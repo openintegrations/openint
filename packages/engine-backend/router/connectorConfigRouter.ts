@@ -202,7 +202,6 @@ export const connectorConfigRouter = trpc.router({
                 )
                   .filter(([_, integration]) => integration.enabled === true)
                   .map(([integrationName]) => {
-                    console.log('Enabled integration:', integrationName)
                     return integrationName
                   }),
               }
