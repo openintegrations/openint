@@ -17,7 +17,7 @@ const mintConfig: MintConfig = {
   topbarLinks: [
     {
       name: 'Contact us',
-      url: 'mailto:hi@openint.dev',
+      url: 'mailto:support@openint.dev',
     },
   ],
   topbarCtaButton: {
