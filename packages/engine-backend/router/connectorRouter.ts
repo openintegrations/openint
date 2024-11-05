@@ -1,7 +1,7 @@
 import {zodToOas31Schema} from '@opensdks/util-zod'
 import {extractId, metaForConnector, zId, zVerticalKey} from '@openint/cdk'
 import type {RouterMeta} from '@openint/trpc'
-import {TRPCError} from '@openint/trpc'
+import {getProtectedContext, TRPCError} from '@openint/trpc'
 import {R, z} from '@openint/util'
 import {zBaseRecord, zPaginatedResult, zPaginationParams} from '@openint/vdk'
 import {publicProcedure, trpc} from './_base'
@@ -195,7 +195,10 @@ export const connectorRouter = trpc.mergeRouters(
         }),
       )
       .query(async ({ctx, input}) => {
-        const ccfgs = await ctx.services.metaService.listConnectorConfigInfos()
+        const protectedCtx = getProtectedContext(ctx)
+
+        const ccfgs =
+          await protectedCtx.asOrgIfNeeded.metaService.listConnectorConfigInfos()
 
         const integrations = await Promise.all(
           ccfgs
