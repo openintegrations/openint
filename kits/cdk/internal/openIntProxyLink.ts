@@ -21,7 +21,7 @@ export function openIntProxyLink(opts: {
     const baseUrl = getBaseUrl(req.url)
     const res = await next(
       modifyRequest(req, {
-        url: req.url.replace(baseUrl, 'https://openint.dev/proxy/'),
+        url: req.url.replace(baseUrl, 'https://app.openint.dev/proxy/'),
         headers: mergeHeaders(req.headers, headers, {}),
         body: req.body,
       }),
