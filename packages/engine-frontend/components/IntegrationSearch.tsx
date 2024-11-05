@@ -41,13 +41,14 @@ export function IntegrationSearch({
         (ccfg) => ccfg.id === int.connector_config_id,
       )!,
     }))
-    .filter((int) =>
-      Object.keys(int.ccfg.integrations).some(
-        // TODO; implement client side filtering out
-        // @ts-expect-error
-        (integration: string) => int.ccfg.integrations[integration].enabled,
-      ),
-    )
+    .filter((int) => {
+      if (int.connector_name === 'google') {
+        // these are nested integrations within a connector i.e. int_google_gmail
+        // so we only want to show those enabled in the integrations list of the connector config
+        return int.ccfg.integrations.some((i) => int.id.includes(i))
+      }
+      return true
+    })
 
   const categories = Array.from(
     new Set(connectorConfigs.flatMap((ccfg) => ccfg.verticals)),
