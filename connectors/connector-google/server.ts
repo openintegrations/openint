@@ -2,6 +2,14 @@
 import type {ConnectorServer} from '@openint/cdk'
 import type {googleSchemas} from './def'
 
+function mergeScopes(
+  globalScopes: string = '',
+  integrationScopes: string = '',
+): string {
+  const scopes = [globalScopes, integrationScopes].filter(Boolean).join(',')
+  return scopes
+}
+
 export const googleServer = {
   // newInstance: ({settings, fetchLinks}) => {
   //   const sdk = initHubspotSDK({
@@ -42,21 +50,21 @@ export const googleServer = {
     if (context.integrationExternalId === 'drive') {
       return {
         authorization_params: {
-          scope: `${globalScopes},${_.oauth.integrations.drive.scopes}`,
+          scope: mergeScopes(globalScopes, _.integrations.drive?.scopes),
         },
       }
     }
     if (context.integrationExternalId === 'calendar') {
       return {
         authorization_params: {
-          scope: `${globalScopes},${_.oauth.integrations.gmail.scopes}`,
+          scope: mergeScopes(globalScopes, _.integrations.calendar?.scopes),
         },
       }
     }
     if (context.integrationExternalId === 'gmail') {
       return {
         authorization_params: {
-          scope: `${globalScopes},${_.oauth.integrations.gmail.scopes}`,
+          scope: mergeScopes(globalScopes, _.integrations.gmail?.scopes),
           // 	•	https://www.googleapis.com/auth/gmail.send (Send only)
           // TODO: How do we determine more specific scopes here?
         },
