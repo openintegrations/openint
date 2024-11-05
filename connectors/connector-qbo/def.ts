@@ -64,10 +64,10 @@ export const qboSchemas = {
   sourceOutputEntities: R.mapValues(
     Object.fromEntries(
       Object.entries(QBO_ENTITY_NAME).filter(
-        ([key]) => key !== 'BalanceSheet' && key !== 'ProfitAndLoss'
-      )
+        ([key]) => key !== 'BalanceSheet' && key !== 'ProfitAndLoss',
+      ),
     ),
-    () => z.unknown()
+    () => z.unknown(),
   ),
 } satisfies ConnectorSchemas
 
@@ -80,7 +80,7 @@ export const qboDef = {
     displayName: 'Quickbooks Online',
     stage: 'beta',
     verticals: ['accounting'],
-    logoUrl: '/_assets/logo-quickbooks.svg',
+    logoUrl: '/_assets/logo-qbo.svg',
     nangoProvider: 'quickbooks',
   },
   streams: {

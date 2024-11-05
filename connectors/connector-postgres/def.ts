@@ -20,20 +20,22 @@ export const postgresSchemas = {
   // if it's resourceSettings then it doesn't make as much sense to configure
   // in the list of integrations...
   // How do we create default resources for integrations that are basically single resource?
-  resourceSettings: zPgConfig.pick({databaseUrl: true, migrateTables: true}).extend({
-    // gotta make sourceQueries a Textarea
+  resourceSettings: zPgConfig
+    .pick({databaseUrl: true, migrateTables: true})
+    .extend({
+      // gotta make sourceQueries a Textarea
 
-    sourceQueries: z
-      .object({
-        invoice: z
-          .string()
-          .nullish()
-          .describe('Should order by lastModifiedAt and id descending'),
-      })
-      // .nullish() does not translate well to jsonSchema
-      // @see https://share.cleanshot.com/w0KVx1Y2
-      .optional(),
-  }),
+      sourceQueries: z
+        .object({
+          invoice: z
+            .string()
+            .nullish()
+            .describe('Should order by lastModifiedAt and id descending'),
+        })
+        // .nullish() does not translate well to jsonSchema
+        // @see https://share.cleanshot.com/w0KVx1Y2
+        .optional(),
+    }),
   destinationInputEntity: z.object({
     id: z.string(),
     entityName: z.string(),
@@ -65,7 +67,7 @@ export const postgresDef = {
   name: 'postgres',
   metadata: {
     verticals: ['database'],
-    logoUrl: '/_assets/logo-postgres.png',
+    logoUrl: '/_assets/logo-postgres.svg',
     stage: 'ga',
   },
 
