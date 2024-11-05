@@ -16,7 +16,7 @@ export const mercuryDef = {
   name: 'mercury',
   metadata: {
     verticals: ['banking'],
-    logoUrl: '/_assets/logo-mercury.png',
+    logoUrl: '/_assets/logo-mercury.svg',
     stage: 'alpha',
   },
   standardMappers: {

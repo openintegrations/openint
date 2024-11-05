@@ -41,7 +41,7 @@ export const brexDef = {
       // Add back expense management category once we actually support it properly
       // 'expense-management'
     ],
-    logoUrl: '/_assets/logo-brex.png',
+    logoUrl: '/_assets/logo-brex.svg',
     stage: 'beta',
   },
   standardMappers: {

@@ -37,7 +37,7 @@ export const stripeDef = {
   name: 'stripe',
   metadata: {
     verticals: ['commerce'],
-    logoUrl: '/_assets/logo-stripe.png',
+    logoUrl: '/_assets/logo-stripe.svg',
     stage: 'beta',
   },
   standardMappers: {
