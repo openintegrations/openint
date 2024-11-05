@@ -84,7 +84,7 @@ export const spreadsheetDef = {
   metadata: {
     displayName: 'Spreadsheet (CSV, Google Sheets, Excel)',
     verticals: ['flat-files-and-spreadsheets'],
-    logoUrl: '/_assets/logo-spreadsheet.png',
+    logoUrl: '/_assets/logo-spreadsheet.svg',
   },
   standardMappers: {
     entity: ({entity}, conn) =>

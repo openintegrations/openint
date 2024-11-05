@@ -87,7 +87,7 @@ export function CheckboxFilter({
           ))}
           {/* Added a visible divider here */}
           <div className="my-2 w-full border-t border-[#E6E6E6]" />
-          <div className="col-span-3 flex justify-end gap-2">
+          <div className="col-span-3 flex justify-end gap-1">
             <Button
               onClick={() => {
                 setCheckedState(

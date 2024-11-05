@@ -42,7 +42,7 @@ export const helpers = connHelpers(venmoSchemas)
 export const venmoDef = {
   name: 'venmo',
   schemas: venmoSchemas,
-  metadata: {verticals: ['banking'], logoUrl: '/_assets/logo-venmo.png'},
+  metadata: {verticals: ['banking'], logoUrl: '/_assets/logo-venmo.svg'},
   standardMappers: {
     entity: {
       account: ({entity: a}, _extConn) => ({

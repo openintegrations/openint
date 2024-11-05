@@ -67,7 +67,7 @@ export const mergeDef = {
   standardMappers: {
     integration: (ins) => ({
       name: ins.name,
-      logoUrl: ins.square_image,
+      logoUrl: '/_assets/logo-mer.svg',
       envName: undefined,
       verticals: ins.categories.filter(
         (c): c is 'accounting' | 'hris' => c === 'accounting' || c === 'hris',

@@ -30,7 +30,7 @@ export const heronDef = {
     // This reaches into the next.js public folder which is technically outside the integration directory itself.
     // Low priority to figure out how to have the svg assets be self-contained also
     // also we may need mdx support for the description etc.
-    logoUrl: '/_assets/logo-heron.png',
+    logoUrl: '/_assets/logo-heron.svg',
   },
 
   standardMappers: {
