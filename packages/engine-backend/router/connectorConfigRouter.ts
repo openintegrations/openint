@@ -174,13 +174,16 @@ export const connectorConfigRouter = trpc.router({
             isSource: z.boolean(),
             isDestination: z.boolean(),
             verticals: z.array(zVerticalKey),
+            integrations: z.array(z.string()),
           }),
       ),
     )
     .query(async ({input: {type, id, connectorName}, ctx}) => {
-      const ccfgInfos = await ctx.services.metaService.listConnectorConfigInfos(
-        {id, connectorName},
-      )
+      const ccfgInfos =
+        await ctx.asOrgIfNeeded.metaService.listConnectorConfigInfos({
+          id,
+          connectorName,
+        })
 
       return ccfgInfos
         .map(({id, envName, displayName}) => {
@@ -194,6 +197,13 @@ export const connectorConfigRouter = trpc.router({
                 isSource: !!connector.sourceSync,
                 isDestination: !!connector.destinationSync,
                 verticals: connector.metadata?.verticals ?? [],
+                integrations: Object.entries(
+                  ccfgInfos.find((ccfg) => ccfg.id === id)?.integrations ?? {},
+                )
+                  .filter(([_, integration]) => integration.enabled === true)
+                  .map(([integrationName]) => {
+                    return integrationName
+                  }),
               }
             : null
         })

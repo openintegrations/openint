@@ -12,20 +12,50 @@ export const zSettings = oReso.extend({
 export const googleSchemas = {
   name: z.literal('google'),
   connectorConfig: z.object({
-    oauth: z
-      .union([
-        // TODO: This should be z.literal('default') but it does not render well in the UI :/
-        z.null().openapi({title: 'Use OpenInt platform credentials'}),
-        z
-          .object({
-            client_id: z.string(),
-            client_secret: z.string(),
-            scopes: z.string().describe('comma seperated scopes'),
-          })
-          .openapi({title: 'Use my own'}),
-      ])
-      .optional(),
+    oauth: z.object({
+      client_id: z.string(),
+      client_secret: z.string(),
+      scopes: z
+        .string()
+        .optional()
+        .describe('global google connector comma separated scopes'),
+    }),
+    integrations: z.object({
+      drive: z.object({
+        enabled: z.boolean().optional(),
+        scopes: z.string().optional().describe('drive specific scopes'),
+      }),
+      gmail: z.object({
+        enabled: z.boolean().optional(),
+        scopes: z.string().optional().describe('gmail specific scopes'),
+      }),
+      calendar: z.object({
+        enabled: z.boolean().optional(),
+        scopes: z.string().optional().describe('calendar specific scopes'),
+      }),
+    }),
   }),
+  // NOTE We don't support refines yet but ideally we should
+  // perform combinatorics validations for google
+  // .refine(
+  //   (data) => {
+  //     const {oauth, integrations} = data
+  //     const atLeastOneEnabled = Object.values(integrations).some(
+  //       (integration) => integration.enabled === true,
+  //     )
+  //     const validScopes = Object.values(integrations).every((integration) => {
+  //       if (integration.enabled === true) {
+  //         return oauth.scopes || integration.scopes
+  //       }
+  //       return true
+  //     })
+  //     return atLeastOneEnabled && validScopes
+  //   },
+  //   {
+  //     message:
+  //       'At least one integration must be enabled, and either the global scopes or the integration specific scopes must be set for each enabled integration.',
+  //   },
+  // ),
   resourceSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
 } satisfies ConnectorSchemas

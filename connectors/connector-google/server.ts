@@ -2,6 +2,14 @@
 import type {ConnectorServer} from '@openint/cdk'
 import type {googleSchemas} from './def'
 
+function mergeScopes(
+  globalScopes: string = '',
+  integrationScopes: string = '',
+): string {
+  const scopes = [globalScopes, integrationScopes].filter(Boolean).join(',')
+  return scopes
+}
+
 export const googleServer = {
   // newInstance: ({settings, fetchLinks}) => {
   //   const sdk = initHubspotSDK({
@@ -36,24 +44,27 @@ export const googleServer = {
     // This returns auth options for Nango connect because it is an oauth integration
     // this behavior is not type checked though and could use some improvement
     // May be fixed if we turn nango into a connector
+
+    const globalScopes = _.oauth.scopes
+
     if (context.integrationExternalId === 'drive') {
       return {
         authorization_params: {
-          scope: 'https://www.googleapis.com/auth/drive',
+          scope: mergeScopes(globalScopes, _.integrations.drive?.scopes),
         },
       }
     }
     if (context.integrationExternalId === 'calendar') {
       return {
         authorization_params: {
-          scope: 'https://www.googleapis.com/auth/calendar',
+          scope: mergeScopes(globalScopes, _.integrations.calendar?.scopes),
         },
       }
     }
     if (context.integrationExternalId === 'gmail') {
       return {
         authorization_params: {
-          scope: 'https://www.googleapis.com/auth/gmail.readonly',
+          scope: mergeScopes(globalScopes, _.integrations.gmail?.scopes),
           // 	•	https://www.googleapis.com/auth/gmail.send (Send only)
           // TODO: How do we determine more specific scopes here?
         },
