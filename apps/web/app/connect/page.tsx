@@ -89,7 +89,7 @@ export default async function ConnectPageContainer({
         connection_id: resourceId,
         provider_config_key: connectorConfigId,
         // Consider using hookdeck so we can work with any number of urls
-        redirect_uri: joinPath(getServerUrl(null), '/connect/callback'),
+        redirect_uri: 'https://app.openint.dev/connect/callback',
       })
       return (
         <SetCookieAndRedirect
