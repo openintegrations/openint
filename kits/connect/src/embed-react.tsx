@@ -73,6 +73,7 @@ export const OpenIntConnectEmbed = React.forwardRef(
           display: flex;
           justify-content: center;
           align-items: center;
+          height: 100%;
           background: white;
           transition: opacity 0.3s ease;
         }
