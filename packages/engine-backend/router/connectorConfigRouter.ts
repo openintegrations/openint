@@ -185,7 +185,6 @@ export const connectorConfigRouter = trpc.router({
           connectorName,
         })
 
-      console.log('ccfgInfos', JSON.stringify(ccfgInfos, null, 2))
       return ccfgInfos
         .map(({id, envName, displayName}) => {
           const connector = ctx.connectorMap[extractId(id)[1]]
