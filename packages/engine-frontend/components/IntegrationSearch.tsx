@@ -34,10 +34,20 @@ export function IntegrationSearch({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: searchText,
   })
-  const ints = listIntegrationsRes.data?.items.map((int) => ({
-    ...int,
-    ccfg: connectorConfigs.find((ccfg) => ccfg.id === int.connector_config_id)!,
-  }))
+  const ints = listIntegrationsRes.data?.items
+    .map((int) => ({
+      ...int,
+      ccfg: connectorConfigs.find(
+        (ccfg) => ccfg.id === int.connector_config_id,
+      )!,
+    }))
+    .filter((int) =>
+      Object.keys(int.ccfg.integrations).some(
+        // TODO; implement client side filtering out
+        // @ts-expect-error
+        (integration: string) => int.ccfg.integrations[integration].enabled,
+      ),
+    )
 
   const categories = Array.from(
     new Set(connectorConfigs.flatMap((ccfg) => ccfg.verticals)),
