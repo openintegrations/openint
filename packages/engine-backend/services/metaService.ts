@@ -69,6 +69,7 @@ export interface MetaService {
       id: Id['ccfg']
       envName?: string | null
       displayName?: string | null
+      integrations?: Record<string, {enabled: boolean}>
     }>
   >
   /** Missing default pipeline */
