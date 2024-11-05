@@ -87,7 +87,7 @@ export default function ConnectorConfigsPage() {
                       variant="ghost"
                       onClick={() =>
                         window.open(
-                          `mailto:hi@venice.is?subject=Request%20access%20to%20${connector.displayName}%20connectors&body=My%20use%20case%20is...`,
+                          `mailto:support@openint.dev?subject=Request%20access%20to%20${connector.displayName}%20connectors&body=My%20use%20case%20is...`,
                         )
                       }>
                       Request access
