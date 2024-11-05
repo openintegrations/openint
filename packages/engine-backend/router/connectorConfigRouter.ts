@@ -174,6 +174,7 @@ export const connectorConfigRouter = trpc.router({
             isSource: z.boolean(),
             isDestination: z.boolean(),
             verticals: z.array(zVerticalKey),
+            integrations: z.array(z.string()),
           }),
       ),
     )
@@ -194,6 +195,14 @@ export const connectorConfigRouter = trpc.router({
                 isSource: !!connector.sourceSync,
                 isDestination: !!connector.destinationSync,
                 verticals: connector.metadata?.verticals ?? [],
+                integrations: Object.keys(
+                  ccfgInfos.find((ccfg) => ccfg.id === id)?.integrations ?? {},
+                ).filter(
+                  (integrationName) =>
+                    ccfgInfos.find((ccfg) => ccfg.id === id)?.integrations?.[
+                      integrationName
+                    ]?.enabled === true,
+                ),
               }
             : null
         })
