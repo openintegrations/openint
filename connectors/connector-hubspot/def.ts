@@ -30,7 +30,7 @@ export const hubspotDef = {
   name: 'hubspot',
   schemas: hubspotSchemas,
   metadata: {
-    displayName: 'hubspot',
+    displayName: 'Hubspot',
     stage: 'beta',
     verticals: ['crm'],
     logoUrl: '/_assets/logo-hubspot.svg',

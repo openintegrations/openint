@@ -35,9 +35,9 @@ export function IntegrationCard({
               src={logo}
               alt={`${name} logo`}
               className="h-8 w-8"
-              style={{marginBottom: '10px'}}
+              style={{marginBottom: '10px', objectFit: 'contain'}}
             />{' '}
-            <p className="m-0 mb-2 text-center font-sans text-sm font-semibold">
+            <p className="m-0 text-center font-sans text-sm font-semibold">
               {name}
             </p>{' '}
           </div>
