@@ -155,7 +155,7 @@ export const makePostgresMetaService = zFunction(
         const {runQueries, sql} = _getDeps(opts)
         return runQueries((pool) =>
           pool.any(
-            sql`SELECT id, env_name, display_name, config->'integrations' as integrations FROM connector_config ${
+            sql`SELECT id, env_name, display_name, COALESCE(config->'integrations', '{}'::jsonb) as integrations FROM connector_config ${
               id && connectorName
                 ? sql`WHERE id = ${id} AND connector_name = ${connectorName} AND disabled = FALSE`
                 : id
