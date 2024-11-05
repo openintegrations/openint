@@ -179,10 +179,13 @@ export const connectorConfigRouter = trpc.router({
       ),
     )
     .query(async ({input: {type, id, connectorName}, ctx}) => {
-      const ccfgInfos = await ctx.services.metaService.listConnectorConfigInfos(
-        {id, connectorName},
-      )
+      const ccfgInfos =
+        await ctx.asOrgIfNeeded.metaService.listConnectorConfigInfos({
+          id,
+          connectorName,
+        })
 
+      console.log('ccfgInfos', JSON.stringify(ccfgInfos, null, 2))
       return ccfgInfos
         .map(({id, envName, displayName}) => {
           const connector = ctx.connectorMap[extractId(id)[1]]
@@ -195,14 +198,14 @@ export const connectorConfigRouter = trpc.router({
                 isSource: !!connector.sourceSync,
                 isDestination: !!connector.destinationSync,
                 verticals: connector.metadata?.verticals ?? [],
-                integrations: Object.keys(
+                integrations: Object.entries(
                   ccfgInfos.find((ccfg) => ccfg.id === id)?.integrations ?? {},
-                ).filter(
-                  (integrationName) =>
-                    ccfgInfos.find((ccfg) => ccfg.id === id)?.integrations?.[
-                      integrationName
-                    ]?.enabled === true,
-                ),
+                )
+                  .filter(([_, integration]) => integration.enabled === true)
+                  .map(([integrationName]) => {
+                    console.log('Enabled integration:', integrationName)
+                    return integrationName
+                  }),
               }
             : null
         })
