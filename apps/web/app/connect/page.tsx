@@ -1,7 +1,7 @@
 // import {clerkClient} from '@clerk/nextjs/server'
 // import Image from 'next/image'
 import {defConnectors} from '@openint/app-config/connectors/connectors.def'
-import {getServerUrl, kAccessToken} from '@openint/app-config/constants'
+import {kAccessToken} from '@openint/app-config/constants'
 import {envRequired} from '@openint/app-config/env'
 import type {ConnectorDef} from '@openint/cdk'
 import {
@@ -11,7 +11,7 @@ import {
   NangoConnect,
 } from '@openint/cdk'
 import {zConnectPageParams} from '@openint/engine-backend/router/endUserRouter'
-import {joinPath, makeUlid} from '@openint/util'
+import {makeUlid} from '@openint/util'
 import {ClientRoot} from '@/components/ClientRoot'
 import {SuperHydrate} from '@/components/SuperHydrate'
 import {createServerComponentHelpers} from '@/lib-server/server-component-helpers'
