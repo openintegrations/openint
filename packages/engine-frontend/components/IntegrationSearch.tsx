@@ -96,7 +96,7 @@ export function IntegrationSearch({
           <Loader className="size-5 animate-spin text-[#8A5DF6]" />
         </div>
       ) : (
-        <div className="space-y-6 overflow-y-auto py-4">
+        <div className="space-y-6 py-4">
           {(ints && ints.length > 0) ||
           Object.keys(intsByCategory ?? {}).length > 0 ? (
             Object.entries(intsByCategory ?? {}).map(
@@ -105,7 +105,7 @@ export function IntegrationSearch({
                   <h3 className="mb-2 text-lg font-semibold">
                     {parseCategory(category)}
                   </h3>
-                  <div className="flex flex-row gap-4">
+                  <div className="flex w-full flex-row flex-wrap gap-4 lg:w-[60%]">
                     {categoryInts.map((int) => (
                       <WithConnectorConnect
                         key={int.id}

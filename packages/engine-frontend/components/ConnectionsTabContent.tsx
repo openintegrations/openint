@@ -44,8 +44,8 @@ export function ConnectionsTabContent({
       </div>
       <Button
         onClick={onConnect}
-        className="inline-flex h-10 items-center justify-center self-end">
-        Connect
+        className="h-10 items-center justify-center self-start">
+        Visit Add a Connection
       </Button>
     </div>
   ) : (
