@@ -4,7 +4,6 @@ import type {Oas, Oas_accounting} from '@opensdks/sdk-merge'
 import type {ConnectorDef, ConnectorSchemas, Pta} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
 import {z, zCast} from '@openint/util'
-import {mergeLogoSvg} from './merge-logo.svg'
 
 type components = Oas_accounting['components']
 
@@ -60,7 +59,7 @@ export const mergeDef = {
   metadata: {
     displayName: 'merge.dev',
     stage: 'beta',
-    logoSvg: mergeLogoSvg,
+    logoUrl: '/_assets/logo-merge.svg',
     verticals: ['accounting', 'commerce', 'crm', 'ats'],
   },
 
