@@ -20,7 +20,7 @@ export const zNangoOauthConnectParams = z
   })
   .passthrough()
 
-  // Where is this used relative to nango frontend?
+// Where is this used relative to nango frontend?
 export function buildNangoConnectUrl({
   provider_config_key,
   ...params
