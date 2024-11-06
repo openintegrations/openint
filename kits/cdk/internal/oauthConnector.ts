@@ -91,12 +91,12 @@ export function oauthConnect({
     authorization_params?: Record<string, string | undefined>
   }
 }): Promise<OauthBaseTypes['connectOutput']> {
-  console.log('oauthConnect', {
-    connectorName,
-    connectorConfigId,
-    resourceId,
-    authOptions,
-  })
+  // console.log('oauthConnect', {
+  //   connectorName,
+  //   connectorConfigId,
+  //   resourceId,
+  //   authOptions,
+  // })
   return nangoFrontend
     .auth(
       connectorConfigId,
