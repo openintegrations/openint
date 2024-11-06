@@ -26,8 +26,7 @@ export function IntegrationCard({
             <Plus color="#8A7DFF" size={24} />
             <span className="mt-2 font-sans text-[14px] font-semibold text-[#8A7DFF]">
               Add
-            </span>{' '}
-            {/* Set to 14px and semibold */}
+            </span>
           </div>
         ) : (
           <div className="flex h-full flex-col items-center justify-center">
@@ -37,9 +36,12 @@ export function IntegrationCard({
               className="h-8 w-8"
               style={{marginBottom: '10px', objectFit: 'contain'}}
             />{' '}
-            <p className="m-0 text-center font-sans text-sm font-semibold">
+            <p
+              className={`m-0 max-w-[100px] text-center text-sm font-semibold hover:text-[#8A7DFF] ${
+                name.length > 20 ? 'truncate' : ''
+              }`}>
               {name}
-            </p>{' '}
+            </p>
           </div>
         )}
       </CardContent>
