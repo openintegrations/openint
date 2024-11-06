@@ -205,8 +205,12 @@ export const WithConnectorConnect = ({
         label: resource ? 'Reconnect' : 'Connect',
       })}
 
-      <DialogContent className="max-h-[600px] overflow-visible">
-        <DialogHeader>
+      <DialogContent
+        className="flex flex-col overflow-visible"
+        style={{
+          maxHeight: 'min(90vh, 700px)',
+        }}>
+        <DialogHeader className="shrink-0">
           <DialogTitle>
             <div className="flex items-center">
               <span className="mr-2">
@@ -214,8 +218,8 @@ export const WithConnectorConnect = ({
               </span>
               {ccfg.connector.name === 'greenhouse' && (
                 <div className="group relative inline-block">
-                  <InfoIcon className="h-5 w-5 cursor-help text-gray-500" />
-                  <div className="invisible absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-md bg-[#272731] p-2 text-sm text-white opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
+                  <InfoIcon className="peer h-5 w-5 cursor-help text-gray-500" />
+                  <div className="pointer-events-none absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-md bg-[#272731] p-2 text-sm text-white opacity-0 transition-opacity peer-hover:opacity-100">
                     <div className="absolute bottom-[-8px] left-0 h-2 w-full" />
                     <p className="italic">
                       Generate a custom API key with{' '}
@@ -239,23 +243,23 @@ export const WithConnectorConnect = ({
             </DialogDescription>
           )}
         </DialogHeader>
-        <SchemaForm
-          ref={formRef}
-          schema={z.object({})}
-          jsonSchemaTransform={(schema) =>
-            ccfg.connector.schemas.resourceSettings ?? schema
-          }
-          formData={{}}
-          // formData should be non-null at this point, we should fix the typing
-          loading={connect.isLoading}
-          onSubmit={({formData}) => {
-            console.log('resource form submitted', formData)
-            connect.mutate({connectorConfigId: ccfg.id, settings: formData})
-          }}
-          hideSubmitButton
-        />
-        {/* Children here */}
-        <DialogFooter>
+        <div className="overflow-y-auto">
+          <SchemaForm
+            ref={formRef}
+            schema={z.object({})}
+            jsonSchemaTransform={(schema) =>
+              ccfg.connector.schemas.resourceSettings ?? schema
+            }
+            formData={{}}
+            loading={connect.isLoading}
+            onSubmit={({formData}) => {
+              console.log('resource form submitted', formData)
+              connect.mutate({connectorConfigId: ccfg.id, settings: formData})
+            }}
+            hideSubmitButton
+          />
+        </div>
+        <DialogFooter className="shrink-0">
           <Button
             disabled={connect.isLoading}
             onClick={() => formRef.current?.submit()}
