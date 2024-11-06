@@ -137,7 +137,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         return (
           <div
             className={cn(
-              'flex size-full flex-col gap-4 p-4 lg:p-8',
+              'flex size-full flex-col gap-4 overflow-x-hidden p-4 lg:p-8',
               className,
             )}>
             {listConnectionsRes.isLoading ||
