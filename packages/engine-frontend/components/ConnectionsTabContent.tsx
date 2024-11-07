@@ -1,5 +1,4 @@
 import {Loader} from 'lucide-react'
-import {Fragment} from 'react'
 import {Button} from '@openint/ui'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
