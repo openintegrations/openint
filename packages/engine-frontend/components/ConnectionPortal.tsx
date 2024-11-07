@@ -80,31 +80,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           ),
         }))
 
-        // TODO: add list interations filtering and
-        // show integrations instead of connectors in children
-
-        // https://openintdev.slack.com/archives/C060G4MDZ0Q/p1730843474762009?thread_ts=1730841954.696109&cid=C060G4MDZ0Q
-
-        // const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
-        //   connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
-        //   search_text: searchText,
-        // })
-        // const ints = listIntegrationsRes.data?.items
-        //   .map((int) => ({
-        //     ...int,
-        //     ccfg: connectorConfigs.find(
-        //       (ccfg) => ccfg.id === int.connector_config_id,
-        //     )!,
-        //   }))
-        //   .filter((int) => {
-        //     if (int.connector_name === 'google') {
-        //       // these are nested integrations within a connector i.e. int_google_gmail
-        //       // so we only want to show those enabled in the integrations list of the connector config
-        //       return int.ccfg.integrations.some((i) => int.id.includes(i))
-        //     }
-        //     return true
-        //   })
-
         const connectionCount = connections.length
 
         const tabConfig = [
