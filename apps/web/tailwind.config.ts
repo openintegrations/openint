@@ -126,6 +126,10 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        tooltip: {
+          DEFAULT: 'var(--tooltip)',
+          foreground: 'var(--tooltip-foreground)',
+        },
         // --- End shadcn tailwind config
         // ...VeniceTheme, // Needs to be commented out for tremor to work...
         'venice-black': VeniceTheme.black,
