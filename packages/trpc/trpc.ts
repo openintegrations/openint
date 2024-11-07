@@ -107,7 +107,7 @@ export const publicProcedure = trpc.procedure.use(async ({next, ctx, path}) =>
 )
 
 export function getProtectedContext(ctx: RouterContext) {
-  console.log('getProtectedContext DEBUG', ctx.viewer)
+  // console.log('getProtectedContext DEBUG', ctx.viewer)
   if (!hasRole(ctx.viewer, ['end_user', 'user', 'org', 'system'])) {
     throw new TRPCError({
       code: ctx.viewer.role === 'anon' ? 'UNAUTHORIZED' : 'FORBIDDEN',

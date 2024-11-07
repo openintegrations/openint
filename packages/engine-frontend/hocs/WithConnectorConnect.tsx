@@ -119,6 +119,10 @@ export const WithConnectorConnect = ({
       if (input) {
         return createResource.mutateAsync(input)
       }
+
+      if (integration) {
+        // TODO; call add integration to update and exiting resource
+      }
       // For plaid and other connectors that requires client side JS
       // TODO: Test this...
       // How to make sure does not actually refetch we if we already have data?
