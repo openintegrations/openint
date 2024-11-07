@@ -72,37 +72,44 @@ export const googleServer = {
     }
     return {}
   },
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async listIntegrations() {
+  // @ts-expect-error
+  async listIntegrations(params: {
+    ccfg: {integrations: Record<string, {enabled: boolean}>}
+  }) {
+    console.debug('Google listIntegrations', params)
+    const integrationsToFilter = params?.ccfg?.integrations ?? {}
+
+    const integrations = [
+      {
+        id: 'drive',
+        name: 'Google Drive',
+        // TODO: Differ oauth scope use in Connect based on which integration
+        raw_data: {} as any,
+        verticals: ['file-storage'],
+        updated_at: new Date().toISOString(),
+        logo_url: '/_assets/logo-google-drive.svg',
+      },
+      {
+        id: 'gmail',
+        name: 'Gmail',
+        raw_data: {} as any,
+        verticals: ['email'],
+        updated_at: new Date().toISOString(),
+        logo_url: '/_assets/logo-google-gmail.svg',
+      },
+      {
+        id: 'calendar',
+        name: 'Google Calendar',
+        raw_data: {} as any,
+        verticals: ['calendar'],
+        updated_at: new Date().toISOString(),
+        logo_url: '/_assets/logo-google-calendar.svg',
+      },
+    ].filter((int) => integrationsToFilter[int.id]?.enabled === true)
+
     return {
       has_next_page: false,
-      items: [
-        {
-          id: 'drive',
-          name: 'Google Drive',
-          // TODO: Differ oauth scope use in Connect based on which integration
-          raw_data: {} as any,
-          verticals: ['file-storage'],
-          updated_at: new Date().toISOString(),
-          logo_url: '/_assets/logo-google-drive.svg',
-        },
-        {
-          id: 'gmail',
-          name: 'Gmail',
-          raw_data: {} as any,
-          verticals: ['email'],
-          updated_at: new Date().toISOString(),
-          logo_url: '/_assets/logo-google-gmail.svg',
-        },
-        {
-          id: 'calendar',
-          name: 'Google Calendar',
-          raw_data: {} as any,
-          verticals: ['calendar'],
-          updated_at: new Date().toISOString(),
-          logo_url: '/_assets/logo-google-calendar.svg',
-        },
-      ],
+      items: integrations,
       next_cursor: null,
     }
   },
