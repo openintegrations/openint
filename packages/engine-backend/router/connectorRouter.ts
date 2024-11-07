@@ -1,5 +1,5 @@
 import {zodToOas31Schema} from '@opensdks/util-zod'
-import {extractId, Id, metaForConnector, zId, zVerticalKey} from '@openint/cdk'
+import {extractId, metaForConnector, zId, zVerticalKey} from '@openint/cdk'
 import type {RouterMeta} from '@openint/trpc'
 import {getProtectedContext, TRPCError} from '@openint/trpc'
 import {R, z} from '@openint/util'

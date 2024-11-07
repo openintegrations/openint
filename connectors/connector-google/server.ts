@@ -72,12 +72,8 @@ export const googleServer = {
     }
     return {}
   },
-  // @ts-expect-error
-  async listIntegrations(params: {
-    ccfg: {integrations: Record<string, {enabled: boolean}>}
-  }) {
-    console.debug('Google listIntegrations', params)
-    const integrationsToFilter = params?.ccfg?.integrations ?? {}
+  async listIntegrations(params: unknown) {
+    const integrationsToFilter = (params as any)?.ccfg?.integrations ?? {}
 
     const integrations = [
       {
@@ -105,7 +101,7 @@ export const googleServer = {
         updated_at: new Date().toISOString(),
         logo_url: '/_assets/logo-google-calendar.svg',
       },
-    ].filter((int) => integrationsToFilter[int.id]?.enabled === true)
+    ].filter((int) => integrationsToFilter[int.id]?.enabled === true) as any
 
     return {
       has_next_page: false,
