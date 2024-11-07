@@ -73,12 +73,14 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           })
           .filter((c): c is NonNullable<typeof c> => !!c)
 
-        const categoriesWithConnections = categories.map((category) => ({
-          ...category,
-          connections: connections.filter((c) =>
-            category.connectorConfigs.includes(c.connectorConfig),
-          ),
-        }))
+        const categoriesWithConnections = categories
+          .map((category) => ({
+            ...category,
+            connections: connections.filter((c) =>
+              category.connectorConfigs.includes(c.connectorConfig),
+            ),
+          }))
+          .filter((c) => c.connections.length > 0)
         const connectionCount = connections.length
 
         const tabConfig = [
@@ -94,6 +96,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 onConnect={() => navigateToTab('add-connection')}
               />
             ),
+            status: connections.some((c) => c.syncInProgress),
           },
           {
             key: 'add-connection',
