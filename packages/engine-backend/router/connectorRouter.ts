@@ -130,6 +130,7 @@ const _connectorRouter = trpc.router({
       zPaginationParams.extend({
         name: z.string(),
         search_text: z.string().nullish(),
+        ccfg: z.object({}).passthrough().optional(),
       }),
     )
     // TODO: Add deterministic type for the output here
@@ -138,7 +139,7 @@ const _connectorRouter = trpc.router({
         items: z.array(zIntegration),
       }),
     )
-    .query(({ctx, input: {name, ...params}}) => {
+    .query(async ({ctx, input: {name, ccfg, ...params}}) => {
       const connector = ctx.connectorMap[name]
       if (!connector) {
         throw new TRPCError({
@@ -147,7 +148,7 @@ const _connectorRouter = trpc.router({
         })
       }
       if (connector.listIntegrations) {
-        return connector.listIntegrations(params).then((res) => ({
+        return connector.listIntegrations({ccfg, ...params}).then((res) => ({
           ...res,
           items: res.items.map((item) => ({
             ...item,
@@ -215,6 +216,7 @@ export const connectorRouter = trpc.mergeRouters(
                 .listConnectorIntegrations({
                   name: extractId(ccfg.id)[1],
                   search_text: input.search_text,
+                  ccfg,
                 })
                 .then((res) => ({
                   ...res,
