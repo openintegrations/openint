@@ -18,6 +18,9 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 47.4% 11.2%;
 
+    --tooltip: #272731;
+    --tooltip-foreground: #ffffff;
+
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
 
