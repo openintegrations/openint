@@ -1,3 +1,4 @@
+import {Circle} from 'lucide-react'
 import {type ReactElement} from 'react'
 import {
   Tabs as ShadcnTabs,
@@ -11,6 +12,8 @@ interface TabsProps {
     key: string
     title: string
     content: ReactElement
+    status?: boolean
+    statusFill?: string
   }>
   defaultValue?: string
   value?: string
@@ -31,7 +34,13 @@ export function Tabs({
       <TabsList>
         {tabConfig.map((config) => (
           <TabsTrigger key={config.key} value={config.key}>
-            {config.title}
+            {config.title}{' '}
+            {config.status ? (
+              <Circle
+                className="ml-2 size-2 self-start"
+                fill={config.statusFill ?? '#8A5DF6'}
+              />
+            ) : null}
           </TabsTrigger>
         ))}
       </TabsList>

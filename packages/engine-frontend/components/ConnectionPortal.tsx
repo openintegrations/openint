@@ -96,6 +96,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 onConnect={() => navigateToTab('add-connection')}
               />
             ),
+            status: connections.some((c) => c.syncInProgress),
           },
           {
             key: 'add-connection',
