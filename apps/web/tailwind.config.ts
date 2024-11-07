@@ -119,12 +119,16 @@ export default {
           foreground: 'hsl(var(--accent-foreground))',
         },
         popover: {
-          DEFAULT: 'var(--popover)',
-          foreground: 'var(--popover-foreground)',
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
+        },
+        tooltip: {
+          DEFAULT: 'var(--tooltip)',
+          foreground: 'var(--tooltip-foreground)',
         },
         // --- End shadcn tailwind config
         // ...VeniceTheme, // Needs to be commented out for tremor to work...
