@@ -135,8 +135,8 @@ export const googleServer = {
     return {
       ...defaultResource,
       integration: {
-        // NOTE: we don't have a specific id for integrations within google
-        externalId: `${data.id}_${makeUlid()}`,
+        // Integration id is scoped to connector, not scoped to resource
+        externalId: data.id,
         connectorName: 'google',
         data,
       },
