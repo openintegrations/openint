@@ -123,6 +123,7 @@ export const WithConnectorConnect = ({
       if (input) {
         return createResource.mutateAsync(input)
       }
+
       // For plaid and other connectors that requires client side JS
       // TODO: Test this...
       // How to make sure does not actually refetch we if we already have data?
@@ -140,7 +141,16 @@ export const WithConnectorConnect = ({
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const postConnOutput = ccfg.connector.hasPostConnect
-        ? await postConnect.mutateAsync([connOutput, ccfg.id, {}])
+        ? await postConnect.mutateAsync([
+            connOutput,
+            ccfg.id,
+            {
+              integrationId:
+                ccfg.connector.name === integration?.id
+                  ? undefined
+                  : integration?.id,
+            },
+          ])
         : connOutput
       console.log(`[OpenIntConnect] ${ccfg.id} postConnOutput`, postConnOutput)
 

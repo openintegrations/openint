@@ -91,10 +91,15 @@ export const pipelineRouter = trpc.router({
           .omit({id: true})
           .nullish()
           .parse(mappers?.resource?.(reso.settings))
-        const standardInt = zStandard.integration
-          .omit({id: true})
-          .nullish()
-          .parse(integrations && mappers?.integration?.(integrations?.external))
+        const standardInt =
+          // QQ: what are the implications for external data integrations UI rendering of using this either or ?? and also returning the id?
+          integrations?.standard ??
+          zStandard.integration
+            .omit({id: true})
+            .nullish()
+            .parse(
+              integrations && mappers?.integration?.(integrations?.external),
+            )
 
         return {
           ...reso,

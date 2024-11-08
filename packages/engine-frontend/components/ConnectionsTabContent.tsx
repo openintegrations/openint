@@ -12,6 +12,7 @@ interface ConnectionsTabContentProps {
     connectorName: string
     pipelineIds: string[]
     syncInProgress: boolean
+    integration: any
   }>
 }
 
