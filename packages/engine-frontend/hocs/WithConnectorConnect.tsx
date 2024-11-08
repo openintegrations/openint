@@ -17,6 +17,10 @@ import {
   DialogHeader,
   DialogTitle,
   SchemaForm,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   useToast,
 } from '@openint/ui'
 import {z} from '@openint/util'
@@ -227,22 +231,27 @@ export const WithConnectorConnect = ({
                 Connect to {ccfg.connector.displayName}
               </span>
               {ccfg.connector.name === 'greenhouse' && (
-                <div className="group relative inline-block">
-                  <InfoIcon className="peer h-5 w-5 cursor-help text-gray-500" />
-                  <div className="pointer-events-none absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-md bg-[#272731] p-2 text-sm text-white opacity-0 transition-opacity peer-hover:opacity-100">
-                    <div className="absolute bottom-[-8px] left-0 h-2 w-full" />
-                    <p className="italic">
-                      Generate a custom API key with{' '}
-                      <a
-                        href="https://support.greenhouse.io/hc/en-us/articles/202842799-Create-an-API-key-in-Greenhouse-Recruiting"
-                        className="font-bold underline"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        these instructions
-                      </a>{' '}
-                      and include all Harvest V3 permissions.
-                    </p>
-                  </div>
+                <div className="relative inline-block">
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <InfoIcon className="h-5 w-5 cursor-help text-gray-500" />
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p className="max-w-[300px] italic">
+                          Generate a custom API key with{' '}
+                          <a
+                            href="https://support.greenhouse.io/hc/en-us/articles/202842799-Create-an-API-key-in-Greenhouse-Recruiting"
+                            className="font-bold underline"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            these instructions
+                          </a>{' '}
+                          and include all Harvest V3 permissions.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               )}
             </div>
