@@ -1,11 +1,9 @@
-import {Loader} from 'lucide-react'
 import {Button} from '@openint/ui'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
 
 interface ConnectionsTabContentProps {
   connectionCount: number
-  isLoading: boolean
   deleteResource: ({id}: {id: string}) => void
   onConnect: () => void
   connections: Array<{
@@ -19,7 +17,6 @@ interface ConnectionsTabContentProps {
 
 export function ConnectionsTabContent({
   connectionCount,
-  isLoading,
   deleteResource,
   connections,
   onConnect,
@@ -38,15 +35,9 @@ export function ConnectionsTabContent({
     </div>
   ) : (
     <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
-      {isLoading ? (
-        <div className="flex h-full items-center justify-center">
-          <Loader className="size-5 animate-spin text-[#8A5DF6]" />
-        </div>
-      ) : (
-        connections.map((conn) => (
-          <ConnectionCard key={conn.id} conn={conn} onDelete={deleteResource} />
-        ))
-      )}
+      {connections.map((conn) => (
+        <ConnectionCard key={conn.id} conn={conn} onDelete={deleteResource} />
+      ))}
     </div>
   )
 }
