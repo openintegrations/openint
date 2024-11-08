@@ -15,6 +15,14 @@ import {ConnectionsTabContent} from './ConnectionsTabContent'
 
 type ConnectEventType = 'open' | 'close' | 'error'
 
+export function LoadingSpinner() {
+  return (
+    <div className="flex h-full min-h-[600px] flex-1 items-center justify-center">
+      <Loader className="size-7 animate-spin text-button" />
+    </div>
+  )
+}
+
 export interface ConnectionPortalProps extends UIPropsNoChildren {
   onEvent?: (event: {type: ConnectEventType; ccfgId: Id['ccfg']}) => void
 }
@@ -75,14 +83,20 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
 
         const connectionCount = connections.length
 
+        const isLoading =
+          listConnectionsRes.isLoading ||
+          listConnectionsRes.isFetching ||
+          listConnectionsRes.isRefetching
+
         const tabConfig = [
           {
             key: 'connections',
             title: `My Connections (${connectionCount})`,
-            content: (
+            content: isLoading ? (
+              <LoadingSpinner />
+            ) : (
               <ConnectionsTabContent
                 connectionCount={connectionCount}
-                isLoading={listConnectionsRes.isLoading}
                 deleteResource={deleteResource.mutate}
                 connections={connections}
                 onConnect={() => navigateToTab('add-connection')}
@@ -93,7 +107,9 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           {
             key: 'add-connection',
             title: 'Add a Connection',
-            content: (
+            content: isLoading ? (
+              <LoadingSpinner />
+            ) : (
               <AddConnectionTabContent
                 connectorConfigFilters={{}}
                 refetch={listConnectionsRes.refetch}
@@ -111,19 +127,11 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
               'flex size-full flex-col gap-4 overflow-x-hidden p-4 lg:p-8',
               className,
             )}>
-            {listConnectionsRes.isLoading ||
-            listConnectionsRes.isFetching ||
-            listConnectionsRes.isRefetching ? (
-              <div className="flex h-full min-h-[500px] flex-1 items-center justify-center">
-                <Loader className="size-8 animate-spin text-button" />
-              </div>
-            ) : (
-              <Tabs
-                tabConfig={tabConfig}
-                value={searchParams?.get('connectTab') ?? 'connections'}
-                onValueChange={navigateToTab}
-              />
-            )}
+            <Tabs
+              tabConfig={tabConfig}
+              value={searchParams?.get('connectTab') ?? 'connections'}
+              onValueChange={navigateToTab}
+            />
           </div>
         )
       }}
