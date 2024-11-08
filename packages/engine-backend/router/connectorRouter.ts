@@ -125,7 +125,11 @@ const _connectorRouter = trpc.router({
   // Connectors itself is also a vertical, and
   // it'd be nice to leverage the same primitive
   listConnectorIntegrations: publicProcedure
-    .meta(oapi({method: 'GET', path: '/connector/{name}/integrations'}))
+    // TODO(@pellicceama): add me back once we make turn ccfg into an ID rather than full object
+    // it is not supported by the trpc-openapi library we are using
+    // This is a query so only simple types are supported in the param
+    // Also we had a test for openapi spec generation but donno why it didn't catch it
+    // .meta(oapi({method: 'GET', path: '/connector/{name}/integrations'}))
     .input(
       zPaginationParams.extend({
         name: z.string(),
