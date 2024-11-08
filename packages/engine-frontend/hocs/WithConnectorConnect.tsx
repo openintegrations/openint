@@ -120,9 +120,6 @@ export const WithConnectorConnect = ({
         return createResource.mutateAsync(input)
       }
 
-      if (integration) {
-        // TODO; call add integration to update and exiting resource
-      }
       // For plaid and other connectors that requires client side JS
       // TODO: Test this...
       // How to make sure does not actually refetch we if we already have data?
@@ -143,7 +140,12 @@ export const WithConnectorConnect = ({
         ? await postConnect.mutateAsync([
             connOutput,
             ccfg.id,
-            {integrationId: integration?.id},
+            {
+              integrationId:
+                ccfg.connector.name === integration?.id
+                  ? undefined
+                  : integration?.id,
+            },
           ])
         : connOutput
       console.log(`[OpenIntConnect] ${ccfg.id} postConnOutput`, postConnOutput)
