@@ -46,11 +46,13 @@ function _zId<TPrefix extends IdPrefix>(prefix: TPrefix) {
   extendZodWithOpenApi(z)
   return z
     .string()
-    .refine(
-      // Add support for doubly-prefixed ids...
-      (s): s is Id[TPrefix] => s.startsWith(`${prefix}_`),
-      `Is not a valid ${IDS_INVERTED[prefix]} id, expecting ${prefix}_`,
-    )
+    .refine((s): s is Id[TPrefix] => {
+      const isValid = s.startsWith(`${prefix}_`)
+      if (!isValid) {
+        console.log(`Invalid ID: ${s}. Expected to start with '${prefix}_'.`)
+      }
+      return isValid
+    }, `Is not a valid ${IDS_INVERTED[prefix]} id, expecting ${prefix}_`)
     .openapi({
       // ref: `id.${prefix}`,  // Do not use ref because otherwise we end up wtih oneOf instead of typeArray and screws up the rendering inside react-jsonschema-form
       description: `Must start with '${prefix}_'`,
