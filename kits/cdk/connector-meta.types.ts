@@ -3,10 +3,10 @@ import {z} from '@opensdks/util-zod'
 import type {oas30, oas31} from 'openapi3-ts'
 import type {AnyEntityPayload, ResoUpdateData, Source} from '@openint/sync'
 import {castIs} from '@openint/util'
-import type {VerticalKey} from './verticals'
 import type {ConnHelpers} from './connector.types'
 import type {EndUserId, ExtEndUserId, ExternalId, Id} from './id.types'
-import {zExternalId} from './id.types'
+import {zExternalId, zId} from './id.types'
+import type {VerticalKey} from './verticals'
 
 export const zConnectorStage = z.enum(['hidden', 'alpha', 'beta', 'ga'])
 
@@ -46,6 +46,7 @@ export const zConnectOptions = z.object({
 
 export const zPostConnectOptions = zConnectOptions.extend({
   syncInBand: z.boolean().nullish(),
+  integrationId: zId('int').nullish(),
 })
 
 // MARK: - Client side connect types

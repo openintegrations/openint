@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from '../shadcn/Tooltip'
 import {ConnectorLogo} from './ConnectorCard'
+import {IntegrationLogo} from './ResourceCard'
 
 export function ConnectionCard({
   onDelete,
@@ -27,8 +28,14 @@ export function ConnectionCard({
     pipelineIds: string[]
     syncInProgress: boolean
     connectorConfig: ConnectorConfig
+    integration: any
   }
 }) {
+  let connectionName =
+    conn?.integration?.name ?? conn.connectorConfig.connector.displayName
+  connectionName =
+    connectionName.charAt(0).toUpperCase() + connectionName.slice(1)
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -51,20 +58,24 @@ export function ConnectionCard({
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                <ConnectorLogo
-                  connector={conn.connectorConfig.connector}
-                  className="size-[64px] rounded-lg"
-                />
+                {conn?.integration?.logo_url || conn?.integration?.logoUrl ? (
+                  <IntegrationLogo
+                    integration={conn.integration}
+                    className="size-[64px] rounded-lg"
+                  />
+                ) : (
+                  <ConnectorLogo
+                    connector={conn.connectorConfig.connector}
+                    className="size-[64px] rounded-lg"
+                  />
+                )}
                 <p
                   className={`m-0 max-w-[100px] text-center text-sm font-semibold ${
                     conn.connectorConfig.connector.displayName.length > 15
                       ? 'truncate'
                       : ''
                   }`}>
-                  {conn.connectorConfig.connector.displayName
-                    .charAt(0)
-                    .toUpperCase() +
-                    conn.connectorConfig.connector.displayName.slice(1)}
+                  {connectionName}
                 </p>
                 <div>
                   {conn.syncInProgress ? (

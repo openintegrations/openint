@@ -234,6 +234,17 @@ export const endUserRouter = trpc.router({
                 makeId('reso', int.connector.name, resourceExternalId),
               )
             : undefined
+
+          if (
+            int.connector &&
+            reso &&
+            !reso.integrationId &&
+            connCtxInput.integrationId
+          ) {
+            // setting the integrationId so that the resource can be associated with the integration
+            reso.integrationId = connCtxInput.integrationId
+          }
+
           return await int.connector.postConnect(
             int.connector.schemas.connectOutput.parse(input),
             int.config,
