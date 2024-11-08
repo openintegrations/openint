@@ -140,7 +140,11 @@ export const WithConnectorConnect = ({
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const postConnOutput = ccfg.connector.hasPostConnect
-        ? await postConnect.mutateAsync([connOutput, ccfg.id, {}])
+        ? await postConnect.mutateAsync([
+            connOutput,
+            ccfg.id,
+            {integrationId: integration?.id},
+          ])
         : connOutput
       console.log(`[OpenIntConnect] ${ccfg.id} postConnOutput`, postConnOutput)
 

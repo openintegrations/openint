@@ -31,7 +31,7 @@ export const createContext: Parameters<
   typeof trpcNext.createNextApiHandler
 >[0]['createContext'] = async ({req, res}): Promise<RouterContext> => {
   const viewer = await serverGetViewer({req, res})
-  console.log('[trpc.createContext]', {query: req.query, viewer})
+  // console.log('[trpc.createContext]', {query: req.query, viewer})
   return {
     ...contextFactory.fromViewer(viewer),
     remoteResourceId:
