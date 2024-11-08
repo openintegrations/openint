@@ -74,8 +74,7 @@ export function makeMetaLinks(metaBase: MetaService) {
           // Technically requires elevated permissions...
           await patch('integration', integrationId, {
             id: integrationId,
-            external: integration.data,
-            // Map standard here?
+            standard: integration.data,
           })
         }
         // Workaround for default connector configs such as `ccfg_plaid` etc which
@@ -107,7 +106,7 @@ export function makeMetaLinks(metaBase: MetaService) {
           sourceState: R.keys(op.sourceState ?? {}),
           destinationState: R.keys(op.destinationState ?? {}),
         })
-        
+
         if (pipeline) {
           console.log('[metaLink] stateUpdate pipeline', pipeline.id)
           // Workaround for default pipeline such as `conn_postgres` etc which
@@ -167,7 +166,7 @@ export function makeMetaLinks(metaBase: MetaService) {
       await table.patch(id, _patch)
     } else {
       const data = await table.get(id)
-      // console.log(`[patch] Will merge patch and data`, {_patch, data})
+      console.log(`[patch] Will merge patch and data`, {_patch, data})
       await table.set(id, deepMerge(data ?? {}, _patch))
     }
   }
