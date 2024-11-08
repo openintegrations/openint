@@ -82,7 +82,7 @@ export function IntegrationSearch({
       {/* Search results */}
       {listIntegrationsRes.isLoading ? (
         <div className="flex h-full min-h-[500px] items-center justify-center">
-          <Loader className="size-5 animate-spin text-[#8A5DF6]" />
+          <Loader className="size-7 animate-spin text-[#8A5DF6]" />
         </div>
       ) : (
         <div className="space-y-6 py-4">
