@@ -21,9 +21,13 @@ export const ResourceCard = ({
   resource: Resource
   connector: ConnectorMeta
 }) => (
-  <Card className={cn('flex flex-row items-center justify-between p-6 shadow-[0_0_8px_rgba(0,0,0,0.03)]', className)}>
+  <Card
+    className={cn(
+      'flex flex-row items-center justify-between p-6 shadow-[0_0_8px_rgba(0,0,0,0.03)]',
+      className,
+    )}>
     <div className="flex flex-row items-center space-x-4">
-      <div className="rounded-xl h-12 w-12 min-w-[48px] bg-transparent border-[#cbcbcb] inline-flex items-center justify-center border">
+      <div className="inline-flex h-12 w-12 min-w-[48px] items-center justify-center rounded-xl border border-[#cbcbcb] bg-transparent">
         {resource.integrationId ? (
           <IntegrationLogo
             {...uiProps}
@@ -94,9 +98,11 @@ export function IntegrationLogo({
 }: UIPropsNoChildren & {
   integration?: ZStandard['integration'] | null | undefined
 }) {
-  return integration?.logoUrl ? (
+  // @ts-expect-error - TODO: QQ fix this
+  return integration?.logo_url || integration?.logoUrl ? (
     <Image
-      src={integration.logoUrl}
+      // @ts-expect-error - TODO: QQ fix this
+      src={integration.logo_url || integration.logoUrl}
       alt={`"${integration.name}" logo`}
       className={cn(
         'h-12 w-12 shrink-0 overflow-hidden object-contain',
