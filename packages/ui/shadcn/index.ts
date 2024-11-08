@@ -16,6 +16,8 @@ export * from './ScrollArea'
 export * from './Separator'
 export * from './Sheet'
 export * from './Table'
+export * from './Tabs'
 export * from './Toast'
 export * from './Toaster'
+export * from './Tooltip'
 // codegen:end
