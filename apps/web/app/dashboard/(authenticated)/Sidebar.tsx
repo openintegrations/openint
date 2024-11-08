@@ -133,9 +133,9 @@ export function Sidebar({className}: SidebarProps) {
       </ScrollArea>
       <div className="mt-auto p-4">
         <Link
-          className="flex flex-row items-center gap-2 hover:opacity-90"
+          className="flex flex-row items-center gap-2 font-semibold hover:opacity-90"
           href="/">
-          <Image width={50} height={50} src="/openint-logo.png" alt="OpenInt" />
+          <Image width={32} height={32} src="/openint-logo.png" alt="OpenInt" />
           OpenInt
         </Link>
       </div>

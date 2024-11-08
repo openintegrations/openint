@@ -1,5 +1,6 @@
-import {CircleEllipsis, Loader} from 'lucide-react'
+import {Loader} from 'lucide-react'
 import type {ConnectorConfig} from '../../engine-frontend/hocs/WithConnectConfig'
+import {Ellipsis} from '../components'
 import {
   Card,
   CardContent,
@@ -44,7 +45,7 @@ export function ConnectionCard({
               <div className="relative flex size-full flex-col items-center justify-center gap-1">
                 <DropdownMenu>
                   <DropdownMenuTrigger className="absolute right-0 top-0">
-                    <CircleEllipsis className="size-5 text-[#808080]" />
+                    <Ellipsis className="size-5 text-[#00000040]" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="flex w-[80px] items-center justify-center">
                     <DropdownMenuItem
