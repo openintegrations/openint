@@ -1,5 +1,4 @@
 import {extractId, type ConnectorServer} from '@openint/cdk'
-import {makeUlid} from '@openint/util'
 import type {googleSchemas} from './def'
 
 function mergeScopes(
