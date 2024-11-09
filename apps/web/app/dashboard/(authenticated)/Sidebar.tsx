@@ -135,8 +135,13 @@ export function Sidebar({className}: SidebarProps) {
         <Link
           className="flex flex-row items-center gap-2 font-semibold hover:opacity-90"
           href="/">
-          <Image width={32} height={32} src="/openint-logo.png" alt="OpenInt" />
-          OpenInt
+          <Image
+            width={146}
+            height={40}
+            src="/openint-logo.svg"
+            alt="OpenInt"
+          />
+          {/* OpenInt */}
         </Link>
       </div>
     </nav>
