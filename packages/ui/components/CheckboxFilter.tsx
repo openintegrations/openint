@@ -21,6 +21,7 @@ export function CheckboxFilter({
       {} as Record<string, boolean>,
     ),
   )
+  const [isOpen, setIsOpen] = useState(false)
 
   // Handle checkbox change
   const handleCheckboxChange = (id: string) => {
@@ -31,9 +32,9 @@ export function CheckboxFilter({
   }
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={() => setIsOpen(true)}>
           <Component className="h-4 w-4" style={{color: '#8A5DF6'}} />{' '}
           <span className="ml-2">Category</span>
         </Button>
@@ -43,9 +44,7 @@ export function CheckboxFilter({
           {options.map((option) => (
             <div
               key={option}
-              className="flex w-full cursor-pointer items-center justify-start space-x-2"
-              // onClick={() => handleCheckboxChange(option)}
-            >
+              className="flex w-full cursor-pointer items-center justify-start space-x-2">
               <Checkbox
                 id={option}
                 checked={checkedState[option]}
@@ -106,11 +105,12 @@ export function CheckboxFilter({
               Clear
             </Button>
             <Button
-              onClick={() =>
+              onClick={() => {
                 onApply(
                   Object.keys(checkedState).filter((key) => checkedState[key]),
                 )
-              }
+                setIsOpen(false)
+              }}
               size="sm">
               Apply
             </Button>
