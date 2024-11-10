@@ -9,7 +9,7 @@ export * from './adapters/ms-dynamics-365-sales-adapter'
 export * from './adapters/pipedrive-adapter'
 export * from './adapters/salesforce-adapter'
 export * from './router'
-
+export * from './crmLink'
 export default {
   hubspot: hubspotAdapter,
   salesforce: salesforceAdapter,
