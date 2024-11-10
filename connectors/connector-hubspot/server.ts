@@ -1,6 +1,7 @@
 import {initHubspotSDK, type HubspotSDK} from '@opensdks/sdk-hubspot'
 import type {ConnectorServer} from '@openint/cdk'
-import type {hubspotSchemas} from './def'
+import {Rx, rxjs} from '@openint/util'
+import {HUBSPOT_ENTITIES, hubspotHelpers, type hubspotSchemas} from './def'
 
 export const hubspotServer = {
   newInstance: ({fetchLinks, settings}) =>
@@ -36,6 +37,64 @@ export const hubspotServer = {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
+  },
+  // TODO enable this once we look into the data model of connectOutput
+  // and map most appropriate response for hubspot
+  // postConnect: (connectOutput) => ({
+  //   resourceExternalId: connectOutput.resourceExternalId,
+  //   settings: connectOutput.settings,
+  //   triggerDefaultSync: true,
+  // }),
+  // @ts-expect-error QQ why is typing failing here?
+  sourceSync: ({instance: hubspot, streams, state}) => {
+    async function* iterateEntities() {
+      console.log('[hubspot] Starting sync', streams)
+      for (const type of Object.values(HUBSPOT_ENTITIES)) {
+        if (!streams[type]) {
+          continue
+        }
+
+        if (streams['contact']) {
+          const response = await hubspot.crm_contacts.GET(
+            '/crm/v3/objects/contacts',
+            {
+              params: {
+                query: {
+                  limit: 100, // TODO: Make this dynamic?
+                  after: state.contactSyncCursor ?? undefined,
+                },
+              },
+            },
+          )
+
+          const contacts = response.data.results
+          const nextCursor = response.data.paging?.next?.after
+
+          yield [
+            ...contacts.map((contact) => ({
+              type: 'data',
+              data: {
+                entityName: 'contact',
+                id: contact.id,
+                entity: contact as Record<string, unknown>,
+              },
+            })),
+            // QQ: is this how we want to handle state?
+            hubspotHelpers._opState({contactSyncCursor: nextCursor}),
+          ]
+
+          if (!nextCursor) {
+            break
+          }
+        }
+      }
+    }
+
+    return rxjs
+      .from(iterateEntities())
+      .pipe(
+        Rx.mergeMap((ops) => rxjs.from([...ops, hubspotHelpers._op('commit')])),
+      )
   },
 
   // passthrough: (instance, input) =>

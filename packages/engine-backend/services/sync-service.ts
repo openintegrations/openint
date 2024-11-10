@@ -23,6 +23,7 @@ import type {z} from '@openint/util'
 import {rxjs} from '@openint/util'
 // Amadeo Q: how do I make the atsLink part of the openint/cdk? is there some sort of release process?
 import {atsLink} from '../../../unified/unified-ats'
+import {crmLink} from '../../../unified/unified-crm'
 import {inngest} from '../events'
 import type {zSyncOptions} from '../types'
 import type {AuthProvider} from './AuthProvider'
@@ -77,7 +78,10 @@ export function makeSyncService({
         await metaLinks.patch('resource', defaultDestId, {
           connectorConfigId: dCcfgId,
           // Should always snake_case here. This is also not typesafe...
-          settings: {databaseUrl: org.publicMetadata.database_url, migrateTables: org.publicMetadata.migrate_tables},
+          settings: {
+            databaseUrl: org.publicMetadata.database_url,
+            migrateTables: org.publicMetadata.migrate_tables,
+          },
         })
         console.log('Created default resource', defaultDestId)
       }
@@ -157,6 +161,8 @@ export function makeSyncService({
             return singleTableLink({source})
           case 'ag_column_rename':
             return agColumnRenameLink({source})
+          case 'crm':
+            return crmLink({source})
           default:
             throw new Error(`Unknown link ${l}`)
         }
@@ -350,7 +356,10 @@ export function makeSyncService({
       opts.destination$$ ??
       dest.connectorConfig.connector.destinationSync?.({
         source: {id: src.id, connectorName: src.connectorConfig.connector.name},
-        endUser: {id: endUser?.id as EndUserId, orgId: pipeline.source.connectorConfig.orgId},
+        endUser: {
+          id: endUser?.id as EndUserId,
+          orgId: pipeline.source.connectorConfig.orgId,
+        },
         config: dest.connectorConfig.config,
         settings: dest.settings,
         // Undefined causes crash in Plaid provider due to destructuring, Think about how to fix it for reals
