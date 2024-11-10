@@ -5,10 +5,12 @@ interface AddConnectionTabContentProps {
   connectorConfigFilters: ConnectorConfigFilters
   refetch: () => void
   onSuccessCallback?: () => void
+  connectorNames?: string[]
 }
 
 export function AddConnectionTabContent({
   connectorConfigFilters,
+  connectorNames = [],
   refetch,
   onSuccessCallback,
 }: AddConnectionTabContentProps) {
@@ -21,6 +23,7 @@ export function AddConnectionTabContent({
       </div>
       <ConnectIntegrations
         connectorConfigFilters={connectorConfigFilters}
+        connectorNames={connectorNames}
         onEvent={(event) => {
           if (event.type === 'close') {
             refetch()

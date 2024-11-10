@@ -112,6 +112,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             ) : (
               <AddConnectionTabContent
                 connectorConfigFilters={{}}
+                connectorNames={connections.map((c) => c.connectorName)}
                 refetch={listConnectionsRes.refetch}
                 onSuccessCallback={() => {
                   navigateToTab('connections')
