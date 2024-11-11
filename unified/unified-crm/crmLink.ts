@@ -18,14 +18,14 @@ export function crmLink(ctx: {
     metadata?: unknown
   }
 }): Link<AnyEntityPayload, PostgresInputPayload> {
-  return Rx.mergeMap((op: AnyEntityPayload) => {
+  return Rx.mergeMap((op) => {
     console.log('Unified CRM link')
 
     if (op.type !== 'data') {
       return rxjs.of(op)
     }
 
-    // TODO; generalize
+    // QQ. Why doesn't import mappers work? TODO; generalize
     const mappers =
       ctx.source.connectorConfig.connectorName === 'hubspot'
         ? hubspotSingularMappers
@@ -41,7 +41,7 @@ export function crmLink(ctx: {
       return rxjs.EMPTY
     }
 
-    const mapped = applyMapper(mapper, op.data.entity)
+    const mapped = applyMapper(mapper, op.data.entity as any)
 
     return rxjs.of({
       ...op,

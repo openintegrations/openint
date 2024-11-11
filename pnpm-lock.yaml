@@ -2195,6 +2195,12 @@ importers:
 
   unified/unified-crm:
     dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/connector-postgres':
+        specifier: workspace:*
+        version: link:../../connectors/connector-postgres
       '@openint/vdk':
         specifier: workspace:*
         version: link:../../kits/vdk
@@ -2207,11 +2213,6 @@ importers:
       '@opensdks/sdk-salesforce':
         specifier: 0.0.2
         version: 0.0.2
-      "connector-postgres\n":
-        specifier: |
-          link:@openint/connector-postgres
-        version: |
-          link:@openint/connector-postgres
       jsforce:
         specifier: ^2.0.0-beta.29
         version: 2.0.0-beta.29

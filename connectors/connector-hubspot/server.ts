@@ -59,9 +59,8 @@ export const hubspotServer = {
           },
         },
       })
-      .then((r) => r.data)
+      .then((r) => r.data as {credentials: {access_token: string}})
 
-    console.log('nangoConnection', JSON.stringify(nangoConnection, null, 2))
     const _instance = initHubspotSDK({
       headers: {
         authorization: `Bearer ${nangoConnection.credentials.access_token}`,
@@ -69,7 +68,7 @@ export const hubspotServer = {
     })
     const accountInfo = await _instance.crm_objects
       .request('GET', '/integrations/v1/me', {})
-      .then((r) => r.data)
+      .then((r) => r.data as {portalId: string})
     return {
       resourceExternalId: accountInfo.portalId,
       settings: {
@@ -105,7 +104,7 @@ export const hubspotServer = {
 
           yield [
             ...contacts.map((contact) => ({
-              type: 'data',
+              type: 'data' as any,
               data: {
                 entityName: 'contact',
                 id: contact.id,
