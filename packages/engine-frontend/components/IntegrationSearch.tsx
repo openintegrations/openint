@@ -62,13 +62,13 @@ export function IntegrationSearch({
   return (
     <div className={className}>
       {/* Search integrations */}
-      <div className="mb-2 bg-background/95 pt-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="mb-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex flex-row gap-2">
           <div className="relative w-[450px]">
             {/* top-2.5 is not working for some reason due to tailwind setup */}
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search"
+              placeholder="Search or pick a connector for your setup"
               className="pl-8"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
