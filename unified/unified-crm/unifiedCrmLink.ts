@@ -11,7 +11,7 @@ import {mappers as salesforceMappers} from './adapters/salesforce-adapter/mapper
 type PostgresInputPayload =
   (typeof postgresHelpers)['_types']['destinationInputEntity']
 
-export function crmLink(ctx: {
+export function unifiedCrmLink(ctx: {
   source: {
     id: Id['reso']
     connectorConfig: {connectorName: string}

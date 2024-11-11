@@ -114,9 +114,9 @@ export const zLink = z
     'banking',
     'prefix_connector_name',
     'single_table',
-    'ats',
+    'unified_ats',
     'ag_column_rename',
-    'crm',
+    'unified_crm',
   ])
   .openapi({ref: 'Link'})
 
