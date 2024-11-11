@@ -1,7 +1,7 @@
 // import type {Oas_crm_contacts} from '@opensdks/sdk-hubspot/types'
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema, zEntityPayload} from '@openint/cdk'
-import {z} from '@openint/util'
+import {R, z} from '@openint/util'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
@@ -14,9 +14,8 @@ export const zSettings = oReso.extend({
 // export type hubspotContact =
 //   Oas_crm_contacts['components']['schemas']['CollectionResponseSimplePublicObjectWithAssociationsForwardPaging']['results']
 
-export enum HUBSPOT_ENTITIES {
-  contact = 'contact',
-}
+export const HUBSPOT_ENTITIES = ['contact'] as const
+
 export const hubspotSchemas = {
   name: z.literal('hubspot'),
   connectorConfig: zConfig,
@@ -32,10 +31,17 @@ export const hubspotSchemas = {
   }),
   resourceSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
-  sourceOutputEntity: zEntityPayload,
-  sourceOutputEntities: Object.fromEntries(
-    Object.values(HUBSPOT_ENTITIES).map((entity) => [entity, z.any()]),
-  ),
+  sourceOutputEntity: z.discriminatedUnion('entityName', [
+    z.object({
+      id: z.string(),
+      entityName: z.literal('contact'),
+      entity: z.unknown(),
+    }),
+  ]),
+  sourceOutputEntities: R.mapToObj(HUBSPOT_ENTITIES, (k) => [k, z.unknown()]),
+  // Temp hack... As unkonwn causes type error during sourceSync, also need .type object
+  // otherwise zod-openapi does not like it https://github.com/asteasolutions/zod-to-openapi/issues/196
+  destinationState: z.undefined().openapi({type: 'object'}),
 } satisfies ConnectorSchemas
 
 export const hubspotHelpers = connHelpers(hubspotSchemas)

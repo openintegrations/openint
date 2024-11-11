@@ -77,7 +77,7 @@ export const hubspotServer = {
       triggerDefaultSync: true,
     }
   },
-  // @ts-expect-error QQ why is typing failing here?
+
   sourceSync: ({instance: hubspot, streams, state}) => {
     async function* iterateEntities() {
       console.log('[hubspot] Starting sync', streams)
@@ -87,6 +87,8 @@ export const hubspotServer = {
         }
 
         if (streams['contact']) {
+          // @pellicceama Reference plaid server for a good example.
+          // let cursor = state.transactionSyncCursor ?? undefined
           const response = await hubspot.crm_contacts.GET(
             '/crm/v3/objects/contacts',
             {
@@ -103,14 +105,9 @@ export const hubspotServer = {
           const nextCursor = response.data.paging?.next?.after
 
           yield [
-            ...contacts.map((contact) => ({
-              type: 'data' as any,
-              data: {
-                entityName: 'contact',
-                id: contact.id,
-                entity: contact as Record<string, unknown>,
-              },
-            })),
+            ...contacts.map((contact) =>
+              hubspotHelpers._opData('contact', contact.id, contact),
+            ),
             // QQ: is this how we want to handle state?
             hubspotHelpers._opState({contactSyncCursor: nextCursor}),
           ]
