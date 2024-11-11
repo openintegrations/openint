@@ -282,7 +282,6 @@ export const WithConnectorConnect = ({
           <Button
             disabled={connect.isLoading}
             onClick={() => formRef.current?.submit()}
-            className="bg-[#8192FF] hover:bg-[#6774CC]"
             type="submit">
             {connect.isLoading && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
