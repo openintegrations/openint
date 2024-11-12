@@ -103,6 +103,7 @@ function sdkExt(instance: SalesforceSDK) {
   }
 }
 
+export {mappers}
 export const salesforceAdapter = {
   countEntity: async ({instance, input}) => {
     // NOTE: extract this into a helper function inside sdk-salesforce

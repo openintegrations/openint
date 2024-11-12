@@ -11,7 +11,7 @@ import {mappers as leverMapper} from './adapters/lever-adapter/mappers'
 type PostgresInputPayload =
   (typeof postgresHelpers)['_types']['destinationInputEntity']
 
-export function atsLink(ctx: {
+export function unifiedAtsLink(ctx: {
   source: {
     id: Id['reso']
     connectorConfig: {connectorName: string}
