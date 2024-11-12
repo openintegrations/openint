@@ -1,6 +1,6 @@
 import {initHubspotSDK, type HubspotSDK} from '@opensdks/sdk-hubspot'
-import {initNangoSDK, type ConnectorServer} from '@openint/cdk'
-import {makeUlid, Rx, rxjs} from '@openint/util'
+import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
+import {Rx, rxjs} from '@openint/util'
 import {HUBSPOT_ENTITIES, hubspotHelpers, type hubspotSchemas} from './def'
 
 export const hubspotServer = {
@@ -67,7 +67,7 @@ export const hubspotServer = {
     // and enforce constraints that way
 
     return {
-      resourceExternalId: makeUlid(),
+      resourceExternalId: extractId(connectOutput.connectionId)[2],
       settings: {
         oauth: nangoConnection,
       },
