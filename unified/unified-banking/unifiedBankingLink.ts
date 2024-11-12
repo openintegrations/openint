@@ -14,7 +14,7 @@ type Xero = Oas_accounting['components']['schemas']
 type PostgresInputPayload =
   (typeof postgresHelpers)['_types']['destinationInputEntity']
 
-export function bankingLink(ctx: {
+export function unifiedBankingLink(ctx: {
   source: {
     id: Id['reso']
     connectorConfig: {connectorName: string}

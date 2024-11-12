@@ -151,7 +151,7 @@ export function makeSyncService({
       ...allLinks.map((l) => {
         // TODO: make me less hard-coded.
         switch (l) {
-          case 'banking':
+          case 'unified_banking':
             return bankingLink({source})
           case 'prefix_connector_name':
             return prefixConnectorNameLink({source})

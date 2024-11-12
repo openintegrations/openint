@@ -111,7 +111,7 @@ export type StreamsV1 = z.infer<typeof zStreamsV1>
 /** TODO: Add other links / gather the schema from various links here */
 export const zLink = z
   .enum([
-    'banking',
+    'unified_banking',
     'prefix_connector_name',
     'single_table',
     'unified_ats',
