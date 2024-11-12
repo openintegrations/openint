@@ -105,9 +105,9 @@ export const hubspotServer = {
             const contacts = response.data.results
             nextCursor = response.data.paging?.next?.after
 
-            console.log(
-              `[hubspot] Fetching contacts with cursor: ${nextCursor}`,
-            )
+            // console.log(
+            //   `[hubspot] Fetching contacts with cursor: ${nextCursor}`,
+            // )
             yield [
               ...contacts.map((contact) =>
                 hubspotHelpers._opData('contact', contact.id, contact),
