@@ -24,6 +24,10 @@ export const HUBSPOT_OBJECT_SINGULAR_TO_PLURAL = {
   task: 'tasks',
   // Technically not a "standard" object, but we are treating it as such
   owner: 'owners',
+  opportunity: 'opportunities',
+  lead: 'leads',
+  user: 'users',
+  customObject: 'customObjects',
 } as const
 
 export type HubspotObjectTypeSingular =
@@ -333,6 +337,22 @@ export const mappers = {
     updated_at: 'properties.hs_lastmodifieddate',
   }),
 }
+export const hubspotSingularMappers = Object.fromEntries(
+  Object.entries(mappers).map(([key, value]) => {
+    const singularKey =
+      Object.keys(HUBSPOT_OBJECT_SINGULAR_TO_PLURAL).find(
+        (singular) =>
+          HUBSPOT_OBJECT_SINGULAR_TO_PLURAL[
+            singular as keyof typeof HUBSPOT_OBJECT_SINGULAR_TO_PLURAL
+          ] === key,
+      ) ?? key
+
+    // console.log(`Transforming key: ${key} to singular key: ${singularKey}`)
+
+    return [singularKey, value]
+  }),
+)
+
 const HSProperties = z.record(z.string())
 const HSObject = z.object({
   properties: HSProperties,
