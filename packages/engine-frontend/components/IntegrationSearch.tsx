@@ -3,7 +3,7 @@
 import {Loader, Search} from 'lucide-react'
 import {useState} from 'react'
 import type {Id} from '@openint/cdk'
-import {Input, parseCategory} from '@openint/ui'
+import {cn, Input, parseCategory} from '@openint/ui'
 import {CheckboxFilter} from '@openint/ui/components/CheckboxFilter'
 import {IntegrationCard} from '@openint/ui/domain-components/IntegrationCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
@@ -60,10 +60,10 @@ export function IntegrationSearch({
   }
 
   return (
-    <div className={className}>
-      {/* Search integrations */}
-      <div className="mb-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="flex flex-row gap-2">
+    <div className={cn('flex h-full flex-col', className)}>
+      {/* Search integrations - Fixed header */}
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="mb-2 flex flex-row gap-2">
           <div className="relative w-[450px]">
             {/* top-2.5 is not working for some reason due to tailwind setup */}
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -79,64 +79,66 @@ export function IntegrationSearch({
           )}
         </div>
       </div>
-      {/* Search results */}
-      {listIntegrationsRes.isLoading ? (
-        <div className="flex h-full min-h-[500px] items-center justify-center">
-          <Loader className="size-7 animate-spin text-[#8A5DF6]" />
-        </div>
-      ) : (
-        <div className="space-y-6 py-4">
-          {(ints && ints.length > 0) ||
-          Object.keys(intsByCategory ?? {}).length > 0 ? (
-            Object.entries(intsByCategory ?? {}).map(
-              ([category, categoryInts]) => (
-                <div key={category}>
-                  <h3 className="mb-2 text-lg font-semibold">
-                    {parseCategory(category)}
-                  </h3>
-                  <div className="flex w-full flex-row flex-wrap gap-4 lg:w-[60%]">
-                    {categoryInts.map((int) => (
-                      <WithConnectorConnect
-                        key={int.id}
-                        connectorConfig={{
-                          id: int.connector_config_id,
-                          connector: int.ccfg.connector,
-                        }}
-                        integration={{id: int.id as Id['int']}}
-                        onEvent={(e) => {
-                          onEvent?.({
-                            type: e.type,
-                            integration: {
-                              connectorConfigId: int.connector_config_id,
-                              id: int.id,
-                            },
-                          })
-                        }}>
-                        {({openConnect}) => (
-                          <IntegrationCard
-                            onClick={openConnect}
-                            logo={
-                              int.logo_url ?? int.ccfg.connector.logoUrl ?? ''
-                            }
-                            name={int.name}
-                          />
-                        )}
-                      </WithConnectorConnect>
-                    ))}
+      {/* Search results - Scrollable content */}
+      <div className="relative flex-1 overflow-y-auto">
+        {listIntegrationsRes.isLoading ? (
+          <div className="flex h-full min-h-[500px] items-center justify-center">
+            <Loader className="size-7 animate-spin text-[#8A5DF6]" />
+          </div>
+        ) : (
+          <div className="space-y-6 py-4">
+            {(ints && ints.length > 0) ||
+            Object.keys(intsByCategory ?? {}).length > 0 ? (
+              Object.entries(intsByCategory ?? {}).map(
+                ([category, categoryInts]) => (
+                  <div key={category}>
+                    <h3 className="mb-2 text-lg font-semibold">
+                      {parseCategory(category)}
+                    </h3>
+                    <div className="flex w-full flex-row flex-wrap gap-4 lg:w-[60%]">
+                      {categoryInts.map((int) => (
+                        <WithConnectorConnect
+                          key={int.id}
+                          connectorConfig={{
+                            id: int.connector_config_id,
+                            connector: int.ccfg.connector,
+                          }}
+                          integration={{id: int.id as Id['int']}}
+                          onEvent={(e) => {
+                            onEvent?.({
+                              type: e.type,
+                              integration: {
+                                connectorConfigId: int.connector_config_id,
+                                id: int.id,
+                              },
+                            })
+                          }}>
+                          {({openConnect}) => (
+                            <IntegrationCard
+                              onClick={openConnect}
+                              logo={
+                                int.logo_url ?? int.ccfg.connector.logoUrl ?? ''
+                              }
+                              name={int.name}
+                            />
+                          )}
+                        </WithConnectorConnect>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ),
-            )
-          ) : (
-            <div>
-              <p className="text-lg font-semibold">
-                No available connectors, please check that you have configured
-                connectors available or review your filter values.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+                ),
+              )
+            ) : (
+              <div>
+                <p className="text-lg font-semibold">
+                  No available connectors, please check that you have configured
+                  connectors available or review your filter values.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

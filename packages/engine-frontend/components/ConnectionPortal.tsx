@@ -125,13 +125,14 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         return (
           <div
             className={cn(
-              'flex size-full flex-col gap-4 overflow-x-hidden p-4 lg:p-8 lg:pt-0',
+              'flex size-full flex-col gap-4 overflow-hidden p-4 lg:p-8 lg:pt-0',
               className,
             )}>
             <Tabs
               tabConfig={tabConfig}
               value={searchParams?.get('connectTab') ?? 'connections'}
               onValueChange={navigateToTab}
+              className="flex h-full flex-col"
             />
           </div>
         )
