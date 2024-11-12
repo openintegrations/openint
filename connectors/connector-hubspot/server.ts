@@ -1,6 +1,6 @@
 import {initHubspotSDK, type HubspotSDK} from '@opensdks/sdk-hubspot'
 import {initNangoSDK, type ConnectorServer} from '@openint/cdk'
-import {Rx, rxjs} from '@openint/util'
+import {makeUlid, Rx, rxjs} from '@openint/util'
 import {HUBSPOT_ENTITIES, hubspotHelpers, type hubspotSchemas} from './def'
 
 export const hubspotServer = {
@@ -61,16 +61,13 @@ export const hubspotServer = {
       })
       .then((r) => r.data as {credentials: {access_token: string}})
 
-    const _instance = initHubspotSDK({
-      headers: {
-        authorization: `Bearer ${nangoConnection.credentials.access_token}`,
-      },
-    })
-    const accountInfo = await _instance.crm_objects
-      .request('GET', '/integrations/v1/me', {})
-      .then((r) => r.data as {portalId: string})
+    // note: this used to have the hubspot account portal Id but that
+    // wouldn't allow integrating that account against other oint instances
+    // in future we should have the external id as a separate column
+    // and enforce constraints that way
+
     return {
-      resourceExternalId: accountInfo.portalId,
+      resourceExternalId: makeUlid(),
       settings: {
         oauth: nangoConnection,
       },
