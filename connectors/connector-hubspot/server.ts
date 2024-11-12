@@ -1,6 +1,7 @@
 import {initHubspotSDK, type HubspotSDK} from '@opensdks/sdk-hubspot'
-import type {ConnectorServer} from '@openint/cdk'
-import type {hubspotSchemas} from './def'
+import {initNangoSDK, type ConnectorServer} from '@openint/cdk'
+import {Rx, rxjs} from '@openint/util'
+import {HUBSPOT_ENTITIES, hubspotHelpers, type hubspotSchemas} from './def'
 
 export const hubspotServer = {
   newInstance: ({fetchLinks, settings}) =>
@@ -36,6 +37,97 @@ export const hubspotServer = {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
+  },
+  // TODO enable this once we look into the data model of connectOutput
+  // and map most appropriate response for hubspot
+  postConnect: async (connectOutput, config, context) => {
+    console.log('hubspot postConnect input:', {
+      connectOutput,
+      config,
+      context,
+    })
+    // TODO: pass this context in via postConnect?
+    const nango = initNangoSDK({
+      headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
+    })
+    const nangoConnection = await nango
+      .GET('/connection/{connectionId}', {
+        params: {
+          path: {connectionId: connectOutput.connectionId},
+          query: {
+            provider_config_key: connectOutput.providerConfigKey,
+          },
+        },
+      })
+      .then((r) => r.data as {credentials: {access_token: string}})
+
+    const _instance = initHubspotSDK({
+      headers: {
+        authorization: `Bearer ${nangoConnection.credentials.access_token}`,
+      },
+    })
+    const accountInfo = await _instance.crm_objects
+      .request('GET', '/integrations/v1/me', {})
+      .then((r) => r.data as {portalId: string})
+    return {
+      resourceExternalId: accountInfo.portalId,
+      settings: {
+        oauth: nangoConnection,
+      },
+      triggerDefaultSync: true,
+    }
+  },
+
+  sourceSync: ({instance: hubspot, streams, state}) => {
+    async function* iterateEntities() {
+      console.log('[hubspot] Starting sync', streams)
+      for (const type of Object.values(HUBSPOT_ENTITIES)) {
+        if (!streams[type]) {
+          continue
+        }
+
+        if (streams['contact']) {
+          let nextCursor = state.contactSyncCursor ?? undefined
+
+          while (true) {
+            const response = await hubspot.crm_contacts.GET(
+              '/crm/v3/objects/contacts',
+              {
+                params: {
+                  query: {
+                    limit: 100, // TODO: Make this dynamic?
+                    after: nextCursor,
+                  },
+                },
+              },
+            )
+
+            const contacts = response.data.results
+            nextCursor = response.data.paging?.next?.after
+
+            // console.log(
+            //   `[hubspot] Fetching contacts with cursor: ${nextCursor}`,
+            // )
+            yield [
+              ...contacts.map((contact) =>
+                hubspotHelpers._opData('contact', contact.id, contact),
+              ),
+              hubspotHelpers._opState({contactSyncCursor: nextCursor}),
+            ]
+
+            if (!nextCursor) {
+              break
+            }
+          }
+        }
+      }
+    }
+
+    return rxjs
+      .from(iterateEntities())
+      .pipe(
+        Rx.mergeMap((ops) => rxjs.from([...ops, hubspotHelpers._op('commit')])),
+      )
   },
 
   // passthrough: (instance, input) =>

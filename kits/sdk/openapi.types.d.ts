@@ -483,8 +483,9 @@ export interface components {
       | 'banking'
       | 'prefix_connector_name'
       | 'single_table'
-      | 'ats'
+      | 'unified_ats'
       | 'ag_column_rename'
+      | 'unified_crm'
     'core.integration': {
       id: string
       /** @description ISO8601 date string */
