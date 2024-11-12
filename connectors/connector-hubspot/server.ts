@@ -87,33 +87,37 @@ export const hubspotServer = {
         }
 
         if (streams['contact']) {
-          // @pellicceama Reference plaid server for a good example.
-          // let cursor = state.transactionSyncCursor ?? undefined
-          const response = await hubspot.crm_contacts.GET(
-            '/crm/v3/objects/contacts',
-            {
-              params: {
-                query: {
-                  limit: 100, // TODO: Make this dynamic?
-                  after: state.contactSyncCursor ?? undefined,
+          let nextCursor = state.contactSyncCursor ?? undefined
+
+          while (true) {
+            const response = await hubspot.crm_contacts.GET(
+              '/crm/v3/objects/contacts',
+              {
+                params: {
+                  query: {
+                    limit: 100, // TODO: Make this dynamic?
+                    after: nextCursor,
+                  },
                 },
               },
-            },
-          )
+            )
 
-          const contacts = response.data.results
-          const nextCursor = response.data.paging?.next?.after
+            const contacts = response.data.results
+            nextCursor = response.data.paging?.next?.after
 
-          yield [
-            ...contacts.map((contact) =>
-              hubspotHelpers._opData('contact', contact.id, contact),
-            ),
-            // QQ: is this how we want to handle state?
-            hubspotHelpers._opState({contactSyncCursor: nextCursor}),
-          ]
+            // console.log(
+            //   `[hubspot] Fetching contacts with cursor: ${nextCursor}`,
+            // )
+            yield [
+              ...contacts.map((contact) =>
+                hubspotHelpers._opData('contact', contact.id, contact),
+              ),
+              hubspotHelpers._opState({contactSyncCursor: nextCursor}),
+            ]
 
-          if (!nextCursor) {
-            break
+            if (!nextCursor) {
+              break
+            }
           }
         }
       }
