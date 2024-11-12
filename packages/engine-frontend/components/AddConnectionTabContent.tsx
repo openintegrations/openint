@@ -17,9 +17,9 @@ export function AddConnectionTabContent({
   return (
     <div className="flex flex-col gap-2 p-4">
       <div>
-        <p className="text-sm">
+        {/* <p className="text-sm">
           Choose a connector to integrate with your current setup.
-        </p>
+        </p> */}
       </div>
       <ConnectIntegrations
         connectorConfigFilters={connectorConfigFilters}
