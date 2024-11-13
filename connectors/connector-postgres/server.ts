@@ -5,9 +5,8 @@ import type {DatabasePool} from 'slonik'
 import {sql} from 'slonik'
 import type {ConnectorServer} from '@openint/cdk'
 import {handlersLink} from '@openint/cdk'
-import {R, Rx, rxjs, snakeCase} from '@openint/util'
+import {R, rxjs, snakeCase} from '@openint/util'
 import type {postgresSchemas} from './def'
-import {postgresHelpers} from './def'
 import {makePostgresClient, upsertByIdQuery} from './makePostgresClient'
 
 // TODO: remove when we introduce dynamic column names
@@ -49,7 +48,7 @@ async function setupTable({
   //   'IntegrationATSOffer': ['opening_external_id VARCHAR', 'candidate_name VARCHAR'],
   // }
   // const extraColumns = extraPerEntityColumns[mappedTableName as keyof typeof extraPerEntityColumns]?.join(',\n      ') ?? ''
-  // this does not work... 
+  // this does not work...
   // const extraColumnsSql = extraColumns.length > 0 ? sql`, ${raw(extraColumns)}` : sql``;
 
   await pool.query(sql`
@@ -87,112 +86,8 @@ async function setupTable({
 }
 
 export const postgresServer = {
-  // TODO:
-  // 1) Implement pagination
-  // 2) Impelemnt incremental Sync
-  // 3) Improve type safety
-  // 4) Implement parallel runs
-  sourceSync: ({
-    endUser,
-    settings: {databaseUrl, sourceQueries},
-    state = {},
-  }) => {
-    const {getPool} = makePostgresClient({databaseUrl})
-    // TODO: Never let slonik transform the field names...
-    const rawClient = makePostgresClient({
-      databaseUrl,
-      transformFieldNames: false,
-    })
+  // sourceSync removed: https://github.com/openintegrations/openint/pull/64/commits/20ef41123b1f72378e312c2c3114c462423e16e7
 
-    async function* iterateEntities() {
-      const handlebars = await import('handlebars')
-
-      const pool = await getPool()
-      // Where do we want to put data? Not always public...
-      await setupTable({pool, tableName: 'account'})
-      await setupTable({pool, tableName: 'transaction'})
-
-      for (const entityName of ['account', 'transaction'] as const) {
-        const res = await pool.query<{
-          id: string
-          createdAt: string
-          updatedAt: string
-          clientId: string | null
-          connector_name: string
-          connectionId: string | null
-          raw: any
-          unified: any
-        }>(
-          sql`SELECT * FROM ${sql.identifier([
-            entityName,
-          ])} WHERE "clientId" = ${endUser?.id ?? null}`,
-        )
-        yield res.rows.map((row) =>
-          postgresHelpers._op('data', {
-            data: {
-              entityName,
-              entity: row.unified,
-              raw: row.raw,
-              id: row.id,
-              connectorName: 'postgres',
-              connection_id: row.connectionId ?? undefined,
-            },
-          }),
-        )
-      }
-
-      const rawPool = await rawClient.getPool()
-      for (const [_entityName, _query] of Object.entries(sourceQueries ?? {})) {
-        const entityName = _entityName as keyof NonNullable<
-          typeof sourceQueries
-        >
-        const queryState = state[_entityName as keyof typeof state]
-        if (!_query) {
-          return
-        }
-        // If schema is known, we can use prepared statements instead. But in this case
-        // we do not know the schema
-        const query = handlebars.compile(_query)({
-          ...queryState,
-          endUserId: endUser?.id,
-        })
-
-        const res = await rawPool.query<{id?: string; modifiedAt?: string}>(
-          rawClient.sql([query] as unknown as TemplateStringsArray),
-        )
-        const lastRow = res.rows[res.rows.length - 1]
-
-        yield R.compact([
-          ...res.rows.map((row) =>
-            postgresHelpers._op('data', {
-              data: {
-                entityName,
-                id: `${row.id}`,
-                entity: row,
-                connectorName: 'postgres', // is this right?
-              },
-            }),
-          ),
-          lastRow?.modifiedAt &&
-            lastRow.id &&
-            (postgresHelpers._opState({
-              invoice: {
-                lastModifiedAt: lastRow.modifiedAt,
-                lastRowId: lastRow.id,
-              },
-            }) as never), // Temp hack...
-        ])
-      }
-    }
-
-    return rxjs
-      .from(iterateEntities())
-      .pipe(
-        Rx.mergeMap((ops) =>
-          rxjs.from([...ops, postgresHelpers._op('commit')]),
-        ),
-      )
-  },
   destinationSync: ({endUser, source, settings: {databaseUrl}}) => {
     console.log('[destinationSync] Will makePostgresClient', {
       // databaseUrl,
@@ -219,7 +114,7 @@ export const postgresServer = {
       await setupTable({pool, tableName})
     }
 
-    let agConnectionCreatedForResource = false;
+    let agConnectionCreatedForResource = false
 
     return handlersLink({
       data: async (op) => {
@@ -246,31 +141,36 @@ export const postgresServer = {
           isOpenInt: true,
         }
 
-        const isAgMode = 
+        const isAgMode =
           endUser?.orgId === 'org_2nJZrA4Dk8i3wszhm6PsP3M2Vwy' ||
           endUser?.orgId === 'org_2lcCCimyICKI8cpPNQt195h5zrP' ||
           endUser?.orgId === 'org_2ms9FdeczlbrDIHJLcwGdpv3dTx'
 
         // TODO: Remove when we have support for links custom upserts
-        if(isAgMode) {
-          console.log('Inserting record for AG');
+        if (isAgMode) {
+          console.log('Inserting record for AG')
           if (tableName === 'IntegrationAtsJob') {
-            rowToInsert['external_job_id'] = data.entity?.raw?.id || '';
+            rowToInsert['external_job_id'] = data.entity?.raw?.id || ''
           } else if (tableName === 'IntegrationAtsCandidate') {
-            rowToInsert['opening_external_id'] = data.entity?.raw?.id || '';
-            rowToInsert['candidate_name'] = data.entity?.raw?.first_name + ' ' + data.entity?.raw?.last_name || '';
+            rowToInsert['opening_external_id'] = data.entity?.raw?.id || ''
+            rowToInsert['candidate_name'] =
+              data.entity?.raw?.first_name +
+                ' ' +
+                data.entity?.raw?.last_name || ''
           } else if (tableName === 'IntegrationAtsJobOpening') {
-            rowToInsert['opening_external_id'] = data.entity?.raw?.opening_id || '';
-            rowToInsert['job_id'] = data.entity?.raw?.job_id || '';
+            rowToInsert['opening_external_id'] =
+              data.entity?.raw?.opening_id || ''
+            rowToInsert['job_id'] = data.entity?.raw?.job_id || ''
           } else if (tableName === 'IntegrationAtsOffer') {
             // Note: These fields seemed duplicated from the nested objects
-            rowToInsert['opening_external_id'] = data.entity?.raw?.opening?.id || '';
+            rowToInsert['opening_external_id'] =
+              data.entity?.raw?.opening?.id || ''
             // field does not exist in the offer object
             rowToInsert['candidate_name'] = ''
           }
 
-          if(!agConnectionCreatedForResource) {
-            console.log('will create ag connection record for', entityName);
+          if (!agConnectionCreatedForResource) {
+            console.log('will create ag connection record for', entityName)
             const integrationConnectionRecord = {
               id: source?.id + '',
               createdAt: new Date().toISOString(),
@@ -281,13 +181,19 @@ export const postgresServer = {
               provider: source?.connectorName, // lever, greenhouse etc
               label: source?.connectorName, // lever, greenhouse etc
             }
-            const query = await upsertByIdQuery('IntegrationConnection', [integrationConnectionRecord], {
-              primaryKey: ['id'],
-            })
+            const query = await upsertByIdQuery(
+              'IntegrationConnection',
+              [integrationConnectionRecord],
+              {
+                primaryKey: ['id'],
+              },
+            )
 
-            if(!query) {
-              console.log('[destinationSync] Could not AG create integration connection record');
-              return;
+            if (!query) {
+              console.log(
+                '[destinationSync] Could not AG create integration connection record',
+              )
+              return
             }
 
             // replace all instances of "Ats" with "ATS"
@@ -306,14 +212,14 @@ export const postgresServer = {
               sqlQuery = sqlQuery.replace(regex, `"${mapping.to}"`)
             }
 
-            const pool = await getPool();
+            const pool = await getPool()
             await pool.query({
               sql: sqlQuery,
               values: query.values,
               type: query.type,
-            });
-            agConnectionCreatedForResource = true;
-          } 
+            })
+            agConnectionCreatedForResource = true
+          }
         }
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         batch.push(rowToInsert as any)
