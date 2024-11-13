@@ -33,6 +33,10 @@ export const googleSchemas = {
         enabled: z.boolean().optional(),
         scopes: z.string().optional().describe('calendar specific scopes'),
       }),
+      sheets: z.object({
+        enabled: z.boolean().optional(),
+        scopes: z.string().optional().describe('sheets specific scopes'),
+      }),
     }),
   }),
   // NOTE We don't support refines yet but ideally we should
