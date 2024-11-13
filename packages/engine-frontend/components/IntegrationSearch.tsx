@@ -3,8 +3,9 @@
 import {Loader, Search} from 'lucide-react'
 import {useState} from 'react'
 import type {Id} from '@openint/cdk'
-import {Input, parseCategory} from '@openint/ui'
+import {cn, Input, parseCategory} from '@openint/ui'
 import {CheckboxFilter} from '@openint/ui/components/CheckboxFilter'
+import {FilterBadges} from '@openint/ui/components/FilterBadges'
 import {IntegrationCard} from '@openint/ui/domain-components/IntegrationCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
 import type {ConnectEventType} from '../hocs/WithConnectorConnect'
@@ -28,6 +29,7 @@ export function IntegrationSearch({
   }) => void
 }) {
   const [searchText, setSearchText] = useState('')
+  // Main state after applying filters.
   const [categoryFilter, setCategoryFilter] = useState<string[]>([])
 
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
@@ -42,6 +44,34 @@ export function IntegrationSearch({
   const categories = Array.from(
     new Set(connectorConfigs.flatMap((ccfg) => ccfg.verticals)),
   )
+
+  // State for the checkbox filter
+  const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
+    categories.reduce(
+      (acc, option) => {
+        acc[option] = false
+        return acc
+      },
+      {} as Record<string, boolean>,
+    ),
+  )
+
+  const onClearFilter = () => {
+    setCategoryFilter([])
+    setCheckedState(
+      categories.reduce(
+        (acc, option) => ({...acc, [option]: false}),
+        {} as Record<string, boolean>,
+      ),
+    )
+  }
+
+  const onCheckboxChange = (id: string) => {
+    setCheckedState((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }))
+  }
 
   const intsByCategory = ints?.reduce(
     (acc, int) => {
@@ -60,83 +90,101 @@ export function IntegrationSearch({
   }
 
   return (
-    <div className={className}>
-      {/* Search integrations */}
-      <div className="mb-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="flex flex-row gap-2">
+    <div className={cn('flex h-full flex-col', className)}>
+      {/* Search integrations - Fixed header */}
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="flex flex-row gap-2 px-4">
           <div className="relative w-[450px]">
             {/* top-2.5 is not working for some reason due to tailwind setup */}
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search or pick a connector for your setup"
-              className="pl-8"
+              className="truncate pl-8"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
           {categories.length > 1 && (
-            <CheckboxFilter options={categories} onApply={onApplyFilter} />
+            <CheckboxFilter
+              options={categories}
+              onApply={onApplyFilter}
+              checkedState={checkedState}
+              onCheckboxChange={onCheckboxChange}
+              onClearFilter={onClearFilter}
+            />
           )}
         </div>
+        <FilterBadges
+          filters={categoryFilter}
+          onClick={(filter) => {
+            setCategoryFilter(categoryFilter.filter((f) => f !== filter))
+            setCheckedState((prevState) => ({
+              ...prevState,
+              [filter]: false,
+            }))
+          }}
+        />
       </div>
-      {/* Search results */}
-      {listIntegrationsRes.isLoading ? (
-        <div className="flex h-full min-h-[500px] items-center justify-center">
-          <Loader className="size-7 animate-spin text-[#8A5DF6]" />
-        </div>
-      ) : (
-        <div className="space-y-6 py-4">
-          {(ints && ints.length > 0) ||
-          Object.keys(intsByCategory ?? {}).length > 0 ? (
-            Object.entries(intsByCategory ?? {}).map(
-              ([category, categoryInts]) => (
-                <div key={category}>
-                  <h3 className="mb-2 text-lg font-semibold">
-                    {parseCategory(category)}
-                  </h3>
-                  <div className="flex w-full flex-row flex-wrap gap-4 lg:w-[60%]">
-                    {categoryInts.map((int) => (
-                      <WithConnectorConnect
-                        key={int.id}
-                        connectorConfig={{
-                          id: int.connector_config_id,
-                          connector: int.ccfg.connector,
-                        }}
-                        integration={{id: int.id as Id['int']}}
-                        onEvent={(e) => {
-                          onEvent?.({
-                            type: e.type,
-                            integration: {
-                              connectorConfigId: int.connector_config_id,
-                              id: int.id,
-                            },
-                          })
-                        }}>
-                        {({openConnect}) => (
-                          <IntegrationCard
-                            onClick={openConnect}
-                            logo={
-                              int.logo_url ?? int.ccfg.connector.logoUrl ?? ''
-                            }
-                            name={int.name}
-                          />
-                        )}
-                      </WithConnectorConnect>
-                    ))}
+      {/* Search results - Scrollable content */}
+      <div className="relative flex-1 overflow-y-auto">
+        {listIntegrationsRes.isLoading ? (
+          <div className="flex h-full min-h-[500px] items-center justify-center">
+            <Loader className="size-7 animate-spin text-[#8A5DF6]" />
+          </div>
+        ) : (
+          <div className="space-y-6 p-4">
+            {(ints && ints.length > 0) ||
+            Object.keys(intsByCategory ?? {}).length > 0 ? (
+              Object.entries(intsByCategory ?? {}).map(
+                ([category, categoryInts]) => (
+                  <div key={category}>
+                    <h3 className="mb-2 text-lg font-semibold">
+                      {parseCategory(category)}
+                    </h3>
+                    <div className="flex w-full flex-row flex-wrap gap-4 lg:w-[60%]">
+                      {categoryInts.map((int) => (
+                        <WithConnectorConnect
+                          key={int.id}
+                          connectorConfig={{
+                            id: int.connector_config_id,
+                            connector: int.ccfg.connector,
+                          }}
+                          integration={{id: int.id as Id['int']}}
+                          onEvent={(e) => {
+                            onEvent?.({
+                              type: e.type,
+                              integration: {
+                                connectorConfigId: int.connector_config_id,
+                                id: int.id,
+                              },
+                            })
+                          }}>
+                          {({openConnect}) => (
+                            <IntegrationCard
+                              onClick={openConnect}
+                              logo={
+                                int.logo_url ?? int.ccfg.connector.logoUrl ?? ''
+                              }
+                              name={int.name}
+                            />
+                          )}
+                        </WithConnectorConnect>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ),
-            )
-          ) : (
-            <div>
-              <p className="text-lg font-semibold">
-                No available connectors, please check that you have configured
-                connectors available or review your filter values.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+                ),
+              )
+            ) : (
+              <div>
+                <p className="text-lg font-semibold">
+                  No available connectors, please check that you have configured
+                  connectors available or review your filter values.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

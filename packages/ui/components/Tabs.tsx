@@ -18,6 +18,7 @@ interface TabsProps {
   defaultValue?: string
   value?: string
   onValueChange?: (value: string) => void
+  className?: string
 }
 
 export function Tabs({
@@ -25,12 +26,14 @@ export function Tabs({
   defaultValue,
   value,
   onValueChange,
+  className,
 }: TabsProps) {
   return (
     <ShadcnTabs
       defaultValue={defaultValue}
       value={value}
-      onValueChange={onValueChange}>
+      onValueChange={onValueChange}
+      className={className}>
       <TabsList>
         {tabConfig.map((config) => (
           <TabsTrigger key={config.key} value={config.key}>
