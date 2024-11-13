@@ -5,6 +5,7 @@ import {useState} from 'react'
 import type {Id} from '@openint/cdk'
 import {cn, Input, parseCategory} from '@openint/ui'
 import {CheckboxFilter} from '@openint/ui/components/CheckboxFilter'
+import {FilterBadges} from '@openint/ui/components/FilterBadges'
 import {IntegrationCard} from '@openint/ui/domain-components/IntegrationCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
 import type {ConnectEventType} from '../hocs/WithConnectorConnect'
@@ -28,6 +29,7 @@ export function IntegrationSearch({
   }) => void
 }) {
   const [searchText, setSearchText] = useState('')
+  // Main state after applying filters.
   const [categoryFilter, setCategoryFilter] = useState<string[]>([])
 
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
@@ -42,6 +44,34 @@ export function IntegrationSearch({
   const categories = Array.from(
     new Set(connectorConfigs.flatMap((ccfg) => ccfg.verticals)),
   )
+
+  // State for the checkbox filter
+  const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
+    categories.reduce(
+      (acc, option) => {
+        acc[option] = false
+        return acc
+      },
+      {} as Record<string, boolean>,
+    ),
+  )
+
+  const onClearFilter = () => {
+    setCategoryFilter([])
+    setCheckedState(
+      categories.reduce(
+        (acc, option) => ({...acc, [option]: false}),
+        {} as Record<string, boolean>,
+      ),
+    )
+  }
+
+  const onCheckboxChange = (id: string) => {
+    setCheckedState((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }))
+  }
 
   const intsByCategory = ints?.reduce(
     (acc, int) => {
@@ -75,9 +105,25 @@ export function IntegrationSearch({
             />
           </div>
           {categories.length > 1 && (
-            <CheckboxFilter options={categories} onApply={onApplyFilter} />
+            <CheckboxFilter
+              options={categories}
+              onApply={onApplyFilter}
+              checkedState={checkedState}
+              onCheckboxChange={onCheckboxChange}
+              onClearFilter={onClearFilter}
+            />
           )}
         </div>
+        <FilterBadges
+          filters={categoryFilter}
+          onClick={(filter) => {
+            setCategoryFilter(categoryFilter.filter((f) => f !== filter))
+            setCheckedState((prevState) => ({
+              ...prevState,
+              [filter]: false,
+            }))
+          }}
+        />
       </div>
       {/* Search results - Scrollable content */}
       <div className="relative flex-1 overflow-y-auto">
