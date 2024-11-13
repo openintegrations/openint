@@ -15,7 +15,7 @@ export function AddConnectionTabContent({
   onSuccessCallback,
 }: AddConnectionTabContentProps) {
   return (
-    <div className="flex flex-col gap-2 p-4">
+    <div className="flex flex-col p-4 pt-0">
       <div>
         {/* <p className="text-sm">
           Choose a connector to integrate with your current setup.
