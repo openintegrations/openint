@@ -37,6 +37,14 @@ export const googleSchemas = {
         enabled: z.boolean().optional(),
         scopes: z.string().optional().describe('sheets specific scopes'),
       }),
+      docs: z.object({
+        enabled: z.boolean().optional(),
+        scopes: z.string().optional().describe('docs specific scopes'),
+      }),
+      slides: z.object({
+        enabled: z.boolean().optional(),
+        scopes: z.string().optional().describe('slides specific scopes'),
+      }),
     }),
   }),
   // NOTE We don't support refines yet but ideally we should
