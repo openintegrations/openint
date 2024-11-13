@@ -67,7 +67,7 @@ export const qboSchemas = {
         ([key]) => key !== 'BalanceSheet' && key !== 'ProfitAndLoss',
       ),
     ),
-    () => z.unknown(),
+    () => z.unknown().optional(),
   ),
 } satisfies ConnectorSchemas
 
