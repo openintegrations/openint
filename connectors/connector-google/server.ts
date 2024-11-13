@@ -44,6 +44,22 @@ const integrations = [
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-spreadsheet.svg',
   },
+  {
+    id: 'slides',
+    name: 'Slides',
+    raw_data: {} as any,
+    verticals: ['flat-files-and-spreadsheets'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-google-slides.svg',
+  },
+  {
+    id: 'docs',
+    name: 'Docs',
+    raw_data: {} as any,
+    verticals: ['flat-files-and-spreadsheets'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-google-docs.svg',
+  },
 ]
 
 export const googleServer = {
