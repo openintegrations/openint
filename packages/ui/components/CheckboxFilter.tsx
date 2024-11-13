@@ -8,28 +8,17 @@ import {parseCategory} from '../utils'
 export function CheckboxFilter({
   options,
   onApply,
+  checkedState,
+  onClearFilter,
+  onCheckboxChange,
 }: {
   options: string[]
   onApply: (selected: string[]) => void
+  checkedState: Record<string, boolean>
+  onClearFilter: () => void
+  onCheckboxChange: (id: string) => void
 }) {
-  const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
-    options.reduce(
-      (acc, option) => {
-        acc[option] = false
-        return acc
-      },
-      {} as Record<string, boolean>,
-    ),
-  )
   const [isOpen, setIsOpen] = useState(false)
-
-  // Handle checkbox change
-  const handleCheckboxChange = (id: string) => {
-    setCheckedState((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }))
-  }
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -48,7 +37,7 @@ export function CheckboxFilter({
               <Checkbox
                 id={option}
                 checked={checkedState[option]}
-                onCheckedChange={() => handleCheckboxChange(option)}
+                onCheckedChange={() => onCheckboxChange(option)}
                 className={`rounded-sm border border-gray-300 transition-colors duration-200 ${
                   checkedState[option]
                     ? 'border-transparent bg-[#8A7DFF]'
@@ -87,21 +76,7 @@ export function CheckboxFilter({
           {/* Added a visible divider here */}
           <div className="my-2 w-full border-t border-[#E6E6E6]" />
           <div className="col-span-3 flex justify-end gap-1">
-            <Button
-              onClick={() => {
-                setCheckedState(
-                  options.reduce(
-                    (acc, option) => {
-                      acc[option] = false
-                      return acc
-                    },
-                    {} as Record<string, boolean>,
-                  ),
-                )
-                onApply([])
-              }}
-              size="sm"
-              variant="secondary">
+            <Button onClick={onClearFilter} size="sm" variant="secondary">
               Clear
             </Button>
             <Button
