@@ -5,9 +5,7 @@ import {withLog} from '@openint/util'
 import * as functions from '../../inngest/functions'
 import {sendWebhook} from '../../inngest/routines'
 
-export const config = {
-  maxDuration: 5 * 60, // 5 mins
-}
+export const maxDuration = 5 * 60 // 5 mins;
 
 export default serve(
   withLog('Starting inngest with', {
