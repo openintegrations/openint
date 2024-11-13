@@ -50,50 +50,6 @@ switch (process.argv[2]) {
     }).catch(console.error)
     break
   }
-  case 'source-postgres': {
-    sync({
-      source: postgresProvider.sourceSync({
-        state: undefined,
-        endUser: null,
-        streams: {},
-        ...getInstance(postgresProvider, {
-          config: {},
-          settings: {
-            databaseUrl: process.env['POSTGRES_URL'] ?? '',
-            sourceQueries: {
-              invoice: `
-              SELECT
-                iv.id,
-                iv.customer_id as contact,
-                iv.currency,
-                iv.description as memo,
-                jsonb_agg(
-                  jsonb_build_object(
-                    'id', il.id,
-                    'description', il.description,
-                    'quantity', il.quantity,
-                    'unit_price', il.unit_price
-                  )
-                ) AS line_items
-              FROM
-                invoice_invoice iv
-                LEFT JOIN invoice_invoicelineitem il
-                  ON iv.id = il.invoice_id
-              GROUP BY
-                iv.id;`,
-            },
-          },
-        }),
-      }),
-      destination: (obs) =>
-        obs.pipe(
-          Rx.tap((msg) => {
-            console.error(JSON.stringify(msg))
-          }),
-        ),
-    }).catch(console.error)
-    break
-  }
   case 'source-heron': {
     sync({
       source: heronImpl.sourceSync({

@@ -37,40 +37,6 @@ function getSource(name: string) {
         state: {},
         streams: {},
       })
-    case 'postgres':
-      return postgresProvider.sourceSync({
-        endUser: null,
-        state: {},
-        streams: {},
-        ...getInstance(postgresProvider, {
-          config: {},
-          settings: {
-            databaseUrl: process.env['POSTGRES_URL'] ?? '',
-            sourceQueries: {
-              invoice: `
-              SELECT
-                iv.id,
-                iv.customer_id as contact,
-                iv.currency,
-                iv.description as memo,
-                jsonb_agg(
-                  jsonb_build_object(
-                    'id', il.id,
-                    'description', il.description,
-                    'quantity', il.quantity,
-                    'unit_price', il.unit_price
-                  )
-                ) FILTER (WHERE il.id IS NOT NULL) AS line_items
-              FROM
-                invoice_invoice iv
-                LEFT JOIN invoice_invoicelineitem il
-                  ON iv.id = il.invoice_id
-              GROUP BY
-                iv.id;`,
-            },
-          },
-        }),
-      })
     default:
       throw new Error(`Unknown source: ${name}`)
   }
