@@ -1,4 +1,4 @@
-import {extractId, type ConnectorServer} from '@openint/cdk'
+import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
 import type {googleSchemas} from './def'
 
 function mergeScopes(
@@ -43,6 +43,22 @@ const integrations = [
     verticals: ['flat-files-and-spreadsheets'],
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-spreadsheet.svg',
+  },
+  {
+    id: 'slides',
+    name: 'Slides',
+    raw_data: {} as any,
+    verticals: ['flat-files-and-spreadsheets'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-google-slides.svg',
+  },
+  {
+    id: 'docs',
+    name: 'Docs',
+    raw_data: {} as any,
+    verticals: ['flat-files-and-spreadsheets'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-google-docs.svg',
   },
 ]
 
@@ -119,10 +135,31 @@ export const googleServer = {
       next_cursor: null,
     }
   },
-  async postConnect(connectOutput: any, config: any, context: any) {
+  // note: context currently returns this correctly but types don't catch it
+  // "context": {
+  //   "integrationId": "int_google_sheets",
+  //   "extEndUserId": "eusr_1234",
+  //   "webhookBaseUrl": "http://localhost:4000/api/trpc/webhook/ccfg_google_01JBYY6NZ551BR7Y9DXMBZ79K4",
+  //   "redirectUrl": "http://localhost:4000/"
+  // }
+  async postConnect(connectOutput, config, context: any) {
+    const nango = initNangoSDK({
+      headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
+    })
+    const nangoConnection = await nango
+      .GET('/connection/{connectionId}', {
+        params: {
+          path: {connectionId: connectOutput.connectionId},
+          query: {
+            provider_config_key: connectOutput.providerConfigKey,
+          },
+        },
+      })
+      .then((r) => r.data)
+
     const defaultResource = {
       resourceExternalId: extractId(connectOutput.connectionId)[2],
-      settings: connectOutput,
+      settings: {oauth: nangoConnection},
     }
     if (!context.integrationId) {
       return defaultResource
