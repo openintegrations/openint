@@ -10,7 +10,7 @@ export function FilterBadges({
   onClick: (filter: string) => void
 }) {
   return (
-    <div className="flex flex-row flex-wrap gap-2">
+    <div className="flex flex-row flex-wrap gap-2 pb-2">
       {filters.map((filter) => (
         <Badge key={filter} variant="button">
           {parseCategory(filter)}
