@@ -19,8 +19,6 @@ export function unifiedCrmLink(ctx: {
   }
 }): Link<AnyEntityPayload, PostgresInputPayload> {
   return Rx.mergeMap((op) => {
-    console.log('Unified CRM link')
-
     if (op.type !== 'data') {
       return rxjs.of(op)
     }
