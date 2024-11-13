@@ -36,6 +36,14 @@ const integrations = [
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-google-calendar.svg',
   },
+  {
+    id: 'sheets',
+    name: 'Google Sheets',
+    raw_data: {} as any,
+    verticals: ['spreadsheet'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-spreadsheet.svg',
+  },
 ]
 
 export const googleServer = {
@@ -75,26 +83,25 @@ export const googleServer = {
 
     const globalScopes = _.oauth.scopes
 
-    if (context.integrationExternalId === 'drive') {
-      return {
-        authorization_params: {
-          scope: mergeScopes(globalScopes, _.integrations.drive?.scopes),
-        },
-      }
+    const integrationScopesMap = {
+      drive: _.integrations.drive?.scopes,
+      calendar: _.integrations.calendar?.scopes,
+      gmail: _.integrations.gmail?.scopes,
+      sheets: _.integrations.sheets?.scopes,
     }
-    if (context.integrationExternalId === 'calendar') {
+
+    if (
+      context.integrationExternalId &&
+      context.integrationExternalId in integrationScopesMap
+    ) {
       return {
         authorization_params: {
-          scope: mergeScopes(globalScopes, _.integrations.calendar?.scopes),
-        },
-      }
-    }
-    if (context.integrationExternalId === 'gmail') {
-      return {
-        authorization_params: {
-          scope: mergeScopes(globalScopes, _.integrations.gmail?.scopes),
-          // 	•	https://www.googleapis.com/auth/gmail.send (Send only)
-          // TODO: How do we determine more specific scopes here?
+          scope: mergeScopes(
+            globalScopes,
+            integrationScopesMap[
+              context.integrationExternalId as keyof typeof integrationScopesMap
+            ],
+          ),
         },
       }
     }
