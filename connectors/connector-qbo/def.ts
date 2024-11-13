@@ -49,7 +49,7 @@ export const zSettings = oReso.extend({
     }),
     credentials: oReso.shape.oauth.shape.credentials.extend({
       raw: oReso.shape.oauth.shape.credentials.shape.raw.extend({
-        refresh_token: z.string(),
+        refresh_token: z.string().nullish(),
       }),
     }),
   }),
