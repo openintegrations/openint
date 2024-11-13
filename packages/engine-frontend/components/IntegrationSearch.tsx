@@ -99,7 +99,7 @@ export function IntegrationSearch({
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search or pick a connector for your setup"
-              className="pl-8"
+              className="truncate pl-8"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
