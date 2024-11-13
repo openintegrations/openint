@@ -125,16 +125,12 @@ const _connectorRouter = trpc.router({
   // Connectors itself is also a vertical, and
   // it'd be nice to leverage the same primitive
   listConnectorIntegrations: publicProcedure
-    // TODO(@pellicceama): add me back once we make turn ccfg into an ID rather than full object
-    // it is not supported by the trpc-openapi library we are using
-    // This is a query so only simple types are supported in the param
-    // Also we had a test for openapi spec generation but donno why it didn't catch it
-    // .meta(oapi({method: 'GET', path: '/connector/{name}/integrations'}))
+    .meta(oapi({method: 'GET', path: '/connector/{name}/integrations'}))
     .input(
       zPaginationParams.extend({
         name: z.string(),
         search_text: z.string().nullish(),
-        ccfg: z.object({}).passthrough().optional(),
+        ccfgId: zId('ccfg').optional(),
       }),
     )
     // TODO: Add deterministic type for the output here
@@ -143,7 +139,7 @@ const _connectorRouter = trpc.router({
         items: z.array(zIntegration),
       }),
     )
-    .query(async ({ctx, input: {name, ccfg, ...params}}) => {
+    .query(async ({ctx, input: {name, ccfgId, ...params}}) => {
       const connector = ctx.connectorMap[name]
       if (!connector) {
         throw new TRPCError({
@@ -152,6 +148,11 @@ const _connectorRouter = trpc.router({
         })
       }
       if (connector.listIntegrations) {
+        const protectedCtx = getProtectedContext(ctx)
+
+        const ccfg = ccfgId
+          ? await protectedCtx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
+          : undefined
         return connector.listIntegrations({ccfg, ...params}).then((res) => ({
           ...res,
           items: res.items.map((item) => ({
@@ -220,7 +221,7 @@ export const connectorRouter = trpc.mergeRouters(
                 .listConnectorIntegrations({
                   name: extractId(ccfg.id)[1],
                   search_text: input.search_text,
-                  ccfg,
+                  ccfgId: ccfg.id,
                 })
                 .then((res) => ({
                   ...res,
