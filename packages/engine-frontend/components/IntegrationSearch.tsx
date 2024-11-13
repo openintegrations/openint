@@ -93,7 +93,7 @@ export function IntegrationSearch({
     <div className={cn('flex h-full flex-col', className)}>
       {/* Search integrations - Fixed header */}
       <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="flex flex-row gap-2 px-4">
+        <div className="flex flex-row gap-2 px-4 pb-2">
           <div className="relative w-[450px]">
             {/* top-2.5 is not working for some reason due to tailwind setup */}
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
