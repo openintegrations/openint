@@ -24,7 +24,7 @@ export const leverSchemas = {
   connectOutput: oauthBaseSchema.connectOutput,
   sourceOutputEntities: R.mapToObj(LEVER_ENTITY_NAMES, (e) => [
     e,
-    z.unknown(),
+    z.unknown().optional(),
   ]),
 } satisfies ConnectorSchemas
 

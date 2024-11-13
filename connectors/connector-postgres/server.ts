@@ -105,10 +105,10 @@ export const postgresServer = {
 
     const migrationRan: Record<string, boolean> = {}
     async function runMigration(pool: DatabasePool, tableName: string) {
-      console.log('will run migration for', tableName)
       if (migrationRan[tableName]) {
         return
       }
+      console.log('will run migration for', tableName)
       migrationRan[tableName] = true
       // Where do we want to put data? Not always public...
       await setupTable({pool, tableName})
