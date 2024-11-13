@@ -21,30 +21,42 @@ export const googleSchemas = {
         .describe('global google connector comma separated scopes'),
     }),
     integrations: z.object({
-      drive: z.object({
-        enabled: z.boolean().optional(),
-        scopes: z.string().optional().describe('drive specific scopes'),
-      }),
-      gmail: z.object({
-        enabled: z.boolean().optional(),
-        scopes: z.string().optional().describe('gmail specific scopes'),
-      }),
-      calendar: z.object({
-        enabled: z.boolean().optional(),
-        scopes: z.string().optional().describe('calendar specific scopes'),
-      }),
-      sheets: z.object({
-        enabled: z.boolean().optional(),
-        scopes: z.string().optional().describe('sheets specific scopes'),
-      }),
-      docs: z.object({
-        enabled: z.boolean().optional(),
-        scopes: z.string().optional().describe('docs specific scopes'),
-      }),
-      slides: z.object({
-        enabled: z.boolean().optional(),
-        scopes: z.string().optional().describe('slides specific scopes'),
-      }),
+      drive: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z.string().optional().describe('drive specific scopes'),
+        })
+        .optional(),
+      gmail: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z.string().optional().describe('gmail specific scopes'),
+        })
+        .optional(),
+      calendar: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z.string().optional().describe('calendar specific scopes'),
+        })
+        .optional(),
+      sheets: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z.string().optional().describe('sheets specific scopes'),
+        })
+        .optional(),
+      docs: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z.string().optional().describe('docs specific scopes'),
+        })
+        .optional(),
+      slides: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z.string().optional().describe('slides specific scopes'),
+        })
+        .optional(),
     }),
   }),
   // NOTE We don't support refines yet but ideally we should
