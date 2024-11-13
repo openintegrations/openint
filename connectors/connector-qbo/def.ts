@@ -67,7 +67,7 @@ export const qboSchemas = {
         ([key]) => key !== 'BalanceSheet' && key !== 'ProfitAndLoss',
       ),
     ),
-    () => z.unknown(),
+    () => z.unknown().optional(),
   ),
 } satisfies ConnectorSchemas
 
@@ -77,7 +77,7 @@ export const qboDef = {
   name: 'qbo',
   schemas: qboSchemas,
   metadata: {
-    displayName: 'Quickbooks Online',
+    displayName: 'Quickbooks',
     stage: 'beta',
     verticals: ['accounting'],
     logoUrl: '/_assets/logo-qbo.svg',

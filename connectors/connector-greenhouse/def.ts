@@ -15,7 +15,7 @@ export const greenhouseSchema = {
   resourceSettings: z.object({apiKey: z.string()}),
   sourceOutputEntities: R.mapToObj(GREENHOUSE_ENTITY_NAMES, (e) => [
     e,
-    z.unknown(),
+    z.unknown().optional(),
   ]),
 } satisfies ConnectorSchemas
 
