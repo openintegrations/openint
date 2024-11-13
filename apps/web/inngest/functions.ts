@@ -34,7 +34,7 @@ export const syncResource = inngest.createFunction(
 
       const pool = await getPool()
       const endUserId = await pool.oneFirst<EndUserId>(
-        sql`SELECT "clientId" FROM resource WHERE id = ${resourceId}`,
+        sql`SELECT end_user_id FROM resource WHERE id = ${resourceId}`,
       )
       console.log('endUserId', endUserId)
       await flatRouter
