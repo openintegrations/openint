@@ -40,7 +40,7 @@ const integrations = [
     id: 'sheets',
     name: 'Google Sheets',
     raw_data: {} as any,
-    verticals: ['spreadsheet'],
+    verticals: ['flat-files-and-spreadsheets'],
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-spreadsheet.svg',
   },
@@ -108,7 +108,8 @@ export const googleServer = {
     return {}
   },
   async listIntegrations(params: unknown) {
-    const integrationsToFilter = (params as any)?.ccfg?.integrations ?? {}
+    const integrationsToFilter =
+      (params as any)?.ccfg?.config?.integrations ?? {}
 
     return {
       has_next_page: false,
