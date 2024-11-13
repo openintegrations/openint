@@ -86,6 +86,8 @@ async function setupTable({
 }
 
 export const postgresServer = {
+  // sourceSync removed: https://github.com/openintegrations/openint/pull/64/commits/20ef41123b1f72378e312c2c3114c462423e16e7
+
   destinationSync: ({endUser, source, settings: {databaseUrl}}) => {
     console.log('[destinationSync] Will makePostgresClient', {
       // databaseUrl,
