@@ -107,7 +107,10 @@ export const WithConnectorConnect = ({
   // TODO: Handle preConnectInput schema and such... for example for Plaid
   const preConnect = _trpcReact.preConnect.useQuery(
     [ccfg.id, {resourceExternalId, integrationExternalId}, {}],
-    {enabled: ccfg.connector.hasPreConnect},
+    // note: this used to be enabled: ccfg.connector.hasPreConnect
+    // but we disabled it as it made too many calls for plaid and just left
+    // it as a noop to be lazy called by the refetch below
+    {enabled: false},
   )
   const postConnect = _trpcReact.postConnect.useMutation()
   const createResource = _trpcReact.createResource.useMutation()
