@@ -81,9 +81,18 @@ export const qboServer = {
           updatedSince: entityUpdatedSince,
         })) {
           const entities = res.entities as Array<QBO[TransactionTypeName]>
-          yield entities.map((t) =>
-            qboHelpers._opData(snakeCase(type), t.Id, t),
-          )
+          if (entities.length === 0) {
+            continue
+          }
+          yield [
+            ...entities.map((t) =>
+              qboHelpers._opData(snakeCase(type), t.Id, t),
+            ),
+            qboHelpers._opState({
+              entityUpdatedSince:
+                entities[entities.length - 1]?.Metadata.LastUpdatedTime,
+            }),
+          ]
         }
       }
     }
