@@ -442,18 +442,21 @@ export function makeSyncService({
       return id
     }
 
-    await ensurePipelinesForResource(id)
-    const pipelines = await getPipelinesForResource(id)
+    if (int.defaultPipeOut) {
+      await ensurePipelinesForResource(id)
+      const pipelines = await getPipelinesForResource(id)
 
-    console.log('_syncResourceUpdate existingPipes.len', pipelines.length)
-    await Promise.all(
-      pipelines.map(async (pipe) => {
-        await _syncPipeline(pipe, {
-          source$: resoUpdate.source$,
-          source$ConcatDefault: resoUpdate.triggerDefaultSync,
-        })
-      }),
-    )
+      console.log('_syncResourceUpdate existingPipes.len', pipelines.length)
+      await Promise.all(
+        pipelines.map(async (pipe) => {
+          await _syncPipeline(pipe, {
+            source$: resoUpdate.source$,
+            source$ConcatDefault: resoUpdate.triggerDefaultSync,
+          })
+        }),
+      )
+    }
+
     return id
   }
 
