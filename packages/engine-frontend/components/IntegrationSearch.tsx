@@ -1,7 +1,7 @@
 'use client'
 
 import {Loader, Search} from 'lucide-react'
-import {useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
 import {cn, Input, parseCategory} from '@openint/ui'
 import {CheckboxFilter} from '@openint/ui/components/CheckboxFilter'
@@ -29,12 +29,26 @@ export function IntegrationSearch({
   }) => void
 }) {
   const [searchText, setSearchText] = useState('')
+  const [debouncedSearchText, setDebouncedSearchText] = useState('')
   // Main state after applying filters.
   const [categoryFilter, setCategoryFilter] = useState<string[]>([])
 
+  const debouncedSetSearch = useCallback((value: string) => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearchText(value)
+    }, 300)
+
+    return () => clearTimeout(timeoutId)
+  }, [])
+
+  useEffect(() => {
+    const cleanup = debouncedSetSearch(searchText)
+    return cleanup
+  }, [searchText, debouncedSetSearch])
+
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
-    search_text: searchText,
+    search_text: debouncedSearchText,
   })
   const ints = listIntegrationsRes.data?.items.map((int) => ({
     ...int,
