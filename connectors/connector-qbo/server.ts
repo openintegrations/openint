@@ -63,6 +63,7 @@ export const qboServer = {
     return qbo
   },
 
+  // @ts-expect-error QQ check _opState
   sourceSync: ({instance: qbo, streams, state}) => {
     async function* iterateEntities() {
       const entityUpdatedSince = state.entityUpdatedSince || undefined
@@ -84,13 +85,30 @@ export const qboServer = {
           if (entities.length === 0) {
             continue
           }
+          // console.log('[qbo] entities', JSON.stringify(entities))
+          let newLastUpdatedTime = entities.reduce((max, entity) => {
+            const updatedTime = new Date(
+              entity.MetaData.LastUpdatedTime ?? 0,
+            ).getTime()
+            return updatedTime > max ? updatedTime : max
+          }, 0)
+
+          // this is in case there is no entity.MetaData.LastUpdatedTime and date === new Date(0)
+          if (newLastUpdatedTime === new Date(0).getTime()) {
+            newLastUpdatedTime = new Date(entityUpdatedSince ?? 0).getTime()
+          }
+
+          // removing the trailing .000Z
+          newLastUpdatedTime = new Date(newLastUpdatedTime)
+            .toISOString()
+            .slice(0, -5)
+
           yield [
             ...entities.map((t) =>
               qboHelpers._opData(snakeCase(type), t.Id, t),
             ),
             qboHelpers._opState({
-              entityUpdatedSince:
-                entities[entities.length - 1]?.Metadata.LastUpdatedTime,
+              entityUpdatedSince: newLastUpdatedTime,
             }),
           ]
         }
