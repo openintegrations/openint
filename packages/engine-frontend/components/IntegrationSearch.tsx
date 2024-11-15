@@ -190,7 +190,7 @@ export function IntegrationSearch({
               )
             ) : (
               <div>
-                <p className="text-lg font-semibold">
+                <p className="text-base font-normal">
                   No available connectors, please check that you have configured
                   connectors available or review your filter values.
                 </p>
