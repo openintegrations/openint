@@ -60,6 +60,9 @@ export const qboSchemas = {
   connectorConfig: zConfig,
   resourceSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
+  sourceState: z.object({
+    entityUpdatedSince: z.string().nullish(),
+  }),
   sourceOutputEntity: zEntityPayload,
   sourceOutputEntities: R.mapValues(
     Object.fromEntries(
@@ -86,7 +89,7 @@ export const qboDef = {
   streams: {
     $defaults: {
       primaryKey: 'Id',
-      cursorField: 'Metadata.LastUpdatedTime',
+      cursorField: 'MetaData.LastUpdatedTime',
     },
   },
 } satisfies ConnectorDef<typeof qboSchemas>
