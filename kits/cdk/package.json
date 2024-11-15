@@ -24,7 +24,7 @@
     "@openint/env": "workspace:*",
     "@opensdks/sdk-apollo": "0.0.21",
     "@opensdks/sdk-outreach": "0.0.16",
-    "@opensdks/sdk-qbo": "^0.0.22",
+    "@opensdks/sdk-qbo": "^0.0.23",
     "@types/jsonwebtoken": "9.0.2",
     "@types/react": "*",
     "openapi3-ts": "4.1.2"

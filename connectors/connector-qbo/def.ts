@@ -89,7 +89,7 @@ export const qboDef = {
   streams: {
     $defaults: {
       primaryKey: 'Id',
-      cursorField: 'Metadata.LastUpdatedTime',
+      cursorField: 'MetaData.LastUpdatedTime',
     },
   },
 } satisfies ConnectorDef<typeof qboSchemas>

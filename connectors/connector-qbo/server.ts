@@ -86,7 +86,7 @@ export const qboServer = {
             continue
           }
           // console.log('[qbo] entities', JSON.stringify(entities))
-          let newLastUpdatedTime = entities.reduce((max, entity) => {
+          let newLastUpdatedTime: any = entities.reduce((max, entity) => {
             const updatedTime = new Date(
               entity.MetaData.LastUpdatedTime ?? 0,
             ).getTime()
