@@ -3,7 +3,7 @@
 import {Loader, Search} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
-import {cn, Input, parseCategory} from '@openint/ui'
+import {Button, cn, Input, parseCategory, Separator} from '@openint/ui'
 import {CheckboxFilter} from '@openint/ui/components/CheckboxFilter'
 import {FilterBadges} from '@openint/ui/components/FilterBadges'
 import {IntegrationCard} from '@openint/ui/domain-components/IntegrationCard'
@@ -155,7 +155,7 @@ export function IntegrationSearch({
                     <h3 className="mb-2 text-lg font-semibold">
                       {parseCategory(category)}
                     </h3>
-                    <div className="flex w-full flex-row flex-wrap gap-4 lg:w-[60%]">
+                    <div className="hidden w-full flex-row flex-wrap gap-4 lg:flex lg:w-[60%]">
                       {categoryInts.map((int) => (
                         <WithConnectorConnect
                           key={int.id}
@@ -181,6 +181,54 @@ export function IntegrationSearch({
                               }
                               name={int.name}
                             />
+                          )}
+                        </WithConnectorConnect>
+                      ))}
+                    </div>
+                    <div className="flex w-full flex-col gap-2 lg:hidden">
+                      {categoryInts.map((int, index) => (
+                        <WithConnectorConnect
+                          key={int.id}
+                          connectorConfig={{
+                            id: int.connector_config_id,
+                            connector: int.ccfg.connector,
+                          }}
+                          integration={{id: int.id as Id['int']}}
+                          onEvent={(e) => {
+                            onEvent?.({
+                              type: e.type,
+                              integration: {
+                                connectorConfigId: int.connector_config_id,
+                                id: int.id,
+                              },
+                            })
+                          }}>
+                          {({openConnect}) => (
+                            <>
+                              <div className="flex w-full flex-row items-center justify-between gap-2">
+                                <div className="flex flex-row items-center gap-2">
+                                  <img
+                                    src={
+                                      int.logo_url ??
+                                      int.ccfg.connector.logoUrl ??
+                                      ''
+                                    }
+                                    alt={`${int.name} logo`}
+                                    className="h-12 w-12 rounded-xl"
+                                  />
+                                  <p
+                                    className={`m-0 max-w-[100px] text-center text-sm font-semibold hover:text-[#8A7DFF] ${
+                                      int.name.length > 15 ? 'truncate' : ''
+                                    }`}>
+                                    {int.name}
+                                  </p>
+                                </div>
+                                <Button onClick={openConnect} size="sm">
+                                  Add
+                                </Button>
+                              </div>
+                              {index < categoryInts.length - 1 && <Separator />}
+                            </>
                           )}
                         </WithConnectorConnect>
                       ))}
