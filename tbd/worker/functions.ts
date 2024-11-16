@@ -3,7 +3,7 @@ import type {SendEventPayload} from 'inngest/helpers/types'
 import type {OpenIntHeaders} from '@openint/api'
 import {createAppHandler} from '@openint/api'
 import type {Id} from '@openint/cdk'
-import {VERTICAL_BY_KEY, makeJwtClient} from '@openint/cdk'
+import {makeJwtClient, VERTICAL_BY_KEY} from '@openint/cdk'
 import {
   configDb,
   dbUpsert,
@@ -108,7 +108,7 @@ export async function syncConnection({
   // This can probably be done via an upsert returning...
   const syncState = await configDb.query.sync_state
     .findFirst({
-      where: eq(schema.sync_state.resource_id, resource_id),
+      where: (sync_state, {eq}) => eq(sync_state.resource_id, resource_id),
     })
     .then(
       (ss) =>
