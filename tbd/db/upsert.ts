@@ -60,7 +60,12 @@ export function dbUpsertOne<
   return dbUpsert(db, table, [value], options)!
 }
 
-/** We assume that every row contains the same keys even if not defined in its value */
+/**
+ * We assume that every row contains the same keys even if not defined in its value
+ * Careful though a single upsert operation cannot affect a row a second time
+ * so we may need to dedupe within upserts or on an application level
+ * splitting events into multiple upserts
+ */
 export function dbUpsert<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DB extends PgDatabase<any, any>,

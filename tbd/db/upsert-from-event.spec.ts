@@ -1,10 +1,14 @@
-import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
-import {type PgDatabase} from 'drizzle-orm/pg-core'
+import {getTableName} from 'drizzle-orm'
 import {drizzle} from 'drizzle-orm/postgres-js'
+import * as R from 'remeda'
 import {env} from '@openint/env'
-import {dbUpsertOne} from './upsert'
 import type {RecordMessage} from './upsert-from-event'
-import {inferTable, isValidDateString} from './upsert-from-event'
+import {
+  getMigrationsForTable,
+  inferTable,
+  isValidDateString,
+  upsertFromRecordMessages,
+} from './upsert-from-event'
 
 beforeAll(async () => {
   const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
@@ -32,80 +36,98 @@ test.each([
   expect(isValidDateString(input)).toEqual(valid)
 })
 
-function upsertFromRecordMessage(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  db: PgDatabase<any, any>,
-  message: RecordMessage,
-) {
-  const table = inferTable({stream: message.stream, data: message.data})
-  // This doesn't work because upsert needs reference to table column to know how to
-  // serialize value, For example string into jsonb is not the same as string into a text
-  // column. So it's actually somewhat important to get reference to the table schema
-  // rather than needing to infer it each time.
-  // const table2 = pgTable(
-  //   message.stream,
-  //   (t) =>
-  //     Object.fromEntries(
-  //       Object.keys(message.data).map((k) => [k, t.jsonb()]),
-  //     ) as Record<string, any>,
-  // )
-  if (message.upsert) {
-    return dbUpsertOne(db, table, message.data, {
-      insertOnlyColumns: message.upsert?.insert_only_columns,
-      keyColumns: message.upsert?.key_columns,
-      mustMatchColumns: message.upsert?.must_match_columns,
-      noDiffColumns: message.upsert?.no_diff_columns,
-      shallowMergeJsonbColumns: message.upsert?.shallow_merge_jsonb_columns,
-    })
-  }
-  return db.insert(table).values(message.data)
-}
-
 describe.each([
-  ['insert', {stream: 'account', data: {id: 112, name: 'Cash'}}],
+  ['insert', [{stream: 'account', data: {id: 112, name: 'Cash'}}]],
   [
-    'upsert on single column',
-    {stream: 'tre', data: {id: 5, name: 'B'}, upsert: {key_columns: ['id']}},
+    'insert multiple',
+    [
+      {stream: 'account', data: {id: 555, name: 'Bank'}},
+      {stream: 'account', data: {id: 555}},
+    ],
   ],
   [
-    'upsert on multiple cols',
-    {
-      stream: 'transaction',
-      data: {
-        id: '1',
-        intId: 2,
-        amount: 1.23,
-        // created_at: '2021-01-01T00:00:00Z', // this colun also causes problem for now
-        // uupdated_at: new Date(), // Should we allow non-json values?
-        is_deleted: false,
-        raw: {key: 'value'},
-        array_value: [{key: 'value'}],
-      },
-      upsert: {
-        key_columns: ['id', 'is_deleted'],
-      },
-    },
+    'upsert single key',
+    [{stream: 'tre', data: {id: 5, name: 'B'}, upsert: {key_columns: ['id']}}],
   ],
-] satisfies Array<[string, RecordMessage]>)(
-  'upsertFromEvent %s',
-  (_, message) => {
-    const table = inferTable(message)
+  [
+    'upsert composite keys',
+    [
+      {
+        stream: 'transaction',
+        data: {
+          id: '1',
+          intId: 2,
+          amount: 1.23,
+          is_deleted: false,
+          raw: {key: 'value'},
+          array_value: [{key: 'value'}],
+          null_value: null,
+          undefined_value: undefined, // undefined gets turned into null... but should we allowe for it?
+          // created_at: '2021-01-01T00:00:00Z', // this colun also causes problem for now
+          // uupdated_at: new Date(), // Should we allow non-json values?
+        },
+        upsert: {
+          key_columns: ['id', 'is_deleted'],
+        },
+      },
+    ],
+  ],
+  // [
+  //   'upsert multiple single key',
+  //   [
+  //     {stream: 'tre', data: {id: 5, name: 'B'}, upsert: {key_columns: ['id']}},
+  //     // Needs to be two batches..n in order to work due to postgres upsert cannot operate on the same row twice in one txn
+  //     {stream: 'tre', data: {id: 5, name: 'B'}, upsert: {key_columns: ['id']}},
+  //   ],
+  // ],
+  [
+    'mixed',
+    [
+      {stream: 'good', data: {id: 5, name: 'B'}, upsert: {key_columns: ['id']}},
+      {stream: 'life', data: {id: 1, code: 'C'}, upsert: {key_columns: ['id']}},
+    ],
+  ],
+] satisfies Array<[string, RecordMessage[]]>)(
+  'processEvents %s',
+  (_, messages) => {
+    const tables = messages.map((m) => inferTable(m))
 
     test('infer table schema', async () => {
-      const migrations = await generateMigration(
-        generateDrizzleJson({}),
-        generateDrizzleJson({table}),
+      const tableMigrations = await Promise.all(
+        tables.map((t) => getMigrationsForTable(t)),
       )
-      expect(migrations).toMatchSnapshot()
-      for (const migration of migrations) {
+      expect(tableMigrations.flat()).toMatchSnapshot()
+      for (const migration of tableMigrations.flat()) {
         await db.execute(migration)
       }
     })
 
     test('upsert from message', async () => {
-      await upsertFromRecordMessage(db, message)
-      const rows = await db.select().from(table).execute()
-      expect(rows[0]).toEqual(message.data)
+      await upsertFromRecordMessages(db, messages)
+
+      const uniqueTables = R.uniqBy(tables, (t) => getTableName(t))
+      console.log({
+        uniqueTables: uniqueTables.length,
+        names: tables.map((t) => getTableName(t)),
+      })
+
+      const tableRows = await Promise.all(
+        uniqueTables.map((t) => db.select().from(t).execute()),
+      )
+
+      const rowsByTable = Object.fromEntries(
+        uniqueTables.map((t, i) => [getTableName(t), tableRows[i]]),
+      )
+
+      expect(rowsByTable).toMatchSnapshot()
+
+      // for (const [index, message] of messages.entries()) {
+      //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      //   const table = tables[index]!
+      //   // This wont' work for multiple.. in same table.. need to see.
+      //   const rows = await db.select().from(table).execute()
+      //   // expect(rows[0]).toEqual(message.data)
+      // }
     })
   },
 )

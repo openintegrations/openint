@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`upsertFromEvent insert infer table schema 1`] = `
+exports[`processEvents insert infer table schema 1`] = `
 [
   "CREATE TABLE IF NOT EXISTS "account" (
 	"id" integer,
@@ -10,7 +10,85 @@ exports[`upsertFromEvent insert infer table schema 1`] = `
 ]
 `;
 
-exports[`upsertFromEvent upsert on multiple cols infer table schema 1`] = `
+exports[`processEvents insert multiple infer table schema 1`] = `
+[
+  "CREATE TABLE IF NOT EXISTS "account" (
+	"id" integer,
+	"name" text
+);
+",
+  "CREATE TABLE IF NOT EXISTS "account" (
+	"id" integer
+);
+",
+]
+`;
+
+exports[`processEvents insert multiple upsert from message 1`] = `
+{
+  "account": [
+    {
+      "id": 112,
+      "name": "Cash",
+    },
+    {
+      "id": 555,
+      "name": "Bank",
+    },
+    {
+      "id": 555,
+      "name": null,
+    },
+  ],
+}
+`;
+
+exports[`processEvents insert upsert from message 1`] = `
+{
+  "account": [
+    {
+      "id": 112,
+      "name": "Cash",
+    },
+  ],
+}
+`;
+
+exports[`processEvents mixed infer table schema 1`] = `
+[
+  "CREATE TABLE IF NOT EXISTS "good" (
+	"id" integer,
+	"name" text
+);
+",
+  "CREATE UNIQUE INDEX IF NOT EXISTS "good_upsert_keys" ON "good" USING btree ("id");",
+  "CREATE TABLE IF NOT EXISTS "life" (
+	"id" integer,
+	"code" text
+);
+",
+  "CREATE UNIQUE INDEX IF NOT EXISTS "life_upsert_keys" ON "life" USING btree ("id");",
+]
+`;
+
+exports[`processEvents mixed upsert from message 1`] = `
+{
+  "good": [
+    {
+      "id": 5,
+      "name": "B",
+    },
+  ],
+  "life": [
+    {
+      "code": "C",
+      "id": 1,
+    },
+  ],
+}
+`;
+
+exports[`processEvents upsert composite keys infer table schema 1`] = `
 [
   "CREATE TABLE IF NOT EXISTS "transaction" (
 	"id" text,
@@ -18,14 +96,39 @@ exports[`upsertFromEvent upsert on multiple cols infer table schema 1`] = `
 	"amount" double precision,
 	"is_deleted" boolean,
 	"raw" jsonb,
-	"array_value" jsonb
+	"array_value" jsonb,
+	"null_value" jsonb,
+	"undefined_value" jsonb
 );
 ",
   "CREATE UNIQUE INDEX IF NOT EXISTS "transaction_upsert_keys" ON "transaction" USING btree ("id","is_deleted");",
 ]
 `;
 
-exports[`upsertFromEvent upsert on single column infer table schema 1`] = `
+exports[`processEvents upsert composite keys upsert from message 1`] = `
+{
+  "transaction": [
+    {
+      "amount": 1.23,
+      "array_value": [
+        {
+          "key": "value",
+        },
+      ],
+      "id": "1",
+      "intId": 2,
+      "is_deleted": false,
+      "null_value": null,
+      "raw": {
+        "key": "value",
+      },
+      "undefined_value": null,
+    },
+  ],
+}
+`;
+
+exports[`processEvents upsert single key infer table schema 1`] = `
 [
   "CREATE TABLE IF NOT EXISTS "tre" (
 	"id" integer,
@@ -34,4 +137,15 @@ exports[`upsertFromEvent upsert on single column infer table schema 1`] = `
 ",
   "CREATE UNIQUE INDEX IF NOT EXISTS "tre_upsert_keys" ON "tre" USING btree ("id");",
 ]
+`;
+
+exports[`processEvents upsert single key upsert from message 1`] = `
+{
+  "tre": [
+    {
+      "id": 5,
+      "name": "B",
+    },
+  ],
+}
 `;

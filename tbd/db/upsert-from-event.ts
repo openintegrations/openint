@@ -1,5 +1,10 @@
-import {PgColumn, pgTable, unique, uniqueIndex} from 'drizzle-orm/pg-core'
-import {z} from '@openint/util'
+import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
+import type {PgColumn, PgDatabase, PgTable} from 'drizzle-orm/pg-core'
+import {pgTable, uniqueIndex} from 'drizzle-orm/pg-core'
+import jsonStableStringify from 'json-stable-stringify'
+import * as R from 'remeda'
+import {z} from 'zod'
+import {dbUpsert} from './upsert'
 
 export function isValidDateString(str: string) {
   const date = new Date(str)
@@ -73,4 +78,59 @@ export function inferTable(event: RecordMessage) {
           ]
         : [],
   )
+}
+
+export function getMigrationsForTable(table: PgTable) {
+  return generateMigration(
+    generateDrizzleJson({}),
+    generateDrizzleJson({table}),
+  )
+}
+
+export async function upsertFromRecordMessages(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  db: PgDatabase<any, any>,
+  messages: RecordMessage[],
+) {
+  const messagesByConfig = R.groupBy(messages, (m) =>
+    jsonStableStringify(R.pick(m, ['stream', 'namespace', 'upsert'])),
+  )
+  for (const msgs of Object.values(messagesByConfig)) {
+    const table = inferTable(msgs[0])
+
+    // This should be cached within a single destinationSync run and therefore
+    // the interface of upsertFromRecordMessages may change...
+    const migrations = await getMigrationsForTable(table)
+    for (const migration of migrations) {
+      await db.execute(migration)
+    }
+    // This doesn't work because upsert needs reference to table column to know how to
+    // serialize value, For example string into jsonb is not the same as string into a text
+    // column. So it's actually somewhat important to get reference to the table schema
+    // rather than needing to infer it each time.
+    // const table2 = pgTable(
+    //   message.stream,
+    //   (t) =>
+    //     Object.fromEntries(
+    //       Object.keys(message.data).map((k) => [k, t.jsonb()]),
+    //     ) as Record<string, any>,
+    // )
+    if (msgs[0].upsert) {
+      await dbUpsert(
+        db,
+        table,
+        msgs.map((m) => m.data),
+        {
+          insertOnlyColumns: msgs[0].upsert?.insert_only_columns,
+          keyColumns: msgs[0].upsert?.key_columns,
+          mustMatchColumns: msgs[0].upsert?.must_match_columns,
+          noDiffColumns: msgs[0].upsert?.no_diff_columns,
+          shallowMergeJsonbColumns: msgs[0].upsert?.shallow_merge_jsonb_columns,
+        },
+      )
+    } else {
+      await db.insert(table).values(msgs.map((m) => m.data))
+    }
+  }
+  return messagesByConfig
 }

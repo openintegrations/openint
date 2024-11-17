@@ -1997,8 +1997,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       json-stable-stringify:
-        specifier: 1.0.1
-        version: 1.0.1
+        specifier: ^1.1.1
+        version: 1.1.1
       json-stringify-pretty-compact:
         specifier: 3.0.0
         version: 3.0.0
@@ -2064,8 +2064,8 @@ importers:
         specifier: 0.4.2
         version: 0.4.2
       '@types/json-stable-stringify':
-        specifier: 1.0.34
-        version: 1.0.34
+        specifier: ^1.1.0
+        version: 1.1.0
       '@types/lodash':
         specifier: 4.14.184
         version: 4.14.184
@@ -2102,9 +2102,15 @@ importers:
       drizzle-orm:
         specifier: ^0.36.3
         version: 0.36.3(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+      json-stable-stringify:
+        specifier: ^1.1.1
+        version: 1.1.1
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
+      remeda:
+        specifier: 1.6.1
+        version: 1.6.1
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -2112,6 +2118,9 @@ importers:
       '@openint/vdk':
         specifier: workspace:*
         version: link:../../kits/vdk
+      '@types/json-stable-stringify':
+        specifier: ^1.1.0
+        version: 1.1.0
       drizzle-kit:
         specifier: ^0.28.1
         version: 0.28.1
@@ -5624,8 +5633,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/json-stable-stringify@1.0.34':
-    resolution: {integrity: sha512-s2cfwagOQAS8o06TcwKfr9Wx11dNGbH2E9vJz1cqV+a/LOyhWNLUNd6JSRYNzvB4d29UuJX2M0Dj9vE1T8fRXw==}
+  '@types/json-stable-stringify@1.1.0':
+    resolution: {integrity: sha512-ESTsHWB72QQq+pjUFIbEz9uSCZppD31YrVkbt2rnUciTYEvcwN6uZIhX5JZeBHqRlFJ41x/7MewCs7E2Qux6Cg==}
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
@@ -9674,8 +9683,9 @@ packages:
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
 
-  json-stable-stringify@1.0.1:
-    resolution: {integrity: sha512-i/J297TW6xyj7sDFa7AmBPkQvLIxWr2kKPWI26tXydnZrzVAocNqn5DMNT1Mzk0vit1V5UkRM7C1KdVNp7Lmcg==}
+  json-stable-stringify@1.1.1:
+    resolution: {integrity: sha512-SU/971Kt5qVQfJpyDveVhQ/vya+5hvrjClFOcr8c0Fq5aODJjMwutrOfCU+eCnVD5gpx1Q3fEqkyom77zH1iIg==}
+    engines: {node: '>= 0.4'}
 
   json-stringify-pretty-compact@3.0.0:
     resolution: {integrity: sha512-Rc2suX5meI0S3bfdZuA7JMFBGkJ875ApfVyq2WHELjBiiG22My/l7/8zPpH/CfFVQHuVLd8NLR0nv6vi0BYYKA==}
@@ -9706,8 +9716,8 @@ packages:
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
-  jsonify@0.0.0:
-    resolution: {integrity: sha512-trvBk1ki43VZptdBI5rIlG4YOzyeH/WefQt5rj1grasPn4iiZWKet8nkgc4GlsAylaztn0qZfUYOiTsASJFdNA==}
+  jsonify@0.0.1:
+    resolution: {integrity: sha512-2/Ki0GcmuqSrgFyelQq9M05y7PS0mEwuIzrf3f1fPqkVDVRvZrPZtVSMHxdgo8Aq0sxAOb/cr2aqqA3LeWHVPg==}
 
   jsonpointer@5.0.1:
     resolution: {integrity: sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==}
@@ -18479,7 +18489,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/json-stable-stringify@1.0.34': {}
+  '@types/json-stable-stringify@1.1.0': {}
 
   '@types/json5@0.0.29': {}
 
@@ -19091,7 +19101,7 @@ snapshots:
 
   array-buffer-byte-length@1.0.0:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       is-array-buffer: 3.0.2
 
   array-flatten@1.1.1: {}
@@ -19141,10 +19151,10 @@ snapshots:
   arraybuffer.prototype.slice@1.0.2:
     dependencies:
       array-buffer-byte-length: 1.0.0
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       is-array-buffer: 3.0.2
       is-shared-array-buffer: 1.0.2
 
@@ -20204,9 +20214,9 @@ snapshots:
 
   define-data-property@1.1.1:
     dependencies:
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       gopd: 1.0.1
-      has-property-descriptors: 1.0.0
+      has-property-descriptors: 1.0.2
 
   define-data-property@1.1.4:
     dependencies:
@@ -20513,7 +20523,7 @@ snapshots:
 
   es-abstract@1.20.4:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       es-to-primitive: 1.2.1
       function-bind: 1.1.2
       function.prototype.name: 1.1.5
@@ -20543,11 +20553,11 @@ snapshots:
       array-buffer-byte-length: 1.0.0
       arraybuffer.prototype.slice: 1.0.2
       available-typed-arrays: 1.0.5
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       es-set-tostringtag: 2.0.2
       es-to-primitive: 1.2.1
       function.prototype.name: 1.1.6
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       get-symbol-description: 1.0.0
       globalthis: 1.0.3
       gopd: 1.0.1
@@ -20609,7 +20619,7 @@ snapshots:
 
   es-set-tostringtag@2.0.2:
     dependencies:
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       has-tostringtag: 1.0.0
       hasown: 2.0.0
 
@@ -21584,14 +21594,14 @@ snapshots:
 
   function.prototype.name@1.1.5:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.1.4
       es-abstract: 1.20.4
       functions-have-names: 1.2.3
 
   function.prototype.name@1.1.6:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
       functions-have-names: 1.2.3
@@ -21673,8 +21683,8 @@ snapshots:
 
   get-symbol-description@1.0.0:
     dependencies:
-      call-bind: 1.0.5
-      get-intrinsic: 1.2.2
+      call-bind: 1.0.7
+      get-intrinsic: 1.2.4
 
   get-tsconfig@4.7.3:
     dependencies:
@@ -21952,7 +21962,7 @@ snapshots:
 
   has-property-descriptors@1.0.0:
     dependencies:
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
 
   has-property-descriptors@1.0.2:
     dependencies:
@@ -22314,7 +22324,7 @@ snapshots:
 
   internal-slot@1.0.6:
     dependencies:
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       hasown: 2.0.0
       side-channel: 1.0.4
 
@@ -22376,8 +22386,8 @@ snapshots:
 
   is-array-buffer@3.0.2:
     dependencies:
-      call-bind: 1.0.5
-      get-intrinsic: 1.2.2
+      call-bind: 1.0.7
+      get-intrinsic: 1.2.4
       is-typed-array: 1.1.12
 
   is-arrayish@0.2.1: {}
@@ -22398,7 +22408,7 @@ snapshots:
 
   is-boolean-object@1.1.2:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       has-tostringtag: 1.0.0
 
   is-buffer@1.1.6: {}
@@ -22459,7 +22469,7 @@ snapshots:
 
   is-finalizationregistry@1.0.2:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
 
   is-fullwidth-code-point@2.0.0: {}
 
@@ -22529,7 +22539,7 @@ snapshots:
 
   is-regex@1.1.4:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       has-tostringtag: 1.0.0
 
   is-regexp@1.0.0: {}
@@ -22538,7 +22548,7 @@ snapshots:
 
   is-shared-array-buffer@1.0.2:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
 
   is-stream-ended@0.1.4:
     optional: true
@@ -22569,12 +22579,12 @@ snapshots:
 
   is-weakref@1.0.2:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
 
   is-weakset@2.0.2:
     dependencies:
-      call-bind: 1.0.5
-      get-intrinsic: 1.2.2
+      call-bind: 1.0.7
+      get-intrinsic: 1.2.4
 
   is-what@4.1.7: {}
 
@@ -22663,7 +22673,7 @@ snapshots:
   iterator.prototype@1.1.2:
     dependencies:
       define-properties: 1.2.1
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       has-symbols: 1.0.3
       reflect.getprototypeof: 1.0.4
       set-function-name: 2.0.1
@@ -23333,9 +23343,12 @@ snapshots:
 
   json-stable-stringify-without-jsonify@1.0.1: {}
 
-  json-stable-stringify@1.0.1:
+  json-stable-stringify@1.1.1:
     dependencies:
-      jsonify: 0.0.0
+      call-bind: 1.0.7
+      isarray: 2.0.5
+      jsonify: 0.0.1
+      object-keys: 1.1.1
 
   json-stringify-pretty-compact@3.0.0: {}
 
@@ -23361,7 +23374,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  jsonify@0.0.0: {}
+  jsonify@0.0.1: {}
 
   jsonpointer@5.0.1: {}
 
@@ -24812,7 +24825,7 @@ snapshots:
 
   object.assign@4.1.4:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.1.4
       has-symbols: 1.0.3
       object-keys: 1.1.1
@@ -25940,10 +25953,10 @@ snapshots:
 
   reflect.getprototypeof@1.0.4:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       globalthis: 1.0.3
       which-builtin-type: 1.1.3
 
@@ -25962,13 +25975,13 @@ snapshots:
 
   regexp.prototype.flags@1.4.3:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.1.4
       functions-have-names: 1.2.3
 
   regexp.prototype.flags@1.5.1:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       set-function-name: 2.0.1
 
@@ -26255,8 +26268,8 @@ snapshots:
 
   safe-array-concat@1.0.1:
     dependencies:
-      call-bind: 1.0.5
-      get-intrinsic: 1.2.2
+      call-bind: 1.0.7
+      get-intrinsic: 1.2.4
       has-symbols: 1.0.3
       isarray: 2.0.5
 
@@ -26266,8 +26279,8 @@ snapshots:
 
   safe-regex-test@1.0.0:
     dependencies:
-      call-bind: 1.0.5
-      get-intrinsic: 1.2.2
+      call-bind: 1.0.7
+      get-intrinsic: 1.2.4
       is-regex: 1.1.4
 
   safe-regex@1.1.0:
@@ -26978,31 +26991,31 @@ snapshots:
 
   string.prototype.trim@1.2.8:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
 
   string.prototype.trimend@1.0.5:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.1.4
       es-abstract: 1.20.4
 
   string.prototype.trimend@1.0.7:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
 
   string.prototype.trimstart@1.0.5:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.1.4
       es-abstract: 1.20.4
 
   string.prototype.trimstart@1.0.7:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
 
@@ -27518,13 +27531,13 @@ snapshots:
 
   typed-array-buffer@1.0.0:
     dependencies:
-      call-bind: 1.0.5
-      get-intrinsic: 1.2.2
+      call-bind: 1.0.7
+      get-intrinsic: 1.2.4
       is-typed-array: 1.1.12
 
   typed-array-byte-length@1.0.0:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       for-each: 0.3.3
       has-proto: 1.0.1
       is-typed-array: 1.1.12
@@ -27532,14 +27545,14 @@ snapshots:
   typed-array-byte-offset@1.0.0:
     dependencies:
       available-typed-arrays: 1.0.5
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       for-each: 0.3.3
       has-proto: 1.0.1
       is-typed-array: 1.1.12
 
   typed-array-length@1.0.4:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       for-each: 0.3.3
       is-typed-array: 1.1.12
 
@@ -27575,7 +27588,7 @@ snapshots:
 
   unbox-primitive@1.0.2:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       has-bigints: 1.0.2
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
