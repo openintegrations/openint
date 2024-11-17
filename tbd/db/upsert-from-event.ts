@@ -9,8 +9,18 @@ export function isValidDateString(str: string) {
   )
 }
 
-export function inferTable(tableName: string, data: Record<string, unknown>) {
-  return pgTable(tableName, (t) => {
+/**
+ * We probably want something based off of the Catalog protocol, by inferring catalog
+ * from data object and then generating a migration from the catalog message as a two step,
+ * unified process.
+ * For now we just do something lightweig thought
+ */
+export function inferTable(event: {
+  stream: string
+  data: Record<string, unknown>
+  // TODO Implement namespace and upsert metadata support
+}) {
+  return pgTable(event.stream, (t) => {
     function inferCol(v: unknown) {
       if (typeof v === 'string') {
         return isValidDateString(v) ? t.timestamp() : t.text()
@@ -27,7 +37,7 @@ export function inferTable(tableName: string, data: Record<string, unknown>) {
       return t.jsonb()
     }
     return Object.fromEntries(
-      Object.entries(data).map(([k, v]) => [k, inferCol(v)]),
+      Object.entries(event.data).map(([k, v]) => [k, inferCol(v)]),
     )
   })
 }
