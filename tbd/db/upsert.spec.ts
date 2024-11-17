@@ -57,14 +57,14 @@ test('upsert query', async () => {
     on conflict ("source_id", "id") do
     update
     set
-      "is_deleted" = excluded.is_deleted,
-      "raw" = COALESCE("engagement_sequence"."raw", '{}'::jsonb) || excluded.raw,
-      "unified" = COALESCE("engagement_sequence"."unified", '{}'::jsonb) || excluded.unified
+      "is_deleted" = excluded."is_deleted",
+      "raw" = COALESCE("engagement_sequence"."raw", '{}'::jsonb) || excluded."raw",
+      "unified" = COALESCE("engagement_sequence"."unified", '{}'::jsonb) || excluded."unified"
     where
       (
-        "engagement_sequence"."is_deleted" IS DISTINCT FROM excluded.is_deleted
-        or "engagement_sequence"."raw" IS DISTINCT FROM excluded.raw
-        or "engagement_sequence"."unified" IS DISTINCT FROM excluded.unified
+        "engagement_sequence"."is_deleted" IS DISTINCT FROM excluded."is_deleted"
+        or "engagement_sequence"."raw" IS DISTINCT FROM excluded."raw"
+        or "engagement_sequence"."unified" IS DISTINCT FROM excluded."unified"
       )
     "
   `)

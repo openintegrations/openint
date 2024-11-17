@@ -121,7 +121,10 @@ export function dbUpsert<
             // if they are different, even if they are both NULL. On the other hand, the "!=" operator
             // (also known as "not equals") compares two values and returns true if they are different,
             // but treats NULL as an unknown value and does not consider it as different from other values.
-            (c) => sql`${c} IS DISTINCT FROM ${sql.raw(`excluded.${c.name}`)}`,
+            (c) =>
+              sql`${c} IS DISTINCT FROM ${sql`excluded.${sql.identifier(
+                c.name,
+              )}`}`,
           ),
       ),
       ...(options.mustMatchColumns ?? [])
@@ -143,7 +146,7 @@ export function dbUpsert<
           shallowMergeJsonbColumns?.find((jc) => jc.name === c.name)
             ? sql`COALESCE(${c}, '{}'::jsonb) ||`
             : sql``,
-          sql.raw(`excluded.${c.name}`),
+          sql`excluded.${sql.identifier(c.name)}`,
         ]),
       ]),
     ) as PgUpdateSetSource<TTable>,
