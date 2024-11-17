@@ -1,5 +1,5 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
-import type {PgDatabase} from 'drizzle-orm/pg-core'
+import {type PgDatabase} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
 import {dbUpsertOne} from './upsert'
@@ -38,7 +38,17 @@ function upsertFromRecordMessage(
   message: RecordMessage,
 ) {
   const table = inferTable({stream: message.stream, data: message.data})
-
+  // This doesn't work because upsert needs reference to table column to know how to
+  // serialize value, For example string into jsonb is not the same as string into a text
+  // column. So it's actually somewhat important to get reference to the table schema
+  // rather than needing to infer it each time.
+  // const table2 = pgTable(
+  //   message.stream,
+  //   (t) =>
+  //     Object.fromEntries(
+  //       Object.keys(message.data).map((k) => [k, t.jsonb()]),
+  //     ) as Record<string, any>,
+  // )
   if (message.upsert) {
     return dbUpsertOne(db, table, message.data, {
       insertOnlyColumns: message.upsert?.insert_only_columns,
@@ -51,39 +61,53 @@ function upsertFromRecordMessage(
   return db.insert(table).values(message.data)
 }
 
-const message: RecordMessage = {
-  stream: 'transaction',
-  data: {
-    id: '1',
-    intId: 2,
-    amount: 1.23,
-    // created_at: '2021-01-01T00:00:00Z', // this colun also causes problem for now
-    // uupdated_at: new Date(), // Should we allow non-json values?
-    is_deleted: false,
-    raw: {key: 'value'},
-    array_value: [{key: 'value'}],
-  },
-  upsert: {
-    key_columns: ['id', 'is_deleted'],
-  },
-}
-const table = inferTable(message)
+describe.each([
+  ['insert', {stream: 'account', data: {id: 112, name: 'Cash'}}],
+  [
+    'upsert on single column',
+    {stream: 'tre', data: {id: 5, name: 'B'}, upsert: {key_columns: ['id']}},
+  ],
+  [
+    'upsert on multiple cols',
+    {
+      stream: 'transaction',
+      data: {
+        id: '1',
+        intId: 2,
+        amount: 1.23,
+        // created_at: '2021-01-01T00:00:00Z', // this colun also causes problem for now
+        // uupdated_at: new Date(), // Should we allow non-json values?
+        is_deleted: false,
+        raw: {key: 'value'},
+        array_value: [{key: 'value'}],
+      },
+      upsert: {
+        key_columns: ['id', 'is_deleted'],
+      },
+    },
+  ],
+] satisfies Array<[string, RecordMessage]>)(
+  'upsertFromEvent %s',
+  (_, message) => {
+    const table = inferTable(message)
 
-test('infer table schema', async () => {
-  const migrations = await generateMigration(
-    generateDrizzleJson({}),
-    generateDrizzleJson({table}),
-  )
-  expect(migrations).toMatchSnapshot()
-  for (const migration of migrations) {
-    await db.execute(migration)
-  }
-})
+    test('infer table schema', async () => {
+      const migrations = await generateMigration(
+        generateDrizzleJson({}),
+        generateDrizzleJson({table}),
+      )
+      expect(migrations).toMatchSnapshot()
+      for (const migration of migrations) {
+        await db.execute(migration)
+      }
+    })
 
-test('upsert from message', async () => {
-  await upsertFromRecordMessage(db, message)
-  const rows = await db.select().from(table).execute()
-  expect(rows[0]).toEqual(message.data)
-})
+    test('upsert from message', async () => {
+      await upsertFromRecordMessage(db, message)
+      const rows = await db.select().from(table).execute()
+      expect(rows[0]).toEqual(message.data)
+    })
+  },
+)
 
 afterAll(() => db.$client.end())

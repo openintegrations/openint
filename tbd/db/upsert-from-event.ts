@@ -60,9 +60,12 @@ export function inferTable(event: RecordMessage) {
       )
     },
     (table) =>
+      // TODO: Check against existing primary key and unique indexes
+      // to not create if already there?
+      // && Object.values(table).filter(c => c.i)
       event.upsert?.key_columns
         ? [
-            uniqueIndex('upsert_keys').on(
+            uniqueIndex(`${event.stream}_upsert_keys`).on(
               ...(event.upsert.key_columns.map(
                 (col) => table[col] as PgColumn,
               ) as [PgColumn]),

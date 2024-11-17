@@ -1,6 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`infer table schema 1`] = `
+exports[`upsertFromEvent insert infer table schema 1`] = `
+[
+  "CREATE TABLE IF NOT EXISTS "account" (
+	"id" integer,
+	"name" text
+);
+",
+]
+`;
+
+exports[`upsertFromEvent upsert on multiple cols infer table schema 1`] = `
 [
   "CREATE TABLE IF NOT EXISTS "transaction" (
 	"id" text,
@@ -11,6 +21,17 @@ exports[`infer table schema 1`] = `
 	"array_value" jsonb
 );
 ",
-  "CREATE UNIQUE INDEX IF NOT EXISTS "upsert_keys" ON "transaction" USING btree ("id","is_deleted");",
+  "CREATE UNIQUE INDEX IF NOT EXISTS "transaction_upsert_keys" ON "transaction" USING btree ("id","is_deleted");",
+]
+`;
+
+exports[`upsertFromEvent upsert on single column infer table schema 1`] = `
+[
+  "CREATE TABLE IF NOT EXISTS "tre" (
+	"id" integer,
+	"name" text
+);
+",
+  "CREATE UNIQUE INDEX IF NOT EXISTS "tre_upsert_keys" ON "tre" USING btree ("id");",
 ]
 `;
