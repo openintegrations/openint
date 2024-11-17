@@ -2,8 +2,8 @@ import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import type {PgDatabase} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
-import {z} from '@openint/util'
 import {dbUpsertOne} from './upsert'
+import type {RecordMessage} from './upsert-from-event'
 import {inferTable, isValidDateString} from './upsert-from-event'
 
 beforeAll(async () => {
@@ -32,27 +32,10 @@ test.each([
   expect(isValidDateString(input)).toEqual(valid)
 })
 
-/** Airbyte record message */
-const zRecordMessage = z.object({
-  stream: z.string(),
-  // Should we support non-record data?
-  data: z.record(z.unknown()),
-  namespace: z.string().optional(),
-  upsert: z
-    .object({
-      insert_only_columns: z.array(z.string()),
-      key_columns: z.array(z.string()),
-      must_match_columns: z.array(z.string()),
-      no_diff_columns: z.array(z.string()),
-      shallow_merge_jsonb_columns: z.array(z.string()),
-    })
-    .optional(),
-})
-
 function upsertFromRecordMessage(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   db: PgDatabase<any, any>,
-  message: z.infer<typeof zRecordMessage>,
+  message: RecordMessage,
 ) {
   const table = inferTable({stream: message.stream, data: message.data})
 
@@ -68,7 +51,7 @@ function upsertFromRecordMessage(
   return db.insert(table).values(message.data)
 }
 
-const message: z.infer<typeof zRecordMessage> = {
+const message: RecordMessage = {
   stream: 'transaction',
   data: {
     id: '1',
@@ -79,6 +62,9 @@ const message: z.infer<typeof zRecordMessage> = {
     is_deleted: false,
     raw: {key: 'value'},
     array_value: [{key: 'value'}],
+  },
+  upsert: {
+    key_columns: ['id', 'is_deleted'],
   },
 }
 const table = inferTable(message)

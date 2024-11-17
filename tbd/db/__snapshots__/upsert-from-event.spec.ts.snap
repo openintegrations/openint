@@ -11,5 +11,6 @@ exports[`infer table schema 1`] = `
 	"array_value" jsonb
 );
 ",
+  "CREATE UNIQUE INDEX IF NOT EXISTS "upsert_keys" ON "transaction" USING btree ("id","is_deleted");",
 ]
 `;
