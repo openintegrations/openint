@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`infer 1`] = `
+[
+  "CREATE TABLE IF NOT EXISTS "transaction" (
+	"id" text,
+	"intId" integer,
+	"amount" double precision,
+	"created_at" timestamp,
+	"updated_at" timestamp,
+	"is_deleted" boolean,
+	"raw" jsonb,
+	"array_value" jsonb
+);
+",
+]
+`;

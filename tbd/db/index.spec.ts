@@ -3,6 +3,7 @@ import {sql} from 'drizzle-orm'
 import {check, pgTable} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
+import {inferTable} from './upsert-from-event'
 
 beforeAll(async () => {
   const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
@@ -23,18 +24,13 @@ test('connect', async () => {
 test('migrate', async () => {
   const table = pgTable(
     'account',
-    (t) => ({
-      id: t.serial().primaryKey(),
-      email: t.text(),
-    }),
+    (t) => ({id: t.serial().primaryKey(), email: t.text()}),
     (table) => [check('email_check', sql`${table.email} LIKE '%@%'`)],
   )
-
   const migrations = await generateMigration(
     generateDrizzleJson({}),
     generateDrizzleJson({table}),
   )
-
   expect(migrations).toEqual([
     `CREATE TABLE IF NOT EXISTS "account" (
 	"id" serial PRIMARY KEY NOT NULL,
@@ -43,15 +39,12 @@ test('migrate', async () => {
 );
 `,
   ])
-
   for (const migration of migrations) {
     await db.execute(migration)
   }
-
   await db.insert(table).values({email: 'hello@world.com'})
   const rows = await db.select().from(table).execute()
   expect(rows).toEqual([{id: 1, email: 'hello@world.com'}])
-
   await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
     'violates check constraint',
   )
