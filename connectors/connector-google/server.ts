@@ -100,12 +100,14 @@ export const googleServer = {
 
     const globalScopes = _.oauth.scopes
 
-    const integrationScopesMap = {
-      drive: _.integrations.drive?.scopes,
-      calendar: _.integrations.calendar?.scopes,
-      gmail: _.integrations.gmail?.scopes,
-      sheets: _.integrations.sheets?.scopes,
-    }
+    const integrationScopesMap = integrations.reduce(
+      (map, integration) => {
+        map[integration.id] =
+          _.integrations[integration.id as keyof typeof _.integrations]?.scopes
+        return map
+      },
+      {} as Record<string, string | undefined>,
+    )
 
     if (
       context.integrationExternalId &&
