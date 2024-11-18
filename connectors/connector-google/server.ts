@@ -111,7 +111,7 @@ export const googleServer = {
       context.integrationExternalId &&
       context.integrationExternalId in integrationScopesMap
     ) {
-      return {
+      const authParams = {
         authorization_params: {
           scope: mergeScopes(
             globalScopes,
@@ -121,6 +121,8 @@ export const googleServer = {
           ),
         },
       }
+      console.log('[googleServer] authParams', authParams)
+      return authParams
     }
     return {}
   },
