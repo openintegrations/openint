@@ -5,7 +5,8 @@ function mergeScopes(
   globalScopes: string = '',
   integrationScopes: string = '',
 ): string {
-  const scopes = [globalScopes, integrationScopes].filter(Boolean).join(',')
+  const scopes = [globalScopes, integrationScopes].filter(Boolean).join(' ')
+  console.log('[google] scopes', scopes)
   return scopes
 }
 
