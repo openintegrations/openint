@@ -6,7 +6,7 @@ function mergeScopes(
   integrationScopes: string = '',
 ): string {
   const scopes = [globalScopes, integrationScopes].filter(Boolean).join(' ')
-  console.log('[google] scopes', scopes)
+  console.log('[googleServer] scopes', scopes)
   return scopes
 }
 
@@ -124,6 +124,7 @@ export const googleServer = {
       console.log('[googleServer] authParams', authParams)
       return authParams
     }
+    console.log('[googleServer] no authParams', JSON.stringify(context))
     return {}
   },
   async listIntegrations(params: unknown) {

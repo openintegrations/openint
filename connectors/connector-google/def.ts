@@ -18,43 +18,61 @@ export const googleSchemas = {
       scopes: z
         .string()
         .optional()
-        .describe('global google connector comma separated scopes'),
+        .describe('global google connector space separated scopes'),
     }),
     integrations: z.object({
       drive: z
         .object({
           enabled: z.boolean().optional(),
-          scopes: z.string().optional().describe('drive specific scopes'),
+          scopes: z
+            .string()
+            .optional()
+            .describe('drive specific space separated scopes'),
         })
         .optional(),
       gmail: z
         .object({
           enabled: z.boolean().optional(),
-          scopes: z.string().optional().describe('gmail specific scopes'),
+          scopes: z
+            .string()
+            .optional()
+            .describe('gmail specific space separated scopes'),
         })
         .optional(),
       calendar: z
         .object({
           enabled: z.boolean().optional(),
-          scopes: z.string().optional().describe('calendar specific scopes'),
+          scopes: z
+            .string()
+            .optional()
+            .describe('calendar specific space separated scopes'),
         })
         .optional(),
       sheets: z
         .object({
           enabled: z.boolean().optional(),
-          scopes: z.string().optional().describe('sheets specific scopes'),
+          scopes: z
+            .string()
+            .optional()
+            .describe('sheets specific space separated scopes'),
         })
         .optional(),
       docs: z
         .object({
           enabled: z.boolean().optional(),
-          scopes: z.string().optional().describe('docs specific scopes'),
+          scopes: z
+            .string()
+            .optional()
+            .describe('docs specific space separated scopes'),
         })
         .optional(),
       slides: z
         .object({
           enabled: z.boolean().optional(),
-          scopes: z.string().optional().describe('slides specific scopes'),
+          scopes: z
+            .string()
+            .optional()
+            .describe('slides specific space separated scopes'),
         })
         .optional(),
     }),
