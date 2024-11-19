@@ -5,7 +5,7 @@ export const account = z
     id: z.string(),
     number: z.string().nullish(),
     name: z.string(),
-    type: z.string(), //  z.enum(['asset', 'liability', 'equity', 'income', 'expense']),
+    type: z.string().optional(), //  z.enum(['asset', 'liability', 'equity', 'income', 'expense']),
     subAccount: z.boolean().optional(),
     accountType: z.string().optional(),
     accountSubType: z.string().optional(),
