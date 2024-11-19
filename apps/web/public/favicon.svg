@@ -1,4 +1,5 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect width="64" height="64" rx="15" fill="#1C1C1C"/>
 <rect x="0.25" y="0.25" width="63.5" height="63.5" rx="14.75" stroke="white" stroke-opacity="0.2" stroke-width="0.5"/>
 <g clip-path="url(#clip0_386_158)">
 <mask id="mask0_386_158" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="7" y="8" width="50" height="47">
