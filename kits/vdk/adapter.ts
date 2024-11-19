@@ -75,10 +75,10 @@ export async function proxyCallAdapter({
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const out = await implementation({instance: ctx.remote.instance, input, ctx})
-  console.log(
-    // `[proxyCallRemote] output for ${ctx.remote.connectorName}.${methodName}`,
-    JSON.stringify(out),
-  )
+  // console.log(
+  //   `[proxyCallRemote] output for ${ctx.remote.connectorName}.${methodName}`,
+  //   JSON.stringify(out),
+  // )
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return out
 }

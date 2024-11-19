@@ -149,18 +149,7 @@ const mappers = {
       endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
       currency: (e) => e?.data?.Header?.Currency ?? 'USD',
       transactions: (e) => {
-        const columnMap: {[key: string]: number} =
-          e?.data?.Columns?.Column?.reduce(
-            (
-              acc: {[key: string]: number},
-              col: {ColTitle: string},
-              index: number,
-            ) => {
-              acc[col.ColTitle] = index
-              return acc
-            },
-            {} as {[key: string]: number},
-          )
+        const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
 
         return (
           e?.data?.Rows?.Row?.map((row) => ({
@@ -217,31 +206,71 @@ const mappers = {
       startPeriod: (e) => e?.data?.Header?.StartPeriod ?? '',
       endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
       currency: (e) => e?.data?.Header?.Currency ?? 'USD',
-      entries: (e) =>
-        e?.data?.Rows?.Row?.filter((row) => !row.group)?.map((row) => ({
-          customerId: row?.ColData?.[0]?.id ?? '',
-          customerName: row?.ColData?.[0]?.value ?? '',
-          totalIncome: parseFloat(row?.ColData?.[1]?.value ?? '0'),
-          totalExpenses: parseFloat(row?.ColData?.[2]?.value ?? '0'),
-          netIncome: parseFloat(row?.ColData?.[3]?.value ?? '0'),
-        })) ?? [],
-      totalIncome: (e) =>
-        parseFloat(
-          e?.data?.Rows?.Row?.find((row) => row.group === 'GrandTotal')?.Summary
-            ?.ColData?.[1]?.value ?? '0',
-        ),
-      totalExpenses: (e) =>
-        parseFloat(
-          e?.data?.Rows?.Row?.find((row) => row.group === 'GrandTotal')?.Summary
-            ?.ColData?.[2]?.value ?? '0',
-        ),
-      netIncome: (e) =>
-        parseFloat(
-          e?.data?.Rows?.Row?.find((row) => row.group === 'GrandTotal')?.Summary
-            ?.ColData?.[3]?.value ?? '0',
-        ),
+      entries: (e) => {
+        const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+
+        return (
+          e?.data?.Rows?.Row?.filter((row) => !row.group)?.map((row) => ({
+            customerId: row?.ColData?.[columnMap[''] as number]?.id ?? '',
+            customerName: row?.ColData?.[columnMap[''] as number]?.value ?? '',
+            totalIncome: parseFloat(
+              row?.ColData?.[columnMap['Income'] as number]?.value || '0',
+            ),
+            totalExpenses: parseFloat(
+              row?.ColData?.[columnMap['Expenses'] as number]?.value || '0',
+            ),
+            netIncome: parseFloat(
+              row?.ColData?.[columnMap['Net Income'] as number]?.value || '0',
+            ),
+          })) ?? []
+        )
+      },
+      totalIncome: (e) => {
+        const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+
+        return (
+          parseFloat(
+            e?.data?.Rows?.Row?.find((row) => row.group === 'GrandTotal')
+              ?.Summary?.ColData?.[columnMap['Income'] as number]?.value || '0',
+          ) || 0
+        )
+      },
+      totalExpenses: (e) => {
+        const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+        return (
+          parseFloat(
+            e?.data?.Rows?.Row?.find((row) => row.group === 'GrandTotal')
+              ?.Summary?.ColData?.[columnMap['Expenses'] as number]?.value ||
+              '0',
+          ) || 0
+        )
+      },
+      netIncome: (e) => {
+        const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+
+        return (
+          parseFloat(
+            e?.data?.Rows?.Row?.find((row) => row.group === 'GrandTotal')
+              ?.Summary?.ColData?.[columnMap['Net Income'] as number]?.value ||
+              '0',
+          ) || 0
+        )
+      },
     },
   ),
+}
+
+// Utility function to create a column map
+function createColumnMap(columns: {ColTitle: string}[]): {
+  [key: string]: number
+} {
+  return columns.reduce(
+    (acc: {[key: string]: number}, col: {ColTitle: string}, index: number) => {
+      acc[col.ColTitle] = index
+      return acc
+    },
+    {} as {[key: string]: number},
+  )
 }
 
 export const qboAdapter = {
