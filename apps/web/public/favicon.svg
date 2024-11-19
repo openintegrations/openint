@@ -1,5 +1,5 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect width="64" height="64" rx="15" fill="url(#paint0_linear_386_158)"/>
+<rect width="64" height="64" rx="15" fill="#1C1C1C"/>
 <rect x="0.25" y="0.25" width="63.5" height="63.5" rx="14.75" stroke="white" stroke-opacity="0.2" stroke-width="0.5"/>
 <g clip-path="url(#clip0_386_158)">
 <mask id="mask0_386_158" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="7" y="8" width="50" height="47">
@@ -13,12 +13,6 @@
 <pattern id="pattern0_386_158" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image0_386_158" transform="scale(0.000564653 0.00058651)"/>
 </pattern>
-<linearGradient id="paint0_linear_386_158" x1="0" y1="0" x2="60.5" y2="64" gradientUnits="userSpaceOnUse">
-<stop offset="0.42" stop-color="#1C1C1C"/>
-<stop offset="0.71" stop-color="#443171"/>
-<stop offset="0.82" stop-color="#7745EF"/>
-<stop offset="1" stop-color="#D0C3EE"/>
-</linearGradient>
 <clipPath id="clip0_386_158">
 <rect width="48.4775" height="47" fill="white" transform="translate(8 8)"/>
 </clipPath>
