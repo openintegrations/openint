@@ -1,11 +1,29 @@
 import {z} from '@openint/vdk'
 
-export const account = z.object({
-  id: z.string(),
-  number: z.string().nullish(),
-  name: z.string(),
-  type: z.string(), //  z.enum(['asset', 'liability', 'equity', 'income', 'expense']),
-})
+export const account = z
+  .object({
+    id: z.string(),
+    number: z.string().nullish(),
+    name: z.string(),
+    type: z.string(), //  z.enum(['asset', 'liability', 'equity', 'income', 'expense']),
+    subAccount: z.boolean().optional(),
+    accountType: z.string().optional(),
+    accountSubType: z.string().optional(),
+    currentBalance: z.number().optional(),
+    currencyRef: z
+      .object({
+        value: z.string(),
+        name: z.string(),
+      })
+      .optional(),
+    metaData: z
+      .object({
+        createTime: z.string(),
+        lastUpdatedTime: z.string(),
+      })
+      .optional(),
+  })
+  .passthrough()
 // .openapi({format: 'prefix:acct'}),
 export const expense = z.object({
   id: z.string(),
@@ -77,7 +95,7 @@ const transactionSchema = z.object({
   account: z.string().optional(),
   split: z.string().optional(),
   amount: z.number(),
-});
+})
 
 export const transactionList = z.object({
   reportName: z.string(),
@@ -85,13 +103,13 @@ export const transactionList = z.object({
   endPeriod: z.string(),
   currency: z.string(),
   transactions: z.array(transactionSchema),
-});
+})
 
 const customerBalanceEntrySchema = z.object({
   customerId: z.string(),
   customerName: z.string(),
   balance: z.number(),
-});
+})
 
 export const customerBalance = z.object({
   reportName: z.string(),
@@ -99,7 +117,7 @@ export const customerBalance = z.object({
   currency: z.string(),
   entries: z.array(customerBalanceEntrySchema),
   totalBalance: z.number(),
-});
+})
 
 const customerIncomeEntrySchema = z.object({
   customerId: z.string(),
@@ -107,7 +125,7 @@ const customerIncomeEntrySchema = z.object({
   totalIncome: z.number(),
   totalExpenses: z.number(),
   netIncome: z.number(),
-});
+})
 
 export const customerIncome = z.object({
   reportName: z.string(),
@@ -118,7 +136,7 @@ export const customerIncome = z.object({
   totalIncome: z.number(),
   totalExpenses: z.number(),
   netIncome: z.number(),
-});
+})
 
 export const usBankAccount = z.object({
   updated: z.string(),
@@ -131,4 +149,4 @@ export const usBankAccount = z.object({
   accountType: z.string(),
   routingNumber: z.string(),
   id: z.string(),
-});
+})
