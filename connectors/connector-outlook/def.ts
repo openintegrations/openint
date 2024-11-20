@@ -26,7 +26,8 @@ export const outlookDef = {
     stage: 'beta',
     verticals: ['other'],
     logoUrl: '/_assets/logo-outlook.svg',
-    nangoProvider: 'outlook',
+    // TODO: update  nango SDK version to support outlook key
+    nangoProvider: 'outlook' as any,
   },
 } satisfies ConnectorDef<typeof outlookSchemas>
 
