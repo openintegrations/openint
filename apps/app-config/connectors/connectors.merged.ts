@@ -42,6 +42,8 @@ import {default as connectorMoota_def} from '@openint/connector-moota/def'
 import {default as connectorMoota_server} from '@openint/connector-moota/server'
 import {default as connectorOnebrick_def} from '@openint/connector-onebrick/def'
 import {default as connectorOnebrick_server} from '@openint/connector-onebrick/server'
+import {default as connectorOutlook_def} from '@openint/connector-outlook/def'
+import {default as connectorOutlook_server} from '@openint/connector-outlook/server'
 import {default as connectorOutreach_def} from '@openint/connector-outreach/def'
 import {default as connectorOutreach_server} from '@openint/connector-outreach/server'
 import {default as connectorPipedrive_def} from '@openint/connector-pipedrive/def'
@@ -62,6 +64,8 @@ import {default as connectorSalesloft_def} from '@openint/connector-salesloft/de
 import {default as connectorSalesloft_server} from '@openint/connector-salesloft/server'
 import {default as connectorSaltedge_def} from '@openint/connector-saltedge/def'
 import {default as connectorSaltedge_server} from '@openint/connector-saltedge/server'
+import {default as connectorSlack_def} from '@openint/connector-slack/def'
+import {default as connectorSlack_server} from '@openint/connector-slack/server'
 import {default as connectorSplitwise_def} from '@openint/connector-splitwise/def'
 import {default as connectorSplitwise_server} from '@openint/connector-splitwise/server'
 import {default as connectorSpreadsheet_def} from '@openint/connector-spreadsheet/def'
@@ -193,6 +197,11 @@ const connectorOnebrick = {
   ...connectorOnebrick_server,
 }
 
+const connectorOutlook = {
+  ...connectorOutlook_def,
+  ...connectorOutlook_server,
+}
+
 const connectorOutreach = {
   ...connectorOutreach_def,
   ...connectorOutreach_server,
@@ -241,6 +250,11 @@ const connectorSalesloft = {
 const connectorSaltedge = {
   ...connectorSaltedge_def,
   ...connectorSaltedge_server,
+}
+
+const connectorSlack = {
+  ...connectorSlack_def,
+  ...connectorSlack_server,
 }
 
 const connectorSplitwise = {
@@ -320,6 +334,7 @@ export const mergedConnectors = {
   mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
+  outlook: connectorOutlook,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
   plaid: connectorPlaid,
@@ -330,6 +345,7 @@ export const mergedConnectors = {
   salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
+  slack: connectorSlack,
   splitwise: connectorSplitwise,
   spreadsheet: connectorSpreadsheet,
   stripe: connectorStripe,

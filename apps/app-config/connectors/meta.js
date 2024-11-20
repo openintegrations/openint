@@ -207,6 +207,15 @@ module.exports = [
     },
   },
   {
+    name: 'outlook',
+    dirName: 'connector-outlook',
+    varName: 'connectorOutlook',
+    imports: {
+      def: '@openint/connector-outlook/def',
+      server: '@openint/connector-outlook/server',
+    },
+  },
+  {
     name: 'outreach',
     dirName: 'connector-outreach',
     varName: 'connectorOutreach',
@@ -295,6 +304,15 @@ module.exports = [
     imports: {
       def: '@openint/connector-saltedge/def',
       server: '@openint/connector-saltedge/server',
+    },
+  },
+  {
+    name: 'slack',
+    dirName: 'connector-slack',
+    varName: 'connectorSlack',
+    imports: {
+      def: '@openint/connector-slack/def',
+      server: '@openint/connector-slack/server',
     },
   },
   {
