@@ -137,12 +137,15 @@ export const resourceRouter = trpc.router({
     // How do we verify that the userId here is the same as the userId from preConnectOption?
     .output(z.string())
     .mutation(async ({input: {connectorConfigId, settings, ...input}, ctx}) => {
-      // Authorization
-      await ctx.services.getConnectorConfigInfoOrFail(connectorConfigId)
-
-      // Escalate to now have enough pemission to sync
       const int =
         await ctx.asOrgIfNeeded.getConnectorConfigOrFail(connectorConfigId)
+
+      if (int.orgId !== ctx.viewer.orgId) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: `You are not allowed to create resources for ${int.connectorName}`,
+        })
+      }
 
       const _extId = makeUlid()
       const resoId = makeId('reso', int.connector.name, _extId)
