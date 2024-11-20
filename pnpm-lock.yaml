@@ -243,6 +243,9 @@ importers:
       '@openint/connector-onebrick':
         specifier: workspace:*
         version: link:../../connectors/connector-onebrick
+      '@openint/connector-outlook':
+        specifier: workspace:*
+        version: link:../../connectors/connector-outlook
       '@openint/connector-outreach':
         specifier: workspace:*
         version: link:../../connectors/connector-outreach
@@ -984,6 +987,21 @@ importers:
       '@types/react':
         specifier: 18.0.27
         version: 18.0.27
+
+  connectors/connector-outlook:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+      '@opensdks/runtime':
+        specifier: ^0.0.19
+        version: 0.0.19
 
   connectors/connector-outreach:
     dependencies:

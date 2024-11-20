@@ -20,6 +20,7 @@ import {default as connectorMerge} from '@openint/connector-merge/server'
 import {default as connectorMongodb} from '@openint/connector-mongodb/server'
 import {default as connectorMoota} from '@openint/connector-moota/server'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/server'
+import {default as connectorOutlook} from '@openint/connector-outlook/server'
 import {default as connectorOutreach} from '@openint/connector-outreach/server'
 import {default as connectorPipedrive} from '@openint/connector-pipedrive/server'
 import {default as connectorPlaid} from '@openint/connector-plaid/server'
@@ -64,6 +65,7 @@ export const serverConnectors = {
   mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
+  outlook: connectorOutlook,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
   plaid: connectorPlaid,
