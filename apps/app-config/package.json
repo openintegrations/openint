@@ -46,6 +46,7 @@
     "@openint/connector-salesforce": "workspace:*",
     "@openint/connector-salesloft": "workspace:*",
     "@openint/connector-saltedge": "workspace:*",
+    "@openint/connector-slack": "workspace:*",
     "@openint/connector-splitwise": "workspace:*",
     "@openint/connector-spreadsheet": "workspace:*",
     "@openint/connector-stripe": "workspace:*",

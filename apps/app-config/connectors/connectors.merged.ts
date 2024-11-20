@@ -62,6 +62,8 @@ import {default as connectorSalesloft_def} from '@openint/connector-salesloft/de
 import {default as connectorSalesloft_server} from '@openint/connector-salesloft/server'
 import {default as connectorSaltedge_def} from '@openint/connector-saltedge/def'
 import {default as connectorSaltedge_server} from '@openint/connector-saltedge/server'
+import {default as connectorSlack_def} from '@openint/connector-slack/def'
+import {default as connectorSlack_server} from '@openint/connector-slack/server'
 import {default as connectorSplitwise_def} from '@openint/connector-splitwise/def'
 import {default as connectorSplitwise_server} from '@openint/connector-splitwise/server'
 import {default as connectorSpreadsheet_def} from '@openint/connector-spreadsheet/def'
@@ -243,6 +245,11 @@ const connectorSaltedge = {
   ...connectorSaltedge_server,
 }
 
+const connectorSlack = {
+  ...connectorSlack_def,
+  ...connectorSlack_server,
+}
+
 const connectorSplitwise = {
   ...connectorSplitwise_def,
   ...connectorSplitwise_server,
@@ -330,6 +337,7 @@ export const mergedConnectors = {
   salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
+  slack: connectorSlack,
   splitwise: connectorSplitwise,
   spreadsheet: connectorSpreadsheet,
   stripe: connectorStripe,

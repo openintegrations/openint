@@ -31,6 +31,7 @@ import {default as connectorRevert} from '@openint/connector-revert/def'
 import {default as connectorSalesforce} from '@openint/connector-salesforce/def'
 import {default as connectorSalesloft} from '@openint/connector-salesloft/def'
 import {default as connectorSaltedge} from '@openint/connector-saltedge/def'
+import {default as connectorSlack} from '@openint/connector-slack/def'
 import {default as connectorSplitwise} from '@openint/connector-splitwise/def'
 import {default as connectorSpreadsheet} from '@openint/connector-spreadsheet/def'
 import {default as connectorStripe} from '@openint/connector-stripe/def'
@@ -76,6 +77,7 @@ export const defConnectors = {
   salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
+  slack: connectorSlack,
   splitwise: connectorSplitwise,
   spreadsheet: connectorSpreadsheet,
   stripe: connectorStripe,

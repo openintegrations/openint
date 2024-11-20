@@ -298,6 +298,15 @@ module.exports = [
     },
   },
   {
+    name: 'slack',
+    dirName: 'connector-slack',
+    varName: 'connectorSlack',
+    imports: {
+      def: '@openint/connector-slack/def',
+      server: '@openint/connector-slack/server',
+    },
+  },
+  {
     name: 'splitwise',
     dirName: 'connector-splitwise',
     varName: 'connectorSplitwise',
