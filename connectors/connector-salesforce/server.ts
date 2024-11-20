@@ -15,12 +15,7 @@ export const salesforceServer = {
     return sdk
   },
 
-  postConnect: async (connectOutput, config, context) => {
-    console.log('salesforce postConnect input:', {
-      connectOutput,
-      config,
-      context,
-    })
+  postConnect: async (connectOutput) => {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
     })
