@@ -15,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import {ChevronDown} from 'lucide-react'
+import {ChevronDown, Search} from 'lucide-react'
 import React from 'react'
 import {R, titleCase} from '@openint/util'
 import {
@@ -56,6 +56,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [isFocused, setIsFocused] = React.useState(false)
 
   const columns = React.useMemo(
     () =>
@@ -113,12 +114,23 @@ export function DataTable<TData, TValue>({
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Search..."
-          value={(table.getState().globalFilter as string) ?? ''}
-          onChange={(event) => table.setGlobalFilter(event.target.value)}
-          className="max-w-sm"
-        />
+        <div
+          className="relative max-w-lg transition-all duration-300 ease-in-out"
+          style={{width: isFocused ? '600px' : '400px'}}>
+          {isFocused && (
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-500 opacity-100 transition-opacity duration-300 ease-in-out" />
+          )}
+          <Input
+            placeholder={isFocused ? '' : 'Search...'}
+            value={(table.getState().globalFilter as string) ?? ''}
+            onChange={(event) => table.setGlobalFilter(event.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className={`transition-all duration-300 ease-in-out ${
+              isFocused ? 'pl-10' : 'pl-3'
+            }`}
+          />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
