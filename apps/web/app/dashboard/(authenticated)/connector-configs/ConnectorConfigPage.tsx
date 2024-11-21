@@ -1,6 +1,6 @@
 'use client'
 
-import {Loader2} from 'lucide-react'
+import {Loader2, Lock} from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import {zConnectorStage, zVerticalKey} from '@openint/cdk'
@@ -11,7 +11,6 @@ import {
   ConnectorCard as _ConnectorCard,
   ConnectorConfigCard as _ConnectorConfigCard,
   Badge,
-  Button,
   cn,
   ConnectorLogo,
   DataTable,
@@ -23,7 +22,11 @@ import {ConnectorConfigSheet} from './ConnectorConfigSheet'
 
 export type ConnectorConfig = RouterOutput['adminListConnectorConfigs'][number]
 
-export default function ConnectorConfigsPage() {
+export default function ConnectorConfigsPage({
+  showCTAs = true,
+}: {
+  showCTAs?: boolean
+}) {
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
   const catalog = _trpcReact.listConnectorMetas.useQuery()
   if (!connectorConfigsRes.data || !catalog.data) {
@@ -136,20 +139,21 @@ export default function ConnectorConfigsPage() {
                 <ConnectorCard
                   key={`${vertical}-${connector.name}`}
                   connector={connector}>
-                  {connector.stage === 'alpha' ? (
-                    <Button
-                      className="mt-2"
-                      variant="ghost"
-                      onClick={() =>
-                        window.open(
-                          `mailto:support@openint.dev?subject=Request%20access%20to%20${connector.displayName}%20connectors&body=My%20use%20case%20is...`,
-                        )
-                      }>
-                      Request access
-                    </Button>
-                  ) : (
-                    <ConnectorConfigSheet connectorName={connector.name} />
-                  )}
+                  {showCTAs &&
+                    (connector.stage === 'alpha' ? (
+                      <div
+                        className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button"
+                        onClick={() =>
+                          window.open(
+                            `mailto:support@openint.dev?subject=Request%20access%20to%20${connector.displayName}%20connectors&body=My%20use%20case%20is...`,
+                          )
+                        }>
+                        <Lock />
+                        <p className="text-sm font-semibold">Request access</p>
+                      </div>
+                    ) : (
+                      <ConnectorConfigSheet connectorName={connector.name} />
+                    ))}
                 </ConnectorCard>
               ))}
             </div>
@@ -161,5 +165,10 @@ export default function ConnectorConfigsPage() {
 }
 
 const ConnectorCard = (props: React.ComponentProps<typeof _ConnectorCard>) => (
-  <_ConnectorCard Image={Image as any} showStageBadge {...props} />
+  <_ConnectorCard
+    Image={Image as any}
+    showStageBadge
+    className="cursor-pointer"
+    {...props}
+  />
 )

@@ -1,6 +1,6 @@
 'use client'
 
-import {Loader2} from 'lucide-react'
+import {Loader2, Pencil, Plus} from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import {zId, zRaw} from '@openint/cdk'
@@ -40,9 +40,11 @@ import type {ConnectorConfig} from './ConnectorConfigPage'
 export function ConnectorConfigSheet({
   connectorConfig: ccfg,
   connectorName,
+  horizontalTrigger = false,
 }: {
   connectorConfig?: Omit<ConnectorConfig, 'connectorName'>
   connectorName: string
+  horizontalTrigger?: boolean
 }) {
   const trpcUtils = _trpcReact.useContext()
   const catalogRes = _trpcReact.listConnectorMetas.useQuery()
@@ -180,12 +182,19 @@ export function ConnectorConfigSheet({
     return <LoadingText className="block p-4" />
   }
 
+  const icon = verb === 'Add' ? <Plus /> : <Pencil />
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button className="mt-2" variant="ghost">
-          {verb}
-        </Button>
+      <SheetTrigger
+        className={cn(
+          'flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button',
+          horizontalTrigger && 'flex-row',
+        )}
+        asChild>
+        <div>
+          {icon}
+          <p className="text-sm font-semibold">{verb}</p>
+        </div>
       </SheetTrigger>
       <SheetContent
         position="right"
