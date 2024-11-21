@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import type {Id} from '@openint/cdk'
 import type {RouterOutput} from '@openint/engine-backend'
 import {R} from '@openint/util'
@@ -46,6 +46,10 @@ export const ConnectorConfigCard = ({
   />
 )
 
+// Utility function to capitalize the first letter
+const capitalizeFirstLetter = (string: string) =>
+  string.charAt(0).toUpperCase() + string.slice(1)
+
 export const ConnectorCard = ({
   connector,
   showStageBadge = false,
@@ -59,26 +63,25 @@ export const ConnectorCard = ({
   showStageBadge?: boolean
   labels?: string[]
   showName?: boolean
-}) => (
-  <Card
-    className={cn(
-      'm-3 flex h-36 w-36 flex-col items-center p-2 sm:h-48 sm:w-48',
-      className,
-    )}>
-    <div className="flex h-6 self-stretch">
-      {showName && (
-        <span className="text-sm text-muted-foreground">{connector.name}</span>
+}) => {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <Card
+      className={cn(
+        'relative m-3 flex h-[150px] w-[150px] flex-col items-center justify-center p-2',
+        'border border-gray-300',
+        'transition duration-300 ease-in-out',
+        isHovered ? 'border-button bg-white' : '',
+        className,
       )}
-      {labels.map((label) => (
-        <Badge key={label} variant="secondary">
-          {label}
-        </Badge>
-      ))}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}>
       {showStageBadge && (
         <Badge
           variant="secondary"
           className={cn(
-            'ml-auto',
+            'absolute right-2 top-2',
             connector.stage === 'ga' && 'bg-green-200',
             connector.stage === 'beta' && 'bg-blue-200',
             connector.stage === 'alpha' && 'bg-pink-50',
@@ -86,16 +89,28 @@ export const ConnectorCard = ({
           {connector.stage}
         </Badge>
       )}
-    </div>
-    <ConnectorLogo
-      {...uiProps}
-      connector={connector}
-      // min-h-0 is a hack where some images do not shrink in height @see https://share.cleanshot.com/jMX1bzLP
-      className="min-h-0 grow"
-    />
-    {children}
-  </Card>
-)
+      {!isHovered && (
+        <div className="flex flex-col items-center">
+          <ConnectorLogo
+            {...uiProps}
+            connector={connector}
+            className="min-h-0 grow"
+          />
+          {showName && (
+            <span className="text-center text-sm font-semibold text-muted-foreground">
+              {capitalizeFirstLetter(connector.name)}
+            </span>
+          )}
+        </div>
+      )}
+      {isHovered && children && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          {children}
+        </div>
+      )}
+    </Card>
+  )
+}
 
 export const ConnectorLogo = ({
   connector,
@@ -107,11 +122,12 @@ export const ConnectorLogo = ({
 }) =>
   connector.logoUrl ? (
     <Image
-      width={100}
-      height={100}
+      width={48}
+      height={48}
       src={connector.logoUrl}
       alt={`"${connector.displayName}" logo`}
-      className={cn('object-contain', className)}
+      className={cn('h-12 w-12 rounded-xl object-contain', className)}
+      style={{marginBottom: '10px', objectFit: 'contain'}}
     />
   ) : (
     <div className={cn('flex flex-col items-center justify-center', className)}>
