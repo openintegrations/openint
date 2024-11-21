@@ -6,10 +6,16 @@ import React from 'react'
 import {zConnectorStage, zVerticalKey} from '@openint/cdk'
 import type {RouterOutput} from '@openint/engine-backend'
 import {_trpcReact} from '@openint/engine-frontend'
+import type {ConnectorMeta} from '@openint/ui'
 import {
   ConnectorCard as _ConnectorCard,
   ConnectorConfigCard as _ConnectorConfigCard,
+  Badge,
+  cn,
+  ConnectorLogo,
+  DataTable,
   LoadingText,
+  parseCategory,
 } from '@openint/ui'
 import {inPlaceSort, R, titleCase} from '@openint/util'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
@@ -28,7 +34,7 @@ export default function ConnectorConfigsPage({
   }
 
   return (
-    <div className="p-6">
+    <div className="max-w-[60%] p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Configured connectors
       </h2>
@@ -36,25 +42,72 @@ export default function ConnectorConfigsPage({
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       )}
       {connectorConfigsRes.data ? (
-        <div className="flex flex-wrap">
-          {connectorConfigsRes.data.map((ccfg) => {
-            const connector = catalog.data[ccfg.connectorName]!
-            if (!connector) return
-            return (
-              <ConnectorConfigCard
-                key={ccfg.id}
-                connector={connector}
-                connectorConfig={ccfg}>
-                {showCTAs && (
+        <DataTable
+          query={connectorConfigsRes}
+          columns={[
+            {
+              id: 'connectorName',
+              accessorKey: 'connectorName',
+              cell: ({row}) => (
+                <div className="flex items-center gap-4">
+                  <ConnectorLogo
+                    connector={
+                      catalog.data[row.original.connectorName] as ConnectorMeta
+                    }
+                    className="size-12"
+                  />
+                  <p className="font-semibold">
+                    {titleCase(row.original.connectorName)}
+                  </p>
+                </div>
+              ),
+            },
+            {
+              id: 'disable',
+              accessorKey: 'Status',
+              cell: ({row}) => (
+                <p className={cn(row.original.disabled && 'opacity-60')}>
+                  {row.original.disabled ? 'Disabled' : 'Enabled'}
+                </p>
+              ),
+            },
+            {accessorKey: 'envName'},
+            {
+              id: 'stage',
+              accessorKey: 'stage',
+              cell: ({row}) => {
+                const connector = catalog.data[row.original.connectorName]
+                if (!connector) return null
+                return (
+                  <Badge
+                    variant="secondary"
+                    className={cn(
+                      'ml-auto',
+                      connector.stage === 'ga' && 'bg-green-200',
+                      connector.stage === 'beta' && 'bg-blue-200',
+                      connector.stage === 'alpha' && 'bg-pink-50',
+                    )}>
+                    {parseCategory(connector.stage)}
+                  </Badge>
+                )
+              },
+            },
+            {
+              id: 'action',
+              accessorKey: 'action',
+              cell: ({row}) => {
+                const connector = catalog.data[row.original.connectorName]
+                if (!connector) return null
+                return (
                   <ConnectorConfigSheet
-                    connectorConfig={ccfg}
+                    connectorConfig={row.original}
                     connectorName={connector.name}
                   />
-                )}
-              </ConnectorConfigCard>
-            )
-          })}
-        </div>
+                )
+              },
+            },
+          ]}
+        />
       ) : (
         <div>No connectors configured</div>
       )}
@@ -119,7 +172,3 @@ const ConnectorCard = (props: React.ComponentProps<typeof _ConnectorCard>) => (
     {...props}
   />
 )
-
-const ConnectorConfigCard = (
-  props: React.ComponentProps<typeof _ConnectorConfigCard>,
-) => <_ConnectorConfigCard Image={Image as any} showStageBadge {...props} />

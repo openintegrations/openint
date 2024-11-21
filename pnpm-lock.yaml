@@ -243,6 +243,9 @@ importers:
       '@openint/connector-onebrick':
         specifier: workspace:*
         version: link:../../connectors/connector-onebrick
+      '@openint/connector-outlook':
+        specifier: workspace:*
+        version: link:../../connectors/connector-outlook
       '@openint/connector-outreach':
         specifier: workspace:*
         version: link:../../connectors/connector-outreach
@@ -273,6 +276,9 @@ importers:
       '@openint/connector-saltedge':
         specifier: workspace:*
         version: link:../../connectors/connector-saltedge
+      '@openint/connector-slack':
+        specifier: workspace:*
+        version: link:../../connectors/connector-slack
       '@openint/connector-splitwise':
         specifier: workspace:*
         version: link:../../connectors/connector-splitwise
@@ -982,6 +988,21 @@ importers:
         specifier: 18.0.27
         version: 18.0.27
 
+  connectors/connector-outlook:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+      '@opensdks/runtime':
+        specifier: ^0.0.19
+        version: 0.0.19
+
   connectors/connector-outreach:
     dependencies:
       '@openint/cdk':
@@ -1166,6 +1187,21 @@ importers:
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
+
+  connectors/connector-slack:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+      '@opensdks/runtime':
+        specifier: ^0.0.19
+        version: 0.0.19
 
   connectors/connector-splitwise:
     dependencies:
@@ -20788,7 +20824,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0))(eslint@8.23.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -20833,7 +20869,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.23.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0))(eslint@8.23.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0)
       hasown: 2.0.0
       is-core-module: 2.13.1
       is-glob: 4.0.3

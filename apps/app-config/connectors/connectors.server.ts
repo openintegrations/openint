@@ -20,6 +20,7 @@ import {default as connectorMerge} from '@openint/connector-merge/server'
 import {default as connectorMongodb} from '@openint/connector-mongodb/server'
 import {default as connectorMoota} from '@openint/connector-moota/server'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/server'
+import {default as connectorOutlook} from '@openint/connector-outlook/server'
 import {default as connectorOutreach} from '@openint/connector-outreach/server'
 import {default as connectorPipedrive} from '@openint/connector-pipedrive/server'
 import {default as connectorPlaid} from '@openint/connector-plaid/server'
@@ -30,6 +31,7 @@ import {default as connectorRevert} from '@openint/connector-revert/server'
 import {default as connectorSalesforce} from '@openint/connector-salesforce/server'
 import {default as connectorSalesloft} from '@openint/connector-salesloft/server'
 import {default as connectorSaltedge} from '@openint/connector-saltedge/server'
+import {default as connectorSlack} from '@openint/connector-slack/server'
 import {default as connectorSplitwise} from '@openint/connector-splitwise/server'
 import {default as connectorSpreadsheet} from '@openint/connector-spreadsheet/server'
 import {default as connectorStripe} from '@openint/connector-stripe/server'
@@ -63,6 +65,7 @@ export const serverConnectors = {
   mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
+  outlook: connectorOutlook,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
   plaid: connectorPlaid,
@@ -73,6 +76,7 @@ export const serverConnectors = {
   salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
+  slack: connectorSlack,
   splitwise: connectorSplitwise,
   spreadsheet: connectorSpreadsheet,
   stripe: connectorStripe,
