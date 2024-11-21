@@ -15,7 +15,7 @@ export function getValidChildren(children: React.ReactNode) {
 }
 
 export function parseCategory(category: string) {
-  return category.length < 5
+  return category.length < 4
     ? category.toUpperCase()
     : category
         .split('-')
