@@ -182,19 +182,32 @@ export function ConnectorConfigSheet({
     return <LoadingText className="block p-4" />
   }
 
-  const icon = verb === 'Add' ? <Plus /> : <Pencil />
+  const icon =
+    verb === 'Add' ? (
+      <Plus />
+    ) : (
+      <Pencil className={verb === 'Edit' ? 'h-5 w-5 text-black' : ''} />
+    )
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
-        className={cn(
-          'flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button',
-          horizontalTrigger && 'flex-row',
+      <SheetTrigger asChild>
+        {verb === 'Edit' ? (
+          <Button
+            variant="secondary"
+            className="size-sm flex items-center gap-2">
+            {icon}
+            <span className="text-black">{verb}</span>
+          </Button>
+        ) : (
+          <div
+            className={cn(
+              'flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button',
+              horizontalTrigger && 'flex-row',
+            )}>
+            {icon}
+            <p className="text-sm font-semibold">{verb}</p>
+          </div>
         )}
-        asChild>
-        <div>
-          {icon}
-          <p className="text-sm font-semibold">{verb}</p>
-        </div>
       </SheetTrigger>
       <SheetContent
         position="right"
