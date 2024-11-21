@@ -16,6 +16,7 @@ import {
   ConnectorLogo,
   DataTable,
   LoadingText,
+  parseCategory,
 } from '@openint/ui'
 import {inPlaceSort, R, titleCase} from '@openint/util'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
@@ -30,7 +31,7 @@ export default function ConnectorConfigsPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="max-w-[60%] p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Configured connectors
       </h2>
@@ -45,22 +46,26 @@ export default function ConnectorConfigsPage() {
               id: 'connectorName',
               accessorKey: 'connectorName',
               cell: ({row}) => (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-4">
                   <ConnectorLogo
                     connector={
                       catalog.data[row.original.connectorName] as ConnectorMeta
                     }
-                    className="size-6"
+                    className="size-12"
                   />
-                  <p>{titleCase(row.original.connectorName)}</p>
+                  <p className="font-semibold">
+                    {titleCase(row.original.connectorName)}
+                  </p>
                 </div>
               ),
             },
             {
               id: 'disable',
-              accessorKey: 'Enabled/Disabled',
+              accessorKey: 'Status',
               cell: ({row}) => (
-                <p>{row.original.disabled ? 'Disabled' : 'Enabled'}</p>
+                <p className={cn(row.original.disabled && 'opacity-60')}>
+                  {row.original.disabled ? 'Disabled' : 'Enabled'}
+                </p>
               ),
             },
             {accessorKey: 'envName'},
@@ -79,7 +84,7 @@ export default function ConnectorConfigsPage() {
                       connector.stage === 'beta' && 'bg-blue-200',
                       connector.stage === 'alpha' && 'bg-pink-50',
                     )}>
-                    {connector.stage}
+                    {parseCategory(connector.stage)}
                   </Badge>
                 )
               },
