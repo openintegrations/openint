@@ -1,6 +1,7 @@
 import {MoreHorizontal} from 'lucide-react'
 import React from 'react'
 import {R} from '@openint/util'
+import {__DEBUG__} from '../../../apps/app-config/constants'
 import {Icon} from '../components/Icon'
 import type {ButtonProps} from '../shadcn'
 import {Button, Popover, PopoverContent, PopoverTrigger} from '../shadcn'
@@ -76,7 +77,7 @@ function CommandItemContainer({
   const cmd = {..._cmd, ..._cmd.useCommand?.(params ?? {})}
 
   // Hide "Edit Resource"
-  if (cmd.title === 'Edit Resource') {
+  if (cmd.title === 'Edit Resource' && !__DEBUG__) {
     return null
   }
 

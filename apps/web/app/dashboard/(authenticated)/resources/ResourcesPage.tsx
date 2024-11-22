@@ -1,7 +1,6 @@
 'use client'
 
-import {clientConnectors} from '@openint/app-config/connectors/connectors.client'
-import {_trpcReact, OpenIntConnectButton} from '@openint/engine-frontend'
+import {_trpcReact} from '@openint/engine-frontend'
 import {DataTable} from '@openint/ui'
 import {VCommandMenu} from '@/vcommands/vcommand-components'
 
