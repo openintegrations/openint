@@ -15,7 +15,7 @@ const links: Array<{href: string; title: string}> = [
     href: '/dashboard/connector-configs',
   },
   {
-    title: 'Resources',
+    title: 'Connections',
     href: '/dashboard/resources',
   },
   {
