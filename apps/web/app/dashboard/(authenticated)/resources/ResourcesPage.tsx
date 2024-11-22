@@ -9,6 +9,8 @@ import {VCommandMenu} from '@/vcommands/vcommand-components'
 
 export default function ResourcesPage() {
   const res = _trpcReact.listConnections.useQuery({})
+  const filter = (c: {id: string}) => !c.id.includes('postgres_default')
+
   return (
     <div className="p-6">
       <header className="flex items-center">
@@ -20,6 +22,7 @@ export default function ResourcesPage() {
       <p>Resources are created based on connector configurations</p>
       <DataTable
         query={res}
+        filter={filter}
         columns={[
           {
             id: 'actions',
