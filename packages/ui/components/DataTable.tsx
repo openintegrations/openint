@@ -35,10 +35,13 @@ import {
 } from '../shadcn'
 import {LoadingText} from './LoadingText'
 
+const defaultFilter = () => true
+
 interface DataTableProps<TData, TValue> {
   query: UseQueryResult<TData[]>
   columns: Array<ColumnDef<TData, TValue>>
   enableSelect?: boolean
+  filter?: (data: TData) => boolean
 }
 
 // TODO: Create a schemaDataTable that define columns based on zod schema
@@ -47,6 +50,7 @@ export function DataTable<TData, TValue>({
   columns: _columns,
   query,
   enableSelect,
+  filter = defaultFilter,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -191,20 +195,23 @@ export function DataTable<TData, TValue>({
                 </TableCell>
               </TableRow>
             ) : (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              table
+                .getRowModel()
+                .rows.filter((row) => filter(row.original))
+                .map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
             )}
           </TableBody>
         </Table>

@@ -33,6 +33,9 @@ export default function ConnectorConfigsPage({
     return <LoadingText className="block p-4" />
   }
 
+  const filter = (c: ConnectorConfig) =>
+    c.displayName !== 'Default Postgres Connector for sync'
+
   return (
     <div className="max-w-[60%] p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
@@ -44,6 +47,7 @@ export default function ConnectorConfigsPage({
       {connectorConfigsRes.data ? (
         <DataTable
           query={connectorConfigsRes}
+          filter={filter}
           columns={[
             {
               id: 'connectorName',
