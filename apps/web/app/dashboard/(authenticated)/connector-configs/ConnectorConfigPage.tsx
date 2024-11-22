@@ -48,19 +48,43 @@ export default function ConnectorConfigsPage({
             {
               id: 'connectorName',
               accessorKey: 'connectorName',
-              cell: ({row}) => (
-                <div className="flex items-center gap-4">
-                  <ConnectorLogo
-                    connector={
-                      catalog.data[row.original.connectorName] as ConnectorMeta
-                    }
-                    className="size-12"
-                  />
-                  <p className="font-semibold">
-                    {titleCase(row.original.connectorName)}
-                  </p>
-                </div>
-              ),
+              cell: ({row}) => {
+                const connector = catalog.data[row.original.connectorName]
+
+                return (
+                  <div className="flex items-center gap-4">
+                    <ConnectorLogo
+                      connector={
+                        catalog.data[
+                          row.original.connectorName
+                        ] as ConnectorMeta
+                      }
+                      className="size-12"
+                    />
+                    {row.original.displayName ? (
+                      <div className="flex flex-row gap-2">
+                        <p className="font-semibold">
+                          {`${row.original.displayName}`}
+                        </p>
+                        <p>{`(${titleCase(row.original.connectorName)})`}</p>
+                      </div>
+                    ) : (
+                      <p>{titleCase(row.original.connectorName)}</p>
+                    )}
+                    {connector && (
+                      <Badge
+                        variant="secondary"
+                        className={cn(
+                          connector.stage === 'ga' && 'bg-green-200',
+                          connector.stage === 'beta' && 'bg-blue-200',
+                          connector.stage === 'alpha' && 'bg-pink-50',
+                        )}>
+                        {parseCategory(connector.stage)}
+                      </Badge>
+                    )}
+                  </div>
+                )
+              },
             },
             {
               id: 'disable',
@@ -72,26 +96,6 @@ export default function ConnectorConfigsPage({
               ),
             },
             {accessorKey: 'envName'},
-            {
-              id: 'stage',
-              accessorKey: 'stage',
-              cell: ({row}) => {
-                const connector = catalog.data[row.original.connectorName]
-                if (!connector) return null
-                return (
-                  <Badge
-                    variant="secondary"
-                    className={cn(
-                      'ml-auto',
-                      connector.stage === 'ga' && 'bg-green-200',
-                      connector.stage === 'beta' && 'bg-blue-200',
-                      connector.stage === 'alpha' && 'bg-pink-50',
-                    )}>
-                    {parseCategory(connector.stage)}
-                  </Badge>
-                )
-              },
-            },
             {
               id: 'action',
               accessorKey: 'action',
