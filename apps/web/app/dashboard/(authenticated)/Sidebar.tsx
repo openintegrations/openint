@@ -56,7 +56,7 @@ const sectionedLinks: Array<{
         icon: 'ArrowLeftRight',
       },
       {
-        title: 'Resources',
+        title: 'Connections',
         href: '/dashboard/resources',
         icon: 'Box',
       },

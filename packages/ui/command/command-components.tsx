@@ -74,10 +74,21 @@ function CommandItemContainer({
   onSelect?: (value: string) => void
 }) {
   const cmd = {..._cmd, ..._cmd.useCommand?.(params ?? {})}
+
+  // Hide "Edit Resource"
+  if (cmd.title === 'Edit Resource') {
+    return null
+  }
+
+  // Rename titles
+  if (cmd.title === 'Delete Resource') {
+    cmd.title = 'Delete Connection'
+  } else if (cmd.title === 'Sync Resource') {
+    cmd.title = 'Sync Connection' // Adjusted as per your request
+  }
+
   return (
     <CommandItem
-      // Value is used for filtering commands
-      // Workaround for https://github.com/pacocoursey/cmdk/issues/140
       value={R.compact([cmd.title, cmd.subtitle, cmd.shortcut]).join(' ')}
       onSelect={(currentValue) => {
         console.log('command selected', currentValue)
@@ -103,10 +114,7 @@ function CommandItemContainer({
           </pre>
         )}
       </div>
-      {cmd.shortcut && (
-        // Need to render shortcut better... $mod+K => ⌘S
-        <CommandShortcut>{cmd.shortcut}</CommandShortcut>
-      )}
+      {cmd.shortcut && <CommandShortcut>{cmd.shortcut}</CommandShortcut>}
     </CommandItem>
   )
 }
