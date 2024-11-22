@@ -1,7 +1,6 @@
 'use client'
 
-import {clientConnectors} from '@openint/app-config/connectors/connectors.client'
-import {_trpcReact, OpenIntConnectButton} from '@openint/engine-frontend'
+import {_trpcReact} from '@openint/engine-frontend'
 import {DataTable} from '@openint/ui'
 import {VCommandMenu} from '@/vcommands/vcommand-components'
 
@@ -13,11 +12,11 @@ export default function ResourcesPage() {
     <div className="p-6">
       <header className="flex items-center">
         <h2 className="mb-4 mr-auto text-2xl font-semibold tracking-tight">
-          Resources
+          Connections
         </h2>
-        <OpenIntConnectButton clientConnectors={clientConnectors} />
+        {/* <OpenIntConnectButton clientConnectors={clientConnectors} /> */}
       </header>
-      <p>Resources are created based on connector configurations</p>
+      <p>Connections are created based on connector configurations</p>
       <DataTable
         query={res}
         columns={[
