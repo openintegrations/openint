@@ -61,14 +61,16 @@ export default function ConnectorConfigsPage({
                       }
                       className="size-12"
                     />
-                    <div className="flex flex-row gap-2">
-                      {row.original.displayName && (
+                    {row.original.displayName ? (
+                      <div className="flex flex-row gap-2">
                         <p className="font-semibold">
                           {`${row.original.displayName}`}
                         </p>
-                      )}
-                      <p>{`(${titleCase(row.original.connectorName)})`}</p>
-                    </div>
+                        <p>{`(${titleCase(row.original.connectorName)})`}</p>
+                      </div>
+                    ) : (
+                      <p>{titleCase(row.original.connectorName)}</p>
+                    )}
                     {connector && (
                       <Badge
                         variant="secondary"
