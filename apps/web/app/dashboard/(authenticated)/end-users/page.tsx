@@ -18,9 +18,25 @@ import {
 export default function EndUsersPage() {
   const res = _trpcReact.adminSearchEndUsers.useQuery({})
 
+  // Function to format dates
+  function formatDate(dateString: string) {
+    const date = new Date(dateString)
+    return new Intl.DateTimeFormat('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(date)
+  }
+
   return (
     <div className="p-6">
-      <h2 className="mb-4 text-2xl font-semibold tracking-tight">End Users</h2>
+      <h2 className="mb-2 text-2xl font-semibold tracking-tight">End Users</h2>
+      <p className="mb-4 text-gray-600">
+        View and manage your end users and their associated resources.
+      </p>
       <DataTable
         query={res}
         columns={[
@@ -30,8 +46,16 @@ export default function EndUsersPage() {
           },
           {accessorKey: 'id'},
           {accessorKey: 'resourceCount', header: '# Resources'},
-          {accessorKey: 'firstCreatedAt', header: 'First created'},
-          {accessorKey: 'lastUpdatedAt', header: 'Last updated'},
+          {
+            accessorKey: 'firstCreatedAt',
+            header: 'First created',
+            cell: ({row}) => formatDate(row.original.firstCreatedAt ?? ''),
+          },
+          {
+            accessorKey: 'lastUpdatedAt',
+            header: 'Last updated',
+            cell: ({row}) => formatDate(row.original.lastUpdatedAt ?? ''),
+          },
         ]}
       />
     </div>
@@ -81,7 +105,7 @@ function EndUserMenu({endUser}: {endUser: EndUser}) {
               )
           }}>
           <RefreshCcw className="mr-2 h-4 w-4" />
-          View portal
+          Generate Magic Link
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
