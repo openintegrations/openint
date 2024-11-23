@@ -1,3 +1,4 @@
+import {clerkClient} from '@clerk/nextjs/server'
 import type {Link as FetchLink} from '@opensdks/runtime'
 import type {
   AnyEntityPayload,
@@ -335,6 +336,15 @@ export function makeSyncService({
     const endUserId = src.endUserId ?? dest.endUserId
     const endUser = endUserId ? {id: endUserId} : null
 
+    // TODO: Maybe not the best place for this? Think where clerkClient should live
+    const org =
+      opts.org ??
+      (await clerkClient.organizations
+        .getOrganization({
+          organizationId: src.connectorConfig.orgId,
+        })
+        .then((r) => r.publicMetadata as {webhook_url?: string | null}))
+
     const _source$ = sourceSync({
       opts,
       src,
@@ -410,7 +420,7 @@ export function makeSyncService({
         source_id: src.id,
         destination_id: dest.id,
       },
-      user: opts.org,
+      user: org,
     })
   }
 
