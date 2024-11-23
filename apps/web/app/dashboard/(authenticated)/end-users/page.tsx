@@ -49,12 +49,12 @@ export default function EndUsersPage() {
           {
             accessorKey: 'firstCreatedAt',
             header: 'First created',
-            cell: ({row}) => formatDate(row.original.firstCreatedAt),
+            cell: ({row}) => formatDate(row.original.firstCreatedAt ?? ''),
           },
           {
             accessorKey: 'lastUpdatedAt',
             header: 'Last updated',
-            cell: ({row}) => formatDate(row.original.lastUpdatedAt),
+            cell: ({row}) => formatDate(row.original.lastUpdatedAt ?? ''),
           },
         ]}
       />
