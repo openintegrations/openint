@@ -142,9 +142,13 @@ export const postgresServer = {
         }
 
         const isAgMode =
+          // orgs in openint clerk app
           endUser?.orgId === 'org_2nJZrA4Dk8i3wszhm6PsP3M2Vwy' ||
           endUser?.orgId === 'org_2lcCCimyICKI8cpPNQt195h5zrP' ||
-          endUser?.orgId === 'org_2ms9FdeczlbrDIHJLcwGdpv3dTx'
+          endUser?.orgId === 'org_2ms9FdeczlbrDIHJLcwGdpv3dTx' ||
+          // orgs in ag app
+          endUser?.orgId === 'org_2pBMOEKROMpNR7zckHtah4ebxAk' ||
+          endUser?.orgId === 'org_2pBM0RSOqs5QzZi40A73hZ5aTjD'
 
         // TODO: Remove when we have support for links custom upserts
         if (isAgMode) {
