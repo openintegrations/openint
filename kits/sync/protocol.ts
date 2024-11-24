@@ -53,7 +53,7 @@ type NullableEntity<T> = T extends AnyEntityPayload
   : T
 
 export type SyncOperation<
-  TData = AnyEntityPayload,
+  TData = any,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > =
@@ -79,7 +79,7 @@ export type Source<
  * A specialized version of rxjs.OperatorFucntion. Often times stateful.
  */
 export type Link<
-  TDataIn = AnyEntityPayload,
+  TDataIn = any,
   TDataOut = TDataIn,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
@@ -88,7 +88,7 @@ export type Link<
 ) => rxjs.Observable<SyncOperation<TDataOut, TResoUpdate, TStateUpdate>>
 
 export type LinkFactory<
-  TDataIn = AnyEntityPayload,
+  TDataIn = any,
   TDataOut = TDataIn,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
@@ -101,10 +101,10 @@ export type LinkFactory<
  * for the engine to listen to. The resulting event may not be the same as the input events
  */
 export type Destination<
-  T = AnyEntityPayload,
+  T = any,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
-> = Link<T, AnyEntityPayload, TResoUpdate, TStateUpdate>
+> = Link<T, T, TResoUpdate, TStateUpdate>
 
 // @deprecated?
 

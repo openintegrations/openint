@@ -5,7 +5,7 @@ import type {EndUserId} from '@openint/cdk'
 import {env} from '@openint/env'
 import {rxjs, toCompletion} from '@openint/util'
 import type {RecordMessageBody} from './def'
-import postgresServer from './server2'
+import postgresServer from './server'
 import {getMigrationsForTable, inferTable} from './utils'
 
 beforeAll(async () => {
@@ -151,7 +151,6 @@ describe.each(messages)('custom schema: %s', (_, messages) => {
       })),
       {type: 'commit' as const},
     ])
-    // @ts-expect-error Need to update SyncOperation type to not extend from AnyEntityPayload
     await toCompletion(destLink(src))
 
     const uniqueTables = R.uniqBy(tables, (t) => getTableName(t))

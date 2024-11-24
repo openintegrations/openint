@@ -4,7 +4,7 @@ import type {EndUserId, Id} from '@openint/cdk'
 import {env} from '@openint/env'
 import {rxjs, toCompletion} from '@openint/util'
 import type {DeprecatedInputEntity} from '../def'
-import postgresServer from '../server2'
+import postgresServer from '../server'
 import {agLink} from './agLink'
 
 beforeAll(async () => {

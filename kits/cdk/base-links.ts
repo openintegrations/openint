@@ -9,11 +9,10 @@ import type {WritableDraft} from '@openint/util'
 import {produce, R, Rx, rxjs, snakeCase} from '@openint/util'
 import type {Id} from './id.types'
 
-type Data = AnyEntityPayload
 type OperationType = SyncOperation['type']
 export type OpHandlers<
   TRet,
-  T extends Data = Data,
+  T = any,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = Partial<{
@@ -27,7 +26,7 @@ export type OpHandlers<
  * Consider using zod for runtime typechecking here
  */
 export function handlersLink<
-  TData extends Data,
+  TData = any,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 >(
@@ -49,24 +48,31 @@ export function handlersLink<
     ),
   )
 }
-export function transformLink<T extends Data>(
+export function transformLink<T = any>(
   transform: (op: WritableDraft<SyncOperation<T>>) => SyncOperation<T> | void,
 ): Link<T> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
   return Rx.map((op) => produce(op, transform as any))
 }
 
-export function logLink<T extends Data>(
+export function logLink<T = any>(
   opts: {prefix?: string; verbose?: boolean | number} = {},
 ): Link<T> {
   let i = 0
   return Rx.tap((op) => {
+    const data =
+      op.type === 'data' &&
+      typeof op.data === 'object' &&
+      op.data &&
+      'entityName' in op.data
+        ? (op.data as unknown as AnyEntityPayload)
+        : null
     console.log(
       R.compact([
         `[logLink #${i}]`,
         opts.prefix && `${opts.prefix}:`,
         `type=${op.type}`,
-        op.type === 'data' && `${op.data.entityName}/${op.data.id}`,
+        op.type === 'data' && `${data?.entityName}/${data?.id}`,
         op.type === 'resoUpdate' && `op.id=${op.id}`,
       ]).join(' '),
     )
