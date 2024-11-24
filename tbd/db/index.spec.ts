@@ -3,7 +3,6 @@ import {sql} from 'drizzle-orm'
 import {check, pgTable} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
-import {inferTable} from './upsert-from-event'
 
 beforeAll(async () => {
   const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
