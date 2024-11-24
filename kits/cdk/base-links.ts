@@ -79,7 +79,7 @@ export function logLink<T extends Data>(
   })
 }
 
-export function mergeReady<T extends AnyEntityPayload>(len: number): Link<T> {
+export function mergeReady<T>(len: number): Link<T> {
   let i = 0
   return Rx.mergeMap((op) => {
     if (op.type === 'ready') {
@@ -159,12 +159,15 @@ export function agColumnRenameLink(_ctx: {
 
       // maybe we should not sync opportunities at all as we're mapping it to the same candidate table
       opportunity: 'IntegrationAtsCandidate',
-      
+
       posting: 'IntegrationAtsJob',
       // TODO, perhaps map requisitions to IntegrationAtsJobOpening?
     }
 
-    op.data.entityName = entityMappings[snakeCase(op.data.entityName) as keyof typeof entityMappings] ?? op.data.entityName
+    op.data.entityName =
+      entityMappings[
+        snakeCase(op.data.entityName) as keyof typeof entityMappings
+      ] ?? op.data.entityName
 
     return rxjs.of(op)
   })

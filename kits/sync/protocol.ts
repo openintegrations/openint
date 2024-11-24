@@ -53,7 +53,7 @@ type NullableEntity<T> = T extends AnyEntityPayload
   : T
 
 export type SyncOperation<
-  TData extends AnyEntityPayload = AnyEntityPayload,
+  TData = AnyEntityPayload,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > =
@@ -69,7 +69,7 @@ export type SyncOperation<
 export type AnySyncOperation = NonDiscriminatedUnion<SyncOperation>
 
 export type Source<
-  T extends AnyEntityPayload,
+  T,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = rxjs.Observable<SyncOperation<T, TResoUpdate, TStateUpdate>>
@@ -79,8 +79,8 @@ export type Source<
  * A specialized version of rxjs.OperatorFucntion. Often times stateful.
  */
 export type Link<
-  TDataIn extends AnyEntityPayload = AnyEntityPayload,
-  TDataOut extends AnyEntityPayload = TDataIn,
+  TDataIn = AnyEntityPayload,
+  TDataOut = TDataIn,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = (
@@ -88,8 +88,8 @@ export type Link<
 ) => rxjs.Observable<SyncOperation<TDataOut, TResoUpdate, TStateUpdate>>
 
 export type LinkFactory<
-  TDataIn extends AnyEntityPayload = AnyEntityPayload,
-  TDataOut extends AnyEntityPayload = TDataIn,
+  TDataIn = AnyEntityPayload,
+  TDataOut = TDataIn,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -101,7 +101,7 @@ export type LinkFactory<
  * for the engine to listen to. The resulting event may not be the same as the input events
  */
 export type Destination<
-  T extends AnyEntityPayload = AnyEntityPayload,
+  T = AnyEntityPayload,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = Link<T, AnyEntityPayload, TResoUpdate, TStateUpdate>
