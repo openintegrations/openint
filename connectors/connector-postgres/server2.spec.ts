@@ -151,7 +151,7 @@ describe.each(messages)('custom schema: %s', (_, messages) => {
       })),
       {type: 'commit' as const},
     ])
-
+    // @ts-expect-error Need to update SyncOperation type to not extend from AnyEntityPayload
     await toCompletion(destLink(src))
 
     const uniqueTables = R.uniqBy(tables, (t) => getTableName(t))

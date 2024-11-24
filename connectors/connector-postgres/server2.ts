@@ -7,10 +7,21 @@ import {handlersLink} from '@openint/cdk'
 import {dbUpsert} from '@openint/db'
 import type {NonEmptyArray} from '@openint/util'
 import {rxjs} from '@openint/util'
-import type {postgresSchemas, RecordMessageBody} from './def'
+import {
+  postgresHelpers,
+  type postgresSchemas,
+  type RecordMessageBody,
+} from './def'
 import {inferTable, runMigrationForStandardTable} from './utils'
 
+postgresHelpers._types['destinationInputEntity'] = {
+  entityName: 'string',
+  entity: {raw: 'unknown', unified: 'unknown'},
+  id: 'string',
+}
+
 export const postgresServer = {
+  // @ts-expect-error Need to update SyncOperation type to not extend from AnyEntityPayload
   destinationSync: ({endUser, source, settings: {databaseUrl}}) => {
     const db = drizzle(databaseUrl, {logger: true})
     const migrationRan: Record<string, boolean> = {}
