@@ -19,6 +19,7 @@ import type {ExternalId, Id} from '../cdk/id.types'
  * TODO: We should add a `change` type here, as `null` could also be a valid value
  * Actually, in the simplest form we should just have a [id, data] without even
  * any entity name. This can get transformed to [id, entityName, changeType, entity] as needed.
+ * // TODO: Conform this with airbyte protocol would be nice, and possibly adding in the custom postgres stuff?
  */
 export interface AnyEntityPayload {
   // typename: string
