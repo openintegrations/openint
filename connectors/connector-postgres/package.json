@@ -5,16 +5,23 @@
   "module": "./index.ts",
   "dependencies": {
     "@openint/cdk": "workspace:*",
+    "@openint/db": "workspace:*",
     "@openint/util": "workspace:*",
     "@slonik/migrator": "0.11.3",
+    "drizzle-kit": "^0.28.1",
+    "drizzle-orm": "^0.36.3",
     "handlebars": "4.7.7",
+    "json-stable-stringify": "^1.1.1",
     "pg": "8.8.0",
     "pg-native": "3.0.1",
+    "postgres": "^3.4.5",
     "slonik": "30.3.1",
     "slonik-interceptor-preset": "1.2.10",
     "zod": "3.22.4"
   },
   "devDependencies": {
+    "@openint/env": "workspace:*",
+    "@types/json-stable-stringify": "^1.1.0",
     "@types/pg": "8.6.5"
   }
 }

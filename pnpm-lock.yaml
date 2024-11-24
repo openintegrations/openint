@@ -1081,21 +1081,36 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/db':
+        specifier: workspace:*
+        version: link:../../tbd/db
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
       '@slonik/migrator':
         specifier: 0.11.3
         version: 0.11.3(slonik@30.3.1(pg-native@3.0.1))
+      drizzle-kit:
+        specifier: ^0.28.1
+        version: 0.28.1
+      drizzle-orm:
+        specifier: ^0.36.3
+        version: 0.36.3(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       handlebars:
         specifier: 4.7.7
         version: 4.7.7
+      json-stable-stringify:
+        specifier: ^1.1.1
+        version: 1.1.1
       pg:
         specifier: 8.8.0
         version: 8.8.0(pg-native@3.0.1)
       pg-native:
         specifier: 3.0.1
         version: 3.0.1
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
       slonik:
         specifier: 30.3.1
         version: 30.3.1(pg-native@3.0.1)
@@ -1106,6 +1121,12 @@ importers:
         specifier: 3.22.4
         version: 3.22.4
     devDependencies:
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../../packages/env
+      '@types/json-stable-stringify':
+        specifier: ^1.1.0
+        version: 1.1.0
       '@types/pg':
         specifier: 8.6.5
         version: 8.6.5
@@ -2099,6 +2120,9 @@ importers:
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
+      drizzle-kit:
+        specifier: ^0.28.1
+        version: 0.28.1
       drizzle-orm:
         specifier: ^0.36.3
         version: 0.36.3(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
@@ -2121,9 +2145,6 @@ importers:
       '@types/json-stable-stringify':
         specifier: ^1.1.0
         version: 1.1.0
-      drizzle-kit:
-        specifier: ^0.28.1
-        version: 0.28.1
       prettier:
         specifier: 3.1.0
         version: 3.1.0
@@ -6558,9 +6579,6 @@ packages:
     resolution: {integrity: sha512-pouW8/FmiPQbuGpkXQ9BAPv/Mo5xDGANgSNXzTzJ8DrKGuXOssM4wIQRjfanNRh3Yu5cfYPvcorqbhg2KIJtew==}
     engines: {node: '>=8'}
 
-  call-bind@1.0.5:
-    resolution: {integrity: sha512-C3nQxfFZxFRVoJoGKKI8y3MOEo129NQ+FgQ08iye+Mk4zNZZGdjfs06bVTr+DBSlA66Q2VEcMki/cUCP4SercQ==}
-
   call-bind@1.0.7:
     resolution: {integrity: sha512-GHTSNSYICQ7scH7sZ+M2rFopRoLh8t2bLSW6BbgrtLsahOIB5iyAVJf9GjWK3cYTDaMj4XdBpM1cA6pIS0Kv2w==}
     engines: {node: '>= 0.4'}
@@ -7235,10 +7253,6 @@ packages:
   defer-to-connect@2.0.1:
     resolution: {integrity: sha512-4tvttepXG1VaYGrRibk5EwJd1t4udunSOVMdLSAL6mId1ix438oPwPZMALY41FCijukO1L0twNcGsdzS7dHgDg==}
     engines: {node: '>=10'}
-
-  define-data-property@1.1.1:
-    resolution: {integrity: sha512-E7uGkTzkk1d0ByLeSc6ZsFS79Axg+m1P/VsgYsxHgiuc3tFSj+MjMIwe90FC4lOAZzNBdY7kkO2P2wKdsQ1vgQ==}
-    engines: {node: '>= 0.4'}
 
   define-data-property@1.1.4:
     resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
@@ -8358,9 +8372,6 @@ packages:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
 
-  get-intrinsic@1.2.2:
-    resolution: {integrity: sha512-0gSo4ml/0j98Y3lngkFEot/zhiCeWsbYIlZ+uZOVgzLyLaUw7wxUL+nCTP0XJvJg1AXulJRI3UJi8GsbDuxdGA==}
-
   get-intrinsic@1.2.4:
     resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
     engines: {node: '>= 0.4'}
@@ -8594,9 +8605,6 @@ packages:
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
-
-  has-property-descriptors@1.0.0:
-    resolution: {integrity: sha512-62DVLZGoiEBDHQyqG4w9xCuZ7eJEwNmJRWw2VY84Oedb7WFcA27fiEVe8oUQx9hAUJ4ekurquucTGwsyO1XGdQ==}
 
   has-property-descriptors@1.0.2:
     resolution: {integrity: sha512-55JNKuIW+vq4Ke1BjOTjM2YctQIvCT7GFzHwmfZPGo5wnrgkid0YQtnAleFSqumZm4az3n2BS+erby5ipJdgrg==}
@@ -12225,10 +12233,6 @@ packages:
   server-only@0.0.1:
     resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
 
-  set-function-length@1.1.1:
-    resolution: {integrity: sha512-VoaqjbBJKiWtg4yRcKBQ7g7wnGnLV3M8oLvVWwOk2PdYY6PEFegR1vezXR0tw6fZGF9csVakIRjrJiy2veSBFQ==}
-    engines: {node: '>= 0.4'}
-
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
     engines: {node: '>= 0.4'}
@@ -13919,7 +13923,7 @@ snapshots:
       '@babel/traverse': 7.21.2
       '@babel/types': 7.21.2
       convert-source-map: 1.8.0
-      debug: 4.3.4
+      debug: 4.3.7
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.1
@@ -14381,7 +14385,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.18.6
       '@babel/parser': 7.21.2
       '@babel/types': 7.21.2
-      debug: 4.3.4
+      debug: 4.3.7
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -14396,7 +14400,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.18.6
       '@babel/parser': 7.21.2
       '@babel/types': 7.25.6
-      debug: 4.3.4
+      debug: 4.3.7
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -14619,7 +14623,7 @@ snapshots:
   '@eslint/eslintrc@1.3.3':
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4
+      debug: 4.3.7
       espree: 9.4.0
       globals: 13.17.0
       ignore: 5.3.1
@@ -15156,7 +15160,7 @@ snapshots:
   '@humanwhocodes/config-array@0.10.7':
     dependencies:
       '@humanwhocodes/object-schema': 1.2.1
-      debug: 4.3.4
+      debug: 4.3.7
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -18721,7 +18725,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.6.2)
       '@typescript-eslint/utils': 6.21.0(eslint@8.23.0)(typescript@5.6.2)
-      debug: 4.3.4
+      debug: 4.3.7
       eslint: 8.23.0
       ts-api-utils: 1.3.0(typescript@5.6.2)
     optionalDependencies:
@@ -18737,7 +18741,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 5.57.1
       '@typescript-eslint/visitor-keys': 5.57.1
-      debug: 4.3.4
+      debug: 4.3.7
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.6.0
@@ -18751,7 +18755,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/visitor-keys': 6.21.0
-      debug: 4.3.4
+      debug: 4.3.7
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.3
@@ -18978,7 +18982,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -19108,10 +19112,10 @@ snapshots:
 
   array-includes@3.1.7:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       is-string: 1.0.7
 
   array-union@2.1.0: {}
@@ -19120,33 +19124,33 @@ snapshots:
 
   array.prototype.findlastindex@1.2.3:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-shim-unscopables: 1.0.0
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
 
   array.prototype.flat@1.3.2:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-shim-unscopables: 1.0.0
 
   array.prototype.flatmap@1.3.2:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-shim-unscopables: 1.0.0
 
   array.prototype.tosorted@1.1.2:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-shim-unscopables: 1.0.0
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
 
   arraybuffer.prototype.slice@1.0.2:
     dependencies:
@@ -19580,12 +19584,6 @@ snapshots:
       lowercase-keys: 2.0.0
       normalize-url: 6.1.0
       responselike: 2.0.1
-
-  call-bind@1.0.5:
-    dependencies:
-      function-bind: 1.1.2
-      get-intrinsic: 1.2.2
-      set-function-length: 1.1.1
 
   call-bind@1.0.7:
     dependencies:
@@ -20212,12 +20210,6 @@ snapshots:
 
   defer-to-connect@2.0.1: {}
 
-  define-data-property@1.1.1:
-    dependencies:
-      get-intrinsic: 1.2.4
-      gopd: 1.0.1
-      has-property-descriptors: 1.0.2
-
   define-data-property@1.1.4:
     dependencies:
       es-define-property: 1.0.0
@@ -20228,13 +20220,13 @@ snapshots:
 
   define-properties@1.1.4:
     dependencies:
-      has-property-descriptors: 1.0.0
+      has-property-descriptors: 1.0.2
       object-keys: 1.1.1
 
   define-properties@1.2.1:
     dependencies:
-      define-data-property: 1.1.1
-      has-property-descriptors: 1.0.0
+      define-data-property: 1.1.4
+      has-property-descriptors: 1.0.2
       object-keys: 1.1.1
 
   define-property@0.2.5:
@@ -20287,7 +20279,7 @@ snapshots:
   detect-port@1.5.1:
     dependencies:
       address: 1.2.2
-      debug: 4.3.4
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -20471,7 +20463,7 @@ snapshots:
   engine.io-client@6.2.2(bufferutil@4.0.7)(utf-8-validate@5.0.10):
     dependencies:
       '@socket.io/component-emitter': 3.1.0
-      debug: 4.3.4
+      debug: 4.3.7
       engine.io-parser: 5.0.4
       ws: 8.2.3(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       xmlhttprequest-ssl: 2.0.0
@@ -20527,10 +20519,10 @@ snapshots:
       es-to-primitive: 1.2.1
       function-bind: 1.1.2
       function.prototype.name: 1.1.5
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       get-symbol-description: 1.0.0
       has: 1.0.3
-      has-property-descriptors: 1.0.0
+      has-property-descriptors: 1.0.2
       has-symbols: 1.0.3
       internal-slot: 1.0.3
       is-callable: 1.2.7
@@ -20561,7 +20553,7 @@ snapshots:
       get-symbol-description: 1.0.0
       globalthis: 1.0.3
       gopd: 1.0.1
-      has-property-descriptors: 1.0.0
+      has-property-descriptors: 1.0.2
       has-proto: 1.0.1
       has-symbols: 1.0.3
       hasown: 2.0.0
@@ -20599,14 +20591,14 @@ snapshots:
   es-iterator-helpers@1.0.15:
     dependencies:
       asynciterator.prototype: 1.0.0
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-set-tostringtag: 2.0.2
       function-bind: 1.1.2
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       globalthis: 1.0.3
-      has-property-descriptors: 1.0.0
+      has-property-descriptors: 1.0.2
       has-proto: 1.0.1
       has-symbols: 1.0.3
       internal-slot: 1.0.6
@@ -20672,7 +20664,7 @@ snapshots:
 
   esbuild-register@3.5.0(esbuild@0.17.5):
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.7
       esbuild: 0.17.5
     transitivePeerDependencies:
       - supports-color
@@ -20759,7 +20751,7 @@ snapshots:
 
   eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0):
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.7
       enhanced-resolve: 5.10.0
       eslint: 8.23.0
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0)
@@ -21639,13 +21631,6 @@ snapshots:
 
   get-caller-file@2.0.5: {}
 
-  get-intrinsic@1.2.2:
-    dependencies:
-      function-bind: 1.1.2
-      has-proto: 1.0.1
-      has-symbols: 1.0.3
-      hasown: 2.0.0
-
   get-intrinsic@1.2.4:
     dependencies:
       es-errors: 1.3.0
@@ -21844,7 +21829,7 @@ snapshots:
 
   gopd@1.0.1:
     dependencies:
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
 
   got@11.8.5:
     dependencies:
@@ -21959,10 +21944,6 @@ snapshots:
   has-flag@3.0.0: {}
 
   has-flag@4.0.0: {}
-
-  has-property-descriptors@1.0.0:
-    dependencies:
-      get-intrinsic: 1.2.4
 
   has-property-descriptors@1.0.2:
     dependencies:
@@ -22318,7 +22299,7 @@ snapshots:
 
   internal-slot@1.0.3:
     dependencies:
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       has: 1.0.3
       side-channel: 1.0.4
 
@@ -22381,7 +22362,7 @@ snapshots:
 
   is-arguments@1.1.1:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       has-tostringtag: 1.0.0
 
   is-array-buffer@3.0.2:
@@ -24832,22 +24813,22 @@ snapshots:
 
   object.entries@1.1.7:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
 
   object.fromentries@2.0.7:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
 
   object.groupby@1.0.1:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
 
   object.hasown@1.1.3:
     dependencies:
@@ -24860,7 +24841,7 @@ snapshots:
 
   object.values@1.1.7:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
 
@@ -26182,7 +26163,7 @@ snapshots:
 
   retry-request@4.2.2:
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.7
       extend: 3.0.2
     transitivePeerDependencies:
       - supports-color
@@ -26436,13 +26417,6 @@ snapshots:
 
   server-only@0.0.1: {}
 
-  set-function-length@1.1.1:
-    dependencies:
-      define-data-property: 1.1.1
-      get-intrinsic: 1.2.2
-      gopd: 1.0.1
-      has-property-descriptors: 1.0.0
-
   set-function-length@1.2.2:
     dependencies:
       define-data-property: 1.1.4
@@ -26454,9 +26428,9 @@ snapshots:
 
   set-function-name@2.0.1:
     dependencies:
-      define-data-property: 1.1.1
+      define-data-property: 1.1.4
       functions-have-names: 1.2.3
-      has-property-descriptors: 1.0.0
+      has-property-descriptors: 1.0.2
 
   set-harmonic-interval@1.0.1: {}
 
@@ -26532,8 +26506,8 @@ snapshots:
 
   side-channel@1.0.4:
     dependencies:
-      call-bind: 1.0.5
-      get-intrinsic: 1.2.2
+      call-bind: 1.0.7
+      get-intrinsic: 1.2.4
       object-inspect: 1.13.1
 
   side-channel@1.0.6:
@@ -26711,7 +26685,7 @@ snapshots:
   socket.io-parser@4.2.1:
     dependencies:
       '@socket.io/component-emitter': 3.1.0
-      debug: 4.3.4
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -26962,10 +26936,10 @@ snapshots:
 
   string.prototype.matchall@4.0.10:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.22.3
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       has-symbols: 1.0.3
       internal-slot: 1.0.6
       regexp.prototype.flags: 1.5.1
@@ -26974,10 +26948,10 @@ snapshots:
 
   string.prototype.matchall@4.0.7:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.1.4
       es-abstract: 1.20.4
-      get-intrinsic: 1.2.2
+      get-intrinsic: 1.2.4
       has-symbols: 1.0.3
       internal-slot: 1.0.3
       regexp.prototype.flags: 1.4.3
@@ -26985,7 +26959,7 @@ snapshots:
 
   string.prototype.padend@3.1.3:
     dependencies:
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       define-properties: 1.1.4
       es-abstract: 1.20.4
 
@@ -28091,7 +28065,7 @@ snapshots:
   which-typed-array@1.1.13:
     dependencies:
       available-typed-arrays: 1.0.5
-      call-bind: 1.0.5
+      call-bind: 1.0.7
       for-each: 0.3.3
       gopd: 1.0.1
       has-tostringtag: 1.0.0

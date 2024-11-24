@@ -1,10 +1,32 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import type {PgColumn, PgDatabase, PgTable} from 'drizzle-orm/pg-core'
 import {pgTable, uniqueIndex} from 'drizzle-orm/pg-core'
 import jsonStableStringify from 'json-stable-stringify'
 import * as R from 'remeda'
 import {z} from 'zod'
-import {dbUpsert} from './upsert'
+import type {ConnectorServer} from '@openint/cdk'
+import {handlersLink} from '@openint/cdk'
+import {dbUpsert} from '@openint/db'
+import {rxjs} from '@openint/util'
+import type {postgresSchemas} from './def'
+
+export const postgresServer = {
+  destinationSync: ({endUser, source, settings: {databaseUrl}}) => {
+    return handlersLink({
+      data: async (op) => {
+        return rxjs.of(op)
+      },
+      commit: async (op) => {
+        return op
+      },
+    })
+  },
+} satisfies ConnectorServer<typeof postgresSchemas>
+
+export default postgresServer
 
 export function isValidDateString(str: string) {
   const date = new Date(str)

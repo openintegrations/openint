@@ -2,13 +2,13 @@ import {getTableName} from 'drizzle-orm'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import * as R from 'remeda'
 import {env} from '@openint/env'
-import type {RecordMessage} from './upsert-from-event'
+import type {RecordMessage} from './server2'
 import {
   getMigrationsForTable,
   inferTable,
   isValidDateString,
   upsertFromRecordMessages,
-} from './upsert-from-event'
+} from './server2'
 
 beforeAll(async () => {
   const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
