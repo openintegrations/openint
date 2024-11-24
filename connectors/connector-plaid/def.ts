@@ -55,6 +55,13 @@ export const plaidSchemas = {
      * here must match the setting in the customization, or the customization will not be applied.
      */
     language: zLanguage.default('en'),
+
+
+    // integrationDisplayName: z.string().optional().openapi({
+    //   example: 'US Bank Accounts',
+    //   description:
+    //     'When present, will show a single integration instead of one integration per institution supported by Plaid',
+    // }),
   }),
   resourceSettings: z.object({
     itemId: z.string().nullish(),

@@ -44,9 +44,11 @@ export const plaidServerConnector = {
     return makePlaidClient(config)
       .linkTokenCreate({
         access_token: resource?.settings.accessToken, // Reconnecting
-        institution_id: integrationExternalId
-          ? `${integrationExternalId}`
-          : undefined, // Probably doesn't work, but we wish it does...
+        // Not working as of the latest plaid api, need to think when this is relevant again.
+        // https://share.cleanshot.com/5pKLdGh4
+        // institution_id: integrationExternalId
+        //   ? `${integrationExternalId}`
+        //   : undefined, // Probably doesn't work, but we wish it does...
         user: {client_user_id: userId},
         client_name: config.clientName,
         language: input.language ?? config.language,
@@ -374,28 +376,31 @@ export const plaidServerConnector = {
       .pipe(Rx.mergeMap((ops) => rxjs.from([...ops, def._op('commit')])))
   },
 
-  listIntegrations() {
-    const plaid = makePlaidClient({envName: 'production'})
-    return plaid
-      .institutionsGet({
-        country_codes: [CountryCode.Us],
-        count: 100,
-        offset: 0,
-        options: {include_optional_metadata: true},
-      })
-      .then((res) => ({
-        has_next_page: false,
-        items: res.data.institutions.map((ins) => ({
-          id: ins.institution_id,
-          name: ins.name,
-          logo_url: ins.logo ? `data:image/png;base64,${ins.logo}` : null,
-          updated_at: new Date().toISOString(),
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          raw_data: ins as any,
-        })),
-        next_cursor: null,
-      }))
-  },
+  // TODO: Need to figure out how to get plaid dialog to show a single institution
+  // once it pops up. Otherwise user would have to search for the same institution
+  // twice. Therefore we are not using listIntegrations for now with Plaid.
+  // listIntegrations() {
+  //   const plaid = makePlaidClient({envName: 'production'})
+  //   return plaid
+  //     .institutionsGet({
+  //       country_codes: [CountryCode.Us],
+  //       count: 100,
+  //       offset: 0,
+  //       options: {include_optional_metadata: true},
+  //     })
+  //     .then((res) => ({
+  //       has_next_page: false,
+  //       items: res.data.institutions.map((ins) => ({
+  //         id: ins.institution_id,
+  //         name: ins.name,
+  //         logo_url: ins.logo ? `data:image/png;base64,${ins.logo}` : null,
+  //         updated_at: new Date().toISOString(),
+  //         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  //         raw_data: ins as any,
+  //       })),
+  //       next_cursor: null,
+  //     }))
+  // },
 
   metaSync: ({config}) => {
     // Rate limit is easily exceeded, so we will have to introduce
