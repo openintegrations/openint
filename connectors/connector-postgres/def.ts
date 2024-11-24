@@ -14,6 +14,30 @@ export const zPgConfig = z.object({
   migrateTables: z.boolean().optional(),
 })
 
+/** TODO: Should confirm to airbyte record message format */
+export const zRecordMessageBody = z.object({
+  /** should be optional in case of insert not upsert */
+  id: z.string(),
+  /** aka `stream` */
+  entityName: z.string(),
+  /**
+   * aka `data`
+   * Should we support non-record data?
+   * Typically contains {unified, raw} fields
+   */
+  entity: z.record(z.unknown()),
+  namespace: z.string().optional(),
+  upsert: z
+    .object({
+      insert_only_columns: z.array(z.string()).optional(),
+      key_columns: z.array(z.string()).optional(),
+      must_match_columns: z.array(z.string()).optional(),
+      no_diff_columns: z.array(z.string()).optional(),
+      shallow_merge_jsonb_columns: z.array(z.string()).optional(),
+    })
+    .optional(),
+})
+
 export const postgresSchemas = {
   name: z.literal('postgres'),
   // TODO: Should postgres use integration config or resourceSettings?
@@ -36,18 +60,7 @@ export const postgresSchemas = {
         // @see https://share.cleanshot.com/w0KVx1Y2
         .optional(),
     }),
-  destinationInputEntity: z.object({
-    id: z.string(),
-    entityName: z.string(),
-    // TODO: Fix the support here. We hare hacking postgres to be able
-    // support both unified +unified inputs and raw only inputs
-    // Basically this should work with or without a link... And it's hard to abstract for now
-    entity: z.object({
-      // For now... in future we shall support arbitrary columns later
-      raw: z.any(),
-      unified: z.any(),
-    }),
-  }),
+  destinationInputEntity: zRecordMessageBody,
   sourceOutputEntity: zCast<EntityPayloadWithRaw>(),
   sourceState: z
     .object({
