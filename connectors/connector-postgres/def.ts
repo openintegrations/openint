@@ -14,18 +14,11 @@ export const zPgConfig = z.object({
   migrateTables: z.boolean().optional(),
 })
 
-/** TODO: Should confirm to airbyte record message format */
+/** TODO: Should confirm to airbyte record message format, and probably import from it */
 export const zRecordMessageBody = z.object({
-  /** should be optional in case of insert not upsert */
-  id: z.string(),
-  /** aka `stream` */
-  entityName: z.string(),
-  /**
-   * aka `data`
-   * Should we support non-record data?
-   * Typically contains {unified, raw} fields
-   */
-  entity: z.record(z.unknown()),
+  stream: z.string(),
+  /** Should we support non-record data? Typically contains {unified, raw} fields */
+  data: z.record(z.unknown()),
   namespace: z.string().optional(),
   upsert: z
     .object({
@@ -36,6 +29,19 @@ export const zRecordMessageBody = z.object({
       shallow_merge_jsonb_columns: z.array(z.string()).optional(),
     })
     .optional(),
+})
+
+const deprecatedInputEntity = z.object({
+  id: z.string(),
+  entityName: z.string(),
+  // TODO: Fix the support here. We hare hacking postgres to be able
+  // support both unified +unified inputs and raw only inputs
+  // Basically this should work with or without a link... And it's hard to abstract for now
+  entity: z.object({
+    // For now... in future we shall support arbitrary columns later
+    raw: z.unknown(),
+    unified: z.unknown(),
+  }),
 })
 export type RecordMessageBody = z.infer<typeof zRecordMessageBody>
 
@@ -61,7 +67,7 @@ export const postgresSchemas = {
         // @see https://share.cleanshot.com/w0KVx1Y2
         .optional(),
     }),
-  destinationInputEntity: zRecordMessageBody,
+  destinationInputEntity: z.union([zRecordMessageBody, deprecatedInputEntity]),
   sourceOutputEntity: zCast<EntityPayloadWithRaw>(),
   sourceState: z
     .object({

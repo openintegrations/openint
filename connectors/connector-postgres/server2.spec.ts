@@ -37,9 +37,6 @@ describe('standard schema', () => {
           entity: {
             raw: {AccountName: 'Cash'},
             unified: {name: 'Assets:Cash'},
-            end_user_id: 'esur_12',
-            id: 'vend_1123',
-            source_id: 'reso_sfdc_9287',
           },
         },
         type: 'data' as const,
@@ -65,20 +62,20 @@ describe('standard schema', () => {
 })
 
 const messages = [
-  ['insert', [{entityName: 'house', entity: {id: 112, name: 'White'}}]],
+  ['insert', [{stream: 'house', data: {id: 112, name: 'White'}}]],
   [
     'insert multiple',
     [
-      {entityName: 'account', entity: {id: 555, name: 'Bank'}},
-      {entityName: 'account', entity: {id: 555}},
+      {stream: 'account', data: {id: 555, name: 'Bank'}},
+      {stream: 'account', data: {id: 555}},
     ],
   ],
   [
     'upsert single key',
     [
       {
-        entityName: 'tre',
-        entity: {id: 5, name: 'B'},
+        stream: 'tre',
+        data: {id: 5, name: 'B'},
         upsert: {key_columns: ['id']},
       },
     ],
@@ -87,8 +84,8 @@ const messages = [
     'upsert composite keys',
     [
       {
-        entityName: 'transaction',
-        entity: {
+        stream: 'transaction',
+        data: {
           id: '1',
           intId: 2,
           amount: 1.23,
@@ -118,20 +115,20 @@ const messages = [
     'mixed',
     [
       {
-        entityName: 'good',
-        entity: {id: 5, name: 'B'},
+        stream: 'good',
+        data: {id: 5, name: 'B'},
         upsert: {key_columns: ['id']},
       },
       {
-        entityName: 'life',
-        entity: {id: 1, code: 'C'},
+        stream: 'life',
+        data: {id: 1, code: 'C'},
         upsert: {key_columns: ['id']},
       },
     ],
   ],
 ] satisfies Array<[string, Array<Omit<RecordMessageBody, 'id'>>]>
 
-describe.each(messages)('postgresServer: %s', (_, messages) => {
+describe.each(messages)('custom schema: %s', (_, messages) => {
   const tables = messages.map((m) =>
     inferTable(m as unknown as RecordMessageBody),
   )

@@ -22,7 +22,7 @@ export function isValidDateString(str: string) {
 export function inferTable(event: RecordMessageBody) {
   // TODO Implement namespace and upsert metadata support
   return pgTable(
-    event.entityName,
+    event.stream,
     (t) => {
       function inferCol(v: unknown) {
         if (typeof v === 'string') {
@@ -40,7 +40,7 @@ export function inferTable(event: RecordMessageBody) {
         return t.jsonb()
       }
       return Object.fromEntries(
-        Object.entries(event.entity).map(([k, v]) => [k, inferCol(v)]),
+        Object.entries(event.data).map(([k, v]) => [k, inferCol(v)]),
       )
     },
     (table) =>
@@ -49,7 +49,7 @@ export function inferTable(event: RecordMessageBody) {
       // && Object.values(table).filter(c => c.i)
       event.upsert?.key_columns
         ? [
-            uniqueIndex(`${event.entityName}_upsert_keys`).on(
+            uniqueIndex(`${event.stream}_upsert_keys`).on(
               ...(event.upsert.key_columns.map(
                 (col) => table[col] as PgColumn,
               ) as [PgColumn]),
@@ -89,4 +89,21 @@ export async function runMigrationForStandardTable(
       raw jsonb DEFAULT '{}'::jsonb NOT NULL
     );
   `)
+  // NOTE: Should we add org_id?
+  // NOTE: Rename `unified` to `unified` and `raw` to `raw` or `remote` or `original`
+  // NOTE: add prefix check would be nice
+  // for (const col of [
+  //   'id',
+  //   'source_id',
+  //   'connector_name',
+  //   'created_at',
+  //   'updated_at',
+  //   'end_user_id',
+  // ]) {
+  //   await pool.query(sql`
+  //     CREATE INDEX IF NOT EXISTS ${sql.identifier([
+  //       `${tableName}_${col}`,
+  //     ])} ON ${table} (${sql.identifier([col])});
+  //   `)
+  // }
 }

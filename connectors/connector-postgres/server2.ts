@@ -27,9 +27,21 @@ export const postgresServer = {
 
     return handlersLink({
       data: (op) => {
-        const body = op.data as RecordMessageBody
+        const body =
+          'entityName' in op.data
+            ? ({
+                stream: op.data.entityName,
+                data: {
+                  ...(op.data.entity as {}),
+                  id: op.data.id,
+                  end_user_id: endUser?.id,
+                  source_id: source?.id,
+                },
+                upsert: {key_columns: ['source_id', 'id']},
+              } satisfies RecordMessageBody)
+            : (op.data as RecordMessageBody)
         const hash = jsonStableStringify(
-          R.pick(body, ['entityName', 'namespace', 'upsert']),
+          R.pick(body, ['stream', 'namespace', 'upsert']),
         )
         const messages =
           messagesByConfig[hash] ??
@@ -67,7 +79,7 @@ export const postgresServer = {
             await dbUpsert(
               db,
               table,
-              msgs.map((m) => m.entity),
+              msgs.map((m) => m.data),
               {
                 insertOnlyColumns: msgs[0].upsert?.insert_only_columns,
                 keyColumns: msgs[0].upsert?.key_columns,
@@ -78,7 +90,7 @@ export const postgresServer = {
               },
             )
           } else {
-            await db.insert(table).values(msgs.map((m) => m.entity))
+            await db.insert(table).values(msgs.map((m) => m.data))
           }
         }
         messagesByConfig = {}
