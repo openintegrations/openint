@@ -30,8 +30,9 @@ export const zRecordMessageBody = z.object({
     })
     .optional(),
 })
+export type RecordMessageBody = z.infer<typeof zRecordMessageBody>
 
-const deprecatedInputEntity = z.object({
+export const deprecatedInputEntity = z.object({
   id: z.string(),
   entityName: z.string(),
   // TODO: Fix the support here. We hare hacking postgres to be able
@@ -43,7 +44,8 @@ const deprecatedInputEntity = z.object({
     unified: z.unknown(),
   }),
 })
-export type RecordMessageBody = z.infer<typeof zRecordMessageBody>
+export type DeprecatedInputEntity = z.infer<typeof deprecatedInputEntity>
+
 
 export const postgresSchemas = {
   name: z.literal('postgres'),
