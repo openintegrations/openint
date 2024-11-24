@@ -37,6 +37,7 @@ export const zRecordMessageBody = z.object({
     })
     .optional(),
 })
+export type RecordMessageBody = z.infer<typeof zRecordMessageBody>
 
 export const postgresSchemas = {
   name: z.literal('postgres'),

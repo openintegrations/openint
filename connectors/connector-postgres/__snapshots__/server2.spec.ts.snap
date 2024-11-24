@@ -2,10 +2,10 @@
 
 exports[`postgresServer: insert destinationSync 1`] = `
 {
-  "account": [
+  "house": [
     {
       "id": 112,
-      "name": "Cash",
+      "name": "White",
     },
   ],
 }
@@ -13,7 +13,7 @@ exports[`postgresServer: insert destinationSync 1`] = `
 
 exports[`postgresServer: insert infer table schema 1`] = `
 [
-  "CREATE TABLE IF NOT EXISTS "account" (
+  "CREATE TABLE IF NOT EXISTS "house" (
 	"id" integer,
 	"name" text
 );
@@ -24,10 +24,6 @@ exports[`postgresServer: insert infer table schema 1`] = `
 exports[`postgresServer: insert multiple destinationSync 1`] = `
 {
   "account": [
-    {
-      "id": 112,
-      "name": "Cash",
-    },
     {
       "id": 555,
       "name": "Bank",

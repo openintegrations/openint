@@ -4,8 +4,9 @@ import * as R from 'remeda'
 import type {EndUserId} from '@openint/cdk'
 import {env} from '@openint/env'
 import {rxjs, toCompletion} from '@openint/util'
-import type {RecordMessageBody} from './server2'
-import postgresServer, {getMigrationsForTable, inferTable} from './server2'
+import type {RecordMessageBody} from './def'
+import postgresServer from './server2'
+import {getMigrationsForTable, inferTable} from './utils'
 
 beforeAll(async () => {
   const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
@@ -18,8 +19,53 @@ const dbUrl = new URL(env.POSTGRES_URL)
 dbUrl.pathname = '/testing'
 const db = drizzle(dbUrl.toString(), {logger: true})
 
+const destLink = postgresServer.destinationSync({
+  config: {},
+  endUser: {id: 'esur_12' as EndUserId, orgId: 'org_123'},
+  settings: {databaseUrl: dbUrl.toString()},
+  source: {id: 'reso_sfdc_9287', connectorName: 'sfdc'},
+  state: {},
+})
+
+describe('standard schema', () => {
+  test('destinationSync', async () => {
+    const src = rxjs.from([
+      {
+        data: {
+          entityName: 'vendor',
+          id: 'vend_1123',
+          entity: {
+            raw: {AccountName: 'Cash'},
+            unified: {name: 'Assets:Cash'},
+            end_user_id: 'esur_12',
+            id: 'vend_1123',
+            source_id: 'reso_sfdc_9287',
+          },
+        },
+        type: 'data' as const,
+      },
+      {type: 'commit' as const},
+    ])
+    await toCompletion(destLink(src))
+    const res = await db.execute('SELECT * FROM vendor')
+    expect(res[0]).toMatchObject({
+      source_id: 'reso_sfdc_9287',
+      id: 'vend_1123',
+      end_user_id: 'esur_12',
+      connector_name: 'sfdc',
+      unified: {name: 'Assets:Cash'},
+      raw: {AccountName: 'Cash'},
+      // Should be any ISODate
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      created_at: expect.any(String),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      updated_at: expect.any(String),
+    })
+  })
+})
+
 const messages = [
-  ['insert', [{entityName: 'account', entity: {id: 112, name: 'Cash'}}]],
+  ['insert', [{entityName: 'house', entity: {id: 112, name: 'White'}}]],
   [
     'insert multiple',
     [
@@ -101,13 +147,6 @@ describe.each(messages)('postgresServer: %s', (_, messages) => {
   })
 
   test('destinationSync', async () => {
-    const destLink = postgresServer.destinationSync({
-      config: {},
-      endUser: {id: 'esur_12' as EndUserId, orgId: 'org_123'},
-      settings: {databaseUrl: dbUrl.toString()},
-      source: {id: 'reso_123', connectorName: 'salesforce'},
-      state: {},
-    })
     const src = rxjs.from([
       ...messages.map((m) => ({
         data: {id: '', ...m},
