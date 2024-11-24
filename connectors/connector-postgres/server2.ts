@@ -12,6 +12,7 @@ import {handlersLink} from '@openint/cdk'
 import {dbUpsert} from '@openint/db'
 import {rxjs} from '@openint/util'
 import type {postgresSchemas} from './def'
+import {isValidDateString} from './utils'
 
 export const postgresServer = {
   destinationSync: ({endUser, source, settings: {databaseUrl}}) => {
@@ -27,15 +28,6 @@ export const postgresServer = {
 } satisfies ConnectorServer<typeof postgresSchemas>
 
 export default postgresServer
-
-export function isValidDateString(str: string) {
-  const date = new Date(str)
-  const lenToCheck = Math.min(str.length, '2021-01-01T00:00:00'.length)
-  return (
-    !Number.isNaN(date.getTime()) &&
-    date.toISOString().slice(0, lenToCheck) === str.slice(0, lenToCheck)
-  )
-}
 
 /** Airbyte record message */
 export const zRecordMessage = z.object({

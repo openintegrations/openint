@@ -6,7 +6,6 @@ import type {RecordMessage} from './server2'
 import {
   getMigrationsForTable,
   inferTable,
-  isValidDateString,
   upsertFromRecordMessages,
 } from './server2'
 
@@ -20,21 +19,6 @@ beforeAll(async () => {
 const dbUrl = new URL(env.POSTGRES_URL)
 dbUrl.pathname = '/testing'
 const db = drizzle(dbUrl.toString(), {logger: true})
-
-test.each([
-  ['2021-01-01T00:00:00Z', true],
-  ['2021-01-01T00:00:00', false], // missing timezone, not valid as a result
-  ['2021-01-01', true],
-  ['2021-01', true],
-  ['2021', true],
-  ['12', false],
-  ['202', false],
-  ['2021-01-01T00:00:00+00:00', true],
-  ['Sun, Nov 17, 5:00 PM', false],
-  ['Sat Nov 16 2024 15:28:04 GMT-0800 (Pacific Standard Time)', false],
-])('isValidDateString(%s) -> %o', (input, valid) => {
-  expect(isValidDateString(input)).toEqual(valid)
-})
 
 describe.each([
   ['insert', [{stream: 'account', data: {id: 112, name: 'Cash'}}]],
