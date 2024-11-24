@@ -9,7 +9,6 @@ export function agLink(ctx: {
     metadata?: unknown
     endUserId?: string
   }
-  // @ts-expect-error Remove the constraint on AnyEntityPayload
 }): Link<DeprecatedInputEntity, RecordMessageBody> {
   // @ts-expect-error Remove the constraint on AnyEntityPayload
   return Rx.mergeMap((op) => {

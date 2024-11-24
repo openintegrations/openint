@@ -138,8 +138,8 @@ export function makeSyncService({
   const getLinksForPipeline = ({
     source,
     destination,
-    links, // eslint-disable-next-line arrow-body-style
-  }: _PipelineExpanded): Link[] => {
+    links, // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }: _PipelineExpanded): Array<Link<any>> => {
     const allLinks = [
       ...links,
       ...[

@@ -88,6 +88,7 @@ async function setupTable({
 export const postgresServer = {
   // sourceSync removed: https://github.com/openintegrations/openint/pull/64/commits/20ef41123b1f72378e312c2c3114c462423e16e7
 
+  // @ts-expect-error Deprecated code shall remove
   destinationSync: ({endUser, source, settings: {databaseUrl}}) => {
     console.log('[destinationSync] Will makePostgresClient', {
       // databaseUrl,
@@ -151,24 +152,21 @@ export const postgresServer = {
           endUser?.orgId === 'org_2pBM0RSOqs5QzZi40A73hZ5aTjD'
 
         // TODO: Remove when we have support for links custom upserts
+        const raw = ((data.entity as any)?.raw ?? {}) as Record<string, unknown>
         if (isAgMode) {
           console.log('Inserting record for AG')
           if (tableName === 'IntegrationAtsJob') {
-            rowToInsert['external_job_id'] = data.entity?.raw?.id || ''
+            rowToInsert['external_job_id'] = raw['id'] || ''
           } else if (tableName === 'IntegrationAtsCandidate') {
-            rowToInsert['opening_external_id'] = data.entity?.raw?.id || ''
+            rowToInsert['opening_external_id'] = raw['id'] || ''
             rowToInsert['candidate_name'] =
-              data.entity?.raw?.first_name +
-                ' ' +
-                data.entity?.raw?.last_name || ''
+              raw['first_name'] + ' ' + raw['last_name'] || ''
           } else if (tableName === 'IntegrationAtsJobOpening') {
-            rowToInsert['opening_external_id'] =
-              data.entity?.raw?.opening_id || ''
-            rowToInsert['job_id'] = data.entity?.raw?.job_id || ''
+            rowToInsert['opening_external_id'] = raw['opening_id'] || ''
+            rowToInsert['job_id'] = raw['job_id'] || ''
           } else if (tableName === 'IntegrationAtsOffer') {
             // Note: These fields seemed duplicated from the nested objects
-            rowToInsert['opening_external_id'] =
-              data.entity?.raw?.opening?.id || ''
+            rowToInsert['opening_external_id'] = raw['opening']?.id || ''
             // field does not exist in the offer object
             rowToInsert['candidate_name'] = ''
           }
