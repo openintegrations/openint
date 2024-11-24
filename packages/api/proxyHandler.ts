@@ -17,11 +17,12 @@ export const proxyHandler = async (req: Request) => {
       new Date()
     : false
 
-  if (credentialsExpired && remoteContext.remoteResourceId) {
+if (credentialsExpired && remoteContext.remoteResourceId) {
+  try {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
-    })
-    const resourceExternalId = extractId(remoteContext.remoteResourceId)[2]
+    });
+    const resourceExternalId = extractId(remoteContext.remoteResourceId)[2];
     const nangoConnection = await nango
       .GET('/connection/{connectionId}', {
         params: {
@@ -34,20 +35,24 @@ export const proxyHandler = async (req: Request) => {
           },
         },
       })
-      .then((r) => r.data)
+      .then((r) => r.data);
 
     const {connectorConfig: int} =
       await protectedContext.asOrgIfNeeded.getResourceExpandedOrFail(
         remoteContext.remoteResourceId,
-      )
+      );
 
     await protectedContext.asOrgIfNeeded._syncResourceUpdate(int, {
       settings: {
         oauth: nangoConnection,
       },
       resourceExternalId,
-    })
+    });
+  } catch (error) {
+    console.error('Failed to refresh credentials', error);
+    return new Response('Failed to refresh credentials', { status: 500 });
   }
+}
 
   const connectorImplementedProxy = await remoteContext.remote.connector.proxy
   let res: Response | null = null
