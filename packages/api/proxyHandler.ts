@@ -1,16 +1,19 @@
-import {extractId, getRemoteContext, initNangoSDK} from '@openint/cdk'
+import type {HTTPMethod, OpenAPIClient} from '@opensdks/runtime'
+import {extractId, getRemoteContext, initNangoSDK, Link} from '@openint/cdk'
 import {getProtectedContext} from '@openint/trpc'
 import {contextFromRequest} from './createRouterHandler'
 
+function isOpenAPIClient(instance: any): instance is OpenAPIClient<any> {
+  const hasRequest = typeof instance?.request === 'function'
+  const hasLinksArray = Array.isArray(instance?.links)
+  return hasRequest && hasLinksArray
+}
+
 export const proxyHandler = async (req: Request) => {
-  console.log('Proxy request', {req})
   const ctx = await contextFromRequest({req})
-  console.log('Context', {ctx})
   const protectedContext = getProtectedContext(ctx)
-  console.log('Protected context', {protectedContext})
   const remoteContext = await getRemoteContext(protectedContext)
 
-  console.log('Proxy request', {ctx, remoteContext, protectedContext})
   const credentialsExpired = remoteContext.remote.settings.oauth?.credentials
     .expires_at
     ? new Date(remoteContext.remote.settings.oauth.credentials.expires_at) <
@@ -22,6 +25,7 @@ export const proxyHandler = async (req: Request) => {
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
     })
     const resourceExternalId = extractId(remoteContext.remoteResourceId)[2]
+
     const nangoConnection = await nango
       .GET('/connection/{connectionId}', {
         params: {
@@ -41,6 +45,7 @@ export const proxyHandler = async (req: Request) => {
         remoteContext.remoteResourceId,
       )
 
+    console.log('Syncing resource update...')
     await protectedContext.asOrgIfNeeded._syncResourceUpdate(int, {
       settings: {
         oauth: nangoConnection,
@@ -51,15 +56,20 @@ export const proxyHandler = async (req: Request) => {
 
   const connectorImplementedProxy = await remoteContext.remote.connector.proxy
   let res: Response | null = null
+
   if (connectorImplementedProxy) {
     res = await connectorImplementedProxy(remoteContext.remote.instance, req)
-  } else {
+  } else if (isOpenAPIClient(remoteContext.remote.instance)) {
     const url = new URL(req.url)
     const prefix = url.protocol + '//' + url.host + '/api/proxy'
-    // @ts-expect-error
+
+    const newUrl = req.url.replace(prefix, '')
     res = await remoteContext.remote.instance
-      .request(req.method as 'GET', req.url.replace(prefix, ''), req)
-      .then((r: any) => r.response)
+      .request(req.method as HTTPMethod, newUrl, {
+        body: req.body,
+        headers: req.headers,
+      })
+      .then((r) => r.response)
   }
 
   if (!res) {
@@ -71,9 +81,12 @@ export const proxyHandler = async (req: Request) => {
     )
   }
 
+  const resBody = await res.blob()
+
   const headers = new Headers(res.headers)
   headers.delete('content-encoding') // No more gzip at this point...
-  return new Response(res.body, {
+  headers.delete('content-length') // We don't want to send the content length header in case it is wrong due to compression
+  return new Response(resBody, {
     status: res.status,
     headers,
   })
