@@ -1,5 +1,5 @@
 import type {HTTPMethod, OpenAPIClient} from '@opensdks/runtime'
-import {extractId, getRemoteContext, initNangoSDK, Link} from '@openint/cdk'
+import {extractId, getRemoteContext, initNangoSDK} from '@openint/cdk'
 import {getProtectedContext} from '@openint/trpc'
 import {contextFromRequest} from './createRouterHandler'
 
