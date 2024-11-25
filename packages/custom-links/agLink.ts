@@ -22,6 +22,7 @@ function isUnifiedEntity<T extends keyof Unified>(
   )
 }
 
+/** TODO: Rename me to customLinkAg */
 export function agLink(ctx: {
   source: {
     id: Id['reso']

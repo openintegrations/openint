@@ -495,7 +495,7 @@ export interface components {
       | 'prefix_connector_name'
       | 'single_table'
       | 'unified_ats'
-      | 'ag_link'
+      | 'custom_link_ag'
       | 'unified_crm'
     'core.integration': {
       id: string

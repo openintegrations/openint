@@ -160,10 +160,10 @@ export function makeSyncService({
             return unifiedAtsLink({source})
           case 'single_table':
             return singleTableLink({source})
-          case 'ag_link':
-            return agLink({source})
           case 'unified_crm':
             return unifiedCrmLink({source})
+          case 'custom_link_ag':
+            return agLink({source})
           default:
             throw new Error(`Unknown link ${l}`)
         }

@@ -28,9 +28,6 @@ const destLink = postgresServer.destinationSync({
 
 async function setupAgFixtures() {
   await db.execute(sql`
-    -- This script only contains the table creation statements and does not fully represent the table in the database. Do not use it as a backup.
-
-    -- Table Definition
     CREATE TABLE "public"."Client" (
         "id" text NOT NULL,
         "slug" varchar NOT NULL,
@@ -89,6 +86,36 @@ async function setupAgFixtures() {
         "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "IntegrationATSJob_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "IntegrationATSJob_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "public"."Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+        PRIMARY KEY ("id")
+    );
+    CREATE TABLE "public"."IntegrationATSOffer" (
+        "id" text NOT NULL,
+        "clientId" text NOT NULL,
+        "connectionId" text NOT NULL,
+        "opening_external_id" text NOT NULL,
+        "candidate_name" text NOT NULL,
+        "isOpenInt" bool DEFAULT false,
+        "raw" jsonb NOT NULL DEFAULT '{}'::jsonb,
+        "unified" jsonb NOT NULL DEFAULT '{}'::jsonb,
+        "createdAt" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "IntegrationATSOffer_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+        CONSTRAINT "IntegrationATSOffer_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "public"."Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+        PRIMARY KEY ("id")
+    );
+    CREATE TABLE "public"."IntegrationATSOpening" (
+        "id" text NOT NULL,
+        "clientId" text NOT NULL,
+        "connectionId" text NOT NULL,
+        "opening_external_id" text NOT NULL,
+        "job_id" text NOT NULL,
+        "isOpenInt" bool DEFAULT false,
+        "raw" jsonb NOT NULL DEFAULT '{}'::jsonb,
+        "unified" jsonb NOT NULL DEFAULT '{}'::jsonb,
+        "createdAt" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "IntegrationATSOpening_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "public"."Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+        CONSTRAINT "IntegrationATSOpening_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
         PRIMARY KEY ("id")
     );
   `)
