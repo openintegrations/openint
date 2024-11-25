@@ -38,14 +38,16 @@ export const deprecatedInputEntity = z.object({
   // TODO: Fix the support here. We hare hacking postgres to be able
   // support both unified +unified inputs and raw only inputs
   // Basically this should work with or without a link... And it's hard to abstract for now
-  entity: z.object({
-    // For now... in future we shall support arbitrary columns later
-    raw: z.unknown(),
-    unified: z.unknown(),
-  }),
+  entity: z.union([
+    z.object({
+      // For now... in future we shall support arbitrary columns later
+      raw: z.unknown(),
+      unified: z.unknown(),
+    }),
+    z.null(),
+  ]),
 })
 export type DeprecatedInputEntity = z.infer<typeof deprecatedInputEntity>
-
 
 export const postgresSchemas = {
   name: z.literal('postgres'),

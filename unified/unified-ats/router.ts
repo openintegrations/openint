@@ -11,6 +11,7 @@ import adapters from './adapters'
 import * as unified from './unifiedModels'
 
 export {unified}
+export type Unified = {[k in keyof typeof unified]: z.infer<(typeof unified)[k]>}
 
 function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
   return {openapi: {...meta, path: `/unified/ats${meta.path}`}}
@@ -26,7 +27,9 @@ export const atsRouter = trpc.router({
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listJobOpenings: procedure
     .meta(oapi({method: 'GET', path: '/job/{jobId}/opening'}))
-    .input(z.object({jobId: z.string()}).extend(zPaginationParams.shape).nullish())
+    .input(
+      z.object({jobId: z.string()}).extend(zPaginationParams.shape).nullish(),
+    )
     .output(zPaginatedResult.extend({items: z.array(unified.opening)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listOffers: procedure

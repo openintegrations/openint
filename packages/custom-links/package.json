@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@openint/env": "workspace:*",
+    "@openint/unified-ats": "workspace:*",
     "drizzle-kit": "^0.28.1",
     "drizzle-orm": "^0.36.3",
     "postgres": "^3.4.5"
