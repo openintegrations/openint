@@ -1,6 +1,6 @@
 import type {Id, Link} from '@openint/cdk'
 import {R, Rx, rxjs} from '@openint/util'
-import type {DeprecatedInputEntity, RecordMessageBody} from '../def'
+import type {DeprecatedInputEntity, RecordMessageBody} from '@openint/connector-postgres'
 
 export function agLink(ctx: {
   source: {

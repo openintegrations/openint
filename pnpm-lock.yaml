@@ -1619,6 +1619,31 @@ importers:
         specifier: 0.0.20
         version: 0.0.20
 
+  packages/custom-links:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/connector-postgres':
+        specifier: workspace:*
+        version: link:../../connectors/connector-postgres
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../util
+    devDependencies:
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../env
+      drizzle-kit:
+        specifier: ^0.28.1
+        version: 0.28.1
+      drizzle-orm:
+        specifier: ^0.36.3
+        version: 0.36.3(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
+
   packages/engine-backend:
     dependencies:
       '@openint/cdk':
