@@ -5,18 +5,18 @@ import type {
 } from '@openint/connector-postgres'
 import type {Unified} from '@openint/unified-ats'
 import {R, Rx, rxjs} from '@openint/util'
-import {entityCommands} from '@/vcommands/vcommand-definitions'
 
+/** no ats prefix here */
 function isUnifiedEntity<T extends keyof Unified>(
   entity: DeprecatedInputEntity,
   name: T,
 ): entity is {
   id: string
-  entityName: `ats_${T}`
+  entityName: `${T}`
   entity: {raw?: unknown; unified: Unified[T]}
 } {
   return (
-    entity.entityName === `ats_${name}` &&
+    entity.entityName === `${name}` &&
     entity.entity != null &&
     'unified' in entity.entity
   )
