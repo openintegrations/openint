@@ -128,7 +128,7 @@ export function agLink(ctx: {
         isUnifiedEntity(op.data, 'opening') && {
           type: 'data' as const,
           data: {
-            stream: 'IntegrationATSOpportunity',
+            stream: 'IntegrationATSOpening',
             data: {
               clientId: ctx.source.endUserId,
               connectionId: ctx.source.id,
