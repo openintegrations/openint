@@ -1,4 +1,6 @@
+import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {getTableName} from 'drizzle-orm'
+import type {PgTable} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import * as R from 'remeda'
 import type {EndUserId} from '@openint/cdk'
@@ -6,7 +8,40 @@ import {env} from '@openint/env'
 import {rxjs, toCompletion} from '@openint/util'
 import type {RecordMessageBody} from './def'
 import postgresServer from './server'
-import {getMigrationsForTable, inferTable} from './utils'
+import {inferTable} from './utils'
+
+/**
+ * Causes issue with next.js build... so putting it here for now since we are not quite using it in prod yet
+ * TODO: Report issue to drizzle about this
+../../node_modules/.pnpm/esbuild@0.17.5/node_modules/esbuild/lib/main.d.ts
+Module parse failed: Unexpected token (1:7)
+File was processed with these loaders:
+ * ../../node_modules/.pnpm/next@14.2.13_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/next-flight-loader/index.js
+ * ../../node_modules/.pnpm/next@14.2.13_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+You may need an additional loader to handle the result of these loaders.
+> export type Platform = 'browser' | 'node' | 'neutral'
+| export type Format = 'iife' | 'cjs' | 'esm'
+| export type Loader = 'base64' | 'binary' | 'copy' | 'css' | 'dataurl' | 'default' | 'empty' | 'file' | 'js' | 'json' | 'jsx' | 'text' | 'ts' | 'tsx'
+
+Import trace for requested module:
+../../node_modules/.pnpm/esbuild@0.17.5/node_modules/esbuild/lib/main.d.ts
+../../node_modules/.pnpm/esbuild@0.17.5/node_modules/esbuild/lib/ sync ^.*\/.*$
+../../node_modules/.pnpm/esbuild@0.17.5/node_modules/esbuild/lib/main.js
+../../node_modules/.pnpm/esbuild-register@3.5.0_esbuild@0.17.5/node_modules/esbuild-register/dist/node.js
+../../node_modules/.pnpm/drizzle-kit@0.28.1/node_modules/drizzle-kit/api.mjs
+../../connectors/connector-postgres/utils.ts
+../../connectors/connector-postgres/server.ts
+../app-config/connectors/connectors.merged.ts
+../app-config/backendConfig.ts
+./app/api/resources/[resourceId]/sql/route.ts
+
+ */
+function getMigrationsForTable(table: PgTable) {
+  return generateMigration(
+    generateDrizzleJson({}),
+    generateDrizzleJson({table}),
+  )
+}
 
 beforeAll(async () => {
   const masterDb = drizzle(env.POSTGRES_URL, {logger: true})

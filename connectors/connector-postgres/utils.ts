@@ -1,6 +1,5 @@
-import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
-import type {PgColumn, PgDatabase, PgTable} from 'drizzle-orm/pg-core'
+import type {PgColumn, PgDatabase} from 'drizzle-orm/pg-core'
 import {pgTable, uniqueIndex} from 'drizzle-orm/pg-core'
 import type {RecordMessageBody} from './def'
 
@@ -56,13 +55,6 @@ export function inferTable(event: RecordMessageBody) {
             ),
           ]
         : [],
-  )
-}
-
-export function getMigrationsForTable(table: PgTable) {
-  return generateMigration(
-    generateDrizzleJson({}),
-    generateDrizzleJson({table}),
   )
 }
 
