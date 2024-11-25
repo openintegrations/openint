@@ -61,7 +61,7 @@ export function dbUpsertOne<
 }
 
 /**
- * We assume that every row contains the same keys even if not defined in its value
+ * TODO(p1): We assume that every row contains the same keys even if not defined in its value
  * Careful though a single upsert operation cannot affect a row a second time
  * so we may need to dedupe within upserts or on an application level
  * splitting events into multiple upserts
