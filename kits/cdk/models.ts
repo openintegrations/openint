@@ -115,7 +115,7 @@ export const zLink = z
     'prefix_connector_name',
     'single_table',
     'unified_ats',
-    'ag_column_rename',
+    'ag_link',
     'unified_crm',
   ])
   .openapi({ref: 'Link'})
