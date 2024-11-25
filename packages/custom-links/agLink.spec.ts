@@ -77,6 +77,20 @@ async function setupAgFixtures() {
         CONSTRAINT "IntegrationATSCandidate_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
         PRIMARY KEY ("id")
     );
+    CREATE TABLE "public"."IntegrationATSJob" (
+        "id" text NOT NULL,
+        "clientId" text NOT NULL,
+        "connectionId" text NOT NULL,
+        "external_job_id" text NOT NULL,
+        "isOpenInt" bool DEFAULT false,
+        "raw" jsonb NOT NULL DEFAULT '{}'::jsonb,
+        "unified" jsonb NOT NULL DEFAULT '{}'::jsonb,
+        "createdAt" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "IntegrationATSJob_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+        CONSTRAINT "IntegrationATSJob_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "public"."Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+        PRIMARY KEY ("id")
+    );
   `)
   await db.execute(sql`
     INSERT INTO "public"."Client" ("id", "slug", "createdAt", "updatedAt", "deletedAt", "legalName", "clerkCreatedAt", "clerkCreatedBy", "clerkOrgId")
@@ -95,6 +109,18 @@ test('destinationSync', async () => {
           entity: {
             raw: {first_name: 'John', last_name: 'Doe', id: '123'},
             unified: {name: 'tbd'},
+          },
+        } satisfies DeprecatedInputEntity,
+        type: 'data' as const,
+      },
+      {type: 'commit' as const},
+      {
+        data: {
+          entityName: 'ats_job',
+          id: 'job_123',
+          entity: {
+            raw: {_Name_c: 'new job'},
+            unified: {id: '123', name: 'New job'},
           },
         } satisfies DeprecatedInputEntity,
         type: 'data' as const,
@@ -129,6 +155,20 @@ test('destinationSync', async () => {
     clientId: 'cm3roaf0007',
     raw: {first_name: 'John', last_name: 'Doe', id: '123'},
     unified: {name: 'tbd'},
+    isOpenInt: true,
+    // Should be any ISODate
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    createdAt: expect.any(String),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    updatedAt: expect.any(String),
+  })
+  const jobs = await db.execute('SELECT * FROM "IntegrationATSJob"')
+  expect(jobs[0]).toMatchObject({
+    connectionId: 'conn_123',
+    id: 'job_123',
+    clientId: 'cm3roaf0007',
+    raw: {_Name_c: 'new job'},
+    unified: {name: 'New job', id: '123'},
     isOpenInt: true,
     // Should be any ISODate
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

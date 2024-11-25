@@ -77,7 +77,9 @@ export function agLink(ctx: {
                 op.data.entity.unified.last_name,
               ]).join(' '),
               // Should be candidate external id
-              opening_external_id: op.data.entity.unified.id,
+              opening_external_id:
+                op.data.entity.unified.id ??
+                (op.data.entity.raw as any)?.['id'],
             },
             upsert: {
               key_columns: ['id'],
