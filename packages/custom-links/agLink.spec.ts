@@ -7,15 +7,16 @@ import {env} from '@openint/env'
 import {rxjs, toCompletion} from '@openint/util'
 import {agLink} from './agLink'
 
-beforeAll(async () => {
-  const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
-  await masterDb.execute('DROP DATABASE IF EXISTS testing')
-  await masterDb.execute('CREATE DATABASE testing')
-  await masterDb.$client.end()
-})
+// TODO: Add me back in once we know CI is working
+// beforeAll(async () => {
+//   const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
+//   await masterDb.execute('DROP DATABASE IF EXISTS testing')
+//   await masterDb.execute('CREATE DATABASE testing')
+//   await masterDb.$client.end()
+// })
 
 const dbUrl = new URL(env.POSTGRES_URL)
-dbUrl.pathname = '/testing'
+// dbUrl.pathname = '/testing'
 const db = drizzle(dbUrl.toString(), {logger: true})
 
 const destLink = postgresServer.destinationSync({
