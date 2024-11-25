@@ -27,7 +27,7 @@ export function agLink(ctx: {
     id: Id['reso']
     connectorConfig: {connectorName: string}
     metadata?: unknown
-    endUserId?: string
+    endUserId?: string | null
   }
 }): Link<DeprecatedInputEntity, RecordMessageBody> {
   let integrationConnectionUpserted = false
