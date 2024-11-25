@@ -64,8 +64,6 @@ export function agLink(ctx: {
         isUnifiedEntity(op.data, 'candidate') && {
           type: 'data' as const,
           data: {
-            // TODO: get some strong typing here by importing from atsJob
-            // perhaps this link doesn't quite belong in connectorPostgres?
             stream: 'IntegrationATSCandidate',
             data: {
               clientId: ctx.source.endUserId,

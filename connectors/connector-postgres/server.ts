@@ -65,6 +65,10 @@ export const postgresServer = {
       },
       commit: async (op) => {
         for (const msgs of Object.values(messagesByConfig)) {
+          // TODO(p1): Infer table may NOT end up with the right schema if columns are `null` or `undefined`
+          // in particular it could be hard to differentiate between a string and a jsonb column
+          // We should either add some further edge case testing, ensure default behavior makes the most sense
+          // or allow schema hint to be passed in as part of the message
           const table = inferTable(msgs[0])
 
           // This should be cached within a single destinationSync run and therefore
