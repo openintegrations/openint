@@ -34,7 +34,7 @@ export default function EndUsersPage() {
   return (
     <div className="p-6">
       <h2 className="mb-2 text-2xl font-semibold tracking-tight">End Users</h2>
-      <p className="mb-4 text-gray-600">
+      <p className="mb-4 text-sm text-gray-600">
         View and manage your end users and their associated resources.
       </p>
       <DataTable
