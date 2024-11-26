@@ -30,7 +30,7 @@
   ],
   "tabs": [
     {
-      "name": "API References",
+      "name": "API Reference",
       "openapi": "https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json"
     },
     {
