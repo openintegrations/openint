@@ -117,36 +117,33 @@ export function SqlPage({
     <div className="flex h-[100%] flex-col">
       {listTablesRes.isFetching ? (
         <div className="flex size-full flex-1 items-center justify-center">
-          <Loader2 className="animate-spin text-button" />
+          <Loader2 className="size-8 animate-spin text-button" />
         </div>
       ) : (
-        <div className="flex grow flex-col overflow-hidden p-4">
+        <div className="flex grow flex-col overflow-hidden">
           <Resizable
             defaultSize={{height: '50%', width: '100%'}}
-            className="flex border-b-2">
-            <ScrollArea className="w-32">
-              {Object.entries(listTablesRes.data ?? {}).map(
-                ([title, tables]) =>
-                  !tables.length ? null : (
-                    <div key={title}>
-                      <div className="mb-2 font-medium">{title}</div>
-                      {tables.map((t) => (
-                        <a
-                          className="block cursor-pointer px-1 pl-2 hover:underline"
-                          key={t.table_name}
-                          onClick={() =>
-                            setQueryText(
-                              `SELECT * FROM ${t.table_name} LIMIT 5`,
-                            )
-                          }>
-                          {t.table_name}
-                        </a>
-                      ))}
-                    </div>
-                  ),
-              )}
-            </ScrollArea>
-            <div className="flex grow">
+            className="flex flex-row border-b-2">
+            {Object.entries(listTablesRes.data ?? {}).map(([title, tables]) =>
+              !tables.length ? null : (
+                <div
+                  key={title}
+                  className="flex min-w-[200px] grow flex-col overflow-y-auto border-r border-black/10 p-4">
+                  <div className="mb-2 font-semibold">{title}</div>
+                  {tables.map((t) => (
+                    <a
+                      className="block cursor-pointer px-1 pl-2 hover:underline"
+                      key={t.table_name}
+                      onClick={() =>
+                        setQueryText(`SELECT * FROM ${t.table_name} LIMIT 5`)
+                      }>
+                      {t.table_name}
+                    </a>
+                  ))}
+                </div>
+              ),
+            )}
+            <div className="flex grow py-4">
               <CodeEditor
                 ref={editorRef}
                 language="sql"
@@ -225,7 +222,7 @@ export function SqlPage({
                 </DropdownMenuContent>
               </DropdownMenu>
               <Button
-                variant="ghost"
+                variant="secondary"
                 className="ml-auto"
                 onClick={() =>
                   editorRef.current
