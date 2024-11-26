@@ -38,6 +38,16 @@ const sectionedLinks: Array<{
     ]),
   },
   {
+    title: 'SQL',
+    items: [
+      {
+        title: 'Editor',
+        href: '/dashboard/sql-editor',
+        icon: 'Code',
+      },
+    ],
+  },
+  {
     title: 'Entities',
     items: [
       {
@@ -94,15 +104,21 @@ const sectionedLinks: Array<{
   },
 ]
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
+  hasPgConnection: boolean
+}
 
-export function Sidebar({className}: SidebarProps) {
+export function Sidebar({className, hasPgConnection}: SidebarProps) {
   const pathname = usePathname()
+  const links = hasPgConnection
+    ? sectionedLinks
+    : sectionedLinks.filter((s) => s.title !== 'SQL')
+
   return (
     <nav className={cn('flex flex-col', className)}>
       <ScrollArea className="h-full px-2">
         <div className="space-y-4 py-4">
-          {sectionedLinks.map((section, i) => (
+          {links.map((section, i) => (
             <div key={section.title ?? `i-${i}`} className="px-4 py-2">
               <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
                 {section.title}
