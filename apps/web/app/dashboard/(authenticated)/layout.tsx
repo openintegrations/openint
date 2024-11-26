@@ -2,6 +2,7 @@
 
 import {OrganizationSwitcher, useAuth, UserButton} from '@clerk/nextjs'
 import NextTopLoader from 'nextjs-toploader'
+import {_trpcReact} from '@openint/engine-frontend'
 import {NoSSR} from '@/components/NoSSR'
 import {RedirectToNext13} from '@/components/RedirectTo'
 import {VCommandBar} from '@/vcommands/vcommand-components'
@@ -11,6 +12,9 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
   // Clerk react cannot be trusted... Add our own clerk listener instead...
   // auth works for initial request but then subsequently breaks...
   const auth = useAuth()
+  const connections = _trpcReact.listConnections.useQuery({})
+  const hasPgConnection =
+    connections.data?.some((c) => c.id.includes('postgres_default')) ?? false
   // const user = useUser()
   // const orgs = useOrganizationList()
 
@@ -70,7 +74,10 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
       <main className="ml-[240px] mt-12 max-h-[calc(100vh-3em)] grow overflow-x-hidden">
         {auth.orgId ? children : <div>Create an org to begin</div>}
       </main>
-      <Sidebar className="fixed bottom-0 left-0 top-12 w-[240px] border-r bg-background" />
+      <Sidebar
+        className="fixed bottom-0 left-0 top-12 w-[240px] border-r bg-background"
+        hasPgConnection={hasPgConnection}
+      />
       <header className="fixed inset-x-0 top-0 flex h-12 items-center gap-2 border-b bg-background p-4">
         {/* Not working because of bug in clerk js that is unclear that results in hydration issue.. */}
         <NoSSR>
