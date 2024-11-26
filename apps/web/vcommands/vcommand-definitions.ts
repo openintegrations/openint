@@ -59,6 +59,29 @@ const _resourceCommand = {
   params: z.object({resource: zClient.resource}),
 } satisfies CommandDefinitionInput<CommandContext>
 
+const debugResourceCommands = {
+  'resource:navigate_sql': cmd.identity({
+    ..._resourceCommand,
+    icon: 'Database',
+    title: 'Run sql',
+    // Only show me for postgres resources
+    execute: ({params: {resource}, ctx}) => {
+      // TODO: Display loading indicator while this is happening...
+      ctx.router.push(`/dashboard/resources/${resource.id}/sql`)
+    },
+  }),
+  'resource:navigate_playground': cmd.identity({
+    ..._resourceCommand,
+    icon: 'Database',
+    title: 'Playground',
+    // Only show me for postgres resources
+    execute: ({params: {resource}, ctx}) => {
+      // TODO: Get typecheck to catch bad routes
+      ctx.router.push(`/dashboard/resources/${resource.id}/playground`)
+    },
+  }),
+}
+
 export const resourceCommands = {
   'resource:edit': cmd.identity({
     ..._resourceCommand,
@@ -89,27 +112,7 @@ export const resourceCommands = {
       )
     },
   }),
-  'resource:navigate_sql': cmd.identity({
-    ..._resourceCommand,
-    icon: 'Database',
-    title: 'Run sql',
-    // Only show me for postgres resources
-    execute: ({params: {resource}, ctx}) => {
-      // TODO: Display loading indicator while this is happening...
-      ctx.router.push(`/dashboard/resources/${resource.id}/sql`)
-    },
-  }),
-  'resource:navigate_playground': cmd.identity({
-    ..._resourceCommand,
-    icon: 'Database',
-    title: 'Playground',
-    // Only show me for postgres resources
-    execute: ({params: {resource}, ctx}) => {
-      // TODO: Get typecheck to catch bad routes
-      ctx.router.push(`/dashboard/resources/${resource.id}/playground`)
-    },
-  }),
-
+  ...(__DEBUG__ && debugResourceCommands),
   // TODO: Move this out of the core, now that we have plaid specific operations
   // 'plaid/simulate_disconnect': {
   //   ..._resourceCommand,
