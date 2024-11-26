@@ -18,7 +18,6 @@ import {
   DropdownMenuTrigger,
   Kbd,
   Resizable,
-  ScrollArea,
   useWithToast,
 } from '@openint/ui'
 import type {Editor} from '@openint/ui/components/CodeEditor'
