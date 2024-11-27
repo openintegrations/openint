@@ -1,5 +1,4 @@
 import {zodToOas31Schema} from '@opensdks/util-zod'
-import {TRPCError} from '@trpc/server'
 import {zRaw} from '@openint/cdk'
 import {R, z} from '@openint/util'
 import {contextFactory} from '../../../apps/app-config/backendConfig'
