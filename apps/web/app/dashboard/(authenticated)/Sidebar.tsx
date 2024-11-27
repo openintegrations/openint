@@ -92,7 +92,7 @@ const sectionedLinks: Array<{
       },
       {
         title: 'API Docs',
-        href: '/api/v0',
+        href: 'https://docs.openint.dev',
         icon: 'Cpu',
       },
       {
