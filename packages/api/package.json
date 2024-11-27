@@ -31,5 +31,7 @@
     "@opensdks/util-zod": "0.0.15",
     "remeda": "1.6.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@opensdks/runtime": "0.0.20"
+  }
 }

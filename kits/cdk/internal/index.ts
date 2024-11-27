@@ -3,7 +3,6 @@ export * from './api-key-encoding'
 export * from './NangoClient'
 export * from './nangoProxyLink'
 export * from './oauthConnector'
-export * from './openIntProxyLink'
 export * from './remote-procedure'
 // codegen:end
 
