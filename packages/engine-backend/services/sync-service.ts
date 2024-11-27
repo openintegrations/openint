@@ -420,7 +420,7 @@ export function makeSyncService({
         source_id: src.id,
         destination_id: dest.id,
       },
-      user: {webhook_url: org?.webhook_url || ''},
+      user: {webhook_url: org?.webhook_url || '', end_user_id: endUserId},
     })
   }
 
