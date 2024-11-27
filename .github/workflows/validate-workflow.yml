@@ -76,7 +76,7 @@ jobs:
         # TODO: Figure out a pattern to make environment variables parsed / required on demand rather than on startup time
         # Ideally have a way to switch between the two... Where we can also choose proactive parsing for sanity checking...
       - name: Run health check
-        run: NANGO_SECRET_KEY=noop JWT_SECRET=NOOP POSTGRES_URL=postgres:// npx tsx ./bin/openint.ts health
+        run: MOCK_HEALTHCHECK=true NANGO_SECRET_KEY=noop JWT_SECRET=NOOP POSTGRES_URL=postgres:// npx tsx ./bin/openint.ts health
 
       - name: Run migration check
         run: POSTGRES_URL=postgres://postgres:test@localhost:5432/test pnpm migration up

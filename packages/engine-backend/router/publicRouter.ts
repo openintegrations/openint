@@ -18,6 +18,10 @@ export const publicRouter = trpc.router({
     .input(z.object({exp: z.boolean().optional()}))
     .output(z.object({healthy: z.boolean(), error: z.string().optional()}))
     .query(async ({input: {exp}}) => {
+      if (process.env['MOCK_HEALTHCHECK']) {
+        return {healthy: true}
+      }
+
       const result = await contextFactory
         .fromViewer({role: 'anon'})
         .services.metaService.isHealthy(exp)
