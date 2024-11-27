@@ -218,36 +218,47 @@ export interface paths {
     get: operations['banking-listTransactions']
   }
   '/unified/accounting/account': {
+    /** List Account */
     get: operations['accounting-listAccounts']
   }
   '/unified/accounting/expense': {
+    /** List Expenses */
     get: operations['accounting-listExpenses']
   }
   '/unified/accounting/vendor': {
+    /** List Vendors */
     get: operations['accounting-listVendors']
   }
   '/unified/accounting/balance-sheet': {
+    /** Get Balance Sheet */
     get: operations['accounting-getBalanceSheet']
   }
   '/unified/accounting/profit-and-loss': {
+    /** Get Profit and Loss */
     get: operations['accounting-getProfitAndLoss']
   }
   '/unified/accounting/cash-flow': {
+    /** Get Cash Flow */
     get: operations['accounting-getCashFlow']
   }
   '/unified/accounting/transaction-list': {
+    /** Get Transaction List */
     get: operations['accounting-getTransactionList']
   }
   '/unified/accounting/customer-balance': {
+    /** Get Customer Balance */
     get: operations['accounting-getCustomerBalance']
   }
   '/unified/accounting/customer-income': {
+    /** Get Customer Income */
     get: operations['accounting-getCustomerIncome']
   }
   '/unified/accounting/bank-accounts': {
+    /** Get Bank Accounts */
     get: operations['accounting-getBankAccounts']
   }
   '/unified/accounting/payment-receipt': {
+    /** Get Payment Receipts */
     get: operations['accounting-getPaymentReceipts']
   }
   '/unified/pta/account': {
@@ -480,7 +491,7 @@ export interface components {
     }
     /** @enum {string} */
     Link:
-      | 'banking'
+      | 'unified_banking'
       | 'prefix_connector_name'
       | 'single_table'
       | 'unified_ats'
@@ -1881,6 +1892,7 @@ export interface operations {
               | 'ats'
               | 'email'
             )[]
+            integrations: string[]
           }[]
         }
       }
@@ -2053,6 +2065,7 @@ export interface operations {
         cursor?: string | null
         page_size?: number
         search_text?: string | null
+        ccfgId?: string
       }
       path: {
         name: string
@@ -4070,6 +4083,7 @@ export interface operations {
       }
     }
   }
+  /** List Account */
   'accounting-listAccounts': {
     parameters: {
       query?: {
@@ -4090,6 +4104,18 @@ export interface operations {
               number?: string | null
               name: string
               type: string
+              subAccount?: boolean
+              accountType?: string
+              accountSubType?: string
+              currentBalance?: number
+              currencyRef?: {
+                value: string
+                name: string
+              }
+              metaData?: {
+                createTime: string
+                lastUpdatedTime: string
+              }
             }[]
           }
         }
@@ -4114,6 +4140,7 @@ export interface operations {
       }
     }
   }
+  /** List Expenses */
   'accounting-listExpenses': {
     parameters: {
       query?: {
@@ -4158,6 +4185,7 @@ export interface operations {
       }
     }
   }
+  /** List Vendors */
   'accounting-listVendors': {
     parameters: {
       query?: {
@@ -4201,6 +4229,7 @@ export interface operations {
       }
     }
   }
+  /** Get Balance Sheet */
   'accounting-getBalanceSheet': {
     parameters: {
       query?: {
@@ -4257,6 +4286,7 @@ export interface operations {
       }
     }
   }
+  /** Get Profit and Loss */
   'accounting-getProfitAndLoss': {
     parameters: {
       query?: {
@@ -4308,6 +4338,7 @@ export interface operations {
       }
     }
   }
+  /** Get Cash Flow */
   'accounting-getCashFlow': {
     parameters: {
       query?: {
@@ -4360,6 +4391,7 @@ export interface operations {
       }
     }
   }
+  /** Get Transaction List */
   'accounting-getTransactionList': {
     parameters: {
       query?: {
@@ -4415,13 +4447,14 @@ export interface operations {
       }
     }
   }
+  /** Get Customer Balance */
   'accounting-getCustomerBalance': {
     parameters: {
-      query?: {
+      query: {
         start_date?: string
         end_date?: string
         sort_order?: string
-        customer?: string
+        customer: string
         department?: string
         date_macro?: string
         summarize_by?: string
@@ -4464,13 +4497,14 @@ export interface operations {
       }
     }
   }
+  /** Get Customer Income */
   'accounting-getCustomerIncome': {
     parameters: {
-      query?: {
+      query: {
         start_date?: string
         end_date?: string
         sort_order?: string
-        customer?: string
+        customer: string
         department?: string
         date_macro?: string
         summarize_by?: string
@@ -4518,6 +4552,7 @@ export interface operations {
       }
     }
   }
+  /** Get Bank Accounts */
   'accounting-getBankAccounts': {
     parameters: {
       query: {
@@ -4562,6 +4597,7 @@ export interface operations {
       }
     }
   }
+  /** Get Payment Receipts */
   'accounting-getPaymentReceipts': {
     parameters: {
       query: {
