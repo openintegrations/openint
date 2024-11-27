@@ -1,32 +1,29 @@
-
-## Deploy
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?env=POSTGRES_URL%2Cint_plaid__clientId%2Cint_plaid__secrets__sandbox%2CJWT_SECRET&envDescription=After%20deploy%2C%20you%20can%20add%20other%20optional%20environment%20variables%20to%20configure%20for%20production%20and%20customize%20the%20default%20behavior.%20See%20the%20full%20list%20in%20README&envLink=https%3A%2F%2Fgithub.com%2Fusevenice%2Fvenice%23environment-variables&install-command=npm%20i%20pnpm%407.14.0%20-g%20%26%26%20pnpm%20install&project-name=my-venice&repository-url=https%3A%2F%2Fgithub.com%2FuseVenice%2Fvenice&root-directory=apps%2Fweb)
-
 ## Environment variables
 
-| Name                                           | Description |
-| :--------------------------------------------- | :---------- |
-| `POSTGRES_URL`                                 |             |
-| `POSTGRES_SCHEMA`                              |             |
-| `JWT_SECRET`                                   |             |
-| `CLERK_SECRET_KEY`                             |             |
-| `NANGO_SECRET_KEY`                             |             |
-| `INNGEST_SIGNING_KEY`                          |             |
-| `INNGEST_EVENT_KEY`                            |             |
-| `SENTRY_CRON_MONITOR_URL`                      |             |
-| `DEBUG`                                        |             |
-| `VERCEL_URL`                                   |             |
-| `VERCEL_ENV`                                   |             |
-| `NEXT_PUBLIC_SERVER_URL`                       |             |
-| `NEXT_PUBLIC_NANGO_PUBLIC_KEY`                 |             |
-| `NEXT_PUBLIC_PORT`                             |             |
-| `NEXT_PUBLIC_SUPABASE_URL`                     |             |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY`                |             |
-| `NEXT_PUBLIC_SENTRY_DSN`                       |             |
-| `NEXT_PUBLIC_SENTRY_ORG`                       |             |
-| `NEXT_PUBLIC_POSTHOG_WRITEKEY`                 |             |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`            |             |
-| `NEXT_PUBLIC_CLERK_SUPABASE_JWT_TEMPLATE_NAME` |             |
-| `NEXT_PUBLIC_COMMANDBAR_ORG_ID`                |             |
-
+| Name                                      | Description                                                                                                                                                                                                                                                                       |
+| :---------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POSTGRES_URL`                            | Pass a valid postgres(ql):// url for stateful mode. Will be used Primary database used for metadata and user data storage</br>Pass a valid http(s):// url for stateless mode. Sync data and metadata be sent to provided URL and you are responsible for your own persistence     |
+| `JWT_SECRET`                              | Used for validating authenticity of accessToken                                                                                                                                                                                                                                   |
+| `int_yodlee__sandbox__clientId`           | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__sandbox__clientSecret`       | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__sandbox__adminLoginName`     | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__sandbox__proxy__url`         | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__sandbox__proxy__cert`        | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__development__clientId`       | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__development__clientSecret`   | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__development__adminLoginName` | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__development__proxy__url`     | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__development__proxy__cert`    | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__production__clientId`        | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__production__clientSecret`    | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__production__adminLoginName`  | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__production__proxy__url`      | `string`                                                                                                                                                                                                                                                                          |
+| `int_yodlee__production__proxy__cert`     | `string`                                                                                                                                                                                                                                                                          |
+| `int_plaid__clientId`                     | `string`                                                                                                                                                                                                                                                                          |
+| `int_plaid__secrets__sandbox`             | `string` - (Optional)                                                                                                                                                                                                                                                             |
+| `int_plaid__secrets__development`         | `string` - (Optional)                                                                                                                                                                                                                                                             |
+| `int_plaid__secrets__production`          | `string` - (Optional)                                                                                                                                                                                                                                                             |
+| `int_plaid__clientName`                   | `string = "This Application"` - The name of your application, as it should be displayed in Link.</br>Maximum length of 30 characters.</br>If a value longer than 30 characters is provided, Link will display "This Application" instead.                                         |
+| `int_plaid__products`                     | `Array<assets \| auth \| balance \| identity \| investments \| liabilities \| payment_initiation \| transactions \| credit_details \| income \| income_verification \| deposit_switch \| standing_orders \| transfer \| employment \| recurring_transactions> = ["transactions"]` |
+| `int_plaid__countryCodes`                 | `Array<US \| GB \| ES \| NL \| FR \| IE \| CA \| DE \| IT> = ["US"]`                                                                                                                                                                                                              |
+| `int_plaid__language`                     | `en \| fr \| es \| nl \| de = "en"`                                                                                                                                                                                                                                               |

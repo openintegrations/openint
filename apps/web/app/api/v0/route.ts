@@ -6,19 +6,18 @@ export function GET() {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Elements Dev Portal</title>
-  
-      <script src="https://unpkg.com/@stoplight/elements-dev-portal/web-components.min.js"></script>
-      <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements-dev-portal/styles.min.css">
+      <title>Elements in HTML</title>
+      <!-- Embed elements Elements via Web Component -->
+      <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements/styles.min.css">
     </head>
     <body>
 
-      <elements-stoplight-project
-        projectId="cHJqOjI2NTQzOA"
-        router="hash"
+      <elements-api
         apiDescriptionUrl="/api/v0/openapi.json"
+        router="hash"
         layout="sidebar"
-      ></elements-stoplight-project>
+      />
 
     </body>
   </html>
