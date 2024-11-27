@@ -1,23 +1,93 @@
-import {getRemoteContext} from '@openint/cdk'
+import type {HTTPMethod, OpenAPIClient} from '@opensdks/runtime'
+import {extractId, getRemoteContext, initNangoSDK} from '@openint/cdk'
 import {getProtectedContext} from '@openint/trpc'
 import {contextFromRequest} from './createRouterHandler'
+
+function isOpenAPIClient(instance: any): instance is OpenAPIClient<any> {
+  const hasRequest = typeof instance?.request === 'function'
+  const hasLinksArray = Array.isArray(instance?.links)
+  return hasRequest && hasLinksArray
+}
 
 export const proxyHandler = async (req: Request) => {
   const ctx = await contextFromRequest({req})
   const protectedContext = getProtectedContext(ctx)
   const remoteContext = await getRemoteContext(protectedContext)
-  const res = await remoteContext.remote.connector.proxy?.(
-    remoteContext.remote.instance,
-    req,
-  )
-  if (!res) {
-    return new Response(`Not implemented: ${remoteContext.remoteResourceId}`, {
-      status: 404,
+
+  const credentialsExpired = remoteContext.remote.settings.oauth?.credentials
+    .expires_at
+    ? new Date(remoteContext.remote.settings.oauth.credentials.expires_at) <
+      new Date()
+    : false
+
+  if (credentialsExpired && remoteContext.remoteResourceId) {
+    const nango = initNangoSDK({
+      headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
+    })
+    const resourceExternalId = extractId(remoteContext.remoteResourceId)[2]
+
+    const nangoConnection = await nango
+      .GET('/connection/{connectionId}', {
+        params: {
+          path: {
+            connectionId: resourceExternalId,
+          },
+          query: {
+            provider_config_key: remoteContext.remote.connectorConfigId,
+            force_refresh: true,
+          },
+        },
+      })
+      .then((r) => r.data)
+
+    const {connectorConfig: int} =
+      await protectedContext.asOrgIfNeeded.getResourceExpandedOrFail(
+        remoteContext.remoteResourceId,
+      )
+
+    // TODO: extract all of this logic into an oauthLink that has an option to provide a custom refresh function that can call nango & persist it to db.
+    await protectedContext.asOrgIfNeeded._syncResourceUpdate(int, {
+      settings: {
+        oauth: nangoConnection,
+      },
+      resourceExternalId,
     })
   }
+
+  const connectorImplementedProxy = remoteContext.remote.connector.proxy
+  let res: Response | null = null
+
+  if (connectorImplementedProxy) {
+    res = await connectorImplementedProxy(remoteContext.remote.instance, req)
+  } else if (isOpenAPIClient(remoteContext.remote.instance)) {
+    const url = new URL(req.url)
+    const prefix = url.protocol + '//' + url.host + '/api/proxy'
+
+    const newUrl = req.url.replace(prefix, '')
+    res = await remoteContext.remote.instance
+      .request(req.method as HTTPMethod, newUrl, {
+        body: req.body,
+        headers: req.headers,
+      })
+      .then((r) => r.response)
+  }
+
+  if (!res) {
+    return new Response(
+      `Proxy not supported for resource: ${remoteContext.remoteResourceId}`,
+      {
+        status: 404,
+      },
+    )
+  }
+
+  // TODO: move to stream based response
+  const resBody = await res.blob()
+
   const headers = new Headers(res.headers)
   headers.delete('content-encoding') // No more gzip at this point...
-  return new Response(res.body, {
+  headers.set('content-length', resBody.size.toString())
+  return new Response(resBody, {
     status: res.status,
     headers,
   })
