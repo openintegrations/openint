@@ -14,7 +14,7 @@ export const publicRouter = trpc.router({
         summary: 'Health check',
       },
     })
-    .input(z.union([z.object({exp: z.boolean().optional()}), z.void()]))
+    .input(z.object({exp: z.boolean().optional()}).optional())
     .output(z.object({healthy: z.boolean(), error: z.string().optional()}))
     .query(async ({input}) => {
       if (process.env['MOCK_HEALTHCHECK']) {
