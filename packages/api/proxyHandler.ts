@@ -45,7 +45,7 @@ export const proxyHandler = async (req: Request) => {
         remoteContext.remoteResourceId,
       )
 
-    console.log('Syncing resource update...')
+    // TODO: extract all of this logic into an oauthLink that has an option to provide a custom refresh function that can call nango & persist it to db.
     await protectedContext.asOrgIfNeeded._syncResourceUpdate(int, {
       settings: {
         oauth: nangoConnection,
