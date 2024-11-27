@@ -52,10 +52,14 @@ function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
         'ui:classNames': 'pt-2 mx-1',
       }
 
-      if (typeof value === 'object' && isTypeObject(value)) {
-        uiSchema[key] = {
-          ...uiSchema[key],
-          ...generateUiSchema(value as RJSFSchema),
+      if (typeof value === 'object') {
+        if (isTypeObject(value)) {
+          uiSchema[key] = {
+            ...uiSchema[key],
+            ...generateUiSchema(value as RJSFSchema),
+          }
+        } else if (value.type === 'boolean') {
+          uiSchema[key]['ui:widget'] = 'checkbox'
         }
       }
     }
