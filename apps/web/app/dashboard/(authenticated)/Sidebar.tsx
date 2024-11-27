@@ -125,7 +125,12 @@ export function Sidebar({className, hasPgConnection}: SidebarProps) {
               </h2>
               <div className="space-y-1">
                 {section.items.map((link) => (
-                  <Link href={link.href} key={link.href}>
+                  <Link
+                    href={link.href}
+                    key={link.href}
+                    target={
+                      link.href.startsWith('http') ? '_blank' : undefined
+                    }>
                     <Button
                       variant={
                         pathname === link.href ||
