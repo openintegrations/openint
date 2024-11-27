@@ -10,6 +10,7 @@
     "@openint/util": "workspace:*"
   },
   "devDependencies": {
-    "@openint/engine-backend": "workspace:*"
+    "@openint/engine-backend": "workspace:*",
+    "@opensdks/runtime": "0.0.20"
   }
 }
