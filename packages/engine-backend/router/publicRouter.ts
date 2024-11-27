@@ -20,7 +20,6 @@ export const publicRouter = trpc.router({
       if (process.env['MOCK_HEALTHCHECK']) {
         return {healthy: true}
       }
-
       const result = await contextFactory
         .fromViewer({role: 'anon'})
         .services.metaService.isHealthy(exp)
