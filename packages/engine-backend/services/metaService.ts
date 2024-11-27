@@ -76,4 +76,8 @@ export interface MetaService {
   findResourcesMissingDefaultPipeline: () => Promise<
     ReadonlyArray<{id: Id['reso']}>
   >
+  isHealthy: (checkDefaultPostgresResources?: boolean) => Promise<{
+    healthy: boolean
+    error?: string
+  }>
 }

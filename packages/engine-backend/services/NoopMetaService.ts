@@ -22,4 +22,5 @@ export const noopMetaService: MetaService = {
   findPipelines: async () => [],
   listConnectorConfigInfos: async () => [],
   findResourcesMissingDefaultPipeline: async () => [],
+  isHealthy: () => Promise.resolve({healthy: true}),
 }

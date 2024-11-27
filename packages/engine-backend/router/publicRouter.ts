@@ -1,6 +1,8 @@
 import {zodToOas31Schema} from '@opensdks/util-zod'
+import {TRPCError} from '@trpc/server'
 import {zRaw} from '@openint/cdk'
 import {R, z} from '@openint/util'
+import {contextFactory} from '../../../apps/app-config/backendConfig'
 import {publicProcedure, trpc} from './_base'
 
 export const publicRouter = trpc.router({
@@ -13,9 +15,22 @@ export const publicRouter = trpc.router({
         summary: 'Health check',
       },
     })
-    .input(z.void())
-    .output(z.string())
-    .query(() => 'Ok ' + new Date().toISOString()),
+    .input(z.object({exp: z.boolean().optional()}))
+    .output(z.object({healthy: z.boolean(), error: z.string().optional()}))
+    .query(async ({input: {exp}}) => {
+      const result = await contextFactory
+        .fromViewer({role: 'anon'})
+        .services.metaService.isHealthy(exp)
+
+      if (!result.healthy) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: result.error,
+        })
+      }
+
+      return result
+    }),
   getPublicEnv: publicProcedure.query(({ctx}) =>
     R.pick(ctx.env, ['NEXT_PUBLIC_NANGO_PUBLIC_KEY']),
   ),

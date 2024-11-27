@@ -189,6 +189,47 @@ export const makePostgresMetaService = zFunction(
           `),
         )
       },
+      isHealthy: async (checkDefaultPostgresResources = false) => {
+        const {runQueries, sql} = _getDeps({
+          ...opts,
+          // hardcoding to system viewer to avoid any authorization checks
+          viewer: {role: 'system'},
+        })
+
+        const isMainDbHealthy = await runQueries((pool) =>
+          pool.query(sql`SELECT 1`),
+        )
+
+        if (!isMainDbHealthy || isMainDbHealthy.rows.length !== 1) {
+          return {healthy: false, error: 'Main database is not healthy'}
+        }
+
+        const top3DefaultPostgresResources = await runQueries((pool) =>
+          pool.query(
+            sql`SELECT id, settings->>'databaseUrl' as database_url FROM resource where id like 'reso_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
+          ),
+        )
+
+        if (checkDefaultPostgresResources) {
+          for (const resource of top3DefaultPostgresResources.rows) {
+            if (!resource['database_url']) {
+              continue
+            }
+            const {getPool} = makePostgresClient({
+              databaseUrl: resource['database_url'] as string,
+            })
+            const pool = await getPool()
+            const result = await pool.query(sql`SELECT 1`)
+            if (result.rows.length !== 1) {
+              return {
+                healthy: false,
+                error: `Default postgres resource with id ${resource['id']} is not healthy`,
+              }
+            }
+          }
+        }
+        return {healthy: true}
+      },
     }
   },
 )
