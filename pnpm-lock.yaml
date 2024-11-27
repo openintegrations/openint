@@ -1758,6 +1758,9 @@ importers:
       '@openint/engine-backend':
         specifier: workspace:*
         version: link:../engine-backend
+      '@opensdks/runtime':
+        specifier: 0.0.20
+        version: 0.0.20
 
   packages/meta-service-redis:
     dependencies:
