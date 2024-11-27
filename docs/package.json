@@ -3,11 +3,11 @@
   "scripts": {
     "dev": "mintlify dev",
     "generate": "pnpm run generate:api-pages && pnpm run generate:mint",
-    "generate:api-pages": "mkdir -p api-reference && mintlify-scrape openapi-file -o api-reference ./../kits/sdk/openapi.json | tail -n +2 > ./api-reference/index.json",
+    "generate:api-pages": "rm -rf api-reference && mkdir -p api-reference && mintlify-scrape openapi-file -o api-reference ./../kits/sdk/openapi.json | tail -n +2 > ./api-reference/index.json",
     "generate:mint": "npx tsx mint.ts mint.json"
   },
   "devDependencies": {
-    "@mintlify/scraping": "^4.0.28",
+    "@mintlify/scraping": "^3.0.64",
     "@openint/api": "workspace:*",
     "@openint/loopback-link": "workspace:*",
     "@openint/sdk": "workspace:*",
@@ -18,6 +18,6 @@
     "@opensdks/sdk-openai": "^0.0.14",
     "@opensdks/sdk-slack": "^0.0.14",
     "@opensdks/sdk-venice": "^0.0.14",
-    "mintlify": "^4.0.28"
+    "mintlify": "4.0.59"
   }
 }
