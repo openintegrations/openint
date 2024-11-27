@@ -200,11 +200,6 @@ export const makePostgresMetaService = zFunction(
           pool.query(sql`SELECT 1`),
         )
 
-        console.debug(
-          '[isHealthy] isMainDbHealthy',
-          JSON.stringify(isMainDbHealthy),
-        )
-
         if (!isMainDbHealthy || isMainDbHealthy.rows.length !== 1) {
           return {healthy: false, error: 'Main database is not healthy'}
         }
@@ -213,13 +208,6 @@ export const makePostgresMetaService = zFunction(
           pool.query(
             sql`SELECT id, settings->>'databaseUrl' as database_url FROM resource where id like 'reso_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
           ),
-        )
-
-        console.debug(
-          '[isHealthy] top3DefaultPostgresResources',
-          JSON.stringify({
-            top3DefaultPostgresResources,
-          }),
         )
 
         if (checkDefaultPostgresResources) {

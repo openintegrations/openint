@@ -15,12 +15,12 @@ export const publicRouter = trpc.router({
         summary: 'Health check',
       },
     })
-    .input(z.object({expanded: z.boolean().optional()}))
+    .input(z.object({exp: z.boolean().optional()}))
     .output(z.object({healthy: z.boolean(), error: z.string().optional()}))
-    .query(async ({input: {expanded}}) => {
+    .query(async ({input: {exp}}) => {
       const result = await contextFactory
         .fromViewer({role: 'anon'})
-        .services.metaService.isHealthy(expanded)
+        .services.metaService.isHealthy(exp)
 
       if (!result.healthy) {
         throw new TRPCError({
