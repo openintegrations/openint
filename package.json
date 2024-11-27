@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "web": "pnpm run --filter web dev",
-    "generate:docs": "pnpm run --filter app-config dev",
+    "generate:docs": "npx tsx apps/app-config/_generateDocs.bin.ts",
     "generate:connectorsList": "npx tsx apps/app-config/_generateConnectorLists.ts",
     "docs": "cd docs && mintlify dev",
     "lint": "eslint --ext .js,.ts,.tsx --cache . --quiet --ignore-pattern /gateway",
