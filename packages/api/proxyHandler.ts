@@ -54,7 +54,7 @@ export const proxyHandler = async (req: Request) => {
     })
   }
 
-  const connectorImplementedProxy = await remoteContext.remote.connector.proxy
+  const connectorImplementedProxy = remoteContext.remote.connector.proxy
   let res: Response | null = null
 
   if (connectorImplementedProxy) {
@@ -81,11 +81,12 @@ export const proxyHandler = async (req: Request) => {
     )
   }
 
+  // TODO: move to stream based response
   const resBody = await res.blob()
 
   const headers = new Headers(res.headers)
   headers.delete('content-encoding') // No more gzip at this point...
-  headers.delete('content-length') // We don't want to send the content length header in case it is wrong due to compression
+  headers.set('content-length', resBody.size.toString())
   return new Response(resBody, {
     status: res.status,
     headers,
