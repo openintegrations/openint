@@ -127,7 +127,7 @@ export default function MagicLinkPage() {
               ),
               'ui:description': (
                 <span className="text-sm text-gray-600">
-                  Must start with 'ccfg_'
+                  Must start with ccfg_
                 </span>
               ),
             },
