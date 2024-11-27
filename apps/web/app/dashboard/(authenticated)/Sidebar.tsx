@@ -92,7 +92,7 @@ const sectionedLinks: Array<{
       },
       {
         title: 'API Docs',
-        href: '/api/v0',
+        href: 'https://docs.openint.dev',
         icon: 'Cpu',
       },
       {
@@ -125,7 +125,12 @@ export function Sidebar({className, hasPgConnection}: SidebarProps) {
               </h2>
               <div className="space-y-1">
                 {section.items.map((link) => (
-                  <Link href={link.href} key={link.href}>
+                  <Link
+                    href={link.href}
+                    key={link.href}
+                    target={
+                      link.href.startsWith('http') ? '_blank' : undefined
+                    }>
                     <Button
                       variant={
                         pathname === link.href ||
