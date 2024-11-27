@@ -7,8 +7,6 @@ import {default as connectorCoda} from '@openint/connector-coda/def'
 import {default as connectorDebug} from '@openint/connector-debug/def'
 import {default as connectorDiscord} from '@openint/connector-discord/def'
 import {default as connectorFinch} from '@openint/connector-finch/def'
-import {default as connectorFirebase} from '@openint/connector-firebase/def'
-import {default as connectorForeceipt} from '@openint/connector-foreceipt/def'
 import {default as connectorFs} from '@openint/connector-fs/def'
 import {default as connectorGoogle} from '@openint/connector-google/def'
 import {default as connectorGreenhouse} from '@openint/connector-greenhouse/def'
@@ -18,7 +16,6 @@ import {default as connectorLever} from '@openint/connector-lever/def'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/def'
 import {default as connectorMercury} from '@openint/connector-mercury/def'
 import {default as connectorMerge} from '@openint/connector-merge/def'
-import {default as connectorMongodb} from '@openint/connector-mongodb/def'
 import {default as connectorMoota} from '@openint/connector-moota/def'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/def'
 import {default as connectorOutlook} from '@openint/connector-outlook/def'
@@ -54,8 +51,6 @@ export const defConnectors = {
   debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,
-  firebase: connectorFirebase,
-  foreceipt: connectorForeceipt,
   fs: connectorFs,
   google: connectorGoogle,
   greenhouse: connectorGreenhouse,
@@ -65,7 +60,6 @@ export const defConnectors = {
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
   merge: connectorMerge,
-  mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
   outlook: connectorOutlook,
