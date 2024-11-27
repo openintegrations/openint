@@ -7,8 +7,12 @@
     "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
     "build:migration": "if [ \"$VERCEL_ENV\" = production ] || [ \"$VERCEL_GIT_COMMIT_REF\" = main ]; then pnpm --dir ../../ migration up; else echo 'Skip non prod/staging migration'; fi",
     "build:next": "next build",
+    "build:worker": "cloudflare",
     "codegen:supabase": "supabase gen types typescript --linked --schema public > ./supabase/supabase.gen.d.ts",
+    "deploy:worker": "pnpm run build:worker && wrangler deploy",
     "dev": "next dev -p 4000 --turbo",
+    "dev:worker": "wrangler dev --port 8771",
+    "preview:worker": "pnpm run build:worker && pnpm run dev:worker",
     "start": "next start"
   },
   "dependencies": {
@@ -55,6 +59,7 @@
     "trpc-panel": "1.3.4"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^0.2.1",
     "@sentry/cli": "^2.36.6",
     "@types/http-proxy": "1.17.10",
     "@types/react": "18.0.27",
