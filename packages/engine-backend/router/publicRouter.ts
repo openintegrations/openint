@@ -1,5 +1,4 @@
 import {zodToOas31Schema} from '@opensdks/util-zod'
-import {TRPCError} from '@trpc/server'
 import {zRaw} from '@openint/cdk'
 import {R, z} from '@openint/util'
 import {contextFactory} from '../../../apps/app-config/backendConfig'
@@ -27,10 +26,7 @@ export const publicRouter = trpc.router({
         .services.metaService.isHealthy(exp)
 
       if (!result.healthy) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: result.error,
-        })
+        throw new Error(result.error)
       }
 
       return result
