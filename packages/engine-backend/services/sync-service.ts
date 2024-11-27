@@ -419,8 +419,9 @@ export function makeSyncService({
         pipeline_id: pipeline.id,
         source_id: src.id,
         destination_id: dest.id,
+        end_user_id: endUserId,
       },
-      user: {webhook_url: org?.webhook_url || '', end_user_id: endUserId},
+      user: {webhook_url: org?.webhook_url || ''},
     })
   }
 
