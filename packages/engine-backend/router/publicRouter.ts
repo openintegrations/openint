@@ -14,15 +14,15 @@ export const publicRouter = trpc.router({
         summary: 'Health check',
       },
     })
-    .input(z.object({exp: z.boolean().optional()}))
+    .input(z.union([z.object({exp: z.boolean().optional()}), z.void()]))
     .output(z.object({healthy: z.boolean(), error: z.string().optional()}))
-    .query(async ({input: {exp}}) => {
+    .query(async ({input}) => {
       if (process.env['MOCK_HEALTHCHECK']) {
         return {healthy: true}
       }
       const result = await contextFactory
         .fromViewer({role: 'anon'})
-        .services.metaService.isHealthy(exp)
+        .services.metaService.isHealthy(input?.exp)
 
       if (!result.healthy) {
         throw new Error(result.error)
