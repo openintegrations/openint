@@ -27,6 +27,11 @@
       "@openint/connect/*": ["./kits/connect/src/*"]
     }
   },
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "apps/web/worker-aliases/crypto.js"
+  ],
   "exclude": ["node_modules", "gateway"]
 }

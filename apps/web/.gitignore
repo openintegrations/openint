@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 .worker-next/
+.wrangler
+
 # testing
 /coverage
 
