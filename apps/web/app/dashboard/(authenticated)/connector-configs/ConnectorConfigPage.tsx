@@ -1,8 +1,8 @@
 'use client'
 
-import {Loader2, Lock} from 'lucide-react'
+import {Loader2, Lock, Pencil, Plus} from 'lucide-react'
 import Image from 'next/image'
-import React from 'react'
+import React, {useState} from 'react'
 import {zConnectorStage, zVerticalKey} from '@openint/cdk'
 import type {RouterOutput} from '@openint/engine-backend'
 import {_trpcReact} from '@openint/engine-frontend'
@@ -11,10 +11,10 @@ import {
   ConnectorCard as _ConnectorCard,
   ConnectorConfigCard as _ConnectorConfigCard,
   Badge,
+  Button,
   cn,
   ConnectorLogo,
   DataTable,
-  LoadingText,
   parseCategory,
 } from '@openint/ui'
 import {inPlaceSort, R, titleCase} from '@openint/util'
@@ -27,10 +27,20 @@ export default function ConnectorConfigsPage({
 }: {
   showCTAs?: boolean
 }) {
+  const [open, setOpen] = useState(false)
+  const [connectorName, setConnectorName] = useState<string>('')
+  const [connectorConfig, setConnectorConfig] = useState<
+    Omit<ConnectorConfig, 'connectorName'> | undefined
+  >(undefined)
+
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
   const catalog = _trpcReact.listConnectorMetas.useQuery()
   if (!connectorConfigsRes.data || !catalog.data) {
-    return <LoadingText className="block p-4" />
+    return (
+      <div className="flex size-full items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-button" />
+      </div>
+    )
   }
 
   const filter = (c: ConnectorConfig) =>
@@ -48,6 +58,11 @@ export default function ConnectorConfigsPage({
         <DataTable
           query={connectorConfigsRes}
           filter={filter}
+          onRowClick={(row) => {
+            setConnectorName(row.connectorName)
+            setConnectorConfig(row)
+            setOpen(true)
+          }}
           columns={[
             {
               id: 'connectorName',
@@ -107,10 +122,17 @@ export default function ConnectorConfigsPage({
                 const connector = catalog.data[row.original.connectorName]
                 if (!connector) return null
                 return (
-                  <ConnectorConfigSheet
-                    connectorConfig={row.original}
-                    connectorName={connector.name}
-                  />
+                  <Button
+                    variant="secondary"
+                    className="size-sm flex items-center gap-2"
+                    onClick={() => {
+                      setConnectorName(row.original.connectorName)
+                      setConnectorConfig(row.original)
+                      setOpen(true)
+                    }}>
+                    <Pencil className="h-5 w-5 text-black" />
+                    <span className="text-black">Edit</span>
+                  </Button>
                 )
               },
             },
@@ -160,7 +182,18 @@ export default function ConnectorConfigsPage({
                         <p className="text-sm font-semibold">Request access</p>
                       </div>
                     ) : (
-                      <ConnectorConfigSheet connectorName={connector.name} />
+                      <div
+                        className={cn(
+                          'flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button',
+                        )}
+                        onClick={() => {
+                          setConnectorName(connector.name)
+                          setConnectorConfig(undefined)
+                          setOpen(true)
+                        }}>
+                        <Plus />
+                        <p className="text-sm font-semibold">Add</p>
+                      </div>
                     ))}
                 </ConnectorCard>
               ))}
@@ -168,6 +201,12 @@ export default function ConnectorConfigsPage({
           </div>
         )
       })}
+      <ConnectorConfigSheet
+        connectorName={connectorName}
+        connectorConfig={connectorConfig}
+        open={open}
+        setOpen={setOpen}
+      />
     </div>
   )
 }
