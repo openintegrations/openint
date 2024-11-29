@@ -21,18 +21,33 @@ const procedure = verticalProcedure(adapters)
 
 export const crmRouter = trpc.router({
   countEntity: procedure
-    .meta(oapi({method: 'GET', path: '/{entity}/_count'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/{entity}/_count',
+      tags: ['CRM'],
+      summary: 'Count Entities',
+    }))
     .input(z.object({entity: z.string()}))
     .output(z.object({count: z.number()}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   // MARK: - Account
   listAccounts: procedure
-    .meta(oapi({method: 'GET', path: '/account'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/account',
+      tags: ['CRM'],
+      summary: 'List Accounts',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.account)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getAccount: procedure
-    .meta(oapi({method: 'GET', path: '/account/{id}'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/account/{id}',
+      tags: ['CRM'],
+      summary: 'Get Account',
+    }))
     .input(z.object({id: z.string()}))
     .output(z.object({record: unified.account, raw: z.unknown()}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
@@ -80,12 +95,22 @@ export const crmRouter = trpc.router({
     .mutation(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   // MARK: - Contact
   listContacts: procedure
-    .meta(oapi({method: 'GET', path: '/contact'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/contact',
+      tags: ['CRM'],
+      summary: 'List Contacts',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.contact)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getContact: procedure
-    .meta(oapi({method: 'GET', path: '/contact/{id}'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/contact/{id}',
+      tags: ['CRM'],
+      summary: 'Get Contact',
+    }))
     .input(z.object({id: z.string()}))
     .output(z.object({record: unified.contact, raw: z.unknown()}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
@@ -131,24 +156,44 @@ export const crmRouter = trpc.router({
     .mutation(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   // MARK: - Lead
   listLeads: procedure
-    .meta(oapi({method: 'GET', path: '/lead'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/lead',
+      tags: ['CRM'],
+      summary: 'List Leads',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.lead)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getLead: procedure
-    .meta(oapi({method: 'GET', path: '/lead/{id}'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/lead/{id}',
+      tags: ['CRM'],
+      summary: 'Get Lead',
+    }))
     .input(z.object({id: z.string()}))
     .output(z.object({record: unified.lead, raw: z.unknown()}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
   // MARK: - Opportunity
   listOpportunities: procedure
-    .meta(oapi({method: 'GET', path: '/opportunity'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/opportunity',
+      tags: ['CRM'],
+      summary: 'List Opportunities',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.opportunity)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getOpportunity: procedure
-    .meta(oapi({method: 'GET', path: '/opportunity/{id}'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/opportunity/{id}',
+      tags: ['CRM'],
+      summary: 'Get Opportunity',
+    }))
     .input(z.object({id: z.string()}))
     .output(z.object({record: unified.opportunity, raw: z.unknown()}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
