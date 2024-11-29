@@ -1,6 +1,6 @@
 'use client'
 
-import {Loader2, Pencil, Plus} from 'lucide-react'
+import {Loader2} from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import {zId, zRaw} from '@openint/cdk'
@@ -27,7 +27,6 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
   useToast,
 } from '@openint/ui'
 import {z} from '@openint/util'
@@ -40,11 +39,13 @@ import type {ConnectorConfig} from './ConnectorConfigPage'
 export function ConnectorConfigSheet({
   connectorConfig: ccfg,
   connectorName,
-  horizontalTrigger = false,
+  open,
+  setOpen,
 }: {
   connectorConfig?: Omit<ConnectorConfig, 'connectorName'>
   connectorName: string
-  horizontalTrigger?: boolean
+  open: boolean
+  setOpen: (open: boolean) => void
 }) {
   const trpcUtils = _trpcReact.useContext()
   const catalogRes = _trpcReact.listConnectorMetas.useQuery()
@@ -137,7 +138,6 @@ export function ConnectorConfigSheet({
 
   const {orgId} = useCurrengOrg()
 
-  const [open, setOpen] = React.useState(false)
   const verb = ccfg ? 'Edit' : 'Add'
   const {toast} = useToast()
 
@@ -182,33 +182,8 @@ export function ConnectorConfigSheet({
     return <LoadingText className="block p-4" />
   }
 
-  const icon =
-    verb === 'Add' ? (
-      <Plus />
-    ) : (
-      <Pencil className={verb === 'Edit' ? 'h-5 w-5 text-black' : ''} />
-    )
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        {verb === 'Edit' ? (
-          <Button
-            variant="secondary"
-            className="size-sm flex items-center gap-2">
-            {icon}
-            <span className="text-black">{verb}</span>
-          </Button>
-        ) : (
-          <div
-            className={cn(
-              'flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button',
-              horizontalTrigger && 'flex-row',
-            )}>
-            {icon}
-            <p className="text-sm font-semibold">{verb}</p>
-          </div>
-        )}
-      </SheetTrigger>
       <SheetContent
         position="right"
         size="lg"
