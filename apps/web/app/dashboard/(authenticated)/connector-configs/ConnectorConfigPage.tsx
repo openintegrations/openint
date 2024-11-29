@@ -18,6 +18,7 @@ import {
   DataTable,
   parseCategory,
 } from '@openint/ui'
+import CalendarBooking from '@openint/ui/components/CalendarBooking'
 import {inPlaceSort, R, titleCase} from '@openint/util'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
 
@@ -29,6 +30,7 @@ export default function ConnectorConfigsPage({
   showCTAs?: boolean
 }) {
   const [open, setOpen] = useState(false)
+  const [openCalendar, setOpenCalendar] = useState(false)
   const [connectorName, setConnectorName] = useState<string>('')
   const [connectorConfig, setConnectorConfig] = useState<
     Omit<ConnectorConfig, 'connectorName'> | undefined
@@ -175,11 +177,7 @@ export default function ConnectorConfigsPage({
                     (connector.stage === 'alpha' || !isWhitelisted ? (
                       <div
                         className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button"
-                        onClick={() =>
-                          window.open(
-                            `mailto:support@openint.dev?subject=Request%20access%20to%20${connector.displayName}%20connectors&body=My%20use%20case%20is...`,
-                          )
-                        }>
+                        onClick={() => setOpenCalendar(true)}>
                         <Lock />
                         <p className="text-sm font-semibold">Request access</p>
                       </div>
@@ -208,6 +206,13 @@ export default function ConnectorConfigsPage({
         connectorConfig={connectorConfig}
         open={open}
         setOpen={setOpen}
+      />
+      <CalendarBooking
+        description="Would you like to book a complementary discovery meeting with our founder to help you get the best out of Evefan?"
+        header="Book a Free Discovery Meeting"
+        isVisible={openCalendar}
+        onClose={() => setOpenCalendar(false)}
+        onDismiss={() => setOpenCalendar(false)}
       />
     </div>
   )
