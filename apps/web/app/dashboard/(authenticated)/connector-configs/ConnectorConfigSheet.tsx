@@ -3,7 +3,6 @@
 import {Loader2} from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
-import {zId, zRaw} from '@openint/cdk'
 import {_trpcReact} from '@openint/engine-frontend'
 import type {SchemaFormElement} from '@openint/ui'
 import {
@@ -19,7 +18,6 @@ import {
   Badge,
   Button,
   LoadingText,
-  SchemaForm,
   Separator,
   Sheet,
   SheetContent,
@@ -29,9 +27,8 @@ import {
   SheetTitle,
   useToast,
 } from '@openint/ui'
-import {z} from '@openint/util'
-import {useCurrengOrg} from '@/components/viewer-context'
 import {cn} from '@/lib-client/ui-utils'
+import {ConnectorConfigForm} from './ConnectorConfigForm'
 import type {ConnectorConfig} from './ConnectorConfigPage'
 
 // import {defConnectors } from '@openint/app-config/connectorss/connectorss.def'
@@ -48,95 +45,10 @@ export function ConnectorConfigSheet({
   setOpen: (open: boolean) => void
 }) {
   const trpcUtils = _trpcReact.useContext()
-  const catalogRes = _trpcReact.listConnectorMetas.useQuery()
-  const connectorMeta = catalogRes.data?.[connectorName]
-
-  const resourcesRes = _trpcReact.listResources.useQuery({
-    connectorName: 'postgres',
+  const connectorMetaRes = _trpcReact.getConnectorMeta.useQuery({
+    name: connectorName,
   })
-
-  const zResoId = resourcesRes.data?.length
-    ? z.union(
-        resourcesRes.data.map((r) =>
-          z.literal(r.id).openapi({
-            title: r.displayName ? `${r.displayName} <${r.id}>` : r.id,
-          }),
-        ) as [z.ZodLiteral<string>, z.ZodLiteral<string>],
-      )
-    : zId('reso')
-
-  const ccfgSchema = (
-    connectorMeta?.schemas.connectorConfig
-      ? // Sometimes we have extra data inside the config due to extra data, so workaround for now
-
-        // as we have no way of displaying such information / allow user to fix it
-        {...connectorMeta?.schemas.connectorConfig, additionalProperties: true}
-      : undefined
-  ) as {type: 'object'; properties?: {}; additionalProperties: boolean}
-
-  // Consider calling this provider, actually seem to make more sense...
-  // given that we call the code itself connector config
-  const formSchema = zRaw.connector_config
-    .pick({displayName: true, disabled: true})
-    .extend({
-      config: z.object({}),
-      ...(connectorMeta?.supportedModes.includes('source') && {
-        defaultPipeOut: z
-          .union([
-            z.null().openapi({title: 'Disabled'}),
-            z
-              .object({
-                ...(connectorMeta?.sourceStreams?.length && {
-                  streams: z
-                    .object(
-                      Object.fromEntries(
-                        (connectorMeta.sourceStreams as [string]).map((s) => [
-                          s,
-                          z.boolean(),
-                        ]),
-                      ),
-                      // z.enum(connectorMeta.sourceStreams as [string]),
-                      // z.boolean(),
-                    )
-                    .passthrough()
-                    .openapi({description: 'Entities to sync'}),
-                }),
-                links: zRaw.connector_config.shape.defaultPipeOut
-                  .unwrap()
-                  .unwrap().shape.links,
-                destination_id: zResoId.optional().openapi({
-                  description: 'Defaults to the org-wide postgres',
-                }),
-              })
-              .openapi({title: 'Enabled'}),
-          ])
-          .openapi({
-            title: 'Sync settings',
-            description: zRaw.connector_config.shape.defaultPipeOut.description,
-          }),
-      }),
-      ...(connectorMeta?.supportedModes.includes('destination') && {
-        defaultPipeIn: z
-          .union([
-            z.null().openapi({title: 'Disabled'}),
-            z
-              .object({
-                links: zRaw.connector_config.shape.defaultPipeIn
-                  .unwrap()
-                  .unwrap().shape.links,
-                source_id: zResoId,
-              })
-              .openapi({title: 'Enabled'}),
-          ])
-          .openapi({
-            title: 'Reverse sync settings',
-            description: zRaw.connector_config.shape.defaultPipeIn.description,
-          }),
-      }),
-    })
-  connectorMeta?.__typename
-
-  const {orgId} = useCurrengOrg()
+  const connectorMeta = connectorMetaRes.data
 
   const verb = ccfg ? 'Edit' : 'Add'
   const {toast} = useToast()
@@ -224,42 +136,14 @@ export function ConnectorConfigSheet({
           </SheetDescription>
         </SheetHeader>
         <Separator orientation="horizontal" />
-        <div className="grow overflow-scroll">
-          <SchemaForm
-            ref={formRef}
-            schema={formSchema}
-            jsonSchemaTransform={(schema) => ({
-              ...schema,
-              properties: {
-                ...schema.properties,
-                ...(ccfgSchema && {config: ccfgSchema}),
-              },
-            })}
-            formData={
-              ccfg
-                ? {
-                    displayName: ccfg.displayName,
-                    disabled: ccfg.disabled,
-                    config: ccfg.config ?? {},
-                    defaultPipeOut: ccfg.defaultPipeOut ?? null,
-                    defaultPipeIn: ccfg.defaultPipeIn ?? null,
-                  } // {} because required
-                : undefined
-            }
-            // formData should be non-null at this point, we should fix the typing
-            loading={upsertConnectorConfig.isLoading}
-            onSubmit={({formData}) => {
-              console.log('formData submitted', formData)
-              upsertConnectorConfig.mutate({
-                ...formData,
-                ...(ccfg ? {id: ccfg.id} : {connectorName}),
-                orgId,
-              })
-            }}
-            hideSubmitButton
-          />
-          {!ccfgSchema && <p>No configuration needed</p>}
-        </div>
+        <ConnectorConfigForm
+          connectorName={connectorName}
+          connectorMeta={connectorMeta}
+          ccfg={ccfg}
+          setOpen={setOpen}
+          formRef={formRef}
+          isLoading={connectorMetaRes.isLoading}
+        />
         <Separator orientation="horizontal" />
         <SheetFooter className="shrink-0">
           {ccfg && (

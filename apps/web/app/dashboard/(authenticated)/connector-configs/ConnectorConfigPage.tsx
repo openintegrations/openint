@@ -15,7 +15,6 @@ import {
   cn,
   ConnectorLogo,
   DataTable,
-  LoadingText,
   parseCategory,
 } from '@openint/ui'
 import {inPlaceSort, R, titleCase} from '@openint/util'
@@ -37,7 +36,11 @@ export default function ConnectorConfigsPage({
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
   const catalog = _trpcReact.listConnectorMetas.useQuery()
   if (!connectorConfigsRes.data || !catalog.data) {
-    return <LoadingText className="block p-4" />
+    return (
+      <div className="flex size-full items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-button" />
+      </div>
+    )
   }
 
   const filter = (c: ConnectorConfig) =>
