@@ -58,6 +58,11 @@ export default function ConnectorConfigsPage({
         <DataTable
           query={connectorConfigsRes}
           filter={filter}
+          onRowClick={(row) => {
+            setConnectorName(row.connectorName)
+            setConnectorConfig(row)
+            setOpen(true)
+          }}
           columns={[
             {
               id: 'connectorName',
