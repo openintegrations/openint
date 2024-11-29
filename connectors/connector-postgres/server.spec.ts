@@ -44,7 +44,7 @@ function getMigrationsForTable(table: PgTable) {
 }
 
 // console.log('filename', __filename)
-const dbName = 'aglink'
+const dbName = 'connector_postgres'
 
 // TODO: Add me back in once we know CI is working
 beforeAll(async () => {

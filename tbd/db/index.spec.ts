@@ -5,7 +5,7 @@ import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
 
 // console.log('filename', __filename)
-const dbName = 'aglink'
+const dbName = 'tbd_db'
 
 // TODO: Add me back in once we know CI is working
 beforeAll(async () => {

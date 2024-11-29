@@ -135,7 +135,7 @@ test('destinationSync', async () => {
     .from([
       {
         data: {
-          entityName: 'ats_candidate',
+          entityName: 'candidate',
           id: 'cadi_123',
           entity: {
             raw: {first_name: 'John', last_name: 'Doe', id: '123'},
@@ -147,7 +147,7 @@ test('destinationSync', async () => {
       {type: 'commit' as const},
       {
         data: {
-          entityName: 'ats_job',
+          entityName: 'job',
           id: 'job_123',
           entity: {
             raw: {_Name_c: 'new job'},
