@@ -1,6 +1,11 @@
 'use client'
 
-import {OrganizationSwitcher, useAuth, UserButton} from '@clerk/nextjs'
+import {
+  CreateOrganization,
+  OrganizationSwitcher,
+  useAuth,
+  UserButton,
+} from '@clerk/nextjs'
 import NextTopLoader from 'nextjs-toploader'
 import {_trpcReact} from '@openint/engine-frontend'
 import {NoSSR} from '@/components/NoSSR'
@@ -72,7 +77,22 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
       layout on sql page doesn't work when results are long :( donno how to prevent
       it otherwise without setting overflow hidden prop */}
       <main className="ml-[240px] mt-12 max-h-[calc(100vh-3em)] grow overflow-x-hidden">
-        {auth.orgId ? children : <div>Create an org to begin</div>}
+        {auth.orgId ? (
+          children
+        ) : (
+          <div className="flex h-full p-6">
+            <CreateOrganization
+              appearance={{
+                elements: {
+                  headerTitle: 'text-xl',
+                  cardBox: 'shadow-none',
+                  formButtonPrimary: 'bg-button text-button-foreground',
+                },
+              }}
+              afterCreateOrganizationUrl="/dashboard"
+            />
+          </div>
+        )}
       </main>
       <Sidebar
         className="fixed bottom-0 left-0 top-12 w-[240px] border-r bg-background"
