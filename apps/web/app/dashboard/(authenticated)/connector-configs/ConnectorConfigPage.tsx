@@ -1,5 +1,6 @@
 'use client'
 
+import {useUser} from '@clerk/nextjs'
 import {Loader2, Lock, Pencil, Plus} from 'lucide-react'
 import Image from 'next/image'
 import React, {useState} from 'react'
@@ -32,7 +33,8 @@ export default function ConnectorConfigsPage({
   const [connectorConfig, setConnectorConfig] = useState<
     Omit<ConnectorConfig, 'connectorName'> | undefined
   >(undefined)
-
+  const {user} = useUser()
+  const isWhitelisted = user?.publicMetadata?.['whitelisted'] === true
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
   const catalog = _trpcReact.listConnectorMetas.useQuery()
   if (!connectorConfigsRes.data || !catalog.data) {
@@ -170,7 +172,7 @@ export default function ConnectorConfigsPage({
                   key={`${vertical}-${connector.name}`}
                   connector={connector}>
                   {showCTAs &&
-                    (connector.stage === 'alpha' ? (
+                    (connector.stage === 'alpha' || !isWhitelisted ? (
                       <div
                         className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button"
                         onClick={() =>
