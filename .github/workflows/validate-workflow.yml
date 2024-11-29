@@ -66,8 +66,8 @@ jobs:
 
       # - name: Set up tmate session
       #   uses: mxschmitt/action-tmate@v2
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
+      # - name: Setup upterm session
+      #   uses: lhotari/action-upterm@v1
       - name: Run type checks
         run: pnpm run typecheck
         env:
