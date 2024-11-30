@@ -208,7 +208,7 @@ export default function ConnectorConfigsPage({
         setOpen={setOpen}
       />
       <CalendarBooking
-        description="Would you like to book a complementary discovery meeting with our founder to help you get the best out of Evefan?"
+        description="Grab some time with our founder to help you get the best out of OpenInt"
         header="Book a Free Discovery Meeting"
         isVisible={openCalendar}
         onClose={() => setOpenCalendar(false)}
