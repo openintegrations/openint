@@ -37,7 +37,9 @@ export default function ConnectorConfigsPage({
   >(undefined)
   const {user} = useUser()
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
-  const isWhitelisted =
+
+  // either if whitelisted or already has a connector other than default postgres
+  const canAddNewConnectors =
     user?.publicMetadata?.['whitelisted'] === true ||
     connectorConfigsRes.data?.some(
       (c) => c.connectorName !== 'default_postgres',
@@ -178,7 +180,7 @@ export default function ConnectorConfigsPage({
                   key={`${vertical}-${connector.name}`}
                   connector={connector}>
                   {showCTAs &&
-                    (connector.stage === 'alpha' || !isWhitelisted ? (
+                    (connector.stage === 'alpha' || !canAddNewConnectors ? (
                       <div
                         className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button"
                         onClick={() => setOpenCalendar(true)}>
