@@ -39,7 +39,7 @@ export default function CalendarBooking({
     <div className="fixed inset-0 z-[100] flex items-center justify-center border border-gray-200 backdrop-blur-sm">
       <div className="relative w-full max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-xl">
         <button
-          className="absolute right-2 top-2 text-gray-400 hover:text-white"
+          className="absolute right-2 top-2 text-gray-400"
           onClick={onClose}>
           <X size={24} />
         </button>
