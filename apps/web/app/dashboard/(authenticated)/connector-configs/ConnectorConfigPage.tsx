@@ -36,8 +36,12 @@ export default function ConnectorConfigsPage({
     Omit<ConnectorConfig, 'connectorName'> | undefined
   >(undefined)
   const {user} = useUser()
-  const isWhitelisted = user?.publicMetadata?.['whitelisted'] === true
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
+  const isWhitelisted =
+    user?.publicMetadata?.['whitelisted'] === true ||
+    connectorConfigsRes.data?.some(
+      (c) => c.connectorName !== 'default_postgres',
+    )
   const catalog = _trpcReact.listConnectorMetas.useQuery()
   if (!connectorConfigsRes.data || !catalog.data) {
     return (
