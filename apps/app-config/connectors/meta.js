@@ -51,7 +51,6 @@ module.exports = [
       server: '@openint/connector-coda/server',
     },
   },
-  {dirName: 'connector-copilot', varName: 'connectorCopilot', imports: {}},
   {
     name: 'debug',
     dirName: 'connector-debug',
@@ -79,24 +78,6 @@ module.exports = [
       def: '@openint/connector-finch/def',
       client: '@openint/connector-finch/client',
       server: '@openint/connector-finch/server',
-    },
-  },
-  {
-    name: 'firebase',
-    dirName: 'connector-firebase',
-    varName: 'connectorFirebase',
-    imports: {
-      def: '@openint/connector-firebase/def',
-      server: '@openint/connector-firebase/server',
-    },
-  },
-  {
-    name: 'foreceipt',
-    dirName: 'connector-foreceipt',
-    varName: 'connectorForeceipt',
-    imports: {
-      def: '@openint/connector-foreceipt/def',
-      server: '@openint/connector-foreceipt/server',
     },
   },
   {
@@ -176,15 +157,6 @@ module.exports = [
       def: '@openint/connector-merge/def',
       client: '@openint/connector-merge/client',
       server: '@openint/connector-merge/server',
-    },
-  },
-  {
-    name: 'mongodb',
-    dirName: 'connector-mongodb',
-    varName: 'connectorMongodb',
-    imports: {
-      def: '@openint/connector-mongodb/def',
-      server: '@openint/connector-mongodb/server',
     },
   },
   {

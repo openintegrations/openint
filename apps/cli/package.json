@@ -9,7 +9,6 @@
     "@openint/connector-beancount": "workspace:*",
     "@openint/connector-brex": "workspace:*",
     "@openint/connector-expensify": "workspace:*",
-    "@openint/connector-firebase": "workspace:*",
     "@openint/connector-fs": "workspace:*",
     "@openint/connector-heron": "workspace:*",
     "@openint/connector-lunchmoney": "workspace:*",

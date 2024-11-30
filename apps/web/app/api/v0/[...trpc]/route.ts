@@ -1,4 +1,5 @@
 import {createAppHandler} from '@openint/api'
+import {withClerkMiddleware} from '@/clerkMiddleware'
 
 /** https://vercel.com/docs/functions/runtimes#max-duration */
 export const maxDuration = 300
@@ -6,7 +7,7 @@ export const maxDuration = 300
 // TODO: Add handling for CORS
 // Also we may need to check for req.headers['transfer-encoding'] === 'chunked'
 // Was not supported on pages router, maybe better on app router?
-const handler = createAppHandler({endpoint: '/api/v0'})
+const handler = withClerkMiddleware(createAppHandler({endpoint: '/api/v0'}))
 
 export {
   handler as DELETE,

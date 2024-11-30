@@ -69,6 +69,8 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       handlebars: 'handlebars/dist/handlebars.js',
+      crypto: 'node:crypto',
+      // '#crypto': 'node:crypto',
     }
     config.resolve.fallback = {
       fs: false,
@@ -77,6 +79,8 @@ const nextConfig = {
       tls: false,
       net: false,
       dns: false,
+      crypto: 'node:crypto',
+      // '#crypto': 'node:crypto',
     }
     config.plugins.push(
       new webpack.IgnorePlugin({
@@ -98,24 +102,23 @@ const nextConfig = {
   productionBrowserSourceMaps: true, // Let's see if this helps with Sentry... We are OSS anyways so doesn't matter too much if source code is "leaked" to client
   headers: async () => [
     {
-      source: "/",
+      source: '/',
       headers: [
         {
-          key: "Access-Control-Allow-Origin",
-          value: "*", // Allow any origin 
+          key: 'Access-Control-Allow-Origin',
+          value: '*', // Allow any origin
         },
         {
-          key: "Access-Control-Allow-Methods",
-          value: "GET, POST, PUT, DELETE, OPTIONS",
+          key: 'Access-Control-Allow-Methods',
+          value: 'GET, POST, PUT, DELETE, OPTIONS',
         },
         {
-          key: "Access-Control-Allow-Headers",
-          value: "Content-Type, Authorization",
+          key: 'Access-Control-Allow-Headers',
+          value: 'Content-Type, Authorization',
         },
       ],
     },
   ],
-
 }
 
 module.exports = nextConfig
