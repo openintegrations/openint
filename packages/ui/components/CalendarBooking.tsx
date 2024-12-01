@@ -1,7 +1,6 @@
 import Cal, {getCalApi} from '@calcom/embed-react'
 import {X} from 'lucide-react'
 import {useEffect} from 'react'
-import {Button} from '../shadcn/Button'
 
 interface CalendarBookingProps {
   description: string
@@ -9,6 +8,8 @@ interface CalendarBookingProps {
   isVisible: boolean
   onClose: () => void
   onDismiss: () => void
+  email?: string
+  name?: string
 }
 
 export default function CalendarBooking({
@@ -16,7 +17,8 @@ export default function CalendarBooking({
   header,
   isVisible,
   onClose,
-  onDismiss,
+  email,
+  name,
 }: CalendarBookingProps) {
   useEffect(() => {
     if (isVisible) {
@@ -48,16 +50,20 @@ export default function CalendarBooking({
         <div className="mb-4 h-[700px] overflow-auto rounded border border-gray-100">
           <Cal
             calLink="ap-openint/discovery"
-            config={{layout: 'month_view'}}
+            config={{
+              layout: 'month_view',
+              name: name ?? '',
+              email: email ?? '',
+            }}
             namespace="discovery"
             style={{height: '100%', width: '100%'}}
           />
         </div>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <Button variant="secondary" onClick={onDismiss}>
             Not right now
           </Button>
-        </div>
+        </div> */}
       </div>
     </div>
   ) : null
