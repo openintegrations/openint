@@ -80,16 +80,21 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
         {auth.orgId ? (
           children
         ) : (
-          <div className="flex h-full p-6">
+          <div className="flex h-full flex-col p-6">
+            <h1 className="text-2xl font-bold">Welcome to OpenInt!</h1>
+            <p className="text-lg">
+              Please create an organization to continue.
+            </p>
             <CreateOrganization
               appearance={{
                 elements: {
-                  headerTitle: 'text-xl',
                   cardBox: 'shadow-none',
                   formButtonPrimary: 'bg-button text-button-foreground',
                 },
+                hideFooter: true,
               }}
               afterCreateOrganizationUrl="/dashboard"
+              hideSlug={true}
             />
           </div>
         )}
