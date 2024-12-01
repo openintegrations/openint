@@ -219,7 +219,11 @@ export default function ConnectorConfigsPage({
         isVisible={openCalendar}
         onClose={() => setOpenCalendar(false)}
         onDismiss={() => setOpenCalendar(false)}
-        email={user?.emailAddresses[0].emailAddress}
+        email={
+          user?.emailAddresses?.length
+            ? user.emailAddresses[0].emailAddress
+            : undefined
+        }
         name={
           user?.firstName && user?.lastName
             ? `${user.firstName} ${user.lastName}`

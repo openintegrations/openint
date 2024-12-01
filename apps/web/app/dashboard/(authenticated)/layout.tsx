@@ -26,13 +26,11 @@ function CustomCreateOrganization() {
     const newOrg = await createOrganization({
       name: organizationName,
       // note: this does not seem to be working..
-      // TODO: Enable
+      // TODO: Fix & Enable
       // publicMetadata: {
       //   referralSource,
       // },
     })
-    setOrganizationName('')
-    setReferralSource('')
     if (newOrg) {
       await setActive({organization: newOrg.id})
     }
