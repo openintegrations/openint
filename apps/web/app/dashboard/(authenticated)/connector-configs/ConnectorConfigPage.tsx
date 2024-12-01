@@ -1,5 +1,6 @@
 'use client'
 
+import {useUser} from '@clerk/nextjs'
 import {Loader2, Lock, Pencil, Plus} from 'lucide-react'
 import Image from 'next/image'
 import React, {useState} from 'react'
@@ -17,6 +18,7 @@ import {
   DataTable,
   parseCategory,
 } from '@openint/ui'
+import CalendarBooking from '@openint/ui/components/CalendarBooking'
 import {inPlaceSort, R, titleCase} from '@openint/util'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
 
@@ -28,12 +30,20 @@ export default function ConnectorConfigsPage({
   showCTAs?: boolean
 }) {
   const [open, setOpen] = useState(false)
+  const [openCalendar, setOpenCalendar] = useState(false)
   const [connectorName, setConnectorName] = useState<string>('')
   const [connectorConfig, setConnectorConfig] = useState<
     Omit<ConnectorConfig, 'connectorName'> | undefined
   >(undefined)
-
+  const {user} = useUser()
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
+
+  // either if whitelisted or already has a connector other than default postgres
+  const canAddNewConnectors =
+    user?.publicMetadata?.['whitelisted'] === true ||
+    connectorConfigsRes.data?.some(
+      (c) => c.connectorName !== 'default_postgres',
+    )
   const catalog = _trpcReact.listConnectorMetas.useQuery()
   if (!connectorConfigsRes.data || !catalog.data) {
     return (
@@ -170,14 +180,10 @@ export default function ConnectorConfigsPage({
                   key={`${vertical}-${connector.name}`}
                   connector={connector}>
                   {showCTAs &&
-                    (connector.stage === 'alpha' ? (
+                    (connector.stage === 'alpha' || !canAddNewConnectors ? (
                       <div
                         className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button"
-                        onClick={() =>
-                          window.open(
-                            `mailto:support@openint.dev?subject=Request%20access%20to%20${connector.displayName}%20connectors&body=My%20use%20case%20is...`,
-                          )
-                        }>
+                        onClick={() => setOpenCalendar(true)}>
                         <Lock />
                         <p className="text-sm font-semibold">Request access</p>
                       </div>
@@ -206,6 +212,23 @@ export default function ConnectorConfigsPage({
         connectorConfig={connectorConfig}
         open={open}
         setOpen={setOpen}
+      />
+      <CalendarBooking
+        description="Grab some time with our founder to help you get the best out of OpenInt"
+        header="Book a Free Discovery Meeting"
+        isVisible={openCalendar}
+        onClose={() => setOpenCalendar(false)}
+        onDismiss={() => setOpenCalendar(false)}
+        email={
+          user?.emailAddresses?.length
+            ? user.emailAddresses[0].emailAddress
+            : undefined
+        }
+        name={
+          user?.firstName && user?.lastName
+            ? `${user.firstName} ${user.lastName}`
+            : undefined
+        }
       />
     </div>
   )
