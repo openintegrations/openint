@@ -1,17 +1,51 @@
 'use client'
 
 import {
-  CreateOrganization,
   OrganizationSwitcher,
   useAuth,
+  useOrganizationList,
   UserButton,
 } from '@clerk/nextjs'
 import NextTopLoader from 'nextjs-toploader'
+import {FormEventHandler, useState} from 'react'
 import {_trpcReact} from '@openint/engine-frontend'
+import {Button} from '@openint/ui/shadcn/Button'
+import {Input} from '@openint/ui/shadcn/Input'
 import {NoSSR} from '@/components/NoSSR'
 import {RedirectToNext13} from '@/components/RedirectTo'
 import {VCommandBar} from '@/vcommands/vcommand-components'
 import {Sidebar} from './Sidebar'
+
+function CustomCreateOrganization() {
+  const {createOrganization, setActive} = useOrganizationList()
+  const [organizationName, setOrganizationName] = useState('')
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+    const newOrg = await createOrganization({name: organizationName})
+    setOrganizationName('')
+    if (newOrg) {
+      // Set the newly created organization as active
+      await setActive({organization: newOrg.id})
+    }
+    window.location.href = '/'
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Input
+        type="text"
+        name="organizationName"
+        value={organizationName}
+        placeholder="Acme Corp"
+        onChange={(e) => setOrganizationName(e.currentTarget.value)}
+      />
+      <Button type="submit" className="mt-4">
+        Create organization
+      </Button>
+    </form>
+  )
+}
 
 export default function AuthedLayout({children}: {children: React.ReactNode}) {
   // Clerk react cannot be trusted... Add our own clerk listener instead...
@@ -80,22 +114,10 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
         {auth.orgId ? (
           children
         ) : (
-          <div className="flex h-full flex-col p-6">
-            <h1 className="text-2xl font-bold">Welcome to OpenInt!</h1>
-            <p className="text-lg">
-              Please create an organization to continue.
-            </p>
-            <CreateOrganization
-              appearance={{
-                elements: {
-                  cardBox: 'shadow-none',
-                  formButtonPrimary: 'bg-button text-button-foreground',
-                },
-                hideFooter: true,
-              }}
-              afterCreateOrganizationUrl="/dashboard"
-              hideSlug={true}
-            />
+          <div className="flex h-full flex-col p-6" style={{maxWidth: '400px'}}>
+            <h1 className="mb-4 text-2xl font-bold">Welcome to OpenInt!</h1>
+            <p className="mb-4 text-lg">What is your organization name?</p>
+            <CustomCreateOrganization />
           </div>
         )}
       </main>

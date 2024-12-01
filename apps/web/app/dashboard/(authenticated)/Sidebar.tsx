@@ -38,10 +38,10 @@ const sectionedLinks: Array<{
     ]),
   },
   {
-    title: 'SQL',
+    title: 'Console',
     items: [
       {
-        title: 'Editor',
+        title: 'SQL Editor',
         href: '/dashboard/sql-editor',
         icon: 'Code',
       },
@@ -112,7 +112,7 @@ export function Sidebar({className, hasPgConnection}: SidebarProps) {
   const pathname = usePathname()
   const links = hasPgConnection
     ? sectionedLinks
-    : sectionedLinks.filter((s) => s.title !== 'SQL')
+    : sectionedLinks.filter((s) => s.title !== 'Console')
 
   return (
     <nav className={cn('flex flex-col', className)}>
