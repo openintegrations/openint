@@ -19,13 +19,21 @@ import {Sidebar} from './Sidebar'
 function CustomCreateOrganization() {
   const {createOrganization, setActive} = useOrganizationList()
   const [organizationName, setOrganizationName] = useState('')
+  // const [referralSource, setReferralSource] = useState('')
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
-    const newOrg = await createOrganization({name: organizationName})
+    const newOrg = await createOrganization({
+      name: organizationName,
+      // note: this does not seem to be working..
+      // TODO: Enable
+      // publicMetadata: {
+      //   referralSource,
+      // },
+    })
     setOrganizationName('')
+    setReferralSource('')
     if (newOrg) {
-      // Set the newly created organization as active
       await setActive({organization: newOrg.id})
     }
     window.location.href = '/'
@@ -33,13 +41,22 @@ function CustomCreateOrganization() {
 
   return (
     <form onSubmit={handleSubmit}>
+      <p className="text-md mt-2">What is your organization name?</p>
       <Input
         type="text"
         name="organizationName"
         value={organizationName}
-        placeholder="Acme Corp"
+        placeholder="e.g. Acme Corp"
         onChange={(e) => setOrganizationName(e.currentTarget.value)}
       />
+      {/* <p className="text-md mt-2">How did you hear about us?</p>
+      <Input
+        type="text"
+        name="referralSource"
+        value={referralSource}
+        placeholder="e.g. Twitter"
+        onChange={(e) => setReferralSource(e.currentTarget.value)}
+      /> */}
       <Button type="submit" className="mt-4">
         Create organization
       </Button>
@@ -116,7 +133,6 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
         ) : (
           <div className="flex h-full flex-col p-6" style={{maxWidth: '400px'}}>
             <h1 className="mb-4 text-2xl font-bold">Welcome to OpenInt!</h1>
-            <p className="mb-4 text-lg">What is your organization name?</p>
             <CustomCreateOrganization />
           </div>
         )}

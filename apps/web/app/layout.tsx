@@ -1,10 +1,7 @@
 import './global.css'
-import {env} from '@openint/app-config/env'
 
 export const metadata = {
-  title: `${
-    env.VERCEL_ENV === 'production' ? '' : `[${env.VERCEL_ENV}] `
-  }OpenInt`,
+  title: `OpenInt`,
   icons: [{url: '/favicon.svg', type: 'image/svg+xml'}],
 }
 
