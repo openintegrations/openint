@@ -21,6 +21,10 @@ function CustomCreateOrganization() {
   const [organizationName, setOrganizationName] = useState('')
   // const [referralSource, setReferralSource] = useState('')
 
+  if (!createOrganization || !setActive) {
+    return null
+  }
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
     const newOrg = await createOrganization({
