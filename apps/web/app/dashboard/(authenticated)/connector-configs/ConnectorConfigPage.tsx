@@ -221,12 +221,12 @@ export default function ConnectorConfigsPage({
         onDismiss={() => setOpenCalendar(false)}
         email={
           user?.emailAddresses?.length
-            ? user.emailAddresses[0].emailAddress
+            ? user?.emailAddresses?.[0]?.emailAddress
             : undefined
         }
         name={
           user?.firstName && user?.lastName
-            ? `${user.firstName} ${user.lastName}`
+            ? `${user?.firstName} ${user?.lastName}`
             : undefined
         }
       />
