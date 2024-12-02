@@ -166,9 +166,8 @@ export const postgresServer = {
               data.entity?.raw?.opening_id || ''
             rowToInsert['job_id'] = data.entity?.raw?.job_id || ''
           } else if (tableName === 'IntegrationAtsOffer') {
-            // Note: These fields seemed duplicated from the nested objects
-            rowToInsert['opening_external_id'] =
-              data.entity?.raw?.opening?.id || ''
+            rowToInsert['offer_external_id'] = data.entity?.raw?.id || ''
+            rowToInsert['opening_external_id'] = data.entity?.raw?.opening?.id || ''
             // field does not exist in the offer object
             rowToInsert['candidate_name'] = ''
           }
