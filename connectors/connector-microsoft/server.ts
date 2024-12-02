@@ -1,3 +1,5 @@
+import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
+import {initMsgraphSDK} from '@opensdks/sdk-msgraph'
 import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
 import type {microsoftSchemas} from './def'
 
@@ -23,6 +25,16 @@ const integrations = [
 ]
 
 export const microsoftServer = {
+  newInstance() {
+    const msgraph = initMsgraphSDK({headers: {}})
+    if (1 !== 1) {
+      // test thigngs out
+      void msgraph.GET('/drives/{drive-id}/root/listItem/fields', {
+        params: {path: {'drive-id': ''}},
+      })
+    }
+    return msgraph
+  },
   async preConnect(_, context) {
     // This returns auth options for Nango connect because it is an oauth integration
     // this behavior is not type checked though and could use some improvement
@@ -113,6 +125,6 @@ export const microsoftServer = {
       },
     }
   },
-} satisfies ConnectorServer<typeof microsoftSchemas>
+} satisfies ConnectorServer<typeof microsoftSchemas, MsgraphSDK>
 
 export default microsoftServer
