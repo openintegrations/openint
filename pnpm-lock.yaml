@@ -234,6 +234,9 @@ importers:
       '@openint/connector-merge':
         specifier: workspace:*
         version: link:../../connectors/connector-merge
+      '@openint/connector-microsoft':
+        specifier: workspace:*
+        version: link:../../connectors/connector-microsoft
       '@openint/connector-mongodb':
         specifier: workspace:*
         version: link:../../connectors/connector-mongodb
@@ -947,6 +950,18 @@ importers:
       '@types/react':
         specifier: 18.0.27
         version: 18.0.27
+
+  connectors/connector-microsoft:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@opensdks/runtime':
+        specifier: ^0.0.19
+        version: 0.0.19
 
   connectors/connector-mongodb:
     dependencies:
