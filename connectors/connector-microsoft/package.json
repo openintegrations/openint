@@ -6,7 +6,8 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
-    "@opensdks/runtime": "^0.0.19"
+    "@opensdks/runtime": "^0.0.19",
+    "@opensdks/sdk-msgraph": "^0.0.1"
   },
   "devDependencies": {}
 }

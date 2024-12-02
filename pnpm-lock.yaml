@@ -962,6 +962,9 @@ importers:
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
+      '@opensdks/sdk-msgraph':
+        specifier: ^0.0.1
+        version: 0.0.1
 
   connectors/connector-mongodb:
     dependencies:
@@ -2295,6 +2298,24 @@ importers:
       '@openint/vdk':
         specifier: workspace:*
         version: link:../../kits/vdk
+
+  unified/unified-file-storage:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/connector-greenhouse':
+        specifier: workspace:*
+        version: link:../../connectors/connector-greenhouse
+      '@openint/connector-lever':
+        specifier: workspace:*
+        version: link:../../connectors/connector-lever
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+      rxjs:
+        specifier: 7.5.6
+        version: 7.5.6
 
   unified/unified-hris:
     dependencies:
@@ -3759,6 +3780,9 @@ packages:
 
   '@opensdks/sdk-merge@0.0.6':
     resolution: {integrity: sha512-OJO+rJFpjh0ctqFH7Fq88sepjoVlGseN82MujNZfb7IPpoUIlAdM9dfj0kORfDgt4yFsqnz7TxhgQtNUvDemeg==}
+
+  '@opensdks/sdk-msgraph@0.0.1':
+    resolution: {integrity: sha512-4wWSemu9DVbKdxfqGojxFJ9YYZgEfkvQeSRu28r4opPtG4FpJ65zIK/MphEocdfmaCAV6WywxKoERk1vmZn72g==}
 
   '@opensdks/sdk-nango@0.0.6':
     resolution: {integrity: sha512-nlDbJzZZ9burlpHy85CHlK4UDzmMOv3gKS2zWHebYSj2x9qSM0W6WTL4+PZkFuYVh5sIdiizZhZsyrruHUk6Ig==}
@@ -15972,6 +15996,8 @@ snapshots:
 
   '@opensdks/sdk-merge@0.0.6': {}
 
+  '@opensdks/sdk-msgraph@0.0.1': {}
+
   '@opensdks/sdk-nango@0.0.6': {}
 
   '@opensdks/sdk-onebrick@0.0.0': {}
@@ -20874,7 +20900,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0))(eslint@8.23.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -20919,7 +20945,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.23.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0))(eslint@8.23.0)
       hasown: 2.0.0
       is-core-module: 2.13.1
       is-glob: 4.0.3
