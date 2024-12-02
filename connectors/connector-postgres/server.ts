@@ -13,10 +13,9 @@ import {makePostgresClient, upsertByIdQuery} from './makePostgresClient'
 const agTableMappings = [
   {from: 'integration_ats_job', to: 'IntegrationATSJob'},
   {from: 'integration_ats_candidate', to: 'IntegrationATSCandidate'},
-  {from: 'integration_ats_job_opening', to: 'IntegrationATSJobOpening'},
+  {from: 'integration_ats_opening', to: 'IntegrationATSOpening'},
   {from: 'integration_ats_offer', to: 'IntegrationATSOffer'},
   {from: 'integration_connection', to: 'IntegrationConnection'},
-  {from: 'integration_ats_opening', to: 'IntegrationATSOpening'},
 ]
 
 async function setupTable({
@@ -44,7 +43,7 @@ async function setupTable({
   // const extraPerEntityColumns = {
   //   'IntegrationATSJob': ['external_job_id VARCHAR'],
   //   'IntegrationATSCandidate': ['opening_external_id VARCHAR', 'candidate_name VARCHAR'],
-  //   'IntegrationATSJobOpening': ['opening_external_id VARCHAR', 'job_id VARCHAR'],
+  //   'IntegrationATSOpening': ['opening_external_id VARCHAR', 'job_id VARCHAR'],
   //   'IntegrationATSOffer': ['opening_external_id VARCHAR', 'candidate_name VARCHAR'],
   // }
   // const extraColumns = extraPerEntityColumns[mappedTableName as keyof typeof extraPerEntityColumns]?.join(',\n      ') ?? ''
@@ -161,7 +160,7 @@ export const postgresServer = {
               data.entity?.raw?.first_name +
                 ' ' +
                 data.entity?.raw?.last_name || ''
-          } else if (tableName === 'IntegrationAtsJobOpening') {
+          } else if (tableName === 'IntegrationAtsOpening') {
             rowToInsert['opening_external_id'] =
               data.entity?.raw?.opening_id || ''
             rowToInsert['job_id'] = data.entity?.raw?.job_id || ''
