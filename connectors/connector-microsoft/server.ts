@@ -13,7 +13,7 @@ function mergeScopes(
 const integrations = [
   {
     id: 'sharepoint',
-    name: 'Sharepoint Online',
+    name: 'Sharepoint',
     // TODO: Differ oauth scope use in Connect based on which integration
     raw_data: {} as any,
     verticals: ['file-storage'],
