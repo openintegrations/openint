@@ -3,12 +3,15 @@ import {z} from '@opensdks/util-zod'
 import {TRPCError} from '@trpc/server'
 import type {Viewer} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
-import {zOrganization, zUser} from '@openint/engine-backend'
 import {
   adminProcedure,
   publicProcedure,
   trpc,
 } from '@openint/engine-backend/router/_base'
+import {
+  zOrganization,
+  zUser,
+} from '@openint/engine-backend/services/AuthProvider'
 import {R} from '@openint/util'
 
 export type ClerkOrg = Awaited<
@@ -26,6 +29,7 @@ export const authRouter = trpc.router({
         method: 'GET',
         path: '/viewer',
         summary: 'Get current viewer accessing the API',
+        tags: ['Internal'],
       },
     })
     .input(z.void())
@@ -47,6 +51,7 @@ export const authRouter = trpc.router({
     .meta({
       openapi: {
         method: 'GET',
+        tags: ['Internal'],
         path: '/viewer/organization',
         summary: 'Get current organization of viewer accessing the API',
       },

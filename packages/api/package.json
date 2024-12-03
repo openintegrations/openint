@@ -23,6 +23,7 @@
     "@openint/unified-banking": "workspace:*",
     "@openint/unified-crm": "workspace:*",
     "@openint/unified-etl": "workspace:*",
+    "@openint/unified-file-storage": "workspace:*",
     "@openint/unified-hris": "workspace:*",
     "@openint/unified-pta": "workspace:*",
     "@openint/unified-sales-engagement": "workspace:*",
