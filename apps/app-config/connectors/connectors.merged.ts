@@ -36,6 +36,8 @@ import {default as connectorLunchmoney_server} from '@openint/connector-lunchmon
 import {default as connectorMercury_def} from '@openint/connector-mercury/def'
 import {default as connectorMerge_def} from '@openint/connector-merge/def'
 import {default as connectorMerge_server} from '@openint/connector-merge/server'
+import {default as connectorMicrosoft_def} from '@openint/connector-microsoft/def'
+import {default as connectorMicrosoft_server} from '@openint/connector-microsoft/server'
 import {default as connectorMongodb_def} from '@openint/connector-mongodb/def'
 import {default as connectorMongodb_server} from '@openint/connector-mongodb/server'
 import {default as connectorMoota_def} from '@openint/connector-moota/def'
@@ -180,6 +182,11 @@ const connectorMercury = {
 const connectorMerge = {
   ...connectorMerge_def,
   ...connectorMerge_server,
+}
+
+const connectorMicrosoft = {
+  ...connectorMicrosoft_def,
+  ...connectorMicrosoft_server,
 }
 
 const connectorMongodb = {
@@ -331,6 +338,7 @@ export const mergedConnectors = {
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
   merge: connectorMerge,
+  microsoft: connectorMicrosoft,
   mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,

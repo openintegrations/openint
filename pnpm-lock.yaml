@@ -234,6 +234,9 @@ importers:
       '@openint/connector-merge':
         specifier: workspace:*
         version: link:../../connectors/connector-merge
+      '@openint/connector-microsoft':
+        specifier: workspace:*
+        version: link:../../connectors/connector-microsoft
       '@openint/connector-mongodb':
         specifier: workspace:*
         version: link:../../connectors/connector-mongodb
@@ -947,6 +950,21 @@ importers:
       '@types/react':
         specifier: 18.0.27
         version: 18.0.27
+
+  connectors/connector-microsoft:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@opensdks/runtime':
+        specifier: ^0.0.19
+        version: 0.0.19
+      '@opensdks/sdk-msgraph':
+        specifier: ^0.0.1
+        version: 0.0.1
 
   connectors/connector-mongodb:
     dependencies:
@@ -2280,6 +2298,27 @@ importers:
       '@openint/vdk':
         specifier: workspace:*
         version: link:../../kits/vdk
+
+  unified/unified-file-storage:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/connector-greenhouse':
+        specifier: workspace:*
+        version: link:../../connectors/connector-greenhouse
+      '@openint/connector-lever':
+        specifier: workspace:*
+        version: link:../../connectors/connector-lever
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+      '@opensdks/sdk-msgraph':
+        specifier: ^0.0.1
+        version: 0.0.1
+      rxjs:
+        specifier: 7.5.6
+        version: 7.5.6
 
   unified/unified-hris:
     dependencies:
@@ -3744,6 +3783,9 @@ packages:
 
   '@opensdks/sdk-merge@0.0.6':
     resolution: {integrity: sha512-OJO+rJFpjh0ctqFH7Fq88sepjoVlGseN82MujNZfb7IPpoUIlAdM9dfj0kORfDgt4yFsqnz7TxhgQtNUvDemeg==}
+
+  '@opensdks/sdk-msgraph@0.0.1':
+    resolution: {integrity: sha512-4wWSemu9DVbKdxfqGojxFJ9YYZgEfkvQeSRu28r4opPtG4FpJ65zIK/MphEocdfmaCAV6WywxKoERk1vmZn72g==}
 
   '@opensdks/sdk-nango@0.0.6':
     resolution: {integrity: sha512-nlDbJzZZ9burlpHy85CHlK4UDzmMOv3gKS2zWHebYSj2x9qSM0W6WTL4+PZkFuYVh5sIdiizZhZsyrruHUk6Ig==}
@@ -15956,6 +15998,8 @@ snapshots:
       '@opensdks/runtime': 0.0.20
 
   '@opensdks/sdk-merge@0.0.6': {}
+
+  '@opensdks/sdk-msgraph@0.0.1': {}
 
   '@opensdks/sdk-nango@0.0.6': {}
 

@@ -179,6 +179,15 @@ module.exports = [
     },
   },
   {
+    name: 'microsoft',
+    dirName: 'connector-microsoft',
+    varName: 'connectorMicrosoft',
+    imports: {
+      def: '@openint/connector-microsoft/def',
+      server: '@openint/connector-microsoft/server',
+    },
+  },
+  {
     name: 'mongodb',
     dirName: 'connector-mongodb',
     varName: 'connectorMongodb',

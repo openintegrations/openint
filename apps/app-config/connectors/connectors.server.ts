@@ -17,6 +17,7 @@ import {default as connectorHubspot} from '@openint/connector-hubspot/server'
 import {default as connectorLever} from '@openint/connector-lever/server'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/server'
 import {default as connectorMerge} from '@openint/connector-merge/server'
+import {default as connectorMicrosoft} from '@openint/connector-microsoft/server'
 import {default as connectorMongodb} from '@openint/connector-mongodb/server'
 import {default as connectorMoota} from '@openint/connector-moota/server'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/server'
@@ -62,6 +63,7 @@ export const serverConnectors = {
   lever: connectorLever,
   lunchmoney: connectorLunchmoney,
   merge: connectorMerge,
+  microsoft: connectorMicrosoft,
   mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
