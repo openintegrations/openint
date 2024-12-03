@@ -31,23 +31,23 @@ export const fileStorageRouter = trpc.router({
     .output(unified.Drive)
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listFolders: procedure
-    .meta(oapi({method: 'GET', path: '/folder'}))
-    .input(zPaginationParams.nullish())
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}/folder'}))
+    .input(z.object({driveId: z.string()}))
     .output(zPaginatedResult.extend({items: z.array(unified.Folder)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getFolder: procedure
-    .meta(oapi({method: 'GET', path: '/folder/{folderId}'}))
-    .input(z.object({folderId: z.string()}))
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}/folder/{folderId}'}))
+    .input(z.object({driveId: z.string(), folderId: z.string()}))
     .output(unified.Folder)
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listFiles: procedure
-    .meta(oapi({method: 'GET', path: '/file'}))
-    .input(zPaginationParams.nullish())
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}/file'}))
+    .input(z.object({driveId: z.string(), folderId: z.string().nullish()}))
     .output(zPaginatedResult.extend({items: z.array(unified.File)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getFile: procedure
-    .meta(oapi({method: 'GET', path: '/file/{fileId}'}))
-    .input(z.object({fileId: z.string()}))
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}/file/{fileId}'}))
+    .input(z.object({driveId: z.string(), fileId: z.string()}))
     .output(unified.File)
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 })
