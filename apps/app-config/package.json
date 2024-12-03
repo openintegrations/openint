@@ -26,6 +26,7 @@
     "@openint/connector-foreceipt": "workspace:*",
     "@openint/connector-fs": "workspace:*",
     "@openint/connector-google": "workspace:*",
+    "@openint/connector-microsoft": "workspace:*",
     "@openint/connector-greenhouse": "workspace:*",
     "@openint/connector-heron": "workspace:*",
     "@openint/connector-hubspot": "workspace:*",

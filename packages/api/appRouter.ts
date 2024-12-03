@@ -16,6 +16,7 @@ import ptaRouter from '@openint/unified-pta'
 import {salesEngagementRouter} from '@openint/unified-sales-engagement'
 import {mapKeys, mapValues, publicProcedure, trpc, z} from '@openint/vdk'
 import {authRouter} from './authRouter'
+import fileStorageRouter from '../../unified/unified-file-storage'
 
 export const publicRouter = trpc.router({
   getOpenapiDocument: publicProcedure
@@ -36,6 +37,7 @@ export const _appRouter = trpc.router({
   ats: atsRouter,
   hris: hrisRouter,
   etl: eltRouter,
+  fileStorage: fileStorageRouter,
 })
 
 export const appRouter = trpc.mergeRouters(flatRouter, authRouter, _appRouter)
