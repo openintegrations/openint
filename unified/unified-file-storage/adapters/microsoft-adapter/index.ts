@@ -26,7 +26,9 @@ export const microsoftGraphAdapter = {
 
   getDrive: async ({ instance, input }) => {
     // TODO: replace with correct drive endpoint
-    const res = await instance.GET(`/me/drives/${input.driveId}`);
+    const res = await instance.GET('/drives/{drive-id}/root/listItem/fields', {
+      params: {path: {'drive-id': ''}},
+    })
     const drive = res.data;
 
     return {

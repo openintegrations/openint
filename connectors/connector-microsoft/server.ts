@@ -25,15 +25,26 @@ const integrations = [
 ]
 
 export const microsoftServer = {
-  newInstance() {
-    const msgraph = initMsgraphSDK({headers: {}})
-    if (1 !== 1) {
-      // test thigngs out
-      void msgraph.GET('/drives/{drive-id}/root/listItem/fields', {
-        params: {path: {'drive-id': ''}},
-      })
-    }
-    return msgraph
+  newInstance: ({settings, fetchLinks}) => {
+    const lever = initMsgraphSDK({
+      headers: {
+        authorization: `Bearer ${settings.oauth.credentials.access_token}`,
+      },
+      links: (defaultLinks) => [
+        (req, next) => {
+          if (lever.clientOptions.baseUrl) {
+            req.headers.set(
+              nangoProxyLink.kBaseUrlOverride,
+              lever.clientOptions.baseUrl,
+            )
+          }
+          return next(req)
+        },
+        ...fetchLinks,
+        ...defaultLinks
+      ],
+    })
+    return lever
   },
   async preConnect(_, context) {
     // This returns auth options for Nango connect because it is an oauth integration
