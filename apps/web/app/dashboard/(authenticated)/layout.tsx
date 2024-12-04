@@ -129,7 +129,7 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
       {/* max-h-[calc(100vh-3em)] should normally not be needed, but otherwise
       layout on sql page doesn't work when results are long :( donno how to prevent
       it otherwise without setting overflow hidden prop */}
-      <main className="ml-[240px] mt-12 max-h-[calc(100vh-3em)] grow overflow-x-hidden">
+      <main className="ml-[240px] mt-12 max-h-[calc(100vh-3em)] grow overflow-x-hidden bg-background">
         {auth.orgId ? (
           children
         ) : (
