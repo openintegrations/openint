@@ -1,15 +1,18 @@
 import {appRouter} from './appRouter'
-import {createRouterHandler} from './createRouterHandler'
+import {
+  createRouterOpenAPIHandler,
+  createRouterTRPCHandler,
+} from './createRouterHandler'
 
 export * from './appRouter'
 export * from './createRouterHandler'
 export * from './proxyHandler'
 
 // TODO: Make me work
-export function createAppHandler(
-  opts: {
-    endpoint?: `/${string}`
-  } = {},
-) {
-  return createRouterHandler({...opts, router: appRouter})
+export function createAppOpenAPIHandler(opts: {endpoint: `/${string}`}) {
+  return createRouterOpenAPIHandler({...opts, router: appRouter})
+}
+
+export function createAppTrpcHandler(opts: {endpoint: `/${string}`}) {
+  return createRouterTRPCHandler({...opts, router: appRouter})
 }

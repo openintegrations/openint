@@ -1,6 +1,7 @@
 import {clerkClient} from '@clerk/nextjs/server'
 import {createOpenApiFetchHandler} from '@lilyrose2798/trpc-openapi'
 import {applyLinks, corsLink} from '@opensdks/fetch-links'
+import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {pickBy} from 'remeda'
 import {contextFactory} from '@openint/app-config/backendConfig'
 import {
@@ -149,11 +150,29 @@ export const contextFromRequest = async ({
   }
 }
 
-export function createRouterHandler({
-  endpoint = '/api/v0',
+export function createRouterTRPCHandler({
+  endpoint,
   router,
 }: {
-  endpoint?: `/${string}`
+  endpoint: `/${string}`
+  router: AnyRouter
+}) {
+  return async (req: Request) => {
+    const context = await contextFromRequest({req})
+    return fetchRequestHandler({
+      endpoint,
+      req,
+      router,
+      createContext: () => context,
+    })
+  }
+}
+
+export function createRouterOpenAPIHandler({
+  endpoint,
+  router,
+}: {
+  endpoint: `/${string}`
   router: AnyRouter
 }) {
   const openapiRouteHandler = async (req: Request) => {

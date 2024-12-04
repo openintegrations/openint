@@ -6,7 +6,6 @@
 // - codegen:start {preset: barrel, include: "./{*.{ts,tsx},*/index.{ts,tsx}}", exclude: "./**/*.{d,spec,test,fixture,gen,node}.{ts,tsx}"}
 export * from './components/ConnectionPortal'
 export * from './components/AGConnectionPortal'
-export * from './DeprecatedOpenIntConnect'
 export * from './providers/TRPCProvider'
 export * from './providers/OpenIntConnectProvider'
 export * from './lib'
