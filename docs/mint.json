@@ -44,7 +44,7 @@
       "pages": [
         "quickstart/quickstart",
         "quickstart/use-cases",
-        "quickstart/features
+        "quickstart/features,
         "quickstart/core"
       ]
     },
