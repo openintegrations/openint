@@ -24,7 +24,7 @@ export function CheckboxFilter({
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button variant="secondary" onClick={() => setIsOpen(true)}>
-          <Component className="h-4 w-4" style={{color: '#8A5DF6'}} />{' '}
+          <Component className="h-4 w-4 text-button" />{' '}
           <span className="ml-2">Category</span>
         </Button>
       </PopoverTrigger>

@@ -12,7 +12,7 @@ export default function SyncRunsPage() {
     <div className="p-6">
       <header className="flex items-center">
         <h2 className="mb-4 mr-auto text-2xl font-semibold tracking-tight">
-          Sync runs
+          Pipeline runs
         </h2>
       </header>
       <DataTable
