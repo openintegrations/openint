@@ -2,7 +2,7 @@
   "name": "openint",
   "version": "0.0.0",
   "private": true,
-  "repository": "git@github.com:openint-dev/openint.git",
+  "repository": "git@github.com:openintegrations/openint.git",
   "license": "UNLICENSED",
   "scripts": {
     "web": "pnpm run --filter web dev",
