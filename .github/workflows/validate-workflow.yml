@@ -79,6 +79,9 @@ jobs:
       - name: Run health check
         run: MOCK_HEALTHCHECK=true NANGO_SECRET_KEY=noop JWT_SECRET=NOOP POSTGRES_URL=postgres:// npx tsx ./bin/openint.ts health
 
+      - name: Ensure OpenAPI spec and docs are up to date
+        run: pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate && git diff --exit-code
+
       - name: Run migration check
         run: POSTGRES_URL=postgres://postgres:test@localhost:5432/test pnpm migration up
         # To test this with a locally install postgres, run
