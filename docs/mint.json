@@ -65,8 +65,8 @@
         {
           "group": "Connect",
           "pages": [
-            "api-reference/connect/post-connecttoken",
-            "api-reference/connect/post-connectmagic-link"
+            "api-reference/connect/create-a-connect-token",
+            "api-reference/connect/create-a-magic-link"
           ]
         },
         {
@@ -212,12 +212,12 @@
         {
           "group": "File Storage",
           "pages": [
-            "api-reference/file-storage/get-unifiedfile-storagedrive",
-            "api-reference/file-storage/get-unifiedfile-storagedrive-1",
-            "api-reference/file-storage/get-unifiedfile-storagedrive-folder",
-            "api-reference/file-storage/get-unifiedfile-storagedrive-folder-1",
-            "api-reference/file-storage/get-unifiedfile-storagedrive-file",
-            "api-reference/file-storage/get-unifiedfile-storagedrive-file-1"
+            "api-reference/file-storage/list-drives",
+            "api-reference/file-storage/get-drive",
+            "api-reference/file-storage/list-folders",
+            "api-reference/file-storage/get-folder",
+            "api-reference/file-storage/list-files",
+            "api-reference/file-storage/get-file"
           ]
         }
       ]

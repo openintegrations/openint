@@ -107,6 +107,7 @@
     "/connect/token": {
       "post": {
         "operationId": "createConnectToken",
+        "summary": "Create a connect token",
         "tags": ["Connect"],
         "requestBody": {
           "required": true,
@@ -173,6 +174,7 @@
     "/connect/magic-link": {
       "post": {
         "operationId": "createMagicLink",
+        "summary": "Create a magic link",
         "tags": ["Connect"],
         "requestBody": {
           "required": true,
@@ -8389,6 +8391,7 @@
     "/unified/file-storage/drive": {
       "get": {
         "operationId": "fileStorage-listDrives",
+        "summary": "List Drives",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8476,6 +8479,7 @@
     "/unified/file-storage/drive/{driveId}": {
       "get": {
         "operationId": "fileStorage-getDrive",
+        "summary": "Get Drive",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8534,6 +8538,7 @@
     "/unified/file-storage/drive/{driveId}/folder": {
       "get": {
         "operationId": "fileStorage-listFolders",
+        "summary": "List Folders",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8607,6 +8612,7 @@
     "/unified/file-storage/drive/{driveId}/folder/{folderId}": {
       "get": {
         "operationId": "fileStorage-getFolder",
+        "summary": "Get Folder",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8673,6 +8679,7 @@
     "/unified/file-storage/drive/{driveId}/file": {
       "get": {
         "operationId": "fileStorage-listFiles",
+        "summary": "List Files",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8753,6 +8760,7 @@
     "/unified/file-storage/drive/{driveId}/file/{fileId}": {
       "get": {
         "operationId": "fileStorage-getFile",
+        "summary": "Get File",
         "tags": ["File Storage"],
         "parameters": [
           {

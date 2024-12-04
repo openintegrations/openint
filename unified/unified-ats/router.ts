@@ -13,7 +13,8 @@ import * as unified from './unifiedModels'
 export {unified}
 
 function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
-  return {openapi: {...meta, path: `/unified/ats${meta.path}`}}
+  const path = `/unified/ats${meta.path}` satisfies `/${string}`
+  return {openapi: {summary: path, ...meta, path}}
 }
 
 const procedure = verticalProcedure(adapters)
@@ -42,7 +43,9 @@ export const atsRouter = trpc.router({
         summary: 'List Job Openings',
       }),
     )
-    .input(z.object({jobId: z.string()}).extend(zPaginationParams.shape).nullish())
+    .input(
+      z.object({jobId: z.string()}).extend(zPaginationParams.shape).nullish(),
+    )
     .output(zPaginatedResult.extend({items: z.array(unified.opening)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listOffers: procedure
