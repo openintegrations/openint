@@ -39,7 +39,7 @@ export default async function ConnectPageContainer({
   searchParams: Record<string, string | string[] | undefined>
 }) {
   const {token, ...params} = zConnectPageParams.parse(searchParams)
-  const {ssg, getDehydratedState, viewer} = await createServerComponentHelpers({
+  const {ssg, viewer} = await createServerComponentHelpers({
     searchParams: {[kAccessToken]: token},
   })
   if (viewer.role !== 'end_user') {
