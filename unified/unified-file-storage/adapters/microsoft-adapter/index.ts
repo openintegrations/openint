@@ -13,8 +13,6 @@ export const microsoftGraphAdapter = {
       },
     });
 
-    console.log('Received drive response', JSON.stringify(res.data, null, 2))
-
     if(!res.data || !res.data.value) {
       return {
         has_next_page: false,
@@ -101,19 +99,30 @@ export const microsoftGraphAdapter = {
     };
   },
 
-  getFolder: async () => {
+  getFolder: async ({ instance, input }) => {
     // TODO: Sample static return for getFolder
-    const folder = {
-      id: 'sample-folder-id',
-      name: 'Sample Folder',
-      parent_id: 'sample-parent-id',
-      drive_id: 'sample-drive-id',
-      created_at: '2023-01-01T00:00:00Z',
-      modified_at: '2023-01-02T00:00:00Z',
-      raw_data: {},
-    };
+    const res = await instance.GET(`/drives/{drive-id}/items/{driveItem-id}`, {
+      params: {
+        path: {'drive-id': input.driveId, 'driveItem-id': input.folderId},
+      }
+    });
 
-    return folder;
+    if(!res.data) {
+      // TODO: QQ: is this the right type of error to throw?
+      throw new Error('Folder not found');
+    }
+
+    const folder = res.data;
+
+    return {
+      id: folder.id || '',
+      name: folder.name || '',
+      parent_id: folder.parentReference?.id,
+      drive_id: folder.parentReference?.driveId || '',
+      created_at: folder.createdDateTime,
+      modified_at: folder.lastModifiedDateTime,
+      raw_data: folder,
+    };
   },
 
   listFiles: async ({ instance, input }) => {
@@ -122,10 +131,12 @@ export const microsoftGraphAdapter = {
     const res = input.folderId ? await instance.GET(`/drives/{drive-id}/items/{driveItem-id}/children`, {
       params: {
         path: {'drive-id': input.driveId, 'driveItem-id': input.folderId},
+        query: {$filter: "true"},
       }
     }) : await instance.GET(`/drives/{drive-id}/items`, {
       params: {
         path: {'drive-id': input.driveId},
+        query: {$filter: "true"},
       }
     });
 
@@ -157,20 +168,31 @@ export const microsoftGraphAdapter = {
     };
   },
 
-  getFile: async () => {
+  getFile: async ({ instance, input }) => {
     // TODO: Sample static return for getFile
-    const file = {
-      id: 'sample-file-id',
-      name: 'Sample File',
-      file_url: '',
-      mimeType: null,
-      size: null,
-      drive_id: '',
-      created_at: null,
-      modified_at: null,
-      raw_data: {},
+    const res = await instance.GET(`/drives/{drive-id}/items/{driveItem-id}`, {
+      params: {
+        path: {'drive-id': input.driveId, 'driveItem-id': input.fileId},
+      }
+    });
+
+    if(!res.data) {
+      // TODO: QQ: is this the right type of error to throw?
+      throw new Error('File not found');
+    }
+
+    return {
+      id: res.data.id || '',
+      name: res.data.name || '',
+      file_url: res.data.webUrl || '',
+      mimeType: res.data.file?.mimeType || null,
+      size: res.data.size || null,
+      parent_id: res.data.parentReference?.id,
+      drive_id: res.data.parentReference?.driveId || '',
+      created_at: res.data.createdDateTime,
+      modified_at: res.data.lastModifiedDateTime,
+      raw_data: res.data,
     };
-    return file;
   }
 } satisfies FileStorageAdapter<MsgraphSDK>;
 

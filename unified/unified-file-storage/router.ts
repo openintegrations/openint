@@ -19,7 +19,6 @@ function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
 const procedure = verticalProcedure(adapters)
 
 export const fileStorageRouter = trpc.router({
-
   listDrives: procedure
     .meta(oapi({method: 'GET', path: '/drive'}))
     .input(zPaginationParams.nullish())
