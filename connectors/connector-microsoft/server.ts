@@ -8,7 +8,11 @@ function mergeScopes(
   integrationScopes: string = '',
 ): string {
   const scopes = [globalScopes, integrationScopes].filter(Boolean).join(' ')
-  return scopes
+  // Add offline access to the scopes to be able to refresh the token
+  const scopesWithOfflineAccess = scopes.split(' ').concat('offline_access')
+  // Remove duplicates
+  const uniqueScopes = Array.from(new Set(scopesWithOfflineAccess))
+  return uniqueScopes.join(' ')
 }
 
 // QQ: Why are these integrations in snake case whereas some like plaid has standard in camel case?
