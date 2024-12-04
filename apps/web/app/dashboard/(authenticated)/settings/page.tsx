@@ -1,5 +1,6 @@
 'use client'
 
+import {Loader2} from 'lucide-react'
 import type {AppRouter} from '@openint/api'
 import {zOrganization} from '@openint/engine-backend/services/AuthProvider'
 import type {TRPCReact} from '@openint/engine-frontend'
@@ -22,7 +23,7 @@ export default function SettingsPage() {
     return null
   }
 
-  return (
+  return res && !(res.isLoading || res.isRefetching) ? (
     <div className="p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">Settings</h2>
       <SchemaForm
@@ -37,9 +38,20 @@ export default function SettingsPage() {
         formData={res.data.publicMetadata}
         loading={updateOrg.isLoading}
         onSubmit={({formData}) => {
-          updateOrg.mutate({publicMetadata: formData})
+          updateOrg.mutate(
+            {publicMetadata: formData},
+            {
+              onSuccess: () => {
+                res.refetch()
+              },
+            },
+          )
         }}
       />
+    </div>
+  ) : (
+    <div className="flex size-full flex-1 items-center justify-center">
+      <Loader2 className="h-10 w-10 animate-spin text-button" />
     </div>
   )
 }
