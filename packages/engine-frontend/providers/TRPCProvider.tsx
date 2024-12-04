@@ -26,6 +26,7 @@ export function TRPCProvider({
   // TODO: Should we keep trpcClient the and useRef for the accessToken instead?
   const trpcClient = React.useMemo(
     () =>
+      // Should we leverage ./trpcClient file or use _trpcReact to create client? Which one is better?
       // Disable reqeuest batching in DEBUG mode for easier debugging
       // createTRPCProxyClient<FlatRouter>({
       _trpcReact.createClient({
