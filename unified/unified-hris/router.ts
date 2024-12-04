@@ -18,9 +18,16 @@ function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
 
 const procedure = verticalProcedure(adapters)
 
+const tags = ['HRIS']
+
 export const hrisRouter = trpc.router({
   listIndividual: procedure
-    .meta(oapi({method: 'GET', path: '/individual'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/individual',
+      tags,
+      summary: 'List Individuals',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.individual)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),

@@ -11,9 +11,16 @@ function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
 
 const procedure = verticalProcedure(adapters)
 
+const tags = ['Sales Engagement']
+
 export const salesEngagementRouter = trpc.router({
   listContacts: procedure
-    .meta(oapi({method: 'GET', path: '/contact'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/contact',
+      tags,
+      summary: 'List Contacts',
+    }))
     .input(z.object({cursor: z.string().nullish()}))
     .output(
       z.object({
@@ -22,8 +29,14 @@ export const salesEngagementRouter = trpc.router({
       }),
     )
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+  
   listSequences: procedure
-    .meta(oapi({method: 'GET', path: '/sequence'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/sequence',
+      tags,
+      summary: 'List Sequences',
+    }))
     .input(z.object({cursor: z.string().nullish()}))
     .output(
       z.object({
@@ -32,8 +45,14 @@ export const salesEngagementRouter = trpc.router({
       }),
     )
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+  
   listSequenceStates: procedure
-    .meta(oapi({method: 'GET', path: '/sequence_state'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/sequence_state',
+      tags,
+      summary: 'List Sequence States',
+    }))
     .input(z.object({cursor: z.string().nullish()}))
     .output(
       z.object({
@@ -42,8 +61,14 @@ export const salesEngagementRouter = trpc.router({
       }),
     )
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+  
   listUsers: procedure
-    .meta(oapi({method: 'GET', path: '/user'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/user',
+      tags,
+      summary: 'List Users',
+    }))
     .input(z.object({cursor: z.string().nullish()}))
     .output(
       z.object({
@@ -52,8 +77,14 @@ export const salesEngagementRouter = trpc.router({
       }),
     )
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+  
   listAccounts: procedure
-    .meta(oapi({method: 'GET', path: '/account'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/account',
+      tags,
+      summary: 'List Accounts',
+    }))
     .input(z.object({cursor: z.string().nullish()}))
     .output(
       z.object({
@@ -62,8 +93,14 @@ export const salesEngagementRouter = trpc.router({
       }),
     )
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+  
   listMailboxes: procedure
-    .meta(oapi({method: 'GET', path: '/mailbox'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/mailbox',
+      tags,
+      summary: 'List Mailboxes',
+    }))
     .input(z.object({cursor: z.string().nullish()}))
     .output(
       z.object({
@@ -72,8 +109,14 @@ export const salesEngagementRouter = trpc.router({
       }),
     )
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+  
   upsertAccount: procedure
-    .meta(oapi({method: 'POST', path: '/account/_upsert'}))
+    .meta(oapi({
+      method: 'POST',
+      path: '/account/_upsert',
+      tags,
+      summary: 'Upsert Account',
+    }))
     .input(
       z.object({
         record: z.object({
@@ -105,8 +148,14 @@ export const salesEngagementRouter = trpc.router({
     )
     .output(z.object({record: z.object({id: z.string()}).optional()}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+  
   upsertContact: procedure
-    .meta(oapi({method: 'POST', path: '/contact/_upsert'}))
+    .meta(oapi({
+      method: 'POST',
+      path: '/contact/_upsert',
+      tags,
+      summary: 'Upsert Contact',
+    }))
     .input(
       z.object({
         record: z.object({
@@ -190,8 +239,14 @@ export const salesEngagementRouter = trpc.router({
     )
     .output(z.object({record: z.object({id: z.string()}).optional()}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+  
   insertSequenceState: procedure
-    .meta(oapi({method: 'POST', path: '/sequence_state'}))
+    .meta(oapi({
+      method: 'POST',
+      path: '/sequence_state',
+      tags,
+      summary: 'Insert Sequence State',
+    }))
     .input(
       z.object({
         record: z.object({

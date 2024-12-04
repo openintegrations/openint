@@ -13,12 +13,21 @@ import * as unified from './unifiedModels'
 export {unified}
 
 function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
+<<<<<<< HEAD
   return {openapi: {...meta, path: `/unified/file-storage${meta.path}`}}
+=======
+  const path = `/unified/file-storage${meta.path}` satisfies `/${string}`
+  return {openapi: {...meta, path, tags: ['File Storage']}}
+>>>>>>> 6ee268e3cda595c94c9c5f9054b76bdfa50cb7b5
 }
 
 const procedure = verticalProcedure(adapters)
 
 export const fileStorageRouter = trpc.router({
+<<<<<<< HEAD
+=======
+  // TODO: Auto generate summary via operation name...
+>>>>>>> 6ee268e3cda595c94c9c5f9054b76bdfa50cb7b5
   listDrives: procedure
     .meta(oapi({method: 'GET', path: '/drive'}))
     .input(zPaginationParams.nullish())

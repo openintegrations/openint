@@ -3,7 +3,7 @@ import apiPages from './api-reference/index.json'
 const mintConfig: MintConfig = {
   name: 'OpenInt',
   openapi:
-    'https://raw.githubusercontent.com/openint-dev/openint/main/kits/sdk/openapi.json',
+    'https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json',
   logo: {
     light: '/images/logo/openint-logo.png',
     dark: '/images/logo/openint-logo-dark.webp',
@@ -28,7 +28,7 @@ const mintConfig: MintConfig = {
     {
       name: 'GitHub',
       icon: 'github',
-      url: 'https://github.com/openint-dev/openint',
+      url: 'https://github.com/openintegrations/openint',
     },
   ],
   tabs: [
@@ -38,7 +38,7 @@ const mintConfig: MintConfig = {
     },
     {
       name: 'OpenAPI.json',
-      url: 'https://raw.githubusercontent.com/openint-dev/openint/main/kits/sdk/openapi.json',
+      url: 'https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json',
     },
   ],
   navigation: [
@@ -57,7 +57,7 @@ const mintConfig: MintConfig = {
   ],
   backgroundImage: '/images/background.png',
   footerSocials: {
-    github: 'https://github.com/openint-dev/openint',
+    github: 'https://github.com/openintegrations/openint',
     discord: 'https://discord.gg/gTMch6Gn2u',
     twitter: 'https://twitter.com/use_venice',
   },
