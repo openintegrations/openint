@@ -20,7 +20,6 @@ import {sentenceCase} from '@openint/util'
 import type {AnyRouter, RouterMeta} from '@openint/vdk'
 import {mapKeys, mapValues, publicProcedure, trpc, z} from '@openint/vdk'
 import {authRouter} from './authRouter'
-import fileStorageRouter from '../../unified/unified-file-storage'
 
 export const publicRouter = trpc.router({
   getOpenapiDocument: publicProcedure
