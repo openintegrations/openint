@@ -54,7 +54,6 @@
           "group": "Internal",
           "pages": [
             "api-reference/internal/health-check",
-            "api-reference/internal/get-debugraw-schemas",
             "api-reference/internal/post-passthrough",
             "api-reference/internal/post-coreresource-source_sync",
             "api-reference/internal/get-current-viewer-accessing-the-api",

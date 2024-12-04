@@ -101,6 +101,12 @@ export function getOpenAPISpec() {
         name: 'x-resource-id',
         in: 'header',
       },
+      // TODO: Should this be an actual oauth thing? Doesn't seem to work as is right now
+      token: {
+        type: 'apiKey',
+        name: 'authorization',
+        in: 'header',
+      },
     },
     baseUrl: env.NEXT_PUBLIC_API_URL ?? getServerUrl(null) + '/api/v0',
     webhooks,

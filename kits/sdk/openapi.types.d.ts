@@ -22,10 +22,6 @@ export interface paths {
     /** Health check */
     get: operations['health']
   }
-  '/debug/raw-schemas': {
-    /** @description Get raw schemas */
-    get: operations['getRawSchemas']
-  }
   '/connect/token': {
     /** Create a connect token */
     post: operations['createConnectToken']
@@ -1268,23 +1264,6 @@ export interface operations {
       404: {
         content: {
           'application/json': components['schemas']['error.NOT_FOUND']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /** @description Get raw schemas */
-  getRawSchemas: {
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': unknown
         }
       }
       /** @description Internal server error */
