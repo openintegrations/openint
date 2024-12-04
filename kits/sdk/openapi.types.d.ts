@@ -27,9 +27,11 @@ export interface paths {
     get: operations['getRawSchemas']
   }
   '/connect/token': {
+    /** Create a connect token */
     post: operations['createConnectToken']
   }
   '/connect/magic-link': {
+    /** Create a magic link */
     post: operations['createMagicLink']
   }
   '/passthrough': {
@@ -336,21 +338,27 @@ export interface paths {
     post: operations['etl-write']
   }
   '/unified/file-storage/drive': {
+    /** List Drives */
     get: operations['fileStorage-listDrives']
   }
   '/unified/file-storage/drive/{driveId}': {
+    /** Get Drive */
     get: operations['fileStorage-getDrive']
   }
   '/unified/file-storage/drive/{driveId}/folder': {
+    /** List Folders */
     get: operations['fileStorage-listFolders']
   }
   '/unified/file-storage/drive/{driveId}/folder/{folderId}': {
+    /** Get Folder */
     get: operations['fileStorage-getFolder']
   }
   '/unified/file-storage/drive/{driveId}/file': {
+    /** List Files */
     get: operations['fileStorage-listFiles']
   }
   '/unified/file-storage/drive/{driveId}/file/{fileId}': {
+    /** Get File */
     get: operations['fileStorage-getFile']
   }
 }
@@ -1287,6 +1295,7 @@ export interface operations {
       }
     }
   }
+  /** Create a connect token */
   createConnectToken: {
     requestBody: {
       content: {
@@ -1324,6 +1333,7 @@ export interface operations {
       }
     }
   }
+  /** Create a magic link */
   createMagicLink: {
     requestBody: {
       content: {
@@ -5329,6 +5339,7 @@ export interface operations {
       }
     }
   }
+  /** List Drives */
   'fileStorage-listDrives': {
     parameters: {
       query?: {
@@ -5368,6 +5379,7 @@ export interface operations {
       }
     }
   }
+  /** Get Drive */
   'fileStorage-getDrive': {
     parameters: {
       path: {
@@ -5401,6 +5413,7 @@ export interface operations {
       }
     }
   }
+  /** List Folders */
   'fileStorage-listFolders': {
     parameters: {
       path: {
@@ -5438,6 +5451,7 @@ export interface operations {
       }
     }
   }
+  /** Get Folder */
   'fileStorage-getFolder': {
     parameters: {
       path: {
@@ -5472,6 +5486,7 @@ export interface operations {
       }
     }
   }
+  /** List Files */
   'fileStorage-listFiles': {
     parameters: {
       query?: {
@@ -5512,6 +5527,7 @@ export interface operations {
       }
     }
   }
+  /** Get File */
   'fileStorage-getFile': {
     parameters: {
       path: {
