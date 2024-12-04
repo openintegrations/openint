@@ -98,7 +98,7 @@ jobs:
       - name: Start dev server in background
         run: |
           pnpm run web --port 4000 &
-          npx wait-on tcp:4000
+          pnpm wait-on tcp:4000
 
       - name: Run tests
         run: pnpm run test::ci
