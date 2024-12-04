@@ -32,14 +32,14 @@ export const publicRouter = trpc.router({
     R.pick(ctx.env, ['NEXT_PUBLIC_NANGO_PUBLIC_KEY']),
   ),
   getRawSchemas: publicProcedure
-    .meta({
-      openapi: {
-        method: 'GET',
-        path: '/debug/raw-schemas',
-        tags: ['Internal'],
-        description: 'Get raw schemas',
-      },
-    })
+    // .meta({
+    //   openapi: {
+    //     method: 'GET',
+    //     path: '/debug/raw-schemas',
+    //     tags: ['Internal'],
+    //     description: 'Get raw schemas',
+    //   },
+    // })
     .input(z.void())
     .output(z.unknown())
     .query(() => R.mapValues(zRaw, (zodSchema) => zodToOas31Schema(zodSchema))),
