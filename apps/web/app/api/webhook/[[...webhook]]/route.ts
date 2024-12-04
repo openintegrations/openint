@@ -1,24 +1,40 @@
 import {inngest} from '@openint/engine-backend/events'
-import {fromMaybeArray, makeUlid} from '@openint/util'
+import {makeUlid} from '@openint/util'
+import {NextResponse} from 'next/server'
 
 const handler = async (
   req: Request,
-  {params}: {params: Promise<{webhook: string}>},
+  extra: {params: Promise<{webhook?: string[]}>},
 ) => {
   // Workaround for lack of response from inngest.send https://discord.com/channels/842170679536517141/845000011040555018/1080057253060694036
   const traceId = makeUlid()
   const url = new URL(req.url)
+  const params = await extra.params
   const data = {
     traceId,
+    pathParams: params,
     method: req.method ?? '',
     headers: Object.fromEntries(req.headers.entries()),
-    path: fromMaybeArray((await params).webhook ?? '').join('/'),
+    path: (params.webhook ?? []).join('/'),
     query: Object.fromEntries(url.searchParams.entries()),
     body: await req.text(),
   }
 
-  await inngest.send({name: 'webhook/received', data})
-  return Response.json({status: 'queued', traceId, data})
+  const res = await inngest
+    .send({name: 'webhook/received', data})
+    .catch((err) => err as Error)
+  const resData = res instanceof Error ? {error: res.message} : res.ids
+  const status = res instanceof Error ? 500 : 200
+
+  return NextResponse.json(
+    {
+      ...resData,
+      status,
+      traceId,
+      ...(req.headers.get('x-test') === 'true' && {payload: data}),
+    },
+    {status},
+  )
 }
 
 export {
