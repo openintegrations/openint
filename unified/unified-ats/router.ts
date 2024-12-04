@@ -18,29 +18,66 @@ function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
 
 const procedure = verticalProcedure(adapters)
 
+const tags = ['ATS']
+
 export const atsRouter = trpc.router({
   listJobs: procedure
-    .meta(oapi({method: 'GET', path: '/job'}))
+    .meta(
+      oapi({
+        method: 'GET',
+        path: '/job',
+        tags,
+        summary: 'List Jobs',
+      }),
+    )
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.job)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listJobOpenings: procedure
-    .meta(oapi({method: 'GET', path: '/job/{jobId}/opening'}))
+    .meta(
+      oapi({
+        method: 'GET',
+        path: '/job/{jobId}/opening',
+        tags,
+        summary: 'List Job Openings',
+      }),
+    )
     .input(z.object({jobId: z.string()}).extend(zPaginationParams.shape).nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.opening)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listOffers: procedure
-    .meta(oapi({method: 'GET', path: '/offer'}))
+    .meta(
+      oapi({
+        method: 'GET',
+        path: '/offer',
+        tags,
+        summary: 'List Offers',
+      }),
+    )
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.offer)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listCandidates: procedure
-    .meta(oapi({method: 'GET', path: '/candidate'}))
+    .meta(
+      oapi({
+        method: 'GET',
+        path: '/candidate',
+        tags,
+        summary: 'List Candidates',
+      }),
+    )
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.candidate)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listDepartments: procedure
-    .meta(oapi({method: 'GET', path: '/department'}))
+    .meta(
+      oapi({
+        method: 'GET',
+        path: '/department',
+        tags,
+        summary: 'List Departments',
+      }),
+    )
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.department)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),

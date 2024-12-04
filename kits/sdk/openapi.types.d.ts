@@ -112,38 +112,50 @@ export interface paths {
     get: operations['public-getOpenapiDocument']
   }
   '/unified/sales-engagement/contact': {
+    /** List Contacts */
     get: operations['salesEngagement-listContacts']
   }
   '/unified/sales-engagement/sequence': {
+    /** List Sequences */
     get: operations['salesEngagement-listSequences']
   }
   '/unified/sales-engagement/sequence_state': {
+    /** List Sequence States */
     get: operations['salesEngagement-listSequenceStates']
+    /** Insert Sequence State */
     post: operations['salesEngagement-insertSequenceState']
   }
   '/unified/sales-engagement/user': {
+    /** List Users */
     get: operations['salesEngagement-listUsers']
   }
   '/unified/sales-engagement/account': {
+    /** List Accounts */
     get: operations['salesEngagement-listAccounts']
   }
   '/unified/sales-engagement/mailbox': {
+    /** List Mailboxes */
     get: operations['salesEngagement-listMailboxes']
   }
   '/unified/sales-engagement/account/_upsert': {
+    /** Upsert Account */
     post: operations['salesEngagement-upsertAccount']
   }
   '/unified/sales-engagement/contact/_upsert': {
+    /** Upsert Contact */
     post: operations['salesEngagement-upsertContact']
   }
   '/unified/crm/{entity}/_count': {
+    /** Count Entities */
     get: operations['crm-countEntity']
   }
   '/unified/crm/account': {
+    /** List Accounts */
     get: operations['crm-listAccounts']
     post: operations['crm-createAccount']
   }
   '/unified/crm/account/{id}': {
+    /** Get Account */
     get: operations['crm-getAccount']
     patch: operations['crm-updateAccount']
   }
@@ -154,10 +166,12 @@ export interface paths {
     post: operations['crm-upsertAccount']
   }
   '/unified/crm/contact': {
+    /** List Contacts */
     get: operations['crm-listContacts']
     post: operations['crm-createContact']
   }
   '/unified/crm/contact/{id}': {
+    /** Get Contact */
     get: operations['crm-getContact']
     patch: operations['crm-updateContact']
   }
@@ -168,15 +182,19 @@ export interface paths {
     post: operations['crm-upsertContact']
   }
   '/unified/crm/lead': {
+    /** List Leads */
     get: operations['crm-listLeads']
   }
   '/unified/crm/lead/{id}': {
+    /** Get Lead */
     get: operations['crm-getLead']
   }
   '/unified/crm/opportunity': {
+    /** List Opportunities */
     get: operations['crm-listOpportunities']
   }
   '/unified/crm/opportunity/{id}': {
+    /** Get Opportunity */
     get: operations['crm-getOpportunity']
   }
   '/unified/crm/note': {
@@ -206,15 +224,19 @@ export interface paths {
     post: operations['crm-metadataCreateAssociation']
   }
   '/unified/banking/account': {
+    /** List Accounts */
     get: operations['banking-listAccounts']
   }
   '/unified/banking/merchant': {
+    /** List Merchants */
     get: operations['banking-listMerchants']
   }
   '/unified/banking/category': {
+    /** List Categories */
     get: operations['banking-listCategories']
   }
   '/unified/banking/transaction': {
+    /** List Transactions */
     get: operations['banking-listTransactions']
   }
   '/unified/accounting/account': {
@@ -262,43 +284,74 @@ export interface paths {
     get: operations['accounting-getPaymentReceipts']
   }
   '/unified/pta/account': {
+    /** List Accounts */
     get: operations['pta-listAccounts']
   }
   '/unified/pta/transaction': {
+    /** List Transactions */
     get: operations['pta-listTransactions']
   }
   '/unified/pta/commodity': {
+    /** List Commodities */
     get: operations['pta-listCommodities']
   }
   '/unified/ats/job': {
+    /** List Jobs */
     get: operations['ats-listJobs']
   }
   '/unified/ats/job/{jobId}/opening': {
+    /** List Job Openings */
     get: operations['ats-listJobOpenings']
   }
   '/unified/ats/offer': {
+    /** List Offers */
     get: operations['ats-listOffers']
   }
   '/unified/ats/candidate': {
+    /** List Candidates */
     get: operations['ats-listCandidates']
   }
   '/unified/ats/department': {
+    /** List Departments */
     get: operations['ats-listDepartments']
   }
   '/unified/hris/individual': {
+    /** List Individuals */
     get: operations['hris-listIndividual']
   }
   '/unified/etl/read/{stream}': {
+    /** Read Stream */
     get: operations['etl-readStream']
   }
   '/unified/etl/discover': {
+    /** Discover */
     get: operations['etl-discover']
   }
   '/unified/etl/read': {
+    /** Read Data */
     post: operations['etl-read']
   }
   '/unified/etl/write': {
+    /** Write Data */
     post: operations['etl-write']
+  }
+  '/unified/file-storage/drive': {
+    get: operations['fileStorage-listDrives']
+  }
+  '/unified/file-storage/drive/{driveId}': {
+    get: operations['fileStorage-getDrive']
+  }
+  '/unified/file-storage/drive/{driveId}/folder': {
+    get: operations['fileStorage-listFolders']
+  }
+  '/unified/file-storage/drive/{driveId}/folder/{folderId}': {
+    get: operations['fileStorage-getFolder']
+  }
+  '/unified/file-storage/drive/{driveId}/file': {
+    get: operations['fileStorage-listFiles']
+  }
+  '/unified/file-storage/drive/{driveId}/file/{fileId}': {
+    get: operations['fileStorage-getFile']
   }
 }
 
@@ -334,34 +387,6 @@ export interface components {
      * Error
      * @description The error information
      * @example {
-     *   "code": "INTERNAL_SERVER_ERROR",
-     *   "message": "Internal server error",
-     *   "issues": []
-     * }
-     */
-    'error.INTERNAL_SERVER_ERROR': {
-      /**
-       * @description The error message
-       * @example Internal server error
-       */
-      message: string
-      /**
-       * @description The error code
-       * @example INTERNAL_SERVER_ERROR
-       */
-      code: string
-      /**
-       * @description An array of issues that were responsible for the error
-       * @example []
-       */
-      issues?: {
-        message: string
-      }[]
-    }
-    /**
-     * Error
-     * @description The error information
-     * @example {
      *   "code": "BAD_REQUEST",
      *   "message": "Invalid input data",
      *   "issues": []
@@ -376,6 +401,62 @@ export interface components {
       /**
        * @description The error code
        * @example BAD_REQUEST
+       */
+      code: string
+      /**
+       * @description An array of issues that were responsible for the error
+       * @example []
+       */
+      issues?: {
+        message: string
+      }[]
+    }
+    /**
+     * Error
+     * @description The error information
+     * @example {
+     *   "code": "NOT_FOUND",
+     *   "message": "Not found",
+     *   "issues": []
+     * }
+     */
+    'error.NOT_FOUND': {
+      /**
+       * @description The error message
+       * @example Not found
+       */
+      message: string
+      /**
+       * @description The error code
+       * @example NOT_FOUND
+       */
+      code: string
+      /**
+       * @description An array of issues that were responsible for the error
+       * @example []
+       */
+      issues?: {
+        message: string
+      }[]
+    }
+    /**
+     * Error
+     * @description The error information
+     * @example {
+     *   "code": "INTERNAL_SERVER_ERROR",
+     *   "message": "Internal server error",
+     *   "issues": []
+     * }
+     */
+    'error.INTERNAL_SERVER_ERROR': {
+      /**
+       * @description The error message
+       * @example Internal server error
+       */
+      message: string
+      /**
+       * @description The error code
+       * @example INTERNAL_SERVER_ERROR
        */
       code: string
       /**
@@ -417,34 +498,6 @@ export interface components {
        *   During updates this object will be shallowly merged
        */
       metadata?: unknown
-    }
-    /**
-     * Error
-     * @description The error information
-     * @example {
-     *   "code": "NOT_FOUND",
-     *   "message": "Not found",
-     *   "issues": []
-     * }
-     */
-    'error.NOT_FOUND': {
-      /**
-       * @description The error message
-       * @example Not found
-       */
-      message: string
-      /**
-       * @description The error code
-       * @example NOT_FOUND
-       */
-      code: string
-      /**
-       * @description An array of issues that were responsible for the error
-       * @example []
-       */
-      issues?: {
-        message: string
-      }[]
     }
     ConnectorConfig: {
       createdAt: string
@@ -1131,6 +1184,42 @@ export interface components {
         [key: string]: unknown
       }
     }
+    /** @description A unified representation of a storage drive */
+    'unified.drive': {
+      id: string
+      name: string
+      created_at?: string | null
+      modified_at?: string | null
+      raw_data?: {
+        [key: string]: unknown
+      }
+    }
+    /** @description A unified representation of a folder within a drive */
+    'unified.folder': {
+      id: string
+      name: string
+      parent_id?: string | null
+      drive_id: string
+      created_at?: string | null
+      modified_at?: string | null
+      raw_data?: {
+        [key: string]: unknown
+      }
+    }
+    /** @description A unified representation of a file within a drive */
+    'unified.file': {
+      id: string
+      name: string
+      file_url: string
+      mimeType?: string | null
+      size?: number | null
+      drive_id: string
+      created_at?: string | null
+      modified_at?: string | null
+      raw_data?: {
+        [key: string]: unknown
+      }
+    }
   }
   responses: never
   parameters: never
@@ -1146,11 +1235,31 @@ export type external = Record<string, never>
 export interface operations {
   /** Health check */
   health: {
+    parameters: {
+      query?: {
+        exp?: boolean
+      }
+    }
     responses: {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': string
+          'application/json': {
+            healthy: boolean
+            error?: string
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
         }
       }
       /** @description Internal server error */
@@ -2477,6 +2586,7 @@ export interface operations {
       }
     }
   }
+  /** List Contacts */
   'salesEngagement-listContacts': {
     parameters: {
       query?: {
@@ -2513,6 +2623,7 @@ export interface operations {
       }
     }
   }
+  /** List Sequences */
   'salesEngagement-listSequences': {
     parameters: {
       query?: {
@@ -2549,6 +2660,7 @@ export interface operations {
       }
     }
   }
+  /** List Sequence States */
   'salesEngagement-listSequenceStates': {
     parameters: {
       query?: {
@@ -2585,6 +2697,7 @@ export interface operations {
       }
     }
   }
+  /** Insert Sequence State */
   'salesEngagement-insertSequenceState': {
     requestBody: {
       content: {
@@ -2627,6 +2740,7 @@ export interface operations {
       }
     }
   }
+  /** List Users */
   'salesEngagement-listUsers': {
     parameters: {
       query?: {
@@ -2663,6 +2777,7 @@ export interface operations {
       }
     }
   }
+  /** List Accounts */
   'salesEngagement-listAccounts': {
     parameters: {
       query?: {
@@ -2699,6 +2814,7 @@ export interface operations {
       }
     }
   }
+  /** List Mailboxes */
   'salesEngagement-listMailboxes': {
     parameters: {
       query?: {
@@ -2735,6 +2851,7 @@ export interface operations {
       }
     }
   }
+  /** Upsert Account */
   'salesEngagement-upsertAccount': {
     requestBody: {
       content: {
@@ -2786,6 +2903,7 @@ export interface operations {
       }
     }
   }
+  /** Upsert Contact */
   'salesEngagement-upsertContact': {
     requestBody: {
       content: {
@@ -2886,6 +3004,7 @@ export interface operations {
       }
     }
   }
+  /** Count Entities */
   'crm-countEntity': {
     parameters: {
       path: {
@@ -2921,6 +3040,7 @@ export interface operations {
       }
     }
   }
+  /** List Accounts */
   'crm-listAccounts': {
     parameters: {
       query?: {
@@ -2991,6 +3111,7 @@ export interface operations {
       }
     }
   }
+  /** Get Account */
   'crm-getAccount': {
     parameters: {
       path: {
@@ -3139,6 +3260,7 @@ export interface operations {
       }
     }
   }
+  /** List Contacts */
   'crm-listContacts': {
     parameters: {
       query?: {
@@ -3209,6 +3331,7 @@ export interface operations {
       }
     }
   }
+  /** Get Contact */
   'crm-getContact': {
     parameters: {
       path: {
@@ -3357,6 +3480,7 @@ export interface operations {
       }
     }
   }
+  /** List Leads */
   'crm-listLeads': {
     parameters: {
       query?: {
@@ -3396,6 +3520,7 @@ export interface operations {
       }
     }
   }
+  /** Get Lead */
   'crm-getLead': {
     parameters: {
       path: {
@@ -3432,6 +3557,7 @@ export interface operations {
       }
     }
   }
+  /** List Opportunities */
   'crm-listOpportunities': {
     parameters: {
       query?: {
@@ -3471,6 +3597,7 @@ export interface operations {
       }
     }
   }
+  /** Get Opportunity */
   'crm-getOpportunity': {
     parameters: {
       path: {
@@ -3927,6 +4054,7 @@ export interface operations {
       }
     }
   }
+  /** List Accounts */
   'banking-listAccounts': {
     parameters: {
       query?: {
@@ -3966,6 +4094,7 @@ export interface operations {
       }
     }
   }
+  /** List Merchants */
   'banking-listMerchants': {
     parameters: {
       query?: {
@@ -4005,6 +4134,7 @@ export interface operations {
       }
     }
   }
+  /** List Categories */
   'banking-listCategories': {
     parameters: {
       query?: {
@@ -4044,6 +4174,7 @@ export interface operations {
       }
     }
   }
+  /** List Transactions */
   'banking-listTransactions': {
     parameters: {
       query?: {
@@ -4631,6 +4762,7 @@ export interface operations {
       }
     }
   }
+  /** List Accounts */
   'pta-listAccounts': {
     parameters: {
       query?: {
@@ -4670,6 +4802,7 @@ export interface operations {
       }
     }
   }
+  /** List Transactions */
   'pta-listTransactions': {
     parameters: {
       query?: {
@@ -4709,6 +4842,7 @@ export interface operations {
       }
     }
   }
+  /** List Commodities */
   'pta-listCommodities': {
     parameters: {
       query?: {
@@ -4748,6 +4882,7 @@ export interface operations {
       }
     }
   }
+  /** List Jobs */
   'ats-listJobs': {
     parameters: {
       query?: {
@@ -4787,6 +4922,7 @@ export interface operations {
       }
     }
   }
+  /** List Job Openings */
   'ats-listJobOpenings': {
     parameters: {
       query?: {
@@ -4829,6 +4965,7 @@ export interface operations {
       }
     }
   }
+  /** List Offers */
   'ats-listOffers': {
     parameters: {
       query?: {
@@ -4868,6 +5005,7 @@ export interface operations {
       }
     }
   }
+  /** List Candidates */
   'ats-listCandidates': {
     parameters: {
       query?: {
@@ -4907,6 +5045,7 @@ export interface operations {
       }
     }
   }
+  /** List Departments */
   'ats-listDepartments': {
     parameters: {
       query?: {
@@ -4946,6 +5085,7 @@ export interface operations {
       }
     }
   }
+  /** List Individuals */
   'hris-listIndividual': {
     parameters: {
       query?: {
@@ -4990,6 +5130,7 @@ export interface operations {
       }
     }
   }
+  /** Read Stream */
   'etl-readStream': {
     parameters: {
       query?: {
@@ -5033,6 +5174,7 @@ export interface operations {
       }
     }
   }
+  /** Discover */
   'etl-discover': {
     responses: {
       /** @description Successful response */
@@ -5059,6 +5201,7 @@ export interface operations {
       }
     }
   }
+  /** Read Data */
   'etl-read': {
     requestBody: {
       content: {
@@ -5122,6 +5265,7 @@ export interface operations {
       }
     }
   }
+  /** Write Data */
   'etl-write': {
     requestBody: {
       content: {
@@ -5175,6 +5319,223 @@ export interface operations {
       400: {
         content: {
           'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  'fileStorage-listDrives': {
+    parameters: {
+      query?: {
+        sync_mode?: 'full' | 'incremental'
+        cursor?: string | null
+        page_size?: number
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            next_cursor?: string | null
+            has_next_page: boolean
+            items: components['schemas']['unified.drive'][]
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  'fileStorage-getDrive': {
+    parameters: {
+      path: {
+        driveId: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': components['schemas']['unified.drive']
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  'fileStorage-listFolders': {
+    parameters: {
+      path: {
+        driveId: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            next_cursor?: string | null
+            has_next_page: boolean
+            items: components['schemas']['unified.folder'][]
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  'fileStorage-getFolder': {
+    parameters: {
+      path: {
+        driveId: string
+        folderId: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': components['schemas']['unified.folder']
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  'fileStorage-listFiles': {
+    parameters: {
+      query?: {
+        folderId?: string | null
+      }
+      path: {
+        driveId: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            next_cursor?: string | null
+            has_next_page: boolean
+            items: components['schemas']['unified.file'][]
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  'fileStorage-getFile': {
+    parameters: {
+      path: {
+        driveId: string
+        fileId: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': components['schemas']['unified.file']
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
         }
       }
       /** @description Internal server error */

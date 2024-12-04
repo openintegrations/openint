@@ -5,7 +5,10 @@
       "api-reference/internal/health-check",
       "api-reference/internal/get-debugraw-schemas",
       "api-reference/internal/post-passthrough",
-      "api-reference/internal/post-coreresource-source_sync"
+      "api-reference/internal/post-coreresource-source_sync",
+      "api-reference/internal/get-current-viewer-accessing-the-api",
+      "api-reference/internal/get-current-organization-of-viewer-accessing-the-api",
+      "api-reference/internal/get-openapijson"
     ]
   },
   {
@@ -51,65 +54,59 @@
     ]
   },
   {
-    "group": "API Reference",
+    "group": "Sales Engagement",
     "pages": [
-      "api-reference/get-current-viewer-accessing-the-api",
-      "api-reference/get-current-organization-of-viewer-accessing-the-api",
-      "api-reference/get-openapijson",
-      "api-reference/get-unifiedsales-engagementcontact",
-      "api-reference/get-unifiedsales-engagementsequence",
-      "api-reference/get-unifiedsales-engagementsequence_state",
-      "api-reference/post-unifiedsales-engagementsequence_state",
-      "api-reference/get-unifiedsales-engagementuser",
-      "api-reference/get-unifiedsales-engagementaccount",
-      "api-reference/get-unifiedsales-engagementmailbox",
-      "api-reference/post-unifiedsales-engagementaccount_upsert",
-      "api-reference/post-unifiedsales-engagementcontact_upsert",
-      "api-reference/get-unifiedcrm-_count",
-      "api-reference/get-unifiedcrmaccount",
-      "api-reference/post-unifiedcrmaccount",
-      "api-reference/get-unifiedcrmaccount-1",
-      "api-reference/patch-unifiedcrmaccount",
-      "api-reference/post-unifiedcrmaccount_batch_read",
-      "api-reference/post-unifiedcrmaccount_upsert",
-      "api-reference/get-unifiedcrmcontact",
-      "api-reference/post-unifiedcrmcontact",
-      "api-reference/get-unifiedcrmcontact-1",
-      "api-reference/patch-unifiedcrmcontact",
-      "api-reference/post-unifiedcrmcontact_batch_read",
-      "api-reference/post-unifiedcrmcontact_upsert",
-      "api-reference/get-unifiedcrmlead",
-      "api-reference/get-unifiedcrmlead-1",
-      "api-reference/get-unifiedcrmopportunity",
-      "api-reference/get-unifiedcrmopportunity-1",
-      "api-reference/get-unifiedcrmnote",
-      "api-reference/post-unifiedcrmnote",
-      "api-reference/get-unifiedcrmuser",
-      "api-reference/get-unifiedcrmuser-1",
-      "api-reference/get-unifiedcrmcustom_objects",
-      "api-reference/post-unifiedcrmcustom_objects",
-      "api-reference/get-unifiedcrmmetadataobjects",
-      "api-reference/post-unifiedcrmmetadataobjects",
-      "api-reference/get-unifiedcrmmetadataobjects-properties",
-      "api-reference/post-unifiedcrmmetadataobjects-properties",
-      "api-reference/post-unifiedcrmmetadataassociations",
-      "api-reference/get-unifiedbankingaccount",
-      "api-reference/get-unifiedbankingmerchant",
-      "api-reference/get-unifiedbankingcategory",
-      "api-reference/get-unifiedbankingtransaction",
-      "api-reference/get-unifiedptaaccount",
-      "api-reference/get-unifiedptatransaction",
-      "api-reference/get-unifiedptacommodity",
-      "api-reference/get-unifiedatsjob",
-      "api-reference/get-unifiedatsjob-opening",
-      "api-reference/get-unifiedatsoffer",
-      "api-reference/get-unifiedatscandidate",
-      "api-reference/get-unifiedatsdepartment",
-      "api-reference/get-unifiedhrisindividual",
-      "api-reference/get-unifiedetlread",
-      "api-reference/get-unifiedetldiscover",
-      "api-reference/post-unifiedetlread",
-      "api-reference/post-unifiedetlwrite"
+      "api-reference/sales-engagement/list-contacts",
+      "api-reference/sales-engagement/list-sequences",
+      "api-reference/sales-engagement/list-sequence-states",
+      "api-reference/sales-engagement/insert-sequence-state",
+      "api-reference/sales-engagement/list-users",
+      "api-reference/sales-engagement/list-accounts",
+      "api-reference/sales-engagement/list-mailboxes",
+      "api-reference/sales-engagement/upsert-account",
+      "api-reference/sales-engagement/upsert-contact"
+    ]
+  },
+  {
+    "group": "CRM",
+    "pages": [
+      "api-reference/crm/count-entities",
+      "api-reference/crm/list-accounts",
+      "api-reference/crm/post-unifiedcrmaccount",
+      "api-reference/crm/get-account",
+      "api-reference/crm/patch-unifiedcrmaccount",
+      "api-reference/crm/post-unifiedcrmaccount_batch_read",
+      "api-reference/crm/post-unifiedcrmaccount_upsert",
+      "api-reference/crm/list-contacts",
+      "api-reference/crm/post-unifiedcrmcontact",
+      "api-reference/crm/get-contact",
+      "api-reference/crm/patch-unifiedcrmcontact",
+      "api-reference/crm/post-unifiedcrmcontact_batch_read",
+      "api-reference/crm/post-unifiedcrmcontact_upsert",
+      "api-reference/crm/list-leads",
+      "api-reference/crm/get-lead",
+      "api-reference/crm/list-opportunities",
+      "api-reference/crm/get-opportunity",
+      "api-reference/crm/get-unifiedcrmnote",
+      "api-reference/crm/post-unifiedcrmnote",
+      "api-reference/crm/get-unifiedcrmuser",
+      "api-reference/crm/get-unifiedcrmuser-1",
+      "api-reference/crm/get-unifiedcrmcustom_objects",
+      "api-reference/crm/post-unifiedcrmcustom_objects",
+      "api-reference/crm/get-unifiedcrmmetadataobjects",
+      "api-reference/crm/post-unifiedcrmmetadataobjects",
+      "api-reference/crm/get-unifiedcrmmetadataobjects-properties",
+      "api-reference/crm/post-unifiedcrmmetadataobjects-properties",
+      "api-reference/crm/post-unifiedcrmmetadataassociations"
+    ]
+  },
+  {
+    "group": "Banking",
+    "pages": [
+      "api-reference/banking/list-accounts",
+      "api-reference/banking/list-merchants",
+      "api-reference/banking/list-categories",
+      "api-reference/banking/list-transactions"
     ]
   },
   {
@@ -126,6 +123,50 @@
       "api-reference/accounting/get-customer-income",
       "api-reference/accounting/get-bank-accounts",
       "api-reference/accounting/get-payment-receipts"
+    ]
+  },
+  {
+    "group": "PTA",
+    "pages": [
+      "api-reference/pta/list-accounts",
+      "api-reference/pta/list-transactions",
+      "api-reference/pta/list-commodities"
+    ]
+  },
+  {
+    "group": "ATS",
+    "pages": [
+      "api-reference/ats/list-jobs",
+      "api-reference/ats/list-job-openings",
+      "api-reference/ats/list-offers",
+      "api-reference/ats/list-candidates",
+      "api-reference/ats/list-departments"
+    ]
+  },
+  {
+    "group": "HRIS",
+    "pages": [
+      "api-reference/hris/list-individuals"
+    ]
+  },
+  {
+    "group": "ETL",
+    "pages": [
+      "api-reference/etl/read-stream",
+      "api-reference/etl/discover",
+      "api-reference/etl/read-data",
+      "api-reference/etl/write-data"
+    ]
+  },
+  {
+    "group": "File Storage",
+    "pages": [
+      "api-reference/file-storage/get-unifiedfile-storagedrive",
+      "api-reference/file-storage/get-unifiedfile-storagedrive-1",
+      "api-reference/file-storage/get-unifiedfile-storagedrive-folder",
+      "api-reference/file-storage/get-unifiedfile-storagedrive-folder-1",
+      "api-reference/file-storage/get-unifiedfile-storagedrive-file",
+      "api-reference/file-storage/get-unifiedfile-storagedrive-file-1"
     ]
   }
 ]

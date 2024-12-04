@@ -1,7 +1,6 @@
 import {zodToOas31Schema} from '@opensdks/util-zod'
 import {zRaw} from '@openint/cdk'
 import {R, z} from '@openint/util'
-import {contextFactory} from '../../../apps/app-config/backendConfig'
 import {publicProcedure, trpc} from './_base'
 
 export const publicRouter = trpc.router({
@@ -16,13 +15,12 @@ export const publicRouter = trpc.router({
     })
     .input(z.object({exp: z.boolean().optional()}).optional())
     .output(z.object({healthy: z.boolean(), error: z.string().optional()}))
-    .query(async ({input}) => {
+    .query(async ({input, ctx}) => {
       if (process.env['MOCK_HEALTHCHECK']) {
         return {healthy: true}
       }
-      const result = await contextFactory
-        .fromViewer({role: 'anon'})
-        .services.metaService.isHealthy(input?.exp)
+
+      const result = await ctx.as('anon', {}).metaService.isHealthy(input?.exp)
 
       if (!result.healthy) {
         throw new Error(result.error)
