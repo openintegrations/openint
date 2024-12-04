@@ -140,10 +140,10 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
         )}
       </main>
       <Sidebar
-        className="fixed bottom-0 left-0 top-12 w-[240px] border-r bg-background"
+        className="bg-sidebar fixed bottom-0 left-0 top-12 w-[240px] border-r"
         hasPgConnection={hasPgConnection}
       />
-      <header className="fixed inset-x-0 top-0 flex h-12 items-center gap-2 border-b bg-background p-4">
+      <header className="bg-navbar fixed inset-x-0 top-0 flex h-12 items-center gap-2 border-b p-4">
         {/* Not working because of bug in clerk js that is unclear that results in hydration issue.. */}
         <NoSSR>
           <div className="mb-[-6px]">

@@ -16,30 +16,36 @@ interface ThemeColors {
   card: string
   cardForeground: string
   foreground: string
+  navbar: string
   primary: string
   primaryForeground: string
   secondary: string
   secondaryForeground: string
+  sidebar: string
+  tab: string
 }
 
 const defaultThemeColors: Partial<ThemeColors> = {
-  background: '0 0% 100%',
-  border: '214.3 31.8% 91.4%',
-  button: '#8a5df6',
-  buttonForeground: '#ffffff',
-  buttonHover: '#a082e9',
-  buttonStroke: '#6947bb',
-  buttonSecondary: '#ffffff',
-  buttonSecondaryForeground: '#000000',
-  buttonSecondaryStroke: '#e6e6e6',
-  buttonSecondaryHover: '#efefef',
-  card: '0 100% 50%',
-  cardForeground: '192 5.32% 31.57%',
-  foreground: '192 5.32% 31.57%',
-  primary: '222.2 47.4% 11.2%',
-  primaryForeground: '210 40% 98%',
-  secondary: '210 40% 96.1%',
-  secondaryForeground: '222.2 47.4% 11.2%',
+  background: 'hsl(0, 0%, 100%)', // #ffffff - White
+  border: 'hsl(222, 23%, 87%)', // #d6d9e4 - Light Grayish Blue
+  button: 'hsl(207, 53%, 51%)', // #8a5df6 - Bright Purple
+  buttonForeground: 'hsl(0, 0%, 100%)', // #ffffff - White
+  buttonHover: 'hsl(258, 70%, 71%)', // #a082e9 - Light Purple
+  buttonStroke: 'hsl(258, 47%, 51%)', // #6947bb - Medium Purple
+  buttonSecondary: 'hsl(0, 0%, 100%)', // #ffffff - White
+  buttonSecondaryForeground: 'hsl(0, 0%, 0%)', // #000000 - Black
+  buttonSecondaryStroke: 'hsl(0, 0%, 90%)', // #e6e6e6 - Very Light Gray
+  buttonSecondaryHover: 'hsl(0, 0%, 94%)', // #efefef - Nearly White Gray
+  card: 'hsl(0, 0%, 100%)', // #ffffff - White
+  cardForeground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
+  foreground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
+  navbar: 'hsl(0, 0%, 100%)', // #ffffff - White
+  primary: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
+  primaryForeground: 'hsl(222, 35%, 92%)', // #e2e6f1 - Very Light Grayish Blue
+  secondary: 'hsl(0, 0%, 100%)', // #ffffff - White
+  secondaryForeground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
+  sidebar: 'hsl(0, 0%, 100%)', // #ffffff - White
+  tab: 'hsl(0, 0%, 100%)', // #ffffff - White
 }
 
 export function ColorConfig() {
@@ -62,10 +68,13 @@ export function ColorConfig() {
         --card: ${themeColors.card};
         --card-foreground: ${themeColors.cardForeground};
         --foreground: ${themeColors.foreground};
+        --navbar: ${themeColors.navbar};
         --primary: ${themeColors.primary};
         --primary-foreground: ${themeColors.primaryForeground};
         --secondary: ${themeColors.secondary};
         --secondary-foreground: ${themeColors.secondaryForeground};
+        --sidebar: ${themeColors.sidebar};
+        --tab: ${themeColors.tab};
         --input: ${themeColors.foreground};
         --ring: ${themeColors.secondary};
       }

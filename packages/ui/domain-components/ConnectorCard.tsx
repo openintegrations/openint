@@ -72,7 +72,7 @@ export const ConnectorCard = ({
         'relative m-3 flex h-[150px] w-[150px] flex-col items-center justify-center p-2',
         'border border-gray-300',
         'transition duration-300 ease-in-out',
-        isHovered ? 'border-button bg-[#F8F7FF]' : '',
+        isHovered ? 'bg-button/25 border-button' : '',
         className,
       )}
       onMouseEnter={() => setIsHovered(true)}

@@ -216,7 +216,7 @@ export function IntegrationSearch({
                                     alt={`${int.name} logo`}
                                     className="h-12 w-12 rounded-xl"
                                   />
-                                  <p className="m-0 text-center text-sm font-semibold hover:text-[#8A7DFF]">
+                                  <p className="m-0 text-center text-sm font-semibold hover:text-button">
                                     {int.name}
                                   </p>
                                 </div>

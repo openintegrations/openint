@@ -40,8 +40,8 @@ export function CheckboxFilter({
                 onCheckedChange={() => onCheckboxChange(option)}
                 className={`rounded-sm border border-gray-300 transition-colors duration-200 ${
                   checkedState[option]
-                    ? 'border-transparent bg-[#8A7DFF]'
-                    : 'hover:bg-[#F6F6F6]'
+                    ? 'border-transparent bg-button'
+                    : 'hover:bg-gray-100'
                 }`}>
                 {/* Custom checkmark */}
                 <span
