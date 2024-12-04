@@ -88,13 +88,25 @@ jobs:
         # To test this with a locally install postgres, run
         # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && POSTGRES_URL=postgres://localhost:5432/test pnpm migration up
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-
       - name: Run lint
         run: pnpm run lint
         env:
           NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Start dev server in background with vercel dev environment
+        env:
+          # TODO: Add needed environment variables here
+          POSTGRES_URL: postgres://postgres:test@localhost:5432/test
+          NODE_OPTIONS: --max-old-space-size=4096
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
+          vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local
+          pnpm run web --port 4000 &
+          npx wait-on tcp:4000
+
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
 
       - name: Run tests
         run: pnpm run test::ci
