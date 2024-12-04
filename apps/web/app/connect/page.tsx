@@ -12,11 +12,8 @@ import {
 } from '@openint/cdk'
 import {zConnectPageParams} from '@openint/engine-backend/router/endUserRouter'
 import {makeUlid} from '@openint/util'
-import {ClientRoot} from '@/components/ClientRoot'
-import {SuperHydrate} from '@/components/SuperHydrate'
 import {createServerComponentHelpers} from '@/lib-server/server-component-helpers'
 import {SetCookieAndRedirect} from './(oauth)/redirect/SetCookieAndRedirect'
-import ConnectPage from './page.client'
 import {kConnectSession, type ConnectSession} from './shared'
 
 export const metadata = {
@@ -123,23 +120,7 @@ export default async function ConnectPageContainer({
 
   return (
     <div className="h-screen w-screen p-6">
-      {/* <header className="flex items-center">
-        <Image
-          width={50}
-          height={50}
-          alt={org.slug ?? ''}
-          src={org.imageUrl ?? org.logoUrl}
-          className="mr-4 rounded-lg"
-        />
-        <h2 className="text-2xl font-semibold tracking-tight">
-          {params.displayName ?? `${org.name} - ${viewer.endUserId}`}
-        </h2>
-      </header> */}
-      <ClientRoot accessToken={viewer.accessToken} authStatus="success">
-        <SuperHydrate dehydratedState={getDehydratedState()}>
-          <ConnectPage {...params} />
-        </SuperHydrate>
-      </ClientRoot>
+      /connect is deprecated. Please use /connect/portal instead
     </div>
   )
 }
