@@ -16,6 +16,8 @@ import fileStorageRouter from '@openint/unified-file-storage'
 import hrisRouter from '@openint/unified-hris'
 import ptaRouter from '@openint/unified-pta'
 import {salesEngagementRouter} from '@openint/unified-sales-engagement'
+import {sentenceCase} from '@openint/util'
+import type {AnyRouter, RouterMeta} from '@openint/vdk'
 import {mapKeys, mapValues, publicProcedure, trpc, z} from '@openint/vdk'
 import {authRouter} from './authRouter'
 
@@ -42,6 +44,7 @@ export const _appRouter = trpc.router({
 })
 
 export const appRouter = trpc.mergeRouters(flatRouter, authRouter, _appRouter)
+setDefaultOpenAPIMeta(appRouter)
 
 export type AppRouter = typeof appRouter
 
@@ -84,8 +87,29 @@ export function oasWebhooksEventsMap(
   return {webhooks, components}
 }
 
+/**
+ * Use the last segment of the operationId to be the default openapi summary
+ * e.g. `crm.getContact` -> `Get Contact`
+ */
+function setDefaultOpenAPIMeta(router: AnyRouter) {
+  for (const procedureMap of [router._def.queries, router._def.mutations]) {
+    for (const [name, procedure] of Object.entries(
+      procedureMap as Record<string, unknown>,
+    )) {
+      const meta = (procedure as {meta?: RouterMeta} | undefined)?.meta
+      // console.log('Adding openapi for', name)
+      if (meta?.openapi && !meta.openapi.summary) {
+        const summary = sentenceCase(name.split('.').pop() ?? '')
+        meta.openapi.summary = summary
+        // console.log('Will add summary for', name, meta.openapi)
+      }
+    }
+  }
+}
+
 export function getOpenAPISpec() {
   const {webhooks, components} = oasWebhooksEventsMap(outgoingWebhookEventMap)
+
   const oas = generateOpenApiDocument(appRouter, {
     openApiVersion: '3.1.0', // Want jsonschema
     title: 'OpenInt OpenAPI',
