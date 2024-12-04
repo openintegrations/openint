@@ -6,6 +6,7 @@ import type {
 import {generateOpenApiDocument} from '@lilyrose2798/trpc-openapi/dist/generator'
 import {getServerUrl} from '@openint/app-config/constants'
 import {flatRouter, outgoingWebhookEventMap} from '@openint/engine-backend'
+import {env} from '@openint/env'
 import accountingRouter from '@openint/unified-accounting'
 import atsRouter from '@openint/unified-ats'
 import bankingRouter from '@openint/unified-banking'
@@ -101,7 +102,7 @@ export function getOpenAPISpec() {
         in: 'header',
       },
     },
-    baseUrl: getServerUrl(null) + '/api/v0',
+    baseUrl: env.NEXT_PUBLIC_API_URL ?? getServerUrl(null) + '/api/v0',
     webhooks,
     components,
   })
