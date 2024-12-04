@@ -79,6 +79,8 @@ export const microsoftServer = {
             ],
           ),
         },
+        // note: doesn't seem to be working
+        auth_mode: "OAUTH2_CC"
       }
       return authParams
     }
