@@ -87,6 +87,9 @@ jobs:
         # To test this with a locally install postgres, run
         # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && POSTGRES_URL=postgres://localhost:5432/test pnpm migration up
 
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+
       - name: Run lint
         run: pnpm run lint
         env:
