@@ -1,5 +1,6 @@
 import {mergeHeaders} from '@opensdks/fetch-links'
 import type {NextResponse} from 'next/server'
+import {createAppTrpcClient} from '@openint/engine-frontend/lib/trpcClient'
 import type {GET} from '@/app/api/webhook/[[...webhook]]/route'
 
 type ResponseType<T> = T extends NextResponse<infer U> ? U : never
@@ -24,7 +25,7 @@ async function fetchJson<T>(path: `/${string}`, init?: RequestInit) {
 
 jest.setTimeout(30 * 1000) // long timeout because we have to wait for next.js to compile
 
-test('/debug', async () => {
+test('/api/debug', async () => {
   const [json, res] = await fetchJson('/api/debug')
   expect(res.status).toBe(200)
   expect(json).toEqual({ok: true})
@@ -35,9 +36,15 @@ test.each([
   ['/', {webhook: undefined}],
   ['/plaid', {webhook: ['plaid']}],
   ['/plaid/item_123', {webhook: ['plaid', 'item_123']}],
-])('/webhook%s', async (path, params) => {
+])('/api/webhook%s', async (path, params) => {
   type WebhookResponse = ResponseFromHandler<typeof GET>
 
   const [json] = await fetchJson<WebhookResponse>(`/api/webhook${path}`)
   expect(json.payload?.pathParams).toEqual(params)
+})
+
+test('/api/trpc', async () => {
+  const trpc = createAppTrpcClient({apiUrl: endpoint('/api/trpc')})
+  const res = await trpc.getPublicEnv.query()
+  expect(res.NEXT_PUBLIC_NANGO_PUBLIC_KEY).toBeDefined()
 })
