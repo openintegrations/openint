@@ -22,6 +22,8 @@ async function fetchJson<T>(path: `/${string}`, init?: RequestInit) {
   return [(await res.json()) as T, res] as const
 }
 
+jest.setTimeout(30 * 1000) // long timeout because we have to wait for next.js to compile
+
 test('/debug', async () => {
   const [json, res] = await fetchJson('/api/debug')
   expect(res.status).toBe(200)
