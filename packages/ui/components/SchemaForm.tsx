@@ -83,7 +83,6 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
 ) {
   const _jsonSchema = zodToJsonSchema(schema) as RJSFSchema
   const jsonSchema = jsonSchemaTransform?.(_jsonSchema) ?? _jsonSchema
-  console.log('jsonSchema', jsonSchema)
   // For debugging
   ;(globalThis as any).formSchema = schema
   ;(globalThis as any).formJsonSchema = jsonSchema
