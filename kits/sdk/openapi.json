@@ -238,6 +238,7 @@
     "/passthrough": {
       "post": {
         "operationId": "passthrough",
+        "summary": "Passthrough",
         "tags": ["Internal"],
         "requestBody": {
           "required": true,
@@ -306,6 +307,7 @@
     "/core/resource/{id}/source_sync": {
       "post": {
         "operationId": "sourceSync",
+        "summary": "Source sync",
         "description": "Return records that would have otherwise been emitted during a sync and return it instead",
         "tags": ["Internal"],
         "parameters": [
@@ -382,6 +384,7 @@
     "/core/resource": {
       "post": {
         "operationId": "createResource",
+        "summary": "Create resource",
         "tags": ["Core"],
         "requestBody": {
           "required": true,
@@ -456,6 +459,7 @@
       },
       "get": {
         "operationId": "listResources",
+        "summary": "List resources",
         "tags": ["Core"],
         "parameters": [
           {
@@ -553,6 +557,7 @@
     "/core/resource/{id}": {
       "patch": {
         "operationId": "updateResource",
+        "summary": "Update resource",
         "tags": ["Core"],
         "parameters": [
           {
@@ -643,6 +648,7 @@
       },
       "delete": {
         "operationId": "deleteResource",
+        "summary": "Delete resource",
         "tags": ["Core"],
         "parameters": [
           {
@@ -705,6 +711,7 @@
       },
       "get": {
         "operationId": "getResource",
+        "summary": "Get resource",
         "tags": ["Core"],
         "parameters": [
           {
@@ -796,6 +803,7 @@
     "/core/resource/{id}/_check": {
       "post": {
         "operationId": "checkResource",
+        "summary": "Check resource",
         "tags": ["Core"],
         "parameters": [
           {
@@ -870,6 +878,7 @@
     "/core/resource/{id}/_sync": {
       "post": {
         "operationId": "syncResource",
+        "summary": "Sync resource",
         "tags": ["Core"],
         "parameters": [
           {
@@ -949,6 +958,7 @@
     "/core/connector_config": {
       "get": {
         "operationId": "adminListConnectorConfigs",
+        "summary": "Admin list connector configs",
         "tags": ["Core"],
         "responses": {
           "200": {
@@ -978,6 +988,7 @@
       },
       "post": {
         "operationId": "adminUpsertConnectorConfig",
+        "summary": "Admin upsert connector config",
         "tags": ["Core"],
         "requestBody": {
           "required": true,
@@ -1093,6 +1104,7 @@
     "/core/connector_config/{id}": {
       "patch": {
         "operationId": "adminUpdateConnectorConfig",
+        "summary": "Admin update connector config",
         "tags": ["Core"],
         "parameters": [
           {
@@ -1173,6 +1185,7 @@
       },
       "delete": {
         "operationId": "adminDeleteConnectorConfig",
+        "summary": "Admin delete connector config",
         "tags": ["Core"],
         "parameters": [
           {
@@ -1228,6 +1241,7 @@
       },
       "get": {
         "operationId": "adminGetConnectorConfig",
+        "summary": "Admin get connector config",
         "tags": ["Core"],
         "parameters": [
           {
@@ -1287,6 +1301,7 @@
     "/core/connector_config_info": {
       "get": {
         "operationId": "listConnectorConfigInfos",
+        "summary": "List connector config infos",
         "description": "For end user authentication and list a limited set of non private data",
         "tags": ["Core"],
         "parameters": [
@@ -1426,6 +1441,7 @@
     "/connector": {
       "get": {
         "operationId": "listConnectorMetas",
+        "summary": "List connector metas",
         "description": "Get catalog of all available connectors",
         "tags": ["Connectors"],
         "parameters": [
@@ -1482,6 +1498,7 @@
     "/connector/{name}": {
       "get": {
         "operationId": "getConnectorMeta",
+        "summary": "Get connector meta",
         "tags": ["Connectors"],
         "parameters": [
           {
@@ -1545,6 +1562,7 @@
     "/connector/{name}/oas": {
       "get": {
         "operationId": "getConnectorOpenApiSpec",
+        "summary": "Get connector open api spec",
         "tags": ["Connectors"],
         "parameters": [
           {
@@ -1608,6 +1626,7 @@
     "/connector/{name}/schemas": {
       "get": {
         "operationId": "getConnectorSchemas",
+        "summary": "Get connector schemas",
         "tags": ["Connectors"],
         "parameters": [
           {
@@ -1671,6 +1690,7 @@
     "/connector/{name}/integrations": {
       "get": {
         "operationId": "listConnectorIntegrations",
+        "summary": "List connector integrations",
         "tags": ["Connectors"],
         "parameters": [
           {
@@ -1781,6 +1801,7 @@
     "/configured_integrations": {
       "get": {
         "operationId": "listConfiguredIntegrations",
+        "summary": "List configured integrations",
         "tags": ["Connectors"],
         "parameters": [
           {
@@ -1885,6 +1906,7 @@
     "/core/pipeline": {
       "get": {
         "operationId": "listPipelines",
+        "summary": "List pipelines",
         "tags": ["Core"],
         "parameters": [
           {
@@ -1961,6 +1983,7 @@
       },
       "post": {
         "operationId": "createPipeline",
+        "summary": "Create pipeline",
         "tags": ["Core"],
         "requestBody": {
           "required": true,
@@ -2047,6 +2070,7 @@
     "/core/pipeline/{id}": {
       "patch": {
         "operationId": "updatePipeline",
+        "summary": "Update pipeline",
         "tags": ["Core"],
         "parameters": [
           {
@@ -2139,6 +2163,7 @@
       },
       "delete": {
         "operationId": "deletePipeline",
+        "summary": "Delete pipeline",
         "tags": ["Core"],
         "parameters": [
           {
@@ -2199,6 +2224,7 @@
     "/core/pipeline/{id}/_sync": {
       "post": {
         "operationId": "syncPipeline",
+        "summary": "Sync pipeline",
         "tags": ["Core"],
         "parameters": [
           {
@@ -2278,6 +2304,7 @@
     "/core/sync_run": {
       "get": {
         "operationId": "listSyncRuns",
+        "summary": "List sync runs",
         "tags": ["Core"],
         "parameters": [
           {
@@ -2438,6 +2465,7 @@
     "/openapi.json": {
       "get": {
         "operationId": "public-getOpenapiDocument",
+        "summary": "Get openapi document",
         "tags": ["Internal"],
         "responses": {
           "200": {
@@ -3402,6 +3430,7 @@
       },
       "post": {
         "operationId": "crm-createAccount",
+        "summary": "Create account",
         "tags": ["CRM"],
         "requestBody": {
           "required": true,
@@ -3526,6 +3555,7 @@
       },
       "patch": {
         "operationId": "crm-updateAccount",
+        "summary": "Update account",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -3606,6 +3636,7 @@
     "/unified/crm/account/_batch_read": {
       "post": {
         "operationId": "crm-batchReadAccounts",
+        "summary": "Batch read accounts",
         "tags": ["CRM"],
         "requestBody": {
           "required": true,
@@ -3672,6 +3703,7 @@
     "/unified/crm/account/_upsert": {
       "post": {
         "operationId": "crm-upsertAccount",
+        "summary": "Upsert account",
         "tags": ["CRM"],
         "requestBody": {
           "required": true,
@@ -3836,6 +3868,7 @@
       },
       "post": {
         "operationId": "crm-createContact",
+        "summary": "Create contact",
         "tags": ["CRM"],
         "requestBody": {
           "required": true,
@@ -3960,6 +3993,7 @@
       },
       "patch": {
         "operationId": "crm-updateContact",
+        "summary": "Update contact",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -4040,6 +4074,7 @@
     "/unified/crm/contact/_batch_read": {
       "post": {
         "operationId": "crm-batchReadContacts",
+        "summary": "Batch read contacts",
         "tags": ["CRM"],
         "requestBody": {
           "required": true,
@@ -4106,6 +4141,7 @@
     "/unified/crm/contact/_upsert": {
       "post": {
         "operationId": "crm-upsertContact",
+        "summary": "Upsert contact",
         "tags": ["CRM"],
         "requestBody": {
           "required": true,
@@ -4492,6 +4528,7 @@
     "/unified/crm/note": {
       "get": {
         "operationId": "crm-listNotes",
+        "summary": "List notes",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -4577,6 +4614,7 @@
       },
       "post": {
         "operationId": "crm-createNote",
+        "summary": "Create note",
         "tags": ["CRM"],
         "requestBody": {
           "required": true,
@@ -4637,6 +4675,7 @@
     "/unified/crm/user": {
       "get": {
         "operationId": "crm-listUsers",
+        "summary": "List users",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -4724,6 +4763,7 @@
     "/unified/crm/user/{id}": {
       "get": {
         "operationId": "crm-getUser",
+        "summary": "Get user",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -4789,6 +4829,7 @@
     "/unified/crm/custom_objects/{object_name}": {
       "get": {
         "operationId": "crm-listCustomObjectRecords",
+        "summary": "List custom object records",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -4880,6 +4921,7 @@
       },
       "post": {
         "operationId": "crm-createCustomObjectRecord",
+        "summary": "Create custom object record",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -4954,6 +4996,7 @@
     "/unified/crm/metadata/objects": {
       "get": {
         "operationId": "crm-metadataListObjects",
+        "summary": "Metadata list objects",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -5013,6 +5056,7 @@
       },
       "post": {
         "operationId": "crm-metadataCreateObject",
+        "summary": "Metadata create object",
         "description": "Create custom object schema",
         "tags": ["CRM"],
         "requestBody": {
@@ -5099,6 +5143,7 @@
     "/unified/crm/metadata/objects/{object_name}/properties": {
       "get": {
         "operationId": "crm-metadataListObjectProperties",
+        "summary": "Metadata list object properties",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -5158,6 +5203,7 @@
       },
       "post": {
         "operationId": "crm-metadataCreateObjectProperty",
+        "summary": "Metadata create object property",
         "tags": ["CRM"],
         "parameters": [
           {
@@ -5240,6 +5286,7 @@
     "/unified/crm/metadata/associations": {
       "post": {
         "operationId": "crm-metadataCreateAssociation",
+        "summary": "Metadata create association",
         "tags": ["CRM"],
         "requestBody": {
           "required": true,
@@ -8364,7 +8411,7 @@
     "/unified/file-storage/drive": {
       "get": {
         "operationId": "fileStorage-listDrives",
-        "summary": "List Drives",
+        "summary": "List drives",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8452,7 +8499,7 @@
     "/unified/file-storage/drive/{driveId}": {
       "get": {
         "operationId": "fileStorage-getDrive",
-        "summary": "Get Drive",
+        "summary": "Get drive",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8511,7 +8558,7 @@
     "/unified/file-storage/drive/{driveId}/folder": {
       "get": {
         "operationId": "fileStorage-listFolders",
-        "summary": "List Folders",
+        "summary": "List folders",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8585,7 +8632,7 @@
     "/unified/file-storage/drive/{driveId}/folder/{folderId}": {
       "get": {
         "operationId": "fileStorage-getFolder",
-        "summary": "Get Folder",
+        "summary": "Get folder",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8652,7 +8699,7 @@
     "/unified/file-storage/drive/{driveId}/file": {
       "get": {
         "operationId": "fileStorage-listFiles",
-        "summary": "List Files",
+        "summary": "List files",
         "tags": ["File Storage"],
         "parameters": [
           {
@@ -8733,7 +8780,7 @@
     "/unified/file-storage/drive/{driveId}/file/{fileId}": {
       "get": {
         "operationId": "fileStorage-getFile",
-        "summary": "Get File",
+        "summary": "Get file",
         "tags": ["File Storage"],
         "parameters": [
           {

@@ -22,56 +22,32 @@ const procedure = verticalProcedure(adapters)
 export const fileStorageRouter = trpc.router({
   // TODO: Auto generate summary via operation name...
   listDrives: procedure
-    .meta(oapi({method: 'GET', path: '/drive', summary: 'List Drives'}))
+    .meta(oapi({method: 'GET', path: '/drive'}))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.Drive)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getDrive: procedure
-    .meta(oapi({method: 'GET', path: '/drive/{driveId}', summary: 'Get Drive'}))
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}'}))
     .input(z.object({driveId: z.string()}))
     .output(unified.Drive)
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listFolders: procedure
-    .meta(
-      oapi({
-        method: 'GET',
-        path: '/drive/{driveId}/folder',
-        summary: 'List Folders',
-      }),
-    )
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}/folder'}))
     .input(z.object({driveId: z.string()}))
     .output(zPaginatedResult.extend({items: z.array(unified.Folder)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getFolder: procedure
-    .meta(
-      oapi({
-        method: 'GET',
-        path: '/drive/{driveId}/folder/{folderId}',
-        summary: 'Get Folder',
-      }),
-    )
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}/folder/{folderId}'}))
     .input(z.object({driveId: z.string(), folderId: z.string()}))
     .output(unified.Folder)
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listFiles: procedure
-    .meta(
-      oapi({
-        method: 'GET',
-        path: '/drive/{driveId}/file',
-        summary: 'List Files',
-      }),
-    )
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}/file'}))
     .input(z.object({driveId: z.string(), folderId: z.string().nullish()}))
     .output(zPaginatedResult.extend({items: z.array(unified.File)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getFile: procedure
-    .meta(
-      oapi({
-        method: 'GET',
-        path: '/drive/{driveId}/file/{fileId}',
-        summary: 'Get File',
-      }),
-    )
+    .meta(oapi({method: 'GET', path: '/drive/{driveId}/file/{fileId}'}))
     .input(z.object({driveId: z.string(), fileId: z.string()}))
     .output(unified.File)
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),

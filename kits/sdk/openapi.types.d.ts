@@ -31,71 +31,104 @@ export interface paths {
     post: operations['createMagicLink']
   }
   '/passthrough': {
+    /** Passthrough */
     post: operations['passthrough']
   }
   '/core/resource/{id}/source_sync': {
-    /** @description Return records that would have otherwise been emitted during a sync and return it instead */
+    /**
+     * Source sync
+     * @description Return records that would have otherwise been emitted during a sync and return it instead
+     */
     post: operations['sourceSync']
   }
   '/core/resource': {
+    /** List resources */
     get: operations['listResources']
+    /** Create resource */
     post: operations['createResource']
   }
   '/core/resource/{id}': {
+    /** Get resource */
     get: operations['getResource']
+    /** Delete resource */
     delete: operations['deleteResource']
+    /** Update resource */
     patch: operations['updateResource']
   }
   '/core/resource/{id}/_check': {
+    /** Check resource */
     post: operations['checkResource']
   }
   '/core/resource/{id}/_sync': {
+    /** Sync resource */
     post: operations['syncResource']
   }
   '/core/connector_config': {
+    /** Admin list connector configs */
     get: operations['adminListConnectorConfigs']
+    /** Admin upsert connector config */
     post: operations['adminUpsertConnectorConfig']
   }
   '/core/connector_config/{id}': {
+    /** Admin get connector config */
     get: operations['adminGetConnectorConfig']
+    /** Admin delete connector config */
     delete: operations['adminDeleteConnectorConfig']
+    /** Admin update connector config */
     patch: operations['adminUpdateConnectorConfig']
   }
   '/core/connector_config_info': {
-    /** @description For end user authentication and list a limited set of non private data */
+    /**
+     * List connector config infos
+     * @description For end user authentication and list a limited set of non private data
+     */
     get: operations['listConnectorConfigInfos']
   }
   '/connector': {
-    /** @description Get catalog of all available connectors */
+    /**
+     * List connector metas
+     * @description Get catalog of all available connectors
+     */
     get: operations['listConnectorMetas']
   }
   '/connector/{name}': {
+    /** Get connector meta */
     get: operations['getConnectorMeta']
   }
   '/connector/{name}/oas': {
+    /** Get connector open api spec */
     get: operations['getConnectorOpenApiSpec']
   }
   '/connector/{name}/schemas': {
+    /** Get connector schemas */
     get: operations['getConnectorSchemas']
   }
   '/connector/{name}/integrations': {
+    /** List connector integrations */
     get: operations['listConnectorIntegrations']
   }
   '/configured_integrations': {
+    /** List configured integrations */
     get: operations['listConfiguredIntegrations']
   }
   '/core/pipeline': {
+    /** List pipelines */
     get: operations['listPipelines']
+    /** Create pipeline */
     post: operations['createPipeline']
   }
   '/core/pipeline/{id}': {
+    /** Delete pipeline */
     delete: operations['deletePipeline']
+    /** Update pipeline */
     patch: operations['updatePipeline']
   }
   '/core/pipeline/{id}/_sync': {
+    /** Sync pipeline */
     post: operations['syncPipeline']
   }
   '/core/sync_run': {
+    /** List sync runs */
     get: operations['listSyncRuns']
   }
   '/viewer': {
@@ -107,6 +140,7 @@ export interface paths {
     get: operations['getCurrentOrganization']
   }
   '/openapi.json': {
+    /** Get openapi document */
     get: operations['public-getOpenapiDocument']
   }
   '/unified/sales-engagement/contact': {
@@ -150,33 +184,41 @@ export interface paths {
   '/unified/crm/account': {
     /** List Accounts */
     get: operations['crm-listAccounts']
+    /** Create account */
     post: operations['crm-createAccount']
   }
   '/unified/crm/account/{id}': {
     /** Get Account */
     get: operations['crm-getAccount']
+    /** Update account */
     patch: operations['crm-updateAccount']
   }
   '/unified/crm/account/_batch_read': {
+    /** Batch read accounts */
     post: operations['crm-batchReadAccounts']
   }
   '/unified/crm/account/_upsert': {
+    /** Upsert account */
     post: operations['crm-upsertAccount']
   }
   '/unified/crm/contact': {
     /** List Contacts */
     get: operations['crm-listContacts']
+    /** Create contact */
     post: operations['crm-createContact']
   }
   '/unified/crm/contact/{id}': {
     /** Get Contact */
     get: operations['crm-getContact']
+    /** Update contact */
     patch: operations['crm-updateContact']
   }
   '/unified/crm/contact/_batch_read': {
+    /** Batch read contacts */
     post: operations['crm-batchReadContacts']
   }
   '/unified/crm/contact/_upsert': {
+    /** Upsert contact */
     post: operations['crm-upsertContact']
   }
   '/unified/crm/lead': {
@@ -196,29 +238,42 @@ export interface paths {
     get: operations['crm-getOpportunity']
   }
   '/unified/crm/note': {
+    /** List notes */
     get: operations['crm-listNotes']
+    /** Create note */
     post: operations['crm-createNote']
   }
   '/unified/crm/user': {
+    /** List users */
     get: operations['crm-listUsers']
   }
   '/unified/crm/user/{id}': {
+    /** Get user */
     get: operations['crm-getUser']
   }
   '/unified/crm/custom_objects/{object_name}': {
+    /** List custom object records */
     get: operations['crm-listCustomObjectRecords']
+    /** Create custom object record */
     post: operations['crm-createCustomObjectRecord']
   }
   '/unified/crm/metadata/objects': {
+    /** Metadata list objects */
     get: operations['crm-metadataListObjects']
-    /** @description Create custom object schema */
+    /**
+     * Metadata create object
+     * @description Create custom object schema
+     */
     post: operations['crm-metadataCreateObject']
   }
   '/unified/crm/metadata/objects/{object_name}/properties': {
+    /** Metadata list object properties */
     get: operations['crm-metadataListObjectProperties']
+    /** Metadata create object property */
     post: operations['crm-metadataCreateObjectProperty']
   }
   '/unified/crm/metadata/associations': {
+    /** Metadata create association */
     post: operations['crm-metadataCreateAssociation']
   }
   '/unified/banking/account': {
@@ -334,27 +389,27 @@ export interface paths {
     post: operations['etl-write']
   }
   '/unified/file-storage/drive': {
-    /** List Drives */
+    /** List drives */
     get: operations['fileStorage-listDrives']
   }
   '/unified/file-storage/drive/{driveId}': {
-    /** Get Drive */
+    /** Get drive */
     get: operations['fileStorage-getDrive']
   }
   '/unified/file-storage/drive/{driveId}/folder': {
-    /** List Folders */
+    /** List folders */
     get: operations['fileStorage-listFolders']
   }
   '/unified/file-storage/drive/{driveId}/folder/{folderId}': {
-    /** Get Folder */
+    /** Get folder */
     get: operations['fileStorage-getFolder']
   }
   '/unified/file-storage/drive/{driveId}/file': {
-    /** List Files */
+    /** List files */
     get: operations['fileStorage-listFiles']
   }
   '/unified/file-storage/drive/{driveId}/file/{fileId}': {
-    /** Get File */
+    /** Get file */
     get: operations['fileStorage-getFile']
   }
 }
@@ -1362,6 +1417,7 @@ export interface operations {
       }
     }
   }
+  /** Passthrough */
   passthrough: {
     requestBody: {
       content: {
@@ -1402,7 +1458,10 @@ export interface operations {
       }
     }
   }
-  /** @description Return records that would have otherwise been emitted during a sync and return it instead */
+  /**
+   * Source sync
+   * @description Return records that would have otherwise been emitted during a sync and return it instead
+   */
   sourceSync: {
     parameters: {
       path: {
@@ -1444,6 +1503,7 @@ export interface operations {
       }
     }
   }
+  /** List resources */
   listResources: {
     parameters: {
       query?: {
@@ -1482,6 +1542,7 @@ export interface operations {
       }
     }
   }
+  /** Create resource */
   createResource: {
     requestBody: {
       content: {
@@ -1527,6 +1588,7 @@ export interface operations {
       }
     }
   }
+  /** Get resource */
   getResource: {
     parameters: {
       query?: {
@@ -1574,6 +1636,7 @@ export interface operations {
       }
     }
   }
+  /** Delete resource */
   deleteResource: {
     parameters: {
       query?: {
@@ -1610,6 +1673,7 @@ export interface operations {
       }
     }
   }
+  /** Update resource */
   updateResource: {
     parameters: {
       path: {
@@ -1664,6 +1728,7 @@ export interface operations {
       }
     }
   }
+  /** Check resource */
   checkResource: {
     parameters: {
       path: {
@@ -1702,6 +1767,7 @@ export interface operations {
       }
     }
   }
+  /** Sync resource */
   syncResource: {
     parameters: {
       path: {
@@ -1755,6 +1821,7 @@ export interface operations {
       }
     }
   }
+  /** Admin list connector configs */
   adminListConnectorConfigs: {
     responses: {
       /** @description Successful response */
@@ -1771,6 +1838,7 @@ export interface operations {
       }
     }
   }
+  /** Admin upsert connector config */
   adminUpsertConnectorConfig: {
     requestBody: {
       content: {
@@ -1830,6 +1898,7 @@ export interface operations {
       }
     }
   }
+  /** Admin get connector config */
   adminGetConnectorConfig: {
     parameters: {
       path: {
@@ -1863,6 +1932,7 @@ export interface operations {
       }
     }
   }
+  /** Admin delete connector config */
   adminDeleteConnectorConfig: {
     parameters: {
       path: {
@@ -1896,6 +1966,7 @@ export interface operations {
       }
     }
   }
+  /** Admin update connector config */
   adminUpdateConnectorConfig: {
     parameters: {
       path: {
@@ -1948,7 +2019,10 @@ export interface operations {
       }
     }
   }
-  /** @description For end user authentication and list a limited set of non private data */
+  /**
+   * List connector config infos
+   * @description For end user authentication and list a limited set of non private data
+   */
   listConnectorConfigInfos: {
     parameters: {
       query?: {
@@ -2014,7 +2088,10 @@ export interface operations {
       }
     }
   }
-  /** @description Get catalog of all available connectors */
+  /**
+   * List connector metas
+   * @description Get catalog of all available connectors
+   */
   listConnectorMetas: {
     parameters: {
       query?: {
@@ -2048,6 +2125,7 @@ export interface operations {
       }
     }
   }
+  /** Get connector meta */
   getConnectorMeta: {
     parameters: {
       query?: {
@@ -2084,6 +2162,7 @@ export interface operations {
       }
     }
   }
+  /** Get connector open api spec */
   getConnectorOpenApiSpec: {
     parameters: {
       query?: {
@@ -2120,6 +2199,7 @@ export interface operations {
       }
     }
   }
+  /** Get connector schemas */
   getConnectorSchemas: {
     parameters: {
       query?: {
@@ -2156,6 +2236,7 @@ export interface operations {
       }
     }
   }
+  /** List connector integrations */
   listConnectorIntegrations: {
     parameters: {
       query?: {
@@ -2200,6 +2281,7 @@ export interface operations {
       }
     }
   }
+  /** List configured integrations */
   listConfiguredIntegrations: {
     parameters: {
       query?: {
@@ -2241,6 +2323,7 @@ export interface operations {
       }
     }
   }
+  /** List pipelines */
   listPipelines: {
     parameters: {
       query?: {
@@ -2276,6 +2359,7 @@ export interface operations {
       }
     }
   }
+  /** Create pipeline */
   createPipeline: {
     requestBody: {
       content: {
@@ -2324,6 +2408,7 @@ export interface operations {
       }
     }
   }
+  /** Delete pipeline */
   deletePipeline: {
     parameters: {
       path: {
@@ -2357,6 +2442,7 @@ export interface operations {
       }
     }
   }
+  /** Update pipeline */
   updatePipeline: {
     parameters: {
       path: {
@@ -2410,6 +2496,7 @@ export interface operations {
       }
     }
   }
+  /** Sync pipeline */
   syncPipeline: {
     parameters: {
       path: {
@@ -2463,6 +2550,7 @@ export interface operations {
       }
     }
   }
+  /** List sync runs */
   listSyncRuns: {
     parameters: {
       query?: {
@@ -2559,6 +2647,7 @@ export interface operations {
       }
     }
   }
+  /** Get openapi document */
   'public-getOpenapiDocument': {
     responses: {
       /** @description Successful response */
@@ -3069,6 +3158,7 @@ export interface operations {
       }
     }
   }
+  /** Create account */
   'crm-createAccount': {
     requestBody: {
       content: {
@@ -3137,6 +3227,7 @@ export interface operations {
       }
     }
   }
+  /** Update account */
   'crm-updateAccount': {
     parameters: {
       path: {
@@ -3179,6 +3270,7 @@ export interface operations {
       }
     }
   }
+  /** Batch read accounts */
   'crm-batchReadAccounts': {
     requestBody: {
       content: {
@@ -3209,6 +3301,7 @@ export interface operations {
       }
     }
   }
+  /** Upsert account */
   'crm-upsertAccount': {
     requestBody: {
       content: {
@@ -3289,6 +3382,7 @@ export interface operations {
       }
     }
   }
+  /** Create contact */
   'crm-createContact': {
     requestBody: {
       content: {
@@ -3357,6 +3451,7 @@ export interface operations {
       }
     }
   }
+  /** Update contact */
   'crm-updateContact': {
     parameters: {
       path: {
@@ -3399,6 +3494,7 @@ export interface operations {
       }
     }
   }
+  /** Batch read contacts */
   'crm-batchReadContacts': {
     requestBody: {
       content: {
@@ -3429,6 +3525,7 @@ export interface operations {
       }
     }
   }
+  /** Upsert contact */
   'crm-upsertContact': {
     requestBody: {
       content: {
@@ -3623,6 +3720,7 @@ export interface operations {
       }
     }
   }
+  /** List notes */
   'crm-listNotes': {
     parameters: {
       query?: {
@@ -3662,6 +3760,7 @@ export interface operations {
       }
     }
   }
+  /** Create note */
   'crm-createNote': {
     requestBody: {
       content: {
@@ -3693,6 +3792,7 @@ export interface operations {
       }
     }
   }
+  /** List users */
   'crm-listUsers': {
     parameters: {
       query?: {
@@ -3732,6 +3832,7 @@ export interface operations {
       }
     }
   }
+  /** Get user */
   'crm-getUser': {
     parameters: {
       path: {
@@ -3768,6 +3869,7 @@ export interface operations {
       }
     }
   }
+  /** List custom object records */
   'crm-listCustomObjectRecords': {
     parameters: {
       query?: {
@@ -3810,6 +3912,7 @@ export interface operations {
       }
     }
   }
+  /** Create custom object record */
   'crm-createCustomObjectRecord': {
     parameters: {
       path: {
@@ -3849,6 +3952,7 @@ export interface operations {
       }
     }
   }
+  /** Metadata list objects */
   'crm-metadataListObjects': {
     parameters: {
       query?: {
@@ -3882,7 +3986,10 @@ export interface operations {
       }
     }
   }
-  /** @description Create custom object schema */
+  /**
+   * Metadata create object
+   * @description Create custom object schema
+   */
   'crm-metadataCreateObject': {
     requestBody: {
       content: {
@@ -3919,6 +4026,7 @@ export interface operations {
       }
     }
   }
+  /** Metadata list object properties */
   'crm-metadataListObjectProperties': {
     parameters: {
       path: {
@@ -3952,6 +4060,7 @@ export interface operations {
       }
     }
   }
+  /** Metadata create object property */
   'crm-metadataCreateObjectProperty': {
     parameters: {
       path: {
@@ -4007,6 +4116,7 @@ export interface operations {
       }
     }
   }
+  /** Metadata create association */
   'crm-metadataCreateAssociation': {
     requestBody: {
       content: {
@@ -5318,7 +5428,7 @@ export interface operations {
       }
     }
   }
-  /** List Drives */
+  /** List drives */
   'fileStorage-listDrives': {
     parameters: {
       query?: {
@@ -5358,7 +5468,7 @@ export interface operations {
       }
     }
   }
-  /** Get Drive */
+  /** Get drive */
   'fileStorage-getDrive': {
     parameters: {
       path: {
@@ -5392,7 +5502,7 @@ export interface operations {
       }
     }
   }
-  /** List Folders */
+  /** List folders */
   'fileStorage-listFolders': {
     parameters: {
       path: {
@@ -5430,7 +5540,7 @@ export interface operations {
       }
     }
   }
-  /** Get Folder */
+  /** Get folder */
   'fileStorage-getFolder': {
     parameters: {
       path: {
@@ -5465,7 +5575,7 @@ export interface operations {
       }
     }
   }
-  /** List Files */
+  /** List files */
   'fileStorage-listFiles': {
     parameters: {
       query?: {
@@ -5506,7 +5616,7 @@ export interface operations {
       }
     }
   }
-  /** Get File */
+  /** Get file */
   'fileStorage-getFile': {
     parameters: {
       path: {
