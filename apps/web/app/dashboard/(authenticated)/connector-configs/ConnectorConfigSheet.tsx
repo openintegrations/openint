@@ -38,11 +38,13 @@ export function ConnectorConfigSheet({
   connectorName,
   open,
   setOpen,
+  refetch,
 }: {
   connectorConfig?: Omit<ConnectorConfig, 'connectorName'>
   connectorName: string
   open: boolean
   setOpen: (open: boolean) => void
+  refetch?: () => void
 }) {
   const trpcUtils = _trpcReact.useContext()
   const connectorMetaRes = _trpcReact.getConnectorMeta.useQuery({
@@ -60,6 +62,7 @@ export function ConnectorConfigSheet({
         toast({title: 'connector config saved', variant: 'success'})
         void trpcUtils.adminListConnectorConfigs.invalidate()
         void trpcUtils.listConnectorConfigInfos.invalidate()
+        refetch?.()
       },
       onError: (err) => {
         toast({
@@ -76,6 +79,7 @@ export function ConnectorConfigSheet({
         toast({title: 'connector config deleted', variant: 'success'})
         void trpcUtils.adminListConnectorConfigs.invalidate()
         void trpcUtils.listConnectorConfigInfos.invalidate()
+        refetch?.()
       },
       onError: (err) => {
         toast({
