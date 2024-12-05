@@ -195,7 +195,9 @@
         },
         {
           "group": "HRIS",
-          "pages": ["api-reference/hris/list-individuals"]
+          "pages": [
+            "api-reference/hris/list-individuals"
+          ]
         },
         {
           "group": "ETL",
