@@ -61,9 +61,6 @@ export default function ConnectorConfigsPage({
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Configured connectors
       </h2>
-      {connectorConfigsRes.isFetching && (
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-      )}
       {connectorConfigsRes.data ? (
         <DataTable
           query={connectorConfigsRes}
@@ -212,6 +209,7 @@ export default function ConnectorConfigsPage({
         connectorConfig={connectorConfig}
         open={open}
         setOpen={setOpen}
+        refetch={connectorConfigsRes.refetch}
       />
       <CalendarBooking
         description="Grab some time with our founder to help you get the best out of OpenInt"
