@@ -2,7 +2,7 @@
 
 import {useState} from 'react'
 
-const GOV_SIGNALS_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
+const GS_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
 
 interface ThemeColors {
   background: string
@@ -52,7 +52,7 @@ const defaultThemeColors: Partial<ThemeColors> = {
   tab: 'hsl(0, 0%, 100%)', // #ffffff - White
 }
 
-const govSignalsThemeColors: Partial<ThemeColors> = {
+const gsThemeColors: Partial<ThemeColors> = {
   ...defaultThemeColors,
   button: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
   buttonLight: 'hsl(199, 51%, 96%)', // #e6f5ff - Light Steel Aqua
@@ -60,8 +60,8 @@ const govSignalsThemeColors: Partial<ThemeColors> = {
 
 const getThemeByOrgId = (orgId: string) => {
   switch (orgId) {
-    case GOV_SIGNALS_ID:
-      return govSignalsThemeColors
+    case GS_ID:
+      return gsThemeColors
     default:
       return defaultThemeColors
   }
