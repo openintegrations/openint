@@ -1271,7 +1271,7 @@ export interface components {
       name: string
       file_url?: string | null
       download_url?: string | null
-      mimeType?: string | null
+      mime_type?: string | null
       size?: number | null
       drive_id: string
       created_at?: string | null
