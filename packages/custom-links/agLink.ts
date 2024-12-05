@@ -77,11 +77,9 @@ export function agLink(ctx: {
                 op.data.entity.unified.first_name,
                 op.data.entity.unified.last_name,
               ]).join(' '),
-              // TODO: AG is renaming this to candidate_external_id 
-              // when they migrate their schema this should be candidate_external_id = data.entity?.raw?.id
-              opening_external_id:
+              candidate_external_id:
                 op.data.entity.unified.id ??
-                (op.data.entity.raw as any)?.['id'],
+                (op.data.entity.raw as any)?.['id'] ?? '',
             },
             upsert: {
               key_columns: ['id'],
