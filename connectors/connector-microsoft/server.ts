@@ -15,17 +15,23 @@ function mergeScopes(
   return uniqueScopes.join(' ')
 }
 
-// QQ: Why are these integrations in snake case whereas some like plaid has standard in camel case?
 const integrations = [
   {
     id: 'sharepoint',
     name: 'Sharepoint',
-    // TODO: Differ oauth scope use in Connect based on which integration
     raw_data: {} as any,
     verticals: ['file-storage'],
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-sharepoint.svg',
   },
+  {
+    id: 'outlook',
+    name: 'Outlook',
+    raw_data: {} as any,
+    verticals: ['email'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-outlook.svg',
+  }
 ]
 
 export const microsoftServer = {

@@ -216,15 +216,6 @@ module.exports = [
     },
   },
   {
-    name: 'outlook',
-    dirName: 'connector-outlook',
-    varName: 'connectorOutlook',
-    imports: {
-      def: '@openint/connector-outlook/def',
-      server: '@openint/connector-outlook/server',
-    },
-  },
-  {
     name: 'outreach',
     dirName: 'connector-outreach',
     varName: 'connectorOutreach',
