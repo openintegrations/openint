@@ -10881,7 +10881,7 @@
           "download_url": {
             "type": ["string", "null"]
           },
-          "mimeType": {
+          "mime_type": {
             "type": ["string", "null"]
           },
           "size": {
