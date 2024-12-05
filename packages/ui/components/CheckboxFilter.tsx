@@ -24,7 +24,7 @@ export function CheckboxFilter({
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button variant="secondary" onClick={() => setIsOpen(true)}>
-          <Component className="h-4 w-4" style={{color: '#8A5DF6'}} />{' '}
+          <Component className="h-4 w-4 text-button" />{' '}
           <span className="ml-2">Category</span>
         </Button>
       </PopoverTrigger>
@@ -40,8 +40,8 @@ export function CheckboxFilter({
                 onCheckedChange={() => onCheckboxChange(option)}
                 className={`rounded-sm border border-gray-300 transition-colors duration-200 ${
                   checkedState[option]
-                    ? 'border-transparent bg-[#8A7DFF]'
-                    : 'hover:bg-[#F6F6F6]'
+                    ? 'border-transparent bg-button'
+                    : 'hover:bg-gray-100'
                 }`}>
                 {/* Custom checkmark */}
                 <span

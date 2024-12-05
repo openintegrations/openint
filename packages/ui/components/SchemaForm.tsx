@@ -58,8 +58,6 @@ function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
             ...uiSchema[key],
             ...generateUiSchema(value as RJSFSchema),
           }
-        } else if (value.type === 'boolean') {
-          uiSchema[key]['ui:widget'] = 'checkbox'
         }
       }
     }

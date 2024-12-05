@@ -9,81 +9,96 @@
 /* Via shadcn */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
+    --background: hsl(0, 0%, 100%);
+    --foreground: hsl(250, 12%, 20%);
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: hsl(220, 41%, 75%);
+    --muted-foreground: hsl(235, 16%, 29%);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
+    --popover: hsl(0, 0%, 100%);
+    --popover-foreground: hsl(250, 12%, 20%);
 
-    --tooltip: #272731;
-    --tooltip-foreground: #ffffff;
+    --tooltip: hsl(240, 10%, 17%);
+    --tooltip-foreground: hsl(0, 0%, 100%);
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: hsl(220, 25%, 86%);
+    --input: hsl(220, 25%, 86%);
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --card: hsl(0, 0%, 100%);
+    --card-foreground: hsl(250, 12%, 20%);
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: hsl(250, 12%, 20%);
+    --primary-foreground: hsl(220, 35%, 92%);
 
-    --secondary: #ffffff;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: hsl(0, 0%, 100%);
+    --secondary-foreground: hsl(250, 12%, 20%);
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: hsl(210, 51%, 78%);
+    --accent-foreground: hsl(250, 12%, 20%);
 
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: hsl(0, 100%, 50%);
+    --destructive-foreground: hsl(220, 35%, 92%);
 
-    --ring: 215 20.2% 65.1%;
+    --ring: hsl(235, 7%, 46%);
 
     --radius: 0.5rem;
 
-    --button: #8a5df6;
-    --button-foreground: #ffffff;
-    --button-hover: #a082e9;
-    --button-stroke: #6947bb;
-    --button-secondary: #ffffff;
-    --button-secondary-foreground: #000000;
-    --button-secondary-stroke: #e6e6e6;
-    --button-secondary-hover: #efefef;
+    --button: hsl(255, 90%, 66%);
+    --button-foreground: hsl(0, 0%, 100%);
+    --button-hover: hsl(255, 70%, 71%);
+    --button-stroke: hsl(255, 45%, 51%);
+    --button-secondary: hsl(0, 0%, 100%);
+    --button-secondary-foreground: hsl(0, 0%, 0%);
+    --button-secondary-stroke: hsl(0, 0%, 90%);
+    --button-secondary-hover: hsl(0, 0%, 94%);
+
+    --tab: hsl(0, 0%, 100%);
+    --navbar: hsl(0, 0%, 100%);
+    --sidebar: hsl(0, 0%, 100%);
   }
 
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    --background: hsl(210, 55%, 11%);
+    --foreground: hsl(215, 42%, 75%);
 
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
+    --muted: hsl(215, 50%, 61%);
+    --muted-foreground: hsl(220, 10%, 40%);
 
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
+    --accent: hsl(220, 21%, 39%);
+    --accent-foreground: hsl(220, 35%, 92%);
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
+    --popover: hsl(210, 55%, 11%);
+    --popover-foreground: hsl(235, 7%, 46%);
 
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
+    --border: hsl(220, 21%, 39%);
+    --input: hsl(220, 21%, 39%);
 
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
+    --card: hsl(210, 55%, 11%);
+    --card-foreground: hsl(215, 42%, 75%);
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
+    --primary: hsl(220, 35%, 92%);
+    --primary-foreground: hsl(250, 12%, 20%);
 
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: hsl(250, 12%, 20%);
+    --secondary-foreground: hsl(220, 35%, 92%);
 
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: hsl(7, 68%, 53%);
+    --destructive-foreground: hsl(220, 35%, 92%);
 
-    --ring: 216 34% 17%;
+    --ring: hsl(220, 21%, 39%);
 
-    --radius: 0.5rem;
+    --button: hsl(255, 90%, 66%);
+    --button-foreground: hsl(215, 42%, 75%);
+    --button-hover: hsl(255, 70%, 71%);
+    --button-stroke: hsl(255, 45%, 51%);
+    --button-secondary: hsl(0, 0%, 100%);
+    --button-secondary-foreground: hsl(0, 0%, 0%);
+    --button-secondary-stroke: hsl(0, 0%, 90%);
+    --button-secondary-hover: hsl(0, 0%, 94%);
+
+    --tab: hsl(210, 55%, 11%);
+    --navbar: hsl(210, 55%, 11%);
+    --sidebar: hsl(210, 55%, 11%);
   }
 }
 
@@ -212,7 +227,7 @@
     @apply w-[80px] border-blue-200;
   }
   .schema-form button[type='submit'].btn {
-    @apply inline-flex items-center justify-center bg-primary px-4 text-primary-foreground hover:bg-primary/90;
+    @apply inline-flex items-center justify-center bg-primary px-4 text-primary-foreground hover:bg-primary hover:opacity-90;
   }
 
   /* Loading state */
