@@ -607,8 +607,8 @@ export interface components {
       | 'prefix_connector_name'
       | 'single_table'
       | 'unified_ats'
-      | 'custom_link_ag'
       | 'unified_crm'
+      | 'custom_link_ag'
     'core.integration': {
       id: string
       /** @description ISO8601 date string */
