@@ -77,7 +77,8 @@ export function agLink(ctx: {
                 op.data.entity.unified.first_name,
                 op.data.entity.unified.last_name,
               ]).join(' '),
-              // Should be candidate external id
+              // TODO: AG is renaming this to candidate_external_id 
+              // when they migrate their schema this should be candidate_external_id = data.entity?.raw?.id
               opening_external_id:
                 op.data.entity.unified.id ??
                 (op.data.entity.raw as any)?.['id'],
@@ -96,6 +97,7 @@ export function agLink(ctx: {
               connectionId: ctx.source.id,
               id: op.data.id,
               external_job_id: op.data.entity?.unified.id,
+              offer_external_id: op.data.entity?.unified.id,
               isOpenInt: true,
               raw: op.data.entity?.raw,
               unified: op.data.entity?.unified,
@@ -136,7 +138,7 @@ export function agLink(ctx: {
               raw: op.data.entity?.raw,
               unified: op.data.entity?.unified,
               isOpenInt: true,
-              opening_external_id: raw?.['opening_id'] || '',
+              opening_external_id: op.data.entity?.unified?.id || raw?.['opening_id'] || '',
               job_id: raw?.['job_id'] || '',
             },
             upsert: {
