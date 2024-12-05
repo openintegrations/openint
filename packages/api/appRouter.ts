@@ -6,20 +6,24 @@ import type {
 import {generateOpenApiDocument} from '@lilyrose2798/trpc-openapi/dist/generator'
 import {getServerUrl} from '@openint/app-config/constants'
 import {flatRouter, outgoingWebhookEventMap} from '@openint/engine-backend'
+import {env} from '@openint/env'
 import accountingRouter from '@openint/unified-accounting'
 import atsRouter from '@openint/unified-ats'
 import bankingRouter from '@openint/unified-banking'
 import {crmRouter} from '@openint/unified-crm'
 import eltRouter from '@openint/unified-etl'
+import fileStorageRouter from '@openint/unified-file-storage'
 import hrisRouter from '@openint/unified-hris'
 import ptaRouter from '@openint/unified-pta'
 import {salesEngagementRouter} from '@openint/unified-sales-engagement'
+import {sentenceCase} from '@openint/util'
+import type {AnyRouter, RouterMeta} from '@openint/vdk'
 import {mapKeys, mapValues, publicProcedure, trpc, z} from '@openint/vdk'
 import {authRouter} from './authRouter'
 
 export const publicRouter = trpc.router({
   getOpenapiDocument: publicProcedure
-    .meta({openapi: {method: 'GET', path: '/openapi.json'}})
+    .meta({openapi: {method: 'GET', path: '/openapi.json', tags: ['Internal']}})
     .input(z.void())
     .output(z.unknown())
     .query((): unknown => getOpenAPISpec()),
@@ -36,9 +40,11 @@ export const _appRouter = trpc.router({
   ats: atsRouter,
   hris: hrisRouter,
   etl: eltRouter,
+  fileStorage: fileStorageRouter,
 })
 
 export const appRouter = trpc.mergeRouters(flatRouter, authRouter, _appRouter)
+setDefaultOpenAPIMeta(appRouter)
 
 export type AppRouter = typeof appRouter
 
@@ -81,8 +87,29 @@ export function oasWebhooksEventsMap(
   return {webhooks, components}
 }
 
+/**
+ * Use the last segment of the operationId to be the default openapi summary
+ * e.g. `crm.getContact` -> `Get Contact`
+ */
+function setDefaultOpenAPIMeta(router: AnyRouter) {
+  for (const procedureMap of [router._def.queries, router._def.mutations]) {
+    for (const [name, procedure] of Object.entries(
+      procedureMap as Record<string, unknown>,
+    )) {
+      const meta = (procedure as {meta?: RouterMeta} | undefined)?.meta
+      // console.log('Adding openapi for', name)
+      if (meta?.openapi && !meta.openapi.summary) {
+        const summary = sentenceCase(name.split('.').pop() ?? '')
+        meta.openapi.summary = summary
+        // console.log('Will add summary for', name, meta.openapi)
+      }
+    }
+  }
+}
+
 export function getOpenAPISpec() {
   const {webhooks, components} = oasWebhooksEventsMap(outgoingWebhookEventMap)
+
   const oas = generateOpenApiDocument(appRouter, {
     openApiVersion: '3.1.0', // Want jsonschema
     title: 'OpenInt OpenAPI',
@@ -98,8 +125,14 @@ export function getOpenAPISpec() {
         name: 'x-resource-id',
         in: 'header',
       },
+      // TODO: Should this be an actual oauth thing? Doesn't seem to work as is right now
+      token: {
+        type: 'apiKey',
+        name: 'authorization',
+        in: 'header',
+      },
     },
-    baseUrl: getServerUrl(null) + '/api/v0',
+    baseUrl: env.NEXT_PUBLIC_API_URL ?? getServerUrl(null) + '/api/v0',
     webhooks,
     components,
   })

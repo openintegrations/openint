@@ -1,7 +1,7 @@
 import {eq, sql} from 'drizzle-orm'
 import type {SendEventPayload} from 'inngest/helpers/types'
 import type {OpenIntHeaders} from '@openint/api'
-import {createAppHandler} from '@openint/api'
+import {createAppOpenAPIHandler} from '@openint/api'
 import type {Id} from '@openint/cdk'
 import {makeJwtClient, VERTICAL_BY_KEY} from '@openint/cdk'
 import {
@@ -434,7 +434,7 @@ function initSDK(headers?: OpenIntHeaders) {
     // Bypass the normal fetch link http round-tripping back to our server and handle the BYOS request directly!
     // Though we are losing the ability to debug using Proxyman and others... So maybe make this configurable in
     // development
-    links: [createAppHandler()],
+    links: [createAppOpenAPIHandler({endpoint: '/api/v0'})],
     // baseUrl: 'http://localhost:4000/api/v0',
   })
   return {openint, jwt}

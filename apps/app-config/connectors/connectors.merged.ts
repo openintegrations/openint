@@ -36,14 +36,14 @@ import {default as connectorLunchmoney_server} from '@openint/connector-lunchmon
 import {default as connectorMercury_def} from '@openint/connector-mercury/def'
 import {default as connectorMerge_def} from '@openint/connector-merge/def'
 import {default as connectorMerge_server} from '@openint/connector-merge/server'
+import {default as connectorMicrosoft_def} from '@openint/connector-microsoft/def'
+import {default as connectorMicrosoft_server} from '@openint/connector-microsoft/server'
 import {default as connectorMongodb_def} from '@openint/connector-mongodb/def'
 import {default as connectorMongodb_server} from '@openint/connector-mongodb/server'
 import {default as connectorMoota_def} from '@openint/connector-moota/def'
 import {default as connectorMoota_server} from '@openint/connector-moota/server'
 import {default as connectorOnebrick_def} from '@openint/connector-onebrick/def'
 import {default as connectorOnebrick_server} from '@openint/connector-onebrick/server'
-import {default as connectorOutlook_def} from '@openint/connector-outlook/def'
-import {default as connectorOutlook_server} from '@openint/connector-outlook/server'
 import {default as connectorOutreach_def} from '@openint/connector-outreach/def'
 import {default as connectorOutreach_server} from '@openint/connector-outreach/server'
 import {default as connectorPipedrive_def} from '@openint/connector-pipedrive/def'
@@ -182,6 +182,11 @@ const connectorMerge = {
   ...connectorMerge_server,
 }
 
+const connectorMicrosoft = {
+  ...connectorMicrosoft_def,
+  ...connectorMicrosoft_server,
+}
+
 const connectorMongodb = {
   ...connectorMongodb_def,
   ...connectorMongodb_server,
@@ -195,11 +200,6 @@ const connectorMoota = {
 const connectorOnebrick = {
   ...connectorOnebrick_def,
   ...connectorOnebrick_server,
-}
-
-const connectorOutlook = {
-  ...connectorOutlook_def,
-  ...connectorOutlook_server,
 }
 
 const connectorOutreach = {
@@ -331,10 +331,10 @@ export const mergedConnectors = {
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
   merge: connectorMerge,
+  microsoft: connectorMicrosoft,
   mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
-  outlook: connectorOutlook,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
   plaid: connectorPlaid,

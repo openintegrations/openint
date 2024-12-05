@@ -20,22 +20,42 @@ const procedure = verticalProcedure(adapters)
 
 export const bankingRouter = trpc.router({
   listAccounts: procedure
-    .meta(oapi({method: 'GET', path: '/account'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/account',
+      tags: ['Banking'],
+      summary: 'List Accounts',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.account)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listMerchants: procedure
-    .meta(oapi({method: 'GET', path: '/merchant'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/merchant',
+      tags: ['Banking'],
+      summary: 'List Merchants',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.merchant)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listCategories: procedure
-    .meta(oapi({method: 'GET', path: '/category'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/category',
+      tags: ['Banking'],
+      summary: 'List Categories',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.category)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listTransactions: procedure
-    .meta(oapi({method: 'GET', path: '/transaction'}))
+    .meta(oapi({
+      method: 'GET',
+      path: '/transaction',
+      tags: ['Banking'],
+      summary: 'List Transactions',
+    }))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.transaction)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),

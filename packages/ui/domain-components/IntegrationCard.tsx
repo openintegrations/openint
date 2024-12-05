@@ -24,7 +24,7 @@ export function IntegrationCard({
       <Tooltip>
         <TooltipTrigger className="flex h-full flex-col items-center justify-center">
           <Card
-            className="relative h-[150px] w-[150px] cursor-pointer rounded-lg border border-gray-300 bg-white p-0 transition-colors duration-300 ease-in-out hover:border-[#8A7DFF] hover:bg-[#F8F7FF]"
+            className="hover:bg-button/25 relative h-[150px] w-[150px] cursor-pointer rounded-lg border border-gray-300 bg-white p-0 transition-colors duration-300 ease-in-out hover:border-button"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
             <CardContent
@@ -32,8 +32,8 @@ export function IntegrationCard({
               onClick={onClick}>
               {isHovered ? (
                 <div className="flex h-full flex-col items-center justify-center">
-                  <Plus color="#8A7DFF" size={24} />
-                  <span className="mt-2 font-sans text-[14px] font-semibold text-[#8A7DFF]">
+                  <Plus className="text-button" size={24} />
+                  <span className="mt-2 font-sans text-[14px] font-semibold text-button">
                     Add
                   </span>
                 </div>
@@ -46,7 +46,7 @@ export function IntegrationCard({
                     style={{marginBottom: '10px', objectFit: 'contain'}}
                   />{' '}
                   <p
-                    className={`m-0 max-w-[100px] text-center text-sm font-semibold hover:text-[#8A7DFF] ${
+                    className={`m-0 max-w-[100px] text-center text-sm font-semibold hover:text-button ${
                       name.length > 15 ? 'truncate' : ''
                     }`}>
                     {name}

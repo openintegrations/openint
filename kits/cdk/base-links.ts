@@ -154,7 +154,7 @@ export function agColumnRenameLink(_ctx: {
       // Greenhouse
       job: 'IntegrationAtsJob',
       candidate: 'IntegrationAtsCandidate',
-      opening: 'IntegrationAtsJobOpening',
+      opening: 'IntegrationAtsOpening',
       offer: 'IntegrationAtsOffer',
       // Lever
       // already mapped above, same relation name

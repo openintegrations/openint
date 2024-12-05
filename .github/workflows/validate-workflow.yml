@@ -1,6 +1,8 @@
 name: Validate
 
-on: [push, pull_request]
+on:
+  push: { branches: [main, production] }
+  pull_request:
 
 jobs:
   main:
@@ -31,6 +33,10 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      POSTGRES_URL: postgres://postgres:test@localhost:5432/test
 
     steps:
       - name: Checkout
@@ -70,24 +76,30 @@ jobs:
       #   uses: lhotari/action-upterm@v1
       - name: Run type checks
         run: pnpm run typecheck
-        env:
-          NODE_OPTIONS: --max-old-space-size=4096
-
-        # TODO: Figure out a pattern to make environment variables parsed / required on demand rather than on startup time
-        # Ideally have a way to switch between the two... Where we can also choose proactive parsing for sanity checking...
-
-      - name: Run health check
-        run: MOCK_HEALTHCHECK=true NANGO_SECRET_KEY=noop JWT_SECRET=NOOP POSTGRES_URL=postgres:// npx tsx ./bin/openint.ts health
-
-      - name: Run migration check
-        run: POSTGRES_URL=postgres://postgres:test@localhost:5432/test pnpm migration up
-        # To test this with a locally install postgres, run
-        # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && POSTGRES_URL=postgres://localhost:5432/test pnpm migration up
 
       - name: Run lint
         run: pnpm run lint
-        env:
-          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Download dev env vars from Vercel
+        run: |
+          vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
+          vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local
+
+      - name: Ensure OpenAPI spec and docs are up to date
+        run: pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate && git diff --exit-code
+
+      - name: Run migration
+        run: pnpm migration up
+        # To test this with a locally install postgres, run
+        # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && POSTGRES_URL=postgres://localhost:5432/test pnpm migration up
+
+      - name: Run health check
+        run: MOCK_HEALTHCHECK=true NANGO_SECRET_KEY=noop JWT_SECRET=NOOP npx tsx ./bin/openint.ts health
+
+      - name: Start dev server in background
+        run: |
+          pnpm run web --port 4000 &
+          pnpm wait-on tcp:4000
 
       - name: Run tests
         run: POSTGRES_URL=postgres://postgres:test@localhost:5432/test pnpm run test::ci

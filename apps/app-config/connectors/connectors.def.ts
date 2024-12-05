@@ -18,10 +18,10 @@ import {default as connectorLever} from '@openint/connector-lever/def'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/def'
 import {default as connectorMercury} from '@openint/connector-mercury/def'
 import {default as connectorMerge} from '@openint/connector-merge/def'
+import {default as connectorMicrosoft} from '@openint/connector-microsoft/def'
 import {default as connectorMongodb} from '@openint/connector-mongodb/def'
 import {default as connectorMoota} from '@openint/connector-moota/def'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/def'
-import {default as connectorOutlook} from '@openint/connector-outlook/def'
 import {default as connectorOutreach} from '@openint/connector-outreach/def'
 import {default as connectorPipedrive} from '@openint/connector-pipedrive/def'
 import {default as connectorPlaid} from '@openint/connector-plaid/def'
@@ -65,10 +65,10 @@ export const defConnectors = {
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
   merge: connectorMerge,
+  microsoft: connectorMicrosoft,
   mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
-  outlook: connectorOutlook,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
   plaid: connectorPlaid,

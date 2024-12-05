@@ -2,7 +2,7 @@
   "name": "openint",
   "version": "0.0.0",
   "private": true,
-  "repository": "git@github.com:openint-dev/openint.git",
+  "repository": "git@github.com:openintegrations/openint.git",
   "license": "UNLICENSED",
   "scripts": {
     "web": "pnpm run --filter web dev",
@@ -72,7 +72,8 @@
     "tsx": "3.12.2",
     "turbo": "^1.10.16",
     "typescript": "^5.6.2",
-    "typescript-snapshots-plugin": "^1.7.0"
+    "typescript-snapshots-plugin": "^1.7.0",
+    "wait-on": "^8.0.1"
   },
   "packageManager": "pnpm@9.9.0",
   "engines": {

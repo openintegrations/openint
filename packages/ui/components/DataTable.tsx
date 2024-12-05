@@ -33,6 +33,7 @@ import {
   TableHeader,
   TableRow,
 } from '../shadcn'
+import {cn} from '../utils'
 import {LoadingText} from './LoadingText'
 
 const defaultFilter = () => true
@@ -42,6 +43,7 @@ interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   enableSelect?: boolean
   filter?: (data: TData) => boolean
+  onRowClick?: (data: TData) => void
 }
 
 // TODO: Create a schemaDataTable that define columns based on zod schema
@@ -51,6 +53,7 @@ export function DataTable<TData, TValue>({
   query,
   enableSelect,
   filter = defaultFilter,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -201,7 +204,13 @@ export function DataTable<TData, TValue>({
                 .map((row) => (
                   <TableRow
                     key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}>
+                    data-state={row.getIsSelected() && 'selected'}
+                    onClick={
+                      onRowClick ? () => onRowClick?.(row.original) : undefined
+                    }
+                    className={cn(
+                      onRowClick && 'cursor-pointer hover:bg-muted',
+                    )}>
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(

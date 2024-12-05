@@ -295,28 +295,52 @@ export const qboAdapter = {
       items: res.value?.entities?.map(mappers.vendor) ?? [],
     }
   },
-  getBalanceSheet: async ({instance}) => {
-    const res = await instance.GET('/reports/BalanceSheet')
+  getBalanceSheet: async ({instance, input}) => {
+    const res = await instance.GET('/reports/BalanceSheet', {
+      params: {
+        query: input
+      },
+    })
     return mappers.balanceSheet(res)
   },
-  getProfitAndLoss: async ({instance}) => {
-    const res = await instance.GET('/reports/ProfitAndLoss')
+  getProfitAndLoss: async ({instance, input}) => {
+    const res = await instance.GET('/reports/ProfitAndLoss', {
+      params: {
+        query: input
+      },
+    })
     return mappers.profitAndLoss(res)
   },
-  getCashFlow: async ({instance}) => {
-    const res = await instance.GET('/reports/CashFlow')
+  getCashFlow: async ({instance, input}) => {
+    const res = await instance.GET('/reports/CashFlow', {
+      params: {
+        query: input
+      },
+    })
     return mappers.cashFlow(res)
   },
-  getTransactionList: async ({instance}) => {
-    const res = await instance.GET('/reports/TransactionList')
+  getTransactionList: async ({instance, input}) => {
+    const res = await instance.GET('/reports/TransactionList', {
+      params: {
+        query: input
+      },
+    })
     return mappers.transactionList(res)
   },
-  getCustomerBalance: async ({instance}) => {
-    const res = await instance.GET('/reports/CustomerBalance')
+  getCustomerBalance: async ({instance, input}) => {
+    const res = await instance.GET('/reports/CustomerBalance', {
+      params: {
+        query: input
+      },
+    })
     return mappers.customerBalance(res)
   },
-  getCustomerIncome: async ({instance}) => {
-    const res = await instance.GET('/reports/CustomerIncome')
+  getCustomerIncome: async ({instance, input}) => {
+    const res = await instance.GET('/reports/CustomerIncome', {
+      params: {
+        query: input
+      },
+    })
     return mappers.customerIncome(res)
   },
   // @ts-expect-error we can tighten up the types here after opensdks support qbo v4

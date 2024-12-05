@@ -60,6 +60,13 @@ const _resourceCommand = {
 } satisfies CommandDefinitionInput<CommandContext>
 
 const debugResourceCommands = {
+  'resource:edit': cmd.identity({
+    ..._resourceCommand,
+    icon: 'Pencil',
+    title: 'Edit Connection',
+    execute: ({ctx, params}) =>
+      ctx.setResourceSheetState({resource: params.resource, open: true}),
+  }),
   'resource:navigate_sql': cmd.identity({
     ..._resourceCommand,
     icon: 'Database',
@@ -83,12 +90,6 @@ const debugResourceCommands = {
 }
 
 export const resourceCommands = {
-  'resource:edit': cmd.identity({
-    ..._resourceCommand,
-    icon: 'Pencil',
-    execute: ({ctx, params}) =>
-      ctx.setResourceSheetState({resource: params.resource, open: true}),
-  }),
   'resource:delete': cmd.identity({
     icon: 'Trash',
     ..._resourceCommand,

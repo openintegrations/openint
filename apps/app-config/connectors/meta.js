@@ -179,6 +179,15 @@ module.exports = [
     },
   },
   {
+    name: 'microsoft',
+    dirName: 'connector-microsoft',
+    varName: 'connectorMicrosoft',
+    imports: {
+      def: '@openint/connector-microsoft/def',
+      server: '@openint/connector-microsoft/server',
+    },
+  },
+  {
     name: 'mongodb',
     dirName: 'connector-mongodb',
     varName: 'connectorMongodb',
@@ -204,15 +213,6 @@ module.exports = [
       def: '@openint/connector-onebrick/def',
       client: '@openint/connector-onebrick/client',
       server: '@openint/connector-onebrick/server',
-    },
-  },
-  {
-    name: 'outlook',
-    dirName: 'connector-outlook',
-    varName: 'connectorOutlook',
-    imports: {
-      def: '@openint/connector-outlook/def',
-      server: '@openint/connector-outlook/server',
     },
   },
   {

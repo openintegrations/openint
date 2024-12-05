@@ -9,7 +9,7 @@ OpenInt enables teams to ship product integrations in hours, not weeks, using no
 ## Usage guide (WIP)
 
 - [Getting started code sample](./docs/samples/getting-started.ts)
-- [Full next.js example](https://github.com/openint-dev/examples)
+- [Full next.js example](https://github.com/openintegrations/examples)
 
 ## Deployment checklist
 

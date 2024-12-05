@@ -1,6 +1,8 @@
-import {clerkClient} from '@clerk/nextjs/server'
+import type {RequestLike} from '@clerk/nextjs/dist/types/server/types'
+import {clerkClient, getAuth} from '@clerk/nextjs/server'
 import {createOpenApiFetchHandler} from '@lilyrose2798/trpc-openapi'
 import {applyLinks, corsLink} from '@opensdks/fetch-links'
+import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {pickBy} from 'remeda'
 import {contextFactory} from '@openint/app-config/backendConfig'
 import {
@@ -9,7 +11,7 @@ import {
   kApikeyMetadata,
   kApikeyUrlParam,
 } from '@openint/app-config/constants'
-import type {Id, Viewer} from '@openint/cdk'
+import type {Id, UserId, Viewer} from '@openint/cdk'
 import {decodeApikey, makeJwtClient, zEndUserId, zId} from '@openint/cdk'
 import type {RouterContext} from '@openint/engine-backend'
 import {envRequired} from '@openint/env'
@@ -47,6 +49,7 @@ export type OpenIntHeaders = z.infer<typeof zOpenIntHeaders>
  * fall back to anon viewer
  * TODO: Figure out how to have the result of this function cached for the duration of the request
  * much like we cache
+// TODO: Dedupe me with serverGetViewer
  */
 export async function viewerFromRequest(
   req: Request,
@@ -100,6 +103,19 @@ export async function viewerFromRequest(
     }
     // console.warn('Invalid api key, ignoroing', {apiKey: apikey, id, key, res})
   }
+
+  /** Almost a NextRequest... */
+  const auth = getAuth(req as RequestLike)
+
+  // console.log('auth', auth)
+  if (auth.userId) {
+    return {
+      role: 'user',
+      userId: auth.userId as UserId,
+      orgId: auth.orgId as Id['org'],
+    }
+  }
+
   return {role: 'anon'}
 }
 
@@ -149,11 +165,29 @@ export const contextFromRequest = async ({
   }
 }
 
-export function createRouterHandler({
-  endpoint = '/api/v0',
+export function createRouterTRPCHandler({
+  endpoint,
   router,
 }: {
-  endpoint?: `/${string}`
+  endpoint: `/${string}`
+  router: AnyRouter
+}) {
+  return async (req: Request) => {
+    const context = await contextFromRequest({req})
+    return fetchRequestHandler({
+      endpoint,
+      req,
+      router,
+      createContext: () => context,
+    })
+  }
+}
+
+export function createRouterOpenAPIHandler({
+  endpoint,
+  router,
+}: {
+  endpoint: `/${string}`
   router: AnyRouter
 }) {
   const openapiRouteHandler = async (req: Request) => {

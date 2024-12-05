@@ -30,6 +30,12 @@ export const envConfig = {
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
+    NEXT_PUBLIC_API_URL: z
+      .string()
+      .optional()
+      .describe(
+        'In case API is deployed separately from the main server or there is a reverse proxy in front',
+      ),
     NEXT_PUBLIC_NANGO_PUBLIC_KEY: z.string().optional(),
     // Where the app is running. Only used by getServerUrl at the moment
     NEXT_PUBLIC_PORT: z.string().optional(),
@@ -46,6 +52,7 @@ export const envConfig = {
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
+    NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: process.env['NEXT_PUBLIC_COMMANDBAR_ORG_ID'],
     NEXT_PUBLIC_SUPABASE_URL: process.env['NEXT_PUBLIC_SUPABASE_URL'],
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'],
