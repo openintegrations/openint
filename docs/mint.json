@@ -40,11 +40,23 @@
   ],
   "navigation": [
     {
-      "group": "Getting Started",
+      "group": "Guidance",
       "pages": [
-        "quickstart/quickstart",
-        "quickstart/use-cases",
-        "quickstart/features"
+        "guidance/quickstart",
+        "guidance/integrations"
+      ]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": [
+        "core-concepts/connector-config",
+        "core-concepts/magic-link"
+      ]
+    },
+    {
+      "group": "Community",
+      "pages": [
+        "community/join-our-slack"
       ]
     },
     {
@@ -219,6 +231,12 @@
             "api-reference/file-storage/get-file"
           ]
         }
+      ]
+    },
+    {
+      "group": "Support",
+      "pages": [
+        "support/contact-us"
       ]
     }
   ],
