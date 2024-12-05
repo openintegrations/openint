@@ -22,7 +22,6 @@ import {default as connectorMicrosoft} from '@openint/connector-microsoft/def'
 import {default as connectorMongodb} from '@openint/connector-mongodb/def'
 import {default as connectorMoota} from '@openint/connector-moota/def'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/def'
-import {default as connectorOutlook} from '@openint/connector-outlook/def'
 import {default as connectorOutreach} from '@openint/connector-outreach/def'
 import {default as connectorPipedrive} from '@openint/connector-pipedrive/def'
 import {default as connectorPlaid} from '@openint/connector-plaid/def'
@@ -70,7 +69,6 @@ export const defConnectors = {
   mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
-  outlook: connectorOutlook,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
   plaid: connectorPlaid,
