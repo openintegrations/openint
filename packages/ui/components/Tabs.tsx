@@ -41,7 +41,7 @@ export function Tabs({
             {config.status ? (
               <Circle
                 className="ml-2 size-2 self-start"
-                fill={config.statusFill ?? '#8A5DF6'}
+                fill={config.statusFill ?? 'var(--button)'}
               />
             ) : null}
           </TabsTrigger>

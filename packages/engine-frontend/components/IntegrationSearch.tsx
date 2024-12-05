@@ -143,7 +143,7 @@ export function IntegrationSearch({
       <div className="relative flex-1 overflow-y-auto">
         {listIntegrationsRes.isLoading ? (
           <div className="flex h-full min-h-[500px] items-center justify-center">
-            <Loader className="size-7 animate-spin text-[#8A5DF6]" />
+            <Loader className="size-7 animate-spin text-button" />
           </div>
         ) : (
           <div className="space-y-6 p-4">
@@ -216,7 +216,7 @@ export function IntegrationSearch({
                                     alt={`${int.name} logo`}
                                     className="h-12 w-12 rounded-xl"
                                   />
-                                  <p className="m-0 text-center text-sm font-semibold hover:text-[#8A7DFF]">
+                                  <p className="m-0 text-center text-sm font-semibold hover:text-button">
                                     {int.name}
                                   </p>
                                 </div>

@@ -56,16 +56,6 @@ const sectionedLinks: Array<{
         icon: 'Users',
       },
       {
-        title: 'Pipelines',
-        href: '/dashboard/pipelines',
-        icon: 'ArrowLeftRight',
-      },
-      {
-        title: 'Sync Runs',
-        href: '/dashboard/sync-runs',
-        icon: 'ArrowLeftRight',
-      },
-      {
         title: 'Connections',
         href: '/dashboard/resources',
         icon: 'Box',
@@ -74,6 +64,21 @@ const sectionedLinks: Array<{
         title: 'Connector Configs',
         href: '/dashboard/connector-configs',
         icon: 'Layers',
+      },
+    ],
+  },
+  {
+    title: 'Pipelines',
+    items: [
+      {
+        title: 'Pipeline List',
+        href: '/dashboard/pipelines',
+        icon: 'ArrowLeftRight',
+      },
+      {
+        title: 'Pipeline Runs',
+        href: '/dashboard/pipeline-runs',
+        icon: 'ArrowLeftRight',
       },
     ],
   },
