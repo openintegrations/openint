@@ -37,7 +37,7 @@ export const File = z
     name: z.string(),
     file_url: z.string().nullish(),
     download_url: z.string().nullish(),
-    mimeType: z.string().nullish(),
+    mime_type: z.string().nullish(),
     size: z.number().nullish(),
     drive_id: z.string(),
     created_at: z.string().nullish(),
