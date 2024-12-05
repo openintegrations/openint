@@ -28,10 +28,10 @@ interface ThemeColors {
 const defaultThemeColors: Partial<ThemeColors> = {
   background: 'hsl(0, 0%, 100%)', // #ffffff - White
   border: 'hsl(222, 23%, 87%)', // #d6d9e4 - Light Grayish Blue
-  button: 'hsl(207, 53%, 51%)', // #8a5df6 - Bright Purple
+  button: 'hsl(255, 90%, 66%)', // #8a5df6 - Bright Purple
   buttonForeground: 'hsl(0, 0%, 100%)', // #ffffff - White
   buttonHover: 'hsl(258, 70%, 71%)', // #a082e9 - Light Purple
-  buttonStroke: 'hsl(258, 47%, 51%)', // #6947bb - Medium Purple
+  buttonStroke: 'hsl(255, 90%, 66%)', // #6947bb - Medium Purple
   buttonSecondary: 'hsl(0, 0%, 100%)', // #ffffff - White
   buttonSecondaryForeground: 'hsl(0, 0%, 0%)', // #000000 - Black
   buttonSecondaryStroke: 'hsl(0, 0%, 90%)', // #e6e6e6 - Very Light Gray
