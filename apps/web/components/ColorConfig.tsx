@@ -2,10 +2,13 @@
 
 import {useState} from 'react'
 
+const GOV_SIGNALS_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
+
 interface ThemeColors {
   background: string
   border: string
   button: string
+  buttonLight: string
   buttonForeground: string
   buttonHover: string
   buttonStroke: string
@@ -29,6 +32,7 @@ const defaultThemeColors: Partial<ThemeColors> = {
   background: 'hsl(0, 0%, 100%)', // #ffffff - White
   border: 'hsl(222, 23%, 87%)', // #d6d9e4 - Light Grayish Blue
   button: 'hsl(255, 90%, 66%)', // #8a5df6 - Bright Purple
+  buttonLight: 'hsl(255, 90%, 96%)', // Light Purple
   buttonForeground: 'hsl(0, 0%, 100%)', // #ffffff - White
   buttonHover: 'hsl(258, 70%, 71%)', // #a082e9 - Light Purple
   buttonStroke: 'hsl(255, 90%, 66%)', // #6947bb - Medium Purple
@@ -48,8 +52,23 @@ const defaultThemeColors: Partial<ThemeColors> = {
   tab: 'hsl(0, 0%, 100%)', // #ffffff - White
 }
 
-export function ColorConfig() {
-  const [themeColors] = useState<Partial<ThemeColors>>(defaultThemeColors)
+const govSignalsThemeColors: Partial<ThemeColors> = {
+  ...defaultThemeColors,
+  button: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
+  buttonLight: 'hsl(199, 51%, 96%)', // #e6f5ff - Light Steel Aqua
+}
+
+const getThemeByOrgId = (orgId: string) => {
+  switch (orgId) {
+    case GOV_SIGNALS_ID:
+      return govSignalsThemeColors
+    default:
+      return defaultThemeColors
+  }
+}
+
+export function ColorConfig({orgId}: {orgId: string}) {
+  const [themeColors] = useState<Partial<ThemeColors>>(getThemeByOrgId(orgId))
   // TODO: Fetch color config by client if required and update themeColors state.
 
   return (
@@ -58,6 +77,7 @@ export function ColorConfig() {
         --background: ${themeColors.background};
         --border: ${themeColors.border};
         --button: ${themeColors.button};
+        --button-light: ${themeColors.buttonLight};
         --button-foreground: ${themeColors.buttonForeground};
         --button-hover: ${themeColors.buttonHover};
         --button-stroke: ${themeColors.buttonStroke};
