@@ -155,6 +155,8 @@ export const postgresServer = {
           if (tableName === 'IntegrationAtsJob') {
             rowToInsert['external_job_id'] = data.entity?.raw?.id || ''
           } else if (tableName === 'IntegrationAtsCandidate') {
+            // TODO: AG is renaming this to candidate_external_id 
+            // when they migrate their schema this should be candidate_external_id = data.entity?.raw?.id
             rowToInsert['opening_external_id'] = data.entity?.raw?.id || ''
             rowToInsert['candidate_name'] =
               data.entity?.raw?.first_name +

@@ -1269,7 +1269,8 @@ export interface components {
     'unified.file': {
       id: string
       name: string
-      file_url: string
+      file_url?: string | null
+      download_url?: string | null
       mimeType?: string | null
       size?: number | null
       drive_id: string
@@ -5505,6 +5506,11 @@ export interface operations {
   /** List folders */
   'fileStorage-listFolders': {
     parameters: {
+      query?: {
+        sync_mode?: 'full' | 'incremental'
+        cursor?: string | null
+        page_size?: number
+      }
       path: {
         driveId: string
       }
@@ -5579,6 +5585,9 @@ export interface operations {
   'fileStorage-listFiles': {
     parameters: {
       query?: {
+        sync_mode?: 'full' | 'incremental'
+        cursor?: string | null
+        page_size?: number
         folderId?: string | null
       }
       path: {

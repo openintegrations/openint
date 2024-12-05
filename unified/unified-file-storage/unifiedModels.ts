@@ -35,7 +35,8 @@ export const File = z
   .object({
     id: z.string(),
     name: z.string(),
-    file_url: z.string(),
+    file_url: z.string().nullish(),
+    download_url: z.string().nullish(),
     mimeType: z.string().nullish(),
     size: z.number().nullish(),
     drive_id: z.string(),
