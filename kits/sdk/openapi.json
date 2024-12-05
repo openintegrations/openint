@@ -8568,6 +8568,28 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "sync_mode",
+            "schema": {
+              "type": "string",
+              "enum": ["full", "incremental"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": ["string", "null"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "responses": {
@@ -8709,6 +8731,28 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "sync_mode",
+            "schema": {
+              "type": "string",
+              "enum": ["full", "incremental"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": ["string", "null"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "in": "query",
@@ -10832,7 +10876,10 @@
             "type": "string"
           },
           "file_url": {
-            "type": "string"
+            "type": ["string", "null"]
+          },
+          "download_url": {
+            "type": ["string", "null"]
           },
           "mimeType": {
             "type": ["string", "null"]
@@ -10854,7 +10901,7 @@
             "additionalProperties": {}
           }
         },
-        "required": ["id", "name", "file_url", "drive_id"],
+        "required": ["id", "name", "drive_id"],
         "description": "A unified representation of a file within a drive"
       }
     }
