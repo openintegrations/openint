@@ -32,7 +32,7 @@ export const fileStorageRouter = trpc.router({
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listFolders: procedure
     .meta(oapi({method: 'GET', path: '/drive/{driveId}/folder'}))
-    .input(z.object({driveId: z.string()}))
+    .input(zPaginationParams.extend({driveId: z.string()}))
     .output(zPaginatedResult.extend({items: z.array(unified.Folder)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getFolder: procedure
@@ -42,7 +42,7 @@ export const fileStorageRouter = trpc.router({
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listFiles: procedure
     .meta(oapi({method: 'GET', path: '/drive/{driveId}/file'}))
-    .input(z.object({driveId: z.string(), folderId: z.string().nullish()}))
+    .input(zPaginationParams.extend({driveId: z.string(), folderId: z.string().nullish()}))
     .output(zPaginatedResult.extend({items: z.array(unified.File)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   getFile: procedure

@@ -6,9 +6,8 @@ export const microsoftGraphAdapter = {
     const res = await instance.GET('/drives', {
       params: {
         query: {
-          // @ts-expect-error figure out pagination 
-          // "$skip is not supported on this API. Only URLs returned by the API can be used to page
-          $skipToken: input?.cursor ?? undefined,
+          // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
+          $skiptoken: input?.cursor ?? undefined,
         },
       },
     });
@@ -65,9 +64,8 @@ export const microsoftGraphAdapter = {
       params: {
         path: {'drive-id': input?.driveId ?? ''},
         query: {
-          // @ts-expect-error figure out pagination 
-          // "$skip is not supported on this API. Only URLs returned by the API can be used to page
-          $skipToken: input?.cursor ?? undefined,
+          // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
+          $skiptoken: input?.cursor ?? undefined,
           $filter: "folder ne null",
         },
       }
@@ -131,12 +129,14 @@ export const microsoftGraphAdapter = {
     const res = input.folderId ? await instance.GET(`/drives/{drive-id}/items/{driveItem-id}/children`, {
       params: {
         path: {'drive-id': input.driveId, 'driveItem-id': input.folderId},
-        query: {$filter: "true"},
+        // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
+        query: {$filter: "true", $skiptoken: input?.cursor ?? undefined},
       }
     }) : await instance.GET(`/drives/{drive-id}/items`, {
       params: {
         path: {'drive-id': input.driveId},
-        query: {$filter: "true"},
+        // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
+        query: {$filter: "true", $skiptoken: input?.cursor ?? undefined},
       }
     });
 
@@ -203,5 +203,5 @@ function extractCursor(nextLink: string): string | undefined {
   const url = new URL(nextLink);
 
   // TODO: verify this is the correct cursor
-  return url.searchParams.get('$skip') ?? undefined;
+  return url.searchParams.get('$skiptoken') ?? undefined;
 } 
