@@ -14,6 +14,16 @@ interface LinkItem {
   icon?: IconName
 }
 
+const devSectionedLinks: LinkItem[] = __DEBUG__
+  ? [
+      {
+        title: 'Pipeline Runs',
+        href: '/dashboard/pipeline-runs',
+        icon: 'ArrowLeftRight',
+      },
+    ]
+  : []
+
 const sectionedLinks: Array<{
   title?: string
   items: LinkItem[]
@@ -65,21 +75,12 @@ const sectionedLinks: Array<{
         href: '/dashboard/connector-configs',
         icon: 'Layers',
       },
-    ],
-  },
-  {
-    title: 'Pipelines',
-    items: [
       {
-        title: 'Pipeline List',
+        title: 'Pipelines',
         href: '/dashboard/pipelines',
         icon: 'ArrowLeftRight',
       },
-      {
-        title: 'Pipeline Runs',
-        href: '/dashboard/pipeline-runs',
-        icon: 'ArrowLeftRight',
-      },
+      ...devSectionedLinks,
     ],
   },
   {
