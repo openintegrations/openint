@@ -45,13 +45,13 @@ export const microsoftGraphAdapter = {
     })
     const drive = res.data;
     return {
-      id: drive.id || '',
-      name: drive.name || '',
+      id: drive?.['value']?.[0]?.['id'] || '',
+      name: drive?.['value']?.[0]?.['name'] || '',
       integration: 'sharepoint',
-      created_at: drive.createdDateTime,
-      modified_at: drive.lastModifiedDateTime,
-      owner: drive.owner?.['group']?.['displayName'] || drive.owner?.['user']?.['displayName'],
-      raw_data: drive,
+      created_at: drive?.['value']?.[0]?.['createdDateTime'],
+      modified_at: drive?.['value']?.[0]?.['lastModifiedDateTime'],
+      owner: drive?.['value']?.[0]?.['owner']?.['group']?.['displayName'] || drive?.['value']?.[0]?.['owner']?.['user']?.['displayName'],
+      raw_data: drive?.['value']?.[0],
     };
   },
 
@@ -151,7 +151,8 @@ export const microsoftGraphAdapter = {
     const items = res.data.value.map((item: any) => ({
       id: item.id,
       name: item.name,
-      file_url: item.webUrl || '',
+      file_url: item.webUrl || null,
+      download_url: item['@microsoft.graph.downloadUrl'] || null,
       mimeType: item.file?.mimeType || null,
       size: item.size || null,
       parent_id: item.parentReference?.id,
@@ -184,7 +185,8 @@ export const microsoftGraphAdapter = {
     return {
       id: res.data.id || '',
       name: res.data.name || '',
-      file_url: res.data.webUrl || '',
+      file_url: res.data?.webUrl || null,
+      download_url: res.data['@microsoft.graph.downloadUrl'] + '' || null,
       mimeType: res.data.file?.mimeType || null,
       size: res.data.size || null,
       parent_id: res.data.parentReference?.id,
