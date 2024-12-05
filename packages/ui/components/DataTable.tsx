@@ -15,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import {ChevronDown, Search} from 'lucide-react'
+import {ChevronDown, Loader2, Search} from 'lucide-react'
 import React from 'react'
 import {R, titleCase} from '@openint/util'
 import {
@@ -34,7 +34,6 @@ import {
   TableRow,
 } from '../shadcn'
 import {cn} from '../utils'
-import {LoadingText} from './LoadingText'
 
 const defaultFilter = () => true
 
@@ -189,7 +188,9 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center">
                   {query.isLoading || query.isRefetching ? (
-                    <LoadingText />
+                    <div className="flex size-full min-h-[300px] items-center justify-center">
+                      <Loader2 className="size-8 animate-spin text-button" />
+                    </div>
                   ) : query.isError ? (
                     `Error: ${query.error}`
                   ) : (
