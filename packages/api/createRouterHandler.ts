@@ -1,4 +1,4 @@
-import {RequestLike} from '@clerk/nextjs/dist/types/server/types'
+import type {RequestLike} from '@clerk/nextjs/dist/types/server/types'
 import {clerkClient, getAuth} from '@clerk/nextjs/server'
 import {createOpenApiFetchHandler} from '@lilyrose2798/trpc-openapi'
 import {applyLinks, corsLink} from '@opensdks/fetch-links'
