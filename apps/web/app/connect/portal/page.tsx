@@ -66,7 +66,7 @@ export default async function PortalPage({
   return (
     <ClientRoot accessToken={viewer.accessToken} authStatus="success">
       <SuperHydrate dehydratedState={getDehydratedState()}>
-        <ColorConfig />
+        <ColorConfig orgId={viewer.orgId} />
         {isAgMode ? <AGConnectionPortal /> : <ConnectionPortal />}
       </SuperHydrate>
     </ClientRoot>

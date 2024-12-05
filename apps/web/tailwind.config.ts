@@ -87,6 +87,7 @@ export default {
           foreground: 'var(--button-foreground)',
           hover: 'var(--button-hover)',
           stroke: 'var(--button-stroke)',
+          light: 'var(--button-light)',
           secondary: {
             DEFAULT: 'var(--button-secondary)',
             foreground: 'var(--button-secondary-foreground)',

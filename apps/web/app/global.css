@@ -44,6 +44,7 @@
     --radius: 0.5rem;
 
     --button: hsl(255, 90%, 66%);
+    --button-light: hsl(255, 90%, 96%);
     --button-foreground: hsl(0, 0%, 100%);
     --button-hover: hsl(255, 70%, 71%);
     --button-stroke: hsl(255, 45%, 51%);
@@ -88,6 +89,7 @@
     --ring: hsl(220, 21%, 39%);
 
     --button: hsl(255, 90%, 66%);
+    --button-light: hsl(255, 90%, 96%);
     --button-foreground: hsl(215, 42%, 75%);
     --button-hover: hsl(255, 70%, 71%);
     --button-stroke: hsl(255, 45%, 51%);
