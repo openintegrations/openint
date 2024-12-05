@@ -44,8 +44,8 @@
       "pages": [
         "quickstart/quickstart",
         "quickstart/use-cases",
-        "quickstart/features,
-        "quickstart/test,"
+        "quickstart/features",
+        "quickstart/test"
       ]
     },
     {
@@ -196,9 +196,7 @@
         },
         {
           "group": "HRIS",
-          "pages": [
-            "api-reference/hris/list-individuals"
-          ]
+          "pages": ["api-reference/hris/list-individuals"]
         },
         {
           "group": "ETL",
