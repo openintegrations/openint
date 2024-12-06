@@ -13,6 +13,8 @@ import {
   ConnectorConfigCard as _ConnectorConfigCard,
   Badge,
   Button,
+  Card,
+  CardContent,
   cn,
   ConnectorLogo,
   DataTable,
@@ -21,6 +23,14 @@ import {
 import CalendarBooking from '@openint/ui/components/CalendarBooking'
 import {inPlaceSort, R, titleCase} from '@openint/util'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
+
+const CTA_LINK = 'ap-openint/request-integration'
+const CTA_DESCRIPTION =
+  'Request any integration. Pay $1k, and within 72 hours, one of our partners will build support for it on OpenInt.'
+const CTA_HEADER = 'Request Integration Service'
+const DEFAULT_DESCRIPTION =
+  'Grab some time with our founder to help you get the best out of OpenInt'
+const DEFAULT_HEADER = 'Book a Free Discovery Meeting'
 
 export type ConnectorConfig = RouterOutput['adminListConnectorConfigs'][number]
 
@@ -31,6 +41,14 @@ export default function ConnectorConfigsPage({
 }) {
   const [open, setOpen] = useState(false)
   const [openCalendar, setOpenCalendar] = useState(false)
+  const [calProps, setCalProps] = useState<
+    | {
+        description: string
+        header: string
+        link?: string
+      }
+    | undefined
+  >(undefined)
   const [connectorName, setConnectorName] = useState<string>('')
   const [connectorConfig, setConnectorConfig] = useState<
     Omit<ConnectorConfig, 'connectorName'> | undefined
@@ -55,6 +73,11 @@ export default function ConnectorConfigsPage({
 
   const filter = (c: ConnectorConfig) =>
     c.displayName !== 'Default Postgres Connector for sync'
+
+  const closeCalendar = () => {
+    setOpenCalendar(false)
+    setCalProps(undefined)
+  }
 
   return (
     <div className="max-w-[60%] p-6">
@@ -166,40 +189,80 @@ export default function ConnectorConfigsPage({
         if (!connectors.length) {
           return null
         }
+        const connectorsWithCTA = [
+          ...connectors,
+          {
+            __typename: 'connector',
+            name: 'request-access',
+            displayName: `Request ${vertical} integration`,
+            stage: 'alpha',
+            platforms: [],
+            verticals: [vertical],
+            sourceStreams: [],
+            supportedModes: ['source'],
+            hasPreConnect: false,
+            hasUseConnectHook: false,
+            schemas: {},
+          } as unknown as ConnectorMeta,
+        ]
+
         return (
           <div key={vertical}>
             <h3 className="mb-4 ml-4 text-xl font-semibold tracking-tight">
               {titleCase(vertical)}
             </h3>
             <div className="flex flex-wrap">
-              {connectors.map((connector) => (
-                <ConnectorCard
-                  key={`${vertical}-${connector.name}`}
-                  connector={connector}>
-                  {showCTAs &&
-                    (connector.stage === 'alpha' || !canAddNewConnectors ? (
-                      <div
-                        className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button"
-                        onClick={() => setOpenCalendar(true)}>
-                        <Lock />
-                        <p className="text-sm font-semibold">Request access</p>
-                      </div>
-                    ) : (
-                      <div
-                        className={cn(
-                          'flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button',
-                        )}
-                        onClick={() => {
-                          setConnectorName(connector.name)
-                          setConnectorConfig(undefined)
-                          setOpen(true)
-                        }}>
-                        <Plus />
-                        <p className="text-sm font-semibold">Add</p>
-                      </div>
-                    ))}
-                </ConnectorCard>
-              ))}
+              {connectorsWithCTA.map((connector, index) =>
+                index < connectorsWithCTA.length - 1 ? (
+                  <ConnectorCard
+                    key={`${vertical}-${connector.name}`}
+                    connector={connector}>
+                    {showCTAs &&
+                      (connector.stage === 'alpha' || !canAddNewConnectors ? (
+                        <div
+                          className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button"
+                          onClick={() => setOpenCalendar(true)}>
+                          <Lock />
+                          <p className="text-sm font-semibold">
+                            Request access
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className={cn(
+                            'flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button',
+                          )}
+                          onClick={() => {
+                            setConnectorName(connector.name)
+                            setConnectorConfig(undefined)
+                            setOpen(true)
+                          }}>
+                          <Plus />
+                          <p className="text-sm font-semibold">Add</p>
+                        </div>
+                      ))}
+                  </ConnectorCard>
+                ) : (
+                  <Card
+                    key={`${vertical}-request-access`}
+                    className="m-3 size-[150px] border-button bg-button-light hover:cursor-pointer">
+                    <CardContent
+                      className="flex size-full flex-1 flex-col items-center justify-center pt-4"
+                      onClick={() => {
+                        setCalProps({
+                          description: CTA_DESCRIPTION,
+                          header: CTA_HEADER,
+                          link: CTA_LINK,
+                        })
+                        setOpenCalendar(true)
+                      }}>
+                      <p className="text-center text-button">
+                        Request {parseCategory(vertical)} integration
+                      </p>
+                    </CardContent>
+                  </Card>
+                ),
+              )}
             </div>
           </div>
         )
@@ -212,11 +275,11 @@ export default function ConnectorConfigsPage({
         refetch={connectorConfigsRes.refetch}
       />
       <CalendarBooking
-        description="Grab some time with our founder to help you get the best out of OpenInt"
-        header="Book a Free Discovery Meeting"
+        description={calProps?.description ?? DEFAULT_DESCRIPTION}
+        header={calProps?.header ?? DEFAULT_HEADER}
         isVisible={openCalendar}
-        onClose={() => setOpenCalendar(false)}
-        onDismiss={() => setOpenCalendar(false)}
+        onClose={closeCalendar}
+        onDismiss={closeCalendar}
         email={
           user?.emailAddresses?.length
             ? user?.emailAddresses?.[0]?.emailAddress
