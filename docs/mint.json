@@ -47,7 +47,8 @@
       "pages": [
         "quickstart/quickstart",
         "quickstart/use-cases",
-        "quickstart/features"
+        "quickstart/features",
+        "quickstart/integrations"
       ]
     },
     {
@@ -200,13 +201,6 @@
             "unified-apis/file-storage/get-file"
           ]
         }
-      ]
-    },
-    {
-      "group": "Guidance",
-      "pages": [
-        "guidance/quickstart",
-        "guidance/integrations"
       ]
     },
     {
