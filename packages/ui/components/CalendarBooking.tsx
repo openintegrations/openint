@@ -10,6 +10,7 @@ interface CalendarBookingProps {
   onDismiss: () => void
   email?: string
   name?: string
+  link?: string
 }
 
 export default function CalendarBooking({
@@ -19,6 +20,7 @@ export default function CalendarBooking({
   onClose,
   email,
   name,
+  link,
 }: CalendarBookingProps) {
   useEffect(() => {
     if (isVisible) {
@@ -49,7 +51,7 @@ export default function CalendarBooking({
         <p className="mb-4">{description}</p>
         <div className="mb-4 h-[700px] overflow-auto rounded border border-gray-100">
           <Cal
-            calLink="ap-openint/discovery"
+            calLink={link ?? 'ap-openint/discovery'}
             config={{
               layout: 'month_view',
               name: name ?? '',
