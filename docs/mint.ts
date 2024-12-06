@@ -54,6 +54,32 @@ const mintConfig: MintConfig = {
       group: 'API Reference',
       pages: apiPages,
     },
+    {
+      group: 'Guidance',
+      pages: [
+        'guidance/quickstart',
+        'guidance/integrations',
+      ],
+    },
+    {
+      group: 'Core Concepts',
+      pages: [
+        'core-concepts/connector-config',
+        'core-concepts/magic-link',
+      ],
+    },
+    {
+      group: 'Community',
+      pages: [
+        'community/join-our-slack',
+      ],
+    },
+    {
+      group: 'Support',
+      pages: [
+        'support/contact-us',
+      ],
+    },
   ],
   backgroundImage: '/images/background.png',
   footerSocials: {
