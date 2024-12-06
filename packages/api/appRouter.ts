@@ -147,7 +147,7 @@ function removeInternalPaths(oas: any): any {
   const paths = oas.paths;
   const filteredPaths = Object.fromEntries(
     Object.entries(paths).filter(([_, operations]) =>
-      !Object.values(operations).some((operation: any) =>
+      !Object.values(operations as Record<string, any>).some((operation: any) =>
         operation.tags?.includes('Internal') || operation.tags?.includes('Connectors'),
       )
     )
