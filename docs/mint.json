@@ -74,17 +74,6 @@
           ]
         },
         {
-          "group": "Connectors",
-          "pages": [
-            "api-reference/connectors/list-connector-metas",
-            "api-reference/connectors/get-connector-meta",
-            "api-reference/connectors/get-connector-open-api-spec",
-            "api-reference/connectors/get-connector-schemas",
-            "api-reference/connectors/list-connector-integrations",
-            "api-reference/connectors/list-configured-integrations"
-          ]
-        },
-        {
           "group": "Sales Engagement",
           "pages": [
             "api-reference/sales-engagement/list-contacts",
