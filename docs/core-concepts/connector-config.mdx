@@ -11,26 +11,37 @@ Step-by-step guide to configure a connector in OpenInt.
 
 A connector in OpenInt is a bridge that allows you to integrate with various external services. It simplifies the process of connecting your app to third-party APIs, enabling seamless data exchange and management.
 
-## How to Configure a Connector
+## 🛠️ How to Configure a Connector
 
-<CardGroup>
-  <Card title="Access the Dashboard" icon="user">
-    Log in to your [OpenInt dashboard](https://app.openint.dev/dashboard/sign-up).
-  </Card>
-  <Card title="Navigate to Connector Configs" icon="globe">
-    On the sidebar, click on **Connector Configs** to view available connectors.
-  </Card>
-  <Card title="Select a Connector" icon="plug">
-    Choose the desired connector (e.g., Greenhouse) from the list. Click on it to open the configuration modal.
-  </Card>
-  <Card title="Configure the Connector" icon="wrench">
-    - **Enter Required Details**: Fill in the necessary information such as API keys, client ID, and client secret.
-    - **Set Permissions**: Ensure you have the correct permissions set for the integration.
-  </Card>
-  <Card title="Save and Create a Magic Link" icon="link">
-    Once configured, save your settings. You can now generate a Magic Link to manage your connections effortlessly.
-  </Card>
-</CardGroup>
+<Steps>
+  <Step title="Sign Up or Log In">
+    Access your [app dashboard](https://app.openint.dev/dashboard/sign-up) to
+    get started.
+  </Step>
+  <Step title="Access Connector Configs">
+    Go to Connector Configs in the sidebar.
+    <Frame>
+      <img src="/images/dashboard.png" alt="Dashboard" />
+    </Frame>
+  </Step>
+  <Step title="Configure a Connector">
+    Set up the desired connector for your integration. For this example we will
+    setup Greenhouse, fill in the required fields and click on **Create**.
+    <Frame>
+      <img src="/images/connector-form.png" alt="Connector Form" />
+    </Frame>
+  </Step>
+  <Step title="Verify Connector">
+    You should see the new connector in the available connectors table.
+    <Frame>
+      <img src="/images/saved-connector.png" alt="Connector Table" />
+    </Frame>
+  </Step>
+  <Step title="Ready to Connect!">
+    You are now ready to connect to your Greenhouse account using a [Magic
+    Links](/core-concepts/magic-link).
+  </Step>
+</Steps>
 
 ## Benefits of Using Connectors
 
