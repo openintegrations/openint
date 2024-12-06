@@ -4,7 +4,27 @@
 
 # Open Integrations
 
-OpenInt enables teams to ship product integrations in hours, not weeks, using no or low code. Read and write data using unified APIs or sync it straight to your database.
+OpenInt is an open-source integration platform as a service (iPaaS) that helps you ship product integrations in hours, not weeks. 
+
+<img src="./docs/banner.png"/>
+
+We just participated [Mega Launch Week Dec 2–6](https://launchweek.dev/lw/MEGA) and introduced [OpenInt](https://openint.dev/launch-week)
+
+- Dec 2: [OpenInt](https://openint.dev/launch-week/introducing-openint/) – Open-source iPaaS platform.
+
+- Dec 3: [@OpenInt/Connect](https://openint.dev/launch-week/introducing-openint-connect/) – Fully featured integrations page for your app.
+
+- Dec 4: [OpenInt Sync](https://openint.dev/launch-week/openint-sync-simplify-data-synchronization/) – Automated data syncs straight into your database.
+
+- Dec 5: [OpenSDKs](https://openint.dev/launch-week/introducing-opensdks/) – Typesafe SDKs with an auth proxy for any API.
+
+- Dec 6: [Orchestrate & Our Partner Program](https://openint.dev/launch-week/introducing-orchestrate-and-partner-program/) – Unified aggregator orchestration plus our partner ecosystem (initial ones are also other OSS YC companies).
+
+We think the above makes OpenInt the LAST integration you’ll ever need. If there’s any connector missing, tell us about it, and either we or one of our partners will write it for you in 72h for $1000.
+
+We went through Y Combinator W23 and are now fully committed to building an open ecosystem. The stack is mostly TypeScript on Cloudflare Workers with Postgres for storage—designed to be easy to run and scale on your own infra. Long term, we want to see open-source AI agents assist developers in auto-generating and maintaining integrations and SDKs, collaborating directly within the repo.
+
+Here’s a [1-minute demo video](https://www.youtube.com/watch?v=FpG7otZZhRw) to show how fast you can launch an integration. Check out the integrations list, star our GitHub repos ([OpenInt](https://github.com/openintegrations/openint) | [OpenSDKs](https://github.com/openintegrations/openSDKs)), or hop into our Slack community (signup via https://openint.dev) to say hi.
 
 ## Usage guide (WIP)
 
