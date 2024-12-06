@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "mintlify dev",
     "generate": "pnpm run generate:api-pages && pnpm run generate:mint",
-    "generate:api-pages": "rm -rf api-reference && mkdir -p api-reference && mintlify-scrape openapi-file -o api-reference ./../kits/sdk/openapi.json | tail -n +2 > ./api-reference/index.json",
+    "generate:api-pages": "rm -rf unified-apis && mkdir -p unified-apis && mintlify-scrape openapi-file -o unified-apis ./../kits/sdk/openapi.json | tail -n +2 > ./unified-apis/index.json",
     "generate:mint": "npx tsx mint.ts mint.json"
   },
   "devDependencies": {
