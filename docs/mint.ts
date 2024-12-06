@@ -43,14 +43,6 @@ const mintConfig: MintConfig = {
   ],
   navigation: [
     {
-      group: 'Getting Started',
-      pages: [
-        'quickstart/quickstart',
-        'quickstart/use-cases',
-        'quickstart/features',
-      ],
-    },
-    {
       group: 'API Reference',
       pages: apiPages,
     },

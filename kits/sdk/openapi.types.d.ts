@@ -18,10 +18,6 @@ type OneOf<T extends any[]> = T extends [infer Only]
     : never
 
 export interface paths {
-  '/health': {
-    /** Health check */
-    get: operations['health']
-  }
   '/connect/token': {
     /** Create a connect token */
     post: operations['createConnectToken']
@@ -29,17 +25,6 @@ export interface paths {
   '/connect/magic-link': {
     /** Create a magic link */
     post: operations['createMagicLink']
-  }
-  '/passthrough': {
-    /** Passthrough */
-    post: operations['passthrough']
-  }
-  '/core/resource/{id}/source_sync': {
-    /**
-     * Source sync
-     * @description Return records that would have otherwise been emitted during a sync and return it instead
-     */
-    post: operations['sourceSync']
   }
   '/core/resource': {
     /** List resources */
@@ -130,18 +115,6 @@ export interface paths {
   '/core/sync_run': {
     /** List sync runs */
     get: operations['listSyncRuns']
-  }
-  '/viewer': {
-    /** Get current viewer accessing the API */
-    get: operations['getViewer']
-  }
-  '/viewer/organization': {
-    /** Get current organization of viewer accessing the API */
-    get: operations['getCurrentOrganization']
-  }
-  '/openapi.json': {
-    /** Get openapi document */
-    get: operations['public-getOpenapiDocument']
   }
   '/unified/sales-engagement/contact': {
     /** List Contacts */
@@ -1293,43 +1266,6 @@ export type $defs = Record<string, never>
 export type external = Record<string, never>
 
 export interface operations {
-  /** Health check */
-  health: {
-    parameters: {
-      query?: {
-        exp?: boolean
-      }
-    }
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': {
-            healthy: boolean
-            error?: string
-          }
-        }
-      }
-      /** @description Invalid input data */
-      400: {
-        content: {
-          'application/json': components['schemas']['error.BAD_REQUEST']
-        }
-      }
-      /** @description Not found */
-      404: {
-        content: {
-          'application/json': components['schemas']['error.NOT_FOUND']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
   /** Create a connect token */
   createConnectToken: {
     requestBody: {
@@ -1402,92 +1338,6 @@ export interface operations {
           'application/json': {
             url: string
           }
-        }
-      }
-      /** @description Invalid input data */
-      400: {
-        content: {
-          'application/json': components['schemas']['error.BAD_REQUEST']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /** Passthrough */
-  passthrough: {
-    requestBody: {
-      content: {
-        'application/json': {
-          /** @enum {string} */
-          method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS'
-          path: string
-          query?: {
-            [key: string]: unknown
-          }
-          headers?: {
-            [key: string]: unknown
-          }
-          body?: {
-            [key: string]: unknown
-          }
-        }
-      }
-    }
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': unknown
-        }
-      }
-      /** @description Invalid input data */
-      400: {
-        content: {
-          'application/json': components['schemas']['error.BAD_REQUEST']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /**
-   * Source sync
-   * @description Return records that would have otherwise been emitted during a sync and return it instead
-   */
-  sourceSync: {
-    parameters: {
-      path: {
-        id: string
-      }
-    }
-    requestBody: {
-      content: {
-        'application/json': {
-          state?: {
-            [key: string]: unknown
-          }
-          streams?: {
-            [key: string]: boolean
-          }
-        }
-      }
-    }
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': {
-            [key: string]: unknown
-          }[]
         }
       }
       /** @description Invalid input data */
@@ -2576,85 +2426,6 @@ export interface operations {
       404: {
         content: {
           'application/json': components['schemas']['error.NOT_FOUND']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /** Get current viewer accessing the API */
-  getViewer: {
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': components['schemas']['Viewer']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /** Get current organization of viewer accessing the API */
-  getCurrentOrganization: {
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': {
-            /** @description Must start with 'org_' */
-            id: string
-            slug?: string | null
-            publicMetadata: {
-              /**
-               * PostgreSQL Database URL
-               * @description This is where data from resources are synced to by default
-               * @example postgres://username:password@host:port/database
-               */
-              database_url?: string
-              /**
-               * Synced Data Schema
-               * @description Postgres schema to pipe data synced from end user resources into. Defaults to "synced" if missing.
-               */
-              synced_data_schema?: string
-              /**
-               * Webhook URL
-               * @description Events like sync.completed and connection.created can be sent to url of your choosing
-               */
-              webhook_url?: string
-              /**
-               * Migrate Tables
-               * @description If enabled, table migrations will be run if needed when entities are persisted
-               * @default true
-               */
-              migrate_tables?: boolean
-            }
-          }
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /** Get openapi document */
-  'public-getOpenapiDocument': {
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': unknown
         }
       }
       /** @description Internal server error */

@@ -40,27 +40,8 @@
   ],
   "navigation": [
     {
-      "group": "Getting Started",
-      "pages": [
-        "quickstart/quickstart",
-        "quickstart/use-cases",
-        "quickstart/features"
-      ]
-    },
-    {
       "group": "API Reference",
       "pages": [
-        {
-          "group": "Internal",
-          "pages": [
-            "api-reference/internal/health-check",
-            "api-reference/internal/passthrough",
-            "api-reference/internal/source-sync",
-            "api-reference/internal/get-current-viewer-accessing-the-api",
-            "api-reference/internal/get-current-organization-of-viewer-accessing-the-api",
-            "api-reference/internal/get-openapi-document"
-          ]
-        },
         {
           "group": "Connect",
           "pages": [
