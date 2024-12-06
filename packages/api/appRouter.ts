@@ -107,10 +107,10 @@ function setDefaultOpenAPIMeta(router: AnyRouter) {
   }
 }
 
-export function getOpenAPISpec() {
+export function getOpenAPISpec(includeInternal = true) {
   const {webhooks, components} = oasWebhooksEventsMap(outgoingWebhookEventMap)
 
-  const oas = removeInternalPaths(generateOpenApiDocument(appRouter, {
+  let oas = generateOpenApiDocument(appRouter, {
     openApiVersion: '3.1.0', // Want jsonschema
     title: 'OpenInt OpenAPI',
     version: '0.0.0',
@@ -135,7 +135,11 @@ export function getOpenAPISpec() {
     baseUrl: env.NEXT_PUBLIC_API_URL ?? getServerUrl(null) + '/api/v0',
     webhooks,
     components,
-  }))
+  })
+
+  if (!includeInternal) {
+    oas = removeInternalPaths(oas)
+  }
 
   // Unfortunately trpc-openapi is missing bunch of options...
   oas.security = [{apikey: [], resourceId: []}]
