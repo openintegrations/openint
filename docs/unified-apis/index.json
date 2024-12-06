@@ -1,0 +1,149 @@
+[
+  {
+    "group": "Connect",
+    "pages": [
+      "unified-apis/connect/create-a-connect-token",
+      "unified-apis/connect/create-a-magic-link"
+    ]
+  },
+  {
+    "group": "Core",
+    "pages": [
+      "unified-apis/core/list-resources",
+      "unified-apis/core/create-resource",
+      "unified-apis/core/get-resource",
+      "unified-apis/core/delete-resource",
+      "unified-apis/core/update-resource",
+      "unified-apis/core/check-resource",
+      "unified-apis/core/sync-resource",
+      "unified-apis/core/admin-list-connector-configs",
+      "unified-apis/core/admin-upsert-connector-config",
+      "unified-apis/core/admin-get-connector-config",
+      "unified-apis/core/admin-delete-connector-config",
+      "unified-apis/core/admin-update-connector-config",
+      "unified-apis/core/list-connector-config-infos",
+      "unified-apis/core/list-pipelines",
+      "unified-apis/core/create-pipeline",
+      "unified-apis/core/delete-pipeline",
+      "unified-apis/core/update-pipeline",
+      "unified-apis/core/sync-pipeline",
+      "unified-apis/core/list-sync-runs"
+    ]
+  },
+  {
+    "group": "Sales Engagement",
+    "pages": [
+      "unified-apis/sales-engagement/list-contacts",
+      "unified-apis/sales-engagement/list-sequences",
+      "unified-apis/sales-engagement/list-sequence-states",
+      "unified-apis/sales-engagement/insert-sequence-state",
+      "unified-apis/sales-engagement/list-users",
+      "unified-apis/sales-engagement/list-accounts",
+      "unified-apis/sales-engagement/list-mailboxes",
+      "unified-apis/sales-engagement/upsert-account",
+      "unified-apis/sales-engagement/upsert-contact"
+    ]
+  },
+  {
+    "group": "CRM",
+    "pages": [
+      "unified-apis/crm/count-entities",
+      "unified-apis/crm/list-accounts",
+      "unified-apis/crm/create-account",
+      "unified-apis/crm/get-account",
+      "unified-apis/crm/update-account",
+      "unified-apis/crm/batch-read-accounts",
+      "unified-apis/crm/upsert-account",
+      "unified-apis/crm/list-contacts",
+      "unified-apis/crm/create-contact",
+      "unified-apis/crm/get-contact",
+      "unified-apis/crm/update-contact",
+      "unified-apis/crm/batch-read-contacts",
+      "unified-apis/crm/upsert-contact",
+      "unified-apis/crm/list-leads",
+      "unified-apis/crm/get-lead",
+      "unified-apis/crm/list-opportunities",
+      "unified-apis/crm/get-opportunity",
+      "unified-apis/crm/list-notes",
+      "unified-apis/crm/create-note",
+      "unified-apis/crm/list-users",
+      "unified-apis/crm/get-user",
+      "unified-apis/crm/list-custom-object-records",
+      "unified-apis/crm/create-custom-object-record",
+      "unified-apis/crm/metadata-list-objects",
+      "unified-apis/crm/metadata-create-object",
+      "unified-apis/crm/metadata-list-object-properties",
+      "unified-apis/crm/metadata-create-object-property",
+      "unified-apis/crm/metadata-create-association"
+    ]
+  },
+  {
+    "group": "Banking",
+    "pages": [
+      "unified-apis/banking/list-accounts",
+      "unified-apis/banking/list-merchants",
+      "unified-apis/banking/list-categories",
+      "unified-apis/banking/list-transactions"
+    ]
+  },
+  {
+    "group": "Accounting",
+    "pages": [
+      "unified-apis/accounting/list-account",
+      "unified-apis/accounting/list-expenses",
+      "unified-apis/accounting/list-vendors",
+      "unified-apis/accounting/get-balance-sheet",
+      "unified-apis/accounting/get-profit-and-loss",
+      "unified-apis/accounting/get-cash-flow",
+      "unified-apis/accounting/get-transaction-list",
+      "unified-apis/accounting/get-customer-balance",
+      "unified-apis/accounting/get-customer-income",
+      "unified-apis/accounting/get-bank-accounts",
+      "unified-apis/accounting/get-payment-receipts"
+    ]
+  },
+  {
+    "group": "PTA",
+    "pages": [
+      "unified-apis/pta/list-accounts",
+      "unified-apis/pta/list-transactions",
+      "unified-apis/pta/list-commodities"
+    ]
+  },
+  {
+    "group": "ATS",
+    "pages": [
+      "unified-apis/ats/list-jobs",
+      "unified-apis/ats/list-job-openings",
+      "unified-apis/ats/list-offers",
+      "unified-apis/ats/list-candidates",
+      "unified-apis/ats/list-departments"
+    ]
+  },
+  {
+    "group": "HRIS",
+    "pages": [
+      "unified-apis/hris/list-individuals"
+    ]
+  },
+  {
+    "group": "ETL",
+    "pages": [
+      "unified-apis/etl/read-stream",
+      "unified-apis/etl/discover",
+      "unified-apis/etl/read-data",
+      "unified-apis/etl/write-data"
+    ]
+  },
+  {
+    "group": "File Storage",
+    "pages": [
+      "unified-apis/file-storage/list-drives",
+      "unified-apis/file-storage/get-drive",
+      "unified-apis/file-storage/list-folders",
+      "unified-apis/file-storage/get-folder",
+      "unified-apis/file-storage/list-files",
+      "unified-apis/file-storage/get-file"
+    ]
+  }
+]
