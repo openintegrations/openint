@@ -109,13 +109,13 @@ function generateMarkdownTable(apiSpec: any, provider: string) {
   for (const [path, methods] of Object.entries(paths)) {
 
     for (const [method, details] of Object.entries(methods as any)) {
-      let description = details.summary || details.description || '';
+      let description = (details as any).summary || (details as any).description || '';
       description = description.replace(/\n/g, ' ');
       markdownTable += `| **${method.toUpperCase()}** | ${path.replace(/\/\//g, '/')} | ${description}\n`;
 
       // Add code example only once per path
       if (!example) {
-        example = generateMarkdownCodeExample({ method, path, description, provider, parameters: details.parameters });
+        example = generateMarkdownCodeExample({ method, path, description, provider, parameters: (details as any).parameters });
       }
     }
   }
@@ -127,7 +127,7 @@ function generateMarkdownTable(apiSpec: any, provider: string) {
   return markdownTable;
 }
 
-export function generateMarkdownCodeExample({ method, path, description, provider, parameters}) {
+export function generateMarkdownCodeExample({ method, path, description, provider, parameters}: any) {
   const base = `
     import {initSDK} from '@opensdks/runtime'
     import {${provider}SdkDef} from '@opensdks/sdk-${provider}'
@@ -165,7 +165,7 @@ export async function processOpenSDKs(input: any) {
     }
 
     const groupEntry = allPages.length === 1 ? allPages[0] : { group: provider.charAt(0).toUpperCase() + provider.slice(1) + ' APIs', pages: allPages };
-    allGroups.push(groupEntry);
+    allGroups.push(groupEntry as any);
   }
 
   // Write the single index.json file at the root of baseDir
@@ -203,7 +203,7 @@ async function getDirectoryEntries(path: string) {
     }
   `;
 
-  const { repository } = await graphqlWithAuth(query, {
+  const { repository }: any = await graphqlWithAuth(query, {
     owner: OWNER,
     repo: REPO,
     expr: `${BRANCH}:${path}`
