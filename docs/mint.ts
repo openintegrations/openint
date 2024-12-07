@@ -14,12 +14,7 @@ const mintConfig: MintConfig = {
     light: '#8b9cac',
     dark: '#8b9cac',
   },
-  topbarLinks: [
-    {
-      name: 'Contact us',
-      url: 'mailto:support@openint.dev',
-    },
-  ],
+  topbarLinks: [],
   topbarCtaButton: {
     name: 'Sign up',
     url: 'https://www.openint.dev',
@@ -65,21 +60,16 @@ const mintConfig: MintConfig = {
     {
       group: 'Community',
       pages: ['community/join-our-slack'],
-    },
-    {
-      group: 'Support',
-      pages: ['support/contact-us'],
-    },
+    }
   ],
   backgroundImage: '/images/background.png',
   footerSocials: {
     github: 'https://github.com/openintegrations/openint',
-    discord: 'https://discord.gg/gTMch6Gn2u',
-    twitter: 'https://twitter.com/use_venice',
+    twitter: 'https://twitter.com/openintdev',
   },
   analytics: {
     posthog: {
-      apiKey: 'phc_T3BM4neZzi3z2ruDiN0pYpGHIYjd5AjZw0rSkhzAKSo',
+      apiKey: 'phc_30EStnJPoshPRjyPvxEe8gYP85AaacFPMYHsiPddpRX',
     },
   },
 }
