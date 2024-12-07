@@ -1,7 +1,9 @@
 import {initLeverSDK, type leverTypes} from '@opensdks/sdk-lever'
 import {nangoProxyLink, type ConnectorServer} from '@openint/cdk'
+import {NextPageCursor} from '@openint/cdk/cursors'
+import type {EtlSource} from '../connector-common'
+import {observableFromEtlSource} from '../connector-common'
 import {type leverSchemas} from './def'
-import {EtlSource, NextPageCursor, observableFromEtlSource} from '../connector-common'
 
 export type LeverSDK = ReturnType<typeof initLeverSDK>
 
@@ -27,7 +29,7 @@ export const leverServer = {
           return next(req)
         },
         ...fetchLinks,
-        ...defaultLinks
+        ...defaultLinks,
       ],
     })
     return lever
@@ -55,40 +57,46 @@ function leverSource({sdk}: {sdk: LeverSDK}): EtlSource<{
   // Add other entity types as needed
 }> {
   return {
-    // @ts-expect-error discuss with tony 
+    // @ts-expect-error discuss with tony
     async listEntities(type, {cursor}) {
-      const {next_page: page} = NextPageCursor.fromString(cursor)
-      
+      const {next_page: page} = NextPageCursor.stringToCursor(cursor)
+
       if (type === 'offer') {
         const opportunitiesRes = await sdk.GET('/opportunities', {
-          params: {query: {limit: 50, offset: cursor ?? undefined}}
+          params: {query: {limit: 50, offset: cursor ?? undefined}},
         })
 
         const allOffers = []
         for (const opportunity of opportunitiesRes.data.data) {
-          const offersRes = await sdk.GET(`/opportunities/{id}/offers`, {
-            params: {path: {id: opportunity.id}}
+          const offersRes = await sdk.GET('/opportunities/{id}/offers', {
+            params: {path: {id: opportunity.id}},
           })
 
-          allOffers.push(...offersRes.data.data.map((e) => ({id: `${e.id}`, data: e})))
+          allOffers.push(
+            ...offersRes.data.data.map((e) => ({id: `${e.id}`, data: e})),
+          )
         }
 
         return {
           entities: allOffers,
-          next_cursor: NextPageCursor.toString({next_page: page + 1}),
+          next_cursor: NextPageCursor.cursorToString({next_page: page + 1}),
           has_next_page: opportunitiesRes.data.hasNext ?? false,
         }
       }
       // for opportunity or posting
-      const pluralizeType = (type: string) => type === 'opportunity' ? 'opportunities' : `${type}s`;
-      
-      const res = await sdk.GET(`/${pluralizeType(type) as 'postings' | 'opportunities'}`, {
-        params: {query: {limit: 50, offset: cursor ?? undefined}}
-      })
+      const pluralizeType = (type: string) =>
+        type === 'opportunity' ? 'opportunities' : `${type}s`
+
+      const res = await sdk.GET(
+        `/${pluralizeType(type) as 'postings' | 'opportunities'}`,
+        {
+          params: {query: {limit: 50, offset: cursor ?? undefined}},
+        },
+      )
 
       return {
         entities: res.data.data.map((e) => ({id: `${e.id}`, data: e})),
-        next_cursor: NextPageCursor.toString({next_page: page + 1}),
+        next_cursor: NextPageCursor.cursorToString({next_page: page + 1}),
         has_next_page: res.data.hasNext ?? false,
       }
     },
