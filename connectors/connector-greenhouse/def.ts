@@ -17,6 +17,8 @@ export const greenhouseSchema = {
     e,
     z.unknown().optional(),
   ]),
+  // need better typing...!
+  sourceState: z.unknown(),
 } satisfies ConnectorSchemas
 
 export const greenhouseHelpers = connHelpers(greenhouseSchema)

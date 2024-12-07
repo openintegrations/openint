@@ -1,7 +1,7 @@
 import {type SalesforceSDK as _SalesforceSDK} from '@opensdks/sdk-salesforce'
 // import * as jsforce from 'jsforce'
 import type {BaseRecord} from '@openint/vdk'
-import {LastUpdatedAtId, uniqBy} from '@openint/vdk'
+import {LastUpdatedAndIdCursor, uniqBy} from '@openint/vdk'
 import type {CRMAdapter} from '../../router'
 import {SALESFORCE_STANDARD_OBJECTS} from './constants'
 // import {salesforceProviderJsForce} from './jsforce'
@@ -85,7 +85,7 @@ function sdkExt(instance: SalesforceSDK) {
       includeCustomFields?: boolean
     }) => {
       const limit = page_size ?? SFDC_SOQL_MAX_LIMIT
-      const cursor = LastUpdatedAtId.fromCursor(encodedCursor)
+      const cursor = LastUpdatedAndIdCursor.deserialize(encodedCursor)
       const res = await listEntity<TIn>({...opts, entity, cursor, limit})
       const items = res.records.map(mapper.parse)
       const lastItem = items[items.length - 1]
@@ -93,7 +93,7 @@ function sdkExt(instance: SalesforceSDK) {
         items,
         has_next_page: items.length > 0,
         next_cursor: lastItem
-          ? LastUpdatedAtId.toCursor({
+          ? LastUpdatedAndIdCursor.serialize({
               last_id: lastItem.id,
               last_updated_at: lastItem.updated_at,
             })

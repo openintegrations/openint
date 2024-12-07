@@ -75,6 +75,8 @@ export function logLink<T = any>(
         op.type === 'data' && `${data?.entityName}/${data?.id}`,
         op.type === 'resoUpdate' && `op.id=${op.id}`,
       ]).join(' '),
+      op.type === 'stateUpdate' ? 'op.sourceState=' : '',
+      op.type === 'stateUpdate' ? op.sourceState : '',
     )
     if (opts.verbose !== undefined) {
       console.dir(op, {

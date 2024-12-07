@@ -345,6 +345,8 @@ export function makeSyncService({
         })
         .then((r) => r.publicMetadata as {webhook_url?: string | null}))
 
+    // console.log('[_syncPipeline] pipe sourceState', pipe.id, pipe.sourceState)
+
     const _source$ = sourceSync({
       opts,
       src,
