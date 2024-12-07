@@ -182,15 +182,6 @@
           ]
         },
         {
-          "group": "ETL",
-          "pages": [
-            "unified-apis/etl/read-stream",
-            "unified-apis/etl/discover",
-            "unified-apis/etl/read-data",
-            "unified-apis/etl/write-data"
-          ]
-        },
-        {
           "group": "File Storage",
           "pages": [
             "unified-apis/file-storage/list-drives",
