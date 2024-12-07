@@ -108,7 +108,7 @@ export async function syncConnection({
   // This can probably be done via an upsert returning...
   const syncState = await configDb.query.sync_state
     .findFirst({
-      where: eq(schema.sync_state.resource_id, resource_id),
+      where: (sync_state, {eq}) => eq(sync_state.resource_id, resource_id),
     })
     .then(
       (ss) =>

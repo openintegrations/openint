@@ -1,0 +1,21 @@
+{
+  "name": "@openint/custom-links",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Custom links that should technically be in the database / or outside of the main codebase. Will be moved out once we have a good way to do so.",
+  "sideEffects": false,
+  "module": "./index.ts",
+  "scripts": {},
+  "dependencies": {
+    "@openint/cdk": "workspace:*",
+    "@openint/connector-postgres": "workspace:*",
+    "@openint/util": "workspace:*"
+  },
+  "devDependencies": {
+    "@openint/env": "workspace:*",
+    "@openint/unified-ats": "workspace:*",
+    "drizzle-kit": "^0.28.1",
+    "drizzle-orm": "^0.36.3",
+    "postgres": "^3.4.5"
+  }
+}

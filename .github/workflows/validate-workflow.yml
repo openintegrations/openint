@@ -102,7 +102,7 @@ jobs:
           pnpm wait-on tcp:4000
 
       - name: Run tests
-        run: pnpm run test::ci
+        run: POSTGRES_URL=postgres://postgres:test@localhost:5432/test pnpm run test::ci
 
       - name: Send Slack notification for job status
         uses: 8398a7/action-slack@v3

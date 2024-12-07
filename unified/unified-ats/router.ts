@@ -11,6 +11,9 @@ import adapters from './adapters'
 import * as unified from './unifiedModels'
 
 export {unified}
+export type Unified = {
+  [k in keyof typeof unified]: z.infer<(typeof unified)[k]>
+}
 
 function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
   const path = `/unified/ats${meta.path}` satisfies `/${string}`

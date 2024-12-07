@@ -12,7 +12,7 @@
     "@openint/vdk": "workspace:*",
     "@opensdks/util-zod": "^0.0.15",
     "@trpc/server": "10.40.0",
-    "drizzle-orm": "^0.29.3",
+    "drizzle-orm": "^0.36.3",
     "inngest": "^3.22.13",
     "zod-openapi": "2.14.0"
   },

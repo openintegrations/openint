@@ -19,7 +19,7 @@
     "fast-sort": "3.2.0",
     "immer": "9.0.15",
     "javascript-stringify": "2.1.0",
-    "json-stable-stringify": "1.0.1",
+    "json-stable-stringify": "^1.1.1",
     "json-stringify-pretty-compact": "3.0.0",
     "lodash": "4.17.21",
     "luxon": "2.4.0",
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/accounting": "0.4.2",
-    "@types/json-stable-stringify": "1.0.34",
+    "@types/json-stable-stringify": "^1.1.0",
     "@types/lodash": "4.14.184",
     "@types/luxon": "2.3.2",
     "@types/pluralize": "0.0.29",

@@ -18,7 +18,9 @@ export function getCommonObjectTable<TName extends string>(
   opts: {schema?: string} = {},
 ) {
   const schema = opts.schema ? pgSchema(opts.schema) : undefined
-  const table = (schema ? schema.table : pgTable)(
+  const tableFn = (schema ? schema.table : pgTable) as typeof pgTable
+
+  const table = tableFn(
     tableName,
     {
       source_id: text('source_id').notNull(),

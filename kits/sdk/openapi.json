@@ -7964,8 +7964,8 @@
           "prefix_connector_name",
           "single_table",
           "unified_ats",
-          "ag_column_rename",
-          "unified_crm"
+          "unified_crm",
+          "custom_link_ag"
         ]
       },
       "core.integration": {

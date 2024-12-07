@@ -1,14 +1,5 @@
 import {sql} from 'drizzle-orm'
-import {
-  customType,
-  index,
-  jsonb,
-  pgSchema,
-  pgTable,
-  text,
-  timestamp,
-  varchar,
-} from 'drizzle-orm/pg-core'
+import {customType, index, pgSchema, pgTable} from 'drizzle-orm/pg-core'
 import {env} from '@openint/env'
 import type {ErrorType} from '@openint/vdk'
 
@@ -42,63 +33,58 @@ const generated = <T = undefined>(
 
 const schema = env['POSTGRES_SCHEMA'] ? pgSchema(env['POSTGRES_SCHEMA']) : null
 
-const table = schema?.table ?? pgTable
+const tableFn = (schema?.table ?? pgTable) as typeof pgTable
 
 /** Not currently used. Maybe better to have customer rather than end_user? */
-export const customer = table('customer', {
+export const customer = tableFn('customer', (t) => ({
   // Standard cols
-  id: text('id')
+  id: t
+    .text()
     .notNull()
     .primaryKey()
     .default(sql`substr(md5(random()::text), 0, 25)`),
-  created_at: timestamp('created_at', {
-    precision: 3,
-    mode: 'string',
-  })
+  created_at: t
+    .timestamp({
+      precision: 3,
+      mode: 'string',
+    })
     .notNull()
     .defaultNow(),
-  updated_at: timestamp('updated_at', {
-    precision: 3,
-    mode: 'string',
-  })
+  updated_at: t
+    .timestamp({
+      precision: 3,
+      mode: 'string',
+    })
     .notNull()
     .defaultNow(),
 
   // Specific cols
-  name: text('name'),
-  email: text('email'),
-})
+  name: t.text(),
+  email: t.text(),
+}))
 
 /** Aka sync execution or sync log  */
-export const sync_run = table(
+export const sync_run = tableFn(
   'sync_run',
-  {
+  (t) => ({
     // Standard cols
-    id: text('id')
+    id: t
+      .text()
       .notNull()
       .primaryKey()
       .default(sql`substr(md5(random()::text), 0, 25)`),
-    created_at: timestamp('created_at', {
-      precision: 3,
-      mode: 'string',
-    }).defaultNow(),
-    updated_at: timestamp('updated_at', {
-      precision: 3,
-      mode: 'string',
-    }).defaultNow(),
+    created_at: t.timestamp({precision: 3, mode: 'string'}).defaultNow(),
+    updated_at: t.timestamp({precision: 3, mode: 'string'}).defaultNow(),
     // Identifying cols
-    input_event: jsonb('input_event').notNull(),
+    input_event: t.jsonb().notNull(),
     // Data columns
-    started_at: timestamp('started_at', {precision: 3, mode: 'string'}),
-    completed_at: timestamp('completed_at', {
-      precision: 3,
-      mode: 'string',
-    }),
+    started_at: t.timestamp({precision: 3, mode: 'string'}),
+    completed_at: t.timestamp({precision: 3, mode: 'string'}),
     duration: generated('duration', 'interval', 'completed_at - started_at'),
 
-    initial_state: jsonb('initial_state'),
-    final_state: jsonb('final_state'),
-    metrics: jsonb('metrics'),
+    initial_state: t.jsonb(),
+    final_state: t.jsonb(),
+    metrics: t.jsonb(),
     status: generated<'PENDING' | 'SUCCESS' | ErrorType>(
       'status',
       'varchar',
@@ -110,24 +96,16 @@ export const sync_run = table(
       'varchar',
       "input_event#>>'{data,resource_id}'",
     ),
-    error_detail: text('error_detail'),
+    error_detail: t.text(),
     /** zErrorType. But we don't want to use postgres enum */
-    error_type: varchar('error_type'),
-  },
-  (table) => ({
-    idx_resource_id: index('idx_resource_id').on(table.resource_id),
+    error_type: t.varchar(),
   }),
+  (table) => [index('idx_resource_id').on(table.resource_id)],
 )
 
-export const sync_state = table('sync_state', {
-  resource_id: text('resource_id').primaryKey(),
-  state: jsonb('state'),
-  created_at: timestamp('created_at', {
-    precision: 3,
-    mode: 'string',
-  }).defaultNow(),
-  updated_at: timestamp('updated_at', {
-    precision: 3,
-    mode: 'string',
-  }).defaultNow(),
-})
+export const sync_state = tableFn('sync_state', (t) => ({
+  resource_id: t.text().primaryKey(),
+  state: t.jsonb(),
+  created_at: t.timestamp({precision: 3, mode: 'string'}).defaultNow(),
+  updated_at: t.timestamp({precision: 3, mode: 'string'}).defaultNow(),
+}))

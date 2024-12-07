@@ -14,13 +14,16 @@
   },
   "dependencies": {
     "@openint/env": "workspace:*",
-    "drizzle-orm": "^0.29.3",
-    "postgres": "^3.4.3",
+    "drizzle-kit": "^0.28.1",
+    "drizzle-orm": "^0.36.3",
+    "json-stable-stringify": "^1.1.1",
+    "postgres": "^3.4.5",
+    "remeda": "1.6.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@openint/vdk": "workspace:*",
-    "drizzle-kit": "^0.20.12",
+    "@types/json-stable-stringify": "^1.1.0",
     "prettier": "3.1.0",
     "prettier-plugin-sql": "0.18.1"
   }
