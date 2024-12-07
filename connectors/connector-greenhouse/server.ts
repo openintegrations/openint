@@ -1,4 +1,5 @@
 import {initGreenhouseSDK, type greenhouseTypes} from '@opensdks/sdk-greenhouse'
+import httpLinkHeader from 'http-link-header'
 import type {ConnectorServer} from '@openint/cdk'
 import {LastUpdatedAndPage} from '@openint/cdk/cursors'
 import type {EtlSource} from '../connector-common'
@@ -82,11 +83,15 @@ function greenhouseSource({sdk}: {sdk: GreenhouseSDK}): EtlSource<{
         cursor.pending_last_updated_at,
       ])
       cursor.page += 1
-      // TODO: instead check for count / from response header
-      // Or maybe check if the response size is < than the page size
+
+      // Fall back include if response size is < than the page size
       // though not reliable given server could limit the response size to be less than the page size
       // for page size that are too large.
-      const hasNextPage = res.data.length > 0
+
+      const hasNextPage = httpLinkHeader
+        .parse(res.response.headers.get('link') ?? '')
+        .has('rel', 'next') // && res.data.length > 0 // not needed but for reference
+
       if (!hasNextPage) {
         cursor.last_updated_at = cursor.pending_last_updated_at
         cursor.page = 1

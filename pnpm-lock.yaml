@@ -871,6 +871,13 @@ importers:
       '@opensdks/sdk-greenhouse':
         specifier: ^0.0.8
         version: 0.0.8
+      http-link-header:
+        specifier: ^1.1.3
+        version: 1.1.3
+    devDependencies:
+      '@types/http-link-header':
+        specifier: ^1.0.7
+        version: 1.0.7
 
   connectors/connector-heron:
     dependencies:
@@ -5718,6 +5725,9 @@ packages:
   '@types/http-cache-semantics@4.0.4':
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
 
+  '@types/http-link-header@1.0.7':
+    resolution: {integrity: sha512-snm5oLckop0K3cTDAiBnZDy6ncx9DJ3mCRDvs42C884MbVYPP74Tiq2hFsSDRTyjK6RyDYDIulPiW23ge+g5Lw==}
+
   '@types/http-proxy@1.17.10':
     resolution: {integrity: sha512-Qs5aULi+zV1bwKAg5z1PWnDXWmsn+LxIvUGv6E2+OOMYhclZMO+OXd9pYVf2gLykf2I7IV2u7oTHwChPNsvJ7g==}
 
@@ -8814,6 +8824,10 @@ packages:
   http-errors@2.0.0:
     resolution: {integrity: sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==}
     engines: {node: '>= 0.8'}
+
+  http-link-header@1.1.3:
+    resolution: {integrity: sha512-3cZ0SRL8fb9MUlU3mKM61FcQvPfXx2dBrZW3Vbg5CXa8jFlK8OaEpePenLe1oEXQduhz8b0QjsqfS59QP4AJDQ==}
+    engines: {node: '>=6.0.0'}
 
   http-parser-js@0.5.8:
     resolution: {integrity: sha512-SGeBX54F94Wgu5RH3X5jsDtf4eHyRogWX1XGT3b4HuW3tQPM4AaBzoUji/4AAJNXCEOWZ5O0DgZmJw1947gD5Q==}
@@ -18596,6 +18610,10 @@ snapshots:
 
   '@types/http-cache-semantics@4.0.4': {}
 
+  '@types/http-link-header@1.0.7':
+    dependencies:
+      '@types/node': 18.11.18
+
   '@types/http-proxy@1.17.10':
     dependencies:
       '@types/node': 18.11.18
@@ -22247,6 +22265,8 @@ snapshots:
       setprototypeof: 1.2.0
       statuses: 2.0.1
       toidentifier: 1.0.1
+
+  http-link-header@1.1.3: {}
 
   http-parser-js@0.5.8: {}
 
