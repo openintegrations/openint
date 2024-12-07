@@ -28,10 +28,13 @@
       "url": "https://github.com/openintegrations/openint"
     }
   ],
+  "primaryTab": {
+    "name": "Guide"
+  },
   "tabs": [
     {
-      "name": "API References",
-      "url": "api-reference"
+      "name": "Unified APIs",
+      "url": "unified-apis"
     },
     {
       "name": "OpenAPI.json",
@@ -44,181 +47,170 @@
       "pages": [
         "quickstart/quickstart",
         "quickstart/use-cases",
-        "quickstart/features"
+        "quickstart/features",
+        "quickstart/integrations"
       ]
     },
     {
-      "group": "API Reference",
+      "group": "Unified APIs",
       "pages": [
-        {
-          "group": "Internal",
-          "pages": [
-            "api-reference/internal/health-check",
-            "api-reference/internal/passthrough",
-            "api-reference/internal/source-sync",
-            "api-reference/internal/get-current-viewer-accessing-the-api",
-            "api-reference/internal/get-current-organization-of-viewer-accessing-the-api",
-            "api-reference/internal/get-openapi-document"
-          ]
-        },
         {
           "group": "Connect",
           "pages": [
-            "api-reference/connect/create-a-connect-token",
-            "api-reference/connect/create-a-magic-link"
+            "unified-apis/connect/create-a-connect-token",
+            "unified-apis/connect/create-a-magic-link"
           ]
         },
         {
           "group": "Core",
           "pages": [
-            "api-reference/core/list-resources",
-            "api-reference/core/create-resource",
-            "api-reference/core/get-resource",
-            "api-reference/core/delete-resource",
-            "api-reference/core/update-resource",
-            "api-reference/core/check-resource",
-            "api-reference/core/sync-resource",
-            "api-reference/core/admin-list-connector-configs",
-            "api-reference/core/admin-upsert-connector-config",
-            "api-reference/core/admin-get-connector-config",
-            "api-reference/core/admin-delete-connector-config",
-            "api-reference/core/admin-update-connector-config",
-            "api-reference/core/list-connector-config-infos",
-            "api-reference/core/list-pipelines",
-            "api-reference/core/create-pipeline",
-            "api-reference/core/delete-pipeline",
-            "api-reference/core/update-pipeline",
-            "api-reference/core/sync-pipeline",
-            "api-reference/core/list-sync-runs"
-          ]
-        },
-        {
-          "group": "Connectors",
-          "pages": [
-            "api-reference/connectors/list-connector-metas",
-            "api-reference/connectors/get-connector-meta",
-            "api-reference/connectors/get-connector-open-api-spec",
-            "api-reference/connectors/get-connector-schemas",
-            "api-reference/connectors/list-connector-integrations",
-            "api-reference/connectors/list-configured-integrations"
+            "unified-apis/core/list-resources",
+            "unified-apis/core/create-resource",
+            "unified-apis/core/get-resource",
+            "unified-apis/core/delete-resource",
+            "unified-apis/core/update-resource",
+            "unified-apis/core/check-resource",
+            "unified-apis/core/sync-resource",
+            "unified-apis/core/admin-list-connector-configs",
+            "unified-apis/core/admin-upsert-connector-config",
+            "unified-apis/core/admin-get-connector-config",
+            "unified-apis/core/admin-delete-connector-config",
+            "unified-apis/core/admin-update-connector-config",
+            "unified-apis/core/list-connector-config-infos",
+            "unified-apis/core/list-pipelines",
+            "unified-apis/core/create-pipeline",
+            "unified-apis/core/delete-pipeline",
+            "unified-apis/core/update-pipeline",
+            "unified-apis/core/sync-pipeline",
+            "unified-apis/core/list-sync-runs"
           ]
         },
         {
           "group": "Sales Engagement",
           "pages": [
-            "api-reference/sales-engagement/list-contacts",
-            "api-reference/sales-engagement/list-sequences",
-            "api-reference/sales-engagement/list-sequence-states",
-            "api-reference/sales-engagement/insert-sequence-state",
-            "api-reference/sales-engagement/list-users",
-            "api-reference/sales-engagement/list-accounts",
-            "api-reference/sales-engagement/list-mailboxes",
-            "api-reference/sales-engagement/upsert-account",
-            "api-reference/sales-engagement/upsert-contact"
+            "unified-apis/sales-engagement/list-contacts",
+            "unified-apis/sales-engagement/list-sequences",
+            "unified-apis/sales-engagement/list-sequence-states",
+            "unified-apis/sales-engagement/insert-sequence-state",
+            "unified-apis/sales-engagement/list-users",
+            "unified-apis/sales-engagement/list-accounts",
+            "unified-apis/sales-engagement/list-mailboxes",
+            "unified-apis/sales-engagement/upsert-account",
+            "unified-apis/sales-engagement/upsert-contact"
           ]
         },
         {
           "group": "CRM",
           "pages": [
-            "api-reference/crm/count-entities",
-            "api-reference/crm/list-accounts",
-            "api-reference/crm/create-account",
-            "api-reference/crm/get-account",
-            "api-reference/crm/update-account",
-            "api-reference/crm/batch-read-accounts",
-            "api-reference/crm/upsert-account",
-            "api-reference/crm/list-contacts",
-            "api-reference/crm/create-contact",
-            "api-reference/crm/get-contact",
-            "api-reference/crm/update-contact",
-            "api-reference/crm/batch-read-contacts",
-            "api-reference/crm/upsert-contact",
-            "api-reference/crm/list-leads",
-            "api-reference/crm/get-lead",
-            "api-reference/crm/list-opportunities",
-            "api-reference/crm/get-opportunity",
-            "api-reference/crm/list-notes",
-            "api-reference/crm/create-note",
-            "api-reference/crm/list-users",
-            "api-reference/crm/get-user",
-            "api-reference/crm/list-custom-object-records",
-            "api-reference/crm/create-custom-object-record",
-            "api-reference/crm/metadata-list-objects",
-            "api-reference/crm/metadata-create-object",
-            "api-reference/crm/metadata-list-object-properties",
-            "api-reference/crm/metadata-create-object-property",
-            "api-reference/crm/metadata-create-association"
+            "unified-apis/crm/count-entities",
+            "unified-apis/crm/list-accounts",
+            "unified-apis/crm/create-account",
+            "unified-apis/crm/get-account",
+            "unified-apis/crm/update-account",
+            "unified-apis/crm/batch-read-accounts",
+            "unified-apis/crm/upsert-account",
+            "unified-apis/crm/list-contacts",
+            "unified-apis/crm/create-contact",
+            "unified-apis/crm/get-contact",
+            "unified-apis/crm/update-contact",
+            "unified-apis/crm/batch-read-contacts",
+            "unified-apis/crm/upsert-contact",
+            "unified-apis/crm/list-leads",
+            "unified-apis/crm/get-lead",
+            "unified-apis/crm/list-opportunities",
+            "unified-apis/crm/get-opportunity",
+            "unified-apis/crm/list-notes",
+            "unified-apis/crm/create-note",
+            "unified-apis/crm/list-users",
+            "unified-apis/crm/get-user",
+            "unified-apis/crm/list-custom-object-records",
+            "unified-apis/crm/create-custom-object-record",
+            "unified-apis/crm/metadata-list-objects",
+            "unified-apis/crm/metadata-create-object",
+            "unified-apis/crm/metadata-list-object-properties",
+            "unified-apis/crm/metadata-create-object-property",
+            "unified-apis/crm/metadata-create-association"
           ]
         },
         {
           "group": "Banking",
           "pages": [
-            "api-reference/banking/list-accounts",
-            "api-reference/banking/list-merchants",
-            "api-reference/banking/list-categories",
-            "api-reference/banking/list-transactions"
+            "unified-apis/banking/list-accounts",
+            "unified-apis/banking/list-merchants",
+            "unified-apis/banking/list-categories",
+            "unified-apis/banking/list-transactions"
           ]
         },
         {
           "group": "Accounting",
           "pages": [
-            "api-reference/accounting/list-account",
-            "api-reference/accounting/list-expenses",
-            "api-reference/accounting/list-vendors",
-            "api-reference/accounting/get-balance-sheet",
-            "api-reference/accounting/get-profit-and-loss",
-            "api-reference/accounting/get-cash-flow",
-            "api-reference/accounting/get-transaction-list",
-            "api-reference/accounting/get-customer-balance",
-            "api-reference/accounting/get-customer-income",
-            "api-reference/accounting/get-bank-accounts",
-            "api-reference/accounting/get-payment-receipts"
+            "unified-apis/accounting/list-account",
+            "unified-apis/accounting/list-expenses",
+            "unified-apis/accounting/list-vendors",
+            "unified-apis/accounting/get-balance-sheet",
+            "unified-apis/accounting/get-profit-and-loss",
+            "unified-apis/accounting/get-cash-flow",
+            "unified-apis/accounting/get-transaction-list",
+            "unified-apis/accounting/get-customer-balance",
+            "unified-apis/accounting/get-customer-income",
+            "unified-apis/accounting/get-bank-accounts",
+            "unified-apis/accounting/get-payment-receipts"
           ]
         },
         {
           "group": "PTA",
           "pages": [
-            "api-reference/pta/list-accounts",
-            "api-reference/pta/list-transactions",
-            "api-reference/pta/list-commodities"
+            "unified-apis/pta/list-accounts",
+            "unified-apis/pta/list-transactions",
+            "unified-apis/pta/list-commodities"
           ]
         },
         {
           "group": "ATS",
           "pages": [
-            "api-reference/ats/list-jobs",
-            "api-reference/ats/list-job-openings",
-            "api-reference/ats/list-offers",
-            "api-reference/ats/list-candidates",
-            "api-reference/ats/list-departments"
+            "unified-apis/ats/list-jobs",
+            "unified-apis/ats/list-job-openings",
+            "unified-apis/ats/list-offers",
+            "unified-apis/ats/list-candidates",
+            "unified-apis/ats/list-departments"
           ]
         },
         {
           "group": "HRIS",
           "pages": [
-            "api-reference/hris/list-individuals"
-          ]
-        },
-        {
-          "group": "ETL",
-          "pages": [
-            "api-reference/etl/read-stream",
-            "api-reference/etl/discover",
-            "api-reference/etl/read-data",
-            "api-reference/etl/write-data"
+            "unified-apis/hris/list-individuals"
           ]
         },
         {
           "group": "File Storage",
           "pages": [
-            "api-reference/file-storage/list-drives",
-            "api-reference/file-storage/get-drive",
-            "api-reference/file-storage/list-folders",
-            "api-reference/file-storage/get-folder",
-            "api-reference/file-storage/list-files",
-            "api-reference/file-storage/get-file"
+            "unified-apis/file-storage/list-drives",
+            "unified-apis/file-storage/get-drive",
+            "unified-apis/file-storage/list-folders",
+            "unified-apis/file-storage/get-folder",
+            "unified-apis/file-storage/list-files",
+            "unified-apis/file-storage/get-file"
           ]
         }
+      ]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": [
+        "core-concepts/connector-config",
+        "core-concepts/magic-link"
+      ]
+    },
+    {
+      "group": "Community",
+      "pages": [
+        "community/join-our-slack"
+      ]
+    },
+    {
+      "group": "Support",
+      "pages": [
+        "support/contact-us"
       ]
     }
   ],

@@ -1,4 +1,4 @@
-import apiPages from './api-reference/index.json'
+import apiPages from './unified-apis/index.json'
 
 const mintConfig: MintConfig = {
   name: 'OpenInt',
@@ -31,10 +31,13 @@ const mintConfig: MintConfig = {
       url: 'https://github.com/openintegrations/openint',
     },
   ],
+  primaryTab: {
+    name: 'Guide',
+  },
   tabs: [
     {
-      name: 'API References',
-      url: 'api-reference',
+      name: 'Unified APIs',
+      url: 'unified-apis',
     },
     {
       name: 'OpenAPI.json',
@@ -48,11 +51,24 @@ const mintConfig: MintConfig = {
         'quickstart/quickstart',
         'quickstart/use-cases',
         'quickstart/features',
+        'quickstart/integrations',
       ],
     },
     {
-      group: 'API Reference',
+      group: 'Unified APIs',
       pages: apiPages,
+    },
+    {
+      group: 'Core Concepts',
+      pages: ['core-concepts/connector-config', 'core-concepts/magic-link'],
+    },
+    {
+      group: 'Community',
+      pages: ['community/join-our-slack'],
+    },
+    {
+      group: 'Support',
+      pages: ['support/contact-us'],
     },
   ],
   backgroundImage: '/images/background.png',
@@ -85,6 +101,9 @@ export interface MintConfig {
     name?: string
     url?: string
   }>
+  primaryTab?: {
+    name?: string
+  }
   tabs?: Array<{
     name?: string
     url?: string
