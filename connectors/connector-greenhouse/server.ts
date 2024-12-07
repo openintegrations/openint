@@ -45,7 +45,7 @@ function greenhouseSource({sdk}: {sdk: GreenhouseSDK}): EtlSource<{
     // Perhaps allow cursor implementation to be passed in as a parameter
     // @ts-expect-error ile greenhouse sdk is updated
     async listEntities(type, {cursor}) {
-      const {next_page: page} = NextPageCursor.stringToCursor(cursor)
+      const {next_page: page} = NextPageCursor.deserialize(cursor)
       const isOpening = type === 'opening'
       if (isOpening) {
         console.debug(
@@ -58,7 +58,7 @@ function greenhouseSource({sdk}: {sdk: GreenhouseSDK}): EtlSource<{
       })
       const hasNextPage = res.data.length > 0
       const nextCursor = hasNextPage
-        ? NextPageCursor.cursorToString({next_page: page + 1})
+        ? NextPageCursor.serialize({next_page: page + 1})
         : null
 
       console.log('[greenhouse] listEntities', {type, page, cursor, nextCursor})

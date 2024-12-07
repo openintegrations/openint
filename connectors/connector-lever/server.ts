@@ -59,7 +59,7 @@ function leverSource({sdk}: {sdk: LeverSDK}): EtlSource<{
   return {
     // @ts-expect-error discuss with tony
     async listEntities(type, {cursor}) {
-      const {next_page: page} = NextPageCursor.stringToCursor(cursor)
+      const {next_page: page} = NextPageCursor.deserialize(cursor)
 
       if (type === 'offer') {
         const opportunitiesRes = await sdk.GET('/opportunities', {
@@ -79,7 +79,7 @@ function leverSource({sdk}: {sdk: LeverSDK}): EtlSource<{
 
         return {
           entities: allOffers,
-          next_cursor: NextPageCursor.cursorToString({next_page: page + 1}),
+          next_cursor: NextPageCursor.serialize({next_page: page + 1}),
           has_next_page: opportunitiesRes.data.hasNext ?? false,
         }
       }
@@ -96,7 +96,7 @@ function leverSource({sdk}: {sdk: LeverSDK}): EtlSource<{
 
       return {
         entities: res.data.data.map((e) => ({id: `${e.id}`, data: e})),
-        next_cursor: NextPageCursor.cursorToString({next_page: page + 1}),
+        next_cursor: NextPageCursor.serialize({next_page: page + 1}),
         has_next_page: res.data.hasNext ?? false,
       }
     },
