@@ -1,4 +1,5 @@
 import apiPages from './unified-apis/index.json'
+import openSDKPages from './open-sdks/index.json'
 
 const mintConfig: MintConfig = {
   name: 'OpenInt',
@@ -14,7 +15,12 @@ const mintConfig: MintConfig = {
     light: '#8b9cac',
     dark: '#8b9cac',
   },
-  topbarLinks: [],
+  topbarLinks: [
+    {
+      name: 'Open API Spec',
+      url: 'https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json',
+    },
+  ],
   topbarCtaButton: {
     name: 'Sign up',
     url: 'https://www.openint.dev',
@@ -35,8 +41,8 @@ const mintConfig: MintConfig = {
       url: 'unified-apis',
     },
     {
-      name: 'OpenAPI.json',
-      url: 'https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json',
+      name: 'OpenSDKs',
+      url: 'open-sdks',
     },
   ],
   navigation: [
@@ -54,12 +60,16 @@ const mintConfig: MintConfig = {
       pages: apiPages,
     },
     {
+      group: 'OpenSDKs',
+      pages: openSDKPages,
+    },
+    {
       group: 'Core Concepts',
       pages: ['core-concepts/connector-config', 'core-concepts/magic-link'],
     },
     {
       group: 'Community',
-      pages: ['community/join-our-slack'],
+      pages: ['community/join-our-slack', 'community/attribution'],
     }
   ],
   backgroundImage: '/images/background.png',

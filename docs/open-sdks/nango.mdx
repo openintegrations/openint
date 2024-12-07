@@ -1,0 +1,63 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-nango/nango.oas.json
+---
+
+## Integrating with Nango OpenSDK 
+
+Welcome to the Nango OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Nango OpenSDK allows you to easily integrate with the Nango API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /config | Returns a list of integrations
+| **POST** | /config | Create a new integration
+| **PUT** | /config | Edits an integration (only for OAuth APIs)
+| **GET** | /config/{providerConfigKey} | Returns a specific integration
+| **DELETE** | /config/{providerConfigKey} | Deletes a specific integration
+| **GET** | /connection | Returns a list of connections without credentials
+| **POST** | /connection | Adds a connection for which you already have credentials.
+| **GET** | /connection/{connectionId} | Returns a specific connection with credentials
+| **DELETE** | /connection/{connectionId} | Deletes a specific connection
+| **POST** | /connection/{connectionId}/metadata | Set custom metadata for the connection.
+| **PATCH** | /connection/{connectionId}/metadata | Edit custom metadata for the connection (only overrides specified properties, not the entire metadata).
+| **GET** | /records | Returns data synced with Nango Sync
+| **GET** | /sync/records | Returns data synced with Nango Sync
+| **POST** | /sync/trigger | Triggers an additional, one-off execution of specified sync(s) (for a given connection or all applicable connections if no connection is specified).
+| **POST** | /sync/start | Starts the schedule of specified sync(s) for a given connection or all applicable connections if no connection is specified.
+| **POST** | /sync/pause | Pauses the schedule of specified sync(s) for a given connection or all applicable connections if no connection is specified.
+| **GET** | /sync/status | Get the status of specified sync(s) (for a given connection or all applicable connections if no connection is specified)
+| **PUT** | /sync/update-connection-frequency | Override a sync's default frequency for a specific connection, or revert to the default frequency.
+| **POST** | /action/trigger | Triggers an action for a connection
+| **GET** | /environment-variables | Retrieve the environment variables as added in the Nango dashboard
+| **GET** | /proxy/{anyPath} | Make a GET request with the Proxy.
+| **POST** | /proxy/{anyPath} | Make a POST request with the Proxy.
+| **PUT** | /proxy/{anyPath} | Make a PUT request with the Proxy.
+| **PATCH** | /proxy/{anyPath} | Make a PATCH request with the Proxy.
+| **DELETE** | /proxy/{anyPath} | Make a DELETE request with the Proxy.
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {nangoSdkDef} from '@opensdks/sdk-nango'
+
+    const nango = initSDK(nangoSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['NANGO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    // Returns a list of integrations
+    const res = await nango.GET('/config')
+```

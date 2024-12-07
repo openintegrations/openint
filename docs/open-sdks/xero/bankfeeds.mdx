@@ -1,0 +1,50 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-xero/xero_bankfeeds.oas.json
+---
+
+## Integrating with Xero OpenSDK 
+
+Welcome to the Xero OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Xero OpenSDK allows you to easily integrate with the Xero API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **PARAMETERS** | /FeedConnections | 
+| **GET** | /FeedConnections | Searches for feed connections
+| **POST** | /FeedConnections | Create one or more new feed connection
+| **PARAMETERS** | /FeedConnections/{id} | 
+| **GET** | /FeedConnections/{id} | Retrieve single feed connection based on a unique id provided
+| **PARAMETERS** | /FeedConnections/DeleteRequests | 
+| **POST** | /FeedConnections/DeleteRequests | Delete an existing feed connection
+| **PARAMETERS** | /Statements | 
+| **GET** | /Statements | Retrieve all statements
+| **POST** | /Statements | Creates one or more new statements
+| **PARAMETERS** | /Statements/{statementId} | 
+| **GET** | /Statements/{statementId} | Retrieve single statement based on unique id provided
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {xeroSdkDef} from '@opensdks/sdk-xero'
+
+    const xero = initSDK(xeroSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['XERO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    
+    const res = await xero.PARAMETERS('/FeedConnections')
+```

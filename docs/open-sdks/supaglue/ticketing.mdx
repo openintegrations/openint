@@ -1,0 +1,80 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-supaglue/supaglue_ticketing.oas.json
+---
+
+## Integrating with Supaglue OpenSDK 
+
+Welcome to the Supaglue OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Supaglue OpenSDK allows you to easily integrate with the Supaglue API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /accounts | List accounts
+| **PARAMETERS** | /accounts | 
+| **GET** | /accounts/{account_id} | Get account
+| **PARAMETERS** | /accounts/{account_id} | 
+| **GET** | /collections | List collections
+| **PARAMETERS** | /collections | 
+| **GET** | /collections/{collection_id} | Get collection
+| **PARAMETERS** | /collections/{collection_id} | 
+| **GET** | /collections/{parent_id}/users | List collection users
+| **PARAMETERS** | /collections/{parent_id}/users | 
+| **GET** | /users | List users
+| **PARAMETERS** | /users | 
+| **GET** | /users/{user_id} | Get user
+| **PARAMETERS** | /users/{user_id} | 
+| **GET** | /contacts | List contacts
+| **PARAMETERS** | /contacts | 
+| **GET** | /contacts/{contact_id} | Get contact
+| **PARAMETERS** | /contacts/{contact_id} | 
+| **GET** | /teams | List teams
+| **PARAMETERS** | /teams | 
+| **GET** | /teams/{team_id} | Get team
+| **PARAMETERS** | /teams/{team_id} | 
+| **GET** | /tickets | List tickets
+| **POST** | /tickets | Create ticket
+| **PARAMETERS** | /tickets | 
+| **GET** | /tickets/{ticket_id} | Get ticket
+| **PATCH** | /tickets/{ticket_id} | Update ticket
+| **PARAMETERS** | /tickets/{ticket_id} | 
+| **GET** | /comments | List comments
+| **POST** | /comments | Create comment
+| **PARAMETERS** | /comments | 
+| **GET** | /comments/{comment_id} | Get comment
+| **PARAMETERS** | /comments/{comment_id} | 
+| **GET** | /tags | List tags
+| **PARAMETERS** | /tags | 
+| **GET** | /tags/{tag_id} | Get tag
+| **PARAMETERS** | /tags/{tag_id} | 
+| **GET** | /attachments | List attachments
+| **POST** | /attachments | Create attachment
+| **PARAMETERS** | /attachments | 
+| **GET** | /attachments/{attachment_id} | Get attachment
+| **PARAMETERS** | /attachments/{attachment_id} | 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {supaglueSdkDef} from '@opensdks/sdk-supaglue'
+
+    const supaglue = initSDK(supaglueSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['SUPAGLUE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // List accounts
+    const res = await supaglue.GET('/accounts')
+```

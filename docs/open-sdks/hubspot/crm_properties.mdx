@@ -1,0 +1,51 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-hubspot/hubspot_crm_properties.oas.json
+---
+
+## Integrating with Hubspot OpenSDK 
+
+Welcome to the Hubspot OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Hubspot OpenSDK allows you to easily integrate with the Hubspot API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /crm/v3/properties/{objectType}/batch/archive | Archive a batch of properties
+| **GET** | /crm/v3/properties/{objectType}/groups/{groupName} | Read a property group
+| **DELETE** | /crm/v3/properties/{objectType}/groups/{groupName} | Archive a property group
+| **PATCH** | /crm/v3/properties/{objectType}/groups/{groupName} | Update a property group
+| **GET** | /crm/v3/properties/{objectType}/{propertyName} | Read a property
+| **DELETE** | /crm/v3/properties/{objectType}/{propertyName} | Archive a property
+| **PATCH** | /crm/v3/properties/{objectType}/{propertyName} | Update a property
+| **POST** | /crm/v3/properties/{objectType}/batch/read | Read a batch of properties
+| **POST** | /crm/v3/properties/{objectType}/batch/create | Create a batch of properties
+| **GET** | /crm/v3/properties/{objectType} | Read all properties
+| **POST** | /crm/v3/properties/{objectType} | Create a property
+| **GET** | /crm/v3/properties/{objectType}/groups | Read all property groups
+| **POST** | /crm/v3/properties/{objectType}/groups | Create a property group
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {hubspotSdkDef} from '@opensdks/sdk-hubspot'
+
+    const hubspot = initSDK(hubspotSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['HUBSPOT_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Archive a batch of properties
+    const res = await hubspot.POST('/crm/v3/properties/{objectType}/batch/archive')
+```

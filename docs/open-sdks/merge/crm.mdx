@@ -1,0 +1,133 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-merge/merge_crm.oas.json
+---
+
+## Integrating with Merge OpenSDK 
+
+Welcome to the Merge OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Merge OpenSDK allows you to easily integrate with the Merge API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /account-details | Get details for a linked account.
+| **GET** | /account-token/{public_token} | Returns the account token for the end user with the provided public token.
+| **GET** | /accounts | Returns a list of `Account` objects.
+| **POST** | /accounts | Creates an `Account` object with the given values.
+| **GET** | /accounts/{id} | Returns an `Account` object with the given `id`.
+| **PATCH** | /accounts/{id} | Updates an `Account` object with the given `id`.
+| **GET** | /accounts/meta/patch/{id} | Returns metadata for `CRMAccount` PATCHs.
+| **GET** | /accounts/meta/post | Returns metadata for `CRMAccount` POSTs.
+| **GET** | /accounts/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **POST** | /async-passthrough | Asynchronously pull data from an endpoint not currently supported by Merge.
+| **GET** | /async-passthrough/{async_passthrough_receipt_id} | Retrieves data from earlier async-passthrough POST request
+| **GET** | /audit-trail | Gets a list of audit trail events.
+| **GET** | /available-actions | Returns a list of models and actions available for an account.
+| **GET** | /contacts | Returns a list of `Contact` objects.
+| **POST** | /contacts | Creates a `Contact` object with the given values.
+| **GET** | /contacts/{id} | Returns a `Contact` object with the given `id`.
+| **PATCH** | /contacts/{id} | Updates a `Contact` object with the given `id`.
+| **POST** | /contacts/ignore/{model_id} | Ignores a specific row based on the `model_id` in the url. These records will have their properties set to null, and will not be updated in future syncs. The "reason" and "message" fields in the request body will be stored for audit purposes.
+| **GET** | /contacts/meta/patch/{id} | Returns metadata for `CRMContact` PATCHs.
+| **GET** | /contacts/meta/post | Returns metadata for `CRMContact` POSTs.
+| **GET** | /contacts/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **GET** | /custom-object-classes | Returns a list of `CustomObjectClass` objects.
+| **GET** | /custom-object-classes/{custom_object_class_id}/association-types | Returns a list of `AssociationType` objects.
+| **POST** | /custom-object-classes/{custom_object_class_id}/association-types | Creates an `AssociationType` object with the given values.
+| **GET** | /custom-object-classes/{custom_object_class_id}/association-types/{id} | Returns an `AssociationType` object with the given `id`.
+| **GET** | /custom-object-classes/{custom_object_class_id}/association-types/meta/post | Returns metadata for `CRMAssociationType` POSTs.
+| **GET** | /custom-object-classes/{custom_object_class_id}/custom-objects | Returns a list of `CustomObject` objects.
+| **POST** | /custom-object-classes/{custom_object_class_id}/custom-objects | Creates a `CustomObject` object with the given values.
+| **GET** | /custom-object-classes/{custom_object_class_id}/custom-objects/{id} | Returns a `CustomObject` object with the given `id`.
+| **GET** | /custom-object-classes/{custom_object_class_id}/custom-objects/{object_id}/associations | Returns a list of `Association` objects.
+| **GET** | /custom-object-classes/{custom_object_class_id}/custom-objects/meta/post | Returns metadata for `CRMCustomObject` POSTs.
+| **GET** | /custom-object-classes/{id} | Returns a `CustomObjectClass` object with the given `id`.
+| **PUT** | /custom-object-classes/{source_class_id}/custom-objects/{source_object_id}/associations/{target_class_id}/{target_object_id}/{association_type_id} | Creates an Association between `source_object_id` and `target_object_id` of type `association_type_id`.
+| **GET** | /default-scopes | Get the default permissions for Merge Common Models and fields across all Linked Accounts of a given category. [Learn more](https://help.merge.dev/en/articles/8828211-common-model-and-field-scopes).
+| **POST** | /delete-account | Delete a linked account.
+| **GET** | /engagement-types | Returns a list of `EngagementType` objects.
+| **GET** | /engagement-types/{id} | Returns an `EngagementType` object with the given `id`.
+| **GET** | /engagement-types/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **GET** | /engagements | Returns a list of `Engagement` objects.
+| **POST** | /engagements | Creates an `Engagement` object with the given values.
+| **GET** | /engagements/{id} | Returns an `Engagement` object with the given `id`.
+| **PATCH** | /engagements/{id} | Updates an `Engagement` object with the given `id`.
+| **GET** | /engagements/meta/patch/{id} | Returns metadata for `Engagement` PATCHs.
+| **GET** | /engagements/meta/post | Returns metadata for `Engagement` POSTs.
+| **GET** | /engagements/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **GET** | /field-mappings | Get all Field Mappings for this Linked Account. Field Mappings are mappings between third-party Remote Fields and user defined Merge fields. [Learn more](https://docs.merge.dev/supplemental-data/field-mappings/overview/).
+| **POST** | /field-mappings | Create new Field Mappings that will be available after the next scheduled sync. This will cause the next sync for this Linked Account to sync **ALL** data from start.
+| **PATCH** | /field-mappings/{field_mapping_id} | Create or update existing Field Mappings for a Linked Account. Changes will be reflected after the next scheduled sync. This will cause the next sync for this Linked Account to sync **ALL** data from start.
+| **DELETE** | /field-mappings/{field_mapping_id} | Deletes Field Mappings for a Linked Account. All data related to this Field Mapping will be deleted and these changes will be reflected after the next scheduled sync. This will cause the next sync for this Linked Account to sync **ALL** data from start.
+| **POST** | /generate-key | Create a remote key.
+| **GET** | /issues | Gets all issues for Organization.
+| **GET** | /issues/{id} | Get a specific issue.
+| **GET** | /leads | Returns a list of `Lead` objects.
+| **POST** | /leads | Creates a `Lead` object with the given values.
+| **GET** | /leads/{id} | Returns a `Lead` object with the given `id`.
+| **GET** | /leads/meta/post | Returns metadata for `Lead` POSTs.
+| **GET** | /leads/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **POST** | /link-token | Creates a link token to be used when linking a new end user.
+| **GET** | /linked-account-scopes | Get all available permissions for Merge Common Models and fields for a single Linked Account. [Learn more](https://help.merge.dev/en/articles/8828211-common-model-and-field-scopes).
+| **POST** | /linked-account-scopes | Update permissions for any Common Model or field for a single Linked Account. Any Scopes not set in this POST request will inherit the default Scopes. [Learn more](https://help.merge.dev/en/articles/8828211-common-model-and-field-scopes)
+| **GET** | /linked-accounts | List linked accounts for your organization.
+| **GET** | /notes | Returns a list of `Note` objects.
+| **POST** | /notes | Creates a `Note` object with the given values.
+| **GET** | /notes/{id} | Returns a `Note` object with the given `id`.
+| **GET** | /notes/meta/post | Returns metadata for `Note` POSTs.
+| **GET** | /notes/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **GET** | /opportunities | Returns a list of `Opportunity` objects.
+| **POST** | /opportunities | Creates an `Opportunity` object with the given values.
+| **GET** | /opportunities/{id} | Returns an `Opportunity` object with the given `id`.
+| **PATCH** | /opportunities/{id} | Updates an `Opportunity` object with the given `id`.
+| **GET** | /opportunities/meta/patch/{id} | Returns metadata for `Opportunity` PATCHs.
+| **GET** | /opportunities/meta/post | Returns metadata for `Opportunity` POSTs.
+| **GET** | /opportunities/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **POST** | /passthrough | Pull data from an endpoint not currently supported by Merge.
+| **POST** | /regenerate-key | Exchange remote keys.
+| **GET** | /remote-fields | Get all remote fields for a Linked Account. Remote fields are third-party fields that are accessible after initial sync if remote_data is enabled. You can use remote fields to override existing Merge fields or map a new Merge field. [Learn more](https://docs.merge.dev/supplemental-data/field-mappings/overview/).
+| **GET** | /stages | Returns a list of `Stage` objects.
+| **GET** | /stages/{id} | Returns a `Stage` object with the given `id`.
+| **GET** | /stages/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **GET** | /sync-status | Get syncing status. Possible values: `DISABLED`, `DONE`, `FAILED`, `PARTIALLY_SYNCED`, `PAUSED`, `SYNCING`. Learn more about sync status in our [Help Center](https://help.merge.dev/en/articles/8184193-merge-sync-statuses).
+| **POST** | /sync-status/resync | Force re-sync of all models. This is available for all organizations via the dashboard. Force re-sync is also available programmatically via API for monthly, quarterly, and highest sync frequency customers on the Launch, Professional, or Enterprise plans. Doing so will consume a sync credit for the relevant linked account.
+| **GET** | /target-fields | Get all organization-wide Target Fields, this will not include any Linked Account specific Target Fields. Organization-wide Target Fields are additional fields appended to the Merge Common Model for all Linked Accounts in a category. [Learn more](https://docs.merge.dev/supplemental-data/field-mappings/target-fields/).
+| **GET** | /tasks | Returns a list of `Task` objects.
+| **POST** | /tasks | Creates a `Task` object with the given values.
+| **GET** | /tasks/{id} | Returns a `Task` object with the given `id`.
+| **PATCH** | /tasks/{id} | Updates a `Task` object with the given `id`.
+| **GET** | /tasks/meta/patch/{id} | Returns metadata for `Task` PATCHs.
+| **GET** | /tasks/meta/post | Returns metadata for `Task` POSTs.
+| **GET** | /tasks/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **GET** | /users | Returns a list of `User` objects.
+| **GET** | /users/{id} | Returns a `User` object with the given `id`.
+| **POST** | /users/ignore/{model_id} | Ignores a specific row based on the `model_id` in the url. These records will have their properties set to null, and will not be updated in future syncs. The "reason" and "message" fields in the request body will be stored for audit purposes.
+| **GET** | /users/remote-field-classes | Returns a list of `RemoteFieldClass` objects.
+| **GET** | /webhook-receivers | Returns a list of `WebhookReceiver` objects.
+| **POST** | /webhook-receivers | Creates a `WebhookReceiver` object with the given values.
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {mergeSdkDef} from '@opensdks/sdk-merge'
+
+    const merge = initSDK(mergeSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['MERGE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Get details for a linked account.
+    const res = await merge.GET('/account-details')
+```

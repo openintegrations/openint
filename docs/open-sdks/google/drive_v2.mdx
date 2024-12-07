@@ -1,0 +1,153 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-google/google_drive_v2.oas.json
+---
+
+## Integrating with Google OpenSDK 
+
+Welcome to the Google OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Google OpenSDK allows you to easily integrate with the Google API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /about | Gets the information about the current user along with Drive API settings
+| **PARAMETERS** | /about | 
+| **GET** | /apps | Lists a user's installed apps.
+| **PARAMETERS** | /apps | 
+| **GET** | /apps/{appId} | Gets a specific app.
+| **PARAMETERS** | /apps/{appId} | 
+| **GET** | /changes | Lists the changes for a user or shared drive.
+| **PARAMETERS** | /changes | 
+| **GET** | /changes/startPageToken | Gets the starting pageToken for listing future changes.
+| **PARAMETERS** | /changes/startPageToken | 
+| **PARAMETERS** | /changes/watch | 
+| **POST** | /changes/watch | Subscribe to changes for a user.
+| **GET** | /changes/{changeId} | Deprecated - Use changes.getStartPageToken and changes.list to retrieve recent changes.
+| **PARAMETERS** | /changes/{changeId} | 
+| **PARAMETERS** | /channels/stop | 
+| **POST** | /channels/stop | Stop watching resources through this channel
+| **GET** | /drives | Lists the user's shared drives.
+| **PARAMETERS** | /drives | 
+| **POST** | /drives | Creates a new shared drive.
+| **DELETE** | /drives/{driveId} | Permanently deletes a shared drive for which the user is an organizer. The shared drive cannot contain any untrashed items.
+| **GET** | /drives/{driveId} | Gets a shared drive's metadata by ID.
+| **PARAMETERS** | /drives/{driveId} | 
+| **PUT** | /drives/{driveId} | Updates the metadata for a shared drive.
+| **PARAMETERS** | /drives/{driveId}/hide | 
+| **POST** | /drives/{driveId}/hide | Hides a shared drive from the default view.
+| **PARAMETERS** | /drives/{driveId}/unhide | 
+| **POST** | /drives/{driveId}/unhide | Restores a shared drive to the default view.
+| **GET** | /files | Lists the user's files.
+| **PARAMETERS** | /files | 
+| **POST** | /files | Insert a new file.
+| **GET** | /files/generateIds | Generates a set of file IDs which can be provided in insert or copy requests.
+| **PARAMETERS** | /files/generateIds | 
+| **DELETE** | /files/trash | Permanently deletes all of the user's trashed files.
+| **PARAMETERS** | /files/trash | 
+| **DELETE** | /files/{fileId} | Permanently deletes a file by ID. Skips the trash. The currently authenticated user must own the file or be an organizer on the parent for shared drive files.
+| **GET** | /files/{fileId} | Gets a file's metadata or content by ID.
+| **PARAMETERS** | /files/{fileId} | 
+| **PATCH** | /files/{fileId} | Updates a file's metadata and/or content. When calling this method, only populate fields in the request that you want to modify. When updating fields, some fields might change automatically, such as modifiedDate. This method supports patch semantics.
+| **PUT** | /files/{fileId} | Updates a file's metadata and/or content. When calling this method, only populate fields in the request that you want to modify. When updating fields, some fields might be changed automatically, such as modifiedDate. This method supports patch semantics.
+| **GET** | /files/{fileId}/comments | Lists a file's comments.
+| **PARAMETERS** | /files/{fileId}/comments | 
+| **POST** | /files/{fileId}/comments | Creates a new comment on the given file.
+| **DELETE** | /files/{fileId}/comments/{commentId} | Deletes a comment.
+| **GET** | /files/{fileId}/comments/{commentId} | Gets a comment by ID.
+| **PARAMETERS** | /files/{fileId}/comments/{commentId} | 
+| **PATCH** | /files/{fileId}/comments/{commentId} | Updates an existing comment.
+| **PUT** | /files/{fileId}/comments/{commentId} | Updates an existing comment.
+| **GET** | /files/{fileId}/comments/{commentId}/replies | Lists all of the replies to a comment.
+| **PARAMETERS** | /files/{fileId}/comments/{commentId}/replies | 
+| **POST** | /files/{fileId}/comments/{commentId}/replies | Creates a new reply to the given comment.
+| **DELETE** | /files/{fileId}/comments/{commentId}/replies/{replyId} | Deletes a reply.
+| **GET** | /files/{fileId}/comments/{commentId}/replies/{replyId} | Gets a reply.
+| **PARAMETERS** | /files/{fileId}/comments/{commentId}/replies/{replyId} | 
+| **PATCH** | /files/{fileId}/comments/{commentId}/replies/{replyId} | Updates an existing reply.
+| **PUT** | /files/{fileId}/comments/{commentId}/replies/{replyId} | Updates an existing reply.
+| **PARAMETERS** | /files/{fileId}/copy | 
+| **POST** | /files/{fileId}/copy | Creates a copy of the specified file. Folders cannot be copied.
+| **GET** | /files/{fileId}/export | Exports a Google Workspace document to the requested MIME type and returns exported byte content. Note that the exported content is limited to 10MB.
+| **PARAMETERS** | /files/{fileId}/export | 
+| **GET** | /files/{fileId}/listLabels | Lists the labels on a file.
+| **PARAMETERS** | /files/{fileId}/listLabels | 
+| **PARAMETERS** | /files/{fileId}/modifyLabels | 
+| **POST** | /files/{fileId}/modifyLabels | Modifies the set of labels on a file.
+| **GET** | /files/{fileId}/parents | Lists a file's parents.
+| **PARAMETERS** | /files/{fileId}/parents | 
+| **POST** | /files/{fileId}/parents | Adds a parent folder for a file.
+| **DELETE** | /files/{fileId}/parents/{parentId} | Removes a parent from a file.
+| **GET** | /files/{fileId}/parents/{parentId} | Gets a specific parent reference.
+| **PARAMETERS** | /files/{fileId}/parents/{parentId} | 
+| **GET** | /files/{fileId}/permissions | Lists a file's or shared drive's permissions.
+| **PARAMETERS** | /files/{fileId}/permissions | 
+| **POST** | /files/{fileId}/permissions | Inserts a permission for a file or shared drive.
+| **DELETE** | /files/{fileId}/permissions/{permissionId} | Deletes a permission from a file or shared drive.
+| **GET** | /files/{fileId}/permissions/{permissionId} | Gets a permission by ID.
+| **PARAMETERS** | /files/{fileId}/permissions/{permissionId} | 
+| **PATCH** | /files/{fileId}/permissions/{permissionId} | Updates a permission using patch semantics.
+| **PUT** | /files/{fileId}/permissions/{permissionId} | Updates a permission.
+| **GET** | /files/{fileId}/properties | Lists a file's properties.
+| **PARAMETERS** | /files/{fileId}/properties | 
+| **POST** | /files/{fileId}/properties | Adds a property to a file, or updates it if it already exists.
+| **DELETE** | /files/{fileId}/properties/{propertyKey} | Deletes a property.
+| **GET** | /files/{fileId}/properties/{propertyKey} | Gets a property by its key.
+| **PARAMETERS** | /files/{fileId}/properties/{propertyKey} | 
+| **PATCH** | /files/{fileId}/properties/{propertyKey} | Updates a property.
+| **PUT** | /files/{fileId}/properties/{propertyKey} | Updates a property.
+| **GET** | /files/{fileId}/revisions | Lists a file's revisions.
+| **PARAMETERS** | /files/{fileId}/revisions | 
+| **DELETE** | /files/{fileId}/revisions/{revisionId} | Permanently deletes a file version. You can only delete revisions for files with binary content, like images or videos. Revisions for other files, like Google Docs or Sheets, and the last remaining file version can't be deleted.
+| **GET** | /files/{fileId}/revisions/{revisionId} | Gets a specific revision.
+| **PARAMETERS** | /files/{fileId}/revisions/{revisionId} | 
+| **PATCH** | /files/{fileId}/revisions/{revisionId} | Updates a revision.
+| **PUT** | /files/{fileId}/revisions/{revisionId} | Updates a revision.
+| **PARAMETERS** | /files/{fileId}/touch | 
+| **POST** | /files/{fileId}/touch | Set the file's updated time to the current server time.
+| **PARAMETERS** | /files/{fileId}/trash | 
+| **POST** | /files/{fileId}/trash | Moves a file to the trash. The currently authenticated user must own the file or be at least a fileOrganizer on the parent for shared drive files. Only the owner may trash a file. The trashed item is excluded from all files.list responses returned for any user who does not own the file. However, all users with access to the file can see the trashed item metadata in an API response. All users with access can copy, download, export, and share the file.
+| **PARAMETERS** | /files/{fileId}/untrash | 
+| **POST** | /files/{fileId}/untrash | Restores a file from the trash. The currently authenticated user must own the file or be at least a fileOrganizer on the parent for shared drive files. Only the owner may untrash a file.
+| **PARAMETERS** | /files/{fileId}/watch | 
+| **POST** | /files/{fileId}/watch | Subscribes to changes to a file. While you can establish a channel for changes to a file on a shared drive, a change to a shared drive file won't create a notification.
+| **GET** | /files/{folderId}/children | Lists a folder's children.
+| **PARAMETERS** | /files/{folderId}/children | 
+| **POST** | /files/{folderId}/children | Inserts a file into a folder.
+| **DELETE** | /files/{folderId}/children/{childId} | Removes a child from a folder.
+| **GET** | /files/{folderId}/children/{childId} | Gets a specific child reference.
+| **PARAMETERS** | /files/{folderId}/children/{childId} | 
+| **GET** | /permissionIds/{email} | Returns the permission ID for an email address.
+| **PARAMETERS** | /permissionIds/{email} | 
+| **GET** | /teamdrives | Deprecated use drives.list instead.
+| **PARAMETERS** | /teamdrives | 
+| **POST** | /teamdrives | Deprecated use drives.insert instead.
+| **DELETE** | /teamdrives/{teamDriveId} | Deprecated use drives.delete instead.
+| **GET** | /teamdrives/{teamDriveId} | Deprecated use drives.get instead.
+| **PARAMETERS** | /teamdrives/{teamDriveId} | 
+| **PUT** | /teamdrives/{teamDriveId} | Deprecated use drives.update instead.
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {googleSdkDef} from '@opensdks/sdk-google'
+
+    const google = initSDK(googleSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['GOOGLE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Gets the information about the current user along with Drive API settings
+    const res = await google.GET('/about')
+```

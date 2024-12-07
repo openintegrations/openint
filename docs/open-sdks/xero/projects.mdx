@@ -1,0 +1,61 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-xero/xero_projects.oas.json
+---
+
+## Integrating with Xero OpenSDK 
+
+Welcome to the Xero OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Xero OpenSDK allows you to easily integrate with the Xero API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **PARAMETERS** | /Projects | 
+| **GET** | /Projects | Retrieves all projects
+| **POST** | /Projects | Create one or more new projects
+| **PARAMETERS** | /Projects/{projectId} | 
+| **GET** | /Projects/{projectId} | Retrieves a single project
+| **PUT** | /Projects/{projectId} | Updates a specific project
+| **PATCH** | /Projects/{projectId} | creates a project for the specified contact
+| **PARAMETERS** | /ProjectsUsers | 
+| **GET** | /ProjectsUsers | Retrieves a list of all project users
+| **PARAMETERS** | /Projects/{projectId}/Tasks | 
+| **GET** | /Projects/{projectId}/Tasks | Retrieves all project tasks
+| **POST** | /Projects/{projectId}/Tasks | Allows you to create a task
+| **PARAMETERS** | /Projects/{projectId}/Tasks/{taskId} | 
+| **GET** | /Projects/{projectId}/Tasks/{taskId} | Retrieves a single project task
+| **PUT** | /Projects/{projectId}/Tasks/{taskId} | Allows you to update a task
+| **DELETE** | /Projects/{projectId}/Tasks/{taskId} | Allows you to delete a task
+| **PARAMETERS** | /Projects/{projectId}/Time | 
+| **GET** | /Projects/{projectId}/Time | Retrieves all time entries associated with a specific project
+| **POST** | /Projects/{projectId}/Time | Creates a time entry for a specific project
+| **PARAMETERS** | /Projects/{projectId}/Time/{timeEntryId} | 
+| **GET** | /Projects/{projectId}/Time/{timeEntryId} | Retrieves a single time entry for a specific project
+| **PUT** | /Projects/{projectId}/Time/{timeEntryId} | Updates a time entry for a specific project
+| **DELETE** | /Projects/{projectId}/Time/{timeEntryId} | Deletes a time entry for a specific project
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {xeroSdkDef} from '@opensdks/sdk-xero'
+
+    const xero = initSDK(xeroSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['XERO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    
+    const res = await xero.PARAMETERS('/Projects')
+```
