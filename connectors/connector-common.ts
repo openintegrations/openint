@@ -1,7 +1,6 @@
-
 // MARK: - New way of doing things
 
-import {z, rxjs, Rx} from "@openint/util"
+import {Rx, rxjs, safeJSONParse, z} from '@openint/util'
 
 export interface EtlSource<
   TEntityMap extends Record<string, unknown> = Record<string, unknown>,
@@ -30,8 +29,10 @@ interface CursorParser<T> {
 
 export const NextPageCursor: CursorParser<{next_page: number}> = {
   fromString(cursor) {
-    const num = z.coerce.number().positive().safeParse(cursor)
-    return {next_page: num.success ? num.data : 1}
+    const cur = z
+      .object({next_page: z.number().positive()})
+      .safeParse(safeJSONParse(cursor))
+    return {next_page: cur.success ? cur.data.next_page : 1}
   },
   toString(value) {
     return JSON.stringify(value)
@@ -53,21 +54,29 @@ export function observableFromEtlSource(
         continue
       }
 
-      const {cursor} = state[streamName] ?? {}
-      const {entities, next_cursor, has_next_page} = await source.listEntities(
-        streamName,
-        {cursor},
-      )
+      while (true) {
+        // console.log(`[sourceSync] ${streamName} pre state`, state)
+        const {cursor} = state[streamName] ?? {}
+        const {entities, next_cursor, has_next_page} =
+          await source.listEntities(streamName, {cursor})
+        state[streamName] = {cursor: next_cursor}
+        // console.log(
+        //   `[sourceSync] ${streamName} ${entities.length} entities `,
+        //   state,
+        // )
 
-      yield entities.map((j) => ({
-        type: 'data' as const,
-        // We should make the messages easier to construct
-        data: {entityName: streamName, id: j.id, entity: j.data},
-      }))
+        yield [
+          ...entities.map((j) => ({
+            type: 'data' as const,
+            // We should make the messages easier to construct
+            data: {entityName: streamName, id: j.id, entity: j.data},
+          })),
+          {type: 'stateUpdate', sourceState: state} as never, // type error
+        ]
 
-      state[streamName] = {cursor: next_cursor}
-      if (!has_next_page) {
-        continue
+        if (!has_next_page) {
+          break
+        }
       }
     }
   }
