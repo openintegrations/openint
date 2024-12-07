@@ -224,14 +224,31 @@ export function makeDBService({
         getResourceExpandedOrFail(pipe.sourceId!),
         getResourceExpandedOrFail(pipe.destinationId!),
       ])
-      const sourceState: {} =
-        source.connectorConfig.connector.schemas.sourceState?.parse(
-          pipe.sourceState,
-        )
-      const destinationState: {} =
-        destination.connectorConfig.connector.schemas.destinationState?.parse(
-          pipe.destinationState,
-        )
+      // if (
+      //   pipe.sourceState != null &&
+      //   !source.connectorConfig.connector.schemas.sourceState
+      // ) {
+      //   throw new TRPCError({
+      //     code: 'BAD_REQUEST',
+      //     message: `Source state is not supported for ${source.connectorConfig.connector.name}`,
+      //   })
+      // }
+      // if (
+      //   pipe.destinationState != null &&
+      //   !destination.connectorConfig.connector.schemas.destinationState
+      // ) {
+      //   throw new TRPCError({
+      //     code: 'BAD_REQUEST',
+      //     message: `destinationState is not supported for ${destination.connectorConfig.connector.name}`,
+      //   })
+      // }
+      const sourceState: {} = (
+        source.connectorConfig.connector.schemas.sourceState ?? z.unknown()
+      ).parse(pipe.sourceState)
+      const destinationState: {} = (
+        destination.connectorConfig.connector.schemas.destinationState ??
+        z.unknown()
+      ).parse(pipe.destinationState)
       // const links = R.pipe(
       //   rest.linkOptions ?? pipeline?.linkOptions ?? [],
       //   R.map((l) =>

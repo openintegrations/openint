@@ -1,6 +1,6 @@
 import {initGreenhouseSDK, type greenhouseTypes} from '@opensdks/sdk-greenhouse'
 import type {ConnectorServer} from '@openint/cdk'
-import {NextPageCursor} from '@openint/cdk/cursors'
+import {LastUpdatedAndPage} from '@openint/cdk/cursors'
 import type {EtlSource} from '../connector-common'
 import {observableFromEtlSource} from '../connector-common'
 import {type greenhouseSchema} from './def'
@@ -19,6 +19,7 @@ export const greenhouseServer = {
     return greenhouse
   },
   sourceSync: ({instance: greenhouse, streams, state}) =>
+    // console.log('grenehouse sourceSync', {streams, state})
     observableFromEtlSource(
       greenhouseSource({sdk: greenhouse}),
       streams,
@@ -44,8 +45,8 @@ function greenhouseSource({sdk}: {sdk: GreenhouseSDK}): EtlSource<{
   return {
     // Perhaps allow cursor implementation to be passed in as a parameter
     // @ts-expect-error ile greenhouse sdk is updated
-    async listEntities(type, {cursor}) {
-      const {next_page: page} = NextPageCursor.deserialize(cursor)
+    async listEntities(type, {cursor: cursorStr}) {
+      const cursor = LastUpdatedAndPage.deserialize(cursorStr) ?? {page: 1}
       const isOpening = type === 'opening'
       if (isOpening) {
         console.debug(
@@ -53,15 +54,45 @@ function greenhouseSource({sdk}: {sdk: GreenhouseSDK}): EtlSource<{
         )
         type = 'job' as typeof type
       }
-      const res = await sdk.GET(`/v1/${type as 'job'}s`, {
-        params: {query: {per_page: 50, page}},
-      })
-      const hasNextPage = res.data.length > 0
-      const nextCursor = hasNextPage
-        ? NextPageCursor.serialize({next_page: page + 1})
-        : null
 
-      console.log('[greenhouse] listEntities', {type, page, cursor, nextCursor})
+      // console.log('[greenhouse] listEntities', {
+      //   type,
+      //   cursor,
+      //   query: {
+      //     per_page: 50,
+      //     page: cursor.page,
+      //     ...(cursor.last_updated_at &&
+      //       ({updated_after: cursor.last_updated_at} as {})),
+      //   },
+      // })
+      const res = await sdk.GET(`/v1/${type as 'job'}s`, {
+        params: {
+          query: {
+            per_page: 50,
+            page: cursor.page,
+            ...(cursor.last_updated_at &&
+              ({updated_after: cursor.last_updated_at} as {})),
+          },
+        },
+      })
+      // ISO8601 updatedAt could be compared as number
+      const lastUpdatedItem = maxBy(res.data, (item) => item.updated_at)
+      cursor.pending_last_updated_at = max([
+        lastUpdatedItem?.updated_at,
+        cursor.pending_last_updated_at,
+      ])
+      cursor.page += 1
+      // TODO: instead check for count / from response header
+      // Or maybe check if the response size is < than the page size
+      // though not reliable given server could limit the response size to be less than the page size
+      // for page size that are too large.
+      const hasNextPage = res.data.length > 0
+      if (!hasNextPage) {
+        cursor.last_updated_at = cursor.pending_last_updated_at
+        cursor.page = 1
+        delete cursor.pending_last_updated_at
+      }
+
       return {
         entities: isOpening
           ? res.data.flatMap((j) =>
@@ -71,10 +102,39 @@ function greenhouseSource({sdk}: {sdk: GreenhouseSDK}): EtlSource<{
               })),
             )
           : res.data.map((j) => ({id: `${j.id}`, data: j})),
-        next_cursor: nextCursor,
-        // TODO: instead check for count / from response header
+        next_cursor: LastUpdatedAndPage.serialize(cursor),
         has_next_page: hasNextPage,
       }
     },
   }
+}
+
+function maxBy<T, U extends string | null | undefined>(
+  values: T[],
+  selector: (item: T) => U,
+): T | null | undefined {
+  if (values.length === 0) {
+    return null
+  }
+
+  return values.reduce((max, current) => {
+    const maxValue = selector(max)
+    const currentValue = selector(current)
+
+    if (maxValue == null) {
+      return current
+    }
+    if (currentValue == null) {
+      return max
+    }
+
+    return currentValue > maxValue ? current : max
+  })
+}
+
+function max(
+  values: Array<string | null | undefined>,
+): string | null | undefined {
+  const result = maxBy(values, (v) => v)
+  return result
 }

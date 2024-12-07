@@ -7,7 +7,6 @@ const cursorFromSchema = <T>(
   defaultValue: T,
 ) => ({
   defaultValue,
-  schema,
   serialize: (cur: T) => {
     try {
       return JsonURL.stringify(schema.parse(cur))
@@ -17,6 +16,11 @@ const cursorFromSchema = <T>(
     }
   },
   deserialize: (str: string | null | undefined) => {
+    // console.log('deserialize', {
+    //   str,
+    //   'JsonURL.parse(str)': JsonURL.parse(str!),
+    //   'schema.parse(JsonURL.parse(str))': schema.parse(JsonURL.parse(str!)),
+    // })
     if (str == null) {
       return defaultValue
     }
@@ -27,6 +31,7 @@ const cursorFromSchema = <T>(
       return defaultValue
     }
   },
+  schema,
 })
 
 export const NextPageCursor = cursorFromSchema(
@@ -37,23 +42,35 @@ export const NextPageCursor = cursorFromSchema(
 // TODO: Return indication to caller that the cursor is invalid so that they can dynamically
 // switch to a full sync rather than incremental sync
 export const LastUpdatedAndIdCursor = cursorFromSchema(
-  z.object({
-    last_updated_at: z.string(),
-    last_id: z.string(),
-  }),
+  z
+    .object({
+      last_updated_at: z.string(),
+      last_id: z.string(),
+    })
+    .optional(),
   undefined,
 )
 
 // TODO: Return indication to caller that the cursor is invalid so that they can dynamically
 // switch to a full sync rather than incremental sync
 export const LastUpdatedAndNextOffsetCursor = cursorFromSchema(
-  z.union([
-    z.object({
+  z
+    .object({
       last_updated_at: z.string(),
       // TODO: Rename to next_cursor from next_offset
       next_offset: z.string().nullish(),
-    }),
-    z.undefined(),
-  ]),
+    })
+    .optional(),
+  undefined,
+)
+
+export const LastUpdatedAndPage = cursorFromSchema(
+  z
+    .object({
+      last_updated_at: z.string().nullish(),
+      page: z.number(),
+      pending_last_updated_at: z.string().nullish(),
+    })
+    .optional(),
   undefined,
 )
