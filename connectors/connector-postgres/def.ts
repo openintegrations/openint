@@ -14,6 +14,41 @@ export const zPgConfig = z.object({
   migrateTables: z.boolean().optional(),
 })
 
+/** TODO: Should confirm to airbyte record message format, and probably import from it */
+export const zRecordMessageBody = z.object({
+  stream: z.string(),
+  /** Should we support non-record data? Typically contains {unified, raw} fields */
+  data: z.record(z.unknown()),
+  namespace: z.string().optional(),
+  upsert: z
+    .object({
+      insert_only_columns: z.array(z.string()).optional(),
+      key_columns: z.array(z.string()).optional(),
+      must_match_columns: z.array(z.string()).optional(),
+      no_diff_columns: z.array(z.string()).optional(),
+      shallow_merge_jsonb_columns: z.array(z.string()).optional(),
+    })
+    .optional(),
+})
+export type RecordMessageBody = z.infer<typeof zRecordMessageBody>
+
+export const deprecatedInputEntity = z.object({
+  id: z.string(),
+  entityName: z.string(),
+  // TODO: Fix the support here. We hare hacking postgres to be able
+  // support both unified +unified inputs and raw only inputs
+  // Basically this should work with or without a link... And it's hard to abstract for now
+  entity: z.union([
+    z.object({
+      // For now... in future we shall support arbitrary columns later
+      raw: z.unknown(),
+      unified: z.unknown(),
+    }),
+    z.null(),
+  ]),
+})
+export type DeprecatedInputEntity = z.infer<typeof deprecatedInputEntity>
+
 export const postgresSchemas = {
   name: z.literal('postgres'),
   // TODO: Should postgres use integration config or resourceSettings?
@@ -36,18 +71,7 @@ export const postgresSchemas = {
         // @see https://share.cleanshot.com/w0KVx1Y2
         .optional(),
     }),
-  destinationInputEntity: z.object({
-    id: z.string(),
-    entityName: z.string(),
-    // TODO: Fix the support here. We hare hacking postgres to be able
-    // support both unified +unified inputs and raw only inputs
-    // Basically this should work with or without a link... And it's hard to abstract for now
-    entity: z.object({
-      // For now... in future we shall support arbitrary columns later
-      raw: z.any(),
-      unified: z.any(),
-    }),
-  }),
+  destinationInputEntity: z.union([zRecordMessageBody, deprecatedInputEntity]),
   sourceOutputEntity: zCast<EntityPayloadWithRaw>(),
   sourceState: z
     .object({

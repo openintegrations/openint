@@ -12,7 +12,6 @@ import type {
   StreamsV2,
 } from '@openint/cdk'
 import {
-  agColumnRenameLink,
   bankingLink,
   logLink,
   makeId,
@@ -25,6 +24,7 @@ import {rxjs} from '@openint/util'
 // Amadeo Q: how do I make the atsLink part of the openint/cdk? is there some sort of release process?
 import {unifiedAtsLink} from '../../../unified/unified-ats'
 import {unifiedCrmLink} from '../../../unified/unified-crm'
+import {agLink} from '../../custom-links/agLink'
 import {inngest} from '../events'
 import type {zSyncOptions} from '../types'
 import type {AuthProvider} from './AuthProvider'
@@ -138,8 +138,8 @@ export function makeSyncService({
   const getLinksForPipeline = ({
     source,
     destination,
-    links, // eslint-disable-next-line arrow-body-style
-  }: _PipelineExpanded): Link[] => {
+    links, // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }: _PipelineExpanded): Array<Link<any>> => {
     const allLinks = [
       ...links,
       ...[
@@ -160,10 +160,10 @@ export function makeSyncService({
             return unifiedAtsLink({source})
           case 'single_table':
             return singleTableLink({source})
-          case 'ag_column_rename':
-            return agColumnRenameLink({source})
           case 'unified_crm':
             return unifiedCrmLink({source})
+          case 'custom_link_ag':
+            return agLink({source})
           default:
             throw new Error(`Unknown link ${l}`)
         }

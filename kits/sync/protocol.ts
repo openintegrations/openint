@@ -19,6 +19,7 @@ import type {ExternalId, Id} from '../cdk/id.types'
  * TODO: We should add a `change` type here, as `null` could also be a valid value
  * Actually, in the simplest form we should just have a [id, data] without even
  * any entity name. This can get transformed to [id, entityName, changeType, entity] as needed.
+ * // TODO: Conform this with airbyte protocol would be nice, and possibly adding in the custom postgres stuff?
  */
 export interface AnyEntityPayload {
   // typename: string
@@ -53,7 +54,7 @@ type NullableEntity<T> = T extends AnyEntityPayload
   : T
 
 export type SyncOperation<
-  TData extends AnyEntityPayload = AnyEntityPayload,
+  TData = any,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > =
@@ -69,7 +70,7 @@ export type SyncOperation<
 export type AnySyncOperation = NonDiscriminatedUnion<SyncOperation>
 
 export type Source<
-  T extends AnyEntityPayload,
+  T,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = rxjs.Observable<SyncOperation<T, TResoUpdate, TStateUpdate>>
@@ -79,8 +80,8 @@ export type Source<
  * A specialized version of rxjs.OperatorFucntion. Often times stateful.
  */
 export type Link<
-  TDataIn extends AnyEntityPayload = AnyEntityPayload,
-  TDataOut extends AnyEntityPayload = TDataIn,
+  TDataIn = any,
+  TDataOut = TDataIn,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = (
@@ -88,8 +89,8 @@ export type Link<
 ) => rxjs.Observable<SyncOperation<TDataOut, TResoUpdate, TStateUpdate>>
 
 export type LinkFactory<
-  TDataIn extends AnyEntityPayload = AnyEntityPayload,
-  TDataOut extends AnyEntityPayload = TDataIn,
+  TDataIn = any,
+  TDataOut = TDataIn,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -101,10 +102,10 @@ export type LinkFactory<
  * for the engine to listen to. The resulting event may not be the same as the input events
  */
 export type Destination<
-  T extends AnyEntityPayload = AnyEntityPayload,
+  T = any,
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
-> = Link<T, AnyEntityPayload, TResoUpdate, TStateUpdate>
+> = Link<T, T, TResoUpdate, TStateUpdate>
 
 // @deprecated?
 
