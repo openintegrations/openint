@@ -83,7 +83,6 @@ async function setupAgFixtures() {
         "clientId" text NOT NULL,
         "connectionId" text NOT NULL,
         "external_job_id" text NOT NULL,
-        "offer_external_id" text NOT NULL,
         "isOpenInt" bool DEFAULT false,
         "raw" jsonb NOT NULL DEFAULT '{}'::jsonb,
         "unified" jsonb NOT NULL DEFAULT '{}'::jsonb,

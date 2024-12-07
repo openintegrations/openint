@@ -21,7 +21,7 @@ postgresHelpers._types['destinationInputEntity'] = {
 }
 
 export const postgresServer = {
-  // sourceSync removed: https://github.com/openintegrations/openint/pull/64/commits/20ef41123b1f72378e312c2c3114c462423e16e7
+  // sourceSync removed for now as it is not used yet: https://github.com/openintegrations/openint/pull/64/commits/20ef41123b1f72378e312c2c3114c462423e16e7
 
   destinationSync: ({endUser, source, settings: {databaseUrl}}) => {
     const db = drizzle(databaseUrl, {logger: true})

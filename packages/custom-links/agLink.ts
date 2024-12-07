@@ -39,7 +39,10 @@ export function agLink(ctx: {
 
     const raw = op.data?.entity?.raw as Record<string, unknown>
 
-    console.log('raw data for agLink', op.data.entityName)
+    // console.log('raw data for agLink', op.data.entityName)
+    // TODO: Auto generate typescript types from the database schema
+    // to help validate our insertions, could also be used for agLink.spec.ts
+
     const messages = rxjs.from(
       R.compact([
         // TODO: only send the connection once per agLink instantiation to avoid
@@ -57,9 +60,7 @@ export function agLink(ctx: {
               profile: 'Ats', // TODO: make this configurable or let atsLink pass this data down...
               source: 'OpenInt',
             },
-            upsert: {
-              key_columns: ['id'],
-            },
+            upsert: {key_columns: ['id']},
           } satisfies RecordMessageBody,
         },
         isUnifiedEntity(op.data, 'candidate') && {
@@ -79,11 +80,10 @@ export function agLink(ctx: {
               ]).join(' '),
               candidate_external_id:
                 op.data.entity.unified.id ??
-                (op.data.entity.raw as any)?.['id'] ?? '',
+                (op.data.entity.raw as any)?.['id'] ??
+                '',
             },
-            upsert: {
-              key_columns: ['id'],
-            },
+            upsert: {key_columns: ['id']},
           } satisfies RecordMessageBody,
         },
         isUnifiedEntity(op.data, 'job') && {
@@ -95,14 +95,11 @@ export function agLink(ctx: {
               connectionId: ctx.source.id,
               id: op.data.id,
               external_job_id: op.data.entity?.unified.id,
-              offer_external_id: op.data.entity?.unified.id,
               isOpenInt: true,
               raw: op.data.entity?.raw,
               unified: op.data.entity?.unified,
             },
-            upsert: {
-              key_columns: ['id'],
-            },
+            upsert: {key_columns: ['id']},
           } satisfies RecordMessageBody,
         },
         isUnifiedEntity(op.data, 'offer') && {
@@ -120,9 +117,7 @@ export function agLink(ctx: {
               // there is no candidate name in offer
               candidate_name: '',
             },
-            upsert: {
-              key_columns: ['id'],
-            },
+            upsert: {key_columns: ['id']},
           } satisfies RecordMessageBody,
         },
         isUnifiedEntity(op.data, 'opening') && {
@@ -136,12 +131,11 @@ export function agLink(ctx: {
               raw: op.data.entity?.raw,
               unified: op.data.entity?.unified,
               isOpenInt: true,
-              opening_external_id: op.data.entity?.unified?.id || raw?.['opening_id'] || '',
+              opening_external_id:
+                op.data.entity?.unified?.id || raw?.['opening_id'] || '',
               job_id: raw?.['job_id'] || '',
             },
-            upsert: {
-              key_columns: ['id'],
-            },
+            upsert: {key_columns: ['id']},
           } satisfies RecordMessageBody,
         },
       ]),
