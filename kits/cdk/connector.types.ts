@@ -24,7 +24,7 @@ import type {
 import type {EndUserId, Id} from './id.types'
 import {makeId} from './id.types'
 import type {ZStandard} from './models'
-import {VerticalKey} from './verticals'
+import type {VerticalKey} from './verticals'
 
 /**
  * Equivalent to to airbyte's low code connector spec,

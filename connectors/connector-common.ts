@@ -1,6 +1,6 @@
 // MARK: - New way of doing things
 
-import {Rx, rxjs, safeJSONParse, z} from '@openint/util'
+import {Rx, rxjs} from '@openint/util'
 
 export interface EtlSource<
   TEntityMap extends Record<string, unknown> = Record<string, unknown>,
@@ -22,22 +22,6 @@ export interface EtlSource<
   }>
 }
 
-interface CursorParser<T> {
-  fromString: (cursor: string | undefined | null) => T
-  toString: (value: T) => string | null
-}
-
-export const NextPageCursor: CursorParser<{next_page: number}> = {
-  fromString(cursor) {
-    const cur = z
-      .object({next_page: z.number().positive()})
-      .safeParse(safeJSONParse(cursor))
-    return {next_page: cur.success ? cur.data.next_page : 1}
-  },
-  toString(value) {
-    return JSON.stringify(value)
-  },
-}
 export function observableFromEtlSource(
   source: EtlSource,
   streams: Record<string, boolean | {disabled?: boolean | undefined} | null>,

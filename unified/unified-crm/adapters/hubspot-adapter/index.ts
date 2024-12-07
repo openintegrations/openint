@@ -6,7 +6,7 @@ import type {BaseRecord, z} from '@openint/vdk'
 import {
   BadRequestError,
   InternalServerError,
-  LastUpdatedAtNextOffset,
+  LastUpdatedAndNextOffsetCursor,
   NotFoundError,
   uniqBy,
 } from '@openint/vdk'
@@ -164,7 +164,7 @@ const _listObjectsIncrementalThenMap = async <TIn, TOut extends BaseRecord>(
   },
 ) => {
   const limit = opts?.page_size ?? 100
-  const cursor = LastUpdatedAtNextOffset.fromCursor(opts?.cursor)
+  const cursor = LastUpdatedAndNextOffsetCursor.deserialize(opts?.cursor)
   const kUpdatedAt =
     objectType === 'contacts' ? 'lastmodifieddate' : 'hs_lastmodifieddate'
   // We may want to consider using the list rather than search endpoint for this stuff...
@@ -261,7 +261,7 @@ const _listObjectsIncrementalThenMap = async <TIn, TOut extends BaseRecord>(
     has_next_page: !!res.data.paging?.next?.after,
     next_cursor:
       (lastItem
-        ? LastUpdatedAtNextOffset.toCursor({
+        ? LastUpdatedAndNextOffsetCursor.serialize({
             last_updated_at: lastItem.updated_at,
             next_offset:
               // offset / offset-like cursor is only usable if the filtering criteria doesn't change, notably the last_updated_at timestamp

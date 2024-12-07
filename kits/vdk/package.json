@@ -2,7 +2,6 @@
   "name": "@openint/vdk",
   "description": "Unified API Vertical Development Kit",
   "dependencies": {
-    "@jsonurl/jsonurl": "^1.1.7",
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/trpc": "workspace:*",
