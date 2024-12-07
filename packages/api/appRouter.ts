@@ -147,14 +147,15 @@ export function getOpenAPISpec(includeInternal = true) {
 }
 
 function removeInternalPaths(oas: any): any {
-  // Filter out paths with the tag "Internal"
   const paths = oas.paths;
   const filteredPaths = Object.fromEntries(
     Object.entries(paths).filter(([_, operations]) =>
       !Object.values(operations as Record<string, any>).some((operation: any) =>
-        operation.tags?.includes('Internal') || operation.tags?.includes('Connectors'),
-      )
-    )
+        operation.tags?.includes('Internal') ||
+          operation.tags?.includes('Connectors') ||
+          operation.tags?.includes('ETL'),
+      ),
+    ),
   );
 
   // Return the updated OAS object with filtered paths
