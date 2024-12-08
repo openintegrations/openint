@@ -10,7 +10,7 @@ import type {ZClient} from '@/lib-common/schemas'
 
 const formSchema = zRaw.resource.pick({
   id: true,
-  endUserId: true,
+  customerId: true,
   settings: true,
   disabled: true,
   displayName: true,

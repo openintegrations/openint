@@ -1,6 +1,6 @@
 import '@openint/app-config/register.node'
 import {contextFactory} from '@openint/app-config/backendConfig'
-import type {EndUserId} from '@openint/cdk'
+import type {CustomerId} from '@openint/cdk'
 import {flatRouter} from '@openint/engine-backend'
 import {inngest} from '@openint/engine-backend/events'
 import {getPool, sql} from '../lib-server'
@@ -31,10 +31,10 @@ export const syncResource = inngest.createFunction(
       // TODO: Figure out what is the userId we ought to be using...
 
       const pool = await getPool()
-      const endUserId = await pool.oneFirst<EndUserId>(
-        sql`SELECT end_user_id FROM resource WHERE id = ${resourceId}`,
+      const customerId = await pool.oneFirst<CustomerId>(
+        sql`SELECT customer_id FROM resource WHERE id = ${resourceId}`,
       )
-      console.log('endUserId', endUserId)
+      console.log('customerId', customerId)
       await flatRouter
         .createCaller({
           ...contextFactory.fromViewer({role: 'system'}),

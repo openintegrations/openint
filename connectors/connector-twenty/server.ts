@@ -8,7 +8,7 @@ import type {twentySchemas} from './def'
 type Revert = RevertSDKTypes['oas']['components']['schemas']
 
 export const twentyServer = {
-  destinationSync: ({endUser, source, settings: {access_token}}) => {
+  destinationSync: ({customer, source, settings: {access_token}}) => {
     const twenty = initTwentySDK({
       headers: {authorization: `Bearer ${access_token}`},
     })
@@ -31,7 +31,7 @@ export const twentyServer = {
             ? {...data.entity}
             : {raw: data.entity}),
           id,
-          end_user_id: endUser?.id ?? null,
+          customer_id: customer?.id ?? null,
           source_id: source?.id,
         })
         return rxjs.of(op)

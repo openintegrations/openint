@@ -28,7 +28,7 @@ export function agLink(ctx: {
     id: Id['reso']
     connectorConfig: {connectorName: string}
     metadata?: unknown
-    endUserId?: string | null
+    customerId?: string | null
   }
 }): Link<DeprecatedInputEntity, RecordMessageBody> {
   let integrationConnectionUpserted = false
@@ -53,7 +53,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationConnection',
             data: {
-              clientId: ctx.source.endUserId,
+              clientId: ctx.source.customerId,
               id: ctx.source.id,
               provider: 'openint',
               label: 'OpenInt',
@@ -68,7 +68,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationATSCandidate',
             data: {
-              clientId: ctx.source.endUserId,
+              clientId: ctx.source.customerId,
               connectionId: ctx.source.id,
               id: op.data.id,
               raw: op.data.entity?.raw,
@@ -91,7 +91,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationATSJob',
             data: {
-              clientId: ctx.source.endUserId,
+              clientId: ctx.source.customerId,
               connectionId: ctx.source.id,
               id: op.data.id,
               external_job_id: op.data.entity?.unified.id,
@@ -107,7 +107,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationATSOffer',
             data: {
-              clientId: ctx.source.endUserId,
+              clientId: ctx.source.customerId,
               connectionId: ctx.source.id,
               id: op.data.id,
               raw: op.data.entity?.raw,
@@ -125,7 +125,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationATSOpening',
             data: {
-              clientId: ctx.source.endUserId,
+              clientId: ctx.source.customerId,
               connectionId: ctx.source.id,
               id: op.data.id,
               raw: op.data.entity?.raw,

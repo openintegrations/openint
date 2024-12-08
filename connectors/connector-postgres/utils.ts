@@ -70,7 +70,7 @@ export async function runMigrationForStandardTable(
     CREATE TABLE IF NOT EXISTS ${sql.identifier(tableName)} (
       source_id VARCHAR NOT NULL,
       id VARCHAR NOT NULL,
-      end_user_id VARCHAR,
+      customer_id VARCHAR,
       created_at timestamp with time zone DEFAULT now() NOT NULL,
       updated_at timestamp with time zone DEFAULT now() NOT NULL,
       connector_name VARCHAR GENERATED ALWAYS AS (split_part((source_id)::text, '_'::text, 2)) STORED NOT NULL,
@@ -90,7 +90,7 @@ export async function runMigrationForStandardTable(
   //   'connector_name',
   //   'created_at',
   //   'updated_at',
-  //   'end_user_id',
+  //   'customer_id',
   // ]) {
   //   await pool.query(sql`
   //     CREATE INDEX IF NOT EXISTS ${sql.identifier([

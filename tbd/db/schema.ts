@@ -35,7 +35,7 @@ const schema = env['POSTGRES_SCHEMA'] ? pgSchema(env['POSTGRES_SCHEMA']) : null
 
 const tableFn = (schema?.table ?? pgTable) as typeof pgTable
 
-/** Not currently used. Maybe better to have customer rather than end_user? */
+/** Not currently used. Maybe better to have customer rather than customer? */
 export const customer = tableFn('customer', (t) => ({
   // Standard cols
   id: t

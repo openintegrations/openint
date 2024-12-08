@@ -24,7 +24,7 @@ export function getCommonObjectTable<TName extends string>(
     tableName,
     {
       source_id: text('source_id').notNull(),
-      // end_user_id
+      // customer_id
       // integration_id
       // connector_name
       // these are all derived

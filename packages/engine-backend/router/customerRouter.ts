@@ -1,5 +1,5 @@
 import type {
-  EndUserId,
+  CustomerId,
   OauthBaseTypes,
   ResourceUpdate,
   Viewer,
@@ -8,7 +8,7 @@ import {
   makeId,
   makeOauthConnectorServer,
   zConnectOptions,
-  zEndUserId,
+  zCustomerId,
   zId,
   zPostConnectOptions,
 } from '@openint/cdk'
@@ -21,7 +21,7 @@ import {protectedProcedure, trpc} from './_base'
 export {type inferProcedureInput} from '@openint/trpc'
 
 export const zConnectTokenPayload = z.object({
-  endUserId: zEndUserId
+  customerId: zCustomerId
     .optional() // Optional because when creating magic link as current end user we dont' need it...
     .describe(
       'Anything that uniquely identifies the end user that you will be sending the magic link to',
@@ -70,7 +70,7 @@ export const zConnectPageParams = z.object({
  * unless of course we transform zod -> jsonschema and send that to the client only
  * via a trpc schema endpoint (with server side rendering of course)
  */
-export const endUserRouterSchema = {
+export const customerRouterSchema = {
   createConnectToken: {input: zConnectTokenPayload},
   createMagicLink: {
     input: zConnectTokenPayload.merge(zConnectPageParams.omit({token: true})),
@@ -79,11 +79,11 @@ export const endUserRouterSchema = {
 
 // MARK: - Helpers
 
-function asEndUser(
+function asCustomer(
   viewer: Viewer,
-  input: {endUserId?: EndUserId | null},
-): Viewer<'end_user'> {
-  // console.log('[asEndUser]', viewer, input)
+  input: {customerId?: CustomerId | null},
+): Viewer<'customer'> {
+  // console.log('[asCustomer]', viewer, input)
   // Figure out a better way to share code here...
   if (!('orgId' in viewer) || !viewer.orgId) {
     throw new TRPCError({
@@ -92,33 +92,33 @@ function asEndUser(
     })
   }
   if (
-    viewer.role === 'end_user' &&
-    input.endUserId &&
-    input.endUserId !== viewer.endUserId
+    viewer.role === 'customer' &&
+    input.customerId &&
+    input.customerId !== viewer.customerId
   ) {
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'Current viewer cannot create token for other end user',
     })
   }
-  const endUserId =
-    viewer.role === 'end_user' ? viewer.endUserId : input.endUserId
-  if (!endUserId) {
+  const customerId =
+    viewer.role === 'customer' ? viewer.customerId : input.customerId
+  if (!customerId) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'Either call as an endUser or pass endUserId explicitly',
+      message: 'Either call as an customer or pass customerId explicitly',
     })
   }
 
-  return {role: 'end_user', endUserId, orgId: viewer.orgId}
+  return {role: 'customer', customerId, orgId: viewer.orgId}
 }
 
 // MARK: - Endpoints
 
 const tags = ['Connect']
 
-/** TODO: Modify this so that admin user can execute it... not just endUser */
-export const endUserRouter = trpc.router({
+/** TODO: Modify this so that admin user can execute it... not just customer */
+export const customerRouter = trpc.router({
   createConnectToken: protectedProcedure
     .meta({
       openapi: {
@@ -128,14 +128,14 @@ export const endUserRouter = trpc.router({
         summary: 'Create a connect token',
       },
     })
-    .input(endUserRouterSchema.createConnectToken.input)
+    .input(customerRouterSchema.createConnectToken.input)
     .output(z.object({token: z.string()}))
     .mutation(({input: {validityInSeconds, ...input}, ctx}) =>
       // console.log('[createConnectToken]', ctx.viewer, input, {
       //   validityInSeconds,
       // })
       ({
-        token: ctx.jwt.signViewer(asEndUser(ctx.viewer, input), {
+        token: ctx.jwt.signViewer(asCustomer(ctx.viewer, input), {
           validityInSeconds,
         }),
       }),
@@ -149,10 +149,10 @@ export const endUserRouter = trpc.router({
         summary: 'Create a magic link',
       },
     })
-    .input(endUserRouterSchema.createMagicLink.input)
+    .input(customerRouterSchema.createMagicLink.input)
     .output(z.object({url: z.string()}))
-    .mutation(({input: {endUserId, validityInSeconds, ...params}, ctx}) => {
-      const token = ctx.jwt.signViewer(asEndUser(ctx.viewer, {endUserId}), {
+    .mutation(({input: {customerId, validityInSeconds, ...params}, ctx}) => {
+      const token = ctx.jwt.signViewer(asCustomer(ctx.viewer, {customerId}), {
         validityInSeconds,
       })
       const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
@@ -184,7 +184,7 @@ export const endUserRouter = trpc.router({
           int.config,
           {
             ...connCtxInput,
-            extEndUserId: ctx.extEndUserId,
+            extCustomerId: ctx.extCustomerId,
             resource: reso
               ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 {externalId: resourceExternalId!, settings: reso.settings}
@@ -194,8 +194,8 @@ export const endUserRouter = trpc.router({
               parseWebhookRequest.pathOf(int.id),
             ),
             redirectUrl: ctx.getRedirectUrl?.(int, {
-              endUserId:
-                ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null,
+              customerId:
+                ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
             }),
           },
           preConnInput,
@@ -232,7 +232,7 @@ export const endUserRouter = trpc.router({
               nangoProvider: int.connector.metadata.nangoProvider,
             }).postConnect(input as OauthBaseTypes['connectOutput'])) as Omit<
               ResourceUpdate<any, any>,
-              'endUserId'
+              'customerId'
             >
           }
 
@@ -264,7 +264,7 @@ export const endUserRouter = trpc.router({
             int.config,
             {
               ...connCtxInput,
-              extEndUserId: ctx.extEndUserId,
+              extCustomerId: ctx.extCustomerId,
               resource: reso
                 ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                   {externalId: resourceExternalId!, settings: reso.settings}
@@ -274,8 +274,8 @@ export const endUserRouter = trpc.router({
                 parseWebhookRequest.pathOf(int.id),
               ),
               redirectUrl: ctx.getRedirectUrl?.(int, {
-                endUserId:
-                  ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null,
+                customerId:
+                  ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
               }),
             },
           )
@@ -303,8 +303,8 @@ export const endUserRouter = trpc.router({
         const resourceId = await ctx.asOrgIfNeeded._syncResourceUpdate(int, {
           ...resoUpdate,
           // No need for each connector to worry about this, unlike in the case of handleWebhook.
-          endUserId:
-            ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null,
+          customerId:
+            ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
           triggerDefaultSync,
         })
 

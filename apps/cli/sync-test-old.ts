@@ -33,7 +33,7 @@ switch (process.argv[2]) {
   case 'source-brex': {
     sync({
       source: brexImpl.sourceSync({
-        endUser: null,
+        customer: null,
         state: {},
         streams: {},
         ...getInstance(brexImpl, {
@@ -53,7 +53,7 @@ switch (process.argv[2]) {
   case 'source-heron': {
     sync({
       source: heronImpl.sourceSync({
-        endUser: null,
+        customer: null,
         state: {},
         streams: {},
         ...getInstance(heronImpl, {
@@ -80,7 +80,7 @@ switch (process.argv[2]) {
       }),
       destination: heronImpl.destinationSync({
         source: undefined,
-        endUser: null,
+        customer: null,
         settings: {endUserId: 'b27c6987-22ea-4518-be81-f9da4bbc40c8'},
         config: {apiKey: process.env['HERON_API_KEY']!},
         state: {},
@@ -92,7 +92,7 @@ switch (process.argv[2]) {
     console.log('source mode')
     sync({
       source: mergeImpl.sourceSync({
-        endUser: null,
+        customer: null,
 
         state: {},
         streams: {},
@@ -140,7 +140,7 @@ switch (process.argv[2]) {
       }),
       destination: fsServer.destinationSync({
         source: undefined,
-        endUser: null,
+        customer: null,
         config: {},
         state: {},
         settings: {basePath: destPath},
@@ -153,7 +153,7 @@ switch (process.argv[2]) {
     console.log('direct mode')
     sync({
       source: fsServer.sourceSync({
-        endUser: null,
+        customer: null,
         state: {},
         streams: {},
         ...getInstance(fsServer, {
@@ -163,7 +163,7 @@ switch (process.argv[2]) {
       }),
       destination: fsServer.destinationSync({
         source: undefined,
-        endUser: null,
+        customer: null,
         settings: {basePath: destPath},
         config: {},
         state: {},

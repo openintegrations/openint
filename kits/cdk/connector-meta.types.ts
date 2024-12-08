@@ -4,7 +4,7 @@ import type {oas30, oas31} from 'openapi3-ts'
 import type {AnyEntityPayload, ResoUpdateData, Source} from '@openint/sync'
 import {castIs} from '@openint/util'
 import type {ConnHelpers} from './connector.types'
-import type {EndUserId, ExtEndUserId, ExternalId, Id} from './id.types'
+import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
 import {zExternalId, zId} from './id.types'
 import type {VerticalKey} from './verticals'
 
@@ -79,7 +79,7 @@ export interface CheckResourceContext {
 export interface ConnectContext<TSettings>
   extends Omit<ConnectOptions, 'resourceExternalId' | 'envName'>,
     CheckResourceContext {
-  extEndUserId: ExtEndUserId
+  extCustomerId: ExtCustomerId
   /** Used for OAuth based integrations, e.g. https://plaid.com/docs/link/oauth/#create-and-register-a-redirect-uri */
   redirectUrl?: string
   resource?: {
@@ -118,7 +118,7 @@ export interface ResourceUpdate<TEntity = AnyEntityPayload, TSettings = unknown>
   resourceExternalId: ExternalId
   // Can we inherit types used by metaLinks?
   /** If missing it means do not change the userId... */
-  endUserId?: EndUserId | null
+  customerId?: CustomerId | null
 
   source$?: Source<TEntity>
   triggerDefaultSync?: boolean

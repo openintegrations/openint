@@ -23,7 +23,7 @@ postgresHelpers._types['destinationInputEntity'] = {
 export const postgresServer = {
   // sourceSync removed for now as it is not used yet: https://github.com/openintegrations/openint/pull/64/commits/20ef41123b1f72378e312c2c3114c462423e16e7
 
-  destinationSync: ({endUser, source, settings: {databaseUrl}}) => {
+  destinationSync: ({customer, source, settings: {databaseUrl}}) => {
     const db = drizzle(databaseUrl, {logger: Boolean(process.env['DEBUG'])})
     const migrationRan: Record<string, boolean> = {}
     let messagesByConfig: Record<string, NonEmptyArray<RecordMessageBody>> = {}
@@ -47,7 +47,7 @@ export const postgresServer = {
                 data: {
                   ...(op.data.entity as {}),
                   id: op.data.id,
-                  end_user_id: endUser?.id,
+                  customer_id: customer?.id,
                   source_id: source?.id,
                 },
                 upsert: {key_columns: ['source_id', 'id']},

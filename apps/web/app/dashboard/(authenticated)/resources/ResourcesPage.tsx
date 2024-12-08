@@ -31,7 +31,7 @@ export default function ResourcesPage() {
             ),
           },
           {accessorKey: 'displayName'},
-          {accessorKey: 'endUserId'},
+          {accessorKey: 'customerId'},
           {accessorKey: 'id'},
           {accessorKey: 'status'},
           {accessorKey: 'connectorConfigId'},

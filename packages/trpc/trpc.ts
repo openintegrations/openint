@@ -1,7 +1,7 @@
 import type {OpenApiMeta} from '@lilyrose2798/trpc-openapi'
 import {initTRPC, TRPCError} from '@trpc/server'
 // FIXME: We should not be hacking imports like this.
-import type {ExtEndUserId, Viewer, ViewerRole} from '../../kits/cdk/viewer'
+import type {ExtCustomerId, Viewer, ViewerRole} from '../../kits/cdk/viewer'
 import type {RouterContext} from '../engine-backend/context'
 
 /** @deprecated. Dedupe me from cdk hasRole function */
@@ -13,19 +13,19 @@ function hasRole<R extends ViewerRole>(
 }
 
 /** Used for external systems */
-export function getExtEndUserId(
-  viewer: Viewer<'end_user' | 'user' | 'org' | 'system'>,
+export function getExtCustomerId(
+  viewer: Viewer<'customer' | 'user' | 'org' | 'system'>,
 ) {
   switch (viewer.role) {
-    case 'end_user':
-      return `eusr_${viewer.endUserId}` as ExtEndUserId
+    case 'customer':
+      return `cus_${viewer.customerId}` as ExtCustomerId
     case 'user':
       // Falling back to userId should not generally happen
-      return (viewer.orgId ?? viewer.userId) as ExtEndUserId
+      return (viewer.orgId ?? viewer.userId) as ExtCustomerId
     case 'org':
-      return viewer.orgId as ExtEndUserId
+      return viewer.orgId as ExtCustomerId
     case 'system':
-      return 'system' as ExtEndUserId
+      return 'system' as ExtCustomerId
   }
 }
 
@@ -108,17 +108,17 @@ export const publicProcedure = trpc.procedure.use(async ({next, ctx, path}) =>
 
 export function getProtectedContext(ctx: RouterContext) {
   // console.log('getProtectedContext DEBUG', ctx.viewer)
-  if (!hasRole(ctx.viewer, ['end_user', 'user', 'org', 'system'])) {
+  if (!hasRole(ctx.viewer, ['customer', 'user', 'org', 'system'])) {
     throw new TRPCError({
       code: ctx.viewer.role === 'anon' ? 'UNAUTHORIZED' : 'FORBIDDEN',
     })
   }
   const asOrgIfNeeded =
-    ctx.viewer.role === 'end_user'
+    ctx.viewer.role === 'customer'
       ? ctx.as('org', {orgId: ctx.viewer.orgId})
       : ctx.services
-  const extEndUserId = getExtEndUserId(ctx.viewer)
-  return {...ctx, viewer: ctx.viewer, asOrgIfNeeded, extEndUserId}
+  const extCustomerId = getExtCustomerId(ctx.viewer)
+  return {...ctx, viewer: ctx.viewer, asOrgIfNeeded, extCustomerId}
 }
 
 export type ProtectedContext = ReturnType<typeof getProtectedContext>

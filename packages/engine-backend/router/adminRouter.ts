@@ -23,12 +23,12 @@ export const adminRouter = trpc.router({
       const id = _id ? _id : makeId('pipe', makeUlid())
       return ctx.services.patchReturning('pipeline', id, input)
     }),
-  adminSearchEndUsers: adminProcedure
+  adminSearchCustomers: adminProcedure
     .input(z.object({keywords: z.string().trim().nullish()}).optional())
     .query(async ({input: {keywords} = {}, ctx}) =>
       ctx.services.metaService
-        .searchEndUsers({keywords})
-        // EndUsers must have non empty IDs
+        .searchCustomers({keywords})
+        // Customers must have non empty IDs
         // This fitlers out data that belongs to the org rather than specific end users
         .then((rows) => rows.filter((u) => !!u.id)),
     ),

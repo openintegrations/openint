@@ -21,7 +21,7 @@ import type {
   WebhookReturnType,
   zPassthroughInput,
 } from './connector-meta.types'
-import type {EndUserId, Id} from './id.types'
+import type {CustomerId, Id} from './id.types'
 import {makeId} from './id.types'
 import type {ZStandard} from './models'
 import type {VerticalKey} from './verticals'
@@ -155,7 +155,7 @@ export interface ConnectorServer<
         T['_types']['sourceOutputEntity'],
         T['_types']['resourceSettings']
       >,
-      'endUserId'
+      'customerId'
     >
   >
 
@@ -173,7 +173,7 @@ export interface ConnectorServer<
         T['_types']['sourceOutputEntity'],
         T['_types']['resourceSettings']
       >,
-      'endUserId'
+      'customerId'
     >
   >
 
@@ -189,7 +189,7 @@ export interface ConnectorServer<
   sourceSync?: (
     input: OmitNever<{
       instance: TInstance
-      endUser: {id: EndUserId} | null | undefined
+      customer: {id: CustomerId} | null | undefined
       /* Enabled streams */
       streams: {
         [k in T['_streamName']]?:
@@ -209,7 +209,7 @@ export interface ConnectorServer<
     input: OmitNever<{
       /** Needed for namespacing when syncing multiple source into same destination */
       source: {id: Id['reso']; connectorName: string} | undefined
-      endUser: {id: EndUserId; orgId: string} | null | undefined
+      customer: {id: CustomerId; orgId: string} | null | undefined
       config: T['_types']['connectorConfig']
       settings: T['_types']['resourceSettings']
       state: T['_types']['destinationState']

@@ -19,7 +19,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
   }
 
   // Ensure that end user can access its own resources
-  if (ctx.viewer.role === 'end_user') {
+  if (ctx.viewer.role === 'customer') {
     await ctx.services.getResourceOrFail(ctx.remoteResourceId)
   }
 
@@ -84,8 +84,8 @@ export async function getRemoteContext(ctx: ProtectedContext) {
       /** Aka remoteClient */
       instance,
       id: resource.id,
-      // TODO: Rename endUserId to just customerId
-      customerId: resource.endUserId ?? '',
+      // TODO: Rename customerId to just customerId
+      customerId: resource.customerId ?? '',
       connectorConfigId: resource.connectorConfig.id,
       connector: resource.connectorConfig.connector,
       connectorName: resource.connectorName,

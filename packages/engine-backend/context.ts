@@ -1,7 +1,7 @@
 import type {clerkClient} from '@clerk/nextjs/server'
 import type {
   AnyConnectorImpl,
-  EndUserId,
+  CustomerId,
   Id,
   LinkFactory,
   NangoSDK,
@@ -45,7 +45,7 @@ export interface RouterContext {
   /** Used for oauth based resources */
   getRedirectUrl?: (
     connectorConfig: _ConnectorConfig,
-    ctx: {endUserId?: EndUserId | null},
+    ctx: {customerId?: CustomerId | null},
   ) => string
 
   /** For vertical API calls */

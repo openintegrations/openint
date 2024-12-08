@@ -24,8 +24,8 @@ export const mergeSchemas = {
   preConnectInput: z.object({
     // TODO: Use proper openapi spec rather than just a runtime type...
     categories: z.array(zCast<Category>()),
-    end_user_email_address: z.string().optional(),
-    end_user_organization_name: z.string().optional(),
+    customer_email_address: z.string().optional(),
+    customer_organization_name: z.string().optional(),
   }),
   connectInput: z.object({
     link_token: z.string(),

@@ -22,7 +22,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "endUserId": {
+                  "customerId": {
                     "type": "string",
                     "minLength": 1,
                     "description": "Anything that uniquely identifies the end user that you will be sending the magic link to"
@@ -89,7 +89,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "endUserId": {
+                  "customerId": {
                     "type": "string",
                     "minLength": 1,
                     "description": "Anything that uniquely identifies the end user that you will be sending the magic link to"
@@ -191,7 +191,7 @@
                   "displayName": {
                     "type": ["string", "null"]
                   },
-                  "endUserId": {
+                  "customerId": {
                     "type": ["string", "null"],
                     "minLength": 1
                   },
@@ -265,7 +265,7 @@
           },
           {
             "in": "query",
-            "name": "endUserId",
+            "name": "customerId",
             "schema": {
               "type": ["string", "null"],
               "minLength": 1
@@ -377,7 +377,7 @@
                   "disabled": {
                     "type": "boolean"
                   },
-                  "endUserId": {
+                  "customerId": {
                     "type": ["string", "null"],
                     "minLength": 1
                   },
@@ -7822,7 +7822,7 @@
           "displayName": {
             "type": ["string", "null"]
           },
-          "endUserId": {
+          "customerId": {
             "type": ["string", "null"],
             "minLength": 1
           },
@@ -8127,9 +8127,9 @@
             "properties": {
               "role": {
                 "type": "string",
-                "enum": ["end_user"]
+                "enum": ["customer"]
               },
-              "endUserId": {
+              "customerId": {
                 "type": "string",
                 "minLength": 1
               },
@@ -8138,7 +8138,7 @@
                 "description": "Must start with 'org_'"
               }
             },
-            "required": ["role", "endUserId", "orgId"]
+            "required": ["role", "customerId", "orgId"]
           },
           {
             "type": "object",

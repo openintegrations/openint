@@ -5,7 +5,7 @@ import {nodeHTTPRequestHandler} from '@trpc/server/adapters/node-http'
 import {json} from 'micro'
 import ngrok from 'ngrok'
 import {contextFactory} from '@openint/app-config/backendConfig'
-import type {EndUserId, Id, UserId} from '@openint/cdk'
+import type {CustomerId, Id, UserId} from '@openint/cdk'
 import {flatRouter, parseWebhookRequest} from '@openint/engine-backend'
 import type {NonEmptyArray} from '@openint/util'
 import {parseUrl, R, z, zFunction, zodInsecureDebug} from '@openint/util'
@@ -18,8 +18,8 @@ if (process.env['DEBUG_ZOD']) {
   zodInsecureDebug()
 }
 
-const {USER_ID, END_USER_ID, ORG_ID, SYSTEM, X_RESOURCE_ID} = process.env
-const endUserId = END_USER_ID as EndUserId | undefined
+const {USER_ID, CUSTOMER_ID, ORG_ID, SYSTEM, X_RESOURCE_ID} = process.env
+const customerId = CUSTOMER_ID as CustomerId | undefined
 const userId = USER_ID as UserId | undefined
 const orgId = ORG_ID as Id['org'] | undefined
 
@@ -29,8 +29,8 @@ export const cli = cliFromRouter(flatRouter, {
   // We should improve this for usage on single machines
   context: {
     ...contextFactory.fromViewer(
-      endUserId && orgId
-        ? {role: 'end_user', endUserId, orgId}
+      customerId && orgId
+        ? {role: 'customer', customerId, orgId}
         : userId
           ? {role: 'user', userId}
           : orgId

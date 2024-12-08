@@ -5,7 +5,7 @@ import {
   makeId,
   sync,
   zCheckResourceOptions,
-  zEndUserId,
+  zCustomerId,
   zId,
   zPassthroughInput,
   zRaw,
@@ -40,10 +40,10 @@ async function performResourceCheck(ctx: any, resoId: string, opts: any) {
     },
   })
   if (resoUpdate || opts?.import !== false) {
-    /** Do not update the `endUserId` here... */
+    /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncResourceUpdate(int, {
       ...(opts?.import && {
-        endUserId: reso.endUserId ?? undefined,
+        customerId: reso.customerId ?? undefined,
       }),
       ...resoUpdate,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -113,8 +113,8 @@ export const resourceRouter = trpc.router({
         state: input.state ?? {},
         streams: input.streams ?? {},
         src: reso,
-        endUser:
-          ctx.viewer.role === 'end_user' ? {id: ctx.viewer.endUserId} : null,
+        customer:
+          ctx.viewer.role === 'customer' ? {id: ctx.viewer.customerId} : null,
       })
 
       return rxjs.firstValueFrom(res.pipe(Rx.toArray()))
@@ -126,7 +126,7 @@ export const resourceRouter = trpc.router({
         connectorConfigId: true,
         settings: true,
         displayName: true,
-        endUserId: true,
+        customerId: true,
         disabled: true,
         metadata: true,
         integrationId: true,
@@ -163,7 +163,7 @@ export const resourceRouter = trpc.router({
           options: {},
         })),
         // TODO: Fix me up
-        endUserId: ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null,
+        customerId: ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
       } satisfies ResourceUpdate
       await ctx.asOrgIfNeeded._syncResourceUpdate(int, resoUpdate)
 
@@ -186,7 +186,7 @@ export const resourceRouter = trpc.router({
         metadata: true,
         disabled: true,
         // Not sure if we should allow these two?
-        endUserId: true,
+        customerId: true,
         integrationId: true,
       }),
     )
@@ -202,7 +202,7 @@ export const resourceRouter = trpc.router({
     .input(z.object({id: zId('reso'), skipRevoke: z.boolean().optional()}))
     .output(z.void())
     .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
-      if (ctx.viewer.role === 'end_user') {
+      if (ctx.viewer.role === 'customer') {
         await ctx.services.getResourceOrFail(resoId)
       }
       const reso = await ctx.asOrgIfNeeded.getResourceExpandedOrFail(resoId)
@@ -231,7 +231,7 @@ export const resourceRouter = trpc.router({
     .input(
       zListParams
         .extend({
-          endUserId: zEndUserId.nullish(),
+          customerId: zCustomerId.nullish(),
           connectorConfigId: zId('ccfg').nullish(),
           connectorName: z.string().nullish(),
           forceRefresh: z.boolean().optional(),
@@ -333,7 +333,7 @@ export const resourceRouter = trpc.router({
     .input(z.object({id: zId('reso')}).merge(zCheckResourceOptions))
     .output(z.unknown())
     .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
-      if (ctx.viewer.role === 'end_user') {
+      if (ctx.viewer.role === 'customer') {
         await ctx.services.getResourceOrFail(resoId)
       }
       const resourceCheck = await performResourceCheck(ctx, resoId, opts)
@@ -350,7 +350,7 @@ export const resourceRouter = trpc.router({
     .input(z.object({id: zId('reso')}).merge(zSyncOptions))
     .output(z.void())
     .mutation(async function syncResource({input: {id: resoId, ...opts}, ctx}) {
-      if (ctx.viewer.role === 'end_user') {
+      if (ctx.viewer.role === 'customer') {
         await ctx.services.getResourceOrFail(resoId)
       }
       if (opts?.async) {
@@ -376,7 +376,7 @@ export const resourceRouter = trpc.router({
               }),
               config: reso.connectorConfig.config,
               settings: reso.settings,
-              endUser: reso.endUserId && {id: reso.endUserId},
+              customer: reso.customerId && {id: reso.customerId},
               state: {},
               streams: {},
             }) ?? rxjs.EMPTY,
@@ -392,7 +392,7 @@ export const resourceRouter = trpc.router({
       // is vulnerable to race condition and feels brittle. Though syncResource is only
       // called from the UI so we are fine for now.
       await ctx.asOrgIfNeeded._syncResourceUpdate(reso.connectorConfig, {
-        endUserId: reso.endUserId,
+        customerId: reso.customerId,
         settings: reso.settings,
         resourceExternalId: extractId(reso.id)[2],
         integration: reso.integration && {

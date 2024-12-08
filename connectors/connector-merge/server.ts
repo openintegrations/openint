@@ -14,11 +14,11 @@ export const mergeServer = {
     const res = await merge
       .POST('/create-link-token', {
         body: {
-          end_user_origin_id: context.extEndUserId,
+          end_user_origin_id: context.extCustomerId,
           end_user_email_address:
-            input.end_user_email_address ?? 'test@example.com',
+            input.customer_email_address ?? 'test@example.com',
           end_user_organization_name:
-            input.end_user_organization_name ?? 'Test Org',
+            input.customer_organization_name ?? 'Test Org',
           categories: input.categories ?? ['accounting'],
         },
       })
