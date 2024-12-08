@@ -534,7 +534,7 @@ export interface components {
       /** @description Unique name of the connector */
       connectorName: string
       displayName?: string | null
-      endUserId?: string | null
+      customerId?: string | null
       /** @description Must start with 'ccfg_' */
       connectorConfigId: string
       /** @description Must start with 'int_' */
@@ -695,7 +695,7 @@ export interface components {
         {
           /** @enum {string} */
           role: 'customer'
-          endUserId: string
+          customerId: string
           /** @description Must start with 'org_' */
           orgId: string
         },
@@ -1336,7 +1336,7 @@ export interface operations {
       content: {
         'application/json': {
           /** @description Anything that uniquely identifies the end user that you will be sending the magic link to */
-          endUserId?: string
+          customerId?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
            * @default 2592000
@@ -1374,7 +1374,7 @@ export interface operations {
       content: {
         'application/json': {
           /** @description Anything that uniquely identifies the end user that you will be sending the magic link to */
-          endUserId?: string
+          customerId?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
            * @default 2592000
@@ -1510,7 +1510,7 @@ export interface operations {
       query?: {
         limit?: number
         offset?: number
-        endUserId?: string | null
+        customerId?: string | null
         connectorConfigId?: string | null
         connectorName?: string | null
         forceRefresh?: boolean
@@ -1554,7 +1554,7 @@ export interface operations {
             [key: string]: unknown
           } | null
           displayName?: string | null
-          endUserId?: string | null
+          customerId?: string | null
           disabled?: boolean
           /**
            * @description
@@ -1696,7 +1696,7 @@ export interface operations {
            */
           metadata?: unknown
           disabled?: boolean
-          endUserId?: string | null
+          customerId?: string | null
           /** @description Must start with 'int_' */
           integrationId?: string | null
         }
