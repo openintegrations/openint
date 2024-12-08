@@ -15,8 +15,8 @@ import {
   useToast,
 } from '@openint/ui'
 
-export default function EndUsersPage() {
-  const res = _trpcReact.adminSearchEndUsers.useQuery({})
+export default function CustomersPage() {
+  const res = _trpcReact.adminSearchCustomers.useQuery({})
 
   // Function to format dates
   function formatDate(dateString: string) {
@@ -42,7 +42,7 @@ export default function EndUsersPage() {
         columns={[
           {
             id: 'actions',
-            cell: ({row}) => <EndUserMenu endUser={row.original} />,
+            cell: ({row}) => <CustomerMenu customer={row.original} />,
           },
           {accessorKey: 'id'},
           {accessorKey: 'resourceCount', header: '# Resources'},
@@ -62,9 +62,9 @@ export default function EndUsersPage() {
   )
 }
 
-type EndUser = RouterOutput['adminSearchEndUsers'][number]
+type Customer = RouterOutput['adminSearchCustomers'][number]
 
-function EndUserMenu({endUser}: {endUser: EndUser}) {
+function CustomerMenu({customer}: {customer: Customer}) {
   const {toast} = useToast()
   const createMagicLink = _trpcReact.createMagicLink.useMutation({})
 
@@ -79,19 +79,19 @@ function EndUserMenu({endUser}: {endUser: EndUser}) {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
-          onClick={() => navigator.clipboard.writeText(endUser.id)}>
+          onClick={() => navigator.clipboard.writeText(customer.id)}>
           <Copy className="mr-2 h-4 w-4" />
           <div>
             Copy End User ID
             <br />
-            <pre className="text-muted-foreground">{endUser.id}</pre>
+            <pre className="text-muted-foreground">{customer.id}</pre>
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
             createMagicLink
-              .mutateAsync({endUserId: endUser.id})
+              .mutateAsync({customerId: customer.id})
               .then((res) => {
                 // This is a problem because due to pop up blockers not liking it async...
                 window.open(res.url)

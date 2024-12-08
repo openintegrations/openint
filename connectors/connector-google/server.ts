@@ -144,7 +144,7 @@ export const googleServer = {
   // note: context currently returns this correctly but types don't catch it
   // "context": {
   //   "integrationId": "int_google_sheets",
-  //   "extEndUserId": "eusr_1234",
+  //   "extCustomerId": "cus_1234",
   //   "webhookBaseUrl": "http://localhost:4000/api/trpc/webhook/ccfg_google_01JBYY6NZ551BR7Y9DXMBZ79K4",
   //   "redirectUrl": "http://localhost:4000/"
   // }

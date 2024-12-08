@@ -69,11 +69,11 @@ export const zUserId = zId('user')
 export type UserId = z.infer<typeof zUserId>
 
 /** trpc-openapi limits us from using .brand https://share.cleanshot.com/Mf4F9xwZ */
-export const zEndUserId = z.string().min(1).brand<'end_user'>()
-export type EndUserId = z.infer<typeof zEndUserId>
+export const zCustomerId = z.string().min(1).brand<'customer'>()
+export type CustomerId = z.infer<typeof zCustomerId>
 
-export const zExtEndUserId = z.string().min(1).brand<'ext_end_user'>()
-export type ExtEndUserId = z.infer<typeof zExtEndUserId>
+export const zExtCustomerId = z.string().min(1).brand<'ext_customer'>()
+export type ExtCustomerId = z.infer<typeof zExtCustomerId>
 
 export function makeId<TPrefix extends IdPrefix, TPName extends string>(
   ...args: TPrefix extends INDEPENDENT_ID_PREFIX

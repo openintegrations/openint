@@ -10,7 +10,7 @@ import {
   makeId,
   NangoConnect,
 } from '@openint/cdk'
-import {zConnectPageParams} from '@openint/engine-backend/router/endUserRouter'
+import {zConnectPageParams} from '@openint/engine-backend/router/customerRouter'
 import {makeUlid} from '@openint/util'
 import {createServerComponentHelpers} from '@/lib-server/server-component-helpers'
 import {SetCookieAndRedirect} from './(oauth)/redirect/SetCookieAndRedirect'
@@ -42,7 +42,7 @@ export default async function ConnectPageContainer({
   const {ssg, viewer} = await createServerComponentHelpers({
     searchParams: {[kAccessToken]: token},
   })
-  if (viewer.role !== 'end_user') {
+  if (viewer.role !== 'customer') {
     return (
       <div>Authenticated user only. Your role is {getViewerId(viewer)}</div>
     )

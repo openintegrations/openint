@@ -1,4 +1,4 @@
-import type {EndUserId, Id, IDS} from '@openint/cdk/id.types'
+import type {CustomerId, Id, IDS} from '@openint/cdk/id.types'
 import type {ZRaw} from '@openint/cdk/models'
 import type {NoInfer, ObjectPartialDeep} from '@openint/util'
 
@@ -10,7 +10,7 @@ export interface MetaTable<
   list(options: {
     ids?: TID[]
     /** Maybe remove this? not applicable everywhere */
-    endUserId?: EndUserId | null
+    customerId?: CustomerId | null
     /** Maybe remove this? not applicable everywhere */
     connectorConfigId?: Id['ccfg'] | null
     /** Maybe remove this? not applicable everywhere */
@@ -26,8 +26,8 @@ export interface MetaTable<
   delete(id: TID): Promise<void>
 }
 
-export interface EndUserResultRow {
-  id: EndUserId
+export interface CustomerResultRow {
+  id: CustomerId
   resourceCount?: number
   firstCreatedAt?: unknown
   lastUpdatedAt?: unknown
@@ -41,11 +41,11 @@ export interface MetaService {
   // and default to dumb listing all rows from table and in memory filter
   // if the corresponding methods are not implemented
   // This is useful for things like memory
-  searchEndUsers: (options: {
+  searchCustomers: (options: {
     keywords?: string | null
     limit?: number
     offset?: number
-  }) => Promise<readonly EndUserResultRow[]>
+  }) => Promise<readonly CustomerResultRow[]>
   searchIntegrations: (options: {
     /** Leave empty to list the top integrations */
     keywords?: string | null

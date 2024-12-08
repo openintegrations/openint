@@ -1,6 +1,6 @@
 import {sql} from 'drizzle-orm'
 import {drizzle} from 'drizzle-orm/postgres-js'
-import type {EndUserId, Id} from '@openint/cdk'
+import type {CustomerId, Id} from '@openint/cdk'
 import type {DeprecatedInputEntity} from '@openint/connector-postgres'
 import {postgresServer} from '@openint/connector-postgres'
 import {env} from '@openint/env'
@@ -24,7 +24,7 @@ const db = drizzle(dbUrl.toString(), {logger: true})
 
 const destLink = postgresServer.destinationSync({
   config: {},
-  endUser: {id: 'esur_12' as EndUserId, orgId: 'org_123'},
+  customer: {id: 'esur_12' as CustomerId, orgId: 'org_123'},
   settings: {databaseUrl: dbUrl.toString()},
   source: {id: 'reso_sfdc_9287', connectorName: 'sfdc'},
   state: {},
@@ -163,7 +163,7 @@ test('destinationSync', async () => {
         source: {
           id: 'conn_123' as Id['reso'],
           connectorConfig: {connectorName: 'greenhouse'},
-          endUserId: 'cm3roaf0007',
+          customerId: 'cm3roaf0007',
         },
       }),
     )

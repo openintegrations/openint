@@ -17,7 +17,7 @@ export const noopMetaService: MetaService = {
     connector_config: noopTable,
     pipeline: noopTable,
   },
-  searchEndUsers: async () => [],
+  searchCustomers: async () => [],
   searchIntegrations: async () => [],
   findPipelines: async () => [],
   listConnectorConfigInfos: async () => [],

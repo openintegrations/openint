@@ -12,7 +12,7 @@ import {
   kApikeyUrlParam,
 } from '@openint/app-config/constants'
 import type {Id, UserId, Viewer} from '@openint/cdk'
-import {decodeApikey, makeJwtClient, zEndUserId, zId} from '@openint/cdk'
+import {decodeApikey, makeJwtClient, zCustomerId, zId} from '@openint/cdk'
 import type {RouterContext} from '@openint/engine-backend'
 import {envRequired} from '@openint/env'
 import {
@@ -33,7 +33,7 @@ export const zOpenIntHeaders = z
     'x-resource-connector-name': z.string().nullish(),
     'x-resource-connector-config-id': zId('ccfg').nullish(),
     /** Implied by authorization header when operating in end user mode */
-    'x-resource-end-user-id': zEndUserId.nullish(),
+    'x-resource-end-user-id': zCustomerId.nullish(),
     authorization: z.string().nullish(), // `Bearer ${string}`
   })
   .catchall(z.string().nullish())
@@ -132,13 +132,13 @@ export const contextFromRequest = async ({
   let resourceId = req.headers.get('x-resource-id') as Id['reso'] | undefined
   if (!resourceId) {
     // TODO: How do we allow filtering for organization owned resources?
-    // Specifically making sure that endUserId = null?
+    // Specifically making sure that customerId = null?
     // TODO: make sure this corresponds to the list resources api
     const resourceFilters = pickBy(
       {
-        // endUserId shall be noop when we are in end User viewer as services
+        // customerId shall be noop when we are in end User viewer as services
         // are already secured by row level security
-        endUserId: headers['x-resource-end-user-id'],
+        customerId: headers['x-resource-end-user-id'],
         connectorName: headers['x-resource-connector-name'],
         connectorConfigId: headers['x-resource-connector-config-id'],
       },

@@ -1,5 +1,5 @@
 import type {ZRaw} from '@openint/cdk'
-import {extractId, zEndUserId, zId, zRaw, zStandard} from '@openint/cdk'
+import {extractId, zCustomerId, zId, zRaw, zStandard} from '@openint/cdk'
 import {R, z} from '@openint/util'
 import {inngest} from '../events'
 import {zSyncOptions} from '../types'
@@ -62,7 +62,7 @@ export const pipelineRouter = trpc.router({
       return true as const
     }),
   listConnections: protectedProcedure
-    .input(zListParams.extend({endUserId: zEndUserId.optional()}).optional())
+    .input(zListParams.extend({customerId: zCustomerId.optional()}).optional())
     .query(async ({input = {}, ctx}) => {
       // Add info about what it takes to `reconnect` here for resources which
       // has disconnected
@@ -151,7 +151,7 @@ export const pipelineRouter = trpc.router({
     .input(z.object({id: zId('pipe')}).merge(zSyncOptions))
     .output(z.void())
     .mutation(async function syncPipeline({input: {id: pipeId, ...opts}, ctx}) {
-      if (ctx.viewer.role === 'end_user') {
+      if (ctx.viewer.role === 'customer') {
         await ctx.services.getPipelineOrFail(pipeId) // Authorization
       }
       if (opts?.async) {

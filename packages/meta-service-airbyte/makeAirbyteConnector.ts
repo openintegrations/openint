@@ -109,7 +109,7 @@ export function makeAirbyteConnector(connector: AnyConnectorImpl) {
 
         return connector
           .sourceSync({
-            endUser: null,
+            customer: null,
             config: config.config,
             settings: config.settings,
 

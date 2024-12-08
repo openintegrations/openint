@@ -11,7 +11,7 @@ import {
   makePostgresClient,
 } from '@openint/connector-postgres/makePostgresClient'
 import type {
-  EndUserResultRow,
+  CustomerResultRow,
   MetaService,
   MetaTable,
 } from '@openint/engine-backend'
@@ -30,10 +30,10 @@ function localGucForViewer(viewer: Viewer) {
   switch (viewer.role) {
     case 'anon':
       return {role: 'anon'}
-    case 'end_user':
+    case 'customer':
       return {
-        role: 'end_user',
-        'request.jwt.claim.end_user_id': viewer.endUserId,
+        role: 'customer',
+        'request.jwt.claim.customer_id': viewer.customerId,
         'request.jwt.claim.org_id': viewer.orgId,
       }
     case 'user':
@@ -92,26 +92,26 @@ export const makePostgresMetaService = zFunction(
     }
     return {
       tables,
-      searchEndUsers: ({keywords, ...rest}) => {
+      searchCustomers: ({keywords, ...rest}) => {
         const {runQueries, sql} = _getDeps(opts)
         const where = keywords
-          ? sql`WHERE end_user_id ILIKE ${'%' + keywords + '%'}`
+          ? sql`WHERE customer_id ILIKE ${'%' + keywords + '%'}`
           : sql``
         const query = applyLimitOffset(
           sql`
             SELECT
-              end_user_id as id,
+              customer_id as id,
               count(*) AS resource_count,
               min(created_at) AS first_created_at,
               max(updated_at) AS last_updated_at
             FROM
               resource
             ${where}
-            GROUP BY end_user_id
+            GROUP BY customer_id
           `,
           rest,
         )
-        return runQueries((pool) => pool.any<EndUserResultRow>(query))
+        return runQueries((pool) => pool.any<CustomerResultRow>(query))
       },
       searchIntegrations: ({keywords, connectorNames, ...rest}) => {
         const {runQueries, sql} = _getDeps(opts)
@@ -246,7 +246,7 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
   return {
     list: ({
       ids,
-      endUserId,
+      customerId,
       connectorConfigId,
       connectorName,
       keywords,
@@ -255,7 +255,7 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
       runQueries((pool) => {
         const conditions = R.compact([
           ids && sql`id = ANY(${sql.array(ids, 'varchar')})`,
-          endUserId && sql`end_user_id = ${endUserId}`,
+          customerId && sql`customer_id = ${customerId}`,
           connectorConfigId && sql`connector_config_id = ${connectorConfigId}`,
           connectorName && sql`connector_name = ${connectorName}`,
           // Temp solution, shall use fts and make this work for any table...

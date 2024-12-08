@@ -37,8 +37,8 @@ export const finchSchemas = {
   // Connect
   preConnectInput: z.object({
     // categories: z.array(zCategory),
-    // end_user_email_address: z.string().optional(),
-    // end_user_organization_name: z.string().optional(),
+    // customer_email_address: z.string().optional(),
+    // customer_organization_name: z.string().optional(),
     state: z.string().optional(),
   }),
   connectInput: z.object({

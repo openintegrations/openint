@@ -3,7 +3,7 @@ import type {Link as FetchLink} from '@opensdks/runtime'
 import type {
   AnyEntityPayload,
   Destination,
-  EndUserId,
+  CustomerId,
   Id,
   Link,
   ResourceUpdate,
@@ -222,19 +222,19 @@ export function makeSyncService({
   const sourceSync = ({
     src,
     state,
-    endUser,
+    customer,
     streams,
     opts,
   }: {
     src: _ResourceExpanded
     state: unknown
-    endUser?: {id: EndUserId} | null | undefined
+    customer?: {id: CustomerId} | null | undefined
     streams?: StreamsV1 | StreamsV2
     opts: {fullResync?: boolean | null}
   }) => {
     const defaultSource$ = () =>
       src.connectorConfig.connector.sourceSync?.({
-        endUser,
+        customer,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         instance: src.connectorConfig.connector.newInstance?.({
           config: src.connectorConfig.config,
@@ -332,9 +332,9 @@ export function makeSyncService({
   ) => {
     console.log('[syncPipeline]', pipeline)
     const {source: src, links, destination: dest, watch, ...pipe} = pipeline
-    // TODO: Should we introduce endUserId onto the pipeline itself?
-    const endUserId = src.endUserId ?? dest.endUserId
-    const endUser = endUserId ? {id: endUserId} : null
+    // TODO: Should we introduce customerId onto the pipeline itself?
+    const customerId = src.customerId ?? dest.customerId
+    const customer = customerId ? {id: customerId} : null
 
     // TODO: Maybe not the best place for this? Think where clerkClient should live
     const org =
@@ -351,7 +351,7 @@ export function makeSyncService({
       opts,
       src,
       state: pipe.sourceState,
-      endUser,
+      customer,
       streams:
         pipeline.streams ??
         pipeline.source.connectorConfig.defaultPipeOut?.streams ??
@@ -368,8 +368,8 @@ export function makeSyncService({
       opts.destination$$ ??
       dest.connectorConfig.connector.destinationSync?.({
         source: {id: src.id, connectorName: src.connectorConfig.connector.name},
-        endUser: {
-          id: endUser?.id as EndUserId,
+        customer: {
+          id: customer?.id as CustomerId,
           orgId: pipeline.source.connectorConfig.orgId,
         },
         config: dest.connectorConfig.config,
@@ -421,7 +421,7 @@ export function makeSyncService({
         pipeline_id: pipeline.id,
         source_id: src.id,
         destination_id: dest.id,
-        end_user_id: endUserId,
+        customer_id: customerId,
       },
       user: {webhook_url: org?.webhook_url || ''},
     })
@@ -430,7 +430,7 @@ export function makeSyncService({
   const _syncResourceUpdate = async (
     int: _ConnectorConfig,
     {
-      endUserId: userId,
+      customerId: userId,
       settings,
       integration,
       ...resoUpdate
@@ -444,7 +444,7 @@ export function makeSyncService({
     })
     const id = makeId('reso', int.connector.name, resoUpdate.resourceExternalId)
     await metaLinks
-      .handlers({resource: {id, connectorConfigId: int.id, endUserId: userId}})
+      .handlers({resource: {id, connectorConfigId: int.id, customerId: userId}})
       .resoUpdate({type: 'resoUpdate', id, settings, integration})
 
     // TODO: This should be happening async

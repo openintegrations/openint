@@ -1,5 +1,5 @@
 import {z} from '@opensdks/util-zod'
-import {zEndUserId, zId} from './id.types'
+import {zCustomerId, zId} from './id.types'
 import {zVerticalKey} from './verticals'
 
 // Utility types
@@ -176,7 +176,7 @@ export const zRaw = {
       id: zId('reso'),
       connectorName: z.string().describe('Unique name of the connector'),
       displayName: z.string().nullish(),
-      endUserId: zEndUserId.nullish(),
+      customerId: zCustomerId.nullish(),
       connectorConfigId: zId('ccfg'),
       integrationId: zId('int').nullish(),
       settings: z.record(z.unknown()).nullish(),

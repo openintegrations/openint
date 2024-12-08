@@ -9,20 +9,20 @@ import {helpers} from './def'
 type components = HeronSDKTypes['oas']['components']
 
 export const heronServer = {
-  sourceSync: ({endUser, config}) => {
+  sourceSync: ({customer, config}) => {
     const heron = initHeronSDK({
       headers: {authorization: `Basic ${btoa(`:${config.apiKey}`)}`},
     })
 
     async function* iterateEntities() {
-      const endUserId = endUser?.id
-      if (!endUserId) {
-        throw new Error('endUser is required for heron source sync')
+      const customerId = customer?.id
+      if (!customerId) {
+        throw new Error('customer is required for heron source sync')
       }
       // TODO: Abstract different paging strategies into re-usable functions, similar to airbyte low-code connector for example
       const res = await heron
         .GET('/api/end_users/{end_user_id_or_heron_id}/transactions', {
-          params: {path: {end_user_id_or_heron_id: endUserId}, query: {}},
+          params: {path: {end_user_id_or_heron_id: customerId}, query: {}},
         })
         .then((r) => r.data)
       yield (res.transactions_enriched ?? []).map((txn) =>
@@ -33,10 +33,10 @@ export const heronServer = {
       .from(iterateEntities())
       .pipe(Rx.mergeMap((ops) => rxjs.from([...ops, helpers._op('commit')])))
   },
-  destinationSync: ({config, endUser}) => {
-    const endUserId = endUser?.id
-    if (!endUserId) {
-      throw new Error('endUser is required for heron source sync')
+  destinationSync: ({config, customer}) => {
+    const customerId = customer?.id
+    if (!customerId) {
+      throw new Error('customer is required for heron source sync')
     }
     const heron = initHeronSDK({
       headers: {authorization: `Basic ${btoa(`:${config.apiKey}`)}`},
@@ -53,18 +53,18 @@ export const heronServer = {
         }
         await heron
           .GET('/api/end_users/{end_user_id_or_heron_id}', {
-            params: {path: {end_user_id_or_heron_id: endUserId}},
+            params: {path: {end_user_id_or_heron_id: customerId}},
           })
           .catch(() =>
             heron.POST('/api/end_users', {
-              body: {end_user: {end_user_id: endUserId}},
+              body: {end_user: {end_user_id: customerId}},
             }),
           )
 
         await heron.POST(
           '/api/end_users/{end_user_id_or_heron_id}/transactions',
           {
-            params: {path: {end_user_id_or_heron_id: endUserId}},
+            params: {path: {end_user_id_or_heron_id: customerId}},
             body: {
               transactions: Object.entries(cache.transaction).map(
                 ([
@@ -85,7 +85,7 @@ export const heronServer = {
         )
         // TODO Do this once when all transactions have completed processing
         await heron.PUT('/api/end_users', {
-          body: {end_user: {end_user_id: endUserId, status: 'ready'}},
+          body: {end_user: {end_user_id: customerId, status: 'ready'}},
         })
       }),
     )

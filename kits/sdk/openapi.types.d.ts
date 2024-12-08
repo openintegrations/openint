@@ -694,7 +694,7 @@ export interface components {
         },
         {
           /** @enum {string} */
-          role: 'end_user'
+          role: 'customer'
           endUserId: string
           /** @description Must start with 'org_' */
           orgId: string

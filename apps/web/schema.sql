@@ -94,29 +94,6 @@ CREATE TABLE public._migrations (
 ALTER TABLE public._migrations OWNER TO postgres;
 
 --
--- Name: connection; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.connection (
-    id character varying DEFAULT concat('conn_', public.generate_ulid()) NOT NULL,
-    connector_name character varying GENERATED ALWAYS AS (split_part((id)::text, '_'::text, 2)) STORED NOT NULL,
-    customer_id character varying,
-    connector_config_id character varying,
-    integration_id character varying,
-    env_name character varying,
-    settings jsonb DEFAULT '{}'::jsonb NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    display_name character varying,
-    disabled boolean DEFAULT false,
-    metadata jsonb,
-    CONSTRAINT connection_id_prefix_check CHECK (starts_with((id)::text, 'conn_'::text))
-);
-
-
-ALTER TABLE public.connection OWNER TO postgres;
-
---
 -- Name: connector_config; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -185,19 +162,34 @@ CREATE TABLE public.pipeline (
 ALTER TABLE public.pipeline OWNER TO postgres;
 
 --
+-- Name: resource; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.resource (
+    id character varying DEFAULT concat('reso', public.generate_ulid()) NOT NULL,
+    connector_name character varying GENERATED ALWAYS AS (split_part((id)::text, '_'::text, 2)) STORED NOT NULL,
+    customer_id character varying,
+    connector_config_id character varying,
+    integration_id character varying,
+    env_name character varying,
+    settings jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    display_name character varying,
+    disabled boolean DEFAULT false,
+    metadata jsonb,
+    CONSTRAINT resource_id_prefix_check CHECK (starts_with((id)::text, 'reso'::text))
+);
+
+
+ALTER TABLE public.resource OWNER TO postgres;
+
+--
 -- Name: _migrations _migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public._migrations
     ADD CONSTRAINT _migrations_pkey PRIMARY KEY (name);
-
-
---
--- Name: connection pk_connection; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.connection
-    ADD CONSTRAINT pk_connection PRIMARY KEY (id);
 
 
 --
@@ -225,31 +217,11 @@ ALTER TABLE ONLY public.pipeline
 
 
 --
--- Name: connection_created_at; Type: INDEX; Schema: public; Owner: postgres
+-- Name: resource pk_resource; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-CREATE INDEX connection_created_at ON public.connection USING btree (created_at);
-
-
---
--- Name: connection_customer_id; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX connection_customer_id ON public.connection USING btree (customer_id);
-
-
---
--- Name: connection_provider_name; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX connection_provider_name ON public.connection USING btree (connector_name);
-
-
---
--- Name: connection_updated_at; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX connection_updated_at ON public.connection USING btree (updated_at);
+ALTER TABLE ONLY public.resource
+    ADD CONSTRAINT pk_resource PRIMARY KEY (id);
 
 
 --
@@ -330,10 +302,38 @@ CREATE INDEX pipeline_updated_at ON public.pipeline USING btree (updated_at);
 
 
 --
--- Name: connection fk_connector_config_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: resource_created_at; Type: INDEX; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.connection
+CREATE INDEX resource_created_at ON public.resource USING btree (created_at);
+
+
+--
+-- Name: resource_customer_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX resource_customer_id ON public.resource USING btree (customer_id);
+
+
+--
+-- Name: resource_provider_name; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX resource_provider_name ON public.resource USING btree (connector_name);
+
+
+--
+-- Name: resource_updated_at; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX resource_updated_at ON public.resource USING btree (updated_at);
+
+
+--
+-- Name: resource fk_connector_config_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.resource
     ADD CONSTRAINT fk_connector_config_id FOREIGN KEY (connector_config_id) REFERENCES public.connector_config(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
@@ -342,7 +342,7 @@ ALTER TABLE ONLY public.connection
 --
 
 ALTER TABLE ONLY public.connector_config
-    ADD CONSTRAINT fk_default_pipe_in_source_id FOREIGN KEY (default_pipe_in_source_id) REFERENCES public.connection(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_default_pipe_in_source_id FOREIGN KEY (default_pipe_in_source_id) REFERENCES public.resource(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
@@ -350,7 +350,7 @@ ALTER TABLE ONLY public.connector_config
 --
 
 ALTER TABLE ONLY public.connector_config
-    ADD CONSTRAINT fk_default_pipe_out_destination_id FOREIGN KEY (default_pipe_out_destination_id) REFERENCES public.connection(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_default_pipe_out_destination_id FOREIGN KEY (default_pipe_out_destination_id) REFERENCES public.resource(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
@@ -358,7 +358,7 @@ ALTER TABLE ONLY public.connector_config
 --
 
 ALTER TABLE ONLY public.pipeline
-    ADD CONSTRAINT fk_destination_id FOREIGN KEY (destination_id) REFERENCES public.connection(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_destination_id FOREIGN KEY (destination_id) REFERENCES public.resource(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -369,10 +369,10 @@ COMMENT ON CONSTRAINT fk_destination_id ON public.pipeline IS '@graphql({"foreig
 
 
 --
--- Name: connection fk_integration_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: resource fk_integration_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.connection
+ALTER TABLE ONLY public.resource
     ADD CONSTRAINT fk_integration_id FOREIGN KEY (integration_id) REFERENCES public.integration(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
@@ -381,7 +381,7 @@ ALTER TABLE ONLY public.connection
 --
 
 ALTER TABLE ONLY public.pipeline
-    ADD CONSTRAINT fk_source_id FOREIGN KEY (source_id) REFERENCES public.connection(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_source_id FOREIGN KEY (source_id) REFERENCES public.resource(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -398,25 +398,10 @@ COMMENT ON CONSTRAINT fk_source_id ON public.pipeline IS '@graphql({"foreign_nam
 ALTER TABLE public._migrations ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: connection; Type: ROW SECURITY; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.connection ENABLE ROW LEVEL SECURITY;
-
---
 -- Name: connector_config; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
 ALTER TABLE public.connector_config ENABLE ROW LEVEL SECURITY;
-
---
--- Name: connection customer_access; Type: POLICY; Schema: public; Owner: postgres
---
-
-CREATE POLICY customer_access ON public.connection TO customer USING ((((connector_config_id)::text IN ( SELECT connector_config.id
-   FROM public.connector_config
-  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))) AND ((customer_id)::text = (( SELECT public.jwt_customer_id() AS jwt_customer_id))::text)));
-
 
 --
 -- Name: connector_config customer_access; Type: POLICY; Schema: public; Owner: postgres
@@ -429,11 +414,20 @@ CREATE POLICY customer_access ON public.connector_config TO customer USING (((or
 -- Name: pipeline customer_access; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY customer_access ON public.pipeline TO customer USING (( SELECT (ARRAY( SELECT connection.id
-           FROM public.connection
-          WHERE (((connection.connector_config_id)::text IN ( SELECT connector_config.id
+CREATE POLICY customer_access ON public.pipeline TO customer USING (( SELECT (ARRAY( SELECT resource.id
+           FROM public.resource
+          WHERE (((resource.connector_config_id)::text IN ( SELECT connector_config.id
                    FROM public.connector_config
-                  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))) AND ((connection.customer_id)::text = (( SELECT public.jwt_customer_id() AS jwt_customer_id))::text))) && ARRAY[pipeline.source_id, pipeline.destination_id])));
+                  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))) AND ((resource.customer_id)::text = (( SELECT public.jwt_customer_id() AS jwt_customer_id))::text))) && ARRAY[pipeline.source_id, pipeline.destination_id])));
+
+
+--
+-- Name: resource customer_access; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY customer_access ON public.resource TO customer USING ((((connector_config_id)::text IN ( SELECT connector_config.id
+   FROM public.connector_config
+  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))) AND ((customer_id)::text = (( SELECT public.jwt_customer_id() AS jwt_customer_id))::text)));
 
 
 --
@@ -441,17 +435,6 @@ CREATE POLICY customer_access ON public.pipeline TO customer USING (( SELECT (AR
 --
 
 ALTER TABLE public.integration ENABLE ROW LEVEL SECURITY;
-
---
--- Name: connection org_access; Type: POLICY; Schema: public; Owner: postgres
---
-
-CREATE POLICY org_access ON public.connection TO org USING (((connector_config_id)::text IN ( SELECT connector_config.id
-   FROM public.connector_config
-  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text)))) WITH CHECK (((connector_config_id)::text IN ( SELECT connector_config.id
-   FROM public.connector_config
-  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))));
-
 
 --
 -- Name: connector_config org_access; Type: POLICY; Schema: public; Owner: postgres
@@ -465,19 +448,19 @@ CREATE POLICY org_access ON public.connector_config TO org USING (((org_id)::tex
 --
 
 CREATE POLICY org_access ON public.pipeline TO org USING (( SELECT (ARRAY( SELECT r.id
-           FROM (public.connection r
+           FROM (public.resource r
              JOIN public.connector_config i ON (((r.connector_config_id)::text = (i.id)::text)))
           WHERE ((i.org_id)::text = (public.jwt_org_id())::text)) && ARRAY[pipeline.source_id, pipeline.destination_id]))) WITH CHECK (( SELECT (ARRAY( SELECT r.id
-           FROM (public.connection r
+           FROM (public.resource r
              JOIN public.connector_config i ON (((r.connector_config_id)::text = (i.id)::text)))
           WHERE ((i.org_id)::text = (public.jwt_org_id())::text)) @> ARRAY[pipeline.source_id, pipeline.destination_id])));
 
 
 --
--- Name: connection org_member_access; Type: POLICY; Schema: public; Owner: postgres
+-- Name: resource org_access; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY org_member_access ON public.connection TO authenticated USING (((connector_config_id)::text IN ( SELECT connector_config.id
+CREATE POLICY org_access ON public.resource TO org USING (((connector_config_id)::text IN ( SELECT connector_config.id
    FROM public.connector_config
   WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text)))) WITH CHECK (((connector_config_id)::text IN ( SELECT connector_config.id
    FROM public.connector_config
@@ -496,12 +479,23 @@ CREATE POLICY org_member_access ON public.connector_config TO authenticated USIN
 --
 
 CREATE POLICY org_member_access ON public.pipeline TO authenticated USING ((ARRAY( SELECT r.id
-   FROM (public.connection r
+   FROM (public.resource r
      JOIN public.connector_config i ON (((i.id)::text = (r.connector_config_id)::text)))
   WHERE ((i.org_id)::text = (public.jwt_org_id())::text)) && ARRAY[source_id, destination_id])) WITH CHECK ((ARRAY( SELECT r.id
-   FROM (public.connection r
+   FROM (public.resource r
      JOIN public.connector_config i ON (((i.id)::text = (r.connector_config_id)::text)))
   WHERE ((i.org_id)::text = (public.jwt_org_id())::text)) @> ARRAY[source_id, destination_id]));
+
+
+--
+-- Name: resource org_member_access; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY org_member_access ON public.resource TO authenticated USING (((connector_config_id)::text IN ( SELECT connector_config.id
+   FROM public.connector_config
+  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text)))) WITH CHECK (((connector_config_id)::text IN ( SELECT connector_config.id
+   FROM public.connector_config
+  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))));
 
 
 --
@@ -525,6 +519,12 @@ CREATE POLICY public_readonly_access ON public.integration FOR SELECT USING (tru
 
 
 --
+-- Name: resource; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.resource ENABLE ROW LEVEL SECURITY;
+
+--
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
 
@@ -539,22 +539,6 @@ GRANT USAGE ON SCHEMA public TO org;
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public._migrations TO org;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public._migrations TO authenticated;
-
-
---
--- Name: TABLE connection; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT SELECT,DELETE ON TABLE public.connection TO customer;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.connection TO org;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.connection TO authenticated;
-
-
---
--- Name: COLUMN connection.display_name; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT UPDATE(display_name) ON TABLE public.connection TO customer;
 
 
 --
@@ -623,6 +607,22 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.integration TO authenticated;
 GRANT SELECT ON TABLE public.pipeline TO customer;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.pipeline TO org;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.pipeline TO authenticated;
+
+
+--
+-- Name: TABLE resource; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT SELECT,DELETE ON TABLE public.resource TO customer;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.resource TO org;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.resource TO authenticated;
+
+
+--
+-- Name: COLUMN resource.display_name; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT UPDATE(display_name) ON TABLE public.resource TO customer;
 
 
 --

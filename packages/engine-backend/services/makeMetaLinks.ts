@@ -12,7 +12,7 @@ import type {MetaService, MetaTable} from './metaService'
 // Should the mapping of the StandardIntegration happen inside here?
 
 export function makeMetaLinks(metaBase: MetaService) {
-  type Res = Pick<ZRaw['resource'], 'id' | 'connectorConfigId' | 'endUserId'>
+  type Res = Pick<ZRaw['resource'], 'id' | 'connectorConfigId' | 'customerId'>
   type Pipe = Pick<
     ZRaw['pipeline'],
     'id' | 'sourceId' | 'destinationId' | 'linkOptions'
@@ -98,7 +98,7 @@ export function makeMetaLinks(metaBase: MetaService) {
           integrationId,
           // maybe we should distinguish between setDefaults (from existingResource) vs. actually
           // updating the values...
-          endUserId: resource.endUserId,
+          customerId: resource.customerId,
         })
       },
       stateUpdate: async (op) => {

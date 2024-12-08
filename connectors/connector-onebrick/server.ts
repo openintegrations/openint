@@ -1,5 +1,5 @@
 import type {ConnectorServer, SyncOperation} from '@openint/cdk'
-import {zEndUserId} from '@openint/cdk'
+import {zCustomerId} from '@openint/cdk'
 import {md5Hash, R, Rx, rxjs, z} from '@openint/util'
 import type {onebrickSchemas} from './def'
 import {helpers} from './def'
@@ -60,7 +60,7 @@ export const onebrickServerConnector = {
     // onebrick resource, and whether they could be rotated...
     return helpers._webhookReturn(md5Hash(accessToken), {
       settings: helpers.resourceSettings.parse({accessToken}),
-      endUserId: zEndUserId.parse(userId),
+      customerId: zCustomerId.parse(userId),
       triggerDefaultSync: true,
     })
   },

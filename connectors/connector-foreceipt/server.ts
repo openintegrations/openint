@@ -34,7 +34,7 @@ export const foreceiptServer = {
             Rx.mergeMap(([q, res]) => {
               info = res
               return firebaseServer.sourceSync({
-                endUser: null,
+                customer: null,
                 config: {},
                 settings: client.fbSettings,
                 state: {_fb: fb, _queries: Object.values(q)},
