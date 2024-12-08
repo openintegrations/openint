@@ -44,15 +44,15 @@ CREATE FUNCTION public.generate_ulid() RETURNS text
 ALTER FUNCTION public.generate_ulid() OWNER TO postgres;
 
 --
--- Name: jwt_end_user_id(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: jwt_customer_id(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.jwt_end_user_id() RETURNS character varying
+CREATE FUNCTION public.jwt_customer_id() RETURNS character varying
     LANGUAGE sql STABLE
-    AS $$ select coalesce( nullif(current_setting('request.jwt.claim.end_user_id', true), ''), (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'end_user_id') ) $$;
+    AS $$ select coalesce( nullif(current_setting('request.jwt.claim.customer_id', true), ''), (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'customer_id') ) $$;
 
 
-ALTER FUNCTION public.jwt_end_user_id() OWNER TO postgres;
+ALTER FUNCTION public.jwt_customer_id() OWNER TO postgres;
 
 --
 -- Name: jwt_org_id(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -168,7 +168,7 @@ ALTER TABLE public.pipeline OWNER TO postgres;
 CREATE TABLE public.resource (
     id character varying DEFAULT concat('reso', public.generate_ulid()) NOT NULL,
     connector_name character varying GENERATED ALWAYS AS (split_part((id)::text, '_'::text, 2)) STORED NOT NULL,
-    end_user_id character varying,
+    customer_id character varying,
     connector_config_id character varying,
     integration_id character varying,
     env_name character varying,
@@ -309,10 +309,10 @@ CREATE INDEX resource_created_at ON public.resource USING btree (created_at);
 
 
 --
--- Name: resource_end_user_id; Type: INDEX; Schema: public; Owner: postgres
+-- Name: resource_customer_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX resource_end_user_id ON public.resource USING btree (end_user_id);
+CREATE INDEX resource_customer_id ON public.resource USING btree (customer_id);
 
 
 --
@@ -404,30 +404,30 @@ ALTER TABLE public._migrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.connector_config ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: connector_config end_user_access; Type: POLICY; Schema: public; Owner: postgres
+-- Name: connector_config customer_access; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY end_user_access ON public.connector_config TO end_user USING (((org_id)::text = (public.jwt_org_id())::text));
+CREATE POLICY customer_access ON public.connector_config TO customer USING (((org_id)::text = (public.jwt_org_id())::text));
 
 
 --
--- Name: pipeline end_user_access; Type: POLICY; Schema: public; Owner: postgres
+-- Name: pipeline customer_access; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY end_user_access ON public.pipeline TO end_user USING (( SELECT (ARRAY( SELECT resource.id
+CREATE POLICY customer_access ON public.pipeline TO customer USING (( SELECT (ARRAY( SELECT resource.id
            FROM public.resource
           WHERE (((resource.connector_config_id)::text IN ( SELECT connector_config.id
                    FROM public.connector_config
-                  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))) AND ((resource.end_user_id)::text = (( SELECT public.jwt_end_user_id() AS jwt_end_user_id))::text))) && ARRAY[pipeline.source_id, pipeline.destination_id])));
+                  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))) AND ((resource.customer_id)::text = (( SELECT public.jwt_customer_id() AS jwt_customer_id))::text))) && ARRAY[pipeline.source_id, pipeline.destination_id])));
 
 
 --
--- Name: resource end_user_access; Type: POLICY; Schema: public; Owner: postgres
+-- Name: resource customer_access; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY end_user_access ON public.resource TO end_user USING ((((connector_config_id)::text IN ( SELECT connector_config.id
+CREATE POLICY customer_access ON public.resource TO customer USING ((((connector_config_id)::text IN ( SELECT connector_config.id
    FROM public.connector_config
-  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))) AND ((end_user_id)::text = (( SELECT public.jwt_end_user_id() AS jwt_end_user_id))::text)));
+  WHERE ((connector_config.org_id)::text = (public.jwt_org_id())::text))) AND ((customer_id)::text = (( SELECT public.jwt_customer_id() AS jwt_customer_id))::text)));
 
 
 --
@@ -529,7 +529,7 @@ ALTER TABLE public.resource ENABLE ROW LEVEL SECURITY;
 --
 
 GRANT USAGE ON SCHEMA public TO authenticated;
-GRANT USAGE ON SCHEMA public TO end_user;
+GRANT USAGE ON SCHEMA public TO customer;
 GRANT USAGE ON SCHEMA public TO org;
 
 
@@ -553,49 +553,49 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.connector_config TO authentica
 -- Name: COLUMN connector_config.id; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT(id) ON TABLE public.connector_config TO end_user;
+GRANT SELECT(id) ON TABLE public.connector_config TO customer;
 
 
 --
 -- Name: COLUMN connector_config.connector_name; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT(connector_name) ON TABLE public.connector_config TO end_user;
+GRANT SELECT(connector_name) ON TABLE public.connector_config TO customer;
 
 
 --
 -- Name: COLUMN connector_config.org_id; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT(org_id) ON TABLE public.connector_config TO end_user;
+GRANT SELECT(org_id) ON TABLE public.connector_config TO customer;
 
 
 --
 -- Name: COLUMN connector_config.display_name; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT(display_name) ON TABLE public.connector_config TO end_user;
+GRANT SELECT(display_name) ON TABLE public.connector_config TO customer;
 
 
 --
 -- Name: COLUMN connector_config.env_name; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT(env_name) ON TABLE public.connector_config TO end_user;
+GRANT SELECT(env_name) ON TABLE public.connector_config TO customer;
 
 
 --
 -- Name: COLUMN connector_config.disabled; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT(disabled) ON TABLE public.connector_config TO end_user;
+GRANT SELECT(disabled) ON TABLE public.connector_config TO customer;
 
 
 --
 -- Name: TABLE integration; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT ON TABLE public.integration TO end_user;
+GRANT SELECT ON TABLE public.integration TO customer;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.integration TO org;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.integration TO authenticated;
 
@@ -604,7 +604,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.integration TO authenticated;
 -- Name: TABLE pipeline; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT ON TABLE public.pipeline TO end_user;
+GRANT SELECT ON TABLE public.pipeline TO customer;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.pipeline TO org;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.pipeline TO authenticated;
 
@@ -613,7 +613,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.pipeline TO authenticated;
 -- Name: TABLE resource; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT SELECT,DELETE ON TABLE public.resource TO end_user;
+GRANT SELECT,DELETE ON TABLE public.resource TO customer;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.resource TO org;
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.resource TO authenticated;
 
@@ -622,7 +622,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.resource TO authenticated;
 -- Name: COLUMN resource.display_name; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT UPDATE(display_name) ON TABLE public.resource TO end_user;
+GRANT UPDATE(display_name) ON TABLE public.resource TO customer;
 
 
 --
