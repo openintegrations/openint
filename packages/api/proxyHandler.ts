@@ -20,11 +20,11 @@ export const proxyHandler = async (req: Request) => {
       new Date()
     : false
 
-  if (credentialsExpired && remoteContext.remoteResourceId) {
+  if (credentialsExpired && remoteContext.remoteConnectionId) {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
     })
-    const resourceExternalId = extractId(remoteContext.remoteResourceId)[2]
+    const resourceExternalId = extractId(remoteContext.remoteConnectionId)[2]
 
     const nangoConnection = await nango
       .GET('/connection/{connectionId}', {
@@ -42,7 +42,7 @@ export const proxyHandler = async (req: Request) => {
 
     const {connectorConfig: int} =
       await protectedContext.asOrgIfNeeded.getResourceExpandedOrFail(
-        remoteContext.remoteResourceId,
+        remoteContext.remoteConnectionId,
       )
 
     // TODO: extract all of this logic into an oauthLink that has an option to provide a custom refresh function that can call nango & persist it to db.
@@ -74,7 +74,7 @@ export const proxyHandler = async (req: Request) => {
 
   if (!res) {
     return new Response(
-      `Proxy not supported for resource: ${remoteContext.remoteResourceId}`,
+      `Proxy not supported for resource: ${remoteContext.remoteConnectionId}`,
       {
         status: 404,
       },

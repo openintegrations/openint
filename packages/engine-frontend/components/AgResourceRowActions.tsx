@@ -75,7 +75,7 @@ export function AgResourceRowActions(
   const syncResourceMutate = () =>
     syncResource.mutate({
       name: 'sync/resource-requested',
-      data: {resourceId: props.resource.id},
+      data: {connectionId: props.resource.id},
     })
 
   // TODO: Turn this into a menu powered by the command abstraction?

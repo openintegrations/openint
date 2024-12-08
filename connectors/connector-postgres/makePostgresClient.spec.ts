@@ -16,26 +16,26 @@ test('sql generation', () => {
   const valueMap = {
     id: 'txn_test',
     provider_name: 'plaid',
-    resource_id: 'reso_test123',
+    connection_id: 'conn_test123',
   }
   const query = upsertByIdQuery(tableName, valueMap)
 
   expect(query?.sql).toMatchInlineSnapshot(`
-    INSERT INTO "transaction" ("id", "provider_name", "resource_id")
+    INSERT INTO "transaction" ("id", "provider_name", "connection_id")
     VALUES ($1, $2, $3)
     ON CONFLICT ("id") DO UPDATE SET
     "provider_name" = excluded."provider_name",
-    "resource_id" = excluded."resource_id",
+    "connection_id" = excluded."connection_id",
     "updated_at" = now()
     WHERE
     "transaction"."provider_name" IS DISTINCT FROM excluded."provider_name" OR
-    "transaction"."resource_id" IS DISTINCT FROM excluded."resource_id";
+    "transaction"."connection_id" IS DISTINCT FROM excluded."connection_id";
   `)
   expect(query?.values).toMatchInlineSnapshot(`
     [
         txn_test,
         plaid,
-        reso_test123,
+        conn_test123,
     ]
   `)
 })

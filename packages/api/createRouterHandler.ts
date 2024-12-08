@@ -28,7 +28,7 @@ import type {AppRouter} from './appRouter'
 export const zOpenIntHeaders = z
   .object({
     [kApikeyHeader]: z.string().nullish(),
-    'x-resource-id': zId('reso').nullish(),
+    'x-connection-id': zId('conn').nullish(),
     /** Alternative ways to pass the resource id, works in case there is a single connector */
     'x-resource-connector-name': z.string().nullish(),
     'x-resource-connector-config-id': zId('ccfg').nullish(),
@@ -129,8 +129,8 @@ export const contextFromRequest = async ({
   const headers = zOpenIntHeaders.parse(
     Object.fromEntries(req.headers.entries()),
   )
-  let resourceId = req.headers.get('x-resource-id') as Id['reso'] | undefined
-  if (!resourceId) {
+  let connectionId = req.headers.get('x-connection-id') as Id['conn'] | undefined
+  if (!connectionId) {
     // TODO: How do we allow filtering for organization owned resources?
     // Specifically making sure that customerId = null?
     // TODO: make sure this corresponds to the list resources api
@@ -155,13 +155,13 @@ export const contextFromRequest = async ({
           )}`,
         )
       }
-      resourceId = resources[0]?.id
+      connectionId = resources[0]?.id
     }
   }
-  console.log('[contextFromRequest]', {url: req.url, viewer, resourceId})
+  console.log('[contextFromRequest]', {url: req.url, viewer, connectionId})
   return {
     ...context,
-    remoteResourceId: resourceId ?? null,
+    remoteConnectionId: connectionId ?? null,
   }
 }
 
@@ -235,10 +235,10 @@ export function createRouterOpenAPIHandler({
           return {}
         },
       })
-      // Pass the resourceId back to the client so there is certainly on which ID
+      // Pass the connectionId back to the client so there is certainly on which ID
       // was used to fetch the data
-      if (context.remoteResourceId) {
-        res.headers.set('x-resource-id', context.remoteResourceId)
+      if (context.remoteConnectionId) {
+        res.headers.set('x-connection-id', context.remoteConnectionId)
       }
       for (const [k, v] of Object.entries(corsHeaders)) {
         res.headers.set(k, v)

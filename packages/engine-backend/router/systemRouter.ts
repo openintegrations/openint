@@ -10,7 +10,7 @@ export const systemRouter = trpc.router({
       resources.map((reso) =>
         ctx.services
           .ensurePipelinesForResource(reso.id)
-          .then((pipelineIds) => ({resourceId: reso.id, pipelineIds}))
+          .then((pipelineIds) => ({connectionId: reso.id, pipelineIds}))
           .catch((err) => {
             console.error(
               'Failed to ensuring default pipelines for resource',

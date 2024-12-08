@@ -14,7 +14,7 @@ Nango OAuth flow callback. Read more about how to use it at: https://github.com/
     <noscript>JavaScript is required to proceed with the authentication.</noscript>
     <script type="text/javascript">
       window.providerConfigKey = \`int_qbo_01HCGK0H4FVS1949G5KCKGG2KJ\`;
-      window.connectionId = \`reso_qbo_01HDFCAW620Q6GQXQ5VEHH82EF\`;
+      window.connectionId = \`conn_qbo_01HDFCAW620Q6GQXQ5VEHH82EF\`;
 
       const message = {};
       message.eventType = 'AUTHORIZATION_SUCEEDED';
@@ -35,7 +35,7 @@ Nango OAuth flow callback. Read more about how to use it at: https://github.com/
     eventType: 'AUTHORIZATION_SUCEEDED',
     data: {
       providerConfigKey: 'int_qbo_01HCGK0H4FVS1949G5KCKGG2KJ',
-      connectionId: 'reso_qbo_01HDFCAW620Q6GQXQ5VEHH82EF',
+      connectionId: 'conn_qbo_01HDFCAW620Q6GQXQ5VEHH82EF',
     },
   })
 })

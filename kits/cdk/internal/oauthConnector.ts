@@ -64,7 +64,7 @@ export const oauthBaseSchema = {
   }),
   connectOutput: z.object({
     providerConfigKey: zId('ccfg'),
-    connectionId: zId('reso'),
+    connectionId: zId('conn'),
   }),
 } satisfies ConnectorSchemas
 
@@ -79,14 +79,14 @@ export function oauthConnect({
   nangoFrontend,
   connectorName,
   connectorConfigId,
-  resourceId,
+  connectionId,
   authOptions,
 }: {
   nangoFrontend: NangoFrontend
   connectorName: string
   connectorConfigId: Id['ccfg']
   /** Should address the re-connect scenario, but let's see... */
-  resourceId?: Id['reso']
+  connectionId?: Id['conn']
   authOptions?: {
     authorization_params?: Record<string, string | undefined>
   }
@@ -94,13 +94,13 @@ export function oauthConnect({
   // console.log('oauthConnect', {
   //   connectorName,
   //   connectorConfigId,
-  //   resourceId,
+  //   connectionId,
   //   authOptions,
   // })
   return nangoFrontend
     .auth(
       connectorConfigId,
-      resourceId ?? makeId('reso', connectorName, makeUlid()),
+      connectionId ?? makeId('conn', connectorName, makeUlid()),
       {
         params: {},
         ...authOptions,

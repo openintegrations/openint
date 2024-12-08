@@ -27,7 +27,7 @@ export function makeDBService({
   // TODO: Consider giving end users no permission at all?
   // It really does feel like we need some internal GraphQL for this...
   // Except different entities may still need to be access with different permissions...
-  const getConnectorOrFail = (id: Id['ccfg'] | Id['reso']) => {
+  const getConnectorOrFail = (id: Id['ccfg'] | Id['conn']) => {
     const connectorName = extractId(id)[1]
     const connector = connectorMap[connectorName]
     if (!connector) {
@@ -98,7 +98,7 @@ export function makeDBService({
       schema = (schema as (typeof zRaw)['resource']).extend({
         // This should be an override...
         settings:
-          getConnectorOrFail(id as Id['reso']).schemas.resourceSettings ??
+          getConnectorOrFail(id as Id['conn']).schemas.resourceSettings ??
           z.object({}).nullish(),
       })
     } else if (tableName === 'pipeline') {
@@ -184,7 +184,7 @@ export function makeDBService({
       }
       return zRaw.integration.parse(ins)
     })
-  const getResourceOrFail = (id: Id['reso']) =>
+  const getResourceOrFail = (id: Id['conn']) =>
     metaService.tables.resource.get(id).then((reso) => {
       if (!reso) {
         throw new TRPCError({
@@ -205,7 +205,7 @@ export function makeDBService({
       return zRaw.pipeline.parse(pipe)
     })
 
-  const getResourceExpandedOrFail = (id: Id['reso']) =>
+  const getResourceExpandedOrFail = (id: Id['conn']) =>
     getResourceOrFail(id).then(async (reso) => {
       const connectorConfig = await getConnectorConfigOrFail(
         reso.connectorConfigId,

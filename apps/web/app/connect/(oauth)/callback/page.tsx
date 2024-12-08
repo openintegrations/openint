@@ -69,9 +69,9 @@ export default async function ConnectCallback({
         searchParams: {[kAccessToken]: session.token},
       })
 
-      const resourceId = res.data.connectionId as Id['reso']
-      if (session.resourceId !== resourceId) {
-        console.warn('Revoking due to unmatched resourceId')
+      const connectionId = res.data.connectionId as Id['conn']
+      if (session.connectionId !== connectionId) {
+        console.warn('Revoking due to unmatched connectionId')
         const nango = initNangoSDK({
           headers: {authorization: `Bearer ${envRequired.NANGO_SECRET_KEY}`},
         })
@@ -85,7 +85,7 @@ export default async function ConnectCallback({
           type: 'ERROR',
           data: {
             code: 'FORBIDDEN',
-            message: `Session resourceId (${session.resourceId}) not matching connected resourceId ${resourceId}`,
+            message: `Session connectionId (${session.connectionId}) not matching connected connectionId ${connectionId}`,
           },
         }
       }
@@ -94,7 +94,7 @@ export default async function ConnectCallback({
       await caller.postConnect([res.data, res.data.providerConfigKey, {}])
       return {
         type: 'SUCCESS',
-        data: {resourceId: res.data.connectionId as Id['reso']},
+        data: {connectionId: res.data.connectionId as Id['conn']},
       }
     } catch (err) {
       console.error('[oauth] Error during connect', err)
@@ -116,7 +116,7 @@ export default async function ConnectCallback({
           <span className="mb-2">
             {msg.type === 'ERROR'
               ? `[${msg.data.code}] ${msg.data.message}`
-              : msg.data.resourceId}
+              : msg.data.connectionId}
           </span>
         </>
       )}

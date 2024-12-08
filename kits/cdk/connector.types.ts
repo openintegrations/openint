@@ -208,7 +208,7 @@ export interface ConnectorServer<
   destinationSync?: (
     input: OmitNever<{
       /** Needed for namespacing when syncing multiple source into same destination */
-      source: {id: Id['reso']; connectorName: string} | undefined
+      source: {id: Id['conn']; connectorName: string} | undefined
       customer: {id: CustomerId; orgId: string} | null | undefined
       config: T['_types']['connectorConfig']
       settings: T['_types']['resourceSettings']
@@ -366,7 +366,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
         // We don't prefix in `_opData`, should we actually prefix here?
         ...rest,
         // TODO: ok so this is a sign that we should be prefixing using a link of some kind...
-        id: makeId('reso', schemas.name.value, id),
+        id: makeId('conn', schemas.name.value, id),
         type: 'resoUpdate',
       }) as OpRes,
     _opState: (

@@ -177,7 +177,7 @@ export const customerRouter = trpc.router({
         }
         const reso = resourceExternalId
           ? await ctx.services.getResourceOrFail(
-              makeId('reso', int.connector.name, resourceExternalId),
+              makeId('conn', int.connector.name, resourceExternalId),
             )
           : undefined
         return int.connector.preConnect?.(
@@ -245,7 +245,7 @@ export const customerRouter = trpc.router({
 
           const reso = resourceExternalId
             ? await ctx.services.getResourceOrFail(
-                makeId('reso', int.connector.name, resourceExternalId),
+                makeId('conn', int.connector.name, resourceExternalId),
               )
             : undefined
 
@@ -300,7 +300,7 @@ export const customerRouter = trpc.router({
         //   },
         // )
 
-        const resourceId = await ctx.asOrgIfNeeded._syncResourceUpdate(int, {
+        const connectionId = await ctx.asOrgIfNeeded._syncResourceUpdate(int, {
           ...resoUpdate,
           // No need for each connector to worry about this, unlike in the case of handleWebhook.
           customerId:
@@ -310,13 +310,13 @@ export const customerRouter = trpc.router({
 
         await inngest.send({
           name: 'connect/resource-connected',
-          data: {resourceId},
+          data: {connectionId},
         })
 
         if (syncInBackground) {
           await inngest.send({
             name: 'sync/resource-requested',
-            data: {resourceId},
+            data: {connectionId},
           })
         }
         console.log(

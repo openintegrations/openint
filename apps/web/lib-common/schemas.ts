@@ -14,7 +14,7 @@ export const zClient = {
     {message: 'Invalid pipeline'},
   ),
   resource: zRecord<Resource>().refine(
-    (r) => zId('reso').safeParse(r.id).success,
+    (r) => zId('conn').safeParse(r.id).success,
     {message: 'Invalid resource'},
   ),
   connector_config: zRecord<ConnectorConfig>().refine(

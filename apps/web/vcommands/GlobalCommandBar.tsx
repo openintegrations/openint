@@ -36,11 +36,11 @@ function _GlobalCommandBar() {
     }
     const resources = [
       {
-        id: 'reso_1',
+        id: 'conn_1',
         label: 'Resource 1 plaid',
       },
       {
-        id: 'reso_2',
+        id: 'conn_2',
         label: 'Resource postgres 2',
       },
     ]

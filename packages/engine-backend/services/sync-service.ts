@@ -56,9 +56,9 @@ export function makeSyncService({
   getFetchLinks: (reso: _ResourceExpanded) => FetchLink[]
   authProvider: AuthProvider
 }) {
-  async function ensurePipelinesForResource(resoId: Id['reso']) {
+  async function ensurePipelinesForResource(resoId: Id['conn']) {
     console.log('[ensurePipelinesForResource]', resoId)
-    const pipelines = await metaService.findPipelines({resourceIds: [resoId]})
+    const pipelines = await metaService.findPipelines({connectionIds: [resoId]})
     const reso = await getResourceExpandedOrFail(resoId)
     const createdIds: Array<Id['pipe']> = []
     let defaultDestId = reso.connectorConfig?.defaultPipeOut?.destination_id
@@ -66,7 +66,7 @@ export function makeSyncService({
       const org = await authProvider.getOrganization(reso.connectorConfig.orgId)
       if (org.publicMetadata.database_url) {
         const dCcfgId = makeId('ccfg', 'postgres', 'default_' + org.id)
-        defaultDestId = makeId('reso', 'postgres', 'default_' + org.id)
+        defaultDestId = makeId('conn', 'postgres', 'default_' + org.id)
         await metaLinks.patch('connector_config', dCcfgId, {
           orgId: org.id,
           // Defaulting to disabled to not show up for end users as we don't have another way to filter them out for now
@@ -121,9 +121,9 @@ export function makeSyncService({
 
   // NOTE: Would be great to avoid the all the round tripping with something like a data loader.
   // or possibly drizzle orm
-  const getPipelinesForResource = (resoId: Id['reso']) =>
+  const getPipelinesForResource = (resoId: Id['conn']) =>
     metaService
-      .findPipelines({resourceIds: [resoId]})
+      .findPipelines({connectionIds: [resoId]})
       .then((pipes) =>
         Promise.all(pipes.map((pipe) => getPipelineExpandedOrFail(pipe.id))),
       )
@@ -442,7 +442,7 @@ export function makeSyncService({
       integration,
       ...resoUpdate,
     })
-    const id = makeId('reso', int.connector.name, resoUpdate.resourceExternalId)
+    const id = makeId('conn', int.connector.name, resoUpdate.resourceExternalId)
     await metaLinks
       .handlers({resource: {id, connectorConfigId: int.id, customerId: userId}})
       .resoUpdate({type: 'resoUpdate', id, settings, integration})

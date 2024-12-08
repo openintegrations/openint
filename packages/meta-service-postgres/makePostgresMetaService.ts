@@ -131,9 +131,9 @@ export const makePostgresMetaService = zFunction(
         )
       },
 
-      findPipelines: ({resourceIds, secondsSinceLastSync, includeDisabled}) => {
+      findPipelines: ({connectionIds, secondsSinceLastSync, includeDisabled}) => {
         const {runQueries, sql} = _getDeps(opts)
-        const ids = resourceIds && sql.array(resourceIds, 'varchar')
+        const ids = connectionIds && sql.array(connectionIds, 'varchar')
         const conditions = R.compact([
           ids && sql`(source_id = ANY(${ids}) OR destination_id = ANY(${ids}))`,
           secondsSinceLastSync &&
@@ -170,7 +170,7 @@ export const makePostgresMetaService = zFunction(
       findResourcesMissingDefaultPipeline: () => {
         const {runQueries, sql} = _getDeps(opts)
         return runQueries((pool) =>
-          pool.any<{id: Id['reso']}>(sql`
+          pool.any<{id: Id['conn']}>(sql`
             SELECT
               r.id,
               cc.default_pipe_out_destination_id,
@@ -206,7 +206,7 @@ export const makePostgresMetaService = zFunction(
 
         const top3DefaultPostgresResources = await runQueries((pool) =>
           pool.query(
-            sql`SELECT id, settings->>'databaseUrl' as database_url FROM resource where id like 'reso_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
+            sql`SELECT id, settings->>'databaseUrl' as database_url FROM resource where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
           ),
         )
 

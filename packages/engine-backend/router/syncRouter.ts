@@ -20,7 +20,7 @@ export const syncRouter = trpc.router({
       }
       const runs = await configDb.query.sync_run.findMany({
         where: inArray(
-          schema.sync_run.resource_id,
+          schema.sync_run.connection_id,
           resources.map((r) => r.id),
         ),
       })

@@ -93,7 +93,7 @@ export const WithConnectorConnect = ({
             connectorConfigId,
             nangoFrontend,
             connectorName: ccfg.connector.name,
-            resourceId: resource?.id,
+            connectionId: resource?.id,
             authOptions: connInput,
           })
         }

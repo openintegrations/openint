@@ -18,7 +18,7 @@ import {trpcErrorResponse} from '@/lib-server/server-helpers'
 
 export async function GET(
   request: NextRequest,
-  {params: {resourceId}}: {params: {resourceId: string}},
+  {params: {connectionId}}: {params: {connectionId: string}},
 ) {
   try {
     const {
@@ -40,7 +40,7 @@ export async function GET(
     }
 
     const {services} = contextFactory.fromViewer(viewer)
-    const reso = await services.getResourceOrFail(resourceId as Id['reso'])
+    const reso = await services.getResourceOrFail(connectionId as Id['conn'])
 
     if (reso.connectorName !== 'postgres') {
       throw new TRPCError({

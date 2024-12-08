@@ -13,7 +13,7 @@ export async function bootstrap() {
 
   const caller = flatRouter.createCaller({
     ...contextFactory.fromViewer({role: 'org', orgId}),
-    remoteResourceId: null,
+    remoteConnectionId: null,
   })
   const configs = parseConnectorConfigsFromRawEnv()
 

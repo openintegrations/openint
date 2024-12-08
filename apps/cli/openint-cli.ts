@@ -18,7 +18,7 @@ if (process.env['DEBUG_ZOD']) {
   zodInsecureDebug()
 }
 
-const {USER_ID, CUSTOMER_ID, ORG_ID, SYSTEM, X_RESOURCE_ID} = process.env
+const {USER_ID, CUSTOMER_ID, ORG_ID, SYSTEM, X_CONNECTION_ID} = process.env
 const customerId = CUSTOMER_ID as CustomerId | undefined
 const userId = USER_ID as UserId | undefined
 const orgId = ORG_ID as Id['org'] | undefined
@@ -39,7 +39,7 @@ export const cli = cliFromRouter(flatRouter, {
               ? {role: 'system'}
               : {role: 'anon'},
     ),
-    remoteResourceId: X_RESOURCE_ID as Id['reso'],
+    remoteConnectionId: X_CONNECTION_ID as Id['conn'],
   },
   // syncEngine.zContext.parse<'typed'>({
   //   accessToken: process.env['ACCESS_TOKEN'],
@@ -84,7 +84,7 @@ cli
               ...contextFactory.fromJwtToken(
                 req.headers.authorization?.match(/^Bearer (.+)/)?.[1],
               ),
-              remoteResourceId: req.headers['x-resource-id'] as Id['reso'],
+              remoteConnectionId: req.headers['x-connection-id'] as Id['conn'],
             }),
             // onError: ({error}) => {
             //   // error.message = 'new message...'

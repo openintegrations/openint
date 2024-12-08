@@ -33,7 +33,7 @@ Import trace for requested module:
 ../../connectors/connector-postgres/server.ts
 ../app-config/connectors/connectors.merged.ts
 ../app-config/backendConfig.ts
-./app/api/resources/[resourceId]/sql/route.ts
+./app/api/resources/[connectionId]/sql/route.ts
 
  */
 function getMigrationsForTable(table: PgTable) {
@@ -62,7 +62,7 @@ const destLink = postgresServer.destinationSync({
   config: {},
   customer: {id: 'esur_12' as CustomerId, orgId: 'org_123'},
   settings: {databaseUrl: dbUrl.toString()},
-  source: {id: 'reso_sfdc_9287', connectorName: 'sfdc'},
+  source: {id: 'conn_sfdc_9287', connectorName: 'sfdc'},
   state: {},
 })
 
@@ -85,7 +85,7 @@ describe('standard schema', () => {
     await toCompletion(destLink(src))
     const res = await db.execute('SELECT * FROM vendor')
     expect(res[0]).toMatchObject({
-      source_id: 'reso_sfdc_9287',
+      source_id: 'conn_sfdc_9287',
       id: 'vend_1123',
       customer_id: 'esur_12',
       connector_name: 'sfdc',

@@ -34,7 +34,7 @@ export interface ResoUpdateData<
   TInsData = {},
   TVariant extends 'partial' | 'complete' = 'partial',
 > {
-  id: Id['reso']
+  id: Id['conn']
   // TODO: remove `?` when Variant = 'complete'
   settings?: TVariant extends 'partial'
     ? ObjectPartialDeep<NoInfer<TSettings>> | undefined

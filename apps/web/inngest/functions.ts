@@ -26,24 +26,24 @@ export const syncResource = inngest.createFunction(
   {event: 'sync/resource-requested'},
   async ({event}) => {
     try {
-      const {resourceId} = event.data
-      console.log('Will sync resource', resourceId)
+      const {connectionId} = event.data
+      console.log('Will sync resource', connectionId)
       // TODO: Figure out what is the userId we ought to be using...
 
       const pool = await getPool()
       const customerId = await pool.oneFirst<CustomerId>(
-        sql`SELECT customer_id FROM resource WHERE id = ${resourceId}`,
+        sql`SELECT customer_id FROM resource WHERE id = ${connectionId}`,
       )
       console.log('customerId', customerId)
       await flatRouter
         .createCaller({
           ...contextFactory.fromViewer({role: 'system'}),
-          remoteResourceId: null,
+          remoteConnectionId: null,
         })
-        .syncResource({id: resourceId})
+        .syncResource({id: connectionId})
 
-      console.log('did sync pipeline', resourceId)
-      return resourceId
+      console.log('did sync pipeline', connectionId)
+      return connectionId
     } catch (err) {
       console.error('Error running syncResource', err)
       throw err

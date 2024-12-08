@@ -49,7 +49,7 @@ export interface RouterContext {
   ) => string
 
   /** For vertical API calls */
-  remoteResourceId: Id['reso'] | null
+  remoteConnectionId: Id['conn'] | null
 }
 
 export interface ContextFactoryOptions<
@@ -94,7 +94,7 @@ export function getContextFactory<
       authProvider: config.authProvider,
     })
 
-  function fromViewer(viewer: Viewer): Omit<RouterContext, 'remoteResourceId'> {
+  function fromViewer(viewer: Viewer): Omit<RouterContext, 'remoteConnectionId'> {
     return {
       viewer,
       as: (role, data) => getServices({role, ...data} as Viewer),

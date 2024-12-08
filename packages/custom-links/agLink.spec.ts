@@ -26,7 +26,7 @@ const destLink = postgresServer.destinationSync({
   config: {},
   customer: {id: 'esur_12' as CustomerId, orgId: 'org_123'},
   settings: {databaseUrl: dbUrl.toString()},
-  source: {id: 'reso_sfdc_9287', connectorName: 'sfdc'},
+  source: {id: 'conn_sfdc_9287', connectorName: 'sfdc'},
   state: {},
 })
 
@@ -161,7 +161,7 @@ test('destinationSync', async () => {
     .pipe(
       agLink({
         source: {
-          id: 'conn_123' as Id['reso'],
+          id: 'conn_123' as Id['conn'],
           connectorConfig: {connectorName: 'greenhouse'},
           customerId: 'cm3roaf0007',
         },

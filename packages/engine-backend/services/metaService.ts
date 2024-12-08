@@ -56,7 +56,7 @@ export interface MetaService {
   }) => Promise<ReadonlyArray<ZRaw['integration']>>
   /** TODO: Implement limit & offset */
   findPipelines: (options: {
-    resourceIds?: Array<Id['reso']>
+    connectionIds?: Array<Id['conn']>
     secondsSinceLastSync?: number
     includeDisabled?: boolean
   }) => Promise<ReadonlyArray<ZRaw['pipeline']>>
@@ -74,7 +74,7 @@ export interface MetaService {
   >
   /** Missing default pipeline */
   findResourcesMissingDefaultPipeline: () => Promise<
-    ReadonlyArray<{id: Id['reso']}>
+    ReadonlyArray<{id: Id['conn']}>
   >
   isHealthy: (checkDefaultPostgresResources?: boolean) => Promise<{
     healthy: boolean

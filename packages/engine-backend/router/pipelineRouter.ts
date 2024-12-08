@@ -15,7 +15,7 @@ export const pipelineRouter = trpc.router({
     .meta({openapi: {method: 'GET', path: '/core/pipeline', tags}})
     .input(
       zListParams
-        .extend({resourceIds: z.array(zId('reso')).optional()})
+        .extend({connectionIds: z.array(zId('conn')).optional()})
         .optional(),
     )
     .output(z.array(zRaw.pipeline))
@@ -73,7 +73,7 @@ export const pipelineRouter = trpc.router({
           ids: R.compact(resources.map((c) => c.integrationId)),
         }),
         ctx.services.metaService.findPipelines({
-          resourceIds: resources.map((c) => c.id),
+          connectionIds: resources.map((c) => c.id),
         }),
       ])
       type ConnType = 'source' | 'destination'
@@ -132,7 +132,7 @@ export const pipelineRouter = trpc.router({
           const pipesIn = pipelines.filter((p) => p.destinationId === r.id)
           const pipes = [...pipesOut, ...pipesIn]
           // TODO: Look up based on provider name
-          const type: ConnType | null = r.id.startsWith('reso_postgres')
+          const type: ConnType | null = r.id.startsWith('conn_postgres')
             ? 'destination'
             : 'source'
           return {

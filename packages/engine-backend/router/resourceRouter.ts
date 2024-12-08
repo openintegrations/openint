@@ -25,7 +25,7 @@ const tags = ['Core']
 async function performResourceCheck(ctx: any, resoId: string, opts: any) {
   const remoteCtx = await getRemoteContext({
     ...ctx,
-    remoteResourceId: resoId,
+    remoteConnectionId: resoId,
   })
   const {connectorConfig: int, ...reso} =
     await ctx.asOrgIfNeeded.getResourceExpandedOrFail(resoId)
@@ -65,7 +65,7 @@ async function performResourceCheck(ctx: any, resoId: string, opts: any) {
 }
 
 export const resourceRouter = trpc.router({
-  // TODO: maybe we should allow resourceId to be part of the path rather than only in the headers
+  // TODO: maybe we should allow connectionId to be part of the path rather than only in the headers
 
   // Should this really be part of the resource router? or left elsewhere?
   passthrough: remoteProcedure
@@ -94,7 +94,7 @@ export const resourceRouter = trpc.router({
     })
     .input(
       z.object({
-        id: zId('reso'),
+        id: zId('conn'),
         // This is an argument for source_sync to be typed per provider
         state: z.record(z.unknown()).optional(),
         streams: z.record(z.boolean()).optional(),
@@ -148,7 +148,7 @@ export const resourceRouter = trpc.router({
       }
 
       const _extId = makeUlid()
-      const resoId = makeId('reso', int.connector.name, _extId)
+      const resoId = makeId('conn', int.connector.name, _extId)
 
       // Should throw if not working..
       const resoUpdate = {
@@ -199,7 +199,7 @@ export const resourceRouter = trpc.router({
     ),
   deleteResource: protectedProcedure
     .meta({openapi: {method: 'DELETE', path: '/core/resource/{id}', tags}})
-    .input(z.object({id: zId('reso'), skipRevoke: z.boolean().optional()}))
+    .input(z.object({id: zId('conn'), skipRevoke: z.boolean().optional()}))
     .output(z.void())
     .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
@@ -281,7 +281,7 @@ export const resourceRouter = trpc.router({
     })
     .input(
       z.object({
-        id: zId('reso'),
+        id: zId('conn'),
         forceRefresh: z.boolean().optional(),
       }),
     )
@@ -330,7 +330,7 @@ export const resourceRouter = trpc.router({
       description: 'Not automatically called, used for debugging for now',
       openapi: {method: 'POST', path: '/core/resource/{id}/_check', tags},
     })
-    .input(z.object({id: zId('reso')}).merge(zCheckResourceOptions))
+    .input(z.object({id: zId('conn')}).merge(zCheckResourceOptions))
     .output(z.unknown())
     .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
@@ -347,7 +347,7 @@ export const resourceRouter = trpc.router({
 
   syncResource: protectedProcedure
     .meta({openapi: {method: 'POST', path: '/core/resource/{id}/_sync', tags}})
-    .input(z.object({id: zId('reso')}).merge(zSyncOptions))
+    .input(z.object({id: zId('conn')}).merge(zSyncOptions))
     .output(z.void())
     .mutation(async function syncResource({input: {id: resoId, ...opts}, ctx}) {
       if (ctx.viewer.role === 'customer') {
@@ -356,7 +356,7 @@ export const resourceRouter = trpc.router({
       if (opts?.async) {
         await inngest.send({
           name: 'sync/resource-requested',
-          data: {resourceId: resoId},
+          data: {connectionId: resoId},
         })
         return
       }

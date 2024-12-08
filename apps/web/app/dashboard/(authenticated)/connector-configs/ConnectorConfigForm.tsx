@@ -39,7 +39,7 @@ export function ConnectorConfigForm({
           }),
         ) as [z.ZodLiteral<string>, z.ZodLiteral<string>],
       )
-    : zId('reso')
+    : zId('conn')
 
   const ccfgSchema = (
     connectorMeta?.schemas.connectorConfig

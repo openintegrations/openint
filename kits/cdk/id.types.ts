@@ -15,7 +15,7 @@ export const INDEPENDENT_IDS = {
 
 export const CONNECTOR_SCOPED_IDS = {
   connector_config: 'ccfg',
-  resource: 'reso',
+  resource: 'conn',
   integration: 'int',
 } as const
 
@@ -92,7 +92,7 @@ export function extractId(id: Id[keyof Id]) {
 }
 
 // TODO: Should we have a branded type for connectorName?
-export function extractConnectorName(id: Id['ccfg'] | Id['reso']) {
+export function extractConnectorName(id: Id['ccfg'] | Id['conn']) {
   return extractId(id)[1]
 }
 

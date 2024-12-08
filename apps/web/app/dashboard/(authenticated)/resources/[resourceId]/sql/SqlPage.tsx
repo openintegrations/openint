@@ -34,14 +34,14 @@ const qListTable = `
 `
 
 function sqlUrl(opts: {
-  resourceId: Id['reso']
+  connectionId: Id['conn']
   query: string
   format?: 'csv' | 'json'
   download?: boolean
   apikey: string
 }) {
   const url = new URL(
-    `/api/resources/${opts.resourceId}/sql`,
+    `/api/resources/${opts.connectionId}/sql`,
     getServerUrl(null),
   )
   url.searchParams.set('q', opts.query)
@@ -56,18 +56,18 @@ function sqlUrl(opts: {
 }
 
 export function SqlPage({
-  resourceId,
+  connectionId,
   apikey,
 }: {
-  resourceId: Id['reso']
+  connectionId: Id['conn']
   apikey: string
 }) {
   const [queryText, setQueryText] = React.useState('')
 
   const res = useQuery<Array<Record<string, unknown>>>({
-    queryKey: ['sql', resourceId, queryText],
+    queryKey: ['sql', connectionId, queryText],
     queryFn: () =>
-      fetch(sqlUrl({apikey, resourceId, query: queryText})).then((r) =>
+      fetch(sqlUrl({apikey, connectionId, query: queryText})).then((r) =>
         r.json(),
       ),
     // Don't cache at all, sql editor always want fresh data
@@ -82,9 +82,9 @@ export function SqlPage({
     // cacheTime: 0, // aka gcTime
     // staleTime: 0,
     refetchOnMount: true,
-    queryKey: ['sql', resourceId, qListTable],
+    queryKey: ['sql', connectionId, qListTable],
     queryFn: () =>
-      fetch(sqlUrl({apikey, resourceId, query: qListTable})).then(
+      fetch(sqlUrl({apikey, connectionId, query: qListTable})).then(
         (r) =>
           r.json() as Promise<
             Array<{table_name: string; table_type: 'BASE TABLE' | 'VIEW'}>
@@ -99,7 +99,7 @@ export function SqlPage({
   const {withToast} = useWithToast()
 
   function resultsUrl(opts: {format?: 'csv' | 'json'; download?: boolean}) {
-    return sqlUrl({...opts, apikey, resourceId, query: queryText}).toString()
+    return sqlUrl({...opts, apikey, connectionId, query: queryText}).toString()
   }
 
   const editorRef = React.useRef<Editor | null>(null)
@@ -112,10 +112,10 @@ export function SqlPage({
           <BreadcrumbLink href="/resources">Resources</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <BreadcrumbLink>{resourceId}</BreadcrumbLink>
+          <BreadcrumbLink>{connectionId}</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href={`/resources/${resourceId}/sql`}>
+          <BreadcrumbLink href={`/resources/${connectionId}/sql`}>
             SQL Explorer
           </BreadcrumbLink>
         </BreadcrumbItem>

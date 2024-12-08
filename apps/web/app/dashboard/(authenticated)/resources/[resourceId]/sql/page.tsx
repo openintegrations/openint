@@ -5,20 +5,20 @@ import {serverComponentGetViewer} from '@/lib-server/server-component-helpers'
 import {SqlPage} from './SqlPage'
 
 export default async function SqlPageServer({
-  params: {resourceId},
+  params: {connectionId},
 }: {
-  params: {resourceId: Id['reso']}
+  params: {connectionId: Id['conn']}
 }) {
   const viewer = await serverComponentGetViewer()
   const apikey = await getOrCreateApikey(viewer)
   const ctx = contextFactory.fromViewer(viewer)
 
-  const resource = await ctx.services.getResourceOrFail(resourceId)
+  const resource = await ctx.services.getResourceOrFail(connectionId)
   if (resource.connectorName !== 'postgres') {
     return (
       <div className="p-6">Only postgres resources are supported for sql</div>
     )
   }
 
-  return <SqlPage apikey={apikey} resourceId={resourceId} />
+  return <SqlPage apikey={apikey} connectionId={connectionId} />
 }

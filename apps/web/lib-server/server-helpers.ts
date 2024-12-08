@@ -50,7 +50,7 @@ type NextContext =
 export function serverSideHelpersFromViewer(viewer: Viewer) {
   const ctx = {
     ...contextFactory.fromViewer(viewer),
-    remoteResourceId: null,
+    remoteConnectionId: null,
   }
   const queryClient = new QueryClient()
 

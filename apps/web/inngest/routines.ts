@@ -33,7 +33,7 @@ export async function scheduleSyncs({step}: FunctionInput<never>) {
     await flatRouter
       .createCaller({
         ...contextFactory.fromViewer({role: 'system'}),
-        remoteResourceId: null,
+        remoteConnectionId: null,
       })
       .ensureDefaultPipelines()
 
@@ -76,7 +76,7 @@ export async function syncPipeline({
   await flatRouter
     .createCaller({
       ...contextFactory.fromViewer({role: 'system'}),
-      remoteResourceId: null,
+      remoteConnectionId: null,
     })
     .syncPipeline({id: pipelineId})
   console.log('did sync pipeline', pipelineId)

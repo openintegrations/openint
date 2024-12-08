@@ -15,7 +15,7 @@ export const zResult = z.enum([
 ])
 
 const syncRequestedData = z.object({
-  resource_id: z.string(),
+  connection_id: z.string(),
   vertical: z.enum(['crm', 'engagement', 'ats']),
   unified_objects: z.array(z.string()).optional(),
   sync_mode: z
@@ -49,7 +49,7 @@ export const eventsMap = {
   'connection.created': {
     data: z.object({
       customer_id: z.string(),
-      resource_id: z.string(),
+      connection_id: z.string(),
       // TODO: Add more fields later...
       // connection_id: z.string(),
       // result: zResult,

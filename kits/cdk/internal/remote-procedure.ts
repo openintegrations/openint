@@ -11,21 +11,21 @@ import {
 
 export async function getRemoteContext(ctx: ProtectedContext) {
   // TODO Should parse headers in here?
-  if (!ctx.remoteResourceId) {
+  if (!ctx.remoteConnectionId) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'remoteResourceId missing. Check your x-resource-* headers',
+      message: 'remoteConnectionId missing. Check your x-resource-* headers',
     })
   }
 
   // Ensure that end user can access its own resources
   if (ctx.viewer.role === 'customer') {
-    await ctx.services.getResourceOrFail(ctx.remoteResourceId)
+    await ctx.services.getResourceOrFail(ctx.remoteConnectionId)
   }
 
   // Elevant role to organization here
   const resource = await ctx.asOrgIfNeeded.getResourceExpandedOrFail(
-    ctx.remoteResourceId,
+    ctx.remoteConnectionId,
   )
 
   const connectionId = toNangoConnectionId(resource.id) // ctx.customerId

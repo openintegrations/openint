@@ -31,14 +31,14 @@ const qListTable = `
 `
 
 function sqlUrl(opts: {
-  resourceId: Id['reso']
+  connectionId: Id['conn']
   query: string
   format?: 'csv' | 'json'
   download?: boolean
   apikey: string
 }) {
   const url = new URL(
-    `/api/resources/${opts.resourceId}/sql`,
+    `/api/resources/${opts.connectionId}/sql`,
     getServerUrl(null),
   )
   url.searchParams.set('q', opts.query)
@@ -54,17 +54,17 @@ function sqlUrl(opts: {
 
 export function SqlPage({
   apikey,
-  resourceId,
+  connectionId,
 }: {
   apikey: string
-  resourceId: Id['reso']
+  connectionId: Id['conn']
 }) {
   const [queryText, setQueryText] = React.useState('')
 
   const res = useQuery<Array<Record<string, unknown>>>({
-    queryKey: ['sql', resourceId, queryText],
+    queryKey: ['sql', connectionId, queryText],
     queryFn: () =>
-      fetch(sqlUrl({apikey, resourceId, query: queryText})).then((r) =>
+      fetch(sqlUrl({apikey, connectionId, query: queryText})).then((r) =>
         r.json(),
       ),
     // Don't cache at all, sql editor always want fresh data
@@ -79,9 +79,9 @@ export function SqlPage({
     // cacheTime: 0, // aka gcTime
     // staleTime: 0,
     refetchOnMount: true,
-    queryKey: ['sql', resourceId, qListTable],
+    queryKey: ['sql', connectionId, qListTable],
     queryFn: () =>
-      fetch(sqlUrl({apikey, resourceId, query: qListTable})).then(
+      fetch(sqlUrl({apikey, connectionId, query: qListTable})).then(
         (r) =>
           r.json() as Promise<
             Array<{table_name: string; table_type: 'BASE TABLE' | 'VIEW'}>
@@ -99,14 +99,14 @@ export function SqlPage({
     return sqlUrl({
       ...opts,
       apikey,
-      resourceId,
+      connectionId,
       query: queryText,
     }).toString()
   }
 
   const editorRef = React.useRef<Editor | null>(null)
 
-  if (!resourceId) {
+  if (!connectionId) {
     return (
       <div className="p-4">Only postgres resources are supported for sql</div>
     )

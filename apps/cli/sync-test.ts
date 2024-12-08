@@ -81,7 +81,7 @@ sync({
   links: R.compact([
     // process.argv[2] === 'plaid' &&
     //   mapStandardEntityLink({
-    //     id: 'reso_plaid_demo',
+    //     id: 'conn_plaid_demo',
     //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     //     connectorConfig: {connector: plaidProvider as any},
     //     settings: {},

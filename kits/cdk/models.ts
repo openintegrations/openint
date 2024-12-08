@@ -62,7 +62,7 @@ export const zStandard = {
     verticals: z.array(zVerticalKey).nullish(),
   }),
   resource: z.object({
-    id: zId('reso'),
+    id: zId('conn'),
     displayName: z.string(),
     /**
      * This correspond to the connection status.
@@ -144,7 +144,7 @@ export const zRaw = {
             .describe(
               'Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization.',
             ),
-          destination_id: zId('reso').optional().openapi({
+          destination_id: zId('conn').optional().openapi({
             description: 'Defaults to the org-wide postgres',
           }),
         })
@@ -160,7 +160,7 @@ export const zRaw = {
             .describe(
               'Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization.',
             ),
-          source_id: zId('reso'),
+          source_id: zId('conn'),
         })
         .nullish()
         .describe(
@@ -173,7 +173,7 @@ export const zRaw = {
     .openapi({ref: 'ConnectorConfig'}),
   resource: zBase
     .extend({
-      id: zId('reso'),
+      id: zId('conn'),
       connectorName: z.string().describe('Unique name of the connector'),
       displayName: z.string().nullish(),
       customerId: zCustomerId.nullish(),
@@ -189,11 +189,11 @@ export const zRaw = {
     .extend({
       id: zId('pipe'),
       // TODO: Remove nullish now that pipelines are more fixed
-      sourceId: zId('reso').optional(),
+      sourceId: zId('conn').optional(),
       sourceState: z.record(z.unknown()).optional(),
       sourceVertical: z.string().optional().nullable(),
       streams: zStreamsV2.nullish(),
-      destinationId: zId('reso').optional(),
+      destinationId: zId('conn').optional(),
       destinationState: z.record(z.unknown()).optional(),
       destinationVertical: z.string().optional().nullable(),
       linkOptions: z

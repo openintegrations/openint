@@ -18,12 +18,11 @@ export const testEnv = createEnv({
     INNGEST_EVENT_KEY: z.string().optional(),
 
     // Used for scripts / cli only, maybe we should rename them to all _ prefixed to be clear?
-    RESOURCE_ID: z.string().optional(),
+    CONNECTION_ID: z.string().optional(),
     CONNECTOR_NAME: z.string().optional(),
 
     SFDC_INSTANCE_URL: z.string().optional(),
     SFDC_ACCESS_TOKEN: z.string().optional(),
-    CONNECTION_ID: z.string().optional(),
     PROVIDER_CONFIG_KEY: z.string().optional(),
     // etc. etcc
     VERTICAL: z.enum(['crm', 'engagement', 'ats']).optional(),
@@ -52,7 +51,6 @@ export const testEnv = createEnv({
     NEXT_PUBLIC_PORT: z.string().optional(),
   },
   runtimeEnv: {
-    RESOURCE_ID: process.env['RESOURCE_ID'],
     CONNECTION_ID: process.env['CONNECTION_ID'],
     DEBUG: process.env['DEBUG'],
     INNGEST_EVENT_KEY: process.env['INNGEST_EVENT_KEY'],

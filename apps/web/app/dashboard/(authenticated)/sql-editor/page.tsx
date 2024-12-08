@@ -31,5 +31,5 @@ export default async function SqlEditorPageServer() {
     return new NextResponse('Must have postgres resource', {status: 400})
   }
 
-  return <SqlPage apikey={apikey} resourceId={pgConnection.id} />
+  return <SqlPage apikey={apikey} connectionId={pgConnection.id} />
 }
