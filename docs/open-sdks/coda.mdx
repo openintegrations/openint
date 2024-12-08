@@ -1,0 +1,136 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-coda/coda.oas.json
+---
+
+## Integrating with Coda OpenSDK 
+
+Welcome to the Coda OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Coda OpenSDK allows you to easily integrate with the Coda API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /categories | Get doc categories
+| **GET** | /docs | List available docs
+| **POST** | /docs | Create doc
+| **GET** | /docs/{docId} | Get info about a doc
+| **DELETE** | /docs/{docId} | Delete doc
+| **PATCH** | /docs/{docId} | Update doc
+| **GET** | /docs/{docId}/acl/metadata | Get sharing metadata
+| **GET** | /docs/{docId}/acl/permissions | List permissions
+| **POST** | /docs/{docId}/acl/permissions | Add permission
+| **DELETE** | /docs/{docId}/acl/permissions/{permissionId} | Delete permission
+| **GET** | /docs/{docId}/acl/principals/search | Search principals
+| **GET** | /docs/{docId}/acl/settings | Get ACL settings
+| **PATCH** | /docs/{docId}/acl/settings | Update ACL settings
+| **PUT** | /docs/{docId}/publish | Publish doc
+| **DELETE** | /docs/{docId}/publish | Unpublish doc
+| **GET** | /docs/{docId}/pages | List pages
+| **POST** | /docs/{docId}/pages | Create a page
+| **GET** | /docs/{docId}/pages/{pageIdOrName} | Get a page
+| **PUT** | /docs/{docId}/pages/{pageIdOrName} | Update a page
+| **DELETE** | /docs/{docId}/pages/{pageIdOrName} | Delete a page
+| **POST** | /docs/{docId}/pages/{pageIdOrName}/export | Begin content export
+| **GET** | /docs/{docId}/pages/{pageIdOrName}/export/{requestId} | Content export status
+| **GET** | /docs/{docId}/tables | List tables
+| **GET** | /docs/{docId}/tables/{tableIdOrName} | Get a table
+| **GET** | /docs/{docId}/tables/{tableIdOrName}/columns | List columns
+| **GET** | /docs/{docId}/tables/{tableIdOrName}/rows | List table rows
+| **POST** | /docs/{docId}/tables/{tableIdOrName}/rows | Insert/upsert rows
+| **DELETE** | /docs/{docId}/tables/{tableIdOrName}/rows | Delete multiple rows
+| **GET** | /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName} | Get a row
+| **PUT** | /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName} | Update row
+| **DELETE** | /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName} | Delete row
+| **POST** | /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName} | Push a button
+| **GET** | /docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName} | Get a column
+| **GET** | /docs/{docId}/formulas | List formulas
+| **GET** | /docs/{docId}/formulas/{formulaIdOrName} | Get a formula
+| **GET** | /docs/{docId}/controls | List controls
+| **GET** | /docs/{docId}/controls/{controlIdOrName} | Get a control
+| **GET** | /docs/${docId}/domains | List custom doc domains
+| **POST** | /docs/${docId}/domains | Add custom domain
+| **DELETE** | /docs/{docId}/domains/{customDocDomain} | Deletes a custom domain
+| **PATCH** | /docs/{docId}/domains/{customDocDomain} | Updates a custom domain
+| **GET** | /domains/provider/{customDocDomain} | Gets custom doc domains providers
+| **GET** | /whoami | Get user info
+| **GET** | /resolveBrowserLink | Resolve browser link
+| **GET** | /mutationStatus/{requestId} | Get mutation status
+| **POST** | /docs/{docId}/hooks/automation/{ruleId} | Trigger automation
+| **GET** | /analytics/docs | List doc analytics
+| **GET** | /analytics/docs/{docId}/pages | List page analytics
+| **GET** | /analytics/docs/summary | Get doc analytics summary
+| **GET** | /analytics/packs | List Pack analytics
+| **GET** | /analytics/packs/summary | Get Pack analytics summary
+| **GET** | /analytics/packs/{packId}/formulas | List Pack formula analytics
+| **GET** | /analytics/updated | Get analytics last updated day
+| **GET** | /workspaces/{workspaceId}/users | List workspace users
+| **POST** | /workspaces/{workspaceId}/users/role | Updates user role
+| **GET** | /workspaces/{workspaceId}/roles | List workspace roles
+| **GET** | /packs | List Packs
+| **POST** | /packs | Create Pack
+| **GET** | /packs/{packId} | Get a single Pack
+| **PATCH** | /packs/{packId} | Update Pack
+| **DELETE** | /packs/{packId} | Delete Pack
+| **GET** | /packs/{packId}/configurations/schema | Gets the JSON Schema for Pack configuration.
+| **GET** | /packs/{packId}/versions | List the versions for a Pack.
+| **POST** | /packs/{packId}/nextVersion | Get the next valid version for a Pack.
+| **GET** | /packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion} | Get the difference between two pack versions.
+| **POST** | /packs/{packId}/versions/{packVersion}/register | Register Pack version
+| **POST** | /packs/{packId}/versions/{packVersion}/uploadComplete | Pack version upload complete
+| **POST** | /packs/{packId}/releases | Create a new Pack release.
+| **GET** | /packs/{packId}/releases | List the releases for a Pack.
+| **PUT** | /packs/{packId}/releases/{packReleaseId} | Update an existing Pack release.
+| **PUT** | /packs/{packId}/oauthConfig | Set the OAuth configurations of the Pack.
+| **GET** | /packs/{packId}/oauthConfig | Retrieve the OAuth configuration of the Pack.
+| **PUT** | /packs/{packId}/systemConnection | Set the system connection credentials of the Pack.
+| **PATCH** | /packs/{packId}/systemConnection | Patch the system connection credentials of the Pack.
+| **GET** | /packs/{packId}/systemConnection | Retrieve the system connection metadata of the Pack.
+| **GET** | /packs/{packId}/permissions | List permissions for a Pack
+| **POST** | /packs/{packId}/permissions | Add a permission for Pack
+| **DELETE** | /packs/{packId}/permissions/{permissionId} | Delete a permission for Pack
+| **GET** | /packs/{packId}/makers | List makers for Pack
+| **POST** | /packs/{packId}/maker | Add a maker for Pack
+| **DELETE** | /packs/{packId}/maker/{loginId} | Delete a maker for Pack
+| **GET** | /packs/{packId}/categories | List categories for Pack
+| **POST** | /packs/{packId}/category | Add a category for Pack
+| **DELETE** | /packs/{packId}/category/{categoryName} | Delete a category for Pack
+| **POST** | /packs/{packId}/uploadAsset | Upload a Pack asset.
+| **POST** | /packs/{packId}/uploadSourceCode | Upload Pack source code.
+| **POST** | /packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete | Pack asset upload complete
+| **POST** | /packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete | Pack source code upload complete
+| **GET** | /packs/{packId}/versions/{packVersion}/sourceCode | get the source code for a Pack version.
+| **GET** | /packs/listings | List the Pack listings accessible to a user.
+| **GET** | /packs/{packId}/listing | Get detailed listing information for a Pack.
+| **GET** | /packs/{packId}/docs/{docId}/logs | Retrieve the logs of a Pack.
+| **GET** | /packs/{packId}/organizationId/{organizationId}/rootIngestionId/{rootIngestionId}/logs | Retrieve the logs of a Ingestion.
+| **GET** | /packs/{packId}/docs/{docId}/groupedLogs | Retrieve the grouped logs of a Pack.
+| **GET** | /packs/{packId}/organizationId/{organizationId}/rootIngestionId/{rootIngestionId}/ingestionExecutionId/{ingestionExecutionId}/groupedLogs | Retrieve the grouped logs of a Pack for a specific ingestionExecutionId.
+| **GET** | /packs/{packId}/organizationId/{organizationId}/rootIngestionId/{rootIngestionId}/ingestionExecutions | Retrieve a list of ingestion execution ids for the given root ingestion id.
+| **GET** | /packs/{packId}/featuredDocs | List featured docs for a Pack
+| **PUT** | /packs/{packId}/featuredDocs | Update featured docs for a Pack
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {codaSdkDef} from '@opensdks/sdk-coda'
+
+    const coda = initSDK(codaSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['CODA_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    // Get doc categories
+    const res = await coda.GET('/categories')
+```

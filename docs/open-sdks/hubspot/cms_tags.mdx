@@ -1,0 +1,52 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-hubspot/hubspot_cms_tags.oas.json
+---
+
+## Integrating with Hubspot OpenSDK 
+
+Welcome to the Hubspot OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Hubspot OpenSDK allows you to easily integrate with the Hubspot API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /cms/v3/blogs/tags/batch/update | Update a batch of Blog Tags
+| **POST** | /cms/v3/blogs/tags/multi-language/update-languages | Update languages of multi-language group
+| **POST** | /cms/v3/blogs/tags/multi-language/detach-from-lang-group | Detach a Blog Tag from a multi-language group
+| **POST** | /cms/v3/blogs/tags/batch/create | Create a batch of Blog Tags
+| **POST** | /cms/v3/blogs/tags/batch/archive | Delete a batch of Blog Tags
+| **PUT** | /cms/v3/blogs/tags/multi-language/set-new-lang-primary | Set a new primary language
+| **POST** | /cms/v3/blogs/tags/batch/read | Retrieve a batch of Blog Tags
+| **GET** | /cms/v3/blogs/tags | Get all Blog Tags
+| **POST** | /cms/v3/blogs/tags | Create a new Blog Tag
+| **POST** | /cms/v3/blogs/tags/multi-language/attach-to-lang-group | Attach a Blog Tag to a multi-language group
+| **GET** | /cms/v3/blogs/tags/{objectId} | Retrieve a Blog Tag
+| **DELETE** | /cms/v3/blogs/tags/{objectId} | Delete a Blog Tag
+| **PATCH** | /cms/v3/blogs/tags/{objectId} | Update a Blog Tag
+| **POST** | /cms/v3/blogs/tags/multi-language/create-language-variation | Create a new language variation
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {hubspotSdkDef} from '@opensdks/sdk-hubspot'
+
+    const hubspot = initSDK(hubspotSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['HUBSPOT_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Update a batch of Blog Tags
+    const res = await hubspot.POST('/cms/v3/blogs/tags/batch/update')
+```

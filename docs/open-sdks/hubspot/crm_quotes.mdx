@@ -1,0 +1,50 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-hubspot/hubspot_crm_quotes.oas.json
+---
+
+## Integrating with Hubspot OpenSDK 
+
+Welcome to the Hubspot OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Hubspot OpenSDK allows you to easily integrate with the Hubspot API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /crm/v3/objects/quotes/batch/read | Read a batch of quotes by internal ID, or unique property values
+| **GET** | /crm/v3/objects/quotes/{quoteId} | Read
+| **DELETE** | /crm/v3/objects/quotes/{quoteId} | Archive
+| **PATCH** | /crm/v3/objects/quotes/{quoteId} | Update
+| **POST** | /crm/v3/objects/quotes/merge | Merge two quotes with same type
+| **POST** | /crm/v3/objects/quotes/batch/archive | Archive a batch of quotes by ID
+| **POST** | /crm/v3/objects/quotes/batch/create | Create a batch of quotes
+| **POST** | /crm/v3/objects/quotes/batch/update | Update a batch of quotes
+| **POST** | /crm/v3/objects/quotes/gdpr-delete | GDPR DELETE
+| **GET** | /crm/v3/objects/quotes | List
+| **POST** | /crm/v3/objects/quotes | Create
+| **POST** | /crm/v3/objects/quotes/search | 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {hubspotSdkDef} from '@opensdks/sdk-hubspot'
+
+    const hubspot = initSDK(hubspotSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['HUBSPOT_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Read a batch of quotes by internal ID, or unique property values
+    const res = await hubspot.POST('/crm/v3/objects/quotes/batch/read')
+```

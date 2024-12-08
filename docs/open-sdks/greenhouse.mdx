@@ -1,0 +1,47 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-greenhouse/greenhouse.oas.json
+---
+
+## Integrating with Greenhouse OpenSDK 
+
+Welcome to the Greenhouse OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Greenhouse OpenSDK allows you to easily integrate with the Greenhouse API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /v1/departments/{id} | 
+| **GET** | /v1/departments | 
+| **GET** | /v1/jobs/{id} | 
+| **GET** | /v1/jobs | 
+| **GET** | /v1/jobs/{id}/openings | 
+| **GET** | /v1/offers/{id} | 
+| **GET** | /v1/offers | 
+| **GET** | /v1/candidates/{id} | 
+| **GET** | /v1/candidates | 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {greenhouseSdkDef} from '@opensdks/sdk-greenhouse'
+
+    const greenhouse = initSDK(greenhouseSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['GREENHOUSE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    
+    const res = await greenhouse.GET('/v1/departments/{id}')
+```

@@ -1,0 +1,50 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-hubspot/hubspot_crm_tickets.oas.json
+---
+
+## Integrating with Hubspot OpenSDK 
+
+Welcome to the Hubspot OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Hubspot OpenSDK allows you to easily integrate with the Hubspot API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /crm/v3/objects/tickets/batch/read | Read a batch of tickets by internal ID, or unique property values
+| **GET** | /crm/v3/objects/tickets/{ticketId} | Read
+| **DELETE** | /crm/v3/objects/tickets/{ticketId} | Archive
+| **PATCH** | /crm/v3/objects/tickets/{ticketId} | Update
+| **POST** | /crm/v3/objects/tickets/merge | Merge two tickets with same type
+| **POST** | /crm/v3/objects/tickets/batch/archive | Archive a batch of tickets by ID
+| **POST** | /crm/v3/objects/tickets/batch/create | Create a batch of tickets
+| **POST** | /crm/v3/objects/tickets/batch/update | Update a batch of tickets
+| **POST** | /crm/v3/objects/tickets/gdpr-delete | GDPR DELETE
+| **GET** | /crm/v3/objects/tickets | List
+| **POST** | /crm/v3/objects/tickets | Create
+| **POST** | /crm/v3/objects/tickets/search | 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {hubspotSdkDef} from '@opensdks/sdk-hubspot'
+
+    const hubspot = initSDK(hubspotSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['HUBSPOT_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Read a batch of tickets by internal ID, or unique property values
+    const res = await hubspot.POST('/crm/v3/objects/tickets/batch/read')
+```

@@ -1,0 +1,303 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-airbyte/airbyte_config.oas.json
+---
+
+## Integrating with Airbyte OpenSDK 
+
+Welcome to the Airbyte OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Airbyte OpenSDK allows you to easily integrate with the Airbyte API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /v1/workspaces/create | Creates a workspace
+| **POST** | /v1/workspaces/create_if_not_exist | Creates a workspace with an explicit workspace ID. This should be use in acceptance tests only.
+| **POST** | /v1/workspaces/delete | Deletes a workspace
+| **POST** | /v1/workspaces/list | List all workspaces registered in the current Airbyte deployment
+| **POST** | /v1/workspaces/list_all_paginated | List all workspaces registered in the current Airbyte deployment. This function also supports searching by keyword and pagination.
+| **POST** | /v1/workspaces/list_paginated | List workspaces by given workspace IDs registered in the current Airbyte deployment. This function also supports pagination.
+| **POST** | /v1/workspaces/list_by_organization_id | List workspaces under the given org id. This function also supports searching by keyword and pagination.
+| **POST** | /v1/workspaces/list_by_user_id | List workspaces by a given user id. The function also supports searching by keyword and pagination.
+| **POST** | /v1/workspaces/get | Find workspace by ID
+| **POST** | /v1/workspaces/get_by_slug | Find workspace by slug
+| **POST** | /v1/workspaces/get_by_connection_id | Find workspace by connection id
+| **POST** | /v1/workspaces/get_by_connection_id_with_tombstone | Find workspace by connection id including the tombstone ones
+| **POST** | /v1/workspaces/get_organization_info | Retrieve a workspace's basic organization info that is accessible for all workspace members, regardless of organization membership.
+| **POST** | /v1/workspaces/update | Update workspace state
+| **POST** | /v1/workspaces/update_name | Update workspace name
+| **POST** | /v1/workspaces/update_organization | Update workspace organization
+| **POST** | /v1/workspaces/tag_feedback_status_as_done | Update workspace feedback state
+| **POST** | /v1/notifications/try | Try sending a notifications; to be deprecated
+| **POST** | /v1/notifications/try_webhook | Try sending a notifications to webhook
+| **POST** | /v1/source_definitions/update | Update a sourceDefinition
+| **POST** | /v1/source_definitions/list | List all the sourceDefinitions the current Airbyte deployment is configured to use
+| **POST** | /v1/source_definitions/list_latest | List the latest sourceDefinitions Airbyte supports
+| **POST** | /v1/source_definitions/get | Get source
+| **POST** | /v1/source_definitions/delete | Delete a source definition
+| **POST** | /v1/source_definitions/list_private | List all private, non-custom sourceDefinitions, and for each indicate whether the given workspace has a grant for using the definition. Used by admins to view and modify a given workspace's grants.
+| **POST** | /v1/source_definitions/list_for_workspace | List all the sourceDefinitions the given workspace is configured to use
+| **POST** | /v1/source_definitions/create_custom | Creates a custom sourceDefinition for the given workspace or organization
+| **POST** | /v1/source_definitions/get_for_workspace | Get a sourceDefinition that is configured for the given workspace
+| **POST** | /v1/source_definitions/get_for_scope | Get a sourceDefinition that is configured for the given workspace or organization
+| **POST** | /v1/source_definitions/grant_definition | grant a private, non-custom sourceDefinition to a given workspace or organization
+| **POST** | /v1/source_definitions/revoke_definition | revoke a grant to a private, non-custom sourceDefinition from a given workspace or organization
+| **POST** | /v1/actor_definition_versions/get_for_source | Get actor definition version for a source.
+| **POST** | /v1/source_definition_specifications/get | Get specification for a SourceDefinition.
+| **POST** | /v1/source_definition_specifications/get_for_source | Get specification for a source.
+| **POST** | /v1/actor_definition_versions/resolve | Resolve an actor definition version by version tag.
+| **POST** | /v1/declarative_source_definitions/create_manifest | Create a declarative manifest to be used by the specified source definition
+| **POST** | /v1/declarative_source_definitions/update_active_manifest | Update the declarative manifest version for a source
+| **POST** | /v1/declarative_source_definitions/list_manifests | List all available declarative manifest versions of a declarative source definition
+| **POST** | /v1/connector_builder_projects/create | Create new connector builder project
+| **POST** | /v1/connector_builder_projects/publish | Publish a connector to the workspace
+| **POST** | /v1/connector_builder_projects/update | Update connector builder project
+| **POST** | /v1/connector_builder_projects/delete | Deletes connector builder project
+| **POST** | /v1/connector_builder_projects/list | List connector builder projects for workspace
+| **POST** | /v1/connector_builder_projects/get_with_manifest | Get a connector builder project with draft manifest
+| **POST** | /v1/connector_builder_projects/update_testing_values | Submit a set of testing values to persist for a connector builder project
+| **POST** | /v1/connector_builder_projects/read_stream | Reads the target stream of the connector builder project using the persisted testing values
+| **POST** | /v1/connector_documentation/get | Get the documentation for a connector
+| **POST** | /v1/sources/create | Create a source
+| **POST** | /v1/sources/update | Update a source
+| **POST** | /v1/sources/partial_update | Partially update a source
+| **POST** | /v1/sources/upgrade_version | Upgrade a source to the latest version
+| **POST** | /v1/sources/list | List sources for workspace
+| **POST** | /v1/sources/list_paginated | List sources for workspace
+| **POST** | /v1/sources/get | Get source
+| **POST** | /v1/sources/most_recent_source_actor_catalog | Get most recent ActorCatalog for source
+| **POST** | /v1/sources/search | Search sources
+| **POST** | /v1/sources/clone | Clone source
+| **POST** | /v1/sources/delete | Delete a source
+| **POST** | /v1/sources/check_connection | Check connection to the source
+| **POST** | /v1/sources/check_connection_for_update | Check connection for a proposed update to a source
+| **POST** | /v1/sources/discover_schema | Discover the schema catalog of the source
+| **POST** | /v1/sources/apply_schema_changes | Auto propagate the change on a catalog to a catalog saved in the DB. It will fetch all the connections linked to a source id and apply the provided diff to their catalog.
+| **POST** | /v1/sources/write_discover_catalog_result | Should only called from worker, to write result from discover activity back to DB.
+| **POST** | /v1/destination_definitions/update | Update destinationDefinition
+| **POST** | /v1/destination_definitions/list | List all the destinationDefinitions the current Airbyte deployment is configured to use
+| **POST** | /v1/destination_definitions/list_latest | List the latest destinationDefinitions Airbyte supports
+| **POST** | /v1/destination_definitions/get | Get destinationDefinition
+| **POST** | /v1/destination_definitions/delete | Delete a destination definition
+| **POST** | /v1/destination_definitions/list_private | List all private, non-custom destinationDefinitions, and for each indicate whether the given workspace has a grant for using the definition. Used by admins to view and modify a given workspace's grants.
+| **POST** | /v1/destination_definitions/list_for_workspace | List all the destinationDefinitions the given workspace is configured to use
+| **POST** | /v1/destination_definitions/create_custom | Creates a custom destinationDefinition for the given workspace
+| **POST** | /v1/destination_definitions/get_for_workspace | Get a destinationDefinition that is configured for the given workspace
+| **POST** | /v1/destination_definitions/get_for_scope | Get a destinationDefinition that is configured for the given scope
+| **POST** | /v1/destination_definitions/grant_definition | grant a private, non-custom destinationDefinition to a given workspace or organization
+| **POST** | /v1/destination_definitions/revoke_definition | revoke a grant to a private, non-custom destinationDefinition from a given workspace or organization
+| **POST** | /v1/actor_definition_versions/get_for_destination | Get actor definition version for a destination.
+| **POST** | /v1/destination_definition_specifications/get | Get specification for a destinationDefinition
+| **POST** | /v1/destination_definition_specifications/get_for_destination | Get specification for a destination
+| **POST** | /v1/destinations/create | Create a destination
+| **POST** | /v1/destinations/update | Update a destination
+| **POST** | /v1/destinations/partial_update | Update a destination partially
+| **POST** | /v1/destinations/upgrade_version | Upgrade a destination to the latest version
+| **POST** | /v1/destinations/list | List configured destinations for a workspace
+| **POST** | /v1/destinations/list_paginated | List configured destinations for a workspace. Pginated
+| **POST** | /v1/destinations/get | Get configured destination
+| **POST** | /v1/destinations/search | Search destinations
+| **POST** | /v1/destinations/check_connection | Check connection to the destination
+| **POST** | /v1/destinations/check_connection_for_update | Check connection for a proposed update to a destination
+| **POST** | /v1/destinations/delete | Delete the destination
+| **POST** | /v1/destinations/clone | Clone destination
+| **POST** | /v1/connections/create | Create a connection between a source and a destination
+| **POST** | /v1/connections/update | Update a connection
+| **POST** | /v1/connections/list | Returns all connections for a workspace.
+| **POST** | /v1/connections/list_paginated | Returns all connections for a workspace. Paginated.
+| **POST** | /v1/connections/list_all | Returns all connections for a workspace, including deleted connections.
+| **POST** | /v1/connections/status | Get the status of multiple connections
+| **POST** | /v1/connections/sync_progress | Get progress information of the current sync of a connection
+| **POST** | /v1/connections/history/uptime | Get the uptime history of a connection
+| **POST** | /v1/connections/history/data | Get the data history of a connection
+| **POST** | /v1/connections/stream_history | Get the history of a connection
+| **POST** | /v1/connections/get | Get a connection
+| **POST** | /v1/connections/getForJob | Get a connection for a given jobId
+| **POST** | /v1/connections/list_by_actor_definition | List all connections that use the provided actor definition
+| **POST** | /v1/connections/apply_schema_changes | Auto propagate the change on a catalog to a catalog saved in the DB for the given connection.
+| **POST** | /v1/state/get | Fetch the current state for a connection.
+| **POST** | /v1/state/create_or_update | Create or update the state for a connection.
+| **POST** | /v1/state/create_or_update_safe | Create or update the state for a connection. Throws error if a sync is currently running when this is called.
+| **POST** | /v1/connections/search | Search connections
+| **POST** | /v1/connections/delete | Delete a connection
+| **POST** | /v1/connections/sync | Trigger a manual sync of the connection
+| **POST** | /v1/connections/reset | Reset the data for the connection. Deletes data generated by the connection in the destination. Resets any cursors back to initial state.
+| **POST** | /v1/connections/clear | Clear the data for the connection. Deletes data generated by the connection in the destination. Clear any cursors back to initial state.
+| **POST** | /v1/connections/auto_disable | Sets connection to inactive if it has met any of the auto-disable conditions (i.e. it hits the max number of consecutive job failures or if it hits the max number of days with only failed jobs). Additionally, notifications will be sent if a connection is disabled or warned if it has reached halfway to disable limits. This endpoint is only able to inactivate connections with more than one non-cancelled job. 
+| **POST** | /v1/connections/clear/stream | Clear the data for a specific stream in the connection. Deletes data generated by the stream in the destination. Clear any cursors back to initial state.
+| **POST** | /v1/connections/reset/stream | Reset the data for a specific stream in the connection. Deletes data generated by the stream in the destination. Resets any cursors back to initial state.
+| **POST** | /v1/connections/refresh | refresh the data for specific streams in the connection. If no stream is specify or the list of stream is empy, all the streams will be refreshed. Resets any cursors back to initial state.
+| **POST** | /v1/connections/get_task_queue_name | Gets the string task queue name for a connection and job type.
+| **POST** | /v1/operations/check | Check if an operation to be created is valid
+| **POST** | /v1/operations/create | Create an operation to be applied as part of a connection pipeline
+| **POST** | /v1/operations/update | Update an operation
+| **POST** | /v1/operations/list | Returns all operations for a connection.
+| **POST** | /v1/operations/get | Returns an operation
+| **POST** | /v1/operations/delete | Delete an operation
+| **POST** | /v1/scheduler/sources/check_connection | Run check connection for a given source configuration
+| **POST** | /v1/scheduler/sources/discover_schema | Run discover schema for a given source a source configuration
+| **POST** | /v1/scheduler/destinations/check_connection | Run check connection for a given destination configuration
+| **POST** | /v1/source_oauths/oauth_params/create | Sets instancewide variables to be used for the oauth flow when creating this source. When set, these variables will be injected into a connector's configuration before any interaction with the connector image itself. This enables running oauth flows with consistent variables e.g: the company's Google Ads developer_token, client_id, and client_secret without the user having to know about these variables. 
+| **POST** | /v1/source_oauths/get_consent_url | Given a source connector definition ID, return the URL to the consent screen where to redirect the user to.
+| **POST** | /v1/source_oauths/complete_oauth | Given a source def ID generate an access/refresh token etc.
+| **POST** | /v1/source_oauths/revoke | Given a source definition ID and workspace ID revoke access/refresh token etc.
+| **POST** | /v1/destination_oauths/get_consent_url | Given a destination connector definition ID, return the URL to the consent screen where to redirect the user to.
+| **POST** | /v1/destination_oauths/complete_oauth | Given a destination def ID generate an access/refresh token etc.
+| **POST** | /v1/destination_oauths/oauth_params/create | Sets instancewide variables to be used for the oauth flow when creating this destination. When set, these variables will be injected into a connector's configuration before any interaction with the connector image itself. This enables running oauth flows with consistent variables e.g: the company's Google Ads developer_token, client_id, and client_secret without the user having to know about these variables. 
+| **POST** | /v1/web_backend/check_updates | Returns a summary of source and destination definitions that could be updated.
+| **POST** | /v1/web_backend/connections/list | Returns all non-deleted connections for a workspace.
+| **POST** | /v1/web_backend/connections/get | Get a connection
+| **POST** | /v1/web_backend/connections/create | Create a connection
+| **POST** | /v1/web_backend/connections/update | Update a connection
+| **POST** | /v1/web_backend/state/get_type | Fetch the current state type for a connection.
+| **POST** | /v1/web_backend/workspace/state | Returns the current state of a workspace
+| **POST** | /v1/web_backend/geographies/list | Returns available geographies can be selected to run data syncs in a particular geography. The 'auto' entry indicates that the sync will be automatically assigned to a geography according to the platform default behavior. Entries other than 'auto' are two-letter country codes that follow the ISO 3166-1 alpha-2 standard. 
+| **POST** | /v1/jobs/create | Creates a new job for a given connection. If a job is already running for the connection, it will be stopped and a new job will be created.
+| **POST** | /v1/jobs/job_success_with_attempt_number | For worker to mark an attempt as successful.
+| **POST** | /v1/jobs/list | Returns recent jobs for a connection. Jobs are returned in descending order by createdAt.
+| **POST** | /v1/jobs/list_for_workspaces | Returns recent jobs for a connection. Jobs are returned in descending order by createdAt.
+| **POST** | /v1/jobs/get | Get information about a job
+| **POST** | /v1/jobs/get_last_replication_job | 
+| **POST** | /v1/jobs/get_without_logs | Get information about a job excluding logs
+| **POST** | /v1/jobs/get_light | Get information about a job excluding attempt info and logs
+| **POST** | /v1/jobs/cancel | Cancels a job
+| **POST** | /v1/jobs/get_debug_info | Gets all information needed to debug this job
+| **POST** | /v1/jobs/get_normalization_status | Get normalization status to determine if we can bypass normalization phase
+| **POST** | /v1/jobs/get_input | Get the job input in order to be able to start a synchronization.
+| **POST** | /v1/jobs/get_check_input | Get the check job input
+| **POST** | /v1/jobs/fail_non_terminal | Fails all non-terminal jobs for a connection
+| **POST** | /v1/jobs/reportJobStart | For worker to report when a job starts.
+| **POST** | /v1/jobs/job_failure | Marks a job as failed
+| **POST** | /v1/jobs/delete_stream_reset_records | Deletes all stream reset records for the specified job
+| **POST** | /v1/users/create | Creates an Airbyte user
+| **POST** | /v1/users/get | Find Airbyte user by internal user ID
+| **POST** | /v1/users/get_by_auth_id | Find Airbyte user by auth id
+| **POST** | /v1/users/get_by_email | Find Airbyte user by email
+| **POST** | /v1/users/get_or_create_by_auth_id | Find Airbyte user by auth id. If not existed, will create a user.
+| **POST** | /v1/users/update | Update user state
+| **POST** | /v1/users/delete | Deletes a user
+| **POST** | /v1/users/list_by_workspace_id | List all users in a workspace
+| **POST** | /v1/users/list_access_info_by_workspace_id | List user access info for a particular workspace.
+| **POST** | /v1/users/list_by_organization_id | List all users with permissions of the given org
+| **POST** | /v1/users/list_instance_admin | List all users with instance admin permissions. Only instance admin has permission to call this.
+| **POST** | /v1/permissions/create | Creates a permission resource
+| **POST** | /v1/permissions/get | Find a permission by ID
+| **POST** | /v1/permissions/check | Check permissions for user
+| **POST** | /v1/permissions/check_multiple_workspaces | Check permissions for user across workspaces
+| **POST** | /v1/permissions/update | Updates a permission resource
+| **POST** | /v1/secrets_persistence_config/get | Get secrets persistence config
+| **POST** | /v1/secrets_persistence_config/create_or_update | Create or update secrets persistence config
+| **POST** | /v1/permissions/delete | Deletes a permission resource
+| **POST** | /v1/permissions/delete_user_from_workspace | Deletes all workspace-level permissions for a particular user and workspace
+| **POST** | /v1/permissions/list_by_user | List permissions a user has access to
+| **GET** | /v1/health | Health Check
+| **GET** | /v1/openapi | Returns the openapi specification
+| **POST** | /v1/attempt/create_new_attempt_number | For worker to create a new attempt number.
+| **POST** | /v1/attempt/set_workflow_in_attempt | For worker to register the workflow id in attempt.
+| **POST** | /v1/attempt/save_stats | For worker to set sync stats of a running attempt.
+| **POST** | /v1/attempt/save_sync_config | For worker to save the AttemptSyncConfig for an attempt.
+| **POST** | /v1/attempt/fail | Fails an attempt with a failure summary and if provided a sync output.
+| **POST** | /v1/attempt/get_combined_stats | For retrieving combined stats for a single attempt
+| **POST** | /v1/attempt/get_for_job | Retrieves an attempt with logs for a job and attempt number.
+| **POST** | /v1/stream_statuses/list | Gets a list of stream statuses filtered by parameters (with AND semantics).
+| **POST** | /v1/stream_statuses/latest_per_run_state | Gets a list of the latest stream status for each stream and run state for a connection.
+| **POST** | /v1/stream_statuses/create | Creates a stream status.
+| **POST** | /v1/stream_statuses/update | Updates a stream status.
+| **GET** | /v1/instance_configuration | Get instance configuration
+| **POST** | /v1/instance_configuration/setup | Setup an instance with user and organization information.
+| **POST** | /v1/jobs/retry_states/create_or_update | Creates or updates a retry state for a job.
+| **POST** | /v1/jobs/retry_states/get | Gets a retry state.
+| **POST** | /v1/jobs/did_previous_job_succeed | Returns whether the job preceding the specified job succeeded
+| **POST** | /v1/jobs/persist_cancellation | Persists the cancellation of a job and kicks off any post processing (e.g notifications).
+| **POST** | /v1/organizations/get | Get an organization info
+| **POST** | /v1/organizations/create | Create an organization
+| **POST** | /v1/organizations/update | Update an organization info
+| **POST** | /v1/organizations/delete | Delete an organization
+| **POST** | /v1/organizations/list_by_user_id | List organizations by a given user id. The function also supports searching by keyword and pagination.
+| **POST** | /v1/deployment/metadata | Provides the Airbyte deployment metadata.
+| **POST** | /v1/applications/list | Returns all Applications for a User.
+| **POST** | /v1/applications/delete | Deletes an Application.
+| **POST** | /v1/applications/create | Creates a new Application.
+| **POST** | /v1/applications/token | Grant an Access Token for an Application.
+| **POST** | /v1/scoped_configuration/list | Get all scoped configurations with a given key
+| **POST** | /v1/scoped_configuration/get_context | Get related configurations for a given scope
+| **POST** | /v1/scoped_configuration/create | Create a new scoped configuration
+| **POST** | /v1/scoped_configuration/get | Get a scoped configuration by ID
+| **POST** | /v1/scoped_configuration/update | Update a scoped configuration by ID
+| **POST** | /v1/scoped_configuration/delete | Delete a scoped configuration by ID
+| **POST** | /v1/user_invitations/create | Create a user invitation
+| **GET** | /v1/user_invitations/by_code/{inviteCode} | Get a user invitation by its unique code (not primary key ID)
+| **POST** | /v1/user_invitations/list_pending | List pending invitations
+| **POST** | /v1/user_invitations/accept | Accept a user invitation
+| **POST** | /v1/user_invitations/decline | Decline a user invitation
+| **POST** | /v1/user_invitations/cancel | Cancel a user invitation
+| **GET** | /public | Root path, currently returns a redirect to the documentation
+| **GET** | /public/v1/health | Health Check
+| **GET** | /public/v1/jobs | List Jobs by sync type
+| **POST** | /public/v1/jobs | Trigger a sync or reset job of a connection
+| **GET** | /public/v1/jobs/{jobId} | Get Job status and details
+| **DELETE** | /public/v1/jobs/{jobId} | Cancel a running Job
+| **PARAMETERS** | /public/v1/jobs/{jobId} | 
+| **GET** | /public/v1/sources | List sources
+| **POST** | /public/v1/sources | Create a source
+| **GET** | /public/v1/sources/{sourceId} | Get Source details
+| **PATCH** | /public/v1/sources/{sourceId} | Update a Source
+| **PUT** | /public/v1/sources/{sourceId} | Update a Source and fully overwrite it
+| **DELETE** | /public/v1/sources/{sourceId} | Delete a Source
+| **PARAMETERS** | /public/v1/sources/{sourceId} | 
+| **GET** | /public/v1/destinations | List destinations
+| **POST** | /public/v1/destinations | Create a destination
+| **GET** | /public/v1/destinations/{destinationId} | Get Destination details
+| **DELETE** | /public/v1/destinations/{destinationId} | Delete a Destination
+| **PATCH** | /public/v1/destinations/{destinationId} | Update a Destination
+| **PUT** | /public/v1/destinations/{destinationId} | Update a Destination and fully overwrite it
+| **PARAMETERS** | /public/v1/destinations/{destinationId} | 
+| **GET** | /public/v1/oauth/callback | Receive OAuth callbacks
+| **POST** | /public/v1/sources/initiateOAuth | Initiate OAuth for a source
+| **POST** | /public/v1/connections | Create a connection
+| **GET** | /public/v1/connections | List connections
+| **GET** | /public/v1/connections/{connectionId} | Get Connection details
+| **PATCH** | /public/v1/connections/{connectionId} | Update Connection details
+| **DELETE** | /public/v1/connections/{connectionId} | Delete a Connection
+| **PARAMETERS** | /public/v1/connections/{connectionId} | 
+| **GET** | /public/v1/streams | Get stream properties
+| **GET** | /public/v1/workspaces | List workspaces
+| **POST** | /public/v1/workspaces | Create a workspace
+| **PARAMETERS** | /public/v1/workspaces/{workspaceId} | 
+| **GET** | /public/v1/workspaces/{workspaceId} | Get Workspace details
+| **PATCH** | /public/v1/workspaces/{workspaceId} | Update a workspace
+| **DELETE** | /public/v1/workspaces/{workspaceId} | Delete a Workspace
+| **PUT** | /public/v1/workspaces/{workspaceId}/oauthCredentials | Create OAuth override credentials for a workspace and source type.
+| **PARAMETERS** | /public/v1/workspaces/{workspaceId}/oauthCredentials | 
+| **PARAMETERS** | /public/v1/permissions/{permissionId} | 
+| **GET** | /public/v1/permissions/{permissionId} | Get Permission details
+| **PATCH** | /public/v1/permissions/{permissionId} | Update a permission
+| **DELETE** | /public/v1/permissions/{permissionId} | Delete a Permission
+| **GET** | /public/v1/permissions | List Permissions by user id
+| **POST** | /public/v1/permissions | Create a permission
+| **GET** | /public/v1/users | List users
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {airbyteSdkDef} from '@opensdks/sdk-airbyte'
+
+    const airbyte = initSDK(airbyteSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['AIRBYTE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    // Creates a workspace
+    const res = await airbyte.POST('/v1/workspaces/create')
+```

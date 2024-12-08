@@ -1,0 +1,58 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-onebrick/onebrick_payment_v2_v2.oas.json
+---
+
+## Integrating with Onebrick OpenSDK 
+
+Welcome to the Onebrick OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Onebrick OpenSDK allows you to easily integrate with the Onebrick API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /disbursements | Disbursement
+| **GET** | /disbursements/{contractId} | Get Disbursement Status
+| **POST** | /va/open | Generate Open VA
+| **GET** | /va/open?vaId=vaId | Status of Open VA
+| **POST** | /va/close | Generate Close VA
+| **GET** | /va/close?vaId=vaId | Status of Close VA
+| **GET** | /bank-account-validation | Account Verification
+| **POST** | /qris/dynamic | Generate Dynamic QRIS
+| **POST** | /qris/dynamic/{referenceId}/cancel/ | Cancel Dynamic QRIS
+| **POST** | /bifast-disbursements | BIFAST Disbursement API
+| **GET** | /bifast-disbursements (COPY) | BIFAST Account Verification API
+| **GET** | /bank-account-validation (COPY) | Account Verification
+| **POST** | /payment-link | Generate Payment Link
+| **GET** | /payment-link?pin=1111&referenceId=0876743bdbae48b8a3e7cc9fb116f867 | Get Payment Link Detail
+| **GET** | /payment-link/bank?referenceId=0876743bdbae48b8a3e7cc9fb116f867&pin=1111 (COPY) | Get Virtual Account Availability
+| **GET** | /payment-link/status | Get Payment Link Status
+| **GET** | /qris/static/{referenceId} | Status for Static QRIs
+| **GET** | /qris/merchant/{id} | Static QRIS Get Merchant Details
+| **GET** | /qris/dynamic/{referenceId} (COPY-2) | Status for Dynamic QRIS
+| **GET** | /qris/merchant/bulk | Static QRIS Get Merchant List
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {onebrickSdkDef} from '@opensdks/sdk-onebrick'
+
+    const onebrick = initSDK(onebrickSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['ONEBRICK_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Disbursement
+    const res = await onebrick.POST('/disbursements')
+```

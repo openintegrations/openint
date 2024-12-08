@@ -1,0 +1,54 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-twenty/twenty_metadata.oas.json
+---
+
+## Integrating with Twenty OpenSDK 
+
+Welcome to the Twenty OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Twenty OpenSDK allows you to easily integrate with the Twenty API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /open-api/metadata | Get Open Api Schema
+| **GET** | /objects | Find Many objects
+| **POST** | /objects | Create One object
+| **GET** | /objects/{id} | Find One object
+| **DELETE** | /objects/{id} | Delete One object
+| **PATCH** | /objects/{id} | Update One objects
+| **GET** | /fields | Find Many fields
+| **POST** | /fields | Create One field
+| **GET** | /fields/{id} | Find One field
+| **DELETE** | /fields/{id} | Delete One field
+| **PATCH** | /fields/{id} | Update One fields
+| **GET** | /relations | Find Many relations
+| **POST** | /relations | Create One relation
+| **GET** | /relations/{id} | Find One relation
+| **DELETE** | /relations/{id} | Delete One relation
+| **PATCH** | /relations/{id} | Update One relations
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {twentySdkDef} from '@opensdks/sdk-twenty'
+
+    const twenty = initSDK(twentySdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['TWENTY_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    // Get Open Api Schema
+    const res = await twenty.GET('/open-api/metadata')
+```

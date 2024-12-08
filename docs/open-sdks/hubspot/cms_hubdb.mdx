@@ -1,0 +1,68 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-hubspot/hubspot_cms_hubdb.oas.json
+---
+
+## Integrating with Hubspot OpenSDK 
+
+Welcome to the Hubspot OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Hubspot OpenSDK allows you to easily integrate with the Hubspot API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /cms/v3/hubdb/tables/{tableIdOrName}/draft/export | Export a draft table
+| **GET** | /cms/v3/hubdb/tables/draft | Return all draft tables
+| **GET** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft | Get rows from draft table
+| **GET** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/{rowId} | Get a table row
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/{rowId}/draft/clone | Clone a row
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/draft/reset | Reset a draft table
+| **GET** | /cms/v3/hubdb/tables/{tableIdOrName}/export | Export a published version of a table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/replace | Replace rows in batch in draft table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/draft/clone | Clone a table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/purge | Permanently deletes rows
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/draft/import | Import data into draft table
+| **GET** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/{rowId}/draft | Get a row from the draft table
+| **PUT** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/{rowId}/draft | Replaces an existing row
+| **DELETE** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/{rowId}/draft | Permanently deletes a row
+| **PATCH** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/{rowId}/draft | Updates an existing row
+| **GET** | /cms/v3/hubdb/tables/{tableIdOrName}/rows | Get rows for a table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows | Add a new row to a table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/batch/read | Get a set of rows
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/create | Create rows in batch
+| **GET** | /cms/v3/hubdb/tables/{tableIdOrName} | Get details for a published table
+| **DELETE** | /cms/v3/hubdb/tables/{tableIdOrName} | Archive a table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/read | Get a set of rows from draft table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/clone | Clone rows in batch
+| **GET** | /cms/v3/hubdb/tables | Get all published tables
+| **POST** | /cms/v3/hubdb/tables | Create a new table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/unpublish | Unpublish a table
+| **GET** | /cms/v3/hubdb/tables/{tableIdOrName}/draft | Get details for a draft table
+| **PATCH** | /cms/v3/hubdb/tables/{tableIdOrName}/draft | Update an existing table
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/draft/publish | Publish a table from draft
+| **POST** | /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/update | Update rows in batch in draft table
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {hubspotSdkDef} from '@opensdks/sdk-hubspot'
+
+    const hubspot = initSDK(hubspotSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['HUBSPOT_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Export a draft table
+    const res = await hubspot.GET('/cms/v3/hubdb/tables/{tableIdOrName}/draft/export')
+```

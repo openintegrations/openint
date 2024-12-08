@@ -1,0 +1,89 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-xero/xero_payroll_au.oas.json
+---
+
+## Integrating with Xero OpenSDK 
+
+Welcome to the Xero OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Xero OpenSDK allows you to easily integrate with the Xero API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **PARAMETERS** | /Employees | 
+| **GET** | /Employees | Searches payroll employees
+| **POST** | /Employees | Creates a payroll employee
+| **PARAMETERS** | /Employees/{EmployeeID} | 
+| **GET** | /Employees/{EmployeeID} | Retrieves an employee's detail by unique employee id
+| **POST** | /Employees/{EmployeeID} | Updates an employee's detail
+| **PARAMETERS** | /LeaveApplications | 
+| **GET** | /LeaveApplications | Retrieves leave applications
+| **POST** | /LeaveApplications | Creates a leave application
+| **PARAMETERS** | /LeaveApplications/v2 | 
+| **GET** | /LeaveApplications/v2 | Retrieves leave applications including leave requests
+| **PARAMETERS** | /LeaveApplications/{LeaveApplicationID} | 
+| **GET** | /LeaveApplications/{LeaveApplicationID} | Retrieves a leave application by a unique leave application id
+| **POST** | /LeaveApplications/{LeaveApplicationID} | Updates a specific leave application
+| **PARAMETERS** | /LeaveApplications/{LeaveApplicationID}/approve | 
+| **POST** | /LeaveApplications/{LeaveApplicationID}/approve | Approve a requested leave application by a unique leave application id
+| **PARAMETERS** | /LeaveApplications/{LeaveApplicationID}/reject | 
+| **POST** | /LeaveApplications/{LeaveApplicationID}/reject | Reject a leave application by a unique leave application id
+| **PARAMETERS** | /PayItems | 
+| **GET** | /PayItems | Retrieves pay items
+| **POST** | /PayItems | Creates a pay item
+| **PARAMETERS** | /PayrollCalendars | 
+| **GET** | /PayrollCalendars | Retrieves payroll calendars
+| **POST** | /PayrollCalendars | Creates a Payroll Calendar
+| **PARAMETERS** | /PayrollCalendars/{PayrollCalendarID} | 
+| **GET** | /PayrollCalendars/{PayrollCalendarID} | Retrieves payroll calendar by using a unique payroll calendar ID
+| **PARAMETERS** | /PayRuns | 
+| **GET** | /PayRuns | Retrieves pay runs
+| **POST** | /PayRuns | Creates a pay run
+| **PARAMETERS** | /PayRuns/{PayRunID} | 
+| **GET** | /PayRuns/{PayRunID} | Retrieves a pay run by using a unique pay run id
+| **POST** | /PayRuns/{PayRunID} | Updates a pay run
+| **PARAMETERS** | /Payslip/{PayslipID} | 
+| **GET** | /Payslip/{PayslipID} | Retrieves for a payslip by a unique payslip id
+| **POST** | /Payslip/{PayslipID} | Updates a payslip
+| **PARAMETERS** | /Settings | 
+| **GET** | /Settings | Retrieves payroll settings
+| **PARAMETERS** | /Superfunds | 
+| **GET** | /Superfunds | Retrieves superfunds
+| **POST** | /Superfunds | Creates a superfund
+| **PARAMETERS** | /Superfunds/{SuperFundID} | 
+| **GET** | /Superfunds/{SuperFundID} | Retrieves a superfund by using a unique superfund ID
+| **POST** | /Superfunds/{SuperFundID} | Updates a superfund
+| **PARAMETERS** | /SuperfundProducts | 
+| **GET** | /SuperfundProducts | Retrieves superfund products
+| **PARAMETERS** | /Timesheets | 
+| **GET** | /Timesheets | Retrieves timesheets
+| **POST** | /Timesheets | Creates a timesheet
+| **PARAMETERS** | /Timesheets/{TimesheetID} | 
+| **GET** | /Timesheets/{TimesheetID} | Retrieves a timesheet by using a unique timesheet id
+| **POST** | /Timesheets/{TimesheetID} | Updates a timesheet
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {xeroSdkDef} from '@opensdks/sdk-xero'
+
+    const xero = initSDK(xeroSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['XERO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    
+    const res = await xero.PARAMETERS('/Employees')
+```

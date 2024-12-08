@@ -1,0 +1,64 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-qbo/qbo.oas.json
+---
+
+## Integrating with Qbo OpenSDK 
+
+Welcome to the Qbo OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Qbo OpenSDK allows you to easily integrate with the Qbo API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /account/{id} | 
+| **GET** | /purchase/{id} | 
+| **GET** | /journalentry/{id} | 
+| **GET** | /invoice/{id} | 
+| **GET** | /payment/{id} | 
+| **GET** | /bill/{id} | 
+| **GET** | /billpayment/{id} | 
+| **GET** | /creditmemo/{id} | 
+| **GET** | /deposit/{id} | 
+| **GET** | /transfer/{id} | 
+| **GET** | /vendor/{id} | 
+| **GET** | /customer/{id} | 
+| **GET** | /item/{id} | 
+| **GET** | /companyinfo/{id} | 
+| **GET** | /balancesheet/{id} | 
+| **GET** | /profitandloss/{id} | 
+| **GET** | /query | 
+| **GET** | /preferences | 
+| **GET** | /reports/TransactionList | 
+| **GET** | /reports/BalanceSheet | 
+| **GET** | /reports/ProfitAndLoss | 
+| **GET** | /reports/CashFlow | 
+| **GET** | /cdc | 
+| **GET** | /reports/AccountList | 
+| **GET** | /reports/CustomerBalance | 
+| **GET** | /reports/CustomerIncome | 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {qboSdkDef} from '@opensdks/sdk-qbo'
+
+    const qbo = initSDK(qboSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['QBO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    
+    const res = await qbo.GET('/account/{id}')
+```

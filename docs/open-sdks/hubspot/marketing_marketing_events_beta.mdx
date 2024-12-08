@@ -1,0 +1,54 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-hubspot/hubspot_marketing_marketing_events_beta.oas.json
+---
+
+## Integrating with Hubspot OpenSDK 
+
+Welcome to the Hubspot OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Hubspot OpenSDK allows you to easily integrate with the Hubspot API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /marketing/v3/marketing-events/events/upsert | Create or update multiple marketing events
+| **POST** | /marketing/v3/marketing-events/attendance/{externalEventId}/{subscriberState}/create | Record
+| **POST** | /marketing/v3/marketing-events/attendance/{externalEventId}/{subscriberState}/email-create | Record
+| **POST** | /marketing/v3/marketing-events/events/{externalEventId}/{subscriberState}/email-upsert | Record
+| **POST** | /marketing/v3/marketing-events/events/{externalEventId}/complete | 
+| **POST** | /marketing/v3/marketing-events/events/{externalEventId}/{subscriberState}/upsert | Record
+| **POST** | /marketing/v3/marketing-events/events | Create a marketing event
+| **POST** | /marketing/v3/marketing-events/events/delete | Delete multiple marketing events
+| **POST** | /marketing/v3/marketing-events/events/{externalEventId}/cancel | Mark a marketing event as cancelled
+| **GET** | /marketing/v3/marketing-events/{appId}/settings | Retrieve the application settings
+| **POST** | /marketing/v3/marketing-events/{appId}/settings | Update the application settings
+| **GET** | /marketing/v3/marketing-events/events/search | Search for marketing events
+| **GET** | /marketing/v3/marketing-events/events/{externalEventId} | Get a marketing event
+| **PUT** | /marketing/v3/marketing-events/events/{externalEventId} | Create or update a marketing event
+| **DELETE** | /marketing/v3/marketing-events/events/{externalEventId} | Delete a marketing event
+| **PATCH** | /marketing/v3/marketing-events/events/{externalEventId} | Update a marketing event
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {hubspotSdkDef} from '@opensdks/sdk-hubspot'
+
+    const hubspot = initSDK(hubspotSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['HUBSPOT_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Create or update multiple marketing events
+    const res = await hubspot.POST('/marketing/v3/marketing-events/events/upsert')
+```

@@ -1,0 +1,48 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-apollo/apollo.oas.json
+---
+
+## Integrating with Apollo OpenSDK 
+
+Welcome to the Apollo OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Apollo OpenSDK allows you to easily integrate with the Apollo API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /v1/emailer_campaigns/{id} | 
+| **POST** | /v1/emailer_campaigns | 
+| **POST** | /v1/emailer_campaigns/{id}/add_contact_ids | 
+| **POST** | /v1/emailer_steps | 
+| **DELETE** | /v1/emailer_steps/{id} | 
+| **PUT** | /v1/emailer_touches/{id} | 
+| **GET** | /v1/contacts/{id} | 
+| **POST** | /v1/contacts/search | 
+| **GET** | /v1/email_accounts | 
+| **POST** | /v1/emailer_campaigns/check_contacts_deployability | Check if contacts are deployable to a sequence, primarily used to check if contacts are already in another sequence.
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {apolloSdkDef} from '@opensdks/sdk-apollo'
+
+    const apollo = initSDK(apolloSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['APOLLO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    
+    const res = await apollo.GET('/v1/emailer_campaigns/{id}')
+```

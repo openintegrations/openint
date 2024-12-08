@@ -1,0 +1,171 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-twilio/twilio_messaging_v1.oas.json
+---
+
+## Integrating with Twilio OpenSDK 
+
+Welcome to the Twilio OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Twilio OpenSDK allows you to easily integrate with the Twilio API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **SERVERS** | /v1/Services/{ServiceSid}/AlphaSenders | 
+| **DESCRIPTION** | /v1/Services/{ServiceSid}/AlphaSenders | 
+| **X-TWILIO** | /v1/Services/{ServiceSid}/AlphaSenders | 
+| **POST** | /v1/Services/{ServiceSid}/AlphaSenders | 
+| **GET** | /v1/Services/{ServiceSid}/AlphaSenders | 
+| **SERVERS** | /v1/Services/{ServiceSid}/AlphaSenders/{Sid} | 
+| **DESCRIPTION** | /v1/Services/{ServiceSid}/AlphaSenders/{Sid} | 
+| **X-TWILIO** | /v1/Services/{ServiceSid}/AlphaSenders/{Sid} | 
+| **GET** | /v1/Services/{ServiceSid}/AlphaSenders/{Sid} | 
+| **DELETE** | /v1/Services/{ServiceSid}/AlphaSenders/{Sid} | 
+| **SERVERS** | /v1/a2p/BrandRegistrations/{BrandRegistrationSid}/SmsOtp | 
+| **DESCRIPTION** | /v1/a2p/BrandRegistrations/{BrandRegistrationSid}/SmsOtp | 
+| **X-TWILIO** | /v1/a2p/BrandRegistrations/{BrandRegistrationSid}/SmsOtp | 
+| **POST** | /v1/a2p/BrandRegistrations/{BrandRegistrationSid}/SmsOtp | 
+| **SERVERS** | /v1/a2p/BrandRegistrations/{Sid} | 
+| **DESCRIPTION** | /v1/a2p/BrandRegistrations/{Sid} | 
+| **X-TWILIO** | /v1/a2p/BrandRegistrations/{Sid} | 
+| **GET** | /v1/a2p/BrandRegistrations/{Sid} | 
+| **POST** | /v1/a2p/BrandRegistrations/{Sid} | 
+| **SERVERS** | /v1/a2p/BrandRegistrations | 
+| **DESCRIPTION** | /v1/a2p/BrandRegistrations | 
+| **X-TWILIO** | /v1/a2p/BrandRegistrations | 
+| **GET** | /v1/a2p/BrandRegistrations | 
+| **POST** | /v1/a2p/BrandRegistrations | 
+| **SERVERS** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings | 
+| **DESCRIPTION** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings | 
+| **X-TWILIO** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings | 
+| **POST** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings | 
+| **GET** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings | 
+| **SERVERS** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings/{BrandVettingSid} | 
+| **DESCRIPTION** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings/{BrandVettingSid} | 
+| **X-TWILIO** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings/{BrandVettingSid} | 
+| **GET** | /v1/a2p/BrandRegistrations/{BrandSid}/Vettings/{BrandVettingSid} | 
+| **SERVERS** | /v1/Services/{MessagingServiceSid}/ChannelSenders | 
+| **DESCRIPTION** | /v1/Services/{MessagingServiceSid}/ChannelSenders | 
+| **X-TWILIO** | /v1/Services/{MessagingServiceSid}/ChannelSenders | 
+| **GET** | /v1/Services/{MessagingServiceSid}/ChannelSenders | 
+| **SERVERS** | /v1/Services/{MessagingServiceSid}/ChannelSenders/{Sid} | 
+| **DESCRIPTION** | /v1/Services/{MessagingServiceSid}/ChannelSenders/{Sid} | 
+| **X-TWILIO** | /v1/Services/{MessagingServiceSid}/ChannelSenders/{Sid} | 
+| **GET** | /v1/Services/{MessagingServiceSid}/ChannelSenders/{Sid} | 
+| **SERVERS** | /v1/Deactivations | 
+| **DESCRIPTION** | /v1/Deactivations | 
+| **X-TWILIO** | /v1/Deactivations | 
+| **GET** | /v1/Deactivations | Fetch a list of all United States numbers that have been deactivated on a specific date.
+| **SERVERS** | /v1/LinkShortening/Domains/{DomainSid}/Certificate | 
+| **DESCRIPTION** | /v1/LinkShortening/Domains/{DomainSid}/Certificate | 
+| **X-TWILIO** | /v1/LinkShortening/Domains/{DomainSid}/Certificate | 
+| **POST** | /v1/LinkShortening/Domains/{DomainSid}/Certificate | 
+| **GET** | /v1/LinkShortening/Domains/{DomainSid}/Certificate | 
+| **DELETE** | /v1/LinkShortening/Domains/{DomainSid}/Certificate | 
+| **SERVERS** | /v1/LinkShortening/Domains/{DomainSid}/Config | 
+| **DESCRIPTION** | /v1/LinkShortening/Domains/{DomainSid}/Config | 
+| **X-TWILIO** | /v1/LinkShortening/Domains/{DomainSid}/Config | 
+| **POST** | /v1/LinkShortening/Domains/{DomainSid}/Config | 
+| **GET** | /v1/LinkShortening/Domains/{DomainSid}/Config | 
+| **SERVERS** | /v1/LinkShortening/MessagingService/{MessagingServiceSid}/DomainConfig | 
+| **DESCRIPTION** | /v1/LinkShortening/MessagingService/{MessagingServiceSid}/DomainConfig | 
+| **X-TWILIO** | /v1/LinkShortening/MessagingService/{MessagingServiceSid}/DomainConfig | 
+| **GET** | /v1/LinkShortening/MessagingService/{MessagingServiceSid}/DomainConfig | 
+| **SERVERS** | /v1/Services/PreregisteredUsa2p | 
+| **DESCRIPTION** | /v1/Services/PreregisteredUsa2p | 
+| **X-TWILIO** | /v1/Services/PreregisteredUsa2p | 
+| **POST** | /v1/Services/PreregisteredUsa2p | 
+| **SERVERS** | /v1/LinkShortening/Domains/{DomainSid}/MessagingServices/{MessagingServiceSid} | 
+| **DESCRIPTION** | /v1/LinkShortening/Domains/{DomainSid}/MessagingServices/{MessagingServiceSid} | 
+| **X-TWILIO** | /v1/LinkShortening/Domains/{DomainSid}/MessagingServices/{MessagingServiceSid} | 
+| **POST** | /v1/LinkShortening/Domains/{DomainSid}/MessagingServices/{MessagingServiceSid} | 
+| **DELETE** | /v1/LinkShortening/Domains/{DomainSid}/MessagingServices/{MessagingServiceSid} | 
+| **SERVERS** | /v1/LinkShortening/MessagingServices/{MessagingServiceSid}/Domain | 
+| **DESCRIPTION** | /v1/LinkShortening/MessagingServices/{MessagingServiceSid}/Domain | 
+| **X-TWILIO** | /v1/LinkShortening/MessagingServices/{MessagingServiceSid}/Domain | 
+| **GET** | /v1/LinkShortening/MessagingServices/{MessagingServiceSid}/Domain | 
+| **SERVERS** | /v1/Services/{ServiceSid}/PhoneNumbers | 
+| **DESCRIPTION** | /v1/Services/{ServiceSid}/PhoneNumbers | 
+| **X-TWILIO** | /v1/Services/{ServiceSid}/PhoneNumbers | 
+| **POST** | /v1/Services/{ServiceSid}/PhoneNumbers | 
+| **GET** | /v1/Services/{ServiceSid}/PhoneNumbers | 
+| **SERVERS** | /v1/Services/{ServiceSid}/PhoneNumbers/{Sid} | 
+| **DESCRIPTION** | /v1/Services/{ServiceSid}/PhoneNumbers/{Sid} | 
+| **X-TWILIO** | /v1/Services/{ServiceSid}/PhoneNumbers/{Sid} | 
+| **DELETE** | /v1/Services/{ServiceSid}/PhoneNumbers/{Sid} | 
+| **GET** | /v1/Services/{ServiceSid}/PhoneNumbers/{Sid} | 
+| **SERVERS** | /v1/Services | 
+| **DESCRIPTION** | /v1/Services | 
+| **X-TWILIO** | /v1/Services | 
+| **POST** | /v1/Services | 
+| **GET** | /v1/Services | 
+| **SERVERS** | /v1/Services/{Sid} | 
+| **DESCRIPTION** | /v1/Services/{Sid} | 
+| **X-TWILIO** | /v1/Services/{Sid} | 
+| **POST** | /v1/Services/{Sid} | 
+| **GET** | /v1/Services/{Sid} | 
+| **DELETE** | /v1/Services/{Sid} | 
+| **SERVERS** | /v1/Services/{ServiceSid}/ShortCodes | 
+| **DESCRIPTION** | /v1/Services/{ServiceSid}/ShortCodes | 
+| **X-TWILIO** | /v1/Services/{ServiceSid}/ShortCodes | 
+| **POST** | /v1/Services/{ServiceSid}/ShortCodes | 
+| **GET** | /v1/Services/{ServiceSid}/ShortCodes | 
+| **SERVERS** | /v1/Services/{ServiceSid}/ShortCodes/{Sid} | 
+| **DESCRIPTION** | /v1/Services/{ServiceSid}/ShortCodes/{Sid} | 
+| **X-TWILIO** | /v1/Services/{ServiceSid}/ShortCodes/{Sid} | 
+| **DELETE** | /v1/Services/{ServiceSid}/ShortCodes/{Sid} | 
+| **GET** | /v1/Services/{ServiceSid}/ShortCodes/{Sid} | 
+| **SERVERS** | /v1/Tollfree/Verifications/{Sid} | 
+| **DESCRIPTION** | /v1/Tollfree/Verifications/{Sid} | 
+| **X-TWILIO** | /v1/Tollfree/Verifications/{Sid} | 
+| **GET** | /v1/Tollfree/Verifications/{Sid} | 
+| **POST** | /v1/Tollfree/Verifications/{Sid} | 
+| **DELETE** | /v1/Tollfree/Verifications/{Sid} | 
+| **SERVERS** | /v1/Tollfree/Verifications | 
+| **DESCRIPTION** | /v1/Tollfree/Verifications | 
+| **X-TWILIO** | /v1/Tollfree/Verifications | 
+| **GET** | /v1/Tollfree/Verifications | 
+| **POST** | /v1/Tollfree/Verifications | 
+| **SERVERS** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p | 
+| **DESCRIPTION** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p | 
+| **X-TWILIO** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p | 
+| **POST** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p | 
+| **GET** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p | 
+| **SERVERS** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/{Sid} | 
+| **DESCRIPTION** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/{Sid} | 
+| **X-TWILIO** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/{Sid} | 
+| **DELETE** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/{Sid} | 
+| **GET** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/{Sid} | 
+| **SERVERS** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/Usecases | 
+| **DESCRIPTION** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/Usecases | 
+| **X-TWILIO** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/Usecases | 
+| **GET** | /v1/Services/{MessagingServiceSid}/Compliance/Usa2p/Usecases | 
+| **SERVERS** | /v1/Services/Usecases | 
+| **DESCRIPTION** | /v1/Services/Usecases | 
+| **X-TWILIO** | /v1/Services/Usecases | 
+| **GET** | /v1/Services/Usecases | 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {twilioSdkDef} from '@opensdks/sdk-twilio'
+
+    const twilio = initSDK(twilioSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['TWILIO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    
+    const res = await twilio.SERVERS('/v1/Services/{ServiceSid}/AlphaSenders')
+```

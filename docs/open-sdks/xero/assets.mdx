@@ -1,0 +1,48 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-xero/xero_assets.oas.json
+---
+
+## Integrating with Xero OpenSDK 
+
+Welcome to the Xero OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Xero OpenSDK allows you to easily integrate with the Xero API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **PARAMETERS** | /Assets | 
+| **GET** | /Assets | searches fixed asset
+| **POST** | /Assets | adds a fixed asset
+| **PARAMETERS** | /Assets/{id} | 
+| **GET** | /Assets/{id} | Retrieves fixed asset by id
+| **PARAMETERS** | /AssetTypes | 
+| **GET** | /AssetTypes | searches fixed asset types
+| **POST** | /AssetTypes | adds a fixed asset type
+| **PARAMETERS** | /Settings | 
+| **GET** | /Settings | searches fixed asset settings
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {xeroSdkDef} from '@opensdks/sdk-xero'
+
+    const xero = initSDK(xeroSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['XERO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    
+    const res = await xero.PARAMETERS('/Assets')
+```

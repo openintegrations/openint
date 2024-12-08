@@ -1,0 +1,47 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-hubspot/hubspot_crm_crm_associations.oas.json
+---
+
+## Integrating with Hubspot OpenSDK 
+
+Welcome to the Hubspot OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Hubspot OpenSDK allows you to easily integrate with the Hubspot API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /{fromObjectType}/{toObjectType}/batch/archive | Delete
+| **POST** | /{fromObjectType}/{toObjectType}/batch/associate/default |  Create Default Associations
+| **POST** | /{fromObjectType}/{toObjectType}/batch/create | Create
+| **POST** | /{fromObjectType}/{toObjectType}/batch/labels/archive | Delete Specific Labels
+| **POST** | /{fromObjectType}/{toObjectType}/batch/read | Read
+| **GET** | /{fromObjectType}/{toObjectType}/labels | Read
+| **PUT** | /{fromObjectType}/{toObjectType}/labels | Update
+| **POST** | /{fromObjectType}/{toObjectType}/labels | Create
+| **DELETE** | /{fromObjectType}/{toObjectType}/labels/{associationTypeId} | Delete
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {hubspotSdkDef} from '@opensdks/sdk-hubspot'
+
+    const hubspot = initSDK(hubspotSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['HUBSPOT_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Delete
+    const res = await hubspot.POST('/{fromObjectType}/{toObjectType}/batch/archive')
+```
