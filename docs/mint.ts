@@ -1,4 +1,5 @@
 import apiPages from './unified-apis/index.json'
+import openSDKPages from './open-sdks/index.json'
 
 const mintConfig: MintConfig = {
   name: 'OpenInt',
@@ -16,8 +17,8 @@ const mintConfig: MintConfig = {
   },
   topbarLinks: [
     {
-      name: 'Contact us',
-      url: 'mailto:support@openint.dev',
+      name: 'Open API Spec',
+      url: 'https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json',
     },
   ],
   topbarCtaButton: {
@@ -40,8 +41,8 @@ const mintConfig: MintConfig = {
       url: 'unified-apis',
     },
     {
-      name: 'OpenAPI.json',
-      url: 'https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json',
+      name: 'OpenSDKs',
+      url: 'open-sdks',
     },
   ],
   navigation: [
@@ -59,27 +60,26 @@ const mintConfig: MintConfig = {
       pages: apiPages,
     },
     {
+      group: 'OpenSDKs',
+      pages: openSDKPages,
+    },
+    {
       group: 'Core Concepts',
       pages: ['core-concepts/connector-config', 'core-concepts/magic-link'],
     },
     {
       group: 'Community',
-      pages: ['community/join-our-slack'],
-    },
-    {
-      group: 'Support',
-      pages: ['support/contact-us'],
-    },
+      pages: ['community/join-our-slack', 'community/attribution'],
+    }
   ],
   backgroundImage: '/images/background.png',
   footerSocials: {
     github: 'https://github.com/openintegrations/openint',
-    discord: 'https://discord.gg/gTMch6Gn2u',
-    twitter: 'https://twitter.com/use_venice',
+    twitter: 'https://twitter.com/openintdev',
   },
   analytics: {
     posthog: {
-      apiKey: 'phc_T3BM4neZzi3z2ruDiN0pYpGHIYjd5AjZw0rSkhzAKSo',
+      apiKey: 'phc_30EStnJPoshPRjyPvxEe8gYP85AaacFPMYHsiPddpRX',
     },
   },
 }

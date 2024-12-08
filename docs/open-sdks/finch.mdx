@@ -1,0 +1,86 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-finch/finch.oas.json
+---
+
+## Integrating with Finch OpenSDK 
+
+Welcome to the Finch OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Finch OpenSDK allows you to easily integrate with the Finch API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /employer/company | Company
+| **GET** | /employer/directory | Directory
+| **POST** | /employer/individual | Individual
+| **POST** | /employer/employment | Employment
+| **GET** | /employer/payment | Payment
+| **POST** | /employer/pay-statement | Pay Statement
+| **PARAMETERS** | /employer/pay-groups | 
+| **GET** | /employer/pay-groups | Get All Pay Groups
+| **PARAMETERS** | /employer/pay-groups/{pay_group_id} | 
+| **GET** | /employer/pay-groups/{pay_group_id} | Get Pay Group
+| **GET** | /employer/benefits | Get All Deductions
+| **POST** | /employer/benefits | Create Deduction
+| **POST** | /employer/benefits/register | Register Deduction
+| **GET** | /employer/benefits/meta | [Deprecated] Get Deductions Metadata
+| **PARAMETERS** | /employer/benefits/{benefit_id} | 
+| **GET** | /employer/benefits/{benefit_id} | Get Deduction
+| **POST** | /employer/benefits/{benefit_id} | Update Deduction
+| **PARAMETERS** | /employer/benefits/{benefit_id}/enrolled | 
+| **GET** | /employer/benefits/{benefit_id}/enrolled | Get Enrolled Individuals
+| **PARAMETERS** | /employer/benefits/{benefit_id}/individuals | 
+| **GET** | /employer/benefits/{benefit_id}/individuals | Get Deductions for Individuals
+| **POST** | /employer/benefits/{benefit_id}/individuals | Enroll Individuals in Deductions
+| **DELETE** | /employer/benefits/{benefit_id}/individuals | Unenroll Individuals from Deductions
+| **POST** | /auth/token | Create Access Token
+| **GET** | /providers | Providers
+| **GET** | /introspect | Introspect
+| **POST** | /disconnect | Disconnect
+| **POST** | /forward | Request Forwarding
+| **GET** | /jobs/automated | List All Automated Jobs
+| **POST** | /jobs/automated | Enqueue a New Automated Job
+| **PARAMETERS** | /jobs/automated/{job_id} | 
+| **GET** | /jobs/automated/{job_id} | Retrieve an Automated Job
+| **PARAMETERS** | /jobs/manual/{job_id} | 
+| **GET** | /jobs/manual/{job_id} | Retrieve a Manual Job
+| **POST** | /sandbox/connections | Create a new Sandbox Connection
+| **PARAMETERS** | /sandbox/connections/accounts | 
+| **POST** | /sandbox/connections/accounts | Create a new sandbox account
+| **PUT** | /sandbox/connections/accounts | Update a sandbox account
+| **PUT** | /sandbox/company | Update a sandbox company's data
+| **POST** | /sandbox/directory | Add new individuals to a sandbox company
+| **PARAMETERS** | /sandbox/individual/{individual_id} | 
+| **PUT** | /sandbox/individual/{individual_id} | Update sandbox individual
+| **PARAMETERS** | /sandbox/employment/{individual_id} | 
+| **PUT** | /sandbox/employment/{individual_id} | Update sandbox employment
+| **POST** | /sandbox/payment | Add a new sandbox payment
+| **POST** | /sandbox/jobs | Enqueue a new sandbox job
+| **GET** | /sandbox/jobs/configuration | Get configurations for sandbox jobs
+| **PUT** | /sandbox/jobs/configuration | Update configurations for sandbox jobs
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {finchSdkDef} from '@opensdks/sdk-finch'
+
+    const finch = initSDK(finchSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['FINCH_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Company
+    const res = await finch.GET('/employer/company')
+```

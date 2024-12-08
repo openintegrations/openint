@@ -1,0 +1,52 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-mercury/mercury_v1.oas.json
+---
+
+## Integrating with Mercury OpenSDK 
+
+Welcome to the Mercury OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Mercury OpenSDK allows you to easily integrate with the Mercury API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /accounts | /accounts
+| **GET** | /account/{id} | /account/:id
+| **GET** | /account/{id}/cards | /account/:id/cards
+| **GET** | /recipients | /recipients
+| **POST** | /recipients | /recipients
+| **GET** | /recipient/{id} | /recipient/:id
+| **POST** | /recipient/{id} | /recipient/:id
+| **GET** | /account/{id}/transactions | /account/:id/transactions
+| **POST** | /account/{id}/transactions | /account/:id/transactions
+| **GET** | /account/{id}/transaction/{transactionId} | /account/:id/transaction/:transactionId
+| **GET** | /account/{id}/statements | /account/:id/statements
+| **GET** | /treasury | /treasury
+| **GET** | /credit | /credit
+| **POST** | /account/{id}/request-send-money | /account/:id/request-send-money
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {mercurySdkDef} from '@opensdks/sdk-mercury'
+
+    const mercury = initSDK(mercurySdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['MERCURY_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    // /accounts
+    const res = await mercury.GET('/accounts')
+```

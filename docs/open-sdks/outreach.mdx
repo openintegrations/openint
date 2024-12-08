@@ -1,0 +1,216 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-outreach/outreach.oas.json
+---
+
+## Integrating with Outreach OpenSDK 
+
+Welcome to the Outreach OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Outreach OpenSDK allows you to easily integrate with the Outreach API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /accounts | Get a Collection of Accounts
+| **POST** | /accounts | Create a New Account
+| **DELETE** | /accounts/{id} | Delete an Existing Account by ID
+| **GET** | /accounts/{id} | Get an Account by ID
+| **PATCH** | /accounts/{id} | Update an Account
+| **GET** | /audits | Get a Collection of Audits
+| **GET** | /callDispositions | Get a Collection of Call Dispositions
+| **POST** | /callDispositions | Create a New Call Disposition
+| **DELETE** | /callDispositions/{id} | Delete an Existing Call Disposition by ID
+| **GET** | /callDispositions/{id} | Get a Call Disposition by ID
+| **PATCH** | /callDispositions/{id} | Update a Call Disposition
+| **GET** | /callPurposes | Get a Collection of Call Purposes
+| **POST** | /callPurposes | Create a New Call Purpose
+| **DELETE** | /callPurposes/{id} | Delete an Existing Call Purpose by ID
+| **GET** | /callPurposes/{id} | Get a Call Purpose by ID
+| **PATCH** | /callPurposes/{id} | Update a Call Purpose
+| **GET** | /calls | Get a Collection of Calls
+| **POST** | /calls | Create a New Call
+| **DELETE** | /calls/{id} | Delete an Existing Call by ID
+| **GET** | /calls/{id} | Get a Call by ID
+| **GET** | /complianceRequests | Get a Collection of Compliance Requests
+| **POST** | /complianceRequests | Create a New Compliance Request
+| **GET** | /complianceRequests/{id} | Get a Compliance Request by ID
+| **GET** | /contentCategories | Get a Collection of Content Categories
+| **POST** | /contentCategories | Create a New Content Category
+| **DELETE** | /contentCategories/{id} | Delete an Existing Content Category by ID
+| **GET** | /contentCategories/{id} | Get a Content Category by ID
+| **PATCH** | /contentCategories/{id} | Update a Content Category
+| **GET** | /contentCategoryMemberships | Get a Collection of Content Category Memberships
+| **POST** | /contentCategoryMemberships | Create a New Content Category Membership
+| **DELETE** | /contentCategoryMemberships/{id} | Delete an Existing Content Category Membership by ID
+| **GET** | /contentCategoryMemberships/{id} | Get a Content Category Membership by ID
+| **GET** | /contentCategoryOwnerships | Get a Collection of Content Category Ownerships
+| **POST** | /contentCategoryOwnerships | Create a New Content Category Ownership
+| **DELETE** | /contentCategoryOwnerships/{id} | Delete an Existing Content Category Ownership by ID
+| **POST** | /customDuties | Create a New Custom Duty
+| **GET** | /duties | Get a Collection of Duties
+| **GET** | /emailAddresses | Get a Collection of Email Addresses
+| **POST** | /emailAddresses | Create a New Email Address
+| **DELETE** | /emailAddresses/{id} | Delete an Existing Email Address by ID
+| **GET** | /emailAddresses/{id} | Get an Email Address by ID
+| **PATCH** | /emailAddresses/{id} | Update an Email Address
+| **GET** | /events/{id} | Get an Event by ID
+| **GET** | /favorites | Get a Collection of Favorites
+| **POST** | /favorites | Create a New Favorite
+| **DELETE** | /favorites/{id} | Delete an Existing Favorite by ID
+| **GET** | /favorites/{id} | Get a Favorite by ID
+| **GET** | /mailAliases | Get a Collection of Mail Aliases
+| **GET** | /mailAliases/{id} | Get a Mail Alias by ID
+| **GET** | /mailboxes | Get a Collection of Mailboxes
+| **POST** | /mailboxes | Create a New Mailbox
+| **DELETE** | /mailboxes/{id} | Delete an Existing Mailbox by ID
+| **GET** | /mailboxes/{id} | Get a Mailbox by ID
+| **PATCH** | /mailboxes/{id} | Update a Mailbox
+| **POST** | /mailboxes/{id}/actions/linkEwsMasterAccount | Link Ews Master Account
+| **POST** | /mailboxes/{id}/actions/testSend | Test Send
+| **POST** | /mailboxes/{id}/actions/testSync | Test Sync
+| **POST** | /mailboxes/{id}/actions/unlinkEwsMasterAccount | Unlink Ews Master Account
+| **GET** | /mailings | Get a Collection of Mailings
+| **POST** | /mailings | Create a New Mailing
+| **GET** | /mailings/{id} | Get a Mailing by ID
+| **GET** | /opportunities | Get a Collection of Opportunities
+| **POST** | /opportunities | Create a New Opportunity
+| **DELETE** | /opportunities/{id} | Delete an Existing Opportunity by ID
+| **GET** | /opportunities/{id} | Get an Opportunity by ID
+| **PATCH** | /opportunities/{id} | Update an Opportunity
+| **GET** | /opportunityProspectRoles | Get a Collection of Opportunity Prospect Roles
+| **POST** | /opportunityProspectRoles | Create a New Opportunity Prospect Role
+| **DELETE** | /opportunityProspectRoles/{id} | Delete an Existing Opportunity Prospect Role by ID
+| **GET** | /opportunityProspectRoles/{id} | Get an Opportunity Prospect Role by ID
+| **PATCH** | /opportunityProspectRoles/{id} | Update an Opportunity Prospect Role
+| **GET** | /opportunityStages | Get a Collection of Opportunity Stages
+| **POST** | /opportunityStages | Create a New Opportunity Stage
+| **DELETE** | /opportunityStages/{id} | Delete an Existing Opportunity Stage by ID
+| **GET** | /opportunityStages/{id} | Get an Opportunity Stage by ID
+| **PATCH** | /opportunityStages/{id} | Update an Opportunity Stage
+| **GET** | /orgSettings/{id} | Get an Org Setting by ID
+| **PATCH** | /orgSettings/{id} | Update an Org Setting
+| **GET** | /personas | Get a Collection of Personas
+| **POST** | /personas | Create a New Persona
+| **DELETE** | /personas/{id} | Delete an Existing Persona by ID
+| **GET** | /personas/{id} | Get a Persona by ID
+| **PATCH** | /personas/{id} | Update a Persona
+| **GET** | /phoneNumbers | Get a Collection of Phone Numbers
+| **POST** | /phoneNumbers | Create a New Phone Number
+| **DELETE** | /phoneNumbers/{id} | Delete an Existing Phone Number by ID
+| **GET** | /phoneNumbers/{id} | Get a Phone Number by ID
+| **PATCH** | /phoneNumbers/{id} | Update a Phone Number
+| **GET** | /profiles | Get a Collection of Profiles
+| **POST** | /profiles | Create a New Profile
+| **DELETE** | /profiles/{id} | Delete an Existing Profile by ID
+| **GET** | /profiles/{id} | Get a Profile by ID
+| **PATCH** | /profiles/{id} | Update a Profile
+| **GET** | /prospects | Get a Collection of Prospects
+| **POST** | /prospects | Create a New Prospect
+| **DELETE** | /prospects/{id} | Delete an Existing Prospect by ID
+| **GET** | /prospects/{id} | Get a Prospect by ID
+| **PATCH** | /prospects/{id} | Update a Prospect
+| **GET** | /recipients | Get a Collection of Recipients
+| **POST** | /recipients | Create a New Recipient
+| **DELETE** | /recipients/{id} | Delete an Existing Recipient by ID
+| **GET** | /recipients/{id} | Get a Recipient by ID
+| **PATCH** | /recipients/{id} | Update a Recipient
+| **GET** | /roles | Get a Collection of Roles
+| **POST** | /roles | Create a New Role
+| **DELETE** | /roles/{id} | Delete an Existing Role by ID
+| **GET** | /roles/{id} | Get a Role by ID
+| **PATCH** | /roles/{id} | Update a Role
+| **GET** | /rulesets | Get a Collection of Rulesets
+| **POST** | /rulesets | Create a New Ruleset
+| **DELETE** | /rulesets/{id} | Delete an Existing Ruleset by ID
+| **GET** | /rulesets/{id} | Get a Ruleset by ID
+| **PATCH** | /rulesets/{id} | Update a Ruleset
+| **GET** | /sequenceStates | Get a Collection of Sequence States
+| **POST** | /sequenceStates | Create a New Sequence State
+| **DELETE** | /sequenceStates/{id} | Delete an Existing Sequence State by ID
+| **GET** | /sequenceStates/{id} | Get a Sequence State by ID
+| **POST** | /sequenceStates/{id}/actions/finish | Finish
+| **POST** | /sequenceStates/{id}/actions/pause | Pause
+| **POST** | /sequenceStates/{id}/actions/resume | Resume
+| **GET** | /sequenceSteps | Get a Collection of Sequence Steps
+| **POST** | /sequenceSteps | Create a New Sequence Step
+| **GET** | /sequenceSteps/{id} | Get a Sequence Step by ID
+| **PATCH** | /sequenceSteps/{id} | Update a Sequence Step
+| **GET** | /sequenceTemplates | Get a Collection of Sequence Templates
+| **POST** | /sequenceTemplates | Create a New Sequence Template
+| **DELETE** | /sequenceTemplates/{id} | Delete an Existing Sequence Template by ID
+| **GET** | /sequenceTemplates/{id} | Get a Sequence Template by ID
+| **PATCH** | /sequenceTemplates/{id} | Update a Sequence Template
+| **GET** | /sequences | Get a Collection of Sequences
+| **POST** | /sequences | Create a New Sequence
+| **DELETE** | /sequences/{id} | Delete an Existing Sequence by ID
+| **GET** | /sequences/{id} | Get a Sequence by ID
+| **PATCH** | /sequences/{id} | Update a Sequence
+| **GET** | /snippets | Get a Collection of Snippets
+| **POST** | /snippets | Create a New Snippet
+| **DELETE** | /snippets/{id} | Delete an Existing Snippet by ID
+| **GET** | /snippets/{id} | Get a Snippet by ID
+| **PATCH** | /snippets/{id} | Update a Snippet
+| **GET** | /stages | Get a Collection of Stages
+| **POST** | /stages | Create a New Stage
+| **DELETE** | /stages/{id} | Delete an Existing Stage by ID
+| **GET** | /stages/{id} | Get a Stage by ID
+| **PATCH** | /stages/{id} | Update a Stage
+| **GET** | /taskPriorities | Get a Collection of Task Priorities
+| **GET** | /taskPriorities/{id} | Get a Task Priority by ID
+| **GET** | /tasks | Get a Collection of Tasks
+| **POST** | /tasks | Create a New Task
+| **DELETE** | /tasks/{id} | Delete an Existing Task by ID
+| **GET** | /tasks/{id} | Get a Task by ID
+| **PATCH** | /tasks/{id} | Update a Task
+| **POST** | /tasks/{id}/actions/advance | Advance
+| **POST** | /tasks/{id}/actions/deliver | Deliver
+| **POST** | /tasks/{id}/actions/markComplete | Mark Complete
+| **POST** | /tasks/{id}/actions/reassignOwner | Reassign Owner
+| **POST** | /tasks/{id}/actions/reschedule | Reschedule
+| **POST** | /tasks/{id}/actions/snooze | Snooze
+| **POST** | /tasks/{id}/actions/updateNote | Update Note
+| **POST** | /tasks/{id}/actions/updateOpportunityAssociation | Update Opportunity Association
+| **GET** | /teams | Get a Collection of Teams
+| **POST** | /teams | Create a New Team
+| **DELETE** | /teams/{id} | Delete an Existing Team by ID
+| **GET** | /teams/{id} | Get a Team by ID
+| **PATCH** | /teams/{id} | Update a Team
+| **GET** | /templates | Get a Collection of Templates
+| **POST** | /templates | Create a New Template
+| **DELETE** | /templates/{id} | Delete an Existing Template by ID
+| **GET** | /templates/{id} | Get a Template by ID
+| **PATCH** | /templates/{id} | Update a Template
+| **GET** | /users | Get a Collection of Users
+| **POST** | /users | Create a New User
+| **GET** | /users/{id} | Get a User by ID
+| **PATCH** | /users/{id} | Update a User
+| **GET** | /webhooks | Get a Collection of Webhooks
+| **POST** | /webhooks | Create a New Webhook
+| **DELETE** | /webhooks/{id} | Delete an Existing Webhook by ID
+| **GET** | /webhooks/{id} | Get a Webhook by ID
+| **PATCH** | /webhooks/{id} | Update a Webhook
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {outreachSdkDef} from '@opensdks/sdk-outreach'
+
+    const outreach = initSDK(outreachSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['OUTREACH_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    // Get a Collection of Accounts
+    const res = await outreach.GET('/accounts')
+```

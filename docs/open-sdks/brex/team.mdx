@@ -1,0 +1,64 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-brex/brex_team.oas.json
+---
+
+## Integrating with Brex OpenSDK 
+
+Welcome to the Brex OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Brex OpenSDK allows you to easily integrate with the Brex API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /v2/cards |  List cards 
+| **POST** | /v2/cards |  Create card 
+| **GET** | /v2/cards/{id} |  Get card 
+| **PUT** | /v2/cards/{id} |  Update card 
+| **POST** | /v2/cards/{id}/lock |  Lock card 
+| **GET** | /v2/cards/{id}/pan |  Get card number 
+| **POST** | /v2/cards/{id}/secure_email |  Create secure email to send card number  
+| **POST** | /v2/cards/{id}/terminate |  Terminate card 
+| **POST** | /v2/cards/{id}/unlock |  Unlock card 
+| **GET** | /v2/company |  Get company 
+| **GET** | /v2/departments |  List departments 
+| **POST** | /v2/departments |  Create department 
+| **GET** | /v2/departments/{id} |  Get department 
+| **GET** | /v2/locations |  List locations 
+| **POST** | /v2/locations |  Create location 
+| **GET** | /v2/locations/{id} |  Get location 
+| **GET** | /v2/titles |  List titles 
+| **POST** | /v2/titles |  Create title 
+| **GET** | /v2/titles/{id} |  Get title 
+| **GET** | /v2/users |  List users 
+| **POST** | /v2/users |  Invite user 
+| **GET** | /v2/users/me |  Get current user 
+| **GET** | /v2/users/{id} |  Get user 
+| **PUT** | /v2/users/{id} |  Update user 
+| **GET** | /v2/users/{id}/limit |  Get limit for the user 
+| **POST** | /v2/users/{id}/limit |  Set limit for the user 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {brexSdkDef} from '@opensdks/sdk-brex'
+
+    const brex = initSDK(brexSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['BREX_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    //  List cards 
+    const res = await brex.GET('/v2/cards')
+```

@@ -1,0 +1,44 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-airbyte/airbyte_permissions_v1.oas.json
+---
+
+## Integrating with Airbyte OpenSDK 
+
+Welcome to the Airbyte OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Airbyte OpenSDK allows you to easily integrate with the Airbyte API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **PARAMETERS** | /permissions/{permissionId} | 
+| **GET** | /permissions/{permissionId} | Get Permission details
+| **PATCH** | /permissions/{permissionId} | Update a permission
+| **DELETE** | /permissions/{permissionId} | Delete a Permission
+| **GET** | /permissions | List Permissions by user id
+| **POST** | /permissions | Create a permission
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {airbyteSdkDef} from '@opensdks/sdk-airbyte'
+
+    const airbyte = initSDK(airbyteSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['AIRBYTE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    
+    const res = await airbyte.PARAMETERS('/permissions/{permissionId}')
+```

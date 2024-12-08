@@ -1,0 +1,67 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-xero/xero_files.oas.json
+---
+
+## Integrating with Xero OpenSDK 
+
+Welcome to the Xero OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Xero OpenSDK allows you to easily integrate with the Xero API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **PARAMETERS** | /Files | 
+| **GET** | /Files | Retrieves files
+| **POST** | /Files | Uploads a File to the inbox
+| **PARAMETERS** | /Files/{FileId} | 
+| **GET** | /Files/{FileId} | Retrieves a file by a unique file ID
+| **PUT** | /Files/{FileId} | Update a file
+| **DELETE** | /Files/{FileId} | Deletes a specific file
+| **PARAMETERS** | /Files/{FolderId} | 
+| **POST** | /Files/{FolderId} | Uploads a File to a specific folder
+| **PARAMETERS** | /Files/{FileId}/Content | 
+| **GET** | /Files/{FileId}/Content | Retrieves the content of a specific file
+| **PARAMETERS** | /Files/{FileId}/Associations | 
+| **GET** | /Files/{FileId}/Associations | Retrieves a specific file associations
+| **POST** | /Files/{FileId}/Associations | Creates a new file association
+| **PARAMETERS** | /Files/{FileId}/Associations/{ObjectId} | 
+| **DELETE** | /Files/{FileId}/Associations/{ObjectId} | Deletes an existing file association
+| **PARAMETERS** | /Associations/{ObjectId} | 
+| **GET** | /Associations/{ObjectId} | Retrieves an association object using a unique object ID
+| **PARAMETERS** | /Associations/Count | 
+| **GET** | /Associations/Count | Retrieves a count of associations for a list of objects.
+| **PARAMETERS** | /Folders | 
+| **GET** | /Folders | Retrieves folders
+| **POST** | /Folders | Creates a new folder
+| **PARAMETERS** | /Folders/{FolderId} | 
+| **GET** | /Folders/{FolderId} | Retrieves specific folder by using a unique folder ID
+| **PUT** | /Folders/{FolderId} | Updates an existing folder
+| **DELETE** | /Folders/{FolderId} | Deletes a folder
+| **PARAMETERS** | /Inbox | 
+| **GET** | /Inbox | Retrieves inbox folder
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {xeroSdkDef} from '@opensdks/sdk-xero'
+
+    const xero = initSDK(xeroSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['XERO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    
+    const res = await xero.PARAMETERS('/Files')
+```

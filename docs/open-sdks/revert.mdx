@@ -1,0 +1,114 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-revert/revert.oas.json
+---
+
+## Integrating with Revert OpenSDK 
+
+Welcome to the Revert OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Revert OpenSDK allows you to easily integrate with the Revert API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /chat/channels | Get all the channels
+| **POST** | /chat/message | Create a new message
+| **GET** | /chat/users | Get all the users
+| **GET** | /connection | Get details of a connection for a specific tenant.
+| **DELETE** | /connection | Delete a connection for a specific tenant.
+| **GET** | /connection/all | Get details of all the connection for a specific account at Revert.
+| **POST** | /connection/webhook | Create a webhook endpoint that listens to a connection events of a specific tenant.
+| **GET** | /connection/webhook | Get details of a connection webhook for a specific tenant.
+| **DELETE** | /connection/webhook | Delete the connection webhook for a specific tenant.
+| **GET** | /connection/integration-status/{revertPublicToken} | Get the OAuth connection event status. This endpoint responds with a `http.ServerResponse` instead of `json`.
+| **POST** | /connection/import | Import multiple connections for a specific environment. Use this to bulk import connections as a one-time exercise.
+| **GET** | /crm/companies/{id} | Get details of a company
+| **PATCH** | /crm/companies/{id} | Update a company
+| **GET** | /crm/companies | Get all the companies
+| **POST** | /crm/companies | Create a new company
+| **POST** | /crm/companies/search | Search for companies
+| **GET** | /crm/contacts/{id} | Get details of a contact
+| **PATCH** | /crm/contacts/{id} | Update a contact
+| **GET** | /crm/contacts | Get all the contacts
+| **POST** | /crm/contacts | Create a new contact
+| **POST** | /crm/contacts/search | Search for contacts
+| **GET** | /crm/deals/{id} | Get details of a deal
+| **PATCH** | /crm/deals/{id} | Update a deal
+| **GET** | /crm/deals | Get all the deals
+| **POST** | /crm/deals | Create a new deal
+| **POST** | /crm/deals/search | Search for deals
+| **GET** | /crm/events/{id} | Get details of a event
+| **PATCH** | /crm/events/{id} | Update a event
+| **DELETE** | /crm/events/{id} | Delete details of an event in a CRM
+| **GET** | /crm/events | Get all the events
+| **POST** | /crm/events | Create a new event
+| **POST** | /crm/events/search | Search for events
+| **GET** | /crm/leads/{id} | Get details of a lead
+| **PATCH** | /crm/leads/{id} | Update a lead
+| **GET** | /crm/leads | Get all the leads
+| **POST** | /crm/leads | Create a new lead
+| **POST** | /crm/leads/search | Search for leads
+| **GET** | /crm/notes/{id} | Get details of a note
+| **PATCH** | /crm/notes/{id} | Update a note
+| **GET** | /crm/notes | Get all the notes
+| **POST** | /crm/notes | Create a new note
+| **POST** | /crm/notes/search | Search for notes
+| **GET** | /crm/properties/{objectName} | Get object properties for connection
+| **POST** | /crm/properties/{objectName} | Set custom properties on an object for a given connection
+| **POST** | /crm/proxy | Call the native CRM api for a specific connection
+| **GET** | /crm/tasks/{id} | Get details of a task
+| **PATCH** | /crm/tasks/{id} | Update a task
+| **GET** | /crm/tasks | Get all the tasks
+| **POST** | /crm/tasks | Create a new task
+| **POST** | /crm/tasks/search | Search for tasks
+| **GET** | /crm/users/{id} | Get details of a user
+| **GET** | /crm/users | Get all the users
+| **POST** | /crm/users | Create a new user
+| **GET** | /field-mapping | Get field mappings configs for a connection
+| **POST** | /field-mapping | Create field mappings for a connection after user input
+| **DELETE** | /field-mapping | Delete field mappings for a connection
+| **GET** | /field-mapping/mappings | Get field mappings for a connection
+| **POST** | /field-mapping/config | Create field mappings config for an account
+| **DELETE** | /field-mapping/config | Delete field mappings config for an account
+| **POST** | /internal/account | Get details of a revert user account
+| **POST** | /internal/account/credentials | Update account credentials (customer app token, secret, scope)
+| **POST** | /internal/analytics | Get Analytics of your revert account
+| **POST** | /internal/telemetry | Create telemetry entry for a deployment
+| **GET** | /metadata/crms | Retrieve a list of CRMs available for this account from the database based on the public token.
+| **GET** | /ticket/collections | Get all the collections
+| **GET** | /ticket/comments/{id} | Get details of a comment
+| **PATCH** | /ticket/comments/{id} | Update comment
+| **GET** | /ticket/comments | Get all the comments
+| **POST** | /ticket/comments | Post comment
+| **POST** | /ticket/proxy | Call the native Ticketing app's api for a specific connection
+| **GET** | /ticket/tasks/{id} | Get details of a task
+| **PATCH** | /ticket/tasks/{id} | Update a task
+| **GET** | /ticket/tasks | Get all the tasks
+| **POST** | /ticket/tasks | 
+| **GET** | /ticket/users/{id} | Get details of a user
+| **GET** | /ticket/users | Get all the users
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {revertSdkDef} from '@opensdks/sdk-revert'
+
+    const revert = initSDK(revertSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['REVERT_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Get all the channels
+    const res = await revert.GET('/chat/channels')
+```

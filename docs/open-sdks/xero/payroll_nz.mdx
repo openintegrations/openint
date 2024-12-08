@@ -1,0 +1,150 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-xero/xero_payroll_nz.oas.json
+---
+
+## Integrating with Xero OpenSDK 
+
+Welcome to the Xero OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Xero OpenSDK allows you to easily integrate with the Xero API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **PARAMETERS** | /Employees | 
+| **GET** | /Employees | Retrieves employees
+| **POST** | /Employees | Creates an employees
+| **PARAMETERS** | /Employees/{EmployeeID} | 
+| **GET** | /Employees/{EmployeeID} | Retrieves an employees using a unique employee ID
+| **PUT** | /Employees/{EmployeeID} | Updates an existing employee
+| **PARAMETERS** | /Employees/{EmployeeID}/Employment | 
+| **POST** | /Employees/{EmployeeID}/Employment | Creates an employment detail for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/Tax | 
+| **GET** | /Employees/{EmployeeID}/Tax | Retrieves tax records for a specific employee
+| **POST** | /Employees/{EmployeeID}/Tax | Updates the tax records for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/openingBalances | 
+| **GET** | /Employees/{EmployeeID}/openingBalances | Retrieves the opening balance for a specific employee
+| **POST** | /Employees/{EmployeeID}/openingBalances | Creates opening balances for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/Leave | 
+| **GET** | /Employees/{EmployeeID}/Leave | Retrieves leave records for a specific employee
+| **POST** | /Employees/{EmployeeID}/Leave | Creates leave records for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/Leave/{LeaveID} | 
+| **PUT** | /Employees/{EmployeeID}/Leave/{LeaveID} | Updates leave records for a specific employee
+| **DELETE** | /Employees/{EmployeeID}/Leave/{LeaveID} | Deletes a leave record for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/LeaveBalances | 
+| **GET** | /Employees/{EmployeeID}/LeaveBalances | Retrieves leave balances for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/LeavePeriods | 
+| **GET** | /Employees/{EmployeeID}/LeavePeriods | Retrieves leave periods for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/leaveSetup | 
+| **POST** | /Employees/{EmployeeID}/leaveSetup | Creates a leave set-up for a specific employee. This is required before viewing, configuring and requesting leave for an employee
+| **PARAMETERS** | /Employees/{EmployeeID}/LeaveTypes | 
+| **GET** | /Employees/{EmployeeID}/LeaveTypes | Retrieves leave types for a specific employee
+| **POST** | /Employees/{EmployeeID}/LeaveTypes | Creates leave type records for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/PaymentMethods | 
+| **GET** | /Employees/{EmployeeID}/PaymentMethods | Retrieves available payment methods for a specific employee
+| **POST** | /Employees/{EmployeeID}/PaymentMethods | Creates a payment method for an employee
+| **PARAMETERS** | /Employees/{EmployeeID}/PayTemplates | 
+| **GET** | /Employees/{EmployeeID}/PayTemplates | Retrieves pay templates for a specific employee
+| **PARAMETERS** | /Employees/{EmployeeID}/PayTemplates/earnings | 
+| **POST** | /Employees/{EmployeeID}/PayTemplates/earnings | Creates earnings template records for an employee
+| **PARAMETERS** | /Employees/{EmployeeID}/PayTemplates/earnings/{PayTemplateEarningID} | 
+| **PUT** | /Employees/{EmployeeID}/PayTemplates/earnings/{PayTemplateEarningID} | Updates an earnings template records for an employee
+| **DELETE** | /Employees/{EmployeeID}/PayTemplates/earnings/{PayTemplateEarningID} | Deletes an employee's earnings template record
+| **PARAMETERS** | /Employees/{EmployeeID}/paytemplateearnings | 
+| **POST** | /Employees/{EmployeeID}/paytemplateearnings | Creates multiple employee earnings template records for a specific employee
+| **PARAMETERS** | /Deductions | 
+| **GET** | /Deductions | Retrieves deductions for a specific employee
+| **POST** | /Deductions | Creates a new deduction for a specific employee
+| **PARAMETERS** | /Deductions/{deductionId} | 
+| **GET** | /Deductions/{deductionId} | Retrieves a single deduction by using a unique deduction ID
+| **PARAMETERS** | /StatutoryDeductions | 
+| **GET** | /StatutoryDeductions | Retrieves statutory deductions
+| **PARAMETERS** | /StatutoryDeductions/{id} | 
+| **GET** | /StatutoryDeductions/{id} | Retrieves a specific statutory deduction by using a unique statutory deductions id
+| **PARAMETERS** | /Superannuations | 
+| **GET** | /Superannuations | Retrieves superannuations
+| **POST** | /Superannuations | Creates a new superannuation
+| **PARAMETERS** | /Superannuations/{SuperannuationID} | 
+| **GET** | /Superannuations/{SuperannuationID} | Retrieves a specific superannuation using a unique superannuation ID
+| **PARAMETERS** | /EarningsRates | 
+| **GET** | /EarningsRates | Retrieves earnings rates
+| **POST** | /EarningsRates | Creates a new earnings rate
+| **PARAMETERS** | /EarningsRates/{EarningsRateID} | 
+| **GET** | /EarningsRates/{EarningsRateID} | Retrieves a specific earnings rates by using a unique earnings rate id
+| **PARAMETERS** | /LeaveTypes | 
+| **GET** | /LeaveTypes | Retrieves leave types
+| **POST** | /LeaveTypes | Creates a new leave type
+| **PARAMETERS** | /LeaveTypes/{LeaveTypeID} | 
+| **GET** | /LeaveTypes/{LeaveTypeID} | Retrieves a specific leave type by using a unique leave type ID
+| **PARAMETERS** | /Reimbursements | 
+| **GET** | /Reimbursements | Retrieves reimbursements
+| **POST** | /Reimbursements | Creates a new reimbursement
+| **PARAMETERS** | /Reimbursements/{ReimbursementID} | 
+| **GET** | /Reimbursements/{ReimbursementID} | Retrieves a specific reimbursement by using a unique reimbursement ID
+| **PARAMETERS** | /Timesheets | 
+| **GET** | /Timesheets | Retrieves timesheets
+| **POST** | /Timesheets | Creates a new timesheet
+| **PARAMETERS** | /Timesheets/{TimesheetID} | 
+| **GET** | /Timesheets/{TimesheetID} | Retrieves a specific timesheet by using a unique timesheet ID
+| **DELETE** | /Timesheets/{TimesheetID} | Deletes a timesheet
+| **PARAMETERS** | /Timesheets/{TimesheetID}/Lines | 
+| **POST** | /Timesheets/{TimesheetID}/Lines | Create a new timesheet line for a specific time sheet
+| **PARAMETERS** | /Timesheets/{TimesheetID}/Approve | 
+| **POST** | /Timesheets/{TimesheetID}/Approve | Approves a timesheet
+| **PARAMETERS** | /Timesheets/{TimesheetID}/RevertToDraft | 
+| **POST** | /Timesheets/{TimesheetID}/RevertToDraft | Reverts a timesheet to draft
+| **PARAMETERS** | /Timesheets/{TimesheetID}/Lines/{TimesheetLineID} | 
+| **PUT** | /Timesheets/{TimesheetID}/Lines/{TimesheetLineID} | Updates a timesheet line for a specific timesheet
+| **DELETE** | /Timesheets/{TimesheetID}/Lines/{TimesheetLineID} | Deletes a timesheet line for a specific timesheet
+| **PARAMETERS** | /PayRunCalendars | 
+| **GET** | /PayRunCalendars | Retrieves payrun calendars
+| **POST** | /PayRunCalendars | Creates a new payrun calendar
+| **PARAMETERS** | /PayRunCalendars/{PayrollCalendarID} | 
+| **GET** | /PayRunCalendars/{PayrollCalendarID} | Retrieves a specific payrun calendar by using a unique payroll calendar ID
+| **PARAMETERS** | /Employees/{EmployeeID}/SalaryAndWages | 
+| **GET** | /Employees/{EmployeeID}/SalaryAndWages | Retrieves an employee's salary and wages
+| **POST** | /Employees/{EmployeeID}/SalaryAndWages | Creates an employee salary and wage record
+| **PARAMETERS** | /Employees/{EmployeeID}/SalaryAndWages/{SalaryAndWagesID} | 
+| **GET** | /Employees/{EmployeeID}/SalaryAndWages/{SalaryAndWagesID} | Retrieves an employee's salary and wages record by using a unique salary and wage ID
+| **PUT** | /Employees/{EmployeeID}/SalaryAndWages/{SalaryAndWagesID} | Updates an employee's salary and wages record
+| **DELETE** | /Employees/{EmployeeID}/SalaryAndWages/{SalaryAndWagesID} | Deletes an employee's salary and wages record
+| **PARAMETERS** | /PayRuns | 
+| **GET** | /PayRuns | Retrieves pay runs
+| **POST** | /PayRuns | Creates a pay run
+| **PARAMETERS** | /PayRuns/{PayRunID} | 
+| **GET** | /PayRuns/{PayRunID} | Retrieves a specific pay run by using a unique pay run ID
+| **PUT** | /PayRuns/{PayRunID} | Updates a pay run
+| **PARAMETERS** | /PaySlips | 
+| **GET** | /PaySlips | Retrieves payslips
+| **PARAMETERS** | /PaySlips/{PaySlipID} | 
+| **GET** | /PaySlips/{PaySlipID} | Retrieves a specific payslip by a unique pay slip ID
+| **PUT** | /PaySlips/{PaySlipID} | Creates an employee pay slip
+| **PARAMETERS** | /Settings | 
+| **GET** | /Settings | Retrieves settings
+| **PARAMETERS** | /Settings/TrackingCategories | 
+| **GET** | /Settings/TrackingCategories | Retrieves tracking categories
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {xeroSdkDef} from '@opensdks/sdk-xero'
+
+    const xero = initSDK(xeroSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['XERO_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    
+    const res = await xero.PARAMETERS('/Employees')
+```

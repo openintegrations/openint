@@ -1,0 +1,148 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-clerk/clerk.oas.json
+---
+
+## Integrating with Clerk OpenSDK 
+
+Welcome to the Clerk OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Clerk OpenSDK allows you to easily integrate with the Clerk API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /public/interstitial | Returns the markup for the interstitial page
+| **GET** | /jwks | Retrieve the JSON Web Key Set of the instance
+| **GET** | /clients | List all clients
+| **POST** | /clients/verify | Verify a client
+| **GET** | /clients/{client_id} | Get a client
+| **POST** | /email_addresses | Create an email address
+| **GET** | /email_addresses/{email_address_id} | Retrieve an email address
+| **DELETE** | /email_addresses/{email_address_id} | Delete an email address
+| **PATCH** | /email_addresses/{email_address_id} | Update an email address
+| **POST** | /phone_numbers | Create a phone number
+| **GET** | /phone_numbers/{phone_number_id} | Retrieve a phone number
+| **DELETE** | /phone_numbers/{phone_number_id} | Delete a phone number
+| **PATCH** | /phone_numbers/{phone_number_id} | Update a phone number
+| **GET** | /sessions | List all sessions
+| **GET** | /sessions/{session_id} | Retrieve a session
+| **POST** | /sessions/{session_id}/revoke | Revoke a session
+| **POST** | /sessions/{session_id}/verify | Verify a session
+| **POST** | /sessions/{session_id}/tokens/{template_name} | Create a session token from a jwt template
+| **GET** | /templates/{template_type} | List all templates
+| **GET** | /templates/{template_type}/{slug} | Retrieve a template
+| **PUT** | /templates/{template_type}/{slug} | Update a template for a given type and slug
+| **POST** | /templates/{template_type}/{slug}/revert | Revert a template
+| **POST** | /templates/{template_type}/{slug}/preview | Preview changes to a template
+| **POST** | /templates/{template_type}/{slug}/toggle_delivery | Toggle the delivery by Clerk for a template of a given type and slug
+| **GET** | /users | List all users
+| **POST** | /users | Create a new user
+| **GET** | /users/count | Count users
+| **GET** | /users/{user_id} | Retrieve a user
+| **PATCH** | /users/{user_id} | Update a user
+| **DELETE** | /users/{user_id} | Delete a user
+| **POST** | /users/{user_id}/ban | Ban a user
+| **POST** | /users/{user_id}/unban | Unban a user
+| **POST** | /users/{user_id}/lock | Lock a user
+| **POST** | /users/{user_id}/unlock | Unlock a user
+| **POST** | /users/{user_id}/profile_image | Set user profile image
+| **DELETE** | /users/{user_id}/profile_image | Delete user profile image
+| **PATCH** | /users/{user_id}/metadata | Merge and update a user's metadata
+| **GET** | /users/{user_id}/oauth_access_tokens/{provider} | Retrieve the OAuth access token of a user
+| **GET** | /users/{user_id}/organization_memberships | Retrieve all memberships for a user
+| **POST** | /users/{user_id}/verify_password | Verify the password of a user
+| **POST** | /users/{user_id}/verify_totp | Verify a TOTP or backup code for a user
+| **DELETE** | /users/{user_id}/mfa | Disable a user's MFA methods
+| **POST** | /invitations | Create an invitation
+| **GET** | /invitations | List all invitations
+| **POST** | /invitations/{invitation_id}/revoke | Revokes an invitation
+| **GET** | /allowlist_identifiers | List all identifiers on the allow-list
+| **POST** | /allowlist_identifiers | Add identifier to the allow-list
+| **DELETE** | /allowlist_identifiers/{identifier_id} | Delete identifier from allow-list
+| **GET** | /blocklist_identifiers | List all identifiers on the block-list
+| **POST** | /blocklist_identifiers | Add identifier to the block-list
+| **DELETE** | /blocklist_identifiers/{identifier_id} | Delete identifier from block-list
+| **PATCH** | /beta_features/instance_settings | Update instance settings
+| **PUT** | /beta_features/domain | Update production instance domain
+| **POST** | /actor_tokens | Create actor token
+| **POST** | /actor_tokens/{actor_token_id}/revoke | Revoke actor token
+| **GET** | /domains | List all instance domains
+| **POST** | /domains | Add a domain
+| **DELETE** | /domains/{domain_id} | Delete a satellite domain
+| **PATCH** | /domains/{domain_id} | Update a domain
+| **PATCH** | /instance | Update instance settings
+| **PATCH** | /instance/restrictions | Update instance restrictions
+| **POST** | /instance/change_domain | Update production instance domain
+| **PATCH** | /instance/organization_settings | Update instance organization settings
+| **POST** | /webhooks/svix | Create a Svix app
+| **DELETE** | /webhooks/svix | Delete a Svix app
+| **POST** | /webhooks/svix_url | Create a Svix Dashboard URL
+| **GET** | /jwt_templates | List all templates
+| **POST** | /jwt_templates | Create a JWT template
+| **GET** | /jwt_templates/{template_id} | Retrieve a template
+| **PATCH** | /jwt_templates/{template_id} | Update a JWT template
+| **DELETE** | /jwt_templates/{template_id} | Delete a Template
+| **GET** | /organizations | Get a list of organizations for an instance
+| **POST** | /organizations | Create an organization
+| **GET** | /organizations/{organization_id} | Retrieve an organization by ID or slug
+| **PATCH** | /organizations/{organization_id} | Update an organization
+| **DELETE** | /organizations/{organization_id} | Delete an organization
+| **PATCH** | /organizations/{organization_id}/metadata | Merge and update metadata for an organization
+| **PUT** | /organizations/{organization_id}/logo | Upload a logo for the organization
+| **DELETE** | /organizations/{organization_id}/logo | Delete the organization's logo.
+| **POST** | /organizations/{organization_id}/invitations | Create and send an organization invitation
+| **GET** | /organizations/{organization_id}/invitations | Get a list of organization invitations
+| **POST** | /organizations/{organization_id}/invitations/bulk | Bulk create and send organization invitations
+| **GET** | /organizations/{organization_id}/invitations/pending | Get a list of pending organization invitations
+| **GET** | /organizations/{organization_id}/invitations/{invitation_id} | Retrieve an organization invitation by ID
+| **POST** | /organizations/{organization_id}/invitations/{invitation_id}/revoke | Revoke a pending organization invitation
+| **POST** | /organizations/{organization_id}/memberships | Create a new organization membership
+| **GET** | /organizations/{organization_id}/memberships | Get a list of all members of an organization
+| **PATCH** | /organizations/{organization_id}/memberships/{user_id} | Update an organization membership
+| **DELETE** | /organizations/{organization_id}/memberships/{user_id} | Remove a member from an organization
+| **PATCH** | /organizations/{organization_id}/memberships/{user_id}/metadata | Merge and update organization membership metadata
+| **POST** | /proxy_checks | Verify the proxy configuration for your domain
+| **GET** | /redirect_urls | List all redirect URLs
+| **POST** | /redirect_urls | Create a redirect URL
+| **GET** | /redirect_urls/{id} | Retrieve a redirect URL
+| **DELETE** | /redirect_urls/{id} | Delete a redirect URL
+| **POST** | /sign_in_tokens | Create sign-in token
+| **POST** | /sign_in_tokens/{sign_in_token_id}/revoke | Revoke the given sign-in token
+| **PATCH** | /sign_ups/{id} | Update a sign-up
+| **GET** | /oauth_applications | Get a list of OAuth applications for an instance
+| **POST** | /oauth_applications | Create an OAuth application
+| **GET** | /oauth_applications/{oauth_application_id} | Retrieve an OAuth application by ID
+| **PATCH** | /oauth_applications/{oauth_application_id} | Update an OAuth application
+| **DELETE** | /oauth_applications/{oauth_application_id} | Delete an OAuth application
+| **POST** | /oauth_applications/{oauth_application_id}/rotate_secret | Rotate the client secret of the given OAuth application
+| **GET** | /saml_connections | Get a list of SAML Connections for an instance
+| **POST** | /saml_connections | Create a SAML Connection
+| **GET** | /saml_connections/{saml_connection_id} | Retrieve a SAML Connection by ID
+| **PATCH** | /saml_connections/{saml_connection_id} | Update a SAML Connection
+| **DELETE** | /saml_connections/{saml_connection_id} | Delete a SAML Connection
+| **POST** | /testing_tokens | Retrieve a new testing token
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {clerkSdkDef} from '@opensdks/sdk-clerk'
+
+    const clerk = initSDK(clerkSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['CLERK_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Returns the markup for the interstitial page
+    const res = await clerk.GET('/public/interstitial')
+```

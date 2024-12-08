@@ -1,0 +1,114 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-supaglue/supaglue_crm.oas.json
+---
+
+## Integrating with Supaglue OpenSDK 
+
+Welcome to the Supaglue OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Supaglue OpenSDK allows you to easily integrate with the Supaglue API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | /accounts | Create account
+| **GET** | /accounts | List accounts
+| **PARAMETERS** | /accounts | 
+| **POST** | /accounts/_upsert | Upsert account
+| **PARAMETERS** | /accounts/_upsert | 
+| **GET** | /accounts/{account_id} | Get account
+| **PATCH** | /accounts/{account_id} | Update account
+| **PARAMETERS** | /accounts/{account_id} | 
+| **POST** | /contacts | Create contact
+| **GET** | /contacts | List contacts
+| **PARAMETERS** | /contacts | 
+| **POST** | /contacts/_search | Search contacts
+| **PARAMETERS** | /contacts/_search | 
+| **POST** | /contacts/_upsert | Upsert contact
+| **PARAMETERS** | /contacts/_upsert | 
+| **GET** | /contacts/{contact_id} | Get contact
+| **PATCH** | /contacts/{contact_id} | Update contact
+| **PARAMETERS** | /contacts/{contact_id} | 
+| **POST** | /leads | Create lead
+| **GET** | /leads | List leads
+| **PARAMETERS** | /leads | 
+| **POST** | /leads/_upsert | Upsert lead
+| **PARAMETERS** | /leads/_upsert | 
+| **POST** | /leads/_search | Search leads
+| **PARAMETERS** | /leads/_search | 
+| **GET** | /leads/{lead_id} | Get lead
+| **PATCH** | /leads/{lead_id} | Update lead
+| **PARAMETERS** | /leads/{lead_id} | 
+| **POST** | /opportunities | Create opportunity
+| **GET** | /opportunities | List opportunities
+| **PARAMETERS** | /opportunities | 
+| **GET** | /opportunities/{opportunity_id} | Get opportunity
+| **PATCH** | /opportunities/{opportunity_id} | Update opportunity
+| **PARAMETERS** | /opportunities/{opportunity_id} | 
+| **GET** | /users | List users
+| **PARAMETERS** | /users | 
+| **GET** | /users/{user_id} | Get user
+| **PARAMETERS** | /users/{user_id} | 
+| **POST** | /custom_objects/{object_name}/records | Create custom object record
+| **GET** | /custom_objects/{object_name}/records | List custom object records
+| **PARAMETERS** | /custom_objects/{object_name}/records | 
+| **PATCH** | /custom_objects/{object_name}/records/{record_id} | Update custom object record
+| **GET** | /custom_objects/{object_name}/records/{record_id} | Get custom object record
+| **PARAMETERS** | /custom_objects/{object_name}/records/{record_id} | 
+| **POST** | /standard_objects/{object_name}/records | Create standard object record
+| **GET** | /standard_objects/{object_name}/records | List standard object records
+| **PARAMETERS** | /standard_objects/{object_name}/records | 
+| **PATCH** | /standard_objects/{object_name}/records/{record_id} | Update standard object record
+| **GET** | /standard_objects/{object_name}/records/{record_id} | Get standard object record
+| **PARAMETERS** | /standard_objects/{object_name}/records/{record_id} | 
+| **GET** | /associations | List associations for a record and target object
+| **PUT** | /associations | Upsert association
+| **PARAMETERS** | /associations | 
+| **GET** | /metadata/associations | List association schemas
+| **POST** | /metadata/associations | Create association schema
+| **PARAMETERS** | /metadata/associations | 
+| **GET** | /metadata/custom_objects | List custom object schemas
+| **POST** | /metadata/custom_objects | Create custom object schema
+| **PARAMETERS** | /metadata/custom_objects | 
+| **GET** | /metadata/standard_objects | List standard object schemas
+| **PARAMETERS** | /metadata/standard_objects | 
+| **GET** | /metadata/properties/{object_name} | List properties
+| **POST** | /metadata/properties/{object_name} | Create property
+| **PARAMETERS** | /metadata/properties/{object_name} | 
+| **GET** | /metadata/properties/{object_name}/{property_name} | Get property (preview)
+| **PATCH** | /metadata/properties/{object_name}/{property_name} | Update property (preview)
+| **PARAMETERS** | /metadata/properties/{object_name}/{property_name} | 
+| **POST** | /metadata/properties/{object_name}/register | Register Property (preview)
+| **PARAMETERS** | /metadata/properties/{object_name}/register | 
+| **GET** | /metadata/custom_objects/{object_name} | Get custom object schema details
+| **PUT** | /metadata/custom_objects/{object_name} | Update custom object schema
+| **PARAMETERS** | /metadata/custom_objects/{object_name} | 
+| **GET** | /lists | List lists
+| **PARAMETERS** | /lists | 
+| **GET** | /lists/{list_id} | List list memberships
+| **PARAMETERS** | /lists/{list_id} | 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {supaglueSdkDef} from '@opensdks/sdk-supaglue'
+
+    const supaglue = initSDK(supaglueSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['SUPAGLUE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Create account
+    const res = await supaglue.POST('/accounts')
+```

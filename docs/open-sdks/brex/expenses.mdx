@@ -1,0 +1,43 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-brex/brex_expenses.oas.json
+---
+
+## Integrating with Brex OpenSDK 
+
+Welcome to the Brex OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Brex OpenSDK allows you to easily integrate with the Brex API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /v1/expenses/card | List expenses
+| **POST** | /v1/expenses/card/receipt_match | Create a new receipt match
+| **GET** | /v1/expenses/card/{expense_id} | Get an expense
+| **PUT** | /v1/expenses/card/{expense_id} | Update an expense
+| **POST** | /v1/expenses/card/{expense_id}/receipt_upload | Create a new receipt upload
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {brexSdkDef} from '@opensdks/sdk-brex'
+
+    const brex = initSDK(brexSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['BREX_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // List expenses
+    const res = await brex.GET('/v1/expenses/card')
+```

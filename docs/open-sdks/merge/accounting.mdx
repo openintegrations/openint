@@ -1,0 +1,125 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-merge/merge_accounting.oas.json
+---
+
+## Integrating with Merge OpenSDK 
+
+Welcome to the Merge OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Merge OpenSDK allows you to easily integrate with the Merge API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /account-details | Get details for a linked account.
+| **GET** | /account-token/{public_token} | Returns the account token for the end user with the provided public token.
+| **GET** | /accounting-periods | Returns a list of `AccountingPeriod` objects.
+| **GET** | /accounting-periods/{id} | Returns an `AccountingPeriod` object with the given `id`.
+| **GET** | /accounts | Returns a list of `Account` objects.
+| **POST** | /accounts | Creates an `Account` object with the given values.
+| **GET** | /accounts/{id} | Returns an `Account` object with the given `id`.
+| **GET** | /accounts/meta/post | Returns metadata for `Account` POSTs.
+| **GET** | /addresses/{id} | Returns an `Address` object with the given `id`.
+| **POST** | /async-passthrough | Asynchronously pull data from an endpoint not currently supported by Merge.
+| **GET** | /async-passthrough/{async_passthrough_receipt_id} | Retrieves data from earlier async-passthrough POST request
+| **GET** | /attachments | Returns a list of `AccountingAttachment` objects.
+| **POST** | /attachments | Creates an `AccountingAttachment` object with the given values.
+| **GET** | /attachments/{id} | Returns an `AccountingAttachment` object with the given `id`.
+| **GET** | /attachments/meta/post | Returns metadata for `AccountingAttachment` POSTs.
+| **GET** | /audit-trail | Gets a list of audit trail events.
+| **GET** | /available-actions | Returns a list of models and actions available for an account.
+| **GET** | /balance-sheets | Returns a list of `BalanceSheet` objects.
+| **GET** | /balance-sheets/{id} | Returns a `BalanceSheet` object with the given `id`.
+| **GET** | /cash-flow-statements | Returns a list of `CashFlowStatement` objects.
+| **GET** | /cash-flow-statements/{id} | Returns a `CashFlowStatement` object with the given `id`.
+| **GET** | /company-info | Returns a list of `CompanyInfo` objects.
+| **GET** | /company-info/{id} | Returns a `CompanyInfo` object with the given `id`.
+| **GET** | /contacts | Returns a list of `Contact` objects.
+| **POST** | /contacts | Creates a `Contact` object with the given values.
+| **GET** | /contacts/{id} | Returns a `Contact` object with the given `id`.
+| **GET** | /contacts/meta/post | Returns metadata for `Contact` POSTs.
+| **GET** | /credit-notes | Returns a list of `CreditNote` objects.
+| **GET** | /credit-notes/{id} | Returns a `CreditNote` object with the given `id`.
+| **GET** | /default-scopes | Get the default permissions for Merge Common Models and fields across all Linked Accounts of a given category. [Learn more](https://help.merge.dev/en/articles/8828211-common-model-and-field-scopes).
+| **POST** | /delete-account | Delete a linked account.
+| **GET** | /expenses | Returns a list of `Expense` objects.
+| **POST** | /expenses | Creates an `Expense` object with the given values.
+| **GET** | /expenses/{id} | Returns an `Expense` object with the given `id`.
+| **GET** | /expenses/meta/post | Returns metadata for `Expense` POSTs.
+| **GET** | /field-mappings | Get all Field Mappings for this Linked Account. Field Mappings are mappings between third-party Remote Fields and user defined Merge fields. [Learn more](https://docs.merge.dev/supplemental-data/field-mappings/overview/).
+| **POST** | /field-mappings | Create new Field Mappings that will be available after the next scheduled sync. This will cause the next sync for this Linked Account to sync **ALL** data from start.
+| **PATCH** | /field-mappings/{field_mapping_id} | Create or update existing Field Mappings for a Linked Account. Changes will be reflected after the next scheduled sync. This will cause the next sync for this Linked Account to sync **ALL** data from start.
+| **DELETE** | /field-mappings/{field_mapping_id} | Deletes Field Mappings for a Linked Account. All data related to this Field Mapping will be deleted and these changes will be reflected after the next scheduled sync. This will cause the next sync for this Linked Account to sync **ALL** data from start.
+| **POST** | /generate-key | Create a remote key.
+| **GET** | /income-statements | Returns a list of `IncomeStatement` objects.
+| **GET** | /income-statements/{id} | Returns an `IncomeStatement` object with the given `id`.
+| **GET** | /invoices | Returns a list of `Invoice` objects.
+| **POST** | /invoices | Creates an `Invoice` object with the given values.
+| **GET** | /invoices/{id} | Returns an `Invoice` object with the given `id`.
+| **PATCH** | /invoices/{id} | Updates an `Invoice` object with the given `id`.
+| **GET** | /invoices/meta/patch/{id} | Returns metadata for `Invoice` PATCHs.
+| **GET** | /invoices/meta/post | Returns metadata for `Invoice` POSTs.
+| **GET** | /issues | Gets all issues for Organization.
+| **GET** | /issues/{id} | Get a specific issue.
+| **GET** | /items | Returns a list of `Item` objects.
+| **GET** | /items/{id} | Returns an `Item` object with the given `id`.
+| **GET** | /journal-entries | Returns a list of `JournalEntry` objects.
+| **POST** | /journal-entries | Creates a `JournalEntry` object with the given values.
+| **GET** | /journal-entries/{id} | Returns a `JournalEntry` object with the given `id`.
+| **GET** | /journal-entries/meta/post | Returns metadata for `JournalEntry` POSTs.
+| **POST** | /link-token | Creates a link token to be used when linking a new end user.
+| **GET** | /linked-account-scopes | Get all available permissions for Merge Common Models and fields for a single Linked Account. [Learn more](https://help.merge.dev/en/articles/8828211-common-model-and-field-scopes).
+| **POST** | /linked-account-scopes | Update permissions for any Common Model or field for a single Linked Account. Any Scopes not set in this POST request will inherit the default Scopes. [Learn more](https://help.merge.dev/en/articles/8828211-common-model-and-field-scopes)
+| **GET** | /linked-accounts | List linked accounts for your organization.
+| **POST** | /passthrough | Pull data from an endpoint not currently supported by Merge.
+| **GET** | /payments | Returns a list of `Payment` objects.
+| **POST** | /payments | Creates a `Payment` object with the given values.
+| **GET** | /payments/{id} | Returns a `Payment` object with the given `id`.
+| **PATCH** | /payments/{id} | Updates a `Payment` object with the given `id`.
+| **GET** | /payments/meta/patch/{id} | Returns metadata for `Payment` PATCHs.
+| **GET** | /payments/meta/post | Returns metadata for `Payment` POSTs.
+| **GET** | /phone-numbers/{id} | Returns an `AccountingPhoneNumber` object with the given `id`.
+| **GET** | /purchase-orders | Returns a list of `PurchaseOrder` objects.
+| **POST** | /purchase-orders | Creates a `PurchaseOrder` object with the given values.
+| **GET** | /purchase-orders/{id} | Returns a `PurchaseOrder` object with the given `id`.
+| **GET** | /purchase-orders/meta/post | Returns metadata for `PurchaseOrder` POSTs.
+| **POST** | /regenerate-key | Exchange remote keys.
+| **GET** | /remote-fields | Get all remote fields for a Linked Account. Remote fields are third-party fields that are accessible after initial sync if remote_data is enabled. You can use remote fields to override existing Merge fields or map a new Merge field. [Learn more](https://docs.merge.dev/supplemental-data/field-mappings/overview/).
+| **GET** | /sync-status | Get syncing status. Possible values: `DISABLED`, `DONE`, `FAILED`, `PARTIALLY_SYNCED`, `PAUSED`, `SYNCING`. Learn more about sync status in our [Help Center](https://help.merge.dev/en/articles/8184193-merge-sync-statuses).
+| **POST** | /sync-status/resync | Force re-sync of all models. This is available for all organizations via the dashboard. Force re-sync is also available programmatically via API for monthly, quarterly, and highest sync frequency customers on the Launch, Professional, or Enterprise plans. Doing so will consume a sync credit for the relevant linked account.
+| **GET** | /target-fields | Get all organization-wide Target Fields, this will not include any Linked Account specific Target Fields. Organization-wide Target Fields are additional fields appended to the Merge Common Model for all Linked Accounts in a category. [Learn more](https://docs.merge.dev/supplemental-data/field-mappings/target-fields/).
+| **GET** | /tax-rates | Returns a list of `TaxRate` objects.
+| **GET** | /tax-rates/{id} | Returns a `TaxRate` object with the given `id`.
+| **GET** | /tracking-categories | Returns a list of `TrackingCategory` objects.
+| **GET** | /tracking-categories/{id} | Returns a `TrackingCategory` object with the given `id`.
+| **GET** | /transactions | Returns a list of `Transaction` objects.
+| **GET** | /transactions/{id} | Returns a `Transaction` object with the given `id`.
+| **GET** | /vendor-credits | Returns a list of `VendorCredit` objects.
+| **GET** | /vendor-credits/{id} | Returns a `VendorCredit` object with the given `id`.
+| **GET** | /webhook-receivers | Returns a list of `WebhookReceiver` objects.
+| **POST** | /webhook-receivers | Creates a `WebhookReceiver` object with the given values.
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {mergeSdkDef} from '@opensdks/sdk-merge'
+
+    const merge = initSDK(mergeSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['MERGE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }, params: { ... }
+    })
+
+    // Get details for a linked account.
+    const res = await merge.GET('/account-details')
+```

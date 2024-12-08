@@ -1,0 +1,78 @@
+---
+openapi: https://raw.githubusercontent.com/openintegrations/openSDKs/refs/heads/main/sdks/sdk-venice/venice.oas.json
+---
+
+## Integrating with Venice OpenSDK 
+
+Welcome to the Venice OpenSDK documentation. OpenSDKs provides a type-safe and standardized way to interact with various APIs, ensuring a consistent and efficient integration experience.
+
+The Venice OpenSDK allows you to easily integrate with the Venice API, providing a robust set of tools to manage your API interactions with managed auth by OpenInt. 
+
+### Available Methods:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | /health | Health check
+| **GET** | /debug/raw-schemas | Get raw schemas
+| **POST** | /connect/token | 
+| **POST** | /connect/magic-link | 
+| **POST** | /passthrough | 
+| **POST** | /core/resource/{id}/source_sync | Return records that would have otherwise been emitted during a sync and return it instead
+| **POST** | /core/resource | 
+| **GET** | /core/resource | 
+| **PATCH** | /core/resource/{id} | 
+| **DELETE** | /core/resource/{id} | 
+| **GET** | /core/resource/{id} | 
+| **POST** | /core/resource/{id}/_sync | 
+| **GET** | /core/connector_config | 
+| **POST** | /core/connector_config | 
+| **PATCH** | /core/connector_config/{id} | 
+| **DELETE** | /core/connector_config/{id} | 
+| **GET** | /core/connector_config/{id} | 
+| **GET** | /core/connector_config_info | 
+| **GET** | /connector | Get catalog of all available connectors
+| **GET** | /connector/{name} | 
+| **GET** | /connector/{name}/oas | 
+| **GET** | /connector/{name}/schemas | 
+| **GET** | /core/pipeline | 
+| **PATCH** | /core/pipeline/{id} | 
+| **DELETE** | /core/pipeline/{id} | 
+| **POST** | /core/pipeline/{id}/_sync | 
+| **GET** | /verticals/accounting/account | 
+| **GET** | /verticals/accounting/expense | 
+| **GET** | /verticals/accounting/vendor | 
+| **GET** | /verticals/pta/account | 
+| **GET** | /verticals/pta/transaction | 
+| **GET** | /verticals/pta/commodity | 
+| **GET** | /verticals/investment/account | 
+| **GET** | /verticals/investment/transaction | 
+| **GET** | /verticals/investment/holding | 
+| **GET** | /verticals/investment/security | 
+| **GET** | /verticals/sales-engagement/contacts | 
+| **GET** | /verticals/banking/category | 
+| **GET** | /viewer | Get current viewer accessing the API
+| **GET** | /openapi.json | 
+
+
+## Code Example
+
+```typescript
+
+    import {initSDK} from '@opensdks/runtime'
+    import {veniceSdkDef} from '@opensdks/sdk-venice'
+
+    const venice = initSDK(veniceSdkDef, {
+      auth: {
+        // for provider-specific auth
+        bearer: `${process.env['VENICE_TOKEN']}`,
+        // or for passthrough auth via OPENINT_API_KEY & end user resourceId
+        openInt: {
+          apiKey: `${process.env['OPENINT_API_KEY']}`,
+          resourceId: END_USER_RESOURCE_ID,
+        }
+      }
+    })
+
+    // Health check
+    const res = await venice.GET('/health')
+```
