@@ -46,9 +46,7 @@ export const envConfig = {
     NEXT_PUBLIC_SENTRY_ORG: z.string().optional(),
     NEXT_PUBLIC_POSTHOG_WRITEKEY: z.string().optional(),
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
-    NEXT_PUBLIC_CLERK_SUPABASE_JWT_TEMPLATE_NAME: z
-      .string()
-      .default('supabase'),
+
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
@@ -61,8 +59,6 @@ export const envConfig = {
     NEXT_PUBLIC_POSTHOG_WRITEKEY: process.env['NEXT_PUBLIC_POSTHOG_WRITEKEY'],
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env['NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY'],
-    NEXT_PUBLIC_CLERK_SUPABASE_JWT_TEMPLATE_NAME:
-      process.env['NEXT_PUBLIC_CLERK_SUPABASE_JWT_TEMPLATE_NAME'],
     DEBUG: process.env['DEBUG'],
     JWT_SECRET: process.env['JWT_SECRET'],
     CLERK_SECRET_KEY: process.env['CLERK_SECRET_KEY'],

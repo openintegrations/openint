@@ -7,7 +7,6 @@
     "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
     "build:migration": "if [ \"$VERCEL_ENV\" = production ] || [ \"$VERCEL_GIT_COMMIT_REF\" = main ]; then pnpm --dir ../../ migration up; else echo 'Skip non prod/staging migration'; fi",
     "build:next": "next build",
-    "codegen:supabase": "supabase gen types typescript --linked --schema public > ./supabase/supabase.gen.d.ts",
     "dev": "next dev -p 4000 --turbo",
     "start": "next start"
   },
@@ -26,7 +25,6 @@
     "@opensdks/fetch-links": "^0.0.19",
     "@sentry/nextjs": "^8.33.1",
     "@stoplight/elements": "7.7.10",
-    "@supabase/realtime-js": "2.7.2",
     "@tanstack/query-core": "4.27.0",
     "@tanstack/query-sync-storage-persister": "4.27.1",
     "@tanstack/react-query": "4.28.0",
