@@ -12,7 +12,7 @@ import type {MetaService, MetaTable} from './metaService'
 // Should the mapping of the StandardIntegration happen inside here?
 
 export function makeMetaLinks(metaBase: MetaService) {
-  type Res = Pick<ZRaw['resource'], 'id' | 'connectorConfigId' | 'customerId'>
+  type Res = Pick<ZRaw['connection'], 'id' | 'connectorConfigId' | 'customerId'>
   type Pipe = Pick<
     ZRaw['pipeline'],
     'id' | 'sourceId' | 'destinationId' | 'linkOptions'
@@ -89,7 +89,7 @@ export function makeMetaLinks(metaBase: MetaService) {
 
         // Can we run this in one transaction?
 
-        await patch('resource', id, {
+        await patch('connection', id, {
           id,
           settings,
           // It is also an issue that Integration may not exist at the initial time of

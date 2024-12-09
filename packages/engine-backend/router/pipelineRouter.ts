@@ -64,33 +64,33 @@ export const pipelineRouter = trpc.router({
   listConnections: protectedProcedure
     .input(zListParams.extend({customerId: zCustomerId.optional()}).optional())
     .query(async ({input = {}, ctx}) => {
-      // Add info about what it takes to `reconnect` here for resources which
+      // Add info about what it takes to `reconnect` here for connections which
       // has disconnected
-      const resources =
-        await ctx.services.metaService.tables.resource.list(input)
+      const connections =
+        await ctx.services.metaService.tables.connection.list(input)
       const [integrations, _pipelines] = await Promise.all([
         ctx.services.metaService.tables.integration.list({
-          ids: R.compact(resources.map((c) => c.integrationId)),
+          ids: R.compact(connections.map((c) => c.integrationId)),
         }),
         ctx.services.metaService.findPipelines({
-          connectionIds: resources.map((c) => c.id),
+          connectionIds: connections.map((c) => c.id),
         }),
       ])
       type ConnType = 'source' | 'destination'
 
       const intById = R.mapToObj(integrations, (ins) => [ins.id, ins])
 
-      function parseResource(reso?: (typeof resources)[number] | null) {
+      function parseResource(reso?: (typeof connections)[number] | null) {
         if (!reso) {
           return reso
         }
         const connectorName = extractId(reso.id)[1]
         const integrations = intById[reso.integrationId!]
         const mappers = ctx.connectorMap[connectorName]?.standardMappers
-        const standardReso = zStandard.resource
+        const standardReso = zStandard.connection
           .omit({id: true})
           .nullish()
-          .parse(mappers?.resource?.(reso.settings))
+          .parse(mappers?.connection?.(reso.settings))
         const standardInt =
           // QQ: what are the implications for external data integrations UI rendering of using this either or ?? and also returning the id?
           integrations?.standard ??
@@ -124,7 +124,7 @@ export const pipelineRouter = trpc.router({
             pipe.lastSyncCompletedAt &&
             pipe.lastSyncStartedAt > pipe.lastSyncCompletedAt),
       }))
-      return resources
+      return connections
         .map(parseResource)
         .filter((r): r is NonNullable<typeof r> => !!r)
         .map((r) => {

@@ -20,29 +20,32 @@ export async function getRemoteContext(ctx: ProtectedContext) {
 
   // Ensure that end user can access its own resources
   if (ctx.viewer.role === 'customer') {
-    await ctx.services.getResourceOrFail(ctx.remoteConnectionId)
+    await ctx.services.getConnectionOrFail(ctx.remoteConnectionId)
   }
 
   // Elevant role to organization here
-  const resource = await ctx.asOrgIfNeeded.getResourceExpandedOrFail(
+  const connection = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(
     ctx.remoteConnectionId,
   )
 
-  const connectionId = toNangoConnectionId(resource.id) // ctx.customerId
+  const connectionId = toNangoConnectionId(connection.id) // ctx.customerId
   const providerConfigKey = toNangoProviderConfigKey(
-    resource.connectorConfigId, // ctx.providerName
+    connection.connectorConfigId, // ctx.providerName
   )
   const nango = initNangoSDK({
     headers: {authorization: `Bearer ${ctx.env.NANGO_SECRET_KEY}`},
   })
 
-  // @ts-expect-error oauth is conditionally present
-  const oauthCredentialsExpiryTime = new Date(resource.settings?.oauth?.credentials?.raw?.expires_at ?? new Date(new Date().getTime() + 1000));
-  const forceRefreshCredentials = oauthCredentialsExpiryTime < new Date();
+  const oauthCredentialsExpiryTime = new Date(
+    // @ts-expect-error oauth is conditionally present
+    connection.settings?.oauth?.credentials?.raw?.expires_at ??
+      new Date(new Date().getTime() + 1000),
+  )
+  const forceRefreshCredentials = oauthCredentialsExpiryTime < new Date()
 
   const settings = {
-    ...resource.settings,
-    ...(resource.connectorConfig.connector.metadata?.nangoProvider && {
+    ...connection.settings,
+    ...(connection.connectorConfig.connector.metadata?.nangoProvider && {
       oauth: await nango
         .GET('/connection/{connectionId}', {
           params: {
@@ -58,8 +61,8 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     }),
   }
 
-  const instance: unknown = resource.connectorConfig.connector.newInstance?.({
-    config: resource.connectorConfig.config,
+  const instance: unknown = connection.connectorConfig.connector.newInstance?.({
+    config: connection.connectorConfig.config,
     settings,
     fetchLinks: compact([
       logLink(),
@@ -74,7 +77,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     ]),
 
     onSettingsChange: (settings) =>
-      ctx.services.metaLinks.patch('resource', resource.id, {settings}),
+      ctx.services.metaLinks.patch('connection', connection.id, {settings}),
   })
 
   return {
@@ -83,17 +86,17 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     remote: {
       /** Aka remoteClient */
       instance,
-      id: resource.id,
+      id: connection.id,
       // TODO: Rename customerId to just customerId
-      customerId: resource.customerId ?? '',
-      connectorConfigId: resource.connectorConfig.id,
-      connector: resource.connectorConfig.connector,
-      connectorName: resource.connectorName,
-      connectorMetadata: resource.connectorConfig.connector.metadata,
+      customerId: connection.customerId ?? '',
+      connectorConfigId: connection.connectorConfig.id,
+      connector: connection.connectorConfig.connector,
+      connectorName: connection.connectorName,
+      connectorMetadata: connection.connectorConfig.connector.metadata,
       settings, // Not resource.settings which is out of date. // TODO: we should update resource.settings through
       // TODO: Need to be careful this is never returned to any end user endpoints
       // and only used for making requests with remotes
-      config: resource.connectorConfig.config,
+      config: connection.connectorConfig.config,
     },
   }
 }

@@ -13,17 +13,21 @@ export default async function PlaygroundPageServer({
   const apikey = await getOrCreateApikey(viewer)
   const ctx = contextFactory.fromViewer(viewer)
 
-  const resource = await ctx.services.getResourceExpandedOrFail(connectionId)
+  const connection =
+    await ctx.services.getConnectionExpandedOrFail(connectionId)
 
-  const oas = resource.connectorConfig.connector.metadata?.openapiSpec?.proxied
+  const oas =
+    connection.connectorConfig.connector.metadata?.openapiSpec?.proxied
 
   if (!oas) {
     return (
       <div className="p-6">
-        {resource.connectorName} does not have OpenAPI spec
+        {connection.connectorName} does not have OpenAPI spec
       </div>
     )
   }
 
-  return <PlaygroundPage apikey={apikey} connectionId={connectionId} oas={oas} />
+  return (
+    <PlaygroundPage apikey={apikey} connectionId={connectionId} oas={oas} />
+  )
 }

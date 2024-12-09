@@ -61,7 +61,7 @@ export const zStandard = {
     /** TODO: Is this the same as connector vertical? */
     verticals: z.array(zVerticalKey).nullish(),
   }),
-  resource: z.object({
+  connection: z.object({
     id: zId('conn'),
     displayName: z.string(),
     /**
@@ -171,7 +171,7 @@ export const zRaw = {
       metadata: zMetadata,
     })
     .openapi({ref: 'ConnectorConfig'}),
-  resource: zBase
+  connection: zBase
     .extend({
       id: zId('conn'),
       connectorName: z.string().describe('Unique name of the connector'),
@@ -180,7 +180,7 @@ export const zRaw = {
       connectorConfigId: zId('ccfg'),
       integrationId: zId('int').nullish(),
       settings: z.record(z.unknown()).nullish(),
-      standard: zStandard.resource.omit({id: true}).nullish(),
+      standard: zStandard.connection.omit({id: true}).nullish(),
       disabled: z.boolean().optional(),
       metadata: zMetadata,
     })

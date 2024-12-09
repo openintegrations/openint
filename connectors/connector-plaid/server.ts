@@ -30,7 +30,7 @@ export const plaidServerConnector = {
   // - commandsForResource
   preConnect: (
     config,
-    {extCustomerId: userId, resource, integrationExternalId, ...ctx},
+    {extCustomerId: userId, connection: resource, integrationExternalId, ...ctx},
     input,
   ) => {
     if (input.sandboxPublicTokenCreate) {

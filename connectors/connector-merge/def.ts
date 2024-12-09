@@ -72,7 +72,7 @@ export const mergeDef = {
         (c): c is 'accounting' | 'hris' => c === 'accounting' || c === 'hris',
       ),
     }),
-    resource() {
+    connection() {
       return {
         displayName: '',
         // status: healthy vs. disconnected...

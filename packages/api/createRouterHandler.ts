@@ -131,7 +131,7 @@ export const contextFromRequest = async ({
   )
   let connectionId = req.headers.get('x-connection-id') as Id['conn'] | undefined
   if (!connectionId) {
-    // TODO: How do we allow filtering for organization owned resources?
+    // TODO: How do we allow filtering for organization owned connections?
     // Specifically making sure that customerId = null?
     // TODO: make sure this corresponds to the list resources api
     const resourceFilters = pickBy(
@@ -145,17 +145,17 @@ export const contextFromRequest = async ({
       (v) => v != null,
     )
     if (Object.keys(resourceFilters).length > 0) {
-      const resources = await context.services.metaService.tables.resource.list(
+      const connections = await context.services.metaService.tables.connection.list(
         {...resourceFilters, limit: 2},
       )
-      if (resources.length > 1) {
+      if (connections.length > 1) {
         throw new BadRequestError(
-          `Multiple resources found for filter: ${JSON.stringify(
+          `Multiple connections found for filter: ${JSON.stringify(
             resourceFilters,
           )}`,
         )
       }
-      connectionId = resources[0]?.id
+      connectionId = connections[0]?.id
     }
   }
   console.log('[contextFromRequest]', {url: req.url, viewer, connectionId})

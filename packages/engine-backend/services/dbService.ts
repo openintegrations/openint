@@ -13,7 +13,7 @@ export type _PipelineExpanded = Awaited<
   ReturnType<ReturnType<typeof makeDBService>['getPipelineExpandedOrFail']>
 >
 export type _ResourceExpanded = Awaited<
-  ReturnType<ReturnType<typeof makeDBService>['getResourceExpandedOrFail']>
+  ReturnType<ReturnType<typeof makeDBService>['getConnectionExpandedOrFail']>
 >
 
 export function makeDBService({
@@ -94,8 +94,8 @@ export function makeDBService({
           z.object({}).nullish(),
         // TODO: Should validate a consistently
       })
-    } else if (tableName === 'resource') {
-      schema = (schema as (typeof zRaw)['resource']).extend({
+    } else if (tableName === 'connection') {
+      schema = (schema as (typeof zRaw)['connection']).extend({
         // This should be an override...
         settings:
           getConnectorOrFail(id as Id['conn']).schemas.connectionSettings ??
@@ -184,15 +184,15 @@ export function makeDBService({
       }
       return zRaw.integration.parse(ins)
     })
-  const getResourceOrFail = (id: Id['conn']) =>
-    metaService.tables.resource.get(id).then((reso) => {
+  const getConnectionOrFail = (id: Id['conn']) =>
+    metaService.tables.connection.get(id).then((reso) => {
       if (!reso) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: `reso not found: ${id}`,
         })
       }
-      return zRaw.resource.parse(reso)
+      return zRaw.connection.parse(reso)
     })
   const getPipelineOrFail = (id: Id['pipe']) =>
     metaService.tables.pipeline.get(id).then((pipe) => {
@@ -205,8 +205,8 @@ export function makeDBService({
       return zRaw.pipeline.parse(pipe)
     })
 
-  const getResourceExpandedOrFail = (id: Id['conn']) =>
-    getResourceOrFail(id).then(async (reso) => {
+  const getConnectionExpandedOrFail = (id: Id['conn']) =>
+    getConnectionOrFail(id).then(async (reso) => {
       const connectorConfig = await getConnectorConfigOrFail(
         reso.connectorConfigId,
       )
@@ -221,8 +221,8 @@ export function makeDBService({
   const getPipelineExpandedOrFail = (id: Id['pipe']) =>
     getPipelineOrFail(id).then(async (pipe) => {
       const [source, destination] = await Promise.all([
-        getResourceExpandedOrFail(pipe.sourceId!),
-        getResourceExpandedOrFail(pipe.destinationId!),
+        getConnectionExpandedOrFail(pipe.sourceId!),
+        getConnectionExpandedOrFail(pipe.destinationId!),
       ])
       // if (
       //   pipe.sourceState != null &&
@@ -284,9 +284,9 @@ export function makeDBService({
     getConnectorOrFail,
     getConnectorConfigInfoOrFail,
     getConnectorConfigOrFail,
-    getResourceOrFail,
+    getConnectionOrFail,
     getPipelineOrFail,
-    getResourceExpandedOrFail,
+    getConnectionExpandedOrFail,
     getPipelineExpandedOrFail,
     listConnectorConfigs,
     // DB methods really should be moved to a separate file

@@ -40,7 +40,7 @@ export async function GET(
     }
 
     const {services} = contextFactory.fromViewer(viewer)
-    const reso = await services.getResourceOrFail(connectionId as Id['conn'])
+    const reso = await services.getConnectionOrFail(connectionId as Id['conn'])
 
     if (reso.connectorName !== 'postgres') {
       throw new TRPCError({

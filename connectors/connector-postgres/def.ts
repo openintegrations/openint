@@ -97,7 +97,7 @@ export const postgresDef = {
 
   schemas: postgresSchemas,
   standardMappers: {
-    resource: (_settings) => ({
+    connection: (_settings) => ({
       displayName: 'Postgres',
       status: 'healthy',
     }),

@@ -34,19 +34,19 @@ function _GlobalCommandBar() {
         template: {type: 'link', value: '', operation: 'router'},
       })
     }
-    const resources = [
+    const connections = [
       {
         id: 'conn_1',
-        label: 'Resource 1 plaid',
+        label: 'Connection 1 plaid',
       },
       {
         id: 'conn_2',
-        label: 'Resource postgres 2',
+        label: 'Connection postgres 2',
       },
     ]
-    window.CommandBar.addRecords('resources', resources)
+    window.CommandBar.addRecords('resources', connections)
 
-    window.CommandBar.addMetadata('activeResource', resources[0])
+    window.CommandBar.addMetadata('activeResource', connections[0])
     void window.CommandBar.addCommand({
       name: 'test',
       text: 'Test',

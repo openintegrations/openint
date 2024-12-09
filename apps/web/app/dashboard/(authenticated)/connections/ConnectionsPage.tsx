@@ -27,7 +27,7 @@ export default function ConnectionsPage() {
             id: 'actions',
             enableHiding: false,
             cell: ({row}) => (
-              <VCommandMenu initialParams={{resource: row.original}} />
+              <VCommandMenu initialParams={{connection: row.original}} />
             ),
           },
           {accessorKey: 'displayName'},

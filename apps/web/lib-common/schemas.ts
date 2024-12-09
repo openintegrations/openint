@@ -4,7 +4,7 @@ import type {z} from '@openint/util'
 import {zRecord} from '@openint/util'
 
 type Pipeline = RouterOutput['listPipelines'][number]
-type Resource = RouterOutput['listConnections'][number]
+type Connection = RouterOutput['listConnectionsRaw'][number]
 type ConnectorConfig = RouterOutput['adminListConnectorConfigs'][number]
 type ConnectorMeta = RouterOutput['listConnectorMetas'][string]
 
@@ -13,9 +13,9 @@ export const zClient = {
     (p) => zId('pipe').safeParse(p.id).success,
     {message: 'Invalid pipeline'},
   ),
-  resource: zRecord<Resource>().refine(
+  connection: zRecord<Connection>().refine(
     (r) => zId('conn').safeParse(r.id).success,
-    {message: 'Invalid resource'},
+    {message: 'Invalid connection'},
   ),
   connector_config: zRecord<ConnectorConfig>().refine(
     (i) => zId('ccfg').safeParse(i.id).success,

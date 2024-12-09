@@ -83,9 +83,9 @@ export interface ConnectorDef<
     integration?: (
       data: T['_types']['integrationData'],
     ) => Omit<ZStandard['integration'], 'id'>
-    resource?: (
+    connection?: (
       settings: T['_types']['connectionSettings'],
-    ) => Omit<ZStandard['resource'], 'id'>
+    ) => Omit<ZStandard['connection'], 'id'>
 
     // TODO: Migrate to vertical format, as only verticals deal with mapping entities
     entity?:

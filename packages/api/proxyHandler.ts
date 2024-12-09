@@ -41,7 +41,7 @@ export const proxyHandler = async (req: Request) => {
       .then((r) => r.data)
 
     const {connectorConfig: int} =
-      await protectedContext.asOrgIfNeeded.getResourceExpandedOrFail(
+      await protectedContext.asOrgIfNeeded.getConnectionExpandedOrFail(
         remoteContext.remoteConnectionId,
       )
 

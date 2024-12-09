@@ -53,7 +53,7 @@ export const tellerDef = {
   },
 
   standardMappers: {
-    resource: (settings) => ({
+    connection: (settings) => ({
       displayName: 'TODO' + settings.token,
       institutionId: 'ins_teller_TODO',
     }),

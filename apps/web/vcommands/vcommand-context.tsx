@@ -42,7 +42,7 @@ export function useCommandContextValue() {
   })
   const [resourceSheetState, setResourceSheetState] = React.useState({
     open: false,
-    resource: undefined as undefined | ZClient['resource'],
+    connection: undefined as undefined | ZClient['connection'],
   })
   const [alertDialogState, setAlertDialogState] =
     React.useState<AlertProps | null>(null)
@@ -111,7 +111,7 @@ export function WithCommandContext(props: {
       <ResourceSheet
         ref={resourceSheet}
         triggerButton={false}
-        resource={ctx.resourceSheetState.resource}
+        connection={ctx.resourceSheetState.connection}
       />
       {!!ctx.alertDialogState && (
         <AlertDialog

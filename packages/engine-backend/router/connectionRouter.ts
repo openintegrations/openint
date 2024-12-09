@@ -22,13 +22,13 @@ export {type inferProcedureInput} from '@openint/trpc'
 
 const tags = ['Core']
 
-async function performResourceCheck(ctx: any, resoId: string, opts: any) {
+async function performConnectionCheck(ctx: any, connId: string, opts: any) {
   const remoteCtx = await getRemoteContext({
     ...ctx,
-    remoteConnectionId: resoId,
+    remoteConnectionId: connId,
   })
   const {connectorConfig: int, ...reso} =
-    await ctx.asOrgIfNeeded.getResourceExpandedOrFail(resoId)
+    await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
 
   let resoUpdate = await int.connector.checkResource?.({
     settings: remoteCtx.remote.settings,
@@ -56,7 +56,7 @@ async function performResourceCheck(ctx: any, resoId: string, opts: any) {
       resourceExternalId:
         resoUpdate?.resourceExternalId ?? extractId(reso.id)[2],
     })
-    resoUpdate = await ctx.services.getResourceOrFail(reso.id)
+    resoUpdate = await ctx.services.getConnectionOrFail(reso.id)
   }
   if (!int.connector.checkResource) {
     return resoUpdate
@@ -103,7 +103,7 @@ export const connectionRouter = trpc.router({
     )
     .output(z.array(z.record(z.any())))
     .mutation(async ({input, ctx}) => {
-      const reso = await ctx.services.getResourceExpandedOrFail(input.id)
+      const reso = await ctx.services.getConnectionExpandedOrFail(input.id)
 
       // NOTE: Gotta make sure this is not an infinite sourceSync somehow such as
       // in the case of firestore...
@@ -122,7 +122,7 @@ export const connectionRouter = trpc.router({
   createResource: protectedProcedure
     .meta({openapi: {method: 'POST', path: '/core/connection', tags}})
     .input(
-      zRaw.resource.pick({
+      zRaw.connection.pick({
         connectorConfigId: true,
         settings: true,
         displayName: true,
@@ -148,7 +148,7 @@ export const connectionRouter = trpc.router({
       }
 
       const _extId = makeUlid()
-      const resoId = makeId('conn', int.connector.name, _extId)
+      const connId = makeId('conn', int.connector.name, _extId)
 
       // Should throw if not working..
       const resoUpdate = {
@@ -163,23 +163,24 @@ export const connectionRouter = trpc.router({
           options: {},
         })),
         // TODO: Fix me up
-        customerId: ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
+        customerId:
+          ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
       } satisfies ResourceUpdate
       await ctx.asOrgIfNeeded._syncResourceUpdate(int, resoUpdate)
 
       // TODO: Do this in one go not two
       if (input.displayName) {
-        await ctx.services.patchReturning('resource', resoId, input)
+        await ctx.services.patchReturning('connection', connId, input)
       }
       // TODO: return the entire resource object...
-      return resoId
+      return connId
     }),
 
   // TODO: Run server-side validation
   updateResource: protectedProcedure
     .meta({openapi: {method: 'PATCH', path: '/core/connection/{id}', tags}})
     .input(
-      zRaw.resource.pick({
+      zRaw.connection.pick({
         id: true,
         settings: true,
         displayName: true,
@@ -190,22 +191,22 @@ export const connectionRouter = trpc.router({
         integrationId: true,
       }),
     )
-    .output(zRaw.resource)
+    .output(zRaw.connection)
     .mutation(async ({input: {id, ...input}, ctx}) =>
       // TODO: Run mapStandardResource after editing
       // Also we probably do not want deeply nested patch
       // shallow is sufficient more most situations
-      ctx.services.patchReturning('resource', id, input),
+      ctx.services.patchReturning('connection', id, input),
     ),
   deleteResource: protectedProcedure
     .meta({openapi: {method: 'DELETE', path: '/core/connection/{id}', tags}})
     .input(z.object({id: zId('conn'), skipRevoke: z.boolean().optional()}))
     .output(z.void())
-    .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
+    .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
-        await ctx.services.getResourceOrFail(resoId)
+        await ctx.services.getConnectionOrFail(connId)
       }
-      const reso = await ctx.asOrgIfNeeded.getResourceExpandedOrFail(resoId)
+      const reso = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
       const {settings, connectorConfig: ccfg} = reso
       if (!opts?.skipRevoke) {
         await ccfg.connector.revokeResource?.(
@@ -224,9 +225,9 @@ export const connectionRouter = trpc.router({
       // and we don't easily have the ability to handle a delete, it's not part of the sync protocol yet...
       // We should probably introduce a reset / delete event...
       // }
-      await ctx.asOrgIfNeeded.metaService.tables.resource.delete(reso.id)
+      await ctx.asOrgIfNeeded.metaService.tables.connection.delete(reso.id)
     }),
-  listResources: protectedProcedure
+  listConnectionsRaw: protectedProcedure
     .meta({openapi: {method: 'GET', path: '/core/connection', tags}})
     .input(
       zListParams
@@ -238,15 +239,16 @@ export const connectionRouter = trpc.router({
         })
         .optional(),
     )
-    .output(z.array(zRaw.resource))
+    .output(z.array(zRaw.connection))
     .query(async ({input = {}, ctx}) => {
-      let resources = await ctx.services.metaService.tables.resource.list(input)
+      let connections =
+        await ctx.services.metaService.tables.connection.list(input)
 
       // Handle forceRefresh for each resource
 
-      console.log('[listResources] Refreshing tokens for all resources')
-      const updatedResources = await Promise.all(
-        resources.map(async (reso) => {
+      console.log('[listConnectionsRaw] Refreshing tokens for all connections')
+      const updatedConnections = await Promise.all(
+        connections.map(async (reso) => {
           const expiresAt =
             // @ts-expect-error
             reso?.settings?.['oauth']?.credentials?.raw?.expires_at
@@ -256,25 +258,25 @@ export const connectionRouter = trpc.router({
             (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now())
           ) {
             console.log(
-              `[listResources] Refreshing token for resource ${reso.connectorName}`,
+              `[listConnectionsRaw] Refreshing token for resource ${reso.connectorName}`,
             )
-            const resoCheck = await performResourceCheck(ctx, reso.id, {})
-            if (!resoCheck) {
+            const connCheck = await performConnectionCheck(ctx, reso.id, {})
+            if (!connCheck) {
               console.warn(
-                `[listResources] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale resource.`,
+                `[listConnectionsRaw] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale resource.`,
               )
             }
-            return resoCheck || reso
+            return connCheck || reso
           }
           return reso
         }),
       )
 
-      resources = updatedResources
+      connections = updatedConnections
 
-      return resources as Array<ZRaw['resource']>
+      return connections as Array<ZRaw['connection']>
     }),
-  getResource: protectedProcedure
+  getConnection: protectedProcedure
     .meta({
       description: 'Not automatically called, used for debugging for now',
       openapi: {method: 'GET', path: '/core/connection/{id}', tags},
@@ -287,7 +289,7 @@ export const connectionRouter = trpc.router({
     )
     .output(
       // TODO: Should we expand this?
-      zRaw.resource.extend({
+      zRaw.connection.extend({
         connector_config: zRaw.connector_config.pick({
           id: true,
           orgId: true,
@@ -297,7 +299,7 @@ export const connectionRouter = trpc.router({
     )
     .query(async ({input, ctx}) => {
       // do not expand for now otherwise permission issues..
-      let reso = await ctx.services.getResourceOrFail(input.id)
+      let reso = await ctx.services.getConnectionOrFail(input.id)
       const ccfg = await ctx.services.getConnectorConfigOrFail(
         reso.connectorConfigId,
       )
@@ -310,14 +312,14 @@ export const connectionRouter = trpc.router({
         expiresAt &&
         (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now())
       ) {
-        console.log('[getResource] Refreshing token')
-        const resoCheck = await performResourceCheck(ctx, reso.id, {})
-        if (!resoCheck) {
+        console.log('[getConnection] Refreshing token')
+        const connCheck = await performConnectionCheck(ctx, reso.id, {})
+        if (!connCheck) {
           console.warn(
-            `[getResource] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale resource.`,
+            `[getConnection] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale resource.`,
           )
         }
-        reso = resoCheck || reso
+        reso = connCheck || reso
       }
 
       return {
@@ -332,13 +334,13 @@ export const connectionRouter = trpc.router({
     })
     .input(z.object({id: zId('conn')}).merge(zCheckResourceOptions))
     .output(z.unknown())
-    .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
+    .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
-        await ctx.services.getResourceOrFail(resoId)
+        await ctx.services.getConnectionOrFail(connId)
       }
-      const resourceCheck = await performResourceCheck(ctx, resoId, opts)
+      const resourceCheck = await performConnectionCheck(ctx, connId, opts)
       if (!resourceCheck) {
-        return `Resource check not implemented for ${resoId}`
+        return `Resource check not implemented for ${connId}`
       }
       return resourceCheck
     }),
@@ -346,21 +348,23 @@ export const connectionRouter = trpc.router({
   // MARK: - Sync
 
   syncResource: protectedProcedure
-    .meta({openapi: {method: 'POST', path: '/core/connection/{id}/_sync', tags}})
+    .meta({
+      openapi: {method: 'POST', path: '/core/connection/{id}/_sync', tags},
+    })
     .input(z.object({id: zId('conn')}).merge(zSyncOptions))
     .output(z.void())
-    .mutation(async function syncResource({input: {id: resoId, ...opts}, ctx}) {
+    .mutation(async function syncResource({input: {id: connId, ...opts}, ctx}) {
       if (ctx.viewer.role === 'customer') {
-        await ctx.services.getResourceOrFail(resoId)
+        await ctx.services.getConnectionOrFail(connId)
       }
       if (opts?.async) {
         await inngest.send({
           name: 'sync/resource-requested',
-          data: {connectionId: resoId},
+          data: {connectionId: connId},
         })
         return
       }
-      const reso = await ctx.asOrgIfNeeded.getResourceExpandedOrFail(resoId)
+      const reso = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
       // No need to checkResource here as sourceSync should take care of it
 
       if (opts?.metaOnly) {

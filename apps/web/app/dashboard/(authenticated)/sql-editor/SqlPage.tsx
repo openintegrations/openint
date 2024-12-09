@@ -38,7 +38,7 @@ function sqlUrl(opts: {
   apikey: string
 }) {
   const url = new URL(
-    `/api/resources/${opts.connectionId}/sql`,
+    `/api/connections/${opts.connectionId}/sql`,
     getServerUrl(null),
   )
   url.searchParams.set('q', opts.query)

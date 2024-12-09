@@ -44,9 +44,9 @@ export async function scheduleSyncs({
   console.log('[scheduleSyncs]', event)
   const {openint} = initSDK()
   // TODO: Deal with pagination
-  const resources = await openint.GET('/core/connection').then((r) => r.data)
+  const connections = await openint.GET('/core/connection').then((r) => r.data)
 
-  const events = resources
+  const events = connections
     .map((r) => {
       if (!event.data.connector_names.includes(r.connectorName)) {
         // Only sync these for now...
@@ -65,7 +65,7 @@ export async function scheduleSyncs({
     .filter((c): c is NonNullable<typeof c> => !!c)
 
   console.log('[scheduleSyncs] Metrics', {
-    num_resources: resources.length,
+    num_resources: connections.length,
     num_resources_to_sync: events.length,
   })
 

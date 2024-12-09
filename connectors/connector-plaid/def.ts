@@ -205,7 +205,7 @@ export const plaidDef = {
       loginUrl: ins.url ?? undefined,
       verticals: ['banking'],
     }),
-    resource: (settings) => {
+    connection: (settings) => {
       // TODO: Unify item.error and webhookItemError into a single field
       // so we know what the true status of the item is...
       const err =

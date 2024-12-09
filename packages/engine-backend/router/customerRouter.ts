@@ -176,7 +176,7 @@ export const customerRouter = trpc.router({
           return null
         }
         const reso = resourceExternalId
-          ? await ctx.services.getResourceOrFail(
+          ? await ctx.services.getConnectionOrFail(
               makeId('conn', int.connector.name, resourceExternalId),
             )
           : undefined
@@ -185,7 +185,7 @@ export const customerRouter = trpc.router({
           {
             ...connCtxInput,
             extCustomerId: ctx.extCustomerId,
-            resource: reso
+            connection: reso
               ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 {externalId: resourceExternalId!, settings: reso.settings}
               : undefined,
@@ -244,7 +244,7 @@ export const customerRouter = trpc.router({
           }
 
           const reso = resourceExternalId
-            ? await ctx.services.getResourceOrFail(
+            ? await ctx.services.getConnectionOrFail(
                 makeId('conn', int.connector.name, resourceExternalId),
               )
             : undefined
@@ -265,7 +265,7 @@ export const customerRouter = trpc.router({
             {
               ...connCtxInput,
               extCustomerId: ctx.extCustomerId,
-              resource: reso
+              connection: reso
                 ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                   {externalId: resourceExternalId!, settings: reso.settings}
                 : undefined,

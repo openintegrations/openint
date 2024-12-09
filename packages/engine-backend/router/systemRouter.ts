@@ -4,10 +4,10 @@ import {adminProcedure, systemProcedure, trpc} from './_base'
 
 export const systemRouter = trpc.router({
   ensureDefaultPipelines: adminProcedure.mutation(async ({ctx}) => {
-    const resources =
+    const connections =
       await ctx.services.metaService.findResourcesMissingDefaultPipeline()
     return await Promise.all(
-      resources.map((reso) =>
+      connections.map((reso) =>
         ctx.services
           .ensurePipelinesForResource(reso.id)
           .then((pipelineIds) => ({connectionId: reso.id, pipelineIds}))
@@ -38,7 +38,7 @@ export const systemRouter = trpc.router({
       await Promise.all(
         res.resourceUpdates.map((resoUpdate) =>
           // Provider is responsible for providing envName / userId
-          // This may be relevant for OneBrick resources for example
+          // This may be relevant for OneBrick connections for example
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           ctx.services._syncResourceUpdate(int, resoUpdate),
         ),

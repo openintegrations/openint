@@ -85,7 +85,7 @@ export const makePostgresMetaService = zFunction(
   (opts): MetaService => {
     const tables: MetaService['tables'] = {
       // Delay calling of __getDeps until later..
-      resource: metaTable('resource', _getDeps(opts)),
+      connection: metaTable('connection', _getDeps(opts)),
       integration: metaTable('integration', _getDeps(opts)),
       connector_config: metaTable('connector_config', _getDeps(opts)),
       pipeline: metaTable('pipeline', _getDeps(opts)),

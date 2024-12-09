@@ -27,11 +27,11 @@ export function ConnectorConfigForm({
   isLoading,
 }: ConnectorConfigFormProps) {
   const trpcUtils = _trpcReact.useContext()
-  const resourcesRes = _trpcReact.listResources.useQuery({
+  const resourcesRes = _trpcReact.listConnectionsRaw.useQuery({
     connectorName: 'postgres',
   })
 
-  const zResoId = resourcesRes.data?.length
+  const zConnId = resourcesRes.data?.length
     ? z.union(
         resourcesRes.data.map((r) =>
           z.literal(r.id).openapi({
@@ -80,7 +80,7 @@ export function ConnectorConfigForm({
                 links: zRaw.connector_config.shape.defaultPipeOut
                   .unwrap()
                   .unwrap().shape.links,
-                destination_id: zResoId.optional().openapi({
+                destination_id: zConnId.optional().openapi({
                   description: 'Defaults to the org-wide postgres',
                 }),
               })
@@ -100,7 +100,7 @@ export function ConnectorConfigForm({
                 links: zRaw.connector_config.shape.defaultPipeIn
                   .unwrap()
                   .unwrap().shape.links,
-                source_id: zResoId,
+                source_id: zConnId,
               })
               .openapi({title: 'Enabled'}),
           ])

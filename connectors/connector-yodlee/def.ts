@@ -187,7 +187,7 @@ export const yodleeDef = {
       loginUrl: int.loginUrl,
       name: int.name ?? `<${int.id}>`,
     }),
-    resource: (settings) => ({
+    connection: (settings) => ({
       id: `${settings.providerAccountId}`,
       displayName:
         settings.provider?.name ?? `Unnamed <${settings.providerAccountId}>`,

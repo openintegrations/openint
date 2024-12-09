@@ -41,7 +41,7 @@ export function makeServices({
     metaService,
     metaLinks: dbService.metaLinks,
     getPipelineExpandedOrFail: dbService.getPipelineExpandedOrFail,
-    getResourceExpandedOrFail: dbService.getResourceExpandedOrFail,
+    getConnectionExpandedOrFail: dbService.getConnectionExpandedOrFail,
     getFetchLinks,
     authProvider,
   })

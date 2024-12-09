@@ -51,7 +51,7 @@ export const brexDef = {
       envName: undefined,
       verticals: ['banking'],
     }),
-    resource() {
+    connection() {
       return {
         displayName: '',
         // status: healthy vs. disconnected...

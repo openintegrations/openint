@@ -41,7 +41,7 @@ export function makeSyncService({
   metaLinks,
   metaService,
   getPipelineExpandedOrFail,
-  getResourceExpandedOrFail,
+  getConnectionExpandedOrFail,
   getFetchLinks,
   authProvider,
 }: {
@@ -50,16 +50,16 @@ export function makeSyncService({
   getPipelineExpandedOrFail: ReturnType<
     typeof makeDBService
   >['getPipelineExpandedOrFail']
-  getResourceExpandedOrFail: ReturnType<
+  getConnectionExpandedOrFail: ReturnType<
     typeof makeDBService
-  >['getResourceExpandedOrFail']
+  >['getConnectionExpandedOrFail']
   getFetchLinks: (reso: _ResourceExpanded) => FetchLink[]
   authProvider: AuthProvider
 }) {
-  async function ensurePipelinesForResource(resoId: Id['conn']) {
-    console.log('[ensurePipelinesForResource]', resoId)
-    const pipelines = await metaService.findPipelines({connectionIds: [resoId]})
-    const reso = await getResourceExpandedOrFail(resoId)
+  async function ensurePipelinesForResource(connId: Id['conn']) {
+    console.log('[ensurePipelinesForResource]', connId)
+    const pipelines = await metaService.findPipelines({connectionIds: [connId]})
+    const reso = await getConnectionExpandedOrFail(connId)
     const createdIds: Array<Id['pipe']> = []
     let defaultDestId = reso.connectorConfig?.defaultPipeOut?.destination_id
     if (!defaultDestId) {
@@ -76,7 +76,7 @@ export function makeSyncService({
         })
         console.log('Created default connector config', dCcfgId)
         // Do we actually need to store this?
-        await metaLinks.patch('resource', defaultDestId, {
+        await metaLinks.patch('connection', defaultDestId, {
           connectorConfigId: dCcfgId,
           // Should always snake_case here. This is also not typesafe...
           settings: {
@@ -95,11 +95,11 @@ export function makeSyncService({
       const pipelineId = makeId('pipe', 'default_out_' + reso.id)
       createdIds.push(pipelineId)
       console.log(
-        `[sync-serivce] Creating default outgoing pipeline ${pipelineId} for ${resoId} to ${defaultDestId}`,
+        `[sync-serivce] Creating default outgoing pipeline ${pipelineId} for ${connId} to ${defaultDestId}`,
       )
 
       await metaLinks.patch('pipeline', pipelineId, {
-        sourceId: resoId,
+        sourceId: connId,
         destinationId: defaultDestId,
       })
     }
@@ -109,11 +109,11 @@ export function makeSyncService({
       const pipelineId = makeId('pipe', 'default_in_' + reso.id)
       createdIds.push(pipelineId)
       console.log(
-        `[sync-serivce] Creating default incoming pipeline ${pipelineId} for ${resoId} from ${defaultSrcId}`,
+        `[sync-serivce] Creating default incoming pipeline ${pipelineId} for ${connId} from ${defaultSrcId}`,
       )
       await metaLinks.patch('pipeline', pipelineId, {
         sourceId: defaultSrcId,
-        destinationId: resoId,
+        destinationId: connId,
       })
     }
     return createdIds
@@ -121,9 +121,9 @@ export function makeSyncService({
 
   // NOTE: Would be great to avoid the all the round tripping with something like a data loader.
   // or possibly drizzle orm
-  const getPipelinesForResource = (resoId: Id['conn']) =>
+  const getPipelinesForResource = (connId: Id['conn']) =>
     metaService
-      .findPipelines({connectionIds: [resoId]})
+      .findPipelines({connectionIds: [connId]})
       .then((pipes) =>
         Promise.all(pipes.map((pipe) => getPipelineExpandedOrFail(pipe.id))),
       )
