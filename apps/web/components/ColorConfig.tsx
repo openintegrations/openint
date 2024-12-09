@@ -56,6 +56,8 @@ const gsThemeColors: Partial<ThemeColors> = {
   ...defaultThemeColors,
   button: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
   buttonLight: 'hsl(199, 51%, 96%)', // #e6f5ff - Light Steel Aqua
+  buttonHover: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
+  buttonStroke: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
 }
 
 const getThemeByOrgId = (orgId: string) => {
