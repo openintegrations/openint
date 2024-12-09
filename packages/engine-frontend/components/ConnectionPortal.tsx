@@ -125,7 +125,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         return (
           <div
             className={cn(
-              'flex size-full flex-col gap-4 overflow-hidden',
+              'flex size-full flex-col gap-4 overflow-hidden bg-background',
               className,
             )}>
             <Tabs
