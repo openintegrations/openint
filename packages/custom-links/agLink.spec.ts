@@ -175,7 +175,7 @@ test('destinationSync', async () => {
     id: 'conn_123',
     clientId: 'cm3roaf0007',
     provider: 'greenhouse',
-    label: 'OpenInt',
+    label: 'greenhouse',
     profile: 'Ats',
     source: 'OpenInt',
   })
@@ -188,7 +188,7 @@ test('destinationSync', async () => {
     unified: {name: 'tbd'},
     isOpenInt: true,
     // Should be any ISODate
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eeslint/no-unsafe-assignment
     createdAt: expect.any(String),
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     updatedAt: expect.any(String),

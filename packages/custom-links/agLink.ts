@@ -56,7 +56,7 @@ export function agLink(ctx: {
               clientId: ctx.source.endUserId,
               id: ctx.source.id,
               provider: ctx.source.connectorConfig.connectorName, // greenhouse, lever, etc
-              label: 'OpenInt',
+              label: ctx.source.connectorConfig.connectorName, // greenhouse, lever, etc,
               profile: 'Ats', // TODO: make this configurable or let atsLink pass this data down...
               source: 'OpenInt',
             },
