@@ -16,10 +16,12 @@ export function IntegrationSearch({
   className,
   connectorConfigs,
   onEvent,
+  enabledIntegrationIds = [],
 }: {
   className?: string
   /** TODO: Make this optional so it is easier to use it as a standalone component */
   connectorConfigs: ConnectorConfig[]
+  enabledIntegrationIds?: string[]
   onEvent?: (event: {
     integration: {
       connectorConfigId: string
@@ -50,10 +52,14 @@ export function IntegrationSearch({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: debouncedSearchText,
   })
-  const ints = listIntegrationsRes.data?.items.map((int) => ({
-    ...int,
-    ccfg: connectorConfigs.find((ccfg) => ccfg.id === int.connector_config_id)!,
-  }))
+  const ints = listIntegrationsRes.data?.items
+    .map((int) => ({
+      ...int,
+      ccfg: connectorConfigs.find(
+        (ccfg) => ccfg.id === int.connector_config_id,
+      )!,
+    }))
+    .filter((int) => !enabledIntegrationIds.includes(int.id))
 
   const categories = Array.from(
     new Set(connectorConfigs.flatMap((ccfg) => ccfg.verticals)),

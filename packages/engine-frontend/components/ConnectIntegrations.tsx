@@ -7,32 +7,25 @@ import {IntegrationSearch} from './IntegrationSearch'
 export function ConnectIntegrations({
   connectorConfigFilters,
   connectorNames = [],
+  enabledIntegrationIds = [],
   onEvent,
 }: {
   connectorConfigFilters: ConnectorConfigFilters
   connectorNames?: string[]
+  enabledIntegrationIds?: string[]
   onEvent: (event: any) => void
 }) {
   return (
     <WithConnectConfig {...connectorConfigFilters}>
       {({ccfgs}) => {
-        const filteredCcfgs = ccfgs.filter((c) => {
-          // TODO: move this to in the case of ccfg containing
-          // integrations we check the list of configured integrations
-          // and not show them again.
-
-          const integrations = c.integrations
-
-          if (integrations && integrations.length > 0) {
-            return true
-          }
-
-          return !connectorNames.includes(c.connectorName)
-        })
+        const filteredCcfgs = ccfgs.filter(
+          (c) => !connectorNames.includes(c.connectorName),
+        )
 
         return (
           <IntegrationSearch
             connectorConfigs={filteredCcfgs}
+            enabledIntegrationIds={enabledIntegrationIds}
             onEvent={(e) => {
               if (onEvent) onEvent(e)
             }}
