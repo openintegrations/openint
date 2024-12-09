@@ -130,7 +130,10 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             )}>
             <Tabs
               tabConfig={tabConfig}
-              value={searchParams?.get('connectTab') ?? 'connections'}
+              value={
+                searchParams?.get('connectTab') ??
+                (connectionCount === 0 ? 'add-connection' : 'connections')
+              }
               onValueChange={navigateToTab}
               className="flex h-full flex-col"
             />
