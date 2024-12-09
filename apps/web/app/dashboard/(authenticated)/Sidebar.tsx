@@ -67,7 +67,7 @@ const sectionedLinks: Array<{
       },
       {
         title: 'Connections',
-        href: '/dashboard/resources',
+        href: '/dashboard/connections',
         icon: 'Box',
       },
       {

@@ -51,11 +51,11 @@ export type DeprecatedInputEntity = z.infer<typeof deprecatedInputEntity>
 
 export const postgresSchemas = {
   name: z.literal('postgres'),
-  // TODO: Should postgres use integration config or resourceSettings?
-  // if it's resourceSettings then it doesn't make as much sense to configure
+  // TODO: Should postgres use integration config or connectionSettings?
+  // if it's connectionSettings then it doesn't make as much sense to configure
   // in the list of integrations...
   // How do we create default resources for integrations that are basically single resource?
-  resourceSettings: zPgConfig
+  connectionSettings: zPgConfig
     .pick({databaseUrl: true, migrateTables: true})
     .extend({
       // gotta make sourceQueries a Textarea

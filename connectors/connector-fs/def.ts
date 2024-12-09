@@ -15,7 +15,7 @@ export const zWatchPathsInput = z.object({
 
 export const fsSchemas = {
   name: z.literal('fs'),
-  resourceSettings: zWatchPathsInput.pick({basePath: true}),
+  connectionSettings: zWatchPathsInput.pick({basePath: true}),
   /**
    * `paths` only used for sourceSync, not destSync. Though these are not technically states...
    * And they are not safe to just erase if fullSync = true.

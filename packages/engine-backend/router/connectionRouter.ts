@@ -64,7 +64,7 @@ async function performResourceCheck(ctx: any, resoId: string, opts: any) {
   return resoUpdate
 }
 
-export const resourceRouter = trpc.router({
+export const connectionRouter = trpc.router({
   // TODO: maybe we should allow connectionId to be part of the path rather than only in the headers
 
   // Should this really be part of the resource router? or left elsewhere?
@@ -86,7 +86,7 @@ export const resourceRouter = trpc.router({
     .meta({
       openapi: {
         method: 'POST',
-        path: '/core/resource/{id}/source_sync',
+        path: '/core/connection/{id}/source_sync',
         tags: ['Internal'],
         description:
           'Return records that would have otherwise been emitted during a sync and return it instead',
@@ -120,7 +120,7 @@ export const resourceRouter = trpc.router({
       return rxjs.firstValueFrom(res.pipe(Rx.toArray()))
     }),
   createResource: protectedProcedure
-    .meta({openapi: {method: 'POST', path: '/core/resource', tags}})
+    .meta({openapi: {method: 'POST', path: '/core/connection', tags}})
     .input(
       zRaw.resource.pick({
         connectorConfigId: true,
@@ -177,7 +177,7 @@ export const resourceRouter = trpc.router({
 
   // TODO: Run server-side validation
   updateResource: protectedProcedure
-    .meta({openapi: {method: 'PATCH', path: '/core/resource/{id}', tags}})
+    .meta({openapi: {method: 'PATCH', path: '/core/connection/{id}', tags}})
     .input(
       zRaw.resource.pick({
         id: true,
@@ -198,7 +198,7 @@ export const resourceRouter = trpc.router({
       ctx.services.patchReturning('resource', id, input),
     ),
   deleteResource: protectedProcedure
-    .meta({openapi: {method: 'DELETE', path: '/core/resource/{id}', tags}})
+    .meta({openapi: {method: 'DELETE', path: '/core/connection/{id}', tags}})
     .input(z.object({id: zId('conn'), skipRevoke: z.boolean().optional()}))
     .output(z.void())
     .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
@@ -227,7 +227,7 @@ export const resourceRouter = trpc.router({
       await ctx.asOrgIfNeeded.metaService.tables.resource.delete(reso.id)
     }),
   listResources: protectedProcedure
-    .meta({openapi: {method: 'GET', path: '/core/resource', tags}})
+    .meta({openapi: {method: 'GET', path: '/core/connection', tags}})
     .input(
       zListParams
         .extend({
@@ -277,7 +277,7 @@ export const resourceRouter = trpc.router({
   getResource: protectedProcedure
     .meta({
       description: 'Not automatically called, used for debugging for now',
-      openapi: {method: 'GET', path: '/core/resource/{id}', tags},
+      openapi: {method: 'GET', path: '/core/connection/{id}', tags},
     })
     .input(
       z.object({
@@ -328,7 +328,7 @@ export const resourceRouter = trpc.router({
   checkResource: protectedProcedure
     .meta({
       description: 'Not automatically called, used for debugging for now',
-      openapi: {method: 'POST', path: '/core/resource/{id}/_check', tags},
+      openapi: {method: 'POST', path: '/core/connection/{id}/_check', tags},
     })
     .input(z.object({id: zId('conn')}).merge(zCheckResourceOptions))
     .output(z.unknown())
@@ -346,7 +346,7 @@ export const resourceRouter = trpc.router({
   // MARK: - Sync
 
   syncResource: protectedProcedure
-    .meta({openapi: {method: 'POST', path: '/core/resource/{id}/_sync', tags}})
+    .meta({openapi: {method: 'POST', path: '/core/connection/{id}/_sync', tags}})
     .input(z.object({id: zId('conn')}).merge(zSyncOptions))
     .output(z.void())
     .mutation(async function syncResource({input: {id: resoId, ...opts}, ctx}) {

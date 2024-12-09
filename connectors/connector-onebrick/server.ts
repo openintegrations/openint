@@ -59,7 +59,7 @@ export const onebrickServerConnector = {
     // TODO: Figure out if accessToken is actually the only unique thing about
     // onebrick resource, and whether they could be rotated...
     return helpers._webhookReturn(md5Hash(accessToken), {
-      settings: helpers.resourceSettings.parse({accessToken}),
+      settings: helpers.connectionSettings.parse({accessToken}),
       customerId: zCustomerId.parse(userId),
       triggerDefaultSync: true,
     })

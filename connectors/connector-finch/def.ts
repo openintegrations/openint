@@ -30,7 +30,7 @@ export const finchSchemas = {
         'Finch products to access, @see https://developer.tryfinch.com/api-reference/development-guides/Permissions',
       ),
   }),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     access_token: z.string(),
   }),
 

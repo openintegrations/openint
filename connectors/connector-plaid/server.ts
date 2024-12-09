@@ -90,7 +90,7 @@ export const plaidServerConnector = {
     ])
     console.log('[Plaid post connect]', res, insRes)
     // We will wait to sync the institution until later
-    const settings = def._type('resourceSettings', {
+    const settings = def._type('connectionSettings', {
       itemId: res.item_id,
       accessToken: res.access_token,
       institution: insRes?.institution,

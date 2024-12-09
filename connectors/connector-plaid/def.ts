@@ -63,7 +63,7 @@ export const plaidSchemas = {
     //     'When present, will show a single integration instead of one integration per institution supported by Plaid',
     // }),
   }),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     itemId: z.string().nullish(),
     accessToken: z.string(),
     institution: zCast<plaid.Institution | undefined>(),

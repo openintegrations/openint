@@ -98,7 +98,7 @@ export function makeDBService({
       schema = (schema as (typeof zRaw)['resource']).extend({
         // This should be an override...
         settings:
-          getConnectorOrFail(id as Id['conn']).schemas.resourceSettings ??
+          getConnectorOrFail(id as Id['conn']).schemas.connectionSettings ??
           z.object({}).nullish(),
       })
     } else if (tableName === 'pipeline') {
@@ -211,7 +211,7 @@ export function makeDBService({
         reso.connectorConfigId,
       )
       const settings: {} =
-        connectorConfig.connector.schemas.resourceSettings?.parse(reso.settings)
+        connectorConfig.connector.schemas.connectionSettings?.parse(reso.settings)
       const integration = reso.integrationId
         ? await getIntegrationOrFail(reso.integrationId)
         : undefined

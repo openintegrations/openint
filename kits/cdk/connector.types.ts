@@ -34,7 +34,7 @@ import type {VerticalKey} from './verticals'
 export interface ConnectorSchemas {
   name: z.ZodLiteral<string>
   connectorConfig?: z.ZodTypeAny
-  resourceSettings?: z.ZodTypeAny
+  connectionSettings?: z.ZodTypeAny
   integrationData?: z.ZodTypeAny
   webhookInput?: z.ZodTypeAny
   preConnectInput?: z.ZodTypeAny
@@ -84,7 +84,7 @@ export interface ConnectorDef<
       data: T['_types']['integrationData'],
     ) => Omit<ZStandard['integration'], 'id'>
     resource?: (
-      settings: T['_types']['resourceSettings'],
+      settings: T['_types']['connectionSettings'],
     ) => Omit<ZStandard['resource'], 'id'>
 
     // TODO: Migrate to vertical format, as only verticals deal with mapping entities
@@ -93,13 +93,13 @@ export interface ConnectorDef<
           // Simpler
           [k in T['_types']['sourceOutputEntity']['entityName']]: (
             entity: Extract<T['_types']['sourceOutputEntity'], {entityName: k}>,
-            settings: T['_types']['resourceSettings'],
+            settings: T['_types']['connectionSettings'],
           ) => EntityPayload | null
         }>
       // More powerful
       | ((
           entity: T['_types']['sourceOutputEntity'],
-          settings: T['_types']['resourceSettings'],
+          settings: T['_types']['connectionSettings'],
         ) => EntityPayload | null)
   }
 
@@ -140,7 +140,7 @@ export interface ConnectorServer<
 
   preConnect?: (
     config: T['_types']['connectorConfig'],
-    context: ConnectContext<T['_types']['resourceSettings']>,
+    context: ConnectContext<T['_types']['connectionSettings']>,
     // TODO: Turn this into an object instead
     input: T['_types']['preConnectInput'],
   ) => Promise<T['_types']['connectInput']>
@@ -148,12 +148,12 @@ export interface ConnectorServer<
   postConnect?: (
     connectOutput: T['_types']['connectOutput'],
     config: T['_types']['connectorConfig'],
-    context: ConnectContext<T['_types']['resourceSettings']>,
+    context: ConnectContext<T['_types']['connectionSettings']>,
   ) => MaybePromise<
     Omit<
       ResourceUpdate<
         T['_types']['sourceOutputEntity'],
-        T['_types']['resourceSettings']
+        T['_types']['connectionSettings']
       >,
       'customerId'
     >
@@ -161,7 +161,7 @@ export interface ConnectorServer<
 
   checkResource?: (
     input: OmitNever<{
-      settings: T['_types']['resourceSettings']
+      settings: T['_types']['connectionSettings']
       config: T['_types']['connectorConfig']
       options: CheckResourceOptions
       context: CheckResourceContext
@@ -171,7 +171,7 @@ export interface ConnectorServer<
     Omit<
       ResourceUpdate<
         T['_types']['sourceOutputEntity'],
-        T['_types']['resourceSettings']
+        T['_types']['connectionSettings']
       >,
       'customerId'
     >
@@ -179,7 +179,7 @@ export interface ConnectorServer<
 
   // This probably need to also return an observable
   revokeResource?: (
-    settings: T['_types']['resourceSettings'],
+    settings: T['_types']['connectionSettings'],
     config: T['_types']['connectorConfig'],
     instance: TInstance,
   ) => Promise<unknown>
@@ -201,7 +201,7 @@ export interface ConnectorServer<
       /** @deprecated, use `instance` instead */
       config: T['_types']['connectorConfig']
       /** @deprecated, use `instance` instead */
-      settings: T['_types']['resourceSettings']
+      settings: T['_types']['connectionSettings']
     }>,
   ) => Source<T['_types']['sourceOutputEntity']>
 
@@ -211,7 +211,7 @@ export interface ConnectorServer<
       source: {id: Id['conn']; connectorName: string} | undefined
       customer: {id: CustomerId; orgId: string} | null | undefined
       config: T['_types']['connectorConfig']
-      settings: T['_types']['resourceSettings']
+      settings: T['_types']['connectionSettings']
       state: T['_types']['destinationState']
     }>,
   ) => Destination<T['_types']['destinationInputEntity']>
@@ -248,7 +248,7 @@ export interface ConnectorServer<
   ) => MaybePromise<
     WebhookReturnType<
       T['_types']['sourceOutputEntity'],
-      T['_types']['resourceSettings']
+      T['_types']['connectionSettings']
     >
   >
 
@@ -259,11 +259,11 @@ export interface ConnectorServer<
    */
   newInstance?: (opts: {
     config: T['_types']['connectorConfig']
-    settings: T['_types']['resourceSettings']
+    settings: T['_types']['connectionSettings']
     fetchLinks: FetchLink[]
     /** @deprecated, use fetchLinks instead for things like token refreshes or connection status update */
     onSettingsChange: (
-      newSettings: T['_types']['resourceSettings'],
+      newSettings: T['_types']['connectionSettings'],
     ) => MaybePromise<void>
   }) => TInstance
 
@@ -313,7 +313,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
     {type: 'data'}
   >
   type resoUpdate = ResoUpdateData<
-    _types['resourceSettings'],
+    _types['connectionSettings'],
     _types['integrationData']
   >
   type stateUpdate = StateUpdateData<
@@ -334,11 +334,11 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
   type OpState = Extract<Op, {type: 'stateUpdate'}>
   type _resourceUpdateType = ResourceUpdate<
     _types['sourceOutputEntity'],
-    _types['resourceSettings']
+    _types['connectionSettings']
   >
   type _webhookReturnType = WebhookReturnType<
     _types['sourceOutputEntity'],
-    _types['resourceSettings']
+    _types['connectionSettings']
   >
   return {
     ...schemas,

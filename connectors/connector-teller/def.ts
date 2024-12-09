@@ -11,7 +11,7 @@ import {
 export const tellerSchemas = {
   name: z.literal('teller'),
   connectorConfig: zTellerConfig,
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     token: z.string(),
   }),
   integrationData: zInstitution,

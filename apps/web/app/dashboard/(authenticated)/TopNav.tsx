@@ -16,7 +16,7 @@ const links: Array<{href: string; title: string}> = [
   },
   {
     title: 'Connections',
-    href: '/dashboard/resources',
+    href: '/dashboard/connections',
   },
   {
     title: 'Pipelines',

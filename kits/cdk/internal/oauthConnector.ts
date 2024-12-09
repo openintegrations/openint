@@ -32,7 +32,7 @@ export const oauthBaseSchema = {
       scopes: z.string().optional(),
     }),
   }),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     oauth: z.object({
       credentials: z.object({
         type: zAuthMode,

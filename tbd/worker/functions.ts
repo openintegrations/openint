@@ -44,7 +44,7 @@ export async function scheduleSyncs({
   console.log('[scheduleSyncs]', event)
   const {openint} = initSDK()
   // TODO: Deal with pagination
-  const resources = await openint.GET('/core/resource').then((r) => r.data)
+  const resources = await openint.GET('/core/connection').then((r) => r.data)
 
   const events = resources
     .map((r) => {
@@ -265,7 +265,7 @@ export async function syncConnection({
       }
     }
     const reso = await openint
-      .GET('/core/resource/{id}', {params: {path: {id: connection_id}}})
+      .GET('/core/connection/{id}', {params: {path: {id: connection_id}}})
       .then((r) => r.data)
 
     const org = await openint
@@ -373,7 +373,7 @@ export async function sendWebhook({event}: FunctionInput<keyof Events>) {
 
   const {openint, jwt} = initSDK()
   const reso = await openint
-    .GET('/core/resource/{id}', {params: {path: {id: connectionId}}})
+    .GET('/core/connection/{id}', {params: {path: {id: connectionId}}})
     .then((r) => r.data)
 
   const org = await openint

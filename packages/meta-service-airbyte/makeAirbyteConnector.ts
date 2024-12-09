@@ -13,7 +13,7 @@ const procedure = trpcServer.procedure
 
 export function makeAirbyteConnector(connector: AnyConnectorImpl) {
   const connSpec = z.object({
-    settings: connector.schemas.resourceSettings ?? z.object({}),
+    settings: connector.schemas.connectionSettings ?? z.object({}),
     // For now, unclear whether it should actually live in airbyte config
     // or perhaps it should just have a `OpenIntConnectorConfigId` field
     // so the data is not duplicated across dozens of integrations

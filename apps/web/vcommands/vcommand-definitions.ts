@@ -74,7 +74,7 @@ const debugResourceCommands = {
     // Only show me for postgres resources
     execute: ({params: {resource}, ctx}) => {
       // TODO: Display loading indicator while this is happening...
-      ctx.router.push(`/dashboard/resources/${resource.id}/sql`)
+      ctx.router.push(`/dashboard/connections/${resource.id}/sql`)
     },
   }),
   'resource:navigate_playground': cmd.identity({
@@ -84,7 +84,7 @@ const debugResourceCommands = {
     // Only show me for postgres resources
     execute: ({params: {resource}, ctx}) => {
       // TODO: Get typecheck to catch bad routes
-      ctx.router.push(`/dashboard/resources/${resource.id}/playground`)
+      ctx.router.push(`/dashboard/connections/${resource.id}/playground`)
     },
   }),
 }

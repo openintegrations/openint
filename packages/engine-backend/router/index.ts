@@ -7,7 +7,7 @@ import {customerRouter} from './customerRouter'
 import {pipelineRouter} from './pipelineRouter'
 import {protectedRouter} from './protectedRouter'
 import {publicRouter} from './publicRouter'
-import {resourceRouter} from './resourceRouter'
+import {connectionRouter} from './connectionRouter'
 import {syncRouter} from './syncRouter'
 import {systemRouter} from './systemRouter'
 
@@ -20,7 +20,7 @@ export const routers = {
   admin: adminRouter,
   connectorConfig: connectorConfigRouter,
   system: systemRouter,
-  resource: resourceRouter,
+  connection: connectionRouter,
   pipeline: pipelineRouter,
   connector: connectorRouter,
   sync: syncRouter,
@@ -35,7 +35,7 @@ export const flatRouter = trpc.mergeRouters(
   customerRouter,
   adminRouter,
   systemRouter,
-  resourceRouter,
+  connectionRouter,
   connectorConfigRouter,
   connectorRouter,
   pipelineRouter,

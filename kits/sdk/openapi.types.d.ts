@@ -34,20 +34,20 @@ export interface paths {
     /** Passthrough */
     post: operations['passthrough']
   }
-  '/core/resource/{id}/source_sync': {
+  '/core/connection/{id}/source_sync': {
     /**
      * Source sync
      * @description Return records that would have otherwise been emitted during a sync and return it instead
      */
     post: operations['sourceSync']
   }
-  '/core/resource': {
+  '/core/connection': {
     /** List resources */
     get: operations['listResources']
     /** Create resource */
     post: operations['createResource']
   }
-  '/core/resource/{id}': {
+  '/core/connection/{id}': {
     /** Get resource */
     get: operations['getResource']
     /** Delete resource */
@@ -55,11 +55,11 @@ export interface paths {
     /** Update resource */
     patch: operations['updateResource']
   }
-  '/core/resource/{id}/_check': {
+  '/core/connection/{id}/_check': {
     /** Check resource */
     post: operations['checkResource']
   }
-  '/core/resource/{id}/_sync': {
+  '/core/connection/{id}/_sync': {
     /** Sync resource */
     post: operations['syncResource']
   }
@@ -433,9 +433,9 @@ export interface components {
       data: {
         /** @description Must start with 'pipe_' */
         pipeline_id: string
-        /** @description Must start with 'reso_' */
+        /** @description Must start with 'conn_' */
         source_id: string
-        /** @description Must start with 'reso_' */
+        /** @description Must start with 'conn_' */
         destination_id: string
       }
       /** @enum {string} */
@@ -529,7 +529,7 @@ export interface components {
     Resource: {
       createdAt: string
       updatedAt: string
-      /** @description Must start with 'reso_' */
+      /** @description Must start with 'conn_' */
       id: string
       /** @description Unique name of the connector */
       connectorName: string
@@ -589,7 +589,7 @@ export interface components {
       defaultPipeIn?: {
         /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
         links?: components['schemas']['Link'][] | null
-        /** @description Must start with 'reso_' */
+        /** @description Must start with 'conn_' */
         source_id: string
       } | null
       envName?: string | null
@@ -656,7 +656,7 @@ export interface components {
       updatedAt: string
       /** @description Must start with 'pipe_' */
       id: string
-      /** @description Must start with 'reso_' */
+      /** @description Must start with 'conn_' */
       sourceId?: string
       sourceState?: {
         [key: string]: unknown
@@ -668,7 +668,7 @@ export interface components {
           fields?: string[]
         }
       } | null
-      /** @description Must start with 'reso_' */
+      /** @description Must start with 'conn_' */
       destinationId?: string
       destinationState?: {
         [key: string]: unknown
@@ -1867,7 +1867,7 @@ export interface operations {
           defaultPipeIn?: {
             /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
             links?: components['schemas']['Link'][] | null
-            /** @description Must start with 'reso_' */
+            /** @description Must start with 'conn_' */
             source_id: string
           } | null
           /**
@@ -2330,7 +2330,7 @@ export interface operations {
       query?: {
         limit?: number
         offset?: number
-        resourceIds?: string[]
+        connectionIds?: string[]
       }
     }
     responses: {
@@ -2375,7 +2375,7 @@ export interface operations {
            */
           metadata?: unknown
           disabled?: boolean
-          /** @description Must start with 'reso_' */
+          /** @description Must start with 'conn_' */
           sourceId?: string
           streams?: {
             [key: string]: {
@@ -2383,7 +2383,7 @@ export interface operations {
               fields?: string[]
             }
           } | null
-          /** @description Must start with 'reso_' */
+          /** @description Must start with 'conn_' */
           destinationId?: string
         }
       }

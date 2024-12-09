@@ -270,7 +270,7 @@ export const WithConnectorConnect = ({
             ref={formRef}
             schema={z.object({})}
             jsonSchemaTransform={(schema) =>
-              ccfg.connector.schemas.resourceSettings ?? schema
+              ccfg.connector.schemas.connectionSettings ?? schema
             }
             formData={{}}
             loading={connect.isLoading}

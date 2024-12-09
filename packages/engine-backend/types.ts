@@ -23,7 +23,7 @@ export type ResourceInput<T extends AnyConnectorImpl = AnyConnectorImpl> =
         id: Id<T['name']>['conn']
         connectorConfigId?: Id<T['name']>['ccfg']
         connectorConfig?: ConnectorConfigInput<T>
-        settings?: Partial<_inferInput<T['schemas']['resourceSettings']>> &
+        settings?: Partial<_inferInput<T['schemas']['connectionSettings']>> &
           object
       }
     : never

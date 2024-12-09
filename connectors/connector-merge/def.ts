@@ -17,7 +17,7 @@ export const mergeSchemas = {
   }),
 
   integrationData: zCast<Integration>(),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     accountToken: z.string(),
     accountDetails: zCast<components['schemas']['AccountDetails']>().optional(),
   }),

@@ -6,7 +6,7 @@ import {VCommandMenu} from '@/vcommands/vcommand-components'
 
 // TODO: Maybe allow filtering / sorting, also easily tell sources from destinations?
 
-export default function ResourcesPage() {
+export default function ConnectionsPage() {
   const res = _trpcReact.listConnections.useQuery({})
   const filter = (c: {id: string}) => !c.id.includes('postgres_default')
 

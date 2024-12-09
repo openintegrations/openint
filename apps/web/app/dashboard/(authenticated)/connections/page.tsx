@@ -1,7 +1,7 @@
 // import {SuperHydrate} from '@/components/SuperHydrate'
 // import {createServerComponentHelpers} from '@/server/server-component-helpers'
 
-import ResourcePage from './ResourcesPage'
+import ResourcePage from './ConnectionsPage'
 
 export default ResourcePage
 

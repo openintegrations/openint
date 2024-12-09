@@ -168,7 +168,7 @@
         }
       }
     },
-    "/core/resource": {
+    "/core/connection": {
       "post": {
         "operationId": "createResource",
         "summary": "Create resource",
@@ -341,7 +341,7 @@
         }
       }
     },
-    "/core/resource/{id}": {
+    "/core/connection/{id}": {
       "patch": {
         "operationId": "updateResource",
         "summary": "Update resource",
@@ -352,7 +352,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           }
@@ -443,7 +443,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           },
@@ -506,7 +506,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           },
@@ -587,7 +587,7 @@
         }
       }
     },
-    "/core/resource/{id}/_check": {
+    "/core/connection/{id}/_check": {
       "post": {
         "operationId": "checkResource",
         "summary": "Check resource",
@@ -598,7 +598,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           }
@@ -662,7 +662,7 @@
         }
       }
     },
-    "/core/resource/{id}/_sync": {
+    "/core/connection/{id}/_sync": {
       "post": {
         "operationId": "syncResource",
         "summary": "Sync resource",
@@ -673,7 +673,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           }
@@ -837,7 +837,7 @@
                       },
                       "source_id": {
                         "type": "string",
-                        "description": "Must start with 'reso_'"
+                        "description": "Must start with 'conn_'"
                       }
                     },
                     "required": ["source_id"],
@@ -1247,12 +1247,12 @@
           },
           {
             "in": "query",
-            "name": "resourceIds",
+            "name": "connectionIds",
             "schema": {
               "type": "array",
               "items": {
                 "type": "string",
-                "description": "Must start with 'reso_'"
+                "description": "Must start with 'conn_'"
               }
             }
           }
@@ -1326,7 +1326,7 @@
                   },
                   "sourceId": {
                     "type": "string",
-                    "description": "Must start with 'reso_'"
+                    "description": "Must start with 'conn_'"
                   },
                   "streams": {
                     "type": ["object", "null"],
@@ -1347,7 +1347,7 @@
                   },
                   "destinationId": {
                     "type": "string",
-                    "description": "Must start with 'reso_'"
+                    "description": "Must start with 'conn_'"
                   }
                 },
                 "required": ["id"]
@@ -7648,9 +7648,9 @@
         "name": "x-apikey",
         "in": "header"
       },
-      "resourceId": {
+      "connectionId": {
         "type": "apiKey",
-        "name": "x-resource-id",
+        "name": "x-connection-id",
         "in": "header"
       },
       "token": {
@@ -7672,11 +7672,11 @@
               },
               "source_id": {
                 "type": "string",
-                "description": "Must start with 'reso_'"
+                "description": "Must start with 'conn_'"
               },
               "destination_id": {
                 "type": "string",
-                "description": "Must start with 'reso_'"
+                "description": "Must start with 'conn_'"
               }
             },
             "required": ["pipeline_id", "source_id", "destination_id"]
@@ -7813,7 +7813,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Must start with 'reso_'"
+            "description": "Must start with 'conn_'"
           },
           "connectorName": {
             "type": "string",
@@ -7942,7 +7942,7 @@
               },
               "source_id": {
                 "type": "string",
-                "description": "Must start with 'reso_'"
+                "description": "Must start with 'conn_'"
               }
             },
             "required": ["source_id"],
@@ -8054,7 +8054,7 @@
           },
           "sourceId": {
             "type": "string",
-            "description": "Must start with 'reso_'"
+            "description": "Must start with 'conn_'"
           },
           "sourceState": {
             "type": "object",
@@ -8082,7 +8082,7 @@
           },
           "destinationId": {
             "type": "string",
-            "description": "Must start with 'reso_'"
+            "description": "Must start with 'conn_'"
           },
           "destinationState": {
             "type": "object",
@@ -9645,7 +9645,7 @@
   "security": [
     {
       "apikey": [],
-      "resourceId": []
+      "connectionId": []
     }
   ]
 }

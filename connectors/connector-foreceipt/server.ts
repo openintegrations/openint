@@ -8,7 +8,7 @@ import {makeForeceiptClient} from './ForeceiptClient'
 export const foreceiptServer = {
   // TODO: Need to check and fix the issue
   // postConnect: async (input, config) => {
-  //   const settings = foreceiptHelpers._type('resourceSettings', {
+  //   const settings = foreceiptHelpers._type('connectionSettings', {
   //     ...input,
   //   })
   //   const source$: rxjs.Observable<ForeceiptSyncOperation> =

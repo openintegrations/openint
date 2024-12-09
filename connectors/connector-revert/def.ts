@@ -12,7 +12,7 @@ export const revertSchemas = {
     api_token: z.string().describe('Revert API token'),
     api_version: z.string().optional().describe('Revert API version'),
   }),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     tenant_id: z
       .string()
       .describe(

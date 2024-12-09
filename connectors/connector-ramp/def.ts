@@ -9,7 +9,7 @@ import {
 export const rampSchemas = {
   name: z.literal('ramp'),
   connectorConfig: zCcfgAuth.oauth,
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     accessToken: z.string().nullish(),
     startAfterTransactionId: z.string().nullish(),
   }),

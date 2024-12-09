@@ -14,7 +14,7 @@ export const togglSchemas = {
     email: z.string().nullish(),
     password: z.string().nullish(),
   }),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     apiToken: z.string(),
     email: z.string().nullish(),
     password: z.string().nullish(),
