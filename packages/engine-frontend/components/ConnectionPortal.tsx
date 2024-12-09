@@ -88,6 +88,13 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           listConnectionsRes.isFetching ||
           listConnectionsRes.isRefetching
 
+        const enabledIntegrationIds: string[] =
+          listConnectionsRes.data
+            ?.filter((c): c is typeof c & {integration: {id: string}} =>
+              Boolean(c?.integration?.id),
+            )
+            .map((c) => c.integration.id) ?? []
+
         const tabConfig = [
           {
             key: 'connections',
@@ -113,6 +120,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
               <AddConnectionTabContent
                 connectorConfigFilters={{}}
                 connectorNames={connections.map((c) => c.connectorName)}
+                enabledIntegrationIds={enabledIntegrationIds}
                 refetch={listConnectionsRes.refetch}
                 onSuccessCallback={() => {
                   navigateToTab('connections')
@@ -125,12 +133,15 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         return (
           <div
             className={cn(
-              'flex size-full flex-col gap-4 overflow-hidden',
+              'flex size-full flex-col gap-4 overflow-hidden bg-background',
               className,
             )}>
             <Tabs
               tabConfig={tabConfig}
-              value={searchParams?.get('connectTab') ?? 'connections'}
+              value={
+                searchParams?.get('connectTab') ??
+                (connectionCount === 0 ? 'add-connection' : 'connections')
+              }
               onValueChange={navigateToTab}
               className="flex h-full flex-col"
             />
