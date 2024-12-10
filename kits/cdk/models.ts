@@ -77,7 +77,7 @@ export const zStandard = {
       .nullish(), // Status unknown
     statusMessage: z.string().nullish(),
     labels: z.array(z.string()).optional(),
-  }),
+  })
 }
 
 // TODO: Make the Input types compatible with our raw types...
@@ -182,7 +182,7 @@ export const zRaw = {
       settings: z.record(z.unknown()).nullish(),
       standard: zStandard.resource.omit({id: true}).nullish(),
       disabled: z.boolean().optional(),
-      metadata: zMetadata,
+      metadata: zMetadata
     })
     .openapi({ref: 'Resource'}),
   pipeline: zBase
