@@ -37,7 +37,7 @@ export interface RouterContext {
   nango: NangoSDK
   env: Env
   /**
-   * Base url of the engine-backend router when deployed, e.g. `localhost:3000/api/usevenice`
+   * Base url of the engine-backend router when deployed, e.g. `localhost:3000/api/useopenint`
    * This is needed for 1) server side rendering and 2) webhook handling
    */
   apiUrl: string

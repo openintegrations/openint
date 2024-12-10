@@ -30,7 +30,7 @@ yarn-error.log*
 .env*
 !.env.example
 
-# symlinked for working with veniceFS
+# symlinked for working with openintFS
 /data
 
 # vercel
@@ -57,7 +57,7 @@ dist/
 
 *storybook.log
 
-## Gateway files 
+## Gateway files
 /gateway/.wrangler
 /gateway/dist
 /gateway/node_modules

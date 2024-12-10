@@ -13,7 +13,7 @@ import {kConnectSession, zConnectSession} from '../../shared'
 import {CallbackEffect} from './CallbackEffect'
 
 export const metadata = {
-  title: 'Venice Oauth Callback',
+  title: 'OpenInt Oauth Callback',
 }
 
 /**
@@ -33,9 +33,9 @@ export default async function ConnectCallback({
   // TODO: Can we use cookies-next to read cookie in this environment?
   const cookie = cookies().get(kConnectSession)
   if (!cookie) {
-    console.warn('No cookie found, redirecting to venice')
+    console.warn('No cookie found, redirecting to openint')
     // Temporary hack to redirect to the right place to accomodate for oauth url not fully changed yet
-    const url = new URL('https://app.venice.is/connect/callback')
+    const url = new URL('https://app.openint.is/connect/callback')
     for (const [key, value] of Object.entries(searchParams)) {
       url.searchParams.append(key, value as string)
     }

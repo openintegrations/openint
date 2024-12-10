@@ -86,8 +86,10 @@ if (require.main === module) {
     sdk: () =>
       initOpenIntSDK({
         headers: {
-          'x-apikey': getEnv('VENICE_API_KEY'),
-          'x-connection-id': getEnv('VENICE_CONNECTION_ID') as `conn_${string}`,
+          'x-apikey': getEnv('OPENINT_API_KEY'),
+          'x-connection-id': getEnv(
+            'OPENINT_CONNECTION_ID',
+          ) as `conn_${string}`,
         },
       }),
   }

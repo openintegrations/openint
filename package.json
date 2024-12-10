@@ -19,11 +19,11 @@
     "prepare": "husky install",
     "typecheck": "tsc --project . --noEmit",
     "validate": "run-s --silent typecheck lint test",
-    "venice": "tsx ./bin/venice",
+    "openint": "tsx ./bin/openint",
     "migration": "tsx ./apps/cli/pgMigrator-cli",
     "pgdump": "pg_dump --schema public --schema-only --no-owner --exclude-schema=graphile_migrate --file=apps/web/schema.sql $POSTGRES_URL",
-    "worker:setup": "tsx ./bin/venice setupWorker",
-    "worker:run": "tsx ./bin/venice runWorker",
+    "worker:setup": "tsx ./bin/openint setupWorker",
+    "worker:run": "tsx ./bin/openint runWorker",
     "env:pull": "vercel env pull --environment development .env.dev && vercel env pull --environment preview .env.pre && vercel env pull --environment production .env.prod"
   },
   "lint-staged": {

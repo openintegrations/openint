@@ -86,7 +86,7 @@ export async function GET(
       // TODO: Better filename would be nice.
       res.headers.set(
         'Content-Disposition',
-        `attachment; filename="venice-${Date.now()}.${format}"`,
+        `attachment; filename="openint-${Date.now()}.${format}"`,
       )
     }
     return res

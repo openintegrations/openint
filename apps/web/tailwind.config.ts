@@ -1,6 +1,6 @@
 import type {Config} from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
-import {VeniceTheme} from './themes'
+import {OpenIntTheme} from './themes'
 
 export default {
   darkMode: 'class',
@@ -72,12 +72,12 @@ export default {
         'toast-swipe-out': 'toast-swipe-out 100ms ease-out forwards',
       },
       backgroundColor: {
-        'venice-red-btn': 'salmon',
-        'venice-green-btn': VeniceTheme.green.darkened,
+        'openint-red-btn': 'salmon',
+        'openint-green-btn': OpenIntTheme.green.darkened,
       },
       boxShadow: {
-        'venice-green-glow': `0px 0px 8px 4px ${VeniceTheme.greenGlow}`,
-        'venice-black-drop-shadow': `0px 2px 4px 0px ${VeniceTheme.dropShadow}`,
+        'openint-green-glow': `0px 0px 8px 4px ${OpenIntTheme.greenGlow}`,
+        'openint-black-drop-shadow': `0px 2px 4px 0px ${OpenIntTheme.dropShadow}`,
       },
       colors: {
         // --- Begin shadcn tailwind config
@@ -141,12 +141,12 @@ export default {
           DEFAULT: 'var(--navbar)',
         },
         // --- End shadcn tailwind config
-        // ...VeniceTheme, // Needs to be commented out for tremor to work...
-        'venice-black': VeniceTheme.black,
-        'venice-gold': VeniceTheme.gold,
-        'venice-gray-muted': VeniceTheme.gray,
-        'venice-green': VeniceTheme.green,
-        'venice-red': VeniceTheme.red,
+        // ...OpenIntTheme, // Needs to be commented out for tremor to work...
+        'openint-black': OpenIntTheme.black,
+        'openint-gold': OpenIntTheme.gold,
+        'openint-gray-muted': OpenIntTheme.gray,
+        'openint-green': OpenIntTheme.green,
+        'openint-red': OpenIntTheme.red,
       },
       current: 'currentColor',
       fontFamily: {
@@ -154,7 +154,7 @@ export default {
         mono: ['Source Code Pro', ...defaultTheme.fontFamily.mono],
       },
       textColor: {
-        'venice-gray': '#c0c0c0',
+        'openint-gray': '#c0c0c0',
       },
       transparent: 'transparent',
     },

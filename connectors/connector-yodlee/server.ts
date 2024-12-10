@@ -17,7 +17,7 @@ export const yodleeServerConnector = {
     }).generateAccessToken(loginName)
     return {accessToken, envName: config.envName}
   },
-  // Without closure we get type issues in venice.config.ts, not sure why
+  // Without closure we get type issues in openint.config.ts, not sure why
   // https://share.cleanshot.com/X3cQDA
 
   postConnect: async (
