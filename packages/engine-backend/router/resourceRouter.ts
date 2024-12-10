@@ -22,6 +22,18 @@ export {type inferProcedureInput} from '@openint/trpc'
 
 const tags = ['Core']
 
+const zExpandIntegration = z.object({
+  id: zId('int'),
+  name: z.string(),
+  logoUrl: z.string().url(),
+})
+
+const zExpandConnector = z.object({
+  id: zId('ccfg'),
+  name: z.string(),
+  logoUrl: z.string().url(),
+})
+
 async function performResourceCheck(ctx: any, resoId: string, opts: any) {
   const remoteCtx = await getRemoteContext({
     ...ctx,
@@ -37,7 +49,7 @@ async function performResourceCheck(ctx: any, resoId: string, opts: any) {
     instance: remoteCtx.remote.instance,
     context: {
       webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
-    },
+    }
   })
   if (resoUpdate || opts?.import !== false) {
     /** Do not update the `endUserId` here... */
@@ -57,6 +69,22 @@ async function performResourceCheck(ctx: any, resoId: string, opts: any) {
         resoUpdate?.resourceExternalId ?? extractId(reso.id)[2],
     })
     resoUpdate = await ctx.services.getResourceOrFail(reso.id)
+  }
+  if(opts?.expand?.includes('integration')) {
+    const possibleIntegrations = await int.connector?.listIntegrations?.({ccfg: int});
+    const integration = possibleIntegrations?.items?.find((i: any) => i.id === extractId(resoUpdate?.integrationId)[2])
+    resoUpdate.integration = {
+      id: resoUpdate?.integrationId,
+      name: integration?.name?.toLowerCase() || int.connector.name?.toLowerCase(),
+      logoUrl: (integration?.logo_url && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + integration?.logo_url) || int.connector.metadata.logoUrl && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + int.connector.metadata.logoUrl,
+    }
+  }
+  if(opts?.expand?.includes('integration.connector')) {
+    resoUpdate.connector = {
+      id: int.id,
+      name: int.connector.name?.toLowerCase(),
+      logoUrl: int.connector.metadata.logoUrl && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + int.connector.metadata.logoUrl,
+    }
   }
   if (!int.connector.checkResource) {
     return resoUpdate
@@ -163,7 +191,7 @@ export const resourceRouter = trpc.router({
           options: {},
         })),
         // TODO: Fix me up
-        endUserId: ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null,
+        endUserId: ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null
       } satisfies ResourceUpdate
       await ctx.asOrgIfNeeded._syncResourceUpdate(int, resoUpdate)
 
@@ -235,11 +263,22 @@ export const resourceRouter = trpc.router({
           connectorConfigId: zId('ccfg').nullish(),
           connectorName: z.string().nullish(),
           forceRefresh: z.boolean().optional(),
+          expand: z.string().optional().describe('Comma-separated list of expand options'),
         })
         .optional(),
     )
-    .output(z.array(zRaw.resource))
+    .output(z.array(zRaw.resource.extend({
+        integration: zExpandIntegration.nullish(),
+        connector: zExpandConnector.nullish(),
+    })))
     .query(async ({input = {}, ctx}) => {
+      const expandArray = input.expand?.split(',').map(item => item.trim()) || [];
+      const validExpandOptions = ['integration', 'integration.connector'];
+
+      if (!expandArray.every(item => validExpandOptions.includes(item))) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid expand options' });
+      }
+
       let resources = await ctx.services.metaService.tables.resource.list(input)
 
       // Handle forceRefresh for each resource
@@ -253,12 +292,12 @@ export const resourceRouter = trpc.router({
 
           if (
             expiresAt &&
-            (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now())
+            (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now()) || input.expand
           ) {
             console.log(
               `[listResources] Refreshing token for resource ${reso.connectorName}`,
             )
-            const resoCheck = await performResourceCheck(ctx, reso.id, {})
+            const resoCheck = await performResourceCheck(ctx, reso.id, {expand: expandArray})
             if (!resoCheck) {
               console.warn(
                 `[listResources] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale resource.`,
@@ -283,6 +322,7 @@ export const resourceRouter = trpc.router({
       z.object({
         id: zId('reso'),
         forceRefresh: z.boolean().optional(),
+        expand: z.string().optional().describe('Comma-separated list of expand options'),
       }),
     )
     .output(
@@ -293,9 +333,18 @@ export const resourceRouter = trpc.router({
           orgId: true,
           connectorName: true,
         }),
+        integration: zExpandIntegration.nullish(),
+        connector: zExpandConnector.nullish(),
       }),
     )
     .query(async ({input, ctx}) => {
+      const expandArray = input.expand?.split(',').map(item => item.trim()) || [];
+      const validExpandOptions = ['integration', 'integration.connector'];
+
+      if (!expandArray.every(item => validExpandOptions.includes(item))) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid expand options' });
+      }
+
       // do not expand for now otherwise permission issues..
       let reso = await ctx.services.getResourceOrFail(input.id)
       const ccfg = await ctx.services.getConnectorConfigOrFail(
@@ -308,10 +357,10 @@ export const resourceRouter = trpc.router({
 
       if (
         expiresAt &&
-        (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now())
+        (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now()) || input.expand
       ) {
         console.log('[getResource] Refreshing token')
-        const resoCheck = await performResourceCheck(ctx, reso.id, {})
+        const resoCheck = await performResourceCheck(ctx, reso.id, {expand: expandArray})
         if (!resoCheck) {
           console.warn(
             `[getResource] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale resource.`,
