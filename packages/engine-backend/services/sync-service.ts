@@ -69,7 +69,7 @@ export function makeSyncService({
         defaultDestId = makeId('conn', 'postgres', 'default_' + org.id)
         await metaLinks.patch('connector_config', dCcfgId, {
           orgId: org.id,
-          // Defaulting to disabled to not show up for end users as we don't have another way to filter them out for now
+          // Defaulting to disabled to not show up for customers as we don't have another way to filter them out for now
           // Though technically incorrect as we will later pause syncing for disabled connectors
           disabled: true,
           displayName: 'Default Postgres Connector for sync',

@@ -25,7 +25,7 @@ export const zOrganization = z.object({
     synced_data_schema: z.string().optional().openapi({
       title: 'Synced Data Schema',
       description:
-        'Postgres schema to pipe data synced from end user connections into. Defaults to "synced" if missing.',
+        'Postgres schema to pipe data synced from customer connections into. Defaults to "synced" if missing.',
     }),
     webhook_url: z.string().optional().openapi({
       title: 'Webhook URL',

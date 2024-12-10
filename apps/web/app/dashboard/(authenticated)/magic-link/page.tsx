@@ -59,7 +59,7 @@ export default function MagicLinkPage() {
               'ui:title': <span className="font-semibold">End User ID</span>,
               'ui:description': (
                 <span className="text-sm text-gray-600">
-                  Anything that uniquely identifies the end user that you will
+                  Anything that uniquely identifies the customer that you will
                   be sending the magic link to
                 </span>
               ),

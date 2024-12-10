@@ -16,7 +16,7 @@ export const revertSchemas = {
     tenant_id: z
       .string()
       .describe(
-        "x-revert-t-id header. This is the end user, aka Revert's customer's customer",
+        "x-revert-t-id header. This is the customer, aka Revert's customer's customer",
       ),
   }),
   sourceOutputEntities: {

@@ -29,7 +29,7 @@ export const adminRouter = trpc.router({
       ctx.services.metaService
         .searchCustomers({keywords})
         // Customers must have non empty IDs
-        // This fitlers out data that belongs to the org rather than specific end users
+        // This fitlers out data that belongs to the org rather than specific customers
         .then((rows) => rows.filter((u) => !!u.id)),
     ),
   adminSyncMetadata: adminProcedure

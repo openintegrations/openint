@@ -32,7 +32,7 @@ export const zOpenIntHeaders = z
     /** Alternative ways to pass the connection id, works in case there is a single connector */
     'x-connection-connector-name': z.string().nullish(),
     'x-connection-connector-config-id': zId('ccfg').nullish(),
-    /** Implied by authorization header when operating in end user mode */
+    /** Implied by authorization header when operating in customer mode */
     'x-connection-customer-id': zCustomerId.nullish(),
     authorization: z.string().nullish(), // `Bearer ${string}`
   })

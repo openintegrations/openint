@@ -18,7 +18,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     })
   }
 
-  // Ensure that end user can access its own connections
+  // Ensure that customer can access its own connections
   if (ctx.viewer.role === 'customer') {
     await ctx.services.getConnectionOrFail(ctx.remoteConnectionId)
   }
@@ -94,7 +94,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
       connectorName: connection.connectorName,
       connectorMetadata: connection.connectorConfig.connector.metadata,
       settings, // Not connection.settings which is out of date. // TODO: we should update connection.settings through
-      // TODO: Need to be careful this is never returned to any end user endpoints
+      // TODO: Need to be careful this is never returned to any customer endpoints
       // and only used for making requests with remotes
       config: connection.connectorConfig.config,
     },

@@ -22,9 +22,9 @@ export {type inferProcedureInput} from '@openint/trpc'
 
 export const zConnectTokenPayload = z.object({
   customerId: zCustomerId
-    .optional() // Optional because when creating magic link as current end user we dont' need it...
+    .optional() // Optional because when creating magic link as current customer we dont' need it...
     .describe(
-      'Anything that uniquely identifies the end user that you will be sending the magic link to',
+      'Anything that uniquely identifies the customer that you will be sending the magic link to',
     ),
   validityInSeconds: z
     .number()
@@ -98,7 +98,7 @@ function asCustomer(
   ) {
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message: 'Current viewer cannot create token for other end user',
+      message: 'Current viewer cannot create token for other customer',
     })
   }
   const customerId =

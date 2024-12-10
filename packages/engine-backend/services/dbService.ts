@@ -23,8 +23,8 @@ export function makeDBService({
   metaService: MetaService
   connectorMap: Record<string, AnyConnectorImpl>
 }) {
-  // TODO: Escalate to workspace level permission so it works for end users
-  // TODO: Consider giving end users no permission at all?
+  // TODO: Escalate to workspace level permission so it works for customers
+  // TODO: Consider giving customers no permission at all?
   // It really does feel like we need some internal GraphQL for this...
   // Except different entities may still need to be access with different permissions...
   const getConnectorOrFail = (id: Id['ccfg'] | Id['conn']) => {

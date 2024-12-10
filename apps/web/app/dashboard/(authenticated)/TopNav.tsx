@@ -7,7 +7,7 @@ const links: Array<{href: string; title: string}> = [
     href: '/dashboard/magic-link',
   },
   {
-    title: 'End users',
+    title: 'Customers',
     href: '/dashboard/customers',
   },
   {

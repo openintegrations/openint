@@ -60,7 +60,7 @@ export interface MetaService {
     secondsSinceLastSync?: number
     includeDisabled?: boolean
   }) => Promise<ReadonlyArray<ZRaw['pipeline']>>
-  /** Id is used to check RLS policy right now for end user */
+  /** Id is used to check RLS policy right now for customer */
   listConnectorConfigInfos: (opts?: {
     id?: Id['ccfg'] | null
     connectorName?: string | null
