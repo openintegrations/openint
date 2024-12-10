@@ -77,7 +77,7 @@ export function WithCommandContext(props: {
 }) {
   const _ctx = useCommandContextValue()
   const pipelineSheet = React.useRef<SchemaSheetRefValue>(null)
-  const resourceSheet = React.useRef<SchemaSheetRefValue>(null)
+  const connectionSheet = React.useRef<SchemaSheetRefValue>(null)
 
   const ctx = React.useMemo(
     () =>
@@ -92,7 +92,7 @@ export function WithCommandContext(props: {
         },
         setConnectionSheetState: (newState) => {
           if (typeof newState === 'object') {
-            resourceSheet.current?.setOpen(newState.open)
+            connectionSheet.current?.setOpen(newState.open)
           }
           _ctx.setConnectionSheetState(newState)
         },
@@ -109,7 +109,7 @@ export function WithCommandContext(props: {
         pipeline={ctx.pipelineSheetState.pipeline}
       />
       <ConnectionSheet
-        ref={resourceSheet}
+        ref={connectionSheet}
         triggerButton={false}
         connection={ctx.connectionSheetState.connection}
       />

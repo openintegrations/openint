@@ -7,14 +7,14 @@ export const systemRouter = trpc.router({
     const connections =
       await ctx.services.metaService.findConnectionsMissingDefaultPipeline()
     return await Promise.all(
-      connections.map((reso) =>
+      connections.map((conn) =>
         ctx.services
-          .ensurePipelinesForConnection(reso.id)
-          .then((pipelineIds) => ({connectionId: reso.id, pipelineIds}))
+          .ensurePipelinesForConnection(conn.id)
+          .then((pipelineIds) => ({connectionId: conn.id, pipelineIds}))
           .catch((err) => {
             console.error(
-              'Failed to ensuring default pipelines for resource',
-              reso.id,
+              'Failed to ensuring default pipelines for connection',
+              conn.id,
               err,
             )
             return false

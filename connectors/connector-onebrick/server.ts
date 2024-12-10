@@ -57,7 +57,7 @@ export const onebrickServerConnector = {
     // TODO: Add verification to check webhook came from oneBrick provider in fact..
     // TODO: Get the bank detail using bankId so we can put it up there
     // TODO: Figure out if accessToken is actually the only unique thing about
-    // onebrick resource, and whether they could be rotated...
+    // onebrick connection, and whether they could be rotated...
     return helpers._webhookReturn(md5Hash(accessToken), {
       settings: helpers.connectionSettings.parse({accessToken}),
       customerId: zCustomerId.parse(userId),

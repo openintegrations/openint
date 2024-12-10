@@ -19,7 +19,7 @@ export default function PipelinesPage() {
       </header>
       <p>
         Pipelines connect connections together by syncing data from source
-        resource to destination resource
+        connection to destination connection
       </p>
       <DataTable
         query={res}

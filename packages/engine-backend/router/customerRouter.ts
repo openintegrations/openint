@@ -1,7 +1,7 @@
 import type {
+  ConnectionUpdate,
   CustomerId,
   OauthBaseTypes,
-  ConnectionUpdate,
   Viewer,
 } from '@openint/cdk'
 import {
@@ -175,7 +175,7 @@ export const customerRouter = trpc.router({
         if (!int.connector.preConnect) {
           return null
         }
-        const reso = connectionExternalId
+        const conn = connectionExternalId
           ? await ctx.services.getConnectionOrFail(
               makeId('conn', int.connector.name, connectionExternalId),
             )
@@ -185,9 +185,9 @@ export const customerRouter = trpc.router({
           {
             ...connCtxInput,
             extCustomerId: ctx.extCustomerId,
-            connection: reso
+            connection: conn
               ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                {externalId: connectionExternalId!, settings: reso.settings}
+                {externalId: connectionExternalId!, settings: conn.settings}
               : undefined,
             webhookBaseUrl: joinPath(
               ctx.apiUrl,
@@ -243,7 +243,7 @@ export const customerRouter = trpc.router({
             return null
           }
 
-          const reso = connectionExternalId
+          const conn = connectionExternalId
             ? await ctx.services.getConnectionOrFail(
                 makeId('conn', int.connector.name, connectionExternalId),
               )
@@ -251,12 +251,12 @@ export const customerRouter = trpc.router({
 
           if (
             int.connector &&
-            reso &&
-            !reso.integrationId &&
+            conn &&
+            !conn.integrationId &&
             connCtxInput.integrationId
           ) {
-            // setting the integrationId so that the resource can be associated with the integration
-            reso.integrationId = connCtxInput.integrationId
+            // setting the integrationId so that the connection can be associated with the integration
+            conn.integrationId = connCtxInput.integrationId
           }
 
           return await int.connector.postConnect(
@@ -265,9 +265,9 @@ export const customerRouter = trpc.router({
             {
               ...connCtxInput,
               extCustomerId: ctx.extCustomerId,
-              connection: reso
+              connection: conn
                 ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  {externalId: connectionExternalId!, settings: reso.settings}
+                  {externalId: connectionExternalId!, settings: conn.settings}
                 : undefined,
               webhookBaseUrl: joinPath(
                 ctx.apiUrl,
@@ -300,13 +300,16 @@ export const customerRouter = trpc.router({
         //   },
         // )
 
-        const connectionId = await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
-          ...connUpdate,
-          // No need for each connector to worry about this, unlike in the case of handleWebhook.
-          customerId:
-            ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
-          triggerDefaultSync,
-        })
+        const connectionId = await ctx.asOrgIfNeeded._syncConnectionUpdate(
+          int,
+          {
+            ...connUpdate,
+            // No need for each connector to worry about this, unlike in the case of handleWebhook.
+            customerId:
+              ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
+            triggerDefaultSync,
+          },
+        )
 
         await inngest.send({
           name: 'connect/connection-connected',

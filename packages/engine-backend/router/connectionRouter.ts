@@ -49,7 +49,7 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
         // ...(opts?.import && remoteCtx.remote.settings),
-        // unconditionally import resource settings
+        // unconditionally import connection settings
         ...remoteCtx.remote.settings,
         ...connUpdate?.settings,
       },
@@ -67,7 +67,7 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
 export const connectionRouter = trpc.router({
   // TODO: maybe we should allow connectionId to be part of the path rather than only in the headers
 
-  // Should this really be part of the resource router? or left elsewhere?
+  // Should this really be part of the connection router? or left elsewhere?
   passthrough: remoteProcedure
     .meta({openapi: {method: 'POST', path: '/passthrough', tags: ['Internal']}}) // Where do we put this?
     .input(zPassthroughInput)
@@ -103,7 +103,7 @@ export const connectionRouter = trpc.router({
     )
     .output(z.array(z.record(z.any())))
     .mutation(async ({input, ctx}) => {
-      const reso = await ctx.services.getConnectionExpandedOrFail(input.id)
+      const conn = await ctx.services.getConnectionExpandedOrFail(input.id)
 
       // NOTE: Gotta make sure this is not an infinite sourceSync somehow such as
       // in the case of firestore...
@@ -112,7 +112,7 @@ export const connectionRouter = trpc.router({
         opts: {},
         state: input.state ?? {},
         streams: input.streams ?? {},
-        src: reso,
+        src: conn,
         customer:
           ctx.viewer.role === 'customer' ? {id: ctx.viewer.customerId} : null,
       })
@@ -172,7 +172,7 @@ export const connectionRouter = trpc.router({
       if (input.displayName) {
         await ctx.services.patchReturning('connection', connId, input)
       }
-      // TODO: return the entire resource object...
+      // TODO: return the entire connection object...
       return connId
     }),
 
@@ -206,8 +206,8 @@ export const connectionRouter = trpc.router({
       if (ctx.viewer.role === 'customer') {
         await ctx.services.getConnectionOrFail(connId)
       }
-      const reso = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
-      const {settings, connectorConfig: ccfg} = reso
+      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
+      const {settings, connectorConfig: ccfg} = conn
       if (!opts?.skipRevoke) {
         await ccfg.connector.revokeConnection?.(
           settings,
@@ -215,7 +215,7 @@ export const connectionRouter = trpc.router({
           ccfg.connector.newInstance?.({
             config: ccfg.config,
             settings,
-            fetchLinks: ctx.services.getFetchLinks(reso),
+            fetchLinks: ctx.services.getFetchLinks(conn),
             onSettingsChange: () => {},
           }),
         )
@@ -225,7 +225,7 @@ export const connectionRouter = trpc.router({
       // and we don't easily have the ability to handle a delete, it's not part of the sync protocol yet...
       // We should probably introduce a reset / delete event...
       // }
-      await ctx.asOrgIfNeeded.metaService.tables.connection.delete(reso.id)
+      await ctx.asOrgIfNeeded.metaService.tables.connection.delete(conn.id)
     }),
   listConnectionsRaw: protectedProcedure
     .meta({openapi: {method: 'GET', path: '/core/connection', tags}})
@@ -244,31 +244,31 @@ export const connectionRouter = trpc.router({
       let connections =
         await ctx.services.metaService.tables.connection.list(input)
 
-      // Handle forceRefresh for each resource
+      // Handle forceRefresh for each connection
 
       console.log('[listConnectionsRaw] Refreshing tokens for all connections')
       const updatedConnections = await Promise.all(
-        connections.map(async (reso) => {
+        connections.map(async (conn) => {
           const expiresAt =
             // @ts-expect-error
-            reso?.settings?.['oauth']?.credentials?.raw?.expires_at
+            conn?.settings?.['oauth']?.credentials?.raw?.expires_at
 
           if (
             expiresAt &&
             (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now())
           ) {
             console.log(
-              `[listConnectionsRaw] Refreshing token for resource ${reso.connectorName}`,
+              `[listConnectionsRaw] Refreshing token for connection ${conn.connectorName}`,
             )
-            const connCheck = await performConnectionCheck(ctx, reso.id, {})
+            const connCheck = await performConnectionCheck(ctx, conn.id, {})
             if (!connCheck) {
               console.warn(
-                `[listConnectionsRaw] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale connection.`,
+                `[listConnectionsRaw] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
               )
             }
-            return connCheck || reso
+            return connCheck || conn
           }
-          return reso
+          return conn
         }),
       )
 
@@ -364,44 +364,44 @@ export const connectionRouter = trpc.router({
         })
         return
       }
-      const reso = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
+      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
       // No need to checkConnection here as sourceSync should take care of it
 
       if (opts?.metaOnly) {
         await sync({
           source:
-            reso.connectorConfig.connector.sourceSync?.({
+            conn.connectorConfig.connector.sourceSync?.({
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              instance: reso.connectorConfig.connector.newInstance?.({
-                config: reso.connectorConfig.config,
-                settings: reso.settings,
-                fetchLinks: ctx.services.getFetchLinks(reso),
+              instance: conn.connectorConfig.connector.newInstance?.({
+                config: conn.connectorConfig.config,
+                settings: conn.settings,
+                fetchLinks: ctx.services.getFetchLinks(conn),
                 onSettingsChange: () => {},
               }),
-              config: reso.connectorConfig.config,
-              settings: reso.settings,
-              customer: reso.customerId && {id: reso.customerId},
+              config: conn.connectorConfig.config,
+              settings: conn.settings,
+              customer: conn.customerId && {id: conn.customerId},
               state: {},
               streams: {},
             }) ?? rxjs.EMPTY,
           destination: ctx.asOrgIfNeeded.metaLinks.postSource({
-            src: reso,
+            src: conn,
           }),
         })
         return
       }
 
-      // TODO: Figure how to handle situations where resource does not exist yet
+      // TODO: Figure how to handle situations where connection does not exist yet
       // but pipeline is already being persisted properly. This current solution
       // is vulnerable to race condition and feels brittle. Though syncConnection is only
       // called from the UI so we are fine for now.
-      await ctx.asOrgIfNeeded._syncConnectionUpdate(reso.connectorConfig, {
-        customerId: reso.customerId,
-        settings: reso.settings,
-        connectionExternalId: extractId(reso.id)[2],
-        integration: reso.integration && {
-          externalId: extractId(reso.integration.id)[2],
-          data: reso.integration.external ?? {},
+      await ctx.asOrgIfNeeded._syncConnectionUpdate(conn.connectorConfig, {
+        customerId: conn.customerId,
+        settings: conn.settings,
+        connectionExternalId: extractId(conn.id)[2],
+        integration: conn.integration && {
+          externalId: extractId(conn.integration.id)[2],
+          data: conn.integration.external ?? {},
         },
         triggerDefaultSync: true,
       })

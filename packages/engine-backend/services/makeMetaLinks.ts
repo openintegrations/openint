@@ -53,7 +53,7 @@ export function makeMetaLinks(metaBase: MetaService) {
       // TODO: make standard insitution and connection here...
       connUpdate: async (op) => {
         if (op.id !== connection?.id) {
-          console.warn(`Unexpected resource id ${op.id} != ${connection?.id}`)
+          console.warn(`Unexpected connection id ${op.id} != ${connection?.id}`)
           return
         }
         const {id, settings = {}, integration} = op
@@ -148,7 +148,7 @@ export function makeMetaLinks(metaBase: MetaService) {
           id as Id['int'],
           entity as ZRaw['integration'],
         )
-        // console.log(`[meta] Did update resource`, id, op.data)
+        // console.log(`[meta] Did update connection`, id, op.data)
       },
     }) satisfies OpHandlers<Promise<void>>
 

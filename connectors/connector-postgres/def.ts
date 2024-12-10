@@ -54,7 +54,7 @@ export const postgresSchemas = {
   // TODO: Should postgres use integration config or connectionSettings?
   // if it's connectionSettings then it doesn't make as much sense to configure
   // in the list of integrations...
-  // How do we create default resources for integrations that are basically single resource?
+  // How do we create default connections for integrations that are basically single connection?
   connectionSettings: zPgConfig
     .pick({databaseUrl: true, migrateTables: true})
     .extend({

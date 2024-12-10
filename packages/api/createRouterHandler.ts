@@ -29,7 +29,7 @@ export const zOpenIntHeaders = z
   .object({
     [kApikeyHeader]: z.string().nullish(),
     'x-connection-id': zId('conn').nullish(),
-    /** Alternative ways to pass the resource id, works in case there is a single connector */
+    /** Alternative ways to pass the connection id, works in case there is a single connector */
     'x-connection-connector-name': z.string().nullish(),
     'x-connection-connector-config-id': zId('ccfg').nullish(),
     /** Implied by authorization header when operating in end user mode */

@@ -30,7 +30,7 @@ export const plaidServerConnector = {
   // - commandsForResource
   preConnect: (
     config,
-    {extCustomerId: userId, connection: resource, integrationExternalId, ...ctx},
+    {extCustomerId: userId, connection, integrationExternalId, ...ctx},
     input,
   ) => {
     if (input.sandboxPublicTokenCreate) {
@@ -43,7 +43,7 @@ export const plaidServerConnector = {
     }
     return makePlaidClient(config)
       .linkTokenCreate({
-        access_token: resource?.settings.accessToken, // Reconnecting
+        access_token: connection?.settings.accessToken, // Reconnecting
         // Not working as of the latest plaid api, need to think when this is relevant again.
         // https://share.cleanshot.com/5pKLdGh4
         // institution_id: integrationExternalId
@@ -52,9 +52,9 @@ export const plaidServerConnector = {
         user: {client_user_id: userId},
         client_name: config.clientName,
         language: input.language ?? config.language,
-        ...(!resource?.settings.accessToken && {products: config.products}),
+        ...(!connection?.settings.accessToken && {products: config.products}),
         country_codes: config.countryCodes,
-        // Webhook and redirect_uri would be part of the `resource` already.
+        // Webhook and redirect_uri would be part of the `connection` already.
         // redirect_uri: ctx.redirectUrl,
         webhook: ctx.webhookBaseUrl,
       })

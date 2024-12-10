@@ -2,11 +2,11 @@ import {clerkClient} from '@clerk/nextjs/server'
 import type {Link as FetchLink} from '@opensdks/runtime'
 import type {
   AnyEntityPayload,
-  Destination,
+  ConnectionUpdate,
   CustomerId,
+  Destination,
   Id,
   Link,
-  ConnectionUpdate,
   Source,
   StreamsV1,
   StreamsV2,
@@ -29,9 +29,9 @@ import {inngest} from '../events'
 import type {zSyncOptions} from '../types'
 import type {AuthProvider} from './AuthProvider'
 import type {
+  _ConnectionExpanded,
   _ConnectorConfig,
   _PipelineExpanded,
-  _ConnectionExpanded,
   makeDBService,
 } from './dbService'
 import type {makeMetaLinks} from './makeMetaLinks'
@@ -53,17 +53,17 @@ export function makeSyncService({
   getConnectionExpandedOrFail: ReturnType<
     typeof makeDBService
   >['getConnectionExpandedOrFail']
-  getFetchLinks: (reso: _ConnectionExpanded) => FetchLink[]
+  getFetchLinks: (conn: _ConnectionExpanded) => FetchLink[]
   authProvider: AuthProvider
 }) {
   async function ensurePipelinesForConnection(connId: Id['conn']) {
     console.log('[ensurePipelinesForConnection]', connId)
     const pipelines = await metaService.findPipelines({connectionIds: [connId]})
-    const reso = await getConnectionExpandedOrFail(connId)
+    const conn = await getConnectionExpandedOrFail(connId)
     const createdIds: Array<Id['pipe']> = []
-    let defaultDestId = reso.connectorConfig?.defaultPipeOut?.destination_id
+    let defaultDestId = conn.connectorConfig?.defaultPipeOut?.destination_id
     if (!defaultDestId) {
-      const org = await authProvider.getOrganization(reso.connectorConfig.orgId)
+      const org = await authProvider.getOrganization(conn.connectorConfig.orgId)
       if (org.publicMetadata.database_url) {
         const dCcfgId = makeId('ccfg', 'postgres', 'default_' + org.id)
         defaultDestId = makeId('conn', 'postgres', 'default_' + org.id)
@@ -84,7 +84,7 @@ export function makeSyncService({
             migrateTables: org.publicMetadata.migrate_tables,
           },
         })
-        console.log('Created default resource', defaultDestId)
+        console.log('Created default connection', defaultDestId)
       }
     }
 
@@ -92,7 +92,7 @@ export function makeSyncService({
       defaultDestId &&
       !pipelines.some((p) => p.destinationId === defaultDestId)
     ) {
-      const pipelineId = makeId('pipe', 'default_out_' + reso.id)
+      const pipelineId = makeId('pipe', 'default_out_' + conn.id)
       createdIds.push(pipelineId)
       console.log(
         `[sync-serivce] Creating default outgoing pipeline ${pipelineId} for ${connId} to ${defaultDestId}`,
@@ -104,9 +104,9 @@ export function makeSyncService({
       })
     }
 
-    const defaultSrcId = reso.connectorConfig?.defaultPipeIn?.source_id
+    const defaultSrcId = conn.connectorConfig?.defaultPipeIn?.source_id
     if (defaultSrcId && !pipelines.some((p) => p.sourceId === defaultSrcId)) {
-      const pipelineId = makeId('pipe', 'default_in_' + reso.id)
+      const pipelineId = makeId('pipe', 'default_in_' + conn.id)
       createdIds.push(pipelineId)
       console.log(
         `[sync-serivce] Creating default incoming pipeline ${pipelineId} for ${connId} from ${defaultSrcId}`,
@@ -132,7 +132,7 @@ export function makeSyncService({
   // - connector metadata should be able to specify the set of transformations desired
   // - connector config should additionally be able to specify transformations!
   // connectors shall include `config`.
-  // In contrast, resource shall include `external`
+  // In contrast, connection shall include `external`
   // We do need to figure out which secrets to tokenize and which one not to though
   // Perhaps the best way is to use `secret_` prefix? (think how we might work with vgs)
   const getLinksForPipeline = ({
@@ -442,15 +442,21 @@ export function makeSyncService({
       integration,
       ...connUpdate,
     })
-    const id = makeId('conn', int.connector.name, connUpdate.connectionExternalId)
+    const id = makeId(
+      'conn',
+      int.connector.name,
+      connUpdate.connectionExternalId,
+    )
     await metaLinks
-      .handlers({connection: {id, connectorConfigId: int.id, customerId: userId}})
+      .handlers({
+        connection: {id, connectorConfigId: int.id, customerId: userId},
+      })
       .connUpdate({type: 'connUpdate', id, settings, integration})
 
     // TODO: This should be happening async
     if (!connUpdate.source$ && !connUpdate.triggerDefaultSync) {
       console.log(
-        `[_syncConnectionUpdate] Returning early skip syncing pipelines for resource id ${id} and source ${connUpdate.source$} with triggerDefaultSync ${connUpdate.triggerDefaultSync}`,
+        `[_syncConnectionUpdate] Returning early skip syncing pipelines for connection id ${id} and source ${connUpdate.source$} with triggerDefaultSync ${connUpdate.triggerDefaultSync}`,
       )
       return id
     }

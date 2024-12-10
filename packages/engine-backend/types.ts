@@ -66,7 +66,7 @@ export const zSyncOptions = z
     metaOnly: z
       .boolean()
       .nullish()
-      .describe('Only sync resource metadata and skip pipelines '),
+      .describe('Only sync connection metadata and skip pipelines '),
 
     fullResync: z
       .boolean()

@@ -264,7 +264,7 @@ export async function syncConnection({
         }
       }
     }
-    const reso = await openint
+    const conn = await openint
       .GET('/core/connection/{id}', {params: {path: {id: connection_id}}})
       .then((r) => r.data)
 
@@ -273,7 +273,7 @@ export async function syncConnection({
         headers: {
           authorization: `Bearer ${jwt.signViewer({
             role: 'org',
-            orgId: reso.connector_config.orgId as Id['org'],
+            orgId: conn.connector_config.orgId as Id['org'],
           })}`,
         },
       })
@@ -372,7 +372,7 @@ export async function sendWebhook({event}: FunctionInput<keyof Events>) {
   }
 
   const {openint, jwt} = initSDK()
-  const reso = await openint
+  const conn = await openint
     .GET('/core/connection/{id}', {params: {path: {id: connectionId}}})
     .then((r) => r.data)
 
@@ -381,7 +381,7 @@ export async function sendWebhook({event}: FunctionInput<keyof Events>) {
       headers: {
         authorization: `Bearer ${jwt.signViewer({
           role: 'org',
-          orgId: reso.connector_config.orgId as Id['org'],
+          orgId: conn.connector_config.orgId as Id['org'],
         })}`,
       },
     })

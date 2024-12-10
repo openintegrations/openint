@@ -185,7 +185,7 @@ export const googleServer = {
     return {
       ...defaultResource,
       integration: {
-        // Integration id is scoped to connector, not scoped to resource
+        // Integration id is scoped to connector, not scoped to connection
         externalId: data.id,
         connectorName: 'google',
         data,

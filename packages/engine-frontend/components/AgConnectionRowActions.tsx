@@ -36,7 +36,7 @@ export function AgConnectionRowActions(
   //   },
   //   onError: (err) => {
   //     toast({
-  //       title: 'Failed to save resource',
+  //       title: 'Failed to save connection',
   //       description: `${err.message}`,
   //       variant: 'destructive',
   //     })

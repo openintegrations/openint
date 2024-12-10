@@ -65,7 +65,7 @@ export const spreadsheetSchemas = {
   name: z.literal('spreadsheet'),
   connectionSettings: z.object({
     preset: zPreset,
-    /** This is outdated. Should be the same as the resource external ID */
+    /** This is outdated. Should be the same as the connection external ID */
     accountExternalId: z.string(),
   }),
   sourceOutputEntity: zSrcEntitySchema,

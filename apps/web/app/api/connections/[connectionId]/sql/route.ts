@@ -40,9 +40,9 @@ export async function GET(
     }
 
     const {services} = contextFactory.fromViewer(viewer)
-    const reso = await services.getConnectionOrFail(connectionId as Id['conn'])
+    const conn = await services.getConnectionOrFail(connectionId as Id['conn'])
 
-    if (reso.connectorName !== 'postgres') {
+    if (conn.connectorName !== 'postgres') {
       throw new TRPCError({
         code: 'PRECONDITION_FAILED',
         message: 'Only postgres connections are supported',
@@ -50,7 +50,7 @@ export async function GET(
     }
 
     const {getPool, sql} = makePostgresClient({
-      ...zPgConfig.parse(reso.settings),
+      ...zPgConfig.parse(conn.settings),
       transformFieldNames: false,
     })
     const pool = await getPool()

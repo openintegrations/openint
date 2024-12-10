@@ -13,7 +13,7 @@ export const rampServer = {
 
   // Disable it for now until it's ready
   // handleWebhook: (input) => {
-  //   const conn = identity<z.infer<typeof base['resourceSchema']>>({
+  //   const conn = identity<z.infer<typeof base['connectionSchema']>>({
   //     clientId: '',
   //     clientSecret: '',
   //     authorizationCode: input.query['code'] as string,

@@ -28,7 +28,7 @@ export default async function SqlEditorPageServer() {
   const pgConnection = connections.find((r) => r.id.includes('postgres_default'))
 
   if (!pgConnection) {
-    return new NextResponse('Must have postgres resource', {status: 400})
+    return new NextResponse('Must have postgres connection', {status: 400})
   }
 
   return <SqlPage apikey={apikey} connectionId={pgConnection.id} />

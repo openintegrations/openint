@@ -189,7 +189,7 @@ export function makeDBService({
       if (!conn) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `reso not found: ${id}`,
+          message: `conn not found: ${id}`,
         })
       }
       return zRaw.connection.parse(conn)

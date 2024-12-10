@@ -66,7 +66,7 @@ export const ConnectionRawCard = ({
               )}>
               {
                 connection.syncInProgress ? 'Syncing' : connection.status
-                // TODO: Implement the concept of a primary resource
+                // TODO: Implement the concept of a primary connection
                 // || 'Primary'
               }
             </Badge>

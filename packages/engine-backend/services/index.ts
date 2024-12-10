@@ -25,15 +25,15 @@ export function makeServices({
     connectorMap,
   })
   /** @deprecated. Should use remoteProcedure */
-  function getFetchLinks(reso: _ConnectionExpanded) {
+  function getFetchLinks(conn: _ConnectionExpanded) {
     return R.compact([
       logLink(),
-      reso.connectorConfig.connector.metadata?.nangoProvider &&
+      conn.connectorConfig.connector.metadata?.nangoProvider &&
         env.NANGO_SECRET_KEY &&
         nangoProxyLink({
           secretKey: env.NANGO_SECRET_KEY,
-          connectionId: reso.id,
-          providerConfigKey: reso.connectorConfigId,
+          connectionId: conn.id,
+          providerConfigKey: conn.connectorConfigId,
         }),
     ])
   }

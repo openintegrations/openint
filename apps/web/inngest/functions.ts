@@ -22,17 +22,17 @@ export const syncPipeline = inngest.createFunction(
 )
 
 export const syncConnection = inngest.createFunction(
-  {id: 'Sync resource'},
+  {id: 'Sync connection'},
   {event: 'sync/connection-requested'},
   async ({event}) => {
     try {
       const {connectionId} = event.data
-      console.log('Will sync resource', connectionId)
+      console.log('Will sync connection', connectionId)
       // TODO: Figure out what is the userId we ought to be using...
 
       const pool = await getPool()
       const customerId = await pool.oneFirst<CustomerId>(
-        sql`SELECT customer_id FROM resource WHERE id = ${connectionId}`,
+        sql`SELECT customer_id FROM connection WHERE id = ${connectionId}`,
       )
       console.log('customerId', customerId)
       await flatRouter
