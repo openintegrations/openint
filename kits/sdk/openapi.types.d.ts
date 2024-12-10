@@ -43,7 +43,7 @@ export interface paths {
   }
   '/core/connection': {
     /** List connections */
-    get: operations['listConnectionsRaw']
+    get: operations['listConnection']
     /** Create connection */
     post: operations['createConnection']
   }
@@ -1505,7 +1505,7 @@ export interface operations {
     }
   }
   /** List connections */
-  listConnectionsRaw: {
+  listConnection: {
     parameters: {
       query?: {
         limit?: number

@@ -269,7 +269,7 @@ export const connectionRouter = trpc.router({
       // }
       await ctx.asOrgIfNeeded.metaService.tables.connection.delete(conn.id)
     }),
-  listConnectionsRaw: protectedProcedure
+  listConnection: protectedProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -320,7 +320,7 @@ export const connectionRouter = trpc.router({
 
       // Handle forceRefresh for each connection
 
-      console.log('[listConnectionsRaw] Refreshing tokens for all connections')
+      console.log('[listConnections] Refreshing tokens for all connections')
       const updatedConnections = await Promise.all(
         connections.map(async (conn) => {
           const expiresAt =
@@ -334,14 +334,14 @@ export const connectionRouter = trpc.router({
             input.expand
           ) {
             console.log(
-              `[listConnectionsRaw] Refreshing token for connection ${conn.connectorName}`,
+              `[listConnections] Refreshing token for connection ${conn.connectorName}`,
             )
             const connCheck = await performConnectionCheck(ctx, conn.id, {
               expand: expandArray,
             })
             if (!connCheck) {
               console.warn(
-                `[listConnectionsRaw] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
+                `[listConnections] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
               )
             }
             return connCheck || conn
