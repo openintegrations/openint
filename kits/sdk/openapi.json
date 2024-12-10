@@ -170,8 +170,8 @@
     },
     "/core/connection": {
       "post": {
-        "operationId": "createResource",
-        "summary": "Create resource",
+        "operationId": "createConnection",
+        "summary": "Create connection",
         "tags": ["Core"],
         "requestBody": {
           "required": true,
@@ -245,8 +245,8 @@
         }
       },
       "get": {
-        "operationId": "listResources",
-        "summary": "List resources",
+        "operationId": "listConnectionsRaw",
+        "summary": "List connections raw",
         "tags": ["Core"],
         "parameters": [
           {
@@ -302,7 +302,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Resource"
+                    "$ref": "#/components/schemas/Connection"
                   }
                 }
               }
@@ -343,8 +343,8 @@
     },
     "/core/connection/{id}": {
       "patch": {
-        "operationId": "updateResource",
-        "summary": "Update resource",
+        "operationId": "updateConnection",
+        "summary": "Update connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -396,7 +396,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Resource"
+                  "$ref": "#/components/schemas/Connection"
                 }
               }
             }
@@ -434,8 +434,8 @@
         }
       },
       "delete": {
-        "operationId": "deleteResource",
-        "summary": "Delete resource",
+        "operationId": "deleteConnection",
+        "summary": "Delete connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -497,8 +497,8 @@
         }
       },
       "get": {
-        "operationId": "getResource",
-        "summary": "Get resource",
+        "operationId": "getConnection",
+        "summary": "Get connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -526,7 +526,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Resource"
+                      "$ref": "#/components/schemas/Connection"
                     }
                   ],
                   "type": "object",
@@ -589,8 +589,8 @@
     },
     "/core/connection/{id}/_check": {
       "post": {
-        "operationId": "checkResource",
-        "summary": "Check resource",
+        "operationId": "checkConnection",
+        "summary": "Check connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -664,8 +664,8 @@
     },
     "/core/connection/{id}/_sync": {
       "post": {
-        "operationId": "syncResource",
-        "summary": "Sync resource",
+        "operationId": "syncConnection",
+        "summary": "Sync connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -691,7 +691,7 @@
                   },
                   "metaOnly": {
                     "type": ["boolean", "null"],
-                    "description": "Only sync resource metadata and skip pipelines "
+                    "description": "Only sync connection metadata and skip pipelines "
                   },
                   "fullResync": {
                     "type": ["boolean", "null"],
@@ -823,7 +823,7 @@
                         "description": "Defaults to the org-wide postgres"
                       }
                     },
-                    "description": "Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL"
+                    "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
                   },
                   "defaultPipeIn": {
                     "type": ["object", "null"],
@@ -841,7 +841,7 @@
                       }
                     },
                     "required": ["source_id"],
-                    "description": "Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL"
+                    "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
                   },
                   "disabled": {
                     "type": "boolean",
@@ -1572,7 +1572,7 @@
                   },
                   "metaOnly": {
                     "type": ["boolean", "null"],
-                    "description": "Only sync resource metadata and skip pipelines "
+                    "description": "Only sync connection metadata and skip pipelines "
                   },
                   "fullResync": {
                     "type": ["boolean", "null"],
@@ -7802,7 +7802,7 @@
           "issues": []
         }
       },
-      "Resource": {
+      "Connection": {
         "type": "object",
         "properties": {
           "createdAt": {
@@ -7928,7 +7928,7 @@
                 "description": "Defaults to the org-wide postgres"
               }
             },
-            "description": "Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL"
+            "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
           },
           "defaultPipeIn": {
             "type": ["object", "null"],
@@ -7946,7 +7946,7 @@
               }
             },
             "required": ["source_id"],
-            "description": "Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL"
+            "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
           },
           "envName": {
             "type": ["string", "null"]

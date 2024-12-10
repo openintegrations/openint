@@ -42,26 +42,26 @@ export interface paths {
     post: operations['sourceSync']
   }
   '/core/connection': {
-    /** List resources */
-    get: operations['listResources']
-    /** Create resource */
-    post: operations['createResource']
+    /** List connections raw */
+    get: operations['listConnectionsRaw']
+    /** Create connection */
+    post: operations['createConnection']
   }
   '/core/connection/{id}': {
-    /** Get resource */
-    get: operations['getResource']
-    /** Delete resource */
-    delete: operations['deleteResource']
-    /** Update resource */
-    patch: operations['updateResource']
+    /** Get connection */
+    get: operations['getConnection']
+    /** Delete connection */
+    delete: operations['deleteConnection']
+    /** Update connection */
+    patch: operations['updateConnection']
   }
   '/core/connection/{id}/_check': {
-    /** Check resource */
-    post: operations['checkResource']
+    /** Check connection */
+    post: operations['checkConnection']
   }
   '/core/connection/{id}/_sync': {
-    /** Sync resource */
-    post: operations['syncResource']
+    /** Sync connection */
+    post: operations['syncConnection']
   }
   '/core/connector_config': {
     /** Admin list connector configs */
@@ -526,7 +526,7 @@ export interface components {
         message: string
       }[]
     }
-    Resource: {
+    Connection: {
       createdAt: string
       updatedAt: string
       /** @description Must start with 'conn_' */
@@ -575,7 +575,7 @@ export interface components {
        * @description When disabled it will not be used for connection portal. Essentially a reversible soft-delete
        */
       disabled?: boolean
-      /** @description Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL */
+      /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
       defaultPipeOut?: {
         streams?: {
           [key: string]: boolean
@@ -585,7 +585,7 @@ export interface components {
         /** @description Defaults to the org-wide postgres */
         destination_id?: string
       } | null
-      /** @description Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL */
+      /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
       defaultPipeIn?: {
         /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
         links?: components['schemas']['Link'][] | null
@@ -1504,8 +1504,8 @@ export interface operations {
       }
     }
   }
-  /** List resources */
-  listResources: {
+  /** List connections raw */
+  listConnectionsRaw: {
     parameters: {
       query?: {
         limit?: number
@@ -1520,7 +1520,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Resource'][]
+          'application/json': components['schemas']['Connection'][]
         }
       }
       /** @description Invalid input data */
@@ -1543,8 +1543,8 @@ export interface operations {
       }
     }
   }
-  /** Create resource */
-  createResource: {
+  /** Create connection */
+  createConnection: {
     requestBody: {
       content: {
         'application/json': {
@@ -1589,8 +1589,8 @@ export interface operations {
       }
     }
   }
-  /** Get resource */
-  getResource: {
+  /** Get connection */
+  getConnection: {
     parameters: {
       query?: {
         forceRefresh?: boolean
@@ -1612,7 +1612,7 @@ export interface operations {
                 orgId: string
                 connectorName: string
               }
-            } & components['schemas']['Resource'],
+            } & components['schemas']['Connection'],
             'connector_config'
           >
         }
@@ -1637,8 +1637,8 @@ export interface operations {
       }
     }
   }
-  /** Delete resource */
-  deleteResource: {
+  /** Delete connection */
+  deleteConnection: {
     parameters: {
       query?: {
         skipRevoke?: boolean
@@ -1674,8 +1674,8 @@ export interface operations {
       }
     }
   }
-  /** Update resource */
-  updateResource: {
+  /** Update connection */
+  updateConnection: {
     parameters: {
       path: {
         id: string
@@ -1706,7 +1706,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Resource']
+          'application/json': components['schemas']['Connection']
         }
       }
       /** @description Invalid input data */
@@ -1729,8 +1729,8 @@ export interface operations {
       }
     }
   }
-  /** Check resource */
-  checkResource: {
+  /** Check connection */
+  checkConnection: {
     parameters: {
       path: {
         id: string
@@ -1768,8 +1768,8 @@ export interface operations {
       }
     }
   }
-  /** Sync resource */
-  syncResource: {
+  /** Sync connection */
+  syncConnection: {
     parameters: {
       path: {
         id: string
@@ -1780,7 +1780,7 @@ export interface operations {
         'application/json': {
           /** @description Run sync in the background, not compatible with other options for now... */
           async?: boolean | null
-          /** @description Only sync resource metadata and skip pipelines */
+          /** @description Only sync connection metadata and skip pipelines */
           metaOnly?: boolean | null
           /** @description Remove `state` of pipeline and trigger a full resync */
           fullResync?: boolean | null
@@ -1853,7 +1853,7 @@ export interface operations {
             [key: string]: unknown
           } | null
           displayName?: string | null
-          /** @description Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL */
+          /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
           defaultPipeOut?: {
             streams?: {
               [key: string]: boolean
@@ -1863,7 +1863,7 @@ export interface operations {
             /** @description Defaults to the org-wide postgres */
             destination_id?: string
           } | null
-          /** @description Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL */
+          /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
           defaultPipeIn?: {
             /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
             links?: components['schemas']['Link'][] | null
@@ -2509,7 +2509,7 @@ export interface operations {
         'application/json': {
           /** @description Run sync in the background, not compatible with other options for now... */
           async?: boolean | null
-          /** @description Only sync resource metadata and skip pipelines */
+          /** @description Only sync connection metadata and skip pipelines */
           metaOnly?: boolean | null
           /** @description Remove `state` of pipeline and trigger a full resync */
           fullResync?: boolean | null
@@ -2616,13 +2616,13 @@ export interface operations {
             publicMetadata: {
               /**
                * PostgreSQL Database URL
-               * @description This is where data from resources are synced to by default
+               * @description This is where data from connections are synced to by default
                * @example postgres://username:password@host:port/database
                */
               database_url?: string
               /**
                * Synced Data Schema
-               * @description Postgres schema to pipe data synced from end user resources into. Defaults to "synced" if missing.
+               * @description Postgres schema to pipe data synced from end user connections into. Defaults to "synced" if missing.
                */
               synced_data_schema?: string
               /**
