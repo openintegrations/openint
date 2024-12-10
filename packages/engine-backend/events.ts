@@ -40,7 +40,7 @@ export const eventMap = {
   'sync/scheduler-debug': {},
   'sync/pipeline-requested': {pipelineId: zId('pipe')},
   'sync/connection-requested': {connectionId: zId('conn')},
-  'connect/resource-connected': {connectionId: zId('conn')},
+  'connect/connection-connected': {connectionId: zId('conn')},
   'webhook/received': {
     /** For debugging requests */
     traceId: z.string(),
@@ -53,8 +53,8 @@ export const eventMap = {
   // Analytics events
   'db/user-created': {},
   'db/user-deleted': {},
-  'db/resource-created': {connectionId: zId('conn')},
-  'db/resource-deleted': {connectionId: zId('conn')},
+  'db/connection-created': {connectionId: zId('conn')},
+  'db/connection-deleted': {connectionId: zId('conn')},
   'user/signin': {},
   'user/signout': {},
   'connect/session-started': {connectorName: z.string(), meta: z.unknown()},

@@ -30,10 +30,10 @@ export const zOpenIntHeaders = z
     [kApikeyHeader]: z.string().nullish(),
     'x-connection-id': zId('conn').nullish(),
     /** Alternative ways to pass the resource id, works in case there is a single connector */
-    'x-resource-connector-name': z.string().nullish(),
-    'x-resource-connector-config-id': zId('ccfg').nullish(),
+    'x-connection-connector-name': z.string().nullish(),
+    'x-connection-connector-config-id': zId('ccfg').nullish(),
     /** Implied by authorization header when operating in end user mode */
-    'x-resource-end-user-id': zCustomerId.nullish(),
+    'x-connection-end-user-id': zCustomerId.nullish(),
     authorization: z.string().nullish(), // `Bearer ${string}`
   })
   .catchall(z.string().nullish())
@@ -140,9 +140,9 @@ export const contextFromRequest = async ({
       {
         // customerId shall be noop when we are in end User viewer as services
         // are already secured by row level security
-        customerId: headers['x-resource-end-user-id'],
-        connectorName: headers['x-resource-connector-name'],
-        connectorConfigId: headers['x-resource-connector-config-id'],
+        customerId: headers['x-connection-end-user-id'],
+        connectorName: headers['x-connection-connector-name'],
+        connectorConfigId: headers['x-connection-connector-config-id'],
       },
       (v) => v != null,
     )

@@ -309,7 +309,7 @@ export const customerRouter = trpc.router({
         })
 
         await inngest.send({
-          name: 'connect/resource-connected',
+          name: 'connect/connection-connected',
           data: {connectionId},
         })
 
