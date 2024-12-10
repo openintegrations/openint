@@ -42,7 +42,7 @@ export interface RouterContext {
    */
   apiUrl: string
 
-  /** Used for oauth based resources */
+  /** Used for oauth based connections */
   getRedirectUrl?: (
     connectorConfig: _ConnectorConfig,
     ctx: {customerId?: CustomerId | null},

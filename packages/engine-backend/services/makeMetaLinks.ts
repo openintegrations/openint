@@ -18,17 +18,17 @@ export function makeMetaLinks(metaBase: MetaService) {
     'id' | 'sourceId' | 'destinationId' | 'linkOptions'
   >
 
-  const postSource = (opts: {src: Res}) => handle({resource: opts.src})
+  const postSource = (opts: {src: Res}) => handle({connection: opts.src})
 
   const postDestination = (opts: {pipeline: Pipe; dest: Res}) =>
-    handle({resource: opts.dest, pipeline: opts.pipeline})
+    handle({connection: opts.dest, pipeline: opts.pipeline})
 
   const persistIntegration = () => handle({})
 
   const handle = (...args: Parameters<typeof handlers>) =>
     handlersLink<AnyEntityPayload>({
-      resoUpdate: async (op) => {
-        await handlers(...args).resoUpdate(op)
+      connUpdate: async (op) => {
+        await handlers(...args).connUpdate(op)
         return op
       },
       stateUpdate: async (op) => {
@@ -43,26 +43,26 @@ export function makeMetaLinks(metaBase: MetaService) {
 
   const handlers = ({
     pipeline,
-    resource,
+    connection,
   }: {
     /** Used for state persistence. Do not pass in until destination handled event already */
     pipeline?: Pipe
-    resource?: Res
+    connection?: Res
   }) =>
     ({
       // TODO: make standard insitution and connection here...
-      resoUpdate: async (op) => {
-        if (op.id !== resource?.id) {
-          console.warn(`Unexpected resource id ${op.id} != ${resource?.id}`)
+      connUpdate: async (op) => {
+        if (op.id !== connection?.id) {
+          console.warn(`Unexpected resource id ${op.id} != ${connection?.id}`)
           return
         }
         const {id, settings = {}, integration} = op
-        const connectorName = extractId(resource.id)[1]
-        console.log('[metaLink] resoUpdate', {
+        const connectorName = extractId(connection.id)[1]
+        console.log('[metaLink] connUpdate', {
           id,
           settings: R.keys(settings),
           integration,
-          existingResource: resource,
+          existingConnection: connection,
         })
 
         const integrationId = integration
@@ -82,10 +82,10 @@ export function makeMetaLinks(metaBase: MetaService) {
         // Is it a hack? When there is no 3rd component of id, does that always
         // mean that the connector config does not in fact exist in database?
         const connectorConfigId =
-          resource.connectorConfigId &&
-          extractId(resource.connectorConfigId)[2] === ''
+          connection.connectorConfigId &&
+          extractId(connection.connectorConfigId)[2] === ''
             ? undefined
-            : resource.connectorConfigId
+            : connection.connectorConfigId
 
         // Can we run this in one transaction?
 
@@ -96,9 +96,9 @@ export function makeMetaLinks(metaBase: MetaService) {
           // connection establishing..
           connectorConfigId,
           integrationId,
-          // maybe we should distinguish between setDefaults (from existingResource) vs. actually
+          // maybe we should distinguish between setDefaults (from existingConnection) vs. actually
           // updating the values...
-          customerId: resource.customerId,
+          customerId: connection.customerId,
         })
       },
       stateUpdate: async (op) => {

@@ -65,13 +65,13 @@ const debugConnectionCommands = {
     icon: 'Pencil',
     title: 'Edit Connection',
     execute: ({ctx, params}) =>
-      ctx.setResourceSheetState({connection: params.connection, open: true}),
+      ctx.setConnectionSheetState({connection: params.connection, open: true}),
   }),
   'connection:navigate_sql': cmd.identity({
     ..._connectionCommand,
     icon: 'Database',
     title: 'Run sql',
-    // Only show me for postgres resources
+    // Only show me for postgres connections
     execute: ({params: {connection}, ctx}) => {
       // TODO: Display loading indicator while this is happening...
       ctx.router.push(`/dashboard/connections/${connection.id}/sql`)
@@ -81,7 +81,7 @@ const debugConnectionCommands = {
     ..._connectionCommand,
     icon: 'Database',
     title: 'Playground',
-    // Only show me for postgres resources
+    // Only show me for postgres connections
     execute: ({params: {connection}, ctx}) => {
       // TODO: Get typecheck to catch bad routes
       ctx.router.push(`/dashboard/connections/${connection.id}/playground`)
@@ -101,7 +101,7 @@ export const connectionCommands = {
         description:
           'Already synchronized data will be untouched. However this will delete any incremental sync state so when a new connection is created you will have to sync from scratch.',
         onConfirm: () =>
-          ctx.trpcCtx.client.deleteResource.mutate({id: params.connection.id}),
+          ctx.trpcCtx.client.deleteConnection.mutate({id: params.connection.id}),
       }),
   }),
   'connection:sync': cmd.identity({
@@ -109,7 +109,7 @@ export const connectionCommands = {
     icon: 'RefreshCw',
     execute: ({params: {connection}, ctx}) => {
       void ctx.withToast(() =>
-        ctx.trpcCtx.client.syncResource.mutate({id: connection.id}),
+        ctx.trpcCtx.client.syncConnection.mutate({id: connection.id}),
       )
     },
   }),
@@ -118,7 +118,7 @@ export const connectionCommands = {
   // 'plaid/simulate_disconnect': {
   //   ..._connectionCommand,
   //   icon: 'Unlink',
-  //   // Only show me for sandbox plaid resources
+  //   // Only show me for sandbox plaid connections
   // },
 } satisfies CommandDefinitionMap<CommandContext>
 

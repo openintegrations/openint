@@ -33,7 +33,7 @@ export const dynamic = 'force-dynamic'
 // )
 
 /**
- * Embed this fully featured page to allow customers to fully manage their own resources
+ * Embed this fully featured page to allow customers to fully manage their own connections
  * Include checking sync status, adding, removing, and reauthenticating their connections
  */
 export default async function PortalPage({

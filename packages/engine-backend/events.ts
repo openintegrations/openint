@@ -39,7 +39,7 @@ export const eventMap = {
   'debug/debug': {},
   'sync/scheduler-debug': {},
   'sync/pipeline-requested': {pipelineId: zId('pipe')},
-  'sync/resource-requested': {connectionId: zId('conn')},
+  'sync/connection-requested': {connectionId: zId('conn')},
   'connect/resource-connected': {connectionId: zId('conn')},
   'webhook/received': {
     /** For debugging requests */

@@ -47,7 +47,7 @@ export const mergeServer = {
 
       return {
         // There does not appear to be a unique id in addition to the access token...
-        resourceExternalId: details.id ?? '',
+        connectionExternalId: details.id ?? '',
         settings: {
           accountToken: res.account_token,
           accountDetails: details,
@@ -74,7 +74,7 @@ export const mergeServer = {
 
     return {
       // There does not appear to be a unique id in addition to the access token...
-      resourceExternalId: details.id ?? '',
+      connectionExternalId: details.id ?? '',
       settings: {
         accountToken: connectOutput.accountToken,
         accountDetails: details,
@@ -86,7 +86,7 @@ export const mergeServer = {
     }
   },
 
-  revokeResource: async (settings, config) => {
+  revokeConnection: async (settings, config) => {
     const merge = initMergeSDK({
       headers: {authorization: `Bearer ${config.apiKey}`},
     })

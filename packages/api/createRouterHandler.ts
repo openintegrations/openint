@@ -129,12 +129,14 @@ export const contextFromRequest = async ({
   const headers = zOpenIntHeaders.parse(
     Object.fromEntries(req.headers.entries()),
   )
-  let connectionId = req.headers.get('x-connection-id') as Id['conn'] | undefined
+  let connectionId = req.headers.get('x-connection-id') as
+    | Id['conn']
+    | undefined
   if (!connectionId) {
     // TODO: How do we allow filtering for organization owned connections?
     // Specifically making sure that customerId = null?
-    // TODO: make sure this corresponds to the list resources api
-    const resourceFilters = pickBy(
+    // TODO: make sure this corresponds to the list connections api
+    const connectionFilters = pickBy(
       {
         // customerId shall be noop when we are in end User viewer as services
         // are already secured by row level security
@@ -144,14 +146,16 @@ export const contextFromRequest = async ({
       },
       (v) => v != null,
     )
-    if (Object.keys(resourceFilters).length > 0) {
-      const connections = await context.services.metaService.tables.connection.list(
-        {...resourceFilters, limit: 2},
-      )
+    if (Object.keys(connectionFilters).length > 0) {
+      const connections =
+        await context.services.metaService.tables.connection.list({
+          ...connectionFilters,
+          limit: 2,
+        })
       if (connections.length > 1) {
         throw new BadRequestError(
           `Multiple connections found for filter: ${JSON.stringify(
-            resourceFilters,
+            connectionFilters,
           )}`,
         )
       }

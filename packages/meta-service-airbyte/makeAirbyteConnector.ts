@@ -44,14 +44,14 @@ export function makeAirbyteConnector(connector: AnyConnectorImpl) {
         const config = readJson<ConnectionSpecification>(args.config)
         return rxjs.from(
           fromMaybePromise(
-            connector.checkResource?.({
+            connector.checkConnection?.({
               settings: config.settings,
               config: config.config,
               options: {skipCache: true},
               context: {webhookBaseUrl: ''},
             }),
           )
-            // TODO: does checkResource return resourceUpdate non-standard also?
+            // TODO: does checkConnection return resourceUpdate non-standard also?
             .then(() => abMessage('CONNECTION_STATUS', {status: 'SUCCEEDED'}))
             .catch((err) =>
               abMessage('CONNECTION_STATUS', {

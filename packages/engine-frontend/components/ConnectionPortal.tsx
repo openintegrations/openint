@@ -39,7 +39,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   const ctx = _trpcReact.useContext()
   const listConnectionsRes = _trpcReact.listConnections.useQuery({})
 
-  const deleteResource = _trpcReact.deleteResource.useMutation({
+  const deleteConnection = _trpcReact.deleteConnection.useMutation({
     onSuccess: () => {
       toast({title: 'Connection deleted', variant: 'success'})
     },
@@ -97,7 +97,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             ) : (
               <ConnectionsTabContent
                 connectionCount={connectionCount}
-                deleteResource={deleteResource.mutate}
+                deleteConnection={deleteConnection.mutate}
                 connections={connections}
                 onConnect={() => navigateToTab('add-connection')}
               />

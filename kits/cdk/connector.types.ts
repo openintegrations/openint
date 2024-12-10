@@ -11,13 +11,13 @@ import type {
 import type {MaybePromise} from '@openint/util'
 import {R} from '@openint/util'
 import type {
-  CheckResourceContext,
-  CheckResourceOptions,
+  CheckConnectionContext,
+  CheckConnectionOptions,
   ConnectContext,
   ConnectOptions,
   ConnectorMetadata,
   OpenDialogFn,
-  ResourceUpdate,
+  ConnectionUpdate,
   WebhookReturnType,
   zPassthroughInput,
 } from './connector-meta.types'
@@ -151,7 +151,7 @@ export interface ConnectorServer<
     context: ConnectContext<T['_types']['connectionSettings']>,
   ) => MaybePromise<
     Omit<
-      ResourceUpdate<
+      ConnectionUpdate<
         T['_types']['sourceOutputEntity'],
         T['_types']['connectionSettings']
       >,
@@ -159,17 +159,17 @@ export interface ConnectorServer<
     >
   >
 
-  checkResource?: (
+  checkConnection?: (
     input: OmitNever<{
       settings: T['_types']['connectionSettings']
       config: T['_types']['connectorConfig']
-      options: CheckResourceOptions
-      context: CheckResourceContext
+      options: CheckConnectionOptions
+      context: CheckConnectionContext
       instance?: TInstance
     }>,
   ) => MaybePromise<
     Omit<
-      ResourceUpdate<
+      ConnectionUpdate<
         T['_types']['sourceOutputEntity'],
         T['_types']['connectionSettings']
       >,
@@ -178,7 +178,7 @@ export interface ConnectorServer<
   >
 
   // This probably need to also return an observable
-  revokeResource?: (
+  revokeConnection?: (
     settings: T['_types']['connectionSettings'],
     config: T['_types']['connectorConfig'],
     instance: TInstance,
@@ -312,7 +312,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
     }>,
     {type: 'data'}
   >
-  type resoUpdate = ResoUpdateData<
+  type connUpdate = ResoUpdateData<
     _types['connectionSettings'],
     _types['integrationData']
   >
@@ -320,19 +320,19 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
     _types['sourceState'],
     _types['destinationState']
   >
-  type Src = Source<_types['sourceOutputEntity'], resoUpdate, stateUpdate>
+  type Src = Source<_types['sourceOutputEntity'], connUpdate, stateUpdate>
 
-  type Op = SyncOperation<_types['sourceOutputEntity'], resoUpdate, stateUpdate>
+  type Op = SyncOperation<_types['sourceOutputEntity'], connUpdate, stateUpdate>
   type InputOp = SyncOperation<
     _types['destinationInputEntity'],
-    resoUpdate,
+    connUpdate,
     stateUpdate
   >
 
   type OpData = Extract<Op, {type: 'data'}>
-  type OpRes = Extract<Op, {type: 'resoUpdate'}>
+  type OpRes = Extract<Op, {type: 'connUpdate'}>
   type OpState = Extract<Op, {type: 'stateUpdate'}>
-  type _resourceUpdateType = ResourceUpdate<
+  type _connectionUpdateType = ConnectionUpdate<
     _types['sourceOutputEntity'],
     _types['connectionSettings']
   >
@@ -345,13 +345,13 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
     _types: {} as _types,
     _streams: {} as _streams,
     _streamName: {} as _streamName,
-    _resUpdateType: {} as resoUpdate,
+    _resUpdateType: {} as connUpdate,
     _stateUpdateType: {} as stateUpdate,
     _opType: {} as Op,
     _intOpType: {} as IntOpData,
     _sourceType: {} as Src,
     _inputOpType: {} as InputOp,
-    _resourceUpdateType: {} as _resourceUpdateType,
+    _connectionUpdateType: {} as _connectionUpdateType,
     _webhookReturnType: {} as _webhookReturnType,
 
     // Fns
@@ -367,7 +367,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
         ...rest,
         // TODO: ok so this is a sign that we should be prefixing using a link of some kind...
         id: makeId('conn', schemas.name.value, id),
-        type: 'resoUpdate',
+        type: 'connUpdate',
       }) as OpRes,
     _opState: (
       sourceState?: OpState['sourceState'],
@@ -403,10 +403,10 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
       },
     }),
     _webhookReturn: (
-      resourceExternalId: _resourceUpdateType['resourceExternalId'],
-      rest: Omit<_resourceUpdateType, 'resourceExternalId'>,
+      connectionExternalId: _connectionUpdateType['connectionExternalId'],
+      rest: Omit<_connectionUpdateType, 'connectionExternalId'>,
     ): _webhookReturnType => ({
-      resourceUpdates: [{...rest, resourceExternalId}],
+      connectionUpdates: [{...rest, connectionExternalId}],
     }),
   }
 }

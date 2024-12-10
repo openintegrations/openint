@@ -150,7 +150,7 @@ export const zRaw = {
         })
         .nullish()
         .describe(
-          'Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL',
+          'Automatically sync data from any connections associated with this config to the destination resource, which is typically a Postgres database. Think ETL',
         ),
       defaultPipeIn: z
         .object({
@@ -164,7 +164,7 @@ export const zRaw = {
         })
         .nullish()
         .describe(
-          'Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL',
+          'Automatically sync data from any connections associated with this config to the destination resource, which is typically a Postgres database. Think ETL',
         ),
       /** This is a generated column, which is not the most flexible. Maybe we need some kind of mapStandardIntegration method? */
       envName: z.string().nullish(),
@@ -184,7 +184,7 @@ export const zRaw = {
       disabled: z.boolean().optional(),
       metadata: zMetadata,
     })
-    .openapi({ref: 'Resource'}),
+    .openapi({ref: 'Connection'}),
   pipeline: zBase
     .extend({
       id: zId('pipe'),

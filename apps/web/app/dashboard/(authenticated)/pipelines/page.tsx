@@ -18,7 +18,7 @@ export default function PipelinesPage() {
         <VCommandButton command={['pipeline:create', {}]} />
       </header>
       <p>
-        Pipelines connect resources together by syncing data from source
+        Pipelines connect connections together by syncing data from source
         resource to destination resource
       </p>
       <DataTable

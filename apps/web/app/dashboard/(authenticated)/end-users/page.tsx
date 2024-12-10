@@ -35,7 +35,7 @@ export default function CustomersPage() {
     <div className="p-6">
       <h2 className="mb-2 text-2xl font-semibold tracking-tight">End Users</h2>
       <p className="mb-4 text-sm text-gray-600">
-        View and manage your end users and their associated resources.
+        View and manage your end users and their associated connections.
       </p>
       <DataTable
         query={res}
@@ -45,7 +45,7 @@ export default function CustomersPage() {
             cell: ({row}) => <CustomerMenu customer={row.original} />,
           },
           {accessorKey: 'id'},
-          {accessorKey: 'resourceCount', header: '# Resources'},
+          {accessorKey: 'connectionCount', header: '# Connections'},
           {
             accessorKey: 'firstCreatedAt',
             header: 'First created',

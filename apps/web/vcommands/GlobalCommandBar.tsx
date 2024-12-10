@@ -44,19 +44,19 @@ function _GlobalCommandBar() {
         label: 'Connection postgres 2',
       },
     ]
-    window.CommandBar.addRecords('resources', connections)
+    window.CommandBar.addRecords('connections', connections)
 
-    window.CommandBar.addMetadata('activeResource', connections[0])
+    window.CommandBar.addMetadata('activeConnection', connections[0])
     void window.CommandBar.addCommand({
       name: 'test',
       text: 'Test',
       arguments: {
         book: {
           type: 'context',
-          value: 'resources',
+          value: 'connections',
           order_key: 0,
           label: 'Select from the list below',
-          preselected_key: 'activeResource',
+          preselected_key: 'activeConnection',
         },
         name: {
           type: 'provided',
@@ -67,10 +67,10 @@ function _GlobalCommandBar() {
       template: {type: 'callback', value: 'test'},
     })
     void window.CommandBar.addRecordAction(
-      'resources',
+      'connections',
       {
         name: 'test2',
-        text: 'Resource action 2',
+        text: 'Connection action 2',
         template: {type: 'callback', value: 'test2'},
         arguments: {
           name: {
@@ -83,10 +83,10 @@ function _GlobalCommandBar() {
       false,
     )
     void window.CommandBar.addRecordAction(
-      'resources',
+      'connections',
       {
         name: 'test3',
-        text: 'Resource action 3',
+        text: 'Connection action 3',
         template: {type: 'callback', value: 'test3'},
         arguments: {
           // Implicit argument of `record` is added

@@ -6,7 +6,7 @@ import type {
   CustomerId,
   Id,
   Link,
-  ResourceUpdate,
+  ConnectionUpdate,
   Source,
   StreamsV1,
   StreamsV2,
@@ -31,7 +31,7 @@ import type {AuthProvider} from './AuthProvider'
 import type {
   _ConnectorConfig,
   _PipelineExpanded,
-  _ResourceExpanded,
+  _ConnectionExpanded,
   makeDBService,
 } from './dbService'
 import type {makeMetaLinks} from './makeMetaLinks'
@@ -53,11 +53,11 @@ export function makeSyncService({
   getConnectionExpandedOrFail: ReturnType<
     typeof makeDBService
   >['getConnectionExpandedOrFail']
-  getFetchLinks: (reso: _ResourceExpanded) => FetchLink[]
+  getFetchLinks: (reso: _ConnectionExpanded) => FetchLink[]
   authProvider: AuthProvider
 }) {
-  async function ensurePipelinesForResource(connId: Id['conn']) {
-    console.log('[ensurePipelinesForResource]', connId)
+  async function ensurePipelinesForConnection(connId: Id['conn']) {
+    console.log('[ensurePipelinesForConnection]', connId)
     const pipelines = await metaService.findPipelines({connectionIds: [connId]})
     const reso = await getConnectionExpandedOrFail(connId)
     const createdIds: Array<Id['pipe']> = []
@@ -121,7 +121,7 @@ export function makeSyncService({
 
   // NOTE: Would be great to avoid the all the round tripping with something like a data loader.
   // or possibly drizzle orm
-  const getPipelinesForResource = (connId: Id['conn']) =>
+  const getPipelinesForConnection = (connId: Id['conn']) =>
     metaService
       .findPipelines({connectionIds: [connId]})
       .then((pipes) =>
@@ -226,7 +226,7 @@ export function makeSyncService({
     streams,
     opts,
   }: {
-    src: _ResourceExpanded
+    src: _ConnectionExpanded
     state: unknown
     customer?: {id: CustomerId} | null | undefined
     streams?: StreamsV1 | StreamsV2
@@ -427,43 +427,43 @@ export function makeSyncService({
     })
   }
 
-  const _syncResourceUpdate = async (
+  const _syncConnectionUpdate = async (
     int: _ConnectorConfig,
     {
       customerId: userId,
       settings,
       integration,
-      ...resoUpdate
-    }: ResourceUpdate<AnyEntityPayload, {}>,
+      ...connUpdate
+    }: ConnectionUpdate<AnyEntityPayload, {}>,
   ) => {
-    console.log('[_syncResourceUpdate]', int.id, {
+    console.log('[_syncConnectionUpdate]', int.id, {
       userId,
       settings,
       integration,
-      ...resoUpdate,
+      ...connUpdate,
     })
-    const id = makeId('conn', int.connector.name, resoUpdate.resourceExternalId)
+    const id = makeId('conn', int.connector.name, connUpdate.connectionExternalId)
     await metaLinks
-      .handlers({resource: {id, connectorConfigId: int.id, customerId: userId}})
-      .resoUpdate({type: 'resoUpdate', id, settings, integration})
+      .handlers({connection: {id, connectorConfigId: int.id, customerId: userId}})
+      .connUpdate({type: 'connUpdate', id, settings, integration})
 
     // TODO: This should be happening async
-    if (!resoUpdate.source$ && !resoUpdate.triggerDefaultSync) {
+    if (!connUpdate.source$ && !connUpdate.triggerDefaultSync) {
       console.log(
-        `[_syncResourceUpdate] Returning early skip syncing pipelines for resource id ${id} and source ${resoUpdate.source$} with triggerDefaultSync ${resoUpdate.triggerDefaultSync}`,
+        `[_syncConnectionUpdate] Returning early skip syncing pipelines for resource id ${id} and source ${connUpdate.source$} with triggerDefaultSync ${connUpdate.triggerDefaultSync}`,
       )
       return id
     }
 
-    await ensurePipelinesForResource(id)
-    const pipelines = await getPipelinesForResource(id)
+    await ensurePipelinesForConnection(id)
+    const pipelines = await getPipelinesForConnection(id)
 
-    console.log('_syncResourceUpdate existingPipes.len', pipelines.length)
+    console.log('_syncConnectionUpdate existingPipes.len', pipelines.length)
     await Promise.all(
       pipelines.map(async (pipe) => {
         await _syncPipeline(pipe, {
-          source$: resoUpdate.source$,
-          source$ConcatDefault: resoUpdate.triggerDefaultSync,
+          source$: connUpdate.source$,
+          source$ConcatDefault: connUpdate.triggerDefaultSync,
         })
       }),
     )
@@ -472,8 +472,8 @@ export function makeSyncService({
 
   return {
     _syncPipeline,
-    _syncResourceUpdate,
+    _syncConnectionUpdate,
     sourceSync,
-    ensurePipelinesForResource,
+    ensurePipelinesForConnection,
   }
 }

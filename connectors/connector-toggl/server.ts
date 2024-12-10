@@ -6,7 +6,7 @@ import {makeTogglClient} from './TogglCient'
 
 export const togglServer = {
   postConnect: (input) => ({
-    resourceExternalId: input.apiToken,
+    connectionExternalId: input.apiToken,
     settings: {
       apiToken: input.apiToken,
       email: input.email,

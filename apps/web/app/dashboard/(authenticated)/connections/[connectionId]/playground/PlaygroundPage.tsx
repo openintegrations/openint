@@ -43,7 +43,9 @@ export function PlaygroundPage({
       <Breadcrumb className="p-4">
         <BreadcrumbItem>
           {/* We need typed routes... https://github.com/shadcn/ui/pull/133 */}
-          <BreadcrumbLink href="/dashboard/connections">Resources</BreadcrumbLink>
+          <BreadcrumbLink href="/dashboard/connections">
+            Connections
+          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink>{connectionId}</BreadcrumbLink>

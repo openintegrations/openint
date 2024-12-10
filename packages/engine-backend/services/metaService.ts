@@ -28,7 +28,7 @@ export interface MetaTable<
 
 export interface CustomerResultRow {
   id: CustomerId
-  resourceCount?: number
+  connectionCount?: number
   firstCreatedAt?: unknown
   lastUpdatedAt?: unknown
 }
@@ -73,10 +73,10 @@ export interface MetaService {
     }>
   >
   /** Missing default pipeline */
-  findResourcesMissingDefaultPipeline: () => Promise<
+  findConnectionsMissingDefaultPipeline: () => Promise<
     ReadonlyArray<{id: Id['conn']}>
   >
-  isHealthy: (checkDefaultPostgresResources?: boolean) => Promise<{
+  isHealthy: (checkDefaultPostgresConnections?: boolean) => Promise<{
     healthy: boolean
     error?: string
   }>

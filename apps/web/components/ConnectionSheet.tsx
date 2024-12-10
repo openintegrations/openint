@@ -20,13 +20,13 @@ const formSchema = zRaw.connection.pick({
 })
 
 /** TODO: See if we can eliminate the need having entity specific sheets */
-export const ResourceSheet = React.forwardRef(function ResourceSheet(
+export const ConnectionSheet = React.forwardRef(function ConnectionSheet(
   props: {connection?: ZClient['connection']; triggerButton?: boolean},
   ref: SchemaSheetRef,
 ) {
   const catalogRes = _trpcReact.listConnectorMetas.useQuery()
 
-  const updateResource = _trpcReact.updateResource.useMutation()
+  const updateConnection = _trpcReact.updateConnection.useMutation()
 
   const connector =
     props.connection &&
@@ -39,7 +39,7 @@ export const ResourceSheet = React.forwardRef(function ResourceSheet(
     <SchemaSheet
       ref={ref}
       triggerButton={props.triggerButton}
-      title={props.connection ? 'Edit' : 'New Resource'}
+      title={props.connection ? 'Edit' : 'New Connection'}
       buttonProps={{variant: props.connection ? 'ghost' : 'default'}}
       formProps={{
         uiSchema: {
@@ -49,7 +49,7 @@ export const ResourceSheet = React.forwardRef(function ResourceSheet(
         },
       }}
       schema={formSchema}
-      mutation={updateResource}
+      mutation={updateConnection}
       initialValues={props.connection}>
       <div className="flex max-h-[100px] flex-row items-center justify-between">
         {connector.logoUrl ? (

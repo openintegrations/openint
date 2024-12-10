@@ -80,17 +80,17 @@ export const pipelineRouter = trpc.router({
 
       const intById = R.mapToObj(integrations, (ins) => [ins.id, ins])
 
-      function parseResource(reso?: (typeof connections)[number] | null) {
-        if (!reso) {
-          return reso
+      function parseConnection(conn?: (typeof connections)[number] | null) {
+        if (!conn) {
+          return conn
         }
-        const connectorName = extractId(reso.id)[1]
-        const integrations = intById[reso.integrationId!]
+        const connectorName = extractId(conn.id)[1]
+        const integrations = intById[conn.integrationId!]
         const mappers = ctx.connectorMap[connectorName]?.standardMappers
         const standardReso = zStandard.connection
           .omit({id: true})
           .nullish()
-          .parse(mappers?.connection?.(reso.settings))
+          .parse(mappers?.connection?.(conn.settings))
         const standardInt =
           // QQ: what are the implications for external data integrations UI rendering of using this either or ?? and also returning the id?
           integrations?.standard ??
@@ -102,11 +102,11 @@ export const pipelineRouter = trpc.router({
             )
 
         return {
-          ...reso,
+          ...conn,
           ...standardReso,
-          id: reso.id,
+          id: conn.id,
           displayName:
-            reso.displayName ||
+            conn.displayName ||
             standardReso?.displayName ||
             standardInt?.name ||
             '',
@@ -125,7 +125,7 @@ export const pipelineRouter = trpc.router({
             pipe.lastSyncStartedAt > pipe.lastSyncCompletedAt),
       }))
       return connections
-        .map(parseResource)
+        .map(parseConnection)
         .filter((r): r is NonNullable<typeof r> => !!r)
         .map((r) => {
           const pipesOut = pipelines.filter((p) => p.sourceId === r.id)

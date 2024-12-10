@@ -24,13 +24,13 @@ export const proxyHandler = async (req: Request) => {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
     })
-    const resourceExternalId = extractId(remoteContext.remoteConnectionId)[2]
+    const connectionExternalId = extractId(remoteContext.remoteConnectionId)[2]
 
     const nangoConnection = await nango
       .GET('/connection/{connectionId}', {
         params: {
           path: {
-            connectionId: resourceExternalId,
+            connectionId: connectionExternalId,
           },
           query: {
             provider_config_key: remoteContext.remote.connectorConfigId,
@@ -46,11 +46,11 @@ export const proxyHandler = async (req: Request) => {
       )
 
     // TODO: extract all of this logic into an oauthLink that has an option to provide a custom refresh function that can call nango & persist it to db.
-    await protectedContext.asOrgIfNeeded._syncResourceUpdate(int, {
+    await protectedContext.asOrgIfNeeded._syncConnectionUpdate(int, {
       settings: {
         oauth: nangoConnection,
       },
-      resourceExternalId,
+      connectionExternalId,
     })
   }
 
@@ -74,7 +74,7 @@ export const proxyHandler = async (req: Request) => {
 
   if (!res) {
     return new Response(
-      `Proxy not supported for resource: ${remoteContext.remoteConnectionId}`,
+      `Proxy not supported for connection: ${remoteContext.remoteConnectionId}`,
       {
         status: 404,
       },

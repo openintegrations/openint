@@ -120,7 +120,7 @@ export const microsoftServer = {
       .then((r) => r.data)
 
     const defaultResource = {
-      resourceExternalId: extractId(connectOutput.connectionId)[2],
+      connectionExternalId: extractId(connectOutput.connectionId)[2],
       settings: {oauth: nangoConnection},
     }
     if (!context.integrationId) {

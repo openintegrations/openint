@@ -65,8 +65,8 @@ export async function scheduleSyncs({
     .filter((c): c is NonNullable<typeof c> => !!c)
 
   console.log('[scheduleSyncs] Metrics', {
-    num_resources: connections.length,
-    num_resources_to_sync: events.length,
+    num_connections: connections.length,
+    num_connections_to_sync: events.length,
   })
 
   await step.sendEvent('emit-connection-sync-events', events)

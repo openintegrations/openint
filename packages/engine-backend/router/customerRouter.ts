@@ -1,7 +1,7 @@
 import type {
   CustomerId,
   OauthBaseTypes,
-  ResourceUpdate,
+  ConnectionUpdate,
   Viewer,
 } from '@openint/cdk'
 import {
@@ -54,7 +54,7 @@ export const zConnectPageParams = z.object({
     .describe('Filter connector config by displayName '),
   /** Launch the conector with config right away */
   connectorConfigId: zId('ccfg').optional(),
-  /** Whether to show existing resources */
+  /** Whether to show existing connections */
   showExisting: z.coerce.boolean().optional().default(true),
 })
 
@@ -168,16 +168,16 @@ export const customerRouter = trpc.router({
     // Consider using sessionId, so preConnect corresponds 1:1 with postConnect
     .query(
       async ({
-        input: [ccfgId, {resourceExternalId, ...connCtxInput}, preConnInput],
+        input: [ccfgId, {connectionExternalId, ...connCtxInput}, preConnInput],
         ctx,
       }) => {
         const int = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
         if (!int.connector.preConnect) {
           return null
         }
-        const reso = resourceExternalId
+        const reso = connectionExternalId
           ? await ctx.services.getConnectionOrFail(
-              makeId('conn', int.connector.name, resourceExternalId),
+              makeId('conn', int.connector.name, connectionExternalId),
             )
           : undefined
         return int.connector.preConnect?.(
@@ -187,7 +187,7 @@ export const customerRouter = trpc.router({
             extCustomerId: ctx.extCustomerId,
             connection: reso
               ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                {externalId: resourceExternalId!, settings: reso.settings}
+                {externalId: connectionExternalId!, settings: reso.settings}
               : undefined,
             webhookBaseUrl: joinPath(
               ctx.apiUrl,
@@ -213,7 +213,7 @@ export const customerRouter = trpc.router({
 
     .mutation(
       async ({
-        input: [input, ccfgId, {resourceExternalId, ...connCtxInput}],
+        input: [input, ccfgId, {connectionExternalId, ...connCtxInput}],
         ctx,
       }) => {
         const int = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
@@ -221,7 +221,7 @@ export const customerRouter = trpc.router({
 
         // TODO: we should make it possible for oauth connectors to
         // ALSO handle custom postConnect... This would be very handy for xero for instance
-        const resoUpdate = await (async () => {
+        const connUpdate = await (async () => {
           if (
             !int.connector.postConnect &&
             int.connector.metadata?.nangoProvider
@@ -231,7 +231,7 @@ export const customerRouter = trpc.router({
               ccfgId,
               nangoProvider: int.connector.metadata.nangoProvider,
             }).postConnect(input as OauthBaseTypes['connectOutput'])) as Omit<
-              ResourceUpdate<any, any>,
+              ConnectionUpdate<any, any>,
               'customerId'
             >
           }
@@ -243,9 +243,9 @@ export const customerRouter = trpc.router({
             return null
           }
 
-          const reso = resourceExternalId
+          const reso = connectionExternalId
             ? await ctx.services.getConnectionOrFail(
-                makeId('conn', int.connector.name, resourceExternalId),
+                makeId('conn', int.connector.name, connectionExternalId),
               )
             : undefined
 
@@ -267,7 +267,7 @@ export const customerRouter = trpc.router({
               extCustomerId: ctx.extCustomerId,
               connection: reso
                 ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  {externalId: resourceExternalId!, settings: reso.settings}
+                  {externalId: connectionExternalId!, settings: reso.settings}
                 : undefined,
               webhookBaseUrl: joinPath(
                 ctx.apiUrl,
@@ -281,27 +281,27 @@ export const customerRouter = trpc.router({
           )
         })()
 
-        if (!resoUpdate) {
+        if (!connUpdate) {
           return 'Noop'
         }
 
         const syncInBackground =
-          resoUpdate.triggerDefaultSync !== false && !connCtxInput.syncInBand
+          connUpdate.triggerDefaultSync !== false && !connCtxInput.syncInBand
         const triggerDefaultSync =
-          !syncInBackground && resoUpdate.triggerDefaultSync !== false
+          !syncInBackground && connUpdate.triggerDefaultSync !== false
         // console.log(
-        //   'resoUpdate at postConnect syncInBackground',
+        //   'connUpdate at postConnect syncInBackground',
         //   syncInBackground,
         //   connCtxInput,
-        //   resoUpdate,
+        //   connUpdate,
         //   {
         //     triggerDefaultSync:
-        //       !syncInBackground && resoUpdate.triggerDefaultSync !== false,
+        //       !syncInBackground && connUpdate.triggerDefaultSync !== false,
         //   },
         // )
 
-        const connectionId = await ctx.asOrgIfNeeded._syncResourceUpdate(int, {
-          ...resoUpdate,
+        const connectionId = await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
+          ...connUpdate,
           // No need for each connector to worry about this, unlike in the case of handleWebhook.
           customerId:
             ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
@@ -315,7 +315,7 @@ export const customerRouter = trpc.router({
 
         if (syncInBackground) {
           await inngest.send({
-            name: 'sync/resource-requested',
+            name: 'sync/connection-requested',
             data: {connectionId},
           })
         }
@@ -326,7 +326,7 @@ export const customerRouter = trpc.router({
           `syncInBackground: ${syncInBackground}`,
           `triggerDefaultSync: ${triggerDefaultSync}`,
         )
-        return 'Resource successfully connected'
+        return 'Connection successfully connected'
       },
     ),
 })

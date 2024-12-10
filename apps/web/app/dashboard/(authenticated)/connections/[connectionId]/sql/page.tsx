@@ -16,7 +16,7 @@ export default async function SqlPageServer({
   const connection = await ctx.services.getConnectionOrFail(connectionId)
   if (connection.connectorName !== 'postgres') {
     return (
-      <div className="p-6">Only postgres resources are supported for sql</div>
+      <div className="p-6">Only postgres connections are supported for sql</div>
     )
   }
 

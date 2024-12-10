@@ -16,7 +16,7 @@ import {
   useWithToast,
 } from '@openint/ui'
 import {PipelineSheet} from '@/components/PipelineSheet'
-import {ResourceSheet} from '@/components/ResourceSheet'
+import {ConnectionSheet} from '@/components/ConnectionSheet'
 import type {ZClient} from '@/lib-common/schemas'
 import {trpcReact} from '../lib-client/trpcReact'
 
@@ -40,7 +40,7 @@ export function useCommandContextValue() {
     open: false,
     pipeline: undefined as undefined | ZClient['pipeline'],
   })
-  const [resourceSheetState, setResourceSheetState] = React.useState({
+  const [connectionSheetState, setConnectionSheetState] = React.useState({
     open: false,
     connection: undefined as undefined | ZClient['connection'],
   })
@@ -62,8 +62,8 @@ export function useCommandContextValue() {
     router,
     pipelineSheetState,
     setPipelineSheetState,
-    resourceSheetState,
-    setResourceSheetState,
+    connectionSheetState,
+    setConnectionSheetState,
     alertDialogState,
     setAlertDialogState,
     alertMutation,
@@ -90,11 +90,11 @@ export function WithCommandContext(props: {
           }
           _ctx.setPipelineSheetState(newState)
         },
-        setResourceSheetState: (newState) => {
+        setConnectionSheetState: (newState) => {
           if (typeof newState === 'object') {
             resourceSheet.current?.setOpen(newState.open)
           }
-          _ctx.setResourceSheetState(newState)
+          _ctx.setConnectionSheetState(newState)
         },
       }) satisfies typeof _ctx,
     [_ctx],
@@ -108,10 +108,10 @@ export function WithCommandContext(props: {
         triggerButton={false}
         pipeline={ctx.pipelineSheetState.pipeline}
       />
-      <ResourceSheet
+      <ConnectionSheet
         ref={resourceSheet}
         triggerButton={false}
-        connection={ctx.resourceSheetState.connection}
+        connection={ctx.connectionSheetState.connection}
       />
       {!!ctx.alertDialogState && (
         <AlertDialog

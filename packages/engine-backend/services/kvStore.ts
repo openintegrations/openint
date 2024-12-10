@@ -19,7 +19,7 @@ export interface KVStore<T = Json> {
   // Do we need these? If so introduce soon
   // delete?(id: string): MaybePromise<void>
   commit?(): Promise<void>
-  /** Clean up any resources, disconnect... */
+  /** Clean up any connections, disconnect... */
   close?(): Promise<unknown>
 }
 

@@ -27,13 +27,13 @@ export function ConnectorConfigForm({
   isLoading,
 }: ConnectorConfigFormProps) {
   const trpcUtils = _trpcReact.useContext()
-  const resourcesRes = _trpcReact.listConnectionsRaw.useQuery({
+  const connectionsRes = _trpcReact.listConnectionsRaw.useQuery({
     connectorName: 'postgres',
   })
 
-  const zConnId = resourcesRes.data?.length
+  const zConnId = connectionsRes.data?.length
     ? z.union(
-        resourcesRes.data.map((r) =>
+        connectionsRes.data.map((r) =>
           z.literal(r.id).openapi({
             title: r.displayName ? `${r.displayName} <${r.id}>` : r.id,
           }),

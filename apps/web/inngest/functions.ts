@@ -21,9 +21,9 @@ export const syncPipeline = inngest.createFunction(
   routines.syncPipeline,
 )
 
-export const syncResource = inngest.createFunction(
+export const syncConnection = inngest.createFunction(
   {id: 'Sync resource'},
-  {event: 'sync/resource-requested'},
+  {event: 'sync/connection-requested'},
   async ({event}) => {
     try {
       const {connectionId} = event.data
@@ -40,12 +40,12 @@ export const syncResource = inngest.createFunction(
           ...contextFactory.fromViewer({role: 'system'}),
           remoteConnectionId: null,
         })
-        .syncResource({id: connectionId})
+        .syncConnection({id: connectionId})
 
       console.log('did sync pipeline', connectionId)
       return connectionId
     } catch (err) {
-      console.error('Error running syncResource', err)
+      console.error('Error running syncConnection', err)
       throw err
     }
   },

@@ -6,7 +6,7 @@ import {makeRampClient} from './RampClient'
 
 export const rampServer = {
   postConnect: (input) => ({
-    resourceExternalId: input.clientId ?? '',
+    connectionExternalId: input.clientId ?? '',
     settings: input,
     triggerDefaultSync: true,
   }),

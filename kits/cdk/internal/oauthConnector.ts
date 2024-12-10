@@ -148,7 +148,7 @@ export function makeOauthConnectorServer({
           },
         })
         .then((r) => r.data)
-      return {resourceExternalId: extractId(connId)[2], settings: {oauth: res}}
+      return {connectionExternalId: extractId(connId)[2], settings: {oauth: res}}
     },
   } satisfies ConnectorServer<typeof oauthBaseSchema>
   return {

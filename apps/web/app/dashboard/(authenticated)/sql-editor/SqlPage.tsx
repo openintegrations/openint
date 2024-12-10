@@ -108,7 +108,7 @@ export function SqlPage({
 
   if (!connectionId) {
     return (
-      <div className="p-4">Only postgres resources are supported for sql</div>
+      <div className="p-4">Only postgres connections are supported for sql</div>
     )
   }
 

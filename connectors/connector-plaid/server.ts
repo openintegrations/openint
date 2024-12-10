@@ -98,7 +98,7 @@ export const plaidServerConnector = {
 
     // Emit itemId
     return {
-      resourceExternalId: res.item_id,
+      connectionExternalId: res.item_id,
       settings,
       integration: insRes?.institution && {
         externalId: insRes.institution.institution_id,
@@ -111,8 +111,8 @@ export const plaidServerConnector = {
     }
   },
 
-  checkResource: async ({config, settings, options, context}) => {
-    console.log('[Plaid] checkResource', options, context)
+  checkConnection: async ({config, settings, options, context}) => {
+    console.log('[Plaid] checkConnection', options, context)
     const client = makePlaidClient(config)
 
     const itemId: string =
@@ -121,7 +121,7 @@ export const plaidServerConnector = {
       (await client
         .itemGet({access_token: settings.accessToken})
         .then((r) => r.data.item.item_id))
-    const resoUpdate = {resourceExternalId: itemId}
+    const connUpdate = {connectionExternalId: itemId}
 
     if (options.updateWebhook) {
       await client.itemWebhookUpdate({
@@ -129,7 +129,7 @@ export const plaidServerConnector = {
         webhook: context.webhookBaseUrl,
       })
       return {
-        ...resoUpdate,
+        ...connUpdate,
         triggerDefaultSync: true, // to update settings.item.webhook
         // postgres deepMerge is not implemented yet
         // settings: {item: {webhook: context.webhookBaseUrl}},
@@ -150,12 +150,12 @@ export const plaidServerConnector = {
       // To immediate get item to be in a loginRequired state, as it is hard for us to
       // generate an item error and put it inside settings.item.
       // And because this call does nto appear to trigger any webhook
-      return {...resoUpdate, triggerDefaultSync: true}
+      return {...connUpdate, triggerDefaultSync: true}
     }
-    return resoUpdate
+    return connUpdate
   },
 
-  revokeResource: (settings, config) =>
+  revokeConnection: (settings, config) =>
     makePlaidClient(config)
       .itemRemove({access_token: settings.accessToken})
       .catch((err: IAxiosError) => {
@@ -445,7 +445,7 @@ export const plaidServerConnector = {
       case 'ITEM': {
         switch (webhook.webhook_code) {
           case 'WEBHOOK_UPDATE_ACKNOWLEDGED':
-            return {resourceUpdates: []}
+            return {connectionUpdates: []}
           case 'ERROR':
             // delegate.patchResource({error: webhook.error})
             // await delegate.commit()
@@ -464,7 +464,7 @@ export const plaidServerConnector = {
           case 'INITIAL_UPDATE':
           case 'HISTORICAL_UPDATE':
             return DEFAULT_SYNC
-          // return [{resourceExternalId, triggerDefaultSync: true}] // Incremental false?
+          // return [{connectionExternalId, triggerDefaultSync: true}] // Incremental false?
           case 'DEFAULT_UPDATE':
             return DEFAULT_SYNC
           case 'TRANSACTIONS_REMOVED':
@@ -492,7 +492,7 @@ export const plaidServerConnector = {
     }
 
     console.warn('[plaid] Unhandled webhook', webhook)
-    return {resourceUpdates: []}
+    return {connectionUpdates: []}
   },
   newInstance: ({config, settings}) => {
     const env = inferPlaidEnvFromToken(settings.accessToken)

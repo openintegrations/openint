@@ -58,7 +58,7 @@ export type SyncOperation<
   TResoUpdate extends object = ResoUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > =
-  | (TResoUpdate & {type: 'resoUpdate'})
+  | (TResoUpdate & {type: 'connUpdate'})
   // TODO: We should separate state from options, and perhaps make state
   // less black box also, see airbyte protocol v2 for inspiration
   // Also consider merging fields below into a single field

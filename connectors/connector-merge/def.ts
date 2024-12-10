@@ -34,7 +34,7 @@ export const mergeSchemas = {
     z.object({publicToken: z.string()}),
     // Perfect example why this should be called postConnectInput
     // Can only be provided via CLI...
-    // could this possibly eliminate the need for checkResource?
+    // could this possibly eliminate the need for checkConnection?
     z.object({accountToken: z.string()}),
   ]),
   sourceOutputEntity: z.discriminatedUnion('entityName', [

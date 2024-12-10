@@ -12,7 +12,7 @@ export const hubspotServer = {
       links: (defaultLinks) => [...fetchLinks, ...defaultLinks],
     }),
 
-  checkResource: async ({instance, settings}) => {
+  checkConnection: async ({instance, settings}) => {
     // Fix me hubspot workaround ....
     // https://developers.hubspot.com/docs/api/settings/account-information-api
     const res = await instance!.crm_objects.request(
@@ -67,7 +67,7 @@ export const hubspotServer = {
     // and enforce constraints that way
 
     return {
-      resourceExternalId: extractId(connectOutput.connectionId)[2],
+      connectionExternalId: extractId(connectOutput.connectionId)[2],
       settings: {
         oauth: nangoConnection,
       },

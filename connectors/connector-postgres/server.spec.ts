@@ -33,7 +33,7 @@ Import trace for requested module:
 ../../connectors/connector-postgres/server.ts
 ../app-config/connectors/connectors.merged.ts
 ../app-config/backendConfig.ts
-./app/api/resources/[connectionId]/sql/route.ts
+./app/api/connections/[connectionId]/sql/route.ts
 
  */
 function getMigrationsForTable(table: PgTable) {

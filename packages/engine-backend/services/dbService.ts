@@ -12,7 +12,7 @@ export type _ConnectorConfig = Awaited<
 export type _PipelineExpanded = Awaited<
   ReturnType<ReturnType<typeof makeDBService>['getPipelineExpandedOrFail']>
 >
-export type _ResourceExpanded = Awaited<
+export type _ConnectionExpanded = Awaited<
   ReturnType<ReturnType<typeof makeDBService>['getConnectionExpandedOrFail']>
 >
 
@@ -77,7 +77,7 @@ export function makeDBService({
     id: Id[(typeof IDS)[TTable]],
     _patch: ObjectPartialDeep<ZRaw[TTable]>,
   ) => {
-    // TODO: Validate connectorConfig.config and resource.settings
+    // TODO: Validate connectorConfig.config and connection.settings
     if (Object.keys(_patch).length === 0) {
       return
     }
@@ -185,14 +185,14 @@ export function makeDBService({
       return zRaw.integration.parse(ins)
     })
   const getConnectionOrFail = (id: Id['conn']) =>
-    metaService.tables.connection.get(id).then((reso) => {
-      if (!reso) {
+    metaService.tables.connection.get(id).then((conn) => {
+      if (!conn) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: `reso not found: ${id}`,
         })
       }
-      return zRaw.connection.parse(reso)
+      return zRaw.connection.parse(conn)
     })
   const getPipelineOrFail = (id: Id['pipe']) =>
     metaService.tables.pipeline.get(id).then((pipe) => {
@@ -206,16 +206,18 @@ export function makeDBService({
     })
 
   const getConnectionExpandedOrFail = (id: Id['conn']) =>
-    getConnectionOrFail(id).then(async (reso) => {
+    getConnectionOrFail(id).then(async (conn) => {
       const connectorConfig = await getConnectorConfigOrFail(
-        reso.connectorConfigId,
+        conn.connectorConfigId,
       )
       const settings: {} =
-        connectorConfig.connector.schemas.connectionSettings?.parse(reso.settings)
-      const integration = reso.integrationId
-        ? await getIntegrationOrFail(reso.integrationId)
+        connectorConfig.connector.schemas.connectionSettings?.parse(
+          conn.settings,
+        )
+      const integration = conn.integrationId
+        ? await getIntegrationOrFail(conn.integrationId)
         : undefined
-      return {...reso, connectorConfig, settings, integration}
+      return {...conn, connectorConfig, settings, integration}
     })
 
   const getPipelineExpandedOrFail = (id: Id['pipe']) =>

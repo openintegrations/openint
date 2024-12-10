@@ -73,7 +73,7 @@ export function logLink<T = any>(
         opts.prefix && `${opts.prefix}:`,
         `type=${op.type}`,
         op.type === 'data' && `${data?.entityName}/${data?.id}`,
-        op.type === 'resoUpdate' && `op.id=${op.id}`,
+        op.type === 'connUpdate' && `op.id=${op.id}`,
       ]).join(' '),
       op.type === 'stateUpdate' ? 'op.sourceState=' : '',
       op.type === 'stateUpdate' ? op.sourceState : '',

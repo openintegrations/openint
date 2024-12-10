@@ -45,7 +45,7 @@ export async function GET(
     if (reso.connectorName !== 'postgres') {
       throw new TRPCError({
         code: 'PRECONDITION_FAILED',
-        message: 'Only postgres resources are supported',
+        message: 'Only postgres connections are supported',
       })
     }
 

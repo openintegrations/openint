@@ -18,7 +18,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     })
   }
 
-  // Ensure that end user can access its own resources
+  // Ensure that end user can access its own connections
   if (ctx.viewer.role === 'customer') {
     await ctx.services.getConnectionOrFail(ctx.remoteConnectionId)
   }
@@ -67,7 +67,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     fetchLinks: compact([
       logLink(),
       // No more, has issues.
-      // resource.connectorConfig.connector.metadata?.nangoProvider &&
+      // connection.connectorConfig.connector.metadata?.nangoProvider &&
       //   ctx.env.NANGO_SECRET_KEY &&
       //   nangoProxyLink({
       //     secretKey: ctx.env.NANGO_SECRET_KEY,
@@ -82,7 +82,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
 
   return {
     ...ctx,
-    // TODO: Consider renaming to just resource rather than `remote`
+    // TODO: Consider renaming to just connection rather than `remote`
     remote: {
       /** Aka remoteClient */
       instance,
@@ -93,7 +93,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
       connector: connection.connectorConfig.connector,
       connectorName: connection.connectorName,
       connectorMetadata: connection.connectorConfig.connector.metadata,
-      settings, // Not resource.settings which is out of date. // TODO: we should update resource.settings through
+      settings, // Not connection.settings which is out of date. // TODO: we should update connection.settings through
       // TODO: Need to be careful this is never returned to any end user endpoints
       // and only used for making requests with remotes
       config: connection.connectorConfig.config,

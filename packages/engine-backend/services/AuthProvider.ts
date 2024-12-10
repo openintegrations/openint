@@ -19,13 +19,13 @@ export const zOrganization = z.object({
   publicMetadata: z.object({
     database_url: zPostgresUrl.optional().openapi({
       title: 'PostgreSQL Database URL',
-      description: 'This is where data from resources are synced to by default',
+      description: 'This is where data from connections are synced to by default',
       example: 'postgres://username:password@host:port/database',
     }),
     synced_data_schema: z.string().optional().openapi({
       title: 'Synced Data Schema',
       description:
-        'Postgres schema to pipe data synced from end user resources into. Defaults to "synced" if missing.',
+        'Postgres schema to pipe data synced from end user connections into. Defaults to "synced" if missing.',
     }),
     webhook_url: z.string().optional().openapi({
       title: 'Webhook URL',

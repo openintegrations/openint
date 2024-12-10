@@ -101,11 +101,11 @@ export const makePostgresMetaService = zFunction(
           sql`
             SELECT
               customer_id as id,
-              count(*) AS resource_count,
+              count(*) AS connection_count,
               min(created_at) AS first_created_at,
               max(updated_at) AS last_updated_at
             FROM
-              resource
+              connection
             ${where}
             GROUP BY customer_id
           `,
@@ -131,7 +131,11 @@ export const makePostgresMetaService = zFunction(
         )
       },
 
-      findPipelines: ({connectionIds, secondsSinceLastSync, includeDisabled}) => {
+      findPipelines: ({
+        connectionIds,
+        secondsSinceLastSync,
+        includeDisabled,
+      }) => {
         const {runQueries, sql} = _getDeps(opts)
         const ids = connectionIds && sql.array(connectionIds, 'varchar')
         const conditions = R.compact([
@@ -167,7 +171,7 @@ export const makePostgresMetaService = zFunction(
           ),
         )
       },
-      findResourcesMissingDefaultPipeline: () => {
+      findConnectionsMissingDefaultPipeline: () => {
         const {runQueries, sql} = _getDeps(opts)
         return runQueries((pool) =>
           pool.any<{id: Id['conn']}>(sql`
@@ -189,7 +193,7 @@ export const makePostgresMetaService = zFunction(
           `),
         )
       },
-      isHealthy: async (checkDefaultPostgresResources = false) => {
+      isHealthy: async (checkDefaultPostgresConnections = false) => {
         const {runQueries, sql} = _getDeps({
           ...opts,
           // hardcoding to system viewer to avoid any authorization checks
@@ -204,26 +208,27 @@ export const makePostgresMetaService = zFunction(
           return {healthy: false, error: 'Main database is not healthy'}
         }
 
-        const top3DefaultPostgresResources = await runQueries((pool) =>
+        // TODO:(@pellicceama) to use sql token rather than hard coding here.
+        const top3DefaultPostgresConnections = await runQueries((pool) =>
           pool.query(
-            sql`SELECT id, settings->>'databaseUrl' as database_url FROM resource where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
+            sql`SELECT id, settings->>'databaseUrl' as database_url FROM connection where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
           ),
         )
 
-        if (checkDefaultPostgresResources) {
-          for (const resource of top3DefaultPostgresResources.rows) {
-            if (!resource['database_url']) {
+        if (checkDefaultPostgresConnections) {
+          for (const connection of top3DefaultPostgresConnections.rows) {
+            if (!connection['database_url']) {
               continue
             }
             const {getPool} = makePostgresClient({
-              databaseUrl: resource['database_url'] as string,
+              databaseUrl: connection['database_url'] as string,
             })
             const pool = await getPool()
             const result = await pool.query(sql`SELECT 1`)
             if (result.rows.length !== 1) {
               return {
                 healthy: false,
-                error: `Default postgres resource with id ${resource['id']} is not healthy`,
+                error: `Default postgres connection with id ${connection['id']} is not healthy`,
               }
             }
           }

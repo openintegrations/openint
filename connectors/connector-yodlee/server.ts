@@ -39,7 +39,7 @@ export const yodleeServerConnector = {
     ])
 
     return {
-      resourceExternalId: providerAccountId,
+      connectionExternalId: providerAccountId,
       settings: {
         loginName,
         providerAccountId,

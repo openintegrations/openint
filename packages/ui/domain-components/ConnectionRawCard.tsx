@@ -9,16 +9,16 @@ import {cn} from '../utils'
 import type {ConnectorMeta, UIProps, UIPropsNoChildren} from './ConnectorCard'
 import {ConnectorLogo} from './ConnectorCard'
 
-type Resource = RouterOutput['listConnections'][number]
+type Connection = RouterOutput['listConnections'][number]
 
-export const ResourceCard = ({
-  resource,
+export const ConnectionRawCard = ({
+  connection,
   connector,
   children,
   className,
   ...uiProps
 }: UIProps & {
-  resource: Resource
+  connection: Connection
   connector: ConnectorMeta
 }) => (
   <Card
@@ -28,10 +28,10 @@ export const ResourceCard = ({
     )}>
     <div className="flex flex-row items-center space-x-4">
       <div className="inline-flex h-12 w-12 min-w-[48px] items-center justify-center rounded-xl border border-[#cbcbcb] bg-transparent">
-        {resource.integrationId ? (
+        {connection.integrationId ? (
           <IntegrationLogo
             {...uiProps}
-            integration={resource.integration}
+            integration={connection.integration}
             className="h-8 w-8"
           />
         ) : (
@@ -45,27 +45,27 @@ export const ResourceCard = ({
       <div className="flex flex-col">
         <div className="flex h-6 items-center space-x-2 self-stretch">
           <h4 className="text-sm font-semibold tracking-[-0.01em] text-black antialiased">
-            {resource.displayName ||
-              resource.integration?.name ||
-              titleCase(resource.connectorName) ||
-              resource.connectorConfigId ||
+            {connection.displayName ||
+              connection.integration?.name ||
+              titleCase(connection.connectorName) ||
+              connection.connectorConfigId ||
               '<TODO>'}
           </h4>
           <span className="rounded-full bg-gray-300 px-2 py-1 text-xs font-medium text-white">
             Primary
           </span>
-          {(resource.syncInProgress || resource.status) && (
+          {(connection.syncInProgress || connection.status) && (
             <Badge
               variant="secondary"
               className={cn(
-                resource.status === 'healthy' && 'bg-green-200',
-                resource.status === 'manual' && 'bg-blue-200',
-                (resource.status === 'error' ||
-                  resource.status === 'disconnected') &&
+                connection.status === 'healthy' && 'bg-green-200',
+                connection.status === 'manual' && 'bg-blue-200',
+                (connection.status === 'error' ||
+                  connection.status === 'disconnected') &&
                   'bg-pink-200',
               )}>
               {
-                resource.syncInProgress ? 'Syncing' : resource.status
+                connection.syncInProgress ? 'Syncing' : connection.status
                 // TODO: Implement the concept of a primary resource
                 // || 'Primary'
               }
@@ -73,11 +73,11 @@ export const ResourceCard = ({
           )}
         </div>
         <div className="text-black-mid truncate text-sm tracking-[-0.01em] antialiased">
-          {resource.syncInProgress ? (
+          {connection.syncInProgress ? (
             <LoadingText text="Syncing" />
-          ) : resource.lastSyncCompletedAt ? (
+          ) : connection.lastSyncCompletedAt ? (
             `Synced ${formatDistanceToNowStrict(
-              new Date(resource.lastSyncCompletedAt),
+              new Date(connection.lastSyncCompletedAt),
               {addSuffix: true},
             )}`
           ) : (

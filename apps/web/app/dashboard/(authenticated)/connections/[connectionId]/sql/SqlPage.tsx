@@ -41,7 +41,7 @@ function sqlUrl(opts: {
   apikey: string
 }) {
   const url = new URL(
-    `/api/resources/${opts.connectionId}/sql`,
+    `/api/connections/${opts.connectionId}/sql`,
     getServerUrl(null),
   )
   url.searchParams.set('q', opts.query)
@@ -109,13 +109,13 @@ export function SqlPage({
       <Breadcrumb className="p-4">
         <BreadcrumbItem>
           {/* We need typed routes... https://github.com/shadcn/ui/pull/133 */}
-          <BreadcrumbLink href="/resources">Resources</BreadcrumbLink>
+          <BreadcrumbLink href="/connections">Connections</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink>{connectionId}</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href={`/resources/${connectionId}/sql`}>
+          <BreadcrumbLink href={`/connections/${connectionId}/sql`}>
             SQL Explorer
           </BreadcrumbLink>
         </BreadcrumbItem>

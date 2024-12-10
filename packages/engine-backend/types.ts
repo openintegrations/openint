@@ -17,7 +17,7 @@ export type ConnectorConfigInput<
   : never
 
 // Is there a way to infer this? Or would that be too much?
-export type ResourceInput<T extends AnyConnectorImpl = AnyConnectorImpl> =
+export type ConnectionInput<T extends AnyConnectorImpl = AnyConnectorImpl> =
   T extends AnyConnectorImpl
     ? {
         id: Id<T['name']>['conn']
@@ -34,11 +34,11 @@ export interface PipelineInput<
   TLinks extends Record<string, LinkFactory> = {},
 > {
   id: Id['pipe']
-  source?: PSrc extends AnyConnectorImpl ? ResourceInput<PSrc> : never
+  source?: PSrc extends AnyConnectorImpl ? ConnectionInput<PSrc> : never
   sourceState?: PSrc extends AnyConnectorImpl
     ? Partial<_inferInput<PSrc['schemas']['sourceState']>>
     : never
-  destination?: PDest extends AnyConnectorImpl ? ResourceInput<PDest> : never
+  destination?: PDest extends AnyConnectorImpl ? ConnectionInput<PDest> : never
   destinationState?: PDest extends AnyConnectorImpl
     ? Partial<_inferInput<PDest['schemas']['destinationState']>>
     : never

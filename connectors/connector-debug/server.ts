@@ -8,7 +8,7 @@ export const debugServer = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   destinationSync: () => logLink<any>({prefix: 'debug', verbose: true}),
   handleWebhook: (input) => ({
-    resourceUpdates: [],
+    connectionUpdates: [],
     response: {body: {echo: input}},
   }),
 } satisfies ConnectorServer<typeof debugSchemas>
