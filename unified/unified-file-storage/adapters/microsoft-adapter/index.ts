@@ -2,17 +2,16 @@ import {type FileStorageAdapter} from "../../router";
 import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
 
 export const microsoftGraphAdapter = {
-  listDrives: async ({ instance, input,  }) => {
-    const res = await instance.GET('/drives', {
-      params: {
-        query: {
-          // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
-          $skiptoken: input?.cursor ?? undefined,
-        },
+  listDrives: async ({ instance, input }) => {
+    const res = await fetch(`https://graph.microsoft.com/v1.0/sites?search=*&$skiptoken=${input?.cursor ?? ''}`, {
+      method: 'GET',
+      headers: {
+        // @ts-expect-error 
+        'Authorization': instance.clientOptions.headers?.authorization,
       },
-    });
+    }).then(response => response.json());
 
-    if(!res.data || !res.data.value) {
+    if (!res || !Array.isArray(res.value)) {
       return {
         has_next_page: false,
         next_cursor: undefined,
@@ -20,20 +19,19 @@ export const microsoftGraphAdapter = {
       }
     }
 
-    const drives = res.data.value.map((drive) => ({
-      id: drive.id || '',
-      name: drive.name || '',
-      created_at: drive.createdDateTime,
-      modified_at: drive.lastModifiedDateTime,
-      // todo: potentially parse from weburl includes webUrl or based on the integration_id
+    const drives = res.value.map((site: any) => ({
+      id: site.id || '',
+      name: site.displayName || '',
+      created_at: site.createdDateTime,
+      modified_at: site.lastModifiedDateTime,
       integration: 'sharepoint',
-      owner: drive.owner?.['group']?.['displayName'] || drive.owner?.['user']?.['displayName'],
-      raw_data: drive,
+      owner: site.siteCollection?.hostname,
+      raw_data: site,
     }));
 
     return {
-      has_next_page: res.data['@odata.nextLink'] ? true : false,
-      next_cursor: res.data['@odata.nextLink'] ? extractCursor(res.data['@odata.nextLink']) : undefined,
+      has_next_page: res['@odata.nextLink'] ? true : false,
+      next_cursor: res['@odata.nextLink'] ? extractCursor(res['@odata.nextLink']) : undefined,
       items: drives,
     };
   },
