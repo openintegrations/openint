@@ -19,20 +19,38 @@ export const microsoftGraphAdapter = {
       }
     }
 
-    const drives = res.value.map((site: any) => ({
-      id: site.id || '',
-      name: site.displayName || '',
-      created_at: site.createdDateTime,
-      modified_at: site.lastModifiedDateTime,
-      integration: 'sharepoint',
-      owner: site.siteCollection?.hostname,
-      raw_data: site,
-    }));
+    const drivesPromises = res.value.map((site: any) => {
+      const siteId = site.id;
+      return fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drives`, {
+        method: 'GET',
+        headers: {
+          // @ts-expect-error 
+          'Authorization': instance.clientOptions.headers?.authorization,
+        },
+      }).then(response => response.json());
+    });
+
+    const drivesResponses = await Promise.all(drivesPromises);
+
+    const allDrives = drivesResponses.flatMap((driveResponse: any) => {
+      if (!driveResponse || !Array.isArray(driveResponse.value)) {
+        return [];
+      }
+      return driveResponse.value.map((drive: any) => ({
+        id: drive.id || '',
+        name: drive.name || '',
+        created_at: drive.createdDateTime,
+        modified_at: drive.lastModifiedDateTime,
+        integration: 'sharepoint',
+        owner: drive.owner?.user?.displayName || drive.owner?.group?.displayName,
+        raw_data: drive,
+      }));
+    });
 
     return {
       has_next_page: res['@odata.nextLink'] ? true : false,
       next_cursor: res['@odata.nextLink'] ? extractCursor(res['@odata.nextLink']) : undefined,
-      items: drives,
+      items: allDrives,
     };
   },
 
@@ -128,13 +146,13 @@ export const microsoftGraphAdapter = {
       params: {
         path: {'drive-id': input.driveId, 'driveItem-id': input.folderId},
         // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
-        query: {$filter: "true", $skiptoken: input?.cursor ?? undefined},
+        query: {$skiptoken: input?.cursor ?? undefined},
       }
-    }) : await instance.GET(`/drives/{drive-id}/items`, {
+    }) : await instance.GET(`/drives/{drive-id}/root/children`, {
       params: {
         path: {'drive-id': input.driveId},
         // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
-        query: {$filter: "true", $skiptoken: input?.cursor ?? undefined},
+        query: {$skiptoken: input?.cursor ?? undefined},
       }
     });
 
