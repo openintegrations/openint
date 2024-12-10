@@ -62,7 +62,7 @@ const sectionedLinks: Array<{
     items: [
       {
         title: 'End users',
-        href: '/dashboard/end-users',
+        href: '/dashboard/customers',
         icon: 'Users',
       },
       {

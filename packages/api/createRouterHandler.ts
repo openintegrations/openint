@@ -33,7 +33,7 @@ export const zOpenIntHeaders = z
     'x-connection-connector-name': z.string().nullish(),
     'x-connection-connector-config-id': zId('ccfg').nullish(),
     /** Implied by authorization header when operating in end user mode */
-    'x-connection-end-user-id': zCustomerId.nullish(),
+    'x-connection-customer-id': zCustomerId.nullish(),
     authorization: z.string().nullish(), // `Bearer ${string}`
   })
   .catchall(z.string().nullish())
@@ -140,7 +140,7 @@ export const contextFromRequest = async ({
       {
         // customerId shall be noop when we are in end User viewer as services
         // are already secured by row level security
-        customerId: headers['x-connection-end-user-id'],
+        customerId: headers['x-connection-customer-id'],
         connectorName: headers['x-connection-connector-name'],
         connectorConfigId: headers['x-connection-connector-config-id'],
       },

@@ -8,7 +8,7 @@ const links: Array<{href: string; title: string}> = [
   },
   {
     title: 'End users',
-    href: '/dashboard/end-users',
+    href: '/dashboard/customers',
   },
   {
     title: 'Connector Configs',
