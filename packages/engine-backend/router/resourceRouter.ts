@@ -263,7 +263,7 @@ export const resourceRouter = trpc.router({
           connectorConfigId: zId('ccfg').nullish(),
           connectorName: z.string().nullish(),
           forceRefresh: z.boolean().optional(),
-          expand: z.string().optional().describe('Comma-separated list of expand options: integration and/or integration.connector'),
+          expand: z.string().optional().openapi({description: 'Comma-separated list of expand options: integration and/or integration.connector'}),
         })
         .optional(),
     )
@@ -322,7 +322,7 @@ export const resourceRouter = trpc.router({
       z.object({
         id: zId('reso'),
         forceRefresh: z.boolean().optional(),
-        expand: z.string().optional().describe('Comma-separated list of expand options: integration and/or integration.connector'),
+        expand: z.string().optional().openapi({description: 'Comma-separated list of expand options: integration and/or integration.connector'}),
       }),
     )
     .output(
