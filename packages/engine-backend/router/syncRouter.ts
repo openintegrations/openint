@@ -14,14 +14,14 @@ export const syncRouter = trpc.router({
     .input(zListParams.optional())
     .output(z.array(z.unknown()))
     .query(async ({ctx}) => {
-      const resources = await ctx.services.metaService.tables.resource.list({})
-      if (resources.length === 0) {
+      const connections = await ctx.services.metaService.tables.connection.list({})
+      if (connections.length === 0) {
         return []
       }
       const runs = await configDb.query.sync_run.findMany({
         where: inArray(
-          schema.sync_run.resource_id,
-          resources.map((r) => r.id),
+          schema.sync_run.connection_id,
+          connections.map((r) => r.id),
         ),
       })
       return runs

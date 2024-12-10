@@ -2,7 +2,7 @@
 
 import {ChevronDown} from 'lucide-react'
 import {useState} from 'react'
-import {endUserRouterSchema} from '@openint/engine-backend/router/endUserRouter'
+import {customerRouterSchema} from '@openint/engine-backend/router/customerRouter'
 import {_trpcReact} from '@openint/engine-frontend'
 import {SchemaForm, useToast} from '@openint/ui'
 import {copyToClipboard} from '@/lib-client/copyToClipboard'
@@ -30,7 +30,7 @@ export default function MagicLinkPage() {
       </p>
       <div className="max-w-xl">
         <SchemaForm
-          schema={endUserRouterSchema.createMagicLink.input}
+          schema={customerRouterSchema.createMagicLink.input}
           loading={createMagicLink.isLoading}
           onSubmit={({formData: values}) => {
             createMagicLink.mutate(values, {
@@ -45,7 +45,7 @@ export default function MagicLinkPage() {
           }}
           uiSchema={{
             'ui:order': [
-              'endUserId',
+              'customerId',
               'validityInSeconds',
               'displayName',
               'redirectUrl',
@@ -54,12 +54,12 @@ export default function MagicLinkPage() {
               'connectorConfigId',
               'showExisting',
             ],
-            endUserId: {
+            customerId: {
               'ui:widget': 'text',
               'ui:title': <span className="font-semibold">End User ID</span>,
               'ui:description': (
                 <span className="text-sm text-gray-600">
-                  Anything that uniquely identifies the end user that you will
+                  Anything that uniquely identifies the customer that you will
                   be sending the magic link to
                 </span>
               ),

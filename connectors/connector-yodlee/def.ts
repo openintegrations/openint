@@ -40,7 +40,7 @@ const zSettings = zUserCreds
 export const yodleeSchemas = {
   name: z.literal('yodlee'),
   connectorConfig: zConfig,
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   integrationData: zYodleeInstitution,
   // Should accessToken be cached based on provider / userId?
   connectInput: z.object({accessToken: zAccessToken, envName: zYodleeEnvName}),
@@ -187,7 +187,7 @@ export const yodleeDef = {
       loginUrl: int.loginUrl,
       name: int.name ?? `<${int.id}>`,
     }),
-    resource: (settings) => ({
+    connection: (settings) => ({
       id: `${settings.providerAccountId}`,
       displayName:
         settings.provider?.name ?? `Unnamed <${settings.providerAccountId}>`,

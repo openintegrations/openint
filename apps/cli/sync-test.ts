@@ -22,7 +22,7 @@ function getSource(name: string) {
   switch (name) {
     case 'plaid':
       return plaidProvider.sourceSync({
-        endUser: null,
+        customer: null,
         ...getInstance(plaidProvider, {
           config: plaidProvider.schemas.connectorConfig.parse({
             envName: 'sandbox',
@@ -47,7 +47,7 @@ function getDestination(name: string | undefined) {
     // case 'stripe':
     //   return stripeImpl.destinationSync({
     //     config: {apikeyAuth: true},
-    //     endUser: null,
+    //     customer: null,
     //     settings: {secretKey: process.env['STRIPE_TEST_SECRET_KEY']!},
     //     state: {},
     //   })
@@ -56,7 +56,7 @@ function getDestination(name: string | undefined) {
         source: undefined,
         config: {},
         state: {},
-        endUser: null,
+        customer: null,
         settings: {
           databaseUrl:
             process.env['int_postgres__database_url'] ??
@@ -81,7 +81,7 @@ sync({
   links: R.compact([
     // process.argv[2] === 'plaid' &&
     //   mapStandardEntityLink({
-    //     id: 'reso_plaid_demo',
+    //     id: 'conn_plaid_demo',
     //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     //     connectorConfig: {connector: plaidProvider as any},
     //     settings: {},

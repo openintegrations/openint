@@ -6,5 +6,5 @@ export const kConnectSession = 'connect-session'
 export type ConnectSession = z.infer<typeof zConnectSession>
 export const zConnectSession = z.object({
   token: z.string(),
-  resourceId: zId('reso'),
+  connectionId: zId('conn'),
 })

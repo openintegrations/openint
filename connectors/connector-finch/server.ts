@@ -29,14 +29,14 @@ export const finchServer = {
     const companyId =
       (res.data as Finch['GetIntrospectResponse']).company_id ??
       (await finch.GET('/introspect').then((r) => r.data.company_id))
-    // TODO: figure out if accountId is needed for resourceExternalId
-    // Further, do not have a constraint on resourceExternalId...
+    // TODO: figure out if accountId is needed for connectionExternalId
+    // Further, do not have a constraint on connectionExternalId...
     if (!companyId) {
       throw new Error('Missing company_id for Finch')
     }
     // We should really validate at the router layer.
     return {
-      resourceExternalId: companyId,
+      connectionExternalId: companyId,
       settings: {access_token: res.data.access_token},
     }
   },
@@ -49,7 +49,7 @@ export const finchServer = {
         authorization: `Bearer ${settings.access_token}`,
       },
     }),
-  revokeResource: async (_, __, instance) => {
+  revokeConnection: async (_, __, instance) => {
     await instance.POST('/disconnect')
   },
   passthrough: (instance, input) =>

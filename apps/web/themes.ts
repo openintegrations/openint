@@ -1,6 +1,6 @@
-/* Venice's Core Theme */
+/* OpenInt's Core Theme */
 
-export const VeniceTheme = {
+export const OpenIntTheme = {
   background: '#1e1e1e',
   black: {
     DEFAULT: '#1e1e1e',
@@ -60,7 +60,7 @@ export const dataGridThemeColors = {
   drillDownBorder: '#00000000',
 }
 
-export const VeniceDataGridTheme = {
+export const OpenIntDataGridTheme = {
   accentColor: dataGridThemeColors.accent,
   accentFg: dataGridThemeColors.cellBackground,
   accentLight: dataGridThemeColors.accentLight,

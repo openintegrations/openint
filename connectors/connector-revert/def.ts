@@ -12,11 +12,11 @@ export const revertSchemas = {
     api_token: z.string().describe('Revert API token'),
     api_version: z.string().optional().describe('Revert API version'),
   }),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     tenant_id: z
       .string()
       .describe(
-        "x-revert-t-id header. This is the end user, aka Revert's customer's customer",
+        "x-revert-t-id header. This is the customer, aka Revert's customer's customer",
       ),
   }),
   sourceOutputEntities: {

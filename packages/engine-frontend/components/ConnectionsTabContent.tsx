@@ -4,7 +4,7 @@ import type {ConnectorConfig} from '../hocs/WithConnectConfig'
 
 interface ConnectionsTabContentProps {
   connectionCount: number
-  deleteResource: ({id}: {id: string}) => void
+  deleteConnection: ({id}: {id: string}) => void
   onConnect: () => void
   connections: Array<{
     id: string
@@ -18,7 +18,7 @@ interface ConnectionsTabContentProps {
 
 export function ConnectionsTabContent({
   connectionCount,
-  deleteResource,
+  deleteConnection,
   connections,
   onConnect,
 }: ConnectionsTabContentProps) {
@@ -43,7 +43,7 @@ export function ConnectionsTabContent({
   ) : (
     <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
       {connections.map((conn) => (
-        <ConnectionCard key={conn.id} conn={conn} onDelete={deleteResource} />
+        <ConnectionCard key={conn.id} conn={conn} onDelete={deleteConnection} />
       ))}
     </div>
   )

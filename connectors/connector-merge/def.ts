@@ -17,15 +17,15 @@ export const mergeSchemas = {
   }),
 
   integrationData: zCast<Integration>(),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     accountToken: z.string(),
     accountDetails: zCast<components['schemas']['AccountDetails']>().optional(),
   }),
   preConnectInput: z.object({
     // TODO: Use proper openapi spec rather than just a runtime type...
     categories: z.array(zCast<Category>()),
-    end_user_email_address: z.string().optional(),
-    end_user_organization_name: z.string().optional(),
+    customer_email_address: z.string().optional(),
+    customer_organization_name: z.string().optional(),
   }),
   connectInput: z.object({
     link_token: z.string(),
@@ -34,7 +34,7 @@ export const mergeSchemas = {
     z.object({publicToken: z.string()}),
     // Perfect example why this should be called postConnectInput
     // Can only be provided via CLI...
-    // could this possibly eliminate the need for checkResource?
+    // could this possibly eliminate the need for checkConnection?
     z.object({accountToken: z.string()}),
   ]),
   sourceOutputEntity: z.discriminatedUnion('entityName', [
@@ -72,7 +72,7 @@ export const mergeDef = {
         (c): c is 'accounting' | 'hris' => c === 'accounting' || c === 'hris',
       ),
     }),
-    resource() {
+    connection() {
       return {
         displayName: '',
         // status: healthy vs. disconnected...

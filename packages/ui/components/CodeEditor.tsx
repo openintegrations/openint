@@ -114,7 +114,7 @@ const openintEditorTheme: IStandaloneThemeData = {
     //   token: '',
     // },
     {
-      // venice-gray-muted
+      // openint-gray-muted
       foreground: '7d7d7d',
       token: 'comment',
     },
@@ -139,7 +139,7 @@ const openintEditorTheme: IStandaloneThemeData = {
     //   token: 'constant.other',
     // },
     {
-      // venice-green
+      // openint-green
       foreground: '12b886',
       token: 'keyword',
     },

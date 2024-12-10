@@ -5,7 +5,7 @@ import {z} from '@openint/util'
 export const discordSchemas = {
   name: z.literal('discord'),
   connectorConfig: oauthBaseSchema.connectorConfig,
-  resourceSettings: oauthBaseSchema.resourceSettings,
+  connectionSettings: oauthBaseSchema.connectionSettings,
   connectOutput: oauthBaseSchema.connectOutput,
 } satisfies ConnectorSchemas
 

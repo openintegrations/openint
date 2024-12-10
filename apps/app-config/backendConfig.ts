@@ -32,10 +32,10 @@ export const backendEnv = env
 // @see https://share.cleanshot.com/vpzSPkjP
 // It's probably better to keep typing simpler especially when working with 3rd party
 // libs that can have major changes...
-// export type VeniceInput = inferProcedureInput<
-//   VeniceRouter['_def']['mutations']['syncPipeline']
+// export type OpenIntInput = inferProcedureInput<
+//   OpenIntRouter['_def']['mutations']['syncPipeline']
 // >[0]
-export type VeniceInput = PipelineInput<
+export type OpenIntInput = PipelineInput<
   // @ts-expect-error QQ check qbo _opState
   (typeof mergedConnectors)[keyof typeof mergedConnectors],
   (typeof mergedConnectors)[keyof typeof mergedConnectors]

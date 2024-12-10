@@ -8,7 +8,7 @@ import {z, zCast} from '@openint/util'
 
 export const webhookSchemas = {
   name: z.literal('webhook'),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     destinationUrl: z.string(),
   }),
   destinationInputEntity: zCast<AnyEntityPayload>(),

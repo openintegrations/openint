@@ -1,5 +1,5 @@
 import {z} from '@opensdks/util-zod'
-import {zEndUserId, zId} from './id.types'
+import {zCustomerId, zId} from './id.types'
 import {zVerticalKey} from './verticals'
 
 // Utility types
@@ -61,8 +61,8 @@ export const zStandard = {
     /** TODO: Is this the same as connector vertical? */
     verticals: z.array(zVerticalKey).nullish(),
   }),
-  resource: z.object({
-    id: zId('reso'),
+  connection: z.object({
+    id: zId('conn'),
     displayName: z.string(),
     /**
      * This correspond to the connection status.
@@ -144,13 +144,13 @@ export const zRaw = {
             .describe(
               'Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization.',
             ),
-          destination_id: zId('reso').optional().openapi({
+          destination_id: zId('conn').optional().openapi({
             description: 'Defaults to the org-wide postgres',
           }),
         })
         .nullish()
         .describe(
-          'Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL',
+          'Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL',
         ),
       defaultPipeIn: z
         .object({
@@ -160,40 +160,40 @@ export const zRaw = {
             .describe(
               'Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization.',
             ),
-          source_id: zId('reso'),
+          source_id: zId('conn'),
         })
         .nullish()
         .describe(
-          'Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL',
+          'Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL',
         ),
       /** This is a generated column, which is not the most flexible. Maybe we need some kind of mapStandardIntegration method? */
       envName: z.string().nullish(),
       metadata: zMetadata,
     })
     .openapi({ref: 'ConnectorConfig'}),
-  resource: zBase
+  connection: zBase
     .extend({
-      id: zId('reso'),
+      id: zId('conn'),
       connectorName: z.string().describe('Unique name of the connector'),
       displayName: z.string().nullish(),
-      endUserId: zEndUserId.nullish(),
+      customerId: zCustomerId.nullish(),
       connectorConfigId: zId('ccfg'),
       integrationId: zId('int').nullish(),
       settings: z.record(z.unknown()).nullish(),
-      standard: zStandard.resource.omit({id: true}).nullish(),
+      standard: zStandard.connection.omit({id: true}).nullish(),
       disabled: z.boolean().optional(),
       metadata: zMetadata
     })
-    .openapi({ref: 'Resource'}),
+    .openapi({ref: 'Connection'}),
   pipeline: zBase
     .extend({
       id: zId('pipe'),
       // TODO: Remove nullish now that pipelines are more fixed
-      sourceId: zId('reso').optional(),
+      sourceId: zId('conn').optional(),
       sourceState: z.record(z.unknown()).optional(),
       sourceVertical: z.string().optional().nullable(),
       streams: zStreamsV2.nullish(),
-      destinationId: zId('reso').optional(),
+      destinationId: zId('conn').optional(),
       destinationState: z.record(z.unknown()).optional(),
       destinationVertical: z.string().optional().nullable(),
       linkOptions: z

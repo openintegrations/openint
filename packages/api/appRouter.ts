@@ -120,9 +120,9 @@ export function getOpenAPISpec(includeInternal = true) {
         name: 'x-apikey',
         in: 'header',
       },
-      resourceId: {
+      connectionId: {
         type: 'apiKey',
-        name: 'x-resource-id',
+        name: 'x-connection-id',
         in: 'header',
       },
       // TODO: Should this be an actual oauth thing? Doesn't seem to work as is right now
@@ -142,7 +142,7 @@ export function getOpenAPISpec(includeInternal = true) {
   }
 
   // Unfortunately trpc-openapi is missing bunch of options...
-  oas.security = [{apikey: [], resourceId: []}]
+  oas.security = [{apikey: [], connectionId: []}]
   return oas
 }
 

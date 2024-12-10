@@ -12,7 +12,7 @@ export const yodleeClientConnector = {
     return async (
       {accessToken, envName},
       {
-        resourceExternalId: providerAccountId,
+        connectionExternalId: providerAccountId,
         integrationExternalId: providerId,
       },
     ) => {

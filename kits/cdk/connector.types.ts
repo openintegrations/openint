@@ -11,17 +11,17 @@ import type {
 import type {MaybePromise} from '@openint/util'
 import {R} from '@openint/util'
 import type {
-  CheckResourceContext,
-  CheckResourceOptions,
+  CheckConnectionContext,
+  CheckConnectionOptions,
   ConnectContext,
   ConnectOptions,
   ConnectorMetadata,
   OpenDialogFn,
-  ResourceUpdate,
+  ConnectionUpdate,
   WebhookReturnType,
   zPassthroughInput,
 } from './connector-meta.types'
-import type {EndUserId, Id} from './id.types'
+import type {CustomerId, Id} from './id.types'
 import {makeId} from './id.types'
 import type {ZStandard} from './models'
 import type {VerticalKey} from './verticals'
@@ -34,7 +34,7 @@ import type {VerticalKey} from './verticals'
 export interface ConnectorSchemas {
   name: z.ZodLiteral<string>
   connectorConfig?: z.ZodTypeAny
-  resourceSettings?: z.ZodTypeAny
+  connectionSettings?: z.ZodTypeAny
   integrationData?: z.ZodTypeAny
   webhookInput?: z.ZodTypeAny
   preConnectInput?: z.ZodTypeAny
@@ -83,9 +83,9 @@ export interface ConnectorDef<
     integration?: (
       data: T['_types']['integrationData'],
     ) => Omit<ZStandard['integration'], 'id'>
-    resource?: (
-      settings: T['_types']['resourceSettings'],
-    ) => Omit<ZStandard['resource'], 'id'>
+    connection?: (
+      settings: T['_types']['connectionSettings'],
+    ) => Omit<ZStandard['connection'], 'id'>
 
     // TODO: Migrate to vertical format, as only verticals deal with mapping entities
     entity?:
@@ -93,13 +93,13 @@ export interface ConnectorDef<
           // Simpler
           [k in T['_types']['sourceOutputEntity']['entityName']]: (
             entity: Extract<T['_types']['sourceOutputEntity'], {entityName: k}>,
-            settings: T['_types']['resourceSettings'],
+            settings: T['_types']['connectionSettings'],
           ) => EntityPayload | null
         }>
       // More powerful
       | ((
           entity: T['_types']['sourceOutputEntity'],
-          settings: T['_types']['resourceSettings'],
+          settings: T['_types']['connectionSettings'],
         ) => EntityPayload | null)
   }
 
@@ -140,7 +140,7 @@ export interface ConnectorServer<
 
   preConnect?: (
     config: T['_types']['connectorConfig'],
-    context: ConnectContext<T['_types']['resourceSettings']>,
+    context: ConnectContext<T['_types']['connectionSettings']>,
     // TODO: Turn this into an object instead
     input: T['_types']['preConnectInput'],
   ) => Promise<T['_types']['connectInput']>
@@ -148,38 +148,38 @@ export interface ConnectorServer<
   postConnect?: (
     connectOutput: T['_types']['connectOutput'],
     config: T['_types']['connectorConfig'],
-    context: ConnectContext<T['_types']['resourceSettings']>,
+    context: ConnectContext<T['_types']['connectionSettings']>,
   ) => MaybePromise<
     Omit<
-      ResourceUpdate<
+      ConnectionUpdate<
         T['_types']['sourceOutputEntity'],
-        T['_types']['resourceSettings']
+        T['_types']['connectionSettings']
       >,
-      'endUserId'
+      'customerId'
     >
   >
 
-  checkResource?: (
+  checkConnection?: (
     input: OmitNever<{
-      settings: T['_types']['resourceSettings']
+      settings: T['_types']['connectionSettings']
       config: T['_types']['connectorConfig']
-      options: CheckResourceOptions
-      context: CheckResourceContext
+      options: CheckConnectionOptions
+      context: CheckConnectionContext
       instance?: TInstance
     }>,
   ) => MaybePromise<
     Omit<
-      ResourceUpdate<
+      ConnectionUpdate<
         T['_types']['sourceOutputEntity'],
-        T['_types']['resourceSettings']
+        T['_types']['connectionSettings']
       >,
-      'endUserId'
+      'customerId'
     >
   >
 
   // This probably need to also return an observable
-  revokeResource?: (
-    settings: T['_types']['resourceSettings'],
+  revokeConnection?: (
+    settings: T['_types']['connectionSettings'],
     config: T['_types']['connectorConfig'],
     instance: TInstance,
   ) => Promise<unknown>
@@ -189,7 +189,7 @@ export interface ConnectorServer<
   sourceSync?: (
     input: OmitNever<{
       instance: TInstance
-      endUser: {id: EndUserId} | null | undefined
+      customer: {id: CustomerId} | null | undefined
       /* Enabled streams */
       streams: {
         [k in T['_streamName']]?:
@@ -201,17 +201,17 @@ export interface ConnectorServer<
       /** @deprecated, use `instance` instead */
       config: T['_types']['connectorConfig']
       /** @deprecated, use `instance` instead */
-      settings: T['_types']['resourceSettings']
+      settings: T['_types']['connectionSettings']
     }>,
   ) => Source<T['_types']['sourceOutputEntity']>
 
   destinationSync?: (
     input: OmitNever<{
       /** Needed for namespacing when syncing multiple source into same destination */
-      source: {id: Id['reso']; connectorName: string} | undefined
-      endUser: {id: EndUserId; orgId: string} | null | undefined
+      source: {id: Id['conn']; connectorName: string} | undefined
+      customer: {id: CustomerId; orgId: string} | null | undefined
       config: T['_types']['connectorConfig']
-      settings: T['_types']['resourceSettings']
+      settings: T['_types']['connectionSettings']
       state: T['_types']['destinationState']
     }>,
   ) => Destination<T['_types']['destinationInputEntity']>
@@ -248,7 +248,7 @@ export interface ConnectorServer<
   ) => MaybePromise<
     WebhookReturnType<
       T['_types']['sourceOutputEntity'],
-      T['_types']['resourceSettings']
+      T['_types']['connectionSettings']
     >
   >
 
@@ -259,11 +259,11 @@ export interface ConnectorServer<
    */
   newInstance?: (opts: {
     config: T['_types']['connectorConfig']
-    settings: T['_types']['resourceSettings']
+    settings: T['_types']['connectionSettings']
     fetchLinks: FetchLink[]
     /** @deprecated, use fetchLinks instead for things like token refreshes or connection status update */
     onSettingsChange: (
-      newSettings: T['_types']['resourceSettings'],
+      newSettings: T['_types']['connectionSettings'],
     ) => MaybePromise<void>
   }) => TInstance
 
@@ -312,46 +312,46 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
     }>,
     {type: 'data'}
   >
-  type resoUpdate = ResoUpdateData<
-    _types['resourceSettings'],
+  type connUpdate = ResoUpdateData<
+    _types['connectionSettings'],
     _types['integrationData']
   >
   type stateUpdate = StateUpdateData<
     _types['sourceState'],
     _types['destinationState']
   >
-  type Src = Source<_types['sourceOutputEntity'], resoUpdate, stateUpdate>
+  type Src = Source<_types['sourceOutputEntity'], connUpdate, stateUpdate>
 
-  type Op = SyncOperation<_types['sourceOutputEntity'], resoUpdate, stateUpdate>
+  type Op = SyncOperation<_types['sourceOutputEntity'], connUpdate, stateUpdate>
   type InputOp = SyncOperation<
     _types['destinationInputEntity'],
-    resoUpdate,
+    connUpdate,
     stateUpdate
   >
 
   type OpData = Extract<Op, {type: 'data'}>
-  type OpRes = Extract<Op, {type: 'resoUpdate'}>
+  type OpRes = Extract<Op, {type: 'connUpdate'}>
   type OpState = Extract<Op, {type: 'stateUpdate'}>
-  type _resourceUpdateType = ResourceUpdate<
+  type _connectionUpdateType = ConnectionUpdate<
     _types['sourceOutputEntity'],
-    _types['resourceSettings']
+    _types['connectionSettings']
   >
   type _webhookReturnType = WebhookReturnType<
     _types['sourceOutputEntity'],
-    _types['resourceSettings']
+    _types['connectionSettings']
   >
   return {
     ...schemas,
     _types: {} as _types,
     _streams: {} as _streams,
     _streamName: {} as _streamName,
-    _resUpdateType: {} as resoUpdate,
+    _resUpdateType: {} as connUpdate,
     _stateUpdateType: {} as stateUpdate,
     _opType: {} as Op,
     _intOpType: {} as IntOpData,
     _sourceType: {} as Src,
     _inputOpType: {} as InputOp,
-    _resourceUpdateType: {} as _resourceUpdateType,
+    _connectionUpdateType: {} as _connectionUpdateType,
     _webhookReturnType: {} as _webhookReturnType,
 
     // Fns
@@ -366,8 +366,8 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
         // We don't prefix in `_opData`, should we actually prefix here?
         ...rest,
         // TODO: ok so this is a sign that we should be prefixing using a link of some kind...
-        id: makeId('reso', schemas.name.value, id),
-        type: 'resoUpdate',
+        id: makeId('conn', schemas.name.value, id),
+        type: 'connUpdate',
       }) as OpRes,
     _opState: (
       sourceState?: OpState['sourceState'],
@@ -403,10 +403,10 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
       },
     }),
     _webhookReturn: (
-      resourceExternalId: _resourceUpdateType['resourceExternalId'],
-      rest: Omit<_resourceUpdateType, 'resourceExternalId'>,
+      connectionExternalId: _connectionUpdateType['connectionExternalId'],
+      rest: Omit<_connectionUpdateType, 'connectionExternalId'>,
     ): _webhookReturnType => ({
-      resourceUpdates: [{...rest, resourceExternalId}],
+      connectionUpdates: [{...rest, connectionExternalId}],
     }),
   }
 }

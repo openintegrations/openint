@@ -151,7 +151,7 @@ export const connectorConfigRouter = trpc.router({
         path: '/core/connector_config_info',
         tags,
         description:
-          'For end user authentication and list a limited set of non private data',
+          'For customer authentication and list a limited set of non private data',
       },
     })
     .input(

@@ -35,7 +35,7 @@ const schema = env['POSTGRES_SCHEMA'] ? pgSchema(env['POSTGRES_SCHEMA']) : null
 
 const tableFn = (schema?.table ?? pgTable) as typeof pgTable
 
-/** Not currently used. Maybe better to have customer rather than end_user? */
+/** Not currently used. Maybe better to have customer rather than customer? */
 export const customer = tableFn('customer', (t) => ({
   // Standard cols
   id: t
@@ -91,20 +91,20 @@ export const sync_run = tableFn(
       "CASE WHEN error_type IS NOT NULL THEN error_type WHEN completed_at IS NOT NULL THEN 'SUCCESS' ELSE 'PENDING' END",
     ),
 
-    resource_id: generated(
-      'resource_id',
+    connection_id: generated(
+      'connection_id',
       'varchar',
-      "input_event#>>'{data,resource_id}'",
+      "input_event#>>'{data,connection_id}'",
     ),
     error_detail: t.text(),
     /** zErrorType. But we don't want to use postgres enum */
     error_type: t.varchar(),
   }),
-  (table) => [index('idx_resource_id').on(table.resource_id)],
+  (table) => [index('idx_connection_id').on(table.connection_id)],
 )
 
 export const sync_state = tableFn('sync_state', (t) => ({
-  resource_id: t.text().primaryKey(),
+  connection_id: t.text().primaryKey(),
   state: t.jsonb(),
   created_at: t.timestamp({precision: 3, mode: 'string'}).defaultNow(),
   updated_at: t.timestamp({precision: 3, mode: 'string'}).defaultNow(),

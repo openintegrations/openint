@@ -8,7 +8,7 @@ type components = StripeSDKTypes['oas']['components']
 export const stripeSchemas = {
   name: z.literal('stripe'),
   connectorConfig: zCcfgAuth.oauthOrApikeyAuth,
-  resourceSettings: z.object({secretKey: z.string()}),
+  connectionSettings: z.object({secretKey: z.string()}),
   sourceOutputEntity: z.discriminatedUnion('entityName', [
     z.object({
       id: z.string(),

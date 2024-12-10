@@ -73,7 +73,7 @@ export function logLink<T = any>(
         opts.prefix && `${opts.prefix}:`,
         `type=${op.type}`,
         op.type === 'data' && `${data?.entityName}/${data?.id}`,
-        op.type === 'resoUpdate' && `op.id=${op.id}`,
+        op.type === 'connUpdate' && `op.id=${op.id}`,
       ]).join(' '),
       op.type === 'stateUpdate' ? 'op.sourceState=' : '',
       op.type === 'stateUpdate' ? op.sourceState : '',
@@ -107,7 +107,7 @@ export function mergeReady<T>(len: number): Link<T> {
 
 export function prefixConnectorNameLink(ctx: {
   source: {
-    id: Id['reso']
+    id: Id['conn']
     connectorConfig: {connectorName: string}
     metadata?: unknown
   }
@@ -124,7 +124,7 @@ export function prefixConnectorNameLink(ctx: {
 
 export function singleTableLink(_ctx: {
   source: {
-    id: Id['reso']
+    id: Id['conn']
     connectorConfig: {connectorName: string}
     metadata?: unknown
   }
@@ -142,7 +142,7 @@ export function singleTableLink(_ctx: {
 
 export function agColumnRenameLink(_ctx: {
   source: {
-    id: Id['reso']
+    id: Id['conn']
     connectorConfig: {connectorName: string}
     metadata?: unknown
   }

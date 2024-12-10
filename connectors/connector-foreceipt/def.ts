@@ -11,7 +11,7 @@ import {makeForeceiptClient, zForeceiptConfig} from './ForeceiptClient'
 export const foreceiptSchemas = {
   name: z.literal('foreceipt'),
   // connectorConfig: zForeceiptConfig,
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     credentials: zCast<Readonly<Foreceipt.Credentials>>(),
     options: zCast<ForeceiptClientOptions>(),
     _id: zCast<ExternalId>(),

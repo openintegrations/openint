@@ -84,7 +84,7 @@ export const DeprecatedIntegrationCard = ({
   </Card>
 )
 
-/** Dedupe me with ResourceCard.IntegrationLogo */
+/** Dedupe me with ConnectionCard.IntegrationLogo */
 const IntegrationLogoTemp = ({
   integration: int,
   className,

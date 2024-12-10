@@ -97,7 +97,7 @@ export function DataGrid<TData extends Record<string, unknown>>({
           }),
         )
       }}
-      // theme={VeniceDataGridTheme}
+      // theme={OpenIntDataGridTheme}
     />
   )
 }
@@ -105,9 +105,9 @@ export function DataGrid<TData extends Record<string, unknown>>({
 export function DataGridSkeleton() {
   return (
     <ul className="w-full animate-pulse will-change-auto">
-      <DataGridSkeletonRow bgColor="bg-venice-black-500" />
-      <DataGridSkeletonRow bgColor="bg-venice-black-400" />
-      <DataGridSkeletonRow bgColor="bg-venice-black-300" />
+      <DataGridSkeletonRow bgColor="bg-openint-black-500" />
+      <DataGridSkeletonRow bgColor="bg-openint-black-400" />
+      <DataGridSkeletonRow bgColor="bg-openint-black-300" />
     </ul>
   )
 }
@@ -122,7 +122,7 @@ function DataGridSkeletonRow(props: DataGridSkeletonRowProps) {
   const square = <div className={cn('h-4 w-4 rounded', bgColor)} />
   const rect = <div className={cn('h-4 w-[5rem] rounded', bgColor)} />
   return (
-    <li className="flex justify-between border-b border-venice-gray-muted/50">
+    <li className="flex justify-between border-b border-openint-gray-muted/50">
       <div className="shrink-0 px-3 py-2">{square}</div>
       <div className="flex grow justify-center px-3 py-2">{rect}</div>
       <div className="flex grow justify-center px-3 py-2">{rect}</div>

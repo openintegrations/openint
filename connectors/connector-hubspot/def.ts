@@ -5,7 +5,7 @@ import {R, z} from '@openint/util'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
-const oReso = oauthBaseSchema.resourceSettings
+const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
   extra: z.unknown(),
@@ -29,7 +29,7 @@ export const hubspotSchemas = {
   sourceState: z.object({
     contactSyncCursor: z.string().nullish(),
   }),
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
   sourceOutputEntity: z.discriminatedUnion('entityName', [
     z.object({

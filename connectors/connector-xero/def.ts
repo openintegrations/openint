@@ -5,7 +5,7 @@ import {R, z} from '@openint/util'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
-const oReso = oauthBaseSchema.resourceSettings
+const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
 })
@@ -20,7 +20,7 @@ export const XERO_ENTITY_NAME = {
 export const xeroSchemas = {
   name: z.literal('xero'),
   connectorConfig: zConfig,
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
   sourceOutputEntity: zEntityPayload,
   sourceOutputEntities: R.mapValues(XERO_ENTITY_NAME, () => z.unknown()),

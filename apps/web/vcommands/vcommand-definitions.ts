@@ -54,71 +54,71 @@ export const pipelineCommands = {
   }),
 } satisfies CommandDefinitionMap<CommandContext>
 
-const _resourceCommand = {
-  group: 'resource',
-  params: z.object({resource: zClient.resource}),
+const _connectionCommand = {
+  group: 'connection',
+  params: z.object({connection: zClient.connection}),
 } satisfies CommandDefinitionInput<CommandContext>
 
-const debugResourceCommands = {
-  'resource:edit': cmd.identity({
-    ..._resourceCommand,
+const debugConnectionCommands = {
+  'connection:edit': cmd.identity({
+    ..._connectionCommand,
     icon: 'Pencil',
     title: 'Edit Connection',
     execute: ({ctx, params}) =>
-      ctx.setResourceSheetState({resource: params.resource, open: true}),
+      ctx.setConnectionSheetState({connection: params.connection, open: true}),
   }),
-  'resource:navigate_sql': cmd.identity({
-    ..._resourceCommand,
+  'connection:navigate_sql': cmd.identity({
+    ..._connectionCommand,
     icon: 'Database',
     title: 'Run sql',
-    // Only show me for postgres resources
-    execute: ({params: {resource}, ctx}) => {
+    // Only show me for postgres connections
+    execute: ({params: {connection}, ctx}) => {
       // TODO: Display loading indicator while this is happening...
-      ctx.router.push(`/dashboard/resources/${resource.id}/sql`)
+      ctx.router.push(`/dashboard/connections/${connection.id}/sql`)
     },
   }),
-  'resource:navigate_playground': cmd.identity({
-    ..._resourceCommand,
+  'connection:navigate_playground': cmd.identity({
+    ..._connectionCommand,
     icon: 'Database',
     title: 'Playground',
-    // Only show me for postgres resources
-    execute: ({params: {resource}, ctx}) => {
+    // Only show me for postgres connections
+    execute: ({params: {connection}, ctx}) => {
       // TODO: Get typecheck to catch bad routes
-      ctx.router.push(`/dashboard/resources/${resource.id}/playground`)
+      ctx.router.push(`/dashboard/connections/${connection.id}/playground`)
     },
   }),
 }
 
-export const resourceCommands = {
-  'resource:delete': cmd.identity({
+export const connectionCommands = {
+  'connection:delete': cmd.identity({
     icon: 'Trash',
-    ..._resourceCommand,
+    ..._connectionCommand,
     execute: ({ctx, params}) =>
       ctx.setAlertDialogState({
-        title: `Confirm deleting resource ${params.resource.id}`,
+        title: `Confirm deleting connection ${params.connection.id}`,
         destructive: true,
         // 1) i18n this string so it's shorter and 2) support markdown syntax 3) make user confirm by typing id
         description:
-          'Already synchronized data will be untouched. However this will delete any incremental sync state so when a new resource is created you will have to sync from scratch.',
+          'Already synchronized data will be untouched. However this will delete any incremental sync state so when a new connection is created you will have to sync from scratch.',
         onConfirm: () =>
-          ctx.trpcCtx.client.deleteResource.mutate({id: params.resource.id}),
+          ctx.trpcCtx.client.deleteConnection.mutate({id: params.connection.id}),
       }),
   }),
-  'resource:sync': cmd.identity({
-    ..._resourceCommand,
+  'connection:sync': cmd.identity({
+    ..._connectionCommand,
     icon: 'RefreshCw',
-    execute: ({params: {resource}, ctx}) => {
+    execute: ({params: {connection}, ctx}) => {
       void ctx.withToast(() =>
-        ctx.trpcCtx.client.syncResource.mutate({id: resource.id}),
+        ctx.trpcCtx.client.syncConnection.mutate({id: connection.id}),
       )
     },
   }),
-  ...(__DEBUG__ && debugResourceCommands),
+  ...(__DEBUG__ && debugConnectionCommands),
   // TODO: Move this out of the core, now that we have plaid specific operations
   // 'plaid/simulate_disconnect': {
-  //   ..._resourceCommand,
+  //   ..._connectionCommand,
   //   icon: 'Unlink',
-  //   // Only show me for sandbox plaid resources
+  //   // Only show me for sandbox plaid connections
   // },
 } satisfies CommandDefinitionMap<CommandContext>
 
@@ -128,14 +128,16 @@ export const entityCommands = {
     icon: 'Copy',
     params: z.object({
       pipeline: z.object({id: z.string()}).optional(),
-      resource: z.object({id: z.string()}).optional(),
+      connection: z.object({id: z.string()}).optional(),
     }),
     useCommand: (initial) => ({
-      subtitle: initial.resource?.id ?? initial.pipeline?.id,
+      subtitle: initial.connection?.id ?? initial.pipeline?.id,
       execute: ({params, ctx}) =>
         ctx.withToast(
           () =>
-            copyToClipboard(initial.resource?.id ?? params.pipeline?.id ?? ''),
+            copyToClipboard(
+              initial.connection?.id ?? params.pipeline?.id ?? '',
+            ),
           {
             title: 'Copied to clipboard',
           },
@@ -223,7 +225,7 @@ export const miscCommands = {
 
 export const vDefinitions = {
   ...pipelineCommands,
-  ...resourceCommands,
+  ...connectionCommands,
   ...entityCommands,
   ...navCommands,
   ...miscCommands,

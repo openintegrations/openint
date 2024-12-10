@@ -11,38 +11,41 @@ import {
 
 export async function getRemoteContext(ctx: ProtectedContext) {
   // TODO Should parse headers in here?
-  if (!ctx.remoteResourceId) {
+  if (!ctx.remoteConnectionId) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'remoteResourceId missing. Check your x-resource-* headers',
+      message: 'remoteConnectionId missing. Check your x-connection-* headers',
     })
   }
 
-  // Ensure that end user can access its own resources
-  if (ctx.viewer.role === 'end_user') {
-    await ctx.services.getResourceOrFail(ctx.remoteResourceId)
+  // Ensure that customer can access its own connections
+  if (ctx.viewer.role === 'customer') {
+    await ctx.services.getConnectionOrFail(ctx.remoteConnectionId)
   }
 
   // Elevant role to organization here
-  const resource = await ctx.asOrgIfNeeded.getResourceExpandedOrFail(
-    ctx.remoteResourceId,
+  const connection = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(
+    ctx.remoteConnectionId,
   )
 
-  const connectionId = toNangoConnectionId(resource.id) // ctx.customerId
+  const connectionId = toNangoConnectionId(connection.id) // ctx.customerId
   const providerConfigKey = toNangoProviderConfigKey(
-    resource.connectorConfigId, // ctx.providerName
+    connection.connectorConfigId, // ctx.providerName
   )
   const nango = initNangoSDK({
     headers: {authorization: `Bearer ${ctx.env.NANGO_SECRET_KEY}`},
   })
 
-  // @ts-expect-error oauth is conditionally present
-  const oauthCredentialsExpiryTime = new Date(resource.settings?.oauth?.credentials?.raw?.expires_at ?? new Date(new Date().getTime() + 1000));
-  const forceRefreshCredentials = oauthCredentialsExpiryTime < new Date();
+  const oauthCredentialsExpiryTime = new Date(
+    // @ts-expect-error oauth is conditionally present
+    connection.settings?.oauth?.credentials?.raw?.expires_at ??
+      new Date(new Date().getTime() + 1000),
+  )
+  const forceRefreshCredentials = oauthCredentialsExpiryTime < new Date()
 
   const settings = {
-    ...resource.settings,
-    ...(resource.connectorConfig.connector.metadata?.nangoProvider && {
+    ...connection.settings,
+    ...(connection.connectorConfig.connector.metadata?.nangoProvider && {
       oauth: await nango
         .GET('/connection/{connectionId}', {
           params: {
@@ -58,13 +61,13 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     }),
   }
 
-  const instance: unknown = resource.connectorConfig.connector.newInstance?.({
-    config: resource.connectorConfig.config,
+  const instance: unknown = connection.connectorConfig.connector.newInstance?.({
+    config: connection.connectorConfig.config,
     settings,
     fetchLinks: compact([
       logLink(),
       // No more, has issues.
-      // resource.connectorConfig.connector.metadata?.nangoProvider &&
+      // connection.connectorConfig.connector.metadata?.nangoProvider &&
       //   ctx.env.NANGO_SECRET_KEY &&
       //   nangoProxyLink({
       //     secretKey: ctx.env.NANGO_SECRET_KEY,
@@ -74,26 +77,26 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     ]),
 
     onSettingsChange: (settings) =>
-      ctx.services.metaLinks.patch('resource', resource.id, {settings}),
+      ctx.services.metaLinks.patch('connection', connection.id, {settings}),
   })
 
   return {
     ...ctx,
-    // TODO: Consider renaming to just resource rather than `remote`
+    // TODO: Consider renaming to just connection rather than `remote`
     remote: {
       /** Aka remoteClient */
       instance,
-      id: resource.id,
-      // TODO: Rename endUserId to just customerId
-      customerId: resource.endUserId ?? '',
-      connectorConfigId: resource.connectorConfig.id,
-      connector: resource.connectorConfig.connector,
-      connectorName: resource.connectorName,
-      connectorMetadata: resource.connectorConfig.connector.metadata,
-      settings, // Not resource.settings which is out of date. // TODO: we should update resource.settings through
-      // TODO: Need to be careful this is never returned to any end user endpoints
+      id: connection.id,
+      // TODO: Rename customerId to just customerId
+      customerId: connection.customerId ?? '',
+      connectorConfigId: connection.connectorConfig.id,
+      connector: connection.connectorConfig.connector,
+      connectorName: connection.connectorName,
+      connectorMetadata: connection.connectorConfig.connector.metadata,
+      settings, // Not connection.settings which is out of date. // TODO: we should update connection.settings through
+      // TODO: Need to be careful this is never returned to any customer endpoints
       // and only used for making requests with remotes
-      config: resource.connectorConfig.config,
+      config: connection.connectorConfig.config,
     },
   }
 }

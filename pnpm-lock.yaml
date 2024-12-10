@@ -485,9 +485,6 @@ importers:
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
-      '@opensdks/sdk-venice':
-        specifier: ^0.0.17
-        version: 0.0.17(@opensdks/runtime@0.0.19)
 
   apps/web:
     dependencies:
@@ -3921,11 +3918,6 @@ packages:
     resolution: {integrity: sha512-mGbUqCrqsh5kGxI2gpjCCeqPCbYF0KMyB5Cc8xmcwursZIMFOxMZTYerlYYS0Ht5tRa/WltOuQJTgqUPYmimxg==}
     peerDependencies:
       '@opensdks/runtime': 0.0.14
-
-  '@opensdks/sdk-venice@0.0.17':
-    resolution: {integrity: sha512-gjU8RRMMSC3e3uSI8OzaIrPT0sbOmTwKNqp8Mqhm4OFM9ug8O3QSEEHE0Bwp++ZZ+WnSaD2+u4/X5iRsuxGsBw==}
-    peerDependencies:
-      '@opensdks/runtime': 0.0.17
 
   '@opensdks/sdk-xero@0.0.7':
     resolution: {integrity: sha512-NZLi+HH0Jrss+sCnLyDhnih24wjcz/u77zOvFtpBwbbwCUqPSYQ/s50qO0ek+6g9eJG3YxoeplOM51YbyszPwA==}
@@ -16078,10 +16070,6 @@ snapshots:
   '@opensdks/sdk-twenty@0.0.5': {}
 
   '@opensdks/sdk-venice@0.0.14(@opensdks/runtime@0.0.19)':
-    dependencies:
-      '@opensdks/runtime': 0.0.19
-
-  '@opensdks/sdk-venice@0.0.17(@opensdks/runtime@0.0.19)':
     dependencies:
       '@opensdks/runtime': 0.0.19
 

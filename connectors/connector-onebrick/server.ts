@@ -1,5 +1,5 @@
 import type {ConnectorServer, SyncOperation} from '@openint/cdk'
-import {zEndUserId} from '@openint/cdk'
+import {zCustomerId} from '@openint/cdk'
 import {md5Hash, R, Rx, rxjs, z} from '@openint/util'
 import type {onebrickSchemas} from './def'
 import {helpers} from './def'
@@ -57,10 +57,10 @@ export const onebrickServerConnector = {
     // TODO: Add verification to check webhook came from oneBrick provider in fact..
     // TODO: Get the bank detail using bankId so we can put it up there
     // TODO: Figure out if accessToken is actually the only unique thing about
-    // onebrick resource, and whether they could be rotated...
+    // onebrick connection, and whether they could be rotated...
     return helpers._webhookReturn(md5Hash(accessToken), {
-      settings: helpers.resourceSettings.parse({accessToken}),
-      endUserId: zEndUserId.parse(userId),
+      settings: helpers.connectionSettings.parse({accessToken}),
+      customerId: zCustomerId.parse(userId),
       triggerDefaultSync: true,
     })
   },

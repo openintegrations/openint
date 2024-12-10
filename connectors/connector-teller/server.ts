@@ -14,7 +14,7 @@ export const tellerServer = {
   }),
   // eslint-disable-next-line @typescript-eslint/require-await
   postConnect: async (input, _config) => ({
-    resourceExternalId: input.token, // FIXME
+    connectionExternalId: input.token, // FIXME
     settings: {token: input.token},
     // institution // FIXME
   }),

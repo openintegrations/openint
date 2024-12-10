@@ -13,7 +13,7 @@ const procedure = trpcServer.procedure
 
 export function makeAirbyteConnector(connector: AnyConnectorImpl) {
   const connSpec = z.object({
-    settings: connector.schemas.resourceSettings ?? z.object({}),
+    settings: connector.schemas.connectionSettings ?? z.object({}),
     // For now, unclear whether it should actually live in airbyte config
     // or perhaps it should just have a `OpenIntConnectorConfigId` field
     // so the data is not duplicated across dozens of integrations
@@ -44,14 +44,14 @@ export function makeAirbyteConnector(connector: AnyConnectorImpl) {
         const config = readJson<ConnectionSpecification>(args.config)
         return rxjs.from(
           fromMaybePromise(
-            connector.checkResource?.({
+            connector.checkConnection?.({
               settings: config.settings,
               config: config.config,
               options: {skipCache: true},
               context: {webhookBaseUrl: ''},
             }),
           )
-            // TODO: does checkResource return resourceUpdate non-standard also?
+            // TODO: does checkConnection return resourceUpdate non-standard also?
             .then(() => abMessage('CONNECTION_STATUS', {status: 'SUCCEEDED'}))
             .catch((err) =>
               abMessage('CONNECTION_STATUS', {
@@ -109,7 +109,7 @@ export function makeAirbyteConnector(connector: AnyConnectorImpl) {
 
         return connector
           .sourceSync({
-            endUser: null,
+            customer: null,
             config: config.config,
             settings: config.settings,
 

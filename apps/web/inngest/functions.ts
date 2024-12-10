@@ -1,6 +1,6 @@
 import '@openint/app-config/register.node'
 import {contextFactory} from '@openint/app-config/backendConfig'
-import type {EndUserId} from '@openint/cdk'
+import type {CustomerId} from '@openint/cdk'
 import {flatRouter} from '@openint/engine-backend'
 import {inngest} from '@openint/engine-backend/events'
 import {getPool, sql} from '../lib-server'
@@ -21,31 +21,31 @@ export const syncPipeline = inngest.createFunction(
   routines.syncPipeline,
 )
 
-export const syncResource = inngest.createFunction(
-  {id: 'Sync resource'},
-  {event: 'sync/resource-requested'},
+export const syncConnection = inngest.createFunction(
+  {id: 'Sync connection'},
+  {event: 'sync/connection-requested'},
   async ({event}) => {
     try {
-      const {resourceId} = event.data
-      console.log('Will sync resource', resourceId)
+      const {connectionId} = event.data
+      console.log('Will sync connection', connectionId)
       // TODO: Figure out what is the userId we ought to be using...
 
       const pool = await getPool()
-      const endUserId = await pool.oneFirst<EndUserId>(
-        sql`SELECT end_user_id FROM resource WHERE id = ${resourceId}`,
+      const customerId = await pool.oneFirst<CustomerId>(
+        sql`SELECT customer_id FROM connection WHERE id = ${connectionId}`,
       )
-      console.log('endUserId', endUserId)
+      console.log('customerId', customerId)
       await flatRouter
         .createCaller({
           ...contextFactory.fromViewer({role: 'system'}),
-          remoteResourceId: null,
+          remoteConnectionId: null,
         })
-        .syncResource({id: resourceId})
+        .syncConnection({id: connectionId})
 
-      console.log('did sync pipeline', resourceId)
-      return resourceId
+      console.log('did sync pipeline', connectionId)
+      return connectionId
     } catch (err) {
-      console.error('Error running syncResource', err)
+      console.error('Error running syncConnection', err)
       throw err
     }
   },

@@ -5,7 +5,7 @@ import {R, z} from '@openint/util'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
-const oReso = oauthBaseSchema.resourceSettings
+const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
 })
@@ -15,7 +15,7 @@ export const SALESFORCE_ENTITIES = ['contact'] as const
 export const salesforceSchemas = {
   name: z.literal('salesforce'),
   connectorConfig: zConfig,
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
   sourceState: z.object({
     nextRecordsUrl: z.string().nullish(),

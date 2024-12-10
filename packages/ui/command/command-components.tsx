@@ -76,15 +76,15 @@ function CommandItemContainer({
 }) {
   const cmd = {..._cmd, ..._cmd.useCommand?.(params ?? {})}
 
-  // Hide "Edit Resource"
-  if (cmd.title === 'Edit Resource' && !__DEBUG__) {
+  // Hide "Edit Connection"
+  if (cmd.title === 'Edit Connection' && !__DEBUG__) {
     return null
   }
 
   // Rename titles
-  if (cmd.title === 'Delete Resource') {
+  if (cmd.title === 'Delete Connection') {
     cmd.title = 'Delete Connection'
-  } else if (cmd.title === 'Sync Resource') {
+  } else if (cmd.title === 'Sync Connection') {
     cmd.title = 'Sync Connection' // Adjusted as per your request
   }
 

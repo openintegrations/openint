@@ -11,7 +11,7 @@ import {
 export const tellerSchemas = {
   name: z.literal('teller'),
   connectorConfig: zTellerConfig,
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     token: z.string(),
   }),
   integrationData: zInstitution,
@@ -53,7 +53,7 @@ export const tellerDef = {
   },
 
   standardMappers: {
-    resource: (settings) => ({
+    connection: (settings) => ({
       displayName: 'TODO' + settings.token,
       institutionId: 'ins_teller_TODO',
     }),

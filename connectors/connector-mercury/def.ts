@@ -25,7 +25,7 @@ export const mercuryDef = {
       logoUrl: 'TODO: Default to integration metadata logoUrl',
       verticals: ['banking'],
     }),
-    resource() {
+    connection() {
       return {
         displayName: '',
         // status: healthy vs. disconnected...

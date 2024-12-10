@@ -6,7 +6,7 @@ import {VCommandMenu} from '@/vcommands/vcommand-components'
 
 // TODO: Maybe allow filtering / sorting, also easily tell sources from destinations?
 
-export default function ResourcesPage() {
+export default function ConnectionsPage() {
   const res = _trpcReact.listConnections.useQuery({})
   const filter = (c: {id: string}) => !c.id.includes('postgres_default')
 
@@ -27,11 +27,11 @@ export default function ResourcesPage() {
             id: 'actions',
             enableHiding: false,
             cell: ({row}) => (
-              <VCommandMenu initialParams={{resource: row.original}} />
+              <VCommandMenu initialParams={{connection: row.original}} />
             ),
           },
           {accessorKey: 'displayName'},
-          {accessorKey: 'endUserId'},
+          {accessorKey: 'customerId'},
           {accessorKey: 'id'},
           {accessorKey: 'status'},
           {accessorKey: 'connectorConfigId'},

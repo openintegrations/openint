@@ -6,14 +6,14 @@ import {contextFactory} from './backendConfig'
 import {parseConnectorConfigsFromRawEnv} from './connector-envs'
 
 // TODO: Is this file needed? We can most likely just
-// embed the functionality into venice cli directly...
+// embed the functionality into openint cli directly...
 export async function bootstrap() {
   // Would be nice to simplify loading of env vars from zod in a way that makes sense...
   const orgId = getEnvVar('ORG_ID', {required: true}) as Id['org']
 
   const caller = flatRouter.createCaller({
     ...contextFactory.fromViewer({role: 'org', orgId}),
-    remoteResourceId: null,
+    remoteConnectionId: null,
   })
   const configs = parseConnectorConfigsFromRawEnv()
 

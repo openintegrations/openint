@@ -8,7 +8,7 @@ import {makeForeceiptClient} from './ForeceiptClient'
 export const foreceiptServer = {
   // TODO: Need to check and fix the issue
   // postConnect: async (input, config) => {
-  //   const settings = foreceiptHelpers._type('resourceSettings', {
+  //   const settings = foreceiptHelpers._type('connectionSettings', {
   //     ...input,
   //   })
   //   const source$: rxjs.Observable<ForeceiptSyncOperation> =
@@ -34,7 +34,7 @@ export const foreceiptServer = {
             Rx.mergeMap(([q, res]) => {
               info = res
               return firebaseServer.sourceSync({
-                endUser: null,
+                customer: null,
                 config: {},
                 settings: client.fbSettings,
                 state: {_fb: fb, _queries: Object.values(q)},

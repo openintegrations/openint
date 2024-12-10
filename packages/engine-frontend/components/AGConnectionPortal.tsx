@@ -4,13 +4,13 @@ import {AlertTriangle} from 'lucide-react'
 import React from 'react'
 import type {Id} from '@openint/cdk'
 import type {UIPropsNoChildren} from '@openint/ui'
-import {Card, ResourceCard} from '@openint/ui'
+import {Card, ConnectionRawCard} from '@openint/ui'
 import {cn} from '@openint/ui/utils'
 import {R} from '@openint/util'
 import {WithConnectConfig} from '../hocs/WithConnectConfig'
 import {ConnectEventType} from '../hocs/WithConnectorConnect'
 import {_trpcReact} from '../providers/TRPCProvider'
-import {AgResourceRowActions} from './AgResourceRowActions'
+import {AgConnectionRowActions} from './AgConnectionRowActions'
 import {ConnectDialog} from './ConnectDialog'
 
 export interface AGConnectionPortalProps extends UIPropsNoChildren {
@@ -103,14 +103,14 @@ const AGConnectionPortalComponent: React.FC<AGConnectionPortalProps> = ({
             {categoriesWithConnections.map((category) => (
               <div key={category.key}>
                 {category.connections.map((conn) => (
-                  <ResourceCard
+                  <ConnectionRawCard
                     key={conn.id}
-                    resource={conn}
+                    connection={conn}
                     connector={conn.connectorConfig.connector}
                     className="mb-4">
-                    <AgResourceRowActions
+                    <AgConnectionRowActions
                       connectorConfig={conn.connectorConfig}
-                      resource={conn}
+                      connection={conn}
                       onEvent={(e) => {
                         onEvent?.({
                           type: e.type,
@@ -118,7 +118,7 @@ const AGConnectionPortalComponent: React.FC<AGConnectionPortalProps> = ({
                         })
                       }}
                     />
-                  </ResourceCard>
+                  </ConnectionRawCard>
                 ))}
                 {category.connections.length === 0 && (
                   <Card className="drop-shadow-small flex w-full flex-col items-center justify-center space-y-3 rounded-lg border border-solid border-[#e0e0e5] bg-[#f8f8fc] p-6 text-center">

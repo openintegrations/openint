@@ -41,7 +41,7 @@
   "editor.tabSize": 2,
   "files.associations": {
     ".env.*": "properties",
-    "venice": "typescript"
+    "openint": "typescript"
   },
   "highlight.regexes": {
     "(// ?(?:FIXME|HACK):?)(.*)": [

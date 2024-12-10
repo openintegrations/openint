@@ -82,9 +82,9 @@ function makeVercelDeployButton(params: {
 }
 
 const deployButton = makeVercelDeployButton({
-  'repository-url': 'https://github.com/useVenice/venice',
+  'repository-url': 'https://github.com/useOpenInt/openint',
   'root-directory': 'apps/web',
-  'project-name': 'my-venice',
+  'project-name': 'my-openint',
   env: [
     'POSTGRES_URL',
     'int_plaid__clientId',
@@ -96,8 +96,8 @@ const deployButton = makeVercelDeployButton({
   'install-command': 'npm i pnpm@7.14.0 -g && pnpm install',
   envDescription:
     'After deploy, you can add other optional environment variables to configure for production and customize the default behavior. See the full list in README',
-  envLink: 'https://github.com/usevenice/venice#environment-variables',
-  // 'redirect-url': 'https://link.useVenice.com/next-steps',
+  envLink: 'https://github.com/openintegrations/openint#environment-variables',
+  // 'redirect-url': 'https://link.openint.dev/next-steps',
 })
 console.log(deployButton.url)
 

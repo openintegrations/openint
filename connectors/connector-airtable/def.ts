@@ -9,7 +9,7 @@ import {zAirtableResourceSettings} from './AirtableClient'
 
 export const airtableSchemas = {
   name: z.literal('airtable'),
-  resourceSettings: zAirtableResourceSettings,
+  connectionSettings: zAirtableResourceSettings,
   destinationInputEntity: zCast<EntityPayloadWithRaw>(),
 } satisfies ConnectorSchemas
 

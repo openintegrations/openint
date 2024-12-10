@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from '../shadcn/Tooltip'
 import {ConnectorLogo} from './ConnectorCard'
-import {IntegrationLogo} from './ResourceCard'
+import {IntegrationLogo} from './ConnectionRawCard'
 
 export function ConnectionCard({
   onDelete,

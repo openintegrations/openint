@@ -30,15 +30,15 @@ export const finchSchemas = {
         'Finch products to access, @see https://developer.tryfinch.com/api-reference/development-guides/Permissions',
       ),
   }),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     access_token: z.string(),
   }),
 
   // Connect
   preConnectInput: z.object({
     // categories: z.array(zCategory),
-    // end_user_email_address: z.string().optional(),
-    // end_user_organization_name: z.string().optional(),
+    // customer_email_address: z.string().optional(),
+    // customer_organization_name: z.string().optional(),
     state: z.string().optional(),
   }),
   connectInput: z.object({

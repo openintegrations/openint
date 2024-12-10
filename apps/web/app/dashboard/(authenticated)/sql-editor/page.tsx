@@ -21,15 +21,15 @@ export default async function SqlEditorPageServer() {
     })
   }
 
-  const resources = await services.metaService.tables.resource.list({
+  const connections = await services.metaService.tables.connection.list({
     connectorConfigId: ccfg?.id,
   })
 
-  const pgConnection = resources.find((r) => r.id.includes('postgres_default'))
+  const pgConnection = connections.find((r) => r.id.includes('postgres_default'))
 
   if (!pgConnection) {
-    return new NextResponse('Must have postgres resource', {status: 400})
+    return new NextResponse('Must have postgres connection', {status: 400})
   }
 
-  return <SqlPage apikey={apikey} resourceId={pgConnection.id} />
+  return <SqlPage apikey={apikey} connectionId={pgConnection.id} />
 }

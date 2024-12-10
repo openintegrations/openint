@@ -22,10 +22,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "endUserId": {
+                  "customerId": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "Anything that uniquely identifies the end user that you will be sending the magic link to"
+                    "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
                   },
                   "validityInSeconds": {
                     "type": "number",
@@ -89,10 +89,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "endUserId": {
+                  "customerId": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "Anything that uniquely identifies the end user that you will be sending the magic link to"
+                    "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
                   },
                   "validityInSeconds": {
                     "type": "number",
@@ -168,10 +168,10 @@
         }
       }
     },
-    "/core/resource": {
+    "/core/connection": {
       "post": {
-        "operationId": "createResource",
-        "summary": "Create resource",
+        "operationId": "createConnection",
+        "summary": "Create connection",
         "tags": ["Core"],
         "requestBody": {
           "required": true,
@@ -191,7 +191,7 @@
                   "displayName": {
                     "type": ["string", "null"]
                   },
-                  "endUserId": {
+                  "customerId": {
                     "type": ["string", "null"],
                     "minLength": 1
                   },
@@ -245,8 +245,8 @@
         }
       },
       "get": {
-        "operationId": "listResources",
-        "summary": "List resources",
+        "operationId": "listConnectionsRaw",
+        "summary": "List connections raw",
         "tags": ["Core"],
         "parameters": [
           {
@@ -265,7 +265,7 @@
           },
           {
             "in": "query",
-            "name": "endUserId",
+            "name": "customerId",
             "schema": {
               "type": ["string", "null"],
               "minLength": 1
@@ -311,7 +311,7 @@
                   "items": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Resource"
+                        "$ref": "#/components/schemas/Connection"
                       }
                     ],
                     "type": "object",
@@ -389,10 +389,10 @@
         }
       }
     },
-    "/core/resource/{id}": {
+    "/core/connection/{id}": {
       "patch": {
-        "operationId": "updateResource",
-        "summary": "Update resource",
+        "operationId": "updateConnection",
+        "summary": "Update connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -400,7 +400,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           }
@@ -425,7 +425,7 @@
                   "disabled": {
                     "type": "boolean"
                   },
-                  "endUserId": {
+                  "customerId": {
                     "type": ["string", "null"],
                     "minLength": 1
                   },
@@ -444,7 +444,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Resource"
+                  "$ref": "#/components/schemas/Connection"
                 }
               }
             }
@@ -482,8 +482,8 @@
         }
       },
       "delete": {
-        "operationId": "deleteResource",
-        "summary": "Delete resource",
+        "operationId": "deleteConnection",
+        "summary": "Delete connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -491,7 +491,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           },
@@ -545,8 +545,8 @@
         }
       },
       "get": {
-        "operationId": "getResource",
-        "summary": "Get resource",
+        "operationId": "getConnection",
+        "summary": "Get connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -554,7 +554,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           },
@@ -581,7 +581,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Resource"
+                      "$ref": "#/components/schemas/Connection"
                     }
                   ],
                   "type": "object",
@@ -676,10 +676,10 @@
         }
       }
     },
-    "/core/resource/{id}/_check": {
+    "/core/connection/{id}/_check": {
       "post": {
-        "operationId": "checkResource",
-        "summary": "Check resource",
+        "operationId": "checkConnection",
+        "summary": "Check connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -687,7 +687,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           }
@@ -751,10 +751,10 @@
         }
       }
     },
-    "/core/resource/{id}/_sync": {
+    "/core/connection/{id}/_sync": {
       "post": {
-        "operationId": "syncResource",
-        "summary": "Sync resource",
+        "operationId": "syncConnection",
+        "summary": "Sync connection",
         "tags": ["Core"],
         "parameters": [
           {
@@ -762,7 +762,7 @@
             "name": "id",
             "schema": {
               "type": "string",
-              "description": "Must start with 'reso_'"
+              "description": "Must start with 'conn_'"
             },
             "required": true
           }
@@ -780,7 +780,7 @@
                   },
                   "metaOnly": {
                     "type": ["boolean", "null"],
-                    "description": "Only sync resource metadata and skip pipelines "
+                    "description": "Only sync connection metadata and skip pipelines "
                   },
                   "fullResync": {
                     "type": ["boolean", "null"],
@@ -912,7 +912,7 @@
                         "description": "Defaults to the org-wide postgres"
                       }
                     },
-                    "description": "Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL"
+                    "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
                   },
                   "defaultPipeIn": {
                     "type": ["object", "null"],
@@ -926,11 +926,11 @@
                       },
                       "source_id": {
                         "type": "string",
-                        "description": "Must start with 'reso_'"
+                        "description": "Must start with 'conn_'"
                       }
                     },
                     "required": ["source_id"],
-                    "description": "Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL"
+                    "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
                   },
                   "disabled": {
                     "type": "boolean",
@@ -1178,7 +1178,7 @@
       "get": {
         "operationId": "listConnectorConfigInfos",
         "summary": "List connector config infos",
-        "description": "For end user authentication and list a limited set of non private data",
+        "description": "For customer authentication and list a limited set of non private data",
         "tags": ["Core"],
         "parameters": [
           {
@@ -1336,12 +1336,12 @@
           },
           {
             "in": "query",
-            "name": "resourceIds",
+            "name": "connectionIds",
             "schema": {
               "type": "array",
               "items": {
                 "type": "string",
-                "description": "Must start with 'reso_'"
+                "description": "Must start with 'conn_'"
               }
             }
           }
@@ -1415,7 +1415,7 @@
                   },
                   "sourceId": {
                     "type": "string",
-                    "description": "Must start with 'reso_'"
+                    "description": "Must start with 'conn_'"
                   },
                   "streams": {
                     "type": ["object", "null"],
@@ -1436,7 +1436,7 @@
                   },
                   "destinationId": {
                     "type": "string",
-                    "description": "Must start with 'reso_'"
+                    "description": "Must start with 'conn_'"
                   }
                 },
                 "required": ["id"]
@@ -1661,7 +1661,7 @@
                   },
                   "metaOnly": {
                     "type": ["boolean", "null"],
-                    "description": "Only sync resource metadata and skip pipelines "
+                    "description": "Only sync connection metadata and skip pipelines "
                   },
                   "fullResync": {
                     "type": ["boolean", "null"],
@@ -7737,9 +7737,9 @@
         "name": "x-apikey",
         "in": "header"
       },
-      "resourceId": {
+      "connectionId": {
         "type": "apiKey",
-        "name": "x-resource-id",
+        "name": "x-connection-id",
         "in": "header"
       },
       "token": {
@@ -7761,11 +7761,11 @@
               },
               "source_id": {
                 "type": "string",
-                "description": "Must start with 'reso_'"
+                "description": "Must start with 'conn_'"
               },
               "destination_id": {
                 "type": "string",
-                "description": "Must start with 'reso_'"
+                "description": "Must start with 'conn_'"
               }
             },
             "required": ["pipeline_id", "source_id", "destination_id"]
@@ -7891,7 +7891,7 @@
           "issues": []
         }
       },
-      "Resource": {
+      "Connection": {
         "type": "object",
         "properties": {
           "createdAt": {
@@ -7902,7 +7902,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Must start with 'reso_'"
+            "description": "Must start with 'conn_'"
           },
           "connectorName": {
             "type": "string",
@@ -7911,7 +7911,7 @@
           "displayName": {
             "type": ["string", "null"]
           },
-          "endUserId": {
+          "customerId": {
             "type": ["string", "null"],
             "minLength": 1
           },
@@ -8017,7 +8017,7 @@
                 "description": "Defaults to the org-wide postgres"
               }
             },
-            "description": "Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL"
+            "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
           },
           "defaultPipeIn": {
             "type": ["object", "null"],
@@ -8031,11 +8031,11 @@
               },
               "source_id": {
                 "type": "string",
-                "description": "Must start with 'reso_'"
+                "description": "Must start with 'conn_'"
               }
             },
             "required": ["source_id"],
-            "description": "Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL"
+            "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
           },
           "envName": {
             "type": ["string", "null"]
@@ -8143,7 +8143,7 @@
           },
           "sourceId": {
             "type": "string",
-            "description": "Must start with 'reso_'"
+            "description": "Must start with 'conn_'"
           },
           "sourceState": {
             "type": "object",
@@ -8171,7 +8171,7 @@
           },
           "destinationId": {
             "type": "string",
-            "description": "Must start with 'reso_'"
+            "description": "Must start with 'conn_'"
           },
           "destinationState": {
             "type": "object",
@@ -8216,9 +8216,9 @@
             "properties": {
               "role": {
                 "type": "string",
-                "enum": ["end_user"]
+                "enum": ["customer"]
               },
-              "endUserId": {
+              "customerId": {
                 "type": "string",
                 "minLength": 1
               },
@@ -8227,7 +8227,7 @@
                 "description": "Must start with 'org_'"
               }
             },
-            "required": ["role", "endUserId", "orgId"]
+            "required": ["role", "customerId", "orgId"]
           },
           {
             "type": "object",
@@ -9734,7 +9734,7 @@
   "security": [
     {
       "apikey": [],
-      "resourceId": []
+      "connectionId": []
     }
   ]
 }

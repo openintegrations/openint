@@ -9,7 +9,7 @@ export const brexSchemas = {
   name: z.literal('brex'),
   connectorConfig: zCcfgAuth.oauthOrApikeyAuth,
   integrationData: z.unknown(),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     accessToken: z.string(),
   }),
   sourceOutputEntity: z.discriminatedUnion('entityName', [
@@ -51,7 +51,7 @@ export const brexDef = {
       envName: undefined,
       verticals: ['banking'],
     }),
-    resource() {
+    connection() {
       return {
         displayName: '',
         // status: healthy vs. disconnected...

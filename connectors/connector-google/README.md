@@ -1,4 +1,4 @@
-- [ ] How do we think about resources that give access to MANY apis?
+- [ ] How do we think about connections that give access to MANY apis?
     - Single google oauth gives access to So many things
       - Gmail
       - Google Drive

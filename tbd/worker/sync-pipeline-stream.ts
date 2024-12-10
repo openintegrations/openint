@@ -56,7 +56,7 @@ export async function syncPipeline(pipe: _PipelineExpanded) {
 
 export function verticalSource(pipe: _PipelineExpanded): Source {
   const sdk = initOpenIntSDK({
-    headers: {'x-apikey': '', 'x-resource-id': pipe.source.id},
+    headers: {'x-apikey': '', 'x-connection-id': pipe.source.id},
   })
 
   const srcState = (pipe.sourceState ?? {}) as Record<
@@ -93,7 +93,7 @@ export function verticalSource(pipe: _PipelineExpanded): Source {
 
 export function verticalDestination(pipe: _PipelineExpanded): Destination {
   const sdk = initOpenIntSDK({
-    headers: {'x-apikey': '', 'x-resource-id': pipe.destination.id},
+    headers: {'x-apikey': '', 'x-connection-id': pipe.destination.id},
   })
 
   return flatMap((msg) => {
