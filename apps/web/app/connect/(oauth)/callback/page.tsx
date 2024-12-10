@@ -35,7 +35,7 @@ export default async function ConnectCallback({
   if (!cookie) {
     console.warn('No cookie found, redirecting to openint')
     // Temporary hack to redirect to the right place to accomodate for oauth url not fully changed yet
-    const url = new URL('https://app.openint.is/connect/callback')
+    const url = new URL('https://app.venice.is/connect/callback')
     for (const [key, value] of Object.entries(searchParams)) {
       url.searchParams.append(key, value as string)
     }
