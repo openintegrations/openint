@@ -29,7 +29,7 @@ switch (cmd) {
     void routines.sendWebhook({
       event: {
         name: 'sync.completed',
-        data: {resource_id: testEnv['RESOURCE_ID']!},
+        data: {connection_id: testEnv['CONNECTION_ID']!},
       },
       step,
     })
@@ -57,7 +57,7 @@ switch (cmd) {
         event: {
           name: 'sync.requested',
           data: {
-            resource_id: testEnv['RESOURCE_ID']!,
+            connection_id: testEnv['CONNECTION_ID']!,
             vertical: testEnv['VERTICAL']! as 'crm',
             unified_objects: testEnv['UNIFIED_OBJECT']
               ? [testEnv['UNIFIED_OBJECT']]
@@ -111,14 +111,14 @@ async function runBackfill() {
   for (const event of syncEvents) {
     i++
     const lastRun = await configDb.query.sync_run.findFirst({
-      where: eq(schema.sync_run.resource_id, event.data.resource_id),
+      where: eq(schema.sync_run.connection_id, event.data.connection_id),
       orderBy: desc(schema.sync_run.started_at),
     })
     // Should we handle timeout and other things?
     console.log('Backfill', i, 'of', syncEvents.length, event.data)
     if (
       (lastRun?.status === 'SUCCESS' || lastRun?.status === 'USER_ERROR') &&
-      event.data.resource_id !== 'hubspot' // Need to redo hubspot unfortunately...
+      event.data.connection_id !== 'hubspot' // Need to redo hubspot unfortunately...
     ) {
       console.log(
         'Skipping backfill',

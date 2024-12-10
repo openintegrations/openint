@@ -32,15 +32,15 @@ export const eventMap = {
   // very specific meanning in openapi spec.
   'sync.completed': {
     pipeline_id: zId('pipe'),
-    source_id: zId('reso'),
-    destination_id: zId('reso'),
+    source_id: zId('conn'),
+    destination_id: zId('conn'),
   },
   // Backend events
   'debug/debug': {},
   'sync/scheduler-debug': {},
   'sync/pipeline-requested': {pipelineId: zId('pipe')},
-  'sync/resource-requested': {resourceId: zId('reso')},
-  'connect/resource-connected': {resourceId: zId('reso')},
+  'sync/connection-requested': {connectionId: zId('conn')},
+  'connect/connection-connected': {connectionId: zId('conn')},
   'webhook/received': {
     /** For debugging requests */
     traceId: z.string(),
@@ -53,8 +53,8 @@ export const eventMap = {
   // Analytics events
   'db/user-created': {},
   'db/user-deleted': {},
-  'db/resource-created': {resourceId: zId('reso')},
-  'db/resource-deleted': {resourceId: zId('reso')},
+  'db/connection-created': {connectionId: zId('conn')},
+  'db/connection-deleted': {connectionId: zId('conn')},
   'user/signin': {},
   'user/signout': {},
   'connect/session-started': {connectorName: z.string(), meta: z.unknown()},

@@ -12,15 +12,15 @@ const noopTable: MetaTable<string, never> = {
 // much like used to have memoryKV store
 export const noopMetaService: MetaService = {
   tables: {
-    resource: noopTable,
+    connection: noopTable,
     integration: noopTable,
     connector_config: noopTable,
     pipeline: noopTable,
   },
-  searchEndUsers: async () => [],
+  searchCustomers: async () => [],
   searchIntegrations: async () => [],
   findPipelines: async () => [],
   listConnectorConfigInfos: async () => [],
-  findResourcesMissingDefaultPipeline: async () => [],
+  findConnectionsMissingDefaultPipeline: async () => [],
   isHealthy: () => Promise.resolve({healthy: true}),
 }

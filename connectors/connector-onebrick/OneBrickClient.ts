@@ -255,7 +255,7 @@ export const makeOneBrickMultiClient = zFunction(
       /**
        * Reference: https://technical-docs.onebrick.io/reference/get-institution-list-1
        *
-       * Example: tsx packages/@universal/usevenice-providers/onebrick/OnebrickClient.ts getInstitutions --accessToken 'public-sandbox-c52daf0f-63e8-4d96-9d26-43dcc0dc6fec'
+       * Example: tsx packages/@universal/useopenint-providers/onebrick/OnebrickClient.ts getInstitutions --accessToken 'public-sandbox-c52daf0f-63e8-4d96-9d26-43dcc0dc6fec'
        */
       getInstitutions: zFunction(z.object(inputTokenSchema), (params) =>
         fromToken(params.accessToken ?? '')

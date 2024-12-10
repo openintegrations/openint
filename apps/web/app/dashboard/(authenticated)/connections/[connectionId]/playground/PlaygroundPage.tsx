@@ -10,10 +10,10 @@ import {Breadcrumb, BreadcrumbItem, BreadcrumbLink} from '@openint/ui'
 
 export function PlaygroundPage({
   apikey,
-  resourceId,
+  connectionId,
   oas,
 }: {
-  resourceId: Id['reso']
+  connectionId: Id['conn']
   apikey: string
   oas: OpenApiSpec
 }) {
@@ -31,27 +31,29 @@ export function PlaygroundPage({
           ...init?.headers,
           // Make it even more custom
           'x-apikey': apikey,
-          'x-resource-id': resourceId,
+          'x-connection-id': connectionId,
         },
       })
     }
     ;(globalThis as any)._stoplight_fetch = customFetch
-  }, [apikey, oas.servers, resourceId])
+  }, [apikey, oas.servers, connectionId])
   return (
     // eslint-disable-next-line tailwindcss/no-custom-classname
     <div className="elements-container h-full">
       <Breadcrumb className="p-4">
         <BreadcrumbItem>
           {/* We need typed routes... https://github.com/shadcn/ui/pull/133 */}
-          <BreadcrumbLink href="/dashboard/resources">Resources</BreadcrumbLink>
+          <BreadcrumbLink href="/dashboard/connections">
+            Connections
+          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <BreadcrumbLink>{resourceId}</BreadcrumbLink>
+          <BreadcrumbLink>{connectionId}</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
           <BreadcrumbLink
             // TODO: Get typecheck to catch bad routes
-            href={`/dashboard/resources/${resourceId}/playground`}>
+            href={`/dashboard/connections/${connectionId}/playground`}>
             Playground
           </BreadcrumbLink>
         </BreadcrumbItem>

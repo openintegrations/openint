@@ -7,8 +7,8 @@ const links: Array<{href: string; title: string}> = [
     href: '/dashboard/magic-link',
   },
   {
-    title: 'End users',
-    href: '/dashboard/end-users',
+    title: 'Customers',
+    href: '/dashboard/customers',
   },
   {
     title: 'Connector Configs',
@@ -16,7 +16,7 @@ const links: Array<{href: string; title: string}> = [
   },
   {
     title: 'Connections',
-    href: '/dashboard/resources',
+    href: '/dashboard/connections',
   },
   {
     title: 'Pipelines',

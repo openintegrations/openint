@@ -6,7 +6,7 @@ import {makeYodleeClient} from './YodleeClient'
 
 export const yodleeServerConnector = {
   // TODO: handle reconnecting scenario
-  preConnect: async (config, {extEndUserId: userId}) => {
+  preConnect: async (config, {extCustomerId: userId}) => {
     const loginName =
       config.envName === 'sandbox' ? config?.sandboxLoginName : userId
     if (!loginName) {
@@ -17,13 +17,13 @@ export const yodleeServerConnector = {
     }).generateAccessToken(loginName)
     return {accessToken, envName: config.envName}
   },
-  // Without closure we get type issues in venice.config.ts, not sure why
+  // Without closure we get type issues in openint.config.ts, not sure why
   // https://share.cleanshot.com/X3cQDA
 
   postConnect: async (
     {providerAccountId, providerId},
     config,
-    {extEndUserId: userId},
+    {extCustomerId: userId},
   ) => {
     // Should we get accessToken & loginName from the preConnect phase?
     const loginName =
@@ -39,7 +39,7 @@ export const yodleeServerConnector = {
     ])
 
     return {
-      resourceExternalId: providerAccountId,
+      connectionExternalId: providerAccountId,
       settings: {
         loginName,
         providerAccountId,

@@ -1,7 +1,7 @@
 import type {clerkClient} from '@clerk/nextjs/server'
 import type {
   AnyConnectorImpl,
-  EndUserId,
+  CustomerId,
   Id,
   LinkFactory,
   NangoSDK,
@@ -37,19 +37,19 @@ export interface RouterContext {
   nango: NangoSDK
   env: Env
   /**
-   * Base url of the engine-backend router when deployed, e.g. `localhost:3000/api/usevenice`
+   * Base url of the engine-backend router when deployed, e.g. `localhost:3000/api/useopenint`
    * This is needed for 1) server side rendering and 2) webhook handling
    */
   apiUrl: string
 
-  /** Used for oauth based resources */
+  /** Used for oauth based connections */
   getRedirectUrl?: (
     connectorConfig: _ConnectorConfig,
-    ctx: {endUserId?: EndUserId | null},
+    ctx: {customerId?: CustomerId | null},
   ) => string
 
   /** For vertical API calls */
-  remoteResourceId: Id['reso'] | null
+  remoteConnectionId: Id['conn'] | null
 }
 
 export interface ContextFactoryOptions<
@@ -94,7 +94,7 @@ export function getContextFactory<
       authProvider: config.authProvider,
     })
 
-  function fromViewer(viewer: Viewer): Omit<RouterContext, 'remoteResourceId'> {
+  function fromViewer(viewer: Viewer): Omit<RouterContext, 'remoteConnectionId'> {
     return {
       viewer,
       as: (role, data) => getServices({role, ...data} as Viewer),

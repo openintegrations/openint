@@ -23,7 +23,7 @@ export const fsServer = {
   sourceSync: ({settings, state}) =>
     _fsWatchPaths$({...settings, ...state}).pipe(_readPathData()),
   destinationSync: ({settings: {basePath}}) =>
-    // TODO: Should we add the resourceId to data?
+    // TODO: Should we add the connectionId to data?
     handlersLink({
       data: ({data}) =>
         fromCompletion(

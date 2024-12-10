@@ -12,7 +12,7 @@ export const zMongoConnection = z.object({
 
 export const mongoSchemas = {
   name: z.literal('mongodb'),
-  resourceSettings: zMongoConnection,
+  connectionSettings: zMongoConnection,
   destinationInputEntity: zCast<AnyEntityPayload>(),
 } satisfies ConnectorSchemas
 

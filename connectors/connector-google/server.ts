@@ -144,7 +144,7 @@ export const googleServer = {
   // note: context currently returns this correctly but types don't catch it
   // "context": {
   //   "integrationId": "int_google_sheets",
-  //   "extEndUserId": "eusr_1234",
+  //   "extCustomerId": "cus_1234",
   //   "webhookBaseUrl": "http://localhost:4000/api/trpc/webhook/ccfg_google_01JBYY6NZ551BR7Y9DXMBZ79K4",
   //   "redirectUrl": "http://localhost:4000/"
   // }
@@ -164,7 +164,7 @@ export const googleServer = {
       .then((r) => r.data)
 
     const defaultResource = {
-      resourceExternalId: extractId(connectOutput.connectionId)[2],
+      connectionExternalId: extractId(connectOutput.connectionId)[2],
       settings: {oauth: nangoConnection},
     }
     if (!context.integrationId) {
@@ -185,7 +185,7 @@ export const googleServer = {
     return {
       ...defaultResource,
       integration: {
-        // Integration id is scoped to connector, not scoped to resource
+        // Integration id is scoped to connector, not scoped to connection
         externalId: data.id,
         connectorName: 'google',
         data,

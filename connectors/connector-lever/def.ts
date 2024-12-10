@@ -12,7 +12,7 @@ const LEVER_ENTITY_NAMES = ['posting', 'opportunity', 'offer'] as const
 /**
  * Full list of OAuth scopes: https://hire.lever.co/developer/documentation#scopes
  */
-const oReso = oauthBaseSchema.resourceSettings
+const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
 })
@@ -20,7 +20,7 @@ export const zSettings = oReso.extend({
 export const leverSchemas = {
   name: z.literal('lever'),
   connectorConfig: zConfig,
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
   sourceOutputEntities: R.mapToObj(LEVER_ENTITY_NAMES, (e) => [
     e,

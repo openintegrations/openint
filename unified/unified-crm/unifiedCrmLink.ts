@@ -13,7 +13,7 @@ type PostgresInputPayload =
 
 export function unifiedCrmLink(ctx: {
   source: {
-    id: Id['reso']
+    id: Id['conn']
     connectorConfig: {connectorName: string}
     metadata?: unknown
   }

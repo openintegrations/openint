@@ -1,14 +1,14 @@
 import type {
-  EndUserId,
+  ConnectionUpdate,
+  CustomerId,
   OauthBaseTypes,
-  ResourceUpdate,
   Viewer,
 } from '@openint/cdk'
 import {
   makeId,
   makeOauthConnectorServer,
   zConnectOptions,
-  zEndUserId,
+  zCustomerId,
   zId,
   zPostConnectOptions,
 } from '@openint/cdk'
@@ -21,10 +21,10 @@ import {protectedProcedure, trpc} from './_base'
 export {type inferProcedureInput} from '@openint/trpc'
 
 export const zConnectTokenPayload = z.object({
-  endUserId: zEndUserId
-    .optional() // Optional because when creating magic link as current end user we dont' need it...
+  customerId: zCustomerId
+    .optional() // Optional because when creating magic link as current customer we dont' need it...
     .describe(
-      'Anything that uniquely identifies the end user that you will be sending the magic link to',
+      'Anything that uniquely identifies the customer that you will be sending the magic link to',
     ),
   validityInSeconds: z
     .number()
@@ -54,7 +54,7 @@ export const zConnectPageParams = z.object({
     .describe('Filter connector config by displayName '),
   /** Launch the conector with config right away */
   connectorConfigId: zId('ccfg').optional(),
-  /** Whether to show existing resources */
+  /** Whether to show existing connections */
   showExisting: z.coerce.boolean().optional().default(true),
 })
 
@@ -70,7 +70,7 @@ export const zConnectPageParams = z.object({
  * unless of course we transform zod -> jsonschema and send that to the client only
  * via a trpc schema endpoint (with server side rendering of course)
  */
-export const endUserRouterSchema = {
+export const customerRouterSchema = {
   createConnectToken: {input: zConnectTokenPayload},
   createMagicLink: {
     input: zConnectTokenPayload.merge(zConnectPageParams.omit({token: true})),
@@ -79,11 +79,11 @@ export const endUserRouterSchema = {
 
 // MARK: - Helpers
 
-function asEndUser(
+function asCustomer(
   viewer: Viewer,
-  input: {endUserId?: EndUserId | null},
-): Viewer<'end_user'> {
-  // console.log('[asEndUser]', viewer, input)
+  input: {customerId?: CustomerId | null},
+): Viewer<'customer'> {
+  // console.log('[asCustomer]', viewer, input)
   // Figure out a better way to share code here...
   if (!('orgId' in viewer) || !viewer.orgId) {
     throw new TRPCError({
@@ -92,33 +92,33 @@ function asEndUser(
     })
   }
   if (
-    viewer.role === 'end_user' &&
-    input.endUserId &&
-    input.endUserId !== viewer.endUserId
+    viewer.role === 'customer' &&
+    input.customerId &&
+    input.customerId !== viewer.customerId
   ) {
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message: 'Current viewer cannot create token for other end user',
+      message: 'Current viewer cannot create token for other customer',
     })
   }
-  const endUserId =
-    viewer.role === 'end_user' ? viewer.endUserId : input.endUserId
-  if (!endUserId) {
+  const customerId =
+    viewer.role === 'customer' ? viewer.customerId : input.customerId
+  if (!customerId) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'Either call as an endUser or pass endUserId explicitly',
+      message: 'Either call as an customer or pass customerId explicitly',
     })
   }
 
-  return {role: 'end_user', endUserId, orgId: viewer.orgId}
+  return {role: 'customer', customerId, orgId: viewer.orgId}
 }
 
 // MARK: - Endpoints
 
 const tags = ['Connect']
 
-/** TODO: Modify this so that admin user can execute it... not just endUser */
-export const endUserRouter = trpc.router({
+/** TODO: Modify this so that admin user can execute it... not just customer */
+export const customerRouter = trpc.router({
   createConnectToken: protectedProcedure
     .meta({
       openapi: {
@@ -128,14 +128,14 @@ export const endUserRouter = trpc.router({
         summary: 'Create a connect token',
       },
     })
-    .input(endUserRouterSchema.createConnectToken.input)
+    .input(customerRouterSchema.createConnectToken.input)
     .output(z.object({token: z.string()}))
     .mutation(({input: {validityInSeconds, ...input}, ctx}) =>
       // console.log('[createConnectToken]', ctx.viewer, input, {
       //   validityInSeconds,
       // })
       ({
-        token: ctx.jwt.signViewer(asEndUser(ctx.viewer, input), {
+        token: ctx.jwt.signViewer(asCustomer(ctx.viewer, input), {
           validityInSeconds,
         }),
       }),
@@ -149,10 +149,10 @@ export const endUserRouter = trpc.router({
         summary: 'Create a magic link',
       },
     })
-    .input(endUserRouterSchema.createMagicLink.input)
+    .input(customerRouterSchema.createMagicLink.input)
     .output(z.object({url: z.string()}))
-    .mutation(({input: {endUserId, validityInSeconds, ...params}, ctx}) => {
-      const token = ctx.jwt.signViewer(asEndUser(ctx.viewer, {endUserId}), {
+    .mutation(({input: {customerId, validityInSeconds, ...params}, ctx}) => {
+      const token = ctx.jwt.signViewer(asCustomer(ctx.viewer, {customerId}), {
         validityInSeconds,
       })
       const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
@@ -168,34 +168,34 @@ export const endUserRouter = trpc.router({
     // Consider using sessionId, so preConnect corresponds 1:1 with postConnect
     .query(
       async ({
-        input: [ccfgId, {resourceExternalId, ...connCtxInput}, preConnInput],
+        input: [ccfgId, {connectionExternalId, ...connCtxInput}, preConnInput],
         ctx,
       }) => {
         const int = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
         if (!int.connector.preConnect) {
           return null
         }
-        const reso = resourceExternalId
-          ? await ctx.services.getResourceOrFail(
-              makeId('reso', int.connector.name, resourceExternalId),
+        const conn = connectionExternalId
+          ? await ctx.services.getConnectionOrFail(
+              makeId('conn', int.connector.name, connectionExternalId),
             )
           : undefined
         return int.connector.preConnect?.(
           int.config,
           {
             ...connCtxInput,
-            extEndUserId: ctx.extEndUserId,
-            resource: reso
+            extCustomerId: ctx.extCustomerId,
+            connection: conn
               ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                {externalId: resourceExternalId!, settings: reso.settings}
+                {externalId: connectionExternalId!, settings: conn.settings}
               : undefined,
             webhookBaseUrl: joinPath(
               ctx.apiUrl,
               parseWebhookRequest.pathOf(int.id),
             ),
             redirectUrl: ctx.getRedirectUrl?.(int, {
-              endUserId:
-                ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null,
+              customerId:
+                ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
             }),
           },
           preConnInput,
@@ -213,7 +213,7 @@ export const endUserRouter = trpc.router({
 
     .mutation(
       async ({
-        input: [input, ccfgId, {resourceExternalId, ...connCtxInput}],
+        input: [input, ccfgId, {connectionExternalId, ...connCtxInput}],
         ctx,
       }) => {
         const int = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
@@ -221,7 +221,7 @@ export const endUserRouter = trpc.router({
 
         // TODO: we should make it possible for oauth connectors to
         // ALSO handle custom postConnect... This would be very handy for xero for instance
-        const resoUpdate = await (async () => {
+        const connUpdate = await (async () => {
           if (
             !int.connector.postConnect &&
             int.connector.metadata?.nangoProvider
@@ -231,8 +231,8 @@ export const endUserRouter = trpc.router({
               ccfgId,
               nangoProvider: int.connector.metadata.nangoProvider,
             }).postConnect(input as OauthBaseTypes['connectOutput'])) as Omit<
-              ResourceUpdate<any, any>,
-              'endUserId'
+              ConnectionUpdate<any, any>,
+              'customerId'
             >
           }
 
@@ -243,20 +243,20 @@ export const endUserRouter = trpc.router({
             return null
           }
 
-          const reso = resourceExternalId
-            ? await ctx.services.getResourceOrFail(
-                makeId('reso', int.connector.name, resourceExternalId),
+          const conn = connectionExternalId
+            ? await ctx.services.getConnectionOrFail(
+                makeId('conn', int.connector.name, connectionExternalId),
               )
             : undefined
 
           if (
             int.connector &&
-            reso &&
-            !reso.integrationId &&
+            conn &&
+            !conn.integrationId &&
             connCtxInput.integrationId
           ) {
-            // setting the integrationId so that the resource can be associated with the integration
-            reso.integrationId = connCtxInput.integrationId
+            // setting the integrationId so that the connection can be associated with the integration
+            conn.integrationId = connCtxInput.integrationId
           }
 
           return await int.connector.postConnect(
@@ -264,59 +264,62 @@ export const endUserRouter = trpc.router({
             int.config,
             {
               ...connCtxInput,
-              extEndUserId: ctx.extEndUserId,
-              resource: reso
+              extCustomerId: ctx.extCustomerId,
+              connection: conn
                 ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  {externalId: resourceExternalId!, settings: reso.settings}
+                  {externalId: connectionExternalId!, settings: conn.settings}
                 : undefined,
               webhookBaseUrl: joinPath(
                 ctx.apiUrl,
                 parseWebhookRequest.pathOf(int.id),
               ),
               redirectUrl: ctx.getRedirectUrl?.(int, {
-                endUserId:
-                  ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null,
+                customerId:
+                  ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
               }),
             },
           )
         })()
 
-        if (!resoUpdate) {
+        if (!connUpdate) {
           return 'Noop'
         }
 
         const syncInBackground =
-          resoUpdate.triggerDefaultSync !== false && !connCtxInput.syncInBand
+          connUpdate.triggerDefaultSync !== false && !connCtxInput.syncInBand
         const triggerDefaultSync =
-          !syncInBackground && resoUpdate.triggerDefaultSync !== false
+          !syncInBackground && connUpdate.triggerDefaultSync !== false
         // console.log(
-        //   'resoUpdate at postConnect syncInBackground',
+        //   'connUpdate at postConnect syncInBackground',
         //   syncInBackground,
         //   connCtxInput,
-        //   resoUpdate,
+        //   connUpdate,
         //   {
         //     triggerDefaultSync:
-        //       !syncInBackground && resoUpdate.triggerDefaultSync !== false,
+        //       !syncInBackground && connUpdate.triggerDefaultSync !== false,
         //   },
         // )
 
-        const resourceId = await ctx.asOrgIfNeeded._syncResourceUpdate(int, {
-          ...resoUpdate,
-          // No need for each connector to worry about this, unlike in the case of handleWebhook.
-          endUserId:
-            ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null,
-          triggerDefaultSync,
-        })
+        const connectionId = await ctx.asOrgIfNeeded._syncConnectionUpdate(
+          int,
+          {
+            ...connUpdate,
+            // No need for each connector to worry about this, unlike in the case of handleWebhook.
+            customerId:
+              ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
+            triggerDefaultSync,
+          },
+        )
 
         await inngest.send({
-          name: 'connect/resource-connected',
-          data: {resourceId},
+          name: 'connect/connection-connected',
+          data: {connectionId},
         })
 
         if (syncInBackground) {
           await inngest.send({
-            name: 'sync/resource-requested',
-            data: {resourceId},
+            name: 'sync/connection-requested',
+            data: {connectionId},
           })
         }
         console.log(
@@ -326,7 +329,7 @@ export const endUserRouter = trpc.router({
           `syncInBackground: ${syncInBackground}`,
           `triggerDefaultSync: ${triggerDefaultSync}`,
         )
-        return 'Resource successfully connected'
+        return 'Connection successfully connected'
       },
     ),
 })

@@ -2,11 +2,11 @@ import {clerkClient} from '@clerk/nextjs/server'
 import type {Link as FetchLink} from '@opensdks/runtime'
 import type {
   AnyEntityPayload,
+  ConnectionUpdate,
+  CustomerId,
   Destination,
-  EndUserId,
   Id,
   Link,
-  ResourceUpdate,
   Source,
   StreamsV1,
   StreamsV2,
@@ -29,9 +29,9 @@ import {inngest} from '../events'
 import type {zSyncOptions} from '../types'
 import type {AuthProvider} from './AuthProvider'
 import type {
+  _ConnectionExpanded,
   _ConnectorConfig,
   _PipelineExpanded,
-  _ResourceExpanded,
   makeDBService,
 } from './dbService'
 import type {makeMetaLinks} from './makeMetaLinks'
@@ -41,7 +41,7 @@ export function makeSyncService({
   metaLinks,
   metaService,
   getPipelineExpandedOrFail,
-  getResourceExpandedOrFail,
+  getConnectionExpandedOrFail,
   getFetchLinks,
   authProvider,
 }: {
@@ -50,33 +50,33 @@ export function makeSyncService({
   getPipelineExpandedOrFail: ReturnType<
     typeof makeDBService
   >['getPipelineExpandedOrFail']
-  getResourceExpandedOrFail: ReturnType<
+  getConnectionExpandedOrFail: ReturnType<
     typeof makeDBService
-  >['getResourceExpandedOrFail']
-  getFetchLinks: (reso: _ResourceExpanded) => FetchLink[]
+  >['getConnectionExpandedOrFail']
+  getFetchLinks: (conn: _ConnectionExpanded) => FetchLink[]
   authProvider: AuthProvider
 }) {
-  async function ensurePipelinesForResource(resoId: Id['reso']) {
-    console.log('[ensurePipelinesForResource]', resoId)
-    const pipelines = await metaService.findPipelines({resourceIds: [resoId]})
-    const reso = await getResourceExpandedOrFail(resoId)
+  async function ensurePipelinesForConnection(connId: Id['conn']) {
+    console.log('[ensurePipelinesForConnection]', connId)
+    const pipelines = await metaService.findPipelines({connectionIds: [connId]})
+    const conn = await getConnectionExpandedOrFail(connId)
     const createdIds: Array<Id['pipe']> = []
-    let defaultDestId = reso.connectorConfig?.defaultPipeOut?.destination_id
+    let defaultDestId = conn.connectorConfig?.defaultPipeOut?.destination_id
     if (!defaultDestId) {
-      const org = await authProvider.getOrganization(reso.connectorConfig.orgId)
+      const org = await authProvider.getOrganization(conn.connectorConfig.orgId)
       if (org.publicMetadata.database_url) {
         const dCcfgId = makeId('ccfg', 'postgres', 'default_' + org.id)
-        defaultDestId = makeId('reso', 'postgres', 'default_' + org.id)
+        defaultDestId = makeId('conn', 'postgres', 'default_' + org.id)
         await metaLinks.patch('connector_config', dCcfgId, {
           orgId: org.id,
-          // Defaulting to disabled to not show up for end users as we don't have another way to filter them out for now
+          // Defaulting to disabled to not show up for customers as we don't have another way to filter them out for now
           // Though technically incorrect as we will later pause syncing for disabled connectors
           disabled: true,
           displayName: 'Default Postgres Connector for sync',
         })
         console.log('Created default connector config', dCcfgId)
         // Do we actually need to store this?
-        await metaLinks.patch('resource', defaultDestId, {
+        await metaLinks.patch('connection', defaultDestId, {
           connectorConfigId: dCcfgId,
           // Should always snake_case here. This is also not typesafe...
           settings: {
@@ -84,7 +84,7 @@ export function makeSyncService({
             migrateTables: org.publicMetadata.migrate_tables,
           },
         })
-        console.log('Created default resource', defaultDestId)
+        console.log('Created default connection', defaultDestId)
       }
     }
 
@@ -92,28 +92,28 @@ export function makeSyncService({
       defaultDestId &&
       !pipelines.some((p) => p.destinationId === defaultDestId)
     ) {
-      const pipelineId = makeId('pipe', 'default_out_' + reso.id)
+      const pipelineId = makeId('pipe', 'default_out_' + conn.id)
       createdIds.push(pipelineId)
       console.log(
-        `[sync-serivce] Creating default outgoing pipeline ${pipelineId} for ${resoId} to ${defaultDestId}`,
+        `[sync-serivce] Creating default outgoing pipeline ${pipelineId} for ${connId} to ${defaultDestId}`,
       )
 
       await metaLinks.patch('pipeline', pipelineId, {
-        sourceId: resoId,
+        sourceId: connId,
         destinationId: defaultDestId,
       })
     }
 
-    const defaultSrcId = reso.connectorConfig?.defaultPipeIn?.source_id
+    const defaultSrcId = conn.connectorConfig?.defaultPipeIn?.source_id
     if (defaultSrcId && !pipelines.some((p) => p.sourceId === defaultSrcId)) {
-      const pipelineId = makeId('pipe', 'default_in_' + reso.id)
+      const pipelineId = makeId('pipe', 'default_in_' + conn.id)
       createdIds.push(pipelineId)
       console.log(
-        `[sync-serivce] Creating default incoming pipeline ${pipelineId} for ${resoId} from ${defaultSrcId}`,
+        `[sync-serivce] Creating default incoming pipeline ${pipelineId} for ${connId} from ${defaultSrcId}`,
       )
       await metaLinks.patch('pipeline', pipelineId, {
         sourceId: defaultSrcId,
-        destinationId: resoId,
+        destinationId: connId,
       })
     }
     return createdIds
@@ -121,9 +121,9 @@ export function makeSyncService({
 
   // NOTE: Would be great to avoid the all the round tripping with something like a data loader.
   // or possibly drizzle orm
-  const getPipelinesForResource = (resoId: Id['reso']) =>
+  const getPipelinesForConnection = (connId: Id['conn']) =>
     metaService
-      .findPipelines({resourceIds: [resoId]})
+      .findPipelines({connectionIds: [connId]})
       .then((pipes) =>
         Promise.all(pipes.map((pipe) => getPipelineExpandedOrFail(pipe.id))),
       )
@@ -132,7 +132,7 @@ export function makeSyncService({
   // - connector metadata should be able to specify the set of transformations desired
   // - connector config should additionally be able to specify transformations!
   // connectors shall include `config`.
-  // In contrast, resource shall include `external`
+  // In contrast, connection shall include `external`
   // We do need to figure out which secrets to tokenize and which one not to though
   // Perhaps the best way is to use `secret_` prefix? (think how we might work with vgs)
   const getLinksForPipeline = ({
@@ -222,19 +222,19 @@ export function makeSyncService({
   const sourceSync = ({
     src,
     state,
-    endUser,
+    customer,
     streams,
     opts,
   }: {
-    src: _ResourceExpanded
+    src: _ConnectionExpanded
     state: unknown
-    endUser?: {id: EndUserId} | null | undefined
+    customer?: {id: CustomerId} | null | undefined
     streams?: StreamsV1 | StreamsV2
     opts: {fullResync?: boolean | null}
   }) => {
     const defaultSource$ = () =>
       src.connectorConfig.connector.sourceSync?.({
-        endUser,
+        customer,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         instance: src.connectorConfig.connector.newInstance?.({
           config: src.connectorConfig.config,
@@ -332,9 +332,9 @@ export function makeSyncService({
   ) => {
     console.log('[syncPipeline]', pipeline)
     const {source: src, links, destination: dest, watch, ...pipe} = pipeline
-    // TODO: Should we introduce endUserId onto the pipeline itself?
-    const endUserId = src.endUserId ?? dest.endUserId
-    const endUser = endUserId ? {id: endUserId} : null
+    // TODO: Should we introduce customerId onto the pipeline itself?
+    const customerId = src.customerId ?? dest.customerId
+    const customer = customerId ? {id: customerId} : null
 
     // TODO: Maybe not the best place for this? Think where clerkClient should live
     const org =
@@ -351,7 +351,7 @@ export function makeSyncService({
       opts,
       src,
       state: pipe.sourceState,
-      endUser,
+      customer,
       streams:
         pipeline.streams ??
         pipeline.source.connectorConfig.defaultPipeOut?.streams ??
@@ -368,8 +368,8 @@ export function makeSyncService({
       opts.destination$$ ??
       dest.connectorConfig.connector.destinationSync?.({
         source: {id: src.id, connectorName: src.connectorConfig.connector.name},
-        endUser: {
-          id: endUser?.id as EndUserId,
+        customer: {
+          id: customer?.id as CustomerId,
           orgId: pipeline.source.connectorConfig.orgId,
         },
         config: dest.connectorConfig.config,
@@ -421,49 +421,55 @@ export function makeSyncService({
         pipeline_id: pipeline.id,
         source_id: src.id,
         destination_id: dest.id,
-        end_user_id: endUserId,
+        customer_id: customerId,
       },
       user: {webhook_url: org?.webhook_url || ''},
     })
   }
 
-  const _syncResourceUpdate = async (
+  const _syncConnectionUpdate = async (
     int: _ConnectorConfig,
     {
-      endUserId: userId,
+      customerId: userId,
       settings,
       integration,
-      ...resoUpdate
-    }: ResourceUpdate<AnyEntityPayload, {}>,
+      ...connUpdate
+    }: ConnectionUpdate<AnyEntityPayload, {}>,
   ) => {
-    console.log('[_syncResourceUpdate]', int.id, {
+    console.log('[_syncConnectionUpdate]', int.id, {
       userId,
       settings,
       integration,
-      ...resoUpdate,
+      ...connUpdate,
     })
-    const id = makeId('reso', int.connector.name, resoUpdate.resourceExternalId)
+    const id = makeId(
+      'conn',
+      int.connector.name,
+      connUpdate.connectionExternalId,
+    )
     await metaLinks
-      .handlers({resource: {id, connectorConfigId: int.id, endUserId: userId}})
-      .resoUpdate({type: 'resoUpdate', id, settings, integration})
+      .handlers({
+        connection: {id, connectorConfigId: int.id, customerId: userId},
+      })
+      .connUpdate({type: 'connUpdate', id, settings, integration})
 
     // TODO: This should be happening async
-    if (!resoUpdate.source$ && !resoUpdate.triggerDefaultSync) {
+    if (!connUpdate.source$ && !connUpdate.triggerDefaultSync) {
       console.log(
-        `[_syncResourceUpdate] Returning early skip syncing pipelines for resource id ${id} and source ${resoUpdate.source$} with triggerDefaultSync ${resoUpdate.triggerDefaultSync}`,
+        `[_syncConnectionUpdate] Returning early skip syncing pipelines for connection id ${id} and source ${connUpdate.source$} with triggerDefaultSync ${connUpdate.triggerDefaultSync}`,
       )
       return id
     }
 
-    await ensurePipelinesForResource(id)
-    const pipelines = await getPipelinesForResource(id)
+    await ensurePipelinesForConnection(id)
+    const pipelines = await getPipelinesForConnection(id)
 
-    console.log('_syncResourceUpdate existingPipes.len', pipelines.length)
+    console.log('_syncConnectionUpdate existingPipes.len', pipelines.length)
     await Promise.all(
       pipelines.map(async (pipe) => {
         await _syncPipeline(pipe, {
-          source$: resoUpdate.source$,
-          source$ConcatDefault: resoUpdate.triggerDefaultSync,
+          source$: connUpdate.source$,
+          source$ConcatDefault: connUpdate.triggerDefaultSync,
         })
       }),
     )
@@ -472,8 +478,8 @@ export function makeSyncService({
 
   return {
     _syncPipeline,
-    _syncResourceUpdate,
+    _syncConnectionUpdate,
     sourceSync,
-    ensurePipelinesForResource,
+    ensurePipelinesForConnection,
   }
 }

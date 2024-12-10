@@ -19,7 +19,7 @@ export const webhookServer = {
         batch.entities.push(op.data)
         return rxjs.of(op)
       },
-      resoUpdate: (op) => {
+      connUpdate: (op) => {
         batch.resUpdates.push(op)
         return rxjs.of(op)
       },

@@ -1,5 +1,5 @@
 import type {ZRaw} from '@openint/cdk'
-import {extractId, zEndUserId, zId, zRaw, zStandard} from '@openint/cdk'
+import {extractId, zCustomerId, zId, zRaw, zStandard} from '@openint/cdk'
 import {R, z} from '@openint/util'
 import {inngest} from '../events'
 import {zSyncOptions} from '../types'
@@ -15,7 +15,7 @@ export const pipelineRouter = trpc.router({
     .meta({openapi: {method: 'GET', path: '/core/pipeline', tags}})
     .input(
       zListParams
-        .extend({resourceIds: z.array(zId('reso')).optional()})
+        .extend({connectionIds: z.array(zId('conn')).optional()})
         .optional(),
     )
     .output(z.array(zRaw.pipeline))
@@ -62,35 +62,35 @@ export const pipelineRouter = trpc.router({
       return true as const
     }),
   listConnections: protectedProcedure
-    .input(zListParams.extend({endUserId: zEndUserId.optional()}).optional())
+    .input(zListParams.extend({customerId: zCustomerId.optional()}).optional())
     .query(async ({input = {}, ctx}) => {
-      // Add info about what it takes to `reconnect` here for resources which
+      // Add info about what it takes to `reconnect` here for connections which
       // has disconnected
-      const resources =
-        await ctx.services.metaService.tables.resource.list(input)
+      const connections =
+        await ctx.services.metaService.tables.connection.list(input)
       const [integrations, _pipelines] = await Promise.all([
         ctx.services.metaService.tables.integration.list({
-          ids: R.compact(resources.map((c) => c.integrationId)),
+          ids: R.compact(connections.map((c) => c.integrationId)),
         }),
         ctx.services.metaService.findPipelines({
-          resourceIds: resources.map((c) => c.id),
+          connectionIds: connections.map((c) => c.id),
         }),
       ])
       type ConnType = 'source' | 'destination'
 
       const intById = R.mapToObj(integrations, (ins) => [ins.id, ins])
 
-      function parseResource(reso?: (typeof resources)[number] | null) {
-        if (!reso) {
-          return reso
+      function parseConnection(conn?: (typeof connections)[number] | null) {
+        if (!conn) {
+          return conn
         }
-        const connectorName = extractId(reso.id)[1]
-        const integrations = intById[reso.integrationId!]
+        const connectorName = extractId(conn.id)[1]
+        const integrations = intById[conn.integrationId!]
         const mappers = ctx.connectorMap[connectorName]?.standardMappers
-        const standardReso = zStandard.resource
+        const standardReso = zStandard.connection
           .omit({id: true})
           .nullish()
-          .parse(mappers?.resource?.(reso.settings))
+          .parse(mappers?.connection?.(conn.settings))
         const standardInt =
           // QQ: what are the implications for external data integrations UI rendering of using this either or ?? and also returning the id?
           integrations?.standard ??
@@ -102,11 +102,11 @@ export const pipelineRouter = trpc.router({
             )
 
         return {
-          ...reso,
+          ...conn,
           ...standardReso,
-          id: reso.id,
+          id: conn.id,
           displayName:
-            reso.displayName ||
+            conn.displayName ||
             standardReso?.displayName ||
             standardInt?.name ||
             '',
@@ -124,15 +124,15 @@ export const pipelineRouter = trpc.router({
             pipe.lastSyncCompletedAt &&
             pipe.lastSyncStartedAt > pipe.lastSyncCompletedAt),
       }))
-      return resources
-        .map(parseResource)
+      return connections
+        .map(parseConnection)
         .filter((r): r is NonNullable<typeof r> => !!r)
         .map((r) => {
           const pipesOut = pipelines.filter((p) => p.sourceId === r.id)
           const pipesIn = pipelines.filter((p) => p.destinationId === r.id)
           const pipes = [...pipesOut, ...pipesIn]
           // TODO: Look up based on provider name
-          const type: ConnType | null = r.id.startsWith('reso_postgres')
+          const type: ConnType | null = r.id.startsWith('conn_postgres')
             ? 'destination'
             : 'source'
           return {
@@ -151,7 +151,7 @@ export const pipelineRouter = trpc.router({
     .input(z.object({id: zId('pipe')}).merge(zSyncOptions))
     .output(z.void())
     .mutation(async function syncPipeline({input: {id: pipeId, ...opts}, ctx}) {
-      if (ctx.viewer.role === 'end_user') {
+      if (ctx.viewer.role === 'customer') {
         await ctx.services.getPipelineOrFail(pipeId) // Authorization
       }
       if (opts?.async) {

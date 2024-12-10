@@ -3,7 +3,7 @@ import {z} from 'zod'
 export const zFrameMessage = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('SUCCESS'),
-    data: z.object({resourceId: z.string()}), // Need to better type resourceId
+    data: z.object({connectionId: z.string()}), // Need to better type connectionId
   }),
   z.object({
     type: z.literal('ERROR'),

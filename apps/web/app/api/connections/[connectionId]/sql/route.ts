@@ -18,7 +18,7 @@ import {trpcErrorResponse} from '@/lib-server/server-helpers'
 
 export async function GET(
   request: NextRequest,
-  {params: {resourceId}}: {params: {resourceId: string}},
+  {params: {connectionId}}: {params: {connectionId: string}},
 ) {
   try {
     const {
@@ -40,17 +40,17 @@ export async function GET(
     }
 
     const {services} = contextFactory.fromViewer(viewer)
-    const reso = await services.getResourceOrFail(resourceId as Id['reso'])
+    const conn = await services.getConnectionOrFail(connectionId as Id['conn'])
 
-    if (reso.connectorName !== 'postgres') {
+    if (conn.connectorName !== 'postgres') {
       throw new TRPCError({
         code: 'PRECONDITION_FAILED',
-        message: 'Only postgres resources are supported',
+        message: 'Only postgres connections are supported',
       })
     }
 
     const {getPool, sql} = makePostgresClient({
-      ...zPgConfig.parse(reso.settings),
+      ...zPgConfig.parse(conn.settings),
       transformFieldNames: false,
     })
     const pool = await getPool()
@@ -86,7 +86,7 @@ export async function GET(
       // TODO: Better filename would be nice.
       res.headers.set(
         'Content-Disposition',
-        `attachment; filename="venice-${Date.now()}.${format}"`,
+        `attachment; filename="openint-${Date.now()}.${format}"`,
       )
     }
     return res

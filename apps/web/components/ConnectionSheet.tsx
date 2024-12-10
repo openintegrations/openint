@@ -8,9 +8,9 @@ import type {SchemaSheetRef} from '@openint/ui'
 import {Badge, cn, SchemaSheet, SheetDescription} from '@openint/ui'
 import type {ZClient} from '@/lib-common/schemas'
 
-const formSchema = zRaw.resource.pick({
+const formSchema = zRaw.connection.pick({
   id: true,
-  endUserId: true,
+  customerId: true,
   settings: true,
   disabled: true,
   displayName: true,
@@ -20,16 +20,17 @@ const formSchema = zRaw.resource.pick({
 })
 
 /** TODO: See if we can eliminate the need having entity specific sheets */
-export const ResourceSheet = React.forwardRef(function ResourceSheet(
-  props: {resource?: ZClient['resource']; triggerButton?: boolean},
+export const ConnectionSheet = React.forwardRef(function ConnectionSheet(
+  props: {connection?: ZClient['connection']; triggerButton?: boolean},
   ref: SchemaSheetRef,
 ) {
   const catalogRes = _trpcReact.listConnectorMetas.useQuery()
 
-  const updateResource = _trpcReact.updateResource.useMutation()
+  const updateConnection = _trpcReact.updateConnection.useMutation()
 
   const connector =
-    props.resource && catalogRes.data?.[extractConnectorName(props.resource.id)]
+    props.connection &&
+    catalogRes.data?.[extractConnectorName(props.connection.id)]
   if (!connector) {
     return null
   }
@@ -38,8 +39,8 @@ export const ResourceSheet = React.forwardRef(function ResourceSheet(
     <SchemaSheet
       ref={ref}
       triggerButton={props.triggerButton}
-      title={props.resource ? 'Edit' : 'New Resource'}
-      buttonProps={{variant: props.resource ? 'ghost' : 'default'}}
+      title={props.connection ? 'Edit' : 'New Connection'}
+      buttonProps={{variant: props.connection ? 'ghost' : 'default'}}
       formProps={{
         uiSchema: {
           id: {'ui:readonly': true},
@@ -48,8 +49,8 @@ export const ResourceSheet = React.forwardRef(function ResourceSheet(
         },
       }}
       schema={formSchema}
-      mutation={updateResource}
-      initialValues={props.resource}>
+      mutation={updateConnection}
+      initialValues={props.connection}>
       <div className="flex max-h-[100px] flex-row items-center justify-between">
         {connector.logoUrl ? (
           <Image
@@ -75,7 +76,7 @@ export const ResourceSheet = React.forwardRef(function ResourceSheet(
       </div>
 
       <SheetDescription>
-        {props.resource && `ID: ${props.resource.id}`}
+        {props.connection && `ID: ${props.connection.id}`}
         <br />
         Supported mode(s): {connector.supportedModes.join(', ')}
       </SheetDescription>

@@ -11,16 +11,16 @@ import {
 import {useOptionalOpenIntConnectContext} from '../providers/OpenIntConnectProvider'
 import {_trpcReact} from '../providers/TRPCProvider'
 
-type Resource = RouterOutput['listConnections'][number]
+type Connection = RouterOutput['listConnections'][number]
 
 /**
  * TODO: Add loading indicator when mutations are happening as a result of
  * selecting dropdown menu action
  */
-export function AgResourceRowActions(
+export function AgConnectionRowActions(
   props: UIProps & {
     connectorConfig: ConnectorConfig
-    resource: Resource
+    connection: Connection
     onEvent?: (event: {type: ConnectEventType}) => void
   },
 ) {
@@ -29,14 +29,14 @@ export function AgResourceRowActions(
   const {debug} = useOptionalOpenIntConnectContext()
 
   // Add me when we introduce displayName field
-  // const updateResource = trpcReact.updateResource.useMutation({
+  // const updateConnection = trpcReact.updateConnection.useMutation({
   //   onSuccess: () => {
   //     setOpen(false)
-  //     toast({title: 'Resource updated', variant: 'success'})
+  //     toast({title: 'Connection updated', variant: 'success'})
   //   },
   //   onError: (err) => {
   //     toast({
-  //       title: 'Failed to save resource',
+  //       title: 'Failed to save connection',
   //       description: `${err.message}`,
   //       variant: 'destructive',
   //     })
@@ -44,7 +44,7 @@ export function AgResourceRowActions(
   // })
 
   const ctx = _trpcReact.useContext()
-  const deleteResource = _trpcReact.deleteResource.useMutation({
+  const deleteConnection = _trpcReact.deleteConnection.useMutation({
     onSuccess: () => {
       toast({title: 'Connection deleted', variant: 'success'})
     },
@@ -59,7 +59,7 @@ export function AgResourceRowActions(
       ctx.listConnections.invalidate()
     },
   })
-  const syncResource = _trpcReact.dispatch.useMutation({
+  const syncConnection = _trpcReact.dispatch.useMutation({
     onSuccess: () => {
       toast({title: 'Sync requested', variant: 'success'})
     },
@@ -72,10 +72,10 @@ export function AgResourceRowActions(
     },
   })
   // Is there a way to build the variables into useMutation already?
-  const syncResourceMutate = () =>
-    syncResource.mutate({
-      name: 'sync/resource-requested',
-      data: {resourceId: props.resource.id},
+  const syncConnectionMutate = () =>
+    syncConnection.mutate({
+      name: 'sync/connection-requested',
+      data: {connectionId: props.connection.id},
     })
 
   // TODO: Turn this into a menu powered by the command abstraction?
@@ -89,7 +89,7 @@ export function AgResourceRowActions(
             <button
               type="button"
               onClick={(e) => {
-                syncResourceMutate()
+                syncConnectionMutate()
                 e.preventDefault()
               }}
               className="border-stroke enabled:active:bg-background-mid enabled:active:border-1 focus:border-1 enabled:hover:bg-background-mid disabled:bg-background-mid disabled:border-stroke disabled:text-black-light group inline-flex h-9 items-center justify-center gap-1 whitespace-nowrap rounded-lg border bg-white px-3 py-2 hover:border-[#8192FF] disabled:cursor-not-allowed disabled:opacity-50">
@@ -101,7 +101,7 @@ export function AgResourceRowActions(
           )}
           <button
             type="button"
-            onClick={() => deleteResource.mutate({id: props.resource.id})}
+            onClick={() => deleteConnection.mutate({id: props.connection.id})}
             className="border-stroke enabled:active:bg-background-mid enabled:active:border-1 focus:border-1 enabled:hover:bg-background-mid disabled:bg-background-mid disabled:border-stroke disabled:text-black-light group inline-flex h-9 items-center justify-center gap-1 whitespace-nowrap rounded-lg border bg-white px-3 py-2 hover:border-[#8192FF] disabled:cursor-not-allowed disabled:opacity-50">
             <RefreshCw className="text-black-light h-5 w-5" />
             <p className="text-sm tracking-[-0.01em] text-[#8192FF] antialiased">

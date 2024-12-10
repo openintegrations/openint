@@ -11,7 +11,7 @@ import {
   makePostgresClient,
 } from '@openint/connector-postgres/makePostgresClient'
 import type {
-  EndUserResultRow,
+  CustomerResultRow,
   MetaService,
   MetaTable,
 } from '@openint/engine-backend'
@@ -30,10 +30,10 @@ function localGucForViewer(viewer: Viewer) {
   switch (viewer.role) {
     case 'anon':
       return {role: 'anon'}
-    case 'end_user':
+    case 'customer':
       return {
-        role: 'end_user',
-        'request.jwt.claim.end_user_id': viewer.endUserId,
+        role: 'customer',
+        'request.jwt.claim.customer_id': viewer.customerId,
         'request.jwt.claim.org_id': viewer.orgId,
       }
     case 'user':
@@ -85,33 +85,33 @@ export const makePostgresMetaService = zFunction(
   (opts): MetaService => {
     const tables: MetaService['tables'] = {
       // Delay calling of __getDeps until later..
-      resource: metaTable('resource', _getDeps(opts)),
+      connection: metaTable('connection', _getDeps(opts)),
       integration: metaTable('integration', _getDeps(opts)),
       connector_config: metaTable('connector_config', _getDeps(opts)),
       pipeline: metaTable('pipeline', _getDeps(opts)),
     }
     return {
       tables,
-      searchEndUsers: ({keywords, ...rest}) => {
+      searchCustomers: ({keywords, ...rest}) => {
         const {runQueries, sql} = _getDeps(opts)
         const where = keywords
-          ? sql`WHERE end_user_id ILIKE ${'%' + keywords + '%'}`
+          ? sql`WHERE customer_id ILIKE ${'%' + keywords + '%'}`
           : sql``
         const query = applyLimitOffset(
           sql`
             SELECT
-              end_user_id as id,
-              count(*) AS resource_count,
+              customer_id as id,
+              count(*) AS connection_count,
               min(created_at) AS first_created_at,
               max(updated_at) AS last_updated_at
             FROM
-              resource
+              connection
             ${where}
-            GROUP BY end_user_id
+            GROUP BY customer_id
           `,
           rest,
         )
-        return runQueries((pool) => pool.any<EndUserResultRow>(query))
+        return runQueries((pool) => pool.any<CustomerResultRow>(query))
       },
       searchIntegrations: ({keywords, connectorNames, ...rest}) => {
         const {runQueries, sql} = _getDeps(opts)
@@ -131,9 +131,13 @@ export const makePostgresMetaService = zFunction(
         )
       },
 
-      findPipelines: ({resourceIds, secondsSinceLastSync, includeDisabled}) => {
+      findPipelines: ({
+        connectionIds,
+        secondsSinceLastSync,
+        includeDisabled,
+      }) => {
         const {runQueries, sql} = _getDeps(opts)
-        const ids = resourceIds && sql.array(resourceIds, 'varchar')
+        const ids = connectionIds && sql.array(connectionIds, 'varchar')
         const conditions = R.compact([
           ids && sql`(source_id = ANY(${ids}) OR destination_id = ANY(${ids}))`,
           secondsSinceLastSync &&
@@ -167,29 +171,29 @@ export const makePostgresMetaService = zFunction(
           ),
         )
       },
-      findResourcesMissingDefaultPipeline: () => {
+      findConnectionsMissingDefaultPipeline: () => {
         const {runQueries, sql} = _getDeps(opts)
         return runQueries((pool) =>
-          pool.any<{id: Id['reso']}>(sql`
+          pool.any<{id: Id['conn']}>(sql`
             SELECT
-              r.id,
+              c.id,
               cc.default_pipe_out_destination_id,
               cc.default_pipe_in_source_id,
               pipe_out.id destination_pipeline_id,
               pipe_in.id source_pipeline_id
             FROM
-              resource r
-              JOIN connector_config cc ON r.connector_config_id = cc.id
-              LEFT JOIN pipeline pipe_out ON pipe_out.source_id = r.id
+              connection c
+              JOIN connector_config cc ON c.connector_config_id = cc.id
+              LEFT JOIN pipeline pipe_out ON pipe_out.source_id = c.id
                 AND pipe_out.destination_id = cc.default_pipe_out_destination_id
-              LEFT JOIN pipeline pipe_in ON pipe_in.destination_id = r.id
+              LEFT JOIN pipeline pipe_in ON pipe_in.destination_id = c.id
                 AND pipe_in.source_id = cc.default_pipe_in_source_id
             WHERE (cc.default_pipe_out_destination_id IS NOT NULL AND pipe_out IS NULL)
               OR (cc.default_pipe_in_source_id IS NOT NULL AND pipe_in IS NULL)
           `),
         )
       },
-      isHealthy: async (checkDefaultPostgresResources = false) => {
+      isHealthy: async (checkDefaultPostgresConnections = false) => {
         const {runQueries, sql} = _getDeps({
           ...opts,
           // hardcoding to system viewer to avoid any authorization checks
@@ -204,26 +208,27 @@ export const makePostgresMetaService = zFunction(
           return {healthy: false, error: 'Main database is not healthy'}
         }
 
-        const top3DefaultPostgresResources = await runQueries((pool) =>
+        // TODO:(@pellicceama) to use sql token rather than hard coding here.
+        const top3DefaultPostgresConnections = await runQueries((pool) =>
           pool.query(
-            sql`SELECT id, settings->>'databaseUrl' as database_url FROM resource where id like 'reso_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
+            sql`SELECT id, settings->>'databaseUrl' as database_url FROM connection where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
           ),
         )
 
-        if (checkDefaultPostgresResources) {
-          for (const resource of top3DefaultPostgresResources.rows) {
-            if (!resource['database_url']) {
+        if (checkDefaultPostgresConnections) {
+          for (const connection of top3DefaultPostgresConnections.rows) {
+            if (!connection['database_url']) {
               continue
             }
             const {getPool} = makePostgresClient({
-              databaseUrl: resource['database_url'] as string,
+              databaseUrl: connection['database_url'] as string,
             })
             const pool = await getPool()
             const result = await pool.query(sql`SELECT 1`)
             if (result.rows.length !== 1) {
               return {
                 healthy: false,
-                error: `Default postgres resource with id ${resource['id']} is not healthy`,
+                error: `Default postgres connection with id ${connection['id']} is not healthy`,
               }
             }
           }
@@ -246,7 +251,7 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
   return {
     list: ({
       ids,
-      endUserId,
+      customerId,
       connectorConfigId,
       connectorName,
       keywords,
@@ -255,7 +260,7 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
       runQueries((pool) => {
         const conditions = R.compact([
           ids && sql`id = ANY(${sql.array(ids, 'varchar')})`,
-          endUserId && sql`end_user_id = ${endUserId}`,
+          customerId && sql`customer_id = ${customerId}`,
           connectorConfigId && sql`connector_config_id = ${connectorConfigId}`,
           connectorName && sql`connector_name = ${connectorName}`,
           // Temp solution, shall use fts and make this work for any table...

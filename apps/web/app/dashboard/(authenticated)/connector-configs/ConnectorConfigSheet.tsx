@@ -165,7 +165,7 @@ export function ConnectorConfigSheet({
                     <br />
                     This action cannot be undone. In order to to delete an
                     connector config, you may need to first delete all the
-                    resources that depend on this connector config first
+                    connections that depend on this connector config first
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

@@ -13,10 +13,10 @@ export const PipelineSheet = React.forwardRef(function PipelineSheet(
   props: {pipeline?: ZClient['pipeline']; triggerButton?: boolean},
   ref: SchemaSheetRef,
 ) {
-  const resourcesRes = _trpcReact.listResources.useQuery()
+  const connectionsRes = _trpcReact.listConnectionsRaw.useQuery()
 
-  const zResoId = z.union(
-    (resourcesRes.data ?? []).map((r) =>
+  const zConnId = z.union(
+    (connectionsRes.data ?? []).map((r) =>
       z
         .literal(r.id)
         .openapi({title: r.displayName ? `${r.displayName} <${r.id}>` : r.id}),
@@ -28,8 +28,8 @@ export const PipelineSheet = React.forwardRef(function PipelineSheet(
   // But then that won't work if admin ui cannot be embedded
   const formSchema = z.object({
     ...(props.pipeline && ({id: zId('pipe')} as {})),
-    sourceId: zResoId,
-    destinationId: zResoId,
+    sourceId: zConnId,
+    destinationId: zConnId,
     sourceState: z.record(z.any()).optional(),
     destinationState: z.record(z.any()).optional(),
     streams: zStreamsV2.optional(),

@@ -3,7 +3,7 @@ import {getTableName} from 'drizzle-orm'
 import type {PgTable} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import * as R from 'remeda'
-import type {EndUserId} from '@openint/cdk'
+import type {CustomerId} from '@openint/cdk'
 import {env} from '@openint/env'
 import {rxjs, toCompletion} from '@openint/util'
 import type {RecordMessageBody} from './def'
@@ -33,7 +33,7 @@ Import trace for requested module:
 ../../connectors/connector-postgres/server.ts
 ../app-config/connectors/connectors.merged.ts
 ../app-config/backendConfig.ts
-./app/api/resources/[resourceId]/sql/route.ts
+./app/api/connections/[connectionId]/sql/route.ts
 
  */
 function getMigrationsForTable(table: PgTable) {
@@ -60,9 +60,9 @@ const db = drizzle(dbUrl.toString(), {logger: true})
 
 const destLink = postgresServer.destinationSync({
   config: {},
-  endUser: {id: 'esur_12' as EndUserId, orgId: 'org_123'},
+  customer: {id: 'esur_12' as CustomerId, orgId: 'org_123'},
   settings: {databaseUrl: dbUrl.toString()},
-  source: {id: 'reso_sfdc_9287', connectorName: 'sfdc'},
+  source: {id: 'conn_sfdc_9287', connectorName: 'sfdc'},
   state: {},
 })
 
@@ -85,9 +85,9 @@ describe('standard schema', () => {
     await toCompletion(destLink(src))
     const res = await db.execute('SELECT * FROM vendor')
     expect(res[0]).toMatchObject({
-      source_id: 'reso_sfdc_9287',
+      source_id: 'conn_sfdc_9287',
       id: 'vend_1123',
-      end_user_id: 'esur_12',
+      customer_id: 'esur_12',
       connector_name: 'sfdc',
       unified: {name: 'Assets:Cash'},
       raw: {AccountName: 'Cash'},

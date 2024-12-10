@@ -9,7 +9,7 @@ export {type inferProcedureInput} from '@openint/trpc'
 export const protectedRouter = trpc.router({
   dispatch: protectedProcedure.input(zEvent).mutation(async ({input}) => {
     if (
-      input.name !== 'sync/resource-requested' &&
+      input.name !== 'sync/connection-requested' &&
       input.name !== 'sync/pipeline-requested'
     ) {
       throw new TRPCError({
@@ -49,5 +49,5 @@ export const protectedRouter = trpc.router({
       })
     }),
   // TODO: Do we need this method at all? Or should we simply add params to args
-  // to syncResource instead? For example, skipPipelines?
+  // to syncConnection instead? For example, skipPipelines?
 })

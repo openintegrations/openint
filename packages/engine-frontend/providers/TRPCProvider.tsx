@@ -9,7 +9,7 @@ export type TRPCReact<TRouter extends AnyRouter> = ReturnType<
   typeof createTRPCReact<TRouter>
 >
 
-// TODO: Make use of this from VeniceProvider?
+// TODO: Make use of this from OpenIntProvider?
 export function TRPCProvider({
   apiUrl,
   queryClient,

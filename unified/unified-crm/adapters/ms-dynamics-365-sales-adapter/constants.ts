@@ -1078,7 +1078,7 @@ export const MS_DYNAMICS_365_SALES_STANDARD_OBJECTS = [
   'reportentity',
   'reportlink',
   'reportvisibility',
-  'resource',
+  'connection',
   'resourcegroup',
   'resourcegroupdatasource',
   'resourcegroupexpansion',

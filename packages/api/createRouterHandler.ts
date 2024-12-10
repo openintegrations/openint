@@ -12,7 +12,7 @@ import {
   kApikeyUrlParam,
 } from '@openint/app-config/constants'
 import type {Id, UserId, Viewer} from '@openint/cdk'
-import {decodeApikey, makeJwtClient, zEndUserId, zId} from '@openint/cdk'
+import {decodeApikey, makeJwtClient, zCustomerId, zId} from '@openint/cdk'
 import type {RouterContext} from '@openint/engine-backend'
 import {envRequired} from '@openint/env'
 import {
@@ -28,12 +28,12 @@ import type {AppRouter} from './appRouter'
 export const zOpenIntHeaders = z
   .object({
     [kApikeyHeader]: z.string().nullish(),
-    'x-resource-id': zId('reso').nullish(),
-    /** Alternative ways to pass the resource id, works in case there is a single connector */
-    'x-resource-connector-name': z.string().nullish(),
-    'x-resource-connector-config-id': zId('ccfg').nullish(),
-    /** Implied by authorization header when operating in end user mode */
-    'x-resource-end-user-id': zEndUserId.nullish(),
+    'x-connection-id': zId('conn').nullish(),
+    /** Alternative ways to pass the connection id, works in case there is a single connector */
+    'x-connection-connector-name': z.string().nullish(),
+    'x-connection-connector-config-id': zId('ccfg').nullish(),
+    /** Implied by authorization header when operating in customer mode */
+    'x-connection-customer-id': zCustomerId.nullish(),
     authorization: z.string().nullish(), // `Bearer ${string}`
   })
   .catchall(z.string().nullish())
@@ -129,39 +129,43 @@ export const contextFromRequest = async ({
   const headers = zOpenIntHeaders.parse(
     Object.fromEntries(req.headers.entries()),
   )
-  let resourceId = req.headers.get('x-resource-id') as Id['reso'] | undefined
-  if (!resourceId) {
-    // TODO: How do we allow filtering for organization owned resources?
-    // Specifically making sure that endUserId = null?
-    // TODO: make sure this corresponds to the list resources api
-    const resourceFilters = pickBy(
+  let connectionId = req.headers.get('x-connection-id') as
+    | Id['conn']
+    | undefined
+  if (!connectionId) {
+    // TODO: How do we allow filtering for organization owned connections?
+    // Specifically making sure that customerId = null?
+    // TODO: make sure this corresponds to the list connections api
+    const connectionFilters = pickBy(
       {
-        // endUserId shall be noop when we are in end User viewer as services
+        // customerId shall be noop when we are in end User viewer as services
         // are already secured by row level security
-        endUserId: headers['x-resource-end-user-id'],
-        connectorName: headers['x-resource-connector-name'],
-        connectorConfigId: headers['x-resource-connector-config-id'],
+        customerId: headers['x-connection-customer-id'],
+        connectorName: headers['x-connection-connector-name'],
+        connectorConfigId: headers['x-connection-connector-config-id'],
       },
       (v) => v != null,
     )
-    if (Object.keys(resourceFilters).length > 0) {
-      const resources = await context.services.metaService.tables.resource.list(
-        {...resourceFilters, limit: 2},
-      )
-      if (resources.length > 1) {
+    if (Object.keys(connectionFilters).length > 0) {
+      const connections =
+        await context.services.metaService.tables.connection.list({
+          ...connectionFilters,
+          limit: 2,
+        })
+      if (connections.length > 1) {
         throw new BadRequestError(
-          `Multiple resources found for filter: ${JSON.stringify(
-            resourceFilters,
+          `Multiple connections found for filter: ${JSON.stringify(
+            connectionFilters,
           )}`,
         )
       }
-      resourceId = resources[0]?.id
+      connectionId = connections[0]?.id
     }
   }
-  console.log('[contextFromRequest]', {url: req.url, viewer, resourceId})
+  console.log('[contextFromRequest]', {url: req.url, viewer, connectionId})
   return {
     ...context,
-    remoteResourceId: resourceId ?? null,
+    remoteConnectionId: connectionId ?? null,
   }
 }
 
@@ -235,10 +239,10 @@ export function createRouterOpenAPIHandler({
           return {}
         },
       })
-      // Pass the resourceId back to the client so there is certainly on which ID
+      // Pass the connectionId back to the client so there is certainly on which ID
       // was used to fetch the data
-      if (context.remoteResourceId) {
-        res.headers.set('x-resource-id', context.remoteResourceId)
+      if (context.remoteConnectionId) {
+        res.headers.set('x-connection-id', context.remoteConnectionId)
       }
       for (const [k, v] of Object.entries(corsHeaders)) {
         res.headers.set(k, v)

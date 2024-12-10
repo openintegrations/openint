@@ -26,7 +26,7 @@ export default function SyncRunsPage() {
           //   ),
           // },
           {accessorKey: 'id'},
-          {accessorKey: 'resource_id'},
+          {accessorKey: 'connection_id'},
           {accessorKey: 'status'},
           {accessorKey: 'duration'},
           // {accessorKey: 'input_event'}, // TODO: Handle json

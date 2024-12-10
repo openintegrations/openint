@@ -40,7 +40,7 @@ export const zConfig = oauthBaseSchema.connectorConfig.extend({
   verifierToken: z.string().nullish().describe('For webhooks'),
 })
 
-const oReso = oauthBaseSchema.resourceSettings
+const oReso = oauthBaseSchema.connectionSettings
 /** Very verbose definition... Do we want it a bit simpler maybe? */
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth.extend({
@@ -58,7 +58,7 @@ export const zSettings = oReso.extend({
 export const qboSchemas = {
   name: z.literal('qbo'),
   connectorConfig: zConfig,
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
   sourceState: z.object({
     entityUpdatedSince: z.string().nullish(),

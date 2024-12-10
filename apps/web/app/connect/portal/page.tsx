@@ -3,7 +3,7 @@
 // import nextDynamic from 'next/dynamic'
 import {kAccessToken} from '@openint/app-config/constants'
 import {getViewerId} from '@openint/cdk'
-import {zConnectPageParams} from '@openint/engine-backend/router/endUserRouter'
+import {zConnectPageParams} from '@openint/engine-backend/router/customerRouter'
 import {AGConnectionPortal, ConnectionPortal} from '@openint/engine-frontend'
 import {ClientRoot} from '@/components/ClientRoot'
 import {ColorConfig} from '@/components/ColorConfig'
@@ -33,7 +33,7 @@ export const dynamic = 'force-dynamic'
 // )
 
 /**
- * Embed this fully featured page to allow customers to fully manage their own resources
+ * Embed this fully featured page to allow customers to fully manage their own connections
  * Include checking sync status, adding, removing, and reauthenticating their connections
  */
 export default async function PortalPage({
@@ -48,7 +48,7 @@ export default async function PortalPage({
   const {getDehydratedState, viewer} = await createServerComponentHelpers({
     searchParams: {[kAccessToken]: token},
   })
-  if (viewer.role !== 'end_user') {
+  if (viewer.role !== 'customer') {
     return (
       <div>Authenticated user only. Your role is {getViewerId(viewer)}</div>
     )

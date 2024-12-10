@@ -5,7 +5,7 @@ import {z} from '@openint/util'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
-const oReso = oauthBaseSchema.resourceSettings
+const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
 })
@@ -13,7 +13,7 @@ export const zSettings = oReso.extend({
 export const salesloftSchemas = {
   name: z.literal('salesloft'),
   connectorConfig: zConfig,
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
 } satisfies ConnectorSchemas
 

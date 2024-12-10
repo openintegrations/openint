@@ -8,11 +8,11 @@ export const APOLLO_ENTITY_NAME = ['contact', 'account'] as const
 export const apolloSchemas = {
   name: z.literal('apollo'),
   // Should get this from apollo sdk def...
-  // resourceSettings: z.object({
+  // connectionSettings: z.object({
   //   api_key: z.string(),
   // }),
   // TODO: Migrate away from nango...
-  resourceSettings: oauthBaseSchema.resourceSettings,
+  connectionSettings: oauthBaseSchema.connectionSettings,
   sourceOutputEntities: R.mapToObj(APOLLO_ENTITY_NAME, (k) => [k, z.unknown()]),
 } satisfies ConnectorSchemas
 

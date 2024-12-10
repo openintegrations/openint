@@ -32,7 +32,7 @@ export const oauthBaseSchema = {
       scopes: z.string().optional(),
     }),
   }),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     oauth: z.object({
       credentials: z.object({
         type: zAuthMode,
@@ -64,7 +64,7 @@ export const oauthBaseSchema = {
   }),
   connectOutput: z.object({
     providerConfigKey: zId('ccfg'),
-    connectionId: zId('reso'),
+    connectionId: zId('conn'),
   }),
 } satisfies ConnectorSchemas
 
@@ -79,14 +79,14 @@ export function oauthConnect({
   nangoFrontend,
   connectorName,
   connectorConfigId,
-  resourceId,
+  connectionId,
   authOptions,
 }: {
   nangoFrontend: NangoFrontend
   connectorName: string
   connectorConfigId: Id['ccfg']
   /** Should address the re-connect scenario, but let's see... */
-  resourceId?: Id['reso']
+  connectionId?: Id['conn']
   authOptions?: {
     authorization_params?: Record<string, string | undefined>
   }
@@ -94,13 +94,13 @@ export function oauthConnect({
   // console.log('oauthConnect', {
   //   connectorName,
   //   connectorConfigId,
-  //   resourceId,
+  //   connectionId,
   //   authOptions,
   // })
   return nangoFrontend
     .auth(
       connectorConfigId,
-      resourceId ?? makeId('reso', connectorName, makeUlid()),
+      connectionId ?? makeId('conn', connectorName, makeUlid()),
       {
         params: {},
         ...authOptions,
@@ -134,21 +134,21 @@ export function makeOauthConnectorServer({
 }) {
   const connServer = {
     async postConnect(connectOutput) {
-      const {connectionId: resoId} = connectOutput
+      const {connectionId: connId} = connectOutput
       const res = await nangoClient
         .GET('/connection/{connectionId}', {
           params: {
-            path: {connectionId: resoId},
+            path: {connectionId: connId},
             query: {
               provider_config_key: ccfgId,
               refresh_token: true,
-              // thought this would make forceRefresh work but wasn't called in the getResource code path
+              // thought this would make forceRefresh work but wasn't called in the getConnection code path
               // force_refresh: true,
             },
           },
         })
         .then((r) => r.data)
-      return {resourceExternalId: extractId(resoId)[2], settings: {oauth: res}}
+      return {connectionExternalId: extractId(connId)[2], settings: {oauth: res}}
     },
   } satisfies ConnectorServer<typeof oauthBaseSchema>
   return {

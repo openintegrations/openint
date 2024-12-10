@@ -5,7 +5,7 @@ import {z} from '@openint/util'
 export const debugSchemas = {
   name: z.literal('debug'),
   webhookInput: zWebhookInput,
-  resourceSettings: z.unknown(),
+  connectionSettings: z.unknown(),
   connectorConfig: z.unknown(),
   sourceOutputEntity: z.unknown(),
   integrationData: z.unknown(),

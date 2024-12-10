@@ -8,7 +8,7 @@ import {z, zCast} from '@openint/util'
 
 export const twentySchemas = {
   name: z.literal('twenty'),
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     access_token: z.string(),
   }),
   destinationInputEntity: zCast<EntityPayloadWithRaw>(),

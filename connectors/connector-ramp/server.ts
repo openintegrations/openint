@@ -6,14 +6,14 @@ import {makeRampClient} from './RampClient'
 
 export const rampServer = {
   postConnect: (input) => ({
-    resourceExternalId: input.clientId ?? '',
+    connectionExternalId: input.clientId ?? '',
     settings: input,
     triggerDefaultSync: true,
   }),
 
   // Disable it for now until it's ready
   // handleWebhook: (input) => {
-  //   const conn = identity<z.infer<typeof base['resourceSchema']>>({
+  //   const conn = identity<z.infer<typeof base['connectionSchema']>>({
   //     clientId: '',
   //     clientSecret: '',
   //     authorizationCode: input.query['code'] as string,

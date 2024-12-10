@@ -40,7 +40,6 @@
     "ngrok": "5.0.0-beta.2"
   },
   "devDependencies": {
-    "@opensdks/runtime": "^0.0.19",
-    "@opensdks/sdk-venice": "^0.0.17"
+    "@opensdks/runtime": "^0.0.19"
   }
 }

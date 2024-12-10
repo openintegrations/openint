@@ -120,7 +120,7 @@ export const microsoftServer = {
       .then((r) => r.data)
 
     const defaultResource = {
-      resourceExternalId: extractId(connectOutput.connectionId)[2],
+      connectionExternalId: extractId(connectOutput.connectionId)[2],
       settings: {oauth: nangoConnection},
     }
     if (!context.integrationId) {
@@ -141,7 +141,7 @@ export const microsoftServer = {
     return {
       ...defaultResource,
       integration: {
-        // Integration id is scoped to connector, not scoped to resource
+        // Integration id is scoped to connector, not scoped to connection
         externalId: data.id,
         connectorName: 'microsoft',
         data,

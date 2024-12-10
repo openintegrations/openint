@@ -4,7 +4,7 @@ import {z} from '@openint/util'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
-const oReso = oauthBaseSchema.resourceSettings
+const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
 })
@@ -33,7 +33,7 @@ export const microsoftSchemas = {
         .optional(),
     }),
   }),
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
 } satisfies ConnectorSchemas
 

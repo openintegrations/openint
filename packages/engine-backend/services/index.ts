@@ -3,7 +3,7 @@ import type {AnyConnectorImpl} from '@openint/cdk'
 import {nangoProxyLink} from '@openint/cdk'
 import {R} from '@openint/util'
 import type {AuthProvider} from './AuthProvider'
-import type {_ResourceExpanded} from './dbService'
+import type {_ConnectionExpanded} from './dbService'
 import {makeDBService} from './dbService'
 import type {MetaService} from './metaService'
 import {makeSyncService} from './sync-service'
@@ -25,15 +25,15 @@ export function makeServices({
     connectorMap,
   })
   /** @deprecated. Should use remoteProcedure */
-  function getFetchLinks(reso: _ResourceExpanded) {
+  function getFetchLinks(conn: _ConnectionExpanded) {
     return R.compact([
       logLink(),
-      reso.connectorConfig.connector.metadata?.nangoProvider &&
+      conn.connectorConfig.connector.metadata?.nangoProvider &&
         env.NANGO_SECRET_KEY &&
         nangoProxyLink({
           secretKey: env.NANGO_SECRET_KEY,
-          connectionId: reso.id,
-          providerConfigKey: reso.connectorConfigId,
+          connectionId: conn.id,
+          providerConfigKey: conn.connectorConfigId,
         }),
     ])
   }
@@ -41,7 +41,7 @@ export function makeServices({
     metaService,
     metaLinks: dbService.metaLinks,
     getPipelineExpandedOrFail: dbService.getPipelineExpandedOrFail,
-    getResourceExpandedOrFail: dbService.getResourceExpandedOrFail,
+    getConnectionExpandedOrFail: dbService.getConnectionExpandedOrFail,
     getFetchLinks,
     authProvider,
   })

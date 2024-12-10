@@ -10,7 +10,7 @@ import {
 export const wiseSchemas = {
   name: z.literal('wise'),
   // connectorConfig: zWiseConfig,
-  resourceSettings: z.object({
+  connectionSettings: z.object({
     envName: zEnvName,
     apiToken: z.string().nullish(),
   }),

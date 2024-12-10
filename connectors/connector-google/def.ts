@@ -4,7 +4,7 @@ import {z} from '@openint/util'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
-const oReso = oauthBaseSchema.resourceSettings
+const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
 })
@@ -98,7 +98,7 @@ export const googleSchemas = {
   //       'At least one integration must be enabled, and either the global scopes or the integration specific scopes must be set for each enabled integration.',
   //   },
   // ),
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
 } satisfies ConnectorSchemas
 

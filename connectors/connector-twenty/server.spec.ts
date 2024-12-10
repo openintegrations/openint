@@ -1,5 +1,5 @@
 // /* eslint-disable jest/no-standalone-expect */
-import type {EndUserId, EntityPayloadWithRaw, SyncOperation} from '@openint/cdk'
+import type {CustomerId, EntityPayloadWithRaw, SyncOperation} from '@openint/cdk'
 import {rxjs, toCompletion} from '@openint/util'
 import twentyServer from './server'
 
@@ -10,9 +10,9 @@ const maybeTest = accessToken ? test : test.skip
 maybeTest('destinationSync', async () => {
   const destLink = twentyServer.destinationSync({
     config: {},
-    endUser: {id: 'esur_12' as EndUserId, orgId: 'org_123'},
+    customer: {id: 'esur_12' as CustomerId, orgId: 'org_123'},
     settings: {access_token: accessToken},
-    source: {id: 'reso_123', connectorName: 'salesforce'},
+    source: {id: 'conn_123', connectorName: 'salesforce'},
     state: {},
   })
   const src = rxjs.from([
@@ -24,7 +24,7 @@ maybeTest('destinationSync', async () => {
           name: 'sfdc',
         },
         entityName: 'company',
-        connection_id: 'reso_123',
+        connection_id: 'conn_123',
       },
       type: 'data',
     } satisfies SyncOperation<EntityPayloadWithRaw>,

@@ -58,7 +58,7 @@ export const zSettings = z.discriminatedUnion('role', [
 
 export const firebaseSchemas = {
   name: z.literal('firebase'),
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   sourceState: z.object({
     /**
      * Only used for sourceSync, not destSync. Though these are not technically states...

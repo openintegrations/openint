@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-standalone-expect */
-import type {EndUserId} from '@openint/cdk'
+import type {CustomerId} from '@openint/cdk'
 import {initOpenIntSDK} from '@openint/sdk'
 
 jest.setTimeout(30 * 1000) // long timeout because we have to wait for next.js to compile
@@ -7,8 +7,8 @@ jest.setTimeout(30 * 1000) // long timeout because we have to wait for next.js t
 const openint = initOpenIntSDK({
   headers: {
     'x-apikey': process.env['OPENINT_API_KEY'],
-    'x-resource-end-user-id':
-      (process.env['OPENINT_END_USER_ID'] as EndUserId) ?? undefined,
+    'x-connection-customer-id':
+      (process.env['OPENINT_CUSTOMER_ID'] as CustomerId) ?? undefined,
   },
   baseUrl: process.env['OPENINT_API_URL'],
 })

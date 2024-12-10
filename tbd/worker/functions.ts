@@ -44,9 +44,9 @@ export async function scheduleSyncs({
   console.log('[scheduleSyncs]', event)
   const {openint} = initSDK()
   // TODO: Deal with pagination
-  const resources = await openint.GET('/core/resource').then((r) => r.data)
+  const connections = await openint.GET('/core/connection').then((r) => r.data)
 
-  const events = resources
+  const events = connections
     .map((r) => {
       if (!event.data.connector_names.includes(r.connectorName)) {
         // Only sync these for now...
@@ -56,7 +56,7 @@ export async function scheduleSyncs({
       return {
         name: 'sync.requested',
         data: {
-          resource_id: r.id,
+          connection_id: r.id,
           vertical: event.data.vertical,
           sync_mode: event.data.sync_mode,
         },
@@ -65,14 +65,14 @@ export async function scheduleSyncs({
     .filter((c): c is NonNullable<typeof c> => !!c)
 
   console.log('[scheduleSyncs] Metrics', {
-    num_resources: resources.length,
-    num_resources_to_sync: events.length,
+    num_connections: connections.length,
+    num_connections_to_sync: events.length,
   })
 
   await step.sendEvent('emit-connection-sync-events', events)
   // make it easier to see...
   return events.map((e) => ({
-    customer_id: e.data.resource_id,
+    customer_id: e.data.connection_id,
   }))
 }
 
@@ -86,7 +86,7 @@ export async function syncConnection({
 }: FunctionInput<'sync.requested'>) {
   const {
     data: {
-      resource_id,
+      connection_id,
       vertical,
       unified_objects: _unified_objects,
       sync_mode = 'incremental',
@@ -98,7 +98,7 @@ export async function syncConnection({
     _unified_objects ?? VERTICAL_BY_KEY[vertical].objects ?? []
 
   console.log('[syncConnection] Start', {
-    resource_id,
+    connection_id,
     eventId: event.id,
     sync_mode,
     vertical,
@@ -108,7 +108,7 @@ export async function syncConnection({
   // This can probably be done via an upsert returning...
   const syncState = await configDb.query.sync_state
     .findFirst({
-      where: (sync_state, {eq}) => eq(sync_state.resource_id, resource_id),
+      where: (sync_state, {eq}) => eq(sync_state.connection_id, connection_id),
     })
     .then(
       (ss) =>
@@ -116,7 +116,7 @@ export async function syncConnection({
         // eslint-disable-next-line promise/no-nesting
         configDb
           .insert(schema.sync_state)
-          .values({resource_id, state: sql`${{}}::jsonb`})
+          .values({connection_id, state: sql`${{}}::jsonb`})
           .returning()
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           .then((rows) => rows[0]!),
@@ -133,7 +133,7 @@ export async function syncConnection({
     .then((rows) => rows[0]!.id)
 
   const {openint, jwt} = initSDK({
-    'x-resource-id': resource_id as `reso_${string}`,
+    'x-connection-id': connection_id as `conn_${string}`,
   })
 
   // Should we get the orgId and customerId as part of input ideally already?
@@ -177,7 +177,7 @@ export async function syncConnection({
             table,
             res.data.items.map(({raw_data, ...item}) => ({
               // Primary keys
-              source_id: resource_id,
+              source_id: connection_id,
               id: item.id,
               // Other columns
               created_at: sqlNow,
@@ -200,7 +200,7 @@ export async function syncConnection({
           // NOTE: vercel doesn't understand console.warn unfortunately... so this will show up as error
           // https://vercel.com/docs/observability/runtime-logs#level
           console.warn(
-            `[sync progress] ${resource_id} does not implement ${stream}`,
+            `[sync progress] ${connection_id} does not implement ${stream}`,
           )
           return {has_next_page: false, next_cursor: null}
         }
@@ -264,8 +264,8 @@ export async function syncConnection({
         }
       }
     }
-    const reso = await openint
-      .GET('/core/resource/{id}', {params: {path: {id: resource_id}}})
+    const conn = await openint
+      .GET('/core/connection/{id}', {params: {path: {id: connection_id}}})
       .then((r) => r.data)
 
     const org = await openint
@@ -273,7 +273,7 @@ export async function syncConnection({
         headers: {
           authorization: `Bearer ${jwt.signViewer({
             role: 'org',
-            orgId: reso.connector_config.orgId as Id['org'],
+            orgId: conn.connector_config.orgId as Id['org'],
           })}`,
         },
       })
@@ -324,7 +324,7 @@ export async function syncConnection({
   await step.sendEvent('sync.completed', {
     name: 'sync.completed',
     data: {
-      resource_id,
+      connection_id,
       vertical,
       unified_objects,
       sync_mode,
@@ -338,7 +338,7 @@ export async function syncConnection({
     },
   })
   console.log(`[syncConnection] Complete ${status}`, {
-    resource_id,
+    connection_id,
     status,
     event_id: event.id,
     metrics,
@@ -363,17 +363,17 @@ export async function triggerImmediateSync({
 }
 
 export async function sendWebhook({event}: FunctionInput<keyof Events>) {
-  const resourceId =
+  const connectionId =
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    'resource_id' in event.data ? (event.data.resource_id as string) : null
-  if (!resourceId) {
-    console.log('No resource_id in event, passing', event)
+    'connection_id' in event.data ? (event.data.connection_id as string) : null
+  if (!connectionId) {
+    console.log('No connection_id in event, passing', event)
     return false
   }
 
   const {openint, jwt} = initSDK()
-  const reso = await openint
-    .GET('/core/resource/{id}', {params: {path: {id: resourceId}}})
+  const conn = await openint
+    .GET('/core/connection/{id}', {params: {path: {id: connectionId}}})
     .then((r) => r.data)
 
   const org = await openint
@@ -381,7 +381,7 @@ export async function sendWebhook({event}: FunctionInput<keyof Events>) {
       headers: {
         authorization: `Bearer ${jwt.signViewer({
           role: 'org',
-          orgId: reso.connector_config.orgId as Id['org'],
+          orgId: conn.connector_config.orgId as Id['org'],
         })}`,
       },
     })

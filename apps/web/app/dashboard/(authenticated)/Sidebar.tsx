@@ -61,13 +61,13 @@ const sectionedLinks: Array<{
     title: 'Entities',
     items: [
       {
-        title: 'End users',
-        href: '/dashboard/end-users',
+        title: 'Customers',
+        href: '/dashboard/customers',
         icon: 'Users',
       },
       {
         title: 'Connections',
-        href: '/dashboard/resources',
+        href: '/dashboard/connections',
         icon: 'Box',
       },
       {

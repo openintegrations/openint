@@ -1,4 +1,4 @@
-import type {EndUserId, Id, IDS} from '@openint/cdk/id.types'
+import type {CustomerId, Id, IDS} from '@openint/cdk/id.types'
 import type {ZRaw} from '@openint/cdk/models'
 import type {NoInfer, ObjectPartialDeep} from '@openint/util'
 
@@ -10,7 +10,7 @@ export interface MetaTable<
   list(options: {
     ids?: TID[]
     /** Maybe remove this? not applicable everywhere */
-    endUserId?: EndUserId | null
+    customerId?: CustomerId | null
     /** Maybe remove this? not applicable everywhere */
     connectorConfigId?: Id['ccfg'] | null
     /** Maybe remove this? not applicable everywhere */
@@ -26,9 +26,9 @@ export interface MetaTable<
   delete(id: TID): Promise<void>
 }
 
-export interface EndUserResultRow {
-  id: EndUserId
-  resourceCount?: number
+export interface CustomerResultRow {
+  id: CustomerId
+  connectionCount?: number
   firstCreatedAt?: unknown
   lastUpdatedAt?: unknown
 }
@@ -41,11 +41,11 @@ export interface MetaService {
   // and default to dumb listing all rows from table and in memory filter
   // if the corresponding methods are not implemented
   // This is useful for things like memory
-  searchEndUsers: (options: {
+  searchCustomers: (options: {
     keywords?: string | null
     limit?: number
     offset?: number
-  }) => Promise<readonly EndUserResultRow[]>
+  }) => Promise<readonly CustomerResultRow[]>
   searchIntegrations: (options: {
     /** Leave empty to list the top integrations */
     keywords?: string | null
@@ -56,11 +56,11 @@ export interface MetaService {
   }) => Promise<ReadonlyArray<ZRaw['integration']>>
   /** TODO: Implement limit & offset */
   findPipelines: (options: {
-    resourceIds?: Array<Id['reso']>
+    connectionIds?: Array<Id['conn']>
     secondsSinceLastSync?: number
     includeDisabled?: boolean
   }) => Promise<ReadonlyArray<ZRaw['pipeline']>>
-  /** Id is used to check RLS policy right now for end user */
+  /** Id is used to check RLS policy right now for customer */
   listConnectorConfigInfos: (opts?: {
     id?: Id['ccfg'] | null
     connectorName?: string | null
@@ -73,10 +73,10 @@ export interface MetaService {
     }>
   >
   /** Missing default pipeline */
-  findResourcesMissingDefaultPipeline: () => Promise<
-    ReadonlyArray<{id: Id['reso']}>
+  findConnectionsMissingDefaultPipeline: () => Promise<
+    ReadonlyArray<{id: Id['conn']}>
   >
-  isHealthy: (checkDefaultPostgresResources?: boolean) => Promise<{
+  isHealthy: (checkDefaultPostgresConnections?: boolean) => Promise<{
     healthy: boolean
     error?: string
   }>

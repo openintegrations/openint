@@ -34,34 +34,34 @@ export interface paths {
     /** Passthrough */
     post: operations['passthrough']
   }
-  '/core/resource/{id}/source_sync': {
+  '/core/connection/{id}/source_sync': {
     /**
      * Source sync
      * @description Return records that would have otherwise been emitted during a sync and return it instead
      */
     post: operations['sourceSync']
   }
-  '/core/resource': {
-    /** List resources */
-    get: operations['listResources']
-    /** Create resource */
-    post: operations['createResource']
+  '/core/connection': {
+    /** List connections raw */
+    get: operations['listConnectionsRaw']
+    /** Create connection */
+    post: operations['createConnection']
   }
-  '/core/resource/{id}': {
-    /** Get resource */
-    get: operations['getResource']
-    /** Delete resource */
-    delete: operations['deleteResource']
-    /** Update resource */
-    patch: operations['updateResource']
+  '/core/connection/{id}': {
+    /** Get connection */
+    get: operations['getConnection']
+    /** Delete connection */
+    delete: operations['deleteConnection']
+    /** Update connection */
+    patch: operations['updateConnection']
   }
-  '/core/resource/{id}/_check': {
-    /** Check resource */
-    post: operations['checkResource']
+  '/core/connection/{id}/_check': {
+    /** Check connection */
+    post: operations['checkConnection']
   }
-  '/core/resource/{id}/_sync': {
-    /** Sync resource */
-    post: operations['syncResource']
+  '/core/connection/{id}/_sync': {
+    /** Sync connection */
+    post: operations['syncConnection']
   }
   '/core/connector_config': {
     /** Admin list connector configs */
@@ -80,7 +80,7 @@ export interface paths {
   '/core/connector_config_info': {
     /**
      * List connector config infos
-     * @description For end user authentication and list a limited set of non private data
+     * @description For customer authentication and list a limited set of non private data
      */
     get: operations['listConnectorConfigInfos']
   }
@@ -433,9 +433,9 @@ export interface components {
       data: {
         /** @description Must start with 'pipe_' */
         pipeline_id: string
-        /** @description Must start with 'reso_' */
+        /** @description Must start with 'conn_' */
         source_id: string
-        /** @description Must start with 'reso_' */
+        /** @description Must start with 'conn_' */
         destination_id: string
       }
       /** @enum {string} */
@@ -526,15 +526,15 @@ export interface components {
         message: string
       }[]
     }
-    Resource: {
+    Connection: {
       createdAt: string
       updatedAt: string
-      /** @description Must start with 'reso_' */
+      /** @description Must start with 'conn_' */
       id: string
       /** @description Unique name of the connector */
       connectorName: string
       displayName?: string | null
-      endUserId?: string | null
+      customerId?: string | null
       /** @description Must start with 'ccfg_' */
       connectorConfigId: string
       /** @description Must start with 'int_' */
@@ -575,7 +575,7 @@ export interface components {
        * @description When disabled it will not be used for connection portal. Essentially a reversible soft-delete
        */
       disabled?: boolean
-      /** @description Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL */
+      /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
       defaultPipeOut?: {
         streams?: {
           [key: string]: boolean
@@ -585,11 +585,11 @@ export interface components {
         /** @description Defaults to the org-wide postgres */
         destination_id?: string
       } | null
-      /** @description Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL */
+      /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
       defaultPipeIn?: {
         /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
         links?: components['schemas']['Link'][] | null
-        /** @description Must start with 'reso_' */
+        /** @description Must start with 'conn_' */
         source_id: string
       } | null
       envName?: string | null
@@ -656,7 +656,7 @@ export interface components {
       updatedAt: string
       /** @description Must start with 'pipe_' */
       id: string
-      /** @description Must start with 'reso_' */
+      /** @description Must start with 'conn_' */
       sourceId?: string
       sourceState?: {
         [key: string]: unknown
@@ -668,7 +668,7 @@ export interface components {
           fields?: string[]
         }
       } | null
-      /** @description Must start with 'reso_' */
+      /** @description Must start with 'conn_' */
       destinationId?: string
       destinationState?: {
         [key: string]: unknown
@@ -694,8 +694,8 @@ export interface components {
         },
         {
           /** @enum {string} */
-          role: 'end_user'
-          endUserId: string
+          role: 'customer'
+          customerId: string
           /** @description Must start with 'org_' */
           orgId: string
         },
@@ -1335,8 +1335,8 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': {
-          /** @description Anything that uniquely identifies the end user that you will be sending the magic link to */
-          endUserId?: string
+          /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
+          customerId?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
            * @default 2592000
@@ -1373,8 +1373,8 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': {
-          /** @description Anything that uniquely identifies the end user that you will be sending the magic link to */
-          endUserId?: string
+          /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
+          customerId?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
            * @default 2592000
@@ -1504,13 +1504,13 @@ export interface operations {
       }
     }
   }
-  /** List resources */
-  listResources: {
+  /** List connections raw */
+  listConnectionsRaw: {
     parameters: {
       query?: {
         limit?: number
         offset?: number
-        endUserId?: string | null
+        customerId?: string | null
         connectorConfigId?: string | null
         connectorName?: string | null
         forceRefresh?: boolean
@@ -1536,7 +1536,7 @@ export interface operations {
               /** Format: uri */
               logoUrl: string
             } | null
-          } & components['schemas']['Resource'])[]
+          } & components['schemas']['Connection'])[]
         }
       }
       /** @description Invalid input data */
@@ -1559,8 +1559,8 @@ export interface operations {
       }
     }
   }
-  /** Create resource */
-  createResource: {
+  /** Create connection */
+  createConnection: {
     requestBody: {
       content: {
         'application/json': {
@@ -1570,7 +1570,7 @@ export interface operations {
             [key: string]: unknown
           } | null
           displayName?: string | null
-          endUserId?: string | null
+          customerId?: string | null
           disabled?: boolean
           /**
            * @description
@@ -1605,8 +1605,8 @@ export interface operations {
       }
     }
   }
-  /** Get resource */
-  getResource: {
+  /** Get connection */
+  getConnection: {
     parameters: {
       query?: {
         forceRefresh?: boolean
@@ -1643,7 +1643,7 @@ export interface operations {
                 /** Format: uri */
                 logoUrl: string
               } | null
-            } & components['schemas']['Resource'],
+            } & components['schemas']['Connection'],
             'connector_config'
           >
         }
@@ -1668,8 +1668,8 @@ export interface operations {
       }
     }
   }
-  /** Delete resource */
-  deleteResource: {
+  /** Delete connection */
+  deleteConnection: {
     parameters: {
       query?: {
         skipRevoke?: boolean
@@ -1705,8 +1705,8 @@ export interface operations {
       }
     }
   }
-  /** Update resource */
-  updateResource: {
+  /** Update connection */
+  updateConnection: {
     parameters: {
       path: {
         id: string
@@ -1727,7 +1727,7 @@ export interface operations {
            */
           metadata?: unknown
           disabled?: boolean
-          endUserId?: string | null
+          customerId?: string | null
           /** @description Must start with 'int_' */
           integrationId?: string | null
         }
@@ -1737,7 +1737,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Resource']
+          'application/json': components['schemas']['Connection']
         }
       }
       /** @description Invalid input data */
@@ -1760,8 +1760,8 @@ export interface operations {
       }
     }
   }
-  /** Check resource */
-  checkResource: {
+  /** Check connection */
+  checkConnection: {
     parameters: {
       path: {
         id: string
@@ -1799,8 +1799,8 @@ export interface operations {
       }
     }
   }
-  /** Sync resource */
-  syncResource: {
+  /** Sync connection */
+  syncConnection: {
     parameters: {
       path: {
         id: string
@@ -1811,7 +1811,7 @@ export interface operations {
         'application/json': {
           /** @description Run sync in the background, not compatible with other options for now... */
           async?: boolean | null
-          /** @description Only sync resource metadata and skip pipelines */
+          /** @description Only sync connection metadata and skip pipelines */
           metaOnly?: boolean | null
           /** @description Remove `state` of pipeline and trigger a full resync */
           fullResync?: boolean | null
@@ -1884,7 +1884,7 @@ export interface operations {
             [key: string]: unknown
           } | null
           displayName?: string | null
-          /** @description Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL */
+          /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
           defaultPipeOut?: {
             streams?: {
               [key: string]: boolean
@@ -1894,11 +1894,11 @@ export interface operations {
             /** @description Defaults to the org-wide postgres */
             destination_id?: string
           } | null
-          /** @description Automatically sync data from any resources associated with this config to the destination resource, which is typically a Postgres database. Think ETL */
+          /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
           defaultPipeIn?: {
             /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
             links?: components['schemas']['Link'][] | null
-            /** @description Must start with 'reso_' */
+            /** @description Must start with 'conn_' */
             source_id: string
           } | null
           /**
@@ -2053,7 +2053,7 @@ export interface operations {
   }
   /**
    * List connector config infos
-   * @description For end user authentication and list a limited set of non private data
+   * @description For customer authentication and list a limited set of non private data
    */
   listConnectorConfigInfos: {
     parameters: {
@@ -2361,7 +2361,7 @@ export interface operations {
       query?: {
         limit?: number
         offset?: number
-        resourceIds?: string[]
+        connectionIds?: string[]
       }
     }
     responses: {
@@ -2406,7 +2406,7 @@ export interface operations {
            */
           metadata?: unknown
           disabled?: boolean
-          /** @description Must start with 'reso_' */
+          /** @description Must start with 'conn_' */
           sourceId?: string
           streams?: {
             [key: string]: {
@@ -2414,7 +2414,7 @@ export interface operations {
               fields?: string[]
             }
           } | null
-          /** @description Must start with 'reso_' */
+          /** @description Must start with 'conn_' */
           destinationId?: string
         }
       }
@@ -2540,7 +2540,7 @@ export interface operations {
         'application/json': {
           /** @description Run sync in the background, not compatible with other options for now... */
           async?: boolean | null
-          /** @description Only sync resource metadata and skip pipelines */
+          /** @description Only sync connection metadata and skip pipelines */
           metaOnly?: boolean | null
           /** @description Remove `state` of pipeline and trigger a full resync */
           fullResync?: boolean | null
@@ -2647,13 +2647,13 @@ export interface operations {
             publicMetadata: {
               /**
                * PostgreSQL Database URL
-               * @description This is where data from resources are synced to by default
+               * @description This is where data from connections are synced to by default
                * @example postgres://username:password@host:port/database
                */
               database_url?: string
               /**
                * Synced Data Schema
-               * @description Postgres schema to pipe data synced from end user resources into. Defaults to "synced" if missing.
+               * @description Postgres schema to pipe data synced from customer connections into. Defaults to "synced" if missing.
                */
               synced_data_schema?: string
               /**

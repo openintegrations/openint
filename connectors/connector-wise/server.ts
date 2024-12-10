@@ -8,7 +8,7 @@ import {makeWiseClient} from './WiseClient'
 
 export const wiseServer = {
   postConnect: (input) => ({
-    resourceExternalId: input.apiToken ?? '',
+    connectionExternalId: input.apiToken ?? '',
     settings: {
       envName: input.envName ?? '',
       apiToken: input.apiToken,

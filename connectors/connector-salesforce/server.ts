@@ -31,7 +31,7 @@ export const salesforceServer = {
       .then((r) => r.data as {credentials: {access_token: string}})
 
     return {
-      resourceExternalId: extractId(connectOutput.connectionId)[2],
+      connectionExternalId: extractId(connectOutput.connectionId)[2],
       settings: {
         oauth: nangoConnection,
       },

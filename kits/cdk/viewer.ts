@@ -3,17 +3,17 @@ import {TRPCError} from '@trpc/server'
 import * as jwt from 'jsonwebtoken'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util'
 import {R, zFunction} from '@openint/util'
-import type {EndUserId, ExtEndUserId, Id, UserId} from './id.types'
-import {zEndUserId, zId, zUserId} from './id.types'
+import type {CustomerId, ExtCustomerId, Id, UserId} from './id.types'
+import {zCustomerId, zId, zUserId} from './id.types'
 
-export const zRole = z.enum(['anon', 'end_user', 'user', 'org', 'system'])
-export {ExtEndUserId}
+export const zRole = z.enum(['anon', 'customer', 'user', 'org', 'system'])
+export {ExtCustomerId}
 
 export const zViewer = z
   .discriminatedUnion('role', [
     z.object({role: z.literal(zRole.Enum.anon)}),
     // prettier-ignore
-    z.object({role: z.literal(zRole.Enum.end_user), endUserId: zEndUserId, orgId: zId('org')}),
+    z.object({role: z.literal(zRole.Enum.customer), customerId: zCustomerId, orgId: zId('org')}),
     z.object({
       role: z.literal(zRole.Enum.user),
       userId: zUserId,
@@ -54,8 +54,8 @@ export function getViewerId(viewer: Viewer) {
   switch (viewer.role) {
     case 'anon':
       return 'anon'
-    case 'end_user':
-      return `${viewer.orgId}/eusr_${viewer.endUserId}`
+    case 'customer':
+      return `${viewer.orgId}/cus_${viewer.customerId}`
     case 'user':
       // orgId is actually optional, thus userId first
       return R.compact([viewer.userId, viewer.orgId]).join('/')
@@ -67,19 +67,19 @@ export function getViewerId(viewer: Viewer) {
 }
 
 /** Used for external systems */
-export function getExtEndUserId(
-  viewer: Viewer<'end_user' | 'user' | 'org' | 'system'>,
+export function getExtCustomerId(
+  viewer: Viewer<'customer' | 'user' | 'org' | 'system'>,
 ) {
   switch (viewer.role) {
-    case 'end_user':
-      return `eusr_${viewer.endUserId}` as ExtEndUserId
+    case 'customer':
+      return `cus_${viewer.customerId}` as ExtCustomerId
     case 'user':
       // Falling back to userId should not generally happen
-      return (viewer.orgId ?? viewer.userId) as ExtEndUserId
+      return (viewer.orgId ?? viewer.userId) as ExtCustomerId
     case 'org':
-      return viewer.orgId as ExtEndUserId
+      return viewer.orgId as ExtCustomerId
     case 'system':
-      return 'system' as ExtEndUserId
+      return 'system' as ExtCustomerId
   }
 }
 
@@ -132,13 +132,13 @@ export const zViewerFromJwtPayload = zJwtPayload
           userId: payload.sub as UserId,
           orgId: payload.org_id,
         }
-      // good reason to rename end_user to customer
-      case 'end_user': {
-        const [orgId, endUserId] = payload.sub.split('/') as [
+      // good reason to rename customer to customer
+      case 'customer': {
+        const [orgId, customerId] = payload.sub.split('/') as [
           Id['org'],
-          EndUserId,
+          CustomerId,
         ]
-        return {role: payload.role, endUserId, orgId}
+        return {role: payload.role, customerId, orgId}
       }
       case 'org':
         return {role: payload.role, orgId: payload.sub as Id['org']}
@@ -195,10 +195,10 @@ export const makeJwtClient = zFunction(
       const payload = {
         role: 'anon',
         exp: Math.floor(Date.now() / 1000) + validityInSeconds,
-        ...(viewer.role === 'end_user' && {
-          role: 'end_user',
-          sub: `${viewer.orgId}/${viewer.endUserId}`,
-          end_user_id: viewer.endUserId, // Needed for RLS
+        ...(viewer.role === 'customer' && {
+          role: 'customer',
+          sub: `${viewer.orgId}/${viewer.customerId}`,
+          customer_id: viewer.customerId, // Needed for RLS
           org_id: viewer.orgId, // Needed for RLS
         }),
         ...(viewer.role === 'org' && {

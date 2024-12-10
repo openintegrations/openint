@@ -32,7 +32,7 @@ import {_trpcReact} from '../providers/TRPCProvider'
 
 export type ConnectEventType = 'open' | 'close' | 'error' | 'success'
 
-type Resource = RouterOutput['listConnections'][number]
+type Connection = RouterOutput['listConnections'][number]
 
 type Catalog = RouterOutput['listConnectorMetas']
 
@@ -45,7 +45,7 @@ const __DEBUG__ = Boolean(
 export const WithConnectorConnect = ({
   connectorConfig: ccfg,
   integration,
-  resource,
+  connection,
   onEvent,
   children,
 }: {
@@ -53,7 +53,7 @@ export const WithConnectorConnect = ({
   integration?: {
     id: Id['int']
   }
-  resource?: Resource
+  connection?: Connection
   onEvent?: (event: {type: ConnectEventType}) => void
   children: (props: {
     openConnect: () => void
@@ -93,38 +93,40 @@ export const WithConnectorConnect = ({
             connectorConfigId,
             nangoFrontend,
             connectorName: ccfg.connector.name,
-            resourceId: resource?.id,
+            connectionId: connection?.id,
             authOptions: connInput,
           })
         }
       : undefined)
 
-  const resourceExternalId = resource ? extractId(resource.id)[2] : undefined
+  const connectionExternalId = connection
+    ? extractId(connection.id)[2]
+    : undefined
   const integrationExternalId = integration
     ? extractId(integration.id)[2]
     : undefined
 
   // TODO: Handle preConnectInput schema and such... for example for Plaid
   const preConnect = _trpcReact.preConnect.useQuery(
-    [ccfg.id, {resourceExternalId, integrationExternalId}, {}],
+    [ccfg.id, {connectionExternalId, integrationExternalId}, {}],
     // note: this used to be enabled: ccfg.connector.hasPreConnect
     // but we disabled it as it made too many calls for plaid and just left
     // it as a noop to be lazy called by the refetch below
     {enabled: false},
   )
   const postConnect = _trpcReact.postConnect.useMutation()
-  const createResource = _trpcReact.createResource.useMutation()
+  const createConnection = _trpcReact.createConnection.useMutation()
 
   const {toast} = useToast()
 
   const connect = useMutation(
     // not sure if it's the right idea to have create and connect together in
     // one mutation, starting to feel a bit confusing...
-    async (input?: RouterInput['createResource']) => {
+    async (input?: RouterInput['createConnection']) => {
       // For postgres and various connectors that does not require client side JS
 
       if (input) {
-        return createResource.mutateAsync(input)
+        return createConnection.mutateAsync(input)
       }
 
       // For plaid and other connectors that requires client side JS
@@ -218,8 +220,8 @@ export const WithConnectorConnect = ({
           connect.mutate(undefined)
         },
         loading: connect.isLoading,
-        variant: resource?.status === 'disconnected' ? 'default' : 'ghost',
-        label: resource ? 'Reconnect' : 'Connect',
+        variant: connection?.status === 'disconnected' ? 'default' : 'ghost',
+        label: connection ? 'Reconnect' : 'Connect',
       })}
 
       <DialogContent
@@ -270,12 +272,12 @@ export const WithConnectorConnect = ({
             ref={formRef}
             schema={z.object({})}
             jsonSchemaTransform={(schema) =>
-              ccfg.connector.schemas.resourceSettings ?? schema
+              ccfg.connector.schemas.connectionSettings ?? schema
             }
             formData={{}}
             loading={connect.isLoading}
             onSubmit={({formData}) => {
-              console.log('resource form submitted', formData)
+              console.log('connection form submitted', formData)
               connect.mutate({connectorConfigId: ccfg.id, settings: formData})
             }}
             hideSubmitButton

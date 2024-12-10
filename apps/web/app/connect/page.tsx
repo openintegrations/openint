@@ -10,7 +10,7 @@ import {
   makeId,
   NangoConnect,
 } from '@openint/cdk'
-import {zConnectPageParams} from '@openint/engine-backend/router/endUserRouter'
+import {zConnectPageParams} from '@openint/engine-backend/router/customerRouter'
 import {makeUlid} from '@openint/util'
 import {createServerComponentHelpers} from '@/lib-server/server-component-helpers'
 import {SetCookieAndRedirect} from './(oauth)/redirect/SetCookieAndRedirect'
@@ -42,7 +42,7 @@ export default async function ConnectPageContainer({
   const {ssg, viewer} = await createServerComponentHelpers({
     searchParams: {[kAccessToken]: token},
   })
-  if (viewer.role !== 'end_user') {
+  if (viewer.role !== 'customer') {
     return (
       <div>Authenticated user only. Your role is {getViewerId(viewer)}</div>
     )
@@ -80,10 +80,10 @@ export default async function ConnectPageContainer({
     ] as ConnectorDef
 
     if (intDef.metadata?.nangoProvider) {
-      const resourceId = makeId('reso', connectorName, makeUlid())
+      const connectionId = makeId('conn', connectorName, makeUlid())
       const url = await NangoConnect.getOauthConnectUrl({
         public_key: envRequired.NEXT_PUBLIC_NANGO_PUBLIC_KEY,
-        connection_id: resourceId,
+        connection_id: connectionId,
         provider_config_key: connectorConfigId,
         // Consider using hookdeck so we can work with any number of urls
         // redirect_uri: joinPath(getServerUrl(null), '/connect/callback'),
@@ -94,7 +94,7 @@ export default async function ConnectPageContainer({
             {
               key: kConnectSession,
               value: JSON.stringify({
-                resourceId,
+                connectionId,
                 token,
               } satisfies ConnectSession),
               // https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis-03#section-4.1.2.7%7Cthe

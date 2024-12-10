@@ -1,11 +1,11 @@
-import type {ResourceUpdate, ZRaw} from '@openint/cdk'
+import type {ConnectionUpdate, ZRaw} from '@openint/cdk'
 import {
   extractId,
   getRemoteContext,
   makeId,
   sync,
-  zCheckResourceOptions,
-  zEndUserId,
+  zCheckConnectionOptions,
+  zCustomerId,
   zId,
   zPassthroughInput,
   zRaw,
@@ -34,15 +34,15 @@ const zExpandConnector = z.object({
   logoUrl: z.string().url(),
 })
 
-async function performResourceCheck(ctx: any, resoId: string, opts: any) {
+async function performConnectionCheck(ctx: any, connId: string, opts: any) {
   const remoteCtx = await getRemoteContext({
     ...ctx,
-    remoteResourceId: resoId,
+    remoteConnectionId: connId,
   })
-  const {connectorConfig: int, ...reso} =
-    await ctx.asOrgIfNeeded.getResourceExpandedOrFail(resoId)
+  const {connectorConfig: int, ...conn} =
+    await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
 
-  let resoUpdate = await int.connector.checkResource?.({
+  let connUpdate = await int.connector.checkConnection?.({
     settings: remoteCtx.remote.settings,
     config: int.config,
     options: opts ?? {},
@@ -51,51 +51,51 @@ async function performResourceCheck(ctx: any, resoId: string, opts: any) {
       webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
     }
   })
-  if (resoUpdate || opts?.import !== false) {
-    /** Do not update the `endUserId` here... */
-    await ctx.asOrgIfNeeded._syncResourceUpdate(int, {
+  if (connUpdate || opts?.import !== false) {
+    /** Do not update the `customerId` here... */
+    await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       ...(opts?.import && {
-        endUserId: reso.endUserId ?? undefined,
+        customerId: conn.customerId ?? undefined,
       }),
-      ...resoUpdate,
+      ...connUpdate,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
         // ...(opts?.import && remoteCtx.remote.settings),
-        // unconditionally import resource settings
+        // unconditionally import connection settings
         ...remoteCtx.remote.settings,
-        ...resoUpdate?.settings,
+        ...connUpdate?.settings,
       },
-      resourceExternalId:
-        resoUpdate?.resourceExternalId ?? extractId(reso.id)[2],
+      connectionExternalId:
+        connUpdate?.connectionExternalId ?? extractId(conn.id)[2],
     })
-    resoUpdate = await ctx.services.getResourceOrFail(reso.id)
+    connUpdate = await ctx.services.getConnectionOrFail(conn.id)
   }
   if(opts?.expand?.includes('integration')) {
     const possibleIntegrations = await int.connector?.listIntegrations?.({ccfg: int});
-    const integration = possibleIntegrations?.items?.find((i: any) => i.id === extractId(resoUpdate?.integrationId)[2])
-    resoUpdate.integration = {
-      id: resoUpdate?.integrationId,
+    const integration = possibleIntegrations?.items?.find((i: any) => i.id === extractId(connUpdate?.integrationId)[2])
+    connUpdate.integration = {
+      id: connUpdate?.integrationId,
       name: integration?.name?.toLowerCase() || int.connector.name?.toLowerCase(),
       logoUrl: (integration?.logo_url && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + integration?.logo_url) || int.connector.metadata.logoUrl && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + int.connector.metadata.logoUrl,
     }
   }
   if(opts?.expand?.includes('integration.connector')) {
-    resoUpdate.connector = {
+    connUpdate.connector = {
       id: int.id,
       name: int.connector.name?.toLowerCase(),
       logoUrl: int.connector.metadata.logoUrl && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + int.connector.metadata.logoUrl,
     }
   }
-  if (!int.connector.checkResource) {
-    return resoUpdate
+  if (!int.connector.checkConnection) {
+    return connUpdate
   }
-  return resoUpdate
+  return connUpdate
 }
 
-export const resourceRouter = trpc.router({
-  // TODO: maybe we should allow resourceId to be part of the path rather than only in the headers
+export const connectionRouter = trpc.router({
+  // TODO: maybe we should allow connectionId to be part of the path rather than only in the headers
 
-  // Should this really be part of the resource router? or left elsewhere?
+  // Should this really be part of the connection router? or left elsewhere?
   passthrough: remoteProcedure
     .meta({openapi: {method: 'POST', path: '/passthrough', tags: ['Internal']}}) // Where do we put this?
     .input(zPassthroughInput)
@@ -114,7 +114,7 @@ export const resourceRouter = trpc.router({
     .meta({
       openapi: {
         method: 'POST',
-        path: '/core/resource/{id}/source_sync',
+        path: '/core/connection/{id}/source_sync',
         tags: ['Internal'],
         description:
           'Return records that would have otherwise been emitted during a sync and return it instead',
@@ -122,7 +122,7 @@ export const resourceRouter = trpc.router({
     })
     .input(
       z.object({
-        id: zId('reso'),
+        id: zId('conn'),
         // This is an argument for source_sync to be typed per provider
         state: z.record(z.unknown()).optional(),
         streams: z.record(z.boolean()).optional(),
@@ -131,7 +131,7 @@ export const resourceRouter = trpc.router({
     )
     .output(z.array(z.record(z.any())))
     .mutation(async ({input, ctx}) => {
-      const reso = await ctx.services.getResourceExpandedOrFail(input.id)
+      const conn = await ctx.services.getConnectionExpandedOrFail(input.id)
 
       // NOTE: Gotta make sure this is not an infinite sourceSync somehow such as
       // in the case of firestore...
@@ -140,21 +140,21 @@ export const resourceRouter = trpc.router({
         opts: {},
         state: input.state ?? {},
         streams: input.streams ?? {},
-        src: reso,
-        endUser:
-          ctx.viewer.role === 'end_user' ? {id: ctx.viewer.endUserId} : null,
+        src: conn,
+        customer:
+          ctx.viewer.role === 'customer' ? {id: ctx.viewer.customerId} : null,
       })
 
       return rxjs.firstValueFrom(res.pipe(Rx.toArray()))
     }),
-  createResource: protectedProcedure
-    .meta({openapi: {method: 'POST', path: '/core/resource', tags}})
+  createConnection: protectedProcedure
+    .meta({openapi: {method: 'POST', path: '/core/connection', tags}})
     .input(
-      zRaw.resource.pick({
+      zRaw.connection.pick({
         connectorConfigId: true,
         settings: true,
         displayName: true,
-        endUserId: true,
+        customerId: true,
         disabled: true,
         metadata: true,
         integrationId: true,
@@ -171,78 +171,79 @@ export const resourceRouter = trpc.router({
       if (int.orgId !== ctx.viewer.orgId) {
         throw new TRPCError({
           code: 'FORBIDDEN',
-          message: `You are not allowed to create resources for ${int.connectorName}`,
+          message: `You are not allowed to create connections for ${int.connectorName}`,
         })
       }
 
       const _extId = makeUlid()
-      const resoId = makeId('reso', int.connector.name, _extId)
+      const connId = makeId('conn', int.connector.name, _extId)
 
       // Should throw if not working..
-      const resoUpdate = {
+      const connUpdate = {
         triggerDefaultSync: true,
         // TODO: Should no longer depend on external ID
-        resourceExternalId: _extId,
+        connectionExternalId: _extId,
         settings,
-        ...(await int.connector.checkResource?.({
+        ...(await int.connector.checkConnection?.({
           config: int.config,
           settings,
           context: {webhookBaseUrl: ''},
           options: {},
         })),
         // TODO: Fix me up
-        endUserId: ctx.viewer.role === 'end_user' ? ctx.viewer.endUserId : null
-      } satisfies ResourceUpdate
-      await ctx.asOrgIfNeeded._syncResourceUpdate(int, resoUpdate)
+        customerId:
+          ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
+      } satisfies ConnectionUpdate
+      await ctx.asOrgIfNeeded._syncConnectionUpdate(int, connUpdate)
 
       // TODO: Do this in one go not two
       if (input.displayName) {
-        await ctx.services.patchReturning('resource', resoId, input)
+        await ctx.services.patchReturning('connection', connId, input)
       }
-      // TODO: return the entire resource object...
-      return resoId
+      // TODO: return the entire connection object...
+      return connId
     }),
 
   // TODO: Run server-side validation
-  updateResource: protectedProcedure
-    .meta({openapi: {method: 'PATCH', path: '/core/resource/{id}', tags}})
+  updateConnection: protectedProcedure
+    .meta({openapi: {method: 'PATCH', path: '/core/connection/{id}', tags}})
     .input(
-      zRaw.resource.pick({
+      zRaw.connection.pick({
         id: true,
         settings: true,
         displayName: true,
         metadata: true,
         disabled: true,
         // Not sure if we should allow these two?
-        endUserId: true,
+        customerId: true,
         integrationId: true,
       }),
     )
-    .output(zRaw.resource)
+    .output(zRaw.connection)
     .mutation(async ({input: {id, ...input}, ctx}) =>
-      // TODO: Run mapStandardResource after editing
+      // TODO: Run mapStandardConnection after editing
       // Also we probably do not want deeply nested patch
       // shallow is sufficient more most situations
-      ctx.services.patchReturning('resource', id, input),
+      ctx.services.patchReturning('connection', id, input),
     ),
-  deleteResource: protectedProcedure
-    .meta({openapi: {method: 'DELETE', path: '/core/resource/{id}', tags}})
-    .input(z.object({id: zId('reso'), skipRevoke: z.boolean().optional()}))
+  deleteConnection: protectedProcedure
+    .meta({openapi: {method: 'DELETE', path: '/core/connection/{id}', tags}})
+    .input(z.object({id: zId('conn'), skipRevoke: z.boolean().optional()}))
     .output(z.void())
-    .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
-      if (ctx.viewer.role === 'end_user') {
-        await ctx.services.getResourceOrFail(resoId)
+    .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
+      if (ctx.viewer.role === 'customer') {
+        await ctx.services.getConnectionOrFail(connId)
       }
-      const reso = await ctx.asOrgIfNeeded.getResourceExpandedOrFail(resoId)
-      const {settings, connectorConfig: ccfg} = reso
+      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
+      const {settings, connectorConfig: ccfg} = conn
       if (!opts?.skipRevoke) {
-        await ccfg.connector.revokeResource?.(
+        await ccfg.connector.revokeConnection?.(
           settings,
           ccfg.config,
           ccfg.connector.newInstance?.({
             config: ccfg.config,
             settings,
-            fetchLinks: ctx.services.getFetchLinks(reso),
+            fetchLinks: ctx.services.getFetchLinks(conn),
             onSettingsChange: () => {},
           }),
         )
@@ -252,14 +253,14 @@ export const resourceRouter = trpc.router({
       // and we don't easily have the ability to handle a delete, it's not part of the sync protocol yet...
       // We should probably introduce a reset / delete event...
       // }
-      await ctx.asOrgIfNeeded.metaService.tables.resource.delete(reso.id)
+      await ctx.asOrgIfNeeded.metaService.tables.connection.delete(conn.id)
     }),
-  listResources: protectedProcedure
-    .meta({openapi: {method: 'GET', path: '/core/resource', tags}})
+  listConnectionsRaw: protectedProcedure
+    .meta({openapi: {method: 'GET', path: '/core/connection', tags}})
     .input(
       zListParams
         .extend({
-          endUserId: zEndUserId.nullish(),
+          customerId: zCustomerId.nullish(),
           connectorConfigId: zId('ccfg').nullish(),
           connectorName: z.string().nullish(),
           forceRefresh: z.boolean().optional(),
@@ -267,7 +268,7 @@ export const resourceRouter = trpc.router({
         })
         .optional(),
     )
-    .output(z.array(zRaw.resource.extend({
+    .output(z.array(zRaw.connection.extend({
         integration: zExpandIntegration.nullish(),
         connector: zExpandConnector.nullish(),
     })))
@@ -279,55 +280,55 @@ export const resourceRouter = trpc.router({
         throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid expand options' });
       }
 
-      let resources = await ctx.services.metaService.tables.resource.list(input)
+      let connections = await ctx.services.metaService.tables.connection.list(input)
 
-      // Handle forceRefresh for each resource
+      // Handle forceRefresh for each connection
 
-      console.log('[listResources] Refreshing tokens for all resources')
-      const updatedResources = await Promise.all(
-        resources.map(async (reso) => {
+      console.log('[listConnectionsRaw] Refreshing tokens for all connections')
+      const updatedConnections = await Promise.all(
+        connections.map(async (conn) => {
           const expiresAt =
             // @ts-expect-error
-            reso?.settings?.['oauth']?.credentials?.raw?.expires_at
+            conn?.settings?.['oauth']?.credentials?.raw?.expires_at
 
           if (
             expiresAt &&
             (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now()) || input.expand
           ) {
             console.log(
-              `[listResources] Refreshing token for resource ${reso.connectorName}`,
+              `[listConnectionsRaw] Refreshing token for connection ${conn.connectorName}`,
             )
-            const resoCheck = await performResourceCheck(ctx, reso.id, {expand: expandArray})
-            if (!resoCheck) {
+            const connCheck = await performConnectionCheck(ctx, conn.id, {expand: expandArray})
+            if (!connCheck) {
               console.warn(
-                `[listResources] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale resource.`,
+                `[listConnectionsRaw] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
               )
             }
-            return resoCheck || reso
+            return connCheck || conn
           }
-          return reso
+          return conn
         }),
       )
 
-      resources = updatedResources
+      connections = updatedConnections
 
-      return resources as Array<ZRaw['resource']>
+      return connections as Array<ZRaw['connection']>
     }),
-  getResource: protectedProcedure
+  getConnection: protectedProcedure
     .meta({
       description: 'Not automatically called, used for debugging for now',
-      openapi: {method: 'GET', path: '/core/resource/{id}', tags},
+      openapi: {method: 'GET', path: '/core/connection/{id}', tags},
     })
     .input(
       z.object({
-        id: zId('reso'),
+        id: zId('conn'),
         forceRefresh: z.boolean().optional(),
         expand: z.string().optional().openapi({description: 'Comma-separated list of expand options: integration and/or integration.connector'}),
       }),
     )
     .output(
       // TODO: Should we expand this?
-      zRaw.resource.extend({
+      zRaw.connection.extend({
         connector_config: zRaw.connector_config.pick({
           id: true,
           orgId: true,
@@ -346,107 +347,109 @@ export const resourceRouter = trpc.router({
       }
 
       // do not expand for now otherwise permission issues..
-      let reso = await ctx.services.getResourceOrFail(input.id)
+      let conn = await ctx.services.getConnectionOrFail(input.id)
       const ccfg = await ctx.services.getConnectorConfigOrFail(
-        reso.connectorConfigId,
+        conn.connectorConfigId,
       )
 
       // Handle forceRefresh
       // @ts-expect-error
-      const expiresAt = reso?.settings?.['oauth']?.credentials?.raw?.expires_at
+      const expiresAt = conn?.settings?.['oauth']?.credentials?.raw?.expires_at
 
       if (
         expiresAt &&
         (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now()) || input.expand
       ) {
-        console.log('[getResource] Refreshing token')
-        const resoCheck = await performResourceCheck(ctx, reso.id, {expand: expandArray})
-        if (!resoCheck) {
+        console.log('[getConnection] Refreshing token')
+        const connCheck = await performConnectionCheck(ctx, conn.id, {expand: expandArray})
+        if (!connCheck) {
           console.warn(
-            `[getResource] resourceCheck not implemented for ${reso.connectorName} which requires a refresh. Returning the stale resource.`,
+            `[getConnection] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
           )
         }
-        reso = resoCheck || reso
+        conn = connCheck || conn
       }
 
       return {
-        ...reso,
+        ...conn,
         connector_config: R.pick(ccfg, ['id', 'orgId', 'connectorName']),
       }
     }),
-  checkResource: protectedProcedure
+  checkConnection: protectedProcedure
     .meta({
       description: 'Not automatically called, used for debugging for now',
-      openapi: {method: 'POST', path: '/core/resource/{id}/_check', tags},
+      openapi: {method: 'POST', path: '/core/connection/{id}/_check', tags},
     })
-    .input(z.object({id: zId('reso')}).merge(zCheckResourceOptions))
+    .input(z.object({id: zId('conn')}).merge(zCheckConnectionOptions))
     .output(z.unknown())
-    .mutation(async ({input: {id: resoId, ...opts}, ctx}) => {
-      if (ctx.viewer.role === 'end_user') {
-        await ctx.services.getResourceOrFail(resoId)
+    .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
+      if (ctx.viewer.role === 'customer') {
+        await ctx.services.getConnectionOrFail(connId)
       }
-      const resourceCheck = await performResourceCheck(ctx, resoId, opts)
-      if (!resourceCheck) {
-        return `Resource check not implemented for ${resoId}`
+      const connectionCheck = await performConnectionCheck(ctx, connId, opts)
+      if (!connectionCheck) {
+        return `Connection check not implemented for ${connId}`
       }
-      return resourceCheck
+      return connectionCheck
     }),
 
   // MARK: - Sync
 
-  syncResource: protectedProcedure
-    .meta({openapi: {method: 'POST', path: '/core/resource/{id}/_sync', tags}})
-    .input(z.object({id: zId('reso')}).merge(zSyncOptions))
+  syncConnection: protectedProcedure
+    .meta({
+      openapi: {method: 'POST', path: '/core/connection/{id}/_sync', tags},
+    })
+    .input(z.object({id: zId('conn')}).merge(zSyncOptions))
     .output(z.void())
-    .mutation(async function syncResource({input: {id: resoId, ...opts}, ctx}) {
-      if (ctx.viewer.role === 'end_user') {
-        await ctx.services.getResourceOrFail(resoId)
+    .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
+      if (ctx.viewer.role === 'customer') {
+        await ctx.services.getConnectionOrFail(connId)
       }
       if (opts?.async) {
         await inngest.send({
-          name: 'sync/resource-requested',
-          data: {resourceId: resoId},
+          name: 'sync/connection-requested',
+          data: {connectionId: connId},
         })
         return
       }
-      const reso = await ctx.asOrgIfNeeded.getResourceExpandedOrFail(resoId)
-      // No need to checkResource here as sourceSync should take care of it
+      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
+      // No need to checkConnection here as sourceSync should take care of it
 
       if (opts?.metaOnly) {
         await sync({
           source:
-            reso.connectorConfig.connector.sourceSync?.({
+            conn.connectorConfig.connector.sourceSync?.({
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              instance: reso.connectorConfig.connector.newInstance?.({
-                config: reso.connectorConfig.config,
-                settings: reso.settings,
-                fetchLinks: ctx.services.getFetchLinks(reso),
+              instance: conn.connectorConfig.connector.newInstance?.({
+                config: conn.connectorConfig.config,
+                settings: conn.settings,
+                fetchLinks: ctx.services.getFetchLinks(conn),
                 onSettingsChange: () => {},
               }),
-              config: reso.connectorConfig.config,
-              settings: reso.settings,
-              endUser: reso.endUserId && {id: reso.endUserId},
+              config: conn.connectorConfig.config,
+              settings: conn.settings,
+              customer: conn.customerId && {id: conn.customerId},
               state: {},
               streams: {},
             }) ?? rxjs.EMPTY,
           destination: ctx.asOrgIfNeeded.metaLinks.postSource({
-            src: reso,
+            src: conn,
           }),
         })
         return
       }
 
-      // TODO: Figure how to handle situations where resource does not exist yet
+      // TODO: Figure how to handle situations where connection does not exist yet
       // but pipeline is already being persisted properly. This current solution
-      // is vulnerable to race condition and feels brittle. Though syncResource is only
+      // is vulnerable to race condition and feels brittle. Though syncConnection is only
       // called from the UI so we are fine for now.
-      await ctx.asOrgIfNeeded._syncResourceUpdate(reso.connectorConfig, {
-        endUserId: reso.endUserId,
-        settings: reso.settings,
-        resourceExternalId: extractId(reso.id)[2],
-        integration: reso.integration && {
-          externalId: extractId(reso.integration.id)[2],
-          data: reso.integration.external ?? {},
+      await ctx.asOrgIfNeeded._syncConnectionUpdate(conn.connectorConfig, {
+        customerId: conn.customerId,
+        settings: conn.settings,
+        connectionExternalId: extractId(conn.id)[2],
+        integration: conn.integration && {
+          externalId: extractId(conn.integration.id)[2],
+          data: conn.integration.external ?? {},
         },
         triggerDefaultSync: true,
       })
