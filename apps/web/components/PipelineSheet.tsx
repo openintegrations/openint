@@ -13,7 +13,7 @@ export const PipelineSheet = React.forwardRef(function PipelineSheet(
   props: {pipeline?: ZClient['pipeline']; triggerButton?: boolean},
   ref: SchemaSheetRef,
 ) {
-  const connectionsRes = _trpcReact.listConnectionsRaw.useQuery()
+  const connectionsRes = _trpcReact.listConnections.useQuery()
 
   const zConnId = z.union(
     (connectionsRes.data ?? []).map((r) =>

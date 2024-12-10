@@ -4,7 +4,7 @@ import type {z} from '@openint/util'
 import {zRecord} from '@openint/util'
 
 type Pipeline = RouterOutput['listPipelines'][number]
-type Connection = RouterOutput['listConnectionsRaw'][number]
+type Connection = RouterOutput['listConnections'][number]
 type ConnectorConfig = RouterOutput['adminListConnectorConfigs'][number]
 type ConnectorMeta = RouterOutput['listConnectorMetas'][string]
 

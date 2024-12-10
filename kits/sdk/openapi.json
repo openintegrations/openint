@@ -245,7 +245,7 @@
         }
       },
       "get": {
-        "operationId": "listConnectionsRaw",
+        "operationId": "listConnection",
         "summary": "List connections",
         "tags": ["Core"],
         "parameters": [
