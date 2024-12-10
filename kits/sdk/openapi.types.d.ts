@@ -80,7 +80,7 @@ export interface paths {
   '/core/connector_config_info': {
     /**
      * List connector config infos
-     * @description For end user authentication and list a limited set of non private data
+     * @description For customer authentication and list a limited set of non private data
      */
     get: operations['listConnectorConfigInfos']
   }
@@ -1335,7 +1335,7 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': {
-          /** @description Anything that uniquely identifies the end user that you will be sending the magic link to */
+          /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
           customerId?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
@@ -1373,7 +1373,7 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': {
-          /** @description Anything that uniquely identifies the end user that you will be sending the magic link to */
+          /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
           customerId?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
@@ -2022,7 +2022,7 @@ export interface operations {
   }
   /**
    * List connector config infos
-   * @description For end user authentication and list a limited set of non private data
+   * @description For customer authentication and list a limited set of non private data
    */
   listConnectorConfigInfos: {
     parameters: {
@@ -2622,7 +2622,7 @@ export interface operations {
               database_url?: string
               /**
                * Synced Data Schema
-               * @description Postgres schema to pipe data synced from end user connections into. Defaults to "synced" if missing.
+               * @description Postgres schema to pipe data synced from customer connections into. Defaults to "synced" if missing.
                */
               synced_data_schema?: string
               /**

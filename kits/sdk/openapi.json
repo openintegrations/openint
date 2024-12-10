@@ -25,7 +25,7 @@
                   "customerId": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "Anything that uniquely identifies the end user that you will be sending the magic link to"
+                    "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
                   },
                   "validityInSeconds": {
                     "type": "number",
@@ -92,7 +92,7 @@
                   "customerId": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "Anything that uniquely identifies the end user that you will be sending the magic link to"
+                    "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
                   },
                   "validityInSeconds": {
                     "type": "number",
@@ -1089,7 +1089,7 @@
       "get": {
         "operationId": "listConnectorConfigInfos",
         "summary": "List connector config infos",
-        "description": "For end user authentication and list a limited set of non private data",
+        "description": "For customer authentication and list a limited set of non private data",
         "tags": ["Core"],
         "parameters": [
           {
