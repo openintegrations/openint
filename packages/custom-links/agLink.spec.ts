@@ -174,8 +174,8 @@ test('destinationSync', async () => {
   expect(connections[0]).toMatchObject({
     id: 'conn_123',
     clientId: 'cm3roaf0007',
-    provider: 'openint',
-    label: 'OpenInt',
+    provider: 'greenhouse',
+    label: 'greenhouse',
     profile: 'Ats',
     source: 'OpenInt',
   })

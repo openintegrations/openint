@@ -1514,13 +1514,29 @@ export interface operations {
         connectorConfigId?: string | null
         connectorName?: string | null
         forceRefresh?: boolean
+        expand?: string
       }
     }
     responses: {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Connection'][]
+          'application/json': ({
+            integration?: {
+              /** @description Must start with 'int_' */
+              id: string
+              name: string
+              /** Format: uri */
+              logoUrl: string
+            } | null
+            connector?: {
+              /** @description Must start with 'ccfg_' */
+              id: string
+              name: string
+              /** Format: uri */
+              logoUrl: string
+            } | null
+          } & components['schemas']['Connection'])[]
         }
       }
       /** @description Invalid input data */
@@ -1594,6 +1610,7 @@ export interface operations {
     parameters: {
       query?: {
         forceRefresh?: boolean
+        expand?: string
       }
       path: {
         id: string
@@ -1612,6 +1629,20 @@ export interface operations {
                 orgId: string
                 connectorName: string
               }
+              integration?: {
+                /** @description Must start with 'int_' */
+                id: string
+                name: string
+                /** Format: uri */
+                logoUrl: string
+              } | null
+              connector?: {
+                /** @description Must start with 'ccfg_' */
+                id: string
+                name: string
+                /** Format: uri */
+                logoUrl: string
+              } | null
             } & components['schemas']['Connection'],
             'connector_config'
           >

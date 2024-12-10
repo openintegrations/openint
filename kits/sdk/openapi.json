@@ -292,6 +292,13 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -302,7 +309,48 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Connection"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Connection"
+                      }
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "integration": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Must start with 'int_'"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "logoUrl": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "required": ["id", "name", "logoUrl"]
+                      },
+                      "connector": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Must start with 'ccfg_'"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "logoUrl": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "required": ["id", "name", "logoUrl"]
+                      }
+                    }
                   }
                 }
               }
@@ -516,6 +564,13 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -547,6 +602,40 @@
                         }
                       },
                       "required": ["id", "orgId", "connectorName"]
+                    },
+                    "integration": {
+                      "type": ["object", "null"],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Must start with 'int_'"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "logoUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      },
+                      "required": ["id", "name", "logoUrl"]
+                    },
+                    "connector": {
+                      "type": ["object", "null"],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Must start with 'ccfg_'"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "logoUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      },
+                      "required": ["id", "name", "logoUrl"]
                     }
                   },
                   "required": ["connector_config"]

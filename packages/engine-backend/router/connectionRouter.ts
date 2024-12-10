@@ -22,6 +22,18 @@ export {type inferProcedureInput} from '@openint/trpc'
 
 const tags = ['Core']
 
+const zExpandIntegration = z.object({
+  id: zId('int'),
+  name: z.string(),
+  logoUrl: z.string().url(),
+})
+
+const zExpandConnector = z.object({
+  id: zId('ccfg'),
+  name: z.string(),
+  logoUrl: z.string().url(),
+})
+
 async function performConnectionCheck(ctx: any, connId: string, opts: any) {
   const remoteCtx = await getRemoteContext({
     ...ctx,
@@ -37,7 +49,7 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
     instance: remoteCtx.remote.instance,
     context: {
       webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
-    },
+    }
   })
   if (connUpdate || opts?.import !== false) {
     /** Do not update the `customerId` here... */
@@ -57,6 +69,22 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
         connUpdate?.connectionExternalId ?? extractId(conn.id)[2],
     })
     connUpdate = await ctx.services.getConnectionOrFail(conn.id)
+  }
+  if(opts?.expand?.includes('integration')) {
+    const possibleIntegrations = await int.connector?.listIntegrations?.({ccfg: int});
+    const integration = possibleIntegrations?.items?.find((i: any) => i.id === extractId(connUpdate?.integrationId)[2])
+    connUpdate.integration = {
+      id: connUpdate?.integrationId,
+      name: integration?.name?.toLowerCase() || int.connector.name?.toLowerCase(),
+      logoUrl: (integration?.logo_url && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + integration?.logo_url) || int.connector.metadata.logoUrl && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + int.connector.metadata.logoUrl,
+    }
+  }
+  if(opts?.expand?.includes('integration.connector')) {
+    connUpdate.connector = {
+      id: int.id,
+      name: int.connector.name?.toLowerCase(),
+      logoUrl: int.connector.metadata.logoUrl && (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') + int.connector.metadata.logoUrl,
+    }
   }
   if (!int.connector.checkConnection) {
     return connUpdate
@@ -236,13 +264,23 @@ export const connectionRouter = trpc.router({
           connectorConfigId: zId('ccfg').nullish(),
           connectorName: z.string().nullish(),
           forceRefresh: z.boolean().optional(),
+          expand: z.string().optional().openapi({description: 'Comma-separated list of expand options: integration and/or integration.connector'}),
         })
         .optional(),
     )
-    .output(z.array(zRaw.connection))
+    .output(z.array(zRaw.connection.extend({
+        integration: zExpandIntegration.nullish(),
+        connector: zExpandConnector.nullish(),
+    })))
     .query(async ({input = {}, ctx}) => {
-      let connections =
-        await ctx.services.metaService.tables.connection.list(input)
+      const expandArray = input.expand?.split(',').map(item => item.trim()) || [];
+      const validExpandOptions = ['integration', 'integration.connector'];
+
+      if (!expandArray.every(item => validExpandOptions.includes(item))) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid expand options' });
+      }
+
+      let connections = await ctx.services.metaService.tables.connection.list(input)
 
       // Handle forceRefresh for each connection
 
@@ -255,12 +293,12 @@ export const connectionRouter = trpc.router({
 
           if (
             expiresAt &&
-            (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now())
+            (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now()) || input.expand
           ) {
             console.log(
               `[listConnectionsRaw] Refreshing token for connection ${conn.connectorName}`,
             )
-            const connCheck = await performConnectionCheck(ctx, conn.id, {})
+            const connCheck = await performConnectionCheck(ctx, conn.id, {expand: expandArray})
             if (!connCheck) {
               console.warn(
                 `[listConnectionsRaw] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
@@ -285,6 +323,7 @@ export const connectionRouter = trpc.router({
       z.object({
         id: zId('conn'),
         forceRefresh: z.boolean().optional(),
+        expand: z.string().optional().openapi({description: 'Comma-separated list of expand options: integration and/or integration.connector'}),
       }),
     )
     .output(
@@ -295,9 +334,18 @@ export const connectionRouter = trpc.router({
           orgId: true,
           connectorName: true,
         }),
+        integration: zExpandIntegration.nullish(),
+        connector: zExpandConnector.nullish(),
       }),
     )
     .query(async ({input, ctx}) => {
+      const expandArray = input.expand?.split(',').map(item => item.trim()) || [];
+      const validExpandOptions = ['integration', 'integration.connector'];
+
+      if (!expandArray.every(item => validExpandOptions.includes(item))) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid expand options' });
+      }
+
       // do not expand for now otherwise permission issues..
       let conn = await ctx.services.getConnectionOrFail(input.id)
       const ccfg = await ctx.services.getConnectorConfigOrFail(
@@ -310,10 +358,10 @@ export const connectionRouter = trpc.router({
 
       if (
         expiresAt &&
-        (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now())
+        (input.forceRefresh || new Date(expiresAt).getTime() <= Date.now()) || input.expand
       ) {
         console.log('[getConnection] Refreshing token')
-        const connCheck = await performConnectionCheck(ctx, conn.id, {})
+        const connCheck = await performConnectionCheck(ctx, conn.id, {expand: expandArray})
         if (!connCheck) {
           console.warn(
             `[getConnection] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
