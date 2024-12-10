@@ -42,7 +42,7 @@ export interface paths {
     post: operations['sourceSync']
   }
   '/core/connection': {
-    /** List connections raw */
+    /** List connections */
     get: operations['listConnectionsRaw']
     /** Create connection */
     post: operations['createConnection']
@@ -1504,7 +1504,7 @@ export interface operations {
       }
     }
   }
-  /** List connections raw */
+  /** List connections */
   listConnectionsRaw: {
     parameters: {
       query?: {

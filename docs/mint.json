@@ -64,7 +64,7 @@
         {
           "group": "Core",
           "pages": [
-            "unified-apis/core/list-connections-raw",
+            "unified-apis/core/list-connections",
             "unified-apis/core/create-connection",
             "unified-apis/core/get-connection",
             "unified-apis/core/delete-connection",
