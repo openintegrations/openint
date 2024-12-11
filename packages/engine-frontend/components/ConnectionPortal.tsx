@@ -113,6 +113,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           listConnectionsRes.isFetching ||
           listConnectionsRes.isRefetching
 
+          
         const enabledIntegrationIds: string[] =
           listConnectionsRes.data
             ?.filter((c): c is typeof c & {integration: {id: string}} =>
