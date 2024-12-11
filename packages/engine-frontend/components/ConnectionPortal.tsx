@@ -1,7 +1,9 @@
 'use client'
 
 import {Loader} from 'lucide-react'
+import {useTheme} from 'next-themes'
 import {usePathname, useRouter, useSearchParams} from 'next/navigation'
+import {useEffect} from 'react'
 import type {Id} from '@openint/cdk'
 import type {UIPropsNoChildren} from '@openint/ui'
 import {useToast} from '@openint/ui'
@@ -27,6 +29,10 @@ export interface ConnectionPortalProps extends UIPropsNoChildren {
   onEvent?: (event: {type: ConnectEventType; ccfgId: Id['ccfg']}) => void
 }
 
+// Helper to validate theme value
+const isValidTheme = (theme: string | null): theme is 'light' | 'dark' =>
+  theme === 'light' || theme === 'dark'
+
 // TODO: Wrap this in memo so it does not re-render as much as possible.
 // Also it would be nice if there was an easy way to automatically prefetch on the server side
 // based on calls to useQuery so it doesn't need to be separately handled again on the client...
@@ -34,10 +40,29 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
+  const {theme, setTheme} = useTheme()
 
   const {toast} = useToast()
   const ctx = _trpcReact.useContext()
   const listConnectionsRes = _trpcReact.listConnections.useQuery({})
+
+  useEffect(() => {
+    const themeParam = searchParams.get('theme')
+
+    if (themeParam && isValidTheme(themeParam)) {
+      if (themeParam !== theme) {
+        setTheme(themeParam)
+      }
+    } else {
+      const params = new URLSearchParams(searchParams)
+      if (theme) {
+        params.set('theme', theme)
+        router.replace(`${pathname}?${params.toString()}`, {
+          scroll: false,
+        })
+      }
+    }
+  }, [searchParams, setTheme, theme, pathname, router])
 
   const deleteConnection = _trpcReact.deleteConnection.useMutation({
     onSuccess: () => {
@@ -134,6 +159,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           <div
             className={cn(
               'flex size-full flex-col gap-4 overflow-hidden bg-background',
+              theme === 'dark' ? 'dark' : '',
               className,
             )}>
             <Tabs

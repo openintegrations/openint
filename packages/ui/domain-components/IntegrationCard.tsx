@@ -24,7 +24,7 @@ export function IntegrationCard({
       <Tooltip>
         <TooltipTrigger className="flex h-full flex-col items-center justify-center">
           <Card
-            className="hover:bg-button-light relative h-[150px] w-[150px] cursor-pointer rounded-lg border border-gray-300 bg-white p-0 transition-colors duration-300 ease-in-out hover:border-button"
+            className="border-card-border relative h-[150px] w-[150px] cursor-pointer rounded-lg border bg-card p-0 transition-colors duration-300 ease-in-out hover:border-button hover:bg-button-light"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
             <CardContent
