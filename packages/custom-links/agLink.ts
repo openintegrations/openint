@@ -83,7 +83,7 @@ export function agLink(ctx: {
                 (op.data.entity.raw as any)?.['id'] ??
                 '',
             },
-            upsert: {key_columns: ['id']},
+            upsert: {key_columns: ['id', 'connectionId']},
           } satisfies RecordMessageBody,
         },
         isUnifiedEntity(op.data, 'job') && {
@@ -99,7 +99,7 @@ export function agLink(ctx: {
               raw: op.data.entity?.raw,
               unified: op.data.entity?.unified,
             },
-            upsert: {key_columns: ['id']},
+            upsert: {key_columns: ['id', 'connectionId']},
           } satisfies RecordMessageBody,
         },
         isUnifiedEntity(op.data, 'offer') && {
@@ -117,7 +117,7 @@ export function agLink(ctx: {
               // there is no candidate name in offer
               candidate_name: '',
             },
-            upsert: {key_columns: ['id']},
+            upsert: {key_columns: ['id', 'connectionId']},
           } satisfies RecordMessageBody,
         },
         isUnifiedEntity(op.data, 'opening') && {
@@ -135,7 +135,7 @@ export function agLink(ctx: {
                 op.data.entity?.unified?.id || raw?.['opening_id'] || '',
               job_id: raw?.['job_id'] || '',
             },
-            upsert: {key_columns: ['id']},
+            upsert: {key_columns: ['id', 'connectionId']},
           } satisfies RecordMessageBody,
         },
       ]),
