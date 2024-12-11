@@ -120,7 +120,7 @@ export function IntegrationSearch({
             </div>
             <Input
               placeholder="Search or pick a connector for your setup"
-              className="truncate pl-8"
+              className="truncate pl-8 text-foreground"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
@@ -159,7 +159,7 @@ export function IntegrationSearch({
               Object.entries(intsByCategory ?? {}).map(
                 ([category, categoryInts]) => (
                   <div key={category}>
-                    <h3 className="mb-2 text-lg font-semibold">
+                    <h3 className="mb-2 text-lg font-semibold text-foreground">
                       {parseCategory(category)}
                     </h3>
                     <div className="hidden w-full flex-row flex-wrap gap-4 lg:flex lg:w-[60%]">
