@@ -76,7 +76,7 @@ async function setupAgFixtures() {
         "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "IntegrationATSCandidate_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "public"."Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "IntegrationATSCandidate_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-        PRIMARY KEY ("id")
+        PRIMARY KEY ("id", "connectionId")
     );
     CREATE TABLE "public"."IntegrationATSJob" (
         "id" text NOT NULL,
@@ -90,7 +90,7 @@ async function setupAgFixtures() {
         "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "IntegrationATSJob_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "IntegrationATSJob_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "public"."Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-        PRIMARY KEY ("id")
+        PRIMARY KEY ("id", "connectionId")
     );
     CREATE TABLE "public"."IntegrationATSOffer" (
         "id" text NOT NULL,
@@ -105,7 +105,7 @@ async function setupAgFixtures() {
         "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "IntegrationATSOffer_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "IntegrationATSOffer_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "public"."Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-        PRIMARY KEY ("id")
+        PRIMARY KEY ("id", "connectionId")
     );
     CREATE TABLE "public"."IntegrationATSOpening" (
         "id" text NOT NULL,
@@ -120,7 +120,7 @@ async function setupAgFixtures() {
         "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "IntegrationATSOpening_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "public"."Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "IntegrationATSOpening_connectionId_fkey" FOREIGN KEY ("connectionId") REFERENCES "public"."IntegrationConnection"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-        PRIMARY KEY ("id")
+        PRIMARY KEY ("id", "connectionId")
     );
   `)
   await db.execute(sql`
