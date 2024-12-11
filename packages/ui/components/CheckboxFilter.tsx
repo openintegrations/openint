@@ -28,7 +28,7 @@ export function CheckboxFilter({
           <span className="ml-2">Category</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-48 bg-white">
+      <PopoverContent className="w-48">
         <div className="flex flex-col gap-2">
           {options.map((option) => (
             <div
@@ -38,7 +38,7 @@ export function CheckboxFilter({
                 id={option}
                 checked={checkedState[option]}
                 onCheckedChange={() => onCheckboxChange(option)}
-                className={`rounded-sm border border-gray-300 transition-colors duration-200 ${
+                className={`border-card-border rounded-sm transition-colors duration-200 ${
                   checkedState[option]
                     ? 'border-transparent bg-button'
                     : 'hover:bg-gray-100'

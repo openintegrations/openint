@@ -15,8 +15,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../shadcn/Tooltip'
-import {ConnectorLogo} from './ConnectorCard'
 import {IntegrationLogo} from './ConnectionRawCard'
+import {ConnectorLogo} from './ConnectorCard'
 
 export function ConnectionCard({
   onDelete,
@@ -40,12 +40,12 @@ export function ConnectionCard({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger className="flex size-full w-[150px] flex-col gap-1">
-          <Card className="relative h-[150px] w-[150px] cursor-pointer rounded-lg border border-gray-300 bg-white p-0">
+          <Card className="border-card-border relative h-[150px] w-[150px] cursor-pointer rounded-lg border bg-card p-0">
             <CardContent className="flex h-full flex-col items-center justify-center p-4 py-2">
               <div className="relative flex size-full flex-col items-center justify-center gap-1">
                 <DropdownMenu>
                   <DropdownMenuTrigger className="absolute right-0 top-0">
-                    <Ellipsis className="size-5 text-[#00000040]" />
+                    <Ellipsis className="size-5 text-foreground" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="flex w-[80px] items-center justify-center">
                     <DropdownMenuItem

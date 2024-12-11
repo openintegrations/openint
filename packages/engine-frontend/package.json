@@ -12,7 +12,8 @@
     "@tanstack/react-query": "*",
     "@trpc/client": "10.40.0",
     "@trpc/react-query": "10.40.0",
-    "@trpc/server": "10.40.0"
+    "@trpc/server": "10.40.0",
+    "next-themes": "0.3.0"
   },
   "devDependencies": {
     "@openint/engine-backend": "workspace:*",
