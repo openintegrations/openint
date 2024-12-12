@@ -27,6 +27,7 @@
     "@openint/engine-frontend": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/util": "workspace:*",
+    "@opennextjs/cloudflare": "https://pkg.pr.new/@opennextjs/cloudflare@main",
     "@opensdks/fetch-links": "^0.0.19",
     "@sentry/nextjs": "^8.33.1",
     "@stoplight/elements": "7.7.10",
@@ -59,7 +60,6 @@
     "trpc-panel": "1.3.4"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^0.2.1",
     "@sentry/cli": "^2.36.6",
     "@types/http-proxy": "1.17.10",
     "@types/react": "18.0.27",
