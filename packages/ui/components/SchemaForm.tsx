@@ -12,7 +12,7 @@ const theme: ThemeProps = {
   widgets: {},
   templates: {
     ButtonTemplates: {
-      SubmitButton: (props) => {
+      SubmitButton: (props: any) => {
         return (
           <Button
             type="submit"
