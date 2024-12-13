@@ -39,7 +39,6 @@ export default function ConnectorConfigsPage({
 }: {
   showCTAs?: boolean
 }) {
-  const [open, setOpen] = useState(false)
   const [openCalendar, setOpenCalendar] = useState(false)
   const [calProps, setCalProps] = useState<
     | {
@@ -49,10 +48,13 @@ export default function ConnectorConfigsPage({
       }
     | undefined
   >(undefined)
-  const [connectorName, setConnectorName] = useState<string>('')
-  const [connectorConfig, setConnectorConfig] = useState<
-    Omit<ConnectorConfig, 'connectorName'> | undefined
-  >(undefined)
+  const [sheetState, setSheetState] = useState<{
+    open: boolean
+    connectorName?: string
+    connectorConfig?: Omit<ConnectorConfig, 'connectorName'>
+  }>({
+    open: false,
+  })
   const {user} = useUser()
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
 
@@ -79,6 +81,17 @@ export default function ConnectorConfigsPage({
     setCalProps(undefined)
   }
 
+  const handleOpenSheet = (
+    name: string,
+    config?: Omit<ConnectorConfig, 'connectorName'>,
+  ) => {
+    setSheetState({
+      open: true,
+      connectorName: name,
+      connectorConfig: config,
+    })
+  }
+
   return (
     <div className="max-w-[60%] p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
@@ -89,9 +102,7 @@ export default function ConnectorConfigsPage({
           query={connectorConfigsRes}
           filter={filter}
           onRowClick={(row) => {
-            setConnectorName(row.connectorName)
-            setConnectorConfig(row)
-            setOpen(true)
+            handleOpenSheet(row.connectorName, row)
           }}
           columns={[
             {
@@ -156,9 +167,7 @@ export default function ConnectorConfigsPage({
                     variant="secondary"
                     className="size-sm flex items-center gap-2"
                     onClick={() => {
-                      setConnectorName(row.original.connectorName)
-                      setConnectorConfig(row.original)
-                      setOpen(true)
+                      handleOpenSheet(row.original.connectorName, row.original)
                     }}>
                     <Pencil className="h-5 w-5 text-black" />
                     <span className="text-black">Edit</span>
@@ -233,9 +242,7 @@ export default function ConnectorConfigsPage({
                             'flex size-full cursor-pointer flex-col items-center justify-center gap-2 text-button',
                           )}
                           onClick={() => {
-                            setConnectorName(connector.name)
-                            setConnectorConfig(undefined)
-                            setOpen(true)
+                            handleOpenSheet(connector.name, undefined)
                           }}>
                           <Plus />
                           <p className="text-sm font-semibold">Add</p>
@@ -267,13 +274,15 @@ export default function ConnectorConfigsPage({
           </div>
         )
       })}
-      <ConnectorConfigSheet
-        connectorName={connectorName}
-        connectorConfig={connectorConfig}
-        open={open}
-        setOpen={setOpen}
-        refetch={connectorConfigsRes.refetch}
-      />
+      {sheetState.open && sheetState.connectorName && (
+        <ConnectorConfigSheet
+          connectorName={sheetState.connectorName}
+          connectorConfig={sheetState.connectorConfig}
+          open={sheetState.open}
+          setOpen={(open) => setSheetState((prev) => ({...prev, open}))}
+          refetch={connectorConfigsRes.refetch}
+        />
+      )}
       <CalendarBooking
         description={calProps?.description ?? DEFAULT_DESCRIPTION}
         header={calProps?.header ?? DEFAULT_HEADER}
