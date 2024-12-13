@@ -2,7 +2,7 @@
 
 import {DataTable} from '@openint/ui'
 import {trpcReact} from '@/lib-client/trpcReact'
-import {VCommandButton, VCommandMenu} from '@/vcommands/vcommand-components'
+import {VCommandMenu} from '@/vcommands/vcommand-components'
 
 export default function PipelinesPage() {
   const res = trpcReact.listPipelines.useQuery()
@@ -15,7 +15,8 @@ export default function PipelinesPage() {
         <h2 className="mb-4 mr-auto text-2xl font-semibold tracking-tight">
           Pipelines
         </h2>
-        <VCommandButton command={['pipeline:create', {}]} />
+        {/* **VCommandButton import missing as well** */}
+        {/*<VCommandButton command={['pipeline:create', {}]} /> */}
       </header>
       <p className="mb-4 text-sm text-gray-600">
         Pipelines connect connections together by syncing data from source

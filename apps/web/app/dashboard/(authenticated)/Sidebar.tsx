@@ -3,9 +3,10 @@ import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import {__DEBUG__} from '@openint/app-config/constants'
 import type {IconName} from '@openint/ui'
-import {Button, Icon, ScrollArea} from '@openint/ui'
+import { Icon, ScrollArea} from '@openint/ui'
 import {R} from '@openint/util'
 import {cn} from '@/lib-client/ui-utils'
+import {Button} from '../../../../../packages/ui/shadcn'
 
 type TypedHref = Extract<React.ComponentProps<typeof Link>['href'], string>
 interface LinkItem {
@@ -159,18 +160,20 @@ export function Sidebar({className, hasPgConnection}: SidebarProps) {
         </div>
       </ScrollArea>
       <div className="mt-auto p-4">
-        <Link
-          className="flex flex-row items-center gap-2 font-semibold hover:opacity-90"
-          href="/">
-          <Image
-            width={146}
-            height={40}
-            src="/openint-logo.svg"
-            alt="OpenInt"
-          />
-          {/* OpenInt */}
-        </Link>
-      </div>
+  <Button variant="default" size="sm" className="w-full justify-center mb-6" onClick={() => window.open('https://cal.com/ap-openint/discovery', '_blank')}>Book A Demo</Button>
+  <Link
+    className="flex flex-row items-center gap-2 font-semibold hover:opacity-90"
+    href="/">
+    <Image
+      width={146}
+      height={40}
+      src="/openint-logo.svg"
+      alt="OpenInt"
+    />
+    {/* OpenInt */}
+  </Link>
+</div>
+
     </nav>
   )
 }
