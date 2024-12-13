@@ -26,6 +26,7 @@ export default function SettingsPage() {
   return res && !(res.isLoading || res.isRefetching) ? (
     <div className="p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">Settings</h2>
+      <p className="mb-4 text-sm text-gray-600">Configure your database, schema, and webhook settings to manage how data is stored, organized, and synced across your integrations.</p>
       <SchemaForm
         schema={zOrganization.shape.publicMetadata}
         uiSchema={{
