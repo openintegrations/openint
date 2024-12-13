@@ -84,6 +84,9 @@ export default function ConnectorConfigsPage({
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Configured connectors
       </h2>
+      <p className="mb-4 text-sm text-gray-600">Manage and edit your existing integrations here to ensure your workflows run smoothly.
+
+</p>
       {connectorConfigsRes.data ? (
         <DataTable
           query={connectorConfigsRes}
@@ -176,6 +179,7 @@ export default function ConnectorConfigsPage({
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Available connectors
       </h2>
+      <p className="mb-4 text-sm text-gray-600">Add new integrations from the list below to expand your system's capabilities.</p>
       {zVerticalKey.options.map((vertical) => {
         const stageByIndex = R.mapToObj.indexed(
           zConnectorStage.options,

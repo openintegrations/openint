@@ -10,6 +10,7 @@ export default async function ApiKeyPage() {
   return (
     <div className="p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">API</h2>
+      <p className="mb-4 text-sm text-gray-600">Use the API key to authenticate your requests.</p>
 
       <div className="mt-4 flex items-center">
         <SecureInput label="API Key" readOnly value={apikey} />
