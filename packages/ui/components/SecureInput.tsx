@@ -89,7 +89,6 @@ export default function SecureInput({
         <Button
           type="button"
           variant="outline"
-          size="sm"
           className="ml-2"
           onClick={copyToClipboard}
           aria-label="Copy to clipboard">
