@@ -177,7 +177,7 @@ export default function ConnectorConfigsPage({
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Available connectors
       </h2>
-      <p className="mb-4 text-sm text-gray-600">Add new integrations from the list below to expand your system's capabilities.</p>
+      <p className="mb-4 text-sm text-gray-600">Add new integrations from the list below to expand your system&quot;s capabilities.</p>
       {zVerticalKey.options.map((vertical) => {
         const stageByIndex = R.mapToObj.indexed(
           zConnectorStage.options,
