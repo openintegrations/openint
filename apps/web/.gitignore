@@ -6,6 +6,8 @@
 .pnp.js
 .worker-next/
 .wrangler
+.next-bak/
+.open-next/
 
 # testing
 /coverage

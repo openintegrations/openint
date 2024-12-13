@@ -504,8 +504,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/util
       '@opennextjs/cloudflare':
-        specifier: https://pkg.pr.new/@opennextjs/cloudflare@experimental
-        version: https://pkg.pr.new/@opennextjs/cloudflare@experimental(wrangler@3.95.0(bufferutil@4.0.7)(utf-8-validate@5.0.10))
+        specifier: https://pkg.pr.new/@opennextjs/cloudflare@2ab976f
+        version: https://pkg.pr.new/@opennextjs/cloudflare@2ab976f(wrangler@3.95.0(bufferutil@4.0.7)(utf-8-validate@5.0.10))
       '@opensdks/fetch-links':
         specifier: ^0.0.19
         version: 0.0.19
@@ -3632,8 +3632,8 @@ packages:
     version: 3.2.2
     hasBin: true
 
-  '@opennextjs/cloudflare@https://pkg.pr.new/@opennextjs/cloudflare@experimental':
-    resolution: {tarball: https://pkg.pr.new/@opennextjs/cloudflare@experimental}
+  '@opennextjs/cloudflare@https://pkg.pr.new/@opennextjs/cloudflare@2ab976f':
+    resolution: {tarball: https://pkg.pr.new/@opennextjs/cloudflare@2ab976f}
     version: 0.2.1
     hasBin: true
     peerDependencies:
@@ -16258,7 +16258,7 @@ snapshots:
       - aws-crt
       - supports-color
 
-  '@opennextjs/cloudflare@https://pkg.pr.new/@opennextjs/cloudflare@experimental(wrangler@3.95.0(bufferutil@4.0.7)(utf-8-validate@5.0.10))':
+  '@opennextjs/cloudflare@https://pkg.pr.new/@opennextjs/cloudflare@2ab976f(wrangler@3.95.0(bufferutil@4.0.7)(utf-8-validate@5.0.10))':
     dependencies:
       '@opennextjs/aws': https://pkg.pr.new/@opennextjs/aws@8ab921f
       ts-morph: 23.0.0
