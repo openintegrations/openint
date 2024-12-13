@@ -7,3 +7,4 @@ experimental_assets = { directory = ".worker-next/assets", binding = "ASSETS" }
 
 [alias]
 "#crypto" = "./worker-aliases/crypto"
+"critters" = "./worker-aliases/critters"

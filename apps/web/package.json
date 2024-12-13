@@ -27,7 +27,7 @@
     "@openint/engine-frontend": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/util": "workspace:*",
-    "@opennextjs/cloudflare": "https://pkg.pr.new/@opennextjs/cloudflare@main",
+    "@opennextjs/cloudflare": "https://pkg.pr.new/@opennextjs/cloudflare@experimental",
     "@opensdks/fetch-links": "^0.0.19",
     "@sentry/nextjs": "^8.33.1",
     "@stoplight/elements": "7.7.10",
