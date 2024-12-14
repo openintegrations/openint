@@ -6,27 +6,30 @@ import React from 'react'
 import type {z} from '@openint/util'
 import {zodToJsonSchema} from '@openint/util'
 import {cn} from '../utils'
-import {Button} from '../shadcn'
 
-const theme: ThemeProps = {
-  widgets: {},
-  templates: {
-    ButtonTemplates: {
-      SubmitButton: (props: any) => {
-        return (
-          <Button
-            type="submit"
-            variant="default"
-            disabled={props.disabled}
-            className="mt-4"
-          >
-            {props.disabled ? 'Submitting...' : 'Submit'}
-          </Button>
-        )
-      },
-    },
-  },
-}
+
+const theme: ThemeProps = {widgets: {}}
+// note: disabling for now as it leads to the submit button being shown twice (create / save)
+// import {Button} from '../shadcn'
+// const theme: ThemeProps = {
+//   widgets: {},
+//   templates: {
+//     ButtonTemplates: {
+//       SubmitButton: (props: any) => {
+//         return (
+//           <Button
+//             type="submit"
+//             variant="default"
+//             disabled={props.disabled}
+//             className="mt-4"
+//           >
+//             {props.disabled ? 'Submitting...' : 'Submit'}
+//           </Button>
+//         )
+//       },
+//     },
+//   },
+// }
 
 /** TODO: Actually customize with our own components... */
 export const JsonSchemaForm = withTheme(theme) as typeof Form
