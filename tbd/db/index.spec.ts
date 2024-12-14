@@ -1,6 +1,13 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
-import {check, PgDialect, pgTable, serial, text} from 'drizzle-orm/pg-core'
+import {
+  check,
+  customType,
+  PgDialect,
+  pgTable,
+  serial,
+  text,
+} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
 import {applyLimitOffset} from '.'
@@ -37,6 +44,13 @@ describe('sql generation', () => {
     expect(
       pgDialect.sqlToQuery(sql`SELECT true WHERE ${fragment} AND 2 != 1`),
     ).toMatchObject({sql: 'SELECT true WHERE 1 = 1 AND 2 != 1', params: []})
+  })
+
+  test('dates', () => {
+    const date = new Date()
+    expect(
+      pgDialect.sqlToQuery(sql`SELECT true WHERE created > ${date}`),
+    ).toMatchObject({sql: 'SELECT true WHERE created > $1', params: [date]})
   })
 
   test('apply limit offset', () => {
@@ -117,9 +131,17 @@ describe('test db', () => {
     expect(res[0]).toEqual({sum: 2})
   })
 
+  const customText = customType<{data: unknown}>({dataType: () => 'text'})
+
   const table = pgTable(
     'account',
-    (t) => ({id: t.serial().primaryKey(), email: t.text(), data: t.jsonb()}),
+    (t) => ({
+      id: t.serial().primaryKey(),
+      email: t.text(),
+      data: t.jsonb(),
+      ts: t.timestamp({withTimezone: true}).defaultNow(),
+      custom: customText(),
+    }),
     (table) => [check('email_check', sql`${table.email} LIKE '%@%'`)],
   )
 
@@ -128,13 +150,14 @@ describe('test db', () => {
       generateDrizzleJson({}),
       generateDrizzleJson({table}),
     )
-    console.log(migrations[0])
     expect(migrations).toMatchInlineSnapshot(`
       [
         "CREATE TABLE IF NOT EXISTS "account" (
       	"id" serial PRIMARY KEY NOT NULL,
       	"email" text,
       	"data" jsonb,
+      	"ts" timestamp with time zone DEFAULT now(),
+      	"custom" text,
       	CONSTRAINT "email_check" CHECK ("account"."email" LIKE '%@%')
       );
       ",
@@ -145,7 +168,16 @@ describe('test db', () => {
     }
     await db.insert(table).values({email: 'hello@world.com'})
     const rows = await db.select().from(table).execute()
-    expect(rows).toEqual([{id: 1, email: 'hello@world.com', data: null}])
+    expect(rows).toEqual([
+      {
+        id: 1,
+        email: 'hello@world.com',
+        data: null,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        ts: expect.any(Date),
+        custom: null,
+      },
+    ])
     await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
       'violates check constraint',
     )
@@ -185,18 +217,67 @@ describe('test db', () => {
     ).rejects.toThrow(
       'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Object',
     )
+    await expect(() =>
+      db.execute(
+        sql`INSERT INTO account (email, data) VALUES (${'bool@mail.com'}, ${true})`,
+      ),
+    ).rejects.toThrow(
+      'column "data" is of type jsonb but expression is of type boolean',
+    )
+    await expect(() =>
+      db.execute(
+        sql`INSERT INTO account (email, data) VALUES (${'int@mail.com'}, ${123})`,
+      ),
+    ).rejects.toThrow(
+      'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received type number',
+    )
+    await expect(() =>
+      db.execute(
+        sql`INSERT INTO account (email, data) VALUES (${'str@mail.com'}, ${'str'})`,
+      ),
+    ).rejects.toThrow('invalid input syntax for type json')
+    await db.execute(
+      sql`INSERT INTO account (email, data) VALUES (${'null@mail.com'}, ${'null'})`,
+    )
+    // no easy way to differentiate between sql null vs. jsonb null
+    await db.execute(
+      sql`INSERT INTO account (email, data) VALUES (${'sqlNULL@mail.com'}, ${null})`,
+    )
 
     await db.execute(
       sql`INSERT INTO account (email, data) VALUES (${'hi@mail.com'}, ${JSON.stringify(
         {a: 1},
       )})`,
     )
-    const res = await db.execute(
-      sql`SELECT * FROM ${table} where ${table.email} = ${'hi@mail.com'}`,
-    )
-    expect(res[0]).toMatchObject({
+    expect(
+      await db
+        .execute(
+          sql`SELECT * FROM ${table} where ${table.email} = ${'hi@mail.com'}`,
+        )
+        .then((r) => r[0]),
+    ).toMatchObject({
       email: 'hi@mail.com',
       data: {a: 1},
+    })
+    expect(
+      await db
+        .execute(
+          sql`SELECT * FROM ${table} where ${table.email} = ${'sqlNULL@mail.com'}`,
+        )
+        .then((r) => r[0]),
+    ).toMatchObject({
+      email: 'sqlNULL@mail.com',
+      data: null,
+    })
+    expect(
+      await db
+        .execute(
+          sql`SELECT * FROM ${table} where ${table.email} = ${'null@mail.com'}`,
+        )
+        .then((r) => r[0]),
+    ).toMatchObject({
+      email: 'null@mail.com',
+      data: null,
     })
   })
 

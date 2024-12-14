@@ -12,7 +12,7 @@ import {
   type postgresSchemas,
   type RecordMessageBody,
 } from './def'
-import {inferTable, runMigrationForStandardTable} from './utils'
+import {inferTableFromMessage, runMigrationForStandardTable} from './utils'
 
 postgresHelpers._types['destinationInputEntity'] = {
   entityName: 'string',
@@ -69,7 +69,7 @@ export const postgresServer = {
           // in particular it could be hard to differentiate between a string and a jsonb column
           // We should either add some further edge case testing, ensure default behavior makes the most sense
           // or allow schema hint to be passed in as part of the message
-          const table = inferTable(msgs[0])
+          const table = inferTableFromMessage(msgs[0])
 
           // This should be cached within a single destinationSync run and therefore
           // the interface of upsertFromRecordMessages may change...
