@@ -188,6 +188,29 @@ describe('test db', () => {
     )
   })
 
+  test('camelCase support', async () => {
+    const db2 = drizzle(dbUrl.toString(), {logger: true, casing: 'snake_case'})
+    // works for column names only, not table names
+    await db2.execute(sql`
+      create table if not exists "myAccount" (
+        my_id serial primary key
+      );
+    `)
+
+    const camelTable = pgTable('myAccount', (t) => ({
+      myId: t.serial().primaryKey(),
+    }))
+
+    // works for queries involving table
+    await db2.insert(camelTable).values({myId: 1})
+    const rows = await db2.select().from(camelTable).execute()
+    expect(rows).toEqual([{myId: 1}])
+
+    // does not work for raw queries...
+    const rows2 = await db2.execute(sql`select * from "myAccount"`)
+    expect(rows2).toEqual([{my_id: 1}])
+  })
+
   // Depends on the previous test, cannot be parallel executed
   test('array query', async () => {
     // test array query
