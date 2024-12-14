@@ -16,7 +16,7 @@ export interface DbUpsertOptions<TTable extends PgTable> {
   /** defaults to primaryKeyColumns */
   keyColumns?: Array<ColumnKeyOf<TTable>>
   /** Shallow jsonb merge as via sql`COALESCE(${fullId}, '{}'::jsonb) || excluded.${colId}` */
-  shallowMergeJsonbColumns?: Array<ColumnKeyOf<TTable>>
+  shallowMergeJsonbColumns?: Array<ColumnKeyOf<TTable>> | boolean
   /**
    * Changes to these columns will be ignored in the WHERE clause of ON CONFLICT UPDATE
    * e.g. `updated_at`
@@ -99,7 +99,9 @@ export function dbUpsert<
     tbCfg.primaryKeys[0]?.columns ??
     tbCfg.columns.filter((c) => c.primary) // Presumably only a single primary key column will be possible in this scenario
   const shallowMergeJsonbColumns =
-    options.shallowMergeJsonbColumns?.map(getColumn)
+    typeof options.shallowMergeJsonbColumns === 'boolean'
+      ? tbCfg.columns.filter((c) => c.columnType === 'PgJsonb')
+      : options.shallowMergeJsonbColumns?.map(getColumn)
   const noDiffColumns = options.noDiffColumns?.map(getColumn)
   const insertOnlyColumns = options.insertOnlyColumns?.map(getColumn)
 

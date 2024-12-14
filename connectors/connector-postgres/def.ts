@@ -26,7 +26,10 @@ export const zRecordMessageBody = z.object({
       key_columns: z.array(z.string()).optional(),
       must_match_columns: z.array(z.string()).optional(),
       no_diff_columns: z.array(z.string()).optional(),
-      shallow_merge_jsonb_columns: z.array(z.string()).optional(),
+      shallow_merge_jsonb_columns: z.union([
+        z.array(z.string()).optional(),
+        z.boolean(),
+      ]),
     })
     .optional(),
 })

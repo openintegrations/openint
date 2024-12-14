@@ -145,6 +145,11 @@ describe('test db', () => {
     (table) => [check('email_check', sql`${table.email} LIKE '%@%'`)],
   )
 
+  test('column definition', () => {
+    expect(table.data.columnType).toEqual('PgJsonb')
+    expect(table.data.dataType).toEqual('json')
+  })
+
   test('migrate', async () => {
     const migrations = await generateMigration(
       generateDrizzleJson({}),
