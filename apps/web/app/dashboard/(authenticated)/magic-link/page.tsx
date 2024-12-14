@@ -56,7 +56,7 @@ export default function MagicLinkPage() {
             ],
             customerId: {
               'ui:widget': 'text',
-              'ui:title': <span className="font-semibold">End User ID</span>,
+              'ui:title': <span className="font-semibold">Customer Id</span>,
               'ui:description': (
                 <span className="text-sm text-gray-600">
                   Anything that uniquely identifies the customer that you will
@@ -64,7 +64,9 @@ export default function MagicLinkPage() {
                 </span>
               ),
               'ui:options': {
-                placeholder: 'my-user-id',
+                // @snrondina: this placeholder is too non-faint to work well.
+                // I mistook it for real value and got confused why magic link creation failed
+                // placeholder: 'my-user-id',
               },
             },
             validityInSeconds: {

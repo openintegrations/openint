@@ -82,7 +82,7 @@ function CustomerMenu({customer}: {customer: Customer}) {
           onClick={() => navigator.clipboard.writeText(customer.id)}>
           <Copy className="mr-2 h-4 w-4" />
           <div>
-            Copy End User ID
+            Copy Customer Id
             <br />
             <pre className="text-muted-foreground">{customer.id}</pre>
           </div>
