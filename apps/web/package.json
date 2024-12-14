@@ -18,6 +18,7 @@
     "@openint/cdk": "workspace:*",
     "@openint/connect": "workspace:*",
     "@openint/connector-postgres": "workspace:*",
+    "@openint/db": "workspace:*",
     "@openint/engine-backend": "workspace:*",
     "@openint/engine-frontend": "workspace:*",
     "@openint/ui": "workspace:*",

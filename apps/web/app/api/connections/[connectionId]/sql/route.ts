@@ -6,10 +6,11 @@ import {
   DatabaseError,
   Papa,
 } from '@openint/app-config/backendConfig'
-import {kAcceptUrlParam} from '@openint/app-config/constants'
+import {__DEBUG__, kAcceptUrlParam} from '@openint/app-config/constants'
 import type {Id} from '@openint/cdk'
 import {hasRole} from '@openint/cdk'
-import {makePostgresClient, zPgConfig} from '@openint/connector-postgres'
+import {zPgConfig} from '@openint/connector-postgres'
+import {drizzle} from '@openint/db'
 import {R, z} from '@openint/util'
 import {serverComponentGetViewer} from '@/lib-server/server-component-helpers'
 import {trpcErrorResponse} from '@/lib-server/server-helpers'
@@ -48,25 +49,21 @@ export async function GET(
         message: 'Only postgres connections are supported',
       })
     }
+    const pgConfig = zPgConfig.parse(conn.settings)
 
-    const {getPool, sql} = makePostgresClient({
-      ...zPgConfig.parse(conn.settings),
-      transformFieldNames: false,
-    })
-    const pool = await getPool()
+    const db = drizzle(pgConfig.databaseUrl, {logger: __DEBUG__})
 
     console.log('[sql] Will run query for user', {query, viewer})
 
     // TODO: Should we limit admin user to RLS also? Otherwise we might as well
     // proxy the pgMeta endpoint just like we proxy rest / graphql
-    // @ts-expect-error
-    const result = await pool.query(sql([query]))
 
+    const rows = await db.execute(query)
     const res =
       format === 'csv'
         ? new NextResponse(
             Papa.unparse([
-              ...result.rows.map((r) =>
+              ...rows.map((r) =>
                 R.mapValues(r, (v) =>
                   v instanceof Date
                     ? v.toISOString()
@@ -80,7 +77,7 @@ export async function GET(
               // headers: {'Content-Type': 'text/csv'},
             },
           )
-        : NextResponse.json(result.rows)
+        : NextResponse.json(rows)
 
     if (download) {
       // TODO: Better filename would be nice.

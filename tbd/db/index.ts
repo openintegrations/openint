@@ -10,7 +10,7 @@ export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
 
-export {schema}
+export {schema, drizzle, migrate}
 
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
