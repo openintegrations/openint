@@ -1,4 +1,4 @@
-import type {DrizzleConfig} from 'drizzle-orm'
+import type {DrizzleConfig, SQL} from 'drizzle-orm'
 import {sql} from 'drizzle-orm'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {migrate} from 'drizzle-orm/postgres-js/migrator'
@@ -6,10 +6,10 @@ import postgres from 'postgres'
 import {env} from '@openint/env'
 import * as schema from './schema'
 
+export * from 'drizzle-orm'
 export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
-
 export {schema, drizzle, migrate}
 
 export function getDb<
@@ -73,4 +73,11 @@ export async function runMigration(opts?: {keepAlive?: boolean}) {
   }
 }
 
-export * from 'drizzle-orm'
+export function applyLimitOffset<T>(
+  query: SQL<T>,
+  opts: {limit?: number; offset?: number},
+) {
+  const limit = opts.limit ? sql` LIMIT ${opts.limit}` : sql``
+  const offset = opts.offset ? sql` OFFSET ${opts.offset}` : sql``
+  return sql<T>`${query}${limit}${offset}`
+}
