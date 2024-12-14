@@ -3,7 +3,7 @@ import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
 
 const expandParams = {
   $expand: 'listItem',
-  $select: 'id,name,listItem',
+  $select: '*',
 }
 export const microsoftGraphAdapter = {
   listDrives: async ({ instance, input }) => {
