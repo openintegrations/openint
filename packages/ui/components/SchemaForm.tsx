@@ -1,9 +1,8 @@
 import type {default as Form, FormProps, ThemeProps} from '@rjsf/core'
 import {withTheme} from '@rjsf/core'
-import {type RJSFSchema, type UiSchema} from '@rjsf/utils'
-import validator from '@rjsf/validator-ajv8'
+import {ErrorSchema, RJSFValidationError, ValidatorType, type RJSFSchema, type UiSchema} from '@rjsf/utils'
 import React from 'react'
-import type {z} from '@openint/util'
+import {z} from '@openint/util'
 import {zodToJsonSchema} from '@openint/util'
 import {cn} from '../utils'
 import {Button} from '../shadcn'
@@ -85,6 +84,7 @@ function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
   return uiSchema
 }
 
+
 // Consider renaming this to zodSchemaForm
 export const SchemaForm = React.forwardRef(function SchemaForm<
   TSchema extends z.ZodTypeAny,
@@ -111,6 +111,93 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
   const [formData, setFormData] = React.useState<z.infer<TSchema>>(_formData)
   // console.log('[SchemaForm] jsonSchema', jsonSchema)
   const uiSchema = generateUiSchema(jsonSchema)
+
+// Helper function to convert Zod errors to RJSF-compatible error schema
+const zodToRjsError = (zodError: z.ZodError): { errorSchema: ErrorSchema, errors: RJSFValidationError[] } => {
+  const errorSchema: ErrorSchema = {};
+  const errors: RJSFValidationError[] = [];
+  zodError.errors.forEach((issue) => {
+    const path = issue.path.join('.');
+    if (!errorSchema[path]) {
+      // @ts-expect-error
+      errorSchema[path] = {
+        __errors: [],
+      };
+    }
+    errorSchema[path]!.__errors!.push(issue.message);
+    errors.push({
+      name: issue.code,
+      message: issue.message,
+      params: {}, // zod does not expose params as part of the issue
+      property: path,
+      schemaPath: issue.path.join('/'),
+      stack: `${path} ${issue.message}`,
+    });
+  });
+  return { errorSchema, errors };
+};
+
+// TODO: Fix this as this doesn't work. 
+const validator: ValidatorType<z.infer<typeof schema>, any, any> = {
+  validateFormData: (formData: any) => {
+    try {
+      const parsedData = schema.parse(formData);
+      return { valid: true, formData: parsedData, errors: [], errorSchema: {} };
+    } catch (err: any) {
+      if (err instanceof z.ZodError) {
+        return {
+          ...zodToRjsError(err),
+          valid: false,
+          formData,
+        };
+      }
+      throw err; // Handle unexpected errors
+    }
+  },
+  toErrorList: (errorSchema: ErrorSchema) => {
+    const errorList: RJSFValidationError[] = [];
+    const traverse = (schema: ErrorSchema, path = '') => {
+      Object.entries(schema).forEach(([key, value]) => {
+        const newPath = path ? `${path}.${key}` : key;
+        if (key === '__errors' && Array.isArray(value)) {
+          value.forEach((message) => {
+            errorList.push({
+              name: path,
+              message,
+              stack: `${path} ${message}`,
+            });
+          });
+        } else if (typeof value === 'object' && !Array.isArray(value)) {
+          traverse(value as ErrorSchema, newPath);
+        }
+      });
+    };
+    traverse(errorSchema);
+    return errorList;
+  },
+  isValid: (schema: any, formData: any) => {
+    try {
+      schema.parse(formData);
+      return true;
+    } catch (err: any) {
+      return false;
+    }
+  },
+  // @ts-expect-error this is not used in our runtime but required by the type
+  rawValidation: (schema: any, formData: any) => {
+    try {
+      schema.parse(formData);
+      return { errors: [] };
+    } catch (err: any) {
+      if (err instanceof z.ZodError) {
+        return {
+          errors: zodToRjsError(err).errors.map(e => e.message),
+        };
+      }
+      throw err; // Handle unexpected errors
+    }
+  },
+};
 
   return (
     <JsonSchemaForm<z.infer<TSchema>>

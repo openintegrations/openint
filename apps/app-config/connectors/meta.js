@@ -51,7 +51,6 @@ module.exports = [
       server: '@openint/connector-coda/server',
     },
   },
-  {dirName: 'connector-copilot', varName: 'connectorCopilot', imports: {}},
   {
     name: 'debug',
     dirName: 'connector-debug',

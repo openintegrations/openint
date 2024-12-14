@@ -10,7 +10,7 @@
     "build:worker": "SKIP_NEXT_APP_BUILD=true cloudflare",
     "codegen:supabase": "supabase gen types typescript --linked --schema public > ./supabase/supabase.gen.d.ts",
     "deploy:worker": "pnpm run build:worker && wrangler deploy",
-    "dev": "next dev -p 4000 --turbo",
+    "dev": "next dev -p 4000",
     "dev:worker": "wrangler dev --port 4000",
     "preview:worker": "pnpm run build:worker && pnpm run dev:worker",    
     "start": "next start"
