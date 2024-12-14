@@ -22,7 +22,7 @@ const getPostgreClient = memoize((databaseUrl: string) =>
 )
 
 /**
- * This sets the postgres grand central config (GUC) and determines the identity
+ * This sets the postgres grand unified config (GUC) and determines the identity
  * that gets used for every request to db for the purpose of authorization
  * in row-level-security! So be very careful
  */
