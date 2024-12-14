@@ -119,6 +119,7 @@ const nextConfig = {
       ],
     },
   ],
+  output: 'standalone',
 
 }
 
