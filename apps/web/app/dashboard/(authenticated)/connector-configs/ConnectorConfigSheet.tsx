@@ -55,15 +55,17 @@ export function ConnectorConfigSheet({
   const verb = ccfg ? 'Edit' : 'Add'
   const {toast} = useToast()
 
+  const handleSuccess = React.useCallback(() => {
+    setOpen(false)
+    toast({title: 'connector config saved', variant: 'success'})
+    void trpcUtils.adminListConnectorConfigs.invalidate()
+    void trpcUtils.listConnectorConfigInfos.invalidate()
+    refetch?.()
+  }, [setOpen, toast, trpcUtils, refetch])
+
   const upsertConnectorConfig =
     _trpcReact.adminUpsertConnectorConfig.useMutation({
-      onSuccess: () => {
-        setOpen(false)
-        toast({title: 'connector config saved', variant: 'success'})
-        void trpcUtils.adminListConnectorConfigs.invalidate()
-        void trpcUtils.listConnectorConfigInfos.invalidate()
-        refetch?.()
-      },
+      onSuccess: handleSuccess,
       onError: (err) => {
         toast({
           title: 'Failed to save connector config',

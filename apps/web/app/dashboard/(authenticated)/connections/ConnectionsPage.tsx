@@ -18,7 +18,7 @@ export default function ConnectionsPage() {
         </h2>
         {/* <OpenIntConnectButton clientConnectors={clientConnectors} /> */}
       </header>
-      <p>Connections are created based on connector configurations</p>
+      <p className="mb-4 text-sm text-gray-600">Connections are created based on connector configurations</p>
       <DataTable
         query={res}
         filter={filter}
