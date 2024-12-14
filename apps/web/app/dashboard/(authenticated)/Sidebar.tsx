@@ -159,6 +159,14 @@ export function Sidebar({className, hasPgConnection}: SidebarProps) {
         </div>
       </ScrollArea>
       <div className="mt-auto p-4">
+      <Button 
+    variant="default" 
+    size="sm" 
+    className="w-full justify-center mb-4" 
+    onClick={() => window.open('https://cal.com/ap-openint/discovery', '_blank')}
+  >
+    Book A Demo
+  </Button>
         <Link
           className="flex flex-row items-center gap-2 font-semibold hover:opacity-90"
           href="/">
