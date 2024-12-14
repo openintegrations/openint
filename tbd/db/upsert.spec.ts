@@ -1,7 +1,15 @@
 import {sql} from 'drizzle-orm'
+import {
+  boolean,
+  integer,
+  jsonb,
+  pgTable,
+  serial,
+  varchar,
+} from 'drizzle-orm/pg-core'
 import {configDb} from './'
 import {engagement_sequence} from './schema-dynamic'
-import {dbUpsert} from './upsert'
+import {dbUpsert, dbUpsertOne} from './upsert'
 
 async function formatSql(sqlString: string) {
   const prettier = await import('prettier')
@@ -65,6 +73,99 @@ test('upsert query', async () => {
         "engagement_sequence"."is_deleted" IS DISTINCT FROM excluded."is_deleted"
         or "engagement_sequence"."raw" IS DISTINCT FROM excluded."raw"
         or "engagement_sequence"."unified" IS DISTINCT FROM excluded."unified"
+      )
+    "
+  `)
+})
+
+test('upsert param handling inc. jsonb', async () => {
+  const query = dbUpsertOne(
+    configDb,
+    pgTable('test', {
+      id: serial().primaryKey(),
+      is_deleted: boolean(),
+      data: jsonb(),
+      data2: jsonb(),
+      data3: jsonb(),
+      name: varchar(),
+      name2: varchar(),
+      name3: varchar(),
+      count: integer(),
+      count2: integer(),
+      count3: integer(),
+    }),
+    {
+      id: '123' as never,
+      is_deleted: {} as never,
+      data: 'abc',
+      data2: true,
+      data3: ['123'],
+      name: 'abc',
+      name2: true as never,
+      name3: ['123'] as never,
+      count: 'abc' as never,
+      count2: true as never,
+      count3: ['123'] as never,
+    },
+    {
+      keyColumns: ['id' as never],
+    },
+  )
+  expect(query.toSQL().params).toEqual([
+    '123',
+    {},
+    '"abc"', // jsonb
+    'true', // jsonb
+    '["123"]', // jsonb
+    'abc', // scalar (varchar)
+    true, // scalar (varchar)
+    ['123'], // scalar (varchar)
+    'abc', // scalar (integer)
+    true, // scalar (integer)
+    ['123'], // scalar (integer)
+  ])
+  expect(await formatSql(query?.toSQL().sql)).toMatchInlineSnapshot(`
+    "insert into
+      "test" (
+        "id",
+        "is_deleted",
+        "data",
+        "data2",
+        "data3",
+        "name",
+        "name2",
+        "name3",
+        "count",
+        "count2",
+        "count3"
+      )
+    values
+      ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+    on conflict ("id") do
+    update
+    set
+      "is_deleted" = excluded."is_deleted",
+      "data" = excluded."data",
+      "data2" = excluded."data2",
+      "data3" = excluded."data3",
+      "name" = excluded."name",
+      "name2" = excluded."name2",
+      "name3" = excluded."name3",
+      "count" = excluded."count",
+      "count2" = excluded."count2",
+      "count3" = excluded."count3"
+    where
+      (
+        "test"."is_deleted" IS DISTINCT FROM excluded."is_deleted"
+        or "test"."data" IS DISTINCT FROM excluded."data"
+        or "test"."data2" IS DISTINCT FROM excluded."data2"
+        or "test"."data3" IS DISTINCT FROM excluded."data3"
+        or "test"."name" IS DISTINCT FROM excluded."name"
+        or "test"."name2" IS DISTINCT FROM excluded."name2"
+        or "test"."name3" IS DISTINCT FROM excluded."name3"
+        or "test"."count" IS DISTINCT FROM excluded."count"
+        or "test"."count2" IS DISTINCT FROM excluded."count2"
+        or "test"."count3" IS DISTINCT FROM excluded."count3"
       )
     "
   `)

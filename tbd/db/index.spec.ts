@@ -1,20 +1,9 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
-import {check, PgDialect, pgTable} from 'drizzle-orm/pg-core'
+import {check, PgDialect, pgTable, serial, text} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
 import {applyLimitOffset} from '.'
-
-// console.log('filename', __filename)
-const dbName = 'tbd_db'
-
-// TODO: Add me back in once we know CI is working
-beforeAll(async () => {
-  const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
-  await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
-  await masterDb.execute(`CREATE DATABASE ${dbName}`)
-  await masterDb.$client.end()
-})
 
 describe('sql generation', () => {
   const pgDialect = new PgDialect()
@@ -25,6 +14,22 @@ describe('sql generation', () => {
         sql`SELECT true FROM ${sql.identifier('connection')}`,
       ),
     ).toMatchObject({sql: 'SELECT true FROM "connection"', params: []})
+  })
+
+  test('implicit identifiers', () => {
+    const table = pgTable('connection', {
+      id: serial().primaryKey(),
+      Name: text(),
+    })
+
+    expect(
+      pgDialect.sqlToQuery(
+        sql`SELECT ${table.Name}, ${table.id} FROM ${table}`,
+      ),
+    ).toMatchObject({
+      sql: 'SELECT "connection"."Name", "connection"."id" FROM "connection"',
+      params: [],
+    })
   })
 
   test('concatenate queries', () => {
@@ -91,64 +96,109 @@ describe('sql generation', () => {
   })
 })
 
-const dbUrl = new URL(env.POSTGRES_URL)
-dbUrl.pathname = `/${dbName}`
-const db = drizzle(dbUrl.toString(), {logger: true})
+describe('test db', () => {
+  // console.log('filename', __filename)
+  const dbName = 'tbd_db'
 
-test('connect', async () => {
-  const res = await db.execute('select 1+1 as sum')
-  expect(res[0]).toEqual({sum: 2})
-})
+  // TODO: Add me back in once we know CI is working
+  beforeAll(async () => {
+    const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
+    await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
+    await masterDb.execute(`CREATE DATABASE ${dbName}`)
+    await masterDb.$client.end()
+  })
 
-test('migrate', async () => {
+  const dbUrl = new URL(env.POSTGRES_URL)
+  dbUrl.pathname = `/${dbName}`
+  const db = drizzle(dbUrl.toString(), {logger: true})
+
+  test('connect', async () => {
+    const res = await db.execute('select 1+1 as sum')
+    expect(res[0]).toEqual({sum: 2})
+  })
+
   const table = pgTable(
     'account',
-    (t) => ({id: t.serial().primaryKey(), email: t.text()}),
+    (t) => ({id: t.serial().primaryKey(), email: t.text(), data: t.jsonb()}),
     (table) => [check('email_check', sql`${table.email} LIKE '%@%'`)],
   )
-  const migrations = await generateMigration(
-    generateDrizzleJson({}),
-    generateDrizzleJson({table}),
-  )
-  expect(migrations).toEqual([
-    `CREATE TABLE IF NOT EXISTS "account" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"email" text,
-	CONSTRAINT "email_check" CHECK ("account"."email" LIKE '%@%')
-);
-`,
-  ])
-  for (const migration of migrations) {
-    await db.execute(migration)
-  }
-  await db.insert(table).values({email: 'hello@world.com'})
-  const rows = await db.select().from(table).execute()
-  expect(rows).toEqual([{id: 1, email: 'hello@world.com'}])
-  await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
-    'violates check constraint',
-  )
+
+  test('migrate', async () => {
+    const migrations = await generateMigration(
+      generateDrizzleJson({}),
+      generateDrizzleJson({table}),
+    )
+    console.log(migrations[0])
+    expect(migrations).toMatchInlineSnapshot(`
+      [
+        "CREATE TABLE IF NOT EXISTS "account" (
+      	"id" serial PRIMARY KEY NOT NULL,
+      	"email" text,
+      	"data" jsonb,
+      	CONSTRAINT "email_check" CHECK ("account"."email" LIKE '%@%')
+      );
+      ",
+      ]
+    `)
+    for (const migration of migrations) {
+      await db.execute(migration)
+    }
+    await db.insert(table).values({email: 'hello@world.com'})
+    const rows = await db.select().from(table).execute()
+    expect(rows).toEqual([{id: 1, email: 'hello@world.com', data: null}])
+    await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
+      'violates check constraint',
+    )
+  })
+
+  // Depends on the previous test, cannot be parallel executed
+  test('array query', async () => {
+    // test array query
+    const res = await db.execute(
+      sql`SELECT * FROM account where email = ANY(${sql.param([
+        'hello@world.com',
+        'sup@sup.com',
+      ])})`,
+    )
+    expect(res).toMatchObject([{id: 1, email: 'hello@world.com'}])
+    const res2 = await db.execute(
+      sql`SELECT * FROM account where email = ANY(${sql.param([])})`,
+    )
+    expect(res2).toMatchObject([])
+
+    await expect(() =>
+      db.execute(
+        sql`SELECT * FROM account where email = ANY(${sql.param([
+          'a',
+        ])}::int[])`,
+      ),
+    ).rejects.toThrow('operator does not exist: text = integer')
+  })
+
+  test('jsonb inserts require string input', async () => {
+    await expect(() =>
+      db.execute(
+        sql`INSERT INTO account (email, data) VALUES (${'hi@mail.com'}, ${{
+          a: 1,
+        }})`,
+      ),
+    ).rejects.toThrow(
+      'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Object',
+    )
+
+    await db.execute(
+      sql`INSERT INTO account (email, data) VALUES (${'hi@mail.com'}, ${JSON.stringify(
+        {a: 1},
+      )})`,
+    )
+    const res = await db.execute(
+      sql`SELECT * FROM ${table} where ${table.email} = ${'hi@mail.com'}`,
+    )
+    expect(res[0]).toMatchObject({
+      email: 'hi@mail.com',
+      data: {a: 1},
+    })
+  })
+
+  afterAll(() => db.$client.end())
 })
-
-// Depends on the previous test, cannot be parallel executed
-test('array query', async () => {
-  // test array query
-  const res = await db.execute(
-    sql`SELECT * FROM account where email = ANY(${sql.param([
-      'hello@world.com',
-      'sup@sup.com',
-    ])})`,
-  )
-  expect(res).toMatchObject([{id: 1, email: 'hello@world.com'}])
-  const res2 = await db.execute(
-    sql`SELECT * FROM account where email = ANY(${sql.param([])})`,
-  )
-  expect(res2).toMatchObject([])
-
-  await expect(() =>
-    db.execute(
-      sql`SELECT * FROM account where email = ANY(${sql.param(['a'])}::int[])`,
-    ),
-  ).rejects.toThrow('operator does not exist: text = integer')
-})
-
-afterAll(() => db.$client.end())
