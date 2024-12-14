@@ -12,6 +12,7 @@
 # next.js
 /apps/web/.next/
 /apps/web/out/
+.worker-next/
 
 # production
 /apps/web/build
@@ -63,3 +64,6 @@ dist/
 /gateway/node_modules
 /gateway/config.json
 /gateway/wrangler.toml
+
+# Cloudflare
+.wrangler

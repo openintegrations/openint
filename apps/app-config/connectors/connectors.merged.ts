@@ -15,10 +15,6 @@ import {default as connectorDiscord_def} from '@openint/connector-discord/def'
 import {default as connectorDiscord_server} from '@openint/connector-discord/server'
 import {default as connectorFinch_def} from '@openint/connector-finch/def'
 import {default as connectorFinch_server} from '@openint/connector-finch/server'
-import {default as connectorFirebase_def} from '@openint/connector-firebase/def'
-import {default as connectorFirebase_server} from '@openint/connector-firebase/server'
-import {default as connectorForeceipt_def} from '@openint/connector-foreceipt/def'
-import {default as connectorForeceipt_server} from '@openint/connector-foreceipt/server'
 import {default as connectorFs_def} from '@openint/connector-fs/def'
 import {default as connectorFs_server} from '@openint/connector-fs/server'
 import {default as connectorGoogle_def} from '@openint/connector-google/def'
@@ -38,8 +34,6 @@ import {default as connectorMerge_def} from '@openint/connector-merge/def'
 import {default as connectorMerge_server} from '@openint/connector-merge/server'
 import {default as connectorMicrosoft_def} from '@openint/connector-microsoft/def'
 import {default as connectorMicrosoft_server} from '@openint/connector-microsoft/server'
-import {default as connectorMongodb_def} from '@openint/connector-mongodb/def'
-import {default as connectorMongodb_server} from '@openint/connector-mongodb/server'
 import {default as connectorMoota_def} from '@openint/connector-moota/def'
 import {default as connectorMoota_server} from '@openint/connector-moota/server'
 import {default as connectorOnebrick_def} from '@openint/connector-onebrick/def'
@@ -128,16 +122,6 @@ const connectorFinch = {
   ...connectorFinch_server,
 }
 
-const connectorFirebase = {
-  ...connectorFirebase_def,
-  ...connectorFirebase_server,
-}
-
-const connectorForeceipt = {
-  ...connectorForeceipt_def,
-  ...connectorForeceipt_server,
-}
-
 const connectorFs = {
   ...connectorFs_def,
   ...connectorFs_server,
@@ -185,11 +169,6 @@ const connectorMerge = {
 const connectorMicrosoft = {
   ...connectorMicrosoft_def,
   ...connectorMicrosoft_server,
-}
-
-const connectorMongodb = {
-  ...connectorMongodb_def,
-  ...connectorMongodb_server,
 }
 
 const connectorMoota = {
@@ -320,8 +299,6 @@ export const mergedConnectors = {
   debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,
-  firebase: connectorFirebase,
-  foreceipt: connectorForeceipt,
   fs: connectorFs,
   google: connectorGoogle,
   greenhouse: connectorGreenhouse,
@@ -332,7 +309,6 @@ export const mergedConnectors = {
   mercury: connectorMercury,
   merge: connectorMerge,
   microsoft: connectorMicrosoft,
-  mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
   outreach: connectorOutreach,

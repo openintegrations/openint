@@ -69,6 +69,8 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       handlebars: 'handlebars/dist/handlebars.js',
+      crypto: 'node:crypto',
+      // '#crypto': 'node:crypto',
     }
     config.resolve.fallback = {
       fs: false,
@@ -77,6 +79,8 @@ const nextConfig = {
       tls: false,
       net: false,
       dns: false,
+      crypto: 'node:crypto',
+      // '#crypto': 'node:crypto',
     }
     config.plugins.push(
       new webpack.IgnorePlugin({

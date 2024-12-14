@@ -6,7 +6,6 @@
   "module": "./index.ts",
   "dependencies": {
     "@openint/cdk": "workspace:*",
-    "@openint/connector-firebase": "workspace:*",
     "@openint/util": "workspace:*"
   },
   "devDependencies": {}
