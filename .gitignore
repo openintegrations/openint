@@ -13,6 +13,7 @@
 /apps/web/.next/
 /apps/web/out/
 .worker-next/
+.dev.vars
 
 # production
 /apps/web/build
