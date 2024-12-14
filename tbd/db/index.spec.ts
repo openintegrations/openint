@@ -171,21 +171,38 @@ describe('test db', () => {
     for (const migration of migrations) {
       await db.execute(migration)
     }
-    await db.insert(table).values({email: 'hello@world.com'})
+    const date = new Date('2021-01-01')
+    await db
+      .insert(table)
+      .values({email: 'hello@world.com', ts: date, data: {hello: 'world'}})
+    await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
+      'violates check constraint',
+    )
+    // fetch with db.select
     const rows = await db.select().from(table).execute()
     expect(rows).toEqual([
       {
         id: 1,
         email: 'hello@world.com',
-        data: null,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        ts: expect.any(Date),
+        data: {hello: 'world'},
+        ts: date,
         custom: null,
       },
     ])
-    await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
-      'violates check constraint',
-    )
+
+    // fetch raw with db.execute
+    const rows2 = await db.execute(sql`SELECT * FROM ${table}`)
+    expect(rows2).toEqual([
+      {
+        id: 1,
+        email: 'hello@world.com',
+        data: {hello: 'world'},
+        ts: '2021-01-01 01:00:00+01', // returns as string instead of Date
+        custom: null,
+      },
+    ])
+    const date2 = new Date(rows2[0]?.['ts'] as string)
+    expect(date2.getTime()).toEqual(date.getTime())
   })
 
   test('camelCase support', async () => {

@@ -1,3 +1,4 @@
+import {camelCase, snakeCase} from 'change-case'
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
@@ -108,7 +109,7 @@ export const makePostgresMetaService = zFunction(
         return runQueries(async (trxn) => {
           const rows = await trxn.execute(query)
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return rows as Array<Record<string, any>> as CustomerResultRow[]
+          return rows.map((r) => camelCaseKeys(r) as CustomerResultRow)
         })
       },
       searchIntegrations: ({keywords, connectorNames, ...rest}) => {
@@ -123,9 +124,13 @@ export const makePostgresMetaService = zFunction(
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
             : sql``
         return runQueries((trxn) =>
-          trxn.execute(
-            applyLimitOffset(sql`SELECT * FROM integration ${where}`, rest),
-          ),
+          trxn
+            .execute(
+              applyLimitOffset(sql`SELECT * FROM integration ${where}`, rest),
+            )
+            .then((rows) =>
+              rows.map((r) => camelCaseKeys(r) as ZRaw['integration']),
+            ),
         )
       },
 
@@ -150,23 +155,27 @@ export const makePostgresMetaService = zFunction(
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
             : sql``
         return runQueries((trxn) =>
-          trxn.execute(sql`SELECT * FROM pipeline ${where}`),
+          trxn
+            .execute(sql`SELECT * FROM pipeline ${where}`)
+            .then((rows) => rows.map((r) => camelCaseKeys(r))),
         )
       },
       listConnectorConfigInfos: ({id, connectorName} = {}) => {
         const {runQueries} = _getDeps(opts)
         return runQueries((trxn) =>
-          trxn.execute(
-            sql`SELECT id, env_name, display_name, COALESCE(config->'integrations', '{}'::jsonb) as integrations FROM connector_config ${
-              id && connectorName
-                ? sql`WHERE id = ${id} AND connector_name = ${connectorName} AND disabled = FALSE`
-                : id
-                  ? sql`WHERE id = ${id} AND disabled = FALSE`
-                  : connectorName
-                    ? sql`WHERE connector_name = ${connectorName} AND disabled = FALSE`
-                    : sql`WHERE disabled = FALSE`
-            }`,
-          ),
+          trxn
+            .execute(
+              sql`SELECT id, env_name, display_name, COALESCE(config->'integrations', '{}'::jsonb) as integrations FROM connector_config ${
+                id && connectorName
+                  ? sql`WHERE id = ${id} AND connector_name = ${connectorName} AND disabled = FALSE`
+                  : id
+                    ? sql`WHERE id = ${id} AND disabled = FALSE`
+                    : connectorName
+                      ? sql`WHERE connector_name = ${connectorName} AND disabled = FALSE`
+                      : sql`WHERE disabled = FALSE`
+              }`,
+            )
+            .then((rows) => rows.map((r) => camelCaseKeys(r))),
         )
       },
       findConnectionsMissingDefaultPipeline: () => {
@@ -272,27 +281,41 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
         const res = await trxn.execute<T>(
           applyLimitOffset(sql`SELECT * FROM ${table} ${where}`, rest),
         )
-        return res as T[]
+        return res.map((r) => camelCaseKeys(r) as T)
       }),
     get: (id) =>
       runQueries(async (trxn) => {
         const rows = await trxn.execute<T>(
           sql`SELECT * FROM ${table} where id = ${id}`,
         )
-        return rows[0] as T | undefined
+        return rows.map(camelCaseKeys)[0] as T | undefined
       }),
     set: (id, data) =>
-      dbUpsertOne(db, tableName, {...data, id}, {keyColumns: ['id']}),
+      dbUpsertOne(db, tableName, snakeCaseKeys({...data, id}), {
+        keyColumns: ['id'],
+      }),
     patch: (id, data) =>
-      dbUpsertOne(
-        db,
-        tableName,
-        {...data, id},
-        {keyColumns: ['id'], shallowMergeJsonbColumns: true},
-      ),
+      dbUpsertOne(db, tableName, snakeCaseKeys({...data, id}), {
+        keyColumns: ['id'],
+        shallowMergeJsonbColumns: true,
+      }),
     delete: (id) =>
       runQueries((trxn) =>
         trxn.execute(sql`DELETE FROM ${table} WHERE id = ${id}`),
       ).then(() => {}),
   }
+}
+
+/** Temporary placeholder before we transition API / codebase to fully snake_case */
+function camelCaseKeys<T = Record<string, unknown>>(obj: object) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [camelCase(k), v]),
+  ) as T
+}
+
+/** Temporary placeholder before we transition API / codebase to fully snake_case */
+function snakeCaseKeys<T = Record<string, unknown>>(obj: object) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [snakeCase(k), v]),
+  ) as T
 }
