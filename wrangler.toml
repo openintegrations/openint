@@ -1,8 +1,0 @@
-name = "openint"
-main = ".worker-next/worker.js"
-compatibility_date = "2024-12-01"
-compatibility_flags = ["nodejs_compat"]
-assets = { directory = ".worker-next/assets", binding = "ASSETS" }
-[alias]
-"#crypto" = "./worker-aliases/crypto"
-"critters" = "./worker-aliases/critters"
