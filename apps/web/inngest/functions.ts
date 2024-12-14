@@ -1,9 +1,8 @@
 import '@openint/app-config/register.node'
 import {contextFactory} from '@openint/app-config/backendConfig'
-import type {CustomerId} from '@openint/cdk'
+import {configDb, sql} from '@openint/db'
 import {flatRouter} from '@openint/engine-backend'
 import {inngest} from '@openint/engine-backend/events'
-import {getPool, sql} from '../lib-server'
 import * as routines from './routines'
 
 export const scheduleSyncs = inngest.createFunction(
@@ -30,10 +29,10 @@ export const syncConnection = inngest.createFunction(
       console.log('Will sync connection', connectionId)
       // TODO: Figure out what is the userId we ought to be using...
 
-      const pool = await getPool()
-      const customerId = await pool.oneFirst<CustomerId>(
+      const rows = await configDb.execute(
         sql`SELECT customer_id FROM connection WHERE id = ${connectionId}`,
       )
+      const customerId = rows[0]?.['customer_id']
       console.log('customerId', customerId)
       await flatRouter
         .createCaller({
