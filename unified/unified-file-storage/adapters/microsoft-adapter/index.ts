@@ -1,6 +1,10 @@
 import {type FileStorageAdapter} from "../../router";
 import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
 
+const expandParams = {
+  $expand: 'listItem',
+  $select: 'id,name,listItem',
+}
 export const microsoftGraphAdapter = {
   listDrives: async ({ instance, input }) => {
     const res = await fetch(`https://graph.microsoft.com/v1.0/sites?search=*&$skiptoken=${input?.cursor ?? ''}`, {
@@ -140,28 +144,31 @@ export const microsoftGraphAdapter = {
   },
 
   listFiles: async ({ instance, input }) => {
-    
-    // is there a way to make this less verbose?
-    const res = input.folderId ? await instance.GET(`/drives/{drive-id}/items/{driveItem-id}/children`, {
-      params: {
-        path: {'drive-id': input.driveId, 'driveItem-id': input.folderId},
-        // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
-        query: {$skiptoken: input?.cursor ?? undefined},
-      }
-    }) : await instance.GET(`/drives/{drive-id}/root/children`, {
-      params: {
-        path: {'drive-id': input.driveId},
-        // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
-        query: {$skiptoken: input?.cursor ?? undefined},
-      }
-    });
 
-    if(!res.data || !res.data.value) {
+    const res = input.folderId
+      ? await instance.GET(`/drives/{drive-id}/items/{driveItem-id}/children`, {
+          params: {
+            path: { 'drive-id': input.driveId, 'driveItem-id': input.folderId },
+             // $expand is currently supported an a string[] and sends multiple $expand
+             // queries but this is not supported by the API, it expects a single comma separated string
+             // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
+            query: { $skiptoken: input?.cursor ?? undefined, ...expandParams },
+          },
+        })
+      : await instance.GET(`/drives/{drive-id}/root/children`, {
+          params: {
+            path: { 'drive-id': input.driveId },
+            // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation. Same for expand
+            query: { $skiptoken: input?.cursor ?? undefined, ...expandParams },
+          },
+        });
+
+    if (!res.data || !res.data.value) {
       return {
         has_next_page: false,
         next_cursor: undefined,
         items: [],
-      }
+      };
     }
 
     const items = res.data.value.map((item: any) => ({
@@ -172,7 +179,7 @@ export const microsoftGraphAdapter = {
       mime_type: item.file?.mimeType || null,
       size: item.size || null,
       parent_id: item.parentReference?.id,
-      drive_id: item.parentReference?.driveId,
+      drive_id: item.parentReference?.driveId || input.driveId,
       created_at: item.createdDateTime || null,
       modified_at: item.lastModifiedDateTime || null,
       raw_data: item,
@@ -186,14 +193,17 @@ export const microsoftGraphAdapter = {
   },
 
   getFile: async ({ instance, input }) => {
-    // TODO: Sample static return for getFile
+
     const res = await instance.GET(`/drives/{drive-id}/items/{driveItem-id}`, {
       params: {
-        path: {'drive-id': input.driveId, 'driveItem-id': input.fileId},
-      }
+        path: { 'drive-id': input.driveId, 'driveItem-id': input.fileId },
+        // @ts-expect-error $expand is currently supported an a string[] and sends
+        // multiple $expand queries but this is not supported by the API, it expects a single comma separated string
+        query: { ...expandParams },
+      },
     });
 
-    if(!res.data) {
+    if (!res.data) {
       // TODO: QQ: is this the right type of error to throw?
       throw new Error('File not found');
     }
@@ -202,11 +212,11 @@ export const microsoftGraphAdapter = {
       id: res.data.id || '',
       name: res.data.name || '',
       file_url: res.data?.webUrl || null,
-      download_url: res.data['@microsoft.graph.downloadUrl'] + '' || null,
+      download_url: res.data['@microsoft.graph.downloadUrl'] + ''|| null,
       mime_type: res.data.file?.mimeType || null,
       size: res.data.size || null,
       parent_id: res.data.parentReference?.id,
-      drive_id: res.data.parentReference?.driveId || '',
+      drive_id: res.data.parentReference?.driveId || input.driveId,
       created_at: res.data.createdDateTime,
       modified_at: res.data.lastModifiedDateTime,
       raw_data: res.data,
