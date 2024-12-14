@@ -1820,6 +1820,9 @@ importers:
       '@openint/connector-postgres':
         specifier: workspace:*
         version: link:../../connectors/connector-postgres
+      '@openint/db':
+        specifier: workspace:*
+        version: link:../../tbd/db
       '@openint/util':
         specifier: workspace:*
         version: link:../util

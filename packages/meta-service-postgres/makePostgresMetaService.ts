@@ -1,25 +1,13 @@
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
-import type {
-  DatabaseTransactionConnection,
-  SqlTaggedTemplate,
-  TransactionFunction,
-} from '@openint/connector-postgres/makePostgresClient'
-import {
-  applyLimitOffset,
-  makePostgresClient,
-} from '@openint/connector-postgres/makePostgresClient'
+import {applyLimitOffset, dbUpsertOne, drizzle, sql} from '@openint/db'
 import type {
   CustomerResultRow,
   MetaService,
   MetaTable,
 } from '@openint/engine-backend'
-import {memoize, R, zFunction} from '@openint/util'
-
-const getPostgreClient = memoize((databaseUrl: string) =>
-  makePostgresClient({databaseUrl}),
-)
+import {R, zFunction} from '@openint/util'
 
 /**
  * This sets the postgres grand unified config (GUC) and determines the identity
@@ -53,28 +41,34 @@ function localGucForViewer(viewer: Viewer) {
 }
 
 async function assumeRole(options: {
-  db: DatabaseTransactionConnection
+  db: Pick<ReturnType<typeof drizzle>, 'execute'>
   viewer: Viewer
-  sql: SqlTaggedTemplate
 }) {
-  const {db, viewer, sql} = options
+  const {db, viewer} = options
   for (const [key, value] of Object.entries(localGucForViewer(viewer))) {
-    await db.query(sql`SELECT set_config(${key}, ${value}, true)`)
+    await db.execute(sql`SELECT set_config(${key}, ${value}, true)`)
   }
 }
 
 type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const {viewer, databaseUrl} = opts
-  const client = getPostgreClient(databaseUrl)
-  const {sql, getPool} = client
+
+  const db = drizzle(databaseUrl, {logger: true})
+  type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
+
   return {
-    ...client,
-    runQueries: async <T>(handler: TransactionFunction<T>) => {
-      const pool = await getPool()
-      return pool.transaction(async (trxn) => {
-        await assumeRole({db: trxn, viewer, sql})
-        return handler(trxn)
+    db,
+    runQueries: async <T>(
+      handler: (trxn: PgTransaction) => Promise<T>,
+      // eslint-disable-next-line arrow-body-style
+    ) => {
+      // const res = await db.transaction(async (trxn) => {
+      //   return !!trxn
+      // })
+      return await db.transaction(async (txn) => {
+        await assumeRole({db: txn, viewer})
+        return handler(txn)
       })
     },
   }
@@ -92,8 +86,8 @@ export const makePostgresMetaService = zFunction(
     }
     return {
       tables,
-      searchCustomers: ({keywords, ...rest}) => {
-        const {runQueries, sql} = _getDeps(opts)
+      searchCustomers: async ({keywords, ...rest}) => {
+        const {runQueries} = _getDeps(opts)
         const where = keywords
           ? sql`WHERE customer_id ILIKE ${'%' + keywords + '%'}`
           : sql``
@@ -111,21 +105,25 @@ export const makePostgresMetaService = zFunction(
           `,
           rest,
         )
-        return runQueries((pool) => pool.any<CustomerResultRow>(query))
+        return runQueries(async (trxn) => {
+          const rows = await trxn.execute(query)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return rows as Array<Record<string, any>> as CustomerResultRow[]
+        })
       },
       searchIntegrations: ({keywords, connectorNames, ...rest}) => {
-        const {runQueries, sql} = _getDeps(opts)
+        const {runQueries} = _getDeps(opts)
         const conditions = R.compact([
           connectorNames &&
-            sql`connector_name = ANY(${sql.array(connectorNames, 'varchar')})`,
+            sql`connector_name = ANY(${sql.param(connectorNames)})`,
           keywords && sql`standard->>'name' ILIKE ${'%' + keywords + '%'}`,
         ])
         const where =
           conditions.length > 0
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
             : sql``
-        return runQueries((pool) =>
-          pool.any(
+        return runQueries((trxn) =>
+          trxn.execute(
             applyLimitOffset(sql`SELECT * FROM integration ${where}`, rest),
           ),
         )
@@ -136,8 +134,8 @@ export const makePostgresMetaService = zFunction(
         secondsSinceLastSync,
         includeDisabled,
       }) => {
-        const {runQueries, sql} = _getDeps(opts)
-        const ids = connectionIds && sql.array(connectionIds, 'varchar')
+        const {runQueries} = _getDeps(opts)
+        const ids = connectionIds && sql.param(connectionIds)
         const conditions = R.compact([
           ids && sql`(source_id = ANY(${ids}) OR destination_id = ANY(${ids}))`,
           secondsSinceLastSync &&
@@ -151,14 +149,14 @@ export const makePostgresMetaService = zFunction(
           conditions.length > 0
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
             : sql``
-        return runQueries((pool) =>
-          pool.any(sql`SELECT * FROM pipeline ${where}`),
+        return runQueries((trxn) =>
+          trxn.execute(sql`SELECT * FROM pipeline ${where}`),
         )
       },
       listConnectorConfigInfos: ({id, connectorName} = {}) => {
-        const {runQueries, sql} = _getDeps(opts)
-        return runQueries((pool) =>
-          pool.any(
+        const {runQueries} = _getDeps(opts)
+        return runQueries((trxn) =>
+          trxn.execute(
             sql`SELECT id, env_name, display_name, COALESCE(config->'integrations', '{}'::jsonb) as integrations FROM connector_config ${
               id && connectorName
                 ? sql`WHERE id = ${id} AND connector_name = ${connectorName} AND disabled = FALSE`
@@ -172,9 +170,9 @@ export const makePostgresMetaService = zFunction(
         )
       },
       findConnectionsMissingDefaultPipeline: () => {
-        const {runQueries, sql} = _getDeps(opts)
-        return runQueries((pool) =>
-          pool.any<{id: Id['conn']}>(sql`
+        const {runQueries} = _getDeps(opts)
+        return runQueries((trxn) =>
+          trxn.execute<{id: Id['conn']}>(sql`
             SELECT
               c.id,
               cc.default_pipe_out_destination_id,
@@ -194,38 +192,37 @@ export const makePostgresMetaService = zFunction(
         )
       },
       isHealthy: async (checkDefaultPostgresConnections = false) => {
-        const {runQueries, sql} = _getDeps({
+        const {runQueries} = _getDeps({
           ...opts,
           // hardcoding to system viewer to avoid any authorization checks
           viewer: {role: 'system'},
         })
 
-        const isMainDbHealthy = await runQueries((pool) =>
-          pool.query(sql`SELECT 1`),
+        const isMainDbHealthy = await runQueries((trxn) =>
+          trxn.execute(sql`SELECT 1`),
         )
 
-        if (!isMainDbHealthy || isMainDbHealthy.rows.length !== 1) {
+        if (!isMainDbHealthy || isMainDbHealthy.length !== 1) {
           return {healthy: false, error: 'Main database is not healthy'}
         }
 
         // TODO:(@pellicceama) to use sql token rather than hard coding here.
-        const top3DefaultPostgresConnections = await runQueries((pool) =>
-          pool.query(
+        const top3DefaultPostgresConnections = await runQueries((trxn) =>
+          trxn.execute(
             sql`SELECT id, settings->>'databaseUrl' as database_url FROM connection where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
           ),
         )
 
         if (checkDefaultPostgresConnections) {
-          for (const connection of top3DefaultPostgresConnections.rows) {
+          for (const connection of top3DefaultPostgresConnections) {
             if (!connection['database_url']) {
               continue
             }
-            const {getPool} = makePostgresClient({
-              databaseUrl: connection['database_url'] as string,
+            const connDb = drizzle(connection['database_url'] as string, {
+              logger: true,
             })
-            const pool = await getPool()
-            const result = await pool.query(sql`SELECT 1`)
-            if (result.rows.length !== 1) {
+            const res = await connDb.execute(sql`SELECT 1`)
+            if (res.length !== 1) {
               return {
                 healthy: false,
                 error: `Default postgres connection with id ${connection['id']} is not healthy`,
@@ -241,9 +238,9 @@ export const makePostgresMetaService = zFunction(
 
 function metaTable<TID extends string, T extends Record<string, unknown>>(
   tableName: keyof ZRaw,
-  {sql, upsertById, runQueries}: Deps,
+  {runQueries, db}: Deps,
 ): MetaTable<TID, T> {
-  const table = sql.identifier([tableName])
+  const table = sql.identifier(tableName)
 
   //  const sqlType = sql.type(zRaw[tableName])
 
@@ -257,9 +254,9 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
       keywords,
       ...rest
     }) =>
-      runQueries((pool) => {
+      runQueries(async (trxn) => {
         const conditions = R.compact([
-          ids && sql`id = ANY(${sql.array(ids, 'varchar')})`,
+          ids && sql`id = ANY(${sql.param(ids)})`,
           customerId && sql`customer_id = ${customerId}`,
           connectorConfigId && sql`connector_config_id = ${connectorConfigId}`,
           connectorName && sql`connector_name = ${connectorName}`,
@@ -272,20 +269,30 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
           conditions.length > 0
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
             : sql``
-        return pool.any(
+        const res = await trxn.execute<T>(
           applyLimitOffset(sql`SELECT * FROM ${table} ${where}`, rest),
         )
+        return res as T[]
       }),
     get: (id) =>
-      runQueries((pool) =>
-        pool.maybeOne<T>(sql`SELECT * FROM ${table} where id = ${id}`),
-      ),
-    set: (id, data) => upsertById(tableName, {...data, id}),
+      runQueries(async (trxn) => {
+        const rows = await trxn.execute<T>(
+          sql`SELECT * FROM ${table} where id = ${id}`,
+        )
+        return rows[0] as T | undefined
+      }),
+    set: (id, data) =>
+      dbUpsertOne(db, tableName, {...data, id}, {keyColumns: ['id']}),
     patch: (id, data) =>
-      upsertById(tableName, {...data, id}, {mergeJson: 'shallow'}),
+      dbUpsertOne(
+        db,
+        tableName,
+        {...data, id},
+        {keyColumns: ['id'], shallowMergeJsonbColumns: true},
+      ),
     delete: (id) =>
-      runQueries((pool) =>
-        pool.query(sql`DELETE FROM ${table} WHERE id = ${id}`),
+      runQueries((trxn) =>
+        trxn.execute(sql`DELETE FROM ${table} WHERE id = ${id}`),
       ).then(() => {}),
   }
 }
