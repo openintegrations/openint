@@ -14,7 +14,6 @@ import {
 export const connection = pgTable(
   'connection',
   {
-
     id: varchar()
       .default("concat('conn_', generate_ulid())")
       .primaryKey()
@@ -37,65 +36,63 @@ export const connection = pgTable(
     disabled: boolean().default(false),
     metadata: jsonb(),
   },
-  (t) => {
-    return {
-      created_at: index('connection_created_at').using(
-        'btree',
-        t.created_at.asc().nullsLast().op('timestamptz_ops'),
-      ),
-      customer_id: index('connection_customer_id').using(
-        'btree',
-        t.customer_id.asc().nullsLast().op('text_ops'),
-      ),
-      provider_name: index('connection_provider_name').using(
-        'btree',
-        t.connector_name.asc().nullsLast().op('text_ops'),
-      ),
-      updated_at: index('connection_updated_at').using(
-        'btree',
-        t.updated_at.asc().nullsLast().op('timestamptz_ops'),
-      ),
-      fk_connector_config_id: foreignKey({
-        columns: [t.connector_config_id],
-        foreignColumns: [connector_config.id],
-        name: 'fk_connector_config_id',
-      })
-        .onUpdate('cascade')
-        .onDelete('restrict'),
-      fk_integration_id: foreignKey({
-        columns: [t.integration_id],
-        foreignColumns: [integration.id],
-        name: 'fk_integration_id',
-      })
-        .onUpdate('cascade')
-        .onDelete('restrict'),
-      org_member_access: pgPolicy('org_member_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['authenticated'],
-        using: sql`((connector_config_id)::text IN ( SELECT connector_config.id
-   FROM connector_config
-  WHERE ((connector_config.org_id)::text = (jwt_org_id())::text)))`,
-        withCheck: sql`((connector_config_id)::text IN ( SELECT connector_config.id
-   FROM connector_config
-  WHERE ((connector_config.org_id)::text = (jwt_org_id())::text)))`,
-      }),
-      org_access: pgPolicy('org_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['org'],
-      }),
-      customer_access: pgPolicy('customer_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['customer'],
-      }),
-      connection_id_prefix_check: check(
-        'connection_id_prefix_check',
-        sql`CHECK (starts_with((id)::text, 'conn_'::text`,
-      ),
-    }
-  },
+  (t) => [
+    index('connection_created_at').using(
+      'btree',
+      t.created_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    index('connection_customer_id').using(
+      'btree',
+      t.customer_id.asc().nullsLast().op('text_ops'),
+    ),
+    index('connection_provider_name').using(
+      'btree',
+      t.connector_name.asc().nullsLast().op('text_ops'),
+    ),
+    index('connection_updated_at').using(
+      'btree',
+      t.updated_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    foreignKey({
+      columns: [t.connector_config_id],
+      foreignColumns: [connector_config.id],
+      name: 'fk_connector_config_id',
+    })
+      .onUpdate('cascade')
+      .onDelete('restrict'),
+    foreignKey({
+      columns: [t.integration_id],
+      foreignColumns: [integration.id],
+      name: 'fk_integration_id',
+    })
+      .onUpdate('cascade')
+      .onDelete('restrict'),
+    pgPolicy('org_member_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['authenticated'],
+      using: sql`((connector_config_id)::text IN ( SELECT connector_config.id
+       FROM connector_config
+      WHERE ((connector_config.org_id)::text = (jwt_org_id())::text)))`,
+      withCheck: sql`((connector_config_id)::text IN ( SELECT connector_config.id
+       FROM connector_config
+      WHERE ((connector_config.org_id)::text = (jwt_org_id())::text)))`,
+    }),
+    pgPolicy('org_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['org'],
+    }),
+    pgPolicy('customer_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['customer'],
+    }),
+    check(
+      'connection_id_prefix_check',
+      sql`CHECK (starts_with((id)::text, 'conn_'::text`,
+    ),
+  ],
 )
 
 export const pipeline = pgTable(
@@ -124,64 +121,62 @@ export const pipeline = pgTable(
     source_vertical: varchar(),
     destination_vertical: varchar(),
   },
-  (table) => {
-    return {
-      created_at: index('pipeline_created_at').using(
-        'btree',
-        table.created_at.asc().nullsLast().op('timestamptz_ops'),
-      ),
-      destination_id: index('pipeline_destination_id').using(
-        'btree',
-        table.destination_id.asc().nullsLast().op('text_ops'),
-      ),
-      source_id: index('pipeline_source_id').using(
-        'btree',
-        table.source_id.asc().nullsLast().op('text_ops'),
-      ),
-      updated_at: index('pipeline_updated_at').using(
-        'btree',
-        table.updated_at.asc().nullsLast().op('timestamptz_ops'),
-      ),
-      fk_destination_id: foreignKey({
-        columns: [table.destination_id],
-        foreignColumns: [connection.id],
-        name: 'fk_destination_id',
-      })
-        .onUpdate('cascade')
-        .onDelete('cascade'),
-      fk_source_id: foreignKey({
-        columns: [table.source_id],
-        foreignColumns: [connection.id],
-        name: 'fk_source_id',
-      })
-        .onUpdate('cascade')
-        .onDelete('cascade'),
-      customer_access: pgPolicy('customer_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['customer'],
-        using: sql`( SELECT (ARRAY( SELECT connection.id
-           FROM connection
-          WHERE (((connection.connector_config_id)::text IN ( SELECT connector_config.id
-                   FROM connector_config
-                  WHERE ((connector_config.org_id)::text = (jwt_org_id())::text))) AND ((connection.customer_id)::text = (( SELECT jwt_customer_id() AS jwt_customer_id))::text))) && ARRAY[pipeline.source_id, pipeline.destination_id]))`,
-      }),
-      org_access: pgPolicy('org_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['org'],
-      }),
-      org_member_access: pgPolicy('org_member_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['authenticated'],
-      }),
-      pipeline_id_prefix_check: check(
-        'pipeline_id_prefix_check',
-        sql`CHECK (starts_with((id)::text, 'pipe_'::text`,
-      ),
-    }
-  },
+  (table) => [
+    index('pipeline_created_at').using(
+      'btree',
+      table.created_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    index('pipeline_destination_id').using(
+      'btree',
+      table.destination_id.asc().nullsLast().op('text_ops'),
+    ),
+    index('pipeline_source_id').using(
+      'btree',
+      table.source_id.asc().nullsLast().op('text_ops'),
+    ),
+    index('pipeline_updated_at').using(
+      'btree',
+      table.updated_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    foreignKey({
+      columns: [table.destination_id],
+      foreignColumns: [connection.id],
+      name: 'fk_destination_id',
+    })
+      .onUpdate('cascade')
+      .onDelete('cascade'),
+    foreignKey({
+      columns: [table.source_id],
+      foreignColumns: [connection.id],
+      name: 'fk_source_id',
+    })
+      .onUpdate('cascade')
+      .onDelete('cascade'),
+    pgPolicy('customer_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['customer'],
+      using: sql`( SELECT (ARRAY( SELECT connection.id
+         FROM connection
+        WHERE (((connection.connector_config_id)::text IN ( SELECT connector_config.id
+                 FROM connector_config
+                WHERE ((connector_config.org_id)::text = (jwt_org_id())::text))) AND ((connection.customer_id)::text = (( SELECT jwt_customer_id() AS jwt_customer_id))::text))) && ARRAY[pipeline.source_id, pipeline.destination_id]))`,
+    }),
+    pgPolicy('org_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['org'],
+    }),
+    pgPolicy('org_member_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['authenticated'],
+    }),
+    check(
+      'pipeline_id_prefix_check',
+      sql`CHECK (starts_with((id)::text, 'pipe_'::text`,
+    ),
+  ],
 )
 
 export const integration = pgTable(
@@ -203,38 +198,36 @@ export const integration = pgTable(
       .defaultNow()
       .notNull(),
   },
-  (table) => {
-    return {
-      institution_created_at: index('institution_created_at').using(
-        'btree',
-        table.created_at.asc().nullsLast().op('timestamptz_ops'),
-      ),
-      institution_provider_name: index('institution_provider_name').using(
-        'btree',
-        table.connector_name.asc().nullsLast().op('text_ops'),
-      ),
-      institution_updated_at: index('institution_updated_at').using(
-        'btree',
-        table.updated_at.asc().nullsLast().op('timestamptz_ops'),
-      ),
-      org_write_access: pgPolicy('org_write_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['public'],
-        using: sql`true`,
-        withCheck: sql`true`,
-      }),
-      public_readonly_access: pgPolicy('public_readonly_access', {
-        as: 'permissive',
-        for: 'select',
-        to: ['public'],
-      }),
-      integration_id_prefix_check: check(
-        'integration_id_prefix_check',
-        sql`CHECK (starts_with((id)::text, 'int_'::text`,
-      ),
-    }
-  },
+  (table) => [
+    index('institution_created_at').using(
+      'btree',
+      table.created_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    index('institution_provider_name').using(
+      'btree',
+      table.connector_name.asc().nullsLast().op('text_ops'),
+    ),
+    index('institution_updated_at').using(
+      'btree',
+      table.updated_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    pgPolicy('org_write_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['public'],
+      using: sql`true`,
+      withCheck: sql`true`,
+    }),
+    pgPolicy('public_readonly_access', {
+      as: 'permissive',
+      for: 'select',
+      to: ['public'],
+    }),
+    check(
+      'integration_id_prefix_check',
+      sql`CHECK (starts_with((id)::text, 'int_'::text`,
+    ),
+  ],
 )
 
 export const connector_config = pgTable(
@@ -268,61 +261,58 @@ export const connector_config = pgTable(
     ),
     metadata: jsonb(),
   },
-  (table) => {
-    return {
-      integration_created_at: index('integration_created_at').using(
-        'btree',
-        table.created_at.asc().nullsLast().op('timestamptz_ops'),
-      ),
-      integration_org_id: index('integration_org_id').using(
-        'btree',
-        table.org_id.asc().nullsLast().op('text_ops'),
-      ),
-      integration_provider_name: index('integration_provider_name').using(
-        'btree',
-        table.connector_name.asc().nullsLast().op('text_ops'),
-      ),
-      integration_updated_at: index('integration_updated_at').using(
-        'btree',
-        table.updated_at.asc().nullsLast().op('timestamptz_ops'),
-      ),
-
-      org_access: pgPolicy('org_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['org'],
-        using: sql`((org_id)::text = (jwt_org_id())::text)`,
-        withCheck: sql`((org_id)::text = (jwt_org_id())::text)`,
-      }),
-      customer_access: pgPolicy('customer_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['customer'],
-      }),
-      org_member_access: pgPolicy('org_member_access', {
-        as: 'permissive',
-        for: 'all',
-        to: ['authenticated'],
-      }),
-      connector_config_id_prefix_check: check(
-        'connector_config_id_prefix_check',
-        sql`CHECK (starts_with((id)::text, 'ccfg_'::text`,
-      ),
-      // causes circular dependency
-      // fk_default_pipe_in_source_id: foreignKey({
-      //   columns: [table.default_pipe_in_source_id],
-      //   foreignColumns: [connection.id],
-      //   name: 'fk_default_pipe_in_source_id',
-      // })
-      //   .onUpdate('restrict')
-      //   .onDelete('restrict'),
-      // fk_default_pipe_out_destination_id: foreignKey({
-      //   columns: [table.default_pipe_out_destination_id],
-      //   foreignColumns: [connection.id],
-      //   name: 'fk_default_pipe_out_destination_id',
-      // })
-      //   .onUpdate('restrict')
-      //   .onDelete('restrict'),
-    }
-  },
+  (table) => [
+    index('integration_created_at').using(
+      'btree',
+      table.created_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    index('integration_org_id').using(
+      'btree',
+      table.org_id.asc().nullsLast().op('text_ops'),
+    ),
+    index('integration_provider_name').using(
+      'btree',
+      table.connector_name.asc().nullsLast().op('text_ops'),
+    ),
+    index('integration_updated_at').using(
+      'btree',
+      table.updated_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    pgPolicy('org_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['org'],
+      using: sql`((org_id)::text = (jwt_org_id())::text)`,
+      withCheck: sql`((org_id)::text = (jwt_org_id())::text)`,
+    }),
+    pgPolicy('customer_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['customer'],
+    }),
+    pgPolicy('org_member_access', {
+      as: 'permissive',
+      for: 'all',
+      to: ['authenticated'],
+    }),
+    check(
+      'connector_config_id_prefix_check',
+      sql`CHECK (starts_with((id)::text, 'ccfg_'::text`,
+    ),
+    // causes circular dependency
+    // foreignKey({
+    //   columns: [table.default_pipe_in_source_id],
+    //   foreignColumns: [connection.id],
+    //   name: 'fk_default_pipe_in_source_id',
+    // })
+    //   .onUpdate('restrict')
+    //   .onDelete('restrict'),
+    // foreignKey({
+    //   columns: [table.default_pipe_out_destination_id],
+    //   foreignColumns: [connection.id],
+    //   name: 'fk_default_pipe_out_destination_id',
+    // })
+    //   .onUpdate('restrict')
+    //   .onDelete('restrict'),
+  ],
 )
