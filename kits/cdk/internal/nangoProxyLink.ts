@@ -206,4 +206,8 @@ export const nangoConnectionWithCredentials = z.object({
   deleted_at: z.string().nullish(),
   last_fetched_at: z.string().nullish(),
   config_id: z.number().nullish(),
+  error: z.object({
+    code: z.enum(['refresh_token_external_error']).or(z.string()).nullish(),
+    message: z.string().nullish(),
+  }).nullish(),
 })

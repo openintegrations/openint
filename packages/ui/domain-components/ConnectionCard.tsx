@@ -17,14 +17,17 @@ import {
 } from '../shadcn/Tooltip'
 import {IntegrationLogo} from './ConnectionRawCard'
 import {ConnectorLogo} from './ConnectorCard'
+import {Id} from '@openint/cdk'
 
 export function ConnectionCard({
   onDelete,
+  onReconnect,
   conn,
 }: {
-  onDelete: ({id}: {id: string}) => void
+  onDelete: ({id}: {id: Id<'conn'>}) => void
+  onReconnect: ({id}: {id: Id<'conn'>}) => void
   conn: {
-    id: string
+    id: Id<'conn'>
     pipelineIds: string[]
     syncInProgress: boolean
     connectorConfig: ConnectorConfig
@@ -48,6 +51,14 @@ export function ConnectionCard({
                     <Ellipsis className="size-5 text-foreground" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="flex w-[80px] items-center justify-center">
+                  <DropdownMenuItem
+                      className="flex items-center justify-center"
+                      // TODO: Make this only for 'reconnectable' connections'?
+                      onSelect={() => onReconnect({id: conn.id})}>
+                      <span className="text-center font-medium">
+                        Reconnect
+                      </span>
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       className="flex items-center justify-center"
                       onSelect={() => onDelete({id: conn.id})}>

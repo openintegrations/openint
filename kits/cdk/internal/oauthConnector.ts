@@ -33,6 +33,7 @@ export const oauthBaseSchema = {
     }),
   }),
   connectionSettings: z.object({
+    // equivalent to nango /v1/connections data.connection object with certain fields removed like id
     oauth: z.object({
       credentials: z.object({
         type: zAuthMode,
@@ -61,6 +62,7 @@ export const oauthBaseSchema = {
         .nullish(),
       metadata: z.record(z.unknown()).nullable(),
     }),
+    // TODO: add error fields here or maybe at a higher level to capture when connection needs to be refreshed 
   }),
   connectOutput: z.object({
     providerConfigKey: zId('ccfg'),
