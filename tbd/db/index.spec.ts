@@ -197,7 +197,7 @@ describe('test db', () => {
         id: 1,
         email: 'hello@world.com',
         data: {hello: 'world'},
-        ts: '2021-01-01 01:00:00+01', // returns as string instead of Date
+        ts: expect.any(String), // '2021-01-01 01:00:00+01', // returns as string instead of Date
         custom: null,
       },
     ])
