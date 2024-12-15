@@ -1,6 +1,5 @@
 import '@openint/app-config/register.node'
 import {contextFactory} from '@openint/app-config/backendConfig'
-import {configDb, sql} from '@openint/db'
 import {flatRouter} from '@openint/engine-backend'
 import {inngest} from '@openint/engine-backend/events'
 import * as routines from './routines'
