@@ -37,21 +37,13 @@ export const connection = pgTable(
     metadata: jsonb(),
   },
   (t) => [
-    index('connection_created_at').using(
-      'btree',
-      t.created_at.asc().nullsLast().op('timestamptz_ops'),
-    ),
-    index('connection_customer_id').using(
-      'btree',
-      t.customer_id.asc().nullsLast().op('text_ops'),
-    ),
-    index('connection_provider_name').using(
-      'btree',
-      t.connector_name.asc().nullsLast().op('text_ops'),
-    ),
-    index('connection_updated_at').using(
-      'btree',
-      t.updated_at.asc().nullsLast().op('timestamptz_ops'),
+    index('connection_created_at').on(t.created_at),
+    index('connection_customer_id').on(t.customer_id),
+    index('connection_provider_name').on(t.connector_name),
+    index('connection_updated_at').on(t.updated_at),
+    check(
+      'connection_id_prefix_check',
+      sql`CHECK (starts_with((id)::text, 'conn_'::text`,
     ),
     foreignKey({
       columns: [t.connector_config_id],
@@ -68,30 +60,50 @@ export const connection = pgTable(
       .onUpdate('cascade')
       .onDelete('restrict'),
     pgPolicy('org_member_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['authenticated'],
-      using: sql`((connector_config_id)::text IN ( SELECT connector_config.id
-       FROM connector_config
-      WHERE ((connector_config.org_id)::text = (jwt_org_id())::text)))`,
-      withCheck: sql`((connector_config_id)::text IN ( SELECT connector_config.id
-       FROM connector_config
-      WHERE ((connector_config.org_id)::text = (jwt_org_id())::text)))`,
+      to: 'authenticated',
+      using: sql`(
+        connector_config_id IN (
+          SELECT connector_config.id
+          FROM public.connector_config
+          WHERE connector_config.org_id = public.jwt_org_id()
+        )
+      )`,
+      withCheck: sql`(
+        connector_config_id IN (
+          SELECT connector_config.id
+          FROM public.connector_config
+          WHERE connector_config.org_id = public.jwt_org_id()
+        )
+      )`,
     }),
     pgPolicy('org_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['org'],
+      to: 'org',
+      using: sql`(
+        connector_config_id IN (
+          SELECT connector_config.id
+          FROM public.connector_config
+          WHERE connector_config.org_id = public.jwt_org_id()
+        )
+      )`,
+      withCheck: sql`(
+        connector_config_id IN (
+          SELECT connector_config.id
+          FROM public.connector_config
+          WHERE connector_config.org_id = public.jwt_org_id()
+        )
+      )`,
     }),
     pgPolicy('customer_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['customer'],
+      to: 'customer',
+      using: sql`(
+        connector_config_id IN (
+          SELECT connector_config.id
+          FROM public.connector_config
+          WHERE connector_config.org_id = public.jwt_org_id()
+        )
+        AND customer_id = (SELECT public.jwt_customer_id())
+      )`,
     }),
-    check(
-      'connection_id_prefix_check',
-      sql`CHECK (starts_with((id)::text, 'conn_'::text`,
-    ),
   ],
 )
 
@@ -122,21 +134,13 @@ export const pipeline = pgTable(
     destination_vertical: varchar(),
   },
   (table) => [
-    index('pipeline_created_at').using(
-      'btree',
-      table.created_at.asc().nullsLast().op('timestamptz_ops'),
-    ),
-    index('pipeline_destination_id').using(
-      'btree',
-      table.destination_id.asc().nullsLast().op('text_ops'),
-    ),
-    index('pipeline_source_id').using(
-      'btree',
-      table.source_id.asc().nullsLast().op('text_ops'),
-    ),
-    index('pipeline_updated_at').using(
-      'btree',
-      table.updated_at.asc().nullsLast().op('timestamptz_ops'),
+    index('pipeline_created_at').on(table.created_at),
+    index('pipeline_destination_id').on(table.destination_id),
+    index('pipeline_source_id').on(table.source_id),
+    index('pipeline_updated_at').on(table.updated_at),
+    check(
+      'pipeline_id_prefix_check',
+      sql`CHECK (starts_with((id)::text, 'pipe_'::text`,
     ),
     foreignKey({
       columns: [table.destination_id],
@@ -153,29 +157,63 @@ export const pipeline = pgTable(
       .onUpdate('cascade')
       .onDelete('cascade'),
     pgPolicy('customer_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['customer'],
-      using: sql`( SELECT (ARRAY( SELECT connection.id
-         FROM connection
-        WHERE (((connection.connector_config_id)::text IN ( SELECT connector_config.id
-                 FROM connector_config
-                WHERE ((connector_config.org_id)::text = (jwt_org_id())::text))) AND ((connection.customer_id)::text = (( SELECT jwt_customer_id() AS jwt_customer_id))::text))) && ARRAY[pipeline.source_id, pipeline.destination_id]))`,
+      to: 'customer',
+      using: sql`(
+        SELECT array(
+          SELECT id
+          FROM connection
+          WHERE
+            connector_config_id = ANY(
+              SELECT id
+              FROM connector_config
+              WHERE org_id = jwt_org_id()
+            )
+            AND customer_id = (SELECT jwt_customer_id())
+        ) && array[pipeline.source_id, pipeline.destination_id]
+      )`,
     }),
     pgPolicy('org_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['org'],
+      to: 'org',
+      using: sql`(
+        SELECT array(
+          SELECT r.id
+          FROM resource r
+          JOIN connector_config cc on r.connector_config_id = cc.id
+          WHERE cc.org_id = jwt_org_id()
+        ) && array[source_id, destination_id]
+        -- && and @> is the same, however we are using && to stay consistent with end user policy
+      )`,
+      withCheck: sql`(
+        select array(
+          select r.id
+          from resource r
+          join connector_config cc on r.connector_config_id = cc.id
+          where cc.org_id = jwt_org_id()
+        ) @> array[source_id, destination_id]
+        -- Pipeline must be fully within the org
+      )`,
     }),
     pgPolicy('org_member_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['authenticated'],
+      to: 'authenticated',
+      using: sql`(
+        array(
+          select r.id
+          from resource r
+          join connector_config cc on cc.id = r.connector_config_id
+          where cc.org_id = jwt_org_id()
+        ) && array[source_id, destination_id]
+        -- && and @> is the same, however we are using && to stay consistent with end user policy
+      )`,
+      withCheck: sql`(
+        array(
+          select r.id
+          from resource r
+          join connector_config cc on cc.id = r.connector_config_id
+          where cc.org_id = jwt_org_id()
+        ) @> array[source_id, destination_id]
+        -- User must have access to both the source & destination resources
+      )`,
     }),
-    check(
-      'pipeline_id_prefix_check',
-      sql`CHECK (starts_with((id)::text, 'pipe_'::text`,
-    ),
   ],
 )
 
@@ -199,34 +237,25 @@ export const integration = pgTable(
       .notNull(),
   },
   (table) => [
-    index('institution_created_at').using(
-      'btree',
-      table.created_at.asc().nullsLast().op('timestamptz_ops'),
-    ),
-    index('institution_provider_name').using(
-      'btree',
-      table.connector_name.asc().nullsLast().op('text_ops'),
-    ),
-    index('institution_updated_at').using(
-      'btree',
-      table.updated_at.asc().nullsLast().op('timestamptz_ops'),
-    ),
-    pgPolicy('org_write_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['public'],
-      using: sql`true`,
-      withCheck: sql`true`,
-    }),
-    pgPolicy('public_readonly_access', {
-      as: 'permissive',
-      for: 'select',
-      to: ['public'],
-    }),
+    index('institution_created_at').on(table.created_at),
+    index('institution_provider_name').on(table.connector_name),
+    index('institution_updated_at').on(table.updated_at),
     check(
       'integration_id_prefix_check',
       sql`CHECK (starts_with((id)::text, 'int_'::text`,
     ),
+    // -- FiXME: Revoke write access to institution once we figure out a better way...
+    // -- It's not YET an issue because we are not issuing any org-role tokens at the moment
+    pgPolicy('org_write_access', {
+      to: 'public',
+      using: sql`true`,
+      withCheck: sql`true`,
+    }),
+    pgPolicy('public_readonly_access', {
+      for: 'select',
+      to: 'public',
+      using: sql`true`,
+    }),
   ],
 )
 
@@ -262,43 +291,28 @@ export const connector_config = pgTable(
     metadata: jsonb(),
   },
   (table) => [
-    index('integration_created_at').using(
-      'btree',
-      table.created_at.asc().nullsLast().op('timestamptz_ops'),
-    ),
-    index('integration_org_id').using(
-      'btree',
-      table.org_id.asc().nullsLast().op('text_ops'),
-    ),
-    index('integration_provider_name').using(
-      'btree',
-      table.connector_name.asc().nullsLast().op('text_ops'),
-    ),
-    index('integration_updated_at').using(
-      'btree',
-      table.updated_at.asc().nullsLast().op('timestamptz_ops'),
-    ),
-    pgPolicy('org_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['org'],
-      using: sql`((org_id)::text = (jwt_org_id())::text)`,
-      withCheck: sql`((org_id)::text = (jwt_org_id())::text)`,
-    }),
-    pgPolicy('customer_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['customer'],
-    }),
-    pgPolicy('org_member_access', {
-      as: 'permissive',
-      for: 'all',
-      to: ['authenticated'],
-    }),
+    index('integration_created_at').on(table.created_at),
+    index('integration_org_id').on(table.org_id),
+    index('integration_provider_name').on(table.connector_name),
+    index('integration_updated_at').on(table.updated_at),
     check(
       'connector_config_id_prefix_check',
       sql`CHECK (starts_with((id)::text, 'ccfg_'::text`,
     ),
+    pgPolicy('org_access', {
+      to: 'org',
+      using: sql`org_id = jwt_org_id()`,
+      withCheck: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('customer_access', {
+      to: 'customer',
+      using: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('org_member_access', {
+      to: 'authenticated',
+      using: sql`org_id = public.jwt_org_id()`,
+      withCheck: sql`org_id = public.jwt_org_id()`,
+    }),
     // causes circular dependency
     // foreignKey({
     //   columns: [table.default_pipe_in_source_id],
