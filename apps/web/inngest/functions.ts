@@ -29,11 +29,6 @@ export const syncConnection = inngest.createFunction(
       console.log('Will sync connection', connectionId)
       // TODO: Figure out what is the userId we ought to be using...
 
-      const rows = await configDb.execute(
-        sql`SELECT customer_id FROM connection WHERE id = ${connectionId}`,
-      )
-      const customerId = rows[0]?.['customer_id']
-      console.log('customerId', customerId)
       await flatRouter
         .createCaller({
           ...contextFactory.fromViewer({role: 'system'}),
