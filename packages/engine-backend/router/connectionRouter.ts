@@ -34,7 +34,8 @@ const zExpandConnector = z.object({
   logoUrl: z.string().url(),
 })
 
-async function performConnectionCheck(ctx: any, connId: string, opts: any) {
+export async function performConnectionCheck(ctx: any, connId: string, opts: any) {
+
   const remoteCtx = await getRemoteContext({
     ...ctx,
     remoteConnectionId: connId,
