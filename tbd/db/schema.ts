@@ -16,6 +16,8 @@ export const orgRole = pgRole('org')
 export const customerRole = pgRole('customer')
 export const userRole = pgRole('authenticated')
 
+// TODO: Missing jwt_org_id() function definition
+
 export const connection = pgTable(
   'connection',
   {
@@ -46,10 +48,7 @@ export const connection = pgTable(
     index('connection_customer_id').on(t.customer_id),
     index('connection_provider_name').on(t.connector_name),
     index('connection_updated_at').on(t.updated_at),
-    check(
-      'connection_id_prefix_check',
-      sql`CHECK (starts_with((id)::text, 'conn_'::text`,
-    ),
+    check('connection_id_prefix_check', sql`starts_with(id, 'conn_')`),
     foreignKey({
       columns: [t.connector_config_id],
       foreignColumns: [connector_config.id],
@@ -143,10 +142,7 @@ export const pipeline = pgTable(
     index('pipeline_destination_id').on(table.destination_id),
     index('pipeline_source_id').on(table.source_id),
     index('pipeline_updated_at').on(table.updated_at),
-    check(
-      'pipeline_id_prefix_check',
-      sql`CHECK (starts_with((id)::text, 'pipe_'::text`,
-    ),
+    check('pipeline_id_prefix_check', sql`starts_with(id, 'pipe_')`),
     foreignKey({
       columns: [table.destination_id],
       foreignColumns: [connection.id],
@@ -245,10 +241,7 @@ export const integration = pgTable(
     index('institution_created_at').on(table.created_at),
     index('institution_provider_name').on(table.connector_name),
     index('institution_updated_at').on(table.updated_at),
-    check(
-      'integration_id_prefix_check',
-      sql`CHECK (starts_with((id)::text, 'int_'::text`,
-    ),
+    check('integration_id_prefix_check', sql`starts_with(id, 'int_')`),
     // -- FiXME: Revoke write access to institution once we figure out a better way...
     // -- It's not YET an issue because we are not issuing any org-role tokens at the moment
     pgPolicy('org_write_access', {
@@ -317,10 +310,7 @@ export const connector_config = pgTable(
     })
       .onUpdate('restrict')
       .onDelete('restrict'),
-    check(
-      'connector_config_id_prefix_check',
-      sql`CHECK (starts_with((id)::text, 'ccfg_'::text`,
-    ),
+    check('connector_config_id_prefix_check', sql`starts_with(id, 'ccfg_')`),
     pgPolicy('org_access', {
       to: 'org',
       using: sql`org_id = jwt_org_id()`,
