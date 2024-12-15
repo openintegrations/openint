@@ -10,7 +10,7 @@ import {
   ensureSchema,
   getCommonObjectTable,
   getDb,
-  schema,
+  schemaWip as schema,
   stripNullByte,
 } from '@openint/db'
 import {envRequired} from '@openint/env'
