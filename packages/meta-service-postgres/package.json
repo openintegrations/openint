@@ -7,7 +7,9 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/connector-postgres": "workspace:*",
-    "@openint/util": "workspace:*"
+    "@openint/db": "workspace:*",
+    "@openint/util": "workspace:*",
+    "change-case": "^5.4.4"
   },
   "devDependencies": {
     "@openint/engine-backend": "workspace:*",

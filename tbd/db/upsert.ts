@@ -2,6 +2,7 @@ import {and, or, sql} from 'drizzle-orm'
 import type {PgInsertBase} from 'drizzle-orm/pg-core'
 import {
   getTableConfig,
+  pgTable,
   type PgColumn,
   type PgDatabase,
   type PgInsertValue,
@@ -15,7 +16,7 @@ export interface DbUpsertOptions<TTable extends PgTable> {
   /** defaults to primaryKeyColumns */
   keyColumns?: Array<ColumnKeyOf<TTable>>
   /** Shallow jsonb merge as via sql`COALESCE(${fullId}, '{}'::jsonb) || excluded.${colId}` */
-  shallowMergeJsonbColumns?: Array<ColumnKeyOf<TTable>>
+  shallowMergeJsonbColumns?: Array<ColumnKeyOf<TTable>> | boolean
   /**
    * Changes to these columns will be ignored in the WHERE clause of ON CONFLICT UPDATE
    * e.g. `updated_at`
@@ -51,13 +52,13 @@ export function dbUpsertOne<
   TTable extends PgTable,
 >(
   db: DB,
-  table: TTable,
+  _table: TTable | string,
   value: PgInsertValue<TTable>,
   options?: DbUpsertOptions<TTable>,
 ) {
   // Will always have non empty returns as we are guaranteed a single value
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return dbUpsert(db, table, [value], options)!
+  return dbUpsert(db, _table, [value], options)!
 }
 
 /**
@@ -72,10 +73,18 @@ export function dbUpsert<
   TTable extends PgTable,
 >(
   db: DB,
-  table: TTable,
+  _table: TTable | string,
   values: Array<PgInsertValue<TTable>>,
   options: DbUpsertOptions<TTable> = {},
 ) {
+  const firstRow = values[0]
+  if (!firstRow) {
+    return
+  }
+
+  const table =
+    typeof _table === 'string' ? inferTableForUpsert(_table, firstRow) : _table
+
   const tbCfg = getTableConfig(table)
   const getColumn = (name: string) => {
     const col = table[name as keyof PgTable] as PgColumn
@@ -90,7 +99,9 @@ export function dbUpsert<
     tbCfg.primaryKeys[0]?.columns ??
     tbCfg.columns.filter((c) => c.primary) // Presumably only a single primary key column will be possible in this scenario
   const shallowMergeJsonbColumns =
-    options.shallowMergeJsonbColumns?.map(getColumn)
+    typeof options.shallowMergeJsonbColumns === 'boolean'
+      ? tbCfg.columns.filter((c) => c.columnType === 'PgJsonb')
+      : options.shallowMergeJsonbColumns?.map(getColumn)
   const noDiffColumns = options.noDiffColumns?.map(getColumn)
   const insertOnlyColumns = options.insertOnlyColumns?.map(getColumn)
 
@@ -100,9 +111,6 @@ export function dbUpsert<
     )
   }
 
-  if (!values.length) {
-    return
-  }
   const insertOnlyColumnNames = new Set([
     ...keyColumns.map((k) => k.name),
     ...(insertOnlyColumns?.map((k) => k.name) ?? []),
@@ -156,4 +164,30 @@ export function dbUpsert<
       ]),
     ) as PgUpdateSetSource<TTable>,
   })
+}
+
+/** Simple test */
+function isObjectOrArray(input: unknown) {
+  return typeof input === 'object' && input !== null
+}
+
+export function inferTableForUpsert(
+  name: string,
+  record: Record<string, unknown>,
+  opts?: {
+    jsonColumns?: string[]
+  },
+) {
+  return pgTable(name, (t) =>
+    Object.fromEntries(
+      Object.entries(record).map(([k, v]) => [
+        k,
+        opts?.jsonColumns?.includes(k) || isObjectOrArray(v)
+          ? t.jsonb()
+          : // text() works as a catch all for scalar types because none of them require
+            // the value to be escaped in anyway
+            (t.text() as unknown as ReturnType<typeof t.jsonb>),
+      ]),
+    ),
+  )
 }

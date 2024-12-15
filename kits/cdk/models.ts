@@ -77,7 +77,7 @@ export const zStandard = {
       .nullish(), // Status unknown
     statusMessage: z.string().nullish(),
     labels: z.array(z.string()).optional(),
-  })
+  }),
 }
 
 // TODO: Make the Input types compatible with our raw types...
@@ -93,8 +93,8 @@ export type ZRaw = {
 // as more specific type than just jsonb
 
 const zBase = z.object({
-  createdAt: z.date(), // should be string but slonik returns date
-  updatedAt: z.date(), // should be string but slonik returns date
+  createdAt: z.string(),
+  updatedAt: z.string(),
 })
 
 export const zStreamsV2 = z.record(
@@ -182,7 +182,7 @@ export const zRaw = {
       settings: z.record(z.unknown()).nullish(),
       standard: zStandard.connection.omit({id: true}).nullish(),
       disabled: z.boolean().optional(),
-      metadata: zMetadata
+      metadata: zMetadata,
     })
     .openapi({ref: 'Connection'}),
   pipeline: zBase

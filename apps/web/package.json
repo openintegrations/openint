@@ -5,7 +5,7 @@
   "scripts": {
     "build": "run-s build:*",
     "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
-    "build:migration": "if [ \"$VERCEL_ENV\" = production ] || [ \"$VERCEL_GIT_COMMIT_REF\" = main ]; then pnpm --dir ../../ migration up; else echo 'Skip non prod/staging migration'; fi",
+    "build:migration": "if [ \"$VERCEL_ENV\" = production ] || [ \"$VERCEL_GIT_COMMIT_REF\" = main ]; then pnpm --dir ../../ run-migration; else echo 'Skip non prod/staging migration'; fi",
     "build:next": "next build",
     "build:worker": "SKIP_NEXT_APP_BUILD=true cloudflare",
     "codegen:supabase": "supabase gen types typescript --linked --schema public > ./supabase/supabase.gen.d.ts",
@@ -23,6 +23,7 @@
     "@openint/cdk": "workspace:*",
     "@openint/connect": "workspace:*",
     "@openint/connector-postgres": "workspace:*",
+    "@openint/db": "workspace:*",
     "@openint/engine-backend": "workspace:*",
     "@openint/engine-frontend": "workspace:*",
     "@opennextjs/cloudflare": "https://pkg.pr.new/@opennextjs/cloudflare@2ab976f",

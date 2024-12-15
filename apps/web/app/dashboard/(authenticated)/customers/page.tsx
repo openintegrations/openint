@@ -19,7 +19,10 @@ export default function CustomersPage() {
   const res = _trpcReact.adminSearchCustomers.useQuery({})
 
   // Function to format dates
-  function formatDate(dateString: string) {
+  function formatDate(dateString: string | null | undefined) {
+    if (!dateString) {
+      return ''
+    }
     const date = new Date(dateString)
     return new Intl.DateTimeFormat('en-US', {
       month: '2-digit',
@@ -82,7 +85,7 @@ function CustomerMenu({customer}: {customer: Customer}) {
           onClick={() => navigator.clipboard.writeText(customer.id)}>
           <Copy className="mr-2 h-4 w-4" />
           <div>
-            Copy End User ID
+            Copy Customer Id
             <br />
             <pre className="text-muted-foreground">{customer.id}</pre>
           </div>

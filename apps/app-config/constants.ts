@@ -39,4 +39,5 @@ export const __DEBUG__ =
   getServerUrl(null).includes('localhost') ||
   Boolean(
     typeof window !== 'undefined' && window.localStorage.getItem('__DEBUG__'),
-  )
+  ) ||
+  !!process.env['DEBUG']
