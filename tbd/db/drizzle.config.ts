@@ -3,7 +3,7 @@ import {env} from '@openint/env'
 
 /** Really should be called drizzle-kit config */
 export default defineConfig({
-  out: './drizzle',
+  out: './migrations',
   dialect: 'postgresql',
   schema: './schema.ts',
   dbCredentials: {url: env.POSTGRES_URL},
