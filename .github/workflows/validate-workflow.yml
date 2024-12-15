@@ -89,9 +89,9 @@ jobs:
         run: pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate && git diff --exit-code
 
       - name: Run migration
-        run: pnpm migration up
+        run: pnpm run-migration
         # To test this with a locally install postgres, run
-        # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && POSTGRES_URL=postgres://localhost:5432/test pnpm migration up
+        # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && POSTGRES_URL=postgres://localhost:5432/test pnpm run-migration
 
       - name: Run health check
         run: MOCK_HEALTHCHECK=true NANGO_SECRET_KEY=noop JWT_SECRET=NOOP npx tsx ./bin/openint.ts health
