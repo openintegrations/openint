@@ -10,9 +10,9 @@
     "@openint/ui": "workspace:*",
     "@openint/util": "workspace:*",
     "@tanstack/react-query": "*",
-    "@trpc/client": "10.40.0",
-    "@trpc/react-query": "10.40.0",
-    "@trpc/server": "10.40.0",
+    "@trpc/client": "10.45.2",
+    "@trpc/react-query": "10.45.2",
+    "@trpc/server": "10.45.2",
     "next-themes": "0.3.0"
   },
   "devDependencies": {

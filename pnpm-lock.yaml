@@ -448,8 +448,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/util
       '@trpc/server':
-        specifier: 10.40.0
-        version: 10.40.0
+        specifier: 10.45.2
+        version: 10.45.2
       cac:
         specifier: 6.7.12
         version: 6.7.12(patch_hash=nsfmzcycabp3f3q7kw2uyer77u)
@@ -474,7 +474,7 @@ importers:
         version: 5.6.0(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.22.4)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.45.2)(zod@3.22.4)
       '@openint/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -530,11 +530,11 @@ importers:
         specifier: 4.28.0
         version: 4.28.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@trpc/react-query':
-        specifier: 10.40.0
-        version: 10.40.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.40.0(@trpc/server@10.40.0))(@trpc/server@10.40.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 10.45.2
+        version: 10.45.2(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
-        specifier: 10.40.0
-        version: 10.40.0
+        specifier: 10.45.2
+        version: 10.45.2
       commandbar:
         specifier: 1.7.3
         version: 1.7.3(react@18.3.1)
@@ -594,7 +594,7 @@ importers:
         version: 7.0.8
       trpc-panel:
         specifier: 1.3.4
-        version: 1.3.4(@trpc/server@10.40.0)(zod@3.22.4)
+        version: 1.3.4(@trpc/server@10.45.2)(zod@3.22.4)
     devDependencies:
       '@sentry/cli':
         specifier: ^2.36.6
@@ -1360,8 +1360,8 @@ importers:
         specifier: 0.0.15
         version: 0.0.15
       '@trpc/server':
-        specifier: 10.40.0
-        version: 10.40.0
+        specifier: 10.45.2
+        version: 10.45.2
       jsonwebtoken:
         specifier: 9.0.0
         version: 9.0.0
@@ -1377,7 +1377,7 @@ importers:
     devDependencies:
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.22.4)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.45.2)(zod@3.22.4)
       '@nangohq/frontend':
         specifier: 0.33.8
         version: 0.33.8(patch_hash=cscdyzeu5adridjxg5g7kdqy6q)
@@ -1467,7 +1467,7 @@ importers:
         version: 5.6.0(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.22.4)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.45.2)(zod@3.22.4)
       '@openint/app-config':
         specifier: workspace:*
         version: link:../../apps/app-config
@@ -1579,8 +1579,8 @@ importers:
         specifier: ^0.0.15
         version: 0.0.15
       '@trpc/server':
-        specifier: 10.40.0
-        version: 10.40.0
+        specifier: 10.45.2
+        version: 10.45.2
       drizzle-orm:
         specifier: ^0.36.3
         version: 0.36.3(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
@@ -1596,7 +1596,7 @@ importers:
         version: 5.6.0(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.22.4)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.45.2)(zod@3.22.4)
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
@@ -1619,14 +1619,14 @@ importers:
         specifier: 4.28.0
         version: 4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/client':
-        specifier: 10.40.0
-        version: 10.40.0(@trpc/server@10.40.0)
+        specifier: 10.45.2
+        version: 10.45.2(@trpc/server@10.45.2)
       '@trpc/react-query':
-        specifier: 10.40.0
-        version: 10.40.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.40.0(@trpc/server@10.40.0))(@trpc/server@10.40.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 10.45.2
+        version: 10.45.2(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
-        specifier: 10.40.0
-        version: 10.40.0
+        specifier: 10.45.2
+        version: 10.45.2
       lucide-react:
         specifier: '*'
         version: 0.115.0(react@18.3.1)
@@ -1668,8 +1668,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@trpc/server':
-        specifier: 10.40.0
-        version: 10.40.0
+        specifier: 10.45.2
+        version: 10.45.2
       '@zodios/core':
         specifier: 10.9.6
         version: 10.9.6(axios@0.21.1)(zod@3.22.4)
@@ -1756,7 +1756,7 @@ importers:
     dependencies:
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.22.4)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.45.2)(zod@3.22.4)
       '@openint/env':
         specifier: workspace:*
         version: link:../env
@@ -1767,8 +1767,8 @@ importers:
         specifier: 0.0.15
         version: 0.0.15
       '@trpc/server':
-        specifier: 10.40.0
-        version: 10.40.0
+        specifier: 10.45.2
+        version: 10.45.2
 
   packages/ui:
     dependencies:
@@ -1927,8 +1927,8 @@ importers:
         specifier: ^0.0.15
         version: 0.0.15
       '@trpc/server':
-        specifier: 10.40.0
-        version: 10.40.0
+        specifier: 10.45.2
+        version: 10.45.2
       accounting:
         specifier: 0.4.1
         version: 0.4.1
@@ -5664,22 +5664,22 @@ packages:
       react: 18.3.1
       react-dom: 18.3.1
 
-  '@trpc/client@10.40.0':
-    resolution: {integrity: sha512-bT6BcdWjj0KzGQiimE6rB2tIaRYX0Ear4Gthb5szN/c01wrP0yC1Fbz2uCcm/QTVAwu4Lve5M+YjPoEaTHG6lg==}
+  '@trpc/client@10.45.2':
+    resolution: {integrity: sha512-ykALM5kYWTLn1zYuUOZ2cPWlVfrXhc18HzBDyRhoPYN0jey4iQHEFSEowfnhg1RvYnrAVjNBgHNeSAXjrDbGwg==}
     peerDependencies:
-      '@trpc/server': 10.40.0
+      '@trpc/server': 10.45.2
 
-  '@trpc/react-query@10.40.0':
-    resolution: {integrity: sha512-DpJrV3lmYNo9xtPtcg49lfh9CUFap3ZivjhlSmfe4QPf7H6xBjAE+ml4OdJ0RmKvSTFvbLSOiNdB1k5O8zIdzQ==}
+  '@trpc/react-query@10.45.2':
+    resolution: {integrity: sha512-BAqb9bGZIscroradlNx+Cc9522R+idY3BOSf5z0jHUtkxdMbjeGKxSSMxxu7JzoLqSIEC+LVzL3VvF8sdDWaZQ==}
     peerDependencies:
       '@tanstack/react-query': 4.28.0
-      '@trpc/client': 10.40.0
-      '@trpc/server': 10.40.0
+      '@trpc/client': 10.45.2
+      '@trpc/server': 10.45.2
       react: 18.3.1
       react-dom: 18.3.1
 
-  '@trpc/server@10.40.0':
-    resolution: {integrity: sha512-49SUOMWzSZtu5+OdrADmJD+u+sjSE0qj1cWgYk2FY4jLkPJunLuNRuhzM7aOeBhiUjyfhg2YTfur8FN1WBmvEw==}
+  '@trpc/server@10.45.2':
+    resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
 
   '@tryfinch/react-connect@3.11.0':
     resolution: {integrity: sha512-74dDbMneXPuvQOlB4qDcbbmC0no3K2ze5IGXKKf+G+7gwapFlofj/+LSi9g/nmJUyP+U586IpCIwWjPn3pE0kA==}
@@ -15742,9 +15742,9 @@ snapshots:
 
   '@leichtgewicht/ip-codec@2.0.4': {}
 
-  '@lilyrose2798/trpc-openapi@1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.22.4)':
+  '@lilyrose2798/trpc-openapi@1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.45.2)(zod@3.22.4)':
     dependencies:
-      '@trpc/server': 10.40.0
+      '@trpc/server': 10.45.2
       co-body: 6.1.0
       h3: 1.8.2
       lodash.clonedeep: 4.5.0
@@ -18807,19 +18807,19 @@ snapshots:
       - '@types/react'
       - prop-types
 
-  '@trpc/client@10.40.0(@trpc/server@10.40.0)':
+  '@trpc/client@10.45.2(@trpc/server@10.45.2)':
     dependencies:
-      '@trpc/server': 10.40.0
+      '@trpc/server': 10.45.2
 
-  '@trpc/react-query@10.40.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.40.0(@trpc/server@10.40.0))(@trpc/server@10.40.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@trpc/react-query@10.45.2(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/react-query': 4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@trpc/client': 10.40.0(@trpc/server@10.40.0)
-      '@trpc/server': 10.40.0
+      '@trpc/client': 10.45.2(@trpc/server@10.45.2)
+      '@trpc/server': 10.45.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@trpc/server@10.40.0': {}
+  '@trpc/server@10.45.2': {}
 
   '@tryfinch/react-connect@3.11.0(react@18.3.1)':
     dependencies:
@@ -27354,9 +27354,9 @@ snapshots:
 
   trough@2.1.0: {}
 
-  trpc-panel@1.3.4(@trpc/server@10.40.0)(zod@3.22.4):
+  trpc-panel@1.3.4(@trpc/server@10.45.2)(zod@3.22.4):
     dependencies:
-      '@trpc/server': 10.40.0
+      '@trpc/server': 10.45.2
       fuzzysort: 2.0.4
       path: 0.12.7
       url: 0.11.3

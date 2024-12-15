@@ -10,7 +10,7 @@
     "@openint/env": "workspace:*",
     "@opensdks/runtime": "0.0.19",
     "@opensdks/util-zod": "0.0.15",
-    "@trpc/server": "10.40.0"
+    "@trpc/server": "10.45.2"
   },
   "devDependencies": {}
 }
