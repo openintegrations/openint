@@ -8,7 +8,7 @@ import {env} from '@openint/env'
 import {rxjs, toCompletion} from '@openint/util'
 import type {RecordMessageBody} from './def'
 import postgresServer from './server'
-import {inferTable} from './utils'
+import {inferTableFromMessage} from './utils'
 
 /**
  * Causes issue with next.js build... so putting it here for now since we are not quite using it in prod yet
@@ -169,7 +169,7 @@ const messages = [
 
 describe.each(messages)('custom schema: %s', (_, messages) => {
   const tables = messages.map((m) =>
-    inferTable(m as unknown as RecordMessageBody),
+    inferTableFromMessage(m as unknown as RecordMessageBody),
   )
 
   test('infer table schema', async () => {
