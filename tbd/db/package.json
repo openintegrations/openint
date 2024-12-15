@@ -5,7 +5,7 @@
   "module": "./index.ts",
   "scripts": {
     "db:clean": "rm -rf ./drizzle",
-    "db:pull": "drizzle-kit introspect:pg --connectionString $POSTGRES_URL --driver pg",
+    "db:pull": "drizzle-kit introspect --connectionString $POSTGRES_URL --dialect postgresql",
     "db:push": "drizzle-kit push:pg --connectionString $POSTGRES_URL --driver pg --schema ./schema.ts --verbose --strict",
     "db:run-migration": "npx tsx -e \"import('./').then(r => r.default.runMigration())\"",
     "db:schema-diff": "pnpm db:clean && pnpm db:pull && drizzle-kit generate:pg --schema ./schema.ts && cd ./drizzle && ls 0001*.sql | xargs cat && pnpm db:clean",
