@@ -6,10 +6,15 @@ import {
   index,
   jsonb,
   pgPolicy,
+  pgRole,
   pgTable,
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
+
+export const orgRole = pgRole('org')
+export const customerRole = pgRole('customer')
+export const userRole = pgRole('authenticated')
 
 export const connection = pgTable(
   'connection',
