@@ -1,3 +1,11 @@
+-- Setup the migrations table itself...
+CREATE TABLE IF NOT EXISTS "public"."_migrations" (
+    "name" text NOT NULL,
+    "hash" text NOT NULL,
+    "date" timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY ("name")
+);
+
 --
 -- Meta: App level
 --
