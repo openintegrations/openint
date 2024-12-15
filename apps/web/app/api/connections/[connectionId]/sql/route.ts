@@ -1,11 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import type {NextRequest} from 'next/server'
 import {NextResponse} from 'next/server'
-import {
-  contextFactory,
-  DatabaseError,
-  Papa,
-} from '@openint/app-config/backendConfig'
+import {contextFactory, Papa} from '@openint/app-config/backendConfig'
 import {__DEBUG__, kAcceptUrlParam} from '@openint/app-config/constants'
 import type {Id} from '@openint/cdk'
 import {hasRole} from '@openint/cdk'
@@ -88,10 +84,11 @@ export async function GET(
     }
     return res
   } catch (err) {
+    // TODO: Fix me to use postgres.js error instead.
     // DatabaseError is most likely a result of invalid sql syntax
-    if (err instanceof DatabaseError) {
-      return new NextResponse(err.message, {status: 400})
-    }
+    // if (err instanceof DatabaseError) {
+    //   return new NextResponse(err.message, {status: 400})
+    // }
     if (err instanceof TRPCError) {
       return trpcErrorResponse(err)
     }

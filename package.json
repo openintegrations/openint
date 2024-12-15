@@ -80,11 +80,6 @@
     "node": "20"
   },
   "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "slonik": "30"
-      }
-    },
     "neverBuiltDependencies": [
       "libpq"
     ],
@@ -104,8 +99,7 @@
       "axios": "0.21.1",
       "esbuild": "0.17.5",
       "react": "18.3.1",
-      "react-dom": "18.3.1",
-      "slonik": "30.3.1"
+      "react-dom": "18.3.1"
     },
     "patchedDependencies": {
       "@jsonurl/jsonurl@1.1.7": "patches/@jsonurl__jsonurl@1.1.7.patch",

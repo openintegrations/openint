@@ -14,10 +14,6 @@ import {mergedConnectors} from './connectors/connectors.merged'
 import {getServerUrl} from './constants'
 import {env, envRequired} from './env'
 
-export {
-  DatabaseError,
-  makePostgresClient,
-} from '@openint/connector-postgres/makePostgresClient'
 export {Papa} from '@openint/connector-spreadsheet'
 
 export const backendEnv = env
