@@ -20,7 +20,7 @@
     "typecheck": "tsc --project . --noEmit",
     "validate": "run-s --silent typecheck lint test",
     "openint": "tsx ./bin/openint",
-    "migration": "tsx ./apps/cli/pgMigrator-cli",
+    "run-migration": "pnpm --dir ./tbd/db db:run-migration",
     "pgdump": "pg_dump --schema public --schema-only --no-owner --exclude-schema=graphile_migrate --file=apps/web/schema.sql $POSTGRES_URL",
     "worker:setup": "tsx ./bin/openint setupWorker",
     "worker:run": "tsx ./bin/openint runWorker",
