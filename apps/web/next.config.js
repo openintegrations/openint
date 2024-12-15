@@ -70,6 +70,7 @@ const nextConfig = {
       ...config.resolve.alias,
       handlebars: 'handlebars/dist/handlebars.js',
       crypto: 'node:crypto',
+      depd: path.resolve('./worker-aliases/depd.js'),
       // '#crypto': 'node:crypto',
     }
     config.resolve.fallback = {
@@ -80,6 +81,7 @@ const nextConfig = {
       net: false,
       dns: false,
       crypto: 'node:crypto',
+      depd: path.resolve('./worker-aliases/depd.js'),
       // '#crypto': 'node:crypto',
     }
     config.plugins.push(

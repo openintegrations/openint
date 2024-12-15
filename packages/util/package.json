@@ -5,7 +5,6 @@
   "sideEffects": false,
   "module": "./index.ts",
   "dependencies": {
-    "@blossomfinance/iso-4217-currencies": "0.2.5",
     "@opensdks/util-zod": "^0.0.15",
     "@trpc/server": "10.40.0",
     "accounting": "0.4.1",
