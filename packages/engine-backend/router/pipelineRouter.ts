@@ -5,6 +5,7 @@ import {inngest} from '../events'
 import {zSyncOptions} from '../types'
 import {protectedProcedure, trpc} from './_base'
 import {zListParams} from './_schemas'
+import {performConnectionCheck} from './connectionRouter'
 
 export {type inferProcedureInput} from '@openint/trpc'
 
@@ -75,6 +76,7 @@ export const pipelineRouter = trpc.router({
         ctx.services.metaService.findPipelines({
           connectionIds: connections.map((c) => c.id),
         }),
+        ...connections.map((c) => performConnectionCheck(ctx, c.id, {}))
       ])
       type ConnType = 'source' | 'destination'
 
@@ -87,7 +89,7 @@ export const pipelineRouter = trpc.router({
         const connectorName = extractId(conn.id)[1]
         const integrations = intById[conn.integrationId!]
         const mappers = ctx.connectorMap[connectorName]?.standardMappers
-        const standardReso = zStandard.connection
+        const standardConn = zStandard.connection
           .omit({id: true})
           .nullish()
           .parse(mappers?.connection?.(conn.settings))
@@ -103,11 +105,11 @@ export const pipelineRouter = trpc.router({
 
         return {
           ...conn,
-          ...standardReso,
+          ...standardConn,
           id: conn.id,
           displayName:
             conn.displayName ||
-            standardReso?.displayName ||
+            standardConn?.displayName ||
             standardInt?.name ||
             '',
           integration:

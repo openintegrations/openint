@@ -63,7 +63,12 @@ export async function getRemoteContext(ctx: ProtectedContext) {
             },
           },
         })
-        .then((r) => nangoConnectionWithCredentials.parse(r.data)),
+        .then((r: any) => {
+          return nangoConnectionWithCredentials.parse(r.data)
+        }).catch(error => {
+          console.log('nangoConnectionWithCredentials error', error)
+          throw error
+        }),
     }),
   }
 

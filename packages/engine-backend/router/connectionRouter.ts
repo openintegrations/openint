@@ -34,7 +34,8 @@ const zExpandConnector = z.object({
   logoUrl: z.string().url(),
 })
 
-async function performConnectionCheck(ctx: any, connId: string, opts: any) {
+export async function performConnectionCheck(ctx: any, connId: string, opts: any) {
+
   const remoteCtx = await getRemoteContext({
     ...ctx,
     remoteConnectionId: connId,
@@ -51,7 +52,7 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
       webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
     },
   })
-  if (connUpdate || opts?.import !== false) {
+  if (connUpdate || opts?.import !== false || remoteCtx.remote.settings?.oauth?.error) {
     /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       ...(opts?.import && {
@@ -67,6 +68,10 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
       },
       connectionExternalId:
         connUpdate?.connectionExternalId ?? extractId(conn.id)[2],
+
+      // TODO: generalize these to a handler for all errors and also non nango
+      status: remoteCtx.remote.settings?.oauth?.error?.code === 'refresh_token_external_error' ? 'disconnected' : undefined,
+      statusMessage: remoteCtx.remote.settings?.oauth?.error?.message,
     })
     connUpdate = await ctx.services.getConnectionOrFail(conn.id)
   }

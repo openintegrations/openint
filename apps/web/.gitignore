@@ -8,6 +8,11 @@
 # testing
 /coverage
 
+# Cloudflare
+.dev.vars
+.open-next
+.wrangler
+
 # next.js
 /.next/
 /out/
