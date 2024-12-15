@@ -37,7 +37,7 @@ First setup dependencies
 
 - Postgres (recommend Vercel postgres)
 - Clerk (will be made optional later)
-  - Setup JWT Template -> Supabase
+  - Setup JWT Template -> Supabase (optionally)
     - Use `pwgen 32 -1 | pbcopy` for jwt secret
   - Enable organizations
   - (Use the development env is enough for private use )
