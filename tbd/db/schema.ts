@@ -264,6 +264,9 @@ export const integration = pgTable(
   ],
 )
 
+/** Workaround for the circular reference issue between connector_config and connection otherwise... */
+const _connection: any = connection
+
 export const connector_config = pgTable(
   'connector_config',
   {
@@ -300,6 +303,20 @@ export const connector_config = pgTable(
     index('integration_org_id').on(table.org_id),
     index('integration_provider_name').on(table.connector_name),
     index('integration_updated_at').on(table.updated_at),
+    foreignKey({
+      columns: [table.default_pipe_in_source_id],
+      foreignColumns: [_connection.id],
+      name: 'fk_default_pipe_in_source_id',
+    })
+      .onUpdate('restrict')
+      .onDelete('restrict'),
+    foreignKey({
+      columns: [table.default_pipe_out_destination_id],
+      foreignColumns: [_connection.id],
+      name: 'fk_default_pipe_out_destination_id',
+    })
+      .onUpdate('restrict')
+      .onDelete('restrict'),
     check(
       'connector_config_id_prefix_check',
       sql`CHECK (starts_with((id)::text, 'ccfg_'::text`,
@@ -318,20 +335,5 @@ export const connector_config = pgTable(
       using: sql`org_id = public.jwt_org_id()`,
       withCheck: sql`org_id = public.jwt_org_id()`,
     }),
-    // causes circular dependency
-    // foreignKey({
-    //   columns: [table.default_pipe_in_source_id],
-    //   foreignColumns: [connection.id],
-    //   name: 'fk_default_pipe_in_source_id',
-    // })
-    //   .onUpdate('restrict')
-    //   .onDelete('restrict'),
-    // foreignKey({
-    //   columns: [table.default_pipe_out_destination_id],
-    //   foreignColumns: [connection.id],
-    //   name: 'fk_default_pipe_out_destination_id',
-    // })
-    //   .onUpdate('restrict')
-    //   .onDelete('restrict'),
   ],
 )
