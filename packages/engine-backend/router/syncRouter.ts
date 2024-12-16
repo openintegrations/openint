@@ -19,7 +19,9 @@ export const syncRouter = trpc.router({
         return []
       }
       const runs = await configDb.query.sync_run.findMany({
+        // @ts-expect-error
         where: inArray(
+          // @ts-expect-error
           schema.sync_run.connection_id,
           connections.map((r) => r.id),
         ),

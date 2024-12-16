@@ -107,7 +107,7 @@ export const makePostgresMetaService = zFunction(
           rest,
         )
         return runQueries(async (trxn) => {
-          const rows = await trxn.execute(query)
+          const {rows} = await trxn.execute(query)
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return rows.map((r) => camelCaseKeys(r) as CustomerResultRow)
         })
@@ -128,7 +128,7 @@ export const makePostgresMetaService = zFunction(
             .execute(
               applyLimitOffset(sql`SELECT * FROM integration ${where}`, rest),
             )
-            .then((rows) =>
+            .then(({rows}) =>
               rows.map((r) => camelCaseKeys(r) as ZRaw['integration']),
             ),
         )
@@ -157,7 +157,7 @@ export const makePostgresMetaService = zFunction(
         return runQueries((trxn) =>
           trxn
             .execute(sql`SELECT * FROM pipeline ${where}`)
-            .then((rows) => rows.map((r) => camelCaseKeys(r))),
+            .then(({rows}) => rows.map((r) => camelCaseKeys(r))),
         )
       },
       listConnectorConfigInfos: ({id, connectorName} = {}) => {
@@ -175,7 +175,7 @@ export const makePostgresMetaService = zFunction(
                       : sql`WHERE disabled = FALSE`
               }`,
             )
-            .then((rows) => rows.map((r) => camelCaseKeys(r))),
+            .then(({rows}) => rows.map((r) => camelCaseKeys(r))),
         )
       },
       findConnectionsMissingDefaultPipeline: () => {
