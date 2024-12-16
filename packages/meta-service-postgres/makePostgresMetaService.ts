@@ -178,9 +178,9 @@ export const makePostgresMetaService = zFunction(
             .then(({rows}) => rows.map((r) => camelCaseKeys(r))),
         )
       },
-      findConnectionsMissingDefaultPipeline: () => {
+      findConnectionsMissingDefaultPipeline: async () => {
         const {runQueries} = _getDeps(opts)
-        return runQueries((trxn) =>
+        const {rows: res} = await runQueries((trxn) =>
           trxn.execute<{id: Id['conn']}>(sql`
             SELECT
               c.id,
@@ -199,6 +199,7 @@ export const makePostgresMetaService = zFunction(
               OR (cc.default_pipe_in_source_id IS NOT NULL AND pipe_in IS NULL)
           `),
         )
+        return res
       },
       isHealthy: async (checkDefaultPostgresConnections = false) => {
         const {runQueries} = _getDeps({
@@ -207,7 +208,7 @@ export const makePostgresMetaService = zFunction(
           viewer: {role: 'system'},
         })
 
-        const isMainDbHealthy = await runQueries((trxn) =>
+        const {rows: isMainDbHealthy} = await runQueries((trxn) =>
           trxn.execute(sql`SELECT 1`),
         )
 
@@ -216,10 +217,11 @@ export const makePostgresMetaService = zFunction(
         }
 
         // TODO:(@pellicceama) to use sql token rather than hard coding here.
-        const top3DefaultPostgresConnections = await runQueries((trxn) =>
-          trxn.execute(
-            sql`SELECT id, settings->>'databaseUrl' as database_url FROM connection where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
-          ),
+        const {rows: top3DefaultPostgresConnections} = await runQueries(
+          (trxn) =>
+            trxn.execute(
+              sql`SELECT id, settings->>'databaseUrl' as database_url FROM connection where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
+            ),
         )
 
         if (checkDefaultPostgresConnections) {
@@ -230,7 +232,7 @@ export const makePostgresMetaService = zFunction(
             const connDb = drizzle(connection['database_url'] as string, {
               logger: true,
             })
-            const res = await connDb.execute(sql`SELECT 1`)
+            const {rows: res} = await connDb.execute(sql`SELECT 1`)
             if (res.length !== 1) {
               return {
                 healthy: false,
@@ -278,14 +280,14 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
           conditions.length > 0
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
             : sql``
-        const res = await trxn.execute<T>(
+        const {rows: res} = await trxn.execute<T>(
           applyLimitOffset(sql`SELECT * FROM ${table} ${where}`, rest),
         )
         return res.map((r) => camelCaseKeys(r) as T)
       }),
     get: (id) =>
       runQueries(async (trxn) => {
-        const rows = await trxn.execute<T>(
+        const {rows} = await trxn.execute<T>(
           sql`SELECT * FROM ${table} where id = ${id}`,
         )
         return rows.map(camelCaseKeys)[0] as T | undefined

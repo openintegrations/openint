@@ -39,7 +39,7 @@ export async function ensureSchema(
     .execute(
       sql`SELECT true as exists FROM information_schema.schemata WHERE schema_name = ${schema}`,
     )
-    .then((r) => r[0]?.['exists'] === true)
+    .then((r) => r.rows?.[0]?.['exists'] === true)
   if (exists) {
     return
   }

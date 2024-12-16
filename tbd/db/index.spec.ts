@@ -1,5 +1,6 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
+import {drizzle} from 'drizzle-orm/node-postgres'
 import {
   check,
   customType,
@@ -8,7 +9,6 @@ import {
   serial,
   text,
 } from 'drizzle-orm/pg-core'
-import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
 import {applyLimitOffset} from '.'
 
@@ -128,7 +128,7 @@ describe('test db', () => {
 
   test('connect', async () => {
     const res = await db.execute('select 1+1 as sum')
-    expect(res[0]).toEqual({sum: 2})
+    expect(res.rows[0]).toEqual({sum: 2})
   })
 
   const customText = customType<{data: unknown}>({dataType: () => 'text'})
@@ -191,7 +191,7 @@ describe('test db', () => {
     ])
 
     // fetch raw with db.execute
-    const rows2 = await db.execute(sql`SELECT * FROM ${table}`)
+    const {rows: rows2} = await db.execute(sql`SELECT * FROM ${table}`)
     expect(rows2).toEqual([
       {
         id: 1,
@@ -224,21 +224,21 @@ describe('test db', () => {
     expect(rows).toEqual([{myId: 1}])
 
     // does not work for raw queries...
-    const rows2 = await db2.execute(sql`select * from "myAccount"`)
+    const {rows: rows2} = await db2.execute(sql`select * from "myAccount"`)
     expect(rows2).toEqual([{my_id: 1}])
   })
 
   // Depends on the previous test, cannot be parallel executed
   test('array query', async () => {
     // test array query
-    const res = await db.execute(
+    const {rows: res} = await db.execute(
       sql`SELECT * FROM account where email = ANY(${sql.param([
         'hello@world.com',
         'sup@sup.com',
       ])})`,
     )
     expect(res).toMatchObject([{id: 1, email: 'hello@world.com'}])
-    const res2 = await db.execute(
+    const {rows: res2} = await db.execute(
       sql`SELECT * FROM account where email = ANY(${sql.param([])})`,
     )
     expect(res2).toMatchObject([])
@@ -299,7 +299,10 @@ describe('test db', () => {
         .execute(
           sql`SELECT * FROM ${table} where ${table.email} = ${'hi@mail.com'}`,
         )
-        .then((r) => r[0]),
+        .then((r) => {
+          console.log('r', r.rows)
+          return r.rows[0]
+        }),
     ).toMatchObject({
       email: 'hi@mail.com',
       data: {a: 1},
@@ -309,17 +312,20 @@ describe('test db', () => {
         .execute(
           sql`SELECT * FROM ${table} where ${table.email} = ${'sqlNULL@mail.com'}`,
         )
-        .then((r) => r[0]),
+        .then((r) => r.rows[0]),
     ).toMatchObject({
       email: 'sqlNULL@mail.com',
       data: null,
     })
+    await db.execute(
+      sql`INSERT INTO account (email, data) VALUES (${'null@mail.com'}, ${null})`,
+    )
     expect(
       await db
         .execute(
           sql`SELECT * FROM ${table} where ${table.email} = ${'null@mail.com'}`,
         )
-        .then((r) => r[0]),
+        .then((r) => r.rows[0]),
     ).toMatchObject({
       email: 'null@mail.com',
       data: null,
