@@ -253,6 +253,8 @@ describe('test db', () => {
   })
 
   test('jsonb inserts require string input', async () => {
+    /** Drizzle Note: None of these rejects as they used to. 2 & 3 are particularly strange, 1 i'm not super concerned about. */
+
     await expect(() =>
       db.execute(
         sql`INSERT INTO account (email, data) VALUES (${'hi@mail.com'}, ${{
@@ -262,6 +264,7 @@ describe('test db', () => {
     ).rejects.toThrow(
       'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Object',
     )
+
     await expect(() =>
       db.execute(
         sql`INSERT INTO account (email, data) VALUES (${'bool@mail.com'}, ${true})`,
@@ -276,6 +279,8 @@ describe('test db', () => {
     ).rejects.toThrow(
       'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received type number',
     )
+
+    /** Drizzle Note: Rejecting invalid not json objects is working OK. Same as positive scenarios. */
     await expect(() =>
       db.execute(
         sql`INSERT INTO account (email, data) VALUES (${'str@mail.com'}, ${'str'})`,
