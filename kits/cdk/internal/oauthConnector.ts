@@ -22,6 +22,11 @@ export const zAuthMode = z
   .enum(['OAUTH2', 'OAUTH1', 'BASIC', 'API_KEY'])
   .openapi({ref: 'AuthMode'})
 
+export const zOauthConnectionError = z.object({
+  code: z.enum(['refresh_token_external_error']).or(z.string()),
+  message: z.string().nullish(),
+})
+
 export const oauthBaseSchema = {
   name: z.literal('__oauth__'), // TODO: This is a noop
   connectorConfig: z.object({
@@ -62,7 +67,8 @@ export const oauthBaseSchema = {
         .nullish(),
       metadata: z.record(z.unknown()).nullable(),
     }),
-    // TODO: add error fields here or maybe at a higher level to capture when connection needs to be refreshed 
+    // TODO: add error fields here or maybe at a higher level to capture when connection needs to be refreshed
+    error: zOauthConnectionError.nullish(),
   }),
   connectOutput: z.object({
     providerConfigKey: zId('ccfg'),
@@ -150,7 +156,10 @@ export function makeOauthConnectorServer({
           },
         })
         .then((r) => r.data)
-      return {connectionExternalId: extractId(connId)[2], settings: {oauth: res}}
+      return {
+        connectionExternalId: extractId(connId)[2],
+        settings: {oauth: res},
+      }
     },
   } satisfies ConnectorServer<typeof oauthBaseSchema>
   return {
