@@ -1,7 +1,7 @@
 import type {
   AnyEntityPayload,
+  ConnectionUpdateData,
   Link,
-  ResoUpdateData,
   StateUpdateData,
   SyncOperation,
 } from '@openint/sync'
@@ -13,7 +13,7 @@ type OperationType = SyncOperation['type']
 export type OpHandlers<
   TRet,
   T = any,
-  TResoUpdate extends object = ResoUpdateData,
+  TResoUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = Partial<{
   [k in OperationType]: (
@@ -27,7 +27,7 @@ export type OpHandlers<
  */
 export function handlersLink<
   TData = any,
-  TResoUpdate extends object = ResoUpdateData,
+  TResoUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 >(
   handlers: OpHandlers<

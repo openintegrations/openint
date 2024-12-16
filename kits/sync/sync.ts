@@ -1,9 +1,9 @@
 import {R, Rx, toCompletion} from '@openint/util'
 import type {
   AnyEntityPayload,
+  ConnectionUpdateData,
   Destination,
   Link,
-  ResoUpdateData,
   Source,
   StateUpdateData,
   SyncOperation,
@@ -17,7 +17,7 @@ const COMMIT: Extract<SyncOperation, {type: 'commit'}> = {type: 'commit'}
 /** The most fundamental implementation of using using protocol */
 export async function sync<
   T extends Data = Data,
-  TResoUpdate extends object = ResoUpdateData,
+  TResoUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 >(input: {
   source: Source<T, TResoUpdate, TStateUpdate>

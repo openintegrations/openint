@@ -5,6 +5,7 @@ import type {
   ObjectPartialDeep,
   rxjs,
 } from '@openint/util'
+import {ZStandard} from '../cdk'
 // HACK ALERT
 import type {ExternalId, Id} from '../cdk/id.types'
 
@@ -29,7 +30,7 @@ export interface AnyEntityPayload {
   id: string // ExternalId
 }
 
-export interface ResoUpdateData<
+export interface ConnectionUpdateData<
   TSettings = {},
   TInsData = {},
   TVariant extends 'partial' | 'complete' = 'partial',
@@ -43,6 +44,9 @@ export interface ResoUpdateData<
     externalId: ExternalId
     data: TInsData
   }
+  // QQ: Extend this or calculate it before displaying based on settings?
+  // status?: ZStandard['connection']['status']
+  // statusMessage?: string
 }
 export interface StateUpdateData<TSrcOptions = {}, TDestOptions = {}> {
   sourceState?: ObjectPartialDeep<NoInfer<TSrcOptions>>
@@ -55,7 +59,7 @@ type NullableEntity<T> = T extends AnyEntityPayload
 
 export type SyncOperation<
   TData = any,
-  TResoUpdate extends object = ResoUpdateData,
+  TResoUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > =
   | (TResoUpdate & {type: 'connUpdate'})
@@ -71,7 +75,7 @@ export type AnySyncOperation = NonDiscriminatedUnion<SyncOperation>
 
 export type Source<
   T,
-  TResoUpdate extends object = ResoUpdateData,
+  TResoUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = rxjs.Observable<SyncOperation<T, TResoUpdate, TStateUpdate>>
 
@@ -82,7 +86,7 @@ export type Source<
 export type Link<
   TDataIn = any,
   TDataOut = TDataIn,
-  TResoUpdate extends object = ResoUpdateData,
+  TResoUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = (
   obs: rxjs.Observable<SyncOperation<TDataIn, TResoUpdate, TStateUpdate>>,
@@ -91,7 +95,7 @@ export type Link<
 export type LinkFactory<
   TDataIn = any,
   TDataOut = TDataIn,
-  TResoUpdate extends object = ResoUpdateData,
+  TResoUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TArg = any,
@@ -103,7 +107,7 @@ export type LinkFactory<
  */
 export type Destination<
   T = any,
-  TResoUpdate extends object = ResoUpdateData,
+  TResoUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = Link<T, T, TResoUpdate, TStateUpdate>
 

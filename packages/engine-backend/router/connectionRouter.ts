@@ -34,8 +34,11 @@ const zExpandConnector = z.object({
   logoUrl: z.string().url(),
 })
 
-export async function performConnectionCheck(ctx: any, connId: string, opts: any) {
-
+export async function performConnectionCheck(
+  ctx: any,
+  connId: string,
+  opts: any,
+) {
   const remoteCtx = await getRemoteContext({
     ...ctx,
     remoteConnectionId: connId,
@@ -52,7 +55,11 @@ export async function performConnectionCheck(ctx: any, connId: string, opts: any
       webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
     },
   })
-  if (connUpdate || opts?.import !== false || remoteCtx.remote.settings?.oauth?.error) {
+  if (
+    connUpdate ||
+    opts?.import !== false ||
+    remoteCtx.remote.settings?.oauth?.error
+  ) {
     /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       ...(opts?.import && {
@@ -70,8 +77,13 @@ export async function performConnectionCheck(ctx: any, connId: string, opts: any
         connUpdate?.connectionExternalId ?? extractId(conn.id)[2],
 
       // TODO: generalize these to a handler for all errors and also non nango
-      status: remoteCtx.remote.settings?.oauth?.error?.code === 'refresh_token_external_error' ? 'disconnected' : undefined,
-      statusMessage: remoteCtx.remote.settings?.oauth?.error?.message,
+      // QQ: in addition to putting it in settings, should we also put it parsed in DB as status and statusMessage or just calculate it at runtime?
+      // status:
+      //   remoteCtx.remote.settings?.oauth?.error?.code ===
+      //   'refresh_token_external_error'
+      //     ? 'disconnected'
+      //     : undefined,
+      // statusMessage: remoteCtx.remote.settings?.oauth?.error?.message,
     })
     connUpdate = await ctx.services.getConnectionOrFail(conn.id)
   }
@@ -290,13 +302,10 @@ export const connectionRouter = trpc.router({
           connectorConfigId: zId('ccfg').nullish(),
           connectorName: z.string().nullish(),
           forceRefresh: z.boolean().optional(),
-          expand: z
-            .string()
-            .optional()
-            .openapi({
-              description:
-                'Comma-separated list of expand options: integration and/or integration.connector',
-            }),
+          expand: z.string().optional().openapi({
+            description:
+              'Comma-separated list of expand options: integration and/or integration.connector',
+          }),
         })
         .optional(),
     )
@@ -368,13 +377,10 @@ export const connectionRouter = trpc.router({
       z.object({
         id: zId('conn'),
         forceRefresh: z.boolean().optional(),
-        expand: z
-          .string()
-          .optional()
-          .openapi({
-            description:
-              'Comma-separated list of expand options: integration and/or integration.connector',
-          }),
+        expand: z.string().optional().openapi({
+          description:
+            'Comma-separated list of expand options: integration and/or integration.connector',
+        }),
       }),
     )
     .output(
