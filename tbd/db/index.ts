@@ -1,8 +1,7 @@
 import type {DrizzleConfig, SQL} from 'drizzle-orm'
 import {sql} from 'drizzle-orm'
-import {drizzle} from 'drizzle-orm/postgres-js'
-import {migrate} from 'drizzle-orm/postgres-js/migrator'
-import postgres from 'postgres'
+import {drizzle} from 'drizzle-orm/node-postgres'
+import {migrate} from 'drizzle-orm/node-postgres/migrator'
 import {env} from '@openint/env'
 import * as schema from './schema'
 import * as schemaWip from './schema-wip'
@@ -11,19 +10,20 @@ export * from 'drizzle-orm'
 export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
-export {schema, drizzle, migrate, schemaWip}
+export {drizzle, migrate, schema, schemaWip}
 
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
 >(urlString: string, config?: DrizzleConfig<TSchema>) {
-  const pg = postgres(urlString)
-  const db = drizzle(pg, {logger: !!env['DEBUG'], ...config})
+  // const pg = postgres(urlString)
+  const db = drizzle(urlString, {logger: !!env['DEBUG'], ...config})
 
   const url = new URL(urlString)
   if (env.DEBUG) {
     console.log('[db] host', url.host)
   }
-  return {db, pg}
+
+  return {db, pg: {end: () => {}}}
 }
 
 export const {pg: configPg, db: configDb} = getDb(env.POSTGRES_URL, {

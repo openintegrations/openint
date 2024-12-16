@@ -283,7 +283,7 @@ export async function syncConnection({
       throw new Error(`org does not have a database_url: ${org.id}`)
     }
     const synced_data_schema = org.publicMetadata.synced_data_schema ?? 'synced'
-    const {db, pg} = getDb(org.publicMetadata.database_url, {})
+    const {db} = getDb(org.publicMetadata.database_url, {})
 
     // Load this from a config please...
     if (synced_data_schema) {
@@ -305,7 +305,7 @@ export async function syncConnection({
       }
     }
     // TODO: Put pg.end() in a finally block
-    await pg.end()
+    // await pg.end()
   } catch (err) {
     errorInfo = await parseErrorInfo(err)
   } finally {
