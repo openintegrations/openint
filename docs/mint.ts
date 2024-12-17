@@ -7,7 +7,7 @@ const mintConfig: MintConfig = {
     'https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json',
   logo: {
     light: '/images/logo/openint-logo.png',
-    dark: '/images/logo/openint-logo-dark.webp',
+    dark: '/images/logo/openint-logo-dark.svg',
   },
   favicon: '/images/logo/openint-logo.png',
   colors: {
