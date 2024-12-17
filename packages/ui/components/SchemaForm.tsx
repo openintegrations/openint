@@ -107,9 +107,16 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
   ;(globalThis as any).formSchema = schema
   ;(globalThis as any).formJsonSchema = jsonSchema
 
-  // We cache the formState so that re-render does not cause immediate loss
-  // though this may sometimes cause stale data? Need to think more about it.
-  const [formData, setFormData] = React.useState<z.infer<TSchema>>(_formData)
+  const formDataRef = React.useRef(_formData)
+  const [localFormData, setLocalFormData] = React.useState(
+    () => formDataRef.current,
+  )
+
+  const handleFormChange = React.useCallback((data: any) => {
+    formDataRef.current = data.formData
+    setLocalFormData(data.formData)
+  }, [])
+
   // console.log('[SchemaForm] jsonSchema', jsonSchema)
   const uiSchema = generateUiSchema(jsonSchema)
 
@@ -118,7 +125,7 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
       disabled={loading}
       {...props}
       ref={forwardedRef}
-      formData={formData}
+      formData={localFormData}
       className={cn(
         'schema-form',
         loading && 'loading',
@@ -132,11 +139,11 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
         ...uiSchema,
         ...props.uiSchema,
       }}
+      onChange={handleFormChange}
       onSubmit={(data) => {
         if (!data.formData) {
           throw new Error('Invariant: formData is undefined')
         }
-        setFormData(data.formData)
         onSubmit?.({formData: data.formData})
       }}
     />
