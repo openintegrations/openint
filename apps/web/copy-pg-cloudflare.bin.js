@@ -25,8 +25,13 @@ if (!fs.existsSync(destinationPath)) {
   process.exit(1)
 }
 
+const copyCommand =
+  process.platform === 'win32'
+    ? `copy "${sourcePath}" "${destinationPath}"`
+    : `cp "${sourcePath}" "${destinationPath}"`
+
 try {
-  execSync(`copy "${sourcePath}" "${destinationPath}"`, {stdio: 'inherit'})
+  execSync(copyCommand, {stdio: 'inherit'})
 } catch (error) {
   console.error('Error copying file:', error)
   process.exit(1)
