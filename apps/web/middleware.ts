@@ -1,10 +1,11 @@
 import {clerkMiddleware, createClerkClient} from '@clerk/nextjs/server'
 
+const client = createClerkClient({secretKey: process.env['CLERK_SECRET_KEY']})
 // Disable redirects
 export default clerkMiddleware({
   publishableKey: process.env['NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY'],
   domain: process.env['NEXT_PUBLIC_SERVER_URL'],
-  apiClient: createClerkClient({secretKey: process.env['CLERK_SECRET_KEY']}),
+  apiClient: client,
 })
 
 // Only want clerk to deal with dashboard routes
