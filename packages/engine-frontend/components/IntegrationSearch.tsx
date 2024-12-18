@@ -242,7 +242,7 @@ export function IntegrationSearch({
               )
             ) : (
               <div>
-                <p className="text-base font-normal">
+                <p className="font-normal text-foreground">
                   No available connectors, please check that you have configured
                   connectors available or review your filter values.
                 </p>
