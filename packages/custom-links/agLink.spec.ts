@@ -1,5 +1,5 @@
 import {sql} from 'drizzle-orm'
-import {drizzle} from 'drizzle-orm/postgres-js'
+import {drizzle} from 'drizzle-orm/node-postgres'
 import type {CustomerId, Id} from '@openint/cdk'
 import type {DeprecatedInputEntity} from '@openint/connector-postgres'
 import {postgresServer} from '@openint/connector-postgres'
@@ -170,7 +170,9 @@ test('destinationSync', async () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
   await toCompletion(destLink(src as any))
-  const connections = await db.execute('SELECT * FROM "IntegrationConnection"')
+  const {rows: connections} = await db.execute(
+    'SELECT * FROM "IntegrationConnection"',
+  )
   expect(connections[0]).toMatchObject({
     id: 'conn_123',
     clientId: 'cm3roaf0007',
@@ -179,7 +181,9 @@ test('destinationSync', async () => {
     profile: 'Ats',
     source: 'OpenInt',
   })
-  const candidates = await db.execute('SELECT * FROM "IntegrationATSCandidate"')
+  const {rows: candidates} = await db.execute(
+    'SELECT * FROM "IntegrationATSCandidate"',
+  )
   expect(candidates[0]).toMatchObject({
     connectionId: 'conn_123',
     id: 'cadi_123',
@@ -193,7 +197,7 @@ test('destinationSync', async () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     updatedAt: expect.any(String),
   })
-  const jobs = await db.execute('SELECT * FROM "IntegrationATSJob"')
+  const {rows: jobs} = await db.execute('SELECT * FROM "IntegrationATSJob"')
   expect(jobs[0]).toMatchObject({
     connectionId: 'conn_123',
     id: 'job_123',

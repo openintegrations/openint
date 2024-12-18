@@ -68,3 +68,4 @@ dist/
 
 # Cloudflare
 .wrangler
+.dev.vars
