@@ -7,7 +7,7 @@
     "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
     "build:migration": "if [ \"$VERCEL_ENV\" = production ] || [ \"$VERCEL_GIT_COMMIT_REF\" = main ]; then pnpm --dir ../../ run-migration; else echo 'Skip non prod/staging migration'; fi",
     "build:next": "next build",
-    "build:worker": "SKIP_NEXT_APP_BUILD=true cloudflare && node copy-pg-cloudflare.bin.js",
+    "build:worker": "SKIP_NEXT_APP_BUILD=true cloudflare && node patch-cloudflare.bin.js",
     "codegen:supabase": "supabase gen types typescript --linked --schema public > ./supabase/supabase.gen.d.ts",
     "deploy:worker": "wrangler deploy",
     "dev": "next dev -p 4000",
