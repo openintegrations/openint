@@ -19,7 +19,10 @@ export default function CustomersPage() {
   const res = _trpcReact.adminSearchCustomers.useQuery({})
 
   // Function to format dates
-  function formatDate(dateString: string) {
+  function formatDate(dateString: string | null | undefined) {
+    if (!dateString) {
+      return ''
+    }
     const date = new Date(dateString)
     return new Intl.DateTimeFormat('en-US', {
       month: '2-digit',

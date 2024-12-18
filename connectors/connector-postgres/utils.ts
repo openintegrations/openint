@@ -17,8 +17,10 @@ export function isValidDateString(str: string) {
  * from data object and then generating a migration from the catalog message as a two step,
  * unified process.
  * For now we just do something lightweig thought
+ *
+ * Also consider deduping with inferTableForUpsert
  */
-export function inferTable(event: RecordMessageBody) {
+export function inferTableFromMessage(event: RecordMessageBody) {
   // TODO Implement namespace and upsert metadata support
   return pgTable(
     event.stream,

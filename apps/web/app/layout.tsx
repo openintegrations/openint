@@ -1,7 +1,7 @@
 import './global.css'
 
 export const metadata = {
-  title: `OpenInt`,
+  title: `OpenInt Dashboard`,
   icons: [{url: '/favicon.svg', type: 'image/svg+xml'}],
 }
 
