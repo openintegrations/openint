@@ -572,8 +572,11 @@ importers:
         specifier: 0.1.9
         version: 0.1.9
       pg:
-        specifier: 8.8.0
-        version: 8.8.0(pg-native@3.0.1)
+        specifier: 8.13.1
+        version: 8.13.1(pg-native@3.0.1)
+      pg-cloudflare:
+        specifier: ^1.1.1
+        version: 1.1.1
       posthog-js:
         specifier: ^1.166.1
         version: 1.166.1
@@ -1005,7 +1008,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.13.1(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       handlebars:
         specifier: 4.7.7
         version: 4.7.7
@@ -1013,8 +1016,11 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       pg:
-        specifier: 8.8.0
-        version: 8.8.0(pg-native@3.0.1)
+        specifier: 8.13.1
+        version: 8.13.1(pg-native@3.0.1)
+      pg-cloudflare:
+        specifier: ^1.1.1
+        version: 1.1.1
       pg-native:
         specifier: 3.0.1
         version: 3.0.1
@@ -1582,8 +1588,8 @@ importers:
         specifier: 10.45.2
         version: 10.45.2
       drizzle-orm:
-        specifier: ^0.38.2
-        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.13.1(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        specifier: ^0.36.3
+        version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.13.1(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.6.2)
@@ -2070,13 +2076,16 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.13.1(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
       pg:
-        specifier: ^8.8.0
-        version: 8.8.0(pg-native@3.0.1)
+        specifier: 8.13.1
+        version: 8.13.1(pg-native@3.0.1)
+      pg-cloudflare:
+        specifier: ^1.1.1
+        version: 1.1.1
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
@@ -6689,10 +6698,6 @@ packages:
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
 
-  buffer-writer@2.0.0:
-    resolution: {integrity: sha512-a7ZpuTZU1TRtnwyCNW3I5dc0wWNC3VR9S++Ewyk2HHZdrO3CQJqSpd+95Us590V6AL7JqUAH2IwZ/398PmNFgw==}
-    engines: {node: '>=4'}
-
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
 
@@ -7607,6 +7612,98 @@ packages:
   drizzle-kit@0.30.1:
     resolution: {integrity: sha512-HmA/NeewvHywhJ2ENXD3KvOuM/+K2dGLJfxVfIHsGwaqKICJnS+Ke2L6UcSrSrtMJLJaT0Im1Qv4TFXfaZShyw==}
     hasBin: true
+
+  drizzle-orm@0.36.4:
+    resolution: {integrity: sha512-1OZY3PXD7BR00Gl61UUOFihslDldfH4NFRH2MbP54Yxi0G/PKn4HfO65JYZ7c16DeP3SpM3Aw+VXVG9j6CRSXA==}
+    peerDependencies:
+      '@aws-sdk/client-rds-data': '>=3'
+      '@cloudflare/workers-types': '>=3'
+      '@electric-sql/pglite': '>=0.2.0'
+      '@libsql/client': '>=0.10.0'
+      '@libsql/client-wasm': '>=0.10.0'
+      '@neondatabase/serverless': '>=0.10.0'
+      '@op-engineering/op-sqlite': '>=2'
+      '@opentelemetry/api': ^1.4.1
+      '@planetscale/database': '>=1'
+      '@prisma/client': '*'
+      '@tidbcloud/serverless': '*'
+      '@types/better-sqlite3': '*'
+      '@types/pg': '*'
+      '@types/react': 18.0.27
+      '@types/sql.js': '*'
+      '@vercel/postgres': '>=0.8.0'
+      '@xata.io/client': '*'
+      better-sqlite3: '>=7'
+      bun-types: '*'
+      expo-sqlite: '>=14.0.0'
+      knex: '*'
+      kysely: '*'
+      mysql2: '>=2'
+      pg: '>=8'
+      postgres: '>=3'
+      prisma: '*'
+      react: 18.3.1
+      sql.js: '>=1'
+      sqlite3: '>=5'
+    peerDependenciesMeta:
+      '@aws-sdk/client-rds-data':
+        optional: true
+      '@cloudflare/workers-types':
+        optional: true
+      '@electric-sql/pglite':
+        optional: true
+      '@libsql/client':
+        optional: true
+      '@libsql/client-wasm':
+        optional: true
+      '@neondatabase/serverless':
+        optional: true
+      '@op-engineering/op-sqlite':
+        optional: true
+      '@opentelemetry/api':
+        optional: true
+      '@planetscale/database':
+        optional: true
+      '@prisma/client':
+        optional: true
+      '@tidbcloud/serverless':
+        optional: true
+      '@types/better-sqlite3':
+        optional: true
+      '@types/pg':
+        optional: true
+      '@types/react':
+        optional: true
+      '@types/sql.js':
+        optional: true
+      '@vercel/postgres':
+        optional: true
+      '@xata.io/client':
+        optional: true
+      better-sqlite3:
+        optional: true
+      bun-types:
+        optional: true
+      expo-sqlite:
+        optional: true
+      knex:
+        optional: true
+      kysely:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+      postgres:
+        optional: true
+      prisma:
+        optional: true
+      react:
+        optional: true
+      sql.js:
+        optional: true
+      sqlite3:
+        optional: true
 
   drizzle-orm@0.38.2:
     resolution: {integrity: sha512-eCE3yPRAskLo1WpM9OHpFaM70tBEDsWhwR/0M3CKyztAXKR9Qs3asZlcJOEliIcUSg8GuwrlY0dmYDgmm6y5GQ==}
@@ -10971,9 +11068,6 @@ packages:
   package-json-from-dist@1.0.0:
     resolution: {integrity: sha512-dATvCeZN/8wQsGywez1mzHtTlP22H8OEfPrVMLNr4/eGa+ijtLn/6M5f0dY8UKNrC2O9UCU6SSoG3qRKnt7STw==}
 
-  packet-reader@1.0.0:
-    resolution: {integrity: sha512-HAKu/fG3HpHFO0AA8WE8q2g+gBJaZ9MG7fcKk+IJPLTGAD6Psw4443l+9DGRbOIh3/aXr7Phy0TjilYivJo5XQ==}
-
   papaparse@5.3.2:
     resolution: {integrity: sha512-6dNZu0Ki+gyV0eBsFKJhYr+MdQYAzFUGlBMNj3GNrmHxmz1lfRa24CjFObPXtjcetlOv5Ad299MhIK0znp3afw==}
 
@@ -11084,9 +11178,6 @@ packages:
   pg-cloudflare@1.1.1:
     resolution: {integrity: sha512-xWPagP/4B6BgFO+EKz3JONXv3YDgvkbVrGw2mTo3D6tVDQRh1e7cqVGvyR3BE+eQgAvx1XhW/iEASj4/jCWl3Q==}
 
-  pg-connection-string@2.5.0:
-    resolution: {integrity: sha512-r5o/V/ORTA6TmUnyWZR9nCj1klXCO2CEKNRlVuJptZe85QuhFayC7WeMic7ndayT5IRIR0S0xFxFi2ousartlQ==}
-
   pg-connection-string@2.7.0:
     resolution: {integrity: sha512-PI2W9mv53rXJQEOb8xNR8lH7Hr+EKa6oJa38zsK0S/ky2er16ios1wLKhZyxzD7jUReiWokc9WK5nxSnC7W1TA==}
 
@@ -11096,11 +11187,6 @@ packages:
 
   pg-native@3.0.1:
     resolution: {integrity: sha512-LBVNWkNh0fVx/cienARRP2y22J5OpUsKBe0TpxzAx3arEUUdIs77aLSAHS3scS7SMaqc+OkG40CEu5fN0/cjIw==}
-
-  pg-pool@3.5.2:
-    resolution: {integrity: sha512-His3Fh17Z4eg7oANLob6ZvH8xIVen3phEZh2QuyrIl4dQSDVEabNducv6ysROKpDNPSD+12tONZVWfSgMvDD9w==}
-    peerDependencies:
-      pg: '>=8.0'
 
   pg-pool@3.7.0:
     resolution: {integrity: sha512-ZOBQForurqh4zZWjrgSwwAtzJ7QiRX0ovFkZr2klsen3Nm0aoh33Ls0fzfv3imeH/nw/O27cjdz5kzYJfeGp/g==}
@@ -11122,15 +11208,6 @@ packages:
 
   pg@8.13.1:
     resolution: {integrity: sha512-OUir1A0rPNZlX//c7ksiu7crsGZTKSOXJPgtNiHGIlC9H0lO+NC6ZDYksSgBYY/thSWhnSRBv8w1lieNNGATNQ==}
-    engines: {node: '>= 8.0.0'}
-    peerDependencies:
-      pg-native: '>=3.0.1'
-    peerDependenciesMeta:
-      pg-native:
-        optional: true
-
-  pg@8.8.0:
-    resolution: {integrity: sha512-UXYN0ziKj+AeNNP7VDMwrehpACThH7LUl/p8TDFpEUuSejCUIwGSfxpHsPvtM6/WXFy6SU4E5RG4IJV/TZAGjw==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
       pg-native: '>=3.0.1'
@@ -19112,7 +19189,7 @@ snapshots:
   '@types/pg@8.6.1':
     dependencies:
       '@types/node': 18.11.18
-      pg-protocol: 1.5.0
+      pg-protocol: 1.7.0
       pg-types: 2.2.0
 
   '@types/pg@8.6.5':
@@ -20040,8 +20117,6 @@ snapshots:
 
   buffer-from@1.1.2: {}
 
-  buffer-writer@2.0.0: {}
-
   buffer@5.7.1:
     dependencies:
       base64-js: 1.5.1
@@ -20890,7 +20965,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.13.1(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
+  drizzle-orm@0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.13.1(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.6.5
@@ -20899,12 +20974,12 @@ snapshots:
       postgres: 3.4.5
       react: 18.3.1
 
-  drizzle-orm@0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
+  drizzle-orm@0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.13.1(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.6.5
       '@types/react': 18.0.27
-      pg: 8.8.0(pg-native@3.0.1)
+      pg: 8.13.1(pg-native@3.0.1)
       postgres: 3.4.5
       react: 18.3.1
 
@@ -25195,8 +25270,6 @@ snapshots:
 
   package-json-from-dist@1.0.0: {}
 
-  packet-reader@1.0.0: {}
-
   papaparse@5.3.2: {}
 
   parent-module@1.0.1:
@@ -25300,13 +25373,9 @@ snapshots:
 
   performance-now@2.1.0: {}
 
-  pg-cloudflare@1.1.1:
-    optional: true
+  pg-cloudflare@1.1.1: {}
 
-  pg-connection-string@2.5.0: {}
-
-  pg-connection-string@2.7.0:
-    optional: true
+  pg-connection-string@2.7.0: {}
 
   pg-int8@1.0.1: {}
 
@@ -25316,19 +25385,13 @@ snapshots:
       pg-types: 1.13.0
       readable-stream: 1.0.31
 
-  pg-pool@3.5.2(pg@8.8.0(pg-native@3.0.1)):
-    dependencies:
-      pg: 8.8.0(pg-native@3.0.1)
-
   pg-pool@3.7.0(pg@8.13.1(pg-native@3.0.1)):
     dependencies:
       pg: 8.13.1(pg-native@3.0.1)
-    optional: true
 
   pg-protocol@1.5.0: {}
 
-  pg-protocol@1.7.0:
-    optional: true
+  pg-protocol@1.7.0: {}
 
   pg-types@1.13.0:
     dependencies:
@@ -25355,19 +25418,6 @@ snapshots:
       pgpass: 1.0.5
     optionalDependencies:
       pg-cloudflare: 1.1.1
-      pg-native: 3.0.1
-    optional: true
-
-  pg@8.8.0(pg-native@3.0.1):
-    dependencies:
-      buffer-writer: 2.0.0
-      packet-reader: 1.0.0
-      pg-connection-string: 2.5.0
-      pg-pool: 3.5.2(pg@8.8.0(pg-native@3.0.1))
-      pg-protocol: 1.5.0
-      pg-types: 2.2.0
-      pgpass: 1.0.5
-    optionalDependencies:
       pg-native: 3.0.1
 
   pgpass@1.0.5:

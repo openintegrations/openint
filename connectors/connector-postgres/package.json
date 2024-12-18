@@ -11,7 +11,8 @@
     "drizzle-orm": "^0.38.2",
     "handlebars": "4.7.7",
     "json-stable-stringify": "^1.1.1",
-    "pg": "8.8.0",
+    "pg": "8.13.1",
+    "pg-cloudflare": "^1.1.1",
     "pg-native": "3.0.1",
     "postgres": "^3.4.5",
     "zod": "3.22.4"
