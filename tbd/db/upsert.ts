@@ -82,8 +82,9 @@ export function dbUpsert<
     return
   }
 
-  const table =
+  const table = (
     typeof _table === 'string' ? inferTableForUpsert(_table, firstRow) : _table
+  ) as TTable
 
   const tbCfg = getTableConfig(table)
   const getColumn = (name: string) => {

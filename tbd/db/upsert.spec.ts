@@ -238,7 +238,7 @@ describe('with db', () => {
     await dbUpsertOne(db, 'test_user', row, {
       keyColumns: ['id'],
     })
-    const ret = await db.execute(sql`SELECT * FROM "test_user"`)
+    const {rows: ret} = await db.execute(sql`SELECT * FROM "test_user"`)
 
     expect(ret[0]).toEqual(row)
   })

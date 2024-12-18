@@ -51,7 +51,6 @@ module.exports = [
       server: '@openint/connector-coda/server',
     },
   },
-  {dirName: 'connector-copilot', varName: 'connectorCopilot', imports: {}},
   {
     name: 'debug',
     dirName: 'connector-debug',
@@ -79,24 +78,6 @@ module.exports = [
       def: '@openint/connector-finch/def',
       client: '@openint/connector-finch/client',
       server: '@openint/connector-finch/server',
-    },
-  },
-  {
-    name: 'firebase',
-    dirName: 'connector-firebase',
-    varName: 'connectorFirebase',
-    imports: {
-      def: '@openint/connector-firebase/def',
-      server: '@openint/connector-firebase/server',
-    },
-  },
-  {
-    name: 'foreceipt',
-    dirName: 'connector-foreceipt',
-    varName: 'connectorForeceipt',
-    imports: {
-      def: '@openint/connector-foreceipt/def',
-      server: '@openint/connector-foreceipt/server',
     },
   },
   {
@@ -185,15 +166,6 @@ module.exports = [
     imports: {
       def: '@openint/connector-microsoft/def',
       server: '@openint/connector-microsoft/server',
-    },
-  },
-  {
-    name: 'mongodb',
-    dirName: 'connector-mongodb',
-    varName: 'connectorMongodb',
-    imports: {
-      def: '@openint/connector-mongodb/def',
-      server: '@openint/connector-mongodb/server',
     },
   },
   {
@@ -369,48 +341,5 @@ module.exports = [
       def: '@openint/connector-twenty/def',
       server: '@openint/connector-twenty/server',
     },
-  },
-  {
-    name: 'venmo',
-    dirName: 'connector-venmo',
-    varName: 'connectorVenmo',
-    imports: {def: '@openint/connector-venmo/def'},
-  },
-  {
-    name: 'webhook',
-    dirName: 'connector-webhook',
-    varName: 'connectorWebhook',
-    imports: {
-      def: '@openint/connector-webhook/def',
-      server: '@openint/connector-webhook/server',
-    },
-  },
-  {
-    name: 'wise',
-    dirName: 'connector-wise',
-    varName: 'connectorWise',
-    imports: {
-      def: '@openint/connector-wise/def',
-      server: '@openint/connector-wise/server',
-    },
-  },
-  {
-    name: 'xero',
-    dirName: 'connector-xero',
-    varName: 'connectorXero',
-    imports: {
-      def: '@openint/connector-xero/def',
-      server: '@openint/connector-xero/server',
-    },
-  },
-  {
-    name: 'yodlee',
-    dirName: 'connector-yodlee',
-    varName: 'connectorYodlee',
-    imports: {
-      def: '@openint/connector-yodlee/def',
-      client: '@openint/connector-yodlee/client',
-      server: '@openint/connector-yodlee/server',
-    },
-  },
+  }
 ]
