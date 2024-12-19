@@ -7,7 +7,7 @@
     "db:clean": "rm -rf ./drizzle",
     "db:pull": "drizzle-kit introspect:pg --connectionString $POSTGRES_URL --driver pg",
     "db:push": "drizzle-kit push:pg --connectionString $POSTGRES_URL --driver pg --schema ./schema.ts --verbose --strict",
-    "db:run-migration": "echo 'skipping migration that woudve run npx tsx -e \"import('./').then(r => r.default.runMigration())\"",
+    "db:run-migration": "echo skipping migration that woudve run npx tsx -e \\\"import('./').then(r => r.default.runMigration())\\\"",
     "db:schema-diff": "pnpm db:clean && pnpm db:pull && drizzle-kit generate:pg --schema ./schema.ts && cd ./drizzle && ls 0001*.sql | xargs cat && pnpm db:clean",
     "db:schema-generate": "drizzle-kit generate:pg --schema ./schema.ts --out ./migrations",
     "db:template-dynamic-schema": "drizzle-kit generate:pg --schema ./schema-dynamic.ts --out ./drizzle && cd ./drizzle && ls *.sql | xargs cat && pnpm db:clean"
