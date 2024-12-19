@@ -38,7 +38,7 @@ export function CheckboxFilter({
                 id={option}
                 checked={checkedState[option]}
                 onCheckedChange={() => onCheckboxChange(option)}
-                className={`border-card-border rounded-sm transition-colors duration-200 ${
+                className={`rounded-sm border-foreground transition-colors duration-200 ${
                   checkedState[option]
                     ? 'border-transparent bg-button'
                     : 'hover:bg-gray-100'

@@ -1,10 +1,13 @@
 'use client'
 
+import {useTheme} from 'next-themes'
 import {useState} from 'react'
 
 const GS_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
 
 interface ThemeColors {
+  accent: string
+  accentForeground: string
   background: string
   border: string
   button: string
@@ -52,6 +55,37 @@ const defaultThemeColors: Partial<ThemeColors> = {
   tab: 'hsl(0, 0%, 100%)', // #ffffff - White
 }
 
+const defaultDarkThemeColors: Partial<ThemeColors> = {
+  accent: 'hsl(220, 21%, 39%)',
+  accentForeground: 'hsl(220, 35%, 92%)',
+  background: 'hsl(0, 0, 11%)',
+  border: 'hsl(0, 0%, 20%)',
+  button: 'hsl(255, 90%, 66%)',
+  buttonLight: 'hsl(255, 90%, 96%)',
+  buttonForeground: 'hsl(0, 0%, 96.5%)',
+  buttonHover: 'hsl(255, 70%, 71%)',
+  buttonStroke: 'hsl(255, 45%, 51%)',
+  buttonSecondary: 'hsl(0, 0%, 14%)',
+  buttonSecondaryForeground: 'hsl(0, 0%, 96.5%)',
+  buttonSecondaryStroke: 'hsl(0, 0%, 20%)',
+  buttonSecondaryHover: 'hsl(0, 0%, 24%)',
+  card: 'hsl(0, 0%, 14%)',
+  cardForeground: 'hsl(0, 0%, 96.5%)',
+  foreground: 'hsl(0, 0%, 96.5%)',
+  navbar: 'hsl(0, 0%, 100%)',
+  primary: 'hsl(0, 0%, 96.5%)',
+  primaryForeground: 'hsl(0, 0%, 11%)',
+  secondary: 'hsl(0, 0%, 14%)',
+  secondaryForeground: 'hsl(0, 0%, 96.5%)',
+  sidebar: 'hsl(0, 0%, 100%)',
+  tab: 'hsl(0, 0%, 14%)',
+}
+
+const defaultColorsByTheme = {
+  light: defaultThemeColors,
+  dark: defaultDarkThemeColors,
+}
+
 const gsThemeColors: Partial<ThemeColors> = {
   ...defaultThemeColors,
   button: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
@@ -60,22 +94,43 @@ const gsThemeColors: Partial<ThemeColors> = {
   buttonStroke: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
 }
 
-const getThemeByOrgId = (orgId: string) => {
+const gsDarkThemeColors: Partial<ThemeColors> = {
+  ...defaultDarkThemeColors,
+  accent: 'hsl(199, 51%, 60%)', // #66ACCD
+  background: 'hsl(210, 25%, 8%)', // #0F141A Dark gray
+  button: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
+  buttonLight: 'hsl(199, 51%, 96%)', // #e6f5ff - Light Steel Aqua
+  buttonHover: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
+  buttonStroke: 'hsl(199, 51%, 60%)', // #67AECD - Steel Aqua
+  tab: 'hsl(210, 25%, 8%)', // #0F141A Dark gray
+}
+
+const gsColorsByTheme = {
+  light: gsThemeColors,
+  dark: gsDarkThemeColors,
+}
+
+const getThemeByOrgId = (orgId: string, theme: 'light' | 'dark') => {
   switch (orgId) {
     case GS_ID:
-      return gsThemeColors
+      return gsColorsByTheme[theme]
     default:
-      return defaultThemeColors
+      return defaultColorsByTheme[theme]
   }
 }
 
 export function ColorConfig({orgId}: {orgId: string}) {
-  const [themeColors] = useState<Partial<ThemeColors>>(getThemeByOrgId(orgId))
-  // TODO: Fetch color config by client if required and update themeColors state.
+  const {theme} = useTheme() as {theme: 'light' | 'dark'}
+  const [themeColors] = useState<Partial<ThemeColors>>(
+    getThemeByOrgId(orgId, theme),
+  )
+
+  const cssSelector = theme === 'dark' ? '.dark' : ':root'
 
   return (
     <style id="theme-colors" jsx global>{`
-      :root {
+      ${cssSelector} {
+        --accent: ${themeColors.accent};
         --background: ${themeColors.background};
         --border: ${themeColors.border};
         --button: ${themeColors.button};
