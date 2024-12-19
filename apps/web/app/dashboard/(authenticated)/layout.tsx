@@ -15,6 +15,7 @@ import {NoSSR} from '@/components/NoSSR'
 import {RedirectToNext13} from '@/components/RedirectTo'
 import {VCommandBar} from '@/vcommands/vcommand-components'
 import {Sidebar} from './Sidebar'
+import useRefetchOnSwitch from './useRefetchOnSwitch'
 
 function CustomCreateOrganization() {
   const {createOrganization, setActive} = useOrganizationList()
@@ -71,6 +72,9 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
   // auth works for initial request but then subsequently breaks...
   const auth = useAuth()
   const connections = _trpcReact.listConnections.useQuery({})
+
+  useRefetchOnSwitch(connections.refetch)
+
   const hasPgConnection =
     connections.data?.some((c) => c.id.includes('postgres_default')) ?? false
   // const user = useUser()
@@ -140,10 +144,10 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
         )}
       </main>
       <Sidebar
-        className="bg-sidebar fixed bottom-0 left-0 top-12 w-[240px] border-r"
+        className="fixed bottom-0 left-0 top-12 w-[240px] border-r bg-sidebar"
         hasPgConnection={hasPgConnection}
       />
-      <header className="bg-navbar fixed inset-x-0 top-0 flex h-12 items-center gap-2 border-b p-4">
+      <header className="fixed inset-x-0 top-0 flex h-12 items-center gap-2 border-b bg-navbar p-4">
         {/* Not working because of bug in clerk js that is unclear that results in hydration issue.. */}
         <NoSSR>
           <div className="mb-[-6px]">
