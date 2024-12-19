@@ -2,11 +2,14 @@
 
 import {DataTable} from '@openint/ui'
 import {trpcReact} from '@/lib-client/trpcReact'
+import useRefetchOnSwitch from '../useRefetchOnSwitch'
 
 export default function SyncRunsPage() {
   const res = trpcReact.listSyncRuns.useQuery()
 
   ;(globalThis as any).listSyncRunsRes = res
+
+  useRefetchOnSwitch(res.refetch)
 
   return (
     <div className="p-6">
