@@ -22,6 +22,7 @@ import {
 } from '@openint/ui'
 import CalendarBooking from '@openint/ui/components/CalendarBooking'
 import {inPlaceSort, R, titleCase} from '@openint/util'
+import useRefetchOnSwitch from '../useRefetchOnSwitch'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
 
 const CTA_LINK = 'ap-openint/request-integration'
@@ -57,6 +58,8 @@ export default function ConnectorConfigsPage({
   })
   const {user} = useUser()
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
+
+  useRefetchOnSwitch(connectorConfigsRes.refetch)
 
   // either if whitelisted or already has a connector other than default postgres
   const canAddNewConnectors =
@@ -97,7 +100,10 @@ export default function ConnectorConfigsPage({
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Configured connectors
       </h2>
-      <p className="mb-4 text-sm text-gray-600">Manage and edit your existing integrations here to ensure your workflows run smoothly.</p>
+      <p className="mb-4 text-sm text-gray-600">
+        Manage and edit your existing integrations here to ensure your workflows
+        run smoothly.
+      </p>
       {connectorConfigsRes.data ? (
         <DataTable
           query={connectorConfigsRes}
@@ -186,7 +192,9 @@ export default function ConnectorConfigsPage({
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Available connectors
       </h2>
-      <p className="mb-4 text-sm text-gray-600">Select an integration from the list below to add it to your App.</p>
+      <p className="mb-4 text-sm text-gray-600">
+        Select an integration from the list below to add it to your App.
+      </p>
       {zVerticalKey.options.map((vertical) => {
         const stageByIndex = R.mapToObj.indexed(
           zConnectorStage.options,
