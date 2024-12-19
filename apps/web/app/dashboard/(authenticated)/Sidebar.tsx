@@ -114,10 +114,12 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   hasPgConnection: boolean
 }
 
+const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
+
 export function Sidebar({className, hasPgConnection}: SidebarProps) {
   const pathname = usePathname()
   const links =
-    hasPgConnection && process.env['NEXT_PUBLIC_RUNTIME_ENV'] !== 'edge'
+    hasPgConnection && currentUrl.includes('openint.dev')
       ? sectionedLinks
       : sectionedLinks.filter((s) => s.title !== 'Console')
 
