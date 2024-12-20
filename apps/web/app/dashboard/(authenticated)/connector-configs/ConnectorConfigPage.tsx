@@ -96,7 +96,7 @@ export default function ConnectorConfigsPage({
   }
 
   return (
-    <div className="max-w-[60%] p-6">
+    <div className="max-w-[70%] p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">
         Configured connectors
       </h2>
@@ -227,10 +227,10 @@ export default function ConnectorConfigsPage({
 
         return (
           <div key={vertical}>
-            <h3 className="mb-4 ml-4 text-xl font-semibold tracking-tight">
+            <h3 className="ml-4 text-xl font-semibold tracking-tight">
               {titleCase(vertical)}
             </h3>
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap mb-4">
               {connectorsWithCTA.map((connector, index) =>
                 index < connectorsWithCTA.length - 1 ? (
                   <ConnectorCard
