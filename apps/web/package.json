@@ -74,6 +74,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-radix": "^3.0.5",
     "tilg": "0.1.1",
-    "webpack": "*"
+    "webpack": "*",
+    "wrangler": "^3.99.0"
   }
 }
