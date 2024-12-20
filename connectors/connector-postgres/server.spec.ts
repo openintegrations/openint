@@ -1,7 +1,7 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {getTableName} from 'drizzle-orm'
+import {drizzle} from 'drizzle-orm/node-postgres'
 import type {PgTable} from 'drizzle-orm/pg-core'
-import {drizzle} from 'drizzle-orm/postgres-js'
 import * as R from 'remeda'
 import type {CustomerId} from '@openint/cdk'
 import {env} from '@openint/env'
@@ -83,7 +83,7 @@ describe('standard schema', () => {
       {type: 'commit' as const},
     ])
     await toCompletion(destLink(src))
-    const res = await db.execute('SELECT * FROM vendor')
+    const {rows: res} = await db.execute('SELECT * FROM vendor')
     expect(res[0]).toMatchObject({
       source_id: 'conn_sfdc_9287',
       id: 'vend_1123',

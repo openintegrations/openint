@@ -3,7 +3,6 @@ import {connHelpers, makePostingsMap} from '@openint/cdk'
 import {
   A,
   DateTime,
-  formatAmount,
   math,
   objectFromArray,
   parseMoney,
@@ -54,6 +53,7 @@ export const splitwiseDef = {
         },
       }),
       transaction: ({entity: t}) => {
+        console.warn('WARNING splitwise transaction WITH NEW formatAmount');
         const cost = A(parseMoney(t.cost), t.currency_code)
         const partialTxn: Pick<
           Pta.Transaction,
@@ -77,7 +77,8 @@ export const splitwiseDef = {
               ...partialTxn,
               description: `${formatUser(from)} paid ${formatUser(
                 to,
-              )} ${formatAmount(cost)}`,
+                // NOTE: this used to call formatAmount from blossomfinance/iso-4217-currencies so it may fail 
+              )} ${cost}`,
               postingsMap: makePostingsMap(
                 {},
                 {
