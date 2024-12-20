@@ -5,12 +5,13 @@ import {migrate} from 'drizzle-orm/postgres-js/migrator'
 import postgres from 'postgres'
 import {env} from '@openint/env'
 import * as schema from './schema'
+import * as schemaWip from './schema-wip'
 
 export * from 'drizzle-orm'
 export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
-export {schema, drizzle, migrate}
+export {schema, drizzle, migrate, schemaWip}
 
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
@@ -25,7 +26,9 @@ export function getDb<
   return {db, pg}
 }
 
-export const {pg: configPg, db: configDb} = getDb(env.POSTGRES_URL, {schema})
+export const {pg: configPg, db: configDb} = getDb(env.POSTGRES_URL, {
+  schema: schemaWip,
+})
 
 export async function ensureSchema(
   thisDb: ReturnType<typeof getDb>['db'],

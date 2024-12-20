@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {parseArgs} from 'node:util'
-import {configDb, configPg, desc, eq, schema} from '@openint/db'
+import {configDb, configPg, desc, eq, schemaWip as schema} from '@openint/db'
 import {testEnv} from '@openint/env'
 import type {Events} from '@openint/events'
 import * as routines from './functions'
