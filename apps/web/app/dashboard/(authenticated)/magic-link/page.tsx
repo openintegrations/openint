@@ -166,7 +166,7 @@ export default function MagicLinkPage() {
           </div>
           <div className="mt-4">
             <Button type="submit" variant="default">
-              Submit
+              Create Magic Link
             </Button>
           </div>
         </SchemaForm>
