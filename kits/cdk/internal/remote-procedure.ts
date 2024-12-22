@@ -31,7 +31,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
   let connectionId = toNangoConnectionId(connection.id) // ctx.customerId
 
   // Note: Monkey patch for old connections
-  if (connection.createdAt < new Date('2024-12-10')) {
+  if (new Date(connection.createdAt) < new Date('2024-12-10')) {
     connectionId = connectionId.replace('conn_', 'reso_')
   }
 

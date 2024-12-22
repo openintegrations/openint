@@ -1,16 +1,9 @@
 // import '@openint/app-config/register.node'
 import {clerkClient} from '@clerk/nextjs/server'
-import {makePostgresClient} from '@openint/app-config/backendConfig'
 import {kApikeyMetadata} from '@openint/app-config/constants'
-import {envRequired} from '@openint/app-config/env'
 import type {Viewer} from '@openint/cdk'
 import {encodeApiKey, hasRole} from '@openint/cdk'
 import {makeUlid} from '@openint/util'
-
-export const {getPool, sql} = makePostgresClient({
-  databaseUrl: envRequired.POSTGRES_URL,
-  transformFieldNames: false,
-})
 
 export async function getOrCreateApikey(viewer: Viewer) {
   const orgId = hasRole(viewer, ['org', 'user']) ? viewer.orgId : null

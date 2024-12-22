@@ -3,11 +3,13 @@
 import {DataTable} from '@openint/ui'
 import {trpcReact} from '@/lib-client/trpcReact'
 import {VCommandMenu} from '@/vcommands/vcommand-components'
+import useRefetchOnSwitch from '../useRefetchOnSwitch'
 
 export default function PipelinesPage() {
   const res = trpcReact.listPipelines.useQuery()
-
   ;(globalThis as any).listPipelinesRes = res
+
+  useRefetchOnSwitch(res.refetch)
 
   return (
     <div className="p-6">

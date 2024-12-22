@@ -6,26 +6,27 @@ import React from 'react'
 import type {z} from '@openint/util'
 import {zodToJsonSchema} from '@openint/util'
 import {cn} from '../utils'
-import {Button} from '../shadcn'
+
+// import {Button} from '../shadcn'
 
 const theme: ThemeProps = {
   widgets: {},
-  templates: {
-    ButtonTemplates: {
-      SubmitButton: (props: any) => {
-        return (
-          <Button
-            type="submit"
-            variant="default"
-            disabled={props.disabled}
-            className="mt-4"
-          >
-            {props.disabled ? 'Submitting...' : 'Submit'}
-          </Button>
-        )
-      },
-    },
-  },
+  // templates: {
+  //   ButtonTemplates: {
+  //     SubmitButton: (props: any) => {
+  //       return (
+  //         <Button
+  //           type="submit"
+  //           variant="default"
+  //           disabled={props.disabled}
+  //           className="mt-4"
+  //         >
+  //           {props.disabled ? 'Submitting...' : 'Submit'}
+  //         </Button>
+  //       )
+  //     },
+  //   },
+  // },
 }
 
 /** TODO: Actually customize with our own components... */
@@ -106,9 +107,16 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
   ;(globalThis as any).formSchema = schema
   ;(globalThis as any).formJsonSchema = jsonSchema
 
-  // We cache the formState so that re-render does not cause immediate loss
-  // though this may sometimes cause stale data? Need to think more about it.
-  const [formData, setFormData] = React.useState<z.infer<TSchema>>(_formData)
+  const formDataRef = React.useRef(_formData)
+  const [localFormData, setLocalFormData] = React.useState(
+    () => formDataRef.current,
+  )
+
+  const handleFormChange = React.useCallback((data: any) => {
+    formDataRef.current = data.formData
+    setLocalFormData(data.formData)
+  }, [])
+
   // console.log('[SchemaForm] jsonSchema', jsonSchema)
   const uiSchema = generateUiSchema(jsonSchema)
 
@@ -117,7 +125,7 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
       disabled={loading}
       {...props}
       ref={forwardedRef}
-      formData={formData}
+      formData={localFormData}
       className={cn(
         'schema-form',
         loading && 'loading',
@@ -131,11 +139,11 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
         ...uiSchema,
         ...props.uiSchema,
       }}
+      onChange={handleFormChange}
       onSubmit={(data) => {
         if (!data.formData) {
           throw new Error('Invariant: formData is undefined')
         }
-        setFormData(data.formData)
         onSubmit?.({formData: data.formData})
       }}
     />

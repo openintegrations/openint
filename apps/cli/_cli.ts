@@ -13,7 +13,6 @@ import {makeOneBrickClient} from '@openint/connector-onebrick'
 // Or perhaps we can make it into a register and/or loader for nodejs
 // much like tsx and others
 import {makePlaidClient} from '@openint/connector-plaid'
-import {makePostgresClient} from '@openint/connector-postgres'
 import {makeRampClient} from '@openint/connector-ramp'
 import {makeSaltedgeClient} from '@openint/connector-saltedge'
 import {makeTellerClient} from '@openint/connector-teller'
@@ -59,7 +58,6 @@ if (require.main === module) {
       '': () => parseConnectorConfigsFromRawEnv(),
     }),
     jwt: () => makeJwtClient({secretOrPublicKey: env().JWT_SECRET!}),
-    pg: () => makePostgresClient({databaseUrl: env().POSTGRES_URL}),
     pgMeta: () =>
       makePostgresMetaService({
         databaseUrl: env().POSTGRES_URL,

@@ -7,6 +7,13 @@ description: OpenInt is the last integration platform you'll ever need.
 
 OpenInt is your go-to solution for **embedded product integrations**. It empowers teams to ship product integrations in hours, not weeks, using no or low code. With OpenInt, you can read and write data using unified APIs or sync it straight to your database privately.
 
+## 🎥 Quick Demo
+
+Want to see OpenInt in action? Check out our [quick demo on YouTube](https://www.youtube.com/watch?v=FpG7otZZhRw) to get a visual overview of how OpenInt can streamline your integrations.
+<Frame>
+<iframe width="700" height="315" src="https://www.youtube.com/embed/FpG7otZZhRw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</Frame>
+
 ## 🚀 Key Features
 
 <CardGroup>
@@ -44,9 +51,111 @@ OpenInt is your go-to solution for **embedded product integrations**. It empower
   </Card>
 </CardGroup>
 
+
 ## ✨ Get Started with OpenInt
 
 Ready to streamline your integrations? [Sign up now](https://app.openint.dev/dashboard/sign-up) to start using OpenInt and transform your workflow!
+
+
+    <Frame>
+      <img src="/images/gettingstarted.png" alt="getting started" />
+    </Frame>
+
+<Steps>
+
+<Step title="Set Up Your Connector">
+    <Frame>
+      <img src="/images/step-1.png" alt="step-1" />
+    </Frame>
+    After signing up, navigate to the dashboard and set up your first connector, in this example we'll use **Greenhouse**. This is where you can configure your integration settings to match your requirements.
+</Step>
+
+<Step title="Install Dependencies">
+
+```bash
+npm install @openint/connect @opensdks/sdk-openint
+```
+
+```bash
+yarn add @openint/connect @opensdks/sdk-openint
+```
+
+```bash
+pnpm add @openint/connect @opensdks/sdk-openint
+```
+
+</Step>
+
+<Step title="Configure API Key and Token">
+    <Frame>
+      <img src="/images/step-3.png" alt="step-3" />
+    </Frame>
+
+
+#### For Non-React Applications:
+1. Instead of a token, generate a magic link using your backend.
+2. Embed this magic link as an iframe in your application to enable seamless user interactions.
+
+```javascript
+import { initOpenIntSDK } from "@opensdks/sdk-openint";
+
+// Generate a Magic Link and use it within an iframe
+      const magicLinkResponse = await openint
+        .POST("/connect/magic-link", {
+          body: { customerId, validityInSeconds: 2592000 },
+        })
+        .then((r) => r.data)
+        .catch((err) => {
+          console.error("Error generating magic link:", err);
+          return null;
+        });
+      const magicLink = magicLinkResponse?.url;
+
+// Example for embedding a magic link
+      const iframe = `<iframe src="${magicLink}" />`;
+```
+
+#### For React Applications:
+1. Use your API key to generate a token on the backend.
+2. Pass this token to the frontend.
+
+```javascript
+// Generate a Token with your API key (on the server)
+import { initOpenIntSDK } from "@opensdks/sdk-openint";
+import { OpenIntConnectEmbed } from "@openint/connect";
+
+export default async function OpenIntExample() {
+  const openint = initOpenIntSDK({apiKey: process.env.OPENINT_API_KEY ?? ""});
+
+  const tokenResponse = await openint
+    .POST("/connect/token", {
+      body: { customerId: "END_USER_ID" },
+    })
+    .catch((err) => {
+      console.error("Error fetching token:", err);
+      return { data: { token: null } };
+    });
+
+  const token = tokenResponse?.data?.token ?? "";
+
+  return (
+    <section className="flex-1 p-4 lg:p-8">
+      <h1 className="text-lg lg:text-2xl font-medium text-gray-900 mb-6">
+        Basic Sync Integration
+      </h1>
+      <OpenIntConnectEmbed
+        width={800}
+        height={700}
+        params={{ token }}
+      />
+    </section>
+  );
+}
+
+```
+</Step>
+
+</Steps>
 
 ## Learn More
 
