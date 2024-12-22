@@ -28,7 +28,7 @@ export const connection = pgTable(
     connector_name: varchar()
       .notNull()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
-    customer_id: varchar(),
+    customer_id: varchar().notNull(),
     connector_config_id: varchar(),
     integration_id: varchar(),
     env_name: varchar(),
