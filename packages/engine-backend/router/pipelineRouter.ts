@@ -1,4 +1,4 @@
-import type {ZRaw} from '@openint/cdk'
+import type {ZRaw, ZStandard} from '@openint/cdk'
 import {extractId, zCustomerId, zId, zRaw, zStandard} from '@openint/cdk'
 import {R, z} from '@openint/util'
 import {inngest} from '../events'
@@ -10,6 +10,13 @@ import {performConnectionCheck} from './connectionRouter'
 export {type inferProcedureInput} from '@openint/trpc'
 
 const tags = ['Core']
+
+type ConnectionSettings = {
+  error?: {
+    code?: string
+    message?: string
+  }
+}
 
 export const pipelineRouter = trpc.router({
   listPipelines: protectedProcedure
@@ -76,12 +83,26 @@ export const pipelineRouter = trpc.router({
         ctx.services.metaService.findPipelines({
           connectionIds: connections.map((c) => c.id),
         }),
-        ...connections.map((c) => performConnectionCheck(ctx, c.id, {}))
+        ...connections.map((c) => performConnectionCheck(ctx, c.id, {})),
       ])
       type ConnType = 'source' | 'destination'
 
       const intById = R.mapToObj(integrations, (ins) => [ins.id, ins])
 
+      function defaultConnectionMapper(
+        conn: (typeof connections)[number] & {settings?: ConnectionSettings},
+      ): Omit<ZStandard['connection'], 'id'> {
+        // TODO: complete
+        return {
+          ...conn,
+          status:
+            conn.settings?.error?.code === 'refresh_token_external_error'
+              ? 'disconnected'
+              : // TODO: move to parse
+                'healthy',
+          statusMessage: conn.settings?.error?.message || undefined,
+        }
+      }
       function parseConnection(conn?: (typeof connections)[number] | null) {
         if (!conn) {
           return conn
@@ -92,7 +113,10 @@ export const pipelineRouter = trpc.router({
         const standardConn = zStandard.connection
           .omit({id: true})
           .nullish()
-          .parse(mappers?.connection?.(conn.settings))
+          .parse(
+            mappers?.connection?.(conn.settings) ||
+              defaultConnectionMapper(conn),
+          )
         const standardInt =
           // QQ: what are the implications for external data integrations UI rendering of using this either or ?? and also returning the id?
           integrations?.standard ??
