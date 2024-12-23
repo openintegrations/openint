@@ -63,7 +63,7 @@ export const zStandard = {
   }),
   connection: z.object({
     id: zId('conn'),
-    displayName: z.string(),
+    displayName: z.string().nullish(),
     /**
      * This correspond to the connection status.
      * Pipeline shall have a separate syncStatus */

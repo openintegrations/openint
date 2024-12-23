@@ -11,13 +11,6 @@ export {type inferProcedureInput} from '@openint/trpc'
 
 const tags = ['Core']
 
-type ConnectionSettings = {
-  error?: {
-    code?: string
-    message?: string
-  }
-}
-
 export const pipelineRouter = trpc.router({
   listPipelines: protectedProcedure
     .meta({openapi: {method: 'GET', path: '/core/pipeline', tags}})
@@ -90,17 +83,15 @@ export const pipelineRouter = trpc.router({
       const intById = R.mapToObj(integrations, (ins) => [ins.id, ins])
 
       function defaultConnectionMapper(
-        conn: (typeof connections)[number] & {settings?: ConnectionSettings},
+        conn: ZRaw['connection'],
       ): Omit<ZStandard['connection'], 'id'> {
-        // TODO: complete
         return {
           ...conn,
-          status:
-            conn.settings?.error?.code === 'refresh_token_external_error'
-              ? 'disconnected'
-              : // TODO: move to parse
-                'healthy',
-          statusMessage: conn.settings?.error?.message || undefined,
+          status: (conn.settings?.['error'] as any)?.['code']
+            ? //  TODO: extend to more states, i.e. code === 'refresh_token_external_error' should be reconnected
+              'disconnected'
+            : 'healthy', // default
+          statusMessage: (conn.settings?.['error'] as any)?.['message'],
         }
       }
       function parseConnection(conn?: (typeof connections)[number] | null) {
