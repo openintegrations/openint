@@ -62,9 +62,8 @@ export async function performConnectionCheck(
   ) {
     /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
-      ...(opts?.import && {
-        customerId: conn.customerId ?? undefined,
-      }),
+      customerId: conn.customerId ?? undefined,
+      integrationId: conn.integrationId ?? undefined,
       ...connUpdate,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
@@ -334,7 +333,7 @@ export const connectionRouter = trpc.router({
 
       // Handle forceRefresh for each connection
 
-      console.log('[listConnections] Refreshing tokens for all connections')
+      console.log('[listConnection] Refreshing tokens for all connections ')
       const updatedConnections = await Promise.all(
         connections.map(async (conn) => {
           const expiresAt =
@@ -348,14 +347,14 @@ export const connectionRouter = trpc.router({
             input.expand
           ) {
             console.log(
-              `[listConnections] Refreshing token for connection ${conn.connectorName}`,
+              `[listConnection] Refreshing token for connection ${conn.connectorName}`,
             )
             const connCheck = await performConnectionCheck(ctx, conn.id, {
               expand: expandArray,
             })
             if (!connCheck) {
               console.warn(
-                `[listConnections] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
+                `[listConnection] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
               )
             }
             return connCheck || conn
