@@ -26,6 +26,8 @@ export function ConnectionCard({
     syncInProgress: boolean
     connectorConfig: ConnectorConfig
     integration: any
+    status: string
+    statusMessage: string
   }
 }) {
   let connectionName =
@@ -42,12 +44,13 @@ export function ConnectionCard({
               <Ellipsis className="size-5 text-foreground" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="flex w-[80px] items-center justify-center">
-              <DropdownMenuItem
-                className="flex items-center justify-center"
-                // TODO: Make this only for 'reconnectable' connections'?
-                onSelect={() => onReconnect({id: conn.id})}>
-                <span className="text-center font-medium">Reconnect</span>
-              </DropdownMenuItem>
+              {conn.status !== 'healthy' && (
+                <DropdownMenuItem
+                  className="flex items-center justify-center"
+                  onSelect={() => onReconnect({id: conn.id})}>
+                  <span className="text-center font-medium">Reconnect</span>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 className="flex items-center justify-center"
                 onSelect={() => onDelete({id: conn.id})}>
@@ -78,7 +81,11 @@ export function ConnectionCard({
             {connectionName}
           </p>
           <div>
-            {conn.syncInProgress ? (
+            {conn.status !== 'healthy' ? (
+              <p className="text-center text-sm text-red-500">
+                Reconnection Required
+              </p>
+            ) : conn.syncInProgress ? (
               <div className="flex flex-row items-center justify-start gap-2">
                 <Loader className="size-5 animate-spin text-button" />
                 <p className="text-center text-sm text-button">Syncing...</p>
