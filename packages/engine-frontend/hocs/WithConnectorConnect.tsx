@@ -173,6 +173,17 @@ export const WithConnectorConnect = ({
         }
         setOpen(false)
         onEvent?.({type: 'success'})
+
+        // If running inside an iframe, notify the parent window via postMessage:
+        if (typeof window !== 'undefined' && window.parent !== window) {
+          window.parent.postMessage(
+            {
+              type: 'openint.connection.success',
+              connectorConfigId: ccfg.id,
+            },
+            '*',
+          )
+        }
       },
       onError: (err) => {
         if (err === CANCELLATION_TOKEN) {
