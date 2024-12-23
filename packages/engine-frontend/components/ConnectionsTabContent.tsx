@@ -1,7 +1,7 @@
+import {Id} from '@openint/cdk'
 import {Button} from '@openint/ui'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
-import {Id} from '@openint/cdk'
 import {WithConnectorConnect} from '../hocs/WithConnectorConnect'
 
 interface ConnectionsTabContentProps {
@@ -16,13 +16,14 @@ interface ConnectionsTabContentProps {
     pipelineIds: string[]
     syncInProgress: boolean
     integration: any
+    status: string
+    statusMessage: string
   }>
 }
 
 export function ConnectionsTabContent({
   connectionCount,
   deleteConnection,
-  onReconnect,
   connections,
   onConnect,
 }: ConnectionsTabContentProps) {
@@ -49,31 +50,36 @@ export function ConnectionsTabContent({
   ) : (
     <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
       {connections.map((conn) => (
-            <WithConnectorConnect
+        <WithConnectorConnect
+          key={conn.id + ''}
+          connectorConfig={{
+            id: conn.connectorConfig.id,
+            connector: conn.connectorConfig.connector,
+          }}
+          integration={conn.integration}
+          connection={conn}
+          onEvent={(e) => {
+            console.log('ConnectionsTabContent WithConnectorConnect event', e)
+            // TODO: review
+            onReconnect({id: conn.id})
+            onEvent?.({
+              type: e.type,
+              integration: {
+                connectorConfigId: int.connector_config_id,
+                id: int.id,
+              },
+            })
+          }}>
+          {({openConnect}) => (
+            // TODO: handle on reconnect to parent?
+            <ConnectionCard
               key={conn.id + ''}
-              connectorConfig={{
-                id: conn.connectorConfig.id,
-                connector: conn.connectorConfig.connector,
-              }}
-              integration={conn.integration}
-              connection={conn}
-              onEvent={(e) => {
-                console.log('ConnectionsTabContent WithConnectorConnect event', e)
-                // TODO: review
-                // onReconnect({id: conn.id})
-                // onEvent?.({
-                //   type: e.type,
-                //   integration: {
-                //     connectorConfigId: int.connector_config_id,
-                //     id: int.id,
-                //   },
-                // })
-              }}>
-              {({openConnect}) => (
-                // TODO: handle on reconnect to parent? 
-                <ConnectionCard key={conn.id + ''} conn={conn} onDelete={deleteConnection} onReconnect={openConnect} />
-              )}
-          </WithConnectorConnect>
+              conn={conn}
+              onDelete={deleteConnection}
+              onReconnect={openConnect}
+            />
+          )}
+        </WithConnectorConnect>
       ))}
     </div>
   )

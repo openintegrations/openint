@@ -113,7 +113,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           listConnectionsRes.isFetching ||
           listConnectionsRes.isRefetching
 
-          
         const enabledIntegrationIds: string[] =
           listConnectionsRes.data
             ?.filter((c): c is typeof c & {integration: {id: string}} =>
@@ -121,8 +120,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             )
             .map((c) => c.integration.id) ?? []
 
-      
-            // required? 
+        // required?
         // const onReconnect = _trpcReact.reconnectConnection.useMutation({
         //   onSuccess: () => {
         //     toast({title: 'Connection refreshed', variant: 'success'})
@@ -152,7 +150,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 connections={connections}
                 onConnect={() => navigateToTab('add-connection')}
                 // think about this
-                onReconnect={ () => {
+                onReconnect={() => {
                   console.log('onReconnect called')
                   ctx.listConnections.invalidate()
                 }}
