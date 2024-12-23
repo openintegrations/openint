@@ -51,12 +51,10 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
       webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
     },
   })
+
   if (connUpdate || opts?.import !== false) {
-    /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
-      ...(opts?.import && {
-        customerId: conn.customerId ?? undefined,
-      }),
+      customerId: conn.customerId ?? undefined,
       ...connUpdate,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
@@ -317,7 +315,7 @@ export const connectionRouter = trpc.router({
 
       // Handle forceRefresh for each connection
 
-      console.log('[listConnection] Refreshing tokens for all connections')
+      console.log('[listConnection] Refreshing tokens for all connections ')
       const updatedConnections = await Promise.all(
         connections.map(async (conn) => {
           const expiresAt =
