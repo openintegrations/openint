@@ -3,7 +3,8 @@
 import {useTheme} from 'next-themes'
 import {useState} from 'react'
 
-const GS_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
+const GS_SANDBOX_ORG_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
+const GS_PRODUCTION_ORG_ID = 'org_2qSc8OWoiIg1OIfpjbksgGRx4RU'
 
 interface ThemeColors {
   accent: string
@@ -112,7 +113,8 @@ const gsColorsByTheme = {
 
 const getThemeByOrgId = (orgId: string, theme: 'light' | 'dark') => {
   switch (orgId) {
-    case GS_ID:
+    case GS_SANDBOX_ORG_ID:
+    case GS_PRODUCTION_ORG_ID:
       return gsColorsByTheme[theme]
     default:
       return defaultColorsByTheme[theme]
