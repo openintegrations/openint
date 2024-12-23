@@ -50,7 +50,8 @@ function copyPgCloudflareAndPatchWorker() {
 
     let workerCode = fs.readFileSync(workerTsPath, 'utf8')
     const insertionMarker = 'const url = new URL(request.url)'
-    const envAssignment = 'process.env = Object.assign({}, process.env, env)'
+    const envAssignment =
+      'process.env = Object.assign({}, process.env, env); process.versions.node = "18.19.0"'
 
     // Only insert if not already present.
     if (!workerCode.includes(envAssignment)) {
@@ -84,7 +85,8 @@ function copyPgCloudflareAndPatchWorker() {
     }
 
     let handlerCode = fs.readFileSync(handlerMjsPath, 'utf8')
-    const insertionMarker = '                const request2 = _nextrequest.NextRequestAdapter.fromBaseNextRequest(req, (0, _nextrequest.signalFromNodeResponse)(res.originalResponse));'
+    const insertionMarker =
+      '                const request2 = _nextrequest.NextRequestAdapter.fromBaseNextRequest(req, (0, _nextrequest.signalFromNodeResponse)(res.originalResponse));'
     const insertionLine = `                  req = { ...req, body: await new Promise((resolve) => { let body = ''; req.body.on('data', (chunk) => (body += chunk)); req.body.on('end', () => resolve(body)); }) };`
 
     // Only insert if not already present.
