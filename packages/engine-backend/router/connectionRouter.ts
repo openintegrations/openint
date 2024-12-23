@@ -55,6 +55,7 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
   if (connUpdate || opts?.import !== false) {
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       customerId: conn.customerId ?? undefined,
+      integrationId: conn.integrationId ?? undefined,
       ...connUpdate,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
