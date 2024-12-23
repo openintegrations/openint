@@ -1,6 +1,6 @@
 'use client'
 
-import {Loader2} from 'lucide-react'
+import {AlertCircle, Loader2} from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import {_trpcReact} from '@openint/engine-frontend'
@@ -25,6 +25,10 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   useToast,
 } from '@openint/ui'
 import {cn} from '@/lib-client/ui-utils'
@@ -96,6 +100,10 @@ export function ConnectorConfigSheet({
 
   const formRef = React.useRef<SchemaFormElement>(null)
 
+  const connectionsRes = _trpcReact.listConnection.useQuery({
+    connectorConfigId: ccfg?.id,
+  })
+
   if (!connectorMeta) {
     return <LoadingText className="block p-4" />
   }
@@ -151,12 +159,37 @@ export function ConnectorConfigSheet({
           isLoading={connectorMetaRes.isLoading}
         />
         <Separator orientation="horizontal" />
-        <SheetFooter className="shrink-0">
+        <SheetFooter className="flex shrink-0 justify-between">
           {ccfg && (
             <AlertDialog>
-              <AlertDialogTrigger className="mr-auto">
-                Delete
-              </AlertDialogTrigger>
+              {(connectionsRes.data ?? []).length > 0 ? (
+                <div className="mr-auto flex items-center gap-2">
+                  <Button variant="destructive" disabled>
+                    Delete
+                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <AlertCircle className="size-6 text-destructive" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Cannot delete connector config while it has active
+                        connections
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              ) : (
+                <AlertDialogTrigger asChild>
+                  <div className="mr-auto flex items-center gap-2">
+                    <Button
+                      variant="destructive"
+                      disabled={connectionsRes.isLoading}>
+                      Delete
+                    </Button>
+                  </div>
+                </AlertDialogTrigger>
+              )}
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
