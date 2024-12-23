@@ -285,13 +285,10 @@ export const connectionRouter = trpc.router({
           connectorConfigId: zId('ccfg').nullish(),
           connectorName: z.string().nullish(),
           forceRefresh: z.boolean().optional(),
-          expand: z
-            .string()
-            .optional()
-            .openapi({
-              description:
-                'Comma-separated list of expand options: integration and/or integration.connector',
-            }),
+          expand: z.string().optional().openapi({
+            description:
+              'Comma-separated list of expand options: integration and/or integration.connector',
+          }),
         })
         .optional(),
     )
@@ -320,7 +317,7 @@ export const connectionRouter = trpc.router({
 
       // Handle forceRefresh for each connection
 
-      console.log('[listConnections] Refreshing tokens for all connections')
+      console.log('[listConnection] Refreshing tokens for all connections')
       const updatedConnections = await Promise.all(
         connections.map(async (conn) => {
           const expiresAt =
@@ -334,14 +331,14 @@ export const connectionRouter = trpc.router({
             input.expand
           ) {
             console.log(
-              `[listConnections] Refreshing token for connection ${conn.connectorName}`,
+              `[listConnection] Refreshing token for connection ${conn.connectorName}`,
             )
             const connCheck = await performConnectionCheck(ctx, conn.id, {
               expand: expandArray,
             })
             if (!connCheck) {
               console.warn(
-                `[listConnections] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
+                `[listConnection] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
               )
             }
             return connCheck || conn
@@ -363,13 +360,10 @@ export const connectionRouter = trpc.router({
       z.object({
         id: zId('conn'),
         forceRefresh: z.boolean().optional(),
-        expand: z
-          .string()
-          .optional()
-          .openapi({
-            description:
-              'Comma-separated list of expand options: integration and/or integration.connector',
-          }),
+        expand: z.string().optional().openapi({
+          description:
+            'Comma-separated list of expand options: integration and/or integration.connector',
+        }),
       }),
     )
     .output(
