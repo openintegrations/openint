@@ -150,10 +150,10 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 connections={connections}
                 onConnect={() => navigateToTab('add-connection')}
                 // think about this
-                onReconnect={() => {
-                  console.log('onReconnect called')
-                  ctx.listConnections.invalidate()
-                }}
+                // onReconnect={() => {
+                //   console.log('onReconnect called')
+                //   ctx.listConnections.invalidate()
+                // }}
               />
             ),
             status: connections.some((c) => c.syncInProgress),

@@ -1,4 +1,3 @@
-import {Id} from '@openint/cdk'
 import {Button} from '@openint/ui'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
@@ -6,18 +5,17 @@ import {WithConnectorConnect} from '../hocs/WithConnectorConnect'
 
 interface ConnectionsTabContentProps {
   connectionCount: number
-  deleteConnection: ({id}: {id: Id<'conn'>}) => void
+  deleteConnection: ({id}: {id: string}) => void
   onConnect: () => void
-  onReconnect: ({id}: {id: Id<'conn'>}) => void
   connections: Array<{
-    id: Id<'conn'>
+    id: string
     connectorConfig: ConnectorConfig
     connectorName: string
     pipelineIds: string[]
     syncInProgress: boolean
     integration: any
-    status: string
-    statusMessage: string
+    status?: string | null
+    statusMessage?: string | null
   }>
 }
 
@@ -49,7 +47,7 @@ export function ConnectionsTabContent({
     </div>
   ) : (
     <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
-      {connections.map((conn) => (
+      {connections.map((conn: any) => (
         <WithConnectorConnect
           key={conn.id + ''}
           connectorConfig={{
@@ -61,19 +59,19 @@ export function ConnectionsTabContent({
           onEvent={(e) => {
             console.log('ConnectionsTabContent WithConnectorConnect event', e)
             // TODO: review
-            onReconnect({id: conn.id})
-            onEvent?.({
-              type: e.type,
-              integration: {
-                connectorConfigId: int.connector_config_id,
-                id: int.id,
-              },
-            })
+            // onConnect()
+            // onEvent?.({
+            //   type: e.type,
+            //   integration: {
+            //     connectorConfigId: int.connector_config_id,
+            //     id: int.id,
+            //   },
+            // })
           }}>
           {({openConnect}) => (
             // TODO: handle on reconnect to parent?
             <ConnectionCard
-              key={conn.id + ''}
+              key={conn.id}
               conn={conn}
               onDelete={deleteConnection}
               onReconnect={openConnect}

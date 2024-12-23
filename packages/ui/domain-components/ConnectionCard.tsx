@@ -1,5 +1,5 @@
 import {Loader} from 'lucide-react'
-import {Id} from '@openint/cdk'
+import * as React from 'react'
 import type {ConnectorConfig} from '../../engine-frontend/hocs/WithConnectConfig'
 import {Ellipsis} from '../components'
 import {
@@ -18,10 +18,10 @@ export function ConnectionCard({
   onReconnect,
   conn,
 }: {
-  onDelete: ({id}: {id: Id<'conn'>}) => void
-  onReconnect: ({id}: {id: Id<'conn'>}) => void
+  onDelete: ({id}: {id: string}) => void
+  onReconnect: () => void
   conn: {
-    id: Id<'conn'>
+    id: string
     pipelineIds: string[]
     syncInProgress: boolean
     connectorConfig: ConnectorConfig
@@ -30,6 +30,24 @@ export function ConnectionCard({
     statusMessage: string
   }
 }) {
+  const [isSpinning, setIsSpinning] = React.useState(false)
+
+  const handleReconnect = () => {
+    setIsSpinning(true)
+    onReconnect()
+    setTimeout(() => {
+      setIsSpinning(false)
+    }, 10000)
+  }
+
+  const handleDelete = () => {
+    setIsSpinning(true)
+    onDelete({id: conn.id})
+    setTimeout(() => {
+      setIsSpinning(false)
+    }, 10000)
+  }
+
   let connectionName =
     conn?.integration?.name ?? conn.connectorConfig.connector.displayName
   connectionName =
@@ -37,23 +55,30 @@ export function ConnectionCard({
 
   return (
     <Card className="border-card-border relative h-[150px] w-[150px] cursor-pointer rounded-lg border bg-card p-0">
+      {/* Overlay spinner */}
+      {isSpinning && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70">
+          <Loader className="size-8 animate-spin text-button" />
+        </div>
+      )}
+
       <CardContent className="flex h-full flex-col items-center justify-center p-4 py-2">
         <div className="relative flex size-full flex-col items-center justify-center gap-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="absolute right-0 top-0">
               <Ellipsis className="size-5 text-foreground" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="flex w-[80px] items-center justify-center">
+            <DropdownMenuContent className="w-[120px]">
               {conn.status !== 'healthy' && (
                 <DropdownMenuItem
                   className="flex items-center justify-center"
-                  onSelect={() => onReconnect({id: conn.id})}>
+                  onSelect={() => handleReconnect()}>
                   <span className="text-center font-medium">Reconnect</span>
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
                 className="flex items-center justify-center"
-                onSelect={() => onDelete({id: conn.id})}>
+                onSelect={() => handleDelete()}>
                 <span className="text-center font-medium text-red-500">
                   Delete
                 </span>
@@ -83,7 +108,7 @@ export function ConnectionCard({
           <div>
             {conn.status !== 'healthy' ? (
               <p className="text-center text-sm text-red-500">
-                Reconnection Required
+                Reconnect Required
               </p>
             ) : conn.syncInProgress ? (
               <div className="flex flex-row items-center justify-start gap-2">
