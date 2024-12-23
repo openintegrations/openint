@@ -5,12 +5,12 @@
   "module": "./index.ts",
   "scripts": {
     "db:clean": "rm -rf ./drizzle",
-    "db:pull": "drizzle-kit introspect --connectionString $POSTGRES_URL --dialect postgresql",
-    "db:push": "drizzle-kit push:pg --connectionString $POSTGRES_URL --driver pg --schema ./schema.ts --verbose --strict",
-    "db:run-migration": "echo \"skipping database migration TODO fix\"",
-    "db:schema-diff": "pnpm db:clean && pnpm db:pull && drizzle-kit generate:pg --schema ./schema.ts && cd ./drizzle && ls 0001*.sql | xargs cat && pnpm db:clean",
-    "db:schema-generate": "drizzle-kit generate:pg --schema ./schema.ts --out ./migrations",
-    "db:template-dynamic-schema": "drizzle-kit generate:pg --schema ./schema-dynamic.ts --out ./drizzle && cd ./drizzle && ls *.sql | xargs cat && pnpm db:clean"
+    "db:introspect": "drizzle-kit introspect",
+    "db:push": "drizzle-kit push",
+    "db:run-migration": "npx tsx -e \"import('./').then(r => r.default.runMigration())\"",
+    "TODO_db:schema-diff": "pnpm db:clean && pnpm db:pull && drizzle-kit generate:pg --schema ./schema.ts && cd ./drizzle && ls 0001*.sql | xargs cat && pnpm db:clean",
+    "TODO_db:schema-generate": "drizzle-kit generate:pg --schema ./schema.ts --out ./migrations",
+    "TODO_db:template-dynamic-schema": "drizzle-kit generate:pg --schema ./schema-dynamic.ts --out ./drizzle && cd ./drizzle && ls *.sql | xargs cat && pnpm db:clean"
   },
   "dependencies": {
     "@openint/env": "workspace:*",
