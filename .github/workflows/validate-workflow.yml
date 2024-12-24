@@ -99,7 +99,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client-17
           mkdir -p ./artifacts
-          pg_dump --inserts $POSTGRES_URL > ./artifacts/dump.sql
+          /usr/lib/postgresql/17/bin/pg_dump --inserts $POSTGRES_URL > ./artifacts/dump.sql
 
       - name: Archive migration artifacts
         uses: actions/upload-artifact@v4
