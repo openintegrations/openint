@@ -13,7 +13,7 @@ import * as unified from './unifiedModels'
 export {unified}
 
 function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
-  return {openapi: {...meta, path: `/unified/accounting${meta.path}`,}}
+  return {openapi: {...meta, path: `/unified/accounting${meta.path}`}}
 }
 
 const procedure = verticalProcedure(adapters)
@@ -123,7 +123,10 @@ export const accountingRouter = trpc.router({
     )
     .input(
       baseReportQueryParams.extend({
-        // leaving open not to create too specific of an API
+        payment_method: z.string().optional(),
+        arpaid: z.string().optional(),
+        transaction_type: z.string().optional(),
+        sort_by: z.string().optional(),
       }),
     )
     .output(unified.transactionList)
