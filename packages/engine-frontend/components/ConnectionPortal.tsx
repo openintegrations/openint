@@ -113,7 +113,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           listConnectionsRes.isFetching ||
           listConnectionsRes.isRefetching
 
-          
         const enabledIntegrationIds: string[] =
           listConnectionsRes.data
             ?.filter((c): c is typeof c & {integration: {id: string}} =>
@@ -133,6 +132,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 deleteConnection={deleteConnection.mutate}
                 connections={connections}
                 onConnect={() => navigateToTab('add-connection')}
+                refetch={() => ctx.listConnections.invalidate()}
               />
             ),
             status: connections.some((c) => c.syncInProgress),

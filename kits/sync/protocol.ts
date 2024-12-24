@@ -29,7 +29,7 @@ export interface AnyEntityPayload {
   id: string // ExternalId
 }
 
-export interface ResoUpdateData<
+export interface ConnectionUpdateData<
   TSettings = {},
   TInsData = {},
   TVariant extends 'partial' | 'complete' = 'partial',
@@ -43,6 +43,9 @@ export interface ResoUpdateData<
     externalId: ExternalId
     data: TInsData
   }
+  // QQ: Extend this or calculate it before displaying based on settings?
+  // status?: ZStandard['connection']['status']
+  // statusMessage?: string
 }
 export interface StateUpdateData<TSrcOptions = {}, TDestOptions = {}> {
   sourceState?: ObjectPartialDeep<NoInfer<TSrcOptions>>
@@ -55,10 +58,10 @@ type NullableEntity<T> = T extends AnyEntityPayload
 
 export type SyncOperation<
   TData = any,
-  TResoUpdate extends object = ResoUpdateData,
+  TConnUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > =
-  | (TResoUpdate & {type: 'connUpdate'})
+  | (TConnUpdate & {type: 'connUpdate'})
   // TODO: We should separate state from options, and perhaps make state
   // less black box also, see airbyte protocol v2 for inspiration
   // Also consider merging fields below into a single field
@@ -71,9 +74,9 @@ export type AnySyncOperation = NonDiscriminatedUnion<SyncOperation>
 
 export type Source<
   T,
-  TResoUpdate extends object = ResoUpdateData,
+  TConnUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
-> = rxjs.Observable<SyncOperation<T, TResoUpdate, TStateUpdate>>
+> = rxjs.Observable<SyncOperation<T, TConnUpdate, TStateUpdate>>
 
 /**
  * Adapted from TRPC link and Apollo Link
@@ -82,20 +85,20 @@ export type Source<
 export type Link<
   TDataIn = any,
   TDataOut = TDataIn,
-  TResoUpdate extends object = ResoUpdateData,
+  TConnUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = (
-  obs: rxjs.Observable<SyncOperation<TDataIn, TResoUpdate, TStateUpdate>>,
-) => rxjs.Observable<SyncOperation<TDataOut, TResoUpdate, TStateUpdate>>
+  obs: rxjs.Observable<SyncOperation<TDataIn, TConnUpdate, TStateUpdate>>,
+) => rxjs.Observable<SyncOperation<TDataOut, TConnUpdate, TStateUpdate>>
 
 export type LinkFactory<
   TDataIn = any,
   TDataOut = TDataIn,
-  TResoUpdate extends object = ResoUpdateData,
+  TConnUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TArg = any,
-> = (arg: TArg) => Link<TDataIn, TDataOut, TResoUpdate, TStateUpdate>
+> = (arg: TArg) => Link<TDataIn, TDataOut, TConnUpdate, TStateUpdate>
 
 /**
  * Terminating link is just a link... It can still emit things like ready event
@@ -103,9 +106,9 @@ export type LinkFactory<
  */
 export type Destination<
   T = any,
-  TResoUpdate extends object = ResoUpdateData,
+  TConnUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
-> = Link<T, T, TResoUpdate, TStateUpdate>
+> = Link<T, T, TConnUpdate, TStateUpdate>
 
 // @deprecated?
 

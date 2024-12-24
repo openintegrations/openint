@@ -1,9 +1,9 @@
 import type {Link as FetchLink} from '@opensdks/runtime'
 import type {z} from '@opensdks/util-zod'
 import type {
+  ConnectionUpdateData,
   Destination,
   EntityPayload,
-  ResoUpdateData,
   Source,
   StateUpdateData,
   SyncOperation,
@@ -14,10 +14,10 @@ import type {
   CheckConnectionContext,
   CheckConnectionOptions,
   ConnectContext,
+  ConnectionUpdate,
   ConnectOptions,
   ConnectorMetadata,
   OpenDialogFn,
-  ConnectionUpdate,
   WebhookReturnType,
   zPassthroughInput,
 } from './connector-meta.types'
@@ -312,7 +312,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
     }>,
     {type: 'data'}
   >
-  type connUpdate = ResoUpdateData<
+  type connUpdate = ConnectionUpdateData<
     _types['connectionSettings'],
     _types['integrationData']
   >

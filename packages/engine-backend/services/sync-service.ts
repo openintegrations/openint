@@ -451,7 +451,7 @@ export function makeSyncService({
       .handlers({
         connection: {id, connectorConfigId: int.id, customerId},
       })
-      .connUpdate({type: 'connUpdate', id, settings, integration})
+      .connUpdate({id, settings, integration})
 
     // TODO: This should be happening async
     if (!connUpdate.source$ && !connUpdate.triggerDefaultSync) {

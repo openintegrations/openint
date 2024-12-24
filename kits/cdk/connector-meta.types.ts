@@ -1,7 +1,11 @@
 import type {NangoProvider} from '@opensdks/sdk-nango/src/nango.oas'
 import {z} from '@opensdks/util-zod'
 import type {oas30, oas31} from 'openapi3-ts'
-import type {AnyEntityPayload, ResoUpdateData, Source} from '@openint/sync'
+import type {
+  AnyEntityPayload,
+  ConnectionUpdateData,
+  Source,
+} from '@openint/sync'
 import {castIs} from '@openint/util'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
@@ -111,9 +115,12 @@ export const zCheckConnectionOptions = z.object({
 })
 
 /** Extra props not on ResoUpdateData */
-export interface ConnectionUpdate<TEntity = AnyEntityPayload, TSettings = unknown>
+export interface ConnectionUpdate<
+    TEntity = AnyEntityPayload,
+    TSettings = unknown,
+  >
   // make `ResoUpdateData.id` not prefixed so we can have better inheritance
-  extends Omit<ResoUpdateData<TSettings>, 'id'> {
+  extends Omit<ConnectionUpdateData<TSettings>, 'id'> {
   // Subset of connUpdate
   connectionExternalId: ExternalId
   // Can we inherit types used by metaLinks?
