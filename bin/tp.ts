@@ -26,6 +26,8 @@ Options:
   --advancedSafeModeLevel      Additional control for Safe/Alert mode behavior. Options:
                                - 0: Apply Alert/Safe mode to all queries.
                                - 1: Exclude SELECT/EXPLAIN/SHOW queries from Alert/Safe mode.
+  --schema                     The database schema to connect to (e.g., "public", "custom_schema").
+
 Defaults:
   If --env is not provided, defaults to "local" for localhost connections.
   If --statusColor is not provided, defaults to "007F3D" for localhost connections.
@@ -49,6 +51,7 @@ const args = parseArgs({
      * 1: Alert / Safe mode except for SELECT/EXPLAIN/SHOW queries
      */
     advancedSafeModeLevel: {type: 'string'}, // 0 | 1
+    schema: {type: 'string'},
   },
 })
 
