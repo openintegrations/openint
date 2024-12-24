@@ -1,5 +1,12 @@
 import type {ZRaw, ZStandard} from '@openint/cdk'
-import {extractId, zCustomerId, zId, zRaw, zStandard} from '@openint/cdk'
+import {
+  extractId,
+  oauthBaseSchema,
+  zCustomerId,
+  zId,
+  zRaw,
+  zStandard,
+} from '@openint/cdk'
 import {R, z} from '@openint/util'
 import {inngest} from '../events'
 import {zSyncOptions} from '../types'
@@ -85,13 +92,22 @@ export const pipelineRouter = trpc.router({
       function defaultConnectionMapper(
         conn: ZRaw['connection'],
       ): Omit<ZStandard['connection'], 'id'> {
+        const settings = oauthBaseSchema.connectionSettings.safeParse(
+          conn.settings,
+        )
+
+        if (!settings.success) {
+          // no op
+          return conn
+        }
+
         return {
           ...conn,
-          status: (conn.settings?.['error'] as any)?.['code']
+          status: settings?.data?.error?.code
             ? //  TODO: extend to more states, i.e. code === 'refresh_token_external_error' should be reconnected
               'disconnected'
             : 'healthy', // default
-          statusMessage: (conn.settings?.['error'] as any)?.['message'],
+          statusMessage: settings?.data?.error?.message,
         }
       }
       function parseConnection(conn?: (typeof connections)[number] | null) {
