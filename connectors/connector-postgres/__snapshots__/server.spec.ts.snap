@@ -28,9 +28,10 @@ exports[`custom schema: insert multiple destinationSync 1`] = `
       "id": 555,
       "name": "Bank",
     },
+  ],
+  "trxn": [
     {
       "id": 555,
-      "name": null,
     },
   ],
 }
@@ -43,7 +44,7 @@ exports[`custom schema: insert multiple infer table schema 1`] = `
 	"name" text
 );
 ",
-  "CREATE TABLE "account" (
+  "CREATE TABLE "trxn" (
 	"id" integer
 );
 ",
