@@ -98,7 +98,10 @@ export const pipelineRouter = trpc.router({
 
         if (!settings.success) {
           // no op
-          return conn
+          return {
+            ...conn,
+            status: 'healthy',
+          }
         }
 
         return {
@@ -118,7 +121,7 @@ export const pipelineRouter = trpc.router({
         const integrations = intById[conn.integrationId!]
         const mappers = ctx.connectorMap[connectorName]?.standardMappers
         const standardConn = zStandard.connection
-          .omit({id: true})
+          .omit({id: true, settings: true})
           .nullish()
           .parse(
             mappers?.connection?.(conn.settings) ||
@@ -168,6 +171,10 @@ export const pipelineRouter = trpc.router({
           const type: ConnType | null = r.id.startsWith('conn_postgres')
             ? 'destination'
             : 'source'
+
+          // removing settings to avoid leaking secrets
+          delete r.settings
+
           return {
             ...r,
             syncInProgress: pipes.some((p) => p.syncInProgress),
