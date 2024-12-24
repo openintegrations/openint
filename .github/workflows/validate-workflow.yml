@@ -94,7 +94,7 @@ jobs:
         run: |
           pnpm run-migration
           sudo apt-get update
-          sudo apt-get install -y postgresql-client
+          sudo apt-get install -y postgresql-client-17
           mkdir -p ./artifacts
           pg_dump $POSTGRES_URL > ./artifacts/dump.sql
 
