@@ -1,13 +1,12 @@
 'use client'
 
 import {useTheme} from 'next-themes'
-import {useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 
 const GS_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
 
 interface ThemeColors {
   accent: string
-  accentForeground: string
   background: string
   border: string
   button: string
@@ -32,6 +31,7 @@ interface ThemeColors {
 }
 
 const defaultThemeColors: Partial<ThemeColors> = {
+  accent: 'hsl(210, 51%, 78%)',
   background: 'hsl(0, 0%, 100%)', // #ffffff - White
   border: 'hsl(222, 23%, 87%)', // #d6d9e4 - Light Grayish Blue
   button: 'hsl(255, 90%, 66%)', // #8a5df6 - Bright Purple
@@ -57,7 +57,6 @@ const defaultThemeColors: Partial<ThemeColors> = {
 
 const defaultDarkThemeColors: Partial<ThemeColors> = {
   accent: 'hsl(220, 21%, 39%)',
-  accentForeground: 'hsl(220, 35%, 92%)',
   background: 'hsl(0, 0, 11%)',
   border: 'hsl(0, 0%, 20%)',
   button: 'hsl(255, 90%, 66%)',
@@ -121,13 +120,20 @@ const getThemeByOrgId = (orgId: string, theme: 'light' | 'dark') => {
 
 export function ColorConfig({orgId}: {orgId: string}) {
   const {theme} = useTheme() as {theme: 'light' | 'dark'}
-  const [themeColors] = useState<Partial<ThemeColors>>(
+  const [themeColors, setThemeColors] = useState<Partial<ThemeColors>>(
     getThemeByOrgId(orgId, theme),
   )
 
-  const cssSelector = theme === 'dark' ? '.dark' : ':root'
+  const cssSelector = useMemo(
+    () => (theme === 'dark' ? '.dark' : ':root'),
+    [theme],
+  )
 
-  return (
+  useEffect(() => {
+    setThemeColors(getThemeByOrgId(orgId, theme))
+  }, [orgId, theme])
+
+  return themeColors !== undefined ? (
     <style id="theme-colors" jsx global>{`
       ${cssSelector} {
         --accent: ${themeColors.accent};
@@ -156,5 +162,5 @@ export function ColorConfig({orgId}: {orgId: string}) {
         --ring: ${themeColors.secondary};
       }
     `}</style>
-  )
+  ) : null
 }
