@@ -207,40 +207,84 @@ describe('with db', () => {
   // console.log('filename', __filename)
   const dbName = 'upsert_db'
 
+  const dbUrl = new URL(env.POSTGRES_URL)
+  dbUrl.pathname = `/${dbName}`
+  const db = drizzle(dbUrl.toString(), {logger: true})
+
   beforeAll(async () => {
     const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
     await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
     await masterDb.execute(`CREATE DATABASE ${dbName}`)
     await masterDb.$client.end()
-  })
-
-  const dbUrl = new URL(env.POSTGRES_URL)
-  dbUrl.pathname = `/${dbName}`
-  const db = drizzle(dbUrl.toString(), {logger: true})
-
-  test('upsert with inferred table', async () => {
-    const row = {
-      id: '123',
-      name: 'abc',
-      count: 1,
-      data: {hello: 'world'},
-    }
 
     await db.execute(sql`
       CREATE TABLE IF NOT EXISTS "test_user" (
         id text PRIMARY KEY,
-        name text,
+        name text default 'unnamed',
         count integer,
         data jsonb
       );
     `)
+  })
 
+  const row = {
+    id: '123',
+    name: 'original',
+    count: 1,
+    data: {hello: 'world'},
+  }
+
+  beforeEach(async () => {
     await dbUpsertOne(db, 'test_user', row, {
       keyColumns: ['id'],
     })
-    const ret = await db.execute(sql`SELECT * FROM "test_user"`)
+  })
 
+  afterEach(async () => {
+    await db.execute(sql`TRUNCATE "test_user"`)
+  })
+
+  test('upsert with inferred table', async () => {
+    const ret = await db.execute(sql`SELECT * FROM "test_user"`)
     expect(ret[0]).toEqual(row)
+  })
+
+  test('ignore undefined values by default', async () => {
+    await dbUpsertOne(
+      db,
+      'test_user',
+      {...row, name: undefined},
+      {keyColumns: ['id']},
+    )
+    const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
+    expect(ret2[0]).toEqual(row)
+  })
+
+  test('treat undefined as sql DEFAULT keyword', async () => {
+    await dbUpsertOne(
+      db,
+      'test_user',
+      {...row, name: undefined},
+      {keyColumns: ['id'], undefinedAsDefault: true},
+    )
+    const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
+    expect(ret2[0]).toEqual({...row, name: 'unnamed'})
+  })
+
+  test('only use the firstRow for inferring schema', async () => {
+    await dbUpsert(
+      db,
+      'test_user',
+      [
+        {id: 'new_id', count: 3},
+        {...row, name: undefined},
+      ],
+      {keyColumns: ['id'], undefinedAsDefault: true},
+    )
+
+    expect(
+      await db.execute(sql`SELECT * FROM "test_user"`).then((r) => r[0]),
+    ).toEqual({...row, name: 'original'})
   })
 
   afterAll(async () => {
