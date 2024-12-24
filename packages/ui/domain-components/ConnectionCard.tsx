@@ -37,7 +37,7 @@ export function ConnectionCard({
     onReconnect()
     setTimeout(() => {
       setIsSpinning(false)
-    }, 10000)
+    }, 60000) // ok as upon complete it will refresh
   }
 
   const handleDelete = () => {
@@ -45,7 +45,7 @@ export function ConnectionCard({
     onDelete({id: conn.id})
     setTimeout(() => {
       setIsSpinning(false)
-    }, 10000)
+    }, 60000) // ok as upon complete it will refresh
   }
 
   let connectionName =
@@ -71,13 +71,13 @@ export function ConnectionCard({
             <DropdownMenuContent className="w-[120px]">
               {conn.status !== 'healthy' && (
                 <DropdownMenuItem
-                  className="flex items-center justify-center"
+                  className="flex cursor-pointer items-center justify-center"
                   onSelect={() => handleReconnect()}>
                   <span className="text-center font-medium">Reconnect</span>
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
-                className="flex items-center justify-center"
+                className="flex cursor-pointer items-center justify-center"
                 onSelect={() => handleDelete()}>
                 <span className="text-center font-medium text-red-500">
                   Delete
