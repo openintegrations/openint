@@ -120,23 +120,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             )
             .map((c) => c.integration.id) ?? []
 
-        // required?
-        // const onReconnect = _trpcReact.reconnectConnection.useMutation({
-        //   onSuccess: () => {
-        //     toast({title: 'Connection refreshed', variant: 'success'})
-        //   },
-        //   onError: (err) => {
-        //     toast({
-        //       title: 'Failed to refresh connection',
-        //       description: `${err.message}`,
-        //       variant: 'destructive',
-        //     })
-        //   },
-        //   onSettled: () => {
-        //     ctx.listConnections.invalidate()
-        //   },
-        // })
-
         const tabConfig = [
           {
             key: 'connections',

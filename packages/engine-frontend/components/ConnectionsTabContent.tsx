@@ -55,19 +55,7 @@ export function ConnectionsTabContent({
             connector: conn.connectorConfig.connector,
           }}
           integration={conn.integration}
-          connection={conn}
-          onEvent={(e) => {
-            console.log('ConnectionsTabContent WithConnectorConnect event', e)
-            // TODO: review
-            // onConnect()
-            // onEvent?.({
-            //   type: e.type,
-            //   integration: {
-            //     connectorConfigId: int.connector_config_id,
-            //     id: int.id,
-            //   },
-            // })
-          }}>
+          connection={conn}>
           {({openConnect}) => (
             // TODO: handle on reconnect to parent?
             <ConnectionCard

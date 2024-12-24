@@ -17,12 +17,12 @@ const COMMIT: Extract<SyncOperation, {type: 'commit'}> = {type: 'commit'}
 /** The most fundamental implementation of using using protocol */
 export async function sync<
   T extends Data = Data,
-  TResoUpdate extends object = ConnectionUpdateData,
+  TConnUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 >(input: {
-  source: Source<T, TResoUpdate, TStateUpdate>
-  destination: Destination<T, TResoUpdate, TStateUpdate>
-  links?: Array<Link<T, T, TResoUpdate, TStateUpdate>>
+  source: Source<T, TConnUpdate, TStateUpdate>
+  destination: Destination<T, TConnUpdate, TStateUpdate>
+  links?: Array<Link<T, T, TConnUpdate, TStateUpdate>>
   watch?: boolean
 }) {
   const start = Date.now()
