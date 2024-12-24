@@ -1,7 +1,7 @@
 name: Validate
 
 on:
-  push: { branches: [main, production] }
+  push: {branches: [main, production]}
   pull_request:
 
 jobs:
@@ -88,8 +88,26 @@ jobs:
       - name: Ensure OpenAPI spec and docs are up to date
         run: pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate && git diff --exit-code
 
-      - name: Run migration
-        run: pnpm run-migration
+      - name: Run migration and store the completed schema
+        # TODO: consider diffing schema with stored schema?
+        # Perhaps make dump and diff one of the code generation next steps?
+        run: |
+          pnpm run-migration
+
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17
+          mkdir -p ./artifacts
+          /usr/lib/postgresql/17/bin/pg_dump --inserts $POSTGRES_URL > ./artifacts/dump.sql
+
+      - name: Archive migration artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: migration-artifacts
+          path: |
+            ./artifacts
+
         # To test this with a locally install postgres, run
         # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && POSTGRES_URL=postgres://localhost:5432/test pnpm run-migration
 
