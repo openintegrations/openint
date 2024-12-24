@@ -2,6 +2,29 @@
 import {exec} from 'node:child_process'
 import {parseArgs} from 'node:util'
 
+const USAGE = `
+TablePlus CLI
+
+Examples:
+./bin/tp.ts DOCKER_POSTGRES_URL
+./bin/tp.ts STAGING_URL --label "Staging DB" --env staging --statusColor yellow
+./bin/tp.ts postgres://user:password@localhost:5432/mydb
+
+Positional Arguments:
+  <envKeyOrUrl>    The environment variable key containing the database URL
+                   or a direct database URL (e.g., postgres://user:pass@host:port/db).
+
+Options:
+  --label, -n      A custom label for the connection (e.g., "My Database").
+  --env            The environment name (e.g., development, production, staging).
+  --statusColor    The status color for the connection. Can be a named color
+                   (green, yellow, red) or a custom hex code (e.g., 007F3D).
+
+Defaults:
+  If --env is not provided, defaults to "local" for localhost connections.
+  If --statusColor is not provided, defaults to "007F3D" for localhost connections.
+`
+
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 const args = parseArgs({
   allowPositionals: true,
@@ -13,7 +36,12 @@ const args = parseArgs({
 })
 
 function getUrl() {
-  const envKeyOrUrl = args.positionals[0]!
+  const envKeyOrUrl = args.positionals[0]
+
+  if (!envKeyOrUrl) {
+    console.error(USAGE)
+    process.exit(0)
+  }
 
   try {
     const envKey = envKeyOrUrl
@@ -22,7 +50,7 @@ function getUrl() {
   try {
     return [args.values.label, new URL(envKeyOrUrl)] as const
   } catch {}
-  throw new Error(`Could not find URL for ${envKeyOrUrl}`)
+  throw new Error(`Could parse database URL: ${envKeyOrUrl}`)
 }
 
 const [label, url] = getUrl()
