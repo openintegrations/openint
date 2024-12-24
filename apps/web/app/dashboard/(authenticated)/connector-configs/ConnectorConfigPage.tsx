@@ -4,6 +4,7 @@ import {useUser} from '@clerk/nextjs'
 import {Loader2, Lock, Pencil, Plus} from 'lucide-react'
 import Image from 'next/image'
 import React, {useState} from 'react'
+import {isDevOrStaging} from '@openint/app-config/constants'
 import {zConnectorStage, zVerticalKey} from '@openint/cdk'
 import type {RouterOutput} from '@openint/engine-backend'
 import {_trpcReact} from '@openint/engine-frontend'
@@ -63,6 +64,7 @@ export default function ConnectorConfigsPage({
 
   // either if whitelisted or already has a connector other than default postgres
   const canAddNewConnectors =
+    isDevOrStaging ||
     user?.publicMetadata?.['whitelisted'] === true ||
     connectorConfigsRes.data?.some(
       (c) => c.connectorName !== 'default_postgres',
@@ -230,7 +232,7 @@ export default function ConnectorConfigsPage({
             <h3 className="ml-4 text-xl font-semibold tracking-tight">
               {titleCase(vertical)}
             </h3>
-            <div className="flex flex-wrap mb-4">
+            <div className="mb-4 flex flex-wrap">
               {connectorsWithCTA.map((connector, index) =>
                 index < connectorsWithCTA.length - 1 ? (
                   <ConnectorCard

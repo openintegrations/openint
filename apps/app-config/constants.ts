@@ -41,3 +41,6 @@ export const __DEBUG__ =
     typeof window !== 'undefined' && window.localStorage.getItem('__DEBUG__'),
   ) ||
   !!process.env['DEBUG']
+
+export const isDevOrStaging =
+  __DEBUG__ || process.env['VERCEL_BRANCH_URL']?.includes('main')
