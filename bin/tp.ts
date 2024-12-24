@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npx tsx
+#!/usr/bin/env -S NODE_NO_WARNINGS=1 npx tsx
 import {exec} from 'node:child_process'
 import {parseArgs} from 'node:util'
 
@@ -27,14 +27,18 @@ function getUrl() {
 
 const [label, url] = getUrl()
 
-url.searchParams.set(
-  'name',
-  [label, `${url.username}@${url.hostname}:${url.port}`]
-    .filter((e) => !!e)
-    .join(' : '),
-)
+const name = [label, `${url.username}@${url.hostname}:${url.port}`]
+  .filter((e) => !!e)
+  .join(' : ')
+
 const {label: _, ...options} = args.values
 
+if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+  options.env = options.env || 'local'
+  options.statusColor = options.statusColor || '007F3D'
+}
+
+url.searchParams.set('name', name)
 for (const [key, value] of Object.entries(options)) {
   if (value) {
     url.searchParams.set(key, value)
@@ -44,6 +48,6 @@ for (const [key, value] of Object.entries(options)) {
 /** Have to do some custom transformation otherwise space gets encoded as + signs */
 const postgresURL = url.toString().replaceAll('+', '%20')
 
-console.log('Will open', postgresURL)
+console.log('Will open', name)
 
 exec(`open -a TablePlus '${postgresURL}'`)
