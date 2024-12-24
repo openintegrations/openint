@@ -72,7 +72,8 @@ jobs:
 
       # - name: Set up tmate session
       #   uses: mxschmitt/action-tmate@v2
-
+      # - name: Setup upterm session
+      #   uses: lhotari/action-upterm@v1
       - name: Run type checks
         run: pnpm run typecheck
 
@@ -98,10 +99,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client-17
           mkdir -p ./artifacts
-          # /usr/lib/postgresql/17/bin/pg_dump --inserts $POSTGRES_URL > ./artifacts/dump.sql
-
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
+          /usr/lib/postgresql/17/bin/pg_dump --inserts $POSTGRES_URL > ./artifacts/dump.sql
 
       - name: Archive migration artifacts
         uses: actions/upload-artifact@v4
