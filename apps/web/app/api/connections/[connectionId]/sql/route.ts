@@ -54,7 +54,7 @@ export async function GET(
     // TODO: Should we limit admin user to RLS also? Otherwise we might as well
     // proxy the pgMeta endpoint just like we proxy rest / graphql
 
-    const rows = await db.execute(query)
+    const {rows} = await db.execute(query)
     const res =
       format === 'csv'
         ? new NextResponse(

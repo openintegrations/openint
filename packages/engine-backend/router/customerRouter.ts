@@ -311,6 +311,11 @@ export const customerRouter = trpc.router({
           },
         )
 
+        if (process.env['NEXT_PUBLIC_RUNTIME_ENV'] === 'edge') {
+          console.log('[postConnect] skipping inngest for edge runtime')
+          return 'Connection successfully connected'
+        }
+
         await inngest.send({
           name: 'connect/connection-connected',
           data: {connectionId},
