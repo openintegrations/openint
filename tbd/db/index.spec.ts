@@ -157,7 +157,7 @@ describe('test db', () => {
     )
     expect(migrations).toMatchInlineSnapshot(`
       [
-        "CREATE TABLE IF NOT EXISTS "account" (
+        "CREATE TABLE "account" (
       	"id" serial PRIMARY KEY NOT NULL,
       	"email" text,
       	"data" jsonb,
