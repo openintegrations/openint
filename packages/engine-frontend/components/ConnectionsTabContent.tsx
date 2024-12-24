@@ -7,6 +7,7 @@ interface ConnectionsTabContentProps {
   connectionCount: number
   deleteConnection: ({id}: {id: string}) => void
   onConnect: () => void
+  refetch: () => void
   connections: Array<{
     id: string
     connectorConfig: ConnectorConfig
@@ -24,6 +25,7 @@ export function ConnectionsTabContent({
   deleteConnection,
   connections,
   onConnect,
+  refetch,
 }: ConnectionsTabContentProps) {
   return connectionCount === 0 ? (
     <div className="flex flex-col p-4 pt-0">
@@ -55,7 +57,10 @@ export function ConnectionsTabContent({
             connector: conn.connectorConfig.connector,
           }}
           integration={conn.integration}
-          connection={conn}>
+          connection={conn}
+          onEvent={() => {
+            refetch()
+          }}>
           {({openConnect}) => (
             // TODO: handle on reconnect to parent?
             <ConnectionCard

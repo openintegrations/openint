@@ -73,7 +73,6 @@ export const pipelineRouter = trpc.router({
     .input(zListParams.extend({customerId: zCustomerId.optional()}).optional())
     .query(async ({input = {}, ctx}) => {
       // Add info about what it takes to `reconnect` here for connections which
-      // has disconnected
       const connections =
         await ctx.services.metaService.tables.connection.list(input)
       const [integrations, _pipelines] = await Promise.all([
@@ -83,7 +82,8 @@ export const pipelineRouter = trpc.router({
         ctx.services.metaService.findPipelines({
           connectionIds: connections.map((c) => c.id),
         }),
-        ...connections.map((c) => performConnectionCheck(ctx, c.id, {})),
+        // We used to check connection health here, but we're moving it to async in future
+        // ...connections.map((c) => performConnectionCheck(ctx, c.id, {})),
       ])
       type ConnType = 'source' | 'destination'
 

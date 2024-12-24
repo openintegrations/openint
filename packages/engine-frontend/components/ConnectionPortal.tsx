@@ -132,11 +132,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 deleteConnection={deleteConnection.mutate}
                 connections={connections}
                 onConnect={() => navigateToTab('add-connection')}
-                // think about this
-                // onReconnect={() => {
-                //   console.log('onReconnect called')
-                //   ctx.listConnections.invalidate()
-                // }}
+                refetch={() => ctx.listConnections.invalidate()}
               />
             ),
             status: connections.some((c) => c.syncInProgress),

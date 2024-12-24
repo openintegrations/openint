@@ -56,6 +56,7 @@ export async function performConnectionCheck(
     },
   })
   if (
+    conn?.settings?.error ||
     connUpdate ||
     opts?.import !== false ||
     remoteCtx.remote.settings?.oauth?.error
