@@ -6,11 +6,13 @@ import {zOrganization} from '@openint/engine-backend/services/AuthProvider'
 import type {TRPCReact} from '@openint/engine-frontend'
 import {_trpcReact, useMutationToast} from '@openint/engine-frontend'
 import {SchemaForm} from '@openint/ui'
+import useRefetchOnSwitch from '../useRefetchOnSwitch'
 
 const trpcReact = _trpcReact as unknown as TRPCReact<AppRouter>
 
 export default function SettingsPage() {
   const res = trpcReact.getCurrentOrganization.useQuery()
+  useRefetchOnSwitch(res.refetch)
 
   const updateOrg = trpcReact.updateCurrentOrganization.useMutation({
     ...useMutationToast({
@@ -26,7 +28,10 @@ export default function SettingsPage() {
   return res && !(res.isLoading || res.isRefetching) ? (
     <div className="p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">Settings</h2>
-      <p className="mb-4 text-sm text-gray-600">Configure your database, schema, and webhook settings to manage how data is stored, organized, and synced across your integrations.</p>
+      <p className="mb-4 text-sm text-gray-600">
+        Configure your database, schema, and webhook settings to manage how data
+        is stored, organized, and synced across your integrations.
+      </p>
       <SchemaForm
         schema={zOrganization.shape.publicMetadata}
         uiSchema={{
