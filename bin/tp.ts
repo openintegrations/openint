@@ -70,7 +70,7 @@ function getUrl() {
   try {
     return [args.values.label, new URL(envKeyOrUrl)] as const
   } catch {}
-  throw new Error(`Could parse database URL: ${envKeyOrUrl}`)
+  throw new Error(`Could not parse database URL: ${envKeyOrUrl}`)
 }
 
 const [label, url] = getUrl()
