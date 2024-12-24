@@ -1,5 +1,5 @@
 import {inArray} from 'drizzle-orm'
-import {configDb, schema} from '@openint/db'
+import {configDb, schemaWip as schema} from '@openint/db'
 import {z} from '@openint/util'
 import {protectedProcedure, trpc} from './_base'
 import {zListParams} from './_schemas'

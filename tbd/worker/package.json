@@ -13,7 +13,7 @@
     "@openint/sdk": "workspace:*",
     "@openint/sync": "workspace:*",
     "@openint/unified-etl": "workspace:*",
-    "drizzle-orm": "^0.36.3",
+    "drizzle-orm": "^0.38.2",
     "inngest": "^3.22.13",
     "postgres": "^3.4.5",
     "remeda": "1.6.1",
@@ -22,6 +22,6 @@
   },
   "devDependencies": {
     "@openint/engine-backend": "workspace:*",
-    "drizzle-kit": "^0.28.1"
+    "drizzle-kit": "^0.30.1"
   }
 }

@@ -11,3 +11,13 @@ services:
     environment:
       POSTGRES_DB: postgres # Only database named `postgres` works with pg_cron by default
       POSTGRES_PASSWORD: password
+
+  supabase:
+    image: supabase/postgres:15.8.1.017 # For some reason "lastest tag" is having issues... so we pin to a specific version latest as of 2024-12-20_0055
+    ports:
+      - 5433:5432 # Change the port to avoid conflict with the default postgres
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf -c log_statement=all
+    restart: always
+    environment:
+      POSTGRES_DB: supabase # Only database named `postgres` works with pg_cron by default
+      POSTGRES_PASSWORD: password

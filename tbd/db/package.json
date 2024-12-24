@@ -5,17 +5,16 @@
   "module": "./index.ts",
   "scripts": {
     "db:clean": "rm -rf ./drizzle",
-    "db:pull": "drizzle-kit introspect:pg --connectionString $POSTGRES_URL --driver pg",
-    "db:push": "drizzle-kit push:pg --connectionString $POSTGRES_URL --driver pg --schema ./schema.ts --verbose --strict",
-    "db:run-migration": "echo \"skipping database migration TODO fix\"",
-    "db:schema-diff": "pnpm db:clean && pnpm db:pull && drizzle-kit generate:pg --schema ./schema.ts && cd ./drizzle && ls 0001*.sql | xargs cat && pnpm db:clean",
-    "db:schema-generate": "drizzle-kit generate:pg --schema ./schema.ts --out ./migrations",
-    "db:template-dynamic-schema": "drizzle-kit generate:pg --schema ./schema-dynamic.ts --out ./drizzle && cd ./drizzle && ls *.sql | xargs cat && pnpm db:clean"
+    "db:introspect": "drizzle-kit introspect",
+    "db:push": "drizzle-kit push",
+    "db:export": "drizzle-kit export",
+    "db:migrate": "drizzle-kit migrate",
+    "db:run-migration": "npx tsx -e \"import('./').then(r => r.default.runMigration())\""
   },
   "dependencies": {
     "@openint/env": "workspace:*",
-    "drizzle-kit": "^0.28.1",
-    "drizzle-orm": "^0.36.3",
+    "drizzle-kit": "^0.30.1",
+    "drizzle-orm": "^0.38.2",
     "json-stable-stringify": "^1.1.1",
     "postgres": "^3.4.5",
     "remeda": "1.6.1",
