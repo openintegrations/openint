@@ -1,5 +1,5 @@
 main = ".open-next/worker.ts"
-name = "openint-app-dev"
+name = "openint-production-govsignals"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 assets = { directory = ".open-next/assets", binding = "ASSETS" }
@@ -13,3 +13,19 @@ enabled = true
 "#crypto" = "./worker-aliases/crypto"
 "critters" = "./worker-aliases/critters"
 "depd" = "./worker-aliases/depd"
+
+[vars]
+POSTGRES_URL="postgresql://postgres.nnyrghmnfyiqptpnocim:tesgaz-convo0-gacdyM-funpa2-xofsaF-samnoh@aws-0-us-west-1.pooler.supabase.com:6543/postgres"
+JWT_SECRET="UOWhBo6njYg73aqP"
+#NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_aG9wZWZ1bC1wcmF3bi04Mi5jbGVyay5hY2NvdW50cy5kZXYk"
+#CLERK_SECRET_KEY="sk_test_rcyg2dw3wdlObCzfiEXoUM0ZrZnQnywIK4Ak68uuVj"
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_live_Y2xlcmsuZ292c2lnbmFsc2Nvbm5lY3Rpb25zLmNvbSQ"
+CLERK_SECRET_KEY="sk_live_UoSCmgYPBQbys7KQkASUFVA6kbDAOdENFBLLIQnzdu"
+NEXT_PUBLIC_NANGO_PUBLIC_KEY="79dad042-9fbd-4f89-84a8-49c1190dd596"
+NANGO_SECRET_KEY="f3c7b5eb-c795-456b-8b50-cd0cd7afede4"
+#NEXT_PUBLIC_SERVER_URL="https://local.openint.dev"
+#NEXT_PUBLIC_API_URL="https://local.openint.dev"
+NEXT_PUBLIC_SERVER_URL="https://govsignalsconnections.com"
+NEXT_PUBLIC_API_URL="https://govsignalsconnections.com"
+NEXT_PUBLIC_RUNTIME_ENV="edge"
+
