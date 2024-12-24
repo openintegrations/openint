@@ -249,6 +249,18 @@ describe('with db', () => {
     expect(ret[0]).toEqual(row)
   })
 
+  test('null means null', async () => {
+    await dbUpsertOne(
+      db,
+      'test_user',
+      {...row, name: null},
+      {keyColumns: ['id']},
+    )
+    const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
+    expect(ret2[0]).toEqual({...row, name: null})
+  })
+
+
   test('ignore undefined values by default', async () => {
     await dbUpsertOne(
       db,
