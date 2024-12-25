@@ -43,5 +43,4 @@ export const __DEBUG__ =
   !!process.env['DEBUG']
 
 export const isDevOrStaging =
-  __DEBUG__ ||
-  process.env['VERCEL_URL']?.includes('openint-git-main-openint-dev.vercel.app')
+  __DEBUG__ || process.env['VERCEL_BRANCH_URL']?.includes('main')
