@@ -55,10 +55,12 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
   if (connUpdate || opts?.import !== false) {
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       customerId: conn.customerId ?? undefined,
-      integration: {
-        externalId: extractId(conn.integrationId)[2],
-        data: conn.integration?.external ?? {},
-      },
+      integration: conn.integrationId
+        ? {
+            externalId: extractId(conn.integrationId)[2],
+            data: conn.integration?.external ?? {},
+          }
+        : undefined,
       ...connUpdate,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
@@ -79,18 +81,21 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
     const integration = possibleIntegrations?.items?.find(
       (i: any) => i.id === extractId(connUpdate?.integrationId)[2],
     )
-    connUpdate.integration = {
-      id: connUpdate?.integrationId,
-      name:
-        integration?.name?.toLowerCase() || int.connector.name?.toLowerCase(),
-      logoUrl:
-        (integration?.logo_url &&
-          (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') +
-            integration?.logo_url) ||
-        (int.connector.metadata.logoUrl &&
-          (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') +
-            int.connector.metadata.logoUrl),
-    }
+    connUpdate.integration = connUpdate?.integrationId
+      ? {
+          id: connUpdate?.integrationId,
+          name:
+            integration?.name?.toLowerCase() ||
+            int.connector.name?.toLowerCase(),
+          logoUrl:
+            (integration?.logo_url &&
+              (process.env['NEXT_PUBLIC_SERVER_URL'] ||
+                'https://app.openint.dev') + integration?.logo_url) ||
+            (int.connector.metadata.logoUrl &&
+              (process.env['NEXT_PUBLIC_SERVER_URL'] ||
+                'https://app.openint.dev') + int.connector.metadata.logoUrl),
+        }
+      : undefined
   }
   if (opts?.expand?.includes('integration.connector')) {
     connUpdate.connector = {
