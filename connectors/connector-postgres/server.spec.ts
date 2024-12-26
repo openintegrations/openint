@@ -102,11 +102,13 @@ describe('standard schema', () => {
 
 const messages = [
   ['insert', [{stream: 'house', data: {id: 112, name: 'White'}}]],
+  // This is currently failing due to the removal of `IF NOT EXISTS` clause in drizzle-kit
+  // Need to figure out if we should add it back, probably so?
   [
     'insert multiple',
     [
       {stream: 'account', data: {id: 555, name: 'Bank'}},
-      {stream: 'account', data: {id: 555}},
+      {stream: 'trxn', data: {id: 555}},
     ],
   ],
   [

@@ -4663,6 +4663,10 @@ export interface operations {
         customer?: string
         department?: string
         date_macro?: string
+        payment_method?: string
+        arpaid?: string
+        transaction_type?: string
+        sort_by?: string
       }
     }
     responses: {

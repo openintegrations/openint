@@ -43,6 +43,9 @@ export const testEnv = createEnv({
 
     // Turn on debug output, including drizzle. Should be a boolean tho
     DEBUG: z.string().optional(),
+
+    DOCKER_POSTGRES_URL: z.string().optional(),
+    DOCKER_SUPABASE_URL: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -69,6 +72,8 @@ export const testEnv = createEnv({
     UNIFIED_OBJECT: process.env['UNIFIED_OBJECT'],
     VERCEL_URL: process.env['VERCEL_URL'],
     VERTICAL: process.env['VERTICAL'],
+    DOCKER_POSTGRES_URL: process.env['DOCKER_POSTGRES_URL'],
+    DOCKER_SUPABASE_URL: process.env['DOCKER_SUPABASE_URL'],
   },
 })
 

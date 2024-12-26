@@ -63,3 +63,8 @@ dist/
 /gateway/node_modules
 /gateway/config.json
 /gateway/wrangler.toml
+
+.dev.vars
+
+# CI Artifacts
+/artifacts

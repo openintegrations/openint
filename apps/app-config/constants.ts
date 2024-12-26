@@ -41,3 +41,7 @@ export const __DEBUG__ =
     typeof window !== 'undefined' && window.localStorage.getItem('__DEBUG__'),
   ) ||
   !!process.env['DEBUG']
+
+export const isDevOrStaging =
+  __DEBUG__ ||
+  getServerUrl(null).includes('openint-git-main-openint-dev.vercel.app')

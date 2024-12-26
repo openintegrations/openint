@@ -32,6 +32,11 @@ export interface DbUpsertOptions<TTable extends PgTable> {
    * These columns will have to match for the row to be updated
    */
   mustMatchColumns?: Array<ColumnKeyOf<TTable>>
+  /**
+   * If true, undefined values will be interpreted as the `DEFAULT` keyword in the generated query
+   * If false, undefined values will be ignored
+   */
+  undefinedAsDefault?: boolean
 }
 
 export type DbUpsertQuery<TTable extends PgTable> = Omit<
@@ -74,16 +79,21 @@ export function dbUpsert<
 >(
   db: DB,
   _table: TTable | string,
-  values: Array<PgInsertValue<TTable>>,
+  _values: Array<PgInsertValue<TTable>>,
   options: DbUpsertOptions<TTable> = {},
 ) {
+  const values = options.undefinedAsDefault
+    ? _values
+    : _values.map(removeUndefinedValues)
+
   const firstRow = values[0]
   if (!firstRow) {
     return
   }
 
-  const table =
+  const table = (
     typeof _table === 'string' ? inferTableForUpsert(_table, firstRow) : _table
+  ) as TTable
 
   const tbCfg = getTableConfig(table)
   const getColumn = (name: string) => {
@@ -191,3 +201,13 @@ export function inferTableForUpsert(
     ),
   )
 }
+
+// TODO: dedupe with hubspot/utils.ts
+const removeUndefinedValues = <T extends Record<string, unknown>>(
+  obj: T,
+): {[k in keyof T]: Exclude<T[k], undefined>} =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  Object.fromEntries(
+    Object.entries(obj).filter(([, v]) => v !== undefined),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) as any
