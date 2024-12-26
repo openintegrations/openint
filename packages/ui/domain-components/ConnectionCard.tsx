@@ -53,6 +53,11 @@ export function ConnectionCard({
   connectionName =
     connectionName.charAt(0).toUpperCase() + connectionName.slice(1)
 
+  const isOAuthConnector =
+    conn.connectorConfig.connector.schemas.connectorConfig?.required?.includes(
+      'oauth',
+    )
+
   return (
     <Card className="border-card-border relative h-[150px] w-[150px] cursor-pointer rounded-lg border bg-card p-0">
       {/* Overlay spinner */}
@@ -69,7 +74,7 @@ export function ConnectionCard({
               <Ellipsis className="size-5 text-foreground" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[120px]">
-              {conn.status !== 'healthy' && (
+              {conn.status !== 'healthy' && isOAuthConnector && (
                 <DropdownMenuItem
                   className="flex cursor-pointer items-center justify-center"
                   onSelect={() => handleReconnect()}>
