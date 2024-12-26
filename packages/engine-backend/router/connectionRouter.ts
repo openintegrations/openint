@@ -80,15 +80,6 @@ export async function performConnectionCheck(
       },
       connectionExternalId:
         connUpdate?.connectionExternalId ?? extractId(conn.id)[2],
-
-      // TODO: generalize these to a handler for all errors and also non nango
-      // QQ: in addition to putting it in settings, should we also put it parsed in DB as status and statusMessage or just calculate it at runtime?
-      // status:
-      //   remoteCtx.remote.settings?.oauth?.error?.code ===
-      //   'refresh_token_external_error'
-      //     ? 'disconnected'
-      //     : undefined,
-      // statusMessage: remoteCtx.remote.settings?.oauth?.error?.message,
     })
     connUpdate = await ctx.services.getConnectionOrFail(conn.id)
   }

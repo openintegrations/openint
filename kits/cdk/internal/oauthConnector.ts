@@ -155,16 +155,14 @@ export function makeOauthConnectorServer({
             },
           },
         })
-        .then((r) => r.data)
+        .then((r) => r.data as OauthBaseTypes['connectionSettings'])
       console.log('OauthConnectorServer postConnect', res)
       return {
         connectionExternalId: extractId(connId)[2],
         settings: {
           oauth: res,
-          // @ts-expect-error
           ...(res?.error?.code || res?.error?.message
-            ? // @ts-expect-error
-              {error: {code: res?.error?.code, message: res?.error?.message}}
+            ? {error: {code: res?.error?.code, message: res?.error?.message}}
             : {}),
         },
       }
