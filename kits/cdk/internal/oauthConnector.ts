@@ -156,11 +156,10 @@ export function makeOauthConnectorServer({
           },
         })
         .then((r) => r.data as OauthBaseTypes['connectionSettings'])
-      console.log('OauthConnectorServer postConnect', res)
       return {
         connectionExternalId: extractId(connId)[2],
         settings: {
-          oauth: res,
+          oauth: res as any,
           ...(res?.error?.code || res?.error?.message
             ? {error: {code: res?.error?.code, message: res?.error?.message}}
             : {}),
