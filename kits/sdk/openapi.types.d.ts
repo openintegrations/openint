@@ -543,7 +543,7 @@ export interface components {
         [key: string]: unknown
       } | null
       standard?: {
-        displayName: string
+        displayName?: string | null
         /** @enum {string|null} */
         status?: 'healthy' | 'disconnected' | 'error' | 'manual'
         statusMessage?: string | null
