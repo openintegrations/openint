@@ -12,7 +12,6 @@ import {inngest} from '../events'
 import {zSyncOptions} from '../types'
 import {protectedProcedure, trpc} from './_base'
 import {zListParams} from './_schemas'
-import {performConnectionCheck} from './connectionRouter'
 
 export {type inferProcedureInput} from '@openint/trpc'
 
