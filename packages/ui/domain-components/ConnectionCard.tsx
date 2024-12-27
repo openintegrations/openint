@@ -30,22 +30,22 @@ export function ConnectionCard({
     statusMessage: string
   }
 }) {
-  const [isSpinning, setIsSpinning] = React.useState(false)
+  const [isProcessing, setIsProcessing] = React.useState(false)
 
   const handleReconnect = () => {
-    setIsSpinning(true)
+    setIsProcessing(true)
     onReconnect()
     setTimeout(() => {
-      setIsSpinning(false)
+      setIsProcessing(false)
     }, 60000) // ok as upon complete it will refresh
   }
 
   const handleDelete = () => {
-    setIsSpinning(true)
+    setIsProcessing(true)
     onDelete({id: conn.id})
     setTimeout(() => {
-      setIsSpinning(false)
-    }, 60000) // ok as upon complete it will refresh
+      setIsProcessing(false)
+    }, 6000000) // ok as upon complete it will refresh
   }
 
   let connectionName =
@@ -60,7 +60,7 @@ export function ConnectionCard({
   return (
     <Card className="border-card-border relative h-[150px] w-[150px] cursor-pointer rounded-lg border bg-card p-0">
       {/* Overlay spinner */}
-      {isSpinning && (
+      {isProcessing && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70">
           <Loader className="size-8 animate-spin text-button" />
         </div>
@@ -111,8 +111,11 @@ export function ConnectionCard({
           </p>
           <div>
             {conn.status !== 'healthy' ? (
-              <p className="text-center text-sm text-red-500">
-                Reconnect Required
+              <p
+                className={`text-center text-sm ${
+                  isProcessing ? 'text-button' : 'text-red-500'
+                }`}>
+                {isProcessing ? 'Processing...' : 'Reconnect Required'}
               </p>
             ) : conn.syncInProgress ? (
               <div className="flex flex-row items-center justify-start gap-2">

@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import {Button} from '@openint/ui'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
@@ -27,6 +28,10 @@ export function ConnectionsTabContent({
   onConnect,
   refetch,
 }: ConnectionsTabContentProps) {
+  const [resetKey, setResetKey] = useState(0)
+  // this is so that the timer in the connection card is reset
+  const reset = () => setResetKey((prev) => prev + 1)
+
   return connectionCount === 0 ? (
     <div className="flex flex-col p-4 pt-0">
       <div>
@@ -58,16 +63,19 @@ export function ConnectionsTabContent({
           }}
           integration={conn.integration}
           connection={conn}
-          onEvent={() => {
-            refetch()
+          onEvent={(event) => {
+            if (event.type === 'success' || event.type === 'error') {
+              refetch()
+              reset()
+            }
           }}>
           {({openConnect}) => (
-            // TODO: handle on reconnect to parent?
             <ConnectionCard
-              key={conn.id}
+              key={`${conn.id}-${resetKey}`}
               conn={conn}
               onDelete={deleteConnection}
               onReconnect={openConnect}
+              reset={reset}
             />
           )}
         </WithConnectorConnect>
