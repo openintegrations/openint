@@ -156,7 +156,7 @@ export const pipelineRouter = trpc.router({
       }
       if (opts?.async) {
         await inngest.send({
-          name: 'sync/pipeline-requested',
+          name: 'sync.pipeline-requested',
           data: {pipelineId: pipeId},
         })
         return

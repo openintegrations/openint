@@ -45,9 +45,9 @@ export async function scheduleSyncs({step}: FunctionInput<never>) {
 
     if (pipelines.length > 0) {
       await step.sendEvent(
-        'sync/pipeline-requested',
+        'sync.pipeline-requested',
         pipelines.map((pipe) => ({
-          name: 'sync/pipeline-requested',
+          name: 'sync.pipeline-requested',
           data: {pipelineId: pipe.id},
         })),
       )
@@ -67,7 +67,7 @@ export async function scheduleSyncs({step}: FunctionInput<never>) {
 // Consider automatic inngest function from every trpc function?
 export async function syncPipeline({
   event,
-}: FunctionInput<'sync/pipeline-requested'>) {
+}: FunctionInput<'sync.pipeline-requested'>) {
   const {pipelineId} = event.data
   console.log('Will sync pipeline', pipelineId)
   // TODO: Figure out what is the userId we ought to be using...
