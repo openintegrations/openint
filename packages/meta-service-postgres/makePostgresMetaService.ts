@@ -55,7 +55,7 @@ type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const {viewer, databaseUrl} = opts
 
-  const db = drizzle(databaseUrl, {logger: true})
+  const db = drizzle(databaseUrl, {logger: !!process.env['DEBUG']})
   type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
 
   return {
@@ -242,14 +242,68 @@ export const makePostgresMetaService = zFunction(
         }
         return {healthy: true}
       },
-      createEvent: ({externalId, name, organizationId, customerId, data}) => {
-        const {runQueries} = _getDeps(opts)
-        const id = makeId('ev', externalId)
-        return runQueries((trxn) =>
-          trxn.execute(
-            sql`INSERT INTO events (id, name, organization_id, customer_id, data) VALUES (${id}, ${name}, ${organizationId}, ${customerId}, ${data})`,
-          ),
-        ).then(() => {})
+      createEvents: async (events) => {
+        const {db, runQueries} = _getDeps(opts)
+
+        console.log(
+          'createEvents called with events:',
+          JSON.stringify(events, null, 2),
+        )
+
+        const eventsToPersist = await Promise.all(
+          events
+            .map(async (ev) => {
+              // TODO: QQ, how to best cleanup
+              const connectionId =
+                (ev.data as any).connectionId ||
+                (ev.data as any).connection_id ||
+                (ev.data as any).sourceId ||
+                (ev.data as any).source_id ||
+                (ev.data as any).destinationId ||
+                (ev.data as any).destination_id
+
+              if (!connectionId) {
+                console.error(
+                  `No connectionId found in event ${ev.externalId}, skipping persisting it`,
+                )
+                return null
+              }
+
+              // Fetch organization_id and customer_id from connection and connector_config tables
+              const [idResult] = await db.execute(sql`
+                SELECT cc.org_id as organization_id, c.customer_id 
+                FROM connection c
+                JOIN connector_config cc ON c.connector_config_id = cc.id 
+                WHERE c.id = ${connectionId}
+              `)
+
+              if (!idResult) {
+                console.error(
+                  `No connection found for id ${connectionId}, skipping event ${ev.externalId}`,
+                )
+                return null
+              }
+
+              return {
+                id: makeId('ev', ev.externalId),
+                name: ev.name,
+                organizationId: idResult['organization_id'],
+                customerId: idResult['customer_id'],
+                data: JSON.stringify(ev.data),
+              }
+            })
+            .filter(Boolean),
+        )
+        return runQueries(async (trxn) => {
+          for (const event of eventsToPersist) {
+            if (event) {
+              const {id, name, organizationId, customerId, data} = event
+              await trxn.execute(
+                sql`INSERT INTO events (id, name, organization_id, customer_id, data) VALUES (${id}, ${name}, ${organizationId}, ${customerId}, ${data})`,
+              )
+            }
+          }
+        })
       },
     }
   },

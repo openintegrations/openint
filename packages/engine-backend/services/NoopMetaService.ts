@@ -24,7 +24,7 @@ export const noopMetaService: MetaService = {
   listConnectorConfigInfos: async () => [],
   findConnectionsMissingDefaultPipeline: async () => [],
   isHealthy: () => Promise.resolve({healthy: true}),
-  createEvent: async (args) => {
-    console.log('noop createEvent called for ', args)
+  createEvents: async (args) => {
+    console.log('noop createEvents called for ', args)
   },
 }

@@ -1,6 +1,7 @@
 import type {CustomerId, Id, IDS} from '@openint/cdk/id.types'
 import type {ZRaw} from '@openint/cdk/models'
 import type {NoInfer, ObjectPartialDeep} from '@openint/util'
+import type {Event as OpenIntEvent} from '../events'
 
 export interface MetaTable<
   TID extends string = string,
@@ -80,11 +81,7 @@ export interface MetaService {
     healthy: boolean
     error?: string
   }>
-  createEvent: (opts: {
-    externalId: string
-    name: string
-    organizationId: Id['org']
-    customerId?: string
-    data?: Record<string, unknown> | null
-  }) => Promise<void>
+  createEvents: (
+    events: Array<OpenIntEvent & {externalId: string}>,
+  ) => Promise<void>
 }
