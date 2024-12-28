@@ -299,7 +299,7 @@ export const makePostgresMetaService = zFunction(
             if (event) {
               const {id, name, organizationId, customerId, data} = event
               await trxn.execute(
-                sql`INSERT INTO events (id, name, organization_id, customer_id, data) VALUES (${id}, ${name}, ${organizationId}, ${customerId}, ${data})`,
+                sql`INSERT INTO event (id, name, organization_id, customer_id, data) VALUES (${id}, ${name}, ${organizationId}, ${customerId}, ${data})`,
               )
             }
           }

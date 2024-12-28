@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS events (
+CREATE TABLE IF NOT EXISTS event (
     id                    CHARACTER VARYING NOT NULL DEFAULT generate_ulid(),
     name                  TEXT NOT NULL,
     organization_id       CHARACTER VARYING NOT NULL,
@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS events (
     data                  JSONB,
     created_at            TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at            TIMESTAMPTZ NOT NULL DEFAULT now(),
-    CONSTRAINT pk_events PRIMARY KEY (id)
+    CONSTRAINT pk_event PRIMARY KEY (id)
 );
