@@ -84,6 +84,7 @@ export const makePostgresMetaService = zFunction(
       integration: metaTable('integration', _getDeps(opts)),
       connector_config: metaTable('connector_config', _getDeps(opts)),
       pipeline: metaTable('pipeline', _getDeps(opts)),
+      events: metaTable('events', _getDeps(opts)),
     }
     return {
       tables,
