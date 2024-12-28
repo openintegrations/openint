@@ -1,9 +1,11 @@
 import type {Combine, EventsFromOpts} from 'inngest'
-import {EventSchemas, Inngest} from 'inngest'
+import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import type {ZodToStandardSchema} from 'inngest/components/EventSchemas'
 import {zId} from '@openint/cdk'
 import type {NonEmptyArray} from '@openint/util'
 import {R, z} from '@openint/util'
+import {envRequired} from '../env'
+import {makePostgresMetaService} from '../meta-service-postgres'
 
 // TODO: Implement webhook as events too
 
@@ -84,6 +86,45 @@ export type Events = Combine<
   ZodToStandardSchema<typeof eventMapForInngest>
 >
 
+export const persistEventsMiddleware = new InngestMiddleware({
+  name: 'Persist Events Inngest Middleware',
+  init: async () => {
+    const pendingEvents: Array<any> = []
+
+    return {
+      onSendEvent() {
+        return {
+          transformInput({payloads}) {
+            payloads.forEach((payload) => {
+              pendingEvents.push({
+                payload,
+              })
+            })
+          },
+          async transformOutput(ctx) {
+            const pgService = makePostgresMetaService({
+              databaseUrl: envRequired.POSTGRES_URL,
+              viewer: {role: 'system'},
+            })
+
+            const eventIds = ctx.result.ids
+            const eventsToProcess = pendingEvents.splice(0, eventIds.length)
+
+            const combinedEvents = eventsToProcess.map((event, index) => ({
+              externalId: eventIds[index],
+              ...event.payload,
+            }))
+            await pgService.createEvents(combinedEvents)
+          },
+        }
+      },
+    }
+  },
+})
+
+/**
+ * Existing Inngest client. Add our new middleware here.
+ */
 export const inngest = new Inngest({
   id: 'OpenInt',
   schemas: new EventSchemas().fromZod(eventMapForInngest),
@@ -92,6 +133,7 @@ export const inngest = new Inngest({
   // This is needed in the browser otherwise we get failed to execute fetch on Window
   // due to the way Inngest uses this.fetch when invoking fetch
   fetch: globalThis.fetch.bind(globalThis),
+  middleware: [persistEventsMiddleware],
 })
 
 // MARK: - Deprecated
