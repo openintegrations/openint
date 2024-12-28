@@ -80,4 +80,11 @@ export interface MetaService {
     healthy: boolean
     error?: string
   }>
+  createEvent: (opts: {
+    externalId: string
+    name: string
+    organizationId: Id['org']
+    customerId?: string
+    data?: Record<string, unknown> | null
+  }) => Promise<void>
 }

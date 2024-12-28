@@ -1,6 +1,6 @@
 import {camelCase, snakeCase} from 'change-case'
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
-import {zViewer} from '@openint/cdk'
+import {makeId, zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
 import {applyLimitOffset, dbUpsertOne, drizzle, sql} from '@openint/db'
 import type {
@@ -84,7 +84,7 @@ export const makePostgresMetaService = zFunction(
       integration: metaTable('integration', _getDeps(opts)),
       connector_config: metaTable('connector_config', _getDeps(opts)),
       pipeline: metaTable('pipeline', _getDeps(opts)),
-      events: metaTable('events', _getDeps(opts)),
+      event: metaTable('event', _getDeps(opts)),
     }
     return {
       tables,
@@ -241,6 +241,15 @@ export const makePostgresMetaService = zFunction(
           }
         }
         return {healthy: true}
+      },
+      createEvent: ({externalId, name, organizationId, customerId, data}) => {
+        const {runQueries} = _getDeps(opts)
+        const id = makeId('ev', externalId)
+        return runQueries((trxn) =>
+          trxn.execute(
+            sql`INSERT INTO events (id, name, organization_id, customer_id, data) VALUES (${id}, ${name}, ${organizationId}, ${customerId}, ${data})`,
+          ),
+        ).then(() => {})
       },
     }
   },

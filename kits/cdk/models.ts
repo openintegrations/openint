@@ -222,12 +222,13 @@ export const zRaw = {
     })
     .openapi({ref: 'Integration'}),
   // TODO: Add connection_attempts
-  events: zBase
+  event: zBase
     .extend({
+      // ev_{external_id} i.e. from inngest, clerk, stripe, etc
       id: zId('ev'),
       name: z.string(),
       organizationId: zId('org'),
-      customerId: z.string().nullish(),
+      customerId: zCustomerId.nullish(),
       data: z.record(z.unknown()).nullish(),
     })
     .openapi({ref: 'event'}),
