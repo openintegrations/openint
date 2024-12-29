@@ -34,7 +34,7 @@ switch (cmd) {
   case 'syncPipeline':
     void routines.syncPipeline({
       event: {
-        name: 'sync.pipeline-requested',
+        name: 'sync/pipeline-requested',
         data: {pipelineId: process.env['PIPELINE_ID'] as `pipe_${string}`},
       },
       step,
