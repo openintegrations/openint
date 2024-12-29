@@ -4,6 +4,7 @@
   "private": true,
   "module": "./index.ts",
   "scripts": {
+    "drizzle-kit": "drizzle-kit",
     "db:clean": "rm -rf ./drizzle",
     "db:introspect": "drizzle-kit introspect",
     "db:push": "drizzle-kit push",

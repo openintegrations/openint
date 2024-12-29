@@ -350,9 +350,9 @@ export const event = pgTable(
      * Will be used for RLS policies
      * Slightly inconsistent given that user_id and customer_id are not abbreviated
      */
-    org_id: varchar(), // organization_id
-    usr_id: varchar(), // user_id
-    cus_id: varchar(), // customer_id
+    org_id: varchar().generatedAlwaysAs(sql`"user"->>'org_id'`), // organization_id
+    usr_id: varchar().generatedAlwaysAs(sql`"user"->>'usr_id'`), // user_id
+    cus_id: varchar().generatedAlwaysAs(sql`"user"->>'cus_id'`), // customer_id
   },
   (table) => [
     index('event_timestamp').on(table.timestamp),
