@@ -691,12 +691,14 @@ export interface components {
       metadata?: unknown
     }
     Event: {
-      createdAt: string
-      updatedAt: string
       /** @description Must start with 'evt_' */
       id: string
       name: string
       data?: {
+        [key: string]: unknown
+      } | null
+      timestamp: string
+      user?: {
         [key: string]: unknown
       } | null
       /** @description Must start with 'org_' */

@@ -8334,12 +8334,6 @@
       "Event": {
         "type": "object",
         "properties": {
-          "createdAt": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "type": "string"
-          },
           "id": {
             "type": "string",
             "description": "Must start with 'evt_'"
@@ -8348,6 +8342,13 @@
             "type": "string"
           },
           "data": {
+            "type": ["object", "null"],
+            "additionalProperties": {}
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "user": {
             "type": ["object", "null"],
             "additionalProperties": {}
           },
@@ -8364,7 +8365,7 @@
             "description": "Must start with 'user_'"
           }
         },
-        "required": ["createdAt", "updatedAt", "id", "name"]
+        "required": ["id", "name", "timestamp"]
       },
       "Viewer": {
         "oneOf": [
