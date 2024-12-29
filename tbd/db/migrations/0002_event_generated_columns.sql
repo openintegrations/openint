@@ -56,3 +56,6 @@ INSERT
 CREATE POLICY "customer_append" ON "event" AS PERMISSIVE FOR
 INSERT
   TO "customer" WITH CHECK (org_id = public.jwt_org_id());
+
+-- Forgotten statement from earlier, no impact on drizzle schema though.
+GRANT SELECT ON public.event TO "customer";
