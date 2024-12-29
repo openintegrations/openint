@@ -3,7 +3,8 @@
     "group": "Connect",
     "pages": [
       "unified-apis/connect/create-a-connect-token",
-      "unified-apis/connect/create-a-magic-link"
+      "unified-apis/connect/create-a-magic-link",
+      "unified-apis/connect/list-events"
     ]
   },
   {

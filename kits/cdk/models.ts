@@ -232,8 +232,8 @@ export const zRaw = {
       timestamp: z.date(),
       user: z.record(z.unknown()).nullish(),
       org_id: zId('org').nullish(),
-      cus_id: zCustomerId.nullish(),
-      usr_id: zUserId.nullish(),
+      customer_id: zCustomerId.nullish(),
+      user_id: zUserId.nullish(),
     })
     .openapi({ref: 'Event'}),
 }

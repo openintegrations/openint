@@ -1,5 +1,5 @@
 {
-  "id": "f36ccb9d-c618-4acd-ae68-3000b2da2f3d",
+  "id": "97d3d4fb-a7d5-4ad4-88c1-a06f618a6d99",
   "prevId": "4bf4ebc9-7d6c-48e0-bb7f-dbf7aed179c5",
   "version": "7",
   "dialect": "postgresql",
@@ -514,23 +514,23 @@
             "type": "stored"
           }
         },
-        "usr_id": {
-          "name": "usr_id",
+        "user_id": {
+          "name": "user_id",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false,
           "generated": {
-            "as": "\"user\"->>'usr_id'",
+            "as": "\"user\"->>'user_id'",
             "type": "stored"
           }
         },
-        "cus_id": {
-          "name": "cus_id",
+        "customer_id": {
+          "name": "customer_id",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false,
           "generated": {
-            "as": "\"user\"->>'cus_id'",
+            "as": "\"user\"->>'customer_id'",
             "type": "stored"
           }
         }
@@ -566,11 +566,11 @@
           "method": "btree",
           "with": {}
         },
-        "event_usr_id": {
-          "name": "event_usr_id",
+        "event_user_id": {
+          "name": "event_user_id",
           "columns": [
             {
-              "expression": "usr_id",
+              "expression": "user_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -581,11 +581,11 @@
           "method": "btree",
           "with": {}
         },
-        "event_cus_id": {
-          "name": "event_cus_id",
+        "event_customer_id": {
+          "name": "event_customer_id",
           "columns": [
             {
-              "expression": "cus_id",
+              "expression": "customer_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
