@@ -1,7 +1,8 @@
 import {extractId, zStandard} from '@openint/cdk'
 import {TRPCError} from '@openint/trpc'
 import {R, z} from '@openint/util'
-import {inngest, zEvent} from '../events'
+import {zEvent} from '../events'
+import {inngest} from '../inngest'
 import {protectedProcedure, trpc} from './_base'
 
 export {type inferProcedureInput} from '@openint/trpc'
@@ -9,8 +10,8 @@ export {type inferProcedureInput} from '@openint/trpc'
 export const protectedRouter = trpc.router({
   dispatch: protectedProcedure.input(zEvent).mutation(async ({input}) => {
     if (
-      input.name !== 'sync.connection-requested' &&
-      input.name !== 'sync.pipeline-requested'
+      input.name !== 'sync/connection-requested' &&
+      input.name !== 'sync/pipeline-requested'
     ) {
       throw new TRPCError({
         code: 'BAD_REQUEST',

@@ -16,7 +16,6 @@ export const noopMetaService: MetaService = {
     integration: noopTable,
     connector_config: noopTable,
     pipeline: noopTable,
-    event: noopTable,
   },
   searchCustomers: async () => [],
   searchIntegrations: async () => [],
@@ -24,7 +23,4 @@ export const noopMetaService: MetaService = {
   listConnectorConfigInfos: async () => [],
   findConnectionsMissingDefaultPipeline: async () => [],
   isHealthy: () => Promise.resolve({healthy: true}),
-  createEvents: async (args) => {
-    console.log('noop createEvents called for ', args)
-  },
 }

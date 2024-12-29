@@ -13,7 +13,7 @@ import {
 import {TRPCError} from '@openint/trpc'
 import {joinPath, makeUlid, R, Rx, rxjs, z} from '@openint/util'
 import {zPaginatedResult, zPaginationParams} from '@openint/vdk'
-import {inngest} from '../events'
+import {inngest} from '../inngest'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {zSyncOptions} from '../types'
 import {protectedProcedure, remoteProcedure, trpc} from './_base'
@@ -463,7 +463,7 @@ export const connectionRouter = trpc.router({
       }
       if (opts?.async) {
         await inngest.send({
-          name: 'sync.connection-requested',
+          name: 'sync/connection-requested',
           data: {connectionId: connId},
         })
         return

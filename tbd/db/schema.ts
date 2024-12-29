@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/template-indent */
 import {sql} from 'drizzle-orm'
 import {
   boolean,
@@ -323,6 +324,70 @@ export const connector_config = pgTable(
     pgPolicy('org_member_access', {
       to: 'authenticated',
       using: sql`org_id = public.jwt_org_id()`,
+      withCheck: sql`org_id = public.jwt_org_id()`,
+    }),
+  ],
+)
+
+/** https://www.inngest.com/docs/features/events-triggers/event-format */
+export const event = pgTable(
+  'event',
+  {
+    id: varchar()
+      .default("concat('evt_', generate_ulid())")
+      .primaryKey()
+      .notNull(),
+    name: varchar().notNull(),
+    data: jsonb().notNull(),
+    timestamp: timestamp({withTimezone: true, mode: 'string'})
+      .defaultNow()
+      .notNull(),
+    user: jsonb(),
+    v: varchar(),
+
+    /**
+     * optional metadata contained inside `user` field, should probably be generated
+     * Will be used for RLS policies
+     * Slightly inconsistent given that user_id and customer_id are not abbreviated
+     */
+    org_id: varchar().generatedAlwaysAs(sql`"user"->>'org_id'`), // organization_id
+    usr_id: varchar().generatedAlwaysAs(sql`"user"->>'usr_id'`), // user_id
+    cus_id: varchar().generatedAlwaysAs(sql`"user"->>'cus_id'`), // customer_id
+  },
+  (table) => [
+    index('event_timestamp').on(table.timestamp),
+    index('event_org_id').on(table.org_id),
+    index('event_usr_id').on(table.usr_id),
+    index('event_cus_id').on(table.cus_id),
+    check('event_id_prefix_check', sql`starts_with(id, 'evt_')`),
+    pgPolicy('org_read', {
+      to: 'org',
+      for: 'select',
+      using: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('org_member_read', {
+      to: 'authenticated',
+      for: 'select',
+      using: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('customer_read', {
+      to: 'customer',
+      for: 'select',
+      using: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('org_append', {
+      to: 'org',
+      for: 'insert',
+      withCheck: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('org_member_append', {
+      to: 'authenticated',
+      for: 'insert',
+      withCheck: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('customer_append', {
+      to: 'customer',
+      for: 'insert',
       withCheck: sql`org_id = public.jwt_org_id()`,
     }),
   ],

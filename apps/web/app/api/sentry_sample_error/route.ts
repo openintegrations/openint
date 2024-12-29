@@ -4,7 +4,7 @@ import {serverAnalytics} from '@/lib-server/analytics-server'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  serverAnalytics.track('test', {name: 'debug.debug', data: {}})
+  serverAnalytics.track('test', {name: 'debug/debug', data: {}})
   await serverAnalytics.flush()
   throw new Error('Sentry Backend Error')
 }

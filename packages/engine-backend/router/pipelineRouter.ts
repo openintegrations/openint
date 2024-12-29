@@ -1,7 +1,7 @@
 import type {ZRaw} from '@openint/cdk'
 import {extractId, zCustomerId, zId, zRaw, zStandard} from '@openint/cdk'
 import {R, z} from '@openint/util'
-import {inngest} from '../events'
+import {inngest} from '../inngest'
 import {zSyncOptions} from '../types'
 import {protectedProcedure, trpc} from './_base'
 import {zListParams} from './_schemas'
@@ -156,7 +156,7 @@ export const pipelineRouter = trpc.router({
       }
       if (opts?.async) {
         await inngest.send({
-          name: 'sync.pipeline-requested',
+          name: 'sync/pipeline-requested',
           data: {pipelineId: pipeId},
         })
         return

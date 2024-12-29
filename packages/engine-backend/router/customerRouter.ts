@@ -14,7 +14,6 @@ import {
 } from '@openint/cdk'
 import {TRPCError} from '@openint/trpc'
 import {joinPath, z} from '@openint/util'
-import {inngest} from '../events'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {protectedProcedure, trpc} from './_base'
 
@@ -311,14 +310,14 @@ export const customerRouter = trpc.router({
           },
         )
 
-        await inngest.send({
-          name: 'connect.connection-connected',
+        await ctx.inngest.send({
+          name: 'connect/connection-connected',
           data: {connectionId},
         })
 
         if (syncInBackground) {
-          await inngest.send({
-            name: 'sync.connection-requested',
+          await ctx.inngest.send({
+            name: 'sync/connection-requested',
             data: {connectionId},
           })
         }
