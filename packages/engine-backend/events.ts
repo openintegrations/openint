@@ -86,7 +86,7 @@ export type Events = Combine<
   BuiltInEvents,
   ZodToStandardSchema<typeof eventMapForInngest>
 >
-const mnyt = db
+
 export const persistEventsMiddleware = new InngestMiddleware({
   name: 'Persist Events Inngest Middleware',
   init: () => {
