@@ -14,7 +14,7 @@ import {
 } from '@openint/cdk'
 import {TRPCError} from '@openint/trpc'
 import {joinPath, z} from '@openint/util'
-import {inngest} from '../events'
+import {inngest} from '../inngest'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {protectedProcedure, trpc} from './_base'
 

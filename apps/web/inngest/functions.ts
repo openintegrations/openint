@@ -1,7 +1,7 @@
 import '@openint/app-config/register.node'
 import {contextFactory} from '@openint/app-config/backendConfig'
 import {flatRouter} from '@openint/engine-backend'
-import {inngest} from '@openint/engine-backend/events'
+import {inngest} from '@openint/engine-backend/inngest'
 import * as routines from './routines'
 
 export const scheduleSyncs = inngest.createFunction(
