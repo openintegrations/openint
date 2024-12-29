@@ -4,13 +4,12 @@
   "private": true,
   "module": "./index.ts",
   "scripts": {
+    "clean": "rm -rf ./drizzle",
     "drizzle-kit": "drizzle-kit",
-    "db:clean": "rm -rf ./drizzle",
-    "db:introspect": "drizzle-kit introspect",
-    "db:push": "drizzle-kit push",
-    "db:export": "drizzle-kit export",
-    "db:migrate": "drizzle-kit migrate",
-    "db:run-migration": "npx tsx -e \"import('./').then(r => r.default.runMigration())\""
+    "export": "drizzle-kit export",
+    "introspect": "drizzle-kit introspect",
+    "migrate": "drizzle-kit migrate",
+    "push": "drizzle-kit push"
   },
   "dependencies": {
     "@openint/env": "workspace:*",
