@@ -14,18 +14,18 @@ DROP POLICY IF EXISTS "customer_append" ON "event";
 ALTER TABLE "event" drop column "org_id";--> statement-breakpoint
 ALTER TABLE "event" ADD COLUMN "org_id" varchar GENERATED ALWAYS AS ("user"->>'org_id') STORED;--> statement-breakpoint
 ALTER TABLE "event" drop column "usr_id";--> statement-breakpoint
-ALTER TABLE "event" ADD COLUMN "usr_id" varchar GENERATED ALWAYS AS ("user"->>'usr_id') STORED;--> statement-breakpoint
+ALTER TABLE "event" ADD COLUMN "user_id" varchar GENERATED ALWAYS AS ("user"->>'user_id') STORED;--> statement-breakpoint
 ALTER TABLE "event" drop column "cus_id";--> statement-breakpoint
-ALTER TABLE "event" ADD COLUMN "cus_id" varchar GENERATED ALWAYS AS ("user"->>'cus_id') STORED;
+ALTER TABLE "event" ADD COLUMN "customer_id" varchar GENERATED ALWAYS AS ("user"->>'customer_id') STORED;
 
 --> statement-breakpoint
 CREATE INDEX "event_org_id" ON "event" USING btree ("org_id");
 
 --> statement-breakpoint
-CREATE INDEX "event_usr_id" ON "event" USING btree ("usr_id");
+CREATE INDEX "event_user_id" ON "event" USING btree ("user_id");
 
 --> statement-breakpoint
-CREATE INDEX "event_cus_id" ON "event" USING btree ("cus_id");
+CREATE INDEX "event_customer_id" ON "event" USING btree ("customer_id");
 
 --> statement-breakpoint
 CREATE POLICY "org_read" ON "event" AS PERMISSIVE FOR
