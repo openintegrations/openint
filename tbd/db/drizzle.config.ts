@@ -8,6 +8,9 @@ export default defineConfig({
   schema: './schema.ts',
   dbCredentials: {url: env.POSTGRES_URL},
   introspect: {casing: 'preserve'},
+  migrations: {
+    schema: 'public',
+  },
 
   // migrations: {
   //   prefix: 'timestamp',
@@ -16,5 +19,4 @@ export default defineConfig({
   // },
   strict: true,
   verbose: true,
-
 })

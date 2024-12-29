@@ -69,6 +69,7 @@ export async function runMigration(opts?: {keepAlive?: boolean}) {
   // const __dirname = path.dirname(__filename)
   await migrate(configDb, {
     migrationsFolder: path.join(__dirname, 'migrations'),
+    migrationsSchema: 'public',
     // Seems to have no impact, and unconditionally creates a drizzle schema... 🤔
     // migrationsTable: '_migrations',
   })
