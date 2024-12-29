@@ -2,7 +2,7 @@ import type {Combine, EventsFromOpts} from 'inngest'
 import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import type {ZodToStandardSchema} from 'inngest/components/EventSchemas'
 import {makeId, zId} from '@openint/cdk'
-import {db, schema} from '@openint/db'
+import {db, schema, sql} from '@openint/db'
 import type {NonEmptyArray} from '@openint/util'
 import {makeUlid, R, z} from '@openint/util'
 
@@ -86,21 +86,52 @@ export type Events = Combine<
   BuiltInEvents,
   ZodToStandardSchema<typeof eventMapForInngest>
 >
-
+const mnyt = db
 export const persistEventsMiddleware = new InngestMiddleware({
   name: 'Persist Events Inngest Middleware',
   init: () => {
     type EventForInsert = (typeof schema)['event']['$inferInsert']
     let pendingEvents: EventForInsert[] = []
+
     return {
       onSendEvent() {
         return {
-          transformInput({payloads}) {
+          async transformInput({payloads}) {
+            function getConnIdForEvent(ev: {data?: Record<string, unknown>}) {
+              // TODO: QQ, how to best cleanup this?
+              return (ev.data?.['connectionId'] ??
+                ev.data?.['connection_id'] ??
+                ev.data?.['sourceId'] ??
+                ev.data?.['source_id'] ??
+                ev.data?.['destinationId'] ??
+                ev.data?.['destination_id']) as string | undefined
+            }
+            const connectionIds = R.uniq(
+              payloads.map(getConnIdForEvent).filter((id) => !!id),
+            )
+
+            const rows = await db.execute<{
+              id: string
+              org_id: string
+              customer_id: string
+            }>(sql`
+              SELECT c.id, cc.org_id, c.customer_id as cus_id
+              FROM ${schema.connection} c
+              JOIN ${schema.connector_config} cc ON c.connector_config_id = cc.id
+              WHERE c.id = ANY(${connectionIds})
+            `)
+
+            const infoByConnId = Object.fromEntries(
+              rows.map(({id, ...info}) => [id, info]),
+            )
             const events = payloads.map((payload) => ({
               ...payload,
               id: makeId('evt', makeUlid()),
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              data: payload.data ?? {},
+              data: (payload.data as undefined | {}) ?? {},
+              user: {
+                ...infoByConnId[getConnIdForEvent(payload) ?? ''],
+                ...(payload.user as {} | undefined),
+              },
             }))
             pendingEvents = events
             return {payloads: events}
