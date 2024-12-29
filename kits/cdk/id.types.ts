@@ -11,6 +11,7 @@ export const INDEPENDENT_IDS = {
   user: 'user',
   organization: 'org',
   pipeline: 'pipe',
+  event: 'evt',
 } as const
 
 export const CONNECTOR_SCOPED_IDS = {

@@ -350,15 +350,15 @@ export const event = pgTable(
      * Will be used for RLS policies
      * Slightly inconsistent given that user_id and customer_id are not abbreviated
      */
-    org_id: varchar(), // organization_id
-    usr_id: varchar(), // user_id
-    cus_id: varchar(), // customer_id
+    org_id: varchar().generatedAlwaysAs(sql`"user"->>'org_id'`), // organization_id
+    user_id: varchar().generatedAlwaysAs(sql`"user"->>'user_id'`), // user_id
+    customer_id: varchar().generatedAlwaysAs(sql`"user"->>'customer_id'`), // customer_id
   },
   (table) => [
     index('event_timestamp').on(table.timestamp),
     index('event_org_id').on(table.org_id),
-    index('event_usr_id').on(table.usr_id),
-    index('event_cus_id').on(table.cus_id),
+    index('event_user_id').on(table.user_id),
+    index('event_customer_id').on(table.customer_id),
     check('event_id_prefix_check', sql`starts_with(id, 'evt_')`),
     pgPolicy('org_read', {
       to: 'org',
