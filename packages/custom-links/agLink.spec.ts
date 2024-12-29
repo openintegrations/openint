@@ -12,13 +12,13 @@ const dbName = 'aglink'
 
 // TODO: Add me back in once we know CI is working
 beforeAll(async () => {
-  const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
+  const masterDb = drizzle(env.DATABASE_URL, {logger: true})
   await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
   await masterDb.execute(`CREATE DATABASE ${dbName}`)
   await masterDb.$client.end()
 })
 
-const dbUrl = new URL(env.POSTGRES_URL)
+const dbUrl = new URL(env.DATABASE_URL)
 dbUrl.pathname = `/${dbName}`
 const db = drizzle(dbUrl.toString(), {logger: true})
 
