@@ -63,10 +63,6 @@ export const persistEventsMiddleware = new InngestMiddleware({
   },
 })
 
-/**
- * Existing Inngest client. Add our new middleware here.
- */
-
 export const inngest = new Inngest({
   id: 'OpenInt',
   schemas: new EventSchemas().fromZod(eventMapForInngest),

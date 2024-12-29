@@ -12,7 +12,6 @@ import {
 } from '@openint/cdk'
 import {TRPCError} from '@openint/trpc'
 import {joinPath, makeUlid, R, Rx, rxjs, z} from '@openint/util'
-import {zPaginatedResult, zPaginationParams} from '@openint/vdk'
 import {inngest} from '../inngest'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {zSyncOptions} from '../types'
@@ -508,23 +507,6 @@ export const connectionRouter = trpc.router({
           data: conn.integration.external ?? {},
         },
         triggerDefaultSync: true,
-      })
-    }),
-  listEvents: protectedProcedure
-    .meta({
-      openapi: {method: 'GET', path: '/core/events', tags},
-    })
-    .input(
-      zPaginationParams.extend({
-        since: z.number().int(),
-        customerId: zCustomerId.nullish(),
-      }),
-    )
-    .output(zPaginatedResult.extend({items: zRaw.event}))
-    .query(async ({input: {since, customerId}, ctx}) => {
-      return ctx.services.metaService.tables.event.list({
-        since,
-        customerId,
       })
     }),
 })

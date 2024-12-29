@@ -270,17 +270,20 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
       runQueries(async (trxn) => {
         const conditions = R.compact([
           ids && sql`id = ANY(${sql.param(ids)})`,
-          customerId && tableName === 'event'
-            ? sql`cus_id = ${customerId}`
-            : sql`customer_id = ${customerId}`,
+          customerId
+            ? tableName === 'event'
+              ? sql`cus_id = ${customerId}`
+              : sql`customer_id = ${customerId}`
+            : null,
           connectorConfigId && sql`connector_config_id = ${connectorConfigId}`,
           connectorName && sql`connector_name = ${connectorName}`,
           // Temp solution, shall use fts and make this work for any table...
           keywords &&
             tableName === 'integration' &&
             sql`standard->>'name' ILIKE ${'%' + keywords + '%'}`,
-          since && sql`inserted_at > ${since}`,
+          since && sql`created_at > ${since}`,
         ])
+        console.log('conditions ', customerId, rest)
         const where =
           conditions.length > 0
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
