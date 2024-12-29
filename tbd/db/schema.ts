@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/template-indent */
 import {sql} from 'drizzle-orm'
 import {
   boolean,
@@ -359,10 +360,35 @@ export const event = pgTable(
     index('event_usr_id').on(table.usr_id),
     index('event_cus_id').on(table.cus_id),
     check('event_id_prefix_check', sql`starts_with(id, 'evt_')`),
-    pgPolicy('public_readonly_access', {
+    pgPolicy('org_read', {
+      to: 'org',
       for: 'select',
-      to: 'public',
-      using: sql`true`,
+      using: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('org_member_read', {
+      to: 'authenticated',
+      for: 'select',
+      using: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('customer_read', {
+      to: 'customer',
+      for: 'select',
+      using: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('org_append', {
+      to: 'org',
+      for: 'insert',
+      withCheck: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('org_member_append', {
+      to: 'authenticated',
+      for: 'insert',
+      withCheck: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('customer_append', {
+      to: 'customer',
+      for: 'insert',
+      withCheck: sql`org_id = public.jwt_org_id()`,
     }),
   ],
 )
