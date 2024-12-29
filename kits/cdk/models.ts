@@ -1,5 +1,5 @@
 import {z} from '@opensdks/util-zod'
-import {zCustomerId, zId, zUserId} from './id.types'
+import {zCustomerId, zId} from './id.types'
 import {zVerticalKey} from './verticals'
 
 // Utility types
