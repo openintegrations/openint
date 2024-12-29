@@ -5,7 +5,7 @@ import {makeUlid, R} from '@openint/util'
 import {eventMapForInngest} from './events'
 
 export const persistEventsMiddleware = new InngestMiddleware({
-  name: 'Persist Events Inngest Middleware',
+  name: 'Enrich and persist events',
   init: () => {
     type EventForInsert = (typeof schema)['event']['$inferInsert']
     let pendingEvents: EventForInsert[] = []
@@ -27,23 +27,32 @@ export const persistEventsMiddleware = new InngestMiddleware({
               payloads.map(getConnIdForEvent).filter((id) => !!id),
             )
 
-            const rows = await db.execute<{
-              id: string
-              org_id: string
-              customer_id: string
-            }>(sql`
-              SELECT c.id, cc.org_id, c.customer_id as cus_id
-              FROM ${schema.connection} c
-              JOIN ${schema.connector_config} cc ON c.connector_config_id = cc.id
-              WHERE c.id = ANY(${connectionIds})
-            `)
+            const rows = connectionIds.length
+              ? await db.execute<{
+                  id: string
+                  org_id: string
+                  customer_id: string
+                }>(sql`
+                  SELECT c.id, cc.org_id, c.customer_id as cus_id
+                  FROM ${schema.connection} c
+                  JOIN ${schema.connector_config} cc ON c.connector_config_id = cc.id
+                  WHERE c.id = ANY(${connectionIds})
+                `)
+              : []
 
             const infoByConnId = Object.fromEntries(
               rows.map(({id, ...info}) => [id, info]),
             )
+            const now = new Date()
+            const ts = now.getTime()
+            const timestamp = now.toISOString()
             const events = payloads.map((payload) => ({
               ...payload,
               id: makeId('evt', makeUlid()),
+              ts: payload.ts ?? ts,
+              timestamp: payload.ts
+                ? new Date(payload.ts).toISOString()
+                : timestamp,
               data: (payload.data as undefined | {}) ?? {},
               user: {
                 ...infoByConnId[getConnIdForEvent(payload) ?? ''],
