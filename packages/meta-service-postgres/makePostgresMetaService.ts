@@ -271,9 +271,9 @@ export const makePostgresMetaService = zFunction(
 
               // Fetch organization_id and customer_id from connection and connector_config tables
               const [idResult] = await db.execute(sql`
-                SELECT cc.org_id as organization_id, c.customer_id 
+                SELECT cc.org_id as organization_id, c.customer_id
                 FROM connection c
-                JOIN connector_config cc ON c.connector_config_id = cc.id 
+                JOIN connector_config cc ON c.connector_config_id = cc.id
                 WHERE c.id = ${connectionId}
               `)
 
@@ -285,7 +285,7 @@ export const makePostgresMetaService = zFunction(
               }
 
               return {
-                id: makeId('ev', ev.externalId),
+                id: makeId('evt', ev.externalId),
                 name: ev.name,
                 organizationId: idResult['organization_id'],
                 customerId: idResult['customer_id'],

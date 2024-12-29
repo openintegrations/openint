@@ -1,11 +1,10 @@
 import type {Combine, EventsFromOpts} from 'inngest'
 import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import type {ZodToStandardSchema} from 'inngest/components/EventSchemas'
-import {zId} from '@openint/cdk'
+import {makeId, zId} from '@openint/cdk'
+import {db, schema} from '@openint/db'
 import type {NonEmptyArray} from '@openint/util'
-import {R, z} from '@openint/util'
-import {envRequired} from '../env'
-import {makePostgresMetaService} from '../meta-service-postgres'
+import {makeUlid, R, z} from '@openint/util'
 
 // TODO: Implement webhook as events too
 
@@ -90,33 +89,25 @@ export type Events = Combine<
 
 export const persistEventsMiddleware = new InngestMiddleware({
   name: 'Persist Events Inngest Middleware',
-  init: async () => {
-    const pendingEvents: Array<any> = []
-
+  init: () => {
+    type EventForInsert = (typeof schema)['event']['$inferInsert']
+    let pendingEvents: EventForInsert[] = []
     return {
       onSendEvent() {
         return {
           transformInput({payloads}) {
-            payloads.forEach((payload) => {
-              pendingEvents.push({
-                payload,
-              })
-            })
-          },
-          async transformOutput(ctx) {
-            const pgService = makePostgresMetaService({
-              databaseUrl: envRequired.POSTGRES_URL,
-              viewer: {role: 'system'},
-            })
-
-            const eventIds = ctx.result.ids
-            const eventsToProcess = pendingEvents.splice(0, eventIds.length)
-
-            const combinedEvents = eventsToProcess.map((event, index) => ({
-              externalId: eventIds[index],
-              ...event.payload,
+            const events = payloads.map((payload) => ({
+              ...payload,
+              id: makeId('evt', makeUlid()),
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              data: payload.data ?? {},
             }))
-            await pgService.createEvents(combinedEvents)
+            pendingEvents = events
+            return {payloads: events}
+          },
+          async transformOutput() {
+            await db.insert(schema.event).values(pendingEvents)
+            pendingEvents = []
           },
         }
       },

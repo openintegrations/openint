@@ -1,5 +1,5 @@
 import {z} from '@opensdks/util-zod'
-import {zCustomerId, zId} from './id.types'
+import {zCustomerId, zId, zUserId} from './id.types'
 import {zVerticalKey} from './verticals'
 
 // Utility types
@@ -225,11 +225,12 @@ export const zRaw = {
   event: zBase
     .extend({
       // ev_{external_id} i.e. from inngest, clerk, stripe, etc
-      id: zId('ev'),
+      id: zId('evt'),
       name: z.string(),
-      organizationId: zId('org'),
-      customerId: zCustomerId.nullish(),
       data: z.record(z.unknown()).nullish(),
+      org_id: zId('org').nullish(),
+      cus_id: zCustomerId.nullish(),
+      usr_id: zUserId.nullish(),
     })
     .openapi({ref: 'event'}),
 }
