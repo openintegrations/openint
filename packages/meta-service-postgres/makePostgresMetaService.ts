@@ -84,6 +84,7 @@ export const makePostgresMetaService = zFunction(
       integration: metaTable('integration', _getDeps(opts)),
       connector_config: metaTable('connector_config', _getDeps(opts)),
       pipeline: metaTable('pipeline', _getDeps(opts)),
+      event: metaTable('event', _getDeps(opts)),
     }
     return {
       tables,
@@ -260,19 +261,25 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
       customerId,
       connectorConfigId,
       connectorName,
+      since,
       keywords,
+      orderBy,
+      order,
       ...rest
     }) =>
       runQueries(async (trxn) => {
         const conditions = R.compact([
           ids && sql`id = ANY(${sql.param(ids)})`,
-          customerId && sql`customer_id = ${customerId}`,
+          customerId && tableName === 'event'
+            ? sql`cus_id = ${customerId}`
+            : sql`customer_id = ${customerId}`,
           connectorConfigId && sql`connector_config_id = ${connectorConfigId}`,
           connectorName && sql`connector_name = ${connectorName}`,
           // Temp solution, shall use fts and make this work for any table...
           keywords &&
             tableName === 'integration' &&
             sql`standard->>'name' ILIKE ${'%' + keywords + '%'}`,
+          since && sql`inserted_at > ${since}`,
         ])
         const where =
           conditions.length > 0
