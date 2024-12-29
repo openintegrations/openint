@@ -131,6 +131,10 @@ export interface paths {
     /** List sync runs */
     get: operations['listSyncRuns']
   }
+  '/core/events': {
+    /** List events */
+    get: operations['listEvents']
+  }
   '/viewer': {
     /** Get current viewer accessing the API */
     get: operations['getViewer']
@@ -685,6 +689,21 @@ export interface components {
        *   During updates this object will be shallowly merged
        */
       metadata?: unknown
+    }
+    Event: {
+      createdAt: string
+      updatedAt: string
+      /** @description Must start with 'evt_' */
+      id: string
+      name: string
+      data?: {
+        [key: string]: unknown
+      } | null
+      /** @description Must start with 'org_' */
+      org_id?: string | null
+      customer_id?: string | null
+      /** @description Must start with 'user_' */
+      user_id?: string | null
     }
     Viewer: OneOf<
       [
@@ -2595,6 +2614,48 @@ export interface operations {
       200: {
         content: {
           'application/json': unknown[]
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** List events */
+  listEvents: {
+    parameters: {
+      query: {
+        sync_mode?: 'full' | 'incremental'
+        cursor?: string | null
+        page_size?: number
+        since: number
+        customerId?: string | null
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            next_cursor?: string | null
+            has_next_page: boolean
+            items: components['schemas']['Event'][]
+          }
         }
       }
       /** @description Invalid input data */
