@@ -30,6 +30,8 @@ export const {pg: configPg, db: configDb} = getDb(env.POSTGRES_URL, {
   schema: schemaWip,
 })
 
+export const {pg, db} = getDb(env.POSTGRES_URL, {schema})
+
 export async function ensureSchema(
   thisDb: ReturnType<typeof getDb>['db'],
   schema: string,
@@ -78,9 +80,11 @@ export async function runMigration(opts?: {keepAlive?: boolean}) {
 
 export function applyLimitOffset<T>(
   query: SQL<T>,
-  opts: {limit?: number; offset?: number},
+  opts: {limit?: number; offset?: number; orderBy?: string; order?: string},
 ) {
   const limit = opts.limit ? sql` LIMIT ${opts.limit}` : sql``
   const offset = opts.offset ? sql` OFFSET ${opts.offset}` : sql``
-  return sql<T>`${query}${limit}${offset}`
+  const orderBy = opts.orderBy ? sql` ORDER BY ${opts.orderBy}` : sql``
+  const order = opts.order ? sql` ${opts.order}` : sql``
+  return sql<T>`${query}${limit}${offset}${orderBy}${order}`
 }

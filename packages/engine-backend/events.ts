@@ -1,5 +1,4 @@
-import type {Combine, EventsFromOpts} from 'inngest'
-import {EventSchemas, Inngest} from 'inngest'
+import type {Combine, EventSchemas, EventsFromOpts} from 'inngest'
 import type {ZodToStandardSchema} from 'inngest/components/EventSchemas'
 import {zId} from '@openint/cdk'
 import type {NonEmptyArray} from '@openint/util'
@@ -68,7 +67,7 @@ export const eventMap = {
 
 type BuiltInEvents = EventsFromOpts<{schemas: EventSchemas; id: never}>
 
-const eventMapForInngest = R.mapValues(eventMap, (v) => ({
+export const eventMapForInngest = R.mapValues(eventMap, (v) => ({
   data: z.object(v),
 })) as unknown as {
   [k in keyof typeof eventMap]: {
@@ -85,16 +84,6 @@ export type Events = Combine<
   BuiltInEvents,
   ZodToStandardSchema<typeof eventMapForInngest>
 >
-
-export const inngest = new Inngest({
-  id: 'OpenInt',
-  schemas: new EventSchemas().fromZod(eventMapForInngest),
-  // TODO: have a dedicated browser inngest key
-  eventKey: process.env['INNGEST_EVENT_KEY'] ?? 'local',
-  // This is needed in the browser otherwise we get failed to execute fetch on Window
-  // due to the way Inngest uses this.fetch when invoking fetch
-  fetch: globalThis.fetch.bind(globalThis),
-})
 
 // MARK: - Deprecated
 

@@ -15,6 +15,13 @@
       "when": 1735441973671,
       "tag": "0001_add_event_table",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1735492230154,
+      "tag": "0002_event_generated_columns",
+      "breakpoints": true
     }
   ]
 }
