@@ -1,0 +1,1048 @@
+{
+  "id": "4bf4ebc9-7d6c-48e0-bb7f-dbf7aed179c5",
+  "prevId": "be8a14b0-bf47-48d4-8e4b-006a570e3ba6",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.connection": {
+      "name": "connection",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "'concat(''conn_'', generate_ulid())'"
+        },
+        "connector_name": {
+          "name": "connector_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "generated": {
+            "as": "split_part((id)::text, '_'::text, 2)",
+            "type": "stored"
+          }
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "connector_config_id": {
+          "name": "connector_config_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "integration_id": {
+          "name": "integration_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "env_name": {
+          "name": "env_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "settings": {
+          "name": "settings",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "disabled": {
+          "name": "disabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "connection_created_at": {
+          "name": "connection_created_at",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "connection_customer_id": {
+          "name": "connection_customer_id",
+          "columns": [
+            {
+              "expression": "customer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "connection_provider_name": {
+          "name": "connection_provider_name",
+          "columns": [
+            {
+              "expression": "connector_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "connection_updated_at": {
+          "name": "connection_updated_at",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fk_connector_config_id": {
+          "name": "fk_connector_config_id",
+          "tableFrom": "connection",
+          "tableTo": "connector_config",
+          "columnsFrom": [
+            "connector_config_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "fk_integration_id": {
+          "name": "fk_integration_id",
+          "tableFrom": "connection",
+          "tableTo": "integration",
+          "columnsFrom": [
+            "integration_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "org_member_access": {
+          "name": "org_member_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(\n        connector_config_id IN (\n          SELECT connector_config.id\n          FROM public.connector_config\n          WHERE connector_config.org_id = public.jwt_org_id()\n        )\n      )",
+          "withCheck": "(\n        connector_config_id IN (\n          SELECT connector_config.id\n          FROM public.connector_config\n          WHERE connector_config.org_id = public.jwt_org_id()\n        )\n      )"
+        },
+        "org_access": {
+          "name": "org_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "org"
+          ],
+          "using": "(\n        connector_config_id IN (\n          SELECT connector_config.id\n          FROM public.connector_config\n          WHERE connector_config.org_id = public.jwt_org_id()\n        )\n      )",
+          "withCheck": "(\n        connector_config_id IN (\n          SELECT connector_config.id\n          FROM public.connector_config\n          WHERE connector_config.org_id = public.jwt_org_id()\n        )\n      )"
+        },
+        "customer_access": {
+          "name": "customer_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "customer"
+          ],
+          "using": "(\n        connector_config_id IN (\n          SELECT connector_config.id\n          FROM public.connector_config\n          WHERE connector_config.org_id = public.jwt_org_id()\n        )\n        AND customer_id = (SELECT public.jwt_customer_id())\n      )"
+        }
+      },
+      "checkConstraints": {
+        "connection_id_prefix_check": {
+          "name": "connection_id_prefix_check",
+          "value": "starts_with(id, 'conn_')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.connector_config": {
+      "name": "connector_config",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "'concat(''ccfg_'', generate_ulid())'"
+        },
+        "connector_name": {
+          "name": "connector_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "generated": {
+            "as": "split_part((id)::text, '_'::text, 2)",
+            "type": "stored"
+          }
+        },
+        "config": {
+          "name": "config",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "env_name": {
+          "name": "env_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "(config ->> 'envName'::text)",
+            "type": "stored"
+          }
+        },
+        "disabled": {
+          "name": "disabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "default_pipe_out": {
+          "name": "default_pipe_out",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "default_pipe_in": {
+          "name": "default_pipe_in",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "default_pipe_out_destination_id": {
+          "name": "default_pipe_out_destination_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "(default_pipe_out ->> 'destination_id'::text)",
+            "type": "stored"
+          }
+        },
+        "default_pipe_in_source_id": {
+          "name": "default_pipe_in_source_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "(default_pipe_in ->> 'source_id'::text)",
+            "type": "stored"
+          }
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "integration_created_at": {
+          "name": "integration_created_at",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "integration_org_id": {
+          "name": "integration_org_id",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "integration_provider_name": {
+          "name": "integration_provider_name",
+          "columns": [
+            {
+              "expression": "connector_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "integration_updated_at": {
+          "name": "integration_updated_at",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fk_default_pipe_in_source_id": {
+          "name": "fk_default_pipe_in_source_id",
+          "tableFrom": "connector_config",
+          "tableTo": "connection",
+          "columnsFrom": [
+            "default_pipe_in_source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        },
+        "fk_default_pipe_out_destination_id": {
+          "name": "fk_default_pipe_out_destination_id",
+          "tableFrom": "connector_config",
+          "tableTo": "connection",
+          "columnsFrom": [
+            "default_pipe_out_destination_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "org_access": {
+          "name": "org_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "org"
+          ],
+          "using": "org_id = jwt_org_id()",
+          "withCheck": "org_id = jwt_org_id()"
+        },
+        "customer_access": {
+          "name": "customer_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "customer"
+          ],
+          "using": "org_id = public.jwt_org_id()"
+        },
+        "org_member_access": {
+          "name": "org_member_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "authenticated"
+          ],
+          "using": "org_id = public.jwt_org_id()",
+          "withCheck": "org_id = public.jwt_org_id()"
+        }
+      },
+      "checkConstraints": {
+        "connector_config_id_prefix_check": {
+          "name": "connector_config_id_prefix_check",
+          "value": "starts_with(id, 'ccfg_')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.event": {
+      "name": "event",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "'concat(''evt_'', generate_ulid())'"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "user": {
+          "name": "user",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "v": {
+          "name": "v",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usr_id": {
+          "name": "usr_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cus_id": {
+          "name": "cus_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "event_timestamp": {
+          "name": "event_timestamp",
+          "columns": [
+            {
+              "expression": "timestamp",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_org_id": {
+          "name": "event_org_id",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_usr_id": {
+          "name": "event_usr_id",
+          "columns": [
+            {
+              "expression": "usr_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_cus_id": {
+          "name": "event_cus_id",
+          "columns": [
+            {
+              "expression": "cus_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "org_read": {
+          "name": "org_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "org"
+          ],
+          "using": "org_id = jwt_org_id()"
+        },
+        "org_member_read": {
+          "name": "org_member_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ],
+          "using": "org_id = public.jwt_org_id()"
+        },
+        "customer_read": {
+          "name": "customer_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "customer"
+          ],
+          "using": "org_id = public.jwt_org_id()"
+        },
+        "org_append": {
+          "name": "org_append",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "org"
+          ],
+          "withCheck": "org_id = jwt_org_id()"
+        },
+        "org_member_append": {
+          "name": "org_member_append",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "authenticated"
+          ],
+          "withCheck": "org_id = public.jwt_org_id()"
+        },
+        "customer_append": {
+          "name": "customer_append",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "customer"
+          ],
+          "withCheck": "org_id = public.jwt_org_id()"
+        }
+      },
+      "checkConstraints": {
+        "event_id_prefix_check": {
+          "name": "event_id_prefix_check",
+          "value": "starts_with(id, 'evt_')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.integration": {
+      "name": "integration",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "'concat(''int_'', generate_ulid())'"
+        },
+        "connector_name": {
+          "name": "connector_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "generated": {
+            "as": "split_part((id)::text, '_'::text, 2)",
+            "type": "stored"
+          }
+        },
+        "standard": {
+          "name": "standard",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "external": {
+          "name": "external",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "institution_created_at": {
+          "name": "institution_created_at",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "institution_provider_name": {
+          "name": "institution_provider_name",
+          "columns": [
+            {
+              "expression": "connector_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "institution_updated_at": {
+          "name": "institution_updated_at",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "org_write_access": {
+          "name": "org_write_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "public_readonly_access": {
+          "name": "public_readonly_access",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "public"
+          ],
+          "using": "true"
+        }
+      },
+      "checkConstraints": {
+        "integration_id_prefix_check": {
+          "name": "integration_id_prefix_check",
+          "value": "starts_with(id, 'int_')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.pipeline": {
+      "name": "pipeline",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "'concat(''pipe_'', generate_ulid())'"
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_state": {
+          "name": "source_state",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "destination_id": {
+          "name": "destination_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "destination_state": {
+          "name": "destination_state",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "link_options": {
+          "name": "link_options",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "last_sync_started_at": {
+          "name": "last_sync_started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_sync_completed_at": {
+          "name": "last_sync_completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "disabled": {
+          "name": "disabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "streams": {
+          "name": "streams",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_vertical": {
+          "name": "source_vertical",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "destination_vertical": {
+          "name": "destination_vertical",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "pipeline_created_at": {
+          "name": "pipeline_created_at",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "pipeline_destination_id": {
+          "name": "pipeline_destination_id",
+          "columns": [
+            {
+              "expression": "destination_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "pipeline_source_id": {
+          "name": "pipeline_source_id",
+          "columns": [
+            {
+              "expression": "source_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "pipeline_updated_at": {
+          "name": "pipeline_updated_at",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fk_destination_id": {
+          "name": "fk_destination_id",
+          "tableFrom": "pipeline",
+          "tableTo": "connection",
+          "columnsFrom": [
+            "destination_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "fk_source_id": {
+          "name": "fk_source_id",
+          "tableFrom": "pipeline",
+          "tableTo": "connection",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "customer_access": {
+          "name": "customer_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "customer"
+          ],
+          "using": "(\n        SELECT array(\n          SELECT id\n          FROM connection\n          WHERE\n            connector_config_id = ANY(\n              SELECT id\n              FROM connector_config\n              WHERE org_id = jwt_org_id()\n            )\n            AND customer_id = (SELECT jwt_customer_id())\n        ) && array[pipeline.source_id, pipeline.destination_id]\n      )"
+        },
+        "org_access": {
+          "name": "org_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "org"
+          ],
+          "using": "(\n        SELECT array(\n          SELECT r.id\n          FROM resource r\n          JOIN connector_config cc on r.connector_config_id = cc.id\n          WHERE cc.org_id = jwt_org_id()\n        ) && array[source_id, destination_id]\n        -- && and @> is the same, however we are using && to stay consistent with end user policy\n      )",
+          "withCheck": "(\n        select array(\n          select r.id\n          from resource r\n          join connector_config cc on r.connector_config_id = cc.id\n          where cc.org_id = jwt_org_id()\n        ) @> array[source_id, destination_id]\n        -- Pipeline must be fully within the org\n      )"
+        },
+        "org_member_access": {
+          "name": "org_member_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(\n        array(\n          select r.id\n          from resource r\n          join connector_config cc on cc.id = r.connector_config_id\n          where cc.org_id = jwt_org_id()\n        ) && array[source_id, destination_id]\n        -- && and @> is the same, however we are using && to stay consistent with end user policy\n      )",
+          "withCheck": "(\n        array(\n          select r.id\n          from resource r\n          join connector_config cc on cc.id = r.connector_config_id\n          where cc.org_id = jwt_org_id()\n        ) @> array[source_id, destination_id]\n        -- User must have access to both the source & destination resources\n      )"
+        }
+      },
+      "checkConstraints": {
+        "pipeline_id_prefix_check": {
+          "name": "pipeline_id_prefix_check",
+          "value": "starts_with(id, 'pipe_')"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {
+    "customer": {
+      "name": "customer",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    },
+    "org": {
+      "name": "org",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    },
+    "authenticated": {
+      "name": "authenticated",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    }
+  },
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
