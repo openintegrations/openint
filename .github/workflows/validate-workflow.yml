@@ -36,7 +36,7 @@ jobs:
     env:
       NODE_OPTIONS: --max-old-space-size=4096
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      POSTGRES_URL: postgres://postgres:test@localhost:5432/test
+      DATABASE_URL: postgres://postgres:test@localhost:5432/test
 
     steps:
       - name: Checkout
@@ -99,7 +99,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client-17
           mkdir -p ./artifacts
-          /usr/lib/postgresql/17/bin/pg_dump --inserts $POSTGRES_URL > ./artifacts/dump.sql
+          /usr/lib/postgresql/17/bin/pg_dump --inserts $DATABASE_URL > ./artifacts/dump.sql
 
       - name: Archive migration artifacts
         uses: actions/upload-artifact@v4
@@ -109,7 +109,7 @@ jobs:
             ./artifacts
 
         # To test this with a locally install postgres, run
-        # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && POSTGRES_URL=postgres://localhost:5432/test pnpm run-migration
+        # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && DATABASE_URL=postgres://localhost:5432/test pnpm run-migration
 
       - name: Run health check
         run: MOCK_HEALTHCHECK=true NANGO_SECRET_KEY=noop JWT_SECRET=NOOP npx tsx ./bin/openint.ts health
@@ -120,7 +120,7 @@ jobs:
           pnpm wait-on tcp:4000
 
       - name: Run tests
-        run: POSTGRES_URL=postgres://postgres:test@localhost:5432/test pnpm run test::ci
+        run: DATABASE_URL=postgres://postgres:test@localhost:5432/test pnpm run test::ci
 
       - name: Send Slack notification for job status
         uses: 8398a7/action-slack@v3

@@ -26,11 +26,11 @@ export function getDb<
   return {db, pg}
 }
 
-export const {pg: configPg, db: configDb} = getDb(env.POSTGRES_URL, {
+export const {pg: configPg, db: configDb} = getDb(env.DATABASE_URL, {
   schema: schemaWip,
 })
 
-export const {pg, db} = getDb(env.POSTGRES_URL, {schema})
+export const {pg, db} = getDb(env.DATABASE_URL, {schema})
 
 export async function ensureSchema(
   thisDb: ReturnType<typeof getDb>['db'],
