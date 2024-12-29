@@ -1,7 +1,7 @@
 'use client'
 
 import {useEffect, useRef, useState} from 'react'
-import {ZRaw, zViewerFromUnverifiedJwtToken} from '@openint/cdk'
+import {zViewerFromUnverifiedJwtToken} from '@openint/cdk'
 import {_trpcReact} from '@openint/engine-frontend'
 
 declare global {
@@ -66,12 +66,12 @@ export function EventPoller({accessToken}: {accessToken?: string | null}) {
     const latestEvent = data.items[data.items.length - 1]
     if (
       latestEvent &&
-      new Date(latestEvent?.createdAt).getTime() > lastEventIdRef.current
+      new Date(latestEvent?.timestamp).getTime() > lastEventIdRef.current
     ) {
-      lastEventIdRef.current = new Date(latestEvent?.createdAt).getTime()
+      lastEventIdRef.current = new Date(latestEvent?.timestamp).getTime()
 
       // Send each new event to the callback
-      data.items.forEach((event: ZRaw['event']) => {
+      data.items.forEach((event) => {
         window.onOpenIntEvent?.(event)
       })
     }
