@@ -21,7 +21,7 @@ export const eventRouter = trpc.router({
         customerId,
         // TODO: add cursor
         limit: page_size,
-        orderBy: 'created_at',
+        orderBy: 'timestamp',
         order: 'desc',
       })) as Array<ZRaw['event']>
       return {

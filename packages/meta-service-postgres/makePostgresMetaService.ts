@@ -281,7 +281,10 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
           keywords &&
             tableName === 'integration' &&
             sql`standard->>'name' ILIKE ${'%' + keywords + '%'}`,
-          since && sql`created_at > ${since}`,
+          since &&
+            (tableName === 'event'
+              ? sql`timestamp > ${sql.param(new Date(since).toISOString())}`
+              : sql`created_at > ${sql.param(new Date(since).toISOString())}`),
         ])
         console.log('conditions ', customerId, rest)
         const where =

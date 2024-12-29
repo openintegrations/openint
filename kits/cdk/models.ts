@@ -223,12 +223,14 @@ export const zRaw = {
     .openapi({ref: 'Integration'}),
   // TODO: Add connection_attempts
   // TODO: Figure out how to add this later
-  event: zBase
-    .extend({
+  event: z
+    .object({
       // ev_{external_id} i.e. from inngest, clerk, stripe, etc
       id: zId('evt'),
       name: z.string(),
       data: z.record(z.unknown()).nullish(),
+      timestamp: z.date(),
+      user: z.record(z.unknown()).nullish(),
       org_id: zId('org').nullish(),
       cus_id: zCustomerId.nullish(),
       usr_id: zUserId.nullish(),
