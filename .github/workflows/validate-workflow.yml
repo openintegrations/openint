@@ -92,7 +92,7 @@ jobs:
         # TODO: consider diffing schema with stored schema?
         # Perhaps make dump and diff one of the code generation next steps?
         run: |
-          pnpm run-migration
+          pnpm migrate
 
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
           wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -110,7 +110,7 @@ jobs:
             ./artifacts
 
         # To test this with a locally install postgres, run
-        # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && DATABASE_URL=postgres://localhost:5432/test pnpm run-migration
+        # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && DATABASE_URL=postgres://localhost:5432/test pnpm migrate
 
       - name: Run health check
         run: MOCK_HEALTHCHECK=true NANGO_SECRET_KEY=noop JWT_SECRET=NOOP npx tsx ./bin/openint.ts health

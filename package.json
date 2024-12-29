@@ -20,7 +20,7 @@
     "typecheck": "tsc --project . --noEmit",
     "validate": "run-s --silent typecheck lint test",
     "openint": "tsx ./bin/openint",
-    "run-migration": "pnpm --dir ./tbd/db db:run-migration",
+    "migrate": "pnpm --dir ./tbd/db migrate",
     "pgdump": "pg_dump --schema public --schema-only --no-owner --exclude-schema=graphile_migrate --file=tbd/db/schema.sql $DATABASE_URL",
     "worker:setup": "tsx ./bin/openint setupWorker",
     "worker:run": "tsx ./bin/openint runWorker",
