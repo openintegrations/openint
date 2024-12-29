@@ -270,11 +270,7 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
       runQueries(async (trxn) => {
         const conditions = R.compact([
           ids && sql`id = ANY(${sql.param(ids)})`,
-          customerId
-            ? tableName === 'event'
-              ? sql`cus_id = ${customerId}`
-              : sql`customer_id = ${customerId}`
-            : null,
+          customerId ? sql`customer_id = ${customerId}` : null,
           connectorConfigId && sql`connector_config_id = ${connectorConfigId}`,
           connectorName && sql`connector_name = ${connectorName}`,
           // Temp solution, shall use fts and make this work for any table...
