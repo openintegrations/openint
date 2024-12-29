@@ -6,8 +6,11 @@ export default defineConfig({
   out: './migrations',
   dialect: 'postgresql',
   schema: './schema.ts',
-  dbCredentials: {url: env.POSTGRES_URL},
+  dbCredentials: {url: env.DATABASE_URL},
   introspect: {casing: 'preserve'},
+  migrations: {
+    schema: 'public',
+  },
 
   // migrations: {
   //   prefix: 'timestamp',
@@ -16,5 +19,4 @@ export default defineConfig({
   // },
   strict: true,
   verbose: true,
-
 })

@@ -52,7 +52,7 @@ export const contextFactory = getContextFactory({
   getRedirectUrl: (_, _ctx) => joinPath(getServerUrl(null), '/'),
   // TODO: Do we realy need to support anything other than postgres?
   getMetaService: (viewer) =>
-    makePostgresMetaService({databaseUrl: envRequired.POSTGRES_URL, viewer}),
+    makePostgresMetaService({databaseUrl: envRequired.DATABASE_URL, viewer}),
   // TODO: This probably needs to be internal to the engine-backend or even cdk
   // because of the need to support integration metadata specifying their desired links
   // aka transfomrations

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "run-s build:*",
     "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
-    "build:migration": "if [ \"$VERCEL_ENV\" = production ] || [ \"$VERCEL_GIT_COMMIT_REF\" = main ]; then pnpm --dir ../../ run-migration; else echo 'Skip non prod/staging migration'; fi",
+    "build:migration": "pnpm --dir ../../ run-migration",
     "build:next": "next build",
     "dev": "next dev -p 4000 --turbo",
     "start": "next start"

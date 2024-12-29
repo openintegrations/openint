@@ -1,3 +1,4 @@
+BEGIN;
 --- filename: 0_setup-ulid.sql ---
 
 -- pgulid is based on OK Log's Go implementation of the ULID spec
@@ -488,7 +489,7 @@ BEGIN
 END;
 $$;
 
--- Remove the reference to "postgres" in RLS functions by resetting the uid function -- CURRENT_USER
+-- Remove the reference to CURRENT_USER in RLS functions by resetting the uid function -- CURRENT_USER
 
 CREATE OR REPLACE FUNCTION public._uid()
  RETURNS varchar
@@ -1016,7 +1017,7 @@ BEGIN
       -- For now we do this for the test environment
       CREATE ROLE "authenticated" WITH PASSWORD 'thex0hDD123b1!';
       CREATE ROLE "authenticator" WITH PASSWORD 'thex0hDD123b1!';
-      GRANT "authenticated" TO "postgres"; -- "postgres"; -- CURRENT_USER
+      GRANT "authenticated" TO CURRENT_USER; -- "postgres"; -- CURRENT_USER
       GRANT "authenticated" TO "authenticator";
       GRANT USAGE ON SCHEMA public TO "authenticated";
    END IF;
@@ -1062,7 +1063,7 @@ CREATE POLICY org_member_access ON "public"."pipeline" TO authenticated
 --- End user policies ---
 
 CREATE ROLE "end_user" with PASSWORD 'thex0hDD123b1!';-- Irrelevant pw work around neon, no login allowed
-GRANT "end_user" TO "postgres"; -- "postgres" -- CURRENT_USER
+GRANT "end_user" TO CURRENT_USER; -- "postgres" -- CURRENT_USER
 GRANT "end_user" TO "authenticator";
 GRANT USAGE ON SCHEMA public TO "end_user";
 
@@ -1104,7 +1105,7 @@ CREATE POLICY end_user_access ON public.pipeline TO end_user
 --- Organization policies ---
 
 CREATE ROLE "org" WITH PASSWORD 'thex0hDD123b1!'; -- Irrelevant pw, no login allowed
-GRANT "org" TO "postgres"; --  "postgres"; -- CURRENT_USER
+GRANT "org" TO CURRENT_USER; --  "postgres"; -- CURRENT_USER
 GRANT "end_user" TO "authenticator";
 GRANT USAGE ON SCHEMA public TO "org";
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO "org";
@@ -1384,7 +1385,7 @@ BEGIN
       SELECT FROM pg_catalog.pg_roles
       WHERE  rolname = 'anon') THEN
       create role anon with PASSWORD 'thex0hDD123b1!';
-      grant anon, authenticated to "postgres"; -- CURRENT_USER
+      grant anon, authenticated to CURRENT_USER; -- CURRENT_USER
 
       GRANT USAGE ON SCHEMA public TO "authenticated";
       GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO "authenticated";
@@ -1630,5 +1631,4 @@ USING (
 );
 
 
-;
-
+COMMIT;
