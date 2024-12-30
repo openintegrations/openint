@@ -1,7 +1,34 @@
-import type {FrameMessage} from './common'
-import {zFrameMessage} from './common'
+import {zFrameMessage, type FrameMessage} from './common'
 
 export const OpenIntFrontend = {
+  // TODO: import {Event as OpenIntEvent, zEvent} from '@openint/events'
+  listen: (callback: (event: any) => void) => {
+    // Try to find specific iframe first
+    const targetFrame =
+      (window.frames as unknown as Record<string, Window>)[
+        'openint-connect-frame'
+      ] ||
+      // @ts-expect-error
+      window.document.getElementById('openint-connect-frame')?.contentWindow ||
+      window.frames[0] // Fallback to first iframe if specific frame not found
+
+    if (targetFrame) {
+      // Send to specific iframe if found
+      targetFrame.postMessage('openIntListen', '*')
+    } else {
+      // Fall back to sending to all windows
+      window.postMessage('openIntListen', '*')
+    }
+
+    window.addEventListener('message', (event) => {
+      if (event.data?.type === 'openIntEvent') {
+        callback(event.data.event)
+        return
+      }
+
+      callback(event.data)
+    })
+  },
   openMagicLink: async ({url}: {url: string}) => {
     const features = {
       ...popupLayout(500, 600),

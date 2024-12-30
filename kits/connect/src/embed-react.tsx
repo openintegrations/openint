@@ -50,6 +50,8 @@ export const OpenIntConnectEmbed = React.forwardRef(
           style={{minWidth: '800px'}}
           {...iframeProps}
           ref={forwardedRef}
+          name="openint-connect-frame"
+          id="openint-connect-frame"
           onLoad={() => {
             setLoading(false)
             onReady?.()
