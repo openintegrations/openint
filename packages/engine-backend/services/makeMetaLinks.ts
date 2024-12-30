@@ -1,4 +1,11 @@
-import type {AnyEntityPayload, Id, IDS, OpHandlers, ZRaw} from '@openint/cdk'
+import type {
+  AnyEntityPayload,
+  ConnectionUpdateData,
+  Id,
+  IDS,
+  OpHandlers,
+  ZRaw,
+} from '@openint/cdk'
 import {extractId, handlersLink, IDS_INVERTED, makeId} from '@openint/cdk'
 import type {ObjectPartialDeep} from '@openint/util'
 import {deepMerge, R} from '@openint/util'
@@ -51,7 +58,7 @@ export function makeMetaLinks(metaBase: MetaService) {
   }) =>
     ({
       // TODO: make standard insitution and connection here...
-      connUpdate: async (op) => {
+      connUpdate: async (op: ConnectionUpdateData) => {
         if (op.id !== connection?.id) {
           console.warn(`Unexpected connection id ${op.id} != ${connection?.id}`)
           return

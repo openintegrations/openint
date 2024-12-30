@@ -8063,7 +8063,7 @@
             "type": ["object", "null"],
             "properties": {
               "displayName": {
-                "type": "string"
+                "type": ["string", "null"]
               },
               "status": {
                 "type": ["string", "null"],
@@ -8078,8 +8078,7 @@
                   "type": "string"
                 }
               }
-            },
-            "required": ["displayName"]
+            }
           },
           "disabled": {
             "type": "boolean"

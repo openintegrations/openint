@@ -136,13 +136,20 @@ export const WithConnectorConnect = ({
       const connInput = ccfg.connector.hasPreConnect
         ? (await preConnect.refetch()).data
         : {}
-      console.log(`[OpenIntConnect] ${ccfg.id} connInput`, connInput)
+      console.log(
+        `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id} connInput`,
+        connInput,
+      )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const connOutput = connectFn
         ? await connectFn?.(connInput, {connectorConfigId: ccfg.id})
         : connInput
-      console.log(`[OpenIntConnect] ${ccfg.id} connOutput`, connOutput)
+      console.log(
+        `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id}
+        connOutput`,
+        connOutput,
+      )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const postConnOutput = ccfg.connector.hasPostConnect
