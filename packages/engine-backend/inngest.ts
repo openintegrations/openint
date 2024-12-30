@@ -1,8 +1,8 @@
 import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import {makeId} from '@openint/cdk'
 import {db, schema, sql} from '@openint/db'
+import {eventMapForInngest} from '@openint/events'
 import {makeUlid, R} from '@openint/util'
-import {eventMapForInngest} from './events'
 
 export const persistEventsMiddleware = new InngestMiddleware({
   name: 'Enrich and persist events',

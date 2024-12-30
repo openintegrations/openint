@@ -5,8 +5,9 @@ import type {
 } from '@lilyrose2798/trpc-openapi/dist/generator'
 import {generateOpenApiDocument} from '@lilyrose2798/trpc-openapi/dist/generator'
 import {getServerUrl} from '@openint/app-config/constants'
-import {flatRouter, outgoingWebhookEventMap} from '@openint/engine-backend'
+import {flatRouter} from '@openint/engine-backend'
 import {env} from '@openint/env'
+import {outgoingWebhookEventMap} from '@openint/events'
 import accountingRouter from '@openint/unified-accounting'
 import atsRouter from '@openint/unified-ats'
 import bankingRouter from '@openint/unified-banking'
@@ -147,22 +148,24 @@ export function getOpenAPISpec(includeInternal = true) {
 }
 
 function removeInternalPaths(oas: any): any {
-  const paths = oas.paths;
+  const paths = oas.paths
   const filteredPaths = Object.fromEntries(
-    Object.entries(paths).filter(([_, operations]) =>
-      !Object.values(operations as Record<string, any>).some((operation: any) =>
-        operation.tags?.includes('Internal') ||
-          operation.tags?.includes('Connectors') ||
-          operation.tags?.includes('ETL'),
-      ),
+    Object.entries(paths).filter(
+      ([_, operations]) =>
+        !Object.values(operations as Record<string, any>).some(
+          (operation: any) =>
+            operation.tags?.includes('Internal') ||
+            operation.tags?.includes('Connectors') ||
+            operation.tags?.includes('ETL'),
+        ),
     ),
-  );
+  )
 
   // Return the updated OAS object with filtered paths
   return {
     ...oas,
-    paths: filteredPaths
-  };
+    paths: filteredPaths,
+  }
 }
 
 if (require.main === module) {
