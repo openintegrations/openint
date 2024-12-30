@@ -50,8 +50,14 @@ function copyPgCloudflareAndPatchWorker() {
 
     let workerCode = fs.readFileSync(workerTsPath, 'utf8')
     const insertionMarker = 'const url = new URL(request.url)'
-    const envAssignment =
-      'process.env = Object.assign({}, process.env, env); process.versions.node = "18.19.0"'
+    const commitId = execSync('git rev-parse HEAD')
+      .toString()
+      .trim()
+      .slice(0, 7)
+    const branchName = execSync('git rev-parse --abbrev-ref HEAD')
+      .toString()
+      .trim()
+    const envAssignment = `process.env = Object.assign({}, process.env, env, { VERCEL_GIT_COMMIT_REF: '${commitId}', VERCEL_GIT_COMMIT_BRANCH: '${branchName}' }); process.versions.node = "18.19.0"`
 
     // Only insert if not already present.
     if (!workerCode.includes(envAssignment)) {
