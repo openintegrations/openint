@@ -31,21 +31,16 @@ export function ConnectionCard({
   }
 }) {
   const [isProcessing, setIsProcessing] = React.useState(false)
-
-  const handleReconnect = () => {
+  const handleAction = (action: 'reconnect' | 'delete') => {
     setIsProcessing(true)
-    onReconnect()
+    if (action === 'reconnect') {
+      onReconnect()
+    } else if (action === 'delete') {
+      onDelete({id: conn.id})
+    }
     setTimeout(() => {
       setIsProcessing(false)
     }, 60000) // ok as upon complete it will refresh
-  }
-
-  const handleDelete = () => {
-    setIsProcessing(true)
-    onDelete({id: conn.id})
-    setTimeout(() => {
-      setIsProcessing(false)
-    }, 6000000) // ok as upon complete it will refresh
   }
 
   let connectionName =
@@ -76,13 +71,13 @@ export function ConnectionCard({
               {conn.status !== 'healthy' && isOAuthConnector && (
                 <DropdownMenuItem
                   className="flex cursor-pointer items-center justify-center"
-                  onSelect={() => handleReconnect()}>
+                  onSelect={() => handleAction('reconnect')}>
                   <span className="text-center font-medium">Reconnect</span>
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
                 className="flex cursor-pointer items-center justify-center"
-                onSelect={() => handleDelete()}>
+                onSelect={() => handleAction('delete')}>
                 <span className="text-center font-medium text-red-500">
                   Delete
                 </span>

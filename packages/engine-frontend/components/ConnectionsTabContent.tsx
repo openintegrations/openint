@@ -75,7 +75,6 @@ export function ConnectionsTabContent({
               conn={conn}
               onDelete={deleteConnection}
               onReconnect={openConnect}
-              reset={reset}
             />
           )}
         </WithConnectorConnect>
