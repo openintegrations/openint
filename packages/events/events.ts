@@ -28,7 +28,7 @@ export type OrgProperties = z.infer<typeof zOrgProperties>
 // TODO: Can we learn from trpc to make all the events here easy to refactor across the codebase?
 export const eventMap = {
   // New format for event name. Having `/` is not supported in event names due to slash having
-  // very specific meanning in openapi spec.
+  // very specific meaning in openapi spec.
   'sync.completed': {
     pipeline_id: zId('pipe'),
     source_id: zId('conn'),

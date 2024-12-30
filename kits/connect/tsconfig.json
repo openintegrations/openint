@@ -3,5 +3,5 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "include": ["env.d.ts", "src/index.ts", "src/common.ts"]
+  "include": ["env.d.ts", "src/index.ts", "src/common.ts", "src/popup.ts"]
 }

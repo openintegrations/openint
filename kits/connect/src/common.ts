@@ -12,7 +12,7 @@ export const zFrameMessage = z.discriminatedUnion('type', [
 ])
 export type FrameMessage = z.infer<typeof zFrameMessage>
 
-export const defaultHost = 'https://openint.dev'
+export const defaultHost = 'https://app.openint.dev'
 
 export interface GetIFrameProps {
   baseUrl?: string | null
