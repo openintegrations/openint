@@ -1,3 +1,4 @@
+import {sentryMiddleware} from '@inngest/middleware-sentry'
 import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import {makeId} from '@openint/cdk'
 import {db, schema, sql} from '@openint/db'
@@ -80,5 +81,5 @@ export const inngest = new Inngest({
   // This is needed in the browser otherwise we get failed to execute fetch on Window
   // due to the way Inngest uses this.fetch when invoking fetch
   fetch: globalThis.fetch.bind(globalThis),
-  middleware: [persistEventsMiddleware],
+  middleware: [persistEventsMiddleware, sentryMiddleware()],
 })
