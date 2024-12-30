@@ -50,7 +50,15 @@ export const publicRouter = trpc.router({
    * < {"result":{"data":{"testing_token":"xxxxx"},"}}
    */
   createClerkTestingToken: publicProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/clerk-testing-token',
+        tags: ['Internal'],
+      },
+    })
     .input(z.object({secret: z.string()}))
+    .output(z.object({testing_token: z.string()}))
     .query(async ({input, ctx}) => {
       if (!ctx.env.INTEGRATION_TEST_SECRET) {
         throw new TRPCError({
