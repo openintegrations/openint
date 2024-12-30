@@ -1,7 +1,6 @@
 import type {DrizzleConfig, SQL} from 'drizzle-orm'
 import {sql} from 'drizzle-orm'
 import {drizzle} from 'drizzle-orm/postgres-js'
-import {migrate} from 'drizzle-orm/postgres-js/migrator'
 import postgres from 'postgres'
 import {env} from '@openint/env'
 import * as schema from './schema'
@@ -11,7 +10,7 @@ export * from 'drizzle-orm'
 export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
-export {schema, drizzle, migrate, schemaWip}
+export {schema, drizzle, schemaWip}
 
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
@@ -48,35 +47,6 @@ export async function ensureSchema(
   await thisDb.execute(
     sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};`,
   )
-}
-
-/** Will close the postgres client connection by default */
-export async function runMigration(opts?: {keepAlive?: boolean}) {
-  console.log('[db] Running migrations...')
-  const path = await import('node:path')
-  // const fs = await import('node:fs')
-  // const url = await import('node:url')
-
-  const schema = env['POSTGRES_SCHEMA']
-  if (schema) {
-    await ensureSchema(configDb, schema)
-    await configDb.execute(sql`
-      SET search_path TO ${sql.identifier(schema)};
-    `)
-  }
-
-  // const __filename = url.fileURLToPath(import.meta.url)
-  // const __dirname = path.dirname(__filename)
-  await migrate(configDb, {
-    migrationsFolder: path.join(__dirname, 'migrations'),
-    migrationsSchema: 'public',
-    // Seems to have no impact, and unconditionally creates a drizzle schema... 🤔
-    // migrationsTable: '_migrations',
-  })
-
-  if (!opts?.keepAlive) {
-    await configPg.end()
-  }
 }
 
 export function applyLimitOffset<T>(
