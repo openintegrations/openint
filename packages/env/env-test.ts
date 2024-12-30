@@ -11,7 +11,8 @@ export const testEnv = createEnv({
 
     // MARK: - Not validated, may not be used...
     // Core env vars
-    POSTGRES_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL_UNPOOLED: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
     // Required for worker to work when deployed
     INNGEST_SIGNING_KEY: z.string().optional(),
@@ -63,7 +64,7 @@ export const testEnv = createEnv({
     NEXT_PUBLIC_PORT: process.env['NEXT_PUBLIC_PORT'],
     NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
     PAGE_SIZE: process.env['PAGE_SIZE'],
-    POSTGRES_URL: process.env['POSTGRES_URL'],
+    DATABASE_URL: process.env['DATABASE_URL'],
     PROVIDER_CONFIG_KEY: process.env['PROVIDER_CONFIG_KEY'],
     CONNECTOR_NAME: process.env['CONNECTOR_NAME'],
     SFDC_ACCESS_TOKEN: process.env['SFDC_ACCESS_TOKEN'],
@@ -74,6 +75,7 @@ export const testEnv = createEnv({
     VERTICAL: process.env['VERTICAL'],
     DOCKER_POSTGRES_URL: process.env['DOCKER_POSTGRES_URL'],
     DOCKER_SUPABASE_URL: process.env['DOCKER_SUPABASE_URL'],
+    DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
   },
 })
 

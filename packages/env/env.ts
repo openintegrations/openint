@@ -6,7 +6,8 @@ export const envConfig = {
   server: {
     // MARK: - Not validated, may not be used...
     // Core env vars
-    POSTGRES_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL_UNPOOLED: z.string().optional(),
     // TODO: Incorporate schema in the url itself.
     POSTGRES_SCHEMA: z.string().optional(),
 
@@ -67,7 +68,8 @@ export const envConfig = {
     NEXT_PUBLIC_NANGO_PUBLIC_KEY: process.env['NEXT_PUBLIC_NANGO_PUBLIC_KEY'],
     NEXT_PUBLIC_PORT: process.env['NEXT_PUBLIC_PORT'],
     NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
-    POSTGRES_URL: process.env['POSTGRES_URL'],
+    DATABASE_URL: process.env['DATABASE_URL'],
+    DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
     VERCEL_URL: process.env['VERCEL_URL'],
   }),
 } satisfies Parameters<typeof createEnv>[0]

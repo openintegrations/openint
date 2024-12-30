@@ -1,5 +1,5 @@
 import {z} from '@opensdks/util-zod'
-import {zCustomerId, zId} from './id.types'
+import {zCustomerId, zId, zUserId} from './id.types'
 import {zVerticalKey} from './verticals'
 
 // Utility types
@@ -222,4 +222,18 @@ export const zRaw = {
     })
     .openapi({ref: 'Integration'}),
   // TODO: Add connection_attempts
+  // TODO: Figure out how to add this later
+  event: z
+    .object({
+      // ev_{external_id} i.e. from inngest, clerk, stripe, etc
+      id: zId('evt'),
+      name: z.string(),
+      data: z.record(z.unknown()).nullish(),
+      timestamp: z.date(),
+      user: z.record(z.unknown()).nullish(),
+      org_id: zId('org').nullish(),
+      customer_id: zCustomerId.nullish(),
+      user_id: zUserId.nullish(),
+    })
+    .openapi({ref: 'Event'}),
 }

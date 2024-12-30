@@ -1,0 +1,29 @@
+{
+  "name": "@openint/db",
+  "version": "0.0.0",
+  "private": true,
+  "module": "./index.ts",
+  "scripts": {
+    "clean": "rm -rf ./drizzle",
+    "drizzle-kit": "drizzle-kit",
+    "export": "drizzle-kit export",
+    "introspect": "drizzle-kit introspect",
+    "migrate": "drizzle-kit migrate",
+    "push": "drizzle-kit push"
+  },
+  "dependencies": {
+    "@openint/env": "workspace:*",
+    "drizzle-kit": "^0.30.1",
+    "drizzle-orm": "^0.38.2",
+    "json-stable-stringify": "^1.1.1",
+    "postgres": "^3.4.5",
+    "remeda": "1.6.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@openint/vdk": "workspace:*",
+    "@types/json-stable-stringify": "^1.1.0",
+    "prettier": "3.1.0",
+    "prettier-plugin-sql": "0.18.1"
+  }
+}

@@ -60,7 +60,7 @@ if (require.main === module) {
     jwt: () => makeJwtClient({secretOrPublicKey: env().JWT_SECRET!}),
     pgMeta: () =>
       makePostgresMetaService({
-        databaseUrl: env().POSTGRES_URL,
+        databaseUrl: env().DATABASE_URL,
         viewer: {role: 'system'},
       }) as {},
     plaid: () => makePlaidClient(intConfig('plaid')) as {},

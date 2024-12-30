@@ -17,9 +17,14 @@ export interface MetaTable<
     connectorName?: string | null
     /** Used for search */
     keywords?: string | null
+    /** Used for limiting results to only events after a certain time */
+    since?: number
     /** Pagination, not necessarily supported */
     limit?: number
     offset?: number
+    /** Used for ordering results */
+    orderBy?: string
+    order?: string
   }): Promise<readonly T[]>
   set(id: TID, data: Omit<T, 'id'>): Promise<void>
   patch?(id: TID, partial: ObjectPartialDeep<NoInfer<T>>): Promise<void>

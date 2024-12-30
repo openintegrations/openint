@@ -86,7 +86,7 @@ const deployButton = makeVercelDeployButton({
   'root-directory': 'apps/web',
   'project-name': 'my-openint',
   env: [
-    'POSTGRES_URL',
+    'DATABASE_URL',
     'int_plaid__clientId',
     'int_plaid__secrets__sandbox',
     'JWT_SECRET',

@@ -12,7 +12,7 @@ import {
 } from '@openint/cdk'
 import {TRPCError} from '@openint/trpc'
 import {joinPath, makeUlid, R, Rx, rxjs, z} from '@openint/util'
-import {inngest} from '../events'
+import {inngest} from '../inngest'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {zSyncOptions} from '../types'
 import {protectedProcedure, remoteProcedure, trpc} from './_base'

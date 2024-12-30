@@ -25,7 +25,7 @@ import {rxjs} from '@openint/util'
 import {unifiedAtsLink} from '../../../unified/unified-ats'
 import {unifiedCrmLink} from '../../../unified/unified-crm'
 import {agLink} from '../../custom-links/agLink'
-import {inngest} from '../events'
+import {inngest} from '../inngest'
 import type {zSyncOptions} from '../types'
 import type {AuthProvider} from './AuthProvider'
 import type {

@@ -1,13 +1,14 @@
 import type {inferRouterInputs, inferRouterOutputs} from '@openint/trpc'
 import {trpc} from './_base'
 import {adminRouter} from './adminRouter'
+import {connectionRouter} from './connectionRouter'
 import {connectorConfigRouter} from './connectorConfigRouter'
 import {connectorRouter} from './connectorRouter'
 import {customerRouter} from './customerRouter'
+import {eventRouter} from './eventRouter'
 import {pipelineRouter} from './pipelineRouter'
 import {protectedRouter} from './protectedRouter'
 import {publicRouter} from './publicRouter'
-import {connectionRouter} from './connectionRouter'
 import {syncRouter} from './syncRouter'
 import {systemRouter} from './systemRouter'
 
@@ -24,6 +25,7 @@ export const routers = {
   pipeline: pipelineRouter,
   connector: connectorRouter,
   sync: syncRouter,
+  event: eventRouter,
 }
 
 // Which one is best?
@@ -40,6 +42,7 @@ export const flatRouter = trpc.mergeRouters(
   connectorRouter,
   pipelineRouter,
   syncRouter,
+  eventRouter,
 )
 
 export type FlatRouter = typeof flatRouter

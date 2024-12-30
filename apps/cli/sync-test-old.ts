@@ -75,7 +75,7 @@ switch (process.argv[2]) {
       // @ts-expect-error
       source: postgresProvider.sourceSync({
         settings: {
-          databaseUrl: process.env['POSTGRES_URL'] ?? '',
+          databaseUrl: process.env['DATABASE_URL'] ?? '',
         },
       }),
       destination: heronImpl.destinationSync({

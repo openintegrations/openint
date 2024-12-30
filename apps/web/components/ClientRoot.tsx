@@ -9,6 +9,7 @@ import {TRPCProvider} from '@openint/engine-frontend'
 import {Toaster} from '@openint/ui'
 import {__DEBUG__} from '@/../app-config/constants'
 import {createQueryClient} from '../lib-client/react-query-client'
+import {EventPoller} from './EventPoller'
 import type {AsyncStatus} from './viewer-context'
 import {ViewerContext} from './viewer-context'
 
@@ -91,6 +92,7 @@ export function ClientRoot({
             2) tailwind seems to have issue including .dark color scheme  https://github.com/shadcn/ui/issues/515
              */}
           <ThemeProvider attribute="class" enableSystem defaultTheme="light">
+            <EventPoller accessToken={accessToken} />
             {children}
             <Toaster />
           </ThemeProvider>
