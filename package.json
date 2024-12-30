@@ -24,7 +24,7 @@
     "pgdump": "pg_dump --schema public --schema-only --no-owner --exclude-schema=graphile_migrate --file=tbd/db/schema.sql $DATABASE_URL",
     "worker:setup": "tsx ./bin/openint setupWorker",
     "worker:run": "tsx ./bin/openint runWorker",
-    "env:pull": "vercel env pull --environment development .env.dev && vercel env pull --environment preview .env.pre && vercel env pull --environment production .env.prod"
+    "env:pull": "vercel env pull --environment development .env.dev && vercel env pull --environment preview --git-branch $(git rev-parse --abbrev-ref HEAD) .env.pre && vercel env pull --environment production .env.prod"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx,json,css,yml,yaml}": "prettier --write",
