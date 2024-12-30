@@ -1,3 +1,4 @@
+// TODO: separate this into a separate package so it is independent of next.js
 import '@openint/app-config/register.node'
 import {contextFactory} from '@openint/app-config/backendConfig'
 import {flatRouter} from '@openint/engine-backend'

@@ -1,7 +1,7 @@
 import {extractId, zStandard} from '@openint/cdk'
+import {zEvent} from '@openint/events'
 import {TRPCError} from '@openint/trpc'
 import {R, z} from '@openint/util'
-import {zEvent} from '../events'
 import {inngest} from '../inngest'
 import {protectedProcedure, trpc} from './_base'
 

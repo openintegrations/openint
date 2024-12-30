@@ -1,7 +1,7 @@
 import {PostHog} from 'posthog-node'
 import {env} from '@openint/app-config/env'
 import {zUserId} from '@openint/cdk'
-import {zEvent, zUserTraits} from '@openint/engine-backend/events'
+import {zEvent, zUserTraits} from '@openint/events'
 import {noopFunctionMap, z, zFunction} from '@openint/util'
 
 export const makeServerAnalytics = zFunction(z.string(), (writeKey: string) => {

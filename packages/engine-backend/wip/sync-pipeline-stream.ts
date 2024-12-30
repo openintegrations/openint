@@ -1,7 +1,7 @@
 import {compact} from 'remeda'
-import type {_PipelineExpanded} from '@openint/engine-backend/services/dbService'
 import {initOpenIntSDK} from '@openint/sdk'
 import type {unified} from '@openint/unified-etl'
+import type {_PipelineExpanded} from '../services/dbService'
 import {flatMap, noopWritable, streamFromIterable, tap} from './stream'
 
 type Source = ReadableStream<unified.Message>
