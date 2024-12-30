@@ -517,6 +517,9 @@ importers:
       '@openint/engine-frontend':
         specifier: workspace:*
         version: link:../../packages/engine-frontend
+      '@openint/events':
+        specifier: workspace:*
+        version: link:../../tbd/events
       '@openint/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -2195,9 +2198,13 @@ importers:
 
   tbd/events:
     dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
       '@opensdks/util-zod':
         specifier: 0.0.15
         version: 0.0.15
+    devDependencies:
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.6.2)
