@@ -45,6 +45,10 @@ export const publicRouter = trpc.router({
     .output(z.unknown())
     .query(() => R.mapValues(zRaw, (zodSchema) => zodToOas31Schema(zodSchema))),
 
+  /**
+   * > http://localhost:4000/api/trpc/createClerkTestingToken?input={"secret": "$secret"}
+   * < {"result":{"data":{"testing_token":"xxxxx"},"}}
+   */
   createClerkTestingToken: publicProcedure
     .input(z.object({secret: z.string()}))
     .query(async ({input, ctx}) => {
