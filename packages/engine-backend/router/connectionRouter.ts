@@ -34,7 +34,11 @@ const zExpandConnector = z.object({
   logoUrl: z.string().url(),
 })
 
-async function performConnectionCheck(ctx: any, connId: string, opts: any) {
+export async function performConnectionCheck(
+  ctx: any,
+  connId: string,
+  opts: any,
+) {
   const remoteCtx = await getRemoteContext({
     ...ctx,
     remoteConnectionId: connId,
@@ -51,8 +55,13 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
       webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
     },
   })
-
-  if (connUpdate || opts?.import !== false) {
+  if (
+    conn?.settings?.error ||
+    connUpdate ||
+    opts?.import !== false ||
+    remoteCtx.remote.settings?.oauth?.error
+  ) {
+    /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       customerId: conn.customerId ?? undefined,
       integration: conn.integrationId

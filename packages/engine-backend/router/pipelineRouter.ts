@@ -1,5 +1,12 @@
-import type {ZRaw} from '@openint/cdk'
-import {extractId, zCustomerId, zId, zRaw, zStandard} from '@openint/cdk'
+import type {ZRaw, ZStandard} from '@openint/cdk'
+import {
+  extractId,
+  oauthBaseSchema,
+  zCustomerId,
+  zId,
+  zRaw,
+  zStandard,
+} from '@openint/cdk'
 import {R, z} from '@openint/util'
 import {inngest} from '../inngest'
 import {zSyncOptions} from '../types'
@@ -65,7 +72,6 @@ export const pipelineRouter = trpc.router({
     .input(zListParams.extend({customerId: zCustomerId.optional()}).optional())
     .query(async ({input = {}, ctx}) => {
       // Add info about what it takes to `reconnect` here for connections which
-      // has disconnected
       const connections =
         await ctx.services.metaService.tables.connection.list(input)
       const [integrations, _pipelines] = await Promise.all([
@@ -75,11 +81,37 @@ export const pipelineRouter = trpc.router({
         ctx.services.metaService.findPipelines({
           connectionIds: connections.map((c) => c.id),
         }),
+        // We used to check connection health here, but we're moving it to async in future
+        // ...connections.map((c) => performConnectionCheck(ctx, c.id, {})),
       ])
       type ConnType = 'source' | 'destination'
 
       const intById = R.mapToObj(integrations, (ins) => [ins.id, ins])
 
+      function defaultConnectionMapper(
+        conn: ZRaw['connection'],
+      ): Omit<ZStandard['connection'], 'id'> {
+        const settings = oauthBaseSchema.connectionSettings.safeParse(
+          conn.settings,
+        )
+
+        if (!settings.success) {
+          // no op
+          return {
+            ...conn,
+            status: 'healthy',
+          }
+        }
+
+        return {
+          ...conn,
+          status: settings?.data?.error?.code
+            ? //  TODO: extend to more states, i.e. code === 'refresh_token_external_error' should be reconnected
+              'disconnected'
+            : 'healthy', // default
+          statusMessage: settings?.data?.error?.message,
+        }
+      }
       function parseConnection(conn?: (typeof connections)[number] | null) {
         if (!conn) {
           return conn
@@ -87,10 +119,13 @@ export const pipelineRouter = trpc.router({
         const connectorName = extractId(conn.id)[1]
         const integrations = intById[conn.integrationId!]
         const mappers = ctx.connectorMap[connectorName]?.standardMappers
-        const standardReso = zStandard.connection
-          .omit({id: true})
+        const standardConn = zStandard.connection
+          .omit({id: true, settings: true})
           .nullish()
-          .parse(mappers?.connection?.(conn.settings))
+          .parse(
+            mappers?.connection?.(conn.settings) ||
+              defaultConnectionMapper(conn),
+          )
         const standardInt =
           // QQ: what are the implications for external data integrations UI rendering of using this either or ?? and also returning the id?
           integrations?.standard ??
@@ -103,11 +138,11 @@ export const pipelineRouter = trpc.router({
 
         return {
           ...conn,
-          ...standardReso,
+          ...standardConn,
           id: conn.id,
           displayName:
             conn.displayName ||
-            standardReso?.displayName ||
+            standardConn?.displayName ||
             standardInt?.name ||
             '',
           integration:
@@ -135,6 +170,10 @@ export const pipelineRouter = trpc.router({
           const type: ConnType | null = r.id.startsWith('conn_postgres')
             ? 'destination'
             : 'source'
+
+          // removing settings to avoid leaking secrets
+          delete r.settings
+
           return {
             ...r,
             syncInProgress: pipes.some((p) => p.syncInProgress),

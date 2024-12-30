@@ -307,6 +307,10 @@ export const customerRouter = trpc.router({
             customerId:
               ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
             triggerDefaultSync,
+            settings: {
+              ...connUpdate?.settings,
+              error: connUpdate?.settings?.['error'] || null,
+            },
           },
         )
 

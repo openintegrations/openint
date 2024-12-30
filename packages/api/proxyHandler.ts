@@ -20,6 +20,7 @@ export const proxyHandler = async (req: Request) => {
       new Date()
     : false
 
+  // TODO: this logic is potentially being duplicated in the getRemoteContext call
   if (credentialsExpired && remoteContext.remoteConnectionId) {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
