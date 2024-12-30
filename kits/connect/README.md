@@ -13,3 +13,9 @@ In addition, should be usable from
 
 - Vanilla JS
 - React
+
+## Release process
+
+```
+pnpm build && pnpm pub
+```
