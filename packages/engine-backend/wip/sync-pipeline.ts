@@ -1,8 +1,8 @@
 import {compact} from 'remeda'
 import * as rx from 'rxjs'
-import type {_PipelineExpanded} from '@openint/engine-backend/services/dbService'
 import {initOpenIntSDK} from '@openint/sdk'
 import type {unified} from '@openint/unified-etl'
+import type {_PipelineExpanded} from '../services/dbService'
 
 type Source = rx.Observable<unified.Message>
 type Link = (obs: Source) => Source

@@ -510,7 +510,7 @@ importers:
         version: link:../../connectors/connector-postgres
       '@openint/db':
         specifier: workspace:*
-        version: link:../../tbd/db
+        version: link:../../packages/db
       '@openint/engine-backend':
         specifier: workspace:*
         version: link:../../packages/engine-backend
@@ -1086,7 +1086,7 @@ importers:
         version: link:../../kits/cdk
       '@openint/db':
         specifier: workspace:*
-        version: link:../../tbd/db
+        version: link:../../packages/db
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
@@ -1639,6 +1639,43 @@ importers:
         specifier: ^3.4.5
         version: 3.4.5
 
+  packages/db:
+    dependencies:
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../env
+      drizzle-kit:
+        specifier: ^0.30.1
+        version: 0.30.1
+      drizzle-orm:
+        specifier: ^0.38.2
+        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+      json-stable-stringify:
+        specifier: ^1.1.1
+        version: 1.1.1
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
+      remeda:
+        specifier: 1.6.1
+        version: 1.6.1
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+      '@types/json-stable-stringify':
+        specifier: ^1.1.0
+        version: 1.1.0
+      prettier:
+        specifier: 3.1.0
+        version: 3.1.0
+      prettier-plugin-sql:
+        specifier: 0.18.1
+        version: 0.18.1(prettier@3.1.0)
+
   packages/engine-backend:
     dependencies:
       '@openint/cdk':
@@ -1646,7 +1683,10 @@ importers:
         version: link:../../kits/cdk
       '@openint/db':
         specifier: workspace:*
-        version: link:../../tbd/db
+        version: link:../db
+      '@openint/events':
+        specifier: workspace:*
+        version: link:../../tbd/events
       '@openint/trpc':
         specifier: workspace:*
         version: link:../trpc
@@ -1668,6 +1708,9 @@ importers:
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.6.2)
+      rxjs:
+        specifier: 7.5.6
+        version: 7.5.6
       zod-openapi:
         specifier: 2.14.0
         version: 2.14.0(zod@3.22.4)
@@ -1678,6 +1721,9 @@ importers:
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
         version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.22.4)
+      '@openint/unified-etl':
+        specifier: workspace:*
+        version: link:../../unified/unified-etl
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
@@ -1800,7 +1846,7 @@ importers:
         version: link:../../connectors/connector-postgres
       '@openint/db':
         specifier: workspace:*
-        version: link:../../tbd/db
+        version: link:../db
       '@openint/util':
         specifier: workspace:*
         version: link:../util
@@ -2147,43 +2193,6 @@ importers:
         specifier: 1.3.1
         version: 1.3.1
 
-  tbd/db:
-    dependencies:
-      '@openint/env':
-        specifier: workspace:*
-        version: link:../../packages/env
-      drizzle-kit:
-        specifier: ^0.30.1
-        version: 0.30.1
-      drizzle-orm:
-        specifier: ^0.38.2
-        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
-      json-stable-stringify:
-        specifier: ^1.1.1
-        version: 1.1.1
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.5
-      remeda:
-        specifier: 1.6.1
-        version: 1.6.1
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
-    devDependencies:
-      '@openint/vdk':
-        specifier: workspace:*
-        version: link:../../kits/vdk
-      '@types/json-stable-stringify':
-        specifier: ^1.1.0
-        version: 1.1.0
-      prettier:
-        specifier: 3.1.0
-        version: 3.1.0
-      prettier-plugin-sql:
-        specifier: 0.18.1
-        version: 0.18.1(prettier@3.1.0)
-
   tbd/events:
     dependencies:
       '@opensdks/util-zod':
@@ -2192,58 +2201,6 @@ importers:
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.6.2)
-
-  tbd/worker:
-    dependencies:
-      '@openint/api':
-        specifier: workspace:*
-        version: link:../../packages/api
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/db':
-        specifier: workspace:*
-        version: link:../db
-      '@openint/env':
-        specifier: workspace:*
-        version: link:../../packages/env
-      '@openint/events':
-        specifier: workspace:*
-        version: link:../events
-      '@openint/sdk':
-        specifier: workspace:*
-        version: link:../../kits/sdk
-      '@openint/sync':
-        specifier: workspace:*
-        version: link:../../kits/sync
-      '@openint/unified-etl':
-        specifier: workspace:*
-        version: link:../../unified/unified-etl
-      drizzle-orm:
-        specifier: ^0.38.2
-        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
-      inngest:
-        specifier: ^3.22.13
-        version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.6.2)
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.5
-      remeda:
-        specifier: 1.6.1
-        version: 1.6.1
-      rxjs:
-        specifier: 7.5.6
-        version: 7.5.6
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
-    devDependencies:
-      '@openint/engine-backend':
-        specifier: workspace:*
-        version: link:../../packages/engine-backend
-      drizzle-kit:
-        specifier: ^0.30.1
-        version: 0.30.1
 
   unified/unified-accounting:
     dependencies:
