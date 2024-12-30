@@ -112,7 +112,7 @@ describe('sql generation', () => {
 
 describe('test db', () => {
   // console.log('filename', __filename)
-  const dbName = 'tbd_db'
+  const dbName = 'db_index'
 
   // TODO: Add me back in once we know CI is working
   beforeAll(async () => {
