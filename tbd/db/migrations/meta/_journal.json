@@ -29,6 +29,13 @@
       "when": 1735506679856,
       "tag": "0003_migration_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1735516862304,
+      "tag": "0004_defer_constraints",
+      "breakpoints": true
     }
   ]
 }

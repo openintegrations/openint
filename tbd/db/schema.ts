@@ -301,14 +301,14 @@ export const connector_config = pgTable(
       columns: [table.default_pipe_in_source_id],
       foreignColumns: [_connection.id],
       name: 'fk_default_pipe_in_source_id',
-    })
+    }) // deferred, but not supported in drizzle https://github.com/drizzle-team/drizzle-orm/issues/1429
       .onUpdate('restrict')
       .onDelete('restrict'),
     foreignKey({
       columns: [table.default_pipe_out_destination_id],
       foreignColumns: [_connection.id],
       name: 'fk_default_pipe_out_destination_id',
-    })
+    }) // deferred, but not supported in drizzle https://github.com/drizzle-team/drizzle-orm/issues/1429
       .onUpdate('restrict')
       .onDelete('restrict'),
     check('connector_config_id_prefix_check', sql`starts_with(id, 'ccfg_')`),
