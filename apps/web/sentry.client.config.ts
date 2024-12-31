@@ -13,7 +13,7 @@ const NODE_ENV = process.env.NODE_ENV || process.env['NEXT_PUBLIC_NODE_ENV']
 
 ;(globalThis as any).NODE_ENV = NODE_ENV
 
-export function getSentryEnvironment() {
+export function getEnvironment() {
   const serverUrl =
     process.env['NEXT_PUBLIC_SERVER_URL'] || process.env['VERCEL_URL']
   const vercelBranchUrl = process.env['VERCEL_BRANCH_URL']
@@ -34,24 +34,24 @@ if (!SENTRY_DSN) {
     dsn: SENTRY_DSN,
     // Adjust this value in production, or use tracesSampler for greater control
     tracesSampleRate: 1.0,
+    integrations: [Sentry.captureConsoleIntegration()],
     // ...
     // Note: if you want to override the automatic release value, do not set a
     // `release` value here - use the environment variable `SENTRY_RELEASE`, so
     // that it will also get attached to your source maps
-    integrations: R.compact([
-      // @see https://share.cleanshot.com/zz9KPwZh
-      // https://share.cleanshot.com/zz9KPwZh
-      Sentry.captureConsoleIntegration(),
-      process.env['NEXT_PUBLIC_SENTRY_ORG'] &&
-        new posthog.SentryIntegration(
-          posthog,
-          // We really need a better way to access env var (and zod validation in general)
-          // that is actually readable...
-          z.string().parse(process.env['NEXT_PUBLIC_SENTRY_ORG']),
-          z.number().parse(Number.parseInt(SENTRY_DSN?.split('/').pop() ?? '')),
-        ),
-    ]),
-    environment: getSentryEnvironment(),
+    // integrations: R.compact([
+    //   // @see https://share.cleanshot.com/zz9KPwZh
+    //   // https://share.cleanshot.com/zz9KPwZh
+    //   process.env['NEXT_PUBLIC_SENTRY_ORG'] &&
+    //     new posthog.SentryIntegration(
+    //       posthog,
+    //       // We really need a better way to access env var (and zod validation in general)
+    //       // that is actually readable...
+    //       z.string().parse(process.env['NEXT_PUBLIC_SENTRY_ORG']),
+    //       z.number().parse(Number.parseInt(SENTRY_DSN?.split('/').pop() ?? '')),
+    //     ),
+    // ]),
+    environment: getEnvironment(),
   })
   Sentry.setTags({
     'vercel.env':
