@@ -52,11 +52,22 @@ export const trpc = initTRPC
   .create({
     allowOutsideOfServer: true,
     errorFormatter(opts) {
-      const {shape, error} = opts
+      let {shape, error} = opts
       if (!(error.cause?.name === 'HTTPError')) {
         return shape
       }
       const cause = error.cause as unknown as {response: {data: unknown} | null}
+
+      if (process.env.NODE_ENV === 'production' && shape.data.stack) {
+        shape.data.stack = undefined
+      }
+
+      if (shape.message.includes('provider_config_key')) {
+        const match = shape.message.match(/\[(\d{3})\s/)
+        const statusCode = match?.[1] ?? 'unknown'
+        shape.message = `Provider Config Error ${statusCode}`
+        console.debug('Provider Config Error', shape.message)
+      }
 
       // We cannot use the errorFormatter to modify here because trpc-openapi does not respect data.httpStatus field
       // so we need to catch it further upstream. But we can add some fields... Maybe we need an explicit className field?
@@ -64,14 +75,15 @@ export const trpc = initTRPC
         // This doesn't seem to work so well in prod as name can be mangled...
         class: error.constructor.name,
         ...shape,
-        data: cause.response
-          ? {
-              ...cause.response,
-              // Renaming body to be nicer. otherwise we end up with data.data
-              data: undefined,
-              body: cause.response.data,
-            }
-          : shape.data,
+        data:
+          cause.response || shape.message.includes('provider_config_key')
+            ? {
+                ...cause.response,
+                // Renaming body to be nicer. otherwise we end up with data.data
+                data: undefined,
+                body: cause.response?.data,
+              }
+            : shape.data,
       }
     },
     // if (error instanceof NoLongerAuthenticatedError) {
