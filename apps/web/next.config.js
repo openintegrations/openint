@@ -4,6 +4,9 @@ const {withSentryConfig} = require('@sentry/nextjs')
 
 const connectorInfos = require('../app-config/connectors/meta')
 
+const isDevOrStaging =
+  process.env.NODE_ENV !== 'production' ||
+  process.env['VERCEL_URL'] == 'openint-git-main-openint-dev.vercel.app'
 /**
  * Meta: change from `@type` to @satisfies once ts 5.0 is out
  * @type {import('next').NextConfig}
@@ -98,24 +101,27 @@ const nextConfig = {
   productionBrowserSourceMaps: true, // Let's see if this helps with Sentry... We are OSS anyways so doesn't matter too much if source code is "leaked" to client
   headers: async () => [
     {
-      source: "/",
+      source: '/',
       headers: [
         {
-          key: "Access-Control-Allow-Origin",
-          value: "*", // Allow any origin 
+          key: 'Access-Control-Allow-Origin',
+          value: '*', // Allow any origin
         },
         {
-          key: "Access-Control-Allow-Methods",
-          value: "GET, POST, PUT, DELETE, OPTIONS",
+          key: 'Access-Control-Allow-Methods',
+          value: 'GET, POST, PUT, DELETE, OPTIONS',
         },
         {
-          key: "Access-Control-Allow-Headers",
-          value: "Content-Type, Authorization",
+          key: 'Access-Control-Allow-Headers',
+          value: 'Content-Type, Authorization',
+        },
+        isDevOrStaging && {
+          key: 'Cross-Origin-Embedder-Policy',
+          value: 'unsafe-none',
         },
       ],
     },
   ],
-
 }
 
 module.exports = nextConfig
