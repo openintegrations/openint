@@ -28,7 +28,7 @@ export const envConfig = {
     // Variables set by Vercel when deployed
     VERCEL_URL: z.string().optional(),
     VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
-    STABLY_CLERK_TESTING_TOKEN_SECRET: z.string().optional(),
+    INTEGRATION_TEST_SECRET: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -72,8 +72,7 @@ export const envConfig = {
     DATABASE_URL: process.env['DATABASE_URL'],
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
     VERCEL_URL: process.env['VERCEL_URL'],
-    STABLY_CLERK_TESTING_TOKEN_SECRET:
-      process.env['STABLY_CLERK_TESTING_TOKEN_SECRET'],
+    INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 

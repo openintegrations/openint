@@ -158,7 +158,7 @@ export function Sidebar({className, hasPgConnection}: SidebarProps) {
           ))}
         </div>
       </ScrollArea>
-      <div className="mt-auto p-4">
+      <div className="mt-auto p-7">
       <Button 
     variant="default" 
     size="sm" 

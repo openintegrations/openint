@@ -1,5 +1,6 @@
 import {z} from '@opensdks/util-zod'
-import {zCustomerId, zRaw, ZRaw} from '@openint/cdk'
+import type {ZRaw} from '@openint/cdk'
+import {zCustomerId, zRaw} from '@openint/cdk'
 import {protectedProcedure, trpc} from '@openint/trpc'
 import {zPaginatedResult, zPaginationParams} from '@openint/vdk'
 
