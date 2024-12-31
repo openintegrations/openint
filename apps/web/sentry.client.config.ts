@@ -13,9 +13,14 @@ const NODE_ENV = process.env.NODE_ENV || process.env['NEXT_PUBLIC_NODE_ENV']
 
 ;(globalThis as any).NODE_ENV = NODE_ENV
 
-function getEnvironment() {
-  const serverUrl = process.env['NEXT_PUBLIC_SERVER_URL']
-  if (!serverUrl) {
+export function getSentryEnvironment() {
+  const serverUrl =
+    process.env['NEXT_PUBLIC_SERVER_URL'] || process.env['VERCEL_URL']
+  const vercelBranchUrl = process.env['VERCEL_BRANCH_URL']
+  const vercelBranchIsMainOrProduction =
+    vercelBranchUrl?.includes('main') || vercelBranchUrl?.includes('production')
+
+  if (!serverUrl || !vercelBranchIsMainOrProduction) {
     return undefined
   }
   return serverUrl.split('://')[1]
@@ -29,6 +34,7 @@ if (!SENTRY_DSN) {
     dsn: SENTRY_DSN,
     // Adjust this value in production, or use tracesSampler for greater control
     tracesSampleRate: 1.0,
+    integrations: [Sentry.captureConsoleIntegration()],
     // ...
     // Note: if you want to override the automatic release value, do not set a
     // `release` value here - use the environment variable `SENTRY_RELEASE`, so
@@ -45,7 +51,7 @@ if (!SENTRY_DSN) {
     //       z.number().parse(Number.parseInt(SENTRY_DSN?.split('/').pop() ?? '')),
     //     ),
     // ]),
-    environment: getEnvironment(),
+    environment: getSentryEnvironment(),
   })
   Sentry.setTags({
     'vercel.env':

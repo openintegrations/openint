@@ -9,6 +9,7 @@ import type {
   MetaTable,
 } from '@openint/engine-backend'
 import {R, zFunction} from '@openint/util'
+import {__DEBUG__} from '../../apps/app-config/constants'
 
 /**
  * This sets the postgres grand unified config (GUC) and determines the identity
@@ -55,7 +56,7 @@ type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const {viewer, databaseUrl} = opts
 
-  const db = drizzle(databaseUrl, {logger: true})
+  const db = drizzle(databaseUrl, {logger: __DEBUG__})
   type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
 
   return {
@@ -229,7 +230,7 @@ export const makePostgresMetaService = zFunction(
               continue
             }
             const connDb = drizzle(connection['database_url'] as string, {
-              logger: true,
+              logger: __DEBUG__,
             })
             const res = await connDb.execute(sql`SELECT 1`)
             if (res.length !== 1) {
