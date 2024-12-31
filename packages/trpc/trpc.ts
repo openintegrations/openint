@@ -52,7 +52,7 @@ export const trpc = initTRPC
   .create({
     allowOutsideOfServer: true,
     errorFormatter(opts) {
-      let {shape, error} = opts
+      const {shape, error} = opts
       if (!(error.cause?.name === 'HTTPError')) {
         return shape
       }
