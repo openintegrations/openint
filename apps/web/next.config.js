@@ -115,11 +115,16 @@ const nextConfig = {
           key: 'Access-Control-Allow-Headers',
           value: 'Content-Type, Authorization',
         },
-        isDevOrStaging && {
-          key: 'Cross-Origin-Embedder-Policy',
-          value: 'unsafe-none',
-        },
-      ],
+      ].concat(
+        isDevOrStaging
+          ? [
+              {
+                key: 'Cross-Origin-Embedder-Policy',
+                value: 'unsafe-none',
+              },
+            ]
+          : [],
+      ),
     },
   ],
 }
