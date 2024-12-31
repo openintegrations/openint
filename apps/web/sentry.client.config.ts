@@ -13,6 +13,14 @@ const NODE_ENV = process.env.NODE_ENV || process.env['NEXT_PUBLIC_NODE_ENV']
 
 ;(globalThis as any).NODE_ENV = NODE_ENV
 
+function getEnvironment() {
+  const serverUrl = process.env['NEXT_PUBLIC_SERVER_URL']
+  if (!serverUrl) {
+    return undefined
+  }
+  return serverUrl.split('://')[1]
+}
+
 if (!SENTRY_DSN) {
   console.warn('SENTRY_DSN not set, skipping sentry initialization')
 } else {
@@ -37,6 +45,7 @@ if (!SENTRY_DSN) {
     //       z.number().parse(Number.parseInt(SENTRY_DSN?.split('/').pop() ?? '')),
     //     ),
     // ]),
+    environment: getEnvironment(),
   })
   Sentry.setTags({
     'vercel.env':
