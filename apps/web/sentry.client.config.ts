@@ -13,7 +13,7 @@ const NODE_ENV = process.env.NODE_ENV || process.env['NEXT_PUBLIC_NODE_ENV']
 
 ;(globalThis as any).NODE_ENV = NODE_ENV
 
-export function getEnvironment() {
+export function getSentryEnvironment() {
   const serverUrl =
     process.env['NEXT_PUBLIC_SERVER_URL'] || process.env['VERCEL_URL']
   const vercelBranchUrl = process.env['VERCEL_BRANCH_URL']
@@ -51,7 +51,7 @@ if (!SENTRY_DSN) {
     //       z.number().parse(Number.parseInt(SENTRY_DSN?.split('/').pop() ?? '')),
     //     ),
     // ]),
-    environment: getEnvironment(),
+    environment: getSentryEnvironment(),
   })
   Sentry.setTags({
     'vercel.env':
