@@ -22,6 +22,10 @@ export interface paths {
     /** Health check */
     get: operations['health']
   }
+  '/clerk-testing-token': {
+    /** Create clerk testing token */
+    get: operations['createClerkTestingToken']
+  }
   '/connect/token': {
     /** Create a connect token */
     post: operations['createConnectToken']
@@ -1328,6 +1332,42 @@ export interface operations {
           'application/json': {
             healthy: boolean
             error?: string
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Create clerk testing token */
+  createClerkTestingToken: {
+    parameters: {
+      query: {
+        secret: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            testing_token: string
           }
         }
       }

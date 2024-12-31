@@ -5,6 +5,7 @@
   "sideEffects": false,
   "module": "./index.ts",
   "dependencies": {
+    "@inngest/middleware-sentry": "^0.1.1",
     "@openint/cdk": "workspace:*",
     "@openint/db": "workspace:*",
     "@openint/events": "workspace:*",

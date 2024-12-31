@@ -1681,6 +1681,9 @@ importers:
 
   packages/engine-backend:
     dependencies:
+      '@inngest/middleware-sentry':
+        specifier: ^0.1.1
+        version: 0.1.1(@sentry/core@8.33.1)(@sentry/types@8.33.1)(inngest@3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.6.2))
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
@@ -3335,6 +3338,13 @@ packages:
     peerDependenciesMeta:
       '@vue/compiler-sfc':
         optional: true
+
+  '@inngest/middleware-sentry@0.1.1':
+    resolution: {integrity: sha512-GxNnuE/TKZuKB1LsdEOZr3csdgB/fYy/HDx6oGpa88Oyvps3qzMMVrpxgyPshfsj55pzzzJNfiVaWjc4mLc9Zg==}
+    peerDependencies:
+      '@sentry/core': '>=8.0.0'
+      '@sentry/types': '>=8.0.0'
+      inngest: '>=3.0.0'
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -15019,6 +15029,12 @@ snapshots:
       semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
+
+  '@inngest/middleware-sentry@0.1.1(@sentry/core@8.33.1)(@sentry/types@8.33.1)(inngest@3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.6.2))':
+    dependencies:
+      '@sentry/core': 8.33.1
+      '@sentry/types': 8.33.1
+      inngest: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.6.2)
 
   '@isaacs/cliui@8.0.2':
     dependencies:
