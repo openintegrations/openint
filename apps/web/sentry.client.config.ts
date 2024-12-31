@@ -14,8 +14,13 @@ const NODE_ENV = process.env.NODE_ENV || process.env['NEXT_PUBLIC_NODE_ENV']
 ;(globalThis as any).NODE_ENV = NODE_ENV
 
 function getEnvironment() {
-  const serverUrl = process.env['NEXT_PUBLIC_SERVER_URL']
-  if (!serverUrl) {
+  const serverUrl =
+    process.env['NEXT_PUBLIC_SERVER_URL'] || process.env['VERCEL_URL']
+  const vercelBranchUrl = process.env['VERCEL_BRANCH_URL']
+  const vercelBranchIsMainOrProduction =
+    vercelBranchUrl?.includes('main') || vercelBranchUrl?.includes('production')
+
+  if (!serverUrl || !vercelBranchIsMainOrProduction) {
     return undefined
   }
   return serverUrl.split('://')[1]
