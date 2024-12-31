@@ -66,7 +66,7 @@ export const trpc = initTRPC
         const match = shape.message.match(/\[(\d{3})\s/)
         const statusCode = match?.[1] ?? 'unknown'
         shape.message = `Provider Config Error ${statusCode}`
-        console.debug('Provider Config Error', shape.message)
+        console.log('Provider Config Error', shape.message)
       }
 
       // We cannot use the errorFormatter to modify here because trpc-openapi does not respect data.httpStatus field
