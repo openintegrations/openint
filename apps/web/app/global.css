@@ -12,7 +12,7 @@
     --background: hsl(0, 0%, 100%);
     --foreground: hsl(250, 12%, 20%);
 
-    --muted: hsl(220, 41%, 75%);
+    --muted: hsl(0, 0%, 95%);
     --muted-foreground: hsl(235, 16%, 29%);
 
     --popover: hsl(0, 0%, 100%);
@@ -34,7 +34,7 @@
     --secondary: hsl(0, 0%, 100%);
     --secondary-foreground: hsl(250, 12%, 20%);
 
-    --accent: hsl(210, 51%, 78%);
+    --accent: hsl(0, 0%, 95%);
     --accent-foreground: hsl(250, 12%, 20%);
 
     --destructive: hsl(0, 100%, 50%);
@@ -57,6 +57,17 @@
     --tab: hsl(0, 0%, 100%);
     --navbar: hsl(0, 0%, 100%);
     --sidebar: hsl(0, 0%, 100%);
+
+    
+    --toast-bg-default: hsl(0, 0%, 100%);
+    --toast-border-default: hsl(220, 25%, 86%);
+    --toast-bg-success: hsl(134, 58%, 47%);
+    --toast-border-success: hsl(134, 79%, 32%); 
+    --toast-bg-loading: hsl(60, 100%, 90%);
+    --toast-border-loading: hsl(60, 100%, 80%);
+    --toast-bg-destructive: hsl(0, 100%, 63%); 
+    --toast-border-destructive: hsl(0, 60%, 55%);
+    --toast-foreground: hsl(0, 0%, 100%);
   }
 
   .dark {
@@ -103,6 +114,17 @@
     --tab: hsl(0, 0%, 14%);
     --navbar: hsl(0, 0%, 100%);
     --sidebar: hsl(0, 0%, 100%);
+
+  
+    --toast-bg-default: hsl(0, 0%, 14%);
+    --toast-border-default: hsl(0, 0%, 20%);
+    --toast-bg-success: hsl(138, 41%, 25%); 
+    --toast-border-success: hsl(138, 47%, 48%);
+    --toast-bg-loading: hsl(60, 40%, 30%); 
+    --toast-border-loading: hsl(60, 40%, 25%);
+    --toast-bg-destructive: hsl(0, 50%, 28%);
+    --toast-border-destructive: hsl(0, 41%, 50%);
+    --toast-foreground: hsl(0, 0%, 100%);
   }
 }
 
