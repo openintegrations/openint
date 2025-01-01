@@ -15,7 +15,7 @@ export const browserAnalytics = {
       console.warn('No write key provided, analytics will be noop')
     }
     posthog.init(writeKey, {
-      api_host: '/_posthog',
+      api_host: 'https://eu.i.posthog.com',
       autocapture: true,
       loaded: () => {
         posthog.register({environment: getSentryEnvironment()})
