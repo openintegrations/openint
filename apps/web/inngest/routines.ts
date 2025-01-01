@@ -59,6 +59,8 @@ export async function scheduleSyncs({step}: FunctionInput<never>) {
       scheduledCount: pipelines.length,
       // For debugging
       // sentryCheckinId: checkinId,
+
+      // NOTE: this has not been rotated since we moved to the new sentry org yet
       // sentryMonitorId: backendEnv.SENTRY_CRON_MONITOR_ID,
     }
   })
