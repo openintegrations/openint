@@ -203,7 +203,7 @@ export function inferTableForUpsert(
 }
 
 // TODO: dedupe with hubspot/utils.ts
-const removeUndefinedValues = <T extends Record<string, unknown>>(
+export const removeUndefinedValues = <T extends Record<string, unknown>>(
   obj: T,
 ): {[k in keyof T]: Exclude<T[k], undefined>} =>
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
