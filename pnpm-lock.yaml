@@ -1243,6 +1243,49 @@ importers:
         specifier: 5.3.5
         version: 5.3.5
 
+  connectors/connector-starbase:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/connector-postgres':
+        specifier: workspace:*
+        version: link:../connector-postgres
+      '@openint/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      drizzle-kit:
+        specifier: ^0.30.1
+        version: 0.30.1
+      drizzle-orm:
+        specifier: ^0.38.2
+        version: 0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+      drizzle-starbase:
+        specifier: ^0.1.0
+        version: 0.1.0(drizzle-orm@0.38.2(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1))
+      handlebars:
+        specifier: 4.7.7
+        version: 4.7.7
+      json-stable-stringify:
+        specifier: ^1.1.1
+        version: 1.1.1
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../../packages/env
+      '@types/json-stable-stringify':
+        specifier: ^1.1.0
+        version: 1.1.0
+
   connectors/connector-stripe:
     dependencies:
       '@openint/cdk':
@@ -21715,7 +21758,7 @@ snapshots:
 
   handlebars@4.7.7:
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.8
       neo-async: 2.6.2
       source-map: 0.6.1
       wordwrap: 1.0.0

@@ -70,6 +70,8 @@ import {default as connectorSplitwise_def} from '@openint/connector-splitwise/de
 import {default as connectorSplitwise_server} from '@openint/connector-splitwise/server'
 import {default as connectorSpreadsheet_def} from '@openint/connector-spreadsheet/def'
 import {default as connectorSpreadsheet_server} from '@openint/connector-spreadsheet/server'
+import {default as connectorStarbase_def} from '@openint/connector-starbase/def'
+import {default as connectorStarbase_server} from '@openint/connector-starbase/server'
 import {default as connectorStripe_def} from '@openint/connector-stripe/def'
 import {default as connectorStripe_server} from '@openint/connector-stripe/server'
 import {default as connectorTeller_def} from '@openint/connector-teller/def'
@@ -267,6 +269,11 @@ const connectorSpreadsheet = {
   ...connectorSpreadsheet_server,
 }
 
+const connectorStarbase = {
+  ...connectorStarbase_def,
+  ...connectorStarbase_server,
+}
+
 const connectorStripe = {
   ...connectorStripe_def,
   ...connectorStripe_server,
@@ -348,6 +355,7 @@ export const mergedConnectors = {
   slack: connectorSlack,
   splitwise: connectorSplitwise,
   spreadsheet: connectorSpreadsheet,
+  starbase: connectorStarbase,
   stripe: connectorStripe,
   teller: connectorTeller,
   toggl: connectorToggl,

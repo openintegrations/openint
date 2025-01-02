@@ -13,3 +13,5 @@ export const postgresProvider = {
   ...postgresDef,
   ...postgresServer,
 }
+
+export * from './utils'

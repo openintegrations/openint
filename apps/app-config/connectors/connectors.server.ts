@@ -34,6 +34,7 @@ import {default as connectorSaltedge} from '@openint/connector-saltedge/server'
 import {default as connectorSlack} from '@openint/connector-slack/server'
 import {default as connectorSplitwise} from '@openint/connector-splitwise/server'
 import {default as connectorSpreadsheet} from '@openint/connector-spreadsheet/server'
+import {default as connectorStarbase} from '@openint/connector-starbase/server'
 import {default as connectorStripe} from '@openint/connector-stripe/server'
 import {default as connectorTeller} from '@openint/connector-teller/server'
 import {default as connectorToggl} from '@openint/connector-toggl/server'
@@ -79,6 +80,7 @@ export const serverConnectors = {
   slack: connectorSlack,
   splitwise: connectorSplitwise,
   spreadsheet: connectorSpreadsheet,
+  starbase: connectorStarbase,
   stripe: connectorStripe,
   teller: connectorTeller,
   toggl: connectorToggl,
