@@ -207,8 +207,8 @@ export const zRaw = {
       // TODO: Add two separate tables sync_jobs to keep track of this instead of these two
       // though questionnable whether it should be in a separate database completely
       // just like Airbyte. Or perhaps using airbyte itself as the jobs database
-      lastSyncStartedAt: z.date().nullish(),
-      lastSyncCompletedAt: z.date().nullish(),
+      lastSyncStartedAt: z.string().nullish(),
+      lastSyncCompletedAt: z.string().nullish(),
       disabled: z.boolean().optional(),
       metadata: zMetadata,
     })
@@ -229,7 +229,7 @@ export const zRaw = {
       id: zId('evt'),
       name: z.string(),
       data: z.record(z.unknown()).nullish(),
-      timestamp: z.date(),
+      timestamp: z.string(),
       user: z.record(z.unknown()).nullish(),
       org_id: zId('org').nullish(),
       customer_id: zCustomerId.nullish(),
