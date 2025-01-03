@@ -1,3 +1,4 @@
+import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {
   boolean,
@@ -173,31 +174,56 @@ test('upsert param handling inc. jsonb', async () => {
 })
 
 test('upsert query with inferred table', async () => {
+  const date = new Date()
   const row = {
     id: '123',
     name: 'abc',
     count: 1,
     data: {hello: 'world'},
+    date,
   }
   const table = inferTableForUpsert('test_user', row)
+  const createTableSql = await generateMigration(
+    generateDrizzleJson({}),
+    generateDrizzleJson({table}),
+  ).then((statements) => statements[0])
+  expect(createTableSql).toMatchInlineSnapshot(`
+    "CREATE TABLE "test_user" (
+    	"id" text,
+    	"name" text,
+    	"count" text,
+    	"data" jsonb,
+    	"date" text
+    );
+    "
+  `)
+
   const query = dbUpsertOne(drizzle(''), table, row, {keyColumns: ['id']})
-  expect(query.toSQL().params).toEqual(['123', 'abc', 1, '{"hello":"world"}'])
+  expect(query.toSQL().params).toEqual([
+    '123',
+    'abc',
+    1,
+    '{"hello":"world"}',
+    date,
+  ])
   expect(await formatSql(query.toSQL().sql)).toMatchInlineSnapshot(`
     "insert into
-      "test_user" ("id", "name", "count", "data")
+      "test_user" ("id", "name", "count", "data", "date")
     values
-      ($1, $2, $3, $4)
+      ($1, $2, $3, $4, $5)
     on conflict ("id") do
     update
     set
       "name" = excluded."name",
       "count" = excluded."count",
-      "data" = excluded."data"
+      "data" = excluded."data",
+      "date" = excluded."date"
     where
       (
         "test_user"."name" IS DISTINCT FROM excluded."name"
         or "test_user"."count" IS DISTINCT FROM excluded."count"
         or "test_user"."data" IS DISTINCT FROM excluded."data"
+        or "test_user"."date" IS DISTINCT FROM excluded."date"
       )
     "
   `)
@@ -259,7 +285,6 @@ describe('with db', () => {
     const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
     expect(ret2[0]).toEqual({...row, name: null})
   })
-
 
   test('ignore undefined values by default', async () => {
     await dbUpsertOne(
