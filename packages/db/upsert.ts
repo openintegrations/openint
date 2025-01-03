@@ -193,7 +193,7 @@ export function inferTableForUpsert(
     Object.fromEntries(
       Object.entries(record).map(([k, v]) => [
         k,
-        opts?.jsonColumns?.includes(k) || isPlainObject(v)
+        opts?.jsonColumns?.includes(k) || isPlainObject(v) || Array.isArray(v)
           ? t.jsonb()
           : // text() works as a catch all for scalar types because none of them require
             // the value to be escaped in anyway
