@@ -140,6 +140,7 @@ describe('test db', () => {
       email: t.text(),
       data: t.jsonb(),
       ts: t.timestamp({withTimezone: true}).defaultNow(),
+      ts_str: t.timestamp({withTimezone: true, mode: 'string'}).defaultNow(),
       custom: customText(),
     }),
     (table) => [check('email_check', sql`${table.email} LIKE '%@%'`)],
@@ -162,6 +163,7 @@ describe('test db', () => {
       	"email" text,
       	"data" jsonb,
       	"ts" timestamp with time zone DEFAULT now(),
+      	"ts_str" timestamp with time zone DEFAULT now(),
       	"custom" text,
       	CONSTRAINT "email_check" CHECK ("account"."email" LIKE '%@%')
       );
@@ -171,12 +173,20 @@ describe('test db', () => {
     for (const migration of migrations) {
       await db.execute(migration)
     }
+  })
+
+  test('date operations', async () => {
     const date = new Date('2021-01-01')
     await db
       .insert(table)
       .values({email: 'hello@world.com', ts: date, data: {hello: 'world'}})
     await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
       'violates check constraint',
+    )
+    await expect(
+      db.insert(table).values({ts_str: date as any}),
+    ).rejects.toThrow(
+      '"string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Date',
     )
     // fetch with db.select
     const rows = await db.select().from(table).execute()
@@ -186,6 +196,7 @@ describe('test db', () => {
         email: 'hello@world.com',
         data: {hello: 'world'},
         ts: date,
+        ts_str: expect.any(String),
         custom: null,
       },
     ])
@@ -198,6 +209,7 @@ describe('test db', () => {
         email: 'hello@world.com',
         data: {hello: 'world'},
         ts: expect.any(String), // '2021-01-01 01:00:00+01', // returns as string instead of Date
+        ts_str: expect.any(String),
         custom: null,
       },
     ])
