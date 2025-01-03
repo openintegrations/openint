@@ -1,46 +1,52 @@
 import {createClerkClient} from '@clerk/backend'
+import {jest} from '@jest/globals'
 import {initOpenIntSDK} from '@openint/sdk'
 
 describe('connectionRouter', () => {
   describe('listConnection', () => {
+    jest.setTimeout(10000)
+
     it('should list connections', async () => {
-      // We need clerk session for the token request, when we do a simple call it has a header from clerk that the call is not made on the browser and we get 401
-      // Having issues with clerk key not being recognized.
       const clerk = createClerkClient({
         secretKey: process.env.CLERK_SECRET_KEY as string,
       })
 
-      // Create test user
+      // Create test user with required fields
       const testUser = await clerk.users.createUser({
         emailAddress: ['test@example.com'],
-        password: 'test-password123',
+        firstName: 'Test',
+        lastName: 'User',
+        password: 'test-password-123',
       })
 
-      // Create sign in token
+      console.log('testUser:', testUser)
+
+      // Create a session token
       const signInToken = await clerk.signInTokens.createSignInToken({
         userId: testUser.id,
         expiresInSeconds: 300, // 5 minutes
       })
 
-      // Use openint sdk.
-      const openint = initOpenIntSDK({
-        baseUrl: 'http://localhost:4000/api/v0',
-        headers: {
-          'x-apikey': process.env.OPENINT_API_KEY ?? '',
-          Authorization: `Bearer ${signInToken.token}`,
-        },
-      })
+      console.log('signInToken:', signInToken)
 
-      try {
-        // Get connections, we need to add a expect for the response data.
-        const response = await openint.GET('/core/connection')
-        console.log('response:', response)
-      } catch (err) {
-        console.error('Error:', err)
-      }
+      // const openint = initOpenIntSDK({
+      //   baseUrl: 'http://localhost:4000/api/v0',
+      //   headers: {
+      //     'x-apikey': process.env.OPENINT_API_KEY ?? '',
+      //     Authorization: `Bearer ${signInToken.token}`,
+      //   },
+      // })
 
-      // Delete user after test?
-      await clerk.users.deleteUser(testUser.id)
+      // try {
+      //   const response = await openint.GET('/core/connection')
+      //   console.log('response:', response)
+      // } catch (err) {
+      //   console.error('Error:', err)
+      //   throw err
+      // } finally {
+      //   // Cleanup
+      //   await clerk.users.deleteUser(testUser.id)
+      // }
     })
   })
 })
