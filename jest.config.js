@@ -1,8 +1,10 @@
+const path = require('path')
+
 /**
  * @type {import('@jest/types').Config.ProjectConfig}
  */
 module.exports = {
-  setupFiles: ['jest-date-mock'],
+  setupFiles: ['jest-date-mock', './jest.setup.js'],
   testEnvironment: 'node',
   testPathIgnorePatterns: [
     '/node_modules/',

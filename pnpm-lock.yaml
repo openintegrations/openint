@@ -80,6 +80,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: 6.21.0
         version: 6.21.0(eslint@8.23.0)(typescript@5.6.2)
+      dotenv:
+        specifier: ^16.4.1
+        version: 16.4.5
       esbuild:
         specifier: 0.17.5
         version: 0.17.5
@@ -1721,6 +1724,9 @@ importers:
         specifier: 2.14.0
         version: 2.14.0(zod@3.22.4)
     devDependencies:
+      '@clerk/backend':
+        specifier: 1.21.4
+        version: 1.21.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@clerk/nextjs':
         specifier: 5.6.0
         version: 5.6.0(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2793,6 +2799,10 @@ packages:
     resolution: {integrity: sha512-VpAkb/P/fybC+Rv1uEuUiMXTVxmnl1Umj9wMfS0ZIPx/hu6t3PLVZbGYeNwQULr6mUE5qhomJoEkTsqGyaR8Pg==}
     engines: {node: '>=18.17.0'}
 
+  '@clerk/backend@1.21.4':
+    resolution: {integrity: sha512-PHJzBJrTxBAvHwscXwUwpippT7nHhphgycVcFb3655Dq6q0nRdKfo5GlkDHscEKxLOdmppB/168nXsVwSWf86w==}
+    engines: {node: '>=18.17.0'}
+
   '@clerk/clerk-react@5.9.1':
     resolution: {integrity: sha512-I2gAceIkJtQl3uEyPbjUKPbDpssj7uJt+D0QY7cWOECLvpump+B8s19DJ6OFkuD7pwlzeZp5QrdMaMpcCUReEg==}
     engines: {node: '>=18.17.0'}
@@ -2808,6 +2818,18 @@ packages:
       react: 18.3.1
       react-dom: 18.3.1
 
+  '@clerk/shared@2.20.4':
+    resolution: {integrity: sha512-1ndGEO+NejIMFkl47DCeSpVv3nmKh9BHD6wt2Sl3X1wv7sj3eWzSVC14Exkag7D8Og2VcN4LXOFLErsCXHS+YQ==}
+    engines: {node: '>=18.17.0'}
+    peerDependencies:
+      react: 18.3.1
+      react-dom: 18.3.1
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
   '@clerk/shared@2.8.1':
     resolution: {integrity: sha512-8LxnrQDj9xdKcOFQa4FSKb3P5loZeLMiynzD9yBJgCBTCJ8dNV//qySlP6xK6z172L8RwnDk29yO9J+v+FS9Sw==}
     engines: {node: '>=18.17.0'}
@@ -2822,6 +2844,10 @@ packages:
 
   '@clerk/types@4.21.0':
     resolution: {integrity: sha512-yyPNF4agzub9zXOht9Bk8HG+OkHfLKIpsQuTCiZJszehcKNUqKvJZRxUwdRREBYnBdMl632PKCwbckZsChVxVQ==}
+    engines: {node: '>=18.17.0'}
+
+  '@clerk/types@4.40.0':
+    resolution: {integrity: sha512-9QdllXYujsjYLbvPg9Kq1rWOemX5FB0r6Ijy8HOxwjKN+TPlxUnGcs+t7IwU+M5gdmZ2KV6aA6d1a2q2FlSoiA==}
     engines: {node: '>=18.17.0'}
 
   '@cnakazawa/watch@1.0.4':
@@ -7026,6 +7052,10 @@ packages:
 
   cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
+    engines: {node: '>= 0.6'}
+
+  cookie@0.7.0:
+    resolution: {integrity: sha512-qCf+V4dtlNhSRXGAZatc1TasyFO6GjohcOul807YOb5ik3+kQSnb4d7iajeCL8QHaJ4uZEjCgiCJerKXwdRVlQ==}
     engines: {node: '>= 0.6'}
 
   cookie@0.7.1:
@@ -14320,6 +14350,17 @@ snapshots:
       - react
       - react-dom
 
+  '@clerk/backend@1.21.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@clerk/shared': 2.20.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@clerk/types': 4.40.0
+      cookie: 0.7.0
+      snakecase-keys: 5.4.4
+      tslib: 2.4.1
+    transitivePeerDependencies:
+      - react
+      - react-dom
+
   '@clerk/clerk-react@5.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@clerk/shared': 2.8.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -14341,6 +14382,18 @@ snapshots:
       server-only: 0.0.1
       tslib: 2.4.1
 
+  '@clerk/shared@2.20.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@clerk/types': 4.40.0
+      dequal: 2.0.3
+      glob-to-regexp: 0.4.1
+      js-cookie: 3.0.5
+      std-env: 3.7.0
+      swr: 2.2.0(react@18.3.1)
+    optionalDependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   '@clerk/shared@2.8.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@clerk/types': 4.21.0
@@ -14353,6 +14406,10 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
 
   '@clerk/types@4.21.0':
+    dependencies:
+      csstype: 3.1.1
+
+  '@clerk/types@4.40.0':
     dependencies:
       csstype: 3.1.1
 
@@ -19835,6 +19892,8 @@ snapshots:
   cookie@0.4.2: {}
 
   cookie@0.5.0: {}
+
+  cookie@0.7.0: {}
 
   cookie@0.7.1: {}
 
