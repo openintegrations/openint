@@ -215,6 +215,7 @@ module.exports = [
       server: '@openint/connector-onebrick/server',
     },
   },
+  {dirName: 'connector-outlook', varName: 'connectorOutlook', imports: {}},
   {
     name: 'outreach',
     dirName: 'connector-outreach',
@@ -331,6 +332,15 @@ module.exports = [
     imports: {
       def: '@openint/connector-spreadsheet/def',
       server: '@openint/connector-spreadsheet/server',
+    },
+  },
+  {
+    name: 'starbase',
+    dirName: 'connector-starbase',
+    varName: 'connectorStarbase',
+    imports: {
+      def: '@openint/connector-starbase/def',
+      server: '@openint/connector-starbase/server',
     },
   },
   {

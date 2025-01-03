@@ -10,6 +10,7 @@ export * from 'drizzle-orm'
 export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
+export * from './starbase'
 export {schema, drizzle, schemaWip}
 
 export function getDb<

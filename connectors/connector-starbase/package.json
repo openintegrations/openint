@@ -1,0 +1,23 @@
+{
+  "name": "@openint/connector-starbase",
+  "version": "0.0.0",
+  "private": true,
+  "module": "./index.ts",
+  "dependencies": {
+    "@openint/cdk": "workspace:*",
+    "@openint/connector-postgres": "workspace:*",
+    "@openint/db": "workspace:*",
+    "@openint/util": "workspace:*",
+    "drizzle-kit": "^0.30.1",
+    "drizzle-orm": "^0.38.2",
+    "drizzle-starbase": "^0.1.0",
+    "handlebars": "4.7.7",
+    "json-stable-stringify": "^1.1.1",
+    "postgres": "^3.4.5",
+    "zod": "3.22.4"
+  },
+  "devDependencies": {
+    "@openint/env": "workspace:*",
+    "@types/json-stable-stringify": "^1.1.0"
+  }
+}

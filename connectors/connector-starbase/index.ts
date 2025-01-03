@@ -9,9 +9,7 @@ export * from './def'
 export * from './server'
 // codegen:end
 
-export const postgresProvider = {
+export const starbaseProvider = {
   ...postgresDef,
   ...postgresServer,
 }
-
-export * from './utils'
