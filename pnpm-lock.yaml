@@ -1060,8 +1060,8 @@ importers:
         specifier: ^0.0.19
         version: 0.0.19
       '@opensdks/sdk-plaid':
-        specifier: ^0.0.14
-        version: 0.0.14
+        specifier: ^0.0.16
+        version: 0.0.16
       '@t3-oss/env-core':
         specifier: 0.7.1
         version: 0.7.1(typescript@5.6.2)(zod@3.22.4)
@@ -3857,8 +3857,8 @@ packages:
   '@opensdks/sdk-pipedrive@0.0.1':
     resolution: {integrity: sha512-cNZsDdpQY0CUeM4Bs0UACFeYDRuxKyDlEpC7bpeDVFH5a87D5dqyNJcA4Do9SACbrpXgp7tyzZbdkq4KSKC81g==}
 
-  '@opensdks/sdk-plaid@0.0.14':
-    resolution: {integrity: sha512-LcutnqPz94xXGjz9UhA/737tIoIbhoqgXJ0jB8qBJM4wBIfHFTmu1K9Jy6B0ixWIliv8IfDMpoHyxvg0bUgJ4Q==}
+  '@opensdks/sdk-plaid@0.0.16':
+    resolution: {integrity: sha512-GsqVsxcbJgf77jIMZSqO1BdRRxD4h8ZgLWi5NqRVpYqX6hovB6Sid87YVoCX+cnBZP1fm9GuF7eKaxpXt/u/iw==}
 
   '@opensdks/sdk-qbo@0.0.23':
     resolution: {integrity: sha512-U6mjnOjwfraS8RS5+e6Ypy7HEEXCwdiwP1qEQZB0lhKcHLwtmqjoS4O6bS9HQPXHo8rZIfuGNv1yARv7qAEBVA==}
@@ -15811,7 +15811,7 @@ snapshots:
 
   '@opensdks/sdk-pipedrive@0.0.1': {}
 
-  '@opensdks/sdk-plaid@0.0.14': {}
+  '@opensdks/sdk-plaid@0.0.16': {}
 
   '@opensdks/sdk-qbo@0.0.23': {}
 
