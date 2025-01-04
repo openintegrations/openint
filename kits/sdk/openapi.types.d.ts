@@ -1899,7 +1899,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': unknown
+          'application/json': Record<string, never>
         }
       }
       /** @description Invalid input data */
