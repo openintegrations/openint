@@ -2,10 +2,7 @@ import plaidOas from '@opensdks/sdk-plaid/plaid.oas.json'
 import type * as plaid from 'plaid'
 import type {PlaidError} from 'plaid'
 import {CountryCode, Products} from 'plaid'
-import type {
-  PlaidAccount as PlaidLinkAccount,
-  PlaidLinkOnSuccessMetadata,
-} from 'react-plaid-link'
+import type {PlaidLinkOnSuccessMetadata} from 'react-plaid-link'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers, makePostingsMap, zWebhookInput} from '@openint/cdk'
 import {A, R, z, zCast} from '@openint/util'
@@ -143,7 +140,7 @@ export const plaidDef = {
   standardMappers: {
     entity: {
       account: ({entity: a}, extConn) => ({
-        id: 'account_id' in a ? a.account_id : a.id,
+        id: a.account_id,
         entityName: 'account',
         entity: {
           name: getPlaidAccountFullName(a, extConn.institution),
