@@ -56,7 +56,6 @@ export const plaidSchemas = {
      */
     language: zLanguage.default('en'),
 
-
     // integrationDisplayName: z.string().optional().openapi({
     //   example: 'US Bank Accounts',
     //   description:
@@ -111,7 +110,7 @@ export const plaidSchemas = {
     z.object({
       id: z.string(),
       entityName: z.literal('account'),
-      entity: zCast<plaid.AccountBase | PlaidLinkAccount>(),
+      entity: zCast<plaid.AccountBase>(),
     }),
     z.object({
       id: z.string(),
