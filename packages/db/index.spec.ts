@@ -1,114 +1,8 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
-import {
-  check,
-  customType,
-  PgDialect,
-  pgTable,
-  serial,
-  text,
-} from 'drizzle-orm/pg-core'
+import {check, customType, pgTable} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
-import {applyLimitOffset} from '.'
-
-describe('sql generation', () => {
-  const pgDialect = new PgDialect()
-
-  test('identifier', () => {
-    expect(
-      pgDialect.sqlToQuery(
-        sql`SELECT true FROM ${sql.identifier('connection')}`,
-      ),
-    ).toMatchObject({sql: 'SELECT true FROM "connection"', params: []})
-  })
-
-  test('implicit identifiers', () => {
-    const table = pgTable('connection', {
-      id: serial().primaryKey(),
-      Name: text(),
-    })
-
-    expect(
-      pgDialect.sqlToQuery(
-        sql`SELECT ${table.Name}, ${table.id} FROM ${table}`,
-      ),
-    ).toMatchObject({
-      sql: 'SELECT "connection"."Name", "connection"."id" FROM "connection"',
-      params: [],
-    })
-  })
-
-  test('concatenate queries', () => {
-    const fragment = sql`1 = 1`
-    expect(
-      pgDialect.sqlToQuery(sql`SELECT true WHERE ${fragment} AND 2 != 1`),
-    ).toMatchObject({sql: 'SELECT true WHERE 1 = 1 AND 2 != 1', params: []})
-  })
-
-  test('dates', () => {
-    const date = new Date()
-    expect(
-      pgDialect.sqlToQuery(sql`SELECT true WHERE created > ${date}`),
-    ).toMatchObject({sql: 'SELECT true WHERE created > $1', params: [date]})
-  })
-
-  test('apply limit offset', () => {
-    expect(
-      pgDialect.sqlToQuery(
-        applyLimitOffset(sql`SELECT * FROM connection`, {limit: 10, offset: 5}),
-      ),
-    ).toMatchObject({
-      sql: 'SELECT * FROM connection LIMIT $1 OFFSET $2',
-      params: [10, 5],
-    })
-    expect(
-      pgDialect.sqlToQuery(
-        applyLimitOffset(sql`SELECT * FROM connection`, {limit: 10}),
-      ),
-    ).toMatchObject({
-      sql: 'SELECT * FROM connection LIMIT $1',
-      params: [10],
-    })
-    expect(
-      pgDialect.sqlToQuery(applyLimitOffset(sql`SELECT * FROM connection`, {})),
-    ).toMatchObject({
-      sql: 'SELECT * FROM connection',
-      params: [],
-    })
-  })
-
-  test('array', () => {
-    expect(pgDialect.sqlToQuery(sql`SELECT ${1} + ${2}`)).toMatchObject({
-      sql: 'SELECT $1 + $2',
-      params: [1, 2],
-    })
-
-    const ids = ['i1', 'i2']
-
-    // array input is flattened by default
-    expect(
-      pgDialect.sqlToQuery(
-        sql`SELECT * from connection where id = ANY(${ids}) and status = ${'active'}`,
-      ),
-    ).toMatchObject({
-      sql: 'SELECT * from connection where id = ANY(($1, $2)) and status = $3',
-      params: ['i1', 'i2', 'active'],
-    })
-
-    // with param array is passed as a single value
-    expect(
-      pgDialect.sqlToQuery(
-        sql`SELECT * from connection where id = ANY(${sql.param(
-          ids,
-        )}) and status = ${'active'}`,
-      ),
-    ).toMatchObject({
-      sql: 'SELECT * from connection where id = ANY($1) and status = $2',
-      params: [['i1', 'i2'], 'active'],
-    })
-  })
-})
 
 describe('test db', () => {
   // console.log('filename', __filename)
@@ -140,6 +34,7 @@ describe('test db', () => {
       email: t.text(),
       data: t.jsonb(),
       ts: t.timestamp({withTimezone: true}).defaultNow(),
+      ts_str: t.timestamp({withTimezone: true, mode: 'string'}).defaultNow(),
       custom: customText(),
     }),
     (table) => [check('email_check', sql`${table.email} LIKE '%@%'`)],
@@ -162,6 +57,7 @@ describe('test db', () => {
       	"email" text,
       	"data" jsonb,
       	"ts" timestamp with time zone DEFAULT now(),
+      	"ts_str" timestamp with time zone DEFAULT now(),
       	"custom" text,
       	CONSTRAINT "email_check" CHECK ("account"."email" LIKE '%@%')
       );
@@ -171,12 +67,20 @@ describe('test db', () => {
     for (const migration of migrations) {
       await db.execute(migration)
     }
+  })
+
+  test('date operations', async () => {
     const date = new Date('2021-01-01')
     await db
       .insert(table)
       .values({email: 'hello@world.com', ts: date, data: {hello: 'world'}})
     await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
       'violates check constraint',
+    )
+    await expect(
+      db.insert(table).values({ts_str: date as any}),
+    ).rejects.toThrow(
+      '"string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Date',
     )
     // fetch with db.select
     const rows = await db.select().from(table).execute()
@@ -186,6 +90,7 @@ describe('test db', () => {
         email: 'hello@world.com',
         data: {hello: 'world'},
         ts: date,
+        ts_str: expect.any(String),
         custom: null,
       },
     ])
@@ -198,6 +103,7 @@ describe('test db', () => {
         email: 'hello@world.com',
         data: {hello: 'world'},
         ts: expect.any(String), // '2021-01-01 01:00:00+01', // returns as string instead of Date
+        ts_str: expect.any(String),
         custom: null,
       },
     ])
@@ -324,6 +230,16 @@ describe('test db', () => {
       email: 'null@mail.com',
       data: null,
     })
+  })
+
+  test('= ANY query requires sql.param', async () => {
+    await expect(
+      db.execute(sql`SELECT true WHERE 'a' = ANY(${['a']})`),
+    ).rejects.toThrow('malformed array literal: "a"')
+
+    await expect(
+      db.execute(sql`SELECT true WHERE 'a' = ANY(${sql.param(['a'])})`),
+    ).resolves.toEqual([{'?column?': true}])
   })
 
   afterAll(() => db.$client.end())

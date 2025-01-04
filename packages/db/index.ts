@@ -11,7 +11,7 @@ export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
 export * from './starbase'
-export {schema, drizzle, schemaWip}
+export {schema, drizzle, schemaWip, postgres}
 
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,

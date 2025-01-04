@@ -2,7 +2,13 @@ import {camelCase, snakeCase} from 'change-case'
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
-import {applyLimitOffset, dbUpsertOne, drizzle, sql} from '@openint/db'
+import {
+  applyLimitOffset,
+  dbUpsertOne,
+  drizzle,
+  postgres,
+  sql,
+} from '@openint/db'
 import type {
   CustomerResultRow,
   MetaService,
@@ -55,12 +61,15 @@ async function assumeRole(options: {
 type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const {viewer, databaseUrl} = opts
-
-  const db = drizzle(databaseUrl, {logger: __DEBUG__})
+  const pg = postgres(databaseUrl)
+  const getDb = () => drizzle(pg, {logger: __DEBUG__})
+  const db = getDb()
   type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
 
   return {
     db,
+    pg,
+    getDb,
     runQueries: async <T>(
       handler: (trxn: PgTransaction) => Promise<T>,
       // eslint-disable-next-line arrow-body-style
@@ -249,7 +258,7 @@ export const makePostgresMetaService = zFunction(
 
 function metaTable<TID extends string, T extends Record<string, unknown>>(
   tableName: keyof ZRaw,
-  {runQueries, db}: Deps,
+  {runQueries, getDb}: Deps,
 ): MetaTable<TID, T> {
   const table = sql.identifier(tableName)
 
@@ -301,11 +310,12 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
         return rows.map(camelCaseKeys)[0] as T | undefined
       }),
     set: (id, data) =>
-      dbUpsertOne(db, tableName, snakeCaseKeys({...data, id}), {
+      dbUpsertOne(getDb(), tableName, snakeCaseKeys({...data, id}), {
         keyColumns: ['id'],
       }),
     patch: (id, data) =>
-      dbUpsertOne(db, tableName, snakeCaseKeys({...data, id}), {
+      // use getDb to workaround drizzle schema cache issue
+      dbUpsertOne(getDb(), tableName, snakeCaseKeys({...data, id}), {
         keyColumns: ['id'],
         shallowMergeJsonbColumns: true,
       }),

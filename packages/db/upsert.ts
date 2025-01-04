@@ -9,6 +9,7 @@ import {
   type PgTable,
   type PgUpdateSetSource,
 } from 'drizzle-orm/pg-core'
+import {isPlainObject} from '@openint/util'
 
 type ColumnKeyOf<T extends PgTable> = Extract<keyof T['_']['columns'], string>
 
@@ -115,7 +116,7 @@ export function dbUpsert<
   const noDiffColumns = options.noDiffColumns?.map(getColumn)
   const insertOnlyColumns = options.insertOnlyColumns?.map(getColumn)
 
-  if (!keyColumns) {
+  if (!keyColumns.length) {
     throw new Error(
       `Unable to upsert without keyColumns for table ${tbCfg.name}`,
     )
@@ -176,11 +177,11 @@ export function dbUpsert<
   })
 }
 
-/** Simple test */
-function isObjectOrArray(input: unknown) {
-  return typeof input === 'object' && input !== null
-}
-
+/**
+ * For the purpose of upserting, we only care about ]
+ * whether a column is jsonb or now because it needs different encoding
+ * No other columns needs separate encoding to generate the right SQL and params
+ */
 export function inferTableForUpsert(
   name: string,
   record: Record<string, unknown>,
@@ -192,7 +193,7 @@ export function inferTableForUpsert(
     Object.fromEntries(
       Object.entries(record).map(([k, v]) => [
         k,
-        opts?.jsonColumns?.includes(k) || isObjectOrArray(v)
+        opts?.jsonColumns?.includes(k) || isPlainObject(v) || Array.isArray(v)
           ? t.jsonb()
           : // text() works as a catch all for scalar types because none of them require
             // the value to be escaped in anyway

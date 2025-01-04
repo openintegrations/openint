@@ -11,6 +11,7 @@ services:
     environment:
       POSTGRES_DB: postgres # Only database named `postgres` works with pg_cron by default
       POSTGRES_PASSWORD: password
+    command: ["postgres", "-c", "log_statement=all"]
 
   supabase:
     image: supabase/postgres:15.8.1.017 # For some reason "lastest tag" is having issues... so we pin to a specific version latest as of 2024-12-20_0055

@@ -47,6 +47,7 @@ export const testEnv = createEnv({
 
     DOCKER_POSTGRES_URL: z.string().optional(),
     DOCKER_SUPABASE_URL: z.string().optional(),
+    conn_greenhouse_API_KEY: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -76,6 +77,7 @@ export const testEnv = createEnv({
     DOCKER_POSTGRES_URL: process.env['DOCKER_POSTGRES_URL'],
     DOCKER_SUPABASE_URL: process.env['DOCKER_SUPABASE_URL'],
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
+    conn_greenhouse_API_KEY: process.env['conn_greenhouse_API_KEY'],
   },
 })
 

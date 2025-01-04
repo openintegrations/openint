@@ -146,6 +146,8 @@ export interface paths {
   '/viewer/organization': {
     /** Get current organization of viewer accessing the API */
     get: operations['getCurrentOrganization']
+    /** Update current organization */
+    patch: operations['updateCurrentOrganization']
   }
   '/openapi.json': {
     /** Get openapi document */
@@ -1897,7 +1899,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': unknown
+          'application/json': Record<string, never>
         }
       }
       /** @description Invalid input data */
@@ -2772,6 +2774,93 @@ export interface operations {
               migrate_tables?: boolean
             }
           }
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Update current organization */
+  updateCurrentOrganization: {
+    requestBody: {
+      content: {
+        'application/json': {
+          publicMetadata: {
+            /**
+             * PostgreSQL Database URL
+             * @description This is where data from connections are synced to by default
+             * @example postgres://username:password@host:port/database
+             */
+            database_url?: string
+            /**
+             * Synced Data Schema
+             * @description Postgres schema to pipe data synced from customer connections into. Defaults to "synced" if missing.
+             */
+            synced_data_schema?: string
+            /**
+             * Webhook URL
+             * @description Events like sync.completed and connection.created can be sent to url of your choosing
+             */
+            webhook_url?: string
+            /**
+             * Migrate Tables
+             * @description If enabled, table migrations will be run if needed when entities are persisted
+             * @default true
+             */
+            migrate_tables?: boolean
+          }
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            /** @description Must start with 'org_' */
+            id: string
+            slug?: string | null
+            publicMetadata: {
+              /**
+               * PostgreSQL Database URL
+               * @description This is where data from connections are synced to by default
+               * @example postgres://username:password@host:port/database
+               */
+              database_url?: string
+              /**
+               * Synced Data Schema
+               * @description Postgres schema to pipe data synced from customer connections into. Defaults to "synced" if missing.
+               */
+              synced_data_schema?: string
+              /**
+               * Webhook URL
+               * @description Events like sync.completed and connection.created can be sent to url of your choosing
+               */
+              webhook_url?: string
+              /**
+               * Migrate Tables
+               * @description If enabled, table migrations will be run if needed when entities are persisted
+               * @default true
+               */
+              migrate_tables?: boolean
+            }
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
         }
       }
       /** @description Internal server error */

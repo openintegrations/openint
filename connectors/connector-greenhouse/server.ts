@@ -19,13 +19,14 @@ export const greenhouseServer = {
     })
     return greenhouse
   },
-  sourceSync: ({instance: greenhouse, streams, state}) =>
-    // console.log('grenehouse sourceSync', {streams, state})
-    observableFromEtlSource(
+  sourceSync: ({instance: greenhouse, streams, state}) => {
+    console.log('grenehouse sourceSync', {streams, state})
+    return observableFromEtlSource(
       greenhouseSource({sdk: greenhouse}),
       streams,
       (state ?? {}) as {},
-    ),
+    )
+  },
 } satisfies ConnectorServer<
   typeof greenhouseSchema,
   ReturnType<typeof initGreenhouseSDK>

@@ -66,7 +66,15 @@ export const authRouter = trpc.router({
     }),
 
   updateCurrentOrganization: adminProcedure
+    .meta({
+      openapi: {
+        method: 'PATCH',
+        path: '/viewer/organization',
+        tags: ['Internal'],
+      },
+    })
     .input(zOrganization.pick({publicMetadata: true}))
+    .output(zOrganization.omit({privateMetadata: true}))
     .mutation(async ({ctx, input: update}) => {
       if (!ctx.viewer.orgId) {
         throw new TRPCError({code: 'BAD_REQUEST', message: 'orgId needed'})
@@ -75,7 +83,7 @@ export const authRouter = trpc.router({
         ctx.viewer.orgId,
         update,
       )
-      return org
+      return zOrganization.omit({privateMetadata: true}).parse(org)
     }),
 })
 
