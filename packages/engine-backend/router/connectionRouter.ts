@@ -259,7 +259,7 @@ export const connectionRouter = trpc.router({
   deleteConnection: protectedProcedure
     .meta({openapi: {method: 'DELETE', path: '/core/connection/{id}', tags}})
     .input(z.object({id: zId('conn'), skipRevoke: z.boolean().optional()}))
-    .output(z.void())
+    .output(z.object({}))
     .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
         await ctx.services.getConnectionOrFail(connId)
@@ -284,6 +284,7 @@ export const connectionRouter = trpc.router({
       // We should probably introduce a reset / delete event...
       // }
       await ctx.asOrgIfNeeded.metaService.tables.connection.delete(conn.id)
+      return {}
     }),
   listConnection: protectedProcedure
     .meta({

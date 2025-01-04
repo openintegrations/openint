@@ -39,6 +39,7 @@ beforeAll(async () => {
 afterAll(async () => {
   if (!testEnv.DEBUG) {
     await tearDownTestOrg(fixture)
+    await testDb.db.$client.end()
     await db.execute(`DROP DATABASE IF EXISTS test_${fixture.testId}`)
   }
 })
@@ -119,7 +120,9 @@ test('create and sync plaid connection', async () => {
     params: {path: {id: connId}},
   })
 
-  const rows = await testDb.db.execute(sql`SELECT * FROM openint.banking_transaction`)
+  const rows = await testDb.db.execute(
+    sql`SELECT * FROM openint.banking_transaction`,
+  )
   expect(rows[0]).toMatchObject({
     source_id: connId,
     id: expect.any(String),
