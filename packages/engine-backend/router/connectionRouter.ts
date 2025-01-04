@@ -193,7 +193,7 @@ export const connectionRouter = trpc.router({
     // Questionable why `zConnectContextInput` should be there. Examine whether this is actually
     // needed
     // How do we verify that the userId here is the same as the userId from preConnectOption?
-    .output(z.string())
+    .output(z.string()) // TODO(api): We should not return just a string here. Should return an object
     .mutation(async ({input: {connectorConfigId, settings, ...input}, ctx}) => {
       const int =
         await ctx.asOrgIfNeeded.getConnectorConfigOrFail(connectorConfigId)
