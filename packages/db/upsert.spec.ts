@@ -8,6 +8,7 @@ import {
   serial,
   varchar,
 } from 'drizzle-orm/pg-core'
+import postgres from 'postgres'
 import {env} from '@openint/env'
 import {configDb, drizzle} from './'
 import {engagement_sequence} from './schema-dynamic'
@@ -327,6 +328,45 @@ describe('with db', () => {
     expect(
       await db.execute(sql`SELECT * FROM "test_user"`).then((r) => r[0]),
     ).toEqual({...row, name: 'original'})
+  })
+
+  test('fail without key column', () => {
+    expect(() => dbUpsertOne(db, 'test', {val: 1})).toThrow(
+      'Unable to upsert without keyColumns',
+    )
+  })
+
+  test('db schema cache causes issue for upsert', async () => {
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS "pipeline" (
+        id text PRIMARY KEY,
+        num integer,
+        str text
+      );
+    `)
+
+    await dbUpsertOne(db, 'pipeline', {id: 1, num: 123}, {keyColumns: ['id']})
+
+    await expect(
+      dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']}),
+    ).rejects.toThrow('column "undefined" of relation "pipeline"')
+
+    // casing cache causes it to work
+    ;(db as any).dialect.casing.clearCache()
+    await dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']})
+
+    // recreating the db each time works better
+    const pg = postgres(dbUrl.toString())
+    const d = () => drizzle(pg, {logger: true})
+    await dbUpsertOne(d(), 'pipeline', {id: 3, num: 223}, {keyColumns: ['id']})
+    await dbUpsertOne(d(), 'pipeline', {id: 4, str: 'my'}, {keyColumns: ['id']})
+    const res = await d().execute('SELECT * FROM "pipeline"')
+    expect(res).toEqual([
+      {id: '1', num: 123, str: null},
+      {id: '2', num: null, str: 'my'},
+      {id: '3', num: 223, str: null},
+      {id: '4', num: null, str: 'my'},
+    ])
   })
 
   afterAll(async () => {

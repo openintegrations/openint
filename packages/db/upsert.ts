@@ -116,7 +116,7 @@ export function dbUpsert<
   const noDiffColumns = options.noDiffColumns?.map(getColumn)
   const insertOnlyColumns = options.insertOnlyColumns?.map(getColumn)
 
-  if (!keyColumns) {
+  if (!keyColumns.length) {
     throw new Error(
       `Unable to upsert without keyColumns for table ${tbCfg.name}`,
     )
