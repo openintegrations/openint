@@ -1,4 +1,5 @@
-import {drizzle} from '@openint/db'
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import {drizzle, sql} from '@openint/db'
 import {env, testEnv} from '@openint/env'
 import {initOpenIntSDK} from '@openint/sdk'
 import {setupTestOrg} from './test-utils'
@@ -14,7 +15,7 @@ async function setupTestDb(dbName: string) {
   url.pathname = `/${dbName}`
   console.log('setupTestDb url:', url.toString())
   console.log(url.toString())
-  return {url}
+  return {url, db: drizzle(url.toString(), {logger: true})}
 }
 
 beforeAll(async () => {
@@ -48,9 +49,8 @@ test('create connector config', async () => {
           streams: {job: true, candidate: true},
           // TODO: Get sync with no unification to also work
           // May need to work around drizzle-kit issues though
-          links: ['unified_ats']
+          links: ['unified_ats'],
         },
-
       },
     })
     .then((r) => r.data)
@@ -61,10 +61,22 @@ test('create connector config', async () => {
       settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
     },
   })
+  console.log('[endToEnd] connId', connId)
 
-  const res = await sdk.POST('/core/connection/{id}/_sync', {
+  await sdk.POST('/core/connection/{id}/_sync', {
     body: {async: false},
     params: {path: {id: connId}},
   })
-  console.log('res', res.data)
+
+  const rows = await testDb.db.execute(sql`SELECT * FROM job`)
+  expect(rows[0]).toMatchObject({
+    source_id: connId,
+    id: expect.any(String),
+    customer_id: null,
+    created_at: expect.any(String),
+    updated_at: expect.any(String),
+    connector_name: 'greenhouse',
+    unified: expect.any(Object),
+    raw: expect.any(Object),
+  })
 })
