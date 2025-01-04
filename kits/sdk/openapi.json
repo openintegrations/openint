@@ -1707,7 +1707,10 @@
             "description": "Successful response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
               }
             }
           },
