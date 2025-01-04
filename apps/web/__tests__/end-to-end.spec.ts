@@ -40,7 +40,8 @@ afterAll(async () => {
   if (!testEnv.DEBUG) {
     await tearDownTestOrg(fixture)
     await testDb.db.$client.end()
-    await db.execute(`DROP DATABASE IF EXISTS test_${fixture.testId}`)
+    // Cannot drop because database connection is still kept open by connector-postgres/server
+    // await db.execute(`DROP DATABASE IF EXISTS test_${fixture.testId}`)
   }
 })
 

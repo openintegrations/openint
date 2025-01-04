@@ -41,6 +41,8 @@ export const postgresServer = {
       await runMigrationForStandardTable(db, tableName)
     }
 
+    // TODO: Introduce an end event that allows database connection to be closed explicitly
+    // when not in serverless environments
     return handlersLink({
       data: (op) => {
         // Transforming old format into new format...
