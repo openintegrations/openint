@@ -85,6 +85,9 @@ jobs:
           vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
           vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local
 
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+
       - name: Ensure OpenAPI spec and docs are up to date
         run: pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate && git diff --exit-code
 
@@ -121,7 +124,7 @@ jobs:
           pnpm wait-on tcp:4000
 
       - name: Run tests
-        run: DATABASE_URL=postgres://postgres:test@localhost:5432/test pnpm run test::ci
+        run: pnpm run test::ci
 
       - name: Send Slack notification for job status
         uses: 8398a7/action-slack@v3
