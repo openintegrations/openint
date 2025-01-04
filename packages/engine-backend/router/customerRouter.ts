@@ -281,7 +281,10 @@ export const customerRouter = trpc.router({
         })()
 
         if (!connUpdate) {
-          return 'Noop'
+          return {
+            message: 'Noop',
+            connectionId: null,
+          }
         }
 
         const syncInBackground =
@@ -330,7 +333,10 @@ export const customerRouter = trpc.router({
           `syncInBackground: ${syncInBackground}`,
           `triggerDefaultSync: ${triggerDefaultSync}`,
         )
-        return 'Connection successfully connected'
+        return {
+          connectionId,
+          message: 'Connection successfully connected'
+        }
       },
     ),
 })
