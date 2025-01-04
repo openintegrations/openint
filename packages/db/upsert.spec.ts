@@ -1,3 +1,4 @@
+import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {
   boolean,
@@ -7,6 +8,7 @@ import {
   serial,
   varchar,
 } from 'drizzle-orm/pg-core'
+import postgres from 'postgres'
 import {env} from '@openint/env'
 import {configDb, drizzle} from './'
 import {engagement_sequence} from './schema-dynamic'
@@ -173,31 +175,61 @@ test('upsert param handling inc. jsonb', async () => {
 })
 
 test('upsert query with inferred table', async () => {
+  const date = new Date()
   const row = {
     id: '123',
     name: 'abc',
     count: 1,
     data: {hello: 'world'},
+    arr: ['a', 'b'],
+    date,
   }
   const table = inferTableForUpsert('test_user', row)
+  const createTableSql = await generateMigration(
+    generateDrizzleJson({}),
+    generateDrizzleJson({table}),
+  ).then((statements) => statements[0])
+  expect(createTableSql).toMatchInlineSnapshot(`
+    "CREATE TABLE "test_user" (
+    	"id" text,
+    	"name" text,
+    	"count" text,
+    	"data" jsonb,
+    	"arr" jsonb,
+    	"date" text
+    );
+    "
+  `)
+
   const query = dbUpsertOne(drizzle(''), table, row, {keyColumns: ['id']})
-  expect(query.toSQL().params).toEqual(['123', 'abc', 1, '{"hello":"world"}'])
+  expect(query.toSQL().params).toEqual([
+    '123',
+    'abc',
+    1,
+    '{"hello":"world"}',
+    '["a","b"]',
+    date,
+  ])
   expect(await formatSql(query.toSQL().sql)).toMatchInlineSnapshot(`
     "insert into
-      "test_user" ("id", "name", "count", "data")
+      "test_user" ("id", "name", "count", "data", "arr", "date")
     values
-      ($1, $2, $3, $4)
+      ($1, $2, $3, $4, $5, $6)
     on conflict ("id") do
     update
     set
       "name" = excluded."name",
       "count" = excluded."count",
-      "data" = excluded."data"
+      "data" = excluded."data",
+      "arr" = excluded."arr",
+      "date" = excluded."date"
     where
       (
         "test_user"."name" IS DISTINCT FROM excluded."name"
         or "test_user"."count" IS DISTINCT FROM excluded."count"
         or "test_user"."data" IS DISTINCT FROM excluded."data"
+        or "test_user"."arr" IS DISTINCT FROM excluded."arr"
+        or "test_user"."date" IS DISTINCT FROM excluded."date"
       )
     "
   `)
@@ -260,7 +292,6 @@ describe('with db', () => {
     expect(ret2[0]).toEqual({...row, name: null})
   })
 
-
   test('ignore undefined values by default', async () => {
     await dbUpsertOne(
       db,
@@ -297,6 +328,45 @@ describe('with db', () => {
     expect(
       await db.execute(sql`SELECT * FROM "test_user"`).then((r) => r[0]),
     ).toEqual({...row, name: 'original'})
+  })
+
+  test('fail without key column', () => {
+    expect(() => dbUpsertOne(db, 'test', {val: 1})).toThrow(
+      'Unable to upsert without keyColumns',
+    )
+  })
+
+  test('db schema cache causes issue for upsert', async () => {
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS "pipeline" (
+        id text PRIMARY KEY,
+        num integer,
+        str text
+      );
+    `)
+
+    await dbUpsertOne(db, 'pipeline', {id: 1, num: 123}, {keyColumns: ['id']})
+
+    await expect(
+      dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']}),
+    ).rejects.toThrow('column "undefined" of relation "pipeline"')
+
+    // casing cache causes it to work
+    ;(db as any).dialect.casing.clearCache()
+    await dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']})
+
+    // recreating the db each time works better
+    const pg = postgres(dbUrl.toString())
+    const d = () => drizzle(pg, {logger: true})
+    await dbUpsertOne(d(), 'pipeline', {id: 3, num: 223}, {keyColumns: ['id']})
+    await dbUpsertOne(d(), 'pipeline', {id: 4, str: 'my'}, {keyColumns: ['id']})
+    const res = await d().execute('SELECT * FROM "pipeline"')
+    expect(res).toEqual([
+      {id: '1', num: 123, str: null},
+      {id: '2', num: null, str: 'my'},
+      {id: '3', num: 223, str: null},
+      {id: '4', num: null, str: 'my'},
+    ])
   })
 
   afterAll(async () => {

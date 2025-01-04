@@ -20,6 +20,7 @@
     "@openint/connector-postgres": "workspace:*",
     "@openint/db": "workspace:*",
     "@openint/events": "workspace:*",
+    "@openint/env": "workspace:*",
     "@openint/engine-backend": "workspace:*",
     "@openint/engine-frontend": "workspace:*",
     "@openint/ui": "workspace:*",

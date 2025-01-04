@@ -37,7 +37,7 @@ export const persistEventsMiddleware = new InngestMiddleware({
                   SELECT c.id, cc.org_id, c.customer_id as cus_id
                   FROM ${schema.connection} c
                   JOIN ${schema.connector_config} cc ON c.connector_config_id = cc.id
-                  WHERE c.id = ANY(${connectionIds})
+                  WHERE c.id = ANY(${sql.param(connectionIds)})
                 `)
               : []
 

@@ -120,8 +120,13 @@ jobs:
           pnpm run web --port 4000 &
           pnpm wait-on tcp:4000
 
+      - name: Start inngest dev server in background
+        run: |
+          npx inngest-cli@latest dev &
+          pnpm wait-on tcp:8288
+
       - name: Run tests
-        run: DATABASE_URL=postgres://postgres:test@localhost:5432/test pnpm run test::ci
+        run: ./bin/shdotenv -e ./apps/web/.env.local pnpm run test::ci
 
       - name: Send Slack notification for job status
         uses: 8398a7/action-slack@v3
