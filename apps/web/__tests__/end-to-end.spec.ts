@@ -1,4 +1,4 @@
-import {dbUpsertOne, drizzle} from '@openint/db'
+import {drizzle} from '@openint/db'
 import {env, testEnv} from '@openint/env'
 import {initOpenIntSDK} from '@openint/sdk'
 import {setupTestOrg} from './test-utils'
@@ -12,68 +12,59 @@ async function setupTestDb(dbName: string) {
   await db.execute(`CREATE DATABASE ${dbName}`)
   const url = new URL(env.DATABASE_URL)
   url.pathname = `/${dbName}`
+  console.log('setupTestDb url:', url.toString())
+  console.log(url.toString())
   return {url}
 }
 
-// beforeAll(async () => {
-//   fixture = await setupTestOrg()
-//   sdk = initOpenIntSDK({
-//     headers: {'x-apikey': fixture.apiKey},
-//     baseUrl: 'http://localhost:4000/api/v0',
-//   })
-// })
+beforeAll(async () => {
+  fixture = await setupTestOrg()
+  sdk = initOpenIntSDK({
+    headers: {'x-apikey': fixture.apiKey},
+    baseUrl: 'http://localhost:4000/api/v0',
+  })
+})
 
-// test('create connector config', async () => {
-//   const testDb = await setupTestDb(`test_${fixture.testId}`)
+test('create connector config', async () => {
+  const testDb = await setupTestDb(`test_${fixture.testId}`)
 
-//   await sdk.PATCH('/viewer/organization', {
-//     body: {
-//       publicMetadata: {
-//         database_url: testDb.url.toString(),
-//       },
-//     },
-//   })
+  await sdk.PATCH('/viewer/organization', {
+    body: {
+      publicMetadata: {
+        database_url: testDb.url.toString(),
+      },
+    },
+  })
 
-//   const org = await sdk.GET('/viewer/organization').then((r) => r.data)
-//   expect(org.publicMetadata.database_url).toEqual(testDb.url.toString())
+  const org = await sdk.GET('/viewer/organization').then((r) => r.data)
+  expect(org.publicMetadata.database_url).toEqual(testDb.url.toString())
 
-//   const connConfig = await sdk
-//     .POST('/core/connector_config', {
-//       body: {orgId: fixture.org.id, connectorName: 'greenhouse'},
-//     })
-//     .then((r) => r.data)
+  const connConfig = await sdk
+    .POST('/core/connector_config', {
+      body: {
+        orgId: fixture.org.id,
+        connectorName: 'greenhouse',
+        defaultPipeOut: {
+          streams: {job: true, candidate: true},
+          // TODO: Get sync with no unification to also work
+          // May need to work around drizzle-kit issues though
+          links: ['unified_ats']
+        },
 
-//   const {data: conn} = await sdk.POST('/core/connection', {
-//     body: {
-//       connectorConfigId: connConfig.id,
-//       settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
-//     },
-//   })
+      },
+    })
+    .then((r) => r.data)
 
-//   console.log('conn', conn)
-// })
+  const {data: connId} = await sdk.POST('/core/connection', {
+    body: {
+      connectorConfigId: connConfig.id,
+      settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
+    },
+  })
 
-// test('upsert', async () => {
-//   await dbUpsertOne(
-//     db,
-//     'pipeline',
-//     {
-//       source_id: 'conn_greenhouse_01JGR6MRSH9HBFTS6ZHNRHG0N0',
-//       destination_id: 'conn_postgres_default_org_2r9kDbl4xOZgwooO3VNrVeZPIeA',
-//       id: 'pipe_default_out_conn_greenhouse_01JGR6MRSH9HBFTS6ZHNRHG0N0',
-//     },
-//     {
-//       keyColumns: ['id'],
-//       shallowMergeJsonbColumns: true,
-//     },
-//   )
-//   await dbUpsertOne(
-//     db,
-//     'pipeline',
-//     {id: 'pipe_default_out_conn_greenhouse_01JGR6MRSH9HBFTS6ZHNRHG0N0'},
-//     {
-//       keyColumns: ['id'],
-//       shallowMergeJsonbColumns: true,
-//     },
-//   )
-// })
+  const res = await sdk.POST('/core/connection/{id}/_sync', {
+    body: {async: false},
+    params: {path: {id: connId}},
+  })
+  console.log('res', res.data)
+})

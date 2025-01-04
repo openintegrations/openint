@@ -27,7 +27,7 @@ export function inferTableFromMessage(event: RecordMessageBody) {
     (t) => {
       function inferCol(v: unknown) {
         if (typeof v === 'string') {
-          return isValidDateString(v) ? t.timestamp() : t.text()
+          return isValidDateString(v) ? t.timestamp({mode: 'string'}) : t.text()
         }
         if (typeof v === 'number') {
           return Math.floor(v) === v ? t.integer() : t.doublePrecision()

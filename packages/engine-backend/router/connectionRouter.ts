@@ -464,7 +464,7 @@ export const connectionRouter = trpc.router({
       openapi: {method: 'POST', path: '/core/connection/{id}/_sync', tags},
     })
     .input(z.object({id: zId('conn')}).merge(zSyncOptions))
-    .output(z.void())
+    .output(z.object({}))
     .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
         await ctx.services.getConnectionOrFail(connId)
@@ -474,7 +474,7 @@ export const connectionRouter = trpc.router({
           name: 'sync/connection-requested',
           data: {connectionId: connId},
         })
-        return
+        return {}
       }
       const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
       // No need to checkConnection here as sourceSync should take care of it
@@ -500,7 +500,7 @@ export const connectionRouter = trpc.router({
             src: conn,
           }),
         })
-        return
+        return {}
       }
 
       // TODO: Figure how to handle situations where connection does not exist yet
@@ -517,5 +517,6 @@ export const connectionRouter = trpc.router({
         },
         triggerDefaultSync: true,
       })
+      return {}
     }),
 })
