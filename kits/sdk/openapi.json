@@ -806,7 +806,26 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                    "connection_requested_event_id": {
+                      "type": "string"
+                    },
+                    "pipeline_syncs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pipeline_id": {
+                            "type": "string"
+                          },
+                          "sync_completed_event_id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["pipeline_id", "sync_completed_event_id"]
+                      }
+                    }
+                  }
                 }
               }
             }

@@ -1899,7 +1899,13 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': Record<string, never>
+          'application/json': {
+            connection_requested_event_id?: string
+            pipeline_syncs?: {
+              pipeline_id: string
+              sync_completed_event_id: string
+            }[]
+          }
         }
       }
       /** @description Invalid input data */

@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import {drizzle, sql} from '@openint/db'
+import {drizzle, eq, schema, sql} from '@openint/db'
 import {env, testEnv} from '@openint/env'
 import {initOpenIntSDK} from '@openint/sdk'
-import {setupTestOrg} from './test-utils'
+import {resetClerkTestData, setupTestOrg} from './test-utils'
 
 jest.setTimeout(30 * 1000) // long timeout because we have to wait for next.js to compile
 
 let fixture: Awaited<ReturnType<typeof setupTestOrg>>
 let sdk: ReturnType<typeof initOpenIntSDK>
 
-const db = drizzle(env.DATABASE_URL, {logger: true})
+const db = drizzle(env.DATABASE_URL, {logger: true, schema})
 async function setupTestDb(dbName: string) {
   await db.execute(`DROP DATABASE IF EXISTS ${dbName}`)
   await db.execute(`CREATE DATABASE ${dbName}`)
@@ -21,6 +21,7 @@ async function setupTestDb(dbName: string) {
 }
 
 beforeAll(async () => {
+  await resetClerkTestData()
   fixture = await setupTestOrg()
   sdk = initOpenIntSDK({
     headers: {'x-apikey': fixture.apiKey},
@@ -65,7 +66,7 @@ test('create connector config', async () => {
   })
   console.log('[endToEnd] connId', connId)
 
-  await sdk.POST('/core/connection/{id}/_sync', {
+  const syncRes = await sdk.POST('/core/connection/{id}/_sync', {
     body: {async: false},
     params: {path: {id: connId}},
   })
@@ -80,5 +81,16 @@ test('create connector config', async () => {
     connector_name: 'greenhouse',
     unified: expect.any(Object),
     raw: expect.any(Object),
+  })
+
+  const syncCompletedEvent = await db.query.event.findFirst({
+    where: eq(
+      schema.event.id,
+      syncRes.data.pipeline_syncs?.[0]?.sync_completed_event_id ?? '',
+    ),
+  })
+  expect(syncCompletedEvent).toMatchObject({
+    name: 'sync.completed',
+    data: {source_id: connId},
   })
 })

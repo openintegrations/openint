@@ -464,17 +464,29 @@ export const connectionRouter = trpc.router({
       openapi: {method: 'POST', path: '/core/connection/{id}/_sync', tags},
     })
     .input(z.object({id: zId('conn')}).merge(zSyncOptions))
-    .output(z.object({}))
+    .output(
+      z.object({
+        connection_requested_event_id: z.string().optional(),
+        pipeline_syncs: z
+          .array(
+            z.object({
+              pipeline_id: z.string(),
+              sync_completed_event_id: z.string(),
+            }),
+          )
+          .optional(),
+      }),
+    )
     .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
         await ctx.services.getConnectionOrFail(connId)
       }
       if (opts?.async) {
-        await inngest.send({
+        const {ids} = await inngest.send({
           name: 'sync/connection-requested',
           data: {connectionId: connId},
         })
-        return {}
+        return {connection_requested_event_id: ids[0]}
       }
       const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
       // No need to checkConnection here as sourceSync should take care of it
@@ -500,23 +512,26 @@ export const connectionRouter = trpc.router({
             src: conn,
           }),
         })
-        return {}
+        return {pipeline_syncs: []}
       }
 
       // TODO: Figure how to handle situations where connection does not exist yet
       // but pipeline is already being persisted properly. This current solution
       // is vulnerable to race condition and feels brittle. Though syncConnection is only
       // called from the UI so we are fine for now.
-      await ctx.asOrgIfNeeded._syncConnectionUpdate(conn.connectorConfig, {
-        customerId: conn.customerId,
-        settings: conn.settings,
-        connectionExternalId: extractId(conn.id)[2],
-        integration: conn.integration && {
-          externalId: extractId(conn.integration.id)[2],
-          data: conn.integration.external ?? {},
+      const connSync = await ctx.asOrgIfNeeded._syncConnectionUpdate(
+        conn.connectorConfig,
+        {
+          customerId: conn.customerId,
+          settings: conn.settings,
+          connectionExternalId: extractId(conn.id)[2],
+          integration: conn.integration && {
+            externalId: extractId(conn.integration.id)[2],
+            data: conn.integration.external ?? {},
+          },
+          triggerDefaultSync: true,
         },
-        triggerDefaultSync: true,
-      })
-      return {}
+      )
+      return connSync
     }),
 })
