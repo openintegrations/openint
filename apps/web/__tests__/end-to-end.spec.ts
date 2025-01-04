@@ -4,6 +4,8 @@ import {env, testEnv} from '@openint/env'
 import {initOpenIntSDK} from '@openint/sdk'
 import {setupTestOrg} from './test-utils'
 
+jest.setTimeout(30 * 1000) // long timeout because we have to wait for next.js to compile
+
 let fixture: Awaited<ReturnType<typeof setupTestOrg>>
 let sdk: ReturnType<typeof initOpenIntSDK>
 
