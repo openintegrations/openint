@@ -54,6 +54,7 @@ async function assumeRole(options: {
 }) {
   const {db, viewer} = options
   for (const [key, value] of Object.entries(localGucForViewer(viewer))) {
+    // true is for isLocal, which means it will only affect the current transaction, not the whole session
     await db.execute(sql`SELECT set_config(${key}, ${value}, true)`)
   }
 }

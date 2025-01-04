@@ -47,6 +47,8 @@ let testDb: Awaited<ReturnType<typeof setupTestDb>>
 
 test('setup organization default destination', async () => {
   testDb = await setupTestDb(`test_${fixture.testId}`)
+  // TODO: Add a separate test for syncing into public schema vs custom schema
+  testDb.url.searchParams.set('schema', 'openint')
 
   await sdk.PATCH('/viewer/organization', {
     body: {
@@ -117,7 +119,7 @@ test('create and sync plaid connection', async () => {
     params: {path: {id: connId}},
   })
 
-  const rows = await testDb.db.execute(sql`SELECT * FROM banking_transaction`)
+  const rows = await testDb.db.execute(sql`SELECT * FROM openint.banking_transaction`)
   expect(rows[0]).toMatchObject({
     source_id: connId,
     id: expect.any(String),
@@ -128,6 +130,10 @@ test('create and sync plaid connection', async () => {
     unified: expect.any(Object),
     raw: expect.any(Object),
   })
+
+  if (!testEnv.DEBUG) {
+    await sdk.DELETE('/core/connection/{id}', {params: {path: {id: connId}}})
+  }
 })
 
 test('create and sync greenhouse connection', async () => {
@@ -159,7 +165,7 @@ test('create and sync greenhouse connection', async () => {
     params: {path: {id: connId}},
   })
 
-  const rows = await testDb.db.execute(sql`SELECT * FROM job`)
+  const rows = await testDb.db.execute(sql`SELECT * FROM openint.job`)
   expect(rows[0]).toMatchObject({
     source_id: connId,
     id: expect.any(String),
