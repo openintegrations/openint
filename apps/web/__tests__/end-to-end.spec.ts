@@ -196,6 +196,13 @@ test('Edit organization with bad parameters fails  ', async () => {
 })
 
 test('create connections with bad parameters', async () => {
+  const randomString = (n: number) => {
+    let str = ''
+    for (let i = 0; i < n; i++) {
+      str += 'a'
+    }
+    return str
+  }
   const connConfig = await sdk
     .POST('/core/connector_config', {
       body: {
