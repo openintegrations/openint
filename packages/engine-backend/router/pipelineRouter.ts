@@ -188,7 +188,7 @@ export const pipelineRouter = trpc.router({
   syncPipeline: protectedProcedure
     .meta({openapi: {method: 'POST', path: '/core/pipeline/{id}/_sync', tags}})
     .input(z.object({id: zId('pipe')}).merge(zSyncOptions))
-    .output(z.void())
+    .output(z.object({}))
     .mutation(async function syncPipeline({input: {id: pipeId, ...opts}, ctx}) {
       if (ctx.viewer.role === 'customer') {
         await ctx.services.getPipelineOrFail(pipeId) // Authorization

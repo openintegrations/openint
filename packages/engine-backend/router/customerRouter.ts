@@ -299,9 +299,8 @@ export const customerRouter = trpc.router({
         //   },
         // )
 
-        const connectionId = await ctx.asOrgIfNeeded._syncConnectionUpdate(
-          int,
-          {
+        const {connection_id: connectionId} =
+          await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
             ...connUpdate,
             // No need for each connector to worry about this, unlike in the case of handleWebhook.
             customerId:
@@ -311,8 +310,7 @@ export const customerRouter = trpc.router({
               ...connUpdate?.settings,
               error: connUpdate?.settings?.['error'] || null,
             },
-          },
-        )
+          })
 
         await ctx.inngest.send({
           name: 'connect/connection-connected',
