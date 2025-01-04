@@ -18,7 +18,7 @@ import {
 } from './def'
 import {inferTableFromMessage, runMigrationForStandardTable} from './utils'
 
-const STARBASE_ORG_ID = 'FOO'
+const STARBASE_ORG_ID = 'org_2r7BrlE3gPq74Erm7xyQoQRIV5E'
 
 postgresHelpers._types['destinationInputEntity'] = {
   entityName: 'string',
