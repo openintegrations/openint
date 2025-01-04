@@ -21,14 +21,17 @@ export async function resetClerk() {
 }
 
 export async function setupTestOrg() {
-  const now = new Date().toISOString()
+  const testId = new Date()
+    .toISOString()
+    .replaceAll(/[\.Z:-]/g, '')
+    .replace('T', '_')
   const user = await clerkClient.users.createUser({
-    firstName: `Test user ${now}`,
-    password: now,
-    emailAddress: [`${now.replaceAll(':', '_')}@test.com`],
+    firstName: `Test user ${testId}`,
+    password: testId,
+    emailAddress: [`${testId}@test.com`],
   })
   const org = await clerkClient.organizations.createOrganization({
-    name: `Test org ${now}`,
+    name: `Test org ${testId}`,
     createdBy: user.id,
   })
   const viewer: Viewer = {
@@ -36,5 +39,5 @@ export async function setupTestOrg() {
     orgId: org.id as Id['org'],
   }
   const apiKey = await getOrCreateApikey(viewer)
-  return {user, org, viewer, apiKey}
+  return {user, org, viewer, apiKey, testId}
 }

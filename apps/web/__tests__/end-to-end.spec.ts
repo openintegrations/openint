@@ -1,7 +1,79 @@
+import {dbUpsertOne, drizzle} from '@openint/db'
+import {env, testEnv} from '@openint/env'
+import {initOpenIntSDK} from '@openint/sdk'
 import {setupTestOrg} from './test-utils'
 
-test('setupTestOrg', async () => {
-  // await resetClerk()
-  const res = await setupTestOrg()
-  console.log(res)
-})
+let fixture: Awaited<ReturnType<typeof setupTestOrg>>
+let sdk: ReturnType<typeof initOpenIntSDK>
+
+const db = drizzle(env.DATABASE_URL, {logger: true})
+async function setupTestDb(dbName: string) {
+  await db.execute(`DROP DATABASE IF EXISTS ${dbName}`)
+  await db.execute(`CREATE DATABASE ${dbName}`)
+  const url = new URL(env.DATABASE_URL)
+  url.pathname = `/${dbName}`
+  return {url}
+}
+
+// beforeAll(async () => {
+//   fixture = await setupTestOrg()
+//   sdk = initOpenIntSDK({
+//     headers: {'x-apikey': fixture.apiKey},
+//     baseUrl: 'http://localhost:4000/api/v0',
+//   })
+// })
+
+// test('create connector config', async () => {
+//   const testDb = await setupTestDb(`test_${fixture.testId}`)
+
+//   await sdk.PATCH('/viewer/organization', {
+//     body: {
+//       publicMetadata: {
+//         database_url: testDb.url.toString(),
+//       },
+//     },
+//   })
+
+//   const org = await sdk.GET('/viewer/organization').then((r) => r.data)
+//   expect(org.publicMetadata.database_url).toEqual(testDb.url.toString())
+
+//   const connConfig = await sdk
+//     .POST('/core/connector_config', {
+//       body: {orgId: fixture.org.id, connectorName: 'greenhouse'},
+//     })
+//     .then((r) => r.data)
+
+//   const {data: conn} = await sdk.POST('/core/connection', {
+//     body: {
+//       connectorConfigId: connConfig.id,
+//       settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
+//     },
+//   })
+
+//   console.log('conn', conn)
+// })
+
+// test('upsert', async () => {
+//   await dbUpsertOne(
+//     db,
+//     'pipeline',
+//     {
+//       source_id: 'conn_greenhouse_01JGR6MRSH9HBFTS6ZHNRHG0N0',
+//       destination_id: 'conn_postgres_default_org_2r9kDbl4xOZgwooO3VNrVeZPIeA',
+//       id: 'pipe_default_out_conn_greenhouse_01JGR6MRSH9HBFTS6ZHNRHG0N0',
+//     },
+//     {
+//       keyColumns: ['id'],
+//       shallowMergeJsonbColumns: true,
+//     },
+//   )
+//   await dbUpsertOne(
+//     db,
+//     'pipeline',
+//     {id: 'pipe_default_out_conn_greenhouse_01JGR6MRSH9HBFTS6ZHNRHG0N0'},
+//     {
+//       keyColumns: ['id'],
+//       shallowMergeJsonbColumns: true,
+//     },
+//   )
+// })

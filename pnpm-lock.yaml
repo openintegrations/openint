@@ -517,6 +517,9 @@ importers:
       '@openint/engine-frontend':
         specifier: workspace:*
         version: link:../../packages/engine-frontend
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       '@openint/events':
         specifier: workspace:*
         version: link:../../packages/events
