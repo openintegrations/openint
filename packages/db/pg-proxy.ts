@@ -31,7 +31,7 @@ export function createDbQueryHandler(dbUrl: string) {
         headers: {'Content-Type': 'application/json'},
       })
     } catch (err) {
-      console.error('Error from pg proxy server:', err)
+      console.error('Error postgres server:', err)
       return new Response(JSON.stringify({rows: [], error: `${err}`}), {
         headers: {'Content-Type': 'application/json'},
       })
@@ -55,18 +55,22 @@ export function createDbProxyRemoteCallback(opts: {
       method,
     )
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const res = await dbFetch(
         new Request(url, {
           body: JSON.stringify({sql, params, method}),
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
         }),
-      ).then((r) => r.json())
-      return {rows: (res as {rows: []}).rows}
+      )
+        .then((r) => r.json())
+        .then((r) => r as {rows: []; error?: string})
+      if (res.error) {
+        throw new Error(res.error)
+      }
+      return res
     } catch (err) {
       console.error('Error from pg proxy server:', err)
-      return {rows: []}
+      throw err
     }
   }
 }

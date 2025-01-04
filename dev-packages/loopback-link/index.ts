@@ -2,7 +2,7 @@
 import type {AddressInfo} from 'node:net'
 import {serve} from '@hono/node-server'
 import type {Link as FetchLink} from '@opensdks/fetch-links'
-import {applyLinks, modifyRequest} from '@opensdks/fetch-links'
+import {modifyRequest} from '@opensdks/fetch-links'
 
 interface ServeOptions {
   /** defaults to 0 which is a random port */
