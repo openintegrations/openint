@@ -4,7 +4,7 @@ import {drizzle, eq, schema, sql} from '@openint/db'
 import {createAppTrpcClient} from '@openint/engine-frontend/lib/trpcClient'
 import {env, testEnv, testEnvRequired} from '@openint/env'
 import {initOpenIntSDK} from '@openint/sdk'
-import {resetClerkTestData, setupTestOrg} from './test-utils'
+import {setupTestOrg, tearDownTestOrg} from './test-utils'
 
 jest.setTimeout(30 * 1000) // long timeout because we have to wait for next.js to compile
 
@@ -25,7 +25,6 @@ async function setupTestDb(dbName: string) {
 }
 
 beforeAll(async () => {
-  await resetClerkTestData()
   fixture = await setupTestOrg()
   sdk = initOpenIntSDK({
     headers: {'x-apikey': fixture.apiKey},
@@ -35,6 +34,13 @@ beforeAll(async () => {
     apiUrl: 'http://localhost:4000/api/trpc',
     headers: {'x-apikey': fixture.apiKey},
   })
+})
+
+afterAll(async () => {
+  if (!testEnv.DEBUG) {
+    await tearDownTestOrg(fixture)
+    await db.execute(`DROP DATABASE IF EXISTS test_${fixture.testId}`)
+  }
 })
 
 let testDb: Awaited<ReturnType<typeof setupTestDb>>

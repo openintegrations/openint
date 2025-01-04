@@ -41,3 +41,8 @@ export async function setupTestOrg() {
   const apiKey = await getOrCreateApikey(viewer)
   return {user, org, viewer, apiKey, testId}
 }
+
+export async function tearDownTestOrg(testOrg: Awaited<ReturnType<typeof setupTestOrg>>) {
+  await clerkClient.organizations.deleteOrganization(testOrg.org.id)
+  await clerkClient.users.deleteUser(testOrg.user.id)
+}
