@@ -2,7 +2,7 @@
 import type {AddressInfo} from 'node:net'
 import {serve} from '@hono/node-server'
 import type {Link as FetchLink} from '@opensdks/fetch-links'
-import {modifyRequest} from '@opensdks/fetch-links'
+import {applyLinks, modifyRequest} from '@opensdks/fetch-links'
 
 interface ServeOptions {
   /** defaults to 0 which is a random port */
@@ -13,7 +13,7 @@ export function serveAsync(
   handler: (request: Request) => Promise<Response>,
   opts: ServeOptions = {},
 ) {
-  console.log('Serving', opts)
+  console.log('[loopbackLink] Serving', opts)
   return new Promise<AddressInfo & {close: () => Promise<void>}>((resolve) => {
     // 0 means random
     const server = serve({fetch: handler, port: opts.port ?? 0}, (info) =>
@@ -46,3 +46,5 @@ export const loopbackLink =
 // void serveAsync(async () => new Response('👋')).then((info) => {
 //   console.log(`Server running at ${info.address}:${info.port}`)
 // })
+
+export {createFetchWithLinks} from '@opensdks/fetch-links'
