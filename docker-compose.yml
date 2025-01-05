@@ -22,9 +22,3 @@ services:
     environment:
       POSTGRES_DB: supabase # Only database named `postgres` works with pg_cron by default
       POSTGRES_PASSWORD: password
-
-  inngest:
-      image: inngest/inngest
-      command: 'inngest dev'
-      ports:
-        - '8288:8288'
