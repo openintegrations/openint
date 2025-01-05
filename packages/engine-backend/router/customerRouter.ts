@@ -281,7 +281,10 @@ export const customerRouter = trpc.router({
         })()
 
         if (!connUpdate) {
-          return 'Noop'
+          return {
+            message: 'Noop',
+            connectionId: null,
+          }
         }
 
         const syncInBackground =
@@ -299,9 +302,8 @@ export const customerRouter = trpc.router({
         //   },
         // )
 
-        const connectionId = await ctx.asOrgIfNeeded._syncConnectionUpdate(
-          int,
-          {
+        const {connection_id: connectionId} =
+          await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
             ...connUpdate,
             // No need for each connector to worry about this, unlike in the case of handleWebhook.
             customerId:
@@ -311,8 +313,7 @@ export const customerRouter = trpc.router({
               ...connUpdate?.settings,
               error: connUpdate?.settings?.['error'] || null,
             },
-          },
-        )
+          })
 
         await ctx.inngest.send({
           name: 'connect/connection-connected',
@@ -332,7 +333,10 @@ export const customerRouter = trpc.router({
           `syncInBackground: ${syncInBackground}`,
           `triggerDefaultSync: ${triggerDefaultSync}`,
         )
-        return 'Connection successfully connected'
+        return {
+          connectionId,
+          message: 'Connection successfully connected'
+        }
       },
     ),
 })

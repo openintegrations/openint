@@ -15,6 +15,7 @@ export interface MetaTable<
     connectorConfigId?: Id['ccfg'] | null
     /** Maybe remove this? not applicable everywhere */
     connectorName?: string | null
+    where?: Record<string, string>
     /** Used for search */
     keywords?: string | null
     /** Used for limiting results to only events after a certain time */

@@ -36,7 +36,9 @@ export const persistEventsMiddleware = new InngestMiddleware({
                 }>(sql`
                   SELECT c.id, cc.org_id, c.customer_id as cus_id
                   FROM ${schema.connection} c
-                  JOIN ${schema.connector_config} cc ON c.connector_config_id = cc.id
+                  JOIN ${
+                    schema.connector_config
+                  } cc ON c.connector_config_id = cc.id
                   WHERE c.id = ANY(${sql.param(connectionIds)})
                 `)
               : []
@@ -63,9 +65,14 @@ export const persistEventsMiddleware = new InngestMiddleware({
             pendingEvents = events
             return {payloads: events}
           },
-          async transformOutput() {
+          async transformOutput(output) {
+            // Inngest only use our ids for idempotency, and does not in fact
+            // use it for its internal event id...
+            // TODO: store inngest internal event id to allow for better lookup by event id
+            output.result = {ids: pendingEvents.map((ev) => ev.id!)}
             await db.insert(schema.event).values(pendingEvents)
             pendingEvents = []
+            // return {result: {ids: pendingEvents.map((ev) => ev.id!)}}
           },
         }
       },

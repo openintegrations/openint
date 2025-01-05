@@ -14,8 +14,8 @@ jobs:
       postgres:
         image: postgres:latest
         # service environment variables
-        # `POSTGRES_HOST` is `postgres`
         env:
+          # `POSTGRES_HOST` is `postgres`
           # optional (defaults to `postgres`)
           POSTGRES_DB: test
           # required
@@ -33,6 +33,12 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      # This is not working for some reason...
+      # inngest:
+      #   image: inngest/inngest
+      #   ports:
+      #     - 8288:8288
+
     env:
       NODE_OPTIONS: --max-old-space-size=4096
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

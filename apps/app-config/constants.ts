@@ -36,7 +36,7 @@ export const kAcceptUrlParam = '_accept' as const
 export const kAccessToken = '_token' as const
 
 export const __DEBUG__ =
-  process.env['DEBUG'] === 'false' || process.env['DEBUG'] === false
+  process.env['DEBUG'] === 'false'
     ? false
     : getServerUrl(null).includes('localhost') ||
       Boolean(

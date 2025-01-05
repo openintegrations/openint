@@ -82,8 +82,7 @@
             "unified-apis/core/create-pipeline",
             "unified-apis/core/delete-pipeline",
             "unified-apis/core/update-pipeline",
-            "unified-apis/core/sync-pipeline",
-            "unified-apis/core/list-sync-runs"
+            "unified-apis/core/sync-pipeline"
           ]
         },
         {

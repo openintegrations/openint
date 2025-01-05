@@ -30,8 +30,8 @@ export const mappers = {
   account: mapper(zCast<Plaid['schemas']['AccountBase']>(), unified.account, {
     id: 'account_id',
     name: 'name',
-    current_balance: (a) => a?.balances?.current ?? undefined,
-    currency: (a) => a?.balances?.iso_currency_code ?? undefined,
+    current_balance: (a) => a.balances?.current ?? undefined,
+    currency: (a) => a.balances?.iso_currency_code ?? undefined,
   }),
   category: mapper(zCast<Plaid['schemas']['Category']>(), unified.category, {
     id: 'category_id',
@@ -52,7 +52,7 @@ export const plaidAdapter = {
   },
   listTransactions: async ({instance}) => {
     const res = await instance.POST('/transactions/sync', {
-      body: {access_token: instance.accessToken},
+      body: {access_token: instance.accessToken, count: 100},
     })
     // TODO: Fully implement this...
     return {

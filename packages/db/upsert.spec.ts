@@ -5,13 +5,13 @@ import {
   integer,
   jsonb,
   pgTable,
+  primaryKey,
   serial,
   varchar,
 } from 'drizzle-orm/pg-core'
 import postgres from 'postgres'
 import {env} from '@openint/env'
-import {configDb, drizzle} from './'
-import {engagement_sequence} from './schema-dynamic'
+import {drizzle} from './'
 import {dbUpsert, dbUpsertOne, inferTableForUpsert} from './upsert'
 
 async function formatSql(sqlString: string) {
@@ -25,9 +25,45 @@ async function formatSql(sqlString: string) {
   })
 }
 
+const noopDb = drizzle('postgres://noop', {logger: true})
+
 test('upsert query', async () => {
+  const engagement_sequence = pgTable(
+    'engagement_sequence',
+    (t) => ({
+      source_id: t.text().notNull(),
+      // customer_id
+      // integration_id
+      // connector_name
+      // these are all derived
+      id: t.text().notNull(),
+      created_at: t
+        .timestamp({
+          precision: 3,
+          mode: 'string',
+        })
+        .defaultNow()
+        .notNull(),
+      updated_at: t
+        .timestamp({
+          precision: 3,
+          mode: 'string',
+        })
+        .defaultNow()
+        .notNull(),
+      is_deleted: t.boolean().default(false).notNull(),
+      raw: t.jsonb(),
+      unified: t.jsonb(),
+    }),
+    (table) => ({
+      primaryKey: primaryKey({
+        columns: [table.source_id, table.id],
+        name: 'engagement_sequence_pkey',
+      }),
+    }),
+  )
   const query = dbUpsert(
-    configDb,
+    noopDb,
     engagement_sequence,
     [
       {
@@ -83,7 +119,7 @@ test('upsert query', async () => {
 
 test('upsert param handling inc. jsonb', async () => {
   const query = dbUpsertOne(
-    configDb,
+    noopDb,
     pgTable('test', {
       id: serial().primaryKey(),
       is_deleted: boolean(),
