@@ -9,7 +9,6 @@ import {eventRouter} from './eventRouter'
 import {pipelineRouter} from './pipelineRouter'
 import {protectedRouter} from './protectedRouter'
 import {publicRouter} from './publicRouter'
-import {syncRouter} from './syncRouter'
 import {systemRouter} from './systemRouter'
 
 // accountingRouter._def.procedures.listAccounts._def.meta?.openapi?.path += '/accounting/'
@@ -24,7 +23,6 @@ export const routers = {
   connection: connectionRouter,
   pipeline: pipelineRouter,
   connector: connectorRouter,
-  sync: syncRouter,
   event: eventRouter,
 }
 
@@ -41,7 +39,6 @@ export const flatRouter = trpc.mergeRouters(
   connectorConfigRouter,
   connectorRouter,
   pipelineRouter,
-  syncRouter,
   eventRouter,
 )
 

@@ -5,9 +5,12 @@ import {trpcReact} from '@/lib-client/trpcReact'
 import useRefetchOnSwitch from '../useRefetchOnSwitch'
 
 export default function SyncRunsPage() {
-  const res = trpcReact.listSyncRuns.useQuery()
+  const res = trpcReact.listEvents.useQuery({
+    name: 'sync.completed',
+    since: 0,
+  })
 
-  ;(globalThis as any).listSyncRunsRes = res
+  ;(globalThis as any).listEvents = res
 
   useRefetchOnSwitch(res.refetch)
 
@@ -19,7 +22,8 @@ export default function SyncRunsPage() {
         </h2>
       </header>
       <DataTable
-        query={res}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        query={{...res, data: res.data?.items ?? []} as any}
         columns={[
           // {
           //   id: 'actions',
@@ -29,15 +33,18 @@ export default function SyncRunsPage() {
           //   ),
           // },
           {accessorKey: 'id'},
-          {accessorKey: 'connection_id'},
-          {accessorKey: 'status'},
-          {accessorKey: 'duration'},
-          // {accessorKey: 'input_event'}, // TODO: Handle json
-          {accessorKey: 'error_type'},
-          {accessorKey: 'error_details'},
-          // {accessorKey: 'metrics'}, // TODO: Handle json
-          {accessorKey: 'created_at'},
-          {accessorKey: 'updated_at'},
+          {accessorKey: 'data.source_id', header: 'Source ID'},
+          {accessorKey: 'data.destination_id', header: 'Destination ID'},
+          {accessorKey: 'data.pipeline_id', header: 'Pipeline ID'},
+          {accessorKey: 'timestamp'},
+          //  TODO: Add status, duration, sync metrics, and other fields...
+          // {accessorKey: 'duration'},
+          // // {accessorKey: 'input_event'}, // TODO: Handle json
+          // {accessorKey: 'error_type'},
+          // {accessorKey: 'error_details'},
+          // // {accessorKey: 'metrics'}, // TODO: Handle json
+          // {accessorKey: 'created_at'},
+          // {accessorKey: 'updated_at'},
         ]}
       />
     </div>

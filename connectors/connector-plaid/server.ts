@@ -105,7 +105,25 @@ export const plaidServerConnector = {
         data: insRes.institution,
       },
       source$: rxjs.from(
-        (meta?.accounts ?? []).map((a) => def._opData('account', a.id, a)),
+        (meta?.accounts ?? []).map((a) =>
+          def._opData('account', a.id, {
+            account_id: a.id,
+            name: a.name,
+            mask: a.mask,
+            official_name: a.name,
+            balances: {
+              available: null,
+              current: null,
+              limit: null,
+              iso_currency_code: null,
+              unofficial_currency_code: null,
+            },
+            type: a.type as plaid.AccountBase['type'],
+            subtype: a.subtype as plaid.AccountBase['subtype'],
+            verification_status:
+              a.verification_status as plaid.AccountBase['verification_status'],
+          }),
+        ),
       ),
       triggerDefaultSync: true,
     }

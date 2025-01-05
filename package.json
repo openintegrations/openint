@@ -8,7 +8,7 @@
     "web": "pnpm run --filter web dev",
     "generate-deprecated:docs": "npx tsx apps/app-config/_generateDocs.bin.ts",
     "generate-deprecated:connectorsList": "npx tsx apps/app-config/_generateConnectorLists.ts",
-    "genreate": "pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate",
+    "generate": "pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate",
     "docs": "cd docs && mintlify dev",
     "lint": "eslint --ext .js,.ts,.tsx --cache . --quiet --ignore-pattern /gateway",
     "mitm": "mitmweb --listen-port 3010 --web-port 3011 --mode reverse:http://localhost:3000",

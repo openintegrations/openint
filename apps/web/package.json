@@ -19,10 +19,10 @@
     "@openint/connect": "workspace:*",
     "@openint/connector-postgres": "workspace:*",
     "@openint/db": "workspace:*",
-    "@openint/events": "workspace:*",
-    "@openint/env": "workspace:*",
     "@openint/engine-backend": "workspace:*",
     "@openint/engine-frontend": "workspace:*",
+    "@openint/env": "workspace:*",
+    "@openint/events": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.19",
@@ -55,6 +55,7 @@
     "trpc-panel": "1.3.4"
   },
   "devDependencies": {
+    "@opensdks/sdk-plaid": "^0.0.19",
     "@sentry/cli": "^2.36.6",
     "@types/http-proxy": "1.17.10",
     "@types/react": "18.0.27",
