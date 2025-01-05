@@ -131,10 +131,6 @@ export interface paths {
     /** Sync pipeline */
     post: operations['syncPipeline']
   }
-  '/core/sync_run': {
-    /** List sync runs */
-    get: operations['listSyncRuns']
-  }
   '/core/events': {
     /** List events */
     get: operations['listEvents']
@@ -2651,41 +2647,6 @@ export interface operations {
       }
     }
   }
-  /** List sync runs */
-  listSyncRuns: {
-    parameters: {
-      query?: {
-        limit?: number
-        offset?: number
-      }
-    }
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': unknown[]
-        }
-      }
-      /** @description Invalid input data */
-      400: {
-        content: {
-          'application/json': components['schemas']['error.BAD_REQUEST']
-        }
-      }
-      /** @description Not found */
-      404: {
-        content: {
-          'application/json': components['schemas']['error.NOT_FOUND']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
   /** List events */
   listEvents: {
     parameters: {
@@ -2695,6 +2656,7 @@ export interface operations {
         page_size?: number
         since: number
         customerId?: string | null
+        name?: string | null
       }
     }
     responses: {
