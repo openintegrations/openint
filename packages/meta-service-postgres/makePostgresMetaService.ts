@@ -292,6 +292,9 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
             (tableName === 'event'
               ? sql`timestamp > ${sql.param(new Date(since).toISOString())}`
               : sql`created_at > ${sql.param(new Date(since).toISOString())}`),
+          ...Object.entries(rest.where ?? {}).map(
+            ([k, v]) => sql`${sql.identifier(k)} = ${v}`,
+          ),
         ])
         console.log('conditions ', customerId, rest)
         const where =
