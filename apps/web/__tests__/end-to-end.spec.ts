@@ -199,7 +199,7 @@ test('create and sync greenhouse connection', async () => {
   })
 })
 
-test('create connector config with bad parameters fail ', async () => {
+test('create connector config with bad parameters fail', async () => {
   await expect(
     sdk.POST('/core/connector_config', {
       body: {
@@ -238,7 +238,7 @@ test('create connector config with bad parameters fail ', async () => {
   ).rejects.toThrow()
 })
 
-test('Edit organization with bad parameters fails  ', async () => {
+test('Edit organization with bad parameters fails', async () => {
   // TODO ? this should fail ?
   // const org1 = await sdk.PATCH('/viewer/organization', {
   //   body: {
@@ -317,7 +317,7 @@ test('create connections with bad parameters', async () => {
     }),
   ).rejects.toThrow()
 
-  let body = {
+  const body = {
     connectorConfigId: connConfig.id,
     settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
     displayName: 'displayName',
@@ -331,7 +331,7 @@ test('create connections with bad parameters', async () => {
     sdk.POST('/core/connection', {
       body: {
         ...body,
-        // @ts-ignore
+        // @ts-expect-error
         settings: 'foo',
       },
     }),
