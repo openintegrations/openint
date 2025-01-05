@@ -415,7 +415,7 @@ export function makeSyncService({
         .stateUpdate({type: 'stateUpdate', subtype: 'complete'}),
     )
 
-    await inngest.send({
+    const res = await inngest.send({
       name: 'sync.completed',
       data: {
         pipeline_id: pipeline.id,
@@ -425,6 +425,11 @@ export function makeSyncService({
       },
       user: {webhook_url: org?.webhook_url || ''},
     })
+    // console.log('res', res)
+    return {
+      pipeline_id: pipeline.id,
+      sync_completed_event_id: res.ids[0] as string,
+    }
   }
 
   const _syncConnectionUpdate = async (
@@ -458,22 +463,25 @@ export function makeSyncService({
       console.log(
         `[_syncConnectionUpdate] Returning early skip syncing pipelines for connection id ${id} and source ${connUpdate.source$} with triggerDefaultSync ${connUpdate.triggerDefaultSync}`,
       )
-      return id
+      return {connection_id: id}
     }
 
     await ensurePipelinesForConnection(id)
     const pipelines = await getPipelinesForConnection(id)
 
     console.log('_syncConnectionUpdate existingPipes.len', pipelines.length)
-    await Promise.all(
-      pipelines.map(async (pipe) => {
-        await _syncPipeline(pipe, {
+    const pipelineSyncs = await Promise.all(
+      pipelines.map((pipe) =>
+        _syncPipeline(pipe, {
           source$: connUpdate.source$,
           source$ConcatDefault: connUpdate.triggerDefaultSync,
-        })
-      }),
+        }),
+      ),
     )
-    return id
+    return {
+      connection_id: id,
+      pipeline_syncs: pipelineSyncs,
+    }
   }
 
   return {

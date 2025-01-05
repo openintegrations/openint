@@ -8,8 +8,6 @@ export const envConfig = {
     // Core env vars
     DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
     DATABASE_URL_UNPOOLED: z.string().optional(),
-    // TODO: Incorporate schema in the url itself.
-    POSTGRES_SCHEMA: z.string().optional(),
 
     JWT_SECRET: z.string().optional(),
     CLERK_SECRET_KEY: z.string().optional(),
@@ -63,7 +61,6 @@ export const envConfig = {
     NANGO_SECRET_KEY: process.env['NANGO_SECRET_KEY'],
     SENTRY_CRON_MONITOR_URL: process.env['SENTRY_CRON_MONITOR_URL'],
     VERCEL_ENV: process.env['VERCEL_ENV'],
-    POSTGRES_SCHEMA: process.env['POSTGRES_SCHEMA'],
     INNGEST_EVENT_KEY: process.env['INNGEST_EVENT_KEY'],
     INNGEST_SIGNING_KEY: process.env['INNGEST_SIGNING_KEY'],
     NEXT_PUBLIC_NANGO_PUBLIC_KEY: process.env['NEXT_PUBLIC_NANGO_PUBLIC_KEY'],

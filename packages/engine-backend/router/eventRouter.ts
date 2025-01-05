@@ -11,12 +11,14 @@ export const eventRouter = trpc.router({
     })
     .input(
       zPaginationParams.extend({
+        // Should not be a required param
         since: z.number().int(),
         customerId: zCustomerId.nullish(),
+        name: z.string().nullish(),
       }),
     )
     .output(zPaginatedResult.extend({items: z.array(zRaw.event)}))
-    .query(async ({input: {since, customerId, page_size}, ctx}) => {
+    .query(async ({input: {since, customerId, page_size, name}, ctx}) => {
       const events = (await ctx.services.metaService.tables.event.list({
         since,
         customerId,
@@ -24,6 +26,9 @@ export const eventRouter = trpc.router({
         limit: page_size,
         orderBy: 'timestamp',
         order: 'desc',
+        where: {
+          ...(name ? {name} : {}),
+        },
       })) as Array<ZRaw['event']>
       return {
         // TODO: fix pagination
