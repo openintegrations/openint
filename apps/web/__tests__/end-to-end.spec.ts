@@ -284,13 +284,13 @@ test('Edit organization with bad parameters fails  ', async () => {
 })
 
 test('create connections with bad parameters', async () => {
-  const randomString = (n: number) => {
-    let str = ''
-    for (let i = 0; i < n; i++) {
-      str += 'a'
-    }
-    return str
-  }
+  // const randomString = (n: number) => {
+  //   let str = ''
+  //   for (let i = 0; i < n; i++) {
+  //     str += 'a'
+  //   }
+  //   return str
+  // }
   const connConfig = await sdk
     .POST('/core/connector_config', {
       body: {
@@ -414,7 +414,7 @@ describe('/clerk-testing-token', () => {
   test('GET /clerk-testing-token - Returns a testing token', async () => {
     const res = await sdk.GET('/clerk-testing-token', {
       params: {
-        query: {secret: testEnv.INTEGRATION_TEST_SECRET},
+        query: {secret: testEnv.INTEGRATION_TEST_SECRET + ''},
       },
     })
     expect(res.response.status).toEqual(200)
