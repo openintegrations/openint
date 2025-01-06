@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Wait for 5 minutes for Vercel Main Branch Deployment
+        run: sleep 300
       - name: Stably Runner Action
         id: stably-runner
         uses: stablyhq/stably-runner-action@v3
