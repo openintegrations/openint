@@ -5635,6 +5635,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "summarize_by",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
