@@ -87,55 +87,12 @@ const mappers = {
       e?.data?.Header?.Option?.find((opt) => opt.Name === 'AccountingStandard')
         ?.Value ?? '',
     totalIncome: (e) => {
-      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
-      const incomeRow = e?.data?.Rows?.Row?.find(
-        (row) => row.group === 'Income',
-      )
-      return Number.parseFloat(
-        incomeRow?.Summary?.ColData?.[columnMap['Total'] as number]?.value ||
-          '0',
-      )
+      return getReportValue(e.data, 'Income')
     },
-    grossProfit: (e) => {
-      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
-      const grossProfitRow = e?.data?.Rows?.Row?.find(
-        (row) => row.group === 'GrossProfit',
-      )
-      return Number.parseFloat(
-        grossProfitRow?.Summary?.ColData?.[columnMap['Total'] as number]
-          ?.value || '0',
-      )
-    },
-    totalExpenses: (e) => {
-      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
-      const expensesRow = e?.data?.Rows?.Row?.find(
-        (row) => row.group === 'Expenses',
-      )
-      return Number.parseFloat(
-        expensesRow?.Summary?.ColData?.[columnMap['Total'] as number]?.value ||
-          '0',
-      )
-    },
-    netOperatingIncome: (e) => {
-      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
-      const netOperatingRow = e?.data?.Rows?.Row?.find(
-        (row) => row.group === 'NetOperatingIncome',
-      )
-      return Number.parseFloat(
-        netOperatingRow?.Summary?.ColData?.[columnMap['Total'] as number]
-          ?.value || '0',
-      )
-    },
-    netIncome: (e) => {
-      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
-      const netIncomeRow = e?.data?.Rows?.Row?.find(
-        (row) => row.group === 'NetIncome',
-      )
-      return Number.parseFloat(
-        netIncomeRow?.Summary?.ColData?.[columnMap['Total'] as number]?.value ||
-          '0',
-      )
-    },
+    grossProfit: (e) => getReportValue(e.data, 'GrossProfit'),
+    totalExpenses: (e) => getReportValue(e.data, 'Expenses'),
+    netOperatingIncome: (e) => getReportValue(e.data, 'NetOperatingIncome'),
+    netIncome: (e) => getReportValue(e.data, 'NetIncome'),
   }),
 
   cashFlow: mapper(zCast<{data: QBO['Report']}>(), unified.cashFlow, {
@@ -289,7 +246,6 @@ const mappers = {
   ),
 }
 
-// Utility function to create a column map
 function createColumnMap(columns: {ColTitle: string}[]): {
   [key: string]: number
 } {
@@ -300,6 +256,19 @@ function createColumnMap(columns: {ColTitle: string}[]): {
     },
     {} as {[key: string]: number},
   )
+}
+
+// TODO: migrate other report adapters to use this type of abstraction (just using in pnl ATM)
+function getReportValue(e: QBO['Report'], group: string) {
+  const columnMap = createColumnMap(e?.Columns?.Column ?? [])
+
+  const row = e?.Rows?.Row?.find((row) => row.group === group)
+  // Get the last column's value, falling back to 'Total' or 'TOTAL' if available
+  const totalColIndex =
+    columnMap['TOTAL'] ??
+    columnMap['Total'] ??
+    (row?.Summary?.ColData?.length ?? 1) - 1
+  return Number.parseFloat(row?.Summary?.ColData?.[totalColIndex]?.value || '0')
 }
 
 export const qboAdapter = {
