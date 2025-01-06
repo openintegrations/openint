@@ -52,6 +52,8 @@ export const testEnv = createEnv({
     ccfg_plaid__CLIENT_SECRET_PRODUCTION: z.string().optional(),
     ccfg_plaid__CLIENT_SECRET_SANDBOX: z.string().optional(),
     INTEGRATION_TEST_SECRET: z.string().optional(),
+    STARBASE_ENDPOINT: z.string().optional(),
+    STARBASE_AUTH_TOKEN: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -88,6 +90,8 @@ export const testEnv = createEnv({
     ccfg_plaid__CLIENT_SECRET_SANDBOX:
       process.env['ccfg_plaid__CLIENT_SECRET_SANDBOX'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
+    STARBASE_ENDPOINT: process.env['STARBASE_ENDPOINT'],
+    STARBASE_AUTH_TOKEN: process.env['STARBASE_AUTH_TOKEN'],
   },
 })
 
