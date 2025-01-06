@@ -84,29 +84,58 @@ const mappers = {
     endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
     currency: (e) => e?.data?.Header?.Currency ?? 'USD',
     accountingStandard: (e) =>
-      e?.data?.Header?.Option?.find(
-        (opt: any) => opt.Name === 'AccountingStandard',
-      )?.Value ?? '',
-    totalIncome: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[0]?.Summary?.ColData[1]?.value || '0',
-      ),
-    grossProfit: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[1]?.Summary?.ColData[1]?.value || '0',
-      ),
-    totalExpenses: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[2]?.Summary?.ColData[1]?.value || '0',
-      ),
-    netOperatingIncome: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[3]?.Summary?.ColData[1]?.value || '0',
-      ),
-    netIncome: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[4]?.Summary?.ColData[1]?.value || '0',
-      ),
+      e?.data?.Header?.Option?.find((opt) => opt.Name === 'AccountingStandard')
+        ?.Value ?? '',
+    totalIncome: (e) => {
+      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+      const incomeRow = e?.data?.Rows?.Row?.find(
+        (row) => row.group === 'Income',
+      )
+      return Number.parseFloat(
+        incomeRow?.Summary?.ColData?.[columnMap['Total'] as number]?.value ||
+          '0',
+      )
+    },
+    grossProfit: (e) => {
+      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+      const grossProfitRow = e?.data?.Rows?.Row?.find(
+        (row) => row.group === 'GrossProfit',
+      )
+      return Number.parseFloat(
+        grossProfitRow?.Summary?.ColData?.[columnMap['Total'] as number]
+          ?.value || '0',
+      )
+    },
+    totalExpenses: (e) => {
+      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+      const expensesRow = e?.data?.Rows?.Row?.find(
+        (row) => row.group === 'Expenses',
+      )
+      return Number.parseFloat(
+        expensesRow?.Summary?.ColData?.[columnMap['Total'] as number]?.value ||
+          '0',
+      )
+    },
+    netOperatingIncome: (e) => {
+      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+      const netOperatingRow = e?.data?.Rows?.Row?.find(
+        (row) => row.group === 'NetOperatingIncome',
+      )
+      return Number.parseFloat(
+        netOperatingRow?.Summary?.ColData?.[columnMap['Total'] as number]
+          ?.value || '0',
+      )
+    },
+    netIncome: (e) => {
+      const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+      const netIncomeRow = e?.data?.Rows?.Row?.find(
+        (row) => row.group === 'NetIncome',
+      )
+      return Number.parseFloat(
+        netIncomeRow?.Summary?.ColData?.[columnMap['Total'] as number]?.value ||
+          '0',
+      )
+    },
   }),
 
   cashFlow: mapper(zCast<{data: QBO['Report']}>(), unified.cashFlow, {
@@ -298,7 +327,7 @@ export const qboAdapter = {
   getBalanceSheet: async ({instance, input}) => {
     const res = await instance.GET('/reports/BalanceSheet', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.balanceSheet(res)
@@ -306,7 +335,7 @@ export const qboAdapter = {
   getProfitAndLoss: async ({instance, input}) => {
     const res = await instance.GET('/reports/ProfitAndLoss', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.profitAndLoss(res)
@@ -314,7 +343,7 @@ export const qboAdapter = {
   getCashFlow: async ({instance, input}) => {
     const res = await instance.GET('/reports/CashFlow', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.cashFlow(res)
@@ -322,7 +351,7 @@ export const qboAdapter = {
   getTransactionList: async ({instance, input}) => {
     const res = await instance.GET('/reports/TransactionList', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.transactionList(res)
@@ -330,7 +359,7 @@ export const qboAdapter = {
   getCustomerBalance: async ({instance, input}) => {
     const res = await instance.GET('/reports/CustomerBalance', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.customerBalance(res)
@@ -338,7 +367,7 @@ export const qboAdapter = {
   getCustomerIncome: async ({instance, input}) => {
     const res = await instance.GET('/reports/CustomerIncome', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.customerIncome(res)
