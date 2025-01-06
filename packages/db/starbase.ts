@@ -86,7 +86,9 @@ export async function dbUpsertStarbase<
 
     if (!response.ok) {
       throw new Error(
-        `Starbase upsert request failed: ${await response.text()}`,
+        `Starbase upsert request failed: ${await response.text()}, query: ${
+          query.sql
+        }`,
       )
     }
   }
