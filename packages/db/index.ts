@@ -8,6 +8,7 @@ import * as schema from './schema'
 export * from 'drizzle-orm'
 export * from './stripeNullByte'
 export * from './upsert'
+export * from './starbase'
 export {schema, drizzle, postgres}
 
 export function getDb<

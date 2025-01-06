@@ -23,7 +23,7 @@ postgresHelpers._types['destinationInputEntity'] = {
 }
 
 export const starbaseServer = {
-  destinationSync: ({customer, source, settings: {databaseUrl}}) => {
+  destinationSync: ({customer, source}) => {
     const migrationRan: Record<string, boolean> = {}
     let messagesByConfig: Record<string, NonEmptyArray<RecordMessageBody>> = {}
 

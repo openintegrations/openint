@@ -1,4 +1,4 @@
-import {getTableName, sql} from 'drizzle-orm'
+import {getTableName} from 'drizzle-orm'
 import {drizzle} from 'drizzle-orm/sqlite-proxy'
 import {starbase} from 'drizzle-starbase'
 import * as R from 'remeda'
@@ -25,11 +25,6 @@ const destLink = starbaseServer.destinationSync({
   source: {id: 'conn_sfdc_9287', connectorName: 'sfdc'},
   state: {},
 })
-
-// Helper to clear tables between tests
-async function clearTable(tableName: string) {
-  await db.run(sql`DELETE FROM ${sql.identifier(tableName)}`)
-}
 
 describe('standard schema', () => {
   test('destinationSync', async () => {
