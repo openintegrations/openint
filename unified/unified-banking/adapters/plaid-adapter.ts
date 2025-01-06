@@ -52,7 +52,7 @@ export const plaidAdapter = {
   },
   listTransactions: async ({instance}) => {
     const res = await instance.POST('/transactions/sync', {
-      body: {access_token: instance.accessToken},
+      body: {access_token: instance.accessToken, count: 100},
     })
     // TODO: Fully implement this...
     return {

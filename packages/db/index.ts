@@ -4,14 +4,11 @@ import {drizzle} from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import {env} from '@openint/env'
 import * as schema from './schema'
-import * as schemaWip from './schema-wip'
 
 export * from 'drizzle-orm'
-export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
-export * from './starbase'
-export {schema, drizzle, schemaWip, postgres}
+export {schema, drizzle, postgres}
 
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
@@ -25,10 +22,6 @@ export function getDb<
   }
   return {db, pg}
 }
-
-export const {pg: configPg, db: configDb} = getDb(env.DATABASE_URL, {
-  schema: schemaWip,
-})
 
 export const {pg, db} = getDb(env.DATABASE_URL, {schema})
 

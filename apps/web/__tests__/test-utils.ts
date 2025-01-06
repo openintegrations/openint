@@ -2,7 +2,7 @@ import {clerkClient} from '@clerk/nextjs/server'
 import type {Id, Viewer} from '@openint/cdk'
 import {getOrCreateApikey} from '../lib-server/procedures'
 
-export async function resetClerk() {
+export async function resetClerkTestData() {
   const orgs = await clerkClient.organizations.getOrganizationList({limit: 100})
   for (const org of orgs.data) {
     if (
@@ -40,4 +40,9 @@ export async function setupTestOrg() {
   }
   const apiKey = await getOrCreateApikey(viewer)
   return {user, org, viewer, apiKey, testId}
+}
+
+export async function tearDownTestOrg(testOrg: Awaited<ReturnType<typeof setupTestOrg>>) {
+  await clerkClient.organizations.deleteOrganization(testOrg.org.id)
+  await clerkClient.users.deleteUser(testOrg.user.id)
 }

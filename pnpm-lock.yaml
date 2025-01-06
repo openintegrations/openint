@@ -617,6 +617,9 @@ importers:
         specifier: 1.3.4
         version: 1.3.4(@trpc/server@10.40.0)(zod@3.22.4)
     devDependencies:
+      '@opensdks/sdk-plaid':
+        specifier: ^0.0.19
+        version: 0.0.19
       '@sentry/cli':
         specifier: ^2.36.6
         version: 2.36.6
@@ -1063,8 +1066,8 @@ importers:
         specifier: ^0.0.19
         version: 0.0.19
       '@opensdks/sdk-plaid':
-        specifier: ^0.0.14
-        version: 0.0.14
+        specifier: ^0.0.19
+        version: 0.0.19
       '@t3-oss/env-core':
         specifier: 0.7.1
         version: 0.7.1(typescript@5.6.2)(zod@3.22.4)
@@ -3843,11 +3846,17 @@ packages:
   '@opensdks/fetch-links@0.0.19':
     resolution: {integrity: sha512-rGFjhN61qkLWVSrffEkYHGstCFT+3RQ/jUFHL2tpyJ9he6aNoX80ABsRxf9DCrQole5L/wWuq88luUeAnfTMBQ==}
 
+  '@opensdks/fetch-links@0.0.21':
+    resolution: {integrity: sha512-3f+n1frcdeADOVgfH6e3VCPp42oOs2sS7zvufHzwhgFw4u2KyFpreNfjlQsBSpLFUsWFsIwiMlSiNW7GRe5PLA==}
+
   '@opensdks/runtime@0.0.19':
     resolution: {integrity: sha512-9rPrPDHS+PRVKOWXbdYEtys/4uHeVzitQgR0QVSWtMFOn6FOY8VxMGvem0TGJwHf4EPecejoWF8NuNwUATmbeA==}
 
   '@opensdks/runtime@0.0.20':
     resolution: {integrity: sha512-Ho1+r9Y6Bsdl/3oppx6c709rlJot2UM86Rj36MYfKFIt9kCj6mHI2HLWi+X9+bmYE3CwwMsw58h3PWJMYjq/2w==}
+
+  '@opensdks/runtime@0.0.22':
+    resolution: {integrity: sha512-8xs8vnhrUYy0iqVoLffwWGFR22jenIGvscPBrir10cO1wO3Xpe5sNwZN0di2T+lxorm6b/naQ3LU90mLTB/hkw==}
 
   '@opensdks/sdk-airbyte@0.0.1':
     resolution: {integrity: sha512-bFDDy0BDRhvJAlto2wW4BwcMVMdsedLDIAsrHTDV5InyxKFqu9wxTE6vONwWm/JKB5aximIoedNq208wAmEKvw==}
@@ -3906,8 +3915,8 @@ packages:
   '@opensdks/sdk-pipedrive@0.0.1':
     resolution: {integrity: sha512-cNZsDdpQY0CUeM4Bs0UACFeYDRuxKyDlEpC7bpeDVFH5a87D5dqyNJcA4Do9SACbrpXgp7tyzZbdkq4KSKC81g==}
 
-  '@opensdks/sdk-plaid@0.0.14':
-    resolution: {integrity: sha512-LcutnqPz94xXGjz9UhA/737tIoIbhoqgXJ0jB8qBJM4wBIfHFTmu1K9Jy6B0ixWIliv8IfDMpoHyxvg0bUgJ4Q==}
+  '@opensdks/sdk-plaid@0.0.19':
+    resolution: {integrity: sha512-o4iZWn8e0enVB6ZV6Y6wHZT9cAk4vQtJqN27BIQyTCL22JVQE/RhUmW/T+RWW2Tx+/5kSteMhlCXLMdkzA6Evg==}
 
   '@opensdks/sdk-qbo@0.0.23':
     resolution: {integrity: sha512-U6mjnOjwfraS8RS5+e6Ypy7HEEXCwdiwP1qEQZB0lhKcHLwtmqjoS4O6bS9HQPXHo8rZIfuGNv1yARv7qAEBVA==}
@@ -10919,11 +10928,17 @@ packages:
     resolution: {integrity: sha512-XgFPPM+B28FtCCgSb9I+s9szOC1vZRSwgWsRUA5ylIxRTgKozqjOCrVOqGsYABPYK5qnfqClxZTFBa8PKt2v6Q==}
     engines: {node: '>=12'}
 
+  openapi-fetch@0.13.4:
+    resolution: {integrity: sha512-JHX7UYjLEiHuQGCPxa3CCCIqe/nc4bTIF9c4UYVC8BegAbWoS3g4gJxKX5XcG7UtYQs2060kY6DH64KkvNZahg==}
+
   openapi-fetch@0.8.1:
     resolution: {integrity: sha512-xmzMaBCydPTMd0TKy4P2DYx/JOe9yjXtPIky1n1GV7nJJdZ3IZgSHvAWVbe06WsPD8EreR7E97IAiskPr6sa2g==}
 
   openapi-types@12.1.0:
     resolution: {integrity: sha512-XpeCy01X6L5EpP+6Hc3jWN7rMZJ+/k1lwki/kTmWzbVhdPie3jd5O2ZtedEx8Yp58icJ0osVldLMrTB/zslQXA==}
+
+  openapi-typescript-helpers@0.0.15:
+    resolution: {integrity: sha512-opyTPaunsklCBpTK8JGef6mfPhLSnyy5a0IN9vKtx3+4aExf+KxEqYwIy3hqkedXIB97u357uLMJsOnm3GVjsw==}
 
   openapi-typescript-helpers@0.0.4:
     resolution: {integrity: sha512-Q0MTapapFAG993+dx8lNw33X6P/6EbFr31yNymJHq56fNc6dODyRm8tWyRnGxuC74lyl1iCRMV6nQCGQsfVNKg==}
@@ -10936,6 +10951,9 @@ packages:
 
   openapi3-ts@4.1.2:
     resolution: {integrity: sha512-B7gOkwsYMZO7BZXwJzXCuVagym2xhqsrilVvV0dnq2Di4+iLUXKVX9gOK23ZqaAHZOwABXN0QTdW8QnkUTX6DA==}
+
+  openapi3-ts@4.4.0:
+    resolution: {integrity: sha512-9asTNB9IkKEzWMcHmVZE7Ts3kC9G7AFHfs8i7caD8HbI76gEjdkId4z/AkP83xdZsH7PLAnnbl47qZkXuxpArw==}
 
   optionator@0.9.1:
     resolution: {integrity: sha512-74RlY5FCnhq4jRxVUPKDaRwrVNXMqsGsiW6AJw4XK8hmtm10wC0ypZBLw5IIp85NZMr91+qd1RvvENwg7jjRFw==}
@@ -13676,6 +13694,11 @@ packages:
     resolution: {integrity: sha512-8aAvwVUSHpfEqTQ4w/KMlf3HcRdt50E5ODIQJBw1fQ5RL34xabzxtUlzTXVqc4rkZsPbvrXKWnABCD7kWSmocA==}
     engines: {node: '>= 14'}
 
+  yaml@2.7.0:
+    resolution: {integrity: sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA==}
+    engines: {node: '>= 14'}
+    hasBin: true
+
   yamljs@0.3.0:
     resolution: {integrity: sha512-C/FsVVhht4iPQYXOInoxUM/1ELSf9EsgKH34FofQOp6hwCPrW4vG4w5++TED3xRUo8gD7l0P1J1dLlDYzODsTQ==}
     hasBin: true
@@ -15809,6 +15832,8 @@ snapshots:
 
   '@opensdks/fetch-links@0.0.19': {}
 
+  '@opensdks/fetch-links@0.0.21': {}
+
   '@opensdks/runtime@0.0.19':
     dependencies:
       '@opensdks/fetch-links': 0.0.18
@@ -15822,6 +15847,13 @@ snapshots:
       openapi-fetch: 0.8.1
       openapi-typescript-helpers: 0.0.4
       openapi3-ts: 4.1.2
+
+  '@opensdks/runtime@0.0.22':
+    dependencies:
+      '@opensdks/fetch-links': 0.0.21
+      openapi-fetch: 0.13.4
+      openapi-typescript-helpers: 0.0.15
+      openapi3-ts: 4.4.0
 
   '@opensdks/sdk-airbyte@0.0.1': {}
 
@@ -15865,7 +15897,9 @@ snapshots:
 
   '@opensdks/sdk-pipedrive@0.0.1': {}
 
-  '@opensdks/sdk-plaid@0.0.14': {}
+  '@opensdks/sdk-plaid@0.0.19':
+    dependencies:
+      '@opensdks/runtime': 0.0.22
 
   '@opensdks/sdk-qbo@0.0.23': {}
 
@@ -24718,11 +24752,17 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
+  openapi-fetch@0.13.4:
+    dependencies:
+      openapi-typescript-helpers: 0.0.15
+
   openapi-fetch@0.8.1:
     dependencies:
       openapi-typescript-helpers: 0.0.4
 
   openapi-types@12.1.0: {}
+
+  openapi-typescript-helpers@0.0.15: {}
 
   openapi-typescript-helpers@0.0.4: {}
 
@@ -24735,6 +24775,10 @@ snapshots:
   openapi3-ts@4.1.2:
     dependencies:
       yaml: 2.3.4
+
+  openapi3-ts@4.4.0:
+    dependencies:
+      yaml: 2.7.0
 
   optionator@0.9.1:
     dependencies:
@@ -27856,6 +27900,8 @@ snapshots:
   yaml@2.3.0: {}
 
   yaml@2.3.4: {}
+
+  yaml@2.7.0: {}
 
   yamljs@0.3.0:
     dependencies:

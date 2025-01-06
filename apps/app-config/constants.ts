@@ -36,11 +36,14 @@ export const kAcceptUrlParam = '_accept' as const
 export const kAccessToken = '_token' as const
 
 export const __DEBUG__ =
-  getServerUrl(null).includes('localhost') ||
-  Boolean(
-    typeof window !== 'undefined' && window.localStorage.getItem('__DEBUG__'),
-  ) ||
-  !!process.env['DEBUG']
+  process.env['DEBUG'] === 'false'
+    ? false
+    : getServerUrl(null).includes('localhost') ||
+      Boolean(
+        typeof window !== 'undefined' &&
+          window.localStorage.getItem('__DEBUG__'),
+      ) ||
+      !!process.env['DEBUG']
 
 export const isDevOrStaging =
   __DEBUG__ ||

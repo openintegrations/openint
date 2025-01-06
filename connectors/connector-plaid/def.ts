@@ -2,10 +2,7 @@ import plaidOas from '@opensdks/sdk-plaid/plaid.oas.json'
 import type * as plaid from 'plaid'
 import type {PlaidError} from 'plaid'
 import {CountryCode, Products} from 'plaid'
-import type {
-  PlaidAccount as PlaidLinkAccount,
-  PlaidLinkOnSuccessMetadata,
-} from 'react-plaid-link'
+import type {PlaidLinkOnSuccessMetadata} from 'react-plaid-link'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers, makePostingsMap, zWebhookInput} from '@openint/cdk'
 import {A, R, z, zCast} from '@openint/util'
@@ -55,7 +52,6 @@ export const plaidSchemas = {
      * here must match the setting in the customization, or the customization will not be applied.
      */
     language: zLanguage.default('en'),
-
 
     // integrationDisplayName: z.string().optional().openapi({
     //   example: 'US Bank Accounts',
@@ -111,7 +107,7 @@ export const plaidSchemas = {
     z.object({
       id: z.string(),
       entityName: z.literal('account'),
-      entity: zCast<plaid.AccountBase | PlaidLinkAccount>(),
+      entity: zCast<plaid.AccountBase>(),
     }),
     z.object({
       id: z.string(),
@@ -144,7 +140,7 @@ export const plaidDef = {
   standardMappers: {
     entity: {
       account: ({entity: a}, extConn) => ({
-        id: 'account_id' in a ? a.account_id : a.id,
+        id: a.account_id,
         entityName: 'account',
         entity: {
           name: getPlaidAccountFullName(a, extConn.institution),
