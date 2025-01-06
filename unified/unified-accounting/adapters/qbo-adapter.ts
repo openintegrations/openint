@@ -84,29 +84,15 @@ const mappers = {
     endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
     currency: (e) => e?.data?.Header?.Currency ?? 'USD',
     accountingStandard: (e) =>
-      e?.data?.Header?.Option?.find(
-        (opt: any) => opt.Name === 'AccountingStandard',
-      )?.Value ?? '',
-    totalIncome: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[0]?.Summary?.ColData[1]?.value || '0',
-      ),
-    grossProfit: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[1]?.Summary?.ColData[1]?.value || '0',
-      ),
-    totalExpenses: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[2]?.Summary?.ColData[1]?.value || '0',
-      ),
-    netOperatingIncome: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[3]?.Summary?.ColData[1]?.value || '0',
-      ),
-    netIncome: (e) =>
-      Number.parseFloat(
-        e?.data?.Rows?.Row[4]?.Summary?.ColData[1]?.value || '0',
-      ),
+      e?.data?.Header?.Option?.find((opt) => opt.Name === 'AccountingStandard')
+        ?.Value ?? '',
+    totalIncome: (e) => {
+      return getReportValue(e.data, 'Income')
+    },
+    grossProfit: (e) => getReportValue(e.data, 'GrossProfit'),
+    totalExpenses: (e) => getReportValue(e.data, 'Expenses'),
+    netOperatingIncome: (e) => getReportValue(e.data, 'NetOperatingIncome'),
+    netIncome: (e) => getReportValue(e.data, 'NetIncome'),
   }),
 
   cashFlow: mapper(zCast<{data: QBO['Report']}>(), unified.cashFlow, {
@@ -260,7 +246,6 @@ const mappers = {
   ),
 }
 
-// Utility function to create a column map
 function createColumnMap(columns: {ColTitle: string}[]): {
   [key: string]: number
 } {
@@ -271,6 +256,19 @@ function createColumnMap(columns: {ColTitle: string}[]): {
     },
     {} as {[key: string]: number},
   )
+}
+
+// TODO: migrate other report adapters to use this type of abstraction (just using in pnl ATM)
+function getReportValue(e: QBO['Report'], group: string) {
+  const columnMap = createColumnMap(e?.Columns?.Column ?? [])
+
+  const row = e?.Rows?.Row?.find((row) => row.group === group)
+  // Get the last column's value, falling back to 'Total' or 'TOTAL' if available
+  const totalColIndex =
+    columnMap['TOTAL'] ??
+    columnMap['Total'] ??
+    (row?.Summary?.ColData?.length ?? 1) - 1
+  return Number.parseFloat(row?.Summary?.ColData?.[totalColIndex]?.value || '0')
 }
 
 export const qboAdapter = {
@@ -298,7 +296,7 @@ export const qboAdapter = {
   getBalanceSheet: async ({instance, input}) => {
     const res = await instance.GET('/reports/BalanceSheet', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.balanceSheet(res)
@@ -306,7 +304,7 @@ export const qboAdapter = {
   getProfitAndLoss: async ({instance, input}) => {
     const res = await instance.GET('/reports/ProfitAndLoss', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.profitAndLoss(res)
@@ -314,7 +312,7 @@ export const qboAdapter = {
   getCashFlow: async ({instance, input}) => {
     const res = await instance.GET('/reports/CashFlow', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.cashFlow(res)
@@ -322,7 +320,7 @@ export const qboAdapter = {
   getTransactionList: async ({instance, input}) => {
     const res = await instance.GET('/reports/TransactionList', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.transactionList(res)
@@ -330,7 +328,7 @@ export const qboAdapter = {
   getCustomerBalance: async ({instance, input}) => {
     const res = await instance.GET('/reports/CustomerBalance', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.customerBalance(res)
@@ -338,7 +336,7 @@ export const qboAdapter = {
   getCustomerIncome: async ({instance, input}) => {
     const res = await instance.GET('/reports/CustomerIncome', {
       params: {
-        query: input
+        query: input,
       },
     })
     return mappers.customerIncome(res)
