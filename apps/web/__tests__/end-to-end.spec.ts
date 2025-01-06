@@ -113,7 +113,6 @@ test('create and sync plaid connection', async () => {
     {},
   ])
 
-  console.log('[endToEnd] postConnectRes', postConnectRes)
   const connId = postConnectRes.connectionId!
 
   await sdk.POST('/core/connection/{id}/_sync', {
@@ -156,11 +155,18 @@ test('create and sync greenhouse connection', async () => {
     })
     .then((r) => r.data)
 
-  const {data: connId} = await sdk.POST('/core/connection', {
-    body: {
-      connectorConfigId: connConfig.id,
-      settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
+  const body = {
+    connectorConfigId: connConfig.id,
+    settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
+    displayName: 'displayName',
+    disabled: false,
+    metadata: {
+      key: 'value',
     },
+    customerId: 'fooCustomerId',
+  }
+  const {data: connId} = await sdk.POST('/core/connection', {
+    body,
   })
   console.log('[endToEnd] connId', connId)
 
@@ -190,5 +196,290 @@ test('create and sync greenhouse connection', async () => {
   expect(syncCompletedEvent).toMatchObject({
     name: 'sync.completed',
     data: {source_id: connId},
+  })
+})
+
+test('create connector config with bad parameters fail', async () => {
+  await expect(
+    sdk.POST('/core/connector_config', {
+      body: {
+        orgId: fixture.org.id,
+        connectorName: 'foo',
+        defaultPipeOut: {
+          streams: {job: true, candidate: true},
+        },
+      },
+    }),
+  ).rejects.toThrow()
+
+  // TODO: this should fail
+  // await expect(
+  //   sdk.POST('/core/connector_config', {
+  //     body: {
+  //       orgId: fixture.org.id,
+  //       connectorName: 'greenhouse',
+  //       defaultPipeOut: {
+  //         streams: {michael: true},
+  //       },
+  //     },
+  //   }),
+  // ).rejects.toThrow()
+
+  await expect(
+    sdk.POST('/core/connector_config', {
+      body: {
+        orgId: 'micasa',
+        connectorName: 'greenhouse',
+        defaultPipeOut: {
+          streams: {job: true, candidate: true},
+        },
+      },
+    }),
+  ).rejects.toThrow()
+})
+
+test('Edit organization with bad parameters fails', async () => {
+  // TODO ? this should fail ?
+  // const org1 = await sdk.PATCH('/viewer/organization', {
+  //   body: {
+  //     publicMetadata: {
+  //       database_url: testDb.url.toString(),
+  //       // @ts-expect-error
+  //       foo: 'value',
+  //     },
+  //   },
+  // })
+
+  // expect(org1.error).toBeTruthy()
+
+  await expect(
+    sdk.PATCH('/viewer/organization', {
+      body: {
+        publicMetadata: {
+          // @ts-expect-error
+          database_url: {},
+        },
+      },
+    }),
+  ).rejects.toThrow()
+
+  // TODO: this should fail
+  // await expect(
+  //   sdk.PATCH('/viewer/organization', {
+  //     body: {
+  //       publicMetadata: {
+  //         // @ts-expect-error
+  //         migrate_tables: {},
+  //       },
+  //     },
+  //   }),
+  // ).rejects.toThrow()
+
+  await expect(
+    sdk.PATCH('/viewer/organization', {
+      // @ts-expect-error
+      body: {},
+    }),
+  ).rejects.toThrow()
+})
+
+test('create connections with bad parameters', async () => {
+  // const randomString = (n: number) => {
+  //   let str = ''
+  //   for (let i = 0; i < n; i++) {
+  //     str += 'a'
+  //   }
+  //   return str
+  // }
+  const connConfig = await sdk
+    .POST('/core/connector_config', {
+      body: {
+        orgId: fixture.org.id,
+        connectorName: 'greenhouse',
+      },
+    })
+    .then((r) => r.data)
+
+  // TODO: validate API keys for greenhouse when adding a connection with it
+  // await expect(
+  //   sdk.POST('/core/connection', {
+  //     body: {
+  //       connectorConfigId: connConfig.id,
+  //       settings: {apiKey: 'fooApiKey'},
+  //     },
+  //   }),
+  // ).rejects.toThrow()
+
+  await expect(
+    sdk.POST('/core/connection', {
+      // @ts-expect-error
+      body: {},
+    }),
+  ).rejects.toThrow()
+
+  const body = {
+    connectorConfigId: connConfig.id,
+    settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
+    displayName: 'displayName',
+    disabled: false,
+    metadata: {
+      key: 'value',
+    },
+  }
+
+  await expect(
+    sdk.POST('/core/connection', {
+      body: {
+        ...body,
+        // @ts-expect-error
+        settings: 'foo',
+      },
+    }),
+  ).rejects.toThrow()
+
+  // TODO: this should fail
+  // await expect(
+  //   sdk.POST('/core/connection', {
+  //     body: {
+  //       ...body,
+  //       displayName: randomString(9999),
+  //     },
+  //   }),
+  // ).rejects.toThrow()
+
+  // TODO: this should fail
+  // await expect(
+  //   sdk.POST('/core/connection', {
+  //     body: {
+  //       ...body,
+  //       // @ts-expect-error
+  //       disabled: {},
+  //     },
+  //   }),
+  // ).rejects.toThrow()
+
+  // TODO: this should fail
+  // await expect(
+  //   sdk.POST('/core/connection', {
+  //     body: {
+  //       ...body,
+  //       metadata: 'foo',
+  //     },
+  //   }),
+  // ).rejects.toThrow()
+
+  // TODO: this should fail
+  // await expect(
+  //   sdk.POST('/core/connection', {
+  //     body: {
+  //       ...body,
+  //       customerId: randomString(999),
+  //     },
+  //   }),
+  // ).rejects.toThrow()
+
+  await expect(
+    sdk.POST('/core/connection', {
+      body: {
+        ...body,
+        integrationId: 'foo',
+      },
+    }),
+  ).rejects.toThrow()
+})
+
+// Group: /health
+describe('/health', () => {
+  test('GET /health - Health check', async () => {
+    const res = await sdk.GET('/health')
+    expect(res.response.status).toEqual(200)
+    expect(res.data).toMatchObject({healthy: true})
+  })
+
+  // TODO: fix this, failing with
+  //       "message": "unrecognized configuration parameter \"schema\"",
+  // test('GET /health?exp=true - Health check with query params', async () => {
+  //   const res = await sdk.GET('/health', {
+  //     params: {
+  //       query: {exp: true},
+  //     },
+  //   })
+  //   expect(res.response.status).toEqual(200)
+  //   expect(res.data.healthy).toBe(true)
+  // })
+})
+
+// Group: /clerk-testing-token
+describe('/clerk-testing-token', () => {
+  test('GET /clerk-testing-token - Returns a testing token', async () => {
+    const res = await sdk.GET('/clerk-testing-token', {
+      params: {
+        query: {secret: testEnv.INTEGRATION_TEST_SECRET + ''},
+      },
+    })
+    expect(res.response.status).toEqual(200)
+    expect(res.data).toHaveProperty('testing_token')
+  })
+})
+
+// Group: /connect
+describe('/connect', () => {
+  test('POST /connect/token - Creates a connect token', async () => {
+    const res = await sdk.POST('/connect/token', {
+      body: {
+        customerId: 'testCustomer',
+        validityInSeconds: 600,
+      },
+    })
+    expect(res.response.status).toEqual(200)
+    expect(res.data).toHaveProperty('token')
+  })
+
+  test('POST /connect/magic-link - Creates a magic link', async () => {
+    const res = await sdk.POST('/connect/magic-link', {
+      body: {
+        customerId: 'testCustomer',
+        displayName: 'Test',
+        redirectUrl: 'https://example.com',
+      },
+    })
+    expect(res.response.status).toEqual(200)
+    expect(res.data).toHaveProperty('url')
+  })
+})
+
+// Group: /passthrough
+describe('/passthrough', () => {
+  // TODO: add passthrough positive case
+
+  test('POST /passthrough - Throws error for greenhouse passthrough request', async () => {
+    const connConfig = await sdk
+      .POST('/core/connector_config', {
+        body: {
+          orgId: fixture.org.id,
+          connectorName: 'greenhouse',
+        },
+      })
+      .then((r) => r.data)
+
+    // TODO: validate API keys for greenhouse when adding a connection with it
+    const {data: connId} = await sdk.POST('/core/connection', {
+      body: {
+        connectorConfigId: connConfig.id,
+        settings: {apiKey: 'fooApiKey'},
+      },
+    })
+
+    await expect(async () => {
+      await sdk.POST('/passthrough', {
+        body: {
+          method: 'GET',
+          path: 'https://jsonplaceholder.typicode.com/todos/1',
+        },
+        headers: {
+          'x-connection-id': connId,
+        },
+      })
+    }).rejects.toThrow()
   })
 })
