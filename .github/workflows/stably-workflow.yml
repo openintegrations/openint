@@ -23,4 +23,4 @@ jobs:
         uses: stablyhq/stably-runner-action@v3
         with:
           api-key: ${{ secrets.STABLY_API_KEY }}
-          test-suite-id: cm5g8i6nc0005l103urkixuxz
+          test-group-id: cm5g8i6nc0005l103urkixuxz
