@@ -63,8 +63,8 @@
     --toast-border-default: hsl(220, 25%, 86%);
     --toast-bg-success: hsl(134, 58%, 47%);
     --toast-border-success: hsl(134, 79%, 32%); 
-    --toast-bg-loading: hsl(60, 100%, 90%);
-    --toast-border-loading: hsl(60, 100%, 80%);
+    --toast-bg-loading: hsl(0, 0%, 64%);
+    --toast-border-loading: hsl(0, 0%, 42%);
     --toast-bg-destructive: hsl(0, 100%, 63%); 
     --toast-border-destructive: hsl(0, 60%, 55%);
     --toast-foreground: hsl(0, 0%, 100%);
@@ -120,8 +120,8 @@
     --toast-border-default: hsl(0, 0%, 20%);
     --toast-bg-success: hsl(138, 41%, 25%); 
     --toast-border-success: hsl(138, 47%, 48%);
-    --toast-bg-loading: hsl(60, 40%, 30%); 
-    --toast-border-loading: hsl(60, 40%, 25%);
+    --toast-bg-loading: hsl(0, 0%, 27%);
+    --toast-border-loading: hsl(0, 0%, 42%);
     --toast-bg-destructive: hsl(0, 50%, 28%);
     --toast-border-destructive: hsl(0, 41%, 50%);
     --toast-foreground: hsl(0, 0%, 100%);
