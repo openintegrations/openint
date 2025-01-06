@@ -1,0 +1,24 @@
+name: Stably Test Runner
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  stably-test-action:
+    name: Stably Test Runner
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Stably Runner Action
+        id: stably-runner
+        uses: stablyhq/stably-runner-action@v3
+        with:
+          api-key: ${{ secrets.STABLY_API_KEY }}
+          test-suite-id: cm5g8i6nc0005l103urkixuxz
