@@ -4718,6 +4718,7 @@ export interface operations {
         customer?: string
         department?: string
         date_macro?: string
+        summarize_by?: string
       }
     }
     responses: {
