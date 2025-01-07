@@ -115,11 +115,12 @@ jobs:
           echo "Combined changelog written to changelog.txt"
 
       - name: Extract PR titles and important lines
+        id: parse_changelog
         run: |
           awk -v repo_url="https://github.com/openintegrations/openint" '
           BEGIN {
-              # Use an associative array to store seen PRs
-              declare -A seen_prs;
+              # Declare an associative array for seen PRs
+              seen_prs = "";
           }
           /^- PR #[0-9]+:/ {
               match($0, /^- PR #([0-9]+):/, pr);
@@ -131,13 +132,12 @@ jobs:
               getline;
               important_line = $0;
               if (!(pr_key in seen_prs)) {
-                  seen_prs[pr_key] = 1;
+                  seen_prs[pr_key] = 1; # Mark this PR as seen
                   print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
               }
           }' changelog.txt > formatted_release_notes.txt
           echo "Formatted Release Notes:"
           cat formatted_release_notes.txt
-
       - name: Summarize PR changes with OpenAI
         id: summarize
         env:
