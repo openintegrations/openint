@@ -36,9 +36,7 @@ jobs:
             LATEST_TAG="v0.0.0"
           fi
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
-
       - name: Calculate new version
-        id: calculate_version
         run: |
           VERSION=${{ env.latest_tag }}
           VERSION=${VERSION#v}
@@ -52,8 +50,14 @@ jobs:
             PATCH=$((PATCH + 1))
             NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
           fi
-          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
 
+          # Check if the tag exists and increment if necessary
+          while gh release view "$NEW_VERSION" &> /dev/null; do
+            PATCH=$((PATCH + 1))
+            NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          done
+
+          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
       - name: Generate changelog
         id: changelog
         run: |
