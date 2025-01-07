@@ -125,6 +125,7 @@ jobs:
           echo -e "### Summary\n\n$SUMMARY\n\n### BREAKDOWN:\n" > release_notes.txt
           cat full_changelog.txt >> release_notes.txt
           echo "Release notes written to release_notes.txt"
+          cat release_notes.txt
 
       - name: Create GitHub Release
         env:
