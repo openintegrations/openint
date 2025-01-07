@@ -94,7 +94,7 @@ jobs:
       - name: Extract PR titles and important lines
         id: parse_changelog
         run: |
-          OUTPUT=$(awk -v repo_url="https://github.com/openintegrations/openint" '
+          awk -v repo_url="https://github.com/openintegrations/openint" '
           /^- PR #[0-9]+:/ {
               match($0, /^- PR #([0-9]+):/, pr);
               pr_title = $0;
@@ -104,22 +104,21 @@ jobs:
               getline;
               important_line = $0;
               print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
-          }' changelog.txt)
-          echo "$OUTPUT" > formatted_release_notes.txt
-          echo "formatted_output=$OUTPUT" >> $GITHUB_ENV
+          }' changelog.txt > formatted_release_notes.txt
+          echo "Formatted Release Notes:"
+          cat formatted_release_notes.txt
 
       - name: Summarize PR changes with OpenAI
         id: summarize
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "Logging content passed to OpenAI:"
-          echo "$formatted_output"
+          FORMATTED_OUTPUT=$(cat formatted_release_notes.txt | jq -Rsa .)
 
           RESPONSE=$(curl -s -X POST https://api.openai.com/v1/chat/completions \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
-            -d "$(jq -n --arg changelog "$formatted_output" '{
+            -d "$(jq -n --arg changelog "$FORMATTED_OUTPUT" '{
               model: "gpt-4",
               messages: [
                 {role: "system", content: "You are an assistant that generates concise and clear release summaries for software projects."},
