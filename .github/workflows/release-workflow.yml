@@ -80,34 +80,41 @@ jobs:
           else
             CHANGES=$(git log ${{ env.latest_tag }}..HEAD --pretty=format:"- %s (%h) by %an")
           fi
-          echo "Changes:\n$CHANGES"
-          echo "changes=$CHANGES" >> $GITHUB_ENV
+          echo "$CHANGES" > changes.txt
+          echo "Changes written to changes.txt"
 
-      - name: Summarize PRs
+      - name: Fetch PR data as JSON
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ "${{ env.latest_tag }}" = "v0.0.0" ]; then
-            PRS=$(gh pr list --state merged --base main \
-              --json number,title,body,author,mergedAt,labels \
-              --jq '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"')
+            gh pr list --state merged --base main \
+              --json number,title,body,author,mergedAt,labels > prs.json
           else
-            PRS=$(gh pr list --state merged --base main --search "merged:>$(git show -s --format=%ci ${{ env.latest_tag }})" \
-              --json number,title,body,author,mergedAt,labels \
-              --jq '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"')
+            gh pr list --state merged --base main --search "merged:>$(git show -s --format=%ci ${{ env.latest_tag }})" \
+              --json number,title,body,author,mergedAt,labels > prs.json
           fi
+          echo "PR data saved to prs.json"
 
-          # Sanitize PR output to remove problematic formatting
-          PRS=$(echo "$PRS" | sed 's/>\s\[!IMPORTANT\]//g' | sed 's/<[^>]*>//g' | sed 's/\[.*\]//g')
-          echo "Sanitized PRs:\n$PRS"
-          echo "prs=$PRS" >> $GITHUB_ENV
+      - name: Format PR data
+        run: |
+          jq -r '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"' prs.json > formatted_prs.txt
+          echo "Formatted PR data saved to formatted_prs.txt"
+
+      - name: Combine changelog and PR data
+        run: |
+          echo "Changes from git log:\n" > full_changelog.txt
+          cat changes.txt >> full_changelog.txt
+          echo "\nChanges from PRs:\n" >> full_changelog.txt
+          cat formatted_prs.txt >> full_changelog.txt
+          echo "Combined changelog written to full_changelog.txt"
 
       - name: Summarize changes with GPT-4
         id: summarize
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          FULL_CHANGELOG="Changes from git log:\n\n${{ env.changes }}\n\nChanges from PRs:\n\n${{ env.prs }}"
+          FULL_CHANGELOG=$(cat full_changelog.txt)
           DATA='{
             "model": "gpt-4",
             "messages": [
@@ -115,6 +122,7 @@ jobs:
               {"role": "user", "content": "Summarize the following changes for a GitHub release:\n\n'"${FULL_CHANGELOG}"'"}
             ],
             "temperature": 0.7,
+            "max_tokens": 500
           }'
           RESPONSE=$(curl -s -X POST https://api.openai.com/v1/chat/completions \
             -H "Content-Type: application/json" \
@@ -122,7 +130,7 @@ jobs:
             -d "$DATA")
           SUMMARY=$(echo $RESPONSE | jq -r '.choices[0].message.content')
           echo "Summary: $SUMMARY"
-          echo "summary=$SUMMARY" >> $GITHUB_ENV
+          echo "$SUMMARY" > summary.txt
 
       - name: Create and push tag
         run: |
@@ -135,4 +143,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes "${{ env.summary }}"
+          gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes "$(cat summary.txt)"
