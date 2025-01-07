@@ -1,0 +1,83 @@
+name: Release to Production
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install GitHub CLI
+        uses: cli/cli-action@v3
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Fetch changes from git log
+        id: git_log
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")
+          echo "Last tag: $LAST_TAG"
+          echo "last_tag=$LAST_TAG" >> $GITHUB_ENV
+
+          # Get commit messages since the last tag
+          CHANGES=$(git log $LAST_TAG..HEAD --pretty=format:"- %s (%h) by %an")
+          echo "Changes since last release:\n$CHANGES"
+          echo "changes=$CHANGES" >> $GITHUB_ENV
+
+      - name: Fetch merged PRs since last release
+        id: fetch_prs
+        run: |
+          # Fetch PRs merged since the last tag
+          PRS=$(gh pr list --state merged --base main --search "merged:>$(git show -s --format=%ci $LAST_TAG)" \
+            --json number,title,body,author,mergedAt,labels \
+            --jq '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"')
+          echo "Merged PRs:\n$PRS"
+          echo "prs=$PRS" >> $GITHUB_ENV
+
+      - name: Summarize changes with GPT-4
+        id: summarize
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          echo "Preparing summary using GPT-4..."
+          FULL_CHANGELOG="Changes from git log:\n\n${{ env.changes }}\n\nChanges from PRs:\n\n${{ env.prs }}"
+          DATA='{
+            "model": "gpt-4",
+            "messages": [
+              {"role": "system", "content": "You are an assistant that generates concise and clear release summaries for software projects."},
+              {"role": "user", "content": "Summarize the following changes for a GitHub release:\n\n'"${FULL_CHANGELOG}"'"}
+            ],
+            "temperature": 0.7,
+            "max_tokens": 500
+          }'
+          RESPONSE=$(curl -s -X POST https://api.openai.com/v1/chat/completions \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -d "$DATA")
+          SUMMARY=$(echo $RESPONSE | jq -r '.choices[0].message.content')
+          echo "Summary: $SUMMARY"
+          echo "summary=$SUMMARY" >> $GITHUB_ENV
+
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          TAG_NAME="v$(date +%Y.%m.%d.%H%M)"
+          gh release create "$TAG_NAME" --title "Release $TAG_NAME" --notes "${{ env.summary }}"
+          echo "Created release: $TAG_NAME"
+
+      - name: Merge into production
+        run: |
+          git config user.name "OpenInt Release Bot"
+          git config user.email "<>"
+          git checkout production
+          git merge --no-ff main -m "Release to production: $LAST_TAG"
+          git push origin production
