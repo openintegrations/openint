@@ -37,7 +37,7 @@ jobs:
           if git describe --tags --abbrev=0 > /dev/null 2>&1; then
             LATEST_TAG=$(git describe --tags --abbrev=0)
           else
-            LATEST_TAG="v0.0.0" # Default initial version if no tags exist
+            LATEST_TAG="v0.0.0" # Default placeholder version
           fi
           echo "Latest tag: $LATEST_TAG"
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
@@ -51,19 +51,24 @@ jobs:
           MINOR=$(echo "$VERSION" | cut -d. -f2)
           PATCH=$(echo "$VERSION" | cut -d. -f3)
 
-          VERSION_TYPE="${{ github.event.inputs.version_type }}"
-          if [ "$VERSION_TYPE" = "major" ]; then
-            MAJOR=$((MAJOR + 1))
-            MINOR=0
-            PATCH=0
-          elif [ "$VERSION_TYPE" = "minor" ]; then
-            MINOR=$((MINOR + 1))
-            PATCH=0
+          if [ "$VERSION" = "0.0.0" ]; then
+            # Initial version set to v0.1.0
+            NEW_VERSION="v0.1.0"
           else
-            PATCH=$((PATCH + 1))
+            VERSION_TYPE="${{ github.event.inputs.version_type }}"
+            if [ "$VERSION_TYPE" = "major" ]; then
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+            elif [ "$VERSION_TYPE" = "minor" ]; then
+              MINOR=$((MINOR + 1))
+              PATCH=0
+            else
+              PATCH=$((PATCH + 1))
+            fi
+            NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
           fi
 
-          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
           echo "New version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
 
@@ -91,7 +96,10 @@ jobs:
               --json number,title,body,author,mergedAt,labels \
               --jq '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"')
           fi
-          echo "PRs:\n$PRS"
+
+          # Sanitize PR output to remove HTML or special characters
+          PRS=$(echo "$PRS" | sed 's/<!--.*-->//g' | sed 's/<[^>]*>//g')
+          echo "Sanitized PRs:\n$PRS"
           echo "prs=$PRS" >> $GITHUB_ENV
 
       - name: Summarize changes with GPT-4
