@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write # Ensure GITHUB_TOKEN has write permissions for creating releases
+  contents: write
 
 jobs:
   summarize-prs:
@@ -79,7 +79,6 @@ jobs:
           cat formatted_prs.txt >> changelog.txt
           echo "Combined changelog written to changelog.txt"
 
-      # Note the parsing of the important line set by ellipsis isn't quite working
       - name: Extract PR titles and important lines
         id: parse_changelog
         run: |
@@ -116,7 +115,7 @@ jobs:
               model: "gpt-4",
               messages: [
                 {role: "system", content: "You are an assistant that generates concise and clear release summaries for software projects."},
-                {role: "user", content: ("Summarize the following PR changes into a single two-liner summary highlighting important changes:\n\n" + $changelog)}
+                {role: "user", content: ("Summarize the following PR changes into a single two-liner summary highlighting important changes in casual tone of voice:\n\n" + $changelog)}
               ],
               temperature: 0.7
             }')")
@@ -141,7 +140,6 @@ jobs:
         run: |
           gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes-file release_notes.txt
 
-      # Add new step to merge into production
       - name: Update production branch
         run: |
           git config user.name "GitHub Actions Bot"
