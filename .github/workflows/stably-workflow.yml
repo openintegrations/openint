@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - production
 
 permissions:
   pull-requests: write
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for 5 minutes for Vercel Main Branch Deployment
+      - name: Wait for 5 minutes for any remaining Vercel Main Branch Deployment
         run: sleep 300
       - name: Stably Runner Action
         id: stably-runner
