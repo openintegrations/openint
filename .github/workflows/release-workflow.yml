@@ -51,12 +51,19 @@ jobs:
             NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
           fi
 
+          # Debugging: Initial new version
+          echo "Initial new version: $NEW_VERSION"
+
           # Check if the tag exists and increment if necessary
-          while gh release view "$NEW_VERSION" &> /dev/null; do
+          while gh release view "$NEW_VERSION" &>/dev/null; do
+            echo "Tag $NEW_VERSION exists. Incrementing patch version..."
             PATCH=$((PATCH + 1))
             NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+            echo "New incremented version: $NEW_VERSION"
           done
 
+          # Debugging: Final new version
+          echo "Final new version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
       - name: Generate changelog
         id: changelog
