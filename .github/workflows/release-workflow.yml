@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write # Ensures GITHUB_TOKEN has the required permissions
+
 jobs:
   summarize-prs:
     runs-on: ubuntu-latest
