@@ -156,6 +156,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-          git checkout production
-          git merge --no-ff main -m "Release to production: ${{ env.new_version }}"
+          git fetch origin production
+          git checkout production || git checkout -b production
+          git merge --allow-unrelated-histories --no-ff main -m "Release to production: ${{ env.new_version }}"
           git push origin production
