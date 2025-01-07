@@ -36,6 +36,7 @@ jobs:
             LATEST_TAG="v0.0.0"
           fi
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
+
       - name: Calculate new version
         run: |
           git fetch --tags
@@ -75,6 +76,7 @@ jobs:
           # Debugging: Final new version
           echo "Final new version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+
       - name: Generate changelog
         id: changelog
         run: |
@@ -113,18 +115,25 @@ jobs:
           echo "Combined changelog written to changelog.txt"
 
       - name: Extract PR titles and important lines
-        id: parse_changelog
         run: |
           awk -v repo_url="https://github.com/openintegrations/openint" '
+          BEGIN {
+              # Use an associative array to store seen PRs
+              seen_prs = "";
+          }
           /^- PR #[0-9]+:/ {
               match($0, /^- PR #([0-9]+):/, pr);
               pr_title = $0;
               pr_number = pr[1];
+              pr_key = pr_number; # Unique key for each PR
           }
           /> \[!IMPORTANT\]/ {
               getline;
               important_line = $0;
-              print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
+              if (!(pr_key in seen_prs)) {
+                  seen_prs[pr_key] = 1;
+                  print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
+              }
           }' changelog.txt > formatted_release_notes.txt
           echo "Formatted Release Notes:"
           cat formatted_release_notes.txt
@@ -153,9 +162,11 @@ jobs:
 
           SUMMARY=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "No summary generated"')
           echo "summary=$SUMMARY" >> $GITHUB_ENV
+          echo "$SUMMARY" > summary_output.txt
 
       - name: Create Release Notes
         run: |
+          SUMMARY=$(cat summary_output.txt)
           echo -e "### Summary\n\n$SUMMARY\n\n### PR Breakdown:\n" > release_notes.txt
           cat formatted_release_notes.txt >> release_notes.txt
           echo "Release notes written to release_notes.txt"
