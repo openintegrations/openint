@@ -30,11 +30,11 @@ jobs:
         run: |
           git fetch --tags
           LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
-          # Remove any 'v' prefix for version calculations
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
 
       - name: Calculate new version
         run: |
+          echo "latest_tag=${{ env.latest_tag }}"
           # Split version into components and increment patch
           LATEST_TAG_NO_V=${env.latest_tag/v/}
           IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG_NO_V"
