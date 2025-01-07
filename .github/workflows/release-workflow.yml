@@ -67,21 +67,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ "${{ env.latest_tag }}" = "v0.0.0" ]; then
-            # If no previous tag exists, get all merged PRs
-            gh pr list --state merged --base main \
-              --json number,title,body,author,mergedAt,labels > prs.json
-          else
-            # Get the timestamp of the last tag
-            LAST_TAG_DATE=$(git log -1 --format=%ct ${{ env.latest_tag }})
-            
-            # Convert to ISO 8601 format for GitHub search
-            LAST_TAG_ISO=$(date -u -r "$LAST_TAG_DATE" +"%Y-%m-%dT%H:%M:%SZ")
-            
-            # Get PRs merged after the last tag
-            gh pr list --state merged --base main --search "merged:>$LAST_TAG_ISO" \
-              --json number,title,body,author,mergedAt,labels > prs.json
-          fi
+          # Get the timestamp of the last tag
+          LAST_TAG_DATE=$(git log -1 --format=%ct ${{ env.latest_tag }})
+
+          # Convert to ISO 8601 format for GitHub search
+          LAST_TAG_ISO=$(date -u -r "$LAST_TAG_DATE" +"%Y-%m-%dT%H:%M:%SZ")
+
+          # Get PRs merged after the last tag
+          gh pr list --state merged --base main --search "merged:>$LAST_TAG_ISO" \
+            --json number,title,body,author,mergedAt,labels > prs.json
           echo "PR data saved to prs.json"
 
       - name: Format PR data
