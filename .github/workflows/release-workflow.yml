@@ -97,8 +97,8 @@ jobs:
               --jq '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"')
           fi
 
-          # Sanitize PR output to remove HTML or special characters
-          PRS=$(echo "$PRS" | sed 's/<!--.*-->//g' | sed 's/<[^>]*>//g')
+          # Sanitize PR output to remove problematic formatting
+          PRS=$(echo "$PRS" | sed 's/>\s\[!IMPORTANT\]//g' | sed 's/<[^>]*>//g' | sed 's/\[.*\]//g')
           echo "Sanitized PRs:\n$PRS"
           echo "prs=$PRS" >> $GITHUB_ENV
 
@@ -115,7 +115,6 @@ jobs:
               {"role": "user", "content": "Summarize the following changes for a GitHub release:\n\n'"${FULL_CHANGELOG}"'"}
             ],
             "temperature": 0.7,
-            "max_tokens": 500
           }'
           RESPONSE=$(curl -s -X POST https://api.openai.com/v1/chat/completions \
             -H "Content-Type: application/json" \
