@@ -1330,6 +1330,11 @@ export interface operations {
           'application/json': {
             healthy: boolean
             error?: string
+            deps?: {
+              nango: boolean
+              inngest: boolean
+              clerk: boolean
+            }
           }
         }
       }
