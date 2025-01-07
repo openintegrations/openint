@@ -41,39 +41,16 @@ jobs:
         run: |
           git fetch --tags
 
-          VERSION=${{ env.latest_tag }}
-          VERSION=${VERSION#v}
-          MAJOR=$(echo "$VERSION" | cut -d. -f1)
-          MINOR=$(echo "$VERSION" | cut -d. -f2)
-          PATCH=$(echo "$VERSION" | cut -d. -f3)
+          # Get the latest tag version
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          VERSION=${LATEST_TAG#v}
 
-          if [ "$VERSION" = "0.0.0" ]; then
-            NEW_VERSION="v0.1.0"
-          else
-            PATCH=$((PATCH + 1))
-            NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
-          fi
+          # Split version into components and increment patch
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          PATCH=$((PATCH + 1))
+          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
 
-          # Debugging: Initial new version
-          echo "Initial new version: $NEW_VERSION"
-
-          git fetch --tags --force
-
-          # Check if the tag exists and increment if necessary
-          while true; do
-            echo "Checking if tag $NEW_VERSION exists..."
-            if git tag --list | grep -q "^$NEW_VERSION$"; then
-              echo "Tag $NEW_VERSION exists. Incrementing patch version..."
-              PATCH=$((PATCH + 1))
-              NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
-              echo "New incremented version: $NEW_VERSION"
-            else
-              echo "Tag $NEW_VERSION does not exist. Proceeding with this version."
-              break
-            fi
-          done
-
-          # Debugging: Final new version
+          # Output the new version
           echo "Final new version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
 
@@ -119,20 +96,18 @@ jobs:
         run: |
           awk -v repo_url="https://github.com/openintegrations/openint" '
           BEGIN {
-              # Declare an associative array for seen PRs
-              seen_prs = "";
+              last_pr_number = "";
           }
           /^- PR #[0-9]+:/ {
               match($0, /^- PR #([0-9]+):/, pr);
               pr_title = $0;
               pr_number = pr[1];
-              pr_key = pr_number; # Unique key for each PR
           }
           /> \[!IMPORTANT\]/ {
               getline;
               important_line = $0;
-              if (!(pr_key in seen_prs)) {
-                  seen_prs[pr_key] = 1; # Mark this PR as seen
+              if (pr_number != last_pr_number) {
+                  last_pr_number = pr_number;
                   print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
               }
           }' changelog.txt > formatted_release_notes.txt
