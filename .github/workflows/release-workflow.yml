@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write # Ensures GITHUB_TOKEN has the required permissions
+  contents: write
 
 jobs:
   summarize-prs:
@@ -16,17 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install GitHub CLI
+      - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gh jq
-
-      - name: Authenticate GitHub CLI
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Authenticating GitHub CLI..."
-          gh auth status
+          sudo apt-get install -y jq
 
       - name: Get the latest tag or set initial version
         id: get_latest_tag
@@ -66,51 +59,37 @@ jobs:
           echo "$CHANGES" > changes.txt
           echo "Changes written to changes.txt"
 
-      - name: Fetch PR data as JSON
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Format PR Information
+        id: format_prs
         run: |
-          if [ "${{ env.latest_tag }}" = "v0.0.0" ]; then
-            gh pr list --state merged --base main \
-              --json number,title,body,author,mergedAt,labels > prs.json
-          else
-            gh pr list --state merged --base main --search "merged:>$(git show -s --format=%ci ${{ env.latest_tag }})" \
-              --json number,title,body,author,mergedAt,labels > prs.json
-          fi
-          echo "PR data saved to prs.json"
-
-      - name: Format PR data
-        run: |
-          jq -r '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n> [!IMPORTANT]\n> \(.body // "No description provided.")\n"' prs.json > formatted_prs.txt
-          echo "Formatted PR data saved to formatted_prs.txt"
-
-      - name: Combine changelog and PR data
-        run: |
-          echo "Changes from git log:\n" > full_changelog.txt
-          cat changes.txt >> full_changelog.txt
-          echo "\nChanges from PRs:\n" >> full_changelog.txt
-          cat formatted_prs.txt >> full_changelog.txt
-          echo "Combined changelog written to full_changelog.txt"
+          OUTPUT=$(awk -v repo_url="https://github.com/openintegrations/openint" '
+          /^- PR #[0-9]+:/ {
+              match($0, /^- PR #([0-9]+):/, pr);
+              pr_title = $0;
+              pr_number = pr[1];
+          }
+          /> \[!IMPORTANT\]/ {
+              getline;
+              important_line = $0;
+              print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
+          }' changelog.txt)
+          echo "$OUTPUT" > formatted_prs.txt
+          echo "Formatted PR content:"
+          cat formatted_prs.txt
+          echo "formatted_output=$OUTPUT" >> $GITHUB_ENV
 
       - name: Summarize PR changes with OpenAI
         id: summarize
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          OUTPUT=$(awk '
-          /^- PR #[0-9]+:/ {
-              pr_title = $0;
-          }
-          /> \[!IMPORTANT\]/ {
-              getline;
-              important_line = $0;
-              print pr_title " --> " important_line;
-          }' formatted_prs.txt | jq -Rsa .)
+          echo "Logging content passed to OpenAI:"
+          echo "$formatted_output"
 
           RESPONSE=$(curl -s -X POST https://api.openai.com/v1/chat/completions \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
-            -d "$(jq -n --arg changelog "$OUTPUT" '{
+            -d "$(jq -n --arg changelog "$formatted_output" '{
               model: "gpt-4",
               messages: [
                 {role: "system", content: "You are an assistant that generates concise and clear release summaries for software projects."},
@@ -119,16 +98,17 @@ jobs:
               temperature: 0.7
             }')")
 
+          echo "OpenAI API Response:"
+          echo "$RESPONSE"
+
           SUMMARY=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "No summary generated"')
           echo "summary=$SUMMARY" >> $GITHUB_ENV
 
-      - name: Create release notes
-        id: create_notes
+      - name: Create Release Notes
         run: |
-          echo -e "### Summary\n\n$SUMMARY\n\n### BREAKDOWN:\n" > release_notes.txt
-          cat full_changelog.txt >> release_notes.txt
+          echo -e "### Summary\n\n$SUMMARY\n\n### PR Breakdown:\n" > release_notes.txt
+          cat formatted_prs.txt >> release_notes.txt
           echo "Release notes written to release_notes.txt"
-          cat release_notes.txt
 
       - name: Create GitHub Release
         env:
