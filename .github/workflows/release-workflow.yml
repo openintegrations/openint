@@ -56,9 +56,7 @@ jobs:
         run: |
           # Get the timestamp of the last tag
           LAST_TAG_DATE=$(git log -1 --format=%ct ${{ env.latest_tag }})
-
-          # Convert to ISO 8601 format for GitHub search
-          LAST_TAG_ISO=$(date -u -r "$LAST_TAG_DATE" +"%Y-%m-%dT%H:%M:%SZ")
+          LAST_TAG_ISO=$(date -u --date="@$LAST_TAG_DATE" +"%Y-%m-%dT%H:%M:%SZ")
 
           # Get PRs merged after the last tag
           gh pr list --state merged --base main --search "merged:>$LAST_TAG_ISO" \
