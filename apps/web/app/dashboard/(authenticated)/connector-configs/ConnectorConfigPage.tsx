@@ -264,7 +264,7 @@ export default function ConnectorConfigsPage({
                 ) : (
                   <Card
                     key={`${vertical}-request-access`}
-                    className="m-3 size-[150px] border-button bg-button-light hover:cursor-pointer">
+                    className="m-3 size-[150px] border border-border bg-gray-100 cursor-pointer hover:bg-gray-50 transition-colors duration-150 group">
                     <CardContent
                       className="flex size-full flex-1 flex-col items-center justify-center pt-4"
                       onClick={() => {
@@ -275,8 +275,8 @@ export default function ConnectorConfigsPage({
                         })
                         setOpenCalendar(true)
                       }}>
-                      <p className="text-center text-button">
-                        Request {parseCategory(vertical)} integration
+                      <p className="text-center text-sm font-semibold text-gray-600 group-hover:text-gray-400 transition-colors duration-150">
+                        Request {parseCategory(vertical)} Integration
                       </p>
                     </CardContent>
                   </Card>
