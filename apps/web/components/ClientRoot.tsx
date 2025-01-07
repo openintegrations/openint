@@ -85,14 +85,8 @@ export function ClientRoot({
   }, [])
 
   useEffect(() => {
-    if (status === 'success') {
-      browserAnalytics.identify(getViewerId(viewer), {
-        email: undefined,
-      })
-    }
     if (pathname) {
       browserAnalytics.track({
-        // @ts-expect-error only this useEffect should track navigation
         name: 'pageview',
         data: {
           current_url: window.origin + pathname,
@@ -100,7 +94,7 @@ export function ClientRoot({
         },
       })
     }
-  }, [pathname, status])
+  }, [pathname])
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider

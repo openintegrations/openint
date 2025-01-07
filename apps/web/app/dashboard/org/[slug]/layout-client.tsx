@@ -8,9 +8,11 @@ import {
 } from '@clerk/nextjs'
 import {useRouter} from 'next/navigation'
 import React from 'react'
+import {getViewerId} from '@openint/cdk'
 import {LoadingText} from '@openint/ui'
 import {NoSSR} from '@/components/NoSSR'
 import {RedirectToNext13} from '@/components/RedirectTo'
+import {browserAnalytics} from '@/lib-client/analytics-browser'
 
 // import {Sidebar} from './Sidebar'
 
@@ -43,6 +45,14 @@ export default function OrgLayoutClient({
         .catch((err) => {
           console.error('[OrgLayout] error setting active org', err)
         })
+
+      console.log('identify', auth.userId)
+      if (auth.isSignedIn) {
+        browserAnalytics.identify(auth.userId, {
+          email: undefined,
+          orgId,
+        })
+      }
     }
   }, [auth.orgId, clerk, clerkReady, orgId, ready])
 
