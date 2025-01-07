@@ -48,7 +48,7 @@ jobs:
       - name: Generate changelog
         id: changelog
         run: |
-          CHANGES=$(git log ${{ env.latest_tag }}..HEAD --pretty=format:"- %s (%h) by %an")
+          CHANGES=$(git log "${{ env.latest_tag }}"..HEAD --pretty=format:"- %s (%h) by %an")
           echo "$CHANGES" > changes.txt
           echo "Changes written to changes.txt"
 
