@@ -28,23 +28,14 @@ jobs:
       - name: Get the latest tag or set initial version
         id: get_latest_tag
         run: |
-          if git describe --tags --abbrev=0 > /dev/null 2>&1; then
-            LATEST_TAG=$(git describe --tags --abbrev=0)
-          else
-            LATEST_TAG="v0.0.0"
-          fi
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
-
       - name: Calculate new version
         run: |
-          git fetch --tags
-
-          # Get the latest tag version
-          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
-          VERSION=${LATEST_TAG#v}
 
           # Split version into components and increment patch
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.latest_tag }}"
           PATCH=$((PATCH + 1))
           NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
 
@@ -55,11 +46,7 @@ jobs:
       - name: Generate changelog
         id: changelog
         run: |
-          if [ "${{ env.latest_tag }}" = "v0.0.0" ]; then
-            CHANGES=$(git log --pretty=format:"- %s (%h) by %an")
-          else
-            CHANGES=$(git log ${{ env.latest_tag }}..HEAD --pretty=format:"- %s (%h) by %an")
-          fi
+          CHANGES=$(git log ${{ env.latest_tag }}..HEAD --pretty=format:"- %s (%h) by %an")
           echo "$CHANGES" > changes.txt
           echo "Changes written to changes.txt"
 
