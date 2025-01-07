@@ -56,6 +56,8 @@ jobs:
           # Debugging: Initial new version
           echo "Initial new version: $NEW_VERSION"
 
+          git fetch --tags --force
+
           # Check if the tag exists and increment if necessary
           while git tag --list "$NEW_VERSION" &>/dev/null; do
             echo "Tag $NEW_VERSION exists. Incrementing patch version..."
