@@ -46,7 +46,8 @@ export default function OrgLayoutClient({
           console.error('[OrgLayout] error setting active org', err)
         })
 
-      console.log('identify', auth.userId)
+      // TODO: this does not seem to be working, parking for now
+      console.log('identify', auth.userId, auth.orgId, auth.isSignedIn)
       if (auth.isSignedIn) {
         browserAnalytics.identify(auth.userId, {
           email: undefined,
