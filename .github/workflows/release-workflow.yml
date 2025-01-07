@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: write # Ensure GITHUB_TOKEN has write permissions for creating releases
 
 jobs:
   summarize-prs:
@@ -20,6 +20,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
+
+      - name: Authenticate GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth status
 
       - name: Get the latest tag or set initial version
         id: get_latest_tag
@@ -59,8 +65,34 @@ jobs:
           echo "$CHANGES" > changes.txt
           echo "Changes written to changes.txt"
 
-      - name: Format PR Information
-        id: format_prs
+      - name: Fetch PR data as JSON
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ env.latest_tag }}" = "v0.0.0" ]; then
+            gh pr list --state merged --base main \
+              --json number,title,body,author,mergedAt,labels > prs.json
+          else
+            gh pr list --state merged --base main --search "merged:>$(git show -s --format=%ci ${{ env.latest_tag }})" \
+              --json number,title,body,author,mergedAt,labels > prs.json
+          fi
+          echo "PR data saved to prs.json"
+
+      - name: Format PR data
+        run: |
+          jq -r '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n> [!IMPORTANT]\n> \(.body // "No description provided.")\n"' prs.json > formatted_prs.txt
+          echo "Formatted PR data saved to formatted_prs.txt"
+
+      - name: Combine changelog and PR data
+        run: |
+          echo "Changes from git log:\n" > changelog.txt
+          cat changes.txt >> changelog.txt
+          echo "\nChanges from PRs:\n" >> changelog.txt
+          cat formatted_prs.txt >> changelog.txt
+          echo "Combined changelog written to changelog.txt"
+
+      - name: Extract PR titles and important lines
+        id: parse_changelog
         run: |
           OUTPUT=$(awk -v repo_url="https://github.com/openintegrations/openint" '
           /^- PR #[0-9]+:/ {
@@ -73,9 +105,7 @@ jobs:
               important_line = $0;
               print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
           }' changelog.txt)
-          echo "$OUTPUT" > formatted_prs.txt
-          echo "Formatted PR content:"
-          cat formatted_prs.txt
+          echo "$OUTPUT" > formatted_release_notes.txt
           echo "formatted_output=$OUTPUT" >> $GITHUB_ENV
 
       - name: Summarize PR changes with OpenAI
@@ -107,7 +137,7 @@ jobs:
       - name: Create Release Notes
         run: |
           echo -e "### Summary\n\n$SUMMARY\n\n### PR Breakdown:\n" > release_notes.txt
-          cat formatted_prs.txt >> release_notes.txt
+          cat formatted_release_notes.txt >> release_notes.txt
           echo "Release notes written to release_notes.txt"
 
       - name: Create GitHub Release
