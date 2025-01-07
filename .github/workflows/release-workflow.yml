@@ -1,7 +1,12 @@
-name: Release to Production
+name: Release Workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version type to bump (major, minor, patch)'
+        required: false
+        default: 'patch'
   push:
     branches:
       - main
@@ -19,29 +24,74 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gh
 
-      - name: Fetch all branches
-        run: git fetch --all
-
-      - name: Fetch changes from git log
-        id: git_log
+      - name: Get the latest tag or set initial version
+        id: get_latest_tag
         run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")
-          echo "Last tag: $LAST_TAG"
-          echo "last_tag=$LAST_TAG" >> $GITHUB_ENV
+          if git describe --tags --abbrev=0 > /dev/null 2>&1; then
+            LATEST_TAG=$(git describe --tags --abbrev=0)
+          else
+            LATEST_TAG="v0.0.0" # Default initial version if no tags exist
+          fi
+          echo "Latest tag: $LATEST_TAG"
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
 
-          # Get commit messages since the last tag
-          CHANGES=$(git log $LAST_TAG..HEAD --pretty=format:"- %s (%h) by %an")
-          echo "Changes since last release:\n$CHANGES"
+      - name: Calculate new version
+        id: calculate_version
+        run: |
+          # Extract current version
+          VERSION=${{ env.latest_tag }}
+          VERSION=${VERSION#v} # Remove 'v' prefix
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MINOR=$(echo "$VERSION" | cut -d. -f2)
+          PATCH=$(echo "$VERSION" | cut -d. -f3)
+
+          # Determine version type to bump
+          VERSION_TYPE="${{ github.event.inputs.version_type }}"
+          if [ "$VERSION_TYPE" = "major" ]; then
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif [ "$VERSION_TYPE" = "minor" ]; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          else
+            PATCH=$((PATCH + 1))
+          fi
+
+          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          echo "New version: $NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          if [ "${{ env.latest_tag }}" = "v0.0.0" ]; then
+            # Fetch all commits for the first release
+            CHANGES=$(git log --pretty=format:"- %s (%h) by %an")
+          else
+            # Fetch commits since the last tag
+            CHANGES=$(git log ${{ env.latest_tag }}..HEAD --pretty=format:"- %s (%h) by %an")
+          fi
+
+          echo "Changes:\n$CHANGES"
           echo "changes=$CHANGES" >> $GITHUB_ENV
 
-      - name: Fetch merged PRs since last release
-        id: fetch_prs
+      - name: Summarize PRs
+        id: summarize_prs
         run: |
-          # Fetch PRs merged since the last tag
-          PRS=$(gh pr list --state merged --base main --search "merged:>$(git show -s --format=%ci $LAST_TAG)" \
-            --json number,title,body,author,mergedAt,labels \
-            --jq '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"')
-          echo "Merged PRs:\n$PRS"
+          if [ "${{ env.latest_tag }}" = "v0.0.0" ]; then
+            # Fetch all merged PRs for the first release
+            PRS=$(gh pr list --state merged --base main \
+              --json number,title,body,author,mergedAt,labels \
+              --jq '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"')
+          else
+            # Fetch merged PRs since the last tag
+            PRS=$(gh pr list --state merged --base main --search "merged:>$(git show -s --format=%ci ${{ env.latest_tag }})" \
+              --json number,title,body,author,mergedAt,labels \
+              --jq '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n\(.body // "No description provided.")\nLabels: \(.labels[].name // "none")\n"')
+          fi
+
+          echo "PRs:\n$PRS"
           echo "prs=$PRS" >> $GITHUB_ENV
 
       - name: Summarize changes with GPT-4
@@ -49,7 +99,6 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "Preparing summary using GPT-4..."
           FULL_CHANGELOG="Changes from git log:\n\n${{ env.changes }}\n\nChanges from PRs:\n\n${{ env.prs }}"
           DATA='{
             "model": "gpt-4",
@@ -58,7 +107,7 @@ jobs:
               {"role": "user", "content": "Summarize the following changes for a GitHub release:\n\n'"${FULL_CHANGELOG}"'"}
             ],
             "temperature": 0.7,
-            "max_tokens": 2000
+            "max_tokens": 500
           }'
           RESPONSE=$(curl -s -X POST https://api.openai.com/v1/chat/completions \
             -H "Content-Type: application/json" \
@@ -68,18 +117,17 @@ jobs:
           echo "Summary: $SUMMARY"
           echo "summary=$SUMMARY" >> $GITHUB_ENV
 
-      - name: Create Release
+      - name: Create and push tag
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+          # Create a new tag
+          git tag -a ${{ env.new_version }} -m "Release ${{ env.new_version }}"
+          git push origin ${{ env.new_version }}
+
+      - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          TAG_NAME="v$(date +%Y.%m.%d.%H%M)"
-          gh release create "$TAG_NAME" --title "Release $TAG_NAME" --notes "${{ env.summary }}"
-          echo "Created release: $TAG_NAME"
-
-      - name: Merge into production
-        run: |
-          git config user.name "OpenInt Release Bot"
-          git config user.email "<>"
-          git checkout production
-          git merge --no-ff main -m "Release to production: $LAST_TAG"
-          git push origin production
+          gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes "${{ env.summary }}"
