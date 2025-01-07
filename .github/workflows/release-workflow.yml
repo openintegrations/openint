@@ -156,19 +156,6 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-
-          # Fetch all branches
-          git fetch origin
-
-          # If production branch exists on remote
-          if git ls-remote --heads origin production | grep production; then
-            git checkout production
-          else
-            # If this is first time, create production from current main
-            git checkout -b production
-            git push -u origin production
-          fi
-
-          # Now merge main into production
-          git merge main --no-ff -m "Release to production: ${{ env.new_version }}"
-          git push origin production
+          git fetch origin main
+          git checkout main
+          git push origin main:production -f
