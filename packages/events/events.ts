@@ -12,6 +12,7 @@ export const zUserTraits = z
     name: z.string(),
     email: z.string(),
     phone: z.string(),
+    orgId: z.string(),
   })
   .partial()
 
@@ -63,6 +64,10 @@ export const eventMap = {
   'api/token-copied': {},
   'api/graphql-request': {},
   'api/rest-request': {},
+  pageview: {
+    current_url: z.string(),
+    path: z.string(),
+  },
 } satisfies Record<string, z.ZodRawShape>
 
 type BuiltInEvents = EventsFromOpts<{schemas: EventSchemas; id: never}>
