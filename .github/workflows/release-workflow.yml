@@ -38,6 +38,8 @@ jobs:
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
       - name: Calculate new version
         run: |
+          git fetch --tags
+
           VERSION=${{ env.latest_tag }}
           VERSION=${VERSION#v}
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
@@ -55,7 +57,7 @@ jobs:
           echo "Initial new version: $NEW_VERSION"
 
           # Check if the tag exists and increment if necessary
-          while gh release view "$NEW_VERSION" &>/dev/null; do
+          while git tag --list "$NEW_VERSION" &>/dev/null; do
             echo "Tag $NEW_VERSION exists. Incrementing patch version..."
             PATCH=$((PATCH + 1))
             NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
