@@ -119,7 +119,7 @@ jobs:
           awk -v repo_url="https://github.com/openintegrations/openint" '
           BEGIN {
               # Use an associative array to store seen PRs
-              seen_prs = "";
+              declare -A seen_prs;
           }
           /^- PR #[0-9]+:/ {
               match($0, /^- PR #([0-9]+):/, pr);
