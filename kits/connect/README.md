@@ -14,7 +14,7 @@ In addition, should be usable from
 - Vanilla JS
 - React
 
-## Release process
+## Release Command
 
 ```
 pnpm build && pnpm pub
