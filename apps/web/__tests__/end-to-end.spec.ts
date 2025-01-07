@@ -211,6 +211,31 @@ test('list connections', async () => {
   expect(
     res.data.find((c) => c.connectorConfigId.includes('ccfg_greenhouse')),
   ).toBeTruthy()
+
+  // Check connection object structure
+  expect(res.data[0]).toHaveProperty('connectorName')
+  expect(res.data[0]).toHaveProperty('displayName')
+  expect(res.data[0]).toHaveProperty('connectorConfigId')
+  expect(res.data[0]).toHaveProperty('integrationId')
+  expect(res.data[0]).toHaveProperty('settings')
+  expect(res.data[0]).toHaveProperty('metadata')
+})
+
+test('list connector metas', async () => {
+  const res = await sdk.GET('/connector')
+  const connectorData = res.data as Record<string, unknown>
+  const connector = connectorData['greenhouse']
+
+  expect(Object.keys(connectorData).length).toBeGreaterThan(40)
+  // Check basic properties
+  expect(connector).toHaveProperty('__typename', 'connector')
+  expect(connector).toHaveProperty('name')
+  expect(connector).toHaveProperty('displayName')
+  expect(connector).toHaveProperty('logoUrl')
+  expect(connector).toHaveProperty('stage')
+  expect(connector).toHaveProperty('verticals')
+  expect(connector).toHaveProperty('supportedModes')
+  expect(connector).toHaveProperty('schemas')
 })
 
 test('list connector config info', async () => {
@@ -223,6 +248,15 @@ test('list connector config info', async () => {
   expect(
     res.data.find((c) => c.connectorName.includes('greenhouse')),
   ).toBeTruthy()
+
+  // Check basic properties
+  expect(res.data[0]).toHaveProperty('envName')
+  expect(res.data[0]).toHaveProperty('displayName')
+  expect(res.data[0]).toHaveProperty('connectorName')
+  expect(res.data[0]).toHaveProperty('isSource')
+  expect(res.data[0]).toHaveProperty('isDestination')
+  expect(res.data[0]).toHaveProperty('verticals')
+  expect(res.data[0]).toHaveProperty('integrations')
 })
 
 test('list configured integrations', async () => {
@@ -231,6 +265,12 @@ test('list configured integrations', async () => {
   expect(res.data.items).toHaveLength(2)
   expect(res.data.items[0]?.connector_name).toEqual('plaid')
   expect(res.data.items[1]?.connector_name).toEqual('greenhouse')
+
+  // Check basic properties
+  expect(res.data.items[0]).toHaveProperty('connector_config_id')
+  expect(res.data.items[0]).toHaveProperty('connector_name')
+  expect(res.data.items[0]).toHaveProperty('logo_url')
+  expect(res.data.items[0]).toHaveProperty('name')
 })
 
 test('create token', async () => {
