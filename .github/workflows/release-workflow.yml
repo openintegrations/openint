@@ -59,11 +59,17 @@ jobs:
           git fetch --tags --force
 
           # Check if the tag exists and increment if necessary
-          while git tag --list "$NEW_VERSION" &>/dev/null; do
-            echo "Tag $NEW_VERSION exists. Incrementing patch version..."
-            PATCH=$((PATCH + 1))
-            NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
-            echo "New incremented version: $NEW_VERSION"
+          while true; do
+            echo "Checking if tag $NEW_VERSION exists..."
+            if git tag --list | grep -q "^$NEW_VERSION$"; then
+              echo "Tag $NEW_VERSION exists. Incrementing patch version..."
+              PATCH=$((PATCH + 1))
+              NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+              echo "New incremented version: $NEW_VERSION"
+            else
+              echo "Tag $NEW_VERSION does not exist. Proceeding with this version."
+              break
+            fi
           done
 
           # Debugging: Final new version
