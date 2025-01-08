@@ -199,6 +199,90 @@ test('create and sync greenhouse connection', async () => {
   })
 })
 
+test('list connections', async () => {
+  const res = await sdk.GET('/core/connection')
+
+  expect(res.data).toHaveLength(2)
+  // Check we have the default postgres connector
+  expect(
+    res.data.find((c) => c.connectorConfigId.includes('ccfg_postgres_default')),
+  ).toBeTruthy()
+  // Check we have the greenhouse connector
+  expect(
+    res.data.find((c) => c.connectorConfigId.includes('ccfg_greenhouse')),
+  ).toBeTruthy()
+
+  // Check connection object structure
+  expect(res.data[0]).toHaveProperty('connectorName')
+  expect(res.data[0]).toHaveProperty('displayName')
+  expect(res.data[0]).toHaveProperty('connectorConfigId')
+  expect(res.data[0]).toHaveProperty('integrationId')
+  expect(res.data[0]).toHaveProperty('settings')
+  expect(res.data[0]).toHaveProperty('metadata')
+})
+
+test('list connector metas', async () => {
+  const res = await sdk.GET('/connector')
+  const connectorData = res.data as Record<string, unknown>
+  const connector = connectorData['greenhouse']
+
+  expect(Object.keys(connectorData).length).toBeGreaterThan(40)
+  // Check basic properties
+  expect(connector).toHaveProperty('__typename', 'connector')
+  expect(connector).toHaveProperty('name')
+  expect(connector).toHaveProperty('displayName')
+  expect(connector).toHaveProperty('logoUrl')
+  expect(connector).toHaveProperty('stage')
+  expect(connector).toHaveProperty('verticals')
+  expect(connector).toHaveProperty('supportedModes')
+  expect(connector).toHaveProperty('schemas')
+})
+
+test('list connector config info', async () => {
+  const res = await sdk.GET('/core/connector_config_info')
+
+  expect(res.data).toHaveLength(2)
+  // Check we have the default postgres connector
+  expect(res.data.find((c) => c.connectorName.includes('plaid'))).toBeTruthy()
+  // Check we have the greenhouse connector
+  expect(
+    res.data.find((c) => c.connectorName.includes('greenhouse')),
+  ).toBeTruthy()
+
+  // Check basic properties
+  expect(res.data[0]).toHaveProperty('envName')
+  expect(res.data[0]).toHaveProperty('displayName')
+  expect(res.data[0]).toHaveProperty('connectorName')
+  expect(res.data[0]).toHaveProperty('isSource')
+  expect(res.data[0]).toHaveProperty('isDestination')
+  expect(res.data[0]).toHaveProperty('verticals')
+  expect(res.data[0]).toHaveProperty('integrations')
+})
+
+test('list configured integrations', async () => {
+  const res = await sdk.GET('/configured_integrations')
+
+  expect(res.data.items).toHaveLength(2)
+  expect(res.data.items[0]?.connector_name).toEqual('plaid')
+  expect(res.data.items[1]?.connector_name).toEqual('greenhouse')
+
+  // Check basic properties
+  expect(res.data.items[0]).toHaveProperty('connector_config_id')
+  expect(res.data.items[0]).toHaveProperty('connector_name')
+  expect(res.data.items[0]).toHaveProperty('logo_url')
+  expect(res.data.items[0]).toHaveProperty('name')
+})
+
+test('create token', async () => {
+  const res = await sdk.POST('/connect/token', {
+    body: {
+      customerId: fixture.org.id,
+      validityInSeconds: 600,
+    },
+  })
+  expect(res.data).toHaveProperty('token')
+})
+
 test('create connector config with bad parameters fail', async () => {
   await expect(
     sdk.POST('/core/connector_config', {
