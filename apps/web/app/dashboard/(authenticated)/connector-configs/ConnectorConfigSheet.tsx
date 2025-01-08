@@ -100,9 +100,16 @@ export function ConnectorConfigSheet({
 
   const formRef = React.useRef<SchemaFormElement>(null)
 
-  const connectionsRes = _trpcReact.listConnection.useQuery({
-    connectorConfigId: ccfg?.id,
-  })
+  const connectionsRes = _trpcReact.listConnection.useQuery(
+    {
+      connectorConfigId: ccfg?.id,
+    },
+    {
+      cacheTime: 0,
+      staleTime: 0,
+      refetchOnMount: true,
+    },
+  )
 
   if (!connectorMeta) {
     return <LoadingText className="block p-4" />
