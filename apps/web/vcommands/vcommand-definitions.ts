@@ -1,7 +1,8 @@
-import {useTheme} from 'next-themes';
+// import {useTheme} from 'next-themes';
 import type {CommandDefinitionInput, CommandDefinitionMap} from '@openint/ui';
 import {cmdInit} from '@openint/ui';
-import {delay, z} from '@openint/util';
+import {z} from '@openint/util';
+// import {delay} from '@openint/util';
 import {__DEBUG__} from '@/../app-config/constants';
 import {zClient} from '@/lib-common/schemas';
 import {copyToClipboard} from '../lib-client/copyToClipboard';
@@ -135,11 +136,11 @@ export const entityCommands = {
   }),
 } satisfies CommandDefinitionMap<CommandContext>;
 
-const _debugCommand = {
-  group: 'debug',
-} satisfies CommandDefinitionInput<CommandContext>;
+// const _debugCommand = {
+//   group: 'debug',
+// } satisfies CommandDefinitionInput<CommandContext>;
 
-export const debugCommands = {} satisfies CommandDefinitionMap<CommandContext>;
+// export const debugCommands = {} satisfies CommandDefinitionMap<CommandContext>;
 
 const _navCommand = {
   group: 'navigation',
@@ -209,5 +210,5 @@ export const vDefinitions = {
   ...entityCommands,
   ...navCommands,
   ...miscCommands,
-  ...debugCommands,
+  // ...debugCommands,
 } satisfies CommandDefinitionMap<CommandContext>;
