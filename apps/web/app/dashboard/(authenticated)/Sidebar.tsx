@@ -156,6 +156,10 @@ export function Sidebar({className, hasPgConnection}: SidebarProps) {
               </div>
             </div>
           ))}
+          <div className="mt-4 flex items-start text-sm text-gray-400 p-2 px-4">
+            <Icon name="Info" className="mr-2 h-5 w-5 text-gray-400" />
+            <span>Access command shortcut with <kbd>cmd</kbd> + <kbd>k</kbd></span>
+          </div>
         </div>
       </ScrollArea>
       <div className="mt-auto p-7">
