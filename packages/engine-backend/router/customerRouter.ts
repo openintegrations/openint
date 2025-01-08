@@ -335,8 +335,33 @@ export const customerRouter = trpc.router({
         )
         return {
           connectionId,
-          message: 'Connection successfully connected'
+          message: 'Connection successfully connected',
         }
       },
     ),
+  createCustomer: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'PUT',
+        path: '/core/customer',
+        tags: ['core'],
+        summary: 'Upsert a customer',
+      },
+    })
+    .input(z.object({customerId: z.string(), metadata: z.unknown()}))
+    .output(
+      z.object({
+        customerId: z.string(),
+        orgId: z.string(),
+        metadata: z.unknown(),
+      }),
+    )
+    .mutation(({input: {customerId, metadata}, ctx}) => {
+      console.log('createCustomer', ctx.viewer, customerId, metadata)
+      return {
+        customerId,
+        orgId: ctx.viewer.orgId + '',
+        metadata,
+      }
+    }),
 })
