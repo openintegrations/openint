@@ -1,7 +1,6 @@
 name: Stably Test Runner
 
 on:
-  pull_request:
   push:
     branches:
       - production
