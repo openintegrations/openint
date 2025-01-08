@@ -8,6 +8,12 @@
     ]
   },
   {
+    "group": "core",
+    "pages": [
+      "unified-apis/core/upsert-a-customer"
+    ]
+  },
+  {
     "group": "Core",
     "pages": [
       "unified-apis/core/list-connections",

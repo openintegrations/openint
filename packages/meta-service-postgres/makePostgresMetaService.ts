@@ -90,6 +90,7 @@ export const makePostgresMetaService = zFunction(
   zPgConfig.pick({databaseUrl: true}).extend({viewer: zViewer}),
   (opts): MetaService => {
     const tables: MetaService['tables'] = {
+      // customer: metaTable('customer', _getDeps(opts)),
       // Delay calling of __getDeps until later..
       connection: metaTable('connection', _getDeps(opts)),
       integration: metaTable('integration', _getDeps(opts)),
