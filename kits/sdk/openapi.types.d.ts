@@ -431,6 +431,16 @@ export interface webhooks {
       responses: {}
     }
   }
+  pageview: {
+    post: {
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['webhooks.pageview']
+        }
+      }
+      responses: {}
+    }
+  }
 }
 
 export interface components {
@@ -446,6 +456,15 @@ export interface components {
       }
       /** @enum {string} */
       name: 'sync.completed'
+      id?: string
+    }
+    'webhooks.pageview': {
+      data: {
+        current_url: string
+        path: string
+      }
+      /** @enum {string} */
+      name: 'pageview'
       id?: string
     }
     /**
