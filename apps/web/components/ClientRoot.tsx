@@ -3,11 +3,13 @@
 import {useAuth} from '@clerk/nextjs'
 import {QueryClientProvider} from '@tanstack/react-query'
 import {ThemeProvider} from 'next-themes'
+import {usePathname} from 'next/navigation'
 import React, {useEffect} from 'react'
 import {getViewerId, zViewerFromUnverifiedJwtToken} from '@openint/cdk'
 import {TRPCProvider} from '@openint/engine-frontend'
 import {Toaster} from '@openint/ui'
 import {__DEBUG__} from '@/../app-config/constants'
+import {browserAnalytics} from '@/lib-client/analytics-browser'
 import {createQueryClient} from '../lib-client/react-query-client'
 import {EventPoller} from './EventPoller'
 import type {AsyncStatus} from './viewer-context'
@@ -51,6 +53,8 @@ export function ClientRoot({
   trpcAccessToken?: string | null
   authStatus: AsyncStatus
 }) {
+  const pathname = usePathname()
+
   console.log('[ClientRoot] rendering initialToken?', accessToken != null)
 
   const viewer = React.useMemo(
@@ -74,6 +78,23 @@ export function ClientRoot({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
   ;(globalThis as any).queryClient = queryClient
 
+  useEffect(() => {
+    if (process.env['NEXT_PUBLIC_POSTHOG_WRITEKEY']) {
+      browserAnalytics.init(process.env['NEXT_PUBLIC_POSTHOG_WRITEKEY']!)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (pathname) {
+      browserAnalytics.track({
+        name: 'pageview',
+        data: {
+          current_url: window.origin + pathname,
+          path: pathname,
+        },
+      })
+    }
+  }, [pathname])
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider
@@ -101,11 +122,3 @@ export function ClientRoot({
     </QueryClientProvider>
   )
 }
-
-// browserAnalytics.track({name: 'user/signin', data: {}})
-// browserAnalytics.track({name: 'user/signout', data: {}})
-// browserAnalytics.identify(userId, {
-//   email: email || undefined,
-//   phone: phone || undefined,
-// })
-// browserAnalytics.reset()

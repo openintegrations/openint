@@ -431,6 +431,16 @@ export interface webhooks {
       responses: {}
     }
   }
+  pageview: {
+    post: {
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['webhooks.pageview']
+        }
+      }
+      responses: {}
+    }
+  }
 }
 
 export interface components {
@@ -446,6 +456,15 @@ export interface components {
       }
       /** @enum {string} */
       name: 'sync.completed'
+      id?: string
+    }
+    'webhooks.pageview': {
+      data: {
+        current_url: string
+        path: string
+      }
+      /** @enum {string} */
+      name: 'pageview'
       id?: string
     }
     /**
@@ -1330,6 +1349,11 @@ export interface operations {
           'application/json': {
             healthy: boolean
             error?: string
+            deps?: {
+              nango: boolean
+              inngest: boolean
+              clerk: boolean
+            }
           }
         }
       }
@@ -4718,6 +4742,7 @@ export interface operations {
         customer?: string
         department?: string
         date_macro?: string
+        summarize_by?: string
       }
     }
     responses: {

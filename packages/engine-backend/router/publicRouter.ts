@@ -15,19 +15,48 @@ export const publicRouter = trpc.router({
       },
     })
     .input(z.object({exp: z.boolean().optional()}).optional())
-    .output(z.object({healthy: z.boolean(), error: z.string().optional()}))
+    .output(
+      z.object({
+        healthy: z.boolean(),
+        error: z.string().optional(),
+        deps: z
+          .object({
+            nango: z.boolean(),
+            inngest: z.boolean(),
+            clerk: z.boolean(),
+          })
+          .optional(),
+      }),
+    )
     .query(async ({input, ctx}) => {
       if (process.env['MOCK_HEALTHCHECK']) {
         return {healthy: true}
       }
 
-      const result = await ctx.as('anon', {}).metaService.isHealthy(input?.exp)
+      const [result, externalChecks] = await Promise.all([
+        ctx.as('anon', {}).metaService.isHealthy(input?.exp),
+        Promise.allSettled([
+          fetch('https://api.nango.dev/health').then((r) => r.ok),
+          fetch('https://api.inngest.com/health').then((r) => r.ok),
+          fetch('https://api.clerk.com/v1/health').then((r) => r.ok),
+        ]),
+      ])
 
       if (!result.healthy) {
         throw new Error(result.error)
       }
 
-      return result
+      return {
+        ...result,
+        deps: {
+          nango:
+            externalChecks[0].status === 'fulfilled' && externalChecks[0].value,
+          inngest:
+            externalChecks[1].status === 'fulfilled' && externalChecks[1].value,
+          clerk:
+            externalChecks[2].status === 'fulfilled' && externalChecks[2].value,
+        },
+      }
     }),
   getPublicEnv: publicProcedure.query(({ctx}) =>
     R.pick(ctx.env, ['NEXT_PUBLIC_NANGO_PUBLIC_KEY']),

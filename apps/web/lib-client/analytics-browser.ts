@@ -17,6 +17,7 @@ export const browserAnalytics = {
     posthog.init(writeKey, {
       api_host: 'https://eu.i.posthog.com',
       autocapture: true,
+      capture_pageview: false,
       loaded: () => {
         posthog.register({environment: getSentryEnvironment()})
         initialized = true
@@ -41,6 +42,7 @@ export const browserAnalytics = {
         return
       }
       posthog.capture(event.name, event.data)
+      // QQ: why is this null?
       Sentry.setUser(null)
     }),
   reset: () => {
