@@ -88,6 +88,7 @@ jobs:
 
       - name: Download dev env vars from Vercel
         run: |
+          npm install --global vercel@latest
           vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
           vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local
 
