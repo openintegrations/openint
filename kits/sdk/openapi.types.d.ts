@@ -34,6 +34,10 @@ export interface paths {
     /** Create a magic link */
     post: operations['createMagicLink']
   }
+  '/core/customer': {
+    /** Upsert a customer */
+    put: operations['createCustomer']
+  }
   '/passthrough': {
     /** Passthrough */
     post: operations['passthrough']
@@ -1491,6 +1495,47 @@ export interface operations {
       400: {
         content: {
           'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Upsert a customer */
+  createCustomer: {
+    requestBody: {
+      content: {
+        'application/json': {
+          customerId: string
+          metadata?: unknown
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            customerId: string
+            orgId: string
+            metadata?: unknown
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
         }
       }
       /** @description Internal server error */
