@@ -18,7 +18,7 @@ import {
 } from './def'
 import {inferTableFromMessage, runMigrationForStandardTable} from './utils'
 
-const STARBASE_ORG_ID = 'org_2r7BrlE3gPq74Erm7xyQoQRIV5E'
+const SB_ORG_ID = 'org_2r7BrlE3gPq74Erm7xyQoQRIV5E'
 
 postgresHelpers._types['destinationInputEntity'] = {
   entityName: 'string',
@@ -44,7 +44,7 @@ export const postgresServer = {
       }
       console.log('will run migration for', tableName)
       migrationRan[tableName] = true
-      if (customer?.orgId === STARBASE_ORG_ID) {
+      if (customer?.orgId === SB_ORG_ID) {
         await runMigrationForStandardTableStarbase(tableName)
       } else {
         await runMigrationForStandardTable(db, tableName)
@@ -132,7 +132,7 @@ export const postgresServer = {
                 msgs[0].upsert?.shallow_merge_jsonb_columns,
             }
 
-            if (customer?.orgId === STARBASE_ORG_ID) {
+            if (customer?.orgId === SB_ORG_ID) {
               await dbUpsertStarbase(
                 table,
                 msgs.map((m) => m.data),
@@ -146,7 +146,7 @@ export const postgresServer = {
                 options,
               )
             }
-          } else if (customer?.orgId !== STARBASE_ORG_ID) {
+          } else if (customer?.orgId !== SB_ORG_ID) {
             await db.insert(table).values(msgs.map((m) => m.data))
           }
         }

@@ -3,8 +3,6 @@
 import {useTheme} from 'next-themes'
 import {useEffect, useMemo, useState} from 'react'
 
-const GS_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
-
 interface ThemeColors {
   accent: string
   background: string
@@ -109,10 +107,31 @@ const gsColorsByTheme = {
   dark: gsDarkThemeColors,
 }
 
+const sbDarkThemeColors: Partial<ThemeColors> = {
+  ...defaultDarkThemeColors,
+  accent: 'hsl(0, 0%, 86%)', // #DCDCDC
+  background: 'hsl(0, 0%, 4%)', // #0A0A0A
+  button: 'hsl(0, 0%, 86%)', // #DCDCDC
+  buttonLight: 'hsl(0, 0%, 100%)', // #FFFFFF
+  buttonHover: 'hsl(0, 0%, 100%)', // #FFFFFF
+  buttonStroke: 'hsl(0, 0%, 86%)', // #DCDCDC
+  tab: 'hsl(0, 0%, 6%)', // #101010
+}
+
+const sbColorsByTheme = {
+  light: defaultThemeColors,
+  dark: sbDarkThemeColors,
+}
+
+const GS_ID = 'org_2pjCxWkWPImA1ZKNlzL2fQzzcgX'
+const SB_ID = 'org_2r7BrlE3gPq74Erm7xyQoQRIV5E'
+
 const getThemeByOrgId = (orgId: string, theme: 'light' | 'dark') => {
   switch (orgId) {
     case GS_ID:
       return gsColorsByTheme[theme]
+    case SB_ID:
+      return sbColorsByTheme[theme]
     default:
       return defaultColorsByTheme[theme]
   }
