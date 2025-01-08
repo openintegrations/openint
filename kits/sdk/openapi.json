@@ -7836,6 +7836,20 @@
         },
         "responses": {}
       }
+    },
+    "pageview": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/webhooks.pageview"
+              }
+            }
+          }
+        },
+        "responses": {}
+      }
     }
   },
   "components": {
@@ -7881,6 +7895,31 @@
           "name": {
             "type": "string",
             "enum": ["sync.completed"]
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": ["data", "name"]
+      },
+      "webhooks.pageview": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "current_url": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": ["current_url", "path"]
+          },
+          "name": {
+            "type": "string",
+            "enum": ["pageview"]
           },
           "id": {
             "type": "string"
