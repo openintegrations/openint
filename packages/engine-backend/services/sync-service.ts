@@ -102,6 +102,7 @@ export function makeSyncService({
         }
 
         // else default to postgres if they've configured it
+        // QQ: should these be mutually exclusive or perhaps set more than 1 default destination?
       } else if (org.publicMetadata.database_url) {
         const dCcfgId = makeId('ccfg', 'postgres', 'default_' + org.id)
         defaultDestId = makeId('conn', 'postgres', 'default_' + org.id)
