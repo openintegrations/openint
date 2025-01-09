@@ -236,11 +236,13 @@ export const zRaw = {
       user_id: zUserId.nullish(),
     })
     .openapi({ref: 'Event'}),
-  // customer: zBase
-  //   .extend({
-  //     id: zCustomerId,
-  //     org_id: zId('org'),
-  //     metadata: z.unknown(),
-  //   })
-  //   .openapi({ref: 'Customer'}),
+  customer: zBase
+    .extend({
+      id: zId('cus'),
+      customer_id: zCustomerId,
+      org_id: zId('org'),
+      metadata: z.unknown(),
+      default_destination_id: zId('conn').nullish(),
+    })
+    .openapi({ref: 'Customer'}),
 }

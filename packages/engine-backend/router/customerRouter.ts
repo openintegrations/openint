@@ -348,10 +348,16 @@ export const customerRouter = trpc.router({
         summary: 'Upsert a customer',
       },
     })
-    .input(z.object({customerId: z.string(), metadata: z.unknown()}))
+    .input(
+      z.object({
+        customerId: zCustomerId,
+        metadata: z.unknown().optional(),
+        defaultDestinationId: zId('conn').optional(),
+      }),
+    )
     .output(
       z.object({
-        customerId: z.string(),
+        customerId: zCustomerId,
         orgId: z.string(),
         metadata: z.unknown(),
       }),
