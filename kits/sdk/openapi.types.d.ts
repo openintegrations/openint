@@ -27,16 +27,16 @@ export interface paths {
     get: operations['createClerkTestingToken']
   }
   '/connect/token': {
-    /** Create a connect token */
+    /** Create connect token */
     post: operations['createConnectToken']
   }
   '/connect/magic-link': {
-    /** Create a magic link */
+    /** Create magic link */
     post: operations['createMagicLink']
   }
-  '/core/customer': {
-    /** Upsert a customer */
-    put: operations['createCustomer']
+  '/core/customer/{id}': {
+    /** Upsert customer */
+    put: operations['upsertCustomer']
   }
   '/passthrough': {
     /** Passthrough */
@@ -1417,7 +1417,7 @@ export interface operations {
       }
     }
   }
-  /** Create a connect token */
+  /** Create connect token */
   createConnectToken: {
     requestBody: {
       content: {
@@ -1455,7 +1455,7 @@ export interface operations {
       }
     }
   }
-  /** Create a magic link */
+  /** Create magic link */
   createMagicLink: {
     requestBody: {
       content: {
@@ -1505,12 +1505,16 @@ export interface operations {
       }
     }
   }
-  /** Upsert a customer */
-  createCustomer: {
+  /** Upsert customer */
+  upsertCustomer: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
     requestBody: {
       content: {
         'application/json': {
-          customerId: string
           metadata?: unknown
         }
       }
@@ -1520,7 +1524,7 @@ export interface operations {
       200: {
         content: {
           'application/json': {
-            customerId: string
+            id: string
             orgId: string
             metadata?: unknown
           }
