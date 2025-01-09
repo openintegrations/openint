@@ -242,7 +242,7 @@ export const zRaw = {
       customer_id: zCustomerId,
       org_id: zId('org'),
       metadata: z.unknown(),
-      default_destination_id: zId('conn').nullish(),
+      default_connector_config_id: zId('ccfg').nullish(),
     })
     .openapi({ref: 'Customer'}),
 }

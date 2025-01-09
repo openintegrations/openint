@@ -288,6 +288,7 @@ export const customerRouter = trpc.router({
           }
         }
 
+        // QQ: is this logic wrong? Wouldn't we want the syncs to be async/in background by default most times?
         const syncInBackground =
           connUpdate.triggerDefaultSync !== false && !connCtxInput.syncInBand
         const triggerDefaultSync =
@@ -353,12 +354,15 @@ export const customerRouter = trpc.router({
       z.object({
         customerId: zCustomerId,
         metadata: z.unknown().optional(),
-        defaultDestinationId: zId('conn').optional(),
+        defaultConnectorConfigId: zId('ccfg').optional(),
       }),
     )
     .output(zRaw.customer)
     .mutation(
-      async ({input: {customerId, metadata, defaultDestinationId}, ctx}) => {
+      async ({
+        input: {customerId, metadata, defaultConnectorConfigId},
+        ctx,
+      }) => {
         console.log('createCustomer', ctx.viewer, customerId, metadata)
 
         // QQ: when would an orgId be falsy?
@@ -381,8 +385,9 @@ export const customerRouter = trpc.router({
             ? existingCustomer[0]?.id
             : makeId('cus', makeUlid()),
           {
+            // QQ: Confirm casing handling going forward
             customer_id: customerId,
-            default_destination_id: defaultDestinationId,
+            default_connector_config_id: defaultConnectorConfigId,
             org_id: ctx.viewer.orgId,
             metadata,
           },
