@@ -94,10 +94,9 @@ export function makeSyncService({
           await metaLinks.patch('connection', defaultDestId, {
             connectorConfigId: dCcfgId,
             // Should always snake_case here. This is also not typesafe...
-            settings: {
-              databaseUrl: org.publicMetadata.database_url,
-              migrateTables: org.publicMetadata.migrate_tables,
-            },
+
+            // QQ: Is this unsafe perhaps?
+            settings: existingCustomer[0]?.metadata ?? {},
           })
           console.log('Created default connection', defaultDestId)
         }
@@ -120,6 +119,8 @@ export function makeSyncService({
           // Should always snake_case here. This is also not typesafe...
           settings: {
             databaseUrl: org.publicMetadata.database_url,
+            // QQ: shouldn't this not be in the database in the connection settings
+            // and instead always read from org.publicMetadata.migrate_tables?
             migrateTables: org.publicMetadata.migrate_tables,
           },
         })
