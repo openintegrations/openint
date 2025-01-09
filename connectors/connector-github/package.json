@@ -6,8 +6,7 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
-    "@openint/vdk": "workspace:*",
-    "@openint/runtime": "^0.0.19"
+    "@openint/vdk": "workspace:*"
   },
   "devDependencies": {}
 }
