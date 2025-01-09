@@ -4,11 +4,7 @@ import jsonStableStringify from 'json-stable-stringify'
 import * as R from 'remeda'
 import type {ConnectorServer} from '@openint/cdk'
 import {handlersLink} from '@openint/cdk'
-import {
-  dbUpsert,
-  dbUpsertStarbase,
-  runMigrationForStandardTableStarbase,
-} from '@openint/db'
+import {dbUpsert} from '@openint/db'
 import type {NonEmptyArray} from '@openint/util'
 import {rxjs} from '@openint/util'
 import {
@@ -17,8 +13,6 @@ import {
   type RecordMessageBody,
 } from './def'
 import {inferTableFromMessage, runMigrationForStandardTable} from './utils'
-
-const SB_ORG_ID = 'org_2r7BrlE3gPq74Erm7xyQoQRIV5E'
 
 postgresHelpers._types['destinationInputEntity'] = {
   entityName: 'string',
@@ -44,11 +38,7 @@ export const postgresServer = {
       }
       console.log('will run migration for', tableName)
       migrationRan[tableName] = true
-      if (customer?.orgId === SB_ORG_ID) {
-        await runMigrationForStandardTableStarbase(tableName)
-      } else {
-        await runMigrationForStandardTable(db, tableName)
-      }
+      await runMigrationForStandardTable(db, tableName)
     }
 
     // TODO: Introduce an end event that allows database connection to be closed explicitly
@@ -123,30 +113,20 @@ export const postgresServer = {
           //     ) as Record<string, any>,
           // )
           if (msgs[0].upsert) {
-            const options = {
-              insertOnlyColumns: msgs[0].upsert?.insert_only_columns,
-              keyColumns: msgs[0].upsert?.key_columns,
-              mustMatchColumns: msgs[0].upsert?.must_match_columns,
-              noDiffColumns: msgs[0].upsert?.no_diff_columns,
-              shallowMergeJsonbColumns:
-                msgs[0].upsert?.shallow_merge_jsonb_columns,
-            }
-
-            if (customer?.orgId === SB_ORG_ID) {
-              await dbUpsertStarbase(
-                table,
-                msgs.map((m) => m.data),
-                options,
-              )
-            } else {
-              await dbUpsert(
-                db,
-                table,
-                msgs.map((m) => m.data),
-                options,
-              )
-            }
-          } else if (customer?.orgId !== SB_ORG_ID) {
+            await dbUpsert(
+              db,
+              table,
+              msgs.map((m) => m.data),
+              {
+                insertOnlyColumns: msgs[0].upsert?.insert_only_columns,
+                keyColumns: msgs[0].upsert?.key_columns,
+                mustMatchColumns: msgs[0].upsert?.must_match_columns,
+                noDiffColumns: msgs[0].upsert?.no_diff_columns,
+                shallowMergeJsonbColumns:
+                  msgs[0].upsert?.shallow_merge_jsonb_columns,
+              },
+            )
+          } else {
             await db.insert(table).values(msgs.map((m) => m.data))
           }
         }

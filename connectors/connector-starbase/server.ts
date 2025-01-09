@@ -31,7 +31,7 @@ export const starbaseServer = {
       if (migrationRan[tableName]) {
         return
       }
-      console.log('will run migration for', tableName)
+      console.log('will run starbase migration for', tableName)
       migrationRan[tableName] = true
       await runMigrationForStandardTableStarbase(tableName)
     }

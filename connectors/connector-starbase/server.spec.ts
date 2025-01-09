@@ -16,7 +16,10 @@ const destLink = starbaseServer.destinationSync({
   config: {},
   customer: {id: 'esur_12' as CustomerId, orgId: 'org_123'},
   settings: {
-    databaseUrl: STARBASE_ENDPOINT,
+    credentials: {
+      starbaseDbHost: STARBASE_ENDPOINT,
+      starbaseDbToken: STARBASE_AUTH_TOKEN,
+    },
   },
   source: {id: 'conn_sfdc_9287', connectorName: 'sfdc'},
   state: {},

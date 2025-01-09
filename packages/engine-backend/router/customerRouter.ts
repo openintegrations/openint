@@ -354,6 +354,7 @@ export const customerRouter = trpc.router({
       z.object({
         customerId: zCustomerId,
         metadata: z.unknown().optional(),
+        // QQ: should this be an array?
         defaultConnectorConfigId: zId('ccfg').optional(),
       }),
     )
