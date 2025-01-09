@@ -13,6 +13,7 @@ import type {
 } from '@openint/cdk'
 import {
   bankingLink,
+  extractId,
   logLink,
   makeId,
   prefixConnectorNameLink,
@@ -64,7 +65,45 @@ export function makeSyncService({
     let defaultDestId = conn.connectorConfig?.defaultPipeOut?.destination_id
     if (!defaultDestId) {
       const org = await authProvider.getOrganization(conn.connectorConfig.orgId)
-      if (org.publicMetadata.database_url) {
+
+      // TODO: @pellicceama DRY and remove duplication
+      if (conn.customerId) {
+        const existingCustomer = await metaService.tables.customer.list({
+          customerId: conn.customerId,
+          limit: 1,
+        })
+        const dCcfgId =
+          existingCustomer && existingCustomer[0]?.default_connector_config_id
+
+        if (dCcfgId) {
+          // create default connection for that ccfg
+          const dCcfgId = makeId('ccfg', 'postgres', 'default_' + org.id)
+          const connectorName = extractId(dCcfgId)[1] // i.e. starbasedb
+          defaultDestId = makeId('conn', connectorName, 'default_' + org.id)
+          await metaLinks.patch('connector_config', dCcfgId, {
+            orgId: org.id,
+            // Defaulting to disabled to not show up for customers as we don't have another way to filter them out for now
+            // Though technically incorrect as we will later pause syncing for disabled connectors
+            disabled: true,
+            displayName: `Default ${
+              connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
+            } Connector for sync`,
+          })
+          console.log('Created default connector config', dCcfgId)
+          // Do we actually need to store this?
+          await metaLinks.patch('connection', defaultDestId, {
+            connectorConfigId: dCcfgId,
+            // Should always snake_case here. This is also not typesafe...
+            settings: {
+              databaseUrl: org.publicMetadata.database_url,
+              migrateTables: org.publicMetadata.migrate_tables,
+            },
+          })
+          console.log('Created default connection', defaultDestId)
+        }
+
+        // else default to postgres if they've configured it
+      } else if (org.publicMetadata.database_url) {
         const dCcfgId = makeId('ccfg', 'postgres', 'default_' + org.id)
         defaultDestId = makeId('conn', 'postgres', 'default_' + org.id)
         await metaLinks.patch('connector_config', dCcfgId, {
