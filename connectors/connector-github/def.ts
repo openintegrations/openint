@@ -2,17 +2,17 @@ import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
 import {z} from '@openint/util'
 
-export const zConfig = oauthBaseSchema.connectorConfigId
+export const zConfig = oauthBaseSchema.connectorConfig
 
-const oReso = oauthBaseSchema.resourceSettings
-export const zSettings = oReso.extend({
-  oauth: oReso.shape.oauth,
+const oConn = oauthBaseSchema.connectionSettings
+export const zSettings = oConn.extend({
+  oauth: oConn.shape.oauth,
 })
 
 export const githubSchemas = {
   name: z.literal('github'),
   connectorConfig: zConfig,
-  resourceSettings: zSettings,
+  connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
 } satisfies ConnectorSchemas
 
