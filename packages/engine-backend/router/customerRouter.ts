@@ -12,7 +12,7 @@ import {
   zId,
   zPostConnectOptions,
 } from '@openint/cdk'
-import {TRPCError} from '@openint/trpc'
+import {adminProcedure, TRPCError} from '@openint/trpc'
 import {joinPath, z} from '@openint/util'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {protectedProcedure, trpc} from './_base'
@@ -124,7 +124,6 @@ export const customerRouter = trpc.router({
         method: 'POST',
         path: '/connect/token',
         tags,
-        summary: 'Create a connect token',
       },
     })
     .input(customerRouterSchema.createConnectToken.input)
@@ -145,7 +144,6 @@ export const customerRouter = trpc.router({
         method: 'POST',
         path: '/connect/magic-link',
         tags,
-        summary: 'Create a magic link',
       },
     })
     .input(customerRouterSchema.createMagicLink.input)
@@ -339,27 +337,22 @@ export const customerRouter = trpc.router({
         }
       },
     ),
-  createCustomer: protectedProcedure
+  upsertCustomer: adminProcedure
     .meta({
-      openapi: {
-        method: 'PUT',
-        path: '/core/customer',
-        tags: ['core'],
-        summary: 'Upsert a customer',
-      },
+      openapi: {method: 'PUT', path: '/core/customer/{id}', tags: ['core']},
     })
-    .input(z.object({customerId: z.string(), metadata: z.unknown()}))
+    .input(z.object({id: z.string(), metadata: z.unknown()}))
     .output(
       z.object({
-        customerId: z.string(),
+        id: z.string(),
         orgId: z.string(),
         metadata: z.unknown(),
       }),
     )
-    .mutation(({input: {customerId, metadata}, ctx}) => {
-      console.log('createCustomer', ctx.viewer, customerId, metadata)
+    .mutation(({input: {id, metadata}, ctx}) => {
+      console.log('createCustomer', ctx.viewer, id, metadata)
       return {
-        customerId,
+        id,
         orgId: ctx.viewer.orgId + '',
         metadata,
       }

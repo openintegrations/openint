@@ -57,15 +57,15 @@
         {
           "group": "Connect",
           "pages": [
-            "unified-apis/connect/create-a-connect-token",
-            "unified-apis/connect/create-a-magic-link",
+            "unified-apis/connect/create-connect-token",
+            "unified-apis/connect/create-magic-link",
             "unified-apis/connect/list-events"
           ]
         },
         {
           "group": "core",
           "pages": [
-            "unified-apis/core/upsert-a-customer"
+            "unified-apis/core/upsert-customer"
           ]
         },
         {
