@@ -11,9 +11,10 @@ import {
   zCustomerId,
   zId,
   zPostConnectOptions,
+  zRaw,
 } from '@openint/cdk'
 import {TRPCError} from '@openint/trpc'
-import {joinPath, z} from '@openint/util'
+import {joinPath, makeUlid, z} from '@openint/util'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {protectedProcedure, trpc} from './_base'
 
@@ -355,19 +356,37 @@ export const customerRouter = trpc.router({
         defaultDestinationId: zId('conn').optional(),
       }),
     )
-    .output(
-      z.object({
-        customerId: zCustomerId,
-        orgId: z.string(),
-        metadata: z.unknown(),
-      }),
-    )
-    .mutation(({input: {customerId, metadata}, ctx}) => {
-      console.log('createCustomer', ctx.viewer, customerId, metadata)
-      return {
-        customerId,
-        orgId: ctx.viewer.orgId + '',
-        metadata,
-      }
-    }),
+    .output(zRaw.customer)
+    .mutation(
+      async ({input: {customerId, metadata, defaultDestinationId}, ctx}) => {
+        console.log('createCustomer', ctx.viewer, customerId, metadata)
+
+        // QQ: when would an orgId be falsy?
+        if (!ctx.viewer.orgId) {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'Viewer must have an organization ',
+          })
+        }
+
+        const existingCustomer =
+          await ctx.services.metaService.tables.customer.list({
+            customerId,
+            limit: 1,
+          })
+
+        return ctx.services.patchReturning(
+          'customer',
+          existingCustomer.length > 0 && existingCustomer[0]?.id
+            ? existingCustomer[0]?.id
+            : makeId('cus', makeUlid()),
+          {
+            customer_id: customerId,
+            default_destination_id: defaultDestinationId,
+            org_id: ctx.viewer.orgId,
+            metadata,
+          },
+        )
+      },
+    ),
 })

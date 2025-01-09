@@ -70,6 +70,8 @@ export const zId = memoize(_zId, {
 export const zUserId = zId('user')
 export type UserId = z.infer<typeof zUserId>
 
+// QQ: What's the difference between zCustomerId & zExtCustomerId ?
+
 /** trpc-openapi limits us from using .brand https://share.cleanshot.com/Mf4F9xwZ */
 export const zCustomerId = z.string().min(1).brand<'customer'>()
 export type CustomerId = z.infer<typeof zCustomerId>
