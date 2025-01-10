@@ -1,4 +1,5 @@
 import posthog from 'posthog-js'
+import {isDevOrStaging} from '@openint/app-config/constants'
 import {zUserId} from '@openint/cdk'
 import {zEvent, zUserTraits} from '@openint/events'
 import {z, zFunction} from '@openint/util'
@@ -18,6 +19,8 @@ export const browserAnalytics = {
       api_host: 'https://eu.i.posthog.com',
       autocapture: true,
       capture_pageview: false,
+      disable_session_recording: isDevOrStaging,
+      opt_out_capturing_by_default: isDevOrStaging,
       loaded: () => {
         posthog.register({environment: getSentryEnvironment()})
         initialized = true

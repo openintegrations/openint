@@ -39,11 +39,10 @@ export const __DEBUG__ =
   process.env['DEBUG'] === 'false'
     ? false
     : getServerUrl(null).includes('localhost') ||
-      Boolean(
-        typeof window !== 'undefined' &&
-          window.localStorage.getItem('__DEBUG__'),
-      ) ||
-      !!process.env['DEBUG']
+      getServerUrl(null).includes('local.openint.dev')
+Boolean(
+  typeof window !== 'undefined' && window.localStorage.getItem('__DEBUG__'),
+) || !!process.env['DEBUG']
 
 export const isDevOrStaging =
   __DEBUG__ ||
