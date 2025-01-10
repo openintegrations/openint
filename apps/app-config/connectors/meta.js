@@ -109,6 +109,15 @@ module.exports = [
     },
   },
   {
+    name: 'github',
+    dirName: 'connector-github',
+    varName: 'connectorGithub',
+    imports: {
+      def: '@openint/connector-github/def',
+      server: '@openint/connector-github/server',
+    },
+  },
+  {
     name: 'google',
     dirName: 'connector-google',
     varName: 'connectorGoogle',

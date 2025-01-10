@@ -21,6 +21,8 @@ import {default as connectorForeceipt_def} from '@openint/connector-foreceipt/de
 import {default as connectorForeceipt_server} from '@openint/connector-foreceipt/server'
 import {default as connectorFs_def} from '@openint/connector-fs/def'
 import {default as connectorFs_server} from '@openint/connector-fs/server'
+import {default as connectorGithub_def} from '@openint/connector-github/def'
+import {default as connectorGithub_server} from '@openint/connector-github/server'
 import {default as connectorGoogle_def} from '@openint/connector-google/def'
 import {default as connectorGoogle_server} from '@openint/connector-google/server'
 import {default as connectorGreenhouse_def} from '@openint/connector-greenhouse/def'
@@ -141,6 +143,11 @@ const connectorForeceipt = {
 const connectorFs = {
   ...connectorFs_def,
   ...connectorFs_server,
+}
+
+const connectorGithub = {
+  ...connectorGithub_def,
+  ...connectorGithub_server,
 }
 
 const connectorGoogle = {
@@ -323,6 +330,7 @@ export const mergedConnectors = {
   firebase: connectorFirebase,
   foreceipt: connectorForeceipt,
   fs: connectorFs,
+  github: connectorGithub,
   google: connectorGoogle,
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
