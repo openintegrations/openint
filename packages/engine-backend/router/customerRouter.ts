@@ -13,13 +13,8 @@ import {
   zPostConnectOptions,
   zRaw,
 } from '@openint/cdk'
-<<<<<<< HEAD
-import {TRPCError} from '@openint/trpc'
-import {joinPath, makeUlid, z} from '@openint/util'
-=======
 import {adminProcedure, TRPCError} from '@openint/trpc'
-import {joinPath, z} from '@openint/util'
->>>>>>> 28786b0ce39762e9e84fc9ad42f24ba07069b712
+import {joinPath, makeUlid, z} from '@openint/util'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {protectedProcedure, trpc} from './_base'
 
