@@ -154,6 +154,15 @@ module.exports = [
     },
   },
   {
+    name: 'jira',
+    dirName: 'connector-jira',
+    varName: 'connectorJira',
+    imports: {
+      def: '@openint/connector-jira/def',
+      server: '@openint/connector-jira/server',
+    },
+  },
+  {
     name: 'lever',
     dirName: 'connector-lever',
     varName: 'connectorLever',

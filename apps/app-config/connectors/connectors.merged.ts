@@ -31,6 +31,8 @@ import {default as connectorHeron_def} from '@openint/connector-heron/def'
 import {default as connectorHeron_server} from '@openint/connector-heron/server'
 import {default as connectorHubspot_def} from '@openint/connector-hubspot/def'
 import {default as connectorHubspot_server} from '@openint/connector-hubspot/server'
+import {default as connectorJira_def} from '@openint/connector-jira/def'
+import {default as connectorJira_server} from '@openint/connector-jira/server'
 import {default as connectorLever_def} from '@openint/connector-lever/def'
 import {default as connectorLever_server} from '@openint/connector-lever/server'
 import {default as connectorLunchmoney_def} from '@openint/connector-lunchmoney/def'
@@ -168,6 +170,11 @@ const connectorHeron = {
 const connectorHubspot = {
   ...connectorHubspot_def,
   ...connectorHubspot_server,
+}
+
+const connectorJira = {
+  ...connectorJira_def,
+  ...connectorJira_server,
 }
 
 const connectorLever = {
@@ -335,6 +342,7 @@ export const mergedConnectors = {
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   hubspot: connectorHubspot,
+  jira: connectorJira,
   lever: connectorLever,
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
