@@ -13,8 +13,13 @@ import {
   zPostConnectOptions,
   zRaw,
 } from '@openint/cdk'
+<<<<<<< HEAD
 import {TRPCError} from '@openint/trpc'
 import {joinPath, makeUlid, z} from '@openint/util'
+=======
+import {adminProcedure, TRPCError} from '@openint/trpc'
+import {joinPath, z} from '@openint/util'
+>>>>>>> 28786b0ce39762e9e84fc9ad42f24ba07069b712
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {protectedProcedure, trpc} from './_base'
 
@@ -125,7 +130,6 @@ export const customerRouter = trpc.router({
         method: 'POST',
         path: '/connect/token',
         tags,
-        summary: 'Create a connect token',
       },
     })
     .input(customerRouterSchema.createConnectToken.input)
@@ -146,7 +150,6 @@ export const customerRouter = trpc.router({
         method: 'POST',
         path: '/connect/magic-link',
         tags,
-        summary: 'Create a magic link',
       },
     })
     .input(customerRouterSchema.createMagicLink.input)
@@ -341,14 +344,9 @@ export const customerRouter = trpc.router({
         }
       },
     ),
-  createCustomer: protectedProcedure
+  upsertCustomer: adminProcedure
     .meta({
-      openapi: {
-        method: 'PUT',
-        path: '/core/customer',
-        tags: ['core'],
-        summary: 'Upsert a customer',
-      },
+      openapi: {method: 'PUT', path: '/core/customer/{id}', tags: ['core']},
     })
     .input(
       z.object({
