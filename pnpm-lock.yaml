@@ -215,6 +215,9 @@ importers:
       '@openint/connector-fs':
         specifier: workspace:*
         version: link:../../connectors/connector-fs
+      '@openint/connector-github':
+        specifier: workspace:*
+        version: link:../../connectors/connector-github
       '@openint/connector-google':
         specifier: workspace:*
         version: link:../../connectors/connector-google
@@ -846,6 +849,18 @@ importers:
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
+
+  connectors/connector-github:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
   connectors/connector-google:
     dependencies:
@@ -20622,7 +20637,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0))(eslint@8.23.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -20667,7 +20682,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.23.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0))(eslint@8.23.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0)
       hasown: 2.0.0
       is-core-module: 2.13.1
       is-glob: 4.0.3
