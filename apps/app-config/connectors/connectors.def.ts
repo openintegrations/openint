@@ -16,6 +16,7 @@ import {default as connectorGreenhouse} from '@openint/connector-greenhouse/def'
 import {default as connectorHeron} from '@openint/connector-heron/def'
 import {default as connectorHubspot} from '@openint/connector-hubspot/def'
 import {default as connectorLever} from '@openint/connector-lever/def'
+import {default as connectorLinear} from '@openint/connector-linear/def'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/def'
 import {default as connectorMercury} from '@openint/connector-mercury/def'
 import {default as connectorMerge} from '@openint/connector-merge/def'
@@ -64,6 +65,7 @@ export const defConnectors = {
   heron: connectorHeron,
   hubspot: connectorHubspot,
   lever: connectorLever,
+  linear: connectorLinear,
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
   merge: connectorMerge,

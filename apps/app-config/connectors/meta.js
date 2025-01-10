@@ -163,6 +163,15 @@ module.exports = [
     },
   },
   {
+    name: 'linear',
+    dirName: 'connector-linear',
+    varName: 'connectorLinear',
+    imports: {
+      def: '@openint/connector-linear/def',
+      server: '@openint/connector-linear/server',
+    },
+  },
+  {
     name: 'lunchmoney',
     dirName: 'connector-lunchmoney',
     varName: 'connectorLunchmoney',

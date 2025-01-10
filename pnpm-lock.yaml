@@ -233,6 +233,9 @@ importers:
       '@openint/connector-lever':
         specifier: workspace:*
         version: link:../../connectors/connector-lever
+      '@openint/connector-linear':
+        specifier: workspace:*
+        version: link:../../connectors/connector-linear
       '@openint/connector-lunchmoney':
         specifier: workspace:*
         version: link:../../connectors/connector-lunchmoney
@@ -937,6 +940,18 @@ importers:
       '@opensdks/sdk-lever':
         specifier: 0.0.10
         version: 0.0.10
+
+  connectors/connector-linear:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
   connectors/connector-lunchmoney:
     dependencies:
