@@ -341,11 +341,11 @@ export const customerRouter = trpc.router({
     ),
   upsertCustomer: adminProcedure
     .meta({
-      openapi: {method: 'PUT', path: '/core/customer/{id}', tags: ['core']},
+      openapi: {method: 'PATCH', path: '/core/customer/{id}', tags: ['core']},
     })
     .input(
       z.object({
-        customerId: zCustomerId,
+        id: zCustomerId,
         metadata: z.unknown().optional(),
         // QQ: should this be an array?
         defaultConnectorConfigId: zId('ccfg').optional(),
@@ -353,11 +353,8 @@ export const customerRouter = trpc.router({
     )
     .output(zRaw.customer)
     .mutation(
-      async ({
-        input: {customerId, metadata, defaultConnectorConfigId},
-        ctx,
-      }) => {
-        console.log('createCustomer', ctx.viewer, customerId, metadata)
+      async ({input: {id, metadata, defaultConnectorConfigId}, ctx}) => {
+        console.log('createCustomer', ctx.viewer, id, metadata)
 
         // QQ: when would an orgId be falsy?
         if (!ctx.viewer.orgId) {
@@ -369,7 +366,7 @@ export const customerRouter = trpc.router({
 
         const existingCustomer =
           await ctx.services.metaService.tables.customer.list({
-            customerId,
+            customerId: id,
             limit: 1,
           })
 
@@ -380,7 +377,7 @@ export const customerRouter = trpc.router({
             : makeId('cus', makeUlid()),
           {
             // QQ: Confirm casing handling going forward
-            customer_id: customerId,
+            customer_id: id,
             default_connector_config_id: defaultConnectorConfigId,
             org_id: ctx.viewer.orgId,
             metadata,
