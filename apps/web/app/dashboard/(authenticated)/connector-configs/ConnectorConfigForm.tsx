@@ -131,6 +131,7 @@ export function ConnectorConfigForm({
       },
     })
 
+  console.log('ccfgSchema', ccfgSchema)
   return (
     <div className="grow overflow-scroll">
       {isLoading ? (

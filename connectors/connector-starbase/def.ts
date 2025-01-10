@@ -1,24 +1,7 @@
-import type {
-  ConnectorDef,
-  ConnectorSchemas,
-  EntityPayloadWithRaw,
-} from '@openint/cdk'
+import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
+import {z} from '@openint/util'
 import {deprecatedInputEntity} from '../connector-postgres'
-
-export const zPgConfig = z.object({
-  credentials: z.union([
-    z.null().openapi({title: 'Use Credentials in Customer Metadata'}),
-    z
-      .object({
-        starbaseDbHost: z.string(),
-        starbaseDbToken: z.string(),
-      })
-      .openapi({title: 'Use my own StarbaseDb Instance'}),
-  ]),
-  migrateTables: z.boolean().optional(),
-})
 
 export const zRecordMessageBody = z.object({
   stream: z.string(),
@@ -42,30 +25,30 @@ export type RecordMessageBody = z.infer<typeof zRecordMessageBody>
 
 export const starbaseSchemas = {
   name: z.literal('starbase'),
-  connectionSettings: zPgConfig,
+  connectorConfig: z.object({
+    credentials: z.union([
+      z.null().openapi({title: 'Use Credentials in Customer Metadata'}),
+      z
+        .object({
+          starbaseDbHost: z.string(),
+          starbaseDbToken: z.string(),
+        })
+        .openapi({title: 'Use my own StarbaseDb Instance'}),
+    ]),
+    migrateTables: z.boolean().optional(),
+  }),
   // same as postgres
   destinationInputEntity: z.union([zRecordMessageBody, deprecatedInputEntity]),
-  sourceOutputEntity: zCast<EntityPayloadWithRaw>(),
-  sourceState: z
-    .object({
-      invoice: z
-        .object({
-          lastModifiedAt: z.string().optional(),
-          lastRowId: z.string().optional(),
-        })
-        .optional(),
-    })
-    .optional(),
 } satisfies ConnectorSchemas
 
-export const postgresHelpers = connHelpers(starbaseSchemas)
+export const starbaseHelpers = connHelpers(starbaseSchemas)
 
-export const postgresDef = {
+export const starbaseDef = {
   name: 'starbase',
   metadata: {
     verticals: ['database'],
     logoUrl: '/_assets/logo-starbase.svg',
-    stage: 'alpha',
+    stage: 'beta',
   },
 
   schemas: starbaseSchemas,
@@ -77,4 +60,4 @@ export const postgresDef = {
   },
 } satisfies ConnectorDef<typeof starbaseSchemas>
 
-export default postgresDef
+export default starbaseDef

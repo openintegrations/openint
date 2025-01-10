@@ -71,7 +71,6 @@ import {default as connectorSplitwise_server} from '@openint/connector-splitwise
 import {default as connectorSpreadsheet_def} from '@openint/connector-spreadsheet/def'
 import {default as connectorSpreadsheet_server} from '@openint/connector-spreadsheet/server'
 import {default as connectorStarbase_def} from '@openint/connector-starbase/def'
-import {default as connectorStarbase_server} from '@openint/connector-starbase/server'
 import {default as connectorStripe_def} from '@openint/connector-stripe/def'
 import {default as connectorStripe_server} from '@openint/connector-stripe/server'
 import {default as connectorTeller_def} from '@openint/connector-teller/def'
@@ -89,6 +88,7 @@ import {default as connectorXero_def} from '@openint/connector-xero/def'
 import {default as connectorXero_server} from '@openint/connector-xero/server'
 import {default as connectorYodlee_def} from '@openint/connector-yodlee/def'
 import {default as connectorYodlee_server} from '@openint/connector-yodlee/server'
+import {default as connectorStarbase_server} from '../../../connectors/connector-starbase/server'
 
 const connectorAirtable = {
   ...connectorAirtable_def,

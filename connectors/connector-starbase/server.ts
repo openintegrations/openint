@@ -11,12 +11,12 @@ import type {NonEmptyArray} from '@openint/util'
 import {rxjs} from '@openint/util'
 import {inferTableFromMessage} from '../connector-postgres'
 import {
-  postgresHelpers,
+  starbaseHelpers,
   type RecordMessageBody,
   type starbaseSchemas,
 } from './def'
 
-postgresHelpers._types['destinationInputEntity'] = {
+starbaseHelpers._types['destinationInputEntity'] = {
   entityName: 'string',
   entity: {raw: 'unknown', unified: 'unknown'},
   id: 'string',
