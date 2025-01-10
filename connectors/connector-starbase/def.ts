@@ -33,7 +33,7 @@ export const starbaseSchemas = {
           starbaseDbHost: z.string(),
           starbaseDbToken: z.string(),
         })
-        .openapi({title: 'Use my own StarbaseDb Instance'}),
+        .openapi({title: 'Use my own StarbaseDB Instance'}),
     ]),
     migrateTables: z.boolean().optional(),
   }),

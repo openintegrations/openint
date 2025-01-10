@@ -13,14 +13,14 @@ const STARBASE_AUTH_TOKEN = process.env['STARBASE_AUTH_TOKEN']!
 const db = drizzle(...starbase(STARBASE_ENDPOINT, STARBASE_AUTH_TOKEN))
 
 const destLink = starbaseServer.destinationSync({
-  config: {},
-  customer: {id: 'esur_12' as CustomerId, orgId: 'org_123'},
-  settings: {
+  config: {
     credentials: {
       starbaseDbHost: STARBASE_ENDPOINT,
       starbaseDbToken: STARBASE_AUTH_TOKEN,
     },
   },
+  customer: {id: 'esur_12' as CustomerId, orgId: 'org_123'},
+  settings: {},
   source: {id: 'conn_sfdc_9287', connectorName: 'sfdc'},
   state: {},
 })

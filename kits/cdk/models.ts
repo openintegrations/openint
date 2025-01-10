@@ -150,7 +150,7 @@ export const zRaw = {
         })
         .nullish()
         .describe(
-          'Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL',
+          'Automatically sync data from any connections associated with this config to the destination connection.',
         ),
       defaultPipeIn: z
         .object({
@@ -164,7 +164,7 @@ export const zRaw = {
         })
         .nullish()
         .describe(
-          'Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL',
+          'Automatically sync data from any connections associated with this config to the destination connection.',
         ),
       /** This is a generated column, which is not the most flexible. Maybe we need some kind of mapStandardIntegration method? */
       envName: z.string().nullish(),
