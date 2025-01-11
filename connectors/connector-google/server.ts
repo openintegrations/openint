@@ -1,4 +1,10 @@
-import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
+import {initGoogleSDK} from '@opensdks/sdk-google'
+import {
+  extractId,
+  initNangoSDK,
+  nangoProxyLink,
+  type ConnectorServer,
+} from '@openint/cdk'
 import type {googleSchemas} from './def'
 
 function mergeScopes(
@@ -64,28 +70,29 @@ const integrations = [
 ]
 
 export const googleServer = {
-  // newInstance: ({settings, fetchLinks}) => {
-  //   const sdk = initHubspotSDK({
-  //     // We rely on nango to refresh the access token...
-  //     headers: {
-  //       authorization: `Bearer ${settings.oauth.credentials.access_token}`,
-  //     },
-  //     links: (defaultLinks) => [
-  //       (req, next) => {
-  //         if (sdk.clientOptions.baseUrl) {
-  //           req.headers.set(
-  //             nangoProxyLink.kBaseUrlOverride,
-  //             sdk.clientOptions.baseUrl,
-  //           )
-  //         }
-  //         return next(req)
-  //       },
-  //       ...fetchLinks,
-  //       ...defaultLinks,
-  //     ],
-  //   })
-  //   return sdk
-  // },
+  newInstance: ({settings, fetchLinks}) => {
+    const sdk = initGoogleSDK({
+      // We rely on nango to refresh the access token...
+      headers: {
+        authorization: `Bearer ${settings.oauth.credentials.access_token}`,
+      },
+      links: (defaultLinks) => [
+        (req, next) => {
+          // TODO: make this dynamic to different base URLs than just drive_v2
+          if (sdk.drive_v2.clientOptions.baseUrl) {
+            req.headers.set(
+              nangoProxyLink.kBaseUrlOverride,
+              sdk.drive_v2.clientOptions.baseUrl,
+            )
+          }
+          return next(req)
+        },
+        ...fetchLinks,
+        ...defaultLinks,
+      ],
+    })
+    return sdk
+  },
   // passthrough: (instance, input) =>
   //   instance.request(input.method, input.path, {
   //     headers: input.headers as Record<string, string>,
