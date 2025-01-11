@@ -230,6 +230,9 @@ importers:
       '@openint/connector-hubspot':
         specifier: workspace:*
         version: link:../../connectors/connector-hubspot
+      '@openint/connector-jira':
+        specifier: workspace:*
+        version: link:../../connectors/connector-jira
       '@openint/connector-lever':
         specifier: workspace:*
         version: link:../../connectors/connector-lever
@@ -922,6 +925,18 @@ importers:
       '@opensdks/sdk-hubspot':
         specifier: 0.0.6
         version: 0.0.6
+
+  connectors/connector-jira:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
   connectors/connector-lever:
     dependencies:
