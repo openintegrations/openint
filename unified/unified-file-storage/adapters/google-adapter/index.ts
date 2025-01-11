@@ -56,7 +56,6 @@ export const googleDriveAdapter: FileStorageAdapter<GoogleDriveAdapterInstance> 
     const res = await fetch(url, {
       method: 'GET',
       headers: {
-        // @ts-ignore
         'Authorization': instance.drive_v3.clientOptions.headers?.authorization ?? ''
       }
     });
