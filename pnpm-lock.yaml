@@ -2369,12 +2369,6 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
-      '@openint/connector-greenhouse':
-        specifier: workspace:*
-        version: link:../../connectors/connector-greenhouse
-      '@openint/connector-lever':
-        specifier: workspace:*
-        version: link:../../connectors/connector-lever
       '@openint/vdk':
         specifier: workspace:*
         version: link:../../kits/vdk
