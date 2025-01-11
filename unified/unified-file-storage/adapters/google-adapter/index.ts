@@ -1,8 +1,12 @@
 import { FileStorageAdapter } from "../../router";
 
 type GoogleDriveAdapterInstance = {
-  clientOptions: {
-    headers?: Record<string, string>
+  drive_v3: {
+    clientOptions: {
+      headers: {
+        authorization: string
+      }
+    }
   }
 };
 
@@ -17,7 +21,7 @@ export const googleDriveAdapter: FileStorageAdapter<GoogleDriveAdapterInstance> 
     const res = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': instance.clientOptions.headers?.authorization ?? ''
+        'Authorization': instance.drive_v3.clientOptions.headers?.authorization ?? ''
       }
     });
     const data = await res.json();
@@ -52,7 +56,8 @@ export const googleDriveAdapter: FileStorageAdapter<GoogleDriveAdapterInstance> 
     const res = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': instance.clientOptions.headers?.authorization ?? ''
+        // @ts-ignore
+        'Authorization': instance.drive_v3.clientOptions.headers?.authorization ?? ''
       }
     });
     const drive = await res.json();
@@ -87,7 +92,7 @@ export const googleDriveAdapter: FileStorageAdapter<GoogleDriveAdapterInstance> 
     const res = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': instance.clientOptions.headers?.authorization ?? ''
+        'Authorization': instance.drive_v3.clientOptions.headers?.authorization ?? ''
       }
     });
     const data = await res.json();
@@ -124,7 +129,7 @@ export const googleDriveAdapter: FileStorageAdapter<GoogleDriveAdapterInstance> 
     const res = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': instance.clientOptions.headers?.authorization ?? ''
+        'Authorization': instance.drive_v3.clientOptions.headers?.authorization ?? ''
       }
     });
     const folder = await res.json();
@@ -157,7 +162,7 @@ export const googleDriveAdapter: FileStorageAdapter<GoogleDriveAdapterInstance> 
     const res = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': instance.clientOptions.headers?.authorization ?? ''
+        'Authorization': instance.drive_v3.clientOptions.headers?.authorization ?? ''
       }
     });
     const data = await res.json();
@@ -197,7 +202,7 @@ export const googleDriveAdapter: FileStorageAdapter<GoogleDriveAdapterInstance> 
     const res = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': instance.clientOptions.headers?.authorization ?? ''
+        'Authorization': instance.drive_v3.clientOptions.headers?.authorization ?? ''
       }
     });
     const file = await res.json();

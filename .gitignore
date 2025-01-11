@@ -68,3 +68,4 @@ dist/
 
 # CI Artifacts
 /artifacts
+.aider*

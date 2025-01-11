@@ -879,6 +879,9 @@ importers:
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
+      '@opensdks/sdk-google':
+        specifier: ^0.0.1
+        version: 0.0.1
 
   connectors/connector-greenhouse:
     dependencies:
@@ -3868,6 +3871,9 @@ packages:
 
   '@opensdks/sdk-finch@0.0.4':
     resolution: {integrity: sha512-7CxSxCIE8POPBFrEGlovRdkziXNfbrh6GD7fPwIk6GPR2f2CKmLqPxOpLhBhzH/5Ol0nCyzCq8NDsvLbI5OvEQ==}
+
+  '@opensdks/sdk-google@0.0.1':
+    resolution: {integrity: sha512-Qn9r9Yew2RMiL5LK0jU4+BoP5/Q3o2u80SELymytWv+9sVFN0wrTyIPYQO6mnzM7JWQR8150KbcGEnXjt6gL/Q==}
 
   '@opensdks/sdk-greenhouse@0.0.8':
     resolution: {integrity: sha512-kIN0ckK36QmWUfUNbl7B6Fi8G63JQ/iCWKnY5Ozd+lTRQYQV+ub30FOZk0djiepNOcUkOFv3QSy9K1Sk8B4ADA==}
@@ -15853,6 +15859,8 @@ snapshots:
   '@opensdks/sdk-discord@0.0.14': {}
 
   '@opensdks/sdk-finch@0.0.4': {}
+
+  '@opensdks/sdk-google@0.0.1': {}
 
   '@opensdks/sdk-greenhouse@0.0.8':
     dependencies:
