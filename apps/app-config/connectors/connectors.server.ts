@@ -17,6 +17,7 @@ import {default as connectorHeron} from '@openint/connector-heron/server'
 import {default as connectorHubspot} from '@openint/connector-hubspot/server'
 import {default as connectorJira} from '@openint/connector-jira/server'
 import {default as connectorLever} from '@openint/connector-lever/server'
+import {default as connectorLinear} from '@openint/connector-linear/server'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/server'
 import {default as connectorMerge} from '@openint/connector-merge/server'
 import {default as connectorMicrosoft} from '@openint/connector-microsoft/server'
@@ -64,6 +65,7 @@ export const serverConnectors = {
   hubspot: connectorHubspot,
   jira: connectorJira,
   lever: connectorLever,
+  linear: connectorLinear,
   lunchmoney: connectorLunchmoney,
   merge: connectorMerge,
   microsoft: connectorMicrosoft,

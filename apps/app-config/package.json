@@ -32,6 +32,7 @@
     "@openint/connector-hubspot": "workspace:*",
     "@openint/connector-jira": "workspace:*",
     "@openint/connector-lever": "workspace:*",
+    "@openint/connector-linear": "workspace:*",
     "@openint/connector-lunchmoney": "workspace:*",
     "@openint/connector-mercury": "workspace:*",
     "@openint/connector-merge": "workspace:*",
