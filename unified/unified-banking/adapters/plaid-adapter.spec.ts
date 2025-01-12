@@ -8,19 +8,10 @@ import {
 } from '@openint/connector-plaid'
 import {getContextFactory} from '@openint/engine-backend'
 import {env, testEnvRequired} from '@openint/env'
-// import {contextFactory} from '../../../apps/app-config/backendConfig'
 import {bankingRouter} from '../router'
+import {plaidAdapter} from './plaid-adapter'
 
-// const sdk = initPlaidSDK({
-//   headers: {
-//     'PLAID-CLIENT-ID': testEnvRequired.ccfg_plaid__CLIENT_ID,
-//     'PLAID-SECRET': testEnvRequired.ccfg_plaid__CLIENT_SECRET_SANDBOX,
-//   },
-//   // TODO: This should be explicltly generated also
-//   baseUrl: plaidSdkDef.oasMeta.servers[1].url,
-// })
-
-test('plaid adapter', async () => {
+describe('plaid adapter', () => {
   // TODO: Get this from `integration-tests` organization instead of hard-coding
   const config: (typeof helpers._types)['connectorConfig'] = {
     clientName: 'test',
@@ -88,16 +79,32 @@ test('plaid adapter', async () => {
     ...factory.fromViewer({role: 'system'}),
     remoteConnectionId: 'conn_plaid_123' as Id['conn'],
   }
+  // console.log('bankingRouter._def.procedures,', bankingRouter._def.procedures)
 
-  const res = await bankingRouter.createCaller(ctx).listTransactions({})
+  test.each(Object.entries(bankingRouter._def.procedures))(
+    '%s',
+    async (name, procedure) => {
+      // only test against queries, not mutations...
+      const isQuery = procedure._def.query
+      if (!isQuery) {
+        console.log('skipping mutation', name)
+        return
+      }
+      // console.log('name', name)
+      // await expect(() =>
+      //   bankingRouter.createCaller(ctx).listTransactions({}),
+      // ).resolves.not.toThrow()
+      if (!(name in plaidAdapter)) {
+        console.log('skipping unimplemented query', name)
+        return
+      }
+      // TODO: Get this working with queries that require input?
 
-  // const res = await instance.POST('/transactions/get', {
-  //   body: {
-  //     access_token: testEnvRequired.conn_plaid__ACCESS_TOKEN,
-  //     start_date: '2025-01-01',
-  //     end_date: '2025-01-31',
-  //   },
-  // })
-
-  console.log(res)
+      console.log('Testing', name)
+      const res = await bankingRouter
+        .createCaller(ctx)
+        [name as 'listTransactions']({})
+      expect(res).toBeDefined()
+    },
+  )
 })
