@@ -4,7 +4,7 @@ import { MsgraphSDKTypes } from '@opensdks/sdk-msgraph'
 
 type AdapterTypes = MsgraphSDKTypes['oas']['components']['schemas']
 
-const drive = mapper(
+const Drive = mapper(
   zCast<AdapterTypes['microsoft.graph.drive']>(),
   unified.Drive,
   {
@@ -17,7 +17,7 @@ const drive = mapper(
   }
 )
 
-const folder = mapper(
+const Folder = mapper(
   zCast<AdapterTypes['microsoft.graph.driveItem']>(),
   unified.Folder,
   {
@@ -31,7 +31,7 @@ const folder = mapper(
   }
 )
 
-const file = mapper(
+const File = mapper(
   zCast<AdapterTypes['microsoft.graph.driveItem']>(),
   unified.File,
   {
@@ -49,8 +49,9 @@ const file = mapper(
   }
 )
 
+
 export const mappers = {
-  drive,
-  folder,
-  file
-} 
+  Drive,
+  Folder,
+  File
+} satisfies Record<keyof typeof unified, ReturnType<typeof mapper>> 

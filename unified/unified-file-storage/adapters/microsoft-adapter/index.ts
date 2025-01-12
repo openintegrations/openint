@@ -44,7 +44,7 @@ export const microsoftGraphAdapter: FileStorageAdapter<MsgraphSDK> = {
       if (!driveResponse || !Array.isArray(driveResponse.value)) {
         return [];
       }
-      return driveResponse.value.map(mappers.drive);
+      return driveResponse.value.map(mappers.Drive);
     });
 
     return {
@@ -61,7 +61,7 @@ export const microsoftGraphAdapter: FileStorageAdapter<MsgraphSDK> = {
     if(!res.data?.['value']?.[0]) {
       throw new TRPCError({code: 'NOT_FOUND', message: 'Drive not found'});
     }
-    return mappers.drive(res.data?.['value']?.[0]);
+    return mappers.Drive(res.data?.['value']?.[0]);
   },
 
   listFolders: async ({ instance, input }) => {
@@ -92,7 +92,7 @@ export const microsoftGraphAdapter: FileStorageAdapter<MsgraphSDK> = {
       has_next_page: res.data['@odata.nextLink'] ? true : false,
       
       next_cursor: res.data['@odata.nextLink'] ? extractCursor(res.data['@odata.nextLink']) : undefined,
-      items: res.data.value.map(mappers.folder),
+      items: res.data.value.map(mappers.Folder),
     };
   },
 
@@ -107,7 +107,7 @@ export const microsoftGraphAdapter: FileStorageAdapter<MsgraphSDK> = {
       throw new TRPCError({code: 'NOT_FOUND', message: 'Folder not found'});
     }
 
-    return mappers.folder(res.data);
+    return mappers.Folder(res.data);
   },
 
   listFiles: async ({ instance, input }) => {
@@ -141,7 +141,7 @@ export const microsoftGraphAdapter: FileStorageAdapter<MsgraphSDK> = {
     return {
       has_next_page: res.data['@odata.nextLink'] ? true : false,
       next_cursor: res.data['@odata.nextLink'] ? extractCursor(res.data['@odata.nextLink']) : undefined,
-      items: res.data.value.map(mappers.file),
+      items: res.data.value.map(mappers.File),
     };
   },
 
@@ -149,6 +149,7 @@ export const microsoftGraphAdapter: FileStorageAdapter<MsgraphSDK> = {
     const res = await instance.GET(`/drives/{drive-id}/items/{driveItem-id}`, {
       params: {
         path: { 'drive-id': input.driveId, 'driveItem-id': input.fileId },
+        // @ts-expect-error TODO: "$expand is supported by the API but its not clear in the documentation
         query: { ...expandParams },
       },
     });
@@ -157,7 +158,7 @@ export const microsoftGraphAdapter: FileStorageAdapter<MsgraphSDK> = {
       throw new TRPCError({code: 'NOT_FOUND', message: 'File not found'});
     }
 
-    return mappers.file(res.data);
+    return mappers.File(res.data);
   }
 }
 
