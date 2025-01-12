@@ -2,7 +2,7 @@ import {mapper, zCast} from '@openint/vdk'
 import * as unified from '../../unifiedModels'
 import { MsgraphSDKTypes } from '@opensdks/sdk-msgraph'
 
-type AdapterTypes = MsgraphSDKTypes['oas']['operations']
+type AdapterTypes = MsgraphSDKTypes['oas']['components']['schemas']
 
 const drive = mapper(
   zCast<AdapterTypes['microsoft.graph.drive']>(),
