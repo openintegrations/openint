@@ -51,6 +51,7 @@ export const testEnv = createEnv({
     ccfg_plaid__CLIENT_ID: z.string().optional(),
     ccfg_plaid__CLIENT_SECRET_PRODUCTION: z.string().optional(),
     ccfg_plaid__CLIENT_SECRET_SANDBOX: z.string().optional(),
+    conn_plaid__ACCESS_TOKEN: z.string().optional(),
     INTEGRATION_TEST_SECRET: z.string().optional(),
   },
   client: {
@@ -88,6 +89,7 @@ export const testEnv = createEnv({
     ccfg_plaid__CLIENT_SECRET_SANDBOX:
       process.env['ccfg_plaid__CLIENT_SECRET_SANDBOX'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
+    conn_plaid__ACCESS_TOKEN: process.env['conn_plaid__ACCESS_TOKEN'],
   },
 })
 

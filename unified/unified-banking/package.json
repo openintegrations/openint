@@ -10,6 +10,8 @@
     "@openint/connector-postgres": "workspace:*",
     "@openint/connector-qbo": "workspace:*",
     "@openint/connector-xero": "workspace:*",
+    "@openint/engine-backend": "workspace:*",
+    "@openint/env": "workspace:*",
     "@openint/vdk": "workspace:*"
   }
 }

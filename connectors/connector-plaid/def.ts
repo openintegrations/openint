@@ -16,6 +16,9 @@ import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {ErrorShape} from './plaid.types'
 import {zCountryCode, zLanguage, zPlaidEnvName, zProducts} from './PlaidClient'
 
+// Temporary...
+export {CountryCode, Products} from 'plaid'
+
 export const plaidSchemas = {
   name: z.literal('plaid'),
   // There is a mixing of cases here... Unfortunately...
