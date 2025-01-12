@@ -7,6 +7,7 @@ export const Drive = z
     name: z.string(),
     created_at: z.string().nullish(),
     modified_at: z.string().nullish(),
+    owner: z.string().nullish(),
     raw_data: z.record(z.unknown()).optional(),
   })
   .openapi({
@@ -43,6 +44,7 @@ export const File = z
     created_at: z.string().nullish(),
     modified_at: z.string().nullish(),
     raw_data: z.record(z.unknown()).optional(),
+    parent_id: z.string().nullish()
   })
   .openapi({
     ref: 'unified.file',

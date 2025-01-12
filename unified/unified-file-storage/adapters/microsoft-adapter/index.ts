@@ -1,12 +1,15 @@
 import {type FileStorageAdapter} from "../../router";
 import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
+import {mappers} from './mapper'
+import { TRPCError } from "@openint/vdk";
 
 const expandParams = {
   $expand: 'listItem',
   $select: '*',
 }
-export const microsoftGraphAdapter = {
+export const microsoftGraphAdapter: FileStorageAdapter<MsgraphSDK> = {
   listDrives: async ({ instance, input }) => {
+    // TODO: add /sites to openSDK 
     const res = await fetch(`https://graph.microsoft.com/v1.0/sites?search=*&$skiptoken=${input?.cursor ?? ''}`, {
       method: 'GET',
       headers: {
@@ -25,6 +28,7 @@ export const microsoftGraphAdapter = {
 
     const drivesPromises = res.value.map((site: any) => {
       const siteId = site.id;
+      // TODO: add /sites to openSDK 
       return fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drives`, {
         method: 'GET',
         headers: {
@@ -40,15 +44,7 @@ export const microsoftGraphAdapter = {
       if (!driveResponse || !Array.isArray(driveResponse.value)) {
         return [];
       }
-      return driveResponse.value.map((drive: any) => ({
-        id: drive.id || '',
-        name: drive.name || '',
-        created_at: drive.createdDateTime,
-        modified_at: drive.lastModifiedDateTime,
-        integration: 'sharepoint',
-        owner: drive.owner?.user?.displayName || drive.owner?.group?.displayName,
-        raw_data: drive,
-      }));
+      return driveResponse.value.map(mappers.drive);
     });
 
     return {
@@ -62,22 +58,15 @@ export const microsoftGraphAdapter = {
     const res = await instance.GET('/drives/{drive-id}', {
       params: {path: {'drive-id': ''}},
     })
-    const drive = res.data;
-    return {
-      id: drive?.['value']?.[0]?.['id'] || '',
-      name: drive?.['value']?.[0]?.['name'] || '',
-      integration: 'sharepoint',
-      created_at: drive?.['value']?.[0]?.['createdDateTime'],
-      modified_at: drive?.['value']?.[0]?.['lastModifiedDateTime'],
-      owner: drive?.['value']?.[0]?.['owner']?.['group']?.['displayName'] || drive?.['value']?.[0]?.['owner']?.['user']?.['displayName'],
-      raw_data: drive?.['value']?.[0],
-    };
+    if(!res.data?.['value']?.[0]) {
+      throw new TRPCError({code: 'NOT_FOUND', message: 'Drive not found'});
+    }
+    return mappers.drive(res.data?.['value']?.[0]);
   },
 
   listFolders: async ({ instance, input }) => {
-    // TODO: QQ: is this the right type of error to throw?
     if(!input?.driveId) {
-      throw new Error('drive_id is required');
+      throw new TRPCError({code: 'BAD_REQUEST', message: 'drive_id is required'});
     }
     // TODO: replace with correct drive endpoint
     const res = await instance.GET('/drives/{drive-id}/root/children', {
@@ -99,26 +88,15 @@ export const microsoftGraphAdapter = {
       }
     }
 
-    const folders = res.data.value.map((folder: any) => ({
-      id: folder.id,
-      name: folder.name,
-      parent_id: folder.parentReference?.id,
-      integration: 'sharepoint',
-      drive_id: folder.parentReference?.driveId,
-      created_at: folder.createdDateTime,
-      modified_at: folder.lastModifiedDateTime,
-      raw_data: folder,
-    }));
-
     return {
       has_next_page: res.data['@odata.nextLink'] ? true : false,
+      
       next_cursor: res.data['@odata.nextLink'] ? extractCursor(res.data['@odata.nextLink']) : undefined,
-      items: folders,
+      items: res.data.value.map(mappers.folder),
     };
   },
 
   getFolder: async ({ instance, input }) => {
-    // TODO: Sample static return for getFolder
     const res = await instance.GET(`/drives/{drive-id}/items/{driveItem-id}`, {
       params: {
         path: {'drive-id': input.driveId, 'driveItem-id': input.folderId},
@@ -126,21 +104,10 @@ export const microsoftGraphAdapter = {
     });
 
     if(!res.data) {
-      // TODO: QQ: is this the right type of error to throw?
-      throw new Error('Folder not found');
+      throw new TRPCError({code: 'NOT_FOUND', message: 'Folder not found'});
     }
 
-    const folder = res.data;
-
-    return {
-      id: folder.id || '',
-      name: folder.name || '',
-      parent_id: folder.parentReference?.id,
-      drive_id: folder.parentReference?.driveId || '',
-      created_at: folder.createdDateTime,
-      modified_at: folder.lastModifiedDateTime,
-      raw_data: folder,
-    };
+    return mappers.folder(res.data);
   },
 
   listFiles: async ({ instance, input }) => {
@@ -171,58 +138,28 @@ export const microsoftGraphAdapter = {
       };
     }
 
-    const items = res.data.value.map((item: any) => ({
-      id: item.id,
-      name: item.name,
-      file_url: item.webUrl || null,
-      download_url: item['@microsoft.graph.downloadUrl'] || null,
-      mime_type: item.file?.mimeType || null,
-      size: item.size || null,
-      parent_id: item.parentReference?.id,
-      drive_id: item.parentReference?.driveId || input.driveId,
-      created_at: item.createdDateTime || null,
-      modified_at: item.lastModifiedDateTime || null,
-      raw_data: item,
-    }));
-
     return {
       has_next_page: res.data['@odata.nextLink'] ? true : false,
       next_cursor: res.data['@odata.nextLink'] ? extractCursor(res.data['@odata.nextLink']) : undefined,
-      items: items,
+      items: res.data.value.map(mappers.file),
     };
   },
 
   getFile: async ({ instance, input }) => {
-
     const res = await instance.GET(`/drives/{drive-id}/items/{driveItem-id}`, {
       params: {
         path: { 'drive-id': input.driveId, 'driveItem-id': input.fileId },
-        // @ts-expect-error $expand is currently supported an a string[] and sends
-        // multiple $expand queries but this is not supported by the API, it expects a single comma separated string
         query: { ...expandParams },
       },
     });
 
     if (!res.data) {
-      // TODO: QQ: is this the right type of error to throw?
-      throw new Error('File not found');
+      throw new TRPCError({code: 'NOT_FOUND', message: 'File not found'});
     }
 
-    return {
-      id: res.data.id || '',
-      name: res.data.name || '',
-      file_url: res.data?.webUrl || null,
-      download_url: res.data['@microsoft.graph.downloadUrl'] + ''|| null,
-      mime_type: res.data.file?.mimeType || null,
-      size: res.data.size || null,
-      parent_id: res.data.parentReference?.id,
-      drive_id: res.data.parentReference?.driveId || input.driveId,
-      created_at: res.data.createdDateTime,
-      modified_at: res.data.lastModifiedDateTime,
-      raw_data: res.data,
-    };
+    return mappers.file(res.data);
   }
-} satisfies FileStorageAdapter<MsgraphSDK>;
+}
 
 // Helper function to extract cursor from nextLink
 function extractCursor(nextLink: string): string | undefined {
