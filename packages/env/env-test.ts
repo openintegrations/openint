@@ -53,6 +53,8 @@ export const testEnv = createEnv({
     ccfg_plaid__CLIENT_SECRET_SANDBOX: z.string().optional(),
     conn_plaid__ACCESS_TOKEN: z.string().optional(),
     INTEGRATION_TEST_SECRET: z.string().optional(),
+    INTEGRATION_TEST_ORG_ID: z.string().optional(),
+    INTEGRATION_TEST_API_KEY: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -90,6 +92,8 @@ export const testEnv = createEnv({
       process.env['ccfg_plaid__CLIENT_SECRET_SANDBOX'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
     conn_plaid__ACCESS_TOKEN: process.env['conn_plaid__ACCESS_TOKEN'],
+    INTEGRATION_TEST_ORG_ID: process.env['INTEGRATION_TEST_ORG_ID'],
+    INTEGRATION_TEST_API_KEY: process.env['INTEGRATION_TEST_API_KEY'],
   },
 })
 
