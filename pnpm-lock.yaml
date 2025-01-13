@@ -1591,9 +1591,15 @@ importers:
         specifier: 1.6.1
         version: 1.6.1
     devDependencies:
+      '@types/sync-fetch':
+        specifier: ^0.4.3
+        version: 0.4.3
       openapi-typescript-helpers:
         specifier: ^0.0.6
         version: 0.0.6
+      sync-fetch:
+        specifier: ^0.6.0-2
+        version: 0.6.0-2
 
   packages/api:
     dependencies:
@@ -2327,21 +2333,6 @@ importers:
       '@openint/engine-backend':
         specifier: workspace:*
         version: link:../../packages/engine-backend
-      '@openint/env':
-        specifier: workspace:*
-        version: link:../../packages/env
-      '@types/deasync':
-        specifier: ^0.1.5
-        version: 0.1.5
-      '@types/sync-fetch':
-        specifier: ^0.4.3
-        version: 0.4.3
-      deasync:
-        specifier: ^0.1.30
-        version: 0.1.30
-      sync-fetch:
-        specifier: ^0.6.0-2
-        version: 0.6.0-2
 
   unified/unified-crm:
     dependencies:
@@ -5708,9 +5699,6 @@ packages:
   '@types/d3-timer@3.0.0':
     resolution: {integrity: sha512-HNB/9GHqu7Fo8AQiugyJbv6ZxYz58wef0esl4Mv828w1ZKpAshw/uFWVDUcIB9KKFeFKoxS3cHY07FFgtTRZ1g==}
 
-  '@types/deasync@0.1.5':
-    resolution: {integrity: sha512-mLov/tw+fOX4ZsrT9xuHOJv8xToOpNsp6W4gp8VDHy2qniJ58izyOzHlisnz5r8HdZ+WItDHtANWZy/W0JEJwg==}
-
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
 
@@ -7307,10 +7295,6 @@ packages:
 
   dayjs@1.11.5:
     resolution: {integrity: sha512-CAdX5Q3YW3Gclyo5Vpqkgpj8fSdLQcRuzfX6mC6Phy0nfJ0eGYOeS7m4mt2plDWLAtA4TqTakvbboHvUxfe4iA==}
-
-  deasync@0.1.30:
-    resolution: {integrity: sha512-OaAjvEQuQ9tJsKG4oHO9nV1UHTwb2Qc2+fadB0VeVtD0Z9wiG1XPGLJ4W3aLhAoQSYTaLROFRbd5X20Dkzf7MQ==}
-    engines: {node: '>=0.11.0'}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -10752,9 +10736,6 @@ packages:
 
   node-abort-controller@3.1.1:
     resolution: {integrity: sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==}
-
-  node-addon-api@1.7.2:
-    resolution: {integrity: sha512-ibPK3iA+vaY1eEjESkQkM0BbCqFOaZMiXRTtdB0u7b4djtY6JnsjvPdUHVMg6xQt3B8fpTTWHI9A+ADjM9frzg==}
 
   node-addon-api@4.3.0:
     resolution: {integrity: sha512-73sE9+3UaLYYFmDsFZnqCInzPyh3MqIwZO9cw58yIqAZhONrrabrYyYe3TuIqtIiOuTXVhsGau8hcrhhwSsDIQ==}
@@ -18428,8 +18409,6 @@ snapshots:
 
   '@types/d3-timer@3.0.0': {}
 
-  '@types/deasync@0.1.5': {}
-
   '@types/debug@4.1.12':
     dependencies:
       '@types/ms': 0.7.34
@@ -19436,6 +19415,7 @@ snapshots:
   bindings@1.5.0:
     dependencies:
       file-uri-to-path: 1.0.0
+    optional: true
 
   bl@4.1.0:
     dependencies:
@@ -20221,11 +20201,6 @@ snapshots:
       '@babel/runtime': 7.23.2
 
   dayjs@1.11.5: {}
-
-  deasync@0.1.30:
-    dependencies:
-      bindings: 1.5.0
-      node-addon-api: 1.7.2
 
   debug@2.6.9:
     dependencies:
@@ -21383,7 +21358,8 @@ snapshots:
 
   file-type@3.9.0: {}
 
-  file-uri-to-path@1.0.0: {}
+  file-uri-to-path@1.0.0:
+    optional: true
 
   filesize@10.1.6: {}
 
@@ -24639,8 +24615,6 @@ snapshots:
       semver: 7.6.0
 
   node-abort-controller@3.1.1: {}
-
-  node-addon-api@1.7.2: {}
 
   node-addon-api@4.3.0: {}
 

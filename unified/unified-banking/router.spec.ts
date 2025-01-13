@@ -1,7 +1,7 @@
 /* eslint-disable jest/no-standalone-expect */
+import {forEachAdapterConnections} from '@openint/vdk/vertical-test-utils'
 import adapters from './adapters'
 import type {BankingAdapter} from './router'
-import {forEachAdapterConnections} from './vertical-test-utils'
 
 forEachAdapterConnections<BankingAdapter<unknown>>(adapters, (t) => {
   t.testIfImplemented('listTransactions: non zero items', async () => {

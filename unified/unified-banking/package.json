@@ -12,11 +12,6 @@
     "@openint/connector-qbo": "workspace:*",
     "@openint/connector-xero": "workspace:*",
     "@openint/engine-backend": "workspace:*",
-    "@openint/env": "workspace:*",
-    "@openint/vdk": "workspace:*",
-    "@types/deasync": "^0.1.5",
-    "deasync": "^0.1.30",
-    "sync-fetch": "^0.6.0-2",
-    "@types/sync-fetch": "^0.4.3"
+    "@openint/vdk": "workspace:*"
   }
 }

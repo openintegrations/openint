@@ -65,7 +65,7 @@ export function forEachAdapterConnections<TAdapter>(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     >(adapter as any)
 
-    describe.each(conns.map((c) => c.id))('connId: %s', (connId) => {
+    describe.each(conns.map((c) => c.id))('connectionId: %s', (connId) => {
       const sdkForConn = initOpenIntSDK({
         headers: {
           'x-apikey': testEnvRequired.INTEGRATION_TEST_API_KEY,

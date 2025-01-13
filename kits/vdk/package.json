@@ -10,6 +10,9 @@
     "remeda": "1.6.1"
   },
   "devDependencies": {
-    "openapi-typescript-helpers": "^0.0.6"
+    "@openint/env": "workspace:*",
+    "@types/sync-fetch": "^0.4.3",
+    "openapi-typescript-helpers": "^0.0.6",
+    "sync-fetch": "^0.6.0-2"
   }
 }
