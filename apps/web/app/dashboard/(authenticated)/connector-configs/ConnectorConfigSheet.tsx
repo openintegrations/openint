@@ -2,7 +2,7 @@
 
 import {AlertCircle, Loader2} from 'lucide-react'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import {_trpcReact} from '@openint/engine-frontend'
 import type {SchemaFormElement} from '@openint/ui'
 import {
@@ -50,6 +50,7 @@ export function ConnectorConfigSheet({
   setOpen: (open: boolean) => void
   refetch?: () => void
 }) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const trpcUtils = _trpcReact.useContext()
   const connectorMetaRes = _trpcReact.getConnectorMeta.useQuery({
     name: connectorName,
@@ -60,6 +61,7 @@ export function ConnectorConfigSheet({
   const {toast} = useToast()
 
   const handleSuccess = React.useCallback(() => {
+    setIsSubmitting(false)
     setOpen(false)
     toast({title: 'connector config saved', variant: 'success'})
     void trpcUtils.adminListConnectorConfigs.invalidate()
@@ -71,6 +73,7 @@ export function ConnectorConfigSheet({
     _trpcReact.adminUpsertConnectorConfig.useMutation({
       onSuccess: handleSuccess,
       onError: (err) => {
+        setIsSubmitting(false)
         toast({
           title: 'Failed to save connector config',
           description: `${err}`,
@@ -111,6 +114,11 @@ export function ConnectorConfigSheet({
     },
   )
 
+  const handleSubmit = () => {
+    setIsSubmitting(true)
+    formRef.current?.submit()
+  }
+
   if (!connectorMeta) {
     return <LoadingText className="block p-4" />
   }
@@ -120,7 +128,14 @@ export function ConnectorConfigSheet({
       <SheetContent
         position="right"
         size="lg"
-        className="flex flex-col bg-background">
+        className="flex flex-col bg-background relative">
+        
+        {isSubmitting && (
+          <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
+            <Loader2 className="h-10 w-10 animate-spin text-button" />
+          </div>
+        )}
+
         <SheetHeader className="shrink-0">
           <SheetTitle>
             {verb} {connectorMeta.displayName} connector config
@@ -233,9 +248,9 @@ export function ConnectorConfigSheet({
             </AlertDialog>
           )}
           <Button
-            disabled={mutating}
+            disabled={mutating || isSubmitting}
             type="submit"
-            onClick={() => formRef.current?.submit()}>
+            onClick={handleSubmit}>
             {upsertConnectorConfig.isLoading && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
