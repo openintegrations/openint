@@ -1,7 +1,7 @@
 import {compact} from 'remeda'
 import * as rx from 'rxjs'
 import {initOpenIntSDK} from '@openint/sdk'
-import type {unified} from '@openint/unified-etl'
+import type {unified} from '@openint/unified-sync'
 import type {_PipelineExpanded} from '../services/dbService'
 
 type Source = rx.Observable<unified.Message>

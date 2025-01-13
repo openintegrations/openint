@@ -1,6 +1,6 @@
 import {compact} from 'remeda'
 import {initOpenIntSDK} from '@openint/sdk'
-import type {unified} from '@openint/unified-etl'
+import type {unified} from '@openint/unified-sync'
 import type {_PipelineExpanded} from '../services/dbService'
 import {flatMap, noopWritable, streamFromIterable, tap} from './stream'
 

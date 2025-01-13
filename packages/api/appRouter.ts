@@ -12,11 +12,11 @@ import accountingRouter from '@openint/unified-accounting'
 import atsRouter from '@openint/unified-ats'
 import bankingRouter from '@openint/unified-banking'
 import {crmRouter} from '@openint/unified-crm'
-import eltRouter from '@openint/unified-etl'
 import fileStorageRouter from '@openint/unified-file-storage'
 import hrisRouter from '@openint/unified-hris'
 import ptaRouter from '@openint/unified-pta'
 import {salesEngagementRouter} from '@openint/unified-sales-engagement'
+import syncRouter from '@openint/unified-sync'
 import {sentenceCase} from '@openint/util'
 import type {AnyRouter, RouterMeta} from '@openint/vdk'
 import {mapKeys, mapValues, publicProcedure, trpc, z} from '@openint/vdk'
@@ -40,7 +40,7 @@ export const _appRouter = trpc.router({
   pta: ptaRouter,
   ats: atsRouter,
   hris: hrisRouter,
-  etl: eltRouter,
+  sync: syncRouter,
   fileStorage: fileStorageRouter,
 })
 

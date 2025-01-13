@@ -1,5 +1,5 @@
 {
-  "name": "@openint/unified-etl",
+  "name": "@openint/unified-sync",
   "dependencies": {
     "@openint/connector-revert": "workspace:*",
     "@openint/vdk": "workspace:*"
