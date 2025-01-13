@@ -92,3 +92,9 @@ export function forEachAdapterConnections<TAdapter>(
     })
   })
 }
+
+// maybe belongs in connector test utils?
+export function getConnectionAndConfig() {
+  // from testEnvVar?
+  // from openInt server...
+}
