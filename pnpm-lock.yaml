@@ -2315,9 +2315,6 @@ importers:
         specifier: 7.5.6
         version: 7.5.6
     devDependencies:
-      '@openint/app-config':
-        specifier: workspace:*
-        version: link:../../apps/app-config
       '@openint/connector-plaid':
         specifier: workspace:*
         version: link:../../connectors/connector-plaid
@@ -2330,9 +2327,6 @@ importers:
       '@openint/connector-xero':
         specifier: workspace:*
         version: link:../../connectors/connector-xero
-      '@openint/engine-backend':
-        specifier: workspace:*
-        version: link:../../packages/engine-backend
 
   unified/unified-crm:
     dependencies:

@@ -6,12 +6,10 @@
     "rxjs": "7.5.6"
   },
   "devDependencies": {
-    "@openint/app-config": "workspace:*",
     "@openint/connector-plaid": "workspace:*",
     "@openint/connector-postgres": "workspace:*",
     "@openint/connector-qbo": "workspace:*",
     "@openint/connector-xero": "workspace:*",
-    "@openint/engine-backend": "workspace:*",
     "@openint/vdk": "workspace:*"
   }
 }
