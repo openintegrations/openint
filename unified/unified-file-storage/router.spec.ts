@@ -1,9 +1,9 @@
 /* eslint-disable jest/no-standalone-expect */
-import {forEachAdapterConnections} from '@openint/vdk/vertical-test-utils'
+import {forEachAdapterConnections as describeEachAdapterConnections} from '@openint/vdk/vertical-test-utils'
 import adapters from './adapters'
 import type {FileStorageAdapter} from './router'
 
-forEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
+describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
   let driveId: string
 
   t.testIfImplemented('listDrives', async () => {

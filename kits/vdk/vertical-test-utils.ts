@@ -33,7 +33,8 @@ function getTestIfImplemented<TAdapterMethod extends string>(
   return (mi: MethodInput, fn: jest.ProvidesCallback) => {
     const method = mi.split(':')[0] as TAdapterMethod
     const name = method in adapter ? mi : `not implemented: ${mi}`
-    return method in adapter ? test(name, fn) : test.skip(name, fn)
+    const to = 30 * 1000 // 30 seconds
+    return method in adapter ? test(name, fn, to) : test.skip(name, fn, to)
   }
 }
 
@@ -49,11 +50,18 @@ export function forEachAdapterConnections<TAdapter>(
     >
   }) => void,
 ) {
+  const adapterNames = Object.keys(adapters)
+
+  if (!adapterNames.length) {
+    test.todo('No adapters configured')
+  }
+
   const connections = listConnections(API_URL)
 
-  describe.each(Object.keys(adapters))('adapter: %s', (adapterName) => {
+  describe.each(adapterNames)('adapter: %s', (adapterName) => {
     const conns = connections.filter((c) => c.connectorName === adapterName)
     if (conns.length === 0) {
+      test.todo(`add connections for ${adapterName} to test`)
       return
     }
 
