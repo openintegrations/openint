@@ -38,6 +38,7 @@ function getTestIfImplemented<TAdapterMethod extends string>(
   }
 }
 
+// TODO: We need to seed the test db with dedicated connections from integration-tests org
 export function forEachAdapterConnections<TAdapter>(
   adapters: Record<string, object>,
   fn: (ctx: {
