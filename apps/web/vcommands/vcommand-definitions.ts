@@ -16,13 +16,13 @@ const _pipelineCommand = {
 } satisfies CommandDefinitionInput<CommandContext>;
 
 export const pipelineCommands = {
-  'pipeline:create': cmd.identity({
-    ..._pipelineCommand,
-    params: undefined,
-    icon: 'Plus',
-    execute: ({ ctx }) =>
-      ctx.setPipelineSheetState({ pipeline: undefined, open: true }),
-  }),
+  // 'pipeline:create': cmd.identity({
+  //   ..._pipelineCommand,
+  //   params: undefined,
+  //   icon: 'Plus',
+  //   execute: ({ ctx }) =>
+  //     ctx.setPipelineSheetState({ pipeline: undefined, open: true }),
+  // }),
   'pipeline:edit': cmd.identity({
     ..._pipelineCommand,
     icon: 'Pencil',
@@ -148,11 +148,6 @@ const _navCommand = {
 
 // TODO: Dedupe with the links from the navigation sidebar
 export const navCommands = {
-  go_to_home: {
-    ..._navCommand,
-    icon: 'Home',
-    execute: ({ ctx }) => ctx.router.push('/'),
-  },
   go_to_magic_link: {
     ..._navCommand,
     icon: 'Wand',
@@ -170,18 +165,6 @@ export const navCommands = {
     icon: 'Box',
     title: 'Connections',
     execute: ({ ctx }) => ctx.router.push('/dashboard/connections'),
-  },
-  go_to_pipelines: {
-    ..._navCommand,
-    icon: 'ArrowLeftRight',
-    title: 'Pipelines',
-    execute: ({ ctx }) => ctx.router.push('/dashboard/pipelines'),
-  },
-  go_to_pipeline_runs: {
-    ..._navCommand,
-    icon: 'Shuffle',
-    title: 'Pipeline Runs',
-    execute: ({ ctx }) => ctx.router.push('/dashboard/pipeline-runs'),
   },
   go_to_api_key: {
     ..._navCommand,
