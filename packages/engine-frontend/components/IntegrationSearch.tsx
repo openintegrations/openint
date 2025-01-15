@@ -1,6 +1,7 @@
 'use client'
 
 import {Loader, Search} from 'lucide-react'
+import {useSearchParams} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
 import {Button, cn, Input, parseCategory, Separator} from '@openint/ui'
@@ -35,6 +36,9 @@ export function IntegrationSearch({
   // Main state after applying filters.
   const [categoryFilter, setCategoryFilter] = useState<string[]>([])
 
+  const searchParams = useSearchParams()
+  const integrationFilters = searchParams.get('integrationFilters')
+
   const debouncedSetSearch = useCallback((value: string) => {
     const timeoutId = setTimeout(() => {
       setDebouncedSearchText(value)
@@ -52,6 +56,7 @@ export function IntegrationSearch({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: debouncedSearchText,
     enabled_integration_ids: enabledIntegrationIds,
+    customer_integration_filters: integrationFilters?.split(',') ?? [],
   })
   const ints = listIntegrationsRes.data?.items.map((int) => ({
     ...int,

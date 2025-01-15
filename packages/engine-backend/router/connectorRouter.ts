@@ -195,8 +195,7 @@ export const connectorRouter = trpc.mergeRouters(
           search_text: z.string().optional(),
           connector_config_ids: z.array(z.string()).optional(),
           enabled_integration_ids: z.array(z.string()).optional(),
-          // Support int_google_drive, google_drive, jira,etc.
-          customer_integration_filters: z.array(z.string()).optional(),
+          customer_integration_filters: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
         }),
       )
       .output(
@@ -240,6 +239,10 @@ export const connectorRouter = trpc.mergeRouters(
           .createCaller(ctx)
           .listConnection()
 
+        const hasCustomerFilters =
+          input.customer_integration_filters &&
+          input.customer_integration_filters.length > 0
+
         // TODO: Implement filtering in each of the connectors instead?
 
         // integration should have connector name...
@@ -251,6 +254,10 @@ export const connectorRouter = trpc.mergeRouters(
               (int) =>
                 !connections.some(
                   (conn) =>
+                    (hasCustomerFilters &&
+                      !input.customer_integration_filters?.some((filter) =>
+                        int.id.includes(filter),
+                      )) ||
                     (conn.integrationId === null &&
                       conn.connectorConfigId === int.connector_config_id) ||
                     input.enabled_integration_ids?.includes(int.id),
