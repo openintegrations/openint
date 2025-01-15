@@ -145,7 +145,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             ) : (
               <AddConnectionTabContent
                 connectorConfigFilters={{}}
-                connectorNames={connections.map((c) => c.connectorName)}
                 enabledIntegrationIds={enabledIntegrationIds}
                 refetch={listConnectionsRes.refetch}
                 onSuccessCallback={() => {
