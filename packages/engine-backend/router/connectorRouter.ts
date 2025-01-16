@@ -5,6 +5,7 @@ import {getProtectedContext, TRPCError} from '@openint/trpc'
 import {R, z} from '@openint/util'
 import {zBaseRecord, zPaginatedResult, zPaginationParams} from '@openint/vdk'
 import {publicProcedure, trpc} from './_base'
+import {connectionRouter} from './connectionRouter'
 
 const tags = ['Connectors']
 
@@ -193,6 +194,7 @@ export const connectorRouter = trpc.mergeRouters(
         zPaginationParams.extend({
           search_text: z.string().optional(),
           connector_config_ids: z.array(z.string()).optional(),
+          customer_integration_filters: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
         }),
       )
       .output(
@@ -232,13 +234,34 @@ export const connectorRouter = trpc.mergeRouters(
                 }))
             }),
         )
+        const connections = await connectionRouter
+          .createCaller(ctx)
+          .listConnection()
+
+        const hasCustomerFilters =
+          input.customer_integration_filters &&
+          input.customer_integration_filters.length > 0
 
         // TODO: Implement filtering in each of the connectors instead?
 
         // integration should have connector name...
         return {
           has_next_page: integrations.some((int) => int.has_next_page),
-          items: integrations.flatMap((int) => int.items),
+          items: integrations
+            .flatMap((int) => int.items)
+            .filter(
+              (int) =>
+                !connections.some(
+                  (conn) =>
+                    (hasCustomerFilters &&
+                      !input.customer_integration_filters?.some((filter) =>
+                        int.id.includes(filter),
+                      )) ||
+                    (conn.integrationId === null &&
+                      conn.connectorConfigId === int.connector_config_id) ||
+                    conn.integrationId === int.id,
+                ),
+            ),
           next_cursor: null, // Implement me...
         }
       }),

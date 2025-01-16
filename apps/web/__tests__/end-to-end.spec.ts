@@ -262,9 +262,8 @@ test('list connector config info', async () => {
 test('list configured integrations', async () => {
   const res = await sdk.GET('/configured_integrations')
 
-  expect(res.data.items).toHaveLength(2)
+  expect(res.data.items).toHaveLength(1)
   expect(res.data.items[0]?.connector_name).toEqual('plaid')
-  expect(res.data.items[1]?.connector_name).toEqual('greenhouse')
 
   // Check basic properties
   expect(res.data.items[0]).toHaveProperty('connector_config_id')
