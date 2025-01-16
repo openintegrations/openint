@@ -6,11 +6,9 @@ import {IntegrationSearch} from './IntegrationSearch'
 
 export function ConnectIntegrations({
   connectorConfigFilters,
-  enabledIntegrationIds = [],
   onEvent,
 }: {
   connectorConfigFilters: ConnectorConfigFilters
-  enabledIntegrationIds?: string[]
   onEvent: (event: any) => void
 }) {
   return (
@@ -18,7 +16,6 @@ export function ConnectIntegrations({
       {({ccfgs}) => (
         <IntegrationSearch
           connectorConfigs={ccfgs}
-          enabledIntegrationIds={enabledIntegrationIds}
           onEvent={(e) => {
             if (onEvent) onEvent(e)
           }}

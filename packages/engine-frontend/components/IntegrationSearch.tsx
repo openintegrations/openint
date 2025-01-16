@@ -55,7 +55,6 @@ export function IntegrationSearch({
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: debouncedSearchText,
-    enabled_integration_ids: enabledIntegrationIds,
     customer_integration_filters: integrationFilters?.split(',') ?? [],
   })
   const ints = listIntegrationsRes.data?.items.map((int) => ({

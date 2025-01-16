@@ -113,13 +113,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           listConnectionsRes.isFetching ||
           listConnectionsRes.isRefetching
 
-        const enabledIntegrationIds: string[] =
-          listConnectionsRes.data
-            ?.filter((c): c is typeof c & {integration: {id: string}} =>
-              Boolean(c?.integration?.id),
-            )
-            .map((c) => c.integration.id) ?? []
-
         const tabConfig = [
           {
             key: 'connections',
@@ -145,7 +138,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             ) : (
               <AddConnectionTabContent
                 connectorConfigFilters={{}}
-                enabledIntegrationIds={enabledIntegrationIds}
                 refetch={listConnectionsRes.refetch}
                 onSuccessCallback={() => {
                   navigateToTab('connections')

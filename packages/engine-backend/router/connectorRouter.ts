@@ -194,7 +194,6 @@ export const connectorRouter = trpc.mergeRouters(
         zPaginationParams.extend({
           search_text: z.string().optional(),
           connector_config_ids: z.array(z.string()).optional(),
-          enabled_integration_ids: z.array(z.string()).optional(),
           customer_integration_filters: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
         }),
       )
@@ -260,7 +259,7 @@ export const connectorRouter = trpc.mergeRouters(
                       )) ||
                     (conn.integrationId === null &&
                       conn.connectorConfigId === int.connector_config_id) ||
-                    input.enabled_integration_ids?.includes(int.id),
+                    conn.integrationId === int.id,
                 ),
             ),
           next_cursor: null, // Implement me...
