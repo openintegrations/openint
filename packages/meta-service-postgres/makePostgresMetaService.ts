@@ -1,4 +1,6 @@
 import {camelCase, snakeCase} from 'change-case'
+// Need to use version 4.x of change-case that still supports cjs
+// pureESM modules are idealistic...
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'

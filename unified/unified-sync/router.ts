@@ -13,14 +13,14 @@ import * as unified from './unifiedModels'
 export {unified}
 
 function oapi(meta: NonNullable<RouterMeta['openapi']>): RouterMeta {
-  return {openapi: {...meta, path: `/unified/etl${meta.path}`}}
+  return {openapi: {...meta, path: `/unified/sync${meta.path}`}}
 }
 
 const procedure = verticalProcedure(adapters)
 
-const tags = ['ETL']
+const tags = ['Sync']
 
-export const etlRouter = trpc.router({
+export const syncRouter = trpc.router({
   readStream: procedure
     .meta(
       oapi({
@@ -84,4 +84,4 @@ export const etlRouter = trpc.router({
     .mutation(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 })
 
-export type Adapter<TInstance> = AdapterFromRouter<typeof etlRouter, TInstance>
+export type Adapter<TInstance> = AdapterFromRouter<typeof syncRouter, TInstance>
