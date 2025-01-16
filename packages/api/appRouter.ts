@@ -149,19 +149,54 @@ export function getOpenAPISpec(includeInternal = true) {
 
 function removeInternalPaths(oas: any): any {
   const paths = oas.paths
+
+  // hardcoded tags for enforcing consistency in docs
+  const whitelistedTags = [
+    'Connect',
+    'Core',
+    'Sales Engagement',
+    'CRM',
+    'Banking',
+    'Accounting',
+    'PTA',
+    'ATS',
+    'HRIS',
+    'File Storage',
+  ]
+
+  const internalTags = ['Internal', 'Connectors', 'ETL', 'Sync']
+
   const filteredPaths = Object.fromEntries(
-    Object.entries(paths).filter(
-      ([_, operations]) =>
-        !Object.values(operations as Record<string, any>).some(
-          (operation: any) =>
-            operation.tags?.includes('Internal') ||
-            operation.tags?.includes('Connectors') ||
-            operation.tags?.includes('ETL'),
-        ),
-    ),
+    Object.entries(paths).filter(([path, operations]) => {
+      const operationValues = Object.values(operations as Record<string, any>)
+
+      // Validate all tags are recognized
+      operationValues.forEach((operation: any) => {
+        operation.tags?.forEach((tag: string) => {
+          if (!whitelistedTags.includes(tag) && !internalTags.includes(tag)) {
+            throw new Error(
+              `Unrecognized tag "${tag}" found in path "${path}". All tags must be whitelisted in the 'removeInternalPaths' function.`,
+            )
+          }
+        })
+      })
+
+      // Keep paths that have whitelisted tags
+      const hasWhitelistedTag = operationValues.some(
+        (operation: any) =>
+          operation.tags?.some((tag: string) => whitelistedTags.includes(tag)),
+      )
+
+      // Filter out internal paths unless they have a whitelisted tag
+      const hasInternalTag = operationValues.some(
+        (operation: any) =>
+          operation.tags?.some((tag: string) => internalTags.includes(tag)),
+      )
+
+      return hasWhitelistedTag || !hasInternalTag
+    }),
   )
 
-  // Return the updated OAS object with filtered paths
   return {
     ...oas,
     paths: filteredPaths,
