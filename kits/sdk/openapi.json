@@ -7423,6 +7423,470 @@
         }
       }
     },
+    "/unified/sync/read/{stream}": {
+      "get": {
+        "operationId": "sync-readStream",
+        "summary": "Read Stream",
+        "tags": ["Sync"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "stream",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "sync_mode",
+            "schema": {
+              "type": "string",
+              "enum": ["full", "incremental"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": ["string", "null"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fields",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "next_cursor": {
+                      "type": ["string", "null"]
+                    },
+                    "has_next_page": {
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": ["has_next_page", "items"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/sync/discover": {
+      "get": {
+        "operationId": "sync-discover",
+        "summary": "Discover",
+        "tags": ["Sync"],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "streams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "json_schema": {
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "source_defined_primary_key": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "required": ["name", "json_schema"]
+                      }
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["CATALOG"]
+                    }
+                  },
+                  "required": ["streams", "type"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/sync/read": {
+      "post": {
+        "operationId": "sync-read",
+        "summary": "Read Data",
+        "tags": ["Sync"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "catalog": {
+                    "type": "object",
+                    "properties": {
+                      "streams": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "stream": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "json_schema": {
+                                  "type": "object",
+                                  "additionalProperties": {}
+                                },
+                                "source_defined_primary_key": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "required": ["name", "json_schema"]
+                            },
+                            "sync_mode": {
+                              "type": "string",
+                              "enum": ["full_refresh", "incremental"]
+                            },
+                            "additional_fields": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "required": ["stream", "sync_mode"]
+                        }
+                      }
+                    },
+                    "required": ["streams"]
+                  },
+                  "state": {
+                    "type": "object",
+                    "properties": {
+                      "shared_state": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "stream_states": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "stream_description": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "namespace": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["name", "namespace"]
+                            },
+                            "stream_state": {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          },
+                          "required": ["stream_description", "stream_state"]
+                        }
+                      }
+                    },
+                    "required": ["stream_states"]
+                  }
+                },
+                "required": ["catalog", "state"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "record": {
+                        "type": "object",
+                        "properties": {
+                          "data": {},
+                          "stream": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["stream"]
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["RECORD"]
+                      }
+                    },
+                    "required": ["record", "type"]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/sync/write": {
+      "post": {
+        "operationId": "sync-write",
+        "summary": "Write Data",
+        "tags": ["Sync"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "messages": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "record": {
+                          "type": "object",
+                          "properties": {
+                            "data": {},
+                            "stream": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["stream"]
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": ["RECORD"]
+                        }
+                      },
+                      "required": ["record", "type"]
+                    }
+                  }
+                },
+                "required": ["messages"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "streams": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "json_schema": {
+                                  "type": "object",
+                                  "additionalProperties": {}
+                                },
+                                "source_defined_primary_key": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "required": ["name", "json_schema"]
+                            }
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": ["CATALOG"]
+                          }
+                        },
+                        "required": ["streams", "type"]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "record": {
+                            "type": "object",
+                            "properties": {
+                              "data": {},
+                              "stream": {
+                                "type": "string"
+                              }
+                            },
+                            "required": ["stream"]
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": ["RECORD"]
+                          }
+                        },
+                        "required": ["record", "type"]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "state": {},
+                          "type": {
+                            "type": "string",
+                            "enum": ["STATE"]
+                          }
+                        },
+                        "required": ["type"]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/unified/file-storage/drive": {
       "get": {
         "operationId": "fileStorage-listDrives",

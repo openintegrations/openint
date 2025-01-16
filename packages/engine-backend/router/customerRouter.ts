@@ -339,7 +339,7 @@ export const customerRouter = trpc.router({
     ),
   upsertCustomer: adminProcedure
     .meta({
-      openapi: {method: 'PUT', path: '/core/customer/{id}', tags: ['core']},
+      openapi: {method: 'PUT', path: '/core/customer/{id}', tags: ['Core']},
     })
     .input(z.object({id: z.string(), metadata: z.unknown()}))
     .output(

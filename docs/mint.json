@@ -188,6 +188,15 @@
           ]
         },
         {
+          "group": "Sync",
+          "pages": [
+            "unified-apis/sync/read-stream",
+            "unified-apis/sync/discover",
+            "unified-apis/sync/read-data",
+            "unified-apis/sync/write-data"
+          ]
+        },
+        {
           "group": "File Storage",
           "pages": [
             "unified-apis/file-storage/list-drives",
