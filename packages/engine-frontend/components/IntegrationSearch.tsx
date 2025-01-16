@@ -17,12 +17,10 @@ export function IntegrationSearch({
   className,
   connectorConfigs,
   onEvent,
-  enabledIntegrationIds = [],
 }: {
   className?: string
   /** TODO: Make this optional so it is easier to use it as a standalone component */
   connectorConfigs: ConnectorConfig[]
-  enabledIntegrationIds?: string[]
   onEvent?: (event: {
     integration: {
       connectorConfigId: string
