@@ -1295,6 +1295,7 @@ export interface components {
       name: string
       created_at?: string | null
       modified_at?: string | null
+      owner?: string | null
       raw_data?: {
         [key: string]: unknown
       }
@@ -1325,6 +1326,7 @@ export interface components {
       raw_data?: {
         [key: string]: unknown
       }
+      parent_id?: string | null
     }
   }
   responses: never
