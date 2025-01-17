@@ -82,7 +82,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
 
   const navigateToTab = (tab: string) => {
     const params = new URLSearchParams(searchParams ?? {})
-    params.set('connectTab', tab)
+    params.set('view', tab)
     router.replace(`${pathname}?${params.toString()}`, {
       scroll: false,
     })
@@ -115,7 +115,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
 
         const tabConfig = [
           {
-            key: 'connections',
+            key: 'manage',
             title: `My Connections (${connectionCount})`,
             content: isLoading ? (
               <LoadingSpinner />
@@ -124,14 +124,14 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 connectionCount={connectionCount}
                 deleteConnection={deleteConnection.mutate}
                 connections={connections}
-                onConnect={() => navigateToTab('add-connection')}
+                onConnect={() => navigateToTab('add')}
                 refetch={() => ctx.listConnections.invalidate()}
               />
             ),
             status: connections.some((c) => c.syncInProgress),
           },
           {
-            key: 'add-connection',
+            key: 'add',
             title: 'Add a Connection',
             content: isLoading ? (
               <LoadingSpinner />
@@ -140,7 +140,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 connectorConfigFilters={{}}
                 refetch={listConnectionsRes.refetch}
                 onSuccessCallback={() => {
-                  navigateToTab('connections')
+                  navigateToTab('manage')
                 }}
               />
             ),
@@ -157,8 +157,8 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             <Tabs
               tabConfig={tabConfig}
               value={
-                searchParams?.get('connectTab') ??
-                (connectionCount === 0 ? 'add-connection' : 'connections')
+                searchParams?.get('view') ??
+                (connectionCount === 0 ? 'add' : 'manage')
               }
               onValueChange={navigateToTab}
               className="flex h-full flex-col"
