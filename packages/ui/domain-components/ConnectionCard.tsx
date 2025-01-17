@@ -56,7 +56,7 @@ export function ConnectionCard({
     <Card className="border-card-border relative h-[150px] w-[150px] cursor-pointer rounded-lg border bg-card p-0">
       {/* Overlay spinner */}
       {isProcessing && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md" style={{ backgroundColor: 'var(--spinner-bg)' }}>
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md bg-card-loading">
           <Loader className="size-8 animate-spin text-button" />
         </div>
       )}
