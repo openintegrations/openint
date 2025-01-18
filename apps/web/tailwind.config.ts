@@ -126,6 +126,7 @@ export default {
         card: {
           DEFAULT: 'var(--card)',
           foreground: 'var(--card-foreground)',
+          loading: 'var(--spinner-bg)',
         },
         tooltip: {
           DEFAULT: 'var(--tooltip)',

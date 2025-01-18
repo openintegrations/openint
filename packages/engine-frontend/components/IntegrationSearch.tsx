@@ -1,6 +1,7 @@
 'use client'
 
 import {Loader, Search} from 'lucide-react'
+import {useSearchParams} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
 import {Button, cn, Input, parseCategory, Separator} from '@openint/ui'
@@ -16,12 +17,10 @@ export function IntegrationSearch({
   className,
   connectorConfigs,
   onEvent,
-  enabledIntegrationIds = [],
 }: {
   className?: string
   /** TODO: Make this optional so it is easier to use it as a standalone component */
   connectorConfigs: ConnectorConfig[]
-  enabledIntegrationIds?: string[]
   onEvent?: (event: {
     integration: {
       connectorConfigId: string
@@ -34,6 +33,9 @@ export function IntegrationSearch({
   const [debouncedSearchText, setDebouncedSearchText] = useState('')
   // Main state after applying filters.
   const [categoryFilter, setCategoryFilter] = useState<string[]>([])
+
+  const searchParams = useSearchParams()
+  const integrationFilters = searchParams.get('integrationFilters')
 
   const debouncedSetSearch = useCallback((value: string) => {
     const timeoutId = setTimeout(() => {
@@ -51,15 +53,12 @@ export function IntegrationSearch({
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: debouncedSearchText,
+    customer_integration_filters: integrationFilters?.split(',') ?? [],
   })
-  const ints = listIntegrationsRes.data?.items
-    .map((int) => ({
-      ...int,
-      ccfg: connectorConfigs.find(
-        (ccfg) => ccfg.id === int.connector_config_id,
-      )!,
-    }))
-    .filter((int) => !enabledIntegrationIds.includes(int.id))
+  const ints = listIntegrationsRes.data?.items.map((int) => ({
+    ...int,
+    ccfg: connectorConfigs.find((ccfg) => ccfg.id === int.connector_config_id)!,
+  }))
 
   const categories = Array.from(
     new Set(connectorConfigs.flatMap((ccfg) => ccfg.verticals)),
