@@ -382,21 +382,21 @@ export interface paths {
     /** List Individuals */
     get: operations['hris-listIndividual']
   }
-  '/unified/etl/read/{stream}': {
+  '/unified/sync/read/{stream}': {
     /** Read Stream */
-    get: operations['etl-readStream']
+    get: operations['sync-readStream']
   }
-  '/unified/etl/discover': {
+  '/unified/sync/discover': {
     /** Discover */
-    get: operations['etl-discover']
+    get: operations['sync-discover']
   }
-  '/unified/etl/read': {
+  '/unified/sync/read': {
     /** Read Data */
-    post: operations['etl-read']
+    post: operations['sync-read']
   }
-  '/unified/etl/write': {
+  '/unified/sync/write': {
     /** Write Data */
-    post: operations['etl-write']
+    post: operations['sync-write']
   }
   '/unified/file-storage/drive': {
     /** List drives */
@@ -5501,7 +5501,7 @@ export interface operations {
     }
   }
   /** Read Stream */
-  'etl-readStream': {
+  'sync-readStream': {
     parameters: {
       query?: {
         sync_mode?: 'full' | 'incremental'
@@ -5545,7 +5545,7 @@ export interface operations {
     }
   }
   /** Discover */
-  'etl-discover': {
+  'sync-discover': {
     responses: {
       /** @description Successful response */
       200: {
@@ -5572,7 +5572,7 @@ export interface operations {
     }
   }
   /** Read Data */
-  'etl-read': {
+  'sync-read': {
     requestBody: {
       content: {
         'application/json': {
@@ -5636,7 +5636,7 @@ export interface operations {
     }
   }
   /** Write Data */
-  'etl-write': {
+  'sync-write': {
     requestBody: {
       content: {
         'application/json': {

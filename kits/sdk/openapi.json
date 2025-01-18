@@ -172,7 +172,7 @@
       "put": {
         "operationId": "upsertCustomer",
         "summary": "Upsert customer",
-        "tags": ["core"],
+        "tags": ["Core"],
         "parameters": [
           {
             "in": "path",

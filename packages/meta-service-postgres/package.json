@@ -9,7 +9,7 @@
     "@openint/connector-postgres": "workspace:*",
     "@openint/db": "workspace:*",
     "@openint/util": "workspace:*",
-    "change-case": "^5.4.4"
+    "change-case": "^4"
   },
   "devDependencies": {
     "@openint/engine-backend": "workspace:*",
