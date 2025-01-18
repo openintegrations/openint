@@ -1,3 +1,6 @@
+/**
+ * NOTE: This is a WIP file and started failing after the unified refactor fix, see ts-ignores
+ */
 import {compact} from 'remeda'
 import * as rx from 'rxjs'
 import {initOpenIntSDK} from '@openint/sdk'
@@ -102,6 +105,7 @@ export function verticalDestination(pipe: _PipelineExpanded): Destination {
     return rx
       .from(
         sdk
+          // @ts-expect-error this does not work since the unified refactor fix or delete WIP directory
           .POST(`/unified/${pipe.destinationVertical as 'etl'}/write`, {
             body: {messages},
           })
