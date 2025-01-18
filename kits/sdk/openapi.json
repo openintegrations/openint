@@ -9918,9 +9918,6 @@
           "modified_at": {
             "type": ["string", "null"]
           },
-          "owner": {
-            "type": ["string", "null"]
-          },
           "raw_data": {
             "type": "object",
             "additionalProperties": {}
@@ -9991,9 +9988,6 @@
           "raw_data": {
             "type": "object",
             "additionalProperties": {}
-          },
-          "parent_id": {
-            "type": ["string", "null"]
           }
         },
         "required": ["id", "name", "drive_id"],
