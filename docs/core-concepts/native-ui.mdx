@@ -1,0 +1,81 @@
+Implementing a Native UI for Connect via Core APIs and Deep Linking
+
+Customers may wish to wrap certain parts of Connect within their native UI to maintain a consistent experience with the rest of their app. All of the APIs that power Connect are available as Core APIs. Connect also supports deep linking into any part of the Connect UI via connect parameters.
+
+## Deeplink Parameters Summary
+
+You can configure Connect deeplinks via parameters directly on the Create Magic Link API or via the <EmbedOpenIntConnect/> React component. Here is the list of supported actions:
+• view=manage
+Manage Connections, let the user decide.
+• view=manage&connection_id=conn_yyy
+Manage a specific connection.
+• view=add
+Add a new connection, let the user decide.
+• view=add&connector_name=salesforce
+Add a Salesforce connection.
+• view=add&connector_name=google&integration_id=int_google_drive
+Add a Google Drive connection (within the Google connector).
+
+Powering a Native User Interface Guide
+
+List Existing Connections
+
+You can fetch the List Connections API to render a list of end-user existing connections. Fields that are useful for UI rendering include:
+• status
+• integration.name
+• integration.logoUrl
+
+The simplest way to enable users to manage their connections is to deeplink to the manage connection tab directly using the view=list parameter.
+
+Example Actions:
+• Delete a connection
+• Trigger a sync
+
+To link to a specific connection ID, pass the extra connection_id parameter.
+Example: view=manage&connector_name=salesforce
+
+Showing Connection Names and States
+
+It’s important to let customers know if their connection has issues so they can take corrective action. A status enum and an optional statusMessage field are included to enable apps to create a rich UI.
+
+Example JSON:
+
+{
+...
+"standard": {
+"displayName": "<string>",
+"status": "healthy",
+"statusMessage": "<string>",
+"labels": [
+"<string>"
+]
+}
+}
+
+Possible status values:
+• healthy: Connected and all is well.
+• disconnected: User intervention needed to reconnect.
+• error: System error, nothing the user can do. This includes revoked connections.
+• manual: Manual connection (e.g., import). Normal statuses don’t apply.
+
+To access a custom displayName configured for a connector, use the connection.standard.displayName field.
+
+Add a New Connection
+
+The simplest way to add a new connection is to create a native “Add a New Connection” button that links users to the Add New Connection tab using the view=add parameter.
+
+Adding Specific Connections:
+The parameters vary depending on whether the connection is for a connector or an integration within that connector.
+• Add a Salesforce connection:
+view=add&connector_name=salesforce
+• Add a Google Drive connection (within Google connector):
+view=add&connector_name=google&integration_id=int_google_drive
+
+Removing Connections:
+Customers can remove connections using the Delete Connection API.
+
+Optional Flow: Sync Status
+
+Optionally, if you’d like to display the sync status of a connection to a user: 1. For each connection, call the List Pipelines API to render its sync status. 2. Use the Sync Connection API to trigger a manual sync for each connection.
+
+Let me know if you’d like any additional changes!

@@ -1,6 +1,9 @@
+/**
+ * NOTE: This is a WIP file and started failing after the unified refactor fix, see ts-ignores
+ */
 import {compact} from 'remeda'
 import {initOpenIntSDK} from '@openint/sdk'
-import type {unified} from '@openint/unified-etl'
+import type {unified} from '@openint/unified-sync'
 import type {_PipelineExpanded} from '../services/dbService'
 import {flatMap, noopWritable, streamFromIterable, tap} from './stream'
 
@@ -102,10 +105,13 @@ export function verticalDestination(pipe: _PipelineExpanded): Destination {
     const messages = msgs.filter(
       (m): m is unified.MessageRecord => m.type === 'RECORD',
     )
-    return sdk
-      .POST(`/unified/${pipe.destinationVertical as 'etl'}/write`, {
-        body: {messages},
-      })
-      .then((r) => r.data as unified.Message[])
+    return (
+      sdk
+        // @ts-expect-error this does not work since the unified refactor fix or delete WIP directory
+        .POST(`/unified/${pipe.destinationVertical as 'etl'}/write`, {
+          body: {messages},
+        })
+        .then((r) => r.data as unified.Message[])
+    )
   })
 }
