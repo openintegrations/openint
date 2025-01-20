@@ -242,7 +242,7 @@ export const sharepointAdapter = {
   },
 
   downloadFile: async ({instance, input}) => {
-    return exports.microsoftGraphAdapter.exportFile({instance, input})
+    return exports.sharepointAdapter.exportFile({instance, input})
   },
 
   listFolders: async ({instance, input}) => {
