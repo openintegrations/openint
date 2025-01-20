@@ -139,6 +139,10 @@ const mappers = {
 
         return (
           e?.data?.Rows?.Row?.map((row) => ({
+            id:
+              row?.ColData?.[columnMap['Transaction Type'] as number]?.value +
+              '_' +
+              row?.ColData?.[columnMap['Transaction Type'] as number]?.id,
             date: row?.ColData?.[columnMap['Date'] as number]?.value ?? '',
             transactionType:
               row?.ColData?.[columnMap['Transaction Type'] as number]?.value ??
@@ -157,6 +161,7 @@ const mappers = {
             amount: parseFloat(
               row?.ColData?.[columnMap['Amount'] as number]?.value ?? '0',
             ),
+            raw_data: {Row: row, Column: e?.data?.Columns?.Column},
           })) ?? []
         )
       },
