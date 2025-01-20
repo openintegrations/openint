@@ -185,12 +185,13 @@
         {
           "group": "File Storage",
           "pages": [
+            "unified-apis/file-storage/list-drive-groups",
             "unified-apis/file-storage/list-drives",
-            "unified-apis/file-storage/get-drive",
-            "unified-apis/file-storage/list-folders",
-            "unified-apis/file-storage/get-folder",
             "unified-apis/file-storage/list-files",
-            "unified-apis/file-storage/get-file"
+            "unified-apis/file-storage/get-file",
+            "unified-apis/file-storage/export-file",
+            "unified-apis/file-storage/download-file",
+            "unified-apis/file-storage/list-folders"
           ]
         }
       ]
