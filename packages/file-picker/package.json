@@ -39,6 +39,7 @@
     "@types/node": "*",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
+    "@types/react-table": "^7.7.20",
     "autoprefixer": "^10.4.13",
     "jest": "*",
     "jest-location-mock": "^1.0.9",

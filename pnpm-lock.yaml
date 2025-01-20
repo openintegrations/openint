@@ -1946,6 +1946,9 @@ importers:
       '@types/react-dom':
         specifier: 18.0.10
         version: 18.0.10
+      '@types/react-table':
+        specifier: ^7.7.20
+        version: 7.7.20
       autoprefixer:
         specifier: ^10.4.13
         version: 10.4.13(postcss@8.4.47)
@@ -6085,6 +6088,9 @@ packages:
 
   '@types/react-dom@18.0.10':
     resolution: {integrity: sha512-E42GW/JA4Qv15wQdqJq8DL4JhNpB3prJgjgapN3qJT9K2zO5IIAQh4VXvCEDupoqAwnz0cY4RlXeC/ajX5SFHg==}
+
+  '@types/react-table@7.7.20':
+    resolution: {integrity: sha512-ahMp4pmjVlnExxNwxyaDrFgmKxSbPwU23sGQw2gJK4EhCvnvmib2s/O/+y1dfV57dXOwpr2plfyBol+vEHbi2w==}
 
   '@types/react@18.0.27':
     resolution: {integrity: sha512-3vtRKHgVxu3Jp9t718R9BuzoD4NcQ8YJ5XRzsSKxNDiDonD2MXIT1TmSkenxuCycZJoQT5d2vE8LwWJxBC1gmA==}
@@ -19197,6 +19203,10 @@ snapshots:
   '@types/range-parser@1.2.4': {}
 
   '@types/react-dom@18.0.10':
+    dependencies:
+      '@types/react': 18.0.27
+
+  '@types/react-table@7.7.20':
     dependencies:
       '@types/react': 18.0.27
 
