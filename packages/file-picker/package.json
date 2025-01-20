@@ -1,0 +1,59 @@
+{
+  "name": "@openint/file-picker",
+  "version": "0.0.0",
+  "private": true,
+  "sideEffects": false,
+  "module": "./index.ts",
+  "scripts": {
+    "build-storybook": "storybook build",
+    "storybook": "storybook dev -p 6006"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.8",
+    "@opensdks/sdk-openint": "*",
+    "classnames": "*",
+    "date-fns": "*",
+    "isomorphic-unfetch": "^3.1.0",
+    "re-resizable": "*",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-table": "7.7.0",
+    "react-waypoint": "^10.1.0",
+    "swr": "^1.0.1"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^1.9.0",
+    "@openint/cdk": "workspace:*",
+    "@openint/engine-backend": "workspace:*",
+    "@storybook/addon-essentials": "^8.3.5",
+    "@storybook/addon-interactions": "^8.3.5",
+    "@storybook/addon-links": "^8.3.5",
+    "@storybook/addon-onboarding": "^8.3.5",
+    "@storybook/blocks": "^8.3.5",
+    "@storybook/react": "^8.3.5",
+    "@storybook/react-vite": "^8.3.5",
+    "@storybook/test": "^8.3.5",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@types/jest": "*",
+    "@types/node": "*",
+    "@types/react": "^17.0.20",
+    "@types/react-dom": "^17.0.9",
+    "autoprefixer": "^10.4.13",
+    "jest": "*",
+    "jest-location-mock": "^1.0.9",
+    "postcss": "^8.4.21",
+    "prop-types": "^15.8.1",
+    "storybook": "^8.3.5",
+    "tailwindcss": "^3.2.4",
+    "typescript": "^4.4.2",
+    "vite-plugin-svgr": "^4.2.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "credits": [
+    "Special thanks to Author Jake Prins for the @apideck/file-picker package from which this package is forked from"
+  ]
+}
