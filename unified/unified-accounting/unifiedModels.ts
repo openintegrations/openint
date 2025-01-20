@@ -85,6 +85,7 @@ export const cashFlow = z.object({
 })
 
 const transactionSchema = z.object({
+  id: z.string(),
   date: z.string(),
   transactionType: z.string(),
   documentNumber: z.string().optional(),
@@ -95,6 +96,7 @@ const transactionSchema = z.object({
   account: z.string().optional(),
   split: z.string().optional(),
   amount: z.number(),
+  raw_data: z.any(),
 })
 
 export const transactionList = z.object({

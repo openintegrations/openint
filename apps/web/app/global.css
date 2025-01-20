@@ -68,6 +68,8 @@
     --toast-bg-destructive: hsl(0, 100%, 63%); 
     --toast-border-destructive: hsl(0, 60%, 55%);
     --toast-foreground: hsl(0, 0%, 100%);
+
+    --spinner-bg: hsla(0, 0%, 100%, 0.7); /* Equivalent to bg-white/70 */
   }
 
   .dark {
@@ -125,6 +127,8 @@
     --toast-bg-destructive: hsl(0, 50%, 28%);
     --toast-border-destructive: hsl(0, 41%, 50%);
     --toast-foreground: hsl(0, 0%, 100%);
+
+    --spinner-bg: hsla(0, 0%, 100%, 0.098); /* Keep the same for light theme */
   }
 }
 
