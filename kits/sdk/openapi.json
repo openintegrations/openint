@@ -6064,6 +6064,9 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "date": {
                             "type": "string"
                           },
@@ -6093,9 +6096,10 @@
                           },
                           "amount": {
                             "type": "number"
-                          }
+                          },
+                          "raw_data": {}
                         },
-                        "required": ["date", "transactionType", "amount"]
+                        "required": ["id", "date", "transactionType", "amount"]
                       }
                     }
                   },
@@ -7423,7 +7427,95 @@
         }
       }
     },
-    "/unified/file-storage/drive": {
+    "/unified/file-storage/drive-groups": {
+      "get": {
+        "operationId": "fileStorage-listDriveGroups",
+        "summary": "List drive groups",
+        "tags": ["File Storage"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "sync_mode",
+            "schema": {
+              "type": "string",
+              "enum": ["full", "incremental"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": ["string", "null"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "next_cursor": {
+                      "type": ["string", "null"]
+                    },
+                    "has_next_page": {
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/unified.drivegroup"
+                      }
+                    }
+                  },
+                  "required": ["has_next_page", "items"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/file-storage/drives": {
       "get": {
         "operationId": "fileStorage-listDrives",
         "summary": "List drives",
@@ -7449,6 +7541,13 @@
             "name": "page_size",
             "schema": {
               "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "driveGroupId",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -7511,243 +7610,13 @@
         }
       }
     },
-    "/unified/file-storage/drive/{driveId}": {
-      "get": {
-        "operationId": "fileStorage-getDrive",
-        "summary": "Get drive",
-        "tags": ["File Storage"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unified.drive"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/unified/file-storage/drive/{driveId}/folder": {
-      "get": {
-        "operationId": "fileStorage-listFolders",
-        "summary": "List folders",
-        "tags": ["File Storage"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "sync_mode",
-            "schema": {
-              "type": "string",
-              "enum": ["full", "incremental"]
-            }
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": ["string", "null"]
-            }
-          },
-          {
-            "in": "query",
-            "name": "page_size",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "next_cursor": {
-                      "type": ["string", "null"]
-                    },
-                    "has_next_page": {
-                      "type": "boolean"
-                    },
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/unified.folder"
-                      }
-                    }
-                  },
-                  "required": ["has_next_page", "items"]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/unified/file-storage/drive/{driveId}/folder/{folderId}": {
-      "get": {
-        "operationId": "fileStorage-getFolder",
-        "summary": "Get folder",
-        "tags": ["File Storage"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "folderId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unified.folder"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/unified/file-storage/drive/{driveId}/file": {
+    "/unified/file-storage/files": {
       "get": {
         "operationId": "fileStorage-listFiles",
         "summary": "List files",
         "tags": ["File Storage"],
         "parameters": [
           {
-            "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
             "in": "query",
             "name": "sync_mode",
             "schema": {
@@ -7771,9 +7640,16 @@
           },
           {
             "in": "query",
+            "name": "driveId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "folderId",
             "schema": {
-              "type": ["string", "null"]
+              "type": "string"
             }
           }
         ],
@@ -7836,7 +7712,7 @@
         }
       }
     },
-    "/unified/file-storage/drive/{driveId}/file/{fileId}": {
+    "/unified/file-storage/files/{id}": {
       "get": {
         "operationId": "fileStorage-getFile",
         "summary": "Get file",
@@ -7844,15 +7720,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "fileId",
+            "name": "id",
             "schema": {
               "type": "string"
             },
@@ -7866,6 +7734,223 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/unified.file"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/file-storage/files/{id}/export": {
+      "get": {
+        "operationId": "fileStorage-exportFile",
+        "summary": "Export file",
+        "tags": ["File Storage"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/file-storage/files/{id}/download": {
+      "get": {
+        "operationId": "fileStorage-downloadFile",
+        "summary": "Download file",
+        "tags": ["File Storage"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/file-storage/folders": {
+      "get": {
+        "operationId": "fileStorage-listFolders",
+        "summary": "List folders",
+        "tags": ["File Storage"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "sync_mode",
+            "schema": {
+              "type": "string",
+              "enum": ["full", "incremental"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": ["string", "null"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "driveId",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "next_cursor": {
+                      "type": ["string", "null"]
+                    },
+                    "has_next_page": {
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/unified.folder"
+                      }
+                    }
+                  },
+                  "required": ["has_next_page", "items"]
                 }
               }
             }
@@ -9903,6 +9988,28 @@
         "required": ["id"],
         "description": "A candidate for a job"
       },
+      "unified.drivegroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "updated_at": {
+            "type": ["string", "null"]
+          },
+          "created_at": {
+            "type": ["string", "null"]
+          }
+        },
+        "required": ["id", "name"],
+        "description": "A unified representation of a drive group"
+      },
       "unified.drive": {
         "type": "object",
         "properties": {
@@ -9912,19 +10019,74 @@
           "name": {
             "type": "string"
           },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "updated_at": {
+            "type": ["string", "null"]
+          },
           "created_at": {
             "type": ["string", "null"]
-          },
-          "modified_at": {
-            "type": ["string", "null"]
-          },
-          "raw_data": {
-            "type": "object",
-            "additionalProperties": {}
           }
         },
         "required": ["id", "name"],
         "description": "A unified representation of a storage drive"
+      },
+      "unified.file": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": ["string", "null"]
+          },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["file", "folder", "url"]
+          },
+          "path": {
+            "type": ["string", "null"]
+          },
+          "mime_type": {
+            "type": ["string", "null"]
+          },
+          "downloadable": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": ["number", "null"]
+          },
+          "permissions": {
+            "type": "object",
+            "properties": {
+              "download": {
+                "type": "boolean"
+              }
+            },
+            "required": ["download"]
+          },
+          "exportable": {
+            "type": "boolean"
+          },
+          "export_formats": {
+            "type": ["array", "null"],
+            "items": {
+              "type": "string"
+            }
+          },
+          "updated_at": {
+            "type": ["string", "null"]
+          },
+          "created_at": {
+            "type": ["string", "null"]
+          }
+        },
+        "required": ["id", "type", "downloadable", "permissions", "exportable"],
+        "description": "A unified representation of a file"
       },
       "unified.folder": {
         "type": "object",
@@ -9935,63 +10097,21 @@
           "name": {
             "type": "string"
           },
-          "parent_id": {
+          "description": {
             "type": ["string", "null"]
           },
-          "drive_id": {
+          "path": {
             "type": "string"
+          },
+          "updated_at": {
+            "type": ["string", "null"]
           },
           "created_at": {
             "type": ["string", "null"]
-          },
-          "modified_at": {
-            "type": ["string", "null"]
-          },
-          "raw_data": {
-            "type": "object",
-            "additionalProperties": {}
           }
         },
-        "required": ["id", "name", "drive_id"],
-        "description": "A unified representation of a folder within a drive"
-      },
-      "unified.file": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "file_url": {
-            "type": ["string", "null"]
-          },
-          "download_url": {
-            "type": ["string", "null"]
-          },
-          "mime_type": {
-            "type": ["string", "null"]
-          },
-          "size": {
-            "type": ["number", "null"]
-          },
-          "drive_id": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": ["string", "null"]
-          },
-          "modified_at": {
-            "type": ["string", "null"]
-          },
-          "raw_data": {
-            "type": "object",
-            "additionalProperties": {}
-          }
-        },
-        "required": ["id", "name", "drive_id"],
-        "description": "A unified representation of a file within a drive"
+        "required": ["id", "name", "path"],
+        "description": "A unified representation of a folder"
       }
     }
   },
