@@ -117,6 +117,7 @@ export function getContextFactory<
       getRedirectUrl,
       clerk: config.clerk,
       inngest,
+      resHeaders: new Headers(),
     }
   }
 

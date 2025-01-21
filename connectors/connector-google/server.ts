@@ -65,17 +65,18 @@ const integrations = [
 
 export const googleServer = {
   // newInstance: ({settings, fetchLinks}) => {
-  //   const sdk = initHubspotSDK({
+  //   const sdk = initGoogleSDK({
   //     // We rely on nango to refresh the access token...
   //     headers: {
   //       authorization: `Bearer ${settings.oauth.credentials.access_token}`,
   //     },
   //     links: (defaultLinks) => [
   //       (req, next) => {
-  //         if (sdk.clientOptions.baseUrl) {
+  //         // TODO: make this dynamic to different base URLs than just drive_v2
+  //         if (sdk.drive_v2.clientOptions.baseUrl) {
   //           req.headers.set(
   //             nangoProxyLink.kBaseUrlOverride,
-  //             sdk.clientOptions.baseUrl,
+  //             sdk.drive_v2.clientOptions.baseUrl,
   //           )
   //         }
   //         return next(req)

@@ -7564,7 +7564,7 @@
           },
           {
             "in": "query",
-            "name": "driveGroupId",
+            "name": "drive_group_id",
             "schema": {
               "type": "string"
             }
@@ -7659,14 +7659,14 @@
           },
           {
             "in": "query",
-            "name": "driveId",
+            "name": "drive_id",
             "schema": {
               "type": "string"
             }
           },
           {
             "in": "query",
-            "name": "folderId",
+            "name": "folder_id",
             "schema": {
               "type": "string"
             }
@@ -7942,7 +7942,7 @@
           },
           {
             "in": "query",
-            "name": "driveId",
+            "name": "drive_id",
             "schema": {
               "type": "string"
             }
@@ -10024,7 +10024,8 @@
           },
           "created_at": {
             "type": ["string", "null"]
-          }
+          },
+          "raw_data": {}
         },
         "required": ["id", "name"],
         "description": "A unified representation of a drive group"
@@ -10046,7 +10047,8 @@
           },
           "created_at": {
             "type": ["string", "null"]
-          }
+          },
+          "raw_data": {}
         },
         "required": ["id", "name"],
         "description": "A unified representation of a storage drive"
@@ -10102,7 +10104,8 @@
           },
           "created_at": {
             "type": ["string", "null"]
-          }
+          },
+          "raw_data": {}
         },
         "required": ["id", "type", "downloadable", "permissions", "exportable"],
         "description": "A unified representation of a file"
@@ -10127,7 +10130,8 @@
           },
           "created_at": {
             "type": ["string", "null"]
-          }
+          },
+          "raw_data": {}
         },
         "required": ["id", "name", "path"],
         "description": "A unified representation of a folder"

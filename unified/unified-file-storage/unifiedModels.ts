@@ -7,6 +7,7 @@ export const DriveGroup = z
     description: z.string().nullish(),
     updated_at: z.string().nullish(),
     created_at: z.string().nullish(),
+    raw_data: z.any(),
   })
   .openapi({
     ref: 'unified.drivegroup',
@@ -20,6 +21,7 @@ export const Drive = z
     description: z.string().nullish(),
     updated_at: z.string().nullish(),
     created_at: z.string().nullish(),
+    raw_data: z.any(),
   })
   .openapi({
     ref: 'unified.drive',
@@ -43,6 +45,7 @@ export const File = z
     export_formats: z.array(z.string()).nullish(),
     updated_at: z.string().nullish(),
     created_at: z.string().nullish(),
+    raw_data: z.any(),
   })
   .openapi({
     ref: 'unified.file',
@@ -57,6 +60,7 @@ export const Folder = z
     path: z.string(),
     updated_at: z.string().nullish(),
     created_at: z.string().nullish(),
+    raw_data: z.any(),
   })
   .openapi({
     ref: 'unified.folder',

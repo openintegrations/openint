@@ -29,7 +29,7 @@ export const fileStorageRouter = trpc.router({
     .input(
       zPaginationParams
         .extend({
-          driveGroupId: z.string().optional(),
+          drive_group_id: z.string().optional(),
         })
         .nullish(),
     )
@@ -41,8 +41,8 @@ export const fileStorageRouter = trpc.router({
     .input(
       zPaginationParams
         .extend({
-          driveId: z.string().optional(),
-          folderId: z.string().optional(),
+          drive_id: z.string().optional(),
+          folder_id: z.string().optional(),
         })
         .nullish(),
     )
@@ -69,7 +69,7 @@ export const fileStorageRouter = trpc.router({
   downloadFile: procedure
     .meta(oapi({method: 'GET', path: '/files/{id}/download'}))
     .input(z.object({id: z.string()}))
-    .output(z.instanceof(ReadableStream))
+    .output(z.instanceof(ReadableStream)) // don't validate output
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
   listFolders: procedure
@@ -77,7 +77,7 @@ export const fileStorageRouter = trpc.router({
     .input(
       zPaginationParams
         .extend({
-          driveId: z.string().optional(),
+          drive_id: z.string().optional(),
         })
         .nullish(),
     )

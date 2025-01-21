@@ -21,6 +21,140 @@ function extractCursor(nextLink?: string): string | undefined {
   }
 }
 
+async function getFileFromDrives({
+  instance,
+  input,
+  ctx,
+}: {
+  instance: MsgraphSDK
+  input: {id: string; cursor?: string}
+  ctx: any
+}) {
+  const drivesResult: any = await sharepointAdapter.listDrives({
+    instance,
+    input: {},
+    ctx,
+  })
+
+  const filePromises = drivesResult.items.map(async (drive: any) => {
+    try {
+      const response = await instance.GET(
+        '/drives/{drive-id}/items/{driveItem-id}',
+        {
+          params: {
+            path: {
+              'drive-id': drive.id,
+              'driveItem-id': input.id,
+            },
+            // @ts-expect-error TODO: "$expandParams is supported by the API but its not clear in the documentation
+            query: {
+              ...expandParams,
+            },
+          },
+        },
+      )
+      return response.data
+    } catch (error: any) {
+      // TODO: fix nesting in this SDK
+      if (error?.error?.error?.code === 'itemNotFound') {
+        return null
+      }
+      throw error
+    }
+  })
+
+  const results = await Promise.all(filePromises)
+  const validResult = results.find(
+    (res) => res && res.id && res.id !== 'undefined',
+  )
+
+  if (!validResult) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: 'File not found in any drive',
+    })
+  }
+
+  return validResult
+}
+
+interface DownloadFileResult {
+  status: number
+  stream: ReadableStream<Uint8Array> | null
+  resHeaders?: Headers
+  error: {code: string; message: string} | null
+}
+
+export async function downloadFileById({
+  fileId,
+  ctx,
+}: {
+  fileId: string
+  ctx: any
+}): Promise<DownloadFileResult> {
+  const file = await getFileFromDrives({
+    instance: ctx.remote.instance,
+    input: {id: fileId},
+    ctx,
+  })
+
+  if (!file['@microsoft.graph.downloadUrl']) {
+    return {
+      status: 404,
+      stream: null,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'File not downloadable',
+      },
+    }
+  }
+
+  const downloadResponse = await fetch(file['@microsoft.graph.downloadUrl'])
+
+  if (!downloadResponse.ok) {
+    return {
+      status: 500,
+      stream: null,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to download file',
+      },
+    }
+  }
+
+  if (!downloadResponse.body) {
+    return {
+      status: 500,
+      stream: null,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'No download response body available',
+      },
+    }
+  }
+
+  const headers = new Headers()
+  headers.set(
+    'content-type',
+    downloadResponse.headers.get('content-type') ?? '',
+  )
+  headers.set(
+    'content-length',
+    downloadResponse.headers.get('content-length') ?? '',
+  )
+  headers.set(
+    'content-disposition',
+    downloadResponse.headers.get('content-disposition') ?? '',
+  )
+
+  return {
+    status: 200,
+    stream: downloadResponse.body,
+    resHeaders: headers,
+    error: null,
+  }
+}
+
 export const sharepointAdapter = {
   listDriveGroups: async ({instance, input}) => {
     const res = await fetch(
@@ -50,7 +184,7 @@ export const sharepointAdapter = {
   },
 
   listDrives: async ({instance, input}) => {
-    const siteId = input?.driveGroupId
+    const siteId = input?.drive_group_id
     let drivesResponse
 
     if (siteId) {
@@ -120,20 +254,20 @@ export const sharepointAdapter = {
     }
   },
 
-  listFiles: async ({instance, input}) => {
+  listFiles: async ({instance, input, ctx}) => {
     let filesResponse
 
-    if (input?.driveId) {
-      // Use instance.GET for cases with driveId
-      filesResponse = await instance.GET(
-        input.folderId
-          ? `/drives/{drive-id}/items/{driveItem-id}/children`
-          : `/drives/{drive-id}/root/children`,
-        {
+    if (input?.drive_id) {
+      const endpoint = input.folder_id
+        ? `/drives/{drive-id}/items/{driveItem-id}/children`
+        : `/drives/{drive-id}/root/children`
+
+      try {
+        filesResponse = await instance.GET(endpoint, {
           params: {
             path: {
-              'drive-id': input.driveId,
-              'driveItem-id': input.folderId,
+              'drive-id': input.drive_id,
+              'driveItem-id': input.folder_id,
             },
             query: {
               ...expandParams,
@@ -141,28 +275,55 @@ export const sharepointAdapter = {
               $skiptoken: input?.cursor,
             },
           },
-        },
-      )
-      filesResponse = filesResponse.data
+        })
+        filesResponse = filesResponse.data
+      } catch (error) {
+        throw error
+      }
     } else {
-      // Use fetch for cases without driveId
-      const response = await fetch(
-        `https://graph.microsoft.com/v1.0${
-          input?.folderId
-            ? `/me/drive/items/${input.folderId}/children`
-            : '/me/drive/root/children'
-        }?${new URLSearchParams({
-          ...expandParams,
-          ...(input?.cursor ? {$skiptoken: input.cursor} : {}),
-        })}`,
-        {
-          headers: {
-            // @ts-expect-error
-            Authorization: instance.clientOptions.headers?.authorization,
-          },
-        },
-      )
-      filesResponse = await response.json()
+      if (input?.cursor) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Pagination is only supported when specifying a drive_id',
+        })
+      }
+
+      const drivesResult = await sharepointAdapter.listDrives({
+        instance,
+        input: {},
+        ctx,
+      })
+
+      const allFilesPromises = drivesResult.items.map(async (drive: any) => {
+        try {
+          const endpoint = input?.folder_id
+            ? `/drives/{drive-id}/items/{driveItem-id}/children`
+            : `/drives/{drive-id}/root/children`
+
+          const response = await instance.GET(endpoint, {
+            params: {
+              path: {
+                'drive-id': drive.id,
+                'driveItem-id': input?.folder_id,
+              },
+              query: {
+                ...expandParams,
+                // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
+                $skiptoken: input?.cursor,
+              },
+            },
+          })
+          return response.data.value || []
+        } catch (error) {
+          return []
+        }
+      })
+
+      const allFilesArrays: any[][] = await Promise.all(allFilesPromises)
+      filesResponse = {
+        value: allFilesArrays.flat(),
+        '@odata.nextLink': undefined, // Pagination not supported when searching all drives
+      }
     }
 
     if (!filesResponse.value) {
@@ -177,82 +338,51 @@ export const sharepointAdapter = {
       items: filesResponse.value
         .filter((item: any) => item.file)
         .map(mappers.File),
-      cursor: extractCursor(filesResponse['@odata.nextLink']),
+      cursor: extractCursor(filesResponse['@odata.nextLink'] ?? ''),
     }
   },
 
-  getFile: async ({instance, input}) => {
-    const response = await fetch(
-      `https://graph.microsoft.com/v1.0/me/drive/items/${
-        input.id
-      }?${new URLSearchParams(expandParams)}`,
-      {
-        headers: {
-          // @ts-expect-error
-          Authorization: instance.clientOptions.headers?.authorization,
-        },
-      },
-    )
-    const res = await response.json()
-
-    if (!res) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'File not found',
-      })
-    }
-
-    return mappers.File(res)
+  getFile: async ({instance, input, ctx}) => {
+    const file = await getFileFromDrives({instance, input, ctx})
+    return mappers.File(file)
   },
 
-  exportFile: async ({instance, input}) => {
-    const response = await fetch(
-      `https://graph.microsoft.com/v1.0/me/drive/items/${input.id}`,
-      {
-        headers: {
-          // @ts-expect-error
-          Authorization: instance.clientOptions.headers?.authorization,
-        },
-      },
-    )
-    const res = await response.json()
-
-    if (!res || !res['@microsoft.graph.downloadUrl']) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'File not found or not downloadable',
-      })
-    }
-
-    const downloadResponse = await fetch(res['@microsoft.graph.downloadUrl'])
-    if (!downloadResponse.ok) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to download file',
-      })
-    }
-
-    if (!downloadResponse.body) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'No response body available',
-      })
-    }
-    return downloadResponse.body
+  exportFile: async () => {
+    throw new TRPCError({
+      code: 'NOT_IMPLEMENTED',
+      message: 'Export file is not available in Sharepoint',
+    })
   },
 
-  downloadFile: async ({instance, input}) => {
-    return exports.microsoftGraphAdapter.exportFile({instance, input})
+  downloadFile: async ({input, ctx}) => {
+    const {resHeaders, stream, status, error} = await downloadFileById({
+      fileId: input.id,
+      ctx,
+    })
+
+    if (status !== 200 || error || !stream) {
+      throw new TRPCError({
+        // @ts-expect-error
+        code: error?.code ?? 'INTERNAL_SERVER_ERROR',
+        message: error?.message ?? 'Failed to download file',
+      })
+    }
+
+    resHeaders?.forEach((value, key) => {
+      ctx.resHeaders.set(key, value)
+    })
+
+    return stream
   },
 
   listFolders: async ({instance, input}) => {
     let foldersResponse
 
-    if (input?.driveId) {
+    if (input?.drive_id) {
       // Use instance.GET for cases with driveId
       const res = await instance.GET('/drives/{drive-id}/root/children', {
         params: {
-          path: {'drive-id': input.driveId},
+          path: {'drive-id': input.drive_id},
           query: {
             $filter: 'folder ne null',
             // @ts-expect-error TODO: "$skiptoken is supported by the API but its not clear in the documentation
