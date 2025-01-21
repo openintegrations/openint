@@ -35,8 +35,12 @@ export function IntegrationSearch({
   const [categoryFilter, setCategoryFilter] = useState<string[]>([])
 
   const searchParams = useSearchParams()
-  const integration_id = searchParams.get('integration_id')
-  const connector_name = searchParams.get('connector_name')
+  const view = searchParams.get('view') ?? ''
+  const integrationIds = searchParams.get('integrationIds')
+  const connectorNames = searchParams.get('connectorNames')
+
+  const integrationIdList = integrationIds?.split(',') ?? []
+  const connectorNameList = connectorNames?.split(',') ?? []
 
   const debouncedSetSearch = useCallback((value: string) => {
     const timeoutId = setTimeout(() => {
@@ -54,8 +58,8 @@ export function IntegrationSearch({
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: debouncedSearchText,
-    integration_id: integration_id?.split(',') ?? [],
-    connector_name: connector_name?.split(','),
+    integrationIds: integrationIdList,
+    connectorNames: connectorNameList,
   })
   const ints = listIntegrationsRes.data?.items.map((int) => ({
     ...int,
@@ -109,6 +113,16 @@ export function IntegrationSearch({
   const onApplyFilter = (selected: string[]) => {
     setCategoryFilter(selected)
   }
+
+  const isDeeplinkView = view.split('-')[1] === 'deeplink' ?? false
+  const isFullIntegrationId = integrationIdList[0]?.includes('int_') ?? false
+  const hasRelatedIntegration = Boolean(
+    connectorNameList[0] &&
+      isFullIntegrationId &&
+      integrationIdList[0]?.includes(connectorNameList[0]),
+  )
+
+  const hasDeeplink = isDeeplinkView && hasRelatedIntegration
 
   return (
     <div className={cn('flex h-full flex-col', className)}>
@@ -188,6 +202,7 @@ export function IntegrationSearch({
                                 int.logo_url ?? int.ccfg.connector.logoUrl ?? ''
                               }
                               name={int.name}
+                              hasDeeplink={hasDeeplink}
                             />
                           )}
                         </WithConnectorConnect>
