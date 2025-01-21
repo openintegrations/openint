@@ -1,5 +1,5 @@
 import {Plus} from 'lucide-react'
-import {useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {Card, CardContent} from '../shadcn'
 import {
   Tooltip,
@@ -12,12 +12,22 @@ export function IntegrationCard({
   logo,
   name,
   onClick,
+  hasDeeplink,
 }: {
   logo: string
   name: string
   onClick: () => void
+  hasDeeplink: boolean
 }) {
   const [isHovered, setIsHovered] = useState(false)
+  const hasAutoConnected = useRef(false)
+
+  useEffect(() => {
+    if (!hasAutoConnected.current && hasDeeplink) {
+      hasAutoConnected.current = true
+      onClick()
+    }
+  }, [hasDeeplink, onClick])
 
   return (
     <TooltipProvider>

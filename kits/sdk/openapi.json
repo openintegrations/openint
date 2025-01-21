@@ -107,9 +107,28 @@
                     "type": ["string", "null"],
                     "description": "Where to send user to after connect / if they press back button"
                   },
-                  "connectorName": {
+                  "connectorNames": {
                     "type": ["string", "null"],
-                    "description": "Filter connector config by connector name"
+                    "description": "Filter integrations by comma separated connector names"
+                  },
+                  "integrationIds": {
+                    "type": ["string", "null"],
+                    "description": "Filter integrations by comma separated integration ids"
+                  },
+                  "theme": {
+                    "type": ["string", "null"],
+                    "enum": ["light", "dark"],
+                    "description": "Magic Link display theme"
+                  },
+                  "view": {
+                    "type": ["string", "null"],
+                    "enum": [
+                      "manage",
+                      "manage-deeplink",
+                      "add",
+                      "add-deeplink"
+                    ],
+                    "description": "Magic Link tab view"
                   },
                   "connectorConfigDisplayName": {
                     "type": ["string", "null"],
