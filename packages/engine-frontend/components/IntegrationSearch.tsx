@@ -35,7 +35,8 @@ export function IntegrationSearch({
   const [categoryFilter, setCategoryFilter] = useState<string[]>([])
 
   const searchParams = useSearchParams()
-  const integrationFilters = searchParams.get('integrationFilters')
+  const integration_id = searchParams.get('integration_id')
+  const connector_name = searchParams.get('connector_name')
 
   const debouncedSetSearch = useCallback((value: string) => {
     const timeoutId = setTimeout(() => {
@@ -53,7 +54,8 @@ export function IntegrationSearch({
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: debouncedSearchText,
-    customer_integration_filters: integrationFilters?.split(',') ?? [],
+    integration_id: integration_id?.split(',') ?? [],
+    connector_name: connector_name?.split(','),
   })
   const ints = listIntegrationsRes.data?.items.map((int) => ({
     ...int,

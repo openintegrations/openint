@@ -2460,7 +2460,8 @@ export interface operations {
         page_size?: number
         search_text?: string
         connector_config_ids?: string[]
-        customer_integration_filters?: string[]
+        connector_name?: string[]
+        integration_id?: string[]
       }
     }
     responses: {
