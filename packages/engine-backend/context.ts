@@ -52,6 +52,9 @@ export interface RouterContext {
 
   /** For vertical API calls */
   remoteConnectionId: Id['conn'] | null
+
+  /** For custom headers setting */
+  resHeaders: Headers
 }
 
 export interface ContextFactoryOptions<
