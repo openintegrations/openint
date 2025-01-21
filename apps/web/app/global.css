@@ -13,7 +13,7 @@
     --foreground: hsl(250, 12%, 20%);
 
     --muted: hsl(0, 0%, 95%);
-    --muted-foreground: hsl(235, 16%, 29%);
+    --muted-foreground: hsl(0, 0%, 27%);
 
     --popover: hsl(0, 0%, 100%);
     --popover-foreground: hsl(250, 12%, 20%);
@@ -76,17 +76,17 @@
     --background: hsl(0, 0, 11%);
     --foreground: hsl(0, 0%, 96.5%);
 
-    --muted: hsl(215, 50%, 61%);
+    --muted: hsla(0, 0%, 100%, 0.097);
     --muted-foreground: hsl(0, 0%, 60%);
 
-    --accent: hsl(220, 21%, 39%);
-    --accent-foreground: hsl(220, 35%, 92%);
+    --accent: hsla(0, 0%, 100%, 0.097);
+    --accent-foreground: hsla(0, 0%, 92%, 0.635);
 
     --popover: hsl(0, 0%, 14%);
     --popover-foreground: hsl(0, 0%, 96.5%);
 
     --border: hsl(0, 0%, 20%);
-    --input: hsl(220, 21%, 39%);
+    --input: hsla(0, 0%, 100%, 0.097);
 
     --card: hsl(0, 0%, 14%);
     --card-border: hsl(0, 0%, 20%);
@@ -101,7 +101,7 @@
     --destructive: hsl(7, 68%, 53%);
     --destructive-foreground: hsl(220, 35%, 92%);
 
-    --ring: hsl(220, 21%, 39%);
+    --ring: hsla(0, 0%, 100%, 0.097);
 
     --button: hsl(255, 90%, 66%);
     --button-light: hsl(255, 90%, 96%);
