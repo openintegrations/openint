@@ -56,16 +56,19 @@ export const proxyHandler = async (req: Request) => {
   }
 
   const connectorImplementedProxy = remoteContext.remote.connector.proxy
-  let res: Response | null = null
+  let response: Response | null = null
 
   if (connectorImplementedProxy) {
-    res = await connectorImplementedProxy(remoteContext.remote.instance, req)
+    response = await connectorImplementedProxy(
+      remoteContext.remote.instance,
+      req,
+    )
   } else if (isOpenAPIClient(remoteContext.remote.instance)) {
     const url = new URL(req.url)
     const prefix = url.protocol + '//' + url.host + '/api/proxy'
 
     const newUrl = req.url.replace(prefix, '')
-    res = await remoteContext.remote.instance
+    response = await remoteContext.remote.instance
       .request(req.method as HTTPMethod, newUrl, {
         body: req.body,
         headers: req.headers,
@@ -73,7 +76,7 @@ export const proxyHandler = async (req: Request) => {
       .then((r) => r.response)
   }
 
-  if (!res) {
+  if (!response) {
     return new Response(
       `Proxy not supported for connection: ${remoteContext.remoteConnectionId}`,
       {
@@ -83,13 +86,13 @@ export const proxyHandler = async (req: Request) => {
   }
 
   // TODO: move to stream based response
-  const resBody = await res.blob()
+  const resBody = await response.blob()
 
-  const headers = new Headers(res.headers)
+  const headers = new Headers(response.headers)
   headers.delete('content-encoding') // No more gzip at this point...
   headers.set('content-length', resBody.size.toString())
   return new Response(resBody, {
-    status: res.status,
+    status: response.status,
     headers,
   })
 }

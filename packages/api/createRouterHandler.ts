@@ -12,12 +12,20 @@ import {
   kApikeyUrlParam,
 } from '@openint/app-config/constants'
 import type {Id, UserId, Viewer} from '@openint/cdk'
-import {decodeApikey, makeJwtClient, zCustomerId, zId} from '@openint/cdk'
+import {
+  decodeApikey,
+  getRemoteContext,
+  makeJwtClient,
+  zCustomerId,
+  zId,
+} from '@openint/cdk'
 import type {RouterContext} from '@openint/engine-backend'
 import {envRequired} from '@openint/env'
+import {downloadFileById} from '@openint/unified-file-storage/adapters'
 import {
   BadRequestError,
   getHTTPResponseFromError,
+  getProtectedContext,
   isHttpError,
   TRPCError,
   z,
@@ -164,7 +172,6 @@ export const contextFromRequest = async ({
   }
   console.log('[contextFromRequest]', {url: req.url, viewer, connectionId})
   return {
-    resHeaders: new Headers(),
     ...context,
     remoteConnectionId: connectionId ?? null,
   }
@@ -189,6 +196,74 @@ export function createRouterTRPCHandler({
 
     return res
   }
+}
+
+type HttpMethod =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'PATCH'
+  | 'OPTIONS'
+  | 'HEAD'
+
+type SkipTrpcRoutes = {
+  [method in HttpMethod]?: {
+    [route: string]: (req: Request, ctx: RouterContext) => Promise<Response>
+  }
+}
+
+const skipTrpcRoutes: SkipTrpcRoutes = {
+  GET: {
+    '/api/v0/unified/file-storage/files/{fileId}/download': async (
+      req: Request,
+      ctx: RouterContext,
+    ) => {
+      if (!ctx.remoteConnectionId) {
+        throw new BadRequestError('No Connection Found')
+      }
+      const connection = await ctx.services.metaService.tables.connection.get(
+        ctx.remoteConnectionId,
+      )
+      if (!connection) {
+        throw new BadRequestError('No Connection Found For Download')
+      }
+
+      const urlParts = new URL(req.url).pathname.split('/')
+      const fileId = urlParts.filter((part) => part).slice(-2, -1)[0]
+
+      if (!fileId) {
+        throw new BadRequestError('No fileId found in path')
+      }
+
+      if (!(connection.connectorName in downloadFileById)) {
+        throw new BadRequestError(
+          `Download not supported for ${connection.connectorName}`,
+        )
+      }
+      const downloadFn =
+        downloadFileById[
+          connection.connectorName as keyof typeof downloadFileById
+        ]
+
+      // TODO: abstract so its not fetched in every handler
+      const protectedContext = getProtectedContext(ctx)
+      const remoteContext = await getRemoteContext(protectedContext)
+
+      const {resHeaders, status, error, stream} = await downloadFn({
+        fileId,
+        ctx: remoteContext,
+      })
+
+      if (status !== 200 || error || !stream) {
+        return new Response(JSON.stringify(error), {
+          status,
+        })
+      }
+
+      return new Response(stream, {status, headers: resHeaders})
+    },
+  },
 }
 
 export function createRouterOpenAPIHandler({
@@ -216,6 +291,21 @@ export function createRouterOpenAPIHandler({
     // Now handle for reals
     try {
       const context = await contextFromRequest({req})
+
+      const skipRoutes =
+        skipTrpcRoutes[req.method as keyof typeof skipTrpcRoutes]
+      if (skipRoutes) {
+        const pathname = new URL(req.url).pathname
+        for (const [route, handler] of Object.entries(skipRoutes)) {
+          const regex = new RegExp(
+            '^' + route.replace(/{[^}]+}/g, '[^/]+') + '$',
+          )
+          if (regex.test(pathname)) {
+            console.log('skipping trpc route', route)
+            return handler(req, context)
+          }
+        }
+      }
       // More aptly named handleOpenApiFetchRequest as it returns a response already
       const res = await createOpenApiFetchHandler({
         endpoint,
@@ -224,7 +314,8 @@ export function createRouterOpenAPIHandler({
         createContext: () => context,
         // TODO: handle error status code from passthrough endpoints
         // onError, // can only have side effect and not modify response error status code unfortunately...
-        responseMeta: ({errors, ctx: _ctx}) => {
+        responseMeta: ({errors, ctx: _ctx, data}) => {
+          console.log('res data', data)
           // Pass the status along
           for (const err of errors) {
             console.warn(
@@ -250,12 +341,14 @@ export function createRouterOpenAPIHandler({
       }
 
       for (const [k, v] of context.resHeaders.entries()) {
+        console.log('setting resHeader header', k, v)
         res.headers.set(k, v)
       }
 
       for (const [k, v] of Object.entries(corsHeaders)) {
         res.headers.set(k, v)
       }
+
       return res
     } catch (err) {
       console.error('[trpc.createRouterHandler] error', err)

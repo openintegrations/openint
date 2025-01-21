@@ -1300,6 +1300,7 @@ export interface components {
       description?: string | null
       updated_at?: string | null
       created_at?: string | null
+      raw_data?: unknown
     }
     /** @description A unified representation of a storage drive */
     'unified.drive': {
@@ -1308,6 +1309,7 @@ export interface components {
       description?: string | null
       updated_at?: string | null
       created_at?: string | null
+      raw_data?: unknown
     }
     /** @description A unified representation of a file */
     'unified.file': {
@@ -1327,6 +1329,7 @@ export interface components {
       export_formats?: string[] | null
       updated_at?: string | null
       created_at?: string | null
+      raw_data?: unknown
     }
     /** @description A unified representation of a folder */
     'unified.folder': {
@@ -1336,6 +1339,7 @@ export interface components {
       path: string
       updated_at?: string | null
       created_at?: string | null
+      raw_data?: unknown
     }
   }
   responses: never
@@ -5772,7 +5776,7 @@ export interface operations {
         sync_mode?: 'full' | 'incremental'
         cursor?: string | null
         page_size?: number
-        driveGroupId?: string
+        drive_group_id?: string
       }
     }
     responses: {
@@ -5813,8 +5817,8 @@ export interface operations {
         sync_mode?: 'full' | 'incremental'
         cursor?: string | null
         page_size?: number
-        driveId?: string
-        folderId?: string
+        drive_id?: string
+        folder_id?: string
       }
     }
     responses: {
@@ -5960,7 +5964,7 @@ export interface operations {
         sync_mode?: 'full' | 'incremental'
         cursor?: string | null
         page_size?: number
-        driveId?: string
+        drive_id?: string
       }
     }
     responses: {

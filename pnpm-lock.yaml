@@ -1639,9 +1639,6 @@ importers:
       '@openint/unified-crm':
         specifier: workspace:*
         version: link:../../unified/unified-crm
-      '@openint/unified-sync':
-        specifier: workspace:*
-        version: link:../../unified/unified-sync
       '@openint/unified-file-storage':
         specifier: workspace:*
         version: link:../../unified/unified-file-storage
@@ -1654,6 +1651,9 @@ importers:
       '@openint/unified-sales-engagement':
         specifier: workspace:*
         version: link:../../unified/unified-sales-engagement
+      '@openint/unified-sync':
+        specifier: workspace:*
+        version: link:../../unified/unified-sync
       '@openint/vdk':
         specifier: workspace:*
         version: link:../../kits/vdk
@@ -2361,20 +2361,14 @@ importers:
         specifier: 7.5.6
         version: 7.5.6
 
-  unified/unified-sync:
-    dependencies:
-      '@openint/connector-revert':
-        specifier: workspace:*
-        version: link:../../connectors/connector-revert
-      '@openint/vdk':
-        specifier: workspace:*
-        version: link:../../kits/vdk
-
   unified/unified-file-storage:
     dependencies:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/connector-google':
+        specifier: workspace:^
+        version: link:../../connectors/connector-google
       '@openint/connector-greenhouse':
         specifier: workspace:*
         version: link:../../connectors/connector-greenhouse
@@ -2430,6 +2424,15 @@ importers:
       '@opensdks/sdk-salesloft':
         specifier: 0.0.17
         version: 0.0.17
+
+  unified/unified-sync:
+    dependencies:
+      '@openint/connector-revert':
+        specifier: workspace:*
+        version: link:../../connectors/connector-revert
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
 packages:
 
@@ -20769,7 +20772,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0))(eslint@8.23.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -20814,7 +20817,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.23.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0))(eslint@8.23.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.5.3)(eslint@8.23.0)
       hasown: 2.0.0
       is-core-module: 2.13.1
       is-glob: 4.0.3

@@ -14,6 +14,7 @@ export const mappers = {
       description: 'description',
       updated_at: 'lastModifiedDateTime',
       created_at: 'createdDateTime',
+      raw_data: (record) => record,
     },
   ),
 
@@ -23,6 +24,7 @@ export const mappers = {
     description: 'description',
     updated_at: 'lastModifiedDateTime',
     created_at: 'createdDateTime',
+    raw_data: (record) => record,
   }),
 
   File: mapper(
@@ -43,6 +45,7 @@ export const mappers = {
       export_formats: () => null,
       updated_at: 'lastModifiedDateTime',
       created_at: 'createdDateTime',
+      raw_data: (record) => record,
     },
   ),
 
@@ -56,6 +59,7 @@ export const mappers = {
       path: (record) => record.parentReference?.path || '/',
       updated_at: 'lastModifiedDateTime',
       created_at: 'createdDateTime',
+      raw_data: (record) => record,
     },
   ),
 }
