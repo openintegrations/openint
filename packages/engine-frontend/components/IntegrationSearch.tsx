@@ -114,7 +114,7 @@ export function IntegrationSearch({
     setCategoryFilter(selected)
   }
 
-  const isDeeplinkView = view.split('-')[1] === 'deeplink' ?? false
+  const isDeeplinkView = view.split('-')[1] === 'deeplink'
   const isFullIntegrationId = integrationIdList[0]?.includes('int_') ?? false
   const hasRelatedIntegration = Boolean(
     connectorNameList[0] &&
