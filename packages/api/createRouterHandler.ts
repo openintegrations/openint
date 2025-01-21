@@ -164,6 +164,7 @@ export const contextFromRequest = async ({
   }
   console.log('[contextFromRequest]', {url: req.url, viewer, connectionId})
   return {
+    resHeaders: new Headers(),
     ...context,
     remoteConnectionId: connectionId ?? null,
   }
@@ -178,12 +179,15 @@ export function createRouterTRPCHandler({
 }) {
   return async (req: Request) => {
     const context = await contextFromRequest({req})
-    return fetchRequestHandler({
+
+    const res = await fetchRequestHandler({
       endpoint,
       req,
       router,
       createContext: () => context,
     })
+
+    return res
   }
 }
 
@@ -244,6 +248,11 @@ export function createRouterOpenAPIHandler({
       if (context.remoteConnectionId) {
         res.headers.set('x-connection-id', context.remoteConnectionId)
       }
+
+      for (const [k, v] of context.resHeaders.entries()) {
+        res.headers.set(k, v)
+      }
+
       for (const [k, v] of Object.entries(corsHeaders)) {
         res.headers.set(k, v)
       }
