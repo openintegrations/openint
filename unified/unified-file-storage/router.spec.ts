@@ -49,8 +49,8 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       expect(group.id).toBeTruthy()
       expect(group.name).toBeTruthy()
       expect(typeof group.name).toBe('string')
-      expect(group.raw_data).toBeTruthy()
-      expect(Object.keys(group.raw_data).length).toBeGreaterThan(0)
+      expect(group.raw_data as object).toBeTruthy()
+      expect(Object.keys(group.raw_data as object).length).toBeGreaterThan(0)
     }
   })
 
@@ -105,8 +105,8 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       expect(drive.id).toBeTruthy()
       expect(drive.name).toBeTruthy()
       expect(typeof drive.name).toBe('string')
-      expect(drive.raw_data).toBeTruthy()
-      expect(Object.keys(drive.raw_data).length).toBeGreaterThan(0)
+      expect(drive.raw_data as object).toBeTruthy()
+      expect(Object.keys(drive.raw_data as object).length).toBeGreaterThan(0)
     }
 
     // Test with driveGroupId if we have one
@@ -187,8 +187,8 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
         expect(file.name).toBeTruthy()
         expect(file.type).toBeTruthy()
         expect(typeof file.size).toBe('number')
-        expect(file.raw_data).toBeTruthy()
-        expect(Object.keys(file.raw_data).length).toBeGreaterThan(0)
+        expect(file.raw_data as object).toBeTruthy()
+        expect(Object.keys(file.raw_data as object).length).toBeGreaterThan(0)
       })
     }
 
@@ -201,8 +201,8 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       expect(typeof file.size).toBe('number')
       expect(typeof file.created_at).toBe('string')
       expect(typeof file.updated_at).toBe('string')
-      expect(file.raw_data).toBeTruthy()
-      expect(Object.keys(file.raw_data).length).toBeGreaterThan(0)
+      expect(file.raw_data as object).toBeTruthy()
+      expect(Object.keys(file.raw_data as object).length).toBeGreaterThan(0)
       console.log(
         `Test file ID set to: ${testFileId} ${file.name} ${file.type} ${
           file.size && file.size / 1024 / 1024
@@ -231,8 +231,8 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     expect(typeof res.data.size).toBe('number')
     expect(typeof res.data.created_at).toBe('string')
     expect(typeof res.data.updated_at).toBe('string')
-    expect(res.data.raw_data).toBeTruthy()
-    expect(Object.keys(res.data.raw_data).length).toBeGreaterThan(0)
+    expect(res.data.raw_data as object).toBeTruthy()
+    expect(Object.keys(res.data.raw_data as object).length).toBeGreaterThan(0)
 
     // Test invalid file ID
     await expect(
@@ -393,8 +393,8 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       expect(folder.path).toBeTruthy()
       expect(typeof folder.created_at).toBe('string')
       expect(typeof folder.updated_at).toBe('string')
-      expect(folder.raw_data).toBeTruthy()
-      expect(Object.keys(folder.raw_data).length).toBeGreaterThan(0)
+      expect(folder.raw_data as object).toBeTruthy()
+      expect(Object.keys(folder.raw_data as object).length).toBeGreaterThan(0)
     }
 
     // Test with driveId if available
