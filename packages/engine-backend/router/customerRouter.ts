@@ -43,18 +43,22 @@ export const zConnectPageParams = z.object({
       'Where to send user to after connect / if they press back button',
     ),
   // TODO: How to make sure we actually have a typed api here and can use zProviderName
-  connectorName: z
-    .string()
-    .nullish()
-    .describe('Filter connector config by connector name'),
-  connector_name: z
+  connectorNames: z
     .string()
     .nullish()
     .describe('Filter integrations by comma separated connector names'),
-  integration_id: z
+  integrationIds: z
     .string()
     .nullish()
     .describe('Filter integrations by comma separated integration ids'),
+  theme: z
+    .enum(['light', 'dark'])
+    .nullish()
+    .describe('Magic Link display theme'),
+  view: z
+    .enum(['manage', 'manage-deeplink', 'add', 'add-deeplink'])
+    .nullish()
+    .describe('Magic Link tab view'),
   connectorConfigDisplayName: z
     .string()
     .nullish()
@@ -160,8 +164,27 @@ export const customerRouter = trpc.router({
       const token = ctx.jwt.signViewer(asCustomer(ctx.viewer, {customerId}), {
         validityInSeconds,
       })
+      // Mapping integrationIds and connectorNames to a clean format removing any extra spaces
+      // and ensuring they are prefixed with int_ if they are in the format of connectorName_integrationId.
+      const mappedParams = {
+        ...params,
+        token,
+        integrationIds: params.integrationIds?.split(',').map((id) => {
+          const trimmedId = id.trim()
+
+          return trimmedId.includes('_') &&
+            trimmedId.split('_').length === 2 &&
+            !trimmedId.startsWith('int_')
+            ? `int_${trimmedId}`
+            : trimmedId
+        }),
+        connectorNames: params.connectorNames
+          ?.split(',')
+          .map((name) => name.trim()),
+      }
+
       const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
-      for (const [key, value] of Object.entries({...params, token})) {
+      for (const [key, value] of Object.entries(mappedParams)) {
         url.searchParams.set(key, `${value ?? ''}`)
       }
       return {url: url.toString()}

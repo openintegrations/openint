@@ -194,8 +194,8 @@ export const connectorRouter = trpc.mergeRouters(
         zPaginationParams.extend({
           search_text: z.string().optional(),
           connector_config_ids: z.array(z.string()).optional(),
-          connector_name: z.array(z.string()).optional(),
-          integration_id: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
+          connectorNames: z.array(z.string()).optional(),
+          integrationIds: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
         }),
       )
       .output(
@@ -248,12 +248,12 @@ export const connectorRouter = trpc.mergeRouters(
             .flatMap((int) => int.items)
             .filter((int) => {
               const connectorNameMatches =
-                !input.connector_name ||
-                input.connector_name.includes(int.connector_name)
+                !input.connectorNames ||
+                input.connectorNames.includes(int.connector_name)
 
               const integrationMatches =
-                !input.integration_id?.length ||
-                input.integration_id.some((filter) => int.id.includes(filter))
+                !input.integrationIds?.length ||
+                input.integrationIds.some((filter) => int.id.includes(filter))
 
               // Check if this integration is already connected
               const existingConnection = connections.find(
@@ -263,7 +263,7 @@ export const connectorRouter = trpc.mergeRouters(
                     conn.connectorConfigId === int.connector_config_id),
               )
 
-              const integrationWithinConnector = input.connector_name?.some(
+              const integrationWithinConnector = input.connectorNames?.some(
                 (connectorName) =>
                   int.id.includes(connectorName) && int.id.startsWith('int_'),
               )

@@ -17,6 +17,19 @@ import {ConnectionsTabContent} from './ConnectionsTabContent'
 
 type ConnectEventType = 'open' | 'close' | 'error'
 
+// Add these constants at the top level of the file, before the ConnectionPortal component
+const VIEW_BASE = {
+  ADD: 'add',
+  MANAGE: 'manage',
+} as const
+
+const getBaseView = (
+  view: string | null,
+): (typeof VIEW_BASE)[keyof typeof VIEW_BASE] => {
+  if (!view) return VIEW_BASE.MANAGE
+  return view.split('-')[0] as (typeof VIEW_BASE)[keyof typeof VIEW_BASE]
+}
+
 export function LoadingSpinner() {
   return (
     <div className="flex h-full min-h-[600px] flex-1 items-center justify-center">
@@ -113,6 +126,8 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           listConnectionsRes.isFetching ||
           listConnectionsRes.isRefetching
 
+        const baseView = getBaseView(searchParams?.get('view'))
+
         const tabConfig = [
           {
             key: 'manage',
@@ -157,8 +172,8 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
             <Tabs
               tabConfig={tabConfig}
               value={
-                searchParams?.get('view') ??
-                (connectionCount === 0 ? 'add' : 'manage')
+                baseView ??
+                (connectionCount === 0 ? VIEW_BASE.ADD : VIEW_BASE.MANAGE)
               }
               onValueChange={navigateToTab}
               className="flex h-full flex-col"
