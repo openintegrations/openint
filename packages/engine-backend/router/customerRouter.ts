@@ -47,6 +47,14 @@ export const zConnectPageParams = z.object({
     .string()
     .nullish()
     .describe('Filter connector config by connector name'),
+  connector_name: z
+    .string()
+    .nullish()
+    .describe('Filter integrations by comma separated connector names'),
+  integration_id: z
+    .string()
+    .nullish()
+    .describe('Filter integrations by comma separated integration ids'),
   connectorConfigDisplayName: z
     .string()
     .nullish()

@@ -111,6 +111,14 @@
                     "type": ["string", "null"],
                     "description": "Filter connector config by connector name"
                   },
+                  "connector_name": {
+                    "type": ["string", "null"],
+                    "description": "Filter integrations by comma separated connector names"
+                  },
+                  "integration_id": {
+                    "type": ["string", "null"],
+                    "description": "Filter integrations by comma separated integration ids"
+                  },
                   "connectorConfigDisplayName": {
                     "type": ["string", "null"],
                     "description": "Filter connector config by displayName "

@@ -1473,6 +1473,10 @@ export interface operations {
           redirectUrl?: string | null
           /** @description Filter connector config by connector name */
           connectorName?: string | null
+          /** @description Filter integrations by comma separated connector names */
+          connector_name?: string | null
+          /** @description Filter integrations by comma separated integration ids */
+          integration_id?: string | null
           /** @description Filter connector config by displayName */
           connectorConfigDisplayName?: string | null
           /** @description Must start with 'ccfg_' */
