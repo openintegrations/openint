@@ -50,9 +50,9 @@ export default async function ConnectPageContainer({
 
   // Implement shorthand for specifying only connectorConfigId by connectorName
   let connectorConfigId = params.connectorConfigId
-  if (!connectorConfigId && params.connectorName) {
+  if (!connectorConfigId && params.connectorNames) {
     let ints = await ssg.listConnectorConfigInfos.fetch({
-      connectorName: params.connectorName,
+      connectorName: params.connectorNames,
     })
     if (params.connectorConfigDisplayName) {
       ints = ints.filter(
@@ -63,11 +63,11 @@ export default async function ConnectPageContainer({
       connectorConfigId = ints[0]?.id
     } else if (ints.length < 1) {
       return (
-        <div>No connector config for {params.connectorName} configured</div>
+        <div>No connector config for {params.connectorNames} configured</div>
       )
     } else if (ints.length > 1) {
       console.warn(
-        `${ints.length} connector configs found for ${params.connectorName}`,
+        `${ints.length} connector configs found for ${params.connectorNames}`,
       )
     }
   }
@@ -113,7 +113,7 @@ export default async function ConnectPageContainer({
     // Switch to using react suspense / server fetch for this instead of prefetch
     ssg.listConnectorConfigInfos.prefetch({
       id: connectorConfigId,
-      connectorName: params.connectorName,
+      connectorName: params.connectorNames,
     }),
     params.showExisting ? ssg.listConnections.prefetch({}) : Promise.resolve(),
   ])

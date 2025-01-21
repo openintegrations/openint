@@ -1482,8 +1482,20 @@ export interface operations {
           displayName?: string | null
           /** @description Where to send user to after connect / if they press back button */
           redirectUrl?: string | null
-          /** @description Filter connector config by connector name */
-          connectorName?: string | null
+          /** @description Filter integrations by comma separated connector names */
+          connectorNames?: string | null
+          /** @description Filter integrations by comma separated integration ids */
+          integrationIds?: string | null
+          /**
+           * @description Magic Link display theme
+           * @enum {string|null}
+           */
+          theme?: 'light' | 'dark'
+          /**
+           * @description Magic Link tab view
+           * @enum {string|null}
+           */
+          view?: 'manage' | 'manage-deeplink' | 'add' | 'add-deeplink'
           /** @description Filter connector config by displayName */
           connectorConfigDisplayName?: string | null
           /** @description Must start with 'ccfg_' */
@@ -2471,7 +2483,8 @@ export interface operations {
         page_size?: number
         search_text?: string
         connector_config_ids?: string[]
-        customer_integration_filters?: string[]
+        connectorNames?: string[]
+        integrationIds?: string[]
       }
     }
     responses: {

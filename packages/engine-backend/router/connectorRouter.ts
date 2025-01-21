@@ -194,7 +194,8 @@ export const connectorRouter = trpc.mergeRouters(
         zPaginationParams.extend({
           search_text: z.string().optional(),
           connector_config_ids: z.array(z.string()).optional(),
-          customer_integration_filters: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
+          connectorNames: z.array(z.string()).optional(),
+          integrationIds: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
         }),
       )
       .output(
@@ -238,10 +239,6 @@ export const connectorRouter = trpc.mergeRouters(
           .createCaller(ctx)
           .listConnection()
 
-        const hasCustomerFilters =
-          input.customer_integration_filters &&
-          input.customer_integration_filters.length > 0
-
         // TODO: Implement filtering in each of the connectors instead?
 
         // integration should have connector name...
@@ -249,19 +246,36 @@ export const connectorRouter = trpc.mergeRouters(
           has_next_page: integrations.some((int) => int.has_next_page),
           items: integrations
             .flatMap((int) => int.items)
-            .filter(
-              (int) =>
-                !connections.some(
-                  (conn) =>
-                    (hasCustomerFilters &&
-                      !input.customer_integration_filters?.some((filter) =>
-                        int.id.includes(filter),
-                      )) ||
-                    (conn.integrationId === null &&
-                      conn.connectorConfigId === int.connector_config_id) ||
-                    conn.integrationId === int.id,
-                ),
-            ),
+            .filter((int) => {
+              const connectorNameMatches =
+                !input.connectorNames ||
+                input.connectorNames.includes(int.connector_name)
+
+              const integrationMatches =
+                !input.integrationIds?.length ||
+                input.integrationIds.some((filter) => int.id.includes(filter))
+
+              // Check if this integration is already connected
+              const existingConnection = connections.find(
+                (conn) =>
+                  conn.integrationId === int.id ||
+                  (conn.integrationId === null &&
+                    conn.connectorConfigId === int.connector_config_id),
+              )
+
+              const integrationWithinConnector = input.connectorNames?.some(
+                (connectorName) =>
+                  int.id.includes(connectorName) && int.id.startsWith('int_'),
+              )
+
+              return (
+                ((connectorNameMatches &&
+                  integrationMatches &&
+                  integrationWithinConnector) ||
+                  (connectorNameMatches && !integrationWithinConnector)) &&
+                !existingConnection
+              )
+            }),
           next_cursor: null, // Implement me...
         }
       }),
