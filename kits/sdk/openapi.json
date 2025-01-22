@@ -129,18 +129,6 @@
                       "add-deeplink"
                     ],
                     "description": "Magic Link tab view"
-                  },
-                  "connectorConfigDisplayName": {
-                    "type": ["string", "null"],
-                    "description": "Filter connector config by displayName "
-                  },
-                  "connectorConfigId": {
-                    "type": "string",
-                    "description": "Must start with 'ccfg_'"
-                  },
-                  "showExisting": {
-                    "type": "boolean",
-                    "default": true
                   }
                 }
               }
