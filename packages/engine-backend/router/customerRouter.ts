@@ -181,11 +181,15 @@ export const customerRouter = trpc.router({
         connectorNames: params.connectorNames
           ?.split(',')
           .map((name) => name.trim()),
+        theme: params.theme ?? 'light',
+        view: params.view ?? 'add',
       }
 
       const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
       for (const [key, value] of Object.entries(mappedParams)) {
-        url.searchParams.set(key, `${value ?? ''}`)
+        if (value) {
+          url.searchParams.set(key, `${value ?? ''}`)
+        }
       }
       return {url: url.toString()}
     }),
