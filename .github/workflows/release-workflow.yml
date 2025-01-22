@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  pull-requests: write
   contents: write
 
 jobs:
@@ -147,3 +148,11 @@ jobs:
           git fetch origin main
           git checkout main
           git push origin main:production -f
+      - name: Wait for 5 minutes for any remaining Vercel Main Branch Deployment that's in flight
+        run: sleep 300
+      - name: Stably Runner Action
+        id: stably-runner
+        uses: stablyhq/stably-runner-action@v3
+        with:
+          api-key: ${{ secrets.STABLY_API_KEY }}
+          test-group-id: cm5g8i6nc0005l103urkixuxz
