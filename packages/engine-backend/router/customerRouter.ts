@@ -59,14 +59,6 @@ export const zConnectPageParams = z.object({
     .enum(['manage', 'manage-deeplink', 'add', 'add-deeplink'])
     .nullish()
     .describe('Magic Link tab view'),
-  connectorConfigDisplayName: z
-    .string()
-    .nullish()
-    .describe('Filter connector config by displayName '),
-  /** Launch the conector with config right away */
-  connectorConfigId: zId('ccfg').optional(),
-  /** Whether to show existing connections */
-  showExisting: z.coerce.boolean().optional().default(true),
 })
 
 /**
@@ -181,11 +173,15 @@ export const customerRouter = trpc.router({
         connectorNames: params.connectorNames
           ?.split(',')
           .map((name) => name.trim()),
+        theme: params.theme ?? 'light',
+        view: params.view ?? 'add',
       }
 
       const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
       for (const [key, value] of Object.entries(mappedParams)) {
-        url.searchParams.set(key, `${value ?? ''}`)
+        if (value) {
+          url.searchParams.set(key, `${value ?? ''}`)
+        }
       }
       return {url: url.toString()}
     }),

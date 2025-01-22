@@ -249,10 +249,12 @@ export const connectorRouter = trpc.mergeRouters(
             .filter((int) => {
               const connectorNameMatches =
                 !input.connectorNames ||
+                input.connectorNames.length === 0 ||
                 input.connectorNames.includes(int.connector_name)
 
               const integrationMatches =
-                !input.integrationIds?.length ||
+                !input.integrationIds ||
+                input.integrationIds.length === 0 ||
                 input.integrationIds.some((filter) => int.id.includes(filter))
 
               // Check if this integration is already connected
