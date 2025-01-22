@@ -263,6 +263,55 @@ const skipTrpcRoutes: SkipTrpcRoutes = {
 
       return new Response(stream, {status, headers: resHeaders})
     },
+    '/api/v0/unified/file-storage/files/{fileId}/export': async (
+      req: Request,
+      ctx: RouterContext,
+    ) => {
+      if (!ctx.remoteConnectionId) {
+        throw new BadRequestError('No Connection Found')
+      }
+      const connection = await ctx.services.metaService.tables.connection.get(
+        ctx.remoteConnectionId,
+      )
+      if (!connection) {
+        throw new BadRequestError('No Connection Found For Download')
+      }
+
+      const urlParts = new URL(req.url).pathname.split('/')
+      const fileId = urlParts.filter((part) => part).slice(-2, -1)[0]
+
+      if (!fileId) {
+        throw new BadRequestError('No fileId found in path')
+      }
+
+      if (!(connection.connectorName in downloadFileById)) {
+        throw new BadRequestError(
+          `Export not supported for ${connection.connectorName}`,
+        )
+      }
+      const downloadFn =
+        downloadFileById[
+          connection.connectorName as keyof typeof downloadFileById
+        ]
+
+      // TODO: abstract so its not fetched in every handler
+      const protectedContext = getProtectedContext(ctx)
+      const remoteContext = await getRemoteContext(protectedContext)
+
+      const {resHeaders, status, error, stream} = await downloadFn({
+        fileId,
+        ctx: remoteContext,
+        exportFormat: new URL(req.url).searchParams.get('format') || undefined,
+      })
+
+      if (status !== 200 || error || !stream) {
+        return new Response(JSON.stringify(error), {
+          status,
+        })
+      }
+
+      return new Response(stream, {status, headers: resHeaders})
+    },
   },
 }
 

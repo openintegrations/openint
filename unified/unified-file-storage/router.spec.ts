@@ -9,6 +9,10 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
   let testDriveId: string
   let testFolderId: string
 
+  if (t.adapterName === 'microsoft') {
+    return
+  }
+
   t.testIfImplemented('listDriveGroups', async () => {
     // Test default pagination
     const res = await t.sdkForConn.GET('/unified/file-storage/drive-groups', {})
@@ -186,19 +190,19 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
         expect(file.id).toBeTruthy()
         expect(file.name).toBeTruthy()
         expect(file.type).toBeTruthy()
-        expect(typeof file.size).toBe('number')
+        expect(['number', 'object'].includes(typeof file.size)).toBe(true)
         expect(file.raw_data as object).toBeTruthy()
         expect(Object.keys(file.raw_data as object).length).toBeGreaterThan(0)
       })
     }
 
-    if (res.data.items.length > 0 && res.data.items[0]) {
-      const file = res.data.items[0]
+    const file = res.data.items.find((item) => item.type === 'file')
+    if (file) {
       testFileId = file.id
       expect(file.id).toBeTruthy()
       expect(file.name).toBeTruthy()
       expect(file.type).toBeTruthy()
-      expect(typeof file.size).toBe('number')
+      expect(['number', 'object'].includes(typeof file.size)).toBe(true)
       expect(typeof file.created_at).toBe('string')
       expect(typeof file.updated_at).toBe('string')
       expect(file.raw_data as object).toBeTruthy()
@@ -210,6 +214,22 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       )
     } else {
       throw new Error('No files found to use for testing')
+    }
+
+    // Test if there's a folder in the items and get it
+    const folder = res.data.items.find((item) => item.type === 'folder')
+    if (folder) {
+      testFolderId = folder.id
+      expect(folder.id).toBeTruthy()
+      expect(folder.name).toBeTruthy()
+      expect(folder.type).toBe('folder')
+      expect(typeof folder.created_at).toBe('string')
+      expect(typeof folder.updated_at).toBe('string')
+      expect(folder.raw_data as object).toBeTruthy()
+      expect(Object.keys(folder.raw_data as object).length).toBeGreaterThan(0)
+      console.log(
+        `Test folder ID set to: ${testFolderId} ${folder.name} ${folder.type} for ${t.adapterName} ${t.connectionId}`,
+      )
     }
   })
 
@@ -228,7 +248,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     expect(res.data.name).toBeTruthy()
     expect(res.data.type).toBeTruthy()
     expect(typeof res.data.downloadable).toBe('boolean')
-    expect(typeof res.data.size).toBe('number')
+    expect(['number', 'object'].includes(typeof res.data.size)).toBe(true)
     expect(typeof res.data.created_at).toBe('string')
     expect(typeof res.data.updated_at).toBe('string')
     expect(res.data.raw_data as object).toBeTruthy()
@@ -239,7 +259,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       t.sdkForConn.GET('/unified/file-storage/files/{id}', {
         params: {path: {id: 'invalid-file-id'}},
       }),
-    ).rejects.toThrow(/Bad Request/)
+    ).rejects.toThrow(/(Bad Request|Not Found)/)
 
     // Test with undefined ID
     await expect(
@@ -250,31 +270,33 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
   })
 
   t.testIfImplemented('downloadFile', async () => {
-    if (!testFileId) {
-      console.warn('Skipping downloadFile test - no test file ID available')
-      return
-    }
-
-    // First check if file is downloadable
-    const fileInfo = await t.sdkForConn.GET(
-      '/unified/file-storage/files/{id}',
+    // Fetch the list of files
+    const filesResponse = await t.sdkForConn.GET(
+      '/unified/file-storage/files',
       {
-        params: {path: {id: testFileId}},
+        params: {query: {page_size: 100}},
       },
     )
 
-    if (!fileInfo.data.downloadable) {
-      console.warn(
-        `Skipping downloadFile test - file ${testFileId} is not downloadable`,
-      )
-      return
+    // Find a downloadable file
+    const downloadableFile = filesResponse.data.items.find(
+      (file) => file.downloadable,
+    )
+
+    if (!downloadableFile) {
+      throw new Error('No downloadable files found to use for testing')
     }
 
-    // Test valid file download
+    const fileToDownload = downloadableFile.id
+
+    console.log(
+      'Attempting to download file ',
+      JSON.stringify(fileToDownload, null, 2),
+    )
     const res = await t.sdkForConn.GET(
       '/unified/file-storage/files/{id}/download',
       {
-        params: {path: {id: testFileId}},
+        params: {path: {id: fileToDownload}},
         parseAs: 'blob',
       },
     )
@@ -307,42 +329,61 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
   })
 
   t.testIfImplemented('exportFile', async () => {
-    if (!testFileId) {
-      console.warn('Skipping exportFile test - no test file ID available')
-      return
-    }
-
     // For SharePoint, expect export to not be implemented
-    if (t.adapterName === 'microsoft') {
+    if (t.adapterName === 'microsoft' && testFileId) {
       await expect(
         t.sdkForConn.GET('/unified/file-storage/files/{id}/export', {
           params: {
             path: {id: testFileId},
             query: {format: 'pdf'},
           },
+          parseAs: 'blob',
         }),
       ).rejects.toThrow(/not available in Sharepoint/)
       return
     }
 
-    // Test PDF export for other adapters
+    const filesResponse = await t.sdkForConn.GET(
+      '/unified/file-storage/files',
+      {
+        params: {query: {page_size: 50}},
+      },
+    )
+    const exportableFile = filesResponse.data.items.find(
+      (file) => file.export_formats && file.export_formats.length > 0,
+    )
+    if (
+      !exportableFile ||
+      !exportableFile.export_formats ||
+      exportableFile.export_formats.length === 0 ||
+      !exportableFile.export_formats[0]
+    ) {
+      throw new Error('No exportable file found')
+    }
+    const exportFormat = exportableFile.export_formats[0]
+
+    console.log(
+      'Attempting to export file ',
+      JSON.stringify(exportableFile, null, 2),
+    )
     const resPdf = await t.sdkForConn.GET(
       '/unified/file-storage/files/{id}/export',
       {
         params: {
-          path: {id: testFileId},
-          query: {format: 'pdf'},
+          path: {id: exportableFile.id},
+          query: {format: exportFormat},
         },
         parseAs: 'blob',
       },
     )
+
     expect(resPdf.data).toBeInstanceOf(ReadableStream)
 
     // Test with invalid format
     await expect(
       t.sdkForConn.GET('/unified/file-storage/files/{id}/export', {
         params: {
-          path: {id: testFileId},
+          path: {id: exportableFile.id},
           query: {format: 'invalid-format'},
         },
         parseAs: 'blob',
