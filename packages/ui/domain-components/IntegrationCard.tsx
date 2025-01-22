@@ -25,7 +25,9 @@ export function IntegrationCard({
   useEffect(() => {
     if (!hasAutoConnected.current && hasDeeplink) {
       hasAutoConnected.current = true
-      onClick()
+      setTimeout(() => {
+        onClick()
+      }, 500)
     }
   }, [hasDeeplink, onClick])
 
