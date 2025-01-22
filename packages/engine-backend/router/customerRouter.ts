@@ -59,14 +59,6 @@ export const zConnectPageParams = z.object({
     .enum(['manage', 'manage-deeplink', 'add', 'add-deeplink'])
     .nullish()
     .describe('Magic Link tab view'),
-  connectorConfigDisplayName: z
-    .string()
-    .nullish()
-    .describe('Filter connector config by displayName '),
-  /** Launch the conector with config right away */
-  connectorConfigId: zId('ccfg').optional(),
-  /** Whether to show existing connections */
-  showExisting: z.coerce.boolean().optional().default(true),
 })
 
 /**
