@@ -34,7 +34,7 @@ export interface paths {
     /** Create magic link */
     post: operations['createMagicLink']
   }
-  '/connect/file-picker-link': {
+  '/connect/file-picker': {
     /** Create file picker link */
     post: operations['createFilePickerLink']
   }

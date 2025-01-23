@@ -179,7 +179,7 @@
         }
       }
     },
-    "/connect/file-picker-link": {
+    "/connect/file-picker": {
       "post": {
         "operationId": "createFilePickerLink",
         "summary": "Create file picker link",

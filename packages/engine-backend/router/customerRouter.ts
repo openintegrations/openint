@@ -234,7 +234,7 @@ export const customerRouter = trpc.router({
     .meta({
       openapi: {
         method: 'POST',
-        path: '/connect/file-picker-link',
+        path: '/connect/file-picker',
         tags,
       },
     })
