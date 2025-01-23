@@ -115,6 +115,10 @@
                     "type": ["string", "null"],
                     "description": "Filter integrations by comma separated integration ids"
                   },
+                  "connectionId": {
+                    "type": ["string", "null"],
+                    "description": "Filter managed connections by connection id"
+                  },
                   "theme": {
                     "type": ["string", "null"],
                     "enum": ["light", "dark"],

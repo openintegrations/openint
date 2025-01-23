@@ -2,4 +2,5 @@
 export * from './ConnectorCard'
 export * from './DeprecatedIntegrationCard'
 export * from './ConnectionRawCard'
+export * from './ConnectionDetails'
 // codegen:end

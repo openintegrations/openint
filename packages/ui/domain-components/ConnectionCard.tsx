@@ -16,10 +16,12 @@ import {ConnectorLogo} from './ConnectorCard'
 export function ConnectionCard({
   onDelete,
   onReconnect,
+  onSelect,
   conn,
 }: {
   onDelete: ({id}: {id: string}) => void
   onReconnect: () => void
+  onSelect: () => void
   conn: {
     id: string
     pipelineIds: string[]
@@ -61,7 +63,9 @@ export function ConnectionCard({
         </div>
       )}
 
-      <CardContent className="flex h-full flex-col items-center justify-center p-4 py-2">
+      <CardContent
+        className="flex h-full flex-col items-center justify-center p-4 py-2"
+        onClick={onSelect}>
         <div className="relative flex size-full flex-col items-center justify-center gap-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="absolute right-0 top-0">
