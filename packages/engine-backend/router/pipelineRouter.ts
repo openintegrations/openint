@@ -69,17 +69,27 @@ export const pipelineRouter = trpc.router({
       return true as const
     }),
   listConnections: protectedProcedure
-    .input(zListParams.extend({customerId: zCustomerId.optional()}).optional())
+    .input(
+      zListParams
+        .extend({
+          customerId: zCustomerId.optional(),
+          connectionId: zId('conn').optional(),
+        })
+        .optional(),
+    )
     .query(async ({input = {}, ctx}) => {
       // Add info about what it takes to `reconnect` here for connections which
       const connections =
         await ctx.services.metaService.tables.connection.list(input)
+      const filteredConnections = input.connectionId
+        ? connections.filter((c) => c.id === input.connectionId)
+        : connections
       const [integrations, _pipelines] = await Promise.all([
         ctx.services.metaService.tables.integration.list({
-          ids: R.compact(connections.map((c) => c.integrationId)),
+          ids: R.compact(filteredConnections.map((c) => c.integrationId)),
         }),
         ctx.services.metaService.findPipelines({
-          connectionIds: connections.map((c) => c.id),
+          connectionIds: filteredConnections.map((c) => c.id),
         }),
         // We used to check connection health here, but we're moving it to async in future
         // ...connections.map((c) => performConnectionCheck(ctx, c.id, {})),
@@ -159,7 +169,7 @@ export const pipelineRouter = trpc.router({
             pipe.lastSyncCompletedAt &&
             pipe.lastSyncStartedAt > pipe.lastSyncCompletedAt),
       }))
-      return connections
+      return filteredConnections
         .map(parseConnection)
         .filter((r): r is NonNullable<typeof r> => !!r)
         .map((r) => {

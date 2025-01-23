@@ -51,6 +51,9 @@ export const zConnectPageParams = z.object({
     .string()
     .nullish()
     .describe('Filter integrations by comma separated integration ids'),
+  connectionId: zId('conn')
+    .nullish()
+    .describe('Filter managed connections by connection id'),
   theme: z
     .enum(['light', 'dark'])
     .nullish()

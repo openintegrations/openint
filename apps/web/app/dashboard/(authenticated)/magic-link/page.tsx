@@ -32,6 +32,7 @@ export default function MagicLinkPage() {
       'connectorConfigId',
       'connectorNames',
       'integrationIds',
+      'connectionId',
       'theme',
       'view',
       'showExisting',
@@ -110,6 +111,15 @@ export default function MagicLinkPage() {
       'ui:description': (
         <span className="text-sm text-gray-600">
           Filter integrations by comma separated integration ids
+        </span>
+      ),
+    },
+    connectionId: {
+      'ui:widget': showAdvanced ? 'text' : 'hidden',
+      'ui:title': <span className="font-semibold">Connection ID</span>,
+      'ui:description': (
+        <span className="text-sm text-gray-600">
+          Filter managed connections by connection id
         </span>
       ),
     },

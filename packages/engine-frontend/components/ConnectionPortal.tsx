@@ -54,10 +54,13 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const {theme, setTheme} = useTheme()
+  const connectionId = searchParams.get('connectionId')
 
   const {toast} = useToast()
   const ctx = _trpcReact.useContext()
-  const listConnectionsRes = _trpcReact.listConnections.useQuery({})
+  const listConnectionsRes = _trpcReact.listConnections.useQuery({
+    connectionId: connectionId ?? undefined,
+  })
 
   useEffect(() => {
     const themeParam = searchParams.get('theme')
@@ -124,7 +127,8 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         const isLoading =
           listConnectionsRes.isLoading ||
           listConnectionsRes.isFetching ||
-          listConnectionsRes.isRefetching
+          listConnectionsRes.isRefetching ||
+          deleteConnection.isLoading
 
         const baseView = getBaseView(searchParams?.get('view'))
 
