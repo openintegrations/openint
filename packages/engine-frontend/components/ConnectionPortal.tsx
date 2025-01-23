@@ -127,7 +127,8 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         const isLoading =
           listConnectionsRes.isLoading ||
           listConnectionsRes.isFetching ||
-          listConnectionsRes.isRefetching
+          listConnectionsRes.isRefetching ||
+          deleteConnection.isLoading
 
         const baseView = getBaseView(searchParams?.get('view'))
 
