@@ -1490,6 +1490,8 @@ export interface operations {
           connectorNames?: string | null
           /** @description Filter integrations by comma separated integration ids */
           integrationIds?: string | null
+          /** @description Filter managed connections by connection id */
+          connectionId?: string | null
           /**
            * @description Magic Link display theme
            * @enum {string|null}
