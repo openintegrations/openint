@@ -179,6 +179,158 @@
         }
       }
     },
+    "/connect/file-picker-link": {
+      "post": {
+        "operationId": "createFilePickerLink",
+        "summary": "Create file picker link",
+        "tags": ["Connect"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customerId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
+                  },
+                  "validityInSeconds": {
+                    "type": "number",
+                    "default": 2592000,
+                    "description": "How long the magic link will be valid for (in seconds) before it expires"
+                  },
+                  "theme": {
+                    "type": ["string", "null"],
+                    "enum": ["light", "dark"]
+                  },
+                  "multiSelect": {
+                    "type": ["boolean", "null"]
+                  },
+                  "folderSelect": {
+                    "type": ["boolean", "null"]
+                  },
+                  "themeColors": {
+                    "type": ["object", "null"],
+                    "properties": {
+                      "accent": {
+                        "type": ["string", "null"]
+                      },
+                      "background": {
+                        "type": ["string", "null"]
+                      },
+                      "border": {
+                        "type": ["string", "null"]
+                      },
+                      "button": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonLight": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonHover": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonStroke": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonSecondary": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonSecondaryForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonSecondaryStroke": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonSecondaryHover": {
+                        "type": ["string", "null"]
+                      },
+                      "card": {
+                        "type": ["string", "null"]
+                      },
+                      "cardForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "foreground": {
+                        "type": ["string", "null"]
+                      },
+                      "navbar": {
+                        "type": ["string", "null"]
+                      },
+                      "primary": {
+                        "type": ["string", "null"]
+                      },
+                      "primaryForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "secondary": {
+                        "type": ["string", "null"]
+                      },
+                      "secondaryForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "sidebar": {
+                        "type": ["string", "null"]
+                      },
+                      "tab": {
+                        "type": ["string", "null"]
+                      }
+                    }
+                  },
+                  "connectionId": {
+                    "type": "string"
+                  }
+                },
+                "required": ["connectionId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["url"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/core/customer/{id}": {
       "put": {
         "operationId": "upsertCustomer",

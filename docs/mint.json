@@ -59,6 +59,7 @@
           "pages": [
             "unified-apis/connect/create-connect-token",
             "unified-apis/connect/create-magic-link",
+            "unified-apis/connect/create-file-picker-link",
             "unified-apis/connect/list-events"
           ]
         },
