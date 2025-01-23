@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import {OpenIntConnectEmbed} from '../../../kits/connect/src/embed-react'
 
 export default function Home() {
@@ -10,7 +9,7 @@ export default function Home() {
       <OpenIntConnectEmbed
         baseUrl="http://localhost:4000"
         params={{
-          token: process.env.OPENINT_TOKEN,
+          token: process.env['OPENINT_TOKEN'],
           connectionId: 'conn_github_01JH6FR8H2E1G79HJVYEANYM7T',
           view: 'manage-deeplink',
           theme: 'light',
