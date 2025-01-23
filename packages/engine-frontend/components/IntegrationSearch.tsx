@@ -119,9 +119,10 @@ export function IntegrationSearch({
     integrationIdList.length === 1 && integrationIdList[0]?.includes('int_')
   const hasRelatedIntegration = Boolean(
     connectorNameList.length === 1 &&
-      connectorNameList[0] &&
-      isFullIntegrationId &&
-      integrationIdList[0]?.includes(connectorNameList[0]),
+      ((connectorNameList[0] &&
+        isFullIntegrationId &&
+        integrationIdList[0]?.includes(connectorNameList[0])) ||
+        (ints && ints.length === 1 && ints[0]?.ccfg.integrations.length === 0)),
   )
 
   const hasDeeplink = isDeeplinkView && hasRelatedIntegration
