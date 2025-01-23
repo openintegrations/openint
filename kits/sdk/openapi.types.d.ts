@@ -34,6 +34,10 @@ export interface paths {
     /** Create magic link */
     post: operations['createMagicLink']
   }
+  '/connect/file-picker': {
+    /** Create file picker link */
+    post: operations['createFilePickerLink']
+  }
   '/core/customer/{id}': {
     /** Upsert customer */
     put: operations['upsertCustomer']
@@ -1502,6 +1506,73 @@ export interface operations {
            * @enum {string|null}
            */
           view?: 'manage' | 'manage-deeplink' | 'add' | 'add-deeplink'
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            url: string
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Create file picker link */
+  createFilePickerLink: {
+    requestBody: {
+      content: {
+        'application/json': {
+          /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
+          customerId?: string
+          /**
+           * @description How long the magic link will be valid for (in seconds) before it expires
+           * @default 2592000
+           */
+          validityInSeconds?: number
+          /** @enum {string|null} */
+          theme?: 'light' | 'dark'
+          multiSelect?: boolean | null
+          folderSelect?: boolean | null
+          themeColors?: {
+            accent?: string | null
+            background?: string | null
+            border?: string | null
+            button?: string | null
+            buttonLight?: string | null
+            buttonForeground?: string | null
+            buttonHover?: string | null
+            buttonStroke?: string | null
+            buttonSecondary?: string | null
+            buttonSecondaryForeground?: string | null
+            buttonSecondaryStroke?: string | null
+            buttonSecondaryHover?: string | null
+            card?: string | null
+            cardForeground?: string | null
+            foreground?: string | null
+            navbar?: string | null
+            primary?: string | null
+            primaryForeground?: string | null
+            secondary?: string | null
+            secondaryForeground?: string | null
+            sidebar?: string | null
+            tab?: string | null
+          } | null
+          connectionId: string
         }
       }
     }

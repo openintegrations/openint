@@ -64,6 +64,45 @@ export const zConnectPageParams = z.object({
     .describe('Magic Link tab view'),
 })
 
+export const zFilePickerParams = z.object({
+  theme: z.enum(['light', 'dark']).nullish(),
+  multiSelect: z.boolean().nullish(),
+  folderSelect: z.boolean().nullish(),
+  themeColors: z
+    .object({
+      accent: z.string().nullish(),
+      background: z.string().nullish(),
+      border: z.string().nullish(),
+      button: z.string().nullish(),
+      buttonLight: z.string().nullish(),
+      buttonForeground: z.string().nullish(),
+      buttonHover: z.string().nullish(),
+      buttonStroke: z.string().nullish(),
+      buttonSecondary: z.string().nullish(),
+      buttonSecondaryForeground: z.string().nullish(),
+      buttonSecondaryStroke: z.string().nullish(),
+      buttonSecondaryHover: z.string().nullish(),
+      card: z.string().nullish(),
+      cardForeground: z.string().nullish(),
+      foreground: z.string().nullish(),
+      navbar: z.string().nullish(),
+      primary: z.string().nullish(),
+      primaryForeground: z.string().nullish(),
+      secondary: z.string().nullish(),
+      secondaryForeground: z.string().nullish(),
+      sidebar: z.string().nullish(),
+      tab: z.string().nullish(),
+    })
+    .nullish(),
+  connectionId: z.string(),
+  validityInSeconds: z
+    .number()
+    .default(30 * 24 * 60 * 60)
+    .describe(
+      'How long the magic link will be valid for (in seconds) before it expires',
+    ),
+})
+
 /**
  * Workaround to be able to re-use the schema on the frontend for now
  * @see https://github.com/trpc/trpc/issues/4295
@@ -80,6 +119,9 @@ export const customerRouterSchema = {
   createConnectToken: {input: zConnectTokenPayload},
   createMagicLink: {
     input: zConnectTokenPayload.merge(zConnectPageParams.omit({token: true})),
+  },
+  createFilePickerLink: {
+    input: zConnectTokenPayload.merge(zFilePickerParams),
   },
 } satisfies Record<string, {input?: z.ZodTypeAny; output?: z.ZodTypeAny}>
 
@@ -188,6 +230,53 @@ export const customerRouter = trpc.router({
       }
       return {url: url.toString()}
     }),
+  createFilePickerLink: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/connect/file-picker',
+        tags,
+      },
+    })
+    .input(customerRouterSchema.createFilePickerLink.input)
+    .output(z.object({url: z.string()}))
+    .mutation(
+      ({
+        input: {customerId, validityInSeconds, themeColors, ...params},
+        ctx,
+      }) => {
+        const token = ctx.jwt.signViewer(asCustomer(ctx.viewer, {customerId}), {
+          validityInSeconds,
+        })
+
+        const url = new URL('/connect/file-picker', ctx.apiUrl)
+        url.searchParams.set('token', token)
+        url.searchParams.set('connection_id', params.connectionId)
+        url.searchParams.set('theme', params.theme ?? 'light')
+        if (params.multiSelect) {
+          url.searchParams.set('multi_select', params.multiSelect.toString())
+        }
+        if (params.folderSelect) {
+          url.searchParams.set('folder_select', params.folderSelect.toString())
+        }
+
+        // Add theme colors if provided
+        if (themeColors) {
+          Object.entries(themeColors).forEach(([key, value]) => {
+            if (value) {
+              // Convert camelCase to snake_case for URL params
+              const paramKey = key.replace(
+                /[A-Z]/g,
+                (letter) => `_${letter.toLowerCase()}`,
+              )
+              url.searchParams.set(`theme_colors.${paramKey}`, value)
+            }
+          })
+        }
+
+        return {url: url.toString()}
+      },
+    ),
 
   // MARK: - Connect
   preConnect: protectedProcedure
