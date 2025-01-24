@@ -409,7 +409,7 @@ export const connectionRouter = trpc.router({
 
       // do not expand for now otherwise permission issues..
       let conn = await ctx.services.getConnectionOrFail(input.id)
-      const ccfg = await ctx.services.getConnectorConfigOrFail(
+      const ccfg = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(
         conn.connectorConfigId,
       )
 
@@ -437,6 +437,8 @@ export const connectionRouter = trpc.router({
 
       return {
         ...conn,
+        // NOTE: careful to not return the entire object as it has secrets
+        // and this method is open to end user auth
         connector_config: R.pick(ccfg, ['id', 'orgId', 'connectorName']),
       }
     }),
