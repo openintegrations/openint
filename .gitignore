@@ -68,3 +68,6 @@ dist/
 
 # CI Artifacts
 /artifacts
+
+# Next.js
+.next/

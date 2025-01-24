@@ -1,0 +1,46 @@
+{
+  "name": "unified-file-picker",
+  "version": "1.0.0",
+  "description": "A unified file picker for SharePoint and Google Drive",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "next build",
+    "build:lib": "tsc -p tsconfig.lib.json",
+    "dev": "next dev",
+    "lint": "eslint . --ext .ts,.tsx",
+    "prepublishOnly": "npm run build:lib",
+    "start": "next start",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.ts"
+    ]
+  },
+  "dependencies": {
+    "next": "^14.1.0",
+    "next-themes": "^0.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/uuid": "^8.3.3",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.27.1",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.0.0"
+  }
+}

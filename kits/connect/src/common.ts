@@ -16,7 +16,15 @@ export const defaultHost = 'https://app.openint.dev'
 
 export interface GetIFrameProps {
   baseUrl?: string | null
-  params?: {token?: string; displayName?: string}
+  params?: {
+    token?: string
+    displayName?: string
+    connectionId?: string
+    connectorNames?: string
+    integrationIds?: string
+    view?: 'add' | 'add-deeplink' | 'manage' | 'manage-deeplink'
+    theme?: 'light' | 'dark'
+  }
 }
 
 export const getIFrameUrl = ({
