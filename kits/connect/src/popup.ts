@@ -1,3 +1,4 @@
+import {type SelectedFile} from '@openint/open-file-picker/dist/types'
 import {zFrameMessage, type FrameMessage} from './common'
 
 export const OpenIntFrontend = {
@@ -52,6 +53,66 @@ export const OpenIntFrontend = {
           const res = zFrameMessage.safeParse(event.data)
           if (!res.success) {
             console.warn('Ignoring invalid message from popup', event.data)
+            return
+          }
+          window.removeEventListener('message', listener)
+          popup?.close()
+          if (res.data.type === 'SUCCESS') {
+            resolve(res.data.data)
+          } else {
+            reject(new Error(`${res.data.data.code}: ${res.data.data.message}`))
+          }
+        }
+        window.addEventListener('message', listener)
+      },
+    )
+  },
+  openFilePicker: async ({
+    url,
+    onSelect,
+    onClose,
+  }: {
+    url: string
+    onSelect?: (files: SelectedFile[]) => void
+    onClose?: () => void
+  }) => {
+    const features = {
+      ...popupLayout(500, 600),
+      scrollbars: 'yes',
+      resizable: 'yes',
+      status: 'no',
+      toolbar: 'no',
+      location: 'no',
+      copyhistory: 'no',
+      menubar: 'no',
+      directories: 'no',
+      popup: 'true',
+    }
+    const popup = window.open(url, '_blank', featuresToString(features))
+
+    return new Promise<Extract<FrameMessage, {type: 'SUCCESS'}>['data']>(
+      (resolve, reject) => {
+        const listener: Parameters<
+          typeof window.addEventListener<'message'>
+        >[1] = (event) => {
+          const res = zFrameMessage.safeParse(event.data)
+          if (!res.success) {
+            console.warn('Ignoring invalid message from popup', event.data)
+            return
+          }
+          if (event.data.type === 'onFilePickerSelect') {
+            // Call user-provided onSelect callback if it exists
+            if (onSelect) {
+              onSelect(event.data.files)
+            }
+            return
+          }
+
+          if (event.data.type === 'onFilePickerClose') {
+            // Call user-provided onClose callback if it exists
+            if (onClose) {
+              onClose()
+            }
             return
           }
           window.removeEventListener('message', listener)
