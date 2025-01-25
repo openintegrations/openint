@@ -14,16 +14,7 @@
       }
     ]
   },
-  "include": [
-    "src/**/*",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
-  "typeRoots": [
-    "node_modules/@types",
-    "src/extensions"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "typeRoots": ["node_modules/@types", "src/extensions"]
 }
