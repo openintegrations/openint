@@ -1,10 +1,10 @@
 import type React from 'react'
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {v4 as uuid} from 'uuid'
+import {Input} from '../..//components/ui/input'
 import {Spinner} from '../../components/Spinner'
 import {Button} from '../../components/ui/button'
 import {Checkbox} from '../../components/ui/checkbox'
-import {Input} from '../../components/ui/input'
 import {ScrollArea} from '../../components/ui/scroll-area'
 import {persistSelectedFilesOnConnection} from '../../openint'
 import type {
@@ -14,8 +14,6 @@ import type {
   SharepointConnectionDetails,
   ThemeColors,
 } from '../../types'
-// @ts-ignore for import svg
-import SharePointLogo from './../../../components/logos/sharepoint.svg'
 import {SharePointMessageManager} from './messages'
 
 interface SharePointPickerProps {
@@ -182,11 +180,15 @@ export const SharePointPicker: React.FC<SharePointPickerProps> = ({
   }, [fetchSites])
 
   const filteredSites = useMemo(() => {
-    return sites.filter(
-      (site) =>
-        site.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        site.url.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
+    const searchTerms = searchTerm.toLowerCase().split(/\s+/).filter(Boolean)
+
+    return sites.filter((site) => {
+      if (searchTerms.length === 0) return true
+
+      const siteText =
+        `${site.name} ${site.displayName} ${site.url}`.toLowerCase()
+      return searchTerms.every((term) => siteText.includes(term))
+    })
   }, [sites, searchTerm])
 
   const handleSiteSelect = useCallback((site: SharePointSite) => {
@@ -216,7 +218,12 @@ export const SharePointPicker: React.FC<SharePointPickerProps> = ({
         <>
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center">
-              <SharePointLogo style={logoStyle} />
+              <img
+                // Google one https://pub-c21f3f84c0e943f9806799a566ef9aff.r2.dev/file-picker-logos/google-drive.svg
+                src="https://pub-c21f3f84c0e943f9806799a566ef9aff.r2.dev/file-picker-logos/sharepoint.svg"
+                style={logoStyle}
+                alt="SharePoint logo"
+              />
               <p
                 className="text-xl font-bold"
                 style={{color: themeColors.primary}}>
