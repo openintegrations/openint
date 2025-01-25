@@ -1,7 +1,7 @@
 import {zFrameMessage, type FrameMessage} from './common'
 
 // TODO: import {SelectedFile} from '@openint/open-file-picker'
-type SelectedFile = {
+export type SelectedFile = {
   id: string
   name: string
   type: 'file' | 'folder'
