@@ -1,5 +1,13 @@
-import {type SelectedFile} from '@openint/open-file-picker'
 import {zFrameMessage, type FrameMessage} from './common'
+
+// TODO: import {SelectedFile} from '@openint/open-file-picker'
+type SelectedFile = {
+  id: string
+  name: string
+  type: 'file' | 'folder'
+  driveId: string | null
+  driveGroupId: string | null
+}
 
 export const OpenIntFrontend = {
   // TODO: import {Event as OpenIntEvent, zEvent} from '@openint/events'
