@@ -1,1 +1,2 @@
-export * from "./UnifiedFilePicker";
+export * from './UnifiedFilePicker'
+export * from './types'

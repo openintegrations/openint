@@ -1,4 +1,4 @@
-import {type SelectedFile} from '@openint/open-file-picker/dist/types'
+import {type SelectedFile} from '@openint/open-file-picker'
 import {zFrameMessage, type FrameMessage} from './common'
 
 export const OpenIntFrontend = {

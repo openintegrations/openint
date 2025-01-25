@@ -1,35 +1,35 @@
 export interface AuthObject {
   openIntFilePickerMagicLink: string
-  sharepoint?: Omit<SharepointConnectionDetails, "type">
-  googleDrive?: Omit<GoogleDriveConnectionDetails, "type">
+  sharepoint?: Omit<SharepointConnectionDetails, 'type'>
+  googleDrive?: Omit<GoogleDriveConnectionDetails, 'type'>
 }
 
 export type SharepointConnectionDetails = {
-  type: "sharepoint"
+  type: 'sharepoint'
   accessToken: string
   clientId: string
 }
 
 export type GoogleDriveConnectionDetails = {
-  type: "googledrive"
+  type: 'googledrive'
   accessToken: string
 }
 
-export type ConnectionDetails = SharepointConnectionDetails | GoogleDriveConnectionDetails;
+export type ConnectionDetails =
+  | SharepointConnectionDetails
+  | GoogleDriveConnectionDetails
 
 export interface FilePickerOptions {
   isOpen?: boolean
   onClose?: () => void
   onSelect?: (files: SelectedFile[]) => void
-  theme?: "light" | "dark"
+  theme?: 'light' | 'dark'
   colors?: ThemeColors
   multiselect?: boolean
   folderSelect?: boolean
 }
 
-
-
-export interface SelectedFile {
+export type SelectedFile = {
   id: string
   name: string
   type: 'file' | 'folder'
@@ -63,12 +63,12 @@ export interface PickerConfiguration {
     channelId: string
   }
   selection?: {
-    mode: "multiple" | "single"
+    mode: 'multiple' | 'single'
     maxCount?: number
   }
   typesAndSources?: {
-    mode: "all" | "files" | "folders"
-    pivots?: Array<"recent" | "shared" | "discover">
+    mode: 'all' | 'files' | 'folders'
+    pivots?: Array<'recent' | 'shared' | 'discover'>
   }
 }
 
@@ -146,4 +146,3 @@ export const defaultDarkThemeColors: Partial<ThemeColors> = {
   sidebar: 'hsl(0, 0%, 100%)',
   tab: 'hsl(0, 0%, 14%)',
 }
-
