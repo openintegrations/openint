@@ -65,7 +65,7 @@ export class SharePointMessageManager {
             this.port.start()
 
             this.port.addEventListener('message', (e) => {
-              console.log('Received message: type', e.data.type, e.data.data)
+              // console.log('Received message: type', e.data.type, e.data.data)
               this.handlePickerMessage(e)
             })
           }
@@ -85,7 +85,7 @@ export class SharePointMessageManager {
 
   private sendMessage(message: any) {
     if (this.port) {
-      console.log('Sending message:', message)
+      // console.log('Sending message:', message)
       this.port.postMessage(message)
     }
   }

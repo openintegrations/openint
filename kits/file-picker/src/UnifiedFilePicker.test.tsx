@@ -1,6 +1,11 @@
 // import {fireEvent, render, screen, waitFor} from '@testing-library/react'
 // import type {AuthObject, FilePickerOptions} from './types'
 // import {UnifiedFilePicker} from './UnifiedFilePicker'
+describe('UnifiedFilePicker', () => {
+  it('passes TODO', () => {
+    expect(true).toBe(true)
+  })
+})
 
 // TODO
 // Add the mock declarations

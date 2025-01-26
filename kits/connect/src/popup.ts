@@ -96,46 +96,33 @@ export const OpenIntFrontend = {
       directories: 'no',
       popup: 'true',
     }
-    console.log('Opening file picker', url)
     const popup = window.open(url, '_blank', featuresToString(features))
 
-    return new Promise<Extract<FrameMessage, {type: 'SUCCESS'}>['data']>(
-      (resolve, reject) => {
-        const listener: Parameters<
-          typeof window.addEventListener<'message'>
-        >[1] = (event) => {
-          const res = zFrameMessage.safeParse(event.data)
-          if (!res.success) {
-            console.warn('Ignoring invalid message from popup', event.data)
-            return
+    return new Promise<void>((resolve) => {
+      const listener: Parameters<
+        typeof window.addEventListener<'message'>
+      >[1] = (event) => {
+        if (event.data.type === 'onFilePickerSelect') {
+          // Call user-provided onSelect callback if it exists
+          if (onSelect) {
+            onSelect(event.data.files)
           }
-          if (event.data.type === 'onFilePickerSelect') {
-            // Call user-provided onSelect callback if it exists
-            if (onSelect) {
-              onSelect(event.data.files)
-            }
-            return
-          }
-
-          if (event.data.type === 'onFilePickerClose') {
-            // Call user-provided onClose callback if it exists
-            if (onClose) {
-              onClose()
-              popup?.close()
-            }
-            return
-          }
-          window.removeEventListener('message', listener)
-          popup?.close()
-          if (res.data.type === 'SUCCESS') {
-            resolve(res.data.data)
-          } else {
-            reject(new Error(`${res.data.data.code}: ${res.data.data.message}`))
-          }
+          return
         }
-        window.addEventListener('message', listener)
-      },
-    )
+
+        if (event.data.type === 'onFilePickerClose') {
+          // Call user-provided onClose callback if it exists
+          if (onClose) {
+            onClose()
+            popup?.close()
+            window.removeEventListener('message', listener)
+            resolve()
+          }
+          return
+        }
+      }
+      window.addEventListener('message', listener)
+    })
   },
 }
 
