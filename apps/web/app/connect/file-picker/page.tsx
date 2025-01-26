@@ -7,6 +7,7 @@ import {zConnectPageParams} from '@openint/engine-backend/router/customerRouter'
 import {ClientRoot} from '@/components/ClientRoot'
 import {SuperHydrate} from '@/components/SuperHydrate'
 import {createServerComponentHelpers} from '@/lib-server/server-component-helpers'
+import {FilePickerClient} from './client'
 
 export const metadata = {
   title: 'OpenInt Connection Management Portal',
@@ -56,7 +57,7 @@ export default async function PortalPage({
     <ClientRoot accessToken={viewer.accessToken} authStatus="success">
       <SuperHydrate dehydratedState={getDehydratedState()}>
         {/* <ColorConfig orgId={viewer.orgId} /> */}
-        <div>File picker WIP</div>
+        <FilePickerClient />
       </SuperHydrate>
     </ClientRoot>
   )

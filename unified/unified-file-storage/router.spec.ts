@@ -11,13 +11,13 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
   t.testIfImplemented('listDriveGroups', async () => {
     // Test default pagination
-    const res = await t.sdkForConn.GET('/unified/file-storage/drive-groups', {})
+    const res = await t.sdkForConn.GET('/unified/file-storage/drive-group', {})
     expect(res.data.items).toBeTruthy()
     expect(Array.isArray(res.data.items)).toBe(true)
 
     // Test with pagination params
     const resWithPagination = await t.sdkForConn.GET(
-      '/unified/file-storage/drive-groups',
+      '/unified/file-storage/drive-group',
       {
         params: {query: {page_size: 5}},
       },
@@ -30,7 +30,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       resWithPagination.data.next_cursor
     ) {
       const resWithCursor = await t.sdkForConn.GET(
-        '/unified/file-storage/drive-groups',
+        '/unified/file-storage/drive-group',
         {
           params: {
             query: {
@@ -58,7 +58,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     // First get a drive group ID for testing
     let testDriveGroupId: string | undefined
     const driveGroupsRes = await t.sdkForConn.GET(
-      '/unified/file-storage/drive-groups',
+      '/unified/file-storage/drive-group',
       {},
     )
     if (driveGroupsRes.data.items.length > 0 && driveGroupsRes.data.items[0]) {
@@ -66,13 +66,13 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     }
 
     // Test default listing
-    const res = await t.sdkForConn.GET('/unified/file-storage/drives', {})
+    const res = await t.sdkForConn.GET('/unified/file-storage/drive', {})
     expect(res.data.items).toBeTruthy()
     expect(Array.isArray(res.data.items)).toBe(true)
 
     // Test with pagination
     const resWithPagination = await t.sdkForConn.GET(
-      '/unified/file-storage/drives',
+      '/unified/file-storage/drive',
       {
         params: {query: {page_size: 5}},
       },
@@ -85,7 +85,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       resWithPagination.data.next_cursor
     ) {
       const resWithCursor = await t.sdkForConn.GET(
-        '/unified/file-storage/drives',
+        '/unified/file-storage/drive',
         {
           params: {
             query: {
@@ -112,7 +112,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     // Test with driveGroupId if we have one
     if (testDriveGroupId) {
       const resWithGroup = await t.sdkForConn.GET(
-        '/unified/file-storage/drives',
+        '/unified/file-storage/drive',
         {
           params: {
             query: {
@@ -129,13 +129,13 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
   t.testIfImplemented('listFiles', async () => {
     // Test default listing
-    const res = await t.sdkForConn.GET('/unified/file-storage/files')
+    const res = await t.sdkForConn.GET('/unified/file-storage/file')
     expect(res.data.items).toBeTruthy()
     expect(Array.isArray(res.data.items)).toBe(true)
 
     // Test with pagination
     const resWithPagination = await t.sdkForConn.GET(
-      '/unified/file-storage/files',
+      '/unified/file-storage/file',
       {
         params: {query: {page_size: 3}},
       },
@@ -148,7 +148,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       resWithPagination.data.next_cursor
     ) {
       const resWithCursor = await t.sdkForConn.GET(
-        '/unified/file-storage/files',
+        '/unified/file-storage/file',
         {
           params: {
             query: {
@@ -165,7 +165,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     if (testDriveId) {
       // Test files in specific drive
       const resWithDrive = await t.sdkForConn.GET(
-        '/unified/file-storage/files',
+        '/unified/file-storage/file',
         {
           params: {query: {drive_id: testDriveId}},
         },
@@ -176,7 +176,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     // Test files in specific folder if we have one
     if (testFolderId) {
       const resWithFolder = await t.sdkForConn.GET(
-        '/unified/file-storage/files',
+        '/unified/file-storage/file',
         {
           params: {query: {folder_id: testFolderId}},
         },
@@ -220,7 +220,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     }
 
     // Test valid file retrieval
-    const res = await t.sdkForConn.GET('/unified/file-storage/files/{id}', {
+    const res = await t.sdkForConn.GET('/unified/file-storage/file/{id}', {
       params: {path: {id: testFileId}},
     })
     expect(res.data).toBeTruthy()
@@ -236,14 +236,14 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
     // Test invalid file ID
     await expect(
-      t.sdkForConn.GET('/unified/file-storage/files/{id}', {
+      t.sdkForConn.GET('/unified/file-storage/file/{id}', {
         params: {path: {id: 'invalid-file-id'}},
       }),
     ).rejects.toThrow(/Bad Request/)
 
     // Test with undefined ID
     await expect(
-      t.sdkForConn.GET('/unified/file-storage/files/{id}', {
+      t.sdkForConn.GET('/unified/file-storage/file/{id}', {
         params: {path: {id: 'undefined'}},
       }),
     ).rejects.toThrow(/Not Found/)
@@ -256,12 +256,9 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     }
 
     // First check if file is downloadable
-    const fileInfo = await t.sdkForConn.GET(
-      '/unified/file-storage/files/{id}',
-      {
-        params: {path: {id: testFileId}},
-      },
-    )
+    const fileInfo = await t.sdkForConn.GET('/unified/file-storage/file/{id}', {
+      params: {path: {id: testFileId}},
+    })
 
     if (!fileInfo.data.downloadable) {
       console.warn(
@@ -272,7 +269,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
     // Test valid file download
     const res = await t.sdkForConn.GET(
-      '/unified/file-storage/files/{id}/download',
+      '/unified/file-storage/file/{id}/download',
       {
         params: {path: {id: testFileId}},
         parseAs: 'blob',
@@ -286,7 +283,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
     // const blob = await res.data
     // const buffer = Buffer.from(await blob.arrayBuffer())
-    // const fs = require('fs')
+    // const fs = require('f')
     // const path = require('path')
     // const downloadPath = path.join(filename)
     // fs.writeFileSync(downloadPath, buffer)
@@ -296,7 +293,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
     // Test invalid file ID
     const response = await t.sdkForConn.GET(
-      '/unified/file-storage/files/{id}/download',
+      '/unified/file-storage/file/{id}/download',
       {
         params: {path: {id: 'invalid-file-id'}},
         parseAs: 'blob',
@@ -315,7 +312,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     // For SharePoint, expect export to not be implemented
     if (t.adapterName === 'microsoft') {
       await expect(
-        t.sdkForConn.GET('/unified/file-storage/files/{id}/export', {
+        t.sdkForConn.GET('/unified/file-storage/file/{id}/export', {
           params: {
             path: {id: testFileId},
             query: {format: 'pdf'},
@@ -327,7 +324,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
     // Test PDF export for other adapters
     const resPdf = await t.sdkForConn.GET(
-      '/unified/file-storage/files/{id}/export',
+      '/unified/file-storage/file/{id}/export',
       {
         params: {
           path: {id: testFileId},
@@ -340,7 +337,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
     // Test with invalid format
     await expect(
-      t.sdkForConn.GET('/unified/file-storage/files/{id}/export', {
+      t.sdkForConn.GET('/unified/file-storage/file/{id}/export', {
         params: {
           path: {id: testFileId},
           query: {format: 'invalid-format'},
@@ -352,13 +349,13 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
 
   t.testIfImplemented('listFolders', async () => {
     // Test default listing
-    const res = await t.sdkForConn.GET('/unified/file-storage/folders', {})
+    const res = await t.sdkForConn.GET('/unified/file-storage/folder', {})
     expect(res.data.items).toBeTruthy()
     expect(Array.isArray(res.data.items)).toBe(true)
 
     // Test with pagination
     const resWithPagination = await t.sdkForConn.GET(
-      '/unified/file-storage/folders',
+      '/unified/file-storage/folder',
       {
         params: {query: {page_size: 5}},
       },
@@ -371,7 +368,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
       resWithPagination.data.next_cursor
     ) {
       const resWithCursor = await t.sdkForConn.GET(
-        '/unified/file-storage/folders',
+        '/unified/file-storage/folder',
         {
           params: {
             query: {
@@ -400,7 +397,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     // Test with driveId if available
     if (testDriveId) {
       const resWithDrive = await t.sdkForConn.GET(
-        '/unified/file-storage/folders',
+        '/unified/file-storage/folder',
         {
           params: {query: {drive_id: testDriveId}},
         },

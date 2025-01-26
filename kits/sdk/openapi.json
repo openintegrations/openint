@@ -283,7 +283,8 @@
                     }
                   },
                   "connectionId": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Must start with 'conn_'"
                   }
                 },
                 "required": ["connectionId"]
@@ -7590,7 +7591,7 @@
         }
       }
     },
-    "/unified/file-storage/drive-groups": {
+    "/unified/file-storage/drive-group": {
       "get": {
         "operationId": "fileStorage-listDriveGroups",
         "summary": "List drive groups",
@@ -7678,7 +7679,7 @@
         }
       }
     },
-    "/unified/file-storage/drives": {
+    "/unified/file-storage/drive": {
       "get": {
         "operationId": "fileStorage-listDrives",
         "summary": "List drives",
@@ -7773,7 +7774,7 @@
         }
       }
     },
-    "/unified/file-storage/files": {
+    "/unified/file-storage/file": {
       "get": {
         "operationId": "fileStorage-listFiles",
         "summary": "List files",
@@ -7875,7 +7876,7 @@
         }
       }
     },
-    "/unified/file-storage/files/{id}": {
+    "/unified/file-storage/file/{id}": {
       "get": {
         "operationId": "fileStorage-getFile",
         "summary": "Get file",
@@ -7934,7 +7935,7 @@
         }
       }
     },
-    "/unified/file-storage/files/{id}/export": {
+    "/unified/file-storage/file/{id}/export": {
       "get": {
         "operationId": "fileStorage-exportFile",
         "summary": "Export file",
@@ -7999,7 +8000,7 @@
         }
       }
     },
-    "/unified/file-storage/files/{id}/download": {
+    "/unified/file-storage/file/{id}/download": {
       "get": {
         "operationId": "fileStorage-downloadFile",
         "summary": "Download file",
@@ -8056,7 +8057,7 @@
         }
       }
     },
-    "/unified/file-storage/folders": {
+    "/unified/file-storage/folder": {
       "get": {
         "operationId": "fileStorage-listFolders",
         "summary": "List folders",

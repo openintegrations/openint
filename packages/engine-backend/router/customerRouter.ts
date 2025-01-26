@@ -94,7 +94,7 @@ export const zFilePickerParams = z.object({
       tab: z.string().nullish(),
     })
     .nullish(),
-  connectionId: z.string(),
+  connectionId: zId('conn'),
   validityInSeconds: z
     .number()
     .default(30 * 24 * 60 * 60)
@@ -241,13 +241,17 @@ export const customerRouter = trpc.router({
     .input(customerRouterSchema.createFilePickerLink.input)
     .output(z.object({url: z.string()}))
     .mutation(
-      ({
-        input: {customerId, validityInSeconds, themeColors, ...params},
-        ctx,
-      }) => {
-        const token = ctx.jwt.signViewer(asCustomer(ctx.viewer, {customerId}), {
-          validityInSeconds,
-        })
+      async ({input: {validityInSeconds, themeColors, ...params}, ctx}) => {
+        const connection = await ctx.services.getConnectionOrFail(
+          params.connectionId,
+        )
+
+        const token = ctx.jwt.signViewer(
+          asCustomer(ctx.viewer, {customerId: connection.customerId}),
+          {
+            validityInSeconds,
+          },
+        )
 
         const url = new URL('/connect/file-picker', ctx.apiUrl)
         url.searchParams.set('token', token)
