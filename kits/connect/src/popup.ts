@@ -79,31 +79,46 @@ export const OpenIntFrontend = {
     url,
     onSelect,
     onClose,
+    container,
   }: {
     url: string
     onSelect?: (files: SelectedFile[]) => void
     onClose?: () => void
+    container?: HTMLElement
   }) => {
-    const features = {
-      ...popupLayout(500, 600),
-      scrollbars: 'yes',
-      resizable: 'yes',
-      status: 'no',
-      toolbar: 'no',
-      location: 'no',
-      copyhistory: 'no',
-      menubar: 'no',
-      directories: 'no',
-      popup: 'true',
+    let popup: Window | null = null
+    let iframe: HTMLIFrameElement | null = null
+
+    if (container) {
+      // Create and insert iframe if container is provided
+      iframe = document.createElement('iframe')
+      iframe.src = url
+      iframe.style.width = '100%'
+      iframe.style.height = '100%'
+      iframe.style.border = 'none'
+      container.appendChild(iframe)
+    } else {
+      // Use popup if no container provided
+      const features = {
+        ...popupLayout(500, 600),
+        scrollbars: 'yes',
+        resizable: 'yes',
+        status: 'no',
+        toolbar: 'no',
+        location: 'no',
+        copyhistory: 'no',
+        menubar: 'no',
+        directories: 'no',
+        popup: 'true',
+      }
+      popup = window.open(url, '_blank', featuresToString(features))
     }
-    const popup = window.open(url, '_blank', featuresToString(features))
 
     return new Promise<void>((resolve) => {
       const listener: Parameters<
         typeof window.addEventListener<'message'>
       >[1] = (event) => {
         if (event.data.type === 'onFilePickerSelect') {
-          // Call user-provided onSelect callback if it exists
           if (onSelect) {
             onSelect(event.data.files)
           }
@@ -111,10 +126,12 @@ export const OpenIntFrontend = {
         }
 
         if (event.data.type === 'onFilePickerClose') {
-          // Call user-provided onClose callback if it exists
           if (onClose) {
             onClose()
             popup?.close()
+            if (iframe) {
+              iframe.remove()
+            }
             window.removeEventListener('message', listener)
             resolve()
           }
