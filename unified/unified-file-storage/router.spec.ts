@@ -347,7 +347,7 @@ describeEachAdapterConnections<FileStorageAdapter<unknown>>(adapters, (t) => {
     ).rejects.toThrow()
   })
 
-  t.testIfImplemented('listFolder', async () => {
+  t.testIfImplemented('listFolders', async () => {
     // Test default listing
     const res = await t.sdkForConn.GET('/unified/file-storage/folder', {})
     expect(res.data.items).toBeTruthy()
