@@ -11,7 +11,7 @@ export type SelectedFile = {
 
 export const OpenIntFrontend = {
   // TODO: import {Event as OpenIntEvent, zEvent} from '@openint/events'
-  listen: (callback: (event: any) => void) => {
+  listenConnectEvents: (callback: (event: any) => void) => {
     // Try to find specific iframe first
     const targetFrame =
       (window.frames as unknown as Record<string, Window>)[
