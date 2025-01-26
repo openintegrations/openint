@@ -96,6 +96,7 @@ export const OpenIntFrontend = {
       directories: 'no',
       popup: 'true',
     }
+    console.log('Opening file picker', url)
     const popup = window.open(url, '_blank', featuresToString(features))
 
     return new Promise<Extract<FrameMessage, {type: 'SUCCESS'}>['data']>(
@@ -120,6 +121,7 @@ export const OpenIntFrontend = {
             // Call user-provided onClose callback if it exists
             if (onClose) {
               onClose()
+              popup?.close()
             }
             return
           }
