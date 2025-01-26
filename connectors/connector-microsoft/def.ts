@@ -7,6 +7,7 @@ export const zConfig = oauthBaseSchema.connectorConfig
 const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
+  client_id: z.string().optional(),
 })
 
 export const microsoftSchemas = {

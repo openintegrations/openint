@@ -19,13 +19,13 @@ const procedure = verticalProcedure(adapters)
 
 export const fileStorageRouter = trpc.router({
   listDriveGroups: procedure
-    .meta(oapi({method: 'GET', path: '/drive-groups'}))
+    .meta(oapi({method: 'GET', path: '/drive-group'}))
     .input(zPaginationParams.nullish())
     .output(zPaginatedResult.extend({items: z.array(unified.DriveGroup)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
   listDrives: procedure
-    .meta(oapi({method: 'GET', path: '/drives'}))
+    .meta(oapi({method: 'GET', path: '/drive'}))
     .input(
       zPaginationParams
         .extend({
@@ -37,7 +37,7 @@ export const fileStorageRouter = trpc.router({
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
   listFiles: procedure
-    .meta(oapi({method: 'GET', path: '/files'}))
+    .meta(oapi({method: 'GET', path: '/file'}))
     .input(
       zPaginationParams
         .extend({
@@ -50,13 +50,13 @@ export const fileStorageRouter = trpc.router({
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
   getFile: procedure
-    .meta(oapi({method: 'GET', path: '/files/{id}'}))
+    .meta(oapi({method: 'GET', path: '/file/{id}'}))
     .input(z.object({id: z.string()}))
     .output(unified.File)
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
   exportFile: procedure
-    .meta(oapi({method: 'GET', path: '/files/{id}/export'}))
+    .meta(oapi({method: 'GET', path: '/file/{id}/export'}))
     .input(
       z.object({
         id: z.string(),
@@ -67,13 +67,13 @@ export const fileStorageRouter = trpc.router({
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
   downloadFile: procedure
-    .meta(oapi({method: 'GET', path: '/files/{id}/download'}))
+    .meta(oapi({method: 'GET', path: '/file/{id}/download'}))
     .input(z.object({id: z.string()}))
     .output(z.instanceof(ReadableStream)) // don't validate output
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
   listFolders: procedure
-    .meta(oapi({method: 'GET', path: '/folders'}))
+    .meta(oapi({method: 'GET', path: '/folder'}))
     .input(
       zPaginationParams
         .extend({

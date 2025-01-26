@@ -402,31 +402,31 @@ export interface paths {
     /** Write Data */
     post: operations['sync-write']
   }
-  '/unified/file-storage/drive-groups': {
+  '/unified/file-storage/drive-group': {
     /** List drive groups */
     get: operations['fileStorage-listDriveGroups']
   }
-  '/unified/file-storage/drives': {
+  '/unified/file-storage/drive': {
     /** List drives */
     get: operations['fileStorage-listDrives']
   }
-  '/unified/file-storage/files': {
+  '/unified/file-storage/file': {
     /** List files */
     get: operations['fileStorage-listFiles']
   }
-  '/unified/file-storage/files/{id}': {
+  '/unified/file-storage/file/{id}': {
     /** Get file */
     get: operations['fileStorage-getFile']
   }
-  '/unified/file-storage/files/{id}/export': {
+  '/unified/file-storage/file/{id}/export': {
     /** Export file */
     get: operations['fileStorage-exportFile']
   }
-  '/unified/file-storage/files/{id}/download': {
+  '/unified/file-storage/file/{id}/download': {
     /** Download file */
     get: operations['fileStorage-downloadFile']
   }
-  '/unified/file-storage/folders': {
+  '/unified/file-storage/folder': {
     /** List folders */
     get: operations['fileStorage-listFolders']
   }
@@ -1572,6 +1572,7 @@ export interface operations {
             sidebar?: string | null
             tab?: string | null
           } | null
+          /** @description Must start with 'conn_' */
           connectionId: string
         }
       }
