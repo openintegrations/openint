@@ -141,6 +141,22 @@ export const OpenIntFrontend = {
       window.addEventListener('message', listener)
     })
   },
+  listenFilePicker: ({
+    onSelect,
+    onClose,
+  }: {
+    onSelect: (files: SelectedFile[]) => void
+    onClose: () => void
+  }) => {
+    window.addEventListener('message', (event) => {
+      if (event.data.type === 'onFilePickerSelect') {
+        onSelect(event.data.files)
+      }
+      if (event.data.type === 'onFilePickerClose') {
+        onClose()
+      }
+    })
+  },
 }
 
 function popupLayout(expectedWidth: number, expectedHeight: number) {
