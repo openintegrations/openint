@@ -165,7 +165,7 @@ export class SharePointMessageManager {
 
   close() {
     if (this.pickerWindow) {
-      this.pickerWindow.close()
+      this.pickerWindow?.close()
     }
     if (this.onCloseCallback) {
       this.onCloseCallback()

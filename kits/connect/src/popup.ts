@@ -145,15 +145,15 @@ export const OpenIntFrontend = {
     onSelect,
     onClose,
   }: {
-    onSelect: (files: SelectedFile[]) => void
-    onClose: () => void
+    onSelect?: (files: SelectedFile[]) => void
+    onClose?: () => void
   }) => {
     window.addEventListener('message', (event) => {
       if (event.data.type === 'onFilePickerSelect') {
-        onSelect(event.data.files)
+        onSelect?.(event.data.files)
       }
       if (event.data.type === 'onFilePickerClose') {
-        onClose()
+        onClose?.()
       }
     })
   },

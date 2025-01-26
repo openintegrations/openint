@@ -230,21 +230,23 @@ export const SharePointPicker: React.FC<SharePointPickerProps> = ({
                 Select Site
               </p>
             </div>
-            <button
-              onClick={messageManager.close}
-              style={{
-                position: 'absolute',
-                top: '15px',
-                right: '15px',
-                background: 'none',
-                border: 'none',
-                fontSize: '18px',
-                cursor: 'pointer',
-                color: themeColors.foreground,
-              }}
-              aria-label="Close">
-              ×
-            </button>
+            {options.onClose && (
+              <button
+                onClick={messageManager.close}
+                style={{
+                  position: 'absolute',
+                  top: '15px',
+                  right: '15px',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '18px',
+                  cursor: 'pointer',
+                  color: themeColors.foreground,
+                }}
+                aria-label="Close">
+                ×
+              </button>
+            )}
           </div>
           <Input
             type="text"
@@ -268,8 +270,12 @@ export const SharePointPicker: React.FC<SharePointPickerProps> = ({
               {filteredSites.map((site) => (
                 <div
                   key={site.id}
-                  className="flex items-center p-2 hover:bg-gray-100"
-                  style={{borderBottomColor: themeColors.border}}>
+                  className="site-row flex items-center p-2"
+                  style={
+                    {
+                      '--hover-bg': themeColors.buttonSecondaryHover,
+                    } as React.CSSProperties
+                  }>
                   <Checkbox
                     id={`site-${site.id}`}
                     checked={selectedSite?.id === site.id}

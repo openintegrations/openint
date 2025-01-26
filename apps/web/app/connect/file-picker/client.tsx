@@ -18,6 +18,10 @@ export function FilePickerClient() {
     window.parent.postMessage({type: 'onFilePickerClose'}, '*')
   }, [])
 
+  if (!magicLink) {
+    return null
+  }
+
   return (
     <UnifiedFilePicker
       auth={{

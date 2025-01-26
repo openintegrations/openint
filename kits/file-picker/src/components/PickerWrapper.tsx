@@ -3,7 +3,6 @@ import type {ThemeColors} from '../types'
 
 interface PickerWrapperProps {
   isOpen: boolean
-  theme?: 'light' | 'dark'
   colors: ThemeColors
   children: React.ReactNode
 }

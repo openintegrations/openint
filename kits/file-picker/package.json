@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc -p tsconfig.json",
     "dev": "next dev",
     "lint": "eslint . --ext .ts,.tsx",
     "prepublishOnly": "npm run build:lib",
@@ -13,11 +13,6 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "typecheck": "tsc --noEmit"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.ts"
-    ]
   },
   "dependencies": {
     "@azure/msal-browser": "^4.0.2",

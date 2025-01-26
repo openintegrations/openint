@@ -7,6 +7,7 @@ import {Spinner} from './components/Spinner'
 import {fetchConnectionDetails} from './config'
 import {GoogleDrivePicker, SharePointPicker} from './pickers'
 import {
+  defaultDarkThemeColors,
   defaultThemeColors,
   type AuthObject,
   type ConnectionDetails,
@@ -84,19 +85,22 @@ export const UnifiedFilePicker: React.FC<{
     initialize()
   }, [auth])
 
-  // const themeColors =
-  //   options.theme === "light" ? defaultThemeColors : defaultDarkThemeColors;
+  const themeColors =
+    !options.theme || options.theme === 'light'
+      ? defaultThemeColors
+      : defaultDarkThemeColors
   const mergedColors = {
-    ...defaultThemeColors,
-    ...options.colors,
+    ...themeColors,
+    ...Object.fromEntries(
+      Object.entries(options.colors || {}).filter(
+        ([_, value]) => value && value !== '',
+      ),
+    ),
   } as ThemeColors
 
   if (!isInitialized && isLocalOpen) {
     return (
-      <PickerWrapper
-        isOpen={isLocalOpen}
-        theme={options.theme}
-        colors={mergedColors}>
+      <PickerWrapper isOpen={isLocalOpen} colors={mergedColors}>
         <div className="flex h-full items-center justify-center">
           <Spinner color={mergedColors.accent} />
         </div>
@@ -109,10 +113,7 @@ export const UnifiedFilePicker: React.FC<{
   }
 
   return (
-    <PickerWrapper
-      isOpen={isLocalOpen}
-      theme={options.theme}
-      colors={mergedColors}>
+    <PickerWrapper isOpen={isLocalOpen} colors={mergedColors}>
       {connectionDetails.type === 'sharepoint' ? (
         <SharePointPicker
           connectionDetails={connectionDetails}

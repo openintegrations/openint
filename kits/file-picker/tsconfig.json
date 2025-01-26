@@ -4,7 +4,6 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "noEmitOnError": true,
-    "noEmit": true,
     "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -14,7 +13,7 @@
       }
     ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"],
+  "include": ["src/**/*", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"],
   "typeRoots": ["node_modules/@types", "src/extensions"]
 }
