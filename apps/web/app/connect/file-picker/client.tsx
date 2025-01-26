@@ -2,7 +2,6 @@
 
 import {useCallback, useEffect, useState} from 'react'
 import {UnifiedFilePicker} from '@openint/open-file-picker'
-import {SelectedFile} from '@openint/open-file-picker/dist/types'
 
 export function FilePickerClient() {
   const [magicLink, setMagicLink] = useState<string>('')
@@ -11,7 +10,7 @@ export function FilePickerClient() {
     setMagicLink(window.location.href)
   }, [])
 
-  const onSelect = useCallback((files: SelectedFile[]) => {
+  const onSelect = useCallback((files: any[]) => {
     window.parent.postMessage({type: 'onFilePickerSelect', files}, '*')
   }, [])
 
