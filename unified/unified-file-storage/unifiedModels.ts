@@ -10,7 +10,7 @@ export const DriveGroup = z
     raw_data: z.any(),
   })
   .openapi({
-    ref: 'unified.drivegroup',
+    ref: 'file-storage.drivegroup',
     description: 'A unified representation of a drive group',
   })
 
@@ -24,7 +24,7 @@ export const Drive = z
     raw_data: z.any(),
   })
   .openapi({
-    ref: 'unified.drive',
+    ref: 'file-storage.drive',
     description: 'A unified representation of a storage drive',
   })
 
@@ -48,7 +48,7 @@ export const File = z
     raw_data: z.any(),
   })
   .openapi({
-    ref: 'unified.file',
+    ref: 'file-storage.file',
     description: 'A unified representation of a file',
   })
 
@@ -63,6 +63,6 @@ export const Folder = z
     raw_data: z.any(),
   })
   .openapi({
-    ref: 'unified.folder',
+    ref: 'file-storage.folder',
     description: 'A unified representation of a folder',
   })

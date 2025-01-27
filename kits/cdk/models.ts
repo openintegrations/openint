@@ -118,7 +118,7 @@ export const zLink = z
     'unified_crm',
     'custom_link_ag',
   ])
-  .openapi({ref: 'Link'})
+  .openapi({ref: 'core.link'})
 
 export const zRaw = {
   connector_config: zBase
@@ -170,7 +170,7 @@ export const zRaw = {
       env_name: z.string().nullish(),
       metadata: zMetadata,
     })
-    .openapi({ref: 'ConnectorConfig'}),
+    .openapi({ref: 'core.connector_config'}),
   connection: zBase
     .extend({
       id: zId('conn'),
@@ -184,7 +184,7 @@ export const zRaw = {
       disabled: z.boolean().optional(),
       metadata: zMetadata,
     })
-    .openapi({ref: 'Connection'}),
+    .openapi({ref: 'core.connection'}),
   pipeline: zBase
     .extend({
       id: zId('pipe'),
@@ -212,7 +212,7 @@ export const zRaw = {
       disabled: z.boolean().optional(),
       metadata: zMetadata,
     })
-    .openapi({ref: 'Pipeline'}),
+    .openapi({ref: 'core.pipeline'}),
   integration: zBase
     .extend({
       id: zId('int'),
@@ -220,7 +220,7 @@ export const zRaw = {
       standard: zStandard.integration.omit({id: true}).nullish(),
       external: z.record(z.unknown()).nullish(),
     })
-    .openapi({ref: 'Integration'}),
+    .openapi({ref: 'core.integration'}),
   // TODO: Add connection_attempts
   // TODO: Figure out how to add this later
   event: z
@@ -235,12 +235,12 @@ export const zRaw = {
       customer_id: zCustomerId.nullish(),
       user_id: zUserId.nullish(),
     })
-    .openapi({ref: 'Event'}),
+    .openapi({ref: 'core.event'}),
   // customer: zBase
   //   .extend({
   //     id: zCustomerId,
   //     org_id: zId('org'),
   //     metadata: z.unknown(),
   //   })
-  //   .openapi({ref: 'Customer'}),
+  //   .openapi({ref: 'core.customer'}),
 }

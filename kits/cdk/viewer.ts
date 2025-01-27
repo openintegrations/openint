@@ -30,7 +30,7 @@ export const zViewer = z
     }),
     z.object({role: z.literal(zRole.Enum.system)}),
   ])
-  .openapi({ref: 'Viewer'})
+  .openapi({ref: 'viewer'})
 
 export type ViewerRole = z.infer<typeof zRole>
 

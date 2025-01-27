@@ -563,7 +563,7 @@ export interface components {
         message: string
       }[]
     }
-    Connection: {
+    'core.connection': {
       created_at: string
       updated_at: string
       /** @description Must start with 'conn_' */
@@ -595,7 +595,7 @@ export interface components {
        */
       metadata?: unknown
     }
-    ConnectorConfig: {
+    'core.connector_config': {
       created_at: string
       updated_at: string
       /** @description Must start with 'ccfg_' */
@@ -618,14 +618,14 @@ export interface components {
           [key: string]: boolean
         } | null
         /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
-        links?: components['schemas']['Link'][] | null
+        links?: components['schemas']['core.link'][] | null
         /** @description Defaults to the org-wide postgres */
         destination_id?: string
       } | null
       /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
       default_pipe_in?: {
         /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
-        links?: components['schemas']['Link'][] | null
+        links?: components['schemas']['core.link'][] | null
         /** @description Must start with 'conn_' */
         source_id: string
       } | null
@@ -639,7 +639,7 @@ export interface components {
       metadata?: unknown
     }
     /** @enum {string} */
-    Link:
+    'core.link':
       | 'unified_banking'
       | 'prefix_connector_name'
       | 'single_table'
@@ -688,7 +688,7 @@ export interface components {
       } & components['schemas']['core.integration'],
       'connector_config_id'
     >
-    Pipeline: {
+    'core.pipeline': {
       created_at: string
       updated_at: string
       /** @description Must start with 'pipe_' */
@@ -723,7 +723,7 @@ export interface components {
        */
       metadata?: unknown
     }
-    Event: {
+    'core.event': {
       /** @description Must start with 'evt_' */
       id: string
       name: string
@@ -740,7 +740,7 @@ export interface components {
       /** @description Must start with 'user_' */
       user_id?: string | null
     }
-    Viewer: OneOf<
+    viewer: OneOf<
       [
         {
           /** @enum {string} */
@@ -1298,7 +1298,7 @@ export interface components {
       }
     }
     /** @description A unified representation of a drive group */
-    'unified.drivegroup': {
+    'file-storage.drivegroup': {
       id: string
       name: string
       description?: string | null
@@ -1307,7 +1307,7 @@ export interface components {
       raw_data?: unknown
     }
     /** @description A unified representation of a storage drive */
-    'unified.drive': {
+    'file-storage.drive': {
       id: string
       name: string
       description?: string | null
@@ -1316,7 +1316,7 @@ export interface components {
       raw_data?: unknown
     }
     /** @description A unified representation of a file */
-    'unified.file': {
+    'file-storage.file': {
       id: string
       name?: string | null
       description?: string | null
@@ -1336,7 +1336,7 @@ export interface components {
       raw_data?: unknown
     }
     /** @description A unified representation of a folder */
-    'unified.folder': {
+    'file-storage.folder': {
       id: string
       name: string
       description?: string | null
@@ -1768,7 +1768,7 @@ export interface operations {
               /** Format: uri */
               logoUrl: string
             } | null
-          } & components['schemas']['Connection'])[]
+          } & components['schemas']['core.connection'])[]
         }
       }
       /** @description Invalid input data */
@@ -1872,7 +1872,7 @@ export interface operations {
                 /** Format: uri */
                 logoUrl: string
               } | null
-            } & components['schemas']['Connection'],
+            } & components['schemas']['core.connection'],
             'connector_config'
           >
         }
@@ -1964,7 +1964,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Connection']
+          'application/json': components['schemas']['core.connection']
         }
       }
       /** @description Invalid input data */
@@ -2092,7 +2092,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['ConnectorConfig'][]
+          'application/json': components['schemas']['core.connector_config'][]
         }
       }
       /** @description Internal server error */
@@ -2123,14 +2123,14 @@ export interface operations {
               [key: string]: boolean
             } | null
             /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
-            links?: components['schemas']['Link'][] | null
+            links?: components['schemas']['core.link'][] | null
             /** @description Defaults to the org-wide postgres */
             destination_id?: string
           } | null
           /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
           default_pipe_in?: {
             /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
-            links?: components['schemas']['Link'][] | null
+            links?: components['schemas']['core.link'][] | null
             /** @description Must start with 'conn_' */
             source_id: string
           } | null
@@ -2146,7 +2146,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['ConnectorConfig']
+          'application/json': components['schemas']['core.connector_config']
         }
       }
       /** @description Invalid input data */
@@ -2174,7 +2174,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['ConnectorConfig']
+          'application/json': components['schemas']['core.connector_config']
         }
       }
       /** @description Invalid input data */
@@ -2260,7 +2260,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['ConnectorConfig']
+          'application/json': components['schemas']['core.connector_config']
         }
       }
       /** @description Invalid input data */
@@ -2602,7 +2602,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Pipeline'][]
+          'application/json': components['schemas']['core.pipeline'][]
         }
       }
       /** @description Invalid input data */
@@ -2655,7 +2655,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Pipeline']
+          'application/json': components['schemas']['core.pipeline']
         }
       }
       /** @description Invalid input data */
@@ -2737,7 +2737,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Pipeline']
+          'application/json': components['schemas']['core.pipeline']
         }
       }
       /** @description Invalid input data */
@@ -2833,7 +2833,7 @@ export interface operations {
           'application/json': {
             next_cursor?: string | null
             has_next_page: boolean
-            items: components['schemas']['Event'][]
+            items: components['schemas']['core.event'][]
           }
         }
       }
@@ -2863,7 +2863,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['Viewer']
+          'application/json': components['schemas']['viewer']
         }
       }
       /** @description Internal server error */
@@ -5810,7 +5810,7 @@ export interface operations {
           'application/json': {
             next_cursor?: string | null
             has_next_page: boolean
-            items: components['schemas']['unified.drivegroup'][]
+            items: components['schemas']['file-storage.drivegroup'][]
           }
         }
       }
@@ -5851,7 +5851,7 @@ export interface operations {
           'application/json': {
             next_cursor?: string | null
             has_next_page: boolean
-            items: components['schemas']['unified.drive'][]
+            items: components['schemas']['file-storage.drive'][]
           }
         }
       }
@@ -5893,7 +5893,7 @@ export interface operations {
           'application/json': {
             next_cursor?: string | null
             has_next_page: boolean
-            items: components['schemas']['unified.file'][]
+            items: components['schemas']['file-storage.file'][]
           }
         }
       }
@@ -5928,7 +5928,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': components['schemas']['unified.file']
+          'application/json': components['schemas']['file-storage.file']
         }
       }
       /** @description Invalid input data */
@@ -6039,7 +6039,7 @@ export interface operations {
           'application/json': {
             next_cursor?: string | null
             has_next_page: boolean
-            items: components['schemas']['unified.folder'][]
+            items: components['schemas']['file-storage.folder'][]
           }
         }
       }

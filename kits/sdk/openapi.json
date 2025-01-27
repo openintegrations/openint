@@ -562,7 +562,7 @@
                   "items": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Connection"
+                        "$ref": "#/components/schemas/core.connection"
                       }
                     ],
                     "type": "object",
@@ -688,7 +688,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Connection"
+                  "$ref": "#/components/schemas/core.connection"
                 }
               }
             }
@@ -828,7 +828,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Connection"
+                      "$ref": "#/components/schemas/core.connection"
                     }
                   ],
                   "type": "object",
@@ -1106,7 +1106,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ConnectorConfig"
+                    "$ref": "#/components/schemas/core.connector_config"
                   }
                 }
               }
@@ -1165,7 +1165,7 @@
                       "links": {
                         "type": ["array", "null"],
                         "items": {
-                          "$ref": "#/components/schemas/Link"
+                          "$ref": "#/components/schemas/core.link"
                         },
                         "description": "Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization."
                       },
@@ -1182,7 +1182,7 @@
                       "links": {
                         "type": ["array", "null"],
                         "items": {
-                          "$ref": "#/components/schemas/Link"
+                          "$ref": "#/components/schemas/core.link"
                         },
                         "description": "Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization."
                       },
@@ -1211,7 +1211,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConnectorConfig"
+                  "$ref": "#/components/schemas/core.connector_config"
                 }
               }
             }
@@ -1281,7 +1281,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConnectorConfig"
+                  "$ref": "#/components/schemas/core.connector_config"
                 }
               }
             }
@@ -1395,7 +1395,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConnectorConfig"
+                  "$ref": "#/components/schemas/core.connector_config"
                 }
               }
             }
@@ -1613,7 +1613,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Pipeline"
+                    "$ref": "#/components/schemas/core.pipeline"
                   }
                 }
               }
@@ -1705,7 +1705,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pipeline"
+                  "$ref": "#/components/schemas/core.pipeline"
                 }
               }
             }
@@ -1790,7 +1790,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pipeline"
+                  "$ref": "#/components/schemas/core.pipeline"
                 }
               }
             }
@@ -2039,7 +2039,7 @@
                     "items": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Event"
+                        "$ref": "#/components/schemas/core.event"
                       }
                     }
                   },
@@ -7621,7 +7621,7 @@
                     "items": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/unified.drivegroup"
+                        "$ref": "#/components/schemas/file-storage.drivegroup"
                       }
                     }
                   },
@@ -7716,7 +7716,7 @@
                     "items": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/unified.drive"
+                        "$ref": "#/components/schemas/file-storage.drive"
                       }
                     }
                   },
@@ -7818,7 +7818,7 @@
                     "items": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/unified.file"
+                        "$ref": "#/components/schemas/file-storage.file"
                       }
                     }
                   },
@@ -7881,7 +7881,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unified.file"
+                  "$ref": "#/components/schemas/file-storage.file"
                 }
               }
             }
@@ -8094,7 +8094,7 @@
                     "items": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/unified.folder"
+                        "$ref": "#/components/schemas/file-storage.folder"
                       }
                     }
                   },
@@ -8353,7 +8353,7 @@
           "issues": []
         }
       },
-      "Connection": {
+      "core.connection": {
         "type": "object",
         "properties": {
           "created_at": {
@@ -8425,7 +8425,7 @@
           "connector_config_id"
         ]
       },
-      "ConnectorConfig": {
+      "core.connector_config": {
         "type": "object",
         "properties": {
           "created_at": {
@@ -8469,7 +8469,7 @@
               "links": {
                 "type": ["array", "null"],
                 "items": {
-                  "$ref": "#/components/schemas/Link"
+                  "$ref": "#/components/schemas/core.link"
                 },
                 "description": "Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization."
               },
@@ -8486,7 +8486,7 @@
               "links": {
                 "type": ["array", "null"],
                 "items": {
-                  "$ref": "#/components/schemas/Link"
+                  "$ref": "#/components/schemas/core.link"
                 },
                 "description": "Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization."
               },
@@ -8513,7 +8513,7 @@
           "org_id"
         ]
       },
-      "Link": {
+      "core.link": {
         "type": "string",
         "enum": [
           "unified_banking",
@@ -8595,7 +8595,7 @@
         },
         "required": ["connector_config_id"]
       },
-      "Pipeline": {
+      "core.pipeline": {
         "type": "object",
         "properties": {
           "created_at": {
@@ -8666,7 +8666,7 @@
         },
         "required": ["created_at", "updated_at", "id"]
       },
-      "Event": {
+      "core.event": {
         "type": "object",
         "properties": {
           "id": {
@@ -8702,7 +8702,7 @@
         },
         "required": ["id", "name", "timestamp"]
       },
-      "Viewer": {
+      "viewer": {
         "oneOf": [
           {
             "type": "object",
@@ -10142,7 +10142,7 @@
         "required": ["id"],
         "description": "A candidate for a job"
       },
-      "unified.drivegroup": {
+      "file-storage.drivegroup": {
         "type": "object",
         "properties": {
           "id": {
@@ -10165,7 +10165,7 @@
         "required": ["id", "name"],
         "description": "A unified representation of a drive group"
       },
-      "unified.drive": {
+      "file-storage.drive": {
         "type": "object",
         "properties": {
           "id": {
@@ -10188,7 +10188,7 @@
         "required": ["id", "name"],
         "description": "A unified representation of a storage drive"
       },
-      "unified.file": {
+      "file-storage.file": {
         "type": "object",
         "properties": {
           "id": {
@@ -10245,7 +10245,7 @@
         "required": ["id", "type", "downloadable", "permissions", "exportable"],
         "description": "A unified representation of a file"
       },
-      "unified.folder": {
+      "file-storage.folder": {
         "type": "object",
         "properties": {
           "id": {
