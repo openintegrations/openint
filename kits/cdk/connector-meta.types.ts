@@ -125,7 +125,7 @@ export interface ConnectionUpdate<
   connectionExternalId: ExternalId
   // Can we inherit types used by metaLinks?
   /** If missing it means do not change the userId... */
-  customerId?: CustomerId | null
+  customer_id?: CustomerId | null
 
   source$?: Source<TEntity>
   triggerDefaultSync?: boolean

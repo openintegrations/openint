@@ -223,7 +223,7 @@ export const connectionRouter = trpc.router({
             options: {},
           })),
           // TODO: Fix me up
-          customerId:
+          customer_id:
             ctx.viewer.role === 'customer' ? ctx.viewer.customer_id : null,
         } satisfies ConnectionUpdate
         await ctx.asOrgIfNeeded._syncConnectionUpdate(int, connUpdate)
@@ -528,7 +528,7 @@ export const connectionRouter = trpc.router({
       const connSync = await ctx.asOrgIfNeeded._syncConnectionUpdate(
         conn.connector_config,
         {
-          customerId: conn.customer_id,
+          customer_id: conn.customer_id,
           settings: conn.settings,
           connectionExternalId: extractId(conn.id)[2],
           integration: conn.integration && {

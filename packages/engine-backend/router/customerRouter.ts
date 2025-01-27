@@ -357,20 +357,25 @@ export const customerRouter = trpc.router({
         input: [input, ccfgId, {connectionExternalId, ...connCtxInput}],
         ctx,
       }) => {
-        const int = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
-        console.log('didConnect start', int.connector.name, input, connCtxInput)
+        const ccfg = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
+        console.log(
+          'didConnect start',
+          ccfg.connector.name,
+          input,
+          connCtxInput,
+        )
 
         // TODO: we should make it possible for oauth connectors to
         // ALSO handle custom postConnect... This would be very handy for xero for instance
         const connUpdate = await (async () => {
           if (
-            !int.connector.postConnect &&
-            int.connector.metadata?.nangoProvider
+            !ccfg.connector.postConnect &&
+            ccfg.connector.metadata?.nangoProvider
           ) {
             return (await makeOauthConnectorServer({
               nangoClient: ctx.nango,
               ccfgId,
-              nangoProvider: int.connector.metadata.nangoProvider,
+              nangoProvider: ccfg.connector.metadata.nangoProvider,
             }).postConnect(input as OauthBaseTypes['connectOutput'])) as Omit<
               ConnectionUpdate<any, any>,
               'customerId'
@@ -378,20 +383,20 @@ export const customerRouter = trpc.router({
           }
 
           if (
-            !int.connector.postConnect ||
-            !int.connector.schemas.connectOutput
+            !ccfg.connector.postConnect ||
+            !ccfg.connector.schemas.connectOutput
           ) {
             return null
           }
 
           const conn = connectionExternalId
             ? await ctx.services.getConnectionOrFail(
-                makeId('conn', int.connector.name, connectionExternalId),
+                makeId('conn', ccfg.connector.name, connectionExternalId),
               )
             : undefined
 
           if (
-            int.connector &&
+            ccfg.connector &&
             conn &&
             !conn.integration_id &&
             connCtxInput.integrationId
@@ -400,9 +405,9 @@ export const customerRouter = trpc.router({
             conn.integration_id = connCtxInput.integrationId
           }
 
-          return await int.connector.postConnect(
-            int.connector.schemas.connectOutput.parse(input),
-            int.config,
+          return await ccfg.connector.postConnect(
+            ccfg.connector.schemas.connectOutput.parse(input),
+            ccfg.config,
             {
               ...connCtxInput,
               extCustomerId: ctx.extCustomerId,
@@ -412,9 +417,9 @@ export const customerRouter = trpc.router({
                 : undefined,
               webhookBaseUrl: joinPath(
                 ctx.apiUrl,
-                parseWebhookRequest.pathOf(int.id),
+                parseWebhookRequest.pathOf(ccfg.id),
               ),
-              redirectUrl: ctx.getRedirectUrl?.(int, {
+              redirectUrl: ctx.getRedirectUrl?.(ccfg, {
                 customerId:
                   ctx.viewer.role === 'customer'
                     ? ctx.viewer.customer_id
@@ -447,10 +452,10 @@ export const customerRouter = trpc.router({
         // )
 
         const {connection_id: connectionId} =
-          await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
+          await ctx.asOrgIfNeeded._syncConnectionUpdate(ccfg, {
             ...connUpdate,
             // No need for each connector to worry about this, unlike in the case of handleWebhook.
-            customerId:
+            customer_id:
               ctx.viewer.role === 'customer' ? ctx.viewer.customer_id : null,
             triggerDefaultSync,
             settings: {
@@ -472,7 +477,7 @@ export const customerRouter = trpc.router({
         }
         console.log(
           'didConnect finish',
-          int.connector.name,
+          ccfg.connector.name,
           input,
           `syncInBackground: ${syncInBackground}`,
           `triggerDefaultSync: ${triggerDefaultSync}`,

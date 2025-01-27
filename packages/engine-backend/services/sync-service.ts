@@ -65,7 +65,9 @@ export function makeSyncService({
     const createdIds: Array<Id['pipe']> = []
     let defaultDestId = conn.connector_config?.default_pipe_out?.destination_id
     if (!defaultDestId) {
-      const org = await authProvider.getOrganization(conn.connector_config.id)
+      const org = await authProvider.getOrganization(
+        conn.connector_config.org_id,
+      )
       if (org.publicMetadata.database_url) {
         const dCcfgId = makeId('ccfg', 'postgres', 'default_' + org.id)
         defaultDestId = makeId('conn', 'postgres', 'default_' + org.id)
@@ -439,14 +441,14 @@ export function makeSyncService({
   const _syncConnectionUpdate = async (
     int: _ConnectorConfig,
     {
-      customerId,
+      customer_id,
       settings,
       integration,
       ...connUpdate
     }: ConnectionUpdate<AnyEntityPayload, {}>,
   ) => {
     console.log('[_syncConnectionUpdate]', int.id, {
-      customerId,
+      customerId: customer_id,
       settings,
       integration,
       ...connUpdate,
@@ -458,7 +460,7 @@ export function makeSyncService({
     )
     await metaLinks
       .handlers({
-        connection: {id, connector_config_id: int.id, customer_id: customerId},
+        connection: {id, connector_config_id: int.id, customer_id: customer_id},
       })
       .connUpdate({id, settings, integration})
 

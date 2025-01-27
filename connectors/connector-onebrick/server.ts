@@ -60,7 +60,7 @@ export const onebrickServerConnector = {
     // onebrick connection, and whether they could be rotated...
     return helpers._webhookReturn(md5Hash(accessToken), {
       settings: helpers.connectionSettings.parse({accessToken}),
-      customerId: zCustomerId.parse(userId),
+      customer_id: zCustomerId.parse(userId),
       triggerDefaultSync: true,
     })
   },
