@@ -105,7 +105,7 @@ export function ConnectorConfigSheet({
 
   const connectionsRes = _trpcReact.listConnection.useQuery(
     {
-      connectorConfigId: ccfg?.id,
+      connector_config_id: ccfg?.id,
     },
     {
       cacheTime: 0,
@@ -129,7 +129,7 @@ export function ConnectorConfigSheet({
         position="right"
         size="lg"
         className="flex flex-col bg-background relative">
-        
+
         {isSubmitting && (
           <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
             <Loader2 className="h-10 w-10 animate-spin text-button" />

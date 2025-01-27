@@ -1742,10 +1742,10 @@ export interface operations {
       query?: {
         limit?: number
         offset?: number
-        customerId?: string | null
-        connectorConfigId?: string | null
-        connectorName?: string | null
-        forceRefresh?: boolean
+        customer_id?: string | null
+        connector_config_id?: string | null
+        connector_name?: string | null
+        force_refresh?: boolean
         expand?: string
       }
     }

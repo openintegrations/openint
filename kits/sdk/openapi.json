@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://api.openint.dev/v0"
+      "url": "https://api.openint.dev/v1"
     }
   ],
   "paths": {
@@ -516,7 +516,7 @@
           },
           {
             "in": "query",
-            "name": "customerId",
+            "name": "customer_id",
             "schema": {
               "type": ["string", "null"],
               "minLength": 1
@@ -524,7 +524,7 @@
           },
           {
             "in": "query",
-            "name": "connectorConfigId",
+            "name": "connector_config_id",
             "schema": {
               "type": ["string", "null"],
               "description": "Must start with 'ccfg_'"
@@ -532,14 +532,14 @@
           },
           {
             "in": "query",
-            "name": "connectorName",
+            "name": "connector_name",
             "schema": {
               "type": ["string", "null"]
             }
           },
           {
             "in": "query",
-            "name": "forceRefresh",
+            "name": "force_refresh",
             "schema": {
               "type": "boolean"
             }

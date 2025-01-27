@@ -300,10 +300,10 @@ export const connectionRouter = trpc.router({
     .input(
       zListParams
         .extend({
-          customerId: zCustomerId.nullish(),
-          connectorConfigId: zId('ccfg').nullish(),
-          connectorName: z.string().nullish(),
-          forceRefresh: z.boolean().optional(),
+          customer_id: zCustomerId.nullish(),
+          connector_config_id: zId('ccfg').nullish(),
+          connector_name: z.string().nullish(),
+          force_refresh: z.boolean().optional(),
           expand: z.string().optional().openapi({
             description:
               'Comma-separated list of expand options: integration and/or integration.connector',
@@ -345,7 +345,7 @@ export const connectionRouter = trpc.router({
 
           if (
             (expiresAt &&
-              (input.forceRefresh ||
+              (input.force_refresh ||
                 new Date(expiresAt).getTime() <= Date.now())) ||
             input.expand
           ) {
