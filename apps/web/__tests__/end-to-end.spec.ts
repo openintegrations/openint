@@ -29,7 +29,7 @@ beforeAll(async () => {
   sdk = initOpenIntSDK({
     headers: {'x-apikey': fixture.apiKey},
     // TODO: also test with end user authentication token
-    baseUrl: 'http://localhost:4000/api/v0',
+    baseUrl: 'http://localhost:4000/api/v1',
   })
   trpc = createAppTrpcClient({
     apiUrl: 'http://localhost:4000/api/trpc',

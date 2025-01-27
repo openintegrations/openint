@@ -6,7 +6,7 @@ export const maxDuration = 300
 // TODO: Add handling for CORS
 // Also we may need to check for req.headers['transfer-encoding'] === 'chunked'
 // Was not supported on pages router, maybe better on app router?
-const handler = createAppOpenAPIHandler({endpoint: '/api/v0'})
+const handler = createAppOpenAPIHandler({endpoint: '/api/v1'})
 
 export {
   handler as DELETE,

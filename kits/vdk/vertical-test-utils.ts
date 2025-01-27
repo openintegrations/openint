@@ -6,7 +6,7 @@ import {initOpenIntSDK} from '@openint/sdk'
 // TODO: Allow this to test against local url with a db fork from remote
 const API_URL = `${
   testEnv.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000'
-}/api/v0`
+}/api/c1`
 
 function listConnections(apiUrl: string) {
   const sdk = initOpenIntSDK({headers: {'x-apikey': ''}})

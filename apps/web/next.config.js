@@ -52,11 +52,6 @@ const nextConfig = {
       destination: 'https://openint.docs.buildwithfern.com/:p*',
       permanent: false,
     },
-    {
-      source: '/api/v0/verticals/:p*',
-      destination: '/api/v0/unified/:p*',
-      permanent: false,
-    },
     {source: '/', destination: '/dashboard', permanent: false},
   ],
   swcMinify: true,

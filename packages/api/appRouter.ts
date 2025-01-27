@@ -133,7 +133,7 @@ export function getOpenAPISpec(includeInternal = true) {
         in: 'header',
       },
     },
-    baseUrl: env.NEXT_PUBLIC_API_URL ?? getServerUrl(null) + '/api/v0',
+    baseUrl: env.NEXT_PUBLIC_API_URL ?? getServerUrl(null) + '/api/v1',
     webhooks,
     components,
   })

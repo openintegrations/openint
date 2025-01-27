@@ -6,8 +6,8 @@
   "module": "./index.ts",
   "scripts": {
     "gen": "run-s gen:oasPrivate gen:types gen:oas",
-    "gen:oas": "NEXT_PUBLIC_API_URL=https://api.openint.dev/v0 npx tsx -e \"console.log(JSON.stringify(require('@openint/api/appRouter').getOpenAPISpec(false), null, 2))\" | prettier --parser json > ./openapi.json",
-    "gen:oasPrivate": "NEXT_PUBLIC_API_URL=https://api.openint.dev/v0 npx tsx -e \"console.log(JSON.stringify(require('@openint/api/appRouter').getOpenAPISpec(true)))\" | prettier --parser json > ./openapi.json",
+    "gen:oas": "NEXT_PUBLIC_API_URL=https://api.openint.dev/v1 npx tsx -e \"console.log(JSON.stringify(require('@openint/api/appRouter').getOpenAPISpec(false), null, 2))\" | prettier --parser json > ./openapi.json",
+    "gen:oasPrivate": "NEXT_PUBLIC_API_URL=https://api.openint.dev/v1 npx tsx -e \"console.log(JSON.stringify(require('@openint/api/appRouter').getOpenAPISpec(true)))\" | prettier --parser json > ./openapi.json",
     "gen:types": "npx @opensdks/cli@0.0.17 ./openapi.json --meta-dir ./ --types-dir ./"
   },
   "dependencies": {

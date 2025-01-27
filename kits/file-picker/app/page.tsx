@@ -12,7 +12,7 @@ export default async function Home() {
 
   const openint = initOpenIntSDK({
     apiKey: process.env['OPENINT_API_KEY'] ?? '',
-    baseUrl: 'https://local.openint.dev/api/v0',
+    baseUrl: 'https://local.openint.dev/api/v1',
     // TODO: Check why required
     headers: {
       'x-apikey': process.env['OPENINT_API_KEY'] ?? '',
