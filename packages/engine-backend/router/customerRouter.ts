@@ -133,10 +133,10 @@ function asCustomer(
 ): Viewer<'customer'> {
   // console.log('[asCustomer]', viewer, input)
   // Figure out a better way to share code here...
-  if (!('orgId' in viewer) || !viewer.org_id) {
+  if (!('org_id' in viewer) || !viewer.org_id) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'Current viewer missing orgId to create token',
+      message: 'Current viewer missing org_id to create token',
     })
   }
   if (
