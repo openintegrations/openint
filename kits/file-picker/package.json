@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@azure/msal-browser": "^4.0.2",
-    "@opensdks/sdk-openint": "^0.1.13",
+    "@opensdks/sdk-openint": "^0.1.15",
     "@pnp/core": "^4.9.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
