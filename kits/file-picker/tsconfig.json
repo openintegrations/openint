@@ -10,9 +10,19 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "noEmit": true,
+    "incremental": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", ".next"],
-  "typeRoots": ["node_modules/@types"]
+  "include": [
+    "src/**/*",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next"
+  ],
+  "typeRoots": [
+    "node_modules/@types"
+  ]
 }

@@ -6,6 +6,7 @@ import type {
   ThemeColors,
   SelectedFile,
 } from "../../types";
+import {persistSelectedFilesOnConnection} from "../../openint";
 
 interface GoogleDrivePickerProps {
   connectionDetails: ConnectionDetails;
@@ -24,7 +25,6 @@ declare global {
 export const GoogleDrivePicker: React.FC<GoogleDrivePickerProps> = ({
   connectionDetails,
   options,
-  themeColors,
   onClose,
 }) => {
   const loadGoogleDriveAPI = useCallback((): Promise<void> => {
@@ -42,32 +42,41 @@ export const GoogleDrivePicker: React.FC<GoogleDrivePickerProps> = ({
     });
   }, []);
 
+
   const openNativePicker = useCallback(() => {
+    const fileAndFolderView = new window.google.picker.DocsView()
+      .setIncludeFolders(true) 
+      .setMode(window.google.picker.DocsViewMode.LIST)
+      .setSelectFolderEnabled(true);
+
     const picker = new window.google.picker.PickerBuilder()
-      .addView(window.google.picker.ViewId.DOCS)
+      .addView(fileAndFolderView)
+      .enableFeature(window.google.picker.Feature.MULTISELECT_ENABLED)
       .setOAuthToken(connectionDetails.accessToken)
       .setCallback(pickerCallback)
       .build();
     picker.setVisible(true);
-  }, [connectionDetails.accessToken]);
+  }, [connectionDetails.accessToken, options.multiselect]);
+
+  function fileMapper(doc: any): SelectedFile {
+    const isFolder = doc.mimeType === 'application/vnd.google-apps.folder';
+    return {
+      id: doc.id,
+      name: doc.name,
+      type: isFolder ? 'folder' : 'file',
+    };
+  }
 
   const pickerCallback = useCallback(
-    (data: any) => {
+    async (data: any) => {
       if (
         data[window.google.picker.Response.ACTION] ===
         window.google.picker.Action.PICKED
       ) {
         const docs = data[window.google.picker.Response.DOCUMENTS];
-        const selectedFiles: SelectedFile[] = docs.map((doc: any) => ({
-          id: doc[window.google.picker.Document.ID],
-          name: doc[window.google.picker.Document.NAME],
-          url: doc[window.google.picker.Document.URL],
-          parentReference: {
-            driveId: doc[window.google.picker.Document.PARENT_ID] || "",
-          },
-          "@sharePoint.endpoint": "",
-        }));
+        const selectedFiles: SelectedFile[] = docs.map(fileMapper);
 
+        await persistSelectedFilesOnConnection(selectedFiles);
         if (options.onSelect) {
           options.onSelect(selectedFiles);
         }
@@ -97,22 +106,6 @@ export const GoogleDrivePicker: React.FC<GoogleDrivePickerProps> = ({
     open();
   }, [open]);
 
-  const buttonStyle: React.CSSProperties = {
-    backgroundColor: themeColors.button,
-    color: themeColors.buttonForeground,
-    border: `1px solid ${themeColors.buttonStroke}`,
-    padding: "10px 20px",
-    borderRadius: "4px",
-    cursor: "pointer",
-  };
-
-  return (
-    <div style={{ color: themeColors.foreground }}>
-      <h2 style={{ color: themeColors.primary }}>Google Drive Picker</h2>
-      <p>Google Drive picker is open.</p>
-      <button style={buttonStyle} onClick={close}>
-        Close Picker
-      </button>
-    </div>
-  );
+  // Remove all UI rendering and just return null
+  return null;
 };
