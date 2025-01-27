@@ -564,26 +564,26 @@ export interface components {
       }[]
     }
     Connection: {
-      createdAt: string
-      updatedAt: string
+      created_at: string
+      updated_at: string
       /** @description Must start with 'conn_' */
       id: string
       /** @description Unique name of the connector */
-      connectorName: string
-      displayName?: string | null
-      customerId?: string | null
+      connector_name: string
+      display_name?: string | null
+      customer_id?: string | null
       /** @description Must start with 'ccfg_' */
-      connectorConfigId: string
+      connector_config_id: string
       /** @description Must start with 'int_' */
-      integrationId?: string | null
+      integration_id?: string | null
       settings?: {
         [key: string]: unknown
       } | null
       standard?: {
-        displayName?: string | null
+        display_name?: string | null
         /** @enum {string|null} */
         status?: 'healthy' | 'disconnected' | 'error' | 'manual'
-        statusMessage?: string | null
+        status_message?: string | null
         labels?: string[]
       } | null
       disabled?: boolean
@@ -596,24 +596,24 @@ export interface components {
       metadata?: unknown
     }
     ConnectorConfig: {
-      createdAt: string
-      updatedAt: string
+      created_at: string
+      updated_at: string
       /** @description Must start with 'ccfg_' */
       id: string
-      connectorName: string
+      connector_name: string
       config?: {
         [key: string]: unknown
       } | null
       /** @description Must start with 'org_' */
-      orgId: string
-      displayName?: string | null
+      org_id: string
+      display_name?: string | null
       /**
        * Disabled
        * @description When disabled it will not be used for connection portal. Essentially a reversible soft-delete
        */
       disabled?: boolean
       /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
-      defaultPipeOut?: {
+      default_pipe_out?: {
         streams?: {
           [key: string]: boolean
         } | null
@@ -623,13 +623,13 @@ export interface components {
         destination_id?: string
       } | null
       /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
-      defaultPipeIn?: {
+      default_pipe_in?: {
         /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
         links?: components['schemas']['Link'][] | null
         /** @description Must start with 'conn_' */
         source_id: string
       } | null
-      envName?: string | null
+      env_name?: string | null
       /**
        * @description
        *   JSON object can can be used to associate arbitrary metadata to
@@ -689,16 +689,16 @@ export interface components {
       'connector_config_id'
     >
     Pipeline: {
-      createdAt: string
-      updatedAt: string
+      created_at: string
+      updated_at: string
       /** @description Must start with 'pipe_' */
       id: string
       /** @description Must start with 'conn_' */
-      sourceId?: string
-      sourceState?: {
+      source_id?: string
+      source_state?: {
         [key: string]: unknown
       }
-      sourceVertical?: string | null
+      source_vertical?: string | null
       streams?: {
         [key: string]: {
           disabled?: boolean
@@ -706,14 +706,14 @@ export interface components {
         }
       } | null
       /** @description Must start with 'conn_' */
-      destinationId?: string
-      destinationState?: {
+      destination_id?: string
+      destination_state?: {
         [key: string]: unknown
       }
-      destinationVertical?: string | null
-      linkOptions?: unknown[] | null
-      lastSyncStartedAt?: string | null
-      lastSyncCompletedAt?: string | null
+      destination_vertical?: string | null
+      link_options?: unknown[] | null
+      last_sync_started_at?: string | null
+      last_sync_completed_at?: string | null
       disabled?: boolean
       /**
        * @description
@@ -749,17 +749,17 @@ export interface components {
         {
           /** @enum {string} */
           role: 'customer'
-          customerId: string
+          customer_id: string
           /** @description Must start with 'org_' */
-          orgId: string
+          org_id: string
         },
         {
           /** @enum {string} */
           role: 'user'
           /** @description Must start with 'user_' */
-          userId: string
+          user_id: string
           /** @description Must start with 'org_' */
-          orgId?: string | null
+          org_id?: string | null
           /** @description Currently clerk user */
           extra?: {
             [key: string]: unknown
@@ -769,7 +769,7 @@ export interface components {
           /** @enum {string} */
           role: 'org'
           /** @description Must start with 'org_' */
-          orgId: string
+          org_id: string
           /** @description Currently clerk organization */
           extra?: {
             [key: string]: unknown
@@ -1442,12 +1442,12 @@ export interface operations {
       content: {
         'application/json': {
           /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
-          customerId?: string
+          customer_id?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
            * @default 2592000
            */
-          validityInSeconds?: number
+          validity_in_seconds?: number
         }
       }
     }
@@ -1480,22 +1480,22 @@ export interface operations {
       content: {
         'application/json': {
           /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
-          customerId?: string
+          customer_id?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
            * @default 2592000
            */
-          validityInSeconds?: number
+          validity_in_seconds?: number
           /** @description What to call user by */
-          displayName?: string | null
+          display_name?: string | null
           /** @description Where to send user to after connect / if they press back button */
-          redirectUrl?: string | null
+          redirect_url?: string | null
           /** @description Filter integrations by comma separated connector names */
-          connectorNames?: string | null
+          connector_names?: string | null
           /** @description Filter integrations by comma separated integration ids */
-          integrationIds?: string | null
+          integration_ids?: string | null
           /** @description Filter managed connections by connection id */
-          connectionId?: string | null
+          connection_id?: string | null
           /**
            * @description Magic Link display theme
            * @enum {string|null}
@@ -1538,12 +1538,12 @@ export interface operations {
       content: {
         'application/json': {
           /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
-          customerId?: string
+          customer_id?: string
           /**
            * @description How long the magic link will be valid for (in seconds) before it expires
            * @default 2592000
            */
-          validityInSeconds?: number
+          validity_in_seconds?: number
           /** @enum {string|null} */
           theme?: 'light' | 'dark'
           multiSelect?: boolean | null
@@ -1574,6 +1574,11 @@ export interface operations {
           } | null
           /** @description Must start with 'conn_' */
           connectionId: string
+          /**
+           * @description How long the magic link will be valid for (in seconds) before it expires
+           * @default 2592000
+           */
+          validityInSeconds?: number
         }
       }
     }
@@ -1792,12 +1797,12 @@ export interface operations {
       content: {
         'application/json': {
           /** @description Must start with 'ccfg_' */
-          connectorConfigId: string
+          connector_config_id: string
           settings?: {
             [key: string]: unknown
           } | null
-          displayName?: string | null
-          customerId?: string | null
+          display_name?: string | null
+          customer_id?: string | null
           disabled?: boolean
           /**
            * @description
@@ -1807,7 +1812,7 @@ export interface operations {
            */
           metadata?: unknown
           /** @description Must start with 'int_' */
-          integrationId?: string | null
+          integration_id?: string | null
         }
       }
     }
@@ -1852,9 +1857,6 @@ export interface operations {
               connector_config: {
                 /** @description Must start with 'ccfg_' */
                 id: string
-                /** @description Must start with 'org_' */
-                orgId: string
-                connectorName: string
               }
               integration?: {
                 /** @description Must start with 'int_' */
@@ -1945,7 +1947,6 @@ export interface operations {
           settings?: {
             [key: string]: unknown
           } | null
-          displayName?: string | null
           /**
            * @description
            *   JSON object can can be used to associate arbitrary metadata to
@@ -1954,9 +1955,8 @@ export interface operations {
            */
           metadata?: unknown
           disabled?: boolean
-          customerId?: string | null
           /** @description Must start with 'int_' */
-          integrationId?: string | null
+          integration_id?: string | null
         }
       }
     }
@@ -2039,9 +2039,9 @@ export interface operations {
           /** @description Run sync in the background, not compatible with other options for now... */
           async?: boolean | null
           /** @description Only sync connection metadata and skip pipelines */
-          metaOnly?: boolean | null
+          meta_only?: boolean | null
           /** @description Remove `state` of pipeline and trigger a full resync */
-          fullResync?: boolean | null
+          full_resync?: boolean | null
           /**
            * @description
            *     Triggers provider to refresh data from its source
@@ -2110,15 +2110,15 @@ export interface operations {
         'application/json': {
           /** @description Must start with 'ccfg_' */
           id?: string
-          connectorName?: string
+          connector_name?: string
           /** @description Must start with 'org_' */
-          orgId: string
+          org_id: string
           config?: {
             [key: string]: unknown
           } | null
-          displayName?: string | null
+          display_name?: string | null
           /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
-          defaultPipeOut?: {
+          default_pipe_out?: {
             streams?: {
               [key: string]: boolean
             } | null
@@ -2128,7 +2128,7 @@ export interface operations {
             destination_id?: string
           } | null
           /** @description Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL */
-          defaultPipeIn?: {
+          default_pipe_in?: {
             /** @description Array of transformations that the data gets piped through on the way out. Typically used for things like unification / normalization. */
             links?: components['schemas']['Link'][] | null
             /** @description Must start with 'conn_' */
@@ -2248,7 +2248,6 @@ export interface operations {
            *   During updates this object will be shallowly merged
            */
           metadata?: unknown
-          displayName?: string | null
           /**
            * Disabled
            * @description When disabled it will not be used for connection portal. Essentially a reversible soft-delete
@@ -2293,7 +2292,7 @@ export interface operations {
       query?: {
         type?: 'source' | 'destination'
         id?: string | null
-        connectorName?: string | null
+        connector_name?: string | null
       }
     }
     responses: {
@@ -2303,11 +2302,11 @@ export interface operations {
           'application/json': {
             /** @description Must start with 'ccfg_' */
             id: string
-            envName?: string | null
-            displayName?: string | null
-            connectorName: string
-            isSource: boolean
-            isDestination: boolean
+            env_name?: string | null
+            display_name?: string | null
+            connector_name: string
+            is_source: boolean
+            is_destination: boolean
             verticals: (
               | 'banking'
               | 'accounting'
@@ -2555,8 +2554,8 @@ export interface operations {
         page_size?: number
         search_text?: string
         connector_config_ids?: string[]
-        connectorNames?: string[]
-        integrationIds?: string[]
+        connector_names?: string[]
+        integration_ids?: string[]
       }
     }
     responses: {
@@ -2596,7 +2595,7 @@ export interface operations {
       query?: {
         limit?: number
         offset?: number
-        connectionIds?: string[]
+        connection_ids?: string[]
       }
     }
     responses: {
@@ -2641,8 +2640,6 @@ export interface operations {
            */
           metadata?: unknown
           disabled?: boolean
-          /** @description Must start with 'conn_' */
-          sourceId?: string
           streams?: {
             [key: string]: {
               disabled?: boolean
@@ -2650,7 +2647,7 @@ export interface operations {
             }
           } | null
           /** @description Must start with 'conn_' */
-          destinationId?: string
+          destination_id?: string
         }
       }
     }
@@ -2776,9 +2773,9 @@ export interface operations {
           /** @description Run sync in the background, not compatible with other options for now... */
           async?: boolean | null
           /** @description Only sync connection metadata and skip pipelines */
-          metaOnly?: boolean | null
+          meta_only?: boolean | null
           /** @description Remove `state` of pipeline and trigger a full resync */
-          fullResync?: boolean | null
+          full_resync?: boolean | null
           /**
            * @description
            *     Triggers provider to refresh data from its source
@@ -2825,7 +2822,7 @@ export interface operations {
         cursor?: string | null
         page_size?: number
         since: number
-        customerId?: string | null
+        customer_id?: string | null
         name?: string | null
       }
     }

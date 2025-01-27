@@ -22,12 +22,12 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "customerId": {
+                  "customer_id": {
                     "type": "string",
                     "minLength": 1,
                     "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
                   },
-                  "validityInSeconds": {
+                  "validity_in_seconds": {
                     "type": "number",
                     "default": 2592000,
                     "description": "How long the magic link will be valid for (in seconds) before it expires"
@@ -89,33 +89,33 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "customerId": {
+                  "customer_id": {
                     "type": "string",
                     "minLength": 1,
                     "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
                   },
-                  "validityInSeconds": {
+                  "validity_in_seconds": {
                     "type": "number",
                     "default": 2592000,
                     "description": "How long the magic link will be valid for (in seconds) before it expires"
                   },
-                  "displayName": {
+                  "display_name": {
                     "type": ["string", "null"],
                     "description": "What to call user by"
                   },
-                  "redirectUrl": {
+                  "redirect_url": {
                     "type": ["string", "null"],
                     "description": "Where to send user to after connect / if they press back button"
                   },
-                  "connectorNames": {
+                  "connector_names": {
                     "type": ["string", "null"],
                     "description": "Filter integrations by comma separated connector names"
                   },
-                  "integrationIds": {
+                  "integration_ids": {
                     "type": ["string", "null"],
                     "description": "Filter integrations by comma separated integration ids"
                   },
-                  "connectionId": {
+                  "connection_id": {
                     "type": ["string", "null"],
                     "description": "Filter managed connections by connection id"
                   },
@@ -191,12 +191,12 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "customerId": {
+                  "customer_id": {
                     "type": "string",
                     "minLength": 1,
                     "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
                   },
-                  "validityInSeconds": {
+                  "validity_in_seconds": {
                     "type": "number",
                     "default": 2592000,
                     "description": "How long the magic link will be valid for (in seconds) before it expires"
@@ -285,6 +285,11 @@
                   "connectionId": {
                     "type": "string",
                     "description": "Must start with 'conn_'"
+                  },
+                  "validityInSeconds": {
+                    "type": "number",
+                    "default": 2592000,
+                    "description": "How long the magic link will be valid for (in seconds) before it expires"
                   }
                 },
                 "required": ["connectionId"]
@@ -426,7 +431,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "connectorConfigId": {
+                  "connector_config_id": {
                     "type": "string",
                     "description": "Must start with 'ccfg_'"
                   },
@@ -434,10 +439,10 @@
                     "type": ["object", "null"],
                     "additionalProperties": {}
                   },
-                  "displayName": {
+                  "display_name": {
                     "type": ["string", "null"]
                   },
-                  "customerId": {
+                  "customer_id": {
                     "type": ["string", "null"],
                     "minLength": 1
                   },
@@ -447,12 +452,12 @@
                   "metadata": {
                     "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
                   },
-                  "integrationId": {
+                  "integration_id": {
                     "type": ["string", "null"],
                     "description": "Must start with 'int_'"
                   }
                 },
-                "required": ["connectorConfigId"]
+                "required": ["connector_config_id"]
               }
             }
           }
@@ -662,20 +667,13 @@
                     "type": ["object", "null"],
                     "additionalProperties": {}
                   },
-                  "displayName": {
-                    "type": ["string", "null"]
-                  },
                   "metadata": {
                     "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
                   },
                   "disabled": {
                     "type": "boolean"
                   },
-                  "customerId": {
-                    "type": ["string", "null"],
-                    "minLength": 1
-                  },
-                  "integrationId": {
+                  "integration_id": {
                     "type": ["string", "null"],
                     "description": "Must start with 'int_'"
                   }
@@ -841,16 +839,9 @@
                         "id": {
                           "type": "string",
                           "description": "Must start with 'ccfg_'"
-                        },
-                        "orgId": {
-                          "type": "string",
-                          "description": "Must start with 'org_'"
-                        },
-                        "connectorName": {
-                          "type": "string"
                         }
                       },
-                      "required": ["id", "orgId", "connectorName"]
+                      "required": ["id"]
                     },
                     "integration": {
                       "type": ["object", "null"],
@@ -1027,11 +1018,11 @@
                     "type": ["boolean", "null"],
                     "description": "Run sync in the background, not compatible with other options for now..."
                   },
-                  "metaOnly": {
+                  "meta_only": {
                     "type": ["boolean", "null"],
                     "description": "Only sync connection metadata and skip pipelines "
                   },
-                  "fullResync": {
+                  "full_resync": {
                     "type": ["boolean", "null"],
                     "description": "Remove `state` of pipeline and trigger a full resync"
                   },
@@ -1148,10 +1139,10 @@
                     "type": "string",
                     "description": "Must start with 'ccfg_'"
                   },
-                  "connectorName": {
+                  "connector_name": {
                     "type": "string"
                   },
-                  "orgId": {
+                  "org_id": {
                     "type": "string",
                     "description": "Must start with 'org_'"
                   },
@@ -1159,10 +1150,10 @@
                     "type": ["object", "null"],
                     "additionalProperties": {}
                   },
-                  "displayName": {
+                  "display_name": {
                     "type": ["string", "null"]
                   },
-                  "defaultPipeOut": {
+                  "default_pipe_out": {
                     "type": ["object", "null"],
                     "properties": {
                       "streams": {
@@ -1185,7 +1176,7 @@
                     },
                     "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
                   },
-                  "defaultPipeIn": {
+                  "default_pipe_in": {
                     "type": ["object", "null"],
                     "properties": {
                       "links": {
@@ -1209,7 +1200,7 @@
                     "description": "When disabled it will not be used for connection portal. Essentially a reversible soft-delete"
                   }
                 },
-                "required": ["orgId"]
+                "required": ["org_id"]
               }
             }
           }
@@ -1273,9 +1264,6 @@
                 "properties": {
                   "metadata": {
                     "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
-                  },
-                  "displayName": {
-                    "type": ["string", "null"]
                   },
                   "disabled": {
                     "type": "boolean",
@@ -1470,7 +1458,7 @@
           },
           {
             "in": "query",
-            "name": "connectorName",
+            "name": "connector_name",
             "schema": {
               "type": ["string", "null"]
             }
@@ -1490,19 +1478,19 @@
                         "type": "string",
                         "description": "Must start with 'ccfg_'"
                       },
-                      "envName": {
+                      "env_name": {
                         "type": ["string", "null"]
                       },
-                      "displayName": {
+                      "display_name": {
                         "type": ["string", "null"]
                       },
-                      "connectorName": {
+                      "connector_name": {
                         "type": "string"
                       },
-                      "isSource": {
+                      "is_source": {
                         "type": "boolean"
                       },
-                      "isDestination": {
+                      "is_destination": {
                         "type": "boolean"
                       },
                       "verticals": {
@@ -1541,9 +1529,9 @@
                     },
                     "required": [
                       "id",
-                      "connectorName",
-                      "isSource",
-                      "isDestination",
+                      "connector_name",
+                      "is_source",
+                      "is_destination",
                       "verticals",
                       "integrations"
                     ]
@@ -1607,7 +1595,7 @@
           },
           {
             "in": "query",
-            "name": "connectionIds",
+            "name": "connection_ids",
             "schema": {
               "type": "array",
               "items": {
@@ -1684,10 +1672,6 @@
                   "disabled": {
                     "type": "boolean"
                   },
-                  "sourceId": {
-                    "type": "string",
-                    "description": "Must start with 'conn_'"
-                  },
                   "streams": {
                     "type": ["object", "null"],
                     "additionalProperties": {
@@ -1705,7 +1689,7 @@
                       }
                     }
                   },
-                  "destinationId": {
+                  "destination_id": {
                     "type": "string",
                     "description": "Must start with 'conn_'"
                   }
@@ -1930,11 +1914,11 @@
                     "type": ["boolean", "null"],
                     "description": "Run sync in the background, not compatible with other options for now..."
                   },
-                  "metaOnly": {
+                  "meta_only": {
                     "type": ["boolean", "null"],
                     "description": "Only sync connection metadata and skip pipelines "
                   },
-                  "fullResync": {
+                  "full_resync": {
                     "type": ["boolean", "null"],
                     "description": "Remove `state` of pipeline and trigger a full resync"
                   },
@@ -2024,7 +2008,7 @@
           },
           {
             "in": "query",
-            "name": "customerId",
+            "name": "customer_id",
             "schema": {
               "type": ["string", "null"],
               "minLength": 1
@@ -8372,32 +8356,32 @@
       "Connection": {
         "type": "object",
         "properties": {
-          "createdAt": {
+          "created_at": {
             "type": "string"
           },
-          "updatedAt": {
+          "updated_at": {
             "type": "string"
           },
           "id": {
             "type": "string",
             "description": "Must start with 'conn_'"
           },
-          "connectorName": {
+          "connector_name": {
             "type": "string",
             "description": "Unique name of the connector"
           },
-          "displayName": {
+          "display_name": {
             "type": ["string", "null"]
           },
-          "customerId": {
+          "customer_id": {
             "type": ["string", "null"],
             "minLength": 1
           },
-          "connectorConfigId": {
+          "connector_config_id": {
             "type": "string",
             "description": "Must start with 'ccfg_'"
           },
-          "integrationId": {
+          "integration_id": {
             "type": ["string", "null"],
             "description": "Must start with 'int_'"
           },
@@ -8408,14 +8392,14 @@
           "standard": {
             "type": ["object", "null"],
             "properties": {
-              "displayName": {
+              "display_name": {
                 "type": ["string", "null"]
               },
               "status": {
                 "type": ["string", "null"],
                 "enum": ["healthy", "disconnected", "error", "manual"]
               },
-              "statusMessage": {
+              "status_message": {
                 "type": ["string", "null"]
               },
               "labels": {
@@ -8434,38 +8418,38 @@
           }
         },
         "required": [
-          "createdAt",
-          "updatedAt",
+          "created_at",
+          "updated_at",
           "id",
-          "connectorName",
-          "connectorConfigId"
+          "connector_name",
+          "connector_config_id"
         ]
       },
       "ConnectorConfig": {
         "type": "object",
         "properties": {
-          "createdAt": {
+          "created_at": {
             "type": "string"
           },
-          "updatedAt": {
+          "updated_at": {
             "type": "string"
           },
           "id": {
             "type": "string",
             "description": "Must start with 'ccfg_'"
           },
-          "connectorName": {
+          "connector_name": {
             "type": "string"
           },
           "config": {
             "type": ["object", "null"],
             "additionalProperties": {}
           },
-          "orgId": {
+          "org_id": {
             "type": "string",
             "description": "Must start with 'org_'"
           },
-          "displayName": {
+          "display_name": {
             "type": ["string", "null"]
           },
           "disabled": {
@@ -8473,7 +8457,7 @@
             "title": "Disabled",
             "description": "When disabled it will not be used for connection portal. Essentially a reversible soft-delete"
           },
-          "defaultPipeOut": {
+          "default_pipe_out": {
             "type": ["object", "null"],
             "properties": {
               "streams": {
@@ -8496,7 +8480,7 @@
             },
             "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
           },
-          "defaultPipeIn": {
+          "default_pipe_in": {
             "type": ["object", "null"],
             "properties": {
               "links": {
@@ -8514,14 +8498,20 @@
             "required": ["source_id"],
             "description": "Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL"
           },
-          "envName": {
+          "env_name": {
             "type": ["string", "null"]
           },
           "metadata": {
             "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
           }
         },
-        "required": ["createdAt", "updatedAt", "id", "connectorName", "orgId"]
+        "required": [
+          "created_at",
+          "updated_at",
+          "id",
+          "connector_name",
+          "org_id"
+        ]
       },
       "Link": {
         "type": "string",
@@ -8608,25 +8598,25 @@
       "Pipeline": {
         "type": "object",
         "properties": {
-          "createdAt": {
+          "created_at": {
             "type": "string"
           },
-          "updatedAt": {
+          "updated_at": {
             "type": "string"
           },
           "id": {
             "type": "string",
             "description": "Must start with 'pipe_'"
           },
-          "sourceId": {
+          "source_id": {
             "type": "string",
             "description": "Must start with 'conn_'"
           },
-          "sourceState": {
+          "source_state": {
             "type": "object",
             "additionalProperties": {}
           },
-          "sourceVertical": {
+          "source_vertical": {
             "type": ["string", "null"]
           },
           "streams": {
@@ -8646,25 +8636,25 @@
               }
             }
           },
-          "destinationId": {
+          "destination_id": {
             "type": "string",
             "description": "Must start with 'conn_'"
           },
-          "destinationState": {
+          "destination_state": {
             "type": "object",
             "additionalProperties": {}
           },
-          "destinationVertical": {
+          "destination_vertical": {
             "type": ["string", "null"]
           },
-          "linkOptions": {
+          "link_options": {
             "type": ["array", "null"],
             "items": {}
           },
-          "lastSyncStartedAt": {
+          "last_sync_started_at": {
             "type": ["string", "null"]
           },
-          "lastSyncCompletedAt": {
+          "last_sync_completed_at": {
             "type": ["string", "null"]
           },
           "disabled": {
@@ -8674,7 +8664,7 @@
             "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
           }
         },
-        "required": ["createdAt", "updatedAt", "id"]
+        "required": ["created_at", "updated_at", "id"]
       },
       "Event": {
         "type": "object",
@@ -8731,16 +8721,16 @@
                 "type": "string",
                 "enum": ["customer"]
               },
-              "customerId": {
+              "customer_id": {
                 "type": "string",
                 "minLength": 1
               },
-              "orgId": {
+              "org_id": {
                 "type": "string",
                 "description": "Must start with 'org_'"
               }
             },
-            "required": ["role", "customerId", "orgId"]
+            "required": ["role", "customer_id", "org_id"]
           },
           {
             "type": "object",
@@ -8749,11 +8739,11 @@
                 "type": "string",
                 "enum": ["user"]
               },
-              "userId": {
+              "user_id": {
                 "type": "string",
                 "description": "Must start with 'user_'"
               },
-              "orgId": {
+              "org_id": {
                 "type": ["string", "null"],
                 "description": "Must start with 'org_'"
               },
@@ -8763,7 +8753,7 @@
                 "description": "Currently clerk user"
               }
             },
-            "required": ["role", "userId"]
+            "required": ["role", "user_id"]
           },
           {
             "type": "object",
@@ -8772,7 +8762,7 @@
                 "type": "string",
                 "enum": ["org"]
               },
-              "orgId": {
+              "org_id": {
                 "type": "string",
                 "description": "Must start with 'org_'"
               },
@@ -8782,7 +8772,7 @@
                 "description": "Currently clerk organization"
               }
             },
-            "required": ["role", "orgId"]
+            "required": ["role", "org_id"]
           },
           {
             "type": "object",
