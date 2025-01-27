@@ -213,7 +213,7 @@ export const pipelineRouter = trpc.router({
       const pipeline = await ctx.asOrgIfNeeded.getPipelineExpandedOrFail(pipeId)
       console.log('[syncPipeline]', pipeline)
       const clerkOrg = await ctx.clerk.organizations.getOrganization({
-        organizationId: pipeline.source.connectorConfig.org_id,
+        organizationId: pipeline.source.connector_config.org_id,
       })
 
       const org = z
