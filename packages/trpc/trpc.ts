@@ -1,5 +1,6 @@
 import type {OpenApiMeta} from '@lilyrose2798/trpc-openapi'
 import {initTRPC, TRPCError} from '@trpc/server'
+import {formatError, isAggregateError} from '@openint/util'
 // FIXME: We should not be hacking imports like this.
 import type {ExtCustomerId, Viewer, ViewerRole} from '../../kits/cdk/viewer'
 import type {RouterContext} from '../engine-backend/context'
@@ -55,6 +56,9 @@ export const trpc = initTRPC
       const {shape, error} = opts
       if (!(error.cause?.name === 'HTTPError')) {
         return shape
+      }
+      if (isAggregateError(error.cause)) {
+        console.error(formatError(error.cause))
       }
       const cause = error.cause as unknown as {response: {data: unknown} | null}
 

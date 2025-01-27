@@ -3,6 +3,24 @@ import {sql} from 'drizzle-orm'
 import {check, customType, pgTable} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
+import {formatError} from '@openint/util'
+
+describe('main db', () => {
+  console.log('Connecting to db', env.DATABASE_URL)
+  const db = drizzle(env.DATABASE_URL, {logger: true})
+
+  test('connect', async () => {
+    try {
+      const res = await db.execute('select 1+1 as sum')
+      console.log('res', res)
+      expect(res[0]).toEqual({sum: 2})
+    } catch (err) {
+      console.error(formatError(err))
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(false).toBe(true)
+    }
+  })
+})
 
 describe('test db', () => {
   // console.log('filename', __filename)
