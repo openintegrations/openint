@@ -67,6 +67,8 @@ export const WithConnectorConnect = ({
   // TODO: Restore connectFnMap so that we respect the rules of hooks to always render all hooks
   // and not skip rendering or conditionally rendering hooks
 
+  const [isPreconnecting, setIsPreconnecting] = React.useState(false)
+
   const useConnectHook = clientConnectors[ccfg.connector.name]?.useConnectHook
   const nangoProvider = ccfg.connector.nangoProvider
 
@@ -179,6 +181,7 @@ export const WithConnectorConnect = ({
           })
         }
         setOpen(false)
+        setIsPreconnecting(false)
         onEvent?.({type: 'success'})
       },
       onError: (err) => {
@@ -210,7 +213,13 @@ export const WithConnectorConnect = ({
     // non modal dialog do not add pointer events none to the body
     // which workaround issue with multiple portals (dropdown, dialog) conflicting
     // as well as other modals introduced by things like Plaid
-    <Dialog open={open} onOpenChange={setOpen} modal={false}>
+    <Dialog
+      open={open}
+      onOpenChange={(newValue) => {
+        setOpen(newValue)
+        setIsPreconnecting(newValue)
+      }}
+      modal={false}>
       {children({
         // Children is responsible for rendering dialog triggers as needed
         openConnect: () => {
@@ -222,11 +231,13 @@ export const WithConnectorConnect = ({
             // and a hard api to work with. We sacrifice some accessiblity by
             // using explicit callback rather than DialogTrigger component
             setOpen(true)
+            setIsPreconnecting(true)
+
             return
           }
           connect.mutate(undefined)
         },
-        loading: connect.isLoading,
+        loading: connect.isLoading || isPreconnecting,
         variant: connection?.status === 'disconnected' ? 'default' : 'ghost',
         label: connection ? 'Reconnect' : 'Connect',
       })}
