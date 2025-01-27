@@ -13,7 +13,7 @@ function getOpenIntSDK(token: string) {
   if (!cachedOpenIntSDK) {
     cachedOpenIntSDK = initOpenIntSDK({
       token,
-      baseUrl: 'https://local.openint.dev/api/v0',
+      // baseUrl: 'https://local.openint.dev/api/v0',
       headers: {
         'x-apikey': undefined,
       },
