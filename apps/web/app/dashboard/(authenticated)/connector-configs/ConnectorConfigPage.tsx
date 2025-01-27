@@ -53,7 +53,7 @@ export default function ConnectorConfigsPage({
   const [sheetState, setSheetState] = useState<{
     open: boolean
     connectorName?: string
-    connectorConfig?: Omit<ConnectorConfig, 'connectorName'>
+    connectorConfig?: Omit<ConnectorConfig, 'connector_name'>
   }>({
     open: false,
   })
@@ -288,8 +288,8 @@ export default function ConnectorConfigsPage({
       })}
       {sheetState.open && sheetState.connectorName && (
         <ConnectorConfigSheet
-          connectorName={sheetState.connectorName}
-          connectorConfig={sheetState.connectorConfig}
+          connector_name={sheetState.connectorName}
+          connector_config={sheetState.connectorConfig}
           open={sheetState.open}
           setOpen={(open) => setSheetState((prev) => ({...prev, open}))}
           refetch={connectorConfigsRes.refetch}

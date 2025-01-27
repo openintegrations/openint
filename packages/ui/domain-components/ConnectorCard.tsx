@@ -28,21 +28,21 @@ export interface UIProps extends UIPropsNoChildren {
 export type ConnectorMeta = RouterOutput['listConnectorMetas'][string]
 
 export const ConnectorConfigCard = ({
-  connectorConfig: ccfg,
+  connector_config: ccfg,
   ...props
 }: React.ComponentProps<typeof ConnectorCard> & {
-  connectorConfig: {
+  connector_config: {
     id: Id['ccfg']
-    connectorName: string
+    connector_name: string
     config?: Record<string, unknown> | null
-    envName?: string | null
+    env_name?: string | null
     disabled?: boolean
   }
 }) => (
   <ConnectorCard
     {...props}
     showName={false}
-    labels={R.compact([ccfg.envName, ccfg.disabled && 'disabled'])}
+    labels={R.compact([ccfg.env_name, ccfg.disabled && 'disabled'])}
   />
 )
 

@@ -25,36 +25,44 @@ const tags = ['Core']
 const zExpandIntegration = z.object({
   id: zId('int'),
   name: z.string(),
-  logoUrl: z.string().url(),
+  logo_url: z
+    .string() /*.url()*/
+    .url(),
 })
 
 const zExpandConnector = z.object({
   id: zId('ccfg'),
   name: z.string(),
-  logoUrl: z.string().url(),
+  logo_url: z
+    .string() /*.url()*/
+    .url(),
 })
 
+/* eslint-disable */
 export async function performConnectionCheck(
   ctx: any,
   connId: string,
   opts: any,
 ) {
+  console.log('will performConnectionCheck', connId, opts)
   const remoteCtx = await getRemoteContext({
     ...ctx,
     remoteConnectionId: connId,
   })
-  const {connectorConfig: int, ...conn} =
+  const {connector_config: ccfg, ...conn} =
     await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
 
-  let connUpdate = await int.connector.checkConnection?.({
+  // console.log('got connection', connId, conn, ccfg)
+  let connUpdate = await ccfg.connector.checkConnection?.({
     settings: remoteCtx.remote.settings,
-    config: int.config,
+    config: ccfg.config,
     options: opts ?? {},
     instance: remoteCtx.remote.instance,
     context: {
-      webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
+      webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(ccfg.id)),
     },
   })
+  // console.log('connUpdate', connUpdate)
   if (
     conn?.settings?.error ||
     connUpdate ||
@@ -62,7 +70,7 @@ export async function performConnectionCheck(
     remoteCtx.remote.settings?.oauth?.error
   ) {
     /** Do not update the `customerId` here... */
-    await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
+    await ctx.asOrgIfNeeded._syncConnectionUpdate(ccfg, {
       customerId: conn.customerId ?? undefined,
       integration: conn.integrationId
         ? {
@@ -71,7 +79,6 @@ export async function performConnectionCheck(
           }
         : undefined,
       ...connUpdate,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
         // ...(opts?.import && remoteCtx.remote.settings),
         // unconditionally import connection settings
@@ -83,9 +90,10 @@ export async function performConnectionCheck(
     })
     connUpdate = await ctx.services.getConnectionOrFail(conn.id)
   }
+  // console.log('connUpdate 2', connUpdate)
   if (opts?.expand?.includes('integration')) {
-    const possibleIntegrations = await int.connector?.listIntegrations?.({
-      ccfg: int,
+    const possibleIntegrations = await ccfg.connector?.listIntegrations?.({
+      ccfg: ccfg,
     })
     const integration = possibleIntegrations?.items?.find(
       (i: any) => i.id === extractId(connUpdate?.integrationId)[2],
@@ -95,32 +103,35 @@ export async function performConnectionCheck(
           id: connUpdate?.integrationId,
           name:
             integration?.name?.toLowerCase() ||
-            int.connector.name?.toLowerCase(),
-          logoUrl:
+            ccfg.connector.name?.toLowerCase(),
+          logo_url:
             (integration?.logo_url &&
               (process.env['NEXT_PUBLIC_SERVER_URL'] ||
                 'https://app.openint.dev') + integration?.logo_url) ||
-            (int.connector.metadata.logoUrl &&
+            (ccfg.connector.metadata.logoUrl &&
               (process.env['NEXT_PUBLIC_SERVER_URL'] ||
-                'https://app.openint.dev') + int.connector.metadata.logoUrl),
+                'https://app.openint.dev') + ccfg.connector.metadata.logoUrl),
         }
       : undefined
   }
+  // console.log('connUpdate3', connUpdate)
   if (opts?.expand?.includes('integration.connector')) {
     connUpdate.connector = {
-      id: int.id,
-      name: int.connector.name?.toLowerCase(),
-      logoUrl:
-        int.connector.metadata.logoUrl &&
+      id: ccfg.id,
+      name: ccfg.connector.name?.toLowerCase(),
+      logo_url:
+        ccfg.connector.metadata.logoUrl &&
         (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') +
-          int.connector.metadata.logoUrl,
+          ccfg.connector.metadata.logoUrl,
     }
   }
-  if (!int.connector.checkConnection) {
+  // console.log('connUpdate 4', connUpdate)
+  if (!ccfg.connector.checkConnection) {
     return connUpdate
   }
   return connUpdate
 }
+/* eslint-enable */
 
 export const connectionRouter = trpc.router({
   // TODO: maybe we should allow connectionId to be part of the path rather than only in the headers
@@ -305,6 +316,7 @@ export const connectionRouter = trpc.router({
           connector_config_id: zId('ccfg').nullish(),
           connector_name: z.string().nullish(),
           force_refresh: z.boolean().optional(),
+          refresh: z.enum(['none', 'expired', 'all']).default('expired'),
           expand: z.string().optional().openapi({
             description:
               'Comma-separated list of expand options: integration and/or integration.connector',
@@ -332,12 +344,14 @@ export const connectionRouter = trpc.router({
         })
       }
 
+      // console.log('[listConnection] Listing connections')
+
       let connections =
         await ctx.services.metaService.tables.connection.list(input)
 
       // Handle forceRefresh for each connection
 
-      console.log('[listConnection] Refreshing tokens for all connections ')
+      console.log('[listConnection] Maybe refresh token')
       const updatedConnections = await Promise.all(
         connections.map(async (conn) => {
           const expiresAt =
@@ -351,11 +365,12 @@ export const connectionRouter = trpc.router({
             input.expand
           ) {
             console.log(
-              `[listConnection] Refreshing token for connection ${conn.connector_name}`,
+              `[listConnection] Refreshing token for connection ${conn.id}`,
             )
             const connCheck = await performConnectionCheck(ctx, conn.id, {
               expand: expandArray,
             })
+            // console.log('connCheck', conn.id, connCheck)
             if (!connCheck) {
               console.warn(
                 `[listConnection] connectionCheck not implemented for ${conn.connector_name} which requires a refresh. Returning the stale connection.`,

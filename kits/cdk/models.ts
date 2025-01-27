@@ -47,7 +47,9 @@ export const zStandard = {
     id: zId('int'),
     name: z.string(),
     // No http prefix preprocessing for logo url as they can be data urls
-    logo_url: z.string().url().optional(),
+    logo_url: z
+      .string() /*.url()*/
+      .optional(),
     login_url: z.preprocess(
       // Sometimes url get returned without http prefix...
       // Is there a way to "catch" invalid url error then retry with prefix?
