@@ -252,11 +252,11 @@ test('list connector config info', async () => {
   ).toBeTruthy()
 
   // Check basic properties
-  expect(res.data[0]).toHaveProperty('envName')
+  expect(res.data[0]).toHaveProperty('env_name')
   expect(res.data[0]).toHaveProperty('display_name')
   expect(res.data[0]).toHaveProperty('connector_name')
-  expect(res.data[0]).toHaveProperty('isSource')
-  expect(res.data[0]).toHaveProperty('isDestination')
+  expect(res.data[0]).toHaveProperty('is_source')
+  expect(res.data[0]).toHaveProperty('is_destination')
   expect(res.data[0]).toHaveProperty('verticals')
   expect(res.data[0]).toHaveProperty('integrations')
 })
