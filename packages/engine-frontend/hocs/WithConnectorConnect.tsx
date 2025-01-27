@@ -68,7 +68,7 @@ export const WithConnectorConnect = ({
   // and not skip rendering or conditionally rendering hooks
 
   const useConnectHook = clientConnectors[ccfg.connector.name]?.useConnectHook
-  const nangoProvider = ccfg.connector.nangoProvider
+  const nangoProvider = ccfg.connector.nango_provider
 
   const nangoPublicKey =
     _trpcReact.getPublicEnv.useQuery().data?.NEXT_PUBLIC_NANGO_PUBLIC_KEY
@@ -133,7 +133,7 @@ export const WithConnectorConnect = ({
       // TODO: Test this...
       // How to make sure does not actually refetch we if we already have data?
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const connInput = ccfg.connector.hasPreConnect
+      const connInput = ccfg.connector.has_pre_connect
         ? (await preConnect.refetch()).data
         : {}
       console.log(
@@ -152,7 +152,7 @@ export const WithConnectorConnect = ({
       )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const postConnOutput = ccfg.connector.hasPostConnect
+      const postConnOutput = ccfg.connector.has_post_connect
         ? await postConnect.mutateAsync([
             connOutput,
             ccfg.id,
@@ -173,7 +173,7 @@ export const WithConnectorConnect = ({
       onSuccess(msg) {
         if (msg) {
           toast({
-            title: `Successfully connected to ${ccfg.connector.displayName}`,
+            title: `Successfully connected to ${ccfg.connector.display_name}`,
             // description: `${msg}`,
             variant: 'success',
           })
@@ -185,9 +185,9 @@ export const WithConnectorConnect = ({
         if (err === CANCELLATION_TOKEN) {
           return
         }
-        console.log(ccfg.connector.displayName + ' connection error:', err)
+        console.log(ccfg.connector.display_name + ' connection error:', err)
         toast({
-          title: `Failed to connect to ${ccfg.connector.displayName}`,
+          title: `Failed to connect to ${ccfg.connector.display_name}`,
           // description: `${err}`,
           variant: 'destructive',
         })
@@ -240,7 +240,7 @@ export const WithConnectorConnect = ({
           <DialogTitle>
             <div className="flex items-center">
               <span className="mr-2">
-                Connect to {ccfg.connector.displayName}
+                Connect to {ccfg.connector.display_name}
               </span>
               {ccfg.connector.name === 'greenhouse' && (
                 <div className="relative inline-block">

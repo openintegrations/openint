@@ -46,7 +46,7 @@ export function ConnectionCard({
   }
 
   let connectionName =
-    conn?.integration?.name ?? conn.connector_config.connector.displayName
+    conn?.integration?.name ?? conn.connector_config.connector.display_name
   connectionName =
     connectionName.charAt(0).toUpperCase() + connectionName.slice(1)
 
@@ -102,7 +102,7 @@ export function ConnectionCard({
           )}
           <p
             className={`m-0 max-w-[100px] text-center text-sm font-semibold ${
-              conn.connector_config.connector.displayName.length > 15
+              conn.connector_config.connector.display_name.length > 15
                 ? 'truncate'
                 : ''
             }`}>

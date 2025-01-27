@@ -116,7 +116,7 @@ export default function ConnectorConfigsPage({
           columns={[
             {
               id: 'connectorName',
-              accessorKey: 'connectorName',
+              accessorKey: 'connector_name',
               cell: ({row}) => {
                 const connector = catalog.data[row.original.connector_name]
 
@@ -157,14 +157,14 @@ export default function ConnectorConfigsPage({
             },
             {
               id: 'disable',
-              accessorKey: 'Status',
+              accessorKey: 'status',
               cell: ({row}) => (
                 <p className={cn(row.original.disabled && 'opacity-60')}>
                   {row.original.disabled ? 'Disabled' : 'Enabled'}
                 </p>
               ),
             },
-            {accessorKey: 'envName'},
+            {accessorKey: 'env_name'},
             {
               id: 'action',
               accessorKey: 'action',
@@ -215,14 +215,14 @@ export default function ConnectorConfigsPage({
           {
             __typename: 'connector',
             name: 'request-access',
-            displayName: `Request ${vertical} integration`,
+            display_name: `Request ${vertical} integration`,
             stage: 'alpha',
             platforms: [],
             verticals: [vertical],
-            sourceStreams: [],
-            supportedModes: ['source'],
-            hasPreConnect: false,
-            hasUseConnectHook: false,
+            source_streams: [],
+            supported_modes: ['source'],
+            has_pre_connect: false,
+            has_use_connect_hook: false,
             schemas: {},
           } as unknown as ConnectorMeta,
         ]

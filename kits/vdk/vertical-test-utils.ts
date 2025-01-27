@@ -60,7 +60,7 @@ export function forEachAdapterConnections<TAdapter>(
   const connections = listConnections(API_URL)
 
   describe.each(adapterNames)('adapter: %s', (adapterName) => {
-    const conns = connections.filter((c) => c.connectorName === adapterName)
+    const conns = connections.filter((c) => c.connector_name === adapterName)
     if (conns.length === 0) {
       test.todo(`add connections for ${adapterName} to test`)
       return

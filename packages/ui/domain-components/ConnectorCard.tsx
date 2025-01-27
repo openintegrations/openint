@@ -120,17 +120,17 @@ export const ConnectorLogo = ({
 }: UIPropsNoChildren & {
   connector: ConnectorMeta
 }) =>
-  connector.logoUrl ? (
+  connector.logo_url ? (
     <Image
       width={48}
       height={48}
-      src={connector.logoUrl}
-      alt={`"${connector.displayName}" logo`}
+      src={connector.logo_url}
+      alt={`"${connector.display_name}" logo`}
       className={cn('h-12 w-12 rounded-xl object-contain', className)}
       style={{marginBottom: '10px', objectFit: 'contain'}}
     />
   ) : (
     <div className={cn('flex flex-col items-center justify-center', className)}>
-      <span>{connector.displayName}</span>
+      <span>{connector.display_name}</span>
     </div>
   )

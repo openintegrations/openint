@@ -10,24 +10,24 @@ export const metaForConnector = (
   // ...connector,
   __typename: 'connector' as const,
   name: connector.name,
-  displayName: connector.metadata?.displayName ?? titleCase(connector.name),
-  logoUrl: connector.metadata?.logoSvg
+  display_name: connector.metadata?.displayName ?? titleCase(connector.name),
+  logo_url: connector.metadata?.logoSvg
     ? urlFromImage({type: 'svg', data: connector.metadata?.logoSvg})
     : connector.metadata?.logoUrl,
   stage: connector.metadata?.stage ?? 'alpha',
   platforms: connector.metadata?.platforms ?? ['cloud', 'local'],
   verticals: connector.metadata?.verticals ?? ['other'],
-  sourceStreams: Object.keys(connector.schemas.sourceOutputEntities ?? {}),
-  supportedModes: R.compact([
+  source_streams: Object.keys(connector.schemas.sourceOutputEntities ?? {}),
+  supported_modes: R.compact([
     connector.sourceSync ? ('source' as const) : null,
     connector.destinationSync ? ('destination' as const) : null,
   ]),
-  hasPreConnect: connector.preConnect != null,
-  hasUseConnectHook: connector.useConnectHook != null,
+  has_pre_connect: connector.preConnect != null,
+  has_use_connect_hook: connector.useConnectHook != null,
   // TODO: Maybe nangoProvider be more explicit as a base provider?
-  hasPostConnect:
+  has_post_connect:
     connector.postConnect != null || connector.metadata?.nangoProvider,
-  nangoProvider: connector.metadata?.nangoProvider,
+  nango_provider: connector.metadata?.nangoProvider,
   schemas: R.mapValues(connector.schemas ?? {}, (schema, type) => {
     try {
       return schema instanceof z.ZodSchema ? zodToJsonSchema(schema) : undefined
@@ -37,5 +37,5 @@ export const metaForConnector = (
       )
     }
   }) as Record<keyof ConnectorSchemas, JSONSchema>,
-  openapiSpec: opts.includeOas ? connector.metadata?.openapiSpec : undefined,
+  openapi_spec: opts.includeOas ? connector.metadata?.openapiSpec : undefined,
 })

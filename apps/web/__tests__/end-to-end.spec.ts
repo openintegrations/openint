@@ -70,8 +70,8 @@ test('create and sync plaid connection', async () => {
   const connConfig = await sdk
     .POST('/core/connector_config', {
       body: {
-        orgId: fixture.org.id,
-        connectorName: 'plaid',
+        org_id: fixture.org.id,
+        connector_name: 'plaid',
         config: {
           envName: 'sandbox',
           products: ['transactions'],
@@ -80,7 +80,7 @@ test('create and sync plaid connection', async () => {
           clientName: 'OpenInt Test',
           credentials: null, // use platform credentials
         },
-        defaultPipeOut: {
+        default_pipe_out: {
           streams: {account: true, transaction: true},
           links: ['unified_banking'],
         },
@@ -145,9 +145,9 @@ test('create and sync greenhouse connection', async () => {
   const connConfig = await sdk
     .POST('/core/connector_config', {
       body: {
-        orgId: fixture.org.id,
-        connectorName: 'greenhouse',
-        defaultPipeOut: {
+        org_id: fixture.org.id,
+        connector_name: 'greenhouse',
+        default_pipe_out: {
           streams: {job: true, candidate: true},
           // TODO: Get sync with no unification to also work
           // May need to work around drizzle-kit issues though
@@ -158,14 +158,12 @@ test('create and sync greenhouse connection', async () => {
     .then((r) => r.data)
 
   const body = {
-    connectorConfigId: connConfig.id,
+    connector_config_id: connConfig.id,
     settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
-    displayName: 'displayName',
+    display_name: 'display_name',
     disabled: false,
-    metadata: {
-      key: 'value',
-    },
-    customerId: 'fooCustomerId',
+    metadata: {key: 'value'},
+    customer_id: 'fooCustomerId',
   }
   const {data: connId} = await sdk.POST('/core/connection', {
     body,
@@ -207,18 +205,20 @@ test('list connections', async () => {
   expect(res.data).toHaveLength(2)
   // Check we have the default postgres connector
   expect(
-    res.data.find((c) => c.connectorConfigId.includes('ccfg_postgres_default')),
+    res.data.find((c) =>
+      c.connector_config_id.includes('ccfg_postgres_default'),
+    ),
   ).toBeTruthy()
   // Check we have the greenhouse connector
   expect(
-    res.data.find((c) => c.connectorConfigId.includes('ccfg_greenhouse')),
+    res.data.find((c) => c.connector_config_id.includes('ccfg_greenhouse')),
   ).toBeTruthy()
 
   // Check connection object structure
-  expect(res.data[0]).toHaveProperty('connectorName')
-  expect(res.data[0]).toHaveProperty('displayName')
-  expect(res.data[0]).toHaveProperty('connectorConfigId')
-  expect(res.data[0]).toHaveProperty('integrationId')
+  expect(res.data[0]).toHaveProperty('connector_name')
+  expect(res.data[0]).toHaveProperty('display_name')
+  expect(res.data[0]).toHaveProperty('connector_config_id')
+  expect(res.data[0]).toHaveProperty('integration_id')
   expect(res.data[0]).toHaveProperty('settings')
   expect(res.data[0]).toHaveProperty('metadata')
 })
@@ -232,11 +232,11 @@ test('list connector metas', async () => {
   // Check basic properties
   expect(connector).toHaveProperty('__typename', 'connector')
   expect(connector).toHaveProperty('name')
-  expect(connector).toHaveProperty('displayName')
+  expect(connector).toHaveProperty('display_name')
   expect(connector).toHaveProperty('logoUrl')
   expect(connector).toHaveProperty('stage')
   expect(connector).toHaveProperty('verticals')
-  expect(connector).toHaveProperty('supportedModes')
+  expect(connector).toHaveProperty('supported_modes')
   expect(connector).toHaveProperty('schemas')
 })
 
@@ -245,16 +245,16 @@ test('list connector config info', async () => {
 
   expect(res.data).toHaveLength(2)
   // Check we have the default postgres connector
-  expect(res.data.find((c) => c.connectorName.includes('plaid'))).toBeTruthy()
+  expect(res.data.find((c) => c.connector_name.includes('plaid'))).toBeTruthy()
   // Check we have the greenhouse connector
   expect(
-    res.data.find((c) => c.connectorName.includes('greenhouse')),
+    res.data.find((c) => c.connector_name.includes('greenhouse')),
   ).toBeTruthy()
 
   // Check basic properties
   expect(res.data[0]).toHaveProperty('envName')
-  expect(res.data[0]).toHaveProperty('displayName')
-  expect(res.data[0]).toHaveProperty('connectorName')
+  expect(res.data[0]).toHaveProperty('display_name')
+  expect(res.data[0]).toHaveProperty('connector_name')
   expect(res.data[0]).toHaveProperty('isSource')
   expect(res.data[0]).toHaveProperty('isDestination')
   expect(res.data[0]).toHaveProperty('verticals')
@@ -277,8 +277,8 @@ test('list configured integrations', async () => {
 test('create token', async () => {
   const res = await sdk.POST('/connect/token', {
     body: {
-      customerId: fixture.org.id,
-      validityInSeconds: 600,
+      customer_id: fixture.org.id,
+      validity_in_seconds: 600,
     },
   })
   expect(res.data).toHaveProperty('token')
@@ -288,9 +288,9 @@ test('create connector config with bad parameters fail', async () => {
   await expect(
     sdk.POST('/core/connector_config', {
       body: {
-        orgId: fixture.org.id,
-        connectorName: 'foo',
-        defaultPipeOut: {
+        org_id: fixture.org.id,
+        connector_name: 'foo',
+        default_pipe_out: {
           streams: {job: true, candidate: true},
         },
       },
@@ -301,9 +301,9 @@ test('create connector config with bad parameters fail', async () => {
   // await expect(
   //   sdk.POST('/core/connector_config', {
   //     body: {
-  //       orgId: fixture.org.id,
-  //       connectorName: 'greenhouse',
-  //       defaultPipeOut: {
+  //       org_id: fixture.org.id,
+  //       connector_name: 'greenhouse',
+  //       default_pipe_out: {
   //         streams: {michael: true},
   //       },
   //     },
@@ -313,9 +313,9 @@ test('create connector config with bad parameters fail', async () => {
   await expect(
     sdk.POST('/core/connector_config', {
       body: {
-        orgId: 'micasa',
-        connectorName: 'greenhouse',
-        defaultPipeOut: {
+        org_id: 'micasa',
+        connector_name: 'greenhouse',
+        default_pipe_out: {
           streams: {job: true, candidate: true},
         },
       },
@@ -379,8 +379,8 @@ test('create connections with bad parameters', async () => {
   const connConfig = await sdk
     .POST('/core/connector_config', {
       body: {
-        orgId: fixture.org.id,
-        connectorName: 'greenhouse',
+        org_id: fixture.org.id,
+        connector_name: 'greenhouse',
       },
     })
     .then((r) => r.data)
@@ -389,7 +389,7 @@ test('create connections with bad parameters', async () => {
   // await expect(
   //   sdk.POST('/core/connection', {
   //     body: {
-  //       connectorConfigId: connConfig.id,
+  //       connector_config_id: connConfig.id,
   //       settings: {apiKey: 'fooApiKey'},
   //     },
   //   }),
@@ -403,9 +403,9 @@ test('create connections with bad parameters', async () => {
   ).rejects.toThrow()
 
   const body = {
-    connectorConfigId: connConfig.id,
+    connector_config_id: connConfig.id,
     settings: {apiKey: testEnv.conn_greenhouse_API_KEY},
-    displayName: 'displayName',
+    display_name: 'displayName',
     disabled: false,
     metadata: {
       key: 'value',
@@ -458,7 +458,7 @@ test('create connections with bad parameters', async () => {
   //   sdk.POST('/core/connection', {
   //     body: {
   //       ...body,
-  //       customerId: randomString(999),
+  //       customer_id: randomString(999),
   //     },
   //   }),
   // ).rejects.toThrow()
@@ -467,7 +467,7 @@ test('create connections with bad parameters', async () => {
     sdk.POST('/core/connection', {
       body: {
         ...body,
-        integrationId: 'foo',
+        integration_id: 'foo',
       },
     }),
   ).rejects.toThrow()
@@ -512,8 +512,8 @@ describe('/connect', () => {
   test('POST /connect/token - Creates a connect token', async () => {
     const res = await sdk.POST('/connect/token', {
       body: {
-        customerId: 'testCustomer',
-        validityInSeconds: 600,
+        customer_id: 'testCustomer',
+        validity_in_seconds: 600,
       },
     })
     expect(res.response.status).toEqual(200)
@@ -523,9 +523,9 @@ describe('/connect', () => {
   test('POST /connect/magic-link - Creates a magic link', async () => {
     const res = await sdk.POST('/connect/magic-link', {
       body: {
-        customerId: 'testCustomer',
-        displayName: 'Test',
-        redirectUrl: 'https://example.com',
+        customer_id: 'testCustomer',
+        display_name: 'Test',
+        redirect_url: 'https://example.com',
       },
     })
     expect(res.response.status).toEqual(200)
@@ -541,8 +541,8 @@ describe('/passthrough', () => {
     const connConfig = await sdk
       .POST('/core/connector_config', {
         body: {
-          orgId: fixture.org.id,
-          connectorName: 'greenhouse',
+          org_id: fixture.org.id,
+          connector_name: 'greenhouse',
         },
       })
       .then((r) => r.data)
@@ -550,7 +550,7 @@ describe('/passthrough', () => {
     // TODO: validate API keys for greenhouse when adding a connection with it
     const {data: connId} = await sdk.POST('/core/connection', {
       body: {
-        connectorConfigId: connConfig.id,
+        connector_config_id: connConfig.id,
         settings: {apiKey: 'fooApiKey'},
       },
     })

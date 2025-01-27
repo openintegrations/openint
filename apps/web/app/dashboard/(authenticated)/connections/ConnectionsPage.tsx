@@ -18,7 +18,9 @@ export default function ConnectionsPage() {
         </h2>
         {/* <OpenIntConnectButton clientConnectors={clientConnectors} /> */}
       </header>
-      <p className="mb-4 text-sm text-gray-600">Connections are created based on connector configurations</p>
+      <p className="mb-4 text-sm text-gray-600">
+        Connections are created based on connector configurations
+      </p>
       <DataTable
         query={res}
         filter={filter}
@@ -30,13 +32,13 @@ export default function ConnectionsPage() {
               <VCommandMenu initialParams={{connection: row.original}} />
             ),
           },
-          {accessorKey: 'displayName'},
-          {accessorKey: 'customerId'},
+          {accessorKey: 'display_name'},
+          {accessorKey: 'customer_id'},
           {accessorKey: 'id'},
           {accessorKey: 'status'},
-          {accessorKey: 'connectorConfigId'},
-          {accessorKey: 'integrationId'},
-          {accessorKey: 'pipelineIds'},
+          {accessorKey: 'connector_config_id'},
+          {accessorKey: 'integration_id'},
+          {accessorKey: 'pipeline_ids'},
         ]}
       />
     </div>

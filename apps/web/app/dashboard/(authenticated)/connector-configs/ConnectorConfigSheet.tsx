@@ -138,19 +138,19 @@ export function ConnectorConfigSheet({
 
         <SheetHeader className="shrink-0">
           <SheetTitle>
-            {verb} {connectorMeta.displayName} connector config
+            {verb} {connectorMeta.display_name} connector config
           </SheetTitle>
 
           <div className="flex max-h-[100px] flex-row items-center justify-between">
-            {connectorMeta.logoUrl ? (
+            {connectorMeta.logo_url ? (
               <Image
                 width={100}
                 height={100}
-                src={connectorMeta.logoUrl}
-                alt={connectorMeta.displayName}
+                src={connectorMeta.logo_url}
+                alt={connectorMeta.display_name}
               />
             ) : (
-              <span>{connectorMeta.displayName}</span>
+              <span>{connectorMeta.display_name}</span>
             )}
             <Badge
               variant="secondary"
@@ -168,7 +168,7 @@ export function ConnectorConfigSheet({
           <SheetDescription>
             {ccfg && `ID: ${ccfg.id}`}
             <br />
-            Supported mode(s): {connectorMeta.supportedModes.join(', ')}
+            Supported mode(s): {connectorMeta.supported_modes.join(', ')}
           </SheetDescription>
         </SheetHeader>
         <Separator orientation="horizontal" />
@@ -215,7 +215,7 @@ export function ConnectorConfigSheet({
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    Confirm delete {connectorMeta.displayName} connector config?
+                    Confirm delete {connectorMeta.display_name} connector config?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     ID: {ccfg.id}

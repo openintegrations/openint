@@ -52,15 +52,15 @@ export const ConnectionSheet = React.forwardRef(function ConnectionSheet(
       mutation={updateConnection}
       initialValues={props.connection}>
       <div className="flex max-h-[100px] flex-row items-center justify-between">
-        {connector.logoUrl ? (
+        {connector.logo_url ? (
           <Image
             width={100}
             height={100}
-            src={connector.logoUrl}
-            alt={connector.displayName}
+            src={connector.logo_url}
+            alt={connector.display_name}
           />
         ) : (
-          <span>{connector.displayName}</span>
+          <span>{connector.display_name}</span>
         )}
         <Badge
           variant="secondary"
@@ -78,7 +78,7 @@ export const ConnectionSheet = React.forwardRef(function ConnectionSheet(
       <SheetDescription>
         {props.connection && `ID: ${props.connection.id}`}
         <br />
-        Supported mode(s): {connector.supportedModes.join(', ')}
+        Supported mode(s): {connector.supported_modes.join(', ')}
       </SheetDescription>
     </SchemaSheet>
   )

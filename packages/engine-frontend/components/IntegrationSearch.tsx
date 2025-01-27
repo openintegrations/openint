@@ -202,7 +202,7 @@ export function IntegrationSearch({
                             <IntegrationCard
                               onClick={openConnect}
                               logo={
-                                int.logo_url ?? int.ccfg.connector.logoUrl ?? ''
+                                int.logo_url ?? int.ccfg.connector.logo_url ?? ''
                               }
                               name={int.name}
                               hasDeeplink={hasDeeplink}
@@ -236,7 +236,7 @@ export function IntegrationSearch({
                                   <img
                                     src={
                                       int.logo_url ??
-                                      int.ccfg.connector.logoUrl ??
+                                      int.ccfg.connector.logo_url ??
                                       ''
                                     }
                                     alt={`${int.name} logo`}

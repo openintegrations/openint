@@ -90,7 +90,7 @@ const _connectorRouter = trpc.router({
           message: `Connector ${name} not found`,
         })
       }
-      const specs = metaForConnector(connector, {includeOas: true}).openapiSpec
+      const specs = metaForConnector(connector, {includeOas: true}).openapi_spec
       return input.original ? specs?.original : specs?.proxied
     }),
   getConnectorSchemas: publicProcedure
@@ -171,9 +171,9 @@ const _connectorRouter = trpc.router({
         items: [
           {
             id: name,
-            name: meta.displayName,
+            name: meta.display_name,
             updated_at: new Date().toISOString(),
-            logo_url: meta.logoUrl,
+            logo_url: meta.logo_url,
             connector_name: name,
             // TODO: Should not duplicate this so much...
             categories: connector.metadata?.verticals,

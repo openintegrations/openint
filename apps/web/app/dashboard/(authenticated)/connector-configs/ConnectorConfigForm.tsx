@@ -56,17 +56,17 @@ export function ConnectorConfigForm({
     .pick({displayName: true, disabled: true})
     .extend({
       config: z.object({}),
-      ...(connectorMeta?.supportedModes.includes('source') && {
+      ...(connectorMeta?.supported_modes.includes('source') && {
         defaultPipeOut: z
           .union([
             z.null().openapi({title: 'Disabled'}),
             z
               .object({
-                ...(connectorMeta?.sourceStreams?.length && {
+                ...(connectorMeta?.source_streams?.length && {
                   streams: z
                     .object(
                       Object.fromEntries(
-                        (connectorMeta.sourceStreams as [string]).map((s) => [
+                        (connectorMeta.source_streams as [string]).map((s) => [
                           s,
                           z.boolean().optional(),
                         ]),
@@ -92,7 +92,7 @@ export function ConnectorConfigForm({
               zRaw.connector_config.shape.default_pipe_out.description,
           }),
       }),
-      ...(connectorMeta?.supportedModes.includes('destination') && {
+      ...(connectorMeta?.supported_modes.includes('destination') && {
         defaultPipeIn: z
           .union([
             z.null().openapi({title: 'Disabled'}),
