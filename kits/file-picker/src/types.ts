@@ -13,6 +13,7 @@ export type SharepointConnectionDetails = {
 export type GoogleDriveConnectionDetails = {
   type: 'googledrive'
   accessToken: string
+  clientId: string
 }
 
 export type ConnectionDetails =
@@ -33,8 +34,8 @@ export type SelectedFile = {
   id: string
   name: string
   type: 'file' | 'folder'
-  driveId: string | null
-  driveGroupId: string | null
+  driveId?: string
+  driveGroupId?: string
 }
 
 export interface PickerInterface {
