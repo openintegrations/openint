@@ -46,13 +46,6 @@ export interface paths {
     /** Passthrough */
     post: operations['passthrough']
   }
-  '/core/connection/{id}/source_sync': {
-    /**
-     * Source sync
-     * @description Return records that would have otherwise been emitted during a sync and return it instead
-     */
-    post: operations['sourceSync']
-  }
   '/core/connection': {
     /** List connections */
     get: operations['listConnection']
@@ -1675,51 +1668,6 @@ export interface operations {
       200: {
         content: {
           'application/json': unknown
-        }
-      }
-      /** @description Invalid input data */
-      400: {
-        content: {
-          'application/json': components['schemas']['error.BAD_REQUEST']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /**
-   * Source sync
-   * @description Return records that would have otherwise been emitted during a sync and return it instead
-   */
-  sourceSync: {
-    parameters: {
-      path: {
-        id: string
-      }
-    }
-    requestBody: {
-      content: {
-        'application/json': {
-          state?: {
-            [key: string]: unknown
-          }
-          streams?: {
-            [key: string]: boolean
-          }
-        }
-      }
-    }
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': {
-            [key: string]: unknown
-          }[]
         }
       }
       /** @description Invalid input data */

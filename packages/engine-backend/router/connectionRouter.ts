@@ -141,15 +141,16 @@ export const connectionRouter = trpc.router({
     }),
 
   sourceSync: protectedProcedure
-    .meta({
-      openapi: {
-        method: 'POST',
-        path: '/core/connection/{id}/source_sync',
-        tags: ['Internal'],
-        description:
-          'Return records that would have otherwise been emitted during a sync and return it instead',
-      },
-    })
+    // Remove from oai spec for now
+    // .meta({
+    //   openapi: {
+    //     method: 'POST',
+    //     path: '/core/connection/{id}/source_sync',
+    //     tags: ['Internal'],
+    //     description:
+    //       'Return records that would have otherwise been emitted during a sync and return it instead',
+    //   },
+    // })
     .input(
       z.object({
         id: zId('conn'),
