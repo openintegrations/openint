@@ -1,4 +1,5 @@
 import {type QBOSDK, type QBOSDKTypes} from '@openint/connector-qbo'
+import type {z} from '@openint/util'
 import {makeUlid} from '@openint/util'
 import {mapper, zCast} from '@openint/vdk'
 import type {AccountingAdapter} from '../router'
@@ -25,102 +26,102 @@ const mappers = {
     url: 'domain',
   }),
   balanceSheet: mapper(zCast<{data: QBO['Report']}>(), unified.balanceSheet, {
-    reportName: (e) => e?.data?.Header?.ReportName ?? '',
-    startPeriod: (e) => e?.data?.Header?.StartPeriod ?? '',
-    endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
+    report_name: (e) => e?.data?.Header?.ReportName ?? '',
+    start_period: (e) => e?.data?.Header?.StartPeriod ?? '',
+    end_period: (e) => e?.data?.Header?.EndPeriod ?? '',
     currency: (e) => e?.data?.Header?.Currency ?? 'USD',
-    accountingStandard: (e) =>
+    accounting_standard: (e) =>
       e?.data?.Header?.Option?.find((opt) => opt.Name === 'AccountingStandard')
         ?.Value ?? '',
-    totalCurrentAssets: (e) =>
+    total_current_assets: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[0]?.Rows?.Row[0]?.Summary?.ColData[1]?.value || '0',
       ),
-    totalFixedAssets: (e) =>
+    total_fixed_assets: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[0]?.Rows?.Row[1]?.Summary?.ColData[1]?.value || '0',
       ),
-    totalAssets: (e) =>
+    total_assets: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[0]?.Summary?.ColData[1]?.value || '0',
       ),
-    totalCurrentLiabilities: (e) =>
+    total_current_liabilities: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[1]?.Rows?.Row[0]?.Summary?.ColData[1]?.value || '0',
       ),
-    totalLongTermLiabilities: (e) =>
+    total_long_term_liabilities: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[1]?.Rows?.Row[1]?.Summary?.ColData[1]?.value || '0',
       ),
-    totalLiabilities: (e) =>
+    total_liabilities: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[1]?.Summary?.ColData[1]?.value || '0',
       ),
-    openingBalanceEquity: (e) =>
+    opening_balance_equity: (e) =>
       Number.parseFloat(
         // @ts-expect-error fix the `Row: Record<string, never>[]` typing inside opensdks
         e?.data?.Rows?.Row[1]?.Rows?.Row[1]?.Rows?.Row[0]?.ColData[1]?.value ||
           '0',
       ),
-    netIncome: (e) =>
+    net_income: (e) =>
       Number.parseFloat(
         // @ts-expect-error fix the `Row: Record<string, never>[]` typing inside opensdks
         e?.data?.Rows?.Row[1]?.Rows?.Row[1]?.Rows?.Row[2]?.ColData[1]?.value ||
           '0',
       ),
-    totalEquity: (e) =>
+    total_equity: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[1]?.Rows?.Row[1]?.Summary?.ColData[1]?.value || '0',
       ),
-    totalLiabilitiesAndEquity: (e) =>
+    total_liabilities_and_equity: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[1]?.Summary?.ColData[1]?.value || '0',
       ),
   }),
 
   profitAndLoss: mapper(zCast<{data: QBO['Report']}>(), unified.profitAndLoss, {
-    reportName: (e) => e?.data?.Header?.ReportName ?? '',
-    startPeriod: (e) => e?.data?.Header?.StartPeriod ?? '',
-    endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
+    report_name: (e) => e?.data?.Header?.ReportName ?? '',
+    start_period: (e) => e?.data?.Header?.StartPeriod ?? '',
+    end_period: (e) => e?.data?.Header?.EndPeriod ?? '',
     currency: (e) => e?.data?.Header?.Currency ?? 'USD',
-    accountingStandard: (e) =>
+    accounting_standard: (e) =>
       e?.data?.Header?.Option?.find((opt) => opt.Name === 'AccountingStandard')
         ?.Value ?? '',
-    totalIncome: (e) => {
+    total_income: (e) => {
       return getReportValue(e.data, 'Income')
     },
-    grossProfit: (e) => getReportValue(e.data, 'GrossProfit'),
-    totalExpenses: (e) => getReportValue(e.data, 'Expenses'),
-    netOperatingIncome: (e) => getReportValue(e.data, 'NetOperatingIncome'),
-    netIncome: (e) => getReportValue(e.data, 'NetIncome'),
+    gross_profit: (e) => getReportValue(e.data, 'GrossProfit'),
+    total_expenses: (e) => getReportValue(e.data, 'Expenses'),
+    net_operating_income: (e) => getReportValue(e.data, 'NetOperatingIncome'),
+    net_income: (e) => getReportValue(e.data, 'NetIncome'),
   }),
 
   cashFlow: mapper(zCast<{data: QBO['Report']}>(), unified.cashFlow, {
-    reportName: (e) => e?.data?.Header?.ReportName ?? '',
-    startPeriod: (e) => e?.data?.Header?.StartPeriod ?? '',
-    endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
+    report_name: (e) => e?.data?.Header?.ReportName ?? '',
+    start_period: (e) => e?.data?.Header?.StartPeriod ?? '',
+    end_period: (e) => e?.data?.Header?.EndPeriod ?? '',
     currency: (e) => e?.data?.Header?.Currency ?? 'USD',
-    netIncome: (e) =>
+    net_income: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row?.[0]?.Rows?.Row?.[0]?.ColData?.[1]?.value || '0',
       ),
-    totalOperatingAdjustments: (e) =>
+    total_operating_adjustments: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row?.[0]?.Summary?.ColData?.[1]?.value || '0',
       ),
-    netCashFromOperatingActivities: (e) =>
+    net_cash_from_operating_activities: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[0]?.Summary?.ColData[1]?.value || '0',
       ),
-    netCashFromFinancingActivities: (e) =>
+    net_cash_from_financing_activities: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[1]?.Summary?.ColData[1]?.value || '0',
       ),
-    netCashIncrease: (e) =>
+    net_cash_increase: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[2]?.Summary?.ColData[1]?.value || '0',
       ),
-    endingCash: (e) =>
+    ending_cash: (e) =>
       Number.parseFloat(
         e?.data?.Rows?.Row[3]?.Summary?.ColData[1]?.value || '0',
       ),
@@ -130,41 +131,43 @@ const mappers = {
     zCast<{data: QBO['Report']}>(),
     unified.transactionList,
     {
-      reportName: (e) => e?.data?.Header?.ReportName ?? '',
-      startPeriod: (e) => e?.data?.Header?.StartPeriod ?? '',
-      endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
+      report_name: (e) => e?.data?.Header?.ReportName ?? '',
+      start_period: (e) => e?.data?.Header?.StartPeriod ?? '',
+      end_period: (e) => e?.data?.Header?.EndPeriod ?? '',
       currency: (e) => e?.data?.Header?.Currency ?? 'USD',
       transactions: (e) => {
         const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
 
         return (
-          e?.data?.Rows?.Row?.map((row) => ({
-            id:
-              row?.ColData?.[
-                columnMap['Transaction Type'] as number
-              ]?.value?.toLowerCase() +
-              '_' +
-              row?.ColData?.[columnMap['Transaction Type'] as number]?.id,
-            date: row?.ColData?.[columnMap['Date'] as number]?.value ?? '',
-            transactionType:
-              row?.ColData?.[columnMap['Transaction Type'] as number]?.value ??
-              '',
-            documentNumber:
-              row?.ColData?.[columnMap['Num'] as number]?.value ?? '',
-            posting:
-              row?.ColData?.[columnMap['Posting'] as number]?.value ?? '',
-            name: row?.ColData?.[columnMap['Name'] as number]?.value ?? '',
-            memo:
-              row?.ColData?.[columnMap['Memo/Description'] as number]?.value ??
-              '',
-            account:
-              row?.ColData?.[columnMap['Account'] as number]?.value ?? '',
-            split: row?.ColData?.[columnMap['Split'] as number]?.value ?? '',
-            amount: parseFloat(
-              row?.ColData?.[columnMap['Amount'] as number]?.value ?? '0',
-            ),
-            raw_data: {Column: e?.data?.Columns?.Column, Row: row},
-          })) ?? []
+          e?.data?.Rows?.Row?.map(
+            (row): z.infer<typeof unified.transactionSchema> => ({
+              id:
+                row?.ColData?.[
+                  columnMap['Transaction Type'] as number
+                ]?.value?.toLowerCase() +
+                '_' +
+                row?.ColData?.[columnMap['Transaction Type'] as number]?.id,
+              date: row?.ColData?.[columnMap['Date'] as number]?.value ?? '',
+              transaction_type:
+                row?.ColData?.[columnMap['Transaction Type'] as number]
+                  ?.value ?? '',
+              document_number:
+                row?.ColData?.[columnMap['Num'] as number]?.value ?? '',
+              posting:
+                row?.ColData?.[columnMap['Posting'] as number]?.value ?? '',
+              name: row?.ColData?.[columnMap['Name'] as number]?.value ?? '',
+              memo:
+                row?.ColData?.[columnMap['Memo/Description'] as number]
+                  ?.value ?? '',
+              account:
+                row?.ColData?.[columnMap['Account'] as number]?.value ?? '',
+              split: row?.ColData?.[columnMap['Split'] as number]?.value ?? '',
+              amount: parseFloat(
+                row?.ColData?.[columnMap['Amount'] as number]?.value ?? '0',
+              ),
+              raw_data: {Column: e?.data?.Columns?.Column, Row: row},
+            }),
+          ) ?? []
         )
       },
     },
@@ -173,18 +176,20 @@ const mappers = {
     zCast<{data: QBO['Report']}>(),
     unified.customerBalance,
     {
-      reportName: (e) => e?.data?.Header?.ReportName ?? '',
-      reportDate: (e) =>
+      report_name: (e) => e?.data?.Header?.ReportName ?? '',
+      report_date: (e) =>
         e?.data?.Header?.Option?.find((opt) => opt.Name === 'report_date')
           ?.Value ?? '',
       currency: (e) => e?.data?.Header?.Currency ?? 'USD',
       entries: (e) =>
-        e?.data?.Rows?.Row?.filter((row) => !row.group)?.map((row) => ({
-          customerId: row?.ColData?.[0]?.id ?? '',
-          customerName: row?.ColData?.[0]?.value ?? '',
-          balance: parseFloat(row?.ColData?.[1]?.value ?? '0'),
-        })) ?? [],
-      totalBalance: (e) =>
+        e?.data?.Rows?.Row?.filter((row) => !row.group)?.map(
+          (row): z.infer<typeof unified.customerBalanceEntrySchema> => ({
+            customer_id: row?.ColData?.[0]?.id ?? '',
+            customer_name: row?.ColData?.[0]?.value ?? '',
+            balance: parseFloat(row?.ColData?.[1]?.value ?? '0'),
+          }),
+        ) ?? [],
+      total_balance: (e) =>
         parseFloat(
           e?.data?.Rows?.Row?.find((row) => row.group === 'GrandTotal')?.Summary
             ?.ColData?.[1]?.value ?? '0',
@@ -195,30 +200,33 @@ const mappers = {
     zCast<{data: QBO['Report']}>(),
     unified.customerIncome,
     {
-      reportName: (e) => e?.data?.Header?.ReportName ?? '',
-      startPeriod: (e) => e?.data?.Header?.StartPeriod ?? '',
-      endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
+      report_name: (e) => e?.data?.Header?.ReportName ?? '',
+      start_period: (e) => e?.data?.Header?.StartPeriod ?? '',
+      end_period: (e) => e?.data?.Header?.EndPeriod ?? '',
       currency: (e) => e?.data?.Header?.Currency ?? 'USD',
       entries: (e) => {
         const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
 
         return (
-          e?.data?.Rows?.Row?.filter((row) => !row.group)?.map((row) => ({
-            customerId: row?.ColData?.[columnMap[''] as number]?.id ?? '',
-            customerName: row?.ColData?.[columnMap[''] as number]?.value ?? '',
-            totalIncome: parseFloat(
-              row?.ColData?.[columnMap['Income'] as number]?.value || '0',
-            ),
-            totalExpenses: parseFloat(
-              row?.ColData?.[columnMap['Expenses'] as number]?.value || '0',
-            ),
-            netIncome: parseFloat(
-              row?.ColData?.[columnMap['Net Income'] as number]?.value || '0',
-            ),
-          })) ?? []
+          e?.data?.Rows?.Row?.filter((row) => !row.group)?.map(
+            (row): z.infer<typeof unified.customerIncomeEntrySchema> => ({
+              customer_id: row?.ColData?.[columnMap[''] as number]?.id ?? '',
+              customer_name:
+                row?.ColData?.[columnMap[''] as number]?.value ?? '',
+              total_income: parseFloat(
+                row?.ColData?.[columnMap['Income'] as number]?.value || '0',
+              ),
+              total_expenses: parseFloat(
+                row?.ColData?.[columnMap['Expenses'] as number]?.value || '0',
+              ),
+              net_income: parseFloat(
+                row?.ColData?.[columnMap['Net Income'] as number]?.value || '0',
+              ),
+            }),
+          ) ?? []
         )
       },
-      totalIncome: (e) => {
+      total_income: (e) => {
         const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
 
         return (
@@ -228,7 +236,7 @@ const mappers = {
           ) || 0
         )
       },
-      totalExpenses: (e) => {
+      total_expenses: (e) => {
         const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
         return (
           parseFloat(
@@ -238,7 +246,7 @@ const mappers = {
           ) || 0
         )
       },
-      netIncome: (e) => {
+      net_income: (e) => {
         const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
 
         return (

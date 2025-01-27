@@ -6,17 +6,17 @@ export const account = z
     number: z.string().nullish(),
     name: z.string(),
     type: z.string(), //  z.enum(['asset', 'liability', 'equity', 'income', 'expense']),
-    subAccount: z.boolean().optional(),
-    accountType: z.string().optional(),
-    accountSubType: z.string().optional(),
-    currentBalance: z.number().optional(),
-    currencyRef: z
+    sub_account: z.boolean().optional(),
+    account_type: z.string().optional(),
+    account_subtype: z.string().optional(),
+    current_balance: z.number().optional(),
+    currency_ref: z
       .object({
         value: z.string(),
         name: z.string(),
       })
       .optional(),
-    metaData: z
+    metadata: z
       .object({
         createTime: z.string(),
         lastUpdatedTime: z.string(),
@@ -41,54 +41,54 @@ export const vendor = z.object({
 
 // TODO: expand
 export const balanceSheet = z.object({
-  startPeriod: z.string().openapi({format: 'date'}),
-  endPeriod: z.string().openapi({format: 'date'}),
+  start_period: z.string().openapi({format: 'date'}),
+  end_period: z.string().openapi({format: 'date'}),
   currency: z.string(),
-  accountingStandard: z.string(),
-  totalCurrentAssets: z.number().nullable(),
-  totalFixedAssets: z.number().nullable(),
-  totalAssets: z.number().nullable(),
-  totalCurrentLiabilities: z.number().nullable(),
-  totalLongTermLiabilities: z.number().nullable(),
-  totalLiabilities: z.number().nullable(),
-  openingBalanceEquity: z.number().nullable(),
-  netIncome: z.number().nullable(),
-  totalEquity: z.number().nullable(),
-  totalLiabilitiesAndEquity: z.number().nullable(),
+  accounting_standard: z.string(),
+  total_current_assets: z.number().nullable(),
+  total_fixed_assets: z.number().nullable(),
+  total_assets: z.number().nullable(),
+  total_current_liabilities: z.number().nullable(),
+  total_long_term_liabilities: z.number().nullable(),
+  total_liabilities: z.number().nullable(),
+  opening_balance_equity: z.number().nullable(),
+  net_income: z.number().nullable(),
+  total_equity: z.number().nullable(),
+  total_liabilities_and_equity: z.number().nullable(),
 })
 
 // TODO: expand
 export const profitAndLoss = z.object({
-  reportName: z.string(),
-  startPeriod: z.string().openapi({format: 'date'}),
-  endPeriod: z.string().openapi({format: 'date'}),
+  report_name: z.string(),
+  start_period: z.string().openapi({format: 'date'}),
+  end_period: z.string().openapi({format: 'date'}),
   currency: z.string(),
-  accountingStandard: z.string(),
-  totalIncome: z.number().nullable(),
-  grossProfit: z.number().nullable(),
-  totalExpenses: z.number().nullable(),
-  netOperatingIncome: z.number().nullable(),
-  netIncome: z.number().nullable(),
+  accounting_standard: z.string(),
+  total_income: z.number().nullable(),
+  gross_profit: z.number().nullable(),
+  total_expenses: z.number().nullable(),
+  net_operating_income: z.number().nullable(),
+  net_income: z.number().nullable(),
 })
 
 export const cashFlow = z.object({
-  reportName: z.string(),
-  startPeriod: z.string().openapi({format: 'date'}),
-  endPeriod: z.string().openapi({format: 'date'}),
+  report_name: z.string(),
+  start_period: z.string().openapi({format: 'date'}),
+  end_period: z.string().openapi({format: 'date'}),
   currency: z.string(),
-  netIncome: z.number().nullable(),
-  totalOperatingAdjustments: z.number().nullable(),
-  netCashFromOperatingActivities: z.number().nullable(),
-  netCashFromFinancingActivities: z.number().nullable(),
-  netCashIncrease: z.number().nullable(),
-  endingCash: z.number().nullable(),
+  net_income: z.number().nullable(),
+  total_operating_adjustments: z.number().nullable(),
+  net_cash_from_operating_activities: z.number().nullable(),
+  net_cash_from_financing_activities: z.number().nullable(),
+  net_cash_increase: z.number().nullable(),
+  ending_cash: z.number().nullable(),
 })
 
-const transactionSchema = z.object({
+export const transactionSchema = z.object({
   id: z.string(),
   date: z.string(),
-  transactionType: z.string(),
-  documentNumber: z.string().optional(),
+  transaction_type: z.string(),
+  document_number: z.string().optional(),
   posting: z.string().optional(),
   name: z.string().optional(),
   department: z.string().optional(),
@@ -100,55 +100,55 @@ const transactionSchema = z.object({
 })
 
 export const transactionList = z.object({
-  reportName: z.string(),
-  startPeriod: z.string(),
-  endPeriod: z.string(),
+  report_name: z.string(),
+  start_period: z.string(),
+  end_period: z.string(),
   currency: z.string(),
   transactions: z.array(transactionSchema),
 })
 
-const customerBalanceEntrySchema = z.object({
-  customerId: z.string(),
-  customerName: z.string(),
+export const customerBalanceEntrySchema = z.object({
+  customer_id: z.string(),
+  customer_name: z.string(),
   balance: z.number(),
 })
 
 export const customerBalance = z.object({
-  reportName: z.string(),
-  reportDate: z.string(),
+  report_name: z.string(),
+  report_date: z.string(),
   currency: z.string(),
   entries: z.array(customerBalanceEntrySchema),
-  totalBalance: z.number(),
+  total_balance: z.number(),
 })
 
-const customerIncomeEntrySchema = z.object({
-  customerId: z.string(),
-  customerName: z.string(),
-  totalIncome: z.number(),
-  totalExpenses: z.number(),
-  netIncome: z.number(),
+export const customerIncomeEntrySchema = z.object({
+  customer_id: z.string(),
+  customer_name: z.string(),
+  total_income: z.number(),
+  total_expenses: z.number(),
+  net_income: z.number(),
 })
 
 export const customerIncome = z.object({
-  reportName: z.string(),
-  startPeriod: z.string(),
-  endPeriod: z.string(),
+  report_name: z.string(),
+  start_period: z.string(),
+  end_period: z.string(),
   currency: z.string(),
   entries: z.array(customerIncomeEntrySchema),
-  totalIncome: z.number(),
-  totalExpenses: z.number(),
-  netIncome: z.number(),
+  total_income: z.number(),
+  total_expenses: z.number(),
+  net_income: z.number(),
 })
 
 export const usBankAccount = z.object({
   updated: z.string(),
   name: z.string(),
-  accountNumber: z.string(),
+  account_number: z.string(),
   default: z.boolean(),
   created: z.string(),
-  inputType: z.string(),
+  input_type: z.string(),
   phone: z.string(),
-  accountType: z.string(),
-  routingNumber: z.string(),
+  account_type: z.string(),
+  routing_number: z.string(),
   id: z.string(),
 })

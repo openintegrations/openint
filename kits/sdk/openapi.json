@@ -5369,19 +5369,19 @@
                           "type": {
                             "type": "string"
                           },
-                          "subAccount": {
+                          "sub_account": {
                             "type": "boolean"
                           },
-                          "accountType": {
+                          "account_type": {
                             "type": "string"
                           },
-                          "accountSubType": {
+                          "account_subtype": {
                             "type": "string"
                           },
-                          "currentBalance": {
+                          "current_balance": {
                             "type": "number"
                           },
-                          "currencyRef": {
+                          "currency_ref": {
                             "type": "object",
                             "properties": {
                               "value": {
@@ -5393,7 +5393,7 @@
                             },
                             "required": ["value", "name"]
                           },
-                          "metaData": {
+                          "metadata": {
                             "type": "object",
                             "properties": {
                               "createTime": {
@@ -5720,66 +5720,66 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "startPeriod": {
+                    "start_period": {
                       "type": "string",
                       "format": "date"
                     },
-                    "endPeriod": {
+                    "end_period": {
                       "type": "string",
                       "format": "date"
                     },
                     "currency": {
                       "type": "string"
                     },
-                    "accountingStandard": {
+                    "accounting_standard": {
                       "type": "string"
                     },
-                    "totalCurrentAssets": {
+                    "total_current_assets": {
                       "type": ["number", "null"]
                     },
-                    "totalFixedAssets": {
+                    "total_fixed_assets": {
                       "type": ["number", "null"]
                     },
-                    "totalAssets": {
+                    "total_assets": {
                       "type": ["number", "null"]
                     },
-                    "totalCurrentLiabilities": {
+                    "total_current_liabilities": {
                       "type": ["number", "null"]
                     },
-                    "totalLongTermLiabilities": {
+                    "total_long_term_liabilities": {
                       "type": ["number", "null"]
                     },
-                    "totalLiabilities": {
+                    "total_liabilities": {
                       "type": ["number", "null"]
                     },
-                    "openingBalanceEquity": {
+                    "opening_balance_equity": {
                       "type": ["number", "null"]
                     },
-                    "netIncome": {
+                    "net_income": {
                       "type": ["number", "null"]
                     },
-                    "totalEquity": {
+                    "total_equity": {
                       "type": ["number", "null"]
                     },
-                    "totalLiabilitiesAndEquity": {
+                    "total_liabilities_and_equity": {
                       "type": ["number", "null"]
                     }
                   },
                   "required": [
-                    "startPeriod",
-                    "endPeriod",
+                    "start_period",
+                    "end_period",
                     "currency",
-                    "accountingStandard",
-                    "totalCurrentAssets",
-                    "totalFixedAssets",
-                    "totalAssets",
-                    "totalCurrentLiabilities",
-                    "totalLongTermLiabilities",
-                    "totalLiabilities",
-                    "openingBalanceEquity",
-                    "netIncome",
-                    "totalEquity",
-                    "totalLiabilitiesAndEquity"
+                    "accounting_standard",
+                    "total_current_assets",
+                    "total_fixed_assets",
+                    "total_assets",
+                    "total_current_liabilities",
+                    "total_long_term_liabilities",
+                    "total_liabilities",
+                    "opening_balance_equity",
+                    "net_income",
+                    "total_equity",
+                    "total_liabilities_and_equity"
                   ]
                 }
               }
@@ -5882,50 +5882,50 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "reportName": {
+                    "report_name": {
                       "type": "string"
                     },
-                    "startPeriod": {
+                    "start_period": {
                       "type": "string",
                       "format": "date"
                     },
-                    "endPeriod": {
+                    "end_period": {
                       "type": "string",
                       "format": "date"
                     },
                     "currency": {
                       "type": "string"
                     },
-                    "accountingStandard": {
+                    "accounting_standard": {
                       "type": "string"
                     },
-                    "totalIncome": {
+                    "total_income": {
                       "type": ["number", "null"]
                     },
-                    "grossProfit": {
+                    "gross_profit": {
                       "type": ["number", "null"]
                     },
-                    "totalExpenses": {
+                    "total_expenses": {
                       "type": ["number", "null"]
                     },
-                    "netOperatingIncome": {
+                    "net_operating_income": {
                       "type": ["number", "null"]
                     },
-                    "netIncome": {
+                    "net_income": {
                       "type": ["number", "null"]
                     }
                   },
                   "required": [
-                    "reportName",
-                    "startPeriod",
-                    "endPeriod",
+                    "report_name",
+                    "start_period",
+                    "end_period",
                     "currency",
-                    "accountingStandard",
-                    "totalIncome",
-                    "grossProfit",
-                    "totalExpenses",
-                    "netOperatingIncome",
-                    "netIncome"
+                    "accounting_standard",
+                    "total_income",
+                    "gross_profit",
+                    "total_expenses",
+                    "net_operating_income",
+                    "net_income"
                   ]
                 }
               }
@@ -6028,50 +6028,50 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "reportName": {
+                    "report_name": {
                       "type": "string"
                     },
-                    "startPeriod": {
+                    "start_period": {
                       "type": "string",
                       "format": "date"
                     },
-                    "endPeriod": {
+                    "end_period": {
                       "type": "string",
                       "format": "date"
                     },
                     "currency": {
                       "type": "string"
                     },
-                    "netIncome": {
+                    "net_income": {
                       "type": ["number", "null"]
                     },
-                    "totalOperatingAdjustments": {
+                    "total_operating_adjustments": {
                       "type": ["number", "null"]
                     },
-                    "netCashFromOperatingActivities": {
+                    "net_cash_from_operating_activities": {
                       "type": ["number", "null"]
                     },
-                    "netCashFromFinancingActivities": {
+                    "net_cash_from_financing_activities": {
                       "type": ["number", "null"]
                     },
-                    "netCashIncrease": {
+                    "net_cash_increase": {
                       "type": ["number", "null"]
                     },
-                    "endingCash": {
+                    "ending_cash": {
                       "type": ["number", "null"]
                     }
                   },
                   "required": [
-                    "reportName",
-                    "startPeriod",
-                    "endPeriod",
+                    "report_name",
+                    "start_period",
+                    "end_period",
                     "currency",
-                    "netIncome",
-                    "totalOperatingAdjustments",
-                    "netCashFromOperatingActivities",
-                    "netCashFromFinancingActivities",
-                    "netCashIncrease",
-                    "endingCash"
+                    "net_income",
+                    "total_operating_adjustments",
+                    "net_cash_from_operating_activities",
+                    "net_cash_from_financing_activities",
+                    "net_cash_increase",
+                    "ending_cash"
                   ]
                 }
               }
@@ -6195,13 +6195,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "reportName": {
+                    "report_name": {
                       "type": "string"
                     },
-                    "startPeriod": {
+                    "start_period": {
                       "type": "string"
                     },
-                    "endPeriod": {
+                    "end_period": {
                       "type": "string"
                     },
                     "currency": {
@@ -6218,10 +6218,10 @@
                           "date": {
                             "type": "string"
                           },
-                          "transactionType": {
+                          "transaction_type": {
                             "type": "string"
                           },
-                          "documentNumber": {
+                          "document_number": {
                             "type": "string"
                           },
                           "posting": {
@@ -6247,14 +6247,14 @@
                           },
                           "raw_data": {}
                         },
-                        "required": ["id", "date", "transactionType", "amount"]
+                        "required": ["id", "date", "transaction_type", "amount"]
                       }
                     }
                   },
                   "required": [
-                    "reportName",
-                    "startPeriod",
-                    "endPeriod",
+                    "report_name",
+                    "start_period",
+                    "end_period",
                     "currency",
                     "transactions"
                   ]
@@ -6360,10 +6360,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "reportName": {
+                    "report_name": {
                       "type": "string"
                     },
-                    "reportDate": {
+                    "report_date": {
                       "type": "string"
                     },
                     "currency": {
@@ -6374,29 +6374,29 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "customerId": {
+                          "customer_id": {
                             "type": "string"
                           },
-                          "customerName": {
+                          "customer_name": {
                             "type": "string"
                           },
                           "balance": {
                             "type": "number"
                           }
                         },
-                        "required": ["customerId", "customerName", "balance"]
+                        "required": ["customer_id", "customer_name", "balance"]
                       }
                     },
-                    "totalBalance": {
+                    "total_balance": {
                       "type": "number"
                     }
                   },
                   "required": [
-                    "reportName",
-                    "reportDate",
+                    "report_name",
+                    "report_date",
                     "currency",
                     "entries",
-                    "totalBalance"
+                    "total_balance"
                   ]
                 }
               }
@@ -6500,13 +6500,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "reportName": {
+                    "report_name": {
                       "type": "string"
                     },
-                    "startPeriod": {
+                    "start_period": {
                       "type": "string"
                     },
-                    "endPeriod": {
+                    "end_period": {
                       "type": "string"
                     },
                     "currency": {
@@ -6517,50 +6517,50 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "customerId": {
+                          "customer_id": {
                             "type": "string"
                           },
-                          "customerName": {
+                          "customer_name": {
                             "type": "string"
                           },
-                          "totalIncome": {
+                          "total_income": {
                             "type": "number"
                           },
-                          "totalExpenses": {
+                          "total_expenses": {
                             "type": "number"
                           },
-                          "netIncome": {
+                          "net_income": {
                             "type": "number"
                           }
                         },
                         "required": [
-                          "customerId",
-                          "customerName",
-                          "totalIncome",
-                          "totalExpenses",
-                          "netIncome"
+                          "customer_id",
+                          "customer_name",
+                          "total_income",
+                          "total_expenses",
+                          "net_income"
                         ]
                       }
                     },
-                    "totalIncome": {
+                    "total_income": {
                       "type": "number"
                     },
-                    "totalExpenses": {
+                    "total_expenses": {
                       "type": "number"
                     },
-                    "netIncome": {
+                    "net_income": {
                       "type": "number"
                     }
                   },
                   "required": [
-                    "reportName",
-                    "startPeriod",
-                    "endPeriod",
+                    "report_name",
+                    "start_period",
+                    "end_period",
                     "currency",
                     "entries",
-                    "totalIncome",
-                    "totalExpenses",
-                    "netIncome"
+                    "total_income",
+                    "total_expenses",
+                    "net_income"
                   ]
                 }
               }
@@ -6630,7 +6630,7 @@
                       "name": {
                         "type": "string"
                       },
-                      "accountNumber": {
+                      "account_number": {
                         "type": "string"
                       },
                       "default": {
@@ -6639,16 +6639,16 @@
                       "created": {
                         "type": "string"
                       },
-                      "inputType": {
+                      "input_type": {
                         "type": "string"
                       },
                       "phone": {
                         "type": "string"
                       },
-                      "accountType": {
+                      "account_type": {
                         "type": "string"
                       },
-                      "routingNumber": {
+                      "routing_number": {
                         "type": "string"
                       },
                       "id": {
@@ -6658,13 +6658,13 @@
                     "required": [
                       "updated",
                       "name",
-                      "accountNumber",
+                      "account_number",
                       "default",
                       "created",
-                      "inputType",
+                      "input_type",
                       "phone",
-                      "accountType",
-                      "routingNumber",
+                      "account_type",
+                      "routing_number",
                       "id"
                     ]
                   }

@@ -4641,15 +4641,15 @@ export interface operations {
               number?: string | null
               name: string
               type: string
-              subAccount?: boolean
-              accountType?: string
-              accountSubType?: string
-              currentBalance?: number
-              currencyRef?: {
+              sub_account?: boolean
+              account_type?: string
+              account_subtype?: string
+              current_balance?: number
+              currency_ref?: {
                 value: string
                 name: string
               }
-              metaData?: {
+              metadata?: {
                 createTime: string
                 lastUpdatedTime: string
               }
@@ -4785,21 +4785,21 @@ export interface operations {
         content: {
           'application/json': {
             /** Format: date */
-            startPeriod: string
+            start_period: string
             /** Format: date */
-            endPeriod: string
+            end_period: string
             currency: string
-            accountingStandard: string
-            totalCurrentAssets: number | null
-            totalFixedAssets: number | null
-            totalAssets: number | null
-            totalCurrentLiabilities: number | null
-            totalLongTermLiabilities: number | null
-            totalLiabilities: number | null
-            openingBalanceEquity: number | null
-            netIncome: number | null
-            totalEquity: number | null
-            totalLiabilitiesAndEquity: number | null
+            accounting_standard: string
+            total_current_assets: number | null
+            total_fixed_assets: number | null
+            total_assets: number | null
+            total_current_liabilities: number | null
+            total_long_term_liabilities: number | null
+            total_liabilities: number | null
+            opening_balance_equity: number | null
+            net_income: number | null
+            total_equity: number | null
+            total_liabilities_and_equity: number | null
           }
         }
       }
@@ -4841,18 +4841,18 @@ export interface operations {
       200: {
         content: {
           'application/json': {
-            reportName: string
+            report_name: string
             /** Format: date */
-            startPeriod: string
+            start_period: string
             /** Format: date */
-            endPeriod: string
+            end_period: string
             currency: string
-            accountingStandard: string
-            totalIncome: number | null
-            grossProfit: number | null
-            totalExpenses: number | null
-            netOperatingIncome: number | null
-            netIncome: number | null
+            accounting_standard: string
+            total_income: number | null
+            gross_profit: number | null
+            total_expenses: number | null
+            net_operating_income: number | null
+            net_income: number | null
           }
         }
       }
@@ -4894,18 +4894,18 @@ export interface operations {
       200: {
         content: {
           'application/json': {
-            reportName: string
+            report_name: string
             /** Format: date */
-            startPeriod: string
+            start_period: string
             /** Format: date */
-            endPeriod: string
+            end_period: string
             currency: string
-            netIncome: number | null
-            totalOperatingAdjustments: number | null
-            netCashFromOperatingActivities: number | null
-            netCashFromFinancingActivities: number | null
-            netCashIncrease: number | null
-            endingCash: number | null
+            net_income: number | null
+            total_operating_adjustments: number | null
+            net_cash_from_operating_activities: number | null
+            net_cash_from_financing_activities: number | null
+            net_cash_increase: number | null
+            ending_cash: number | null
           }
         }
       }
@@ -4950,15 +4950,15 @@ export interface operations {
       200: {
         content: {
           'application/json': {
-            reportName: string
-            startPeriod: string
-            endPeriod: string
+            report_name: string
+            start_period: string
+            end_period: string
             currency: string
             transactions: {
               id: string
               date: string
-              transactionType: string
-              documentNumber?: string
+              transaction_type: string
+              document_number?: string
               posting?: string
               name?: string
               department?: string
@@ -5009,15 +5009,15 @@ export interface operations {
       200: {
         content: {
           'application/json': {
-            reportName: string
-            reportDate: string
+            report_name: string
+            report_date: string
             currency: string
             entries: {
-              customerId: string
-              customerName: string
+              customer_id: string
+              customer_name: string
               balance: number
             }[]
-            totalBalance: number
+            total_balance: number
           }
         }
       }
@@ -5059,20 +5059,20 @@ export interface operations {
       200: {
         content: {
           'application/json': {
-            reportName: string
-            startPeriod: string
-            endPeriod: string
+            report_name: string
+            start_period: string
+            end_period: string
             currency: string
             entries: {
-              customerId: string
-              customerName: string
-              totalIncome: number
-              totalExpenses: number
-              netIncome: number
+              customer_id: string
+              customer_name: string
+              total_income: number
+              total_expenses: number
+              net_income: number
             }[]
-            totalIncome: number
-            totalExpenses: number
-            netIncome: number
+            total_income: number
+            total_expenses: number
+            net_income: number
           }
         }
       }
@@ -5110,13 +5110,13 @@ export interface operations {
           'application/json': {
             updated: string
             name: string
-            accountNumber: string
+            account_number: string
             default: boolean
             created: string
-            inputType: string
+            input_type: string
             phone: string
-            accountType: string
-            routingNumber: string
+            account_type: string
+            routing_number: string
             id: string
           }[]
         }
