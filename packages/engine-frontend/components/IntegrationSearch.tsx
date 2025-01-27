@@ -198,7 +198,7 @@ export function IntegrationSearch({
                               },
                             })
                           }}>
-                          {({openConnect}) => (
+                          {({openConnect, loading}) => (
                             <IntegrationCard
                               onClick={openConnect}
                               logo={
@@ -206,6 +206,7 @@ export function IntegrationSearch({
                               }
                               name={int.name}
                               hasDeeplink={hasDeeplink}
+                              isLoading={loading}
                             />
                           )}
                         </WithConnectorConnect>
