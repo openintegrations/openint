@@ -84,18 +84,18 @@ export const cashFlow = z.object({
   endingCash: z.number().nullable(),
 })
 
-const transactionSchema = z.object({
+export const transactionSchema = z.object({
   id: z.string(),
   date: z.string(),
   transactionType: z.string(),
-  documentNumber: z.string().optional(),
-  posting: z.string().optional(),
-  name: z.string().optional(),
-  department: z.string().optional(),
-  memo: z.string().optional(),
-  account: z.string().optional(),
-  split: z.string().optional(),
-  amount: z.number(),
+  documentNumber: z.string().nullish(),
+  posting: z.string().nullish(),
+  name: z.string().nullish(),
+  department: z.string().nullish(),
+  memo: z.string().nullish(),
+  account: z.string().nullish(),
+  split: z.string().nullish(),
+  amount: z.number().nullable(),
   raw_data: z.any(),
 })
 
