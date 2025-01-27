@@ -76,18 +76,18 @@ const AGConnectionPortalComponent: React.FC<AGConnectionPortalProps> = ({
         const connectorConfigById = R.mapToObj(ccfgs, (i) => [i.id, i])
         const connections = (listConnectionsRes.data || [])
           .map((conn) => {
-            const ccfg = connectorConfigById[conn.connectorConfigId]
+            const ccfg = connectorConfigById[conn.connector_config_id]
             if (!ccfg) {
               console.warn('Missing connector config for connection', conn)
             }
-            return ccfg ? {...conn, connectorConfig: ccfg} : null
+            return ccfg ? {...conn, connector_config: ccfg} : null
           })
           .filter((c): c is NonNullable<typeof c> => !!c)
 
         const categoriesWithConnections = categories.map((category) => ({
           ...category,
           connections: connections.filter((c) =>
-            category.connectorConfigs.includes(c.connectorConfig),
+            category.connectorConfigs.includes(c.connector_config),
           ),
         }))
 
@@ -106,15 +106,15 @@ const AGConnectionPortalComponent: React.FC<AGConnectionPortalProps> = ({
                   <ConnectionRawCard
                     key={conn.id}
                     connection={conn}
-                    connector={conn.connectorConfig.connector}
+                    connector={conn.connector_config.connector}
                     className="mb-4">
                     <AgConnectionRowActions
-                      connectorConfig={conn.connectorConfig}
+                      connector_config={conn.connector_config}
                       connection={conn}
                       onEvent={(e) => {
                         onEvent?.({
                           type: e.type,
-                          ccfgId: conn.connectorConfig.id,
+                          ccfgId: conn.connector_config.id,
                         })
                       }}
                     />
@@ -136,7 +136,7 @@ const AGConnectionPortalComponent: React.FC<AGConnectionPortalProps> = ({
                     open={openDialog}
                     setOpen={setOpenDialog}
                     connectorNames={category.connections.map(
-                      (c) => c.connectorName,
+                      (c) => c.connector_name,
                     )}
                     // trigger refetch of connections
                     onEvent={() => listConnectionsRes.refetch()}

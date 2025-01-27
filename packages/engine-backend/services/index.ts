@@ -28,12 +28,12 @@ export function makeServices({
   function getFetchLinks(conn: _ConnectionExpanded) {
     return R.compact([
       logLink(),
-      conn.connectorConfig.connector.metadata?.nangoProvider &&
+      conn.connector_config.connector.metadata?.nangoProvider &&
         env.NANGO_SECRET_KEY &&
         nangoProxyLink({
           secretKey: env.NANGO_SECRET_KEY,
           connectionId: conn.id,
-          providerConfigKey: conn.connectorConfigId,
+          providerConfigKey: conn.connector_config_id,
         }),
     ])
   }

@@ -194,8 +194,8 @@ export const connectorRouter = trpc.mergeRouters(
         zPaginationParams.extend({
           search_text: z.string().optional(),
           connector_config_ids: z.array(z.string()).optional(),
-          connectorNames: z.array(z.string()).optional(),
-          integrationIds: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
+          connector_names: z.array(z.string()).optional(),
+          integration_ids: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
         }),
       )
       .output(
@@ -248,24 +248,24 @@ export const connectorRouter = trpc.mergeRouters(
             .flatMap((int) => int.items)
             .filter((int) => {
               const connectorNameMatches =
-                !input.connectorNames ||
-                input.connectorNames.length === 0 ||
-                input.connectorNames.includes(int.connector_name)
+                !input.connector_names ||
+                input.connector_names.length === 0 ||
+                input.connector_names.includes(int.connector_name)
 
               const integrationMatches =
-                !input.integrationIds ||
-                input.integrationIds.length === 0 ||
-                input.integrationIds.some((filter) => int.id.includes(filter))
+                !input.integration_ids ||
+                input.integration_ids.length === 0 ||
+                input.integration_ids.some((filter) => int.id.includes(filter))
 
               // Check if this integration is already connected
               const existingConnection = connections.find(
                 (conn) =>
-                  conn.integrationId === int.id ||
-                  (conn.integrationId === null &&
-                    conn.connectorConfigId === int.connector_config_id),
+                  conn.integration_id === int.id ||
+                  (conn.integration_id === null &&
+                    conn.connector_config_id === int.connector_config_id),
               )
 
-              const integrationWithinConnector = input.connectorNames?.some(
+              const integrationWithinConnector = input.connector_names?.some(
                 (connectorName) =>
                   int.id.includes(connectorName) && int.id.startsWith('int_'),
               )

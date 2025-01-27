@@ -59,7 +59,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   const {toast} = useToast()
   const ctx = _trpcReact.useContext()
   const listConnectionsRes = _trpcReact.listConnections.useQuery({
-    connectionId: connectionId ?? undefined,
+    connection_id: connectionId ?? undefined,
   })
 
   useEffect(() => {
@@ -114,11 +114,11 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         const connectorConfigById = R.mapToObj(ccfgs, (i) => [i.id, i])
         const connections = (listConnectionsRes.data || [])
           .map((conn) => {
-            const ccfg = connectorConfigById[conn.connectorConfigId]
+            const ccfg = connectorConfigById[conn.connector_config_id]
             if (!ccfg) {
               console.warn('Missing connector config for connection', conn)
             }
-            return ccfg ? {...conn, connectorConfig: ccfg} : null
+            return ccfg ? {...conn, connector_config: ccfg} : null
           })
           .filter((c): c is NonNullable<typeof c> => !!c)
 
@@ -147,7 +147,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 refetch={() => ctx.listConnections.invalidate()}
               />
             ),
-            status: connections.some((c) => c.syncInProgress),
+            status: connections.some((c) => c.sync_in_progress),
           },
           {
             key: 'add',

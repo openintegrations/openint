@@ -31,12 +31,12 @@ export async function getRemoteContext(ctx: ProtectedContext) {
   let connectionId = toNangoConnectionId(connection.id) // ctx.customerId
 
   // Note: Monkey patch for old connections
-  if (new Date(connection.createdAt) < new Date('2024-12-10')) {
+  if (new Date(connection.created_at) < new Date('2024-12-10')) {
     connectionId = connectionId.replace('conn_', 'reso_')
   }
 
   const providerConfigKey = toNangoProviderConfigKey(
-    connection.connectorConfigId, // ctx.providerName
+    connection.connector_config_id, // ctx.providerName
   )
   const nango = initNangoSDK({
     headers: {authorization: `Bearer ${ctx.env.NANGO_SECRET_KEY}`},
@@ -51,7 +51,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
 
   const settings = {
     ...connection.settings,
-    ...(connection.connectorConfig.connector.metadata?.nangoProvider && {
+    ...(connection.connector_config.connector.metadata?.nangoProvider && {
       oauth: await nango
         .GET('/connection/{connectionId}', {
           params: {
@@ -73,24 +73,26 @@ export async function getRemoteContext(ctx: ProtectedContext) {
     }),
   }
 
-  const instance: unknown = connection.connectorConfig.connector.newInstance?.({
-    config: connection.connectorConfig.config,
-    settings,
-    fetchLinks: compact([
-      logLink(),
-      // No more, has issues.
-      // connection.connectorConfig.connector.metadata?.nangoProvider &&
-      //   ctx.env.NANGO_SECRET_KEY &&
-      //   nangoProxyLink({
-      //     secretKey: ctx.env.NANGO_SECRET_KEY,
-      //     connectionId,
-      //     providerConfigKey,
-      //   }),
-    ]),
+  const instance: unknown = connection.connector_config.connector.newInstance?.(
+    {
+      config: connection.connector_config.config,
+      settings,
+      fetchLinks: compact([
+        logLink(),
+        // No more, has issues.
+        // connection.connector_config.connector.metadata?.nangoProvider &&
+        //   ctx.env.NANGO_SECRET_KEY &&
+        //   nangoProxyLink({
+        //     secretKey: ctx.env.NANGO_SECRET_KEY,
+        //     connectionId,
+        //     providerConfigKey,
+        //   }),
+      ]),
 
-    onSettingsChange: (settings) =>
-      ctx.services.metaLinks.patch('connection', connection.id, {settings}),
-  })
+      onSettingsChange: (settings) =>
+        ctx.services.metaLinks.patch('connection', connection.id, {settings}),
+    },
+  )
 
   return {
     ...ctx,
@@ -100,15 +102,15 @@ export async function getRemoteContext(ctx: ProtectedContext) {
       instance,
       id: connection.id,
       // TODO: Rename customerId to just customerId
-      customerId: connection.customerId ?? '',
-      connectorConfigId: connection.connectorConfig.id,
-      connector: connection.connectorConfig.connector,
-      connectorName: connection.connectorName,
-      connectorMetadata: connection.connectorConfig.connector.metadata,
+      customerId: connection.customer_id ?? '',
+      connectorConfigId: connection.connector_config.id,
+      connector: connection.connector_config.connector,
+      connectorName: connection.connector_name,
+      connectorMetadata: connection.connector_config.connector.metadata,
       settings, // Not connection.settings which is out of date. // TODO: we should update connection.settings through
       // TODO: Need to be careful this is never returned to any customer endpoints
       // and only used for making requests with remotes
-      config: connection.connectorConfig.config,
+      config: connection.connector_config.config,
     },
   }
 }

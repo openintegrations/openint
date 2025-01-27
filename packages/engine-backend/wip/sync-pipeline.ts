@@ -64,7 +64,7 @@ export function verticalSource(pipe: _PipelineExpanded): Source {
     headers: {'x-apikey': '', 'x-connection-id': pipe.source.id},
   })
 
-  const srcState = (pipe.sourceState ?? {}) as Record<
+  const srcState = (pipe.source_state ?? {}) as Record<
     string,
     {cursor?: string | null}
   >
@@ -77,7 +77,7 @@ export function verticalSource(pipe: _PipelineExpanded): Source {
   async function* iterateMessages() {
     for (const stream of streams) {
       const res = await sdk.GET(
-        `/unified/${pipe.sourceVertical as 'crm'}/${stream.name as 'account'}`,
+        `/unified/${pipe.source_vertical as 'crm'}/${stream.name as 'account'}`,
         {params: {query: {cursor: srcState[stream.name]?.cursor}}},
       )
       yield res.data.items.map(
@@ -106,7 +106,7 @@ export function verticalDestination(pipe: _PipelineExpanded): Destination {
       .from(
         sdk
           // @ts-expect-error this does not work since the unified refactor fix or delete WIP directory
-          .POST(`/unified/${pipe.destinationVertical as 'etl'}/write`, {
+          .POST(`/unified/${pipe.destination_vertical as 'etl'}/write`, {
             body: {messages},
           })
           .then((r) => r.data as unified.Message[]),

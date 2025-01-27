@@ -6,8 +6,8 @@ import {encodeApiKey, hasRole} from '@openint/cdk'
 import {makeUlid} from '@openint/util'
 
 export async function getOrCreateApikey(viewer: Viewer) {
-  const orgId = hasRole(viewer, ['org', 'user']) ? viewer.orgId : null
-  const userId = hasRole(viewer, ['user']) ? viewer.userId : null
+  const orgId = hasRole(viewer, ['org', 'user']) ? viewer.org_id : null
+  const userId = hasRole(viewer, ['user']) ? viewer.user_id : null
 
   if (orgId) {
     const res = await clerkClient.organizations.getOrganization({

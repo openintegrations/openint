@@ -108,7 +108,7 @@ export function mergeReady<T>(len: number): Link<T> {
 export function prefixConnectorNameLink(ctx: {
   source: {
     id: Id['conn']
-    connectorConfig: {connectorName: string}
+    connector_config: {connector_name: string}
     metadata?: unknown
   }
 }): Link<AnyEntityPayload, AnyEntityPayload> {
@@ -117,7 +117,7 @@ export function prefixConnectorNameLink(ctx: {
       return rxjs.of(op)
     }
 
-    op.data.entityName = `${ctx.source.connectorConfig.connectorName}_${op.data.entityName}`
+    op.data.entityName = `${ctx.source.connector_config.connector_name}_${op.data.entityName}`
     return rxjs.of(op)
   })
 }
@@ -125,7 +125,7 @@ export function prefixConnectorNameLink(ctx: {
 export function singleTableLink(_ctx: {
   source: {
     id: Id['conn']
-    connectorConfig: {connectorName: string}
+    connector_config: {connector_name: string}
     metadata?: unknown
   }
 }): Link<AnyEntityPayload, AnyEntityPayload> {

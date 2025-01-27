@@ -197,8 +197,8 @@ export const plaidDef = {
     // keep resyncing the 10k institutions from Plaid to make this happen...
     integration: (ins) => ({
       name: ins.name,
-      logoUrl: ins.logo ? `data:image/png;base64,${ins.logo}` : undefined,
-      loginUrl: ins.url ?? undefined,
+      logo_url: ins.logo ? `data:image/png;base64,${ins.logo}` : undefined,
+      login_url: ins.url ?? undefined,
       verticals: ['banking'],
     }),
     connection: (settings) => {
@@ -209,14 +209,14 @@ export const plaidDef = {
       const envName = inferPlaidEnvFromToken(settings.accessToken)
       return {
         id: `${settings.itemId}`,
-        displayName: settings.institution?.name ?? '',
+        display_name: settings.institution?.name ?? '',
         status:
           err?.error_code === 'ITEM_LOGIN_REQUIRED'
             ? 'disconnected'
             : err
               ? 'error'
               : 'healthy',
-        statusMessage: err?.error_message,
+        status_message: err?.error_message,
         labels: [envName],
       }
     },

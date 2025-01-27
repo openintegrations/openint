@@ -14,7 +14,7 @@ type PostgresInputPayload =
 export function unifiedAtsLink(ctx: {
   source: {
     id: Id['conn']
-    connectorConfig: {connectorName: string}
+    connector_config: {connector_name: string}
     metadata?: unknown
   }
 }): Link<AnyEntityPayload, PostgresInputPayload> {
@@ -25,7 +25,7 @@ export function unifiedAtsLink(ctx: {
 
     // TODO; generalize
     const mappers =
-      ctx.source.connectorConfig.connectorName === 'greenhouse'
+      ctx.source.connector_config.connector_name === 'greenhouse'
         ? greenhouseMapper
         : leverMapper
 
@@ -34,7 +34,7 @@ export function unifiedAtsLink(ctx: {
     const mapper = mappers[entityName]
     if (!mapper) {
       console.warn(
-        `No ${entityName} entity mapper found for connector: ${ctx.source.connectorConfig.connectorName}`,
+        `No ${entityName} entity mapper found for connector: ${ctx.source.connector_config.connector_name}`,
         JSON.stringify(mappers),
       )
       return rxjs.EMPTY

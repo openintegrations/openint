@@ -9,10 +9,10 @@ import {parseConnectorConfigsFromRawEnv} from './connector-envs'
 // embed the functionality into openint cli directly...
 export async function bootstrap() {
   // Would be nice to simplify loading of env vars from zod in a way that makes sense...
-  const orgId = getEnvVar('ORG_ID', {required: true}) as Id['org']
+  const org_id = getEnvVar('ORG_ID', {required: true}) as Id['org']
 
   const caller = flatRouter.createCaller({
-    ...contextFactory.fromViewer({role: 'org', orgId}),
+    ...contextFactory.fromViewer({role: 'org', org_id}),
     remoteConnectionId: null,
   })
   const configs = parseConnectorConfigsFromRawEnv()
@@ -21,8 +21,8 @@ export async function bootstrap() {
     if (!config) {
       continue
     }
-    const id = makeId('ccfg', connectorName, extractId(orgId)[1])
-    await caller.adminUpsertConnectorConfig({id, config: config as {}, orgId})
+    const id = makeId('ccfg', connectorName, extractId(org_id)[1])
+    await caller.adminUpsertConnectorConfig({id, config: config as {}, org_id})
     console.log('Upsert ConnectorConfig', id)
   }
   console.log('Bootstrap complete')

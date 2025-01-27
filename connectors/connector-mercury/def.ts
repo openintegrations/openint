@@ -22,12 +22,12 @@ export const mercuryDef = {
   standardMappers: {
     integration: () => ({
       name: 'Mercury',
-      logoUrl: 'TODO: Default to integration metadata logoUrl',
+      logo_url: 'TODO: Default to integration metadata logoUrl',
       verticals: ['banking'],
     }),
     connection() {
       return {
-        displayName: '',
+        display_name: '',
         // status: healthy vs. disconnected...
         // labels: test vs. production
       }

@@ -20,12 +20,12 @@ import {protectedProcedure, trpc} from './_base'
 export {type inferProcedureInput} from '@openint/trpc'
 
 export const zConnectTokenPayload = z.object({
-  customerId: zCustomerId
+  customer_id: zCustomerId
     .optional() // Optional because when creating magic link as current customer we dont' need it...
     .describe(
       'Anything that uniquely identifies the customer that you will be sending the magic link to',
     ),
-  validityInSeconds: z
+  validity_in_seconds: z
     .number()
     .default(30 * 24 * 60 * 60)
     .describe(
@@ -35,23 +35,23 @@ export const zConnectTokenPayload = z.object({
 
 export const zConnectPageParams = z.object({
   token: z.string(),
-  displayName: z.string().nullish().describe('What to call user by'),
-  redirectUrl: z
+  display_name: z.string().nullish().describe('What to call user by'),
+  redirect_url: z
     .string()
     .nullish()
     .describe(
       'Where to send user to after connect / if they press back button',
     ),
   // TODO: How to make sure we actually have a typed api here and can use zProviderName
-  connectorNames: z
+  connector_names: z
     .string()
     .nullish()
     .describe('Filter integrations by comma separated connector names'),
-  integrationIds: z
+  integration_ids: z
     .string()
     .nullish()
     .describe('Filter integrations by comma separated integration ids'),
-  connectionId: zId('conn')
+  connection_id: zId('conn')
     .nullish()
     .describe('Filter managed connections by connection id'),
   theme: z
@@ -129,11 +129,11 @@ export const customerRouterSchema = {
 
 function asCustomer(
   viewer: Viewer,
-  input: {customerId?: CustomerId | null},
+  input: {customer_id?: CustomerId | null},
 ): Viewer<'customer'> {
   // console.log('[asCustomer]', viewer, input)
   // Figure out a better way to share code here...
-  if (!('orgId' in viewer) || !viewer.orgId) {
+  if (!('orgId' in viewer) || !viewer.org_id) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: 'Current viewer missing orgId to create token',
@@ -141,24 +141,24 @@ function asCustomer(
   }
   if (
     viewer.role === 'customer' &&
-    input.customerId &&
-    input.customerId !== viewer.customerId
+    input.customer_id &&
+    input.customer_id !== viewer.customer_id
   ) {
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'Current viewer cannot create token for other customer',
     })
   }
-  const customerId =
-    viewer.role === 'customer' ? viewer.customerId : input.customerId
-  if (!customerId) {
+  const customer_id =
+    viewer.role === 'customer' ? viewer.customer_id : input.customer_id
+  if (!customer_id) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: 'Either call as an customer or pass customerId explicitly',
     })
   }
 
-  return {role: 'customer', customerId, orgId: viewer.orgId}
+  return {role: 'customer', customer_id, org_id: viewer.org_id}
 }
 
 // MARK: - Endpoints
@@ -177,15 +177,17 @@ export const customerRouter = trpc.router({
     })
     .input(customerRouterSchema.createConnectToken.input)
     .output(z.object({token: z.string()}))
-    .mutation(({input: {validityInSeconds, ...input}, ctx}) =>
-      // console.log('[createConnectToken]', ctx.viewer, input, {
-      //   validityInSeconds,
-      // })
-      ({
-        token: ctx.jwt.signViewer(asCustomer(ctx.viewer, input), {
-          validityInSeconds,
+    .mutation(
+      ({input: {validity_in_seconds: validityInSeconds, ...input}, ctx}) =>
+        // console.log('[createConnectToken]', ctx.viewer, input, {
+        //   validityInSeconds,
+        // })
+        ({
+          token: ctx.jwt.signViewer(
+            asCustomer(ctx.viewer, {customer_id: input.customer_id}),
+            {validityInSeconds},
+          ),
         }),
-      }),
     ),
   createMagicLink: protectedProcedure
     .meta({
@@ -197,39 +199,51 @@ export const customerRouter = trpc.router({
     })
     .input(customerRouterSchema.createMagicLink.input)
     .output(z.object({url: z.string()}))
-    .mutation(({input: {customerId, validityInSeconds, ...params}, ctx}) => {
-      const token = ctx.jwt.signViewer(asCustomer(ctx.viewer, {customerId}), {
-        validityInSeconds,
-      })
-      // Mapping integrationIds and connectorNames to a clean format removing any extra spaces
-      // and ensuring they are prefixed with int_ if they are in the format of connectorName_integrationId.
-      const mappedParams = {
-        ...params,
-        token,
-        integrationIds: params.integrationIds?.split(',').map((id) => {
-          const trimmedId = id.trim()
+    .mutation(
+      ({
+        input: {
+          customer_id: customerId,
+          validity_in_seconds: validityInSeconds,
+          ...params
+        },
+        ctx,
+      }) => {
+        const token = ctx.jwt.signViewer(
+          asCustomer(ctx.viewer, {customer_id: customerId}),
+          {
+            validityInSeconds,
+          },
+        )
+        // Mapping integrationIds and connectorNames to a clean format removing any extra spaces
+        // and ensuring they are prefixed with int_ if they are in the format of connectorName_integrationId.
+        const mappedParams = {
+          ...params,
+          token,
+          integrationIds: params.integration_ids?.split(',').map((id) => {
+            const trimmedId = id.trim()
 
-          return trimmedId.includes('_') &&
-            trimmedId.split('_').length === 2 &&
-            !trimmedId.startsWith('int_')
-            ? `int_${trimmedId}`
-            : trimmedId
-        }),
-        connectorNames: params.connectorNames
-          ?.split(',')
-          .map((name) => name.trim()),
-        theme: params.theme ?? 'light',
-        view: params.view ?? 'add',
-      }
-
-      const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
-      for (const [key, value] of Object.entries(mappedParams)) {
-        if (value) {
-          url.searchParams.set(key, `${value ?? ''}`)
+            return trimmedId.includes('_') &&
+              trimmedId.split('_').length === 2 &&
+              !trimmedId.startsWith('int_')
+              ? `int_${trimmedId}`
+              : trimmedId
+          }),
+          connectorNames: params.connector_names
+            ?.split(',')
+            .map((name) => name.trim()),
+          theme: params.theme ?? 'light',
+          view: params.view ?? 'add',
         }
-      }
-      return {url: url.toString()}
-    }),
+
+        const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
+        for (const [key, value] of Object.entries(mappedParams)) {
+          if (value) {
+            url.searchParams.set(key, `${value ?? ''}`)
+          }
+        }
+        return {url: url.toString()}
+      },
+    ),
   createFilePickerLink: protectedProcedure
     .meta({
       openapi: {
@@ -247,7 +261,7 @@ export const customerRouter = trpc.router({
         )
 
         const token = ctx.jwt.signViewer(
-          asCustomer(ctx.viewer, {customerId: connection.customerId}),
+          asCustomer(ctx.viewer, {customer_id: connection.customer_id}),
           {
             validityInSeconds,
           },
@@ -315,7 +329,7 @@ export const customerRouter = trpc.router({
             ),
             redirectUrl: ctx.getRedirectUrl?.(int, {
               customerId:
-                ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
+                ctx.viewer.role === 'customer' ? ctx.viewer.customer_id : null,
             }),
           },
           preConnInput,
@@ -372,11 +386,11 @@ export const customerRouter = trpc.router({
           if (
             int.connector &&
             conn &&
-            !conn.integrationId &&
+            !conn.integration_id &&
             connCtxInput.integrationId
           ) {
             // setting the integrationId so that the connection can be associated with the integration
-            conn.integrationId = connCtxInput.integrationId
+            conn.integration_id = connCtxInput.integrationId
           }
 
           return await int.connector.postConnect(
@@ -395,7 +409,9 @@ export const customerRouter = trpc.router({
               ),
               redirectUrl: ctx.getRedirectUrl?.(int, {
                 customerId:
-                  ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
+                  ctx.viewer.role === 'customer'
+                    ? ctx.viewer.customer_id
+                    : null,
               }),
             },
           )
@@ -428,7 +444,7 @@ export const customerRouter = trpc.router({
             ...connUpdate,
             // No need for each connector to worry about this, unlike in the case of handleWebhook.
             customerId:
-              ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
+              ctx.viewer.role === 'customer' ? ctx.viewer.customer_id : null,
             triggerDefaultSync,
             settings: {
               ...connUpdate?.settings,
@@ -476,7 +492,7 @@ export const customerRouter = trpc.router({
       console.log('createCustomer', ctx.viewer, id, metadata)
       return {
         id,
-        orgId: ctx.viewer.orgId + '',
+        orgId: ctx.viewer.org_id + '',
         metadata,
       }
     }),

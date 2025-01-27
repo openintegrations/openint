@@ -10,14 +10,14 @@ export const adminRouter = trpc.router({
       zRaw.pipeline
         .pick({
           id: true,
-          sourceId: true,
-          destinationId: true,
-          sourceState: true,
-          destinationState: true,
+          source_id: true,
+          destination_id: true,
+          source_state: true,
+          destination_state: true,
         })
         .partial()
         // Due to insert on conflict update we need provide all values
-        .required({sourceId: true, destinationId: true}),
+        .required({source_id: true, destination_id: true}),
     )
     .mutation(({input: {id: _id, ...input}, ctx}) => {
       const id = _id ? _id : makeId('pipe', makeUlid())
@@ -82,7 +82,7 @@ export const adminRouter = trpc.router({
       const inss = await ctx.services.metaService.tables.integration.list({})
       for (const ins of inss) {
         console.log('Remap integration', ins.id)
-        const provider = ctx.connectorMap[ins.connectorName]
+        const provider = ctx.connectorMap[ins.connector_name]
         const standard = provider?.standardMappers?.integration?.(ins.external)
         await ctx.services.patch('integration', ins.id, {standard})
       }

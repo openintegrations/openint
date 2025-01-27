@@ -46,7 +46,7 @@ export function ConnectDialog({
     <WithConnectConfig {...connectorConfigFilters}>
       {({ccfgs}) => {
         const filteredCcfgs = ccfgs.filter(
-          (c) => !connectorNames.includes(c.connectorName),
+          (c) => !connectorNames.includes(c.connector_name),
         )
         const [first, ...rest] = filteredCcfgs
         if (!first) {

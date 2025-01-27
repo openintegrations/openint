@@ -1,4 +1,3 @@
-import {camelCase, snakeCase} from 'change-case'
 // Need to use version 4.x of change-case that still supports cjs
 // pureESM modules are idealistic...
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
@@ -11,11 +10,7 @@ import {
   postgres,
   sql,
 } from '@openint/db'
-import type {
-  CustomerResultRow,
-  MetaService,
-  MetaTable,
-} from '@openint/engine-backend'
+import type {MetaService, MetaTable} from '@openint/engine-backend'
 import {R, zFunction} from '@openint/util'
 import {__DEBUG__} from '../../apps/app-config/constants'
 
@@ -31,17 +26,17 @@ function localGucForViewer(viewer: Viewer) {
     case 'customer':
       return {
         role: 'customer',
-        'request.jwt.claim.customer_id': viewer.customerId,
-        'request.jwt.claim.org_id': viewer.orgId,
+        'request.jwt.claim.customer_id': viewer.customer_id,
+        'request.jwt.claim.org_id': viewer.org_id,
       }
     case 'user':
       return {
         role: 'authenticated',
-        'request.jwt.claim.sub': viewer.userId,
-        'request.jwt.claim.org_id': viewer.orgId ?? null,
+        'request.jwt.claim.sub': viewer.user_id,
+        'request.jwt.claim.org_id': viewer.org_id ?? null,
       }
     case 'org':
-      return {role: 'org', 'request.jwt.claim.org_id': viewer.orgId}
+      return {role: 'org', 'request.jwt.claim.org_id': viewer.org_id}
     case 'system':
       return {role: null} // Should be the same as reset role and therefore operates without RLS policy
     default:
@@ -122,12 +117,15 @@ export const makePostgresMetaService = zFunction(
           rest,
         )
         return runQueries(async (trxn) => {
-          const rows = await trxn.execute(query)
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return rows.map((r) => camelCaseKeys(r) as CustomerResultRow)
+          const rows = await trxn.execute<any>(query)
+          return rows
         })
       },
-      searchIntegrations: ({keywords, connectorNames, ...rest}) => {
+      searchIntegrations: ({
+        keywords,
+        connector_names: connectorNames,
+        ...rest
+      }) => {
         const {runQueries} = _getDeps(opts)
         const conditions = R.compact([
           connectorNames &&
@@ -143,16 +141,14 @@ export const makePostgresMetaService = zFunction(
             .execute(
               applyLimitOffset(sql`SELECT * FROM integration ${where}`, rest),
             )
-            .then((rows) =>
-              rows.map((r) => camelCaseKeys(r) as ZRaw['integration']),
-            ),
+            .then((rows) => rows.map((r) => r as ZRaw['integration'])),
         )
       },
 
       findPipelines: ({
-        connectionIds,
-        secondsSinceLastSync,
-        includeDisabled,
+        connection_ids: connectionIds,
+        seconds_since_last_sync: secondsSinceLastSync,
+        include_disabled: includeDisabled,
       }) => {
         const {runQueries} = _getDeps(opts)
         const ids = connectionIds && sql.param(connectionIds)
@@ -170,27 +166,23 @@ export const makePostgresMetaService = zFunction(
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
             : sql``
         return runQueries((trxn) =>
-          trxn
-            .execute(sql`SELECT * FROM pipeline ${where}`)
-            .then((rows) => rows.map((r) => camelCaseKeys(r))),
+          trxn.execute<any>(sql`SELECT * FROM pipeline ${where}`),
         )
       },
-      listConnectorConfigInfos: ({id, connectorName} = {}) => {
+      listConnectorConfigInfos: ({id, connector_name} = {}) => {
         const {runQueries} = _getDeps(opts)
         return runQueries((trxn) =>
-          trxn
-            .execute(
-              sql`SELECT id, env_name, display_name, COALESCE(config->'integrations', '{}'::jsonb) as integrations FROM connector_config ${
-                id && connectorName
-                  ? sql`WHERE id = ${id} AND connector_name = ${connectorName} AND disabled = FALSE`
-                  : id
-                    ? sql`WHERE id = ${id} AND disabled = FALSE`
-                    : connectorName
-                      ? sql`WHERE connector_name = ${connectorName} AND disabled = FALSE`
-                      : sql`WHERE disabled = FALSE`
-              }`,
-            )
-            .then((rows) => rows.map((r) => camelCaseKeys(r))),
+          trxn.execute<any>(
+            sql`SELECT id, env_name, display_name, COALESCE(config->'integrations', '{}'::jsonb) as integrations FROM connector_config ${
+              id && connector_name
+                ? sql`WHERE id = ${id} AND connector_name = ${connector_name} AND disabled = FALSE`
+                : id
+                  ? sql`WHERE id = ${id} AND disabled = FALSE`
+                  : connector_name
+                    ? sql`WHERE connector_name = ${connector_name} AND disabled = FALSE`
+                    : sql`WHERE disabled = FALSE`
+            }`,
+          ),
         )
       },
       findConnectionsMissingDefaultPipeline: () => {
@@ -272,12 +264,12 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
   return {
     list: ({
       ids,
-      customerId,
-      connectorConfigId,
-      connectorName,
+      customer_id: customerId,
+      connector_config_id: connectorConfigId,
+      connector_name: connectorName,
       since,
       keywords,
-      orderBy,
+      order_by: orderBy,
       order,
       ...rest
     }) =>
@@ -307,42 +299,28 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
         const res = await trxn.execute<T>(
           applyLimitOffset(sql`SELECT * FROM ${table} ${where}`, rest),
         )
-        return res.map((r) => camelCaseKeys(r) as T)
+        return res.map((r) => r as T)
       }),
     get: (id) =>
       runQueries(async (trxn) => {
         const rows = await trxn.execute<T>(
           sql`SELECT * FROM ${table} where id = ${id}`,
         )
-        return rows.map(camelCaseKeys)[0] as T | undefined
+        return rows[0] as T | undefined
       }),
     set: (id, data) =>
-      dbUpsertOne(getDb(), tableName, snakeCaseKeys({...data, id}), {
-        keyColumns: ['id'],
-      }),
+      dbUpsertOne(getDb(), tableName, {...data, id}, {keyColumns: ['id']}),
     patch: (id, data) =>
       // use getDb to workaround drizzle schema cache issue
-      dbUpsertOne(getDb(), tableName, snakeCaseKeys({...data, id}), {
-        keyColumns: ['id'],
-        shallowMergeJsonbColumns: true,
-      }),
+      dbUpsertOne(
+        getDb(),
+        tableName,
+        {...data, id},
+        {keyColumns: ['id'], shallowMergeJsonbColumns: true},
+      ),
     delete: (id) =>
       runQueries((trxn) =>
         trxn.execute(sql`DELETE FROM ${table} WHERE id = ${id}`),
       ).then(() => {}),
   }
-}
-
-/** Temporary placeholder before we transition API / codebase to fully snake_case */
-function camelCaseKeys<T = Record<string, unknown>>(obj: object) {
-  return Object.fromEntries(
-    Object.entries(obj).map(([k, v]) => [camelCase(k), v]),
-  ) as T
-}
-
-/** Temporary placeholder before we transition API / codebase to fully snake_case */
-function snakeCaseKeys<T = Record<string, unknown>>(obj: object) {
-  return Object.fromEntries(
-    Object.entries(obj).map(([k, v]) => [snakeCase(k), v]),
-  ) as T
 }

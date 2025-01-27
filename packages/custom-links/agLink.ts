@@ -26,9 +26,9 @@ function isUnifiedEntity<T extends keyof Unified>(
 export function agLink(ctx: {
   source: {
     id: Id['conn']
-    connectorConfig: {connectorName: string}
+    connector_config: {connector_name: string}
     metadata?: unknown
-    customerId?: string | null
+    customer_id?: string | null
   }
 }): Link<DeprecatedInputEntity, RecordMessageBody> {
   let integrationConnectionUpserted = false
@@ -53,10 +53,10 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationConnection',
             data: {
-              clientId: ctx.source.customerId,
+              clientId: ctx.source.customer_id,
               id: ctx.source.id,
-              provider: ctx.source.connectorConfig.connectorName, // greenhouse, lever, etc
-              label: ctx.source.connectorConfig.connectorName, // greenhouse, lever, etc,
+              provider: ctx.source.connector_config.connector_name, // greenhouse, lever, etc
+              label: ctx.source.connector_config.connector_name, // greenhouse, lever, etc,
               profile: 'Ats', // TODO: make this configurable or let atsLink pass this data down...
               source: 'OpenInt',
             },
@@ -68,7 +68,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationATSCandidate',
             data: {
-              clientId: ctx.source.customerId,
+              clientId: ctx.source.customer_id,
               connectionId: ctx.source.id,
               id: op.data.id,
               raw: op.data.entity?.raw,
@@ -91,7 +91,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationATSJob',
             data: {
-              clientId: ctx.source.customerId,
+              clientId: ctx.source.customer_id,
               connectionId: ctx.source.id,
               id: op.data.id,
               external_job_id: op.data.entity?.unified.id,
@@ -107,7 +107,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationATSOffer',
             data: {
-              clientId: ctx.source.customerId,
+              clientId: ctx.source.customer_id,
               connectionId: ctx.source.id,
               id: op.data.id,
               raw: op.data.entity?.raw,
@@ -125,7 +125,7 @@ export function agLink(ctx: {
           data: {
             stream: 'IntegrationATSOpening',
             data: {
-              clientId: ctx.source.customerId,
+              clientId: ctx.source.customer_id,
               connectionId: ctx.source.id,
               id: op.data.id,
               raw: op.data.entity?.raw,

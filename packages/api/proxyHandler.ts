@@ -41,13 +41,13 @@ export const proxyHandler = async (req: Request) => {
       })
       .then((r) => r.data)
 
-    const {connectorConfig: int} =
+    const {connector_config: ccfg} =
       await protectedContext.asOrgIfNeeded.getConnectionExpandedOrFail(
         remoteContext.remoteConnectionId,
       )
 
     // TODO: extract all of this logic into an oauthLink that has an option to provide a custom refresh function that can call nango & persist it to db.
-    await protectedContext.asOrgIfNeeded._syncConnectionUpdate(int, {
+    await protectedContext.asOrgIfNeeded._syncConnectionUpdate(ccfg, {
       settings: {
         oauth: nangoConnection,
       },

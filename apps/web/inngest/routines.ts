@@ -40,7 +40,7 @@ export async function scheduleSyncs({step}: FunctionInput<never>) {
     const pipelines = await contextFactory.config
       .getMetaService({role: 'system'})
       // Every hour
-      .findPipelines({secondsSinceLastSync: 1 * 60 * 60})
+      .findPipelines({seconds_since_last_sync: 1 * 60 * 60})
     console.log(`Found ${pipelines.length} pipelines needing to sync`)
 
     if (pipelines.length > 0) {

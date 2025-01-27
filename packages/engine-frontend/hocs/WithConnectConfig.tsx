@@ -43,7 +43,7 @@ export function WithConnectConfig({
 }) {
   const listConnectorConfigsRes = _trpcReact.listConnectorConfigInfos.useQuery({
     id: props.connectorConfigId,
-    connectorName: props.connectorName,
+    connector_name: props.connectorName,
   })
 
   const listConnectorsRes = _trpcReact.listConnectorMetas.useQuery()
@@ -56,7 +56,7 @@ export function WithConnectConfig({
     ?.filter((ccfg) => !verticalKey || ccfg.verticals?.includes(verticalKey))
     .map((ccfg) => ({
       ...ccfg,
-      connector: listConnectorsRes.data[ccfg.connectorName]!,
+      connector: listConnectorsRes.data[ccfg.connector_name]!,
     }))
 
 

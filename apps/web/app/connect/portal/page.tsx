@@ -56,17 +56,17 @@ export default async function PortalPage({
 
   const isAgMode =
     // orgs in openint clerk app
-    viewer.orgId === 'org_2nJZrA4Dk8i3wszhm6PsP3M2Vwy' ||
-    viewer.orgId === 'org_2lcCCimyICKI8cpPNQt195h5zrP' ||
-    viewer.orgId === 'org_2ms9FdeczlbrDIHJLcwGdpv3dTx' ||
+    viewer.org_id === 'org_2nJZrA4Dk8i3wszhm6PsP3M2Vwy' ||
+    viewer.org_id === 'org_2lcCCimyICKI8cpPNQt195h5zrP' ||
+    viewer.org_id === 'org_2ms9FdeczlbrDIHJLcwGdpv3dTx' ||
     // orgs in ag app
-    viewer.orgId === 'org_2pBMOEKROMpNR7zckHtah4ebxAk' ||
-    viewer.orgId === 'org_2pBM0RSOqs5QzZi40A73hZ5aTjD'
+    viewer.org_id === 'org_2pBMOEKROMpNR7zckHtah4ebxAk' ||
+    viewer.org_id === 'org_2pBM0RSOqs5QzZi40A73hZ5aTjD'
 
   return (
     <ClientRoot accessToken={viewer.accessToken} authStatus="success">
       <SuperHydrate dehydratedState={getDehydratedState()}>
-        <ColorConfig orgId={viewer.orgId} />
+        <ColorConfig orgId={viewer.org_id} />
         {isAgMode ? <AGConnectionPortal /> : <ConnectionPortal />}
       </SuperHydrate>
     </ClientRoot>

@@ -7,15 +7,15 @@ import {ConnectorLogo} from './ConnectorCard'
 interface ConnectionDetailsProps {
   connection: {
     id: string
-    connectorConfig: ConnectorConfig
-    connectorName: string
-    pipelineIds: string[]
-    syncInProgress: boolean
+    connector_config: ConnectorConfig
+    connector_name: string
+    pipeline_ids: string[]
+    sync_in_progress: boolean
     integration: any
     status?: string | null
-    statusMessage?: string | null
-    createdAt: string
-    envName?: string
+    status_message?: string | null
+    created_at: string
+    env_name?: string
     type?: string
   }
   deleteConnection: ({id}: {id: string}) => void
@@ -48,18 +48,18 @@ export function ConnectionDetails({
             />
           ) : (
             <ConnectorLogo
-              connector={connection.connectorConfig.connector}
+              connector={connection.connector_config.connector}
               className="size-[64px] rounded-lg"
             />
           )}
-          {connection.connectorConfig?.connectorName && (
+          {connection.connector_config?.connector_name && (
             <div>
               <p className="text-sm text-muted-foreground">Integration Name</p>
               <p className="font-medium">
-                {connection.connectorConfig?.connectorName
+                {connection.connector_config?.connector_name
                   ?.charAt(0)
                   .toUpperCase() +
-                  connection.connectorConfig?.connectorName?.slice(1)}
+                  connection.connector_config?.connector_name?.slice(1)}
               </p>
             </div>
           )}
@@ -71,7 +71,8 @@ export function ConnectionDetails({
         <div>
           <p className="text-sm text-muted-foreground">Connector Name</p>
           <p className="font-medium">
-            {connection.connectorConfig.displayName || connection.connectorName}
+            {connection.connector_config.display_name ||
+              connection.connector_name}
           </p>
         </div>
         <div>

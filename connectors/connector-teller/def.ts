@@ -54,14 +54,14 @@ export const tellerDef = {
 
   standardMappers: {
     connection: (settings) => ({
-      displayName: 'TODO' + settings.token,
+      display_name: 'TODO' + settings.token,
       institutionId: 'ins_teller_TODO',
     }),
     integration: (data) => ({
       name: data.name,
-      logoUrl: data.logoUrl,
+      logo_url: data.logoUrl,
       envName: undefined,
-      loginUrl: undefined,
+      login_url: undefined,
     }),
     entity: (data) => {
       if (data.entityName === 'account') {

@@ -14,7 +14,7 @@ type PostgresInputPayload =
 export function unifiedCrmLink(ctx: {
   source: {
     id: Id['conn']
-    connectorConfig: {connectorName: string}
+    connector_config: {connector_name: string}
     metadata?: unknown
   }
 }): Link<AnyEntityPayload, PostgresInputPayload> {
@@ -25,7 +25,7 @@ export function unifiedCrmLink(ctx: {
 
     // QQ. Why doesn't import mappers work? TODO; generalize
     const mappers =
-      ctx.source.connectorConfig.connectorName === 'hubspot'
+      ctx.source.connector_config.connector_name === 'hubspot'
         ? hubspotSingularMappers
         : salesforceMappers
 
@@ -33,7 +33,7 @@ export function unifiedCrmLink(ctx: {
     const mapper = mappers[entityName as keyof typeof mappers]
     if (!mapper) {
       console.warn(
-        `No ${entityName} entity mapper found for connector: ${ctx.source.connectorConfig.connectorName}`,
+        `No ${entityName} entity mapper found for connector: ${ctx.source.connector_config.connector_name}`,
         JSON.stringify(mappers),
       )
       return rxjs.EMPTY

@@ -18,12 +18,12 @@ export function getExtCustomerId(
 ) {
   switch (viewer.role) {
     case 'customer':
-      return `cus_${viewer.customerId}` as ExtCustomerId
+      return `cus_${viewer.customer_id}` as ExtCustomerId
     case 'user':
       // Falling back to userId should not generally happen
-      return (viewer.orgId ?? viewer.userId) as ExtCustomerId
+      return (viewer.org_id ?? viewer.user_id) as ExtCustomerId
     case 'org':
-      return viewer.orgId as ExtCustomerId
+      return viewer.org_id as ExtCustomerId
     case 'system':
       return 'system' as ExtCustomerId
   }
@@ -127,7 +127,7 @@ export function getProtectedContext(ctx: RouterContext) {
   }
   const asOrgIfNeeded =
     ctx.viewer.role === 'customer'
-      ? ctx.as('org', {orgId: ctx.viewer.orgId})
+      ? ctx.as('org', {org_id: ctx.viewer.org_id})
       : ctx.services
   const extCustomerId = getExtCustomerId(ctx.viewer)
   return {...ctx, viewer: ctx.viewer, asOrgIfNeeded, extCustomerId}

@@ -156,8 +156,8 @@ export async function serverGetViewer(
 
     if (res?.privateMetadata?.[kApikeyMetadata] === key) {
       return res.id.startsWith('user_')
-        ? {role: 'user', userId: res.id as Id['user']}
-        : {role: 'org', orgId: res.id as Id['org']}
+        ? {role: 'user', user_id: res.id as Id['user']}
+        : {role: 'org', org_id: res.id as Id['org']}
     }
     // console.warn('Invalid api key, ignoroing', {apiKey: apikey, id, key, res})
   }
@@ -169,8 +169,8 @@ export async function serverGetViewer(
   if (auth.userId) {
     return {
       role: 'user',
-      userId: auth.userId as UserId,
-      orgId: auth.orgId as Id['org'],
+      user_id: auth.userId as UserId,
+      org_id: auth.orgId as Id['org'],
     }
   }
 
@@ -187,7 +187,7 @@ export async function serverGetUser(
   if (viewer.role !== 'user') {
     return [null] as const
   }
-  return [{id: viewer.userId}] as const
+  return [{id: viewer.user_id}] as const
 }
 
 export function respondToCORS(req: NextApiRequest, res: NextApiResponse) {

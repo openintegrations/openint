@@ -6,7 +6,7 @@ import {_trpcReact} from '@openint/engine-frontend'
 
 export function EventPoller({accessToken}: {accessToken?: string | null}) {
   const viewer = zViewerFromUnverifiedJwtToken.parse(accessToken)
-  const customerId = viewer.role === 'customer' ? viewer.customerId : null
+  const customerId = viewer.role === 'customer' ? viewer.customer_id : null
 
   // Track if polling should be active and store message source
   const isListeningRef = useRef(false)
@@ -37,7 +37,7 @@ export function EventPoller({accessToken}: {accessToken?: string | null}) {
   const {data} = _trpcReact.listEvents.useQuery(
     {
       since: lastEventIdRef.current,
-      customerId,
+      customer_id: customerId,
       page_size: 100,
     },
     {

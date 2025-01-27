@@ -36,7 +36,7 @@ export const heronDef = {
   standardMappers: {
     connection() {
       return {
-        displayName: 'Heron',
+        display_name: 'Heron',
         // status: healthy vs. disconnected...
         // labels: test vs. production
       }

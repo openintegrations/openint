@@ -17,7 +17,7 @@ type PostgresInputPayload =
 export function unifiedBankingLink(ctx: {
   source: {
     id: Id['conn']
-    connectorConfig: {connectorName: string}
+    connector_config: {connector_name: string}
     metadata?: unknown
   }
 }): Link<AnyEntityPayload, PostgresInputPayload> {
@@ -31,7 +31,7 @@ export function unifiedBankingLink(ctx: {
       return rxjs.of(op)
     }
 
-    if (ctx.source.connectorConfig.connectorName === 'xero') {
+    if (ctx.source.connector_config.connector_name === 'xero') {
       if (op.data.entityName === 'Account') {
         const entity = op.data.entity as Xero['Account']
         if (entity.Class === 'REVENUE' || entity.Class === 'EXPENSE') {
@@ -99,7 +99,7 @@ export function unifiedBankingLink(ctx: {
         })
       }
     }
-    if (ctx.source.connectorConfig.connectorName === 'qbo') {
+    if (ctx.source.connector_config.connector_name === 'qbo') {
       if (op.data.entityName === 'purchase') {
         const mapped = applyMapper(
           adapters.qbo.mappers.purchase,
@@ -183,7 +183,7 @@ export function unifiedBankingLink(ctx: {
         })
       }
     }
-    if (ctx.source.connectorConfig.connectorName === 'plaid') {
+    if (ctx.source.connector_config.connector_name === 'plaid') {
       if (op.data.entityName === 'transaction') {
         const mapped = applyMapper(
           adapters.plaid.mappers.transaction,

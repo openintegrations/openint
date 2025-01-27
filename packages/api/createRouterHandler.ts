@@ -106,8 +106,8 @@ export async function viewerFromRequest(
 
     if (res?.privateMetadata?.[kApikeyMetadata] === key) {
       return res.id.startsWith('user_')
-        ? {role: 'user', userId: res.id as Id['user']}
-        : {role: 'org', orgId: res.id as Id['org']}
+        ? {role: 'user', user_id: res.id as Id['user']}
+        : {role: 'org', org_id: res.id as Id['org']}
     }
     // console.warn('Invalid api key, ignoroing', {apiKey: apikey, id, key, res})
   }
@@ -119,8 +119,8 @@ export async function viewerFromRequest(
   if (auth.userId) {
     return {
       role: 'user',
-      userId: auth.userId as UserId,
-      orgId: auth.orgId as Id['org'],
+      user_id: auth.userId as UserId,
+      org_id: auth.orgId as Id['org'],
     }
   }
 
@@ -236,14 +236,14 @@ const skipTrpcRoutes: SkipTrpcRoutes = {
         throw new BadRequestError('No fileId found in path')
       }
 
-      if (!(connection.connectorName in downloadFileById)) {
+      if (!(connection.connector_name in downloadFileById)) {
         throw new BadRequestError(
-          `Download not supported for ${connection.connectorName}`,
+          `Download not supported for ${connection.connector_name}`,
         )
       }
       const downloadFn =
         downloadFileById[
-          connection.connectorName as keyof typeof downloadFileById
+          connection.connector_name as keyof typeof downloadFileById
         ]
 
       // TODO: abstract so its not fetched in every handler

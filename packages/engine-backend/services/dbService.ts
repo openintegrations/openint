@@ -103,18 +103,18 @@ export function makeDBService({
       })
     } else if (tableName === 'pipeline') {
       // TODO: How do we validate if source or destination id is not provided?
-      if ('sourceId' in _patch) {
+      if ('source_id' in _patch) {
         schema = (schema as (typeof zRaw)['pipeline']).extend({
           // This should be an override...
-          sourceState:
-            getConnectorOrFail(_patch.sourceId!).schemas.sourceState ??
+          source_state:
+            getConnectorOrFail(_patch.source_id!).schemas.sourceState ??
             z.object({}).nullish(),
         })
-      } else if ('destinationId' in _patch) {
+      } else if ('destination_id' in _patch) {
         schema = (schema as (typeof zRaw)['pipeline']).extend({
           // This should be an override...
-          destinationState:
-            getConnectorOrFail(_patch.destinationId!).schemas
+          destination_state:
+            getConnectorOrFail(_patch.destination_id!).schemas
               .destinationState ?? z.object({}).nullish(),
         })
       }
@@ -207,24 +207,24 @@ export function makeDBService({
 
   const getConnectionExpandedOrFail = (id: Id['conn']) =>
     getConnectionOrFail(id).then(async (conn) => {
-      const connectorConfig = await getConnectorConfigOrFail(
-        conn.connectorConfigId,
+      const connector_config = await getConnectorConfigOrFail(
+        conn.connector_config_id,
       )
       const settings: {} =
-        connectorConfig.connector.schemas.connectionSettings?.parse(
+        connector_config.connector.schemas.connectionSettings?.parse(
           conn.settings,
         )
-      const integration = conn.integrationId
-        ? await getIntegrationOrFail(conn.integrationId)
+      const integration = conn.integration_id
+        ? await getIntegrationOrFail(conn.integration_id)
         : undefined
-      return {...conn, connectorConfig, settings, integration}
+      return {...conn, connector_config, settings, integration}
     })
 
   const getPipelineExpandedOrFail = (id: Id['pipe']) =>
     getPipelineOrFail(id).then(async (pipe) => {
       const [source, destination] = await Promise.all([
-        getConnectionExpandedOrFail(pipe.sourceId!),
-        getConnectionExpandedOrFail(pipe.destinationId!),
+        getConnectionExpandedOrFail(pipe.source_id!),
+        getConnectionExpandedOrFail(pipe.destination_id!),
       ])
       // if (
       //   pipe.sourceState != null &&
@@ -244,13 +244,13 @@ export function makeDBService({
       //     message: `destinationState is not supported for ${destination.connectorConfig.connector.name}`,
       //   })
       // }
-      const sourceState: {} = (
-        source.connectorConfig.connector.schemas.sourceState ?? z.unknown()
-      ).parse(pipe.sourceState)
-      const destinationState: {} = (
-        destination.connectorConfig.connector.schemas.destinationState ??
+      const source_state: {} = (
+        source.connector_config.connector.schemas.sourceState ?? z.unknown()
+      ).parse(pipe.source_state)
+      const destination_state: {} = (
+        destination.connector_config.connector.schemas.destinationState ??
         z.unknown()
-      ).parse(pipe.destinationState)
+      ).parse(pipe.destination_state)
       // const links = R.pipe(
       //   rest.linkOptions ?? pipeline?.linkOptions ?? [],
       //   R.map((l) =>
@@ -264,8 +264,8 @@ export function makeDBService({
         ...pipe,
         source,
         destination,
-        sourceState,
-        destinationState,
+        source_state,
+        destination_state,
         links: [],
         watch: false, // TODO: Fix me
       }

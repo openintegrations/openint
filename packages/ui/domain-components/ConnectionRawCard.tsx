@@ -28,7 +28,7 @@ export const ConnectionRawCard = ({
     )}>
     <div className="flex flex-row items-center space-x-4">
       <div className="inline-flex h-12 w-12 min-w-[48px] items-center justify-center rounded-xl border border-[#cbcbcb] bg-transparent">
-        {connection.integrationId ? (
+        {connection.integration_id ? (
           <IntegrationLogo
             {...uiProps}
             integration={connection.integration}
@@ -45,16 +45,16 @@ export const ConnectionRawCard = ({
       <div className="flex flex-col">
         <div className="flex h-6 items-center space-x-2 self-stretch">
           <h4 className="text-sm font-semibold tracking-[-0.01em] text-black antialiased">
-            {connection.displayName ||
+            {connection.display_name ||
               connection.integration?.name ||
-              titleCase(connection.connectorName) ||
-              connection.connectorConfigId ||
+              titleCase(connection.connector_name) ||
+              connection.connector_config_id ||
               '<TODO>'}
           </h4>
           <span className="rounded-full bg-gray-300 px-2 py-1 text-xs font-medium text-white">
             Primary
           </span>
-          {(connection.syncInProgress || connection.status) && (
+          {(connection.sync_in_progress || connection.status) && (
             <Badge
               variant="secondary"
               className={cn(
@@ -65,7 +65,7 @@ export const ConnectionRawCard = ({
                   'bg-pink-200',
               )}>
               {
-                connection.syncInProgress ? 'Syncing' : connection.status
+                connection.sync_in_progress ? 'Syncing' : connection.status
                 // TODO: Implement the concept of a primary connection
                 // || 'Primary'
               }
@@ -73,11 +73,11 @@ export const ConnectionRawCard = ({
           )}
         </div>
         <div className="text-black-mid truncate text-sm tracking-[-0.01em] antialiased">
-          {connection.syncInProgress ? (
+          {connection.sync_in_progress ? (
             <LoadingText text="Syncing" />
-          ) : connection.lastSyncCompletedAt ? (
+          ) : connection.last_sync_completed_at ? (
             `Synced ${formatDistanceToNowStrict(
-              new Date(connection.lastSyncCompletedAt),
+              new Date(connection.last_sync_completed_at),
               {addSuffix: true},
             )}`
           ) : (
@@ -98,11 +98,9 @@ export function IntegrationLogo({
 }: UIPropsNoChildren & {
   integration?: ZStandard['integration'] | null | undefined
 }) {
-  // @ts-expect-error - TODO: QQ fix this
-  return integration?.logo_url || integration?.logoUrl ? (
+  return integration?.logo_url ? (
     <Image
-      // @ts-expect-error - TODO: QQ fix this
-      src={integration.logo_url || integration.logoUrl}
+      src={integration.logo_url}
       alt={`"${integration.name}" logo`}
       className={cn(
         'h-12 w-12 shrink-0 overflow-hidden object-contain',

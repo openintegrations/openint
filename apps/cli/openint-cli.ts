@@ -30,11 +30,11 @@ export const cli = cliFromRouter(flatRouter, {
   context: {
     ...contextFactory.fromViewer(
       customerId && orgId
-        ? {role: 'customer', customerId, orgId}
+        ? {role: 'customer', customer_id: customerId, org_id: orgId}
         : userId
-          ? {role: 'user', userId}
+          ? {role: 'user', user_id: userId}
           : orgId
-            ? {role: 'org', orgId}
+            ? {role: 'org', org_id: orgId}
             : SYSTEM
               ? {role: 'system'}
               : {role: 'anon'},

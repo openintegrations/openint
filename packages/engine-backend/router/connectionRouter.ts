@@ -172,7 +172,7 @@ export const connectionRouter = trpc.router({
         streams: input.streams ?? {},
         src: conn,
         customer:
-          ctx.viewer.role === 'customer' ? {id: ctx.viewer.customerId} : null,
+          ctx.viewer.role === 'customer' ? {id: ctx.viewer.customer_id} : null,
       })
 
       return rxjs.firstValueFrom(res.pipe(Rx.toArray()))
@@ -181,58 +181,60 @@ export const connectionRouter = trpc.router({
     .meta({openapi: {method: 'POST', path: '/core/connection', tags}})
     .input(
       zRaw.connection.pick({
-        connectorConfigId: true,
+        connector_config_id: true,
         settings: true,
-        displayName: true,
-        customerId: true,
+        display_name: true,
+        customer_id: true,
         disabled: true,
         metadata: true,
-        integrationId: true,
+        integration_id: true,
       }),
     )
     // Questionable why `zConnectContextInput` should be there. Examine whether this is actually
     // needed
     // How do we verify that the userId here is the same as the userId from preConnectOption?
     .output(z.string()) // TODO(api): We should not return just a string here. Should return an object
-    .mutation(async ({input: {connectorConfigId, settings, ...input}, ctx}) => {
-      const int =
-        await ctx.asOrgIfNeeded.getConnectorConfigOrFail(connectorConfigId)
+    .mutation(
+      async ({input: {connector_config_id, settings, ...input}, ctx}) => {
+        const int =
+          await ctx.asOrgIfNeeded.getConnectorConfigOrFail(connector_config_id)
 
-      if (int.orgId !== ctx.viewer.orgId) {
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: `You are not allowed to create connections for ${int.connectorName}`,
-        })
-      }
+        if (int.org_id !== ctx.viewer.org_id) {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: `You are not allowed to create connections for ${int.connector_name}`,
+          })
+        }
 
-      const _extId = makeUlid()
-      const connId = makeId('conn', int.connector.name, _extId)
+        const _extId = makeUlid()
+        const connId = makeId('conn', int.connector.name, _extId)
 
-      // Should throw if not working..
-      const connUpdate = {
-        triggerDefaultSync: true,
-        // TODO: Should no longer depend on external ID
-        connectionExternalId: _extId,
-        settings,
-        ...(await int.connector.checkConnection?.({
-          config: int.config,
+        // Should throw if not working..
+        const connUpdate = {
+          triggerDefaultSync: true,
+          // TODO: Should no longer depend on external ID
+          connectionExternalId: _extId,
           settings,
-          context: {webhookBaseUrl: ''},
-          options: {},
-        })),
-        // TODO: Fix me up
-        customerId:
-          ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
-      } satisfies ConnectionUpdate
-      await ctx.asOrgIfNeeded._syncConnectionUpdate(int, connUpdate)
+          ...(await int.connector.checkConnection?.({
+            config: int.config,
+            settings,
+            context: {webhookBaseUrl: ''},
+            options: {},
+          })),
+          // TODO: Fix me up
+          customerId:
+            ctx.viewer.role === 'customer' ? ctx.viewer.customer_id : null,
+        } satisfies ConnectionUpdate
+        await ctx.asOrgIfNeeded._syncConnectionUpdate(int, connUpdate)
 
-      // TODO: Do this in one go not two
-      if (input.displayName) {
-        await ctx.services.patchReturning('connection', connId, input)
-      }
-      // TODO: return the entire connection object...
-      return connId
-    }),
+        // TODO: Do this in one go not two
+        if (input.display_name) {
+          await ctx.services.patchReturning('connection', connId, input)
+        }
+        // TODO: return the entire connection object...
+        return connId
+      },
+    ),
 
   // TODO: Run server-side validation
   updateConnection: protectedProcedure
@@ -246,7 +248,7 @@ export const connectionRouter = trpc.router({
         disabled: true,
         // Not sure if we should allow these two?
         customerId: true,
-        integrationId: true,
+        integration_id: true,
       }),
     )
     .output(zRaw.connection)
@@ -265,7 +267,7 @@ export const connectionRouter = trpc.router({
         await ctx.services.getConnectionOrFail(connId)
       }
       const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
-      const {settings, connectorConfig: ccfg} = conn
+      const {settings, connector_config: ccfg} = conn
       if (!opts?.skipRevoke) {
         await ccfg.connector.revokeConnection?.(
           settings,
@@ -348,14 +350,14 @@ export const connectionRouter = trpc.router({
             input.expand
           ) {
             console.log(
-              `[listConnection] Refreshing token for connection ${conn.connectorName}`,
+              `[listConnection] Refreshing token for connection ${conn.connector_name}`,
             )
             const connCheck = await performConnectionCheck(ctx, conn.id, {
               expand: expandArray,
             })
             if (!connCheck) {
               console.warn(
-                `[listConnection] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
+                `[listConnection] connectionCheck not implemented for ${conn.connector_name} which requires a refresh. Returning the stale connection.`,
               )
             }
             return connCheck || conn
@@ -410,7 +412,7 @@ export const connectionRouter = trpc.router({
       // do not expand for now otherwise permission issues..
       let conn = await ctx.services.getConnectionOrFail(input.id)
       const ccfg = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(
-        conn.connectorConfigId,
+        conn.connector_config_id,
       )
 
       // Handle forceRefresh
@@ -429,7 +431,7 @@ export const connectionRouter = trpc.router({
         })
         if (!connCheck) {
           console.warn(
-            `[getConnection] connectionCheck not implemented for ${conn.connectorName} which requires a refresh. Returning the stale connection.`,
+            `[getConnection] connectionCheck not implemented for ${conn.connector_name} which requires a refresh. Returning the stale connection.`,
           )
         }
         conn = connCheck || conn
@@ -439,7 +441,7 @@ export const connectionRouter = trpc.router({
         ...conn,
         // NOTE: careful to not return the entire object as it has secrets
         // and this method is open to end user auth
-        connector_config: R.pick(ccfg, ['id', 'orgId', 'connectorName']),
+        connector_config: R.pick(ccfg, ['id', 'org_id', 'connector_name']),
       }
     }),
   checkConnection: protectedProcedure
@@ -494,20 +496,20 @@ export const connectionRouter = trpc.router({
       const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
       // No need to checkConnection here as sourceSync should take care of it
 
-      if (opts?.metaOnly) {
+      if (opts?.meta_only) {
         await sync({
           source:
-            conn.connectorConfig.connector.sourceSync?.({
+            conn.connector_config.connector.sourceSync?.({
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              instance: conn.connectorConfig.connector.newInstance?.({
-                config: conn.connectorConfig.config,
+              instance: conn.connector_config.connector.newInstance?.({
+                config: conn.connector_config.config,
                 settings: conn.settings,
                 fetchLinks: ctx.services.getFetchLinks(conn),
                 onSettingsChange: () => {},
               }),
-              config: conn.connectorConfig.config,
+              config: conn.connector_config.config,
               settings: conn.settings,
-              customer: conn.customerId && {id: conn.customerId},
+              customer: conn.customer_id && {id: conn.customer_id},
               state: {},
               streams: {},
             }) ?? rxjs.EMPTY,
@@ -523,9 +525,9 @@ export const connectionRouter = trpc.router({
       // is vulnerable to race condition and feels brittle. Though syncConnection is only
       // called from the UI so we are fine for now.
       const connSync = await ctx.asOrgIfNeeded._syncConnectionUpdate(
-        conn.connectorConfig,
+        conn.connector_config,
         {
-          customerId: conn.customerId,
+          customerId: conn.customer_id,
           settings: conn.settings,
           connectionExternalId: extractId(conn.id)[2],
           integration: conn.integration && {

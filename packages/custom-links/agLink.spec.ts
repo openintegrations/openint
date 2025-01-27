@@ -162,8 +162,8 @@ test('destinationSync', async () => {
       agLink({
         source: {
           id: 'conn_123' as Id['conn'],
-          connectorConfig: {connectorName: 'greenhouse'},
-          customerId: 'cm3roaf0007',
+          connector_config: {connector_name: 'greenhouse'},
+          customer_id: 'cm3roaf0007',
         },
       }),
     )

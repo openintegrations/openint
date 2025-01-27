@@ -47,8 +47,8 @@ export const zStandard = {
     id: zId('int'),
     name: z.string(),
     // No http prefix preprocessing for logo url as they can be data urls
-    logoUrl: z.string().url().optional(),
-    loginUrl: z.preprocess(
+    logo_url: z.string().url().optional(),
+    login_url: z.preprocess(
       // Sometimes url get returned without http prefix...
       // Is there a way to "catch" invalid url error then retry with prefix?
       // Would be better than just prefixing semi-blindly.
@@ -63,7 +63,7 @@ export const zStandard = {
   }),
   connection: z.object({
     id: zId('conn'),
-    displayName: z.string().nullish(),
+    display_name: z.string().nullish(),
     /**
      * This correspond to the connection status.
      * Pipeline shall have a separate syncStatus */
@@ -75,7 +75,7 @@ export const zStandard = {
         'manual', // This is a manual connection (e.g. import. So normal status does not apply)
       ])
       .nullish(), // Status unknown
-    statusMessage: z.string().nullish(),
+    status_message: z.string().nullish(),
     labels: z.array(z.string()).optional(),
   }),
 }
@@ -93,8 +93,8 @@ export type ZRaw = {
 // as more specific type than just jsonb
 
 const zBase = z.object({
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
 })
 
 export const zStreamsV2 = z.record(
@@ -124,10 +124,10 @@ export const zRaw = {
   connector_config: zBase
     .extend({
       id: zId('ccfg'),
-      connectorName: z.string(),
+      connector_name: z.string(),
       config: z.record(z.unknown()).nullish(),
-      orgId: zId('org'),
-      displayName: z.string().nullish(),
+      org_id: zId('org'),
+      display_name: z.string().nullish(),
       disabled: z.boolean().optional().openapi({
         title: 'Disabled',
         description:
@@ -135,7 +135,7 @@ export const zRaw = {
       }),
 
       /** Could be full object later */
-      defaultPipeOut: z
+      default_pipe_out: z
         .object({
           streams: z.record(z.boolean()).nullish(),
           links: z
@@ -152,7 +152,7 @@ export const zRaw = {
         .describe(
           'Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL',
         ),
-      defaultPipeIn: z
+      default_pipe_in: z
         .object({
           links: z
             .array(zLink)
@@ -167,18 +167,18 @@ export const zRaw = {
           'Automatically sync data from any connections associated with this config to the destination connection, which is typically a Postgres database. Think ETL',
         ),
       /** This is a generated column, which is not the most flexible. Maybe we need some kind of mapStandardIntegration method? */
-      envName: z.string().nullish(),
+      env_name: z.string().nullish(),
       metadata: zMetadata,
     })
     .openapi({ref: 'ConnectorConfig'}),
   connection: zBase
     .extend({
       id: zId('conn'),
-      connectorName: z.string().describe('Unique name of the connector'),
-      displayName: z.string().nullish(),
-      customerId: zCustomerId.nullish(),
-      connectorConfigId: zId('ccfg'),
-      integrationId: zId('int').nullish(),
+      connector_name: z.string().describe('Unique name of the connector'),
+      display_name: z.string().nullish(),
+      customer_id: zCustomerId.nullish(),
+      connector_config_id: zId('ccfg'),
+      integration_id: zId('int').nullish(),
       settings: z.record(z.unknown()).nullish(),
       standard: zStandard.connection.omit({id: true}).nullish(),
       disabled: z.boolean().optional(),
@@ -189,14 +189,14 @@ export const zRaw = {
     .extend({
       id: zId('pipe'),
       // TODO: Remove nullish now that pipelines are more fixed
-      sourceId: zId('conn').optional(),
-      sourceState: z.record(z.unknown()).optional(),
-      sourceVertical: z.string().optional().nullable(),
+      source_id: zId('conn').optional(),
+      source_state: z.record(z.unknown()).optional(),
+      source_vertical: z.string().optional().nullable(),
       streams: zStreamsV2.nullish(),
-      destinationId: zId('conn').optional(),
-      destinationState: z.record(z.unknown()).optional(),
-      destinationVertical: z.string().optional().nullable(),
-      linkOptions: z
+      destination_id: zId('conn').optional(),
+      destination_state: z.record(z.unknown()).optional(),
+      destination_vertical: z.string().optional().nullable(),
+      link_options: z
         .array(z.unknown())
         // z.union([
         //   z.string(),
@@ -207,8 +207,8 @@ export const zRaw = {
       // TODO: Add two separate tables sync_jobs to keep track of this instead of these two
       // though questionnable whether it should be in a separate database completely
       // just like Airbyte. Or perhaps using airbyte itself as the jobs database
-      lastSyncStartedAt: z.string().nullish(),
-      lastSyncCompletedAt: z.string().nullish(),
+      last_sync_started_at: z.string().nullish(),
+      last_sync_completed_at: z.string().nullish(),
       disabled: z.boolean().optional(),
       metadata: zMetadata,
     })
@@ -216,7 +216,7 @@ export const zRaw = {
   integration: zBase
     .extend({
       id: zId('int'),
-      connectorName: z.string(),
+      connector_name: z.string(),
       standard: zStandard.integration.omit({id: true}).nullish(),
       external: z.record(z.unknown()).nullish(),
     })

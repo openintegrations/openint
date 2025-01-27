@@ -34,8 +34,8 @@ export default function PipelinesPage() {
             ),
           },
           {accessorKey: 'id'},
-          {accessorKey: 'sourceId'},
-          {accessorKey: 'destinationId'},
+          {accessorKey: 'source_id'},
+          {accessorKey: 'destination_id'},
         ]}
       />
     </div>

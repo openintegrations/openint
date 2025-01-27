@@ -7,15 +7,15 @@ import {WithConnectorConnect} from '../hocs/WithConnectorConnect'
 
 interface Connection {
   id: string
-  connectorConfig: ConnectorConfig
-  connectorName: string
-  pipelineIds: string[]
-  syncInProgress: boolean
+  connector_config: ConnectorConfig
+  connector_name: string
+  pipeline_ids: string[]
+  sync_in_progress: boolean
   integration: any
   status?: string | null
-  statusMessage?: string | null
-  createdAt: string
-  envName?: string
+  status_message?: string | null
+  created_at: string
+  env_name?: string
   type?: string
 }
 
@@ -84,9 +84,9 @@ export function ConnectionsTabContent({
           {connections.map((conn: any) => (
             <WithConnectorConnect
               key={conn.id + ''}
-              connectorConfig={{
-                id: conn.connectorConfig.id,
-                connector: conn.connectorConfig.connector,
+              connector_config={{
+                id: conn.connector_config.id,
+                connector: conn.connector_config.connector,
               }}
               integration={conn.integration}
               connection={conn}

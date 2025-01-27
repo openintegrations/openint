@@ -36,7 +36,7 @@ export async function setupTestOrg() {
   })
   const viewer: Viewer = {
     role: 'org',
-    orgId: org.id as Id['org'],
+    org_id: org.id as Id['org'],
   }
   const apiKey = await getOrCreateApikey(viewer)
   return {user, org, viewer, apiKey, testId}

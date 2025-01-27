@@ -58,8 +58,8 @@ export function IntegrationSearch({
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: debouncedSearchText,
-    integrationIds: integrationIdList,
-    connectorNames: connectorNameList,
+    integration_ids: integrationIdList,
+    connector_names: connectorNameList,
   })
   const ints = listIntegrationsRes.data?.items.map((int) => ({
     ...int,
@@ -184,7 +184,7 @@ export function IntegrationSearch({
                       {categoryInts.map((int) => (
                         <WithConnectorConnect
                           key={int.id}
-                          connectorConfig={{
+                          connector_config={{
                             id: int.connector_config_id,
                             connector: int.ccfg.connector,
                           }}
@@ -215,7 +215,7 @@ export function IntegrationSearch({
                       {categoryInts.map((int, index) => (
                         <WithConnectorConnect
                           key={int.id}
-                          connectorConfig={{
+                          connector_config={{
                             id: int.connector_config_id,
                             connector: int.ccfg.connector,
                           }}

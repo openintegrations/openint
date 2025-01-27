@@ -39,7 +39,7 @@ export async function GET(
     const {services} = contextFactory.fromViewer(viewer)
     const conn = await services.getConnectionOrFail(connectionId as Id['conn'])
 
-    if (conn.connectorName !== 'postgres') {
+    if (conn.connector_name !== 'postgres') {
       throw new TRPCError({
         code: 'PRECONDITION_FAILED',
         message: 'Only postgres connections are supported',

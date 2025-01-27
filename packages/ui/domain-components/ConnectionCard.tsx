@@ -24,12 +24,12 @@ export function ConnectionCard({
   onSelect: () => void
   conn: {
     id: string
-    pipelineIds: string[]
-    syncInProgress: boolean
-    connectorConfig: ConnectorConfig
+    pipeline_ids: string[]
+    sync_in_progress: boolean
+    connector_config: ConnectorConfig
     integration: any
     status: string
-    statusMessage: string
+    status_message: string
   }
 }) {
   const [isProcessing, setIsProcessing] = React.useState(false)
@@ -46,12 +46,12 @@ export function ConnectionCard({
   }
 
   let connectionName =
-    conn?.integration?.name ?? conn.connectorConfig.connector.displayName
+    conn?.integration?.name ?? conn.connector_config.connector.displayName
   connectionName =
     connectionName.charAt(0).toUpperCase() + connectionName.slice(1)
 
   const isOAuthConnector = (
-    conn.connectorConfig.connector.schemas.connectorConfig as any
+    conn.connector_config.connector.schemas.connectorConfig as any
   )?.required?.includes('oauth')
 
   return (
@@ -96,13 +96,13 @@ export function ConnectionCard({
             />
           ) : (
             <ConnectorLogo
-              connector={conn.connectorConfig.connector}
+              connector={conn.connector_config.connector}
               className="size-[64px] rounded-lg"
             />
           )}
           <p
             className={`m-0 max-w-[100px] text-center text-sm font-semibold ${
-              conn.connectorConfig.connector.displayName.length > 15
+              conn.connector_config.connector.displayName.length > 15
                 ? 'truncate'
                 : ''
             }`}>
@@ -116,7 +116,7 @@ export function ConnectionCard({
                 }`}>
                 {isProcessing ? 'Processing...' : 'Reconnect Required'}
               </p>
-            ) : conn.syncInProgress ? (
+            ) : conn.sync_in_progress ? (
               <div className="flex flex-row items-center justify-start gap-2">
                 <Loader className="size-5 animate-spin text-button" />
                 <p className="text-center text-sm text-button">Syncing...</p>

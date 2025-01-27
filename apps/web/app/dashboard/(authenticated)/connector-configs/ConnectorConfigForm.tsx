@@ -32,10 +32,10 @@ export function ConnectorConfigForm({
   const zConnId = connectionsRes.data?.length
     ? z.union(
         connectionsRes.data
-          .filter((r) => r.connectorName === 'postgres')
+          .filter((r) => r.connector_name === 'postgres')
           .map((r) =>
             z.literal(r.id).openapi({
-              title: r.displayName ? `${r.displayName} <${r.id}>` : r.id,
+              title: r.display_name ? `${r.display_name} <${r.id}>` : r.id,
             }),
           ) as [z.ZodLiteral<string>, z.ZodLiteral<string>],
       )
@@ -77,7 +77,7 @@ export function ConnectorConfigForm({
                     .passthrough()
                     .openapi({description: 'Entities to sync'}),
                 }),
-                links: zRaw.connector_config.shape.defaultPipeOut
+                links: zRaw.connector_config.shape.default_pipe_out
                   .unwrap()
                   .unwrap().shape.links,
                 destination_id: zConnId.optional().openapi({
@@ -88,7 +88,8 @@ export function ConnectorConfigForm({
           ])
           .openapi({
             title: 'Sync settings',
-            description: zRaw.connector_config.shape.defaultPipeOut.description,
+            description:
+              zRaw.connector_config.shape.default_pipe_out.description,
           }),
       }),
       ...(connectorMeta?.supportedModes.includes('destination') && {
@@ -97,7 +98,7 @@ export function ConnectorConfigForm({
             z.null().openapi({title: 'Disabled'}),
             z
               .object({
-                links: zRaw.connector_config.shape.defaultPipeIn
+                links: zRaw.connector_config.shape.default_pipe_in
                   .unwrap()
                   .unwrap().shape.links,
                 source_id: zConnId,
@@ -106,7 +107,8 @@ export function ConnectorConfigForm({
           ])
           .openapi({
             title: 'Reverse sync settings',
-            description: zRaw.connector_config.shape.defaultPipeIn.description,
+            description:
+              zRaw.connector_config.shape.default_pipe_in.description,
           }),
       }),
     })
@@ -149,11 +151,11 @@ export function ConnectorConfigForm({
           formData={
             ccfg
               ? {
-                  displayName: ccfg.displayName,
+                  display_name: ccfg.display_name,
                   disabled: ccfg.disabled,
                   config: ccfg.config ?? {},
-                  defaultPipeOut: ccfg.defaultPipeOut ?? null,
-                  defaultPipeIn: ccfg.defaultPipeIn ?? null,
+                  default_pipe_out: ccfg.default_pipe_out ?? null,
+                  default_pipe_in: ccfg.default_pipe_in ?? null,
                 } // {} because required
               : undefined
           }

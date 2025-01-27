@@ -22,7 +22,7 @@ export const pipelineRouter = trpc.router({
     .meta({openapi: {method: 'GET', path: '/core/pipeline', tags}})
     .input(
       zListParams
-        .extend({connectionIds: z.array(zId('conn')).optional()})
+        .extend({connection_ids: z.array(zId('conn')).optional()})
         .optional(),
     )
     .output(z.array(zRaw.pipeline))
@@ -53,7 +53,7 @@ export const pipelineRouter = trpc.router({
         disabled: true,
         sourceId: true,
         streams: true,
-        destinationId: true,
+        destination_id: true,
       }),
     )
     .output(zRaw.pipeline)
@@ -72,8 +72,8 @@ export const pipelineRouter = trpc.router({
     .input(
       zListParams
         .extend({
-          customerId: zCustomerId.optional(),
-          connectionId: zId('conn').optional(),
+          customer_id: zCustomerId.optional(),
+          connection_id: zId('conn').optional(),
         })
         .optional(),
     )
@@ -81,15 +81,15 @@ export const pipelineRouter = trpc.router({
       // Add info about what it takes to `reconnect` here for connections which
       const connections =
         await ctx.services.metaService.tables.connection.list(input)
-      const filteredConnections = input.connectionId
-        ? connections.filter((c) => c.id === input.connectionId)
+      const filteredConnections = input.connection_id
+        ? connections.filter((c) => c.id === input.connection_id)
         : connections
       const [integrations, _pipelines] = await Promise.all([
         ctx.services.metaService.tables.integration.list({
-          ids: R.compact(filteredConnections.map((c) => c.integrationId)),
+          ids: R.compact(filteredConnections.map((c) => c.integration_id)),
         }),
         ctx.services.metaService.findPipelines({
-          connectionIds: filteredConnections.map((c) => c.id),
+          connection_ids: filteredConnections.map((c) => c.id),
         }),
         // We used to check connection health here, but we're moving it to async in future
         // ...connections.map((c) => performConnectionCheck(ctx, c.id, {})),
@@ -119,7 +119,7 @@ export const pipelineRouter = trpc.router({
             ? //  TODO: extend to more states, i.e. code === 'refresh_token_external_error' should be reconnected
               'disconnected'
             : 'healthy', // default
-          statusMessage: settings?.data?.error?.message,
+          status_message: settings?.data?.error?.message,
         }
       }
       function parseConnection(conn?: (typeof connections)[number] | null) {
@@ -127,7 +127,7 @@ export const pipelineRouter = trpc.router({
           return conn
         }
         const connectorName = extractId(conn.id)[1]
-        const integrations = intById[conn.integrationId!]
+        const integrations = intById[conn.integration_id!]
         const mappers = ctx.connectorMap[connectorName]?.standardMappers
         const standardConn = zStandard.connection
           .omit({id: true, settings: true})
@@ -150,9 +150,9 @@ export const pipelineRouter = trpc.router({
           ...conn,
           ...standardConn,
           id: conn.id,
-          displayName:
-            conn.displayName ||
-            standardConn?.displayName ||
+          display_name:
+            conn.display_name ||
+            standardConn?.display_name ||
             standardInt?.name ||
             '',
           integration:
@@ -163,18 +163,18 @@ export const pipelineRouter = trpc.router({
       }
       const pipelines = _pipelines.map((pipe) => ({
         ...pipe,
-        syncInProgress:
-          (pipe.lastSyncStartedAt && !pipe.lastSyncCompletedAt) ||
-          (pipe.lastSyncStartedAt &&
-            pipe.lastSyncCompletedAt &&
-            pipe.lastSyncStartedAt > pipe.lastSyncCompletedAt),
+        sync_in_progress:
+          (pipe.last_sync_started_at && !pipe.last_sync_completed_at) ||
+          (pipe.last_sync_started_at &&
+            pipe.last_sync_completed_at &&
+            pipe.last_sync_started_at > pipe.last_sync_completed_at),
       }))
       return filteredConnections
         .map(parseConnection)
         .filter((r): r is NonNullable<typeof r> => !!r)
         .map((r) => {
-          const pipesOut = pipelines.filter((p) => p.sourceId === r.id)
-          const pipesIn = pipelines.filter((p) => p.destinationId === r.id)
+          const pipesOut = pipelines.filter((p) => p.source_id === r.id)
+          const pipesIn = pipelines.filter((p) => p.destination_id === r.id)
           const pipes = [...pipesOut, ...pipesIn]
           // TODO: Look up based on provider name
           const type: ConnType | null = r.id.startsWith('conn_postgres')
@@ -186,12 +186,12 @@ export const pipelineRouter = trpc.router({
 
           return {
             ...r,
-            syncInProgress: pipes.some((p) => p.syncInProgress),
+            sync_in_progress: pipes.some((p) => p.sync_in_progress),
             type,
-            pipelineIds: pipes.map((p) => p.id),
+            pipeline_ids: pipes.map((p) => p.id),
             // TODO: Fix me
-            lastSyncCompletedAt: pipes.find((p) => p.lastSyncCompletedAt)
-              ?.lastSyncCompletedAt,
+            last_sync_completed_at: pipes.find((p) => p.last_sync_completed_at)
+              ?.last_sync_completed_at,
           }
         })
     }),
@@ -213,7 +213,7 @@ export const pipelineRouter = trpc.router({
       const pipeline = await ctx.asOrgIfNeeded.getPipelineExpandedOrFail(pipeId)
       console.log('[syncPipeline]', pipeline)
       const clerkOrg = await ctx.clerk.organizations.getOrganization({
-        organizationId: pipeline.source.connectorConfig.orgId,
+        organizationId: pipeline.source.connectorConfig.org_id,
       })
 
       const org = z

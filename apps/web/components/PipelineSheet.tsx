@@ -19,7 +19,9 @@ export const PipelineSheet = React.forwardRef(function PipelineSheet(
     (connectionsRes.data ?? []).map((r) =>
       z
         .literal(r.id)
-        .openapi({title: r.displayName ? `${r.displayName} <${r.id}>` : r.id}),
+        .openapi({
+          title: r.display_name ? `${r.display_name} <${r.id}>` : r.id,
+        }),
     ) as [z.ZodLiteral<string>, z.ZodLiteral<string>],
   )
   // Filter for only sources vs destinations when saving...
@@ -28,10 +30,10 @@ export const PipelineSheet = React.forwardRef(function PipelineSheet(
   // But then that won't work if admin ui cannot be embedded
   const formSchema = z.object({
     ...(props.pipeline && ({id: zId('pipe')} as {})),
-    sourceId: zConnId,
-    destinationId: zConnId,
-    sourceState: z.record(z.any()).optional(),
-    destinationState: z.record(z.any()).optional(),
+    source_id: zConnId,
+    destination_id: zConnId,
+    source_state: z.record(z.any()).optional(),
+    destination_state: z.record(z.any()).optional(),
     streams: zStreamsV2.optional(),
   })
 

@@ -58,26 +58,28 @@ export function makeSyncService({
 }) {
   async function ensurePipelinesForConnection(connId: Id['conn']) {
     console.log('[ensurePipelinesForConnection]', connId)
-    const pipelines = await metaService.findPipelines({connectionIds: [connId]})
+    const pipelines = await metaService.findPipelines({
+      connection_ids: [connId],
+    })
     const conn = await getConnectionExpandedOrFail(connId)
     const createdIds: Array<Id['pipe']> = []
-    let defaultDestId = conn.connectorConfig?.defaultPipeOut?.destination_id
+    let defaultDestId = conn.connector_config?.default_pipe_out?.destination_id
     if (!defaultDestId) {
-      const org = await authProvider.getOrganization(conn.connectorConfig.orgId)
+      const org = await authProvider.getOrganization(conn.connector_config.id)
       if (org.publicMetadata.database_url) {
         const dCcfgId = makeId('ccfg', 'postgres', 'default_' + org.id)
         defaultDestId = makeId('conn', 'postgres', 'default_' + org.id)
         await metaLinks.patch('connector_config', dCcfgId, {
-          orgId: org.id,
+          org_id: org.id,
           // Defaulting to disabled to not show up for customers as we don't have another way to filter them out for now
           // Though technically incorrect as we will later pause syncing for disabled connectors
           disabled: true,
-          displayName: 'Default Postgres Connector for sync',
+          display_name: 'Default Postgres Connector for sync',
         })
         console.log('Created default connector config', dCcfgId)
         // Do we actually need to store this?
         await metaLinks.patch('connection', defaultDestId, {
-          connectorConfigId: dCcfgId,
+          connector_config_id: dCcfgId,
           // Should always snake_case here. This is also not typesafe...
           settings: {
             databaseUrl: org.publicMetadata.database_url,
@@ -90,7 +92,7 @@ export function makeSyncService({
 
     if (
       defaultDestId &&
-      !pipelines.some((p) => p.destinationId === defaultDestId)
+      !pipelines.some((p) => p.destination_id === defaultDestId)
     ) {
       const pipelineId = makeId('pipe', 'default_out_' + conn.id)
       createdIds.push(pipelineId)
@@ -99,21 +101,21 @@ export function makeSyncService({
       )
 
       await metaLinks.patch('pipeline', pipelineId, {
-        sourceId: connId,
-        destinationId: defaultDestId,
+        source_id: connId,
+        destination_id: defaultDestId,
       })
     }
 
-    const defaultSrcId = conn.connectorConfig?.defaultPipeIn?.source_id
-    if (defaultSrcId && !pipelines.some((p) => p.sourceId === defaultSrcId)) {
+    const defaultSrcId = conn.connector_config?.default_pipe_in?.source_id
+    if (defaultSrcId && !pipelines.some((p) => p.source_id === defaultSrcId)) {
       const pipelineId = makeId('pipe', 'default_in_' + conn.id)
       createdIds.push(pipelineId)
       console.log(
         `[sync-serivce] Creating default incoming pipeline ${pipelineId} for ${connId} from ${defaultSrcId}`,
       )
       await metaLinks.patch('pipeline', pipelineId, {
-        sourceId: defaultSrcId,
-        destinationId: connId,
+        source_id: defaultSrcId,
+        destination_id: connId,
       })
     }
     return createdIds
@@ -123,7 +125,7 @@ export function makeSyncService({
   // or possibly drizzle orm
   const getPipelinesForConnection = (connId: Id['conn']) =>
     metaService
-      .findPipelines({connectionIds: [connId]})
+      .findPipelines({connection_ids: [connId]})
       .then((pipes) =>
         Promise.all(pipes.map((pipe) => getPipelineExpandedOrFail(pipe.id))),
       )
@@ -143,8 +145,8 @@ export function makeSyncService({
     const allLinks = [
       ...links,
       ...[
-        ...(source.connectorConfig.defaultPipeOut?.links ?? []),
-        ...(destination.connectorConfig.defaultPipeIn?.links ?? []),
+        ...(source.connector_config.default_pipe_out?.links ?? []),
+        ...(destination.connector_config.default_pipe_in?.links ?? []),
       ],
     ]
     // console.log('getLinksForPipeline', {source, allLinks, destination})
@@ -230,25 +232,26 @@ export function makeSyncService({
     state: unknown
     customer?: {id: CustomerId} | null | undefined
     streams?: StreamsV1 | StreamsV2
-    opts: {fullResync?: boolean | null}
+    opts: {full_resync?: boolean | null}
   }) => {
     const defaultSource$ = () =>
-      src.connectorConfig.connector.sourceSync?.({
+      src.connector_config.connector.sourceSync?.({
         customer,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        instance: src.connectorConfig.connector.newInstance?.({
-          config: src.connectorConfig.config,
+        instance: src.connector_config.connector.newInstance?.({
+          config: src.connector_config.config,
           settings: src.settings,
           fetchLinks: getFetchLinks(src),
           onSettingsChange: () => {},
         }),
-        config: src.connectorConfig.config,
+        config: src.connector_config.config,
         settings: src.settings,
         // Maybe we should rename `options` to `state`?
         // Should also make the distinction between `config`, `settings` and `state` much more clear.
         // Undefined causes crash in Plaid provider due to destructuring, Think about how to fix it for reals
-        state: opts.fullResync ? {} : state,
-        streams: streams ?? src.connectorConfig.defaultPipeOut?.streams ?? {},
+        state: opts.full_resync ? {} : state,
+        streams:
+          streams ?? src.connector_config.default_pipe_out?.streams ?? {},
       })
 
     // const verticalSources$ = () => {
@@ -333,16 +336,14 @@ export function makeSyncService({
     console.log('[syncPipeline]', pipeline)
     const {source: src, links, destination: dest, watch, ...pipe} = pipeline
     // TODO: Should we introduce customerId onto the pipeline itself?
-    const customerId = src.customerId ?? dest.customerId
+    const customerId = src.customer_id ?? dest.customer_id
     const customer = customerId ? {id: customerId} : null
 
     // TODO: Maybe not the best place for this? Think where clerkClient should live
     const org =
       opts.org ??
       (await clerkClient.organizations
-        .getOrganization({
-          organizationId: src.connectorConfig.orgId,
-        })
+        .getOrganization({organizationId: src.connector_config.org_id})
         .then((r) => r.publicMetadata as {webhook_url?: string | null}))
 
     // console.log('[_syncPipeline] pipe sourceState', pipe.id, pipe.sourceState)
@@ -350,11 +351,11 @@ export function makeSyncService({
     const _source$ = sourceSync({
       opts,
       src,
-      state: pipe.sourceState,
+      state: pipe.source_state,
       customer,
       streams:
         pipeline.streams ??
-        pipeline.source.connectorConfig.defaultPipeOut?.streams ??
+        pipeline.source.connector_config.default_pipe_out?.streams ??
         undefined,
     })
 
@@ -366,24 +367,27 @@ export function makeSyncService({
 
     const destination$$ =
       opts.destination$$ ??
-      dest.connectorConfig.connector.destinationSync?.({
-        source: {id: src.id, connectorName: src.connectorConfig.connector.name},
+      dest.connector_config.connector.destinationSync?.({
+        source: {
+          id: src.id,
+          connectorName: src.connector_config.connector.name,
+        },
         customer: {
           id: customer?.id as CustomerId,
-          orgId: pipeline.source.connectorConfig.orgId,
+          orgId: pipeline.source.connector_config.org_id,
         },
-        config: dest.connectorConfig.config,
+        config: dest.connector_config.config,
         settings: dest.settings,
         // Undefined causes crash in Plaid provider due to destructuring, Think about how to fix it for reals
-        state: opts.fullResync ? {} : pipe.destinationState,
+        state: opts.full_resync ? {} : pipe.destination_state,
       })
 
     if (!source$) {
-      throw new Error(`${src.connectorConfig.connector.name} missing source`)
+      throw new Error(`${src.connector_config.connector.name} missing source`)
     }
     if (!destination$$) {
       throw new Error(
-        `${dest.connectorConfig.connector.name} missing destination`,
+        `${dest.connector_config.connector.name} missing destination`,
       )
     }
     await metaLinks
@@ -454,7 +458,7 @@ export function makeSyncService({
     )
     await metaLinks
       .handlers({
-        connection: {id, connectorConfigId: int.id, customerId},
+        connection: {id, connector_config_id: int.id, customer_id: customerId},
       })
       .connUpdate({id, settings, integration})
 

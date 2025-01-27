@@ -51,16 +51,16 @@ export default function CustomersPage() {
             cell: ({row}) => <CustomerMenu customer={row.original} />,
           },
           {accessorKey: 'id'},
-          {accessorKey: 'connectionCount', header: '# Connections'},
+          {accessorKey: 'connection_count', header: '# Connections'},
           {
-            accessorKey: 'firstCreatedAt',
+            accessorKey: 'first_created_at',
             header: 'First created',
-            cell: ({row}) => formatDate(row.original.firstCreatedAt ?? ''),
+            cell: ({row}) => formatDate(row.original['first_created_at'] ?? ''),
           },
           {
-            accessorKey: 'lastUpdatedAt',
+            accessorKey: 'last_updated_at',
             header: 'Last updated',
-            cell: ({row}) => formatDate(row.original.lastUpdatedAt ?? ''),
+            cell: ({row}) => formatDate(row.original['last_updated_at'] ?? ''),
           },
         ]}
       />
@@ -97,7 +97,7 @@ function CustomerMenu({customer}: {customer: Customer}) {
         <DropdownMenuItem
           onSelect={() => {
             createMagicLink
-              .mutateAsync({customerId: customer.id})
+              .mutateAsync({customer_id: customer.id})
               .then((res) => {
                 // This is a problem because due to pop up blockers not liking it async...
                 window.open(res.url)

@@ -63,12 +63,12 @@ export const zSyncOptions = z
         'Run sync in the background, not compatible with other options for now...',
       ),
 
-    metaOnly: z
+    meta_only: z
       .boolean()
       .nullish()
       .describe('Only sync connection metadata and skip pipelines '),
 
-    fullResync: z
+    full_resync: z
       .boolean()
       .nullish()
       .describe('Remove `state` of pipeline and trigger a full resync'),

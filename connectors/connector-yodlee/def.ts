@@ -183,13 +183,13 @@ export const yodleeDef = {
     },
     // is the `id` actually externalId?
     integration: (int) => ({
-      logoUrl: int.logo,
-      loginUrl: int.loginUrl,
+      logo_url: int.logo,
+      login_url: int.loginUrl,
       name: int.name ?? `<${int.id}>`,
     }),
     connection: (settings) => ({
       id: `${settings.providerAccountId}`,
-      displayName:
+      display_name:
         settings.provider?.name ?? `Unnamed <${settings.providerAccountId}>`,
       status: (() => {
         switch (settings.providerAccount?.status) {

@@ -13,7 +13,7 @@ export default async function SqlEditorPageServer() {
   const {services} = ctx
   const connectorConfig = await services.listConnectorConfigs()
 
-  const ccfg = connectorConfig.find((ccfg) => ccfg.connectorName === 'postgres')
+  const ccfg = connectorConfig.find((ccfg) => ccfg.connector_name === 'postgres')
 
   if (!ccfg) {
     return new NextResponse('Must have postgres connector config', {
@@ -22,7 +22,7 @@ export default async function SqlEditorPageServer() {
   }
 
   const connections = await services.metaService.tables.connection.list({
-    connectorConfigId: ccfg?.id,
+    connector_config_id: ccfg?.id,
   })
 
   const pgConnection = connections.find((r) => r.id.includes('postgres_default'))

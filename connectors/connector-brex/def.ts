@@ -47,13 +47,13 @@ export const brexDef = {
   standardMappers: {
     integration: () => ({
       name: 'Brex',
-      logoUrl: 'Add brex logo...',
+      logo_url: 'Add brex logo...',
       envName: undefined,
       verticals: ['banking'],
     }),
     connection() {
       return {
-        displayName: '',
+        display_name: '',
         // status: healthy vs. disconnected...
         // labels: test vs. production
       }

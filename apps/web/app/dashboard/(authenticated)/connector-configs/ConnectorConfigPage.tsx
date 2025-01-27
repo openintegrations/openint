@@ -67,7 +67,7 @@ export default function ConnectorConfigsPage({
     isDevOrStaging ||
     user?.publicMetadata?.['whitelisted'] === true ||
     connectorConfigsRes.data?.some(
-      (c) => c.connectorName !== 'default_postgres',
+      (c) => c.connector_name !== 'default_postgres',
     )
   const catalog = _trpcReact.listConnectorMetas.useQuery()
   if (!connectorConfigsRes.data || !catalog.data) {
@@ -79,7 +79,7 @@ export default function ConnectorConfigsPage({
   }
 
   const filter = (c: ConnectorConfig) =>
-    c.displayName !== 'Default Postgres Connector for sync'
+    c.display_name !== 'Default Postgres Connector for sync'
 
   const closeCalendar = () => {
     setOpenCalendar(false)
@@ -111,34 +111,34 @@ export default function ConnectorConfigsPage({
           query={connectorConfigsRes}
           filter={filter}
           onRowClick={(row) => {
-            handleOpenSheet(row.connectorName, row)
+            handleOpenSheet(row.connector_name, row)
           }}
           columns={[
             {
               id: 'connectorName',
               accessorKey: 'connectorName',
               cell: ({row}) => {
-                const connector = catalog.data[row.original.connectorName]
+                const connector = catalog.data[row.original.connector_name]
 
                 return (
                   <div className="flex items-center gap-4">
                     <ConnectorLogo
                       connector={
                         catalog.data[
-                          row.original.connectorName
+                          row.original.connector_name
                         ] as ConnectorMeta
                       }
                       className="size-12"
                     />
-                    {row.original.displayName ? (
+                    {row.original.display_name ? (
                       <div className="flex flex-row gap-2">
                         <p className="font-semibold">
-                          {`${row.original.displayName}`}
+                          {`${row.original.display_name}`}
                         </p>
-                        <p>{`(${titleCase(row.original.connectorName)})`}</p>
+                        <p>{`(${titleCase(row.original.connector_name)})`}</p>
                       </div>
                     ) : (
-                      <p>{titleCase(row.original.connectorName)}</p>
+                      <p>{titleCase(row.original.connector_name)}</p>
                     )}
                     {connector && (
                       <Badge
@@ -169,14 +169,14 @@ export default function ConnectorConfigsPage({
               id: 'action',
               accessorKey: 'action',
               cell: ({row}) => {
-                const connector = catalog.data[row.original.connectorName]
+                const connector = catalog.data[row.original.connector_name]
                 if (!connector) return null
                 return (
                   <Button
                     variant="secondary"
                     className="size-sm flex items-center gap-2"
                     onClick={() => {
-                      handleOpenSheet(row.original.connectorName, row.original)
+                      handleOpenSheet(row.original.connector_name, row.original)
                     }}>
                     <Pencil className="h-5 w-5 text-black" />
                     <span className="text-black">Edit</span>
@@ -264,7 +264,7 @@ export default function ConnectorConfigsPage({
                 ) : (
                   <Card
                     key={`${vertical}-request-access`}
-                    className="m-3 size-[150px] border border-border bg-gray-100 cursor-pointer hover:bg-gray-50 transition-colors duration-150 group">
+                    className="group m-3 size-[150px] cursor-pointer border border-border bg-gray-100 transition-colors duration-150 hover:bg-gray-50">
                     <CardContent
                       className="flex size-full flex-1 flex-col items-center justify-center pt-4"
                       onClick={() => {
@@ -275,7 +275,7 @@ export default function ConnectorConfigsPage({
                         })
                         setOpenCalendar(true)
                       }}>
-                      <p className="text-center text-sm font-semibold text-gray-600 group-hover:text-gray-400 transition-colors duration-150">
+                      <p className="text-center text-sm font-semibold text-gray-600 transition-colors duration-150 group-hover:text-gray-400">
                         Request {parseCategory(vertical)} Integration
                       </p>
                     </CardContent>

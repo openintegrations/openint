@@ -43,13 +43,13 @@ const __DEBUG__ = Boolean(
 )
 
 export const WithConnectorConnect = ({
-  connectorConfig: ccfg,
+  connector_config: ccfg,
   integration,
   connection,
   onEvent,
   children,
 }: {
-  connectorConfig: {id: Id['ccfg']; connector: ConnectorMeta}
+  connector_config: {id: Id['ccfg']; connector: ConnectorMeta}
   integration?: {
     id: Id['int']
   }
@@ -285,7 +285,7 @@ export const WithConnectorConnect = ({
             loading={connect.isLoading}
             onSubmit={({formData}) => {
               console.log('connection form submitted', formData)
-              connect.mutate({connectorConfigId: ccfg.id, settings: formData})
+              connect.mutate({connector_config_id: ccfg.id, settings: formData})
             }}
             hideSubmitButton
           />

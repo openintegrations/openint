@@ -19,10 +19,13 @@ import type {MetaService, MetaTable} from './metaService'
 // Should the mapping of the StandardIntegration happen inside here?
 
 export function makeMetaLinks(metaBase: MetaService) {
-  type Res = Pick<ZRaw['connection'], 'id' | 'connectorConfigId' | 'customerId'>
+  type Res = Pick<
+    ZRaw['connection'],
+    'id' | 'connector_config_id' | 'customer_id'
+  >
   type Pipe = Pick<
     ZRaw['pipeline'],
-    'id' | 'sourceId' | 'destinationId' | 'linkOptions'
+    'id' | 'source_id' | 'destination_id' | 'link_options'
   >
 
   const postSource = (opts: {src: Res}) => handle({connection: opts.src})
@@ -89,10 +92,10 @@ export function makeMetaLinks(metaBase: MetaService) {
         // Is it a hack? When there is no 3rd component of id, does that always
         // mean that the connector config does not in fact exist in database?
         const connectorConfigId =
-          connection.connectorConfigId &&
-          extractId(connection.connectorConfigId)[2] === ''
+          connection.connector_config_id &&
+          extractId(connection.connector_config_id)[2] === ''
             ? undefined
-            : connection.connectorConfigId
+            : connection.connector_config_id
 
         // Can we run this in one transaction?
 
@@ -101,11 +104,11 @@ export function makeMetaLinks(metaBase: MetaService) {
           settings,
           // It is also an issue that Integration may not exist at the initial time of
           // connection establishing..
-          connectorConfigId,
-          integrationId,
+          connector_config_id: connectorConfigId,
+          integration_id: integrationId,
           // maybe we should distinguish between setDefaults (from existingConnection) vs. actually
           // updating the values...
-          customerId: connection.customerId,
+          customer_id: connection.customer_id,
         })
       },
       stateUpdate: async (op) => {
@@ -119,27 +122,28 @@ export function makeMetaLinks(metaBase: MetaService) {
           // Workaround for default pipeline such as `conn_postgres` etc which
           // does not exist in the database...
           const sourceId =
-            pipeline.sourceId && extractId(pipeline.sourceId)[2] === ''
+            pipeline.source_id && extractId(pipeline.source_id)[2] === ''
               ? undefined
-              : pipeline.sourceId
+              : pipeline.source_id
           const destinationId =
-            pipeline.destinationId &&
-            extractId(pipeline.destinationId)[2] === ''
+            pipeline.destination_id &&
+            extractId(pipeline.destination_id)[2] === ''
               ? undefined
-              : pipeline.destinationId
+              : pipeline.destination_id
           const nowStr = new Date().toISOString()
           await patch('pipeline', pipeline.id, {
-            sourceState: op.sourceState,
-            destinationState: op.destinationState,
+            source_state: op.sourceState,
+            destination_state: op.destinationState,
             // Should be part of setDefaults...
-            sourceId,
-            destinationId,
+            source_id: sourceId,
+            destination_id: destinationId,
             id: pipeline.id,
-            linkOptions: pipeline.linkOptions,
-            lastSyncStartedAt: op.subtype === 'init' ? nowStr : undefined,
+            link_options: pipeline.link_options,
+            last_sync_started_at: op.subtype === 'init' ? nowStr : undefined,
             // Idealy this should use the database timestamp if possible (e.g. postgres)
             // However we don't always know if db supports it (e.g. local files...)
-            lastSyncCompletedAt: op.subtype === 'complete' ? nowStr : undefined,
+            last_sync_completed_at:
+              op.subtype === 'complete' ? nowStr : undefined,
           })
         }
       },

@@ -19,7 +19,7 @@ type Connection = RouterOutput['listConnections'][number]
  */
 export function AgConnectionRowActions(
   props: UIProps & {
-    connectorConfig: ConnectorConfig
+    connector_config: ConnectorConfig
     connection: Connection
     onEvent?: (event: {type: ConnectEventType}) => void
   },

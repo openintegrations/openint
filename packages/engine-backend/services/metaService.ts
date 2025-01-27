@@ -10,11 +10,11 @@ export interface MetaTable<
   list(options: {
     ids?: TID[]
     /** Maybe remove this? not applicable everywhere */
-    customerId?: CustomerId | null
+    customer_id?: CustomerId | null
     /** Maybe remove this? not applicable everywhere */
-    connectorConfigId?: Id['ccfg'] | null
+    connector_config_id?: Id['ccfg'] | null
     /** Maybe remove this? not applicable everywhere */
-    connectorName?: string | null
+    connector_name?: string | null
     where?: Record<string, string>
     /** Used for search */
     keywords?: string | null
@@ -24,7 +24,7 @@ export interface MetaTable<
     limit?: number
     offset?: number
     /** Used for ordering results */
-    orderBy?: string
+    order_by?: string
     order?: string
   }): Promise<readonly T[]>
   set(id: TID, data: Omit<T, 'id'>): Promise<void>
@@ -34,9 +34,9 @@ export interface MetaTable<
 
 export interface CustomerResultRow {
   id: CustomerId
-  connectionCount?: number
-  firstCreatedAt?: unknown
-  lastUpdatedAt?: unknown
+  connection_count?: number
+  first_created_at?: unknown
+  last_updated_at?: unknown
 }
 /** TODO: Rename to DB Adapter */
 export interface MetaService {
@@ -56,25 +56,25 @@ export interface MetaService {
     /** Leave empty to list the top integrations */
     keywords?: string | null
     /** is there a stronger type here than string? */
-    connectorNames?: string[]
+    connector_names?: string[]
     limit?: number
     offset?: number
   }) => Promise<ReadonlyArray<ZRaw['integration']>>
   /** TODO: Implement limit & offset */
   findPipelines: (options: {
-    connectionIds?: Array<Id['conn']>
-    secondsSinceLastSync?: number
-    includeDisabled?: boolean
+    connection_ids?: Array<Id['conn']>
+    seconds_since_last_sync?: number
+    include_disabled?: boolean
   }) => Promise<ReadonlyArray<ZRaw['pipeline']>>
   /** Id is used to check RLS policy right now for customer */
   listConnectorConfigInfos: (opts?: {
     id?: Id['ccfg'] | null
-    connectorName?: string | null
+    connector_name?: string | null
   }) => Promise<
     ReadonlyArray<{
       id: Id['ccfg']
-      envName?: string | null
-      displayName?: string | null
+      env_name?: string | null
+      display_name?: string | null
       integrations?: Record<string, {enabled: boolean}>
     }>
   >

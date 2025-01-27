@@ -17,12 +17,12 @@ export default async function PlaygroundPageServer({
     await ctx.services.getConnectionExpandedOrFail(connectionId)
 
   const oas =
-    connection.connectorConfig.connector.metadata?.openapiSpec?.proxied
+    connection.connector_config.connector.metadata?.openapiSpec?.proxied
 
   if (!oas) {
     return (
       <div className="p-6">
-        {connection.connectorName} does not have OpenAPI spec
+        {connection.connector_name} does not have OpenAPI spec
       </div>
     )
   }

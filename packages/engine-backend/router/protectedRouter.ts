@@ -29,7 +29,7 @@ export const protectedRouter = trpc.router({
       const integrations = await ctx.services.metaService.searchIntegrations({
         keywords,
         limit: 10,
-        connectorNames: R.uniq(ints.map((int) => int.connector.name)),
+        connector_names: R.uniq(ints.map((int) => int.connector.name)),
       })
       const intsByConnectorName = R.groupBy(ints, (int) => int.connector.name)
       return integrations.flatMap((ins) => {

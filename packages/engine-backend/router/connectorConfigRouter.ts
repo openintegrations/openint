@@ -32,26 +32,26 @@ export const connectorConfigRouter = trpc.router({
       zRaw.connector_config
         .pick({
           id: true,
-          connectorName: true,
-          orgId: true,
+          connector_name: true,
+          org_id: true,
           config: true,
-          displayName: true,
-          defaultPipeOut: true,
-          defaultPipeIn: true,
+          display_name: true,
+          default_pipe_out: true,
+          default_pipe_in: true,
           disabled: true,
         })
         .partial()
         // Due to insert on conflict update it appears that orgId is actually required
         // it will simply fail on the required field and never gets to on conflict update
         // this makes me wonder if UPSERT should always be the default....
-        .required({orgId: true}),
+        .required({org_id: true}),
     )
     .output(zRaw.connector_config)
-    .mutation(async ({input: {id: _id, connectorName, ...input}, ctx}) => {
+    .mutation(async ({input: {id: _id, connector_name, ...input}, ctx}) => {
       const id = _id
         ? _id
-        : connectorName && input.orgId
-          ? makeId('ccfg', connectorName, makeUlid())
+        : connector_name && input.org_id
+          ? makeId('ccfg', connector_name, makeUlid())
           : null
       if (!id) {
         throw new TRPCError({
@@ -158,7 +158,7 @@ export const connectorConfigRouter = trpc.router({
       z.object({
         type: z.enum(['source', 'destination']).nullish(),
         id: zId('ccfg').nullish(),
-        connectorName: z.string().nullish(),
+        connector_name: z.string().nullish(),
       }),
     )
     .output(
@@ -166,36 +166,36 @@ export const connectorConfigRouter = trpc.router({
         zRaw.connector_config
           .pick({
             id: true,
-            envName: true,
-            displayName: true,
-            connectorName: true,
+            env_name: true,
+            display_name: true,
+            connector_name: true,
           })
           .extend({
-            isSource: z.boolean(),
-            isDestination: z.boolean(),
+            is_source: z.boolean(),
+            is_destination: z.boolean(),
             verticals: z.array(zVerticalKey),
             integrations: z.array(z.string()),
           }),
       ),
     )
-    .query(async ({input: {type, id, connectorName}, ctx}) => {
+    .query(async ({input: {type, id, connector_name}, ctx}) => {
       const ccfgInfos =
         await ctx.asOrgIfNeeded.metaService.listConnectorConfigInfos({
           id,
-          connectorName,
+          connector_name,
         })
 
       return ccfgInfos
-        .map(({id, envName, displayName}) => {
+        .map(({id, env_name, display_name}) => {
           const connector = ctx.connectorMap[extractId(id)[1]]
           return connector
             ? {
                 id,
-                envName,
-                displayName,
-                connectorName: connector.name,
-                isSource: !!connector.sourceSync,
-                isDestination: !!connector.destinationSync,
+                env_name,
+                display_name,
+                connector_name: connector.name,
+                is_source: !!connector.sourceSync,
+                is_destination: !!connector.destinationSync,
                 verticals: connector.metadata?.verticals ?? [],
                 integrations: Object.entries(
                   ccfgInfos.find((ccfg) => ccfg.id === id)?.integrations ?? {},
@@ -211,8 +211,8 @@ export const connectorConfigRouter = trpc.router({
           Boolean(
             int &&
               (!type ||
-                (type === 'source' && int.isSource) ||
-                (type === 'destination' && int.isDestination)),
+                (type === 'source' && int.is_source) ||
+                (type === 'destination' && int.is_destination)),
           ),
         )
     }),

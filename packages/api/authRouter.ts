@@ -38,10 +38,10 @@ export const authRouter = trpc.router({
       const extra =
         ctx.viewer.role === 'org'
           ? await clerkClient.organizations.getOrganization({
-              organizationId: ctx.viewer.orgId,
+              organizationId: ctx.viewer.org_id,
             })
           : ctx.viewer.role === 'user'
-            ? await clerkClient.users.getUser(ctx.viewer.userId)
+            ? await clerkClient.users.getUser(ctx.viewer.user_id)
             : undefined
 
       return {...ctx.viewer, extra} as Viewer
@@ -59,10 +59,10 @@ export const authRouter = trpc.router({
     .input(z.void())
     .output(zOrganization.omit({privateMetadata: true}))
     .query(async ({ctx}) => {
-      if (!ctx.viewer.orgId) {
+      if (!ctx.viewer.org_id) {
         throw new TRPCError({code: 'BAD_REQUEST', message: 'orgId needed'})
       }
-      return await getOrganizationOmitPrivateMeta(ctx.viewer.orgId)
+      return await getOrganizationOmitPrivateMeta(ctx.viewer.org_id)
     }),
 
   updateCurrentOrganization: adminProcedure
@@ -76,11 +76,11 @@ export const authRouter = trpc.router({
     .input(zOrganization.pick({publicMetadata: true}))
     .output(zOrganization.omit({privateMetadata: true}))
     .mutation(async ({ctx, input: update}) => {
-      if (!ctx.viewer.orgId) {
+      if (!ctx.viewer.org_id) {
         throw new TRPCError({code: 'BAD_REQUEST', message: 'orgId needed'})
       }
       const org = await clerkClient.organizations.updateOrganization(
-        ctx.viewer.orgId,
+        ctx.viewer.org_id,
         update,
       )
       return zOrganization.omit({privateMetadata: true}).parse(org)
