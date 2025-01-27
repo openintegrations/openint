@@ -66,36 +66,36 @@ export const zConnectPageParams = z.object({
 
 export const zFilePickerParams = z.object({
   theme: z.enum(['light', 'dark']).nullish(),
-  multiSelect: z.boolean().nullish(),
-  folderSelect: z.boolean().nullish(),
-  themeColors: z
+  multi_select: z.boolean().nullish(),
+  folder_select: z.boolean().nullish(),
+  theme_colors: z
     .object({
       accent: z.string().nullish(),
       background: z.string().nullish(),
       border: z.string().nullish(),
       button: z.string().nullish(),
-      buttonLight: z.string().nullish(),
-      buttonForeground: z.string().nullish(),
-      buttonHover: z.string().nullish(),
-      buttonStroke: z.string().nullish(),
-      buttonSecondary: z.string().nullish(),
-      buttonSecondaryForeground: z.string().nullish(),
-      buttonSecondaryStroke: z.string().nullish(),
-      buttonSecondaryHover: z.string().nullish(),
+      button_light: z.string().nullish(),
+      button_foreground: z.string().nullish(),
+      button_hover: z.string().nullish(),
+      button_stroke: z.string().nullish(),
+      button_secondary: z.string().nullish(),
+      button_secondary_foreground: z.string().nullish(),
+      button_secondary_stroke: z.string().nullish(),
+      button_secondary_hover: z.string().nullish(),
       card: z.string().nullish(),
-      cardForeground: z.string().nullish(),
+      card_foreground: z.string().nullish(),
       foreground: z.string().nullish(),
       navbar: z.string().nullish(),
       primary: z.string().nullish(),
-      primaryForeground: z.string().nullish(),
+      primary_foreground: z.string().nullish(),
       secondary: z.string().nullish(),
-      secondaryForeground: z.string().nullish(),
+      secondary_foreground: z.string().nullish(),
       sidebar: z.string().nullish(),
       tab: z.string().nullish(),
     })
     .nullish(),
-  connectionId: zId('conn'),
-  validityInSeconds: z
+  connection_id: zId('conn'),
+  validity_in_seconds: z
     .number()
     .default(30 * 24 * 60 * 60)
     .describe(
@@ -255,9 +255,16 @@ export const customerRouter = trpc.router({
     .input(customerRouterSchema.createFilePickerLink.input)
     .output(z.object({url: z.string()}))
     .mutation(
-      async ({input: {validityInSeconds, themeColors, ...params}, ctx}) => {
+      async ({
+        input: {
+          validity_in_seconds: validityInSeconds,
+          theme_colors: themeColors,
+          ...params
+        },
+        ctx,
+      }) => {
         const connection = await ctx.services.getConnectionOrFail(
-          params.connectionId,
+          params.connection_id,
         )
 
         const token = ctx.jwt.signViewer(
@@ -269,13 +276,13 @@ export const customerRouter = trpc.router({
 
         const url = new URL('/connect/file-picker', ctx.apiUrl)
         url.searchParams.set('token', token)
-        url.searchParams.set('connection_id', params.connectionId)
+        url.searchParams.set('connection_id', params.connection_id)
         url.searchParams.set('theme', params.theme ?? 'light')
-        if (params.multiSelect) {
-          url.searchParams.set('multi_select', params.multiSelect.toString())
+        if (params.multi_select) {
+          url.searchParams.set('multi_select', params.multi_select.toString())
         }
-        if (params.folderSelect) {
-          url.searchParams.set('folder_select', params.folderSelect.toString())
+        if (params.folder_select) {
+          url.searchParams.set('folder_select', params.folder_select.toString())
         }
 
         // Add theme colors if provided

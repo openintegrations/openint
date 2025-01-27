@@ -1539,39 +1539,34 @@ export interface operations {
           validity_in_seconds?: number
           /** @enum {string|null} */
           theme?: 'light' | 'dark'
-          multiSelect?: boolean | null
-          folderSelect?: boolean | null
-          themeColors?: {
+          multi_select?: boolean | null
+          folder_select?: boolean | null
+          theme_colors?: {
             accent?: string | null
             background?: string | null
             border?: string | null
             button?: string | null
-            buttonLight?: string | null
-            buttonForeground?: string | null
-            buttonHover?: string | null
-            buttonStroke?: string | null
-            buttonSecondary?: string | null
-            buttonSecondaryForeground?: string | null
-            buttonSecondaryStroke?: string | null
-            buttonSecondaryHover?: string | null
+            button_light?: string | null
+            button_foreground?: string | null
+            button_hover?: string | null
+            button_stroke?: string | null
+            button_secondary?: string | null
+            button_secondary_foreground?: string | null
+            button_secondary_stroke?: string | null
+            button_secondary_hover?: string | null
             card?: string | null
-            cardForeground?: string | null
+            card_foreground?: string | null
             foreground?: string | null
             navbar?: string | null
             primary?: string | null
-            primaryForeground?: string | null
+            primary_foreground?: string | null
             secondary?: string | null
-            secondaryForeground?: string | null
+            secondary_foreground?: string | null
             sidebar?: string | null
             tab?: string | null
           } | null
           /** @description Must start with 'conn_' */
-          connectionId: string
-          /**
-           * @description How long the magic link will be valid for (in seconds) before it expires
-           * @default 2592000
-           */
-          validityInSeconds?: number
+          connection_id: string
         }
       }
     }

@@ -205,13 +205,13 @@
                     "type": ["string", "null"],
                     "enum": ["light", "dark"]
                   },
-                  "multiSelect": {
+                  "multi_select": {
                     "type": ["boolean", "null"]
                   },
-                  "folderSelect": {
+                  "folder_select": {
                     "type": ["boolean", "null"]
                   },
-                  "themeColors": {
+                  "theme_colors": {
                     "type": ["object", "null"],
                     "properties": {
                       "accent": {
@@ -226,34 +226,34 @@
                       "button": {
                         "type": ["string", "null"]
                       },
-                      "buttonLight": {
+                      "button_light": {
                         "type": ["string", "null"]
                       },
-                      "buttonForeground": {
+                      "button_foreground": {
                         "type": ["string", "null"]
                       },
-                      "buttonHover": {
+                      "button_hover": {
                         "type": ["string", "null"]
                       },
-                      "buttonStroke": {
+                      "button_stroke": {
                         "type": ["string", "null"]
                       },
-                      "buttonSecondary": {
+                      "button_secondary": {
                         "type": ["string", "null"]
                       },
-                      "buttonSecondaryForeground": {
+                      "button_secondary_foreground": {
                         "type": ["string", "null"]
                       },
-                      "buttonSecondaryStroke": {
+                      "button_secondary_stroke": {
                         "type": ["string", "null"]
                       },
-                      "buttonSecondaryHover": {
+                      "button_secondary_hover": {
                         "type": ["string", "null"]
                       },
                       "card": {
                         "type": ["string", "null"]
                       },
-                      "cardForeground": {
+                      "card_foreground": {
                         "type": ["string", "null"]
                       },
                       "foreground": {
@@ -265,13 +265,13 @@
                       "primary": {
                         "type": ["string", "null"]
                       },
-                      "primaryForeground": {
+                      "primary_foreground": {
                         "type": ["string", "null"]
                       },
                       "secondary": {
                         "type": ["string", "null"]
                       },
-                      "secondaryForeground": {
+                      "secondary_foreground": {
                         "type": ["string", "null"]
                       },
                       "sidebar": {
@@ -282,17 +282,12 @@
                       }
                     }
                   },
-                  "connectionId": {
+                  "connection_id": {
                     "type": "string",
                     "description": "Must start with 'conn_'"
-                  },
-                  "validityInSeconds": {
-                    "type": "number",
-                    "default": 2592000,
-                    "description": "How long the magic link will be valid for (in seconds) before it expires"
                   }
                 },
-                "required": ["connectionId"]
+                "required": ["connection_id"]
               }
             }
           }
