@@ -5,7 +5,7 @@
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/trpc": "workspace:*",
-    "@opensdks/fetch-links": "^0.0.19",
+    "@opensdks/fetch-links": "^0.0.22",
     "@opensdks/util-zod": "0.0.15",
     "remeda": "1.6.1"
   },

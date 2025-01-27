@@ -6,7 +6,7 @@
   "scripts": {},
   "dependencies": {
     "@hono/node-server": "^1.11.0",
-    "@opensdks/fetch-links": "^0.0.19"
+    "@opensdks/fetch-links": "^0.0.22"
   },
   "devDependencies": {}
 }
