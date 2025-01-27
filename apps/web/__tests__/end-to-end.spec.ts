@@ -41,7 +41,7 @@ beforeAll(async () => {
 afterAll(async () => {
   if (!testEnv.DEBUG) {
     await tearDownTestOrg(fixture)
-    await testDb.db.$client.end()
+    await testDb?.db.$client.end()
     // Cannot drop because database connection is still kept open by connector-postgres/server
     // await db.execute(`DROP DATABASE IF EXISTS test_${fixture.testId}`)
   }
@@ -233,7 +233,7 @@ test('list connector metas', async () => {
   expect(connector).toHaveProperty('__typename', 'connector')
   expect(connector).toHaveProperty('name')
   expect(connector).toHaveProperty('display_name')
-  expect(connector).toHaveProperty('logoUrl')
+  expect(connector).toHaveProperty('logo_url')
   expect(connector).toHaveProperty('stage')
   expect(connector).toHaveProperty('verticals')
   expect(connector).toHaveProperty('supported_modes')
