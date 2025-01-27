@@ -64,14 +64,14 @@ function getString(obj: unknown, key: string) {
   const val = get(obj, key)
   return typeof val === 'string' ? val : undefined
 }
-function getNumber(obj: unknown, key: string) {
-  const val = get(obj, key)
-  return typeof val === 'number' ? val : undefined
-}
-function getBoolean(obj: unknown, key: string) {
-  const val = get(obj, key)
-  return typeof val === 'boolean' ? val : undefined
-}
+// function getNumber(obj: unknown, key: string) {
+//   const val = get(obj, key)
+//   return typeof val === 'number' ? val : undefined
+// }
+// function getBoolean(obj: unknown, key: string) {
+//   const val = get(obj, key)
+//   return typeof val === 'boolean' ? val : undefined
+// }
 
 export function isAggregateError(e: unknown): e is AggregateError {
   return (
@@ -83,9 +83,14 @@ export function isAggregateError(e: unknown): e is AggregateError {
 export function formatError(err: unknown): string {
   if (isAggregateError(err)) {
     const msgs = err.errors.map(formatError)
-    return `AggregateError: ${msgs.length} errors${msgs
-      .map((m, i) => `\n\t${i + 1}: ${m}`)
-      .join('')}`
+    return [
+      'AggregateError:',
+      get(err, 'code'),
+      `${msgs.length} errors`,
+      ...msgs.map((m, i) => `\n\t${i + 1}: ${m}`),
+    ]
+      .filter((s) => !!s)
+      .join(' ')
   }
   if (typeof err === 'string') {
     return err
