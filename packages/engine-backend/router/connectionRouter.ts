@@ -406,8 +406,8 @@ export const connectionRouter = trpc.router({
       zRaw.connection.extend({
         connector_config: zRaw.connector_config.pick({
           id: true,
-          orgId: true,
-          connectorName: true,
+          org_id: true,
+          connector_name: true,
         }),
         integration: zExpandIntegration.nullish(),
         connector: zExpandConnector.nullish(),

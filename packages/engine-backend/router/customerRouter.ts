@@ -496,7 +496,7 @@ export const customerRouter = trpc.router({
     .output(
       z.object({
         id: z.string(),
-        orgId: z.string(),
+        org_id: z.string(),
         metadata: z.unknown(),
       }),
     )
@@ -504,7 +504,7 @@ export const customerRouter = trpc.router({
       console.log('createCustomer', ctx.viewer, id, metadata)
       return {
         id,
-        orgId: ctx.viewer.org_id + '',
+        org_id: ctx.viewer.org_id + '',
         metadata,
       }
     }),
