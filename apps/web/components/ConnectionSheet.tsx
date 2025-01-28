@@ -44,8 +44,8 @@ export const ConnectionSheet = React.forwardRef(function ConnectionSheet(
       formProps={{
         uiSchema: {
           id: {'ui:readonly': true},
-          connectorConfigId: {'ui:readonly': true},
-          integrationId: {'ui:readonly': true},
+          connector_config_id: {'ui:readonly': true},
+          integration_id: {'ui:readonly': true},
         },
       }}
       schema={formSchema}

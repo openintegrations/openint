@@ -11,7 +11,7 @@ import type {ConnectorConfig} from './ConnectorConfigPage'
 
 interface ConnectorConfigFormProps {
   connectorName: string
-  ccfg?: Omit<ConnectorConfig, 'connectorName'>
+  ccfg?: Omit<ConnectorConfig, 'connector_name'>
   connectorMeta: ConnectorMeta
   setOpen: (open: boolean) => void
   formRef: React.RefObject<SchemaFormElement>
@@ -53,11 +53,11 @@ export function ConnectorConfigForm({
   // Consider calling this provider, actually seem to make more sense...
   // given that we call the code itself connector config
   const formSchema = zRaw.connector_config
-    .pick({displayName: true, disabled: true})
+    .pick({display_name: true, disabled: true})
     .extend({
       config: z.object({}),
       ...(connectorMeta?.supported_modes.includes('source') && {
-        defaultPipeOut: z
+        default_pipe_out: z
           .union([
             z.null().openapi({title: 'Disabled'}),
             z
@@ -93,7 +93,7 @@ export function ConnectorConfigForm({
           }),
       }),
       ...(connectorMeta?.supported_modes.includes('destination') && {
-        defaultPipeIn: z
+        default_pipe_in: z
           .union([
             z.null().openapi({title: 'Disabled'}),
             z
@@ -164,9 +164,9 @@ export function ConnectorConfigForm({
           onSubmit={({formData}) => {
             console.log('formData submitted', formData)
             upsertConnectorConfig.mutate({
-              ...formData,
-              ...(ccfg ? {id: ccfg.id} : {connectorName}),
-              orgId,
+              ...(formData as {}),
+              ...(ccfg ? {id: ccfg.id} : {connector_name: connectorName}),
+              org_id: orgId,
             })
           }}
           hideSubmitButton

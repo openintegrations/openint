@@ -19,9 +19,9 @@ if (process.env['DEBUG_ZOD']) {
 }
 
 const {USER_ID, CUSTOMER_ID, ORG_ID, SYSTEM, X_CONNECTION_ID} = process.env
-const customerId = CUSTOMER_ID as CustomerId | undefined
-const userId = USER_ID as UserId | undefined
-const orgId = ORG_ID as Id['org'] | undefined
+const customer_id = CUSTOMER_ID as CustomerId | undefined
+const user_id = USER_ID as UserId | undefined
+const org_id = ORG_ID as Id['org'] | undefined
 
 export const cli = cliFromRouter(flatRouter, {
   cleanup: () => {}, // metaService.shutdown?
@@ -29,12 +29,12 @@ export const cli = cliFromRouter(flatRouter, {
   // We should improve this for usage on single machines
   context: {
     ...contextFactory.fromViewer(
-      customerId && orgId
-        ? {role: 'customer', customer_id: customerId, org_id: orgId}
-        : userId
-          ? {role: 'user', user_id: userId}
-          : orgId
-            ? {role: 'org', org_id: orgId}
+      customer_id && org_id
+        ? {role: 'customer', customer_id, org_id}
+        : user_id
+          ? {role: 'user', user_id}
+          : org_id
+            ? {role: 'org', org_id}
             : SYSTEM
               ? {role: 'system'}
               : {role: 'anon'},

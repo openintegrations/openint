@@ -2,7 +2,7 @@
 
 import {AlertCircle, Loader2} from 'lucide-react'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import {_trpcReact} from '@openint/engine-frontend'
 import type {SchemaFormElement} from '@openint/ui'
 import {
@@ -38,14 +38,14 @@ import type {ConnectorConfig} from './ConnectorConfigPage'
 // import {defConnectors } from '@openint/app-config/connectorss/connectorss.def'
 
 export function ConnectorConfigSheet({
-  connectorConfig: ccfg,
-  connectorName,
+  connector_config: ccfg,
+  connector_name,
   open,
   setOpen,
   refetch,
 }: {
-  connectorConfig?: Omit<ConnectorConfig, 'connectorName'>
-  connectorName: string
+  connector_config?: Omit<ConnectorConfig, 'connector_name'>
+  connector_name: string
   open: boolean
   setOpen: (open: boolean) => void
   refetch?: () => void
@@ -53,7 +53,7 @@ export function ConnectorConfigSheet({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const trpcUtils = _trpcReact.useContext()
   const connectorMetaRes = _trpcReact.getConnectorMeta.useQuery({
-    name: connectorName,
+    name: connector_name,
   })
   const connectorMeta = connectorMetaRes.data
 
@@ -128,10 +128,9 @@ export function ConnectorConfigSheet({
       <SheetContent
         position="right"
         size="lg"
-        className="flex flex-col bg-background relative">
-
+        className="relative flex flex-col bg-background">
         {isSubmitting && (
-          <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
             <Loader2 className="h-10 w-10 animate-spin text-button" />
           </div>
         )}
@@ -173,7 +172,7 @@ export function ConnectorConfigSheet({
         </SheetHeader>
         <Separator orientation="horizontal" />
         <ConnectorConfigForm
-          connectorName={connectorName}
+          connectorName={connector_name}
           connectorMeta={connectorMeta}
           ccfg={ccfg}
           setOpen={setOpen}
@@ -215,7 +214,8 @@ export function ConnectorConfigSheet({
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    Confirm delete {connectorMeta.display_name} connector config?
+                    Confirm delete {connectorMeta.display_name} connector
+                    config?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     ID: {ccfg.id}

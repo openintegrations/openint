@@ -24,20 +24,20 @@ export default function MagicLinkPage() {
 
   const uiSchema = {
     'ui:order': [
-      'customerId',
-      'validityInSeconds',
-      'displayName',
-      'redirectUrl',
-      'connectorConfigDisplayName',
-      'connectorConfigId',
-      'connectorNames',
-      'integrationIds',
-      'connectionId',
+      'customer_id',
+      'validity_in_seconds',
+      'display_name',
+      'redirect_url',
+      'connector_config_display_name',
+      'connector_config_id',
+      'connector_names',
+      'integration_ids',
+      'connection_id',
       'theme',
       'view',
-      'showExisting',
+      'show_existing',
     ],
-    customerId: {
+    customer_id: {
       'ui:widget': 'text',
       'ui:title': <span className="font-semibold">Customer Id</span>,
       'ui:description': (
@@ -52,7 +52,7 @@ export default function MagicLinkPage() {
         // placeholder: 'my-user-id',
       },
     },
-    validityInSeconds: {
+    validity_in_seconds: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': <span className="font-semibold">Validity In Seconds</span>,
       'ui:description': (
@@ -62,14 +62,14 @@ export default function MagicLinkPage() {
         </span>
       ),
     },
-    displayName: {
+    display_name: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': <span className="font-semibold">Display Name</span>,
       'ui:description': (
         <span className="text-sm text-gray-600">What to call user by</span>
       ),
     },
-    redirectUrl: {
+    redirect_url: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': <span className="font-semibold">Redirect URL</span>,
       'ui:description': (
@@ -78,7 +78,7 @@ export default function MagicLinkPage() {
         </span>
       ),
     },
-    connectorConfigDisplayName: {
+    connector_config_display_name: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': (
         <span className="font-semibold">Connector Config Display Name</span>
@@ -89,14 +89,14 @@ export default function MagicLinkPage() {
         </span>
       ),
     },
-    connectorConfigId: {
+    connector_config_id: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': <span className="font-semibold">Connector Config ID</span>,
       'ui:description': (
         <span className="text-sm text-gray-600">Must start with ccfg_</span>
       ),
     },
-    connectorNames: {
+    connector_names: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': <span className="font-semibold">Connector Names</span>,
       'ui:description': (
@@ -105,7 +105,7 @@ export default function MagicLinkPage() {
         </span>
       ),
     },
-    integrationIds: {
+    integration_ids: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': <span className="font-semibold">Integration IDs</span>,
       'ui:description': (
@@ -114,7 +114,7 @@ export default function MagicLinkPage() {
         </span>
       ),
     },
-    connectionId: {
+    connection_id: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': <span className="font-semibold">Connection ID</span>,
       'ui:description': (
@@ -131,7 +131,7 @@ export default function MagicLinkPage() {
       'ui:widget': showAdvanced ? 'select' : 'hidden',
       'ui:title': <span className="font-semibold">View</span>,
     },
-    showExisting: {
+    show_existing: {
       'ui:widget': showAdvanced ? 'checkbox' : 'hidden',
       'ui:title': <span className="font-semibold">Show Existing</span>,
     },
