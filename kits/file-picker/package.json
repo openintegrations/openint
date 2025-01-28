@@ -8,7 +8,7 @@
     "build": "rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc -p tsconfig.json",
     "dev": "next dev",
     "lint": "eslint . --ext .ts,.tsx",
-    "prepublishOnly": "npm run build:lib",
+    "prepublishOnly": "npm run build",
     "start": "next start",
     "test": "jest",
     "test:watch": "jest --watch",
