@@ -2,6 +2,7 @@ import initOpenIntSDK from '@opensdks/sdk-openint'
 import {
   ConnectionDetails,
   FilePickerOptions,
+  GoogleDriveConnectionDetails,
   SelectedFile,
   SharepointConnectionDetails,
 } from './types'
@@ -12,11 +13,13 @@ let cachedOpenIntSDK: ReturnType<typeof initOpenIntSDK> | null = null
 function getOpenIntSDK(token: string) {
   if (!cachedOpenIntSDK) {
     cachedOpenIntSDK = initOpenIntSDK({
-      token,
-      // baseUrl: 'https://local.openint.dev/api/v1',
-      headers: {
-        'x-apikey': undefined,
+      auth: {
+        openInt: {
+          token,
+        },
       },
+      headers: {},
+      // baseUrl: 'https://local.openint.dev/api/v0'
     })
   }
   return cachedOpenIntSDK
@@ -147,11 +150,13 @@ export async function fetchOpenIntConnectionDetails(
         clientId: clientId,
       } as SharepointConnectionDetails
     }
-    // case 'googledrive':
-    //     return {
-    //         type: "googledrive",
-    //         accessToken: "mock-access-token",
-    //     } as GoogleDriveConnectionDetails;
+    case 'googledrive':
+      return {
+        type: 'googledrive',
+        accessToken: accessToken,
+        clientId: clientId,
+      } as GoogleDriveConnectionDetails
+
     default:
       throw new Error(
         'The connection of type ' +

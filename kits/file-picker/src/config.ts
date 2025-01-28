@@ -16,6 +16,7 @@ export async function fetchConnectionDetails(
     return {
       type: 'googledrive',
       accessToken: auth.googleDrive.accessToken,
+      clientId: auth.googleDrive.clientId,
     }
   } else {
     throw new Error('Invalid authentication parameters')

@@ -9,7 +9,7 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
-    "@opensdks/fetch-links": "^0.0.19",
+    "@opensdks/fetch-links": "^0.0.22",
     "@opensdks/runtime": "^0.0.19",
     "@opensdks/sdk-plaid": "^0.0.19",
     "@t3-oss/env-core": "0.7.1",

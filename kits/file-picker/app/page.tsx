@@ -8,15 +8,14 @@ export default async function Home() {
   //   "https://local.openint.dev/connect/portal?connection_id=mockConnectionId&token=mockToken&theme=dark&multi_select=true&folder_select=true";
 
   // sharepoint in https://openint-git-main-openint-dev.vercel.app/dashboard/connections
-  const connectionId = 'conn_microsoft_01JJFFFE5B5WD4JCXQ4P5031F0'
+  // const connectionId = 'conn_microsoft_01JJFFFE5B5WD4JCXQ4P5031F0'
+  const connectionId = 'conn_google_01JJMTVFW1JBS35RCRQE004KS9'
 
   const openint = initOpenIntSDK({
     apiKey: process.env['OPENINT_API_KEY'] ?? '',
-    baseUrl: 'https://local.openint.dev/api/v1',
+    // baseUrl: 'https://local.openint.dev/api/v0',
     // TODO: Check why required
-    headers: {
-      'x-apikey': process.env['OPENINT_API_KEY'] ?? '',
-    },
+    headers: {},
   })
 
   const magicLink = await openint.POST('/connect/file-picker', {

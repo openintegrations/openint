@@ -265,9 +265,9 @@ export const connectionRouter = trpc.router({
     .output(z.object({}))
     .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
-        await ctx.services.getConnectionOrFail(connId)
+        await ctx.services.getConnectionOrFail(connId, true)
       }
-      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
+      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId, true)
       const {settings, connector_config: ccfg} = conn
       if (!opts?.skipRevoke) {
         await ccfg.connector.revokeConnection?.(

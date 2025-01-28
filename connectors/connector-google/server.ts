@@ -166,7 +166,7 @@ export const googleServer = {
 
     const defaultResource = {
       connectionExternalId: extractId(connectOutput.connectionId)[2],
-      settings: {oauth: nangoConnection},
+      settings: {oauth: nangoConnection, client_id: config.oauth.client_id},
     }
     if (!context.integrationId) {
       return defaultResource

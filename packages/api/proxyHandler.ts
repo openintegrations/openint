@@ -14,8 +14,7 @@ export const proxyHandler = async (req: Request) => {
   const protectedContext = getProtectedContext(ctx)
   const remoteContext = await getRemoteContext(protectedContext)
 
-  const credentialsExpired = remoteContext.remote.settings.oauth?.credentials
-    .expires_at
+  const credentialsExpired = remoteContext.remote.settings.oauth?.credentials?.expires_at
     ? new Date(remoteContext.remote.settings.oauth.credentials.expires_at) <
       new Date()
     : false

@@ -142,7 +142,7 @@ export function makeDBService({
     return getOrFail(tableName, id)
   }
 
-  const getConnectorConfigInfoOrFail = (id: Id['ccfg']) =>
+  const getConnectorConfigInfoOrFail = (id: Id['ccfg'], skipValidation = false) =>
     metaService.listConnectorConfigInfos({id}).then((ints) => {
       if (!ints[0]) {
         throw new TRPCError({
@@ -150,10 +150,10 @@ export function makeDBService({
           message: `ccfg info not found: ${id}`,
         })
       }
-      return ints[0]
+      return skipValidation ? ints[0] : zRaw.connector_config.parse(ints[0])
     })
 
-  const getConnectorConfigOrFail = (id: Id['ccfg']) =>
+  const getConnectorConfigOrFail = (id: Id['ccfg'], skipValidation = false) =>
     metaService.tables.connector_config.get(id).then((_ccfg) => {
       if (!_ccfg) {
         throw new TRPCError({
@@ -163,11 +163,13 @@ export function makeDBService({
       }
       const int = zRaw.connector_config.parse(_ccfg)
       const connector = getConnectorOrFail(int.id)
-      const config: {} = connector.schemas.connectorConfig?.parse(int.config)
+      const config: {} = skipValidation
+        ? int.config
+        : connector.schemas.connectorConfig?.parse(int.config)
       return {...int, connector, config}
     })
 
-  const getIntegrationOrFail = (id: Id['int']) =>
+  const getIntegrationOrFail = (id: Id['int'], skipValidation = false) =>
     metaService.tables.integration.get(id).then(async (ins) => {
       if (!ins) {
         throw new TRPCError({
@@ -182,9 +184,9 @@ export function makeDBService({
         ins.standard = provider?.standardMappers?.integration?.(ins.external)
         await metaLinks.patch('integration', ins.id, {standard: ins.standard})
       }
-      return zRaw.integration.parse(ins)
+      return skipValidation ? ins : zRaw.integration.parse(ins)
     })
-  const getConnectionOrFail = (id: Id['conn']) =>
+  const getConnectionOrFail = (id: Id['conn'], skipValidation = false) =>
     metaService.tables.connection.get(id).then((conn) => {
       if (!conn) {
         throw new TRPCError({
@@ -192,9 +194,12 @@ export function makeDBService({
           message: `conn not found: ${id}`,
         })
       }
-      return zRaw.connection.parse(conn)
+      if (!skipValidation) {
+        return zRaw.connection.parse(conn)
+      }
+      return conn
     })
-  const getPipelineOrFail = (id: Id['pipe']) =>
+  const getPipelineOrFail = (id: Id['pipe'], skipValidation = false) =>
     metaService.tables.pipeline.get(id).then((pipe) => {
       if (!pipe) {
         throw new TRPCError({
@@ -202,29 +207,30 @@ export function makeDBService({
           message: `pipe not found: ${id}`,
         })
       }
-      return zRaw.pipeline.parse(pipe)
+      return skipValidation ? pipe : zRaw.pipeline.parse(pipe)
     })
 
-  const getConnectionExpandedOrFail = (id: Id['conn']) =>
+  const getConnectionExpandedOrFail = (id: Id['conn'], skipValidation = false) =>
     getConnectionOrFail(id).then(async (conn) => {
       const connector_config = await getConnectorConfigOrFail(
         conn.connector_config_id,
+        skipValidation,
       )
       const settings: {} =
         connector_config.connector.schemas.connectionSettings?.parse(
           conn.settings,
         )
       const integration = conn.integration_id
-        ? await getIntegrationOrFail(conn.integration_id)
+        ? await getIntegrationOrFail(conn.integration_id, skipValidation)
         : undefined
       return {...conn, connector_config, settings, integration}
     })
 
-  const getPipelineExpandedOrFail = (id: Id['pipe']) =>
+  const getPipelineExpandedOrFail = (id: Id['pipe'], skipValidation = false) =>
     getPipelineOrFail(id).then(async (pipe) => {
       const [source, destination] = await Promise.all([
-        getConnectionExpandedOrFail(pipe.source_id!),
-        getConnectionExpandedOrFail(pipe.destination_id!),
+        getConnectionExpandedOrFail(pipe.source_id!, skipValidation),
+        getConnectionExpandedOrFail(pipe.destination_id!, skipValidation),
       ])
       // if (
       //   pipe.sourceState != null &&
@@ -244,13 +250,17 @@ export function makeDBService({
       //     message: `destinationState is not supported for ${destination.connectorConfig.connector.name}`,
       //   })
       // }
-      const source_state: {} = (
-        source.connector_config.connector.schemas.sourceState ?? z.unknown()
-      ).parse(pipe.source_state)
-      const destination_state: {} = (
-        destination.connector_config.connector.schemas.destinationState ??
-        z.unknown()
-      ).parse(pipe.destination_state)
+      const source_state: {} = skipValidation
+        ? pipe.source_state
+        : (
+            source.connector_config.connector.schemas.sourceState ?? z.unknown()
+          ).parse(pipe.source_state)
+      const destination_state: {} = skipValidation
+        ? pipe.destination_state
+        : (
+            destination.connector_config.connector.schemas.destinationState ??
+            z.unknown()
+          ).parse(pipe.destination_state)
       // const links = R.pipe(
       //   rest.linkOptions ?? pipeline?.linkOptions ?? [],
       //   R.map((l) =>
