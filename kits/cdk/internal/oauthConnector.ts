@@ -33,7 +33,7 @@ const zOauthCredentials = z.object({
   api_key: z.string().nullish(),
   access_token: z.string().optional(),
   refresh_token: z.string().optional(),
-    // sometimes this is missing from the response
+  // sometimes this is missing from the response
   expires_at: z.string().datetime().optional(),
   raw: z.object({
     access_token: z.string(),
