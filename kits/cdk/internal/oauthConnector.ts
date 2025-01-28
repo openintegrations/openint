@@ -37,8 +37,8 @@ const zOauthCredentials = z.object({
   expires_at: z.string().datetime().optional(),
   raw: z.object({
     access_token: z.string(),
-    expires_in: z.number(),
     // sometimes this is missing from the response
+    expires_in: z.number().optional(),
     expires_at: z.string().datetime().optional(),
     /** Refresh token (Only returned if the REFRESH_TOKEN boolean parameter is set to true and the refresh token is available) */
     refresh_token: z.string().nullish(),
