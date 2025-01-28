@@ -50,13 +50,14 @@ export function ConnectorConfigForm({
       : undefined
   ) as {type: 'object'; properties?: {}; additionalProperties: boolean}
 
+
   // Consider calling this provider, actually seem to make more sense...
   // given that we call the code itself connector config
   const formSchema = zRaw.connector_config
     .pick({display_name: true, disabled: true})
     .extend({
       config: z.object({}),
-      ...(connectorMeta?.supported_modes.includes('source') && {
+      ...(connectorMeta?.supported_modes?.includes('source') && {
         default_pipe_out: z
           .union([
             z.null().openapi({title: 'Disabled'}),
@@ -80,9 +81,10 @@ export function ConnectorConfigForm({
                 links: zRaw.connector_config.shape.default_pipe_out
                   .unwrap()
                   .unwrap().shape.links,
-                destination_id: zConnId.optional().openapi({
-                  description: 'Defaults to the org-wide postgres',
-                }),
+                // removing for now as not core feature to specify custom destination Ids
+                // destination_id: zConnId.optional().openapi({
+                //   description: 'Defaults to the org-wide postgres',
+                // }),
               })
               .openapi({title: 'Enabled'}),
           ])
@@ -92,7 +94,7 @@ export function ConnectorConfigForm({
               zRaw.connector_config.shape.default_pipe_out.description,
           }),
       }),
-      ...(connectorMeta?.supported_modes.includes('destination') && {
+      ...(connectorMeta?.supported_modes?.includes('destination') && {
         default_pipe_in: z
           .union([
             z.null().openapi({title: 'Disabled'}),
@@ -162,7 +164,6 @@ export function ConnectorConfigForm({
           // formData should be non-null at this point, we should fix the typing
           loading={upsertConnectorConfig.isLoading}
           onSubmit={({formData}) => {
-            console.log('formData submitted', formData)
             upsertConnectorConfig.mutate({
               ...(formData as {}),
               ...(ccfg ? {id: ccfg.id} : {connector_name: connectorName}),
