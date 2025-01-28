@@ -184,7 +184,7 @@ export function makeDBService({
       }
       return zRaw.integration.parse(ins)
     })
-  const getConnectionOrFail = (id: Id['conn']) =>
+  const getConnectionOrFail = (id: Id['conn'], skipValidation = false) =>
     metaService.tables.connection.get(id).then((conn) => {
       if (!conn) {
         throw new TRPCError({
@@ -192,7 +192,10 @@ export function makeDBService({
           message: `conn not found: ${id}`,
         })
       }
-      return zRaw.connection.parse(conn)
+      if (!skipValidation) {
+        return zRaw.connection.parse(conn)
+      }
+      return conn
     })
   const getPipelineOrFail = (id: Id['pipe']) =>
     metaService.tables.pipeline.get(id).then((pipe) => {
@@ -205,15 +208,16 @@ export function makeDBService({
       return zRaw.pipeline.parse(pipe)
     })
 
-  const getConnectionExpandedOrFail = (id: Id['conn']) =>
+  const getConnectionExpandedOrFail = (id: Id['conn'], skipValidation = false) =>
     getConnectionOrFail(id).then(async (conn) => {
       const connectorConfig = await getConnectorConfigOrFail(
         conn.connectorConfigId,
       )
-      const settings: {} =
-        connectorConfig.connector.schemas.connectionSettings?.parse(
-          conn.settings,
-        )
+      const settings: {} = skipValidation
+        ? conn.settings
+        : connectorConfig.connector.schemas.connectionSettings?.parse(
+            conn.settings,
+          )
       const integration = conn.integrationId
         ? await getIntegrationOrFail(conn.integrationId)
         : undefined
