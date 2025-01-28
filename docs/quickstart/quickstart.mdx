@@ -102,7 +102,7 @@ import { initOpenIntSDK } from "@opensdks/sdk-openint";
 // Generate a Magic Link and use it within an iframe
       const magicLinkResponse = await openint
         .POST("/connect/magic-link", {
-          body: { customerId, validityInSeconds: 2592000 },
+          body: { customer_id, validity_in_seconds: 2592000 },
         })
         .then((r) => r.data)
         .catch((err) => {
@@ -129,7 +129,7 @@ export default async function OpenIntExample() {
 
   const tokenResponse = await openint
     .POST("/connect/token", {
-      body: { customerId: "END_USER_ID" },
+      body: { customer_id: "END_USER_ID" },
     })
     .catch((err) => {
       console.error("Error fetching token:", err);
