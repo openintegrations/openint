@@ -27,6 +27,26 @@ export const zOauthConnectionError = z.object({
   message: z.string().nullish(),
 })
 
+const zOauthCredentials = z.object({
+  type: zAuthMode,
+  /** For API key auth... */
+  api_key: z.string().nullish(),
+  access_token: z.string().optional(),
+  refresh_token: z.string().optional(),
+    // sometimes this is missing from the response
+  expires_at: z.string().datetime().optional(),
+  raw: z.object({
+    access_token: z.string(),
+    expires_in: z.number(),
+    // sometimes this is missing from the response
+    expires_at: z.string().datetime().optional(),
+    /** Refresh token (Only returned if the REFRESH_TOKEN boolean parameter is set to true and the refresh token is available) */
+    refresh_token: z.string().nullish(),
+    refresh_token_expires_in: z.number().nullish(),
+    token_type: z.string(), //'bearer',
+    scope: z.string().optional(),
+  }),
+});
 export const oauthBaseSchema = {
   name: z.literal('__oauth__'), // TODO: This is a noop
   connectorConfig: z.object({
@@ -40,24 +60,7 @@ export const oauthBaseSchema = {
   connectionSettings: z.object({
     // equivalent to nango /v1/connections data.connection object with certain fields removed like id
     oauth: z.object({
-      credentials: z.object({
-        type: zAuthMode,
-        /** For API key auth... */
-        api_key: z.string().nullish(),
-        access_token: z.string().optional(),
-        refresh_token: z.string().optional(),
-        expires_at: z.string().datetime(),
-        raw: z.object({
-          access_token: z.string(),
-          expires_in: z.number(),
-          expires_at: z.string().datetime(),
-          /** Refresh token (Only returned if the REFRESH_TOKEN boolean parameter is set to true and the refresh token is available) */
-          refresh_token: z.string().nullish(),
-          refresh_token_expires_in: z.number().nullish(),
-          token_type: z.string(), //'bearer',
-          scope: z.string().optional(),
-        }),
-      }),
+      credentials: zOauthCredentials,
       connection_config: z
         .object({
           portalId: z.number().nullish(),
@@ -156,6 +159,17 @@ export function makeOauthConnectorServer({
           },
         })
         .then((r) => r.data as OauthBaseTypes['connectionSettings'])
+
+      
+      const parsed = zOauthCredentials.safeParse(res)
+      if (!parsed.success) {
+        console.error(
+          'Provider did not return valid connection settings',
+          parsed?.error?.format(),
+        )
+        throw new Error('Provider did not return valid connection settings')
+      }
+
       return {
         connectionExternalId: extractId(connId)[2],
         settings: {
