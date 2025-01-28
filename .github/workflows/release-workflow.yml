@@ -149,5 +149,7 @@ jobs:
           git push origin main:production -f
 
       - name: Trigger Stably Workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh workflow run stably-workflow.yml
