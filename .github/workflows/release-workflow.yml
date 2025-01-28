@@ -147,3 +147,7 @@ jobs:
           git fetch origin main
           git checkout main
           git push origin main:production -f
+
+      - name: Trigger Stably Workflow
+        run: |
+          gh workflow run stably-workflow.yml

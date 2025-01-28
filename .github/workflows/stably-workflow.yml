@@ -1,6 +1,7 @@
 name: Stably Test Runner
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - production
