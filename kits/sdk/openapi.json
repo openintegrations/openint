@@ -371,12 +371,12 @@
                     "id": {
                       "type": "string"
                     },
-                    "orgId": {
+                    "org_id": {
                       "type": "string"
                     },
                     "metadata": {}
                   },
-                  "required": ["id", "orgId"]
+                  "required": ["id", "org_id"]
                 }
               }
             }
@@ -541,6 +541,15 @@
           },
           {
             "in": "query",
+            "name": "refresh",
+            "schema": {
+              "type": "string",
+              "enum": ["none", "expired", "all"],
+              "default": "expired"
+            }
+          },
+          {
+            "in": "query",
             "name": "expand",
             "schema": {
               "type": "string"
@@ -572,12 +581,12 @@
                           "name": {
                             "type": "string"
                           },
-                          "logoUrl": {
+                          "logo_url": {
                             "type": "string",
                             "format": "uri"
                           }
                         },
-                        "required": ["id", "name", "logoUrl"]
+                        "required": ["id", "name", "logo_url"]
                       },
                       "connector": {
                         "type": ["object", "null"],
@@ -589,12 +598,12 @@
                           "name": {
                             "type": "string"
                           },
-                          "logoUrl": {
+                          "logo_url": {
                             "type": "string",
                             "format": "uri"
                           }
                         },
-                        "required": ["id", "name", "logoUrl"]
+                        "required": ["id", "name", "logo_url"]
                       }
                     }
                   }
@@ -834,9 +843,16 @@
                         "id": {
                           "type": "string",
                           "description": "Must start with 'ccfg_'"
+                        },
+                        "org_id": {
+                          "type": "string",
+                          "description": "Must start with 'org_'"
+                        },
+                        "connector_name": {
+                          "type": "string"
                         }
                       },
-                      "required": ["id"]
+                      "required": ["id", "org_id", "connector_name"]
                     },
                     "integration": {
                       "type": ["object", "null"],
@@ -848,12 +864,12 @@
                         "name": {
                           "type": "string"
                         },
-                        "logoUrl": {
+                        "logo_url": {
                           "type": "string",
                           "format": "uri"
                         }
                       },
-                      "required": ["id", "name", "logoUrl"]
+                      "required": ["id", "name", "logo_url"]
                     },
                     "connector": {
                       "type": ["object", "null"],
@@ -865,12 +881,12 @@
                         "name": {
                           "type": "string"
                         },
-                        "logoUrl": {
+                        "logo_url": {
                           "type": "string",
                           "format": "uri"
                         }
                       },
-                      "required": ["id", "name", "logoUrl"]
+                      "required": ["id", "name", "logo_url"]
                     }
                   },
                   "required": ["connector_config"]
@@ -6217,28 +6233,28 @@
                             "type": "string"
                           },
                           "document_number": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "posting": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "name": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "department": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "memo": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "account": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "split": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "amount": {
-                            "type": "number"
+                            "type": ["number", "null"]
                           },
                           "raw_data": {}
                         },

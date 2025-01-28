@@ -1613,7 +1613,7 @@ export interface operations {
         content: {
           'application/json': {
             id: string
-            orgId: string
+            org_id: string
             metadata?: unknown
           }
         }
@@ -1689,6 +1689,7 @@ export interface operations {
         connector_config_id?: string | null
         connector_name?: string | null
         force_refresh?: boolean
+        refresh?: 'none' | 'expired' | 'all'
         expand?: string
       }
     }
@@ -1702,14 +1703,14 @@ export interface operations {
               id: string
               name: string
               /** Format: uri */
-              logoUrl: string
+              logo_url: string
             } | null
             connector?: {
               /** @description Must start with 'ccfg_' */
               id: string
               name: string
               /** Format: uri */
-              logoUrl: string
+              logo_url: string
             } | null
           } & components['schemas']['core.connection'])[]
         }
@@ -1800,20 +1801,23 @@ export interface operations {
               connector_config: {
                 /** @description Must start with 'ccfg_' */
                 id: string
+                /** @description Must start with 'org_' */
+                org_id: string
+                connector_name: string
               }
               integration?: {
                 /** @description Must start with 'int_' */
                 id: string
                 name: string
                 /** Format: uri */
-                logoUrl: string
+                logo_url: string
               } | null
               connector?: {
                 /** @description Must start with 'ccfg_' */
                 id: string
                 name: string
                 /** Format: uri */
-                logoUrl: string
+                logo_url: string
               } | null
             } & components['schemas']['core.connection'],
             'connector_config'
@@ -4953,14 +4957,14 @@ export interface operations {
               id: string
               date: string
               transaction_type: string
-              document_number?: string
-              posting?: string
-              name?: string
-              department?: string
-              memo?: string
-              account?: string
-              split?: string
-              amount: number
+              document_number?: string | null
+              posting?: string | null
+              name?: string | null
+              department?: string | null
+              memo?: string | null
+              account?: string | null
+              split?: string | null
+              amount: number | null
               raw_data?: unknown
             }[]
           }

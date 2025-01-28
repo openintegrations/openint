@@ -295,7 +295,6 @@ export const WithConnectorConnect = ({
             formData={{}}
             loading={connect.isLoading}
             onSubmit={({formData}) => {
-              console.log('connection form submitted', formData)
               connect.mutate({connector_config_id: ccfg.id, settings: formData})
             }}
             hideSubmitButton
