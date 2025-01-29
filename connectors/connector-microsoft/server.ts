@@ -41,7 +41,7 @@ const integrations = [
     id: 'teams',
     name: 'Teams',
     raw_data: {} as any,
-    verticals: ['email'],
+    verticals: ['messaging'],
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-teams.svg',
   },
