@@ -118,6 +118,15 @@ module.exports = [
     },
   },
   {
+    name: 'gong',
+    dirName: 'connector-gong',
+    varName: 'connectorGong',
+    imports: {
+      def: '@openint/connector-gong/def',
+      server: '@openint/connector-gong/server',
+    },
+  },
+  {
     name: 'google',
     dirName: 'connector-google',
     varName: 'connectorGoogle',
@@ -151,6 +160,15 @@ module.exports = [
     imports: {
       def: '@openint/connector-hubspot/def',
       server: '@openint/connector-hubspot/server',
+    },
+  },
+  {
+    name: 'intercom',
+    dirName: 'connector-intercom',
+    varName: 'connectorIntercom',
+    imports: {
+      def: '@openint/connector-intercom/def',
+      server: '@openint/connector-intercom/server',
     },
   },
   {
