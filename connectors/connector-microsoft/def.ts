@@ -32,6 +32,26 @@ export const microsoftSchemas = {
             .describe('sharepoint specific space separated scopes'),
         })
         .optional(),
+      outlook: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z
+            .string()
+            .optional()
+            .describe('outlook specific space separated scopes'),
+        })
+        .optional(),
+      teams: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z
+            .string()
+            .optional()
+            // User.Read, Team.ReadBasic.All, Team.Read.All, Channel.ReadBasic.All, Channel.Read.All, Chat.Read, Chat.ReadWrite, ChatMessage.Read,
+            // ChatMessage.Send, Presence.Read, User.ReadBasic.All, Calls.AccessMedia.All
+            .describe('teams specific space separated scopes'),
+        })
+        .optional(),
     }),
   }),
   connectionSettings: zSettings,

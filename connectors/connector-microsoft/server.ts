@@ -37,6 +37,14 @@ const integrations = [
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-outlook.svg',
   },
+  {
+    id: 'teams',
+    name: 'Teams',
+    raw_data: {} as any,
+    verticals: ['email'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-teams.svg',
+  },
 ]
 
 export const microsoftServer = {
