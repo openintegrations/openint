@@ -18,7 +18,7 @@ const mintConfig: MintConfig = {
   topbarLinks: [
     {
       name: 'Open API Spec',
-      url: 'https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json',
+      url: 'https://raw.githubusercontent.com/openintegrations/openint/production/kits/sdk/openapi.json',
     },
   ],
   topbarCtaButton: {
