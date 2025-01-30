@@ -677,6 +677,7 @@ export interface components {
             | 'calendar'
             | 'ats'
             | 'email'
+            | 'messaging'
           )[]
         | null
       connector_name: string
@@ -2328,6 +2329,7 @@ export interface operations {
               | 'calendar'
               | 'ats'
               | 'email'
+              | 'messaging'
             )[]
             integrations: string[]
           }[]

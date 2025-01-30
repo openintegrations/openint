@@ -1528,7 +1528,8 @@
                             "payroll",
                             "calendar",
                             "ats",
-                            "email"
+                            "email",
+                            "messaging"
                           ]
                         }
                       },
@@ -8580,7 +8581,8 @@
                 "payroll",
                 "calendar",
                 "ats",
-                "email"
+                "email",
+                "messaging"
               ]
             }
           },
