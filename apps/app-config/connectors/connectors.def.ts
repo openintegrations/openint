@@ -19,6 +19,7 @@ import {default as connectorHeron} from '@openint/connector-heron/def'
 import {default as connectorHubspot} from '@openint/connector-hubspot/def'
 import {default as connectorIntercom} from '@openint/connector-intercom/def'
 import {default as connectorJira} from '@openint/connector-jira/def'
+import {default as connectorKustomer} from '@openint/connector-kustomer/def'
 import {default as connectorLever} from '@openint/connector-lever/def'
 import {default as connectorLinear} from '@openint/connector-linear/def'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/def'
@@ -72,6 +73,7 @@ export const defConnectors = {
   hubspot: connectorHubspot,
   intercom: connectorIntercom,
   jira: connectorJira,
+  kustomer: connectorKustomer,
   lever: connectorLever,
   linear: connectorLinear,
   lunchmoney: connectorLunchmoney,

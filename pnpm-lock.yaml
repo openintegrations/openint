@@ -242,6 +242,9 @@ importers:
       '@openint/connector-jira':
         specifier: workspace:*
         version: link:../../connectors/connector-jira
+      '@openint/connector-kustomer':
+        specifier: workspace:*
+        version: link:../../connectors/connector-kustomer
       '@openint/connector-lever':
         specifier: workspace:*
         version: link:../../connectors/connector-lever
@@ -1039,6 +1042,18 @@ importers:
         version: link:../../kits/vdk
 
   connectors/connector-jira:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+
+  connectors/connector-kustomer:
     dependencies:
       '@openint/cdk':
         specifier: workspace:*

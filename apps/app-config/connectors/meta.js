@@ -190,6 +190,15 @@ module.exports = [
     },
   },
   {
+    name: 'kustomer',
+    dirName: 'connector-kustomer',
+    varName: 'connectorKustomer',
+    imports: {
+      def: '@openint/connector-kustomer/def',
+      server: '@openint/connector-kustomer/server',
+    },
+  },
+  {
     name: 'lever',
     dirName: 'connector-lever',
     varName: 'connectorLever',

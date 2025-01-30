@@ -39,6 +39,8 @@ import {default as connectorIntercom_def} from '@openint/connector-intercom/def'
 import {default as connectorIntercom_server} from '@openint/connector-intercom/server'
 import {default as connectorJira_def} from '@openint/connector-jira/def'
 import {default as connectorJira_server} from '@openint/connector-jira/server'
+import {default as connectorKustomer_def} from '@openint/connector-kustomer/def'
+import {default as connectorKustomer_server} from '@openint/connector-kustomer/server'
 import {default as connectorLever_def} from '@openint/connector-lever/def'
 import {default as connectorLever_server} from '@openint/connector-lever/server'
 import {default as connectorLinear_def} from '@openint/connector-linear/def'
@@ -198,6 +200,11 @@ const connectorIntercom = {
 const connectorJira = {
   ...connectorJira_def,
   ...connectorJira_server,
+}
+
+const connectorKustomer = {
+  ...connectorKustomer_def,
+  ...connectorKustomer_server,
 }
 
 const connectorLever = {
@@ -374,6 +381,7 @@ export const mergedConnectors = {
   hubspot: connectorHubspot,
   intercom: connectorIntercom,
   jira: connectorJira,
+  kustomer: connectorKustomer,
   lever: connectorLever,
   linear: connectorLinear,
   lunchmoney: connectorLunchmoney,
