@@ -4,6 +4,7 @@ import {default as connectorApollo} from '@openint/connector-apollo/def'
 import {default as connectorBeancount} from '@openint/connector-beancount/def'
 import {default as connectorBrex} from '@openint/connector-brex/def'
 import {default as connectorCoda} from '@openint/connector-coda/def'
+import {default as connectorConfluence} from '@openint/connector-confluence/def'
 import {default as connectorDebug} from '@openint/connector-debug/def'
 import {default as connectorDiscord} from '@openint/connector-discord/def'
 import {default as connectorFinch} from '@openint/connector-finch/def'
@@ -56,6 +57,7 @@ export const defConnectors = {
   beancount: connectorBeancount,
   brex: connectorBrex,
   coda: connectorCoda,
+  confluence: connectorConfluence,
   debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,

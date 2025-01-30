@@ -194,6 +194,9 @@ importers:
       '@openint/connector-coda':
         specifier: workspace:*
         version: link:../../connectors/connector-coda
+      '@openint/connector-confluence':
+        specifier: workspace:*
+        version: link:../../connectors/connector-confluence
       '@openint/connector-debug':
         specifier: workspace:*
         version: link:../../connectors/connector-debug
@@ -807,6 +810,18 @@ importers:
       '@opensdks/sdk-coda':
         specifier: ^0.0.1
         version: 0.0.1
+
+  connectors/connector-confluence:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
   connectors/connector-copilot:
     dependencies:

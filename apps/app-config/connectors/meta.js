@@ -51,6 +51,15 @@ module.exports = [
       server: '@openint/connector-coda/server',
     },
   },
+  {
+    name: 'confluence',
+    dirName: 'connector-confluence',
+    varName: 'connectorConfluence',
+    imports: {
+      def: '@openint/connector-confluence/def',
+      server: '@openint/connector-confluence/server',
+    },
+  },
   {dirName: 'connector-copilot', varName: 'connectorCopilot', imports: {}},
   {
     name: 'debug',

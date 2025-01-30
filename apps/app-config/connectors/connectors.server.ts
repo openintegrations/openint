@@ -4,6 +4,7 @@ import {default as connectorApollo} from '@openint/connector-apollo/server'
 import {default as connectorBeancount} from '@openint/connector-beancount/server'
 import {default as connectorBrex} from '@openint/connector-brex/server'
 import {default as connectorCoda} from '@openint/connector-coda/server'
+import {default as connectorConfluence} from '@openint/connector-confluence/server'
 import {default as connectorDebug} from '@openint/connector-debug/server'
 import {default as connectorDiscord} from '@openint/connector-discord/server'
 import {default as connectorFinch} from '@openint/connector-finch/server'
@@ -54,6 +55,7 @@ export const serverConnectors = {
   beancount: connectorBeancount,
   brex: connectorBrex,
   coda: connectorCoda,
+  confluence: connectorConfluence,
   debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,
