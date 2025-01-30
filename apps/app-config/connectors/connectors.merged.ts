@@ -101,6 +101,8 @@ import {default as connectorXero_def} from '@openint/connector-xero/def'
 import {default as connectorXero_server} from '@openint/connector-xero/server'
 import {default as connectorYodlee_def} from '@openint/connector-yodlee/def'
 import {default as connectorYodlee_server} from '@openint/connector-yodlee/server'
+import {default as connectorZohodesk_def} from '@openint/connector-zohodesk/def'
+import {default as connectorZohodesk_server} from '@openint/connector-zohodesk/server'
 
 const connectorAirtable = {
   ...connectorAirtable_def,
@@ -360,6 +362,11 @@ const connectorYodlee = {
   ...connectorYodlee_server,
 }
 
+const connectorZohodesk = {
+  ...connectorZohodesk_def,
+  ...connectorZohodesk_server,
+}
+
 export const mergedConnectors = {
   airtable: connectorAirtable,
   apollo: connectorApollo,
@@ -413,4 +420,5 @@ export const mergedConnectors = {
   wise: connectorWise,
   xero: connectorXero,
   yodlee: connectorYodlee,
+  zohodesk: connectorZohodesk,
 }

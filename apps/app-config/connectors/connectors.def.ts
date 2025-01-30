@@ -51,6 +51,7 @@ import {default as connectorWebhook} from '@openint/connector-webhook/def'
 import {default as connectorWise} from '@openint/connector-wise/def'
 import {default as connectorXero} from '@openint/connector-xero/def'
 import {default as connectorYodlee} from '@openint/connector-yodlee/def'
+import {default as connectorZohodesk} from '@openint/connector-zohodesk/def'
 
 export const defConnectors = {
   airtable: connectorAirtable,
@@ -105,4 +106,5 @@ export const defConnectors = {
   wise: connectorWise,
   xero: connectorXero,
   yodlee: connectorYodlee,
+  zohodesk: connectorZohodesk,
 }

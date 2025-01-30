@@ -476,4 +476,13 @@ module.exports = [
       server: '@openint/connector-yodlee/server',
     },
   },
+  {
+    name: 'zohodesk',
+    dirName: 'connector-zohodesk',
+    varName: 'connectorZohodesk',
+    imports: {
+      def: '@openint/connector-zohodesk/def',
+      server: '@openint/connector-zohodesk/server',
+    },
+  },
 ]
