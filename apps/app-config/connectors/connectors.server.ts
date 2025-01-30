@@ -11,10 +11,12 @@ import {default as connectorFirebase} from '@openint/connector-firebase/server'
 import {default as connectorForeceipt} from '@openint/connector-foreceipt/server'
 import {default as connectorFs} from '@openint/connector-fs/server'
 import {default as connectorGithub} from '@openint/connector-github/server'
+import {default as connectorGong} from '@openint/connector-gong/server'
 import {default as connectorGoogle} from '@openint/connector-google/server'
 import {default as connectorGreenhouse} from '@openint/connector-greenhouse/server'
 import {default as connectorHeron} from '@openint/connector-heron/server'
 import {default as connectorHubspot} from '@openint/connector-hubspot/server'
+import {default as connectorIntercom} from '@openint/connector-intercom/server'
 import {default as connectorJira} from '@openint/connector-jira/server'
 import {default as connectorLever} from '@openint/connector-lever/server'
 import {default as connectorLinear} from '@openint/connector-linear/server'
@@ -59,10 +61,12 @@ export const serverConnectors = {
   foreceipt: connectorForeceipt,
   fs: connectorFs,
   github: connectorGithub,
+  gong: connectorGong,
   google: connectorGoogle,
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   hubspot: connectorHubspot,
+  intercom: connectorIntercom,
   jira: connectorJira,
   lever: connectorLever,
   linear: connectorLinear,

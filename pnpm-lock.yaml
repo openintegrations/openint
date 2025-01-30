@@ -218,6 +218,9 @@ importers:
       '@openint/connector-github':
         specifier: workspace:*
         version: link:../../connectors/connector-github
+      '@openint/connector-gong':
+        specifier: workspace:*
+        version: link:../../connectors/connector-gong
       '@openint/connector-google':
         specifier: workspace:*
         version: link:../../connectors/connector-google
@@ -230,6 +233,9 @@ importers:
       '@openint/connector-hubspot':
         specifier: workspace:*
         version: link:../../connectors/connector-hubspot
+      '@openint/connector-intercom':
+        specifier: workspace:*
+        version: link:../../connectors/connector-intercom
       '@openint/connector-jira':
         specifier: workspace:*
         version: link:../../connectors/connector-jira
@@ -932,6 +938,18 @@ importers:
         specifier: workspace:*
         version: link:../../kits/vdk
 
+  connectors/connector-gong:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+
   connectors/connector-google:
     dependencies:
       '@openint/cdk':
@@ -992,6 +1010,18 @@ importers:
       '@opensdks/sdk-hubspot':
         specifier: 0.0.6
         version: 0.0.6
+
+  connectors/connector-intercom:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
   connectors/connector-jira:
     dependencies:
