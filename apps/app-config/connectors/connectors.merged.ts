@@ -23,6 +23,8 @@ import {default as connectorFs_def} from '@openint/connector-fs/def'
 import {default as connectorFs_server} from '@openint/connector-fs/server'
 import {default as connectorGithub_def} from '@openint/connector-github/def'
 import {default as connectorGithub_server} from '@openint/connector-github/server'
+import {default as connectorGong_def} from '@openint/connector-gong/def'
+import {default as connectorGong_server} from '@openint/connector-gong/server'
 import {default as connectorGoogle_def} from '@openint/connector-google/def'
 import {default as connectorGoogle_server} from '@openint/connector-google/server'
 import {default as connectorGreenhouse_def} from '@openint/connector-greenhouse/def'
@@ -31,6 +33,8 @@ import {default as connectorHeron_def} from '@openint/connector-heron/def'
 import {default as connectorHeron_server} from '@openint/connector-heron/server'
 import {default as connectorHubspot_def} from '@openint/connector-hubspot/def'
 import {default as connectorHubspot_server} from '@openint/connector-hubspot/server'
+import {default as connectorIntercom_def} from '@openint/connector-intercom/def'
+import {default as connectorIntercom_server} from '@openint/connector-intercom/server'
 import {default as connectorJira_def} from '@openint/connector-jira/def'
 import {default as connectorJira_server} from '@openint/connector-jira/server'
 import {default as connectorLever_def} from '@openint/connector-lever/def'
@@ -154,6 +158,11 @@ const connectorGithub = {
   ...connectorGithub_server,
 }
 
+const connectorGong = {
+  ...connectorGong_def,
+  ...connectorGong_server,
+}
+
 const connectorGoogle = {
   ...connectorGoogle_def,
   ...connectorGoogle_server,
@@ -172,6 +181,11 @@ const connectorHeron = {
 const connectorHubspot = {
   ...connectorHubspot_def,
   ...connectorHubspot_server,
+}
+
+const connectorIntercom = {
+  ...connectorIntercom_def,
+  ...connectorIntercom_server,
 }
 
 const connectorJira = {
@@ -345,10 +359,12 @@ export const mergedConnectors = {
   foreceipt: connectorForeceipt,
   fs: connectorFs,
   github: connectorGithub,
+  gong: connectorGong,
   google: connectorGoogle,
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   hubspot: connectorHubspot,
+  intercom: connectorIntercom,
   jira: connectorJira,
   lever: connectorLever,
   linear: connectorLinear,
