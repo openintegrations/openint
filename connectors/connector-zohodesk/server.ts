@@ -2,6 +2,16 @@ import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
 import type {zohodeskSchemas} from './def'
 
 export const zohodeskServer = {
+  preConnect: async (connectInput) => {
+    return {
+      authorization_params: {
+        scope: connectInput.oauth.scopes,
+      },
+      connection_params: {
+        extension: "com"
+      }
+    }
+  },
   postConnect: async (connectOutput) => {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
