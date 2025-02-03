@@ -112,9 +112,10 @@ export type StreamsV1 = z.infer<typeof zStreamsV1>
 export const zLink = z
   .enum([
     'unified_banking',
+    'unified_ats',
+    'unified_accouting',
     'prefix_connector_name',
     'single_table',
-    'unified_ats',
     'unified_crm',
     'custom_link_ag',
   ])
