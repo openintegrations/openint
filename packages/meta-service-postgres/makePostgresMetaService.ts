@@ -1,4 +1,6 @@
+import {neon} from '@neondatabase/serverless'
 import {camelCase, snakeCase} from 'change-case'
+import {drizzle as drizzleNeon} from 'drizzle-orm/neon-http'
 // Need to use version 4.x of change-case that still supports cjs
 // pureESM modules are idealistic...
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
@@ -216,44 +218,44 @@ export const makePostgresMetaService = zFunction(
         )
       },
       isHealthy: async (checkDefaultPostgresConnections = false) => {
-        const {runQueries} = _getDeps({
-          ...opts,
-          // hardcoding to system viewer to avoid any authorization checks
-          viewer: {role: 'system'},
-        })
+        const neonClient = neon(opts.databaseUrl)
+        const db = drizzleNeon({client: neonClient, logger: __DEBUG__})
 
-        const isMainDbHealthy = await runQueries((trxn) =>
-          trxn.execute(sql`SELECT 1`),
-        )
+        const isMainDbHealthy = await db.execute('SELECT 1')
 
-        if (!isMainDbHealthy || isMainDbHealthy.length !== 1) {
-          return {healthy: false, error: 'Main database is not healthy'}
+        if (!isMainDbHealthy || isMainDbHealthy.rows.length !== 1) {
+          return {
+            healthy: false,
+            error:
+              'Main database is not healthy. ' +
+              checkDefaultPostgresConnections,
+          }
         }
 
         // TODO:(@pellicceama) to use sql token rather than hard coding here.
-        const top3DefaultPostgresConnections = await runQueries((trxn) =>
-          trxn.execute(
-            sql`SELECT id, settings->>'databaseUrl' as database_url FROM connection where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
-          ),
-        )
+        // const top3DefaultPostgresConnections = await runQueries((trxn) =>
+        //   trxn.execute(
+        //     sql`SELECT id, settings->>'databaseUrl' as database_url FROM connection where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
+        //   ),
+        // )
 
-        if (checkDefaultPostgresConnections) {
-          for (const connection of top3DefaultPostgresConnections) {
-            if (!connection['database_url']) {
-              continue
-            }
-            const connDb = drizzle(connection['database_url'] as string, {
-              logger: __DEBUG__,
-            })
-            const res = await connDb.execute(sql`SELECT 1`)
-            if (res.length !== 1) {
-              return {
-                healthy: false,
-                error: `Default postgres connection with id ${connection['id']} is not healthy`,
-              }
-            }
-          }
-        }
+        // if (checkDefaultPostgresConnections) {
+        //   for (const connection of top3DefaultPostgresConnections) {
+        //     if (!connection['database_url']) {
+        //       continue
+        //     }
+        //     const connDb = drizzle(connection['database_url'] as string, {
+        //       logger: __DEBUG__,
+        //     })
+        //     const res = await connDb.execute(sql`SELECT 1`)
+        //     if (res.length !== 1) {
+        //       return {
+        //         healthy: false,
+        //         error: `Default postgres connection with id ${connection['id']} is not healthy`,
+        //       }
+        //     }
+        //   }
+        // }
         return {healthy: true}
       },
     }

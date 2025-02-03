@@ -5,14 +5,17 @@
   "sideEffects": false,
   "module": "./index.ts",
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "@openint/cdk": "workspace:*",
     "@openint/connector-postgres": "workspace:*",
     "@openint/db": "workspace:*",
     "@openint/util": "workspace:*",
-    "change-case": "^4"
+    "change-case": "^4",
+    "drizzle-orm": "^0.38.2"
   },
   "devDependencies": {
     "@openint/engine-backend": "workspace:*",
-    "@opensdks/runtime": "0.0.20"
+    "@opensdks/runtime": "0.0.20",
+    "drizzle-kit": "^0.30.1"
   }
 }
