@@ -9,6 +9,6 @@ const accountFixture = getFixtureJson(__dirname, './__fixtures__/account.json')
 
 testIf(accountFixture)('account', () => {
   const res = mappers.account(accountFixture)
-  const out = unified.account.parse(res)
+  const out = unified.qboAccount.parse(res)
   expect(out).toBeTruthy()
 })

@@ -1,6 +1,8 @@
 import {z} from '@openint/vdk'
 
-export const account = z
+// MAKR: -
+
+export const qboAccount = z
   .object({
     id: z.string(),
     number: z.string().nullish(),
@@ -84,7 +86,7 @@ export const cashFlow = z.object({
   endingCash: z.number().nullable(),
 })
 
-export const transactionSchema = z.object({
+export const transactionListItemSchema = z.object({
   id: z.string(),
   date: z.string(),
   transactionType: z.string(),
@@ -104,7 +106,7 @@ export const transactionList = z.object({
   startPeriod: z.string(),
   endPeriod: z.string(),
   currency: z.string(),
-  transactions: z.array(transactionSchema),
+  transactions: z.array(transactionListItemSchema),
 })
 
 const customerBalanceEntrySchema = z.object({

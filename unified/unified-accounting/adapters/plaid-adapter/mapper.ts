@@ -5,7 +5,7 @@ import * as unified from '../../unifiedModels'
 type Plaid = PlaidSDKTypes['oas']['components']['schemas']
 
 export const mappers = {
-  account: mapper(zCast<Plaid['AccountBase']>(), unified.account, {
+  account: mapper(zCast<Plaid['AccountBase']>(), unified.qboAccount, {
     id: 'account_id',
     name: 'name',
     type: () => 'asset', // TODO

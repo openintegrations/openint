@@ -6,7 +6,7 @@ import * as unified from '../../unifiedModels'
 type QBO = QBOSDKTypes['oas']['components']['schemas']
 
 export const mappers = {
-  account: mapper(zCast<QBO['Account']>(), unified.account, {
+  account: mapper(zCast<QBO['Account']>(), unified.qboAccount, {
     id: 'Id',
     name: 'Name',
     type: 'Classification',
@@ -151,7 +151,7 @@ export const mappers = {
 
         return (
           e?.data?.Rows?.Row?.map(
-            (row): z.infer<typeof unified.transactionSchema> => {
+            (row): z.infer<typeof unified.transactionListItemSchema> => {
               const raw = toKeyValueMap(row)
 
               const amount =
