@@ -1,5 +1,93 @@
 import {z} from '@openint/vdk'
 
+// MARK: - Fields
+
+const currency_code = z.string().describe('ISO 4217 currency code')
+
+const account_classification = z.enum([
+  'asset',
+  'liability',
+  'equity',
+  'income',
+  'expense',
+])
+
+const transaciton_line = z.object({
+  id: z.string().optional(),
+  memo: z.string().nullable().optional().describe('Private line note'),
+  amount: z.number().describe('(positive) debit or (negative) credit'),
+  currency: currency_code,
+  account_id: z.string(),
+})
+
+const transaction_lines = z
+  .array(transaciton_line)
+  .describe(
+    'Minimum 1 lines to balance the implicit line from parent transaction itself. 2 lines or more for split transactions',
+  )
+
+// MARK: - Models
+
+const commonFields = {
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+  raw: z.record(z.string(), z.unknown()).optional(),
+  id: z.string(),
+}
+
+export const transaction = z
+  .object({
+    ...commonFields,
+    date: z.string().openapi({
+      format: 'date',
+      description:
+        'Posted date for accounting purpose, may not be the same as transaction date',
+    }),
+    account_id: z.string().optional(),
+    amount: z.number().optional(),
+    currency: currency_code.optional(),
+    memo: z.string().optional(),
+    lines: transaction_lines,
+    bank_category: z
+      .string()
+      .optional()
+      .describe('Categorization from bank or upstream provider'),
+  })
+  .openapi({ref: 'accounting.transaction'})
+
+export const account = z
+  .object({
+    ...commonFields,
+    name: z.string(),
+    classification: account_classification,
+    currency: currency_code.optional(),
+  })
+  .openapi({ref: 'accounting.account'})
+
+export const vendor = z
+  .object({
+    ...commonFields,
+    name: z.string(),
+    url: z.string(),
+  })
+  .openapi({ref: 'accounting.vendor'})
+
+export const customer = z
+  .object({
+    ...commonFields,
+    name: z.string(),
+  })
+  .openapi({ref: 'accounting.customer'})
+
+export const attachment = z
+  .object({
+    ...commonFields,
+    file_name: z.string().optional(),
+    file_url: z.string().optional(),
+    transaction_id: z.string().optional(),
+  })
+  .openapi({ref: 'accounting.attachment'})
+
 // MAKR: -
 
 export const qboAccount = z
@@ -34,11 +122,7 @@ export const expense = z.object({
   payment_account: z.string(),
 })
 // .openapi({format: 'prefix:exp'}),
-export const vendor = z.object({
-  id: z.string(),
-  name: z.string(),
-  url: z.string(),
-})
+
 // .openapi({format: 'prefix:ven'}),
 
 // TODO: expand
