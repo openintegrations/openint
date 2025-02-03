@@ -100,6 +100,7 @@ export function oauthConnect({
   connectionId?: Id['conn']
   authOptions?: {
     authorization_params?: Record<string, string | undefined>
+    connection_params?: Record<string, string>
   }
 }): Promise<OauthBaseTypes['connectOutput']> {
   // console.log('oauthConnect', {
@@ -113,7 +114,7 @@ export function oauthConnect({
       connectorConfigId,
       connectionId ?? makeId('conn', connectorName, makeUlid()),
       {
-        params: {},
+        params: {...authOptions?.connection_params},
         ...authOptions,
         // authOptions would tend to contain the authorization_params needed to make the initial connection
         // authorization_params: {
