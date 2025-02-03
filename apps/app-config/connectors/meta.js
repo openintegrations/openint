@@ -51,6 +51,15 @@ module.exports = [
       server: '@openint/connector-coda/server',
     },
   },
+  {
+    name: 'confluence',
+    dirName: 'connector-confluence',
+    varName: 'connectorConfluence',
+    imports: {
+      def: '@openint/connector-confluence/def',
+      server: '@openint/connector-confluence/server',
+    },
+  },
   {dirName: 'connector-copilot', varName: 'connectorCopilot', imports: {}},
   {
     name: 'debug',
@@ -178,6 +187,15 @@ module.exports = [
     imports: {
       def: '@openint/connector-jira/def',
       server: '@openint/connector-jira/server',
+    },
+  },
+  {
+    name: 'kustomer',
+    dirName: 'connector-kustomer',
+    varName: 'connectorKustomer',
+    imports: {
+      def: '@openint/connector-kustomer/def',
+      server: '@openint/connector-kustomer/server',
     },
   },
   {
@@ -456,6 +474,15 @@ module.exports = [
       def: '@openint/connector-yodlee/def',
       client: '@openint/connector-yodlee/client',
       server: '@openint/connector-yodlee/server',
+    },
+  },
+  {
+    name: 'zohodesk',
+    dirName: 'connector-zohodesk',
+    varName: 'connectorZohodesk',
+    imports: {
+      def: '@openint/connector-zohodesk/def',
+      server: '@openint/connector-zohodesk/server',
     },
   },
 ]

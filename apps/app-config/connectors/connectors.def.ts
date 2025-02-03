@@ -4,6 +4,7 @@ import {default as connectorApollo} from '@openint/connector-apollo/def'
 import {default as connectorBeancount} from '@openint/connector-beancount/def'
 import {default as connectorBrex} from '@openint/connector-brex/def'
 import {default as connectorCoda} from '@openint/connector-coda/def'
+import {default as connectorConfluence} from '@openint/connector-confluence/def'
 import {default as connectorDebug} from '@openint/connector-debug/def'
 import {default as connectorDiscord} from '@openint/connector-discord/def'
 import {default as connectorFinch} from '@openint/connector-finch/def'
@@ -18,6 +19,7 @@ import {default as connectorHeron} from '@openint/connector-heron/def'
 import {default as connectorHubspot} from '@openint/connector-hubspot/def'
 import {default as connectorIntercom} from '@openint/connector-intercom/def'
 import {default as connectorJira} from '@openint/connector-jira/def'
+import {default as connectorKustomer} from '@openint/connector-kustomer/def'
 import {default as connectorLever} from '@openint/connector-lever/def'
 import {default as connectorLinear} from '@openint/connector-linear/def'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/def'
@@ -49,6 +51,7 @@ import {default as connectorWebhook} from '@openint/connector-webhook/def'
 import {default as connectorWise} from '@openint/connector-wise/def'
 import {default as connectorXero} from '@openint/connector-xero/def'
 import {default as connectorYodlee} from '@openint/connector-yodlee/def'
+import {default as connectorZohodesk} from '@openint/connector-zohodesk/def'
 
 export const defConnectors = {
   airtable: connectorAirtable,
@@ -56,6 +59,7 @@ export const defConnectors = {
   beancount: connectorBeancount,
   brex: connectorBrex,
   coda: connectorCoda,
+  confluence: connectorConfluence,
   debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,
@@ -70,6 +74,7 @@ export const defConnectors = {
   hubspot: connectorHubspot,
   intercom: connectorIntercom,
   jira: connectorJira,
+  kustomer: connectorKustomer,
   lever: connectorLever,
   linear: connectorLinear,
   lunchmoney: connectorLunchmoney,
@@ -101,4 +106,5 @@ export const defConnectors = {
   wise: connectorWise,
   xero: connectorXero,
   yodlee: connectorYodlee,
+  zohodesk: connectorZohodesk,
 }

@@ -9,6 +9,8 @@ import {default as connectorBrex_def} from '@openint/connector-brex/def'
 import {default as connectorBrex_server} from '@openint/connector-brex/server'
 import {default as connectorCoda_def} from '@openint/connector-coda/def'
 import {default as connectorCoda_server} from '@openint/connector-coda/server'
+import {default as connectorConfluence_def} from '@openint/connector-confluence/def'
+import {default as connectorConfluence_server} from '@openint/connector-confluence/server'
 import {default as connectorDebug_def} from '@openint/connector-debug/def'
 import {default as connectorDebug_server} from '@openint/connector-debug/server'
 import {default as connectorDiscord_def} from '@openint/connector-discord/def'
@@ -37,6 +39,8 @@ import {default as connectorIntercom_def} from '@openint/connector-intercom/def'
 import {default as connectorIntercom_server} from '@openint/connector-intercom/server'
 import {default as connectorJira_def} from '@openint/connector-jira/def'
 import {default as connectorJira_server} from '@openint/connector-jira/server'
+import {default as connectorKustomer_def} from '@openint/connector-kustomer/def'
+import {default as connectorKustomer_server} from '@openint/connector-kustomer/server'
 import {default as connectorLever_def} from '@openint/connector-lever/def'
 import {default as connectorLever_server} from '@openint/connector-lever/server'
 import {default as connectorLinear_def} from '@openint/connector-linear/def'
@@ -97,6 +101,8 @@ import {default as connectorXero_def} from '@openint/connector-xero/def'
 import {default as connectorXero_server} from '@openint/connector-xero/server'
 import {default as connectorYodlee_def} from '@openint/connector-yodlee/def'
 import {default as connectorYodlee_server} from '@openint/connector-yodlee/server'
+import {default as connectorZohodesk_def} from '@openint/connector-zohodesk/def'
+import {default as connectorZohodesk_server} from '@openint/connector-zohodesk/server'
 
 const connectorAirtable = {
   ...connectorAirtable_def,
@@ -121,6 +127,11 @@ const connectorBrex = {
 const connectorCoda = {
   ...connectorCoda_def,
   ...connectorCoda_server,
+}
+
+const connectorConfluence = {
+  ...connectorConfluence_def,
+  ...connectorConfluence_server,
 }
 
 const connectorDebug = {
@@ -191,6 +202,11 @@ const connectorIntercom = {
 const connectorJira = {
   ...connectorJira_def,
   ...connectorJira_server,
+}
+
+const connectorKustomer = {
+  ...connectorKustomer_def,
+  ...connectorKustomer_server,
 }
 
 const connectorLever = {
@@ -346,12 +362,18 @@ const connectorYodlee = {
   ...connectorYodlee_server,
 }
 
+const connectorZohodesk = {
+  ...connectorZohodesk_def,
+  ...connectorZohodesk_server,
+}
+
 export const mergedConnectors = {
   airtable: connectorAirtable,
   apollo: connectorApollo,
   beancount: connectorBeancount,
   brex: connectorBrex,
   coda: connectorCoda,
+  confluence: connectorConfluence,
   debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,
@@ -366,6 +388,7 @@ export const mergedConnectors = {
   hubspot: connectorHubspot,
   intercom: connectorIntercom,
   jira: connectorJira,
+  kustomer: connectorKustomer,
   lever: connectorLever,
   linear: connectorLinear,
   lunchmoney: connectorLunchmoney,
@@ -397,4 +420,5 @@ export const mergedConnectors = {
   wise: connectorWise,
   xero: connectorXero,
   yodlee: connectorYodlee,
+  zohodesk: connectorZohodesk,
 }
