@@ -8,7 +8,7 @@ export const qboAdapter = {
     const res = await instance.getAll('Account').next()
     return {
       has_next_page: true,
-      items: res.value?.entities?.map(mappers.account) ?? [],
+      items: res.value?.entities?.map(mappers.qboAccount) ?? [],
     }
   },
   listExpenses: async ({instance}) => {
@@ -22,7 +22,7 @@ export const qboAdapter = {
     const res = await instance.getAll('Vendor').next()
     return {
       has_next_page: true,
-      items: res.value?.entities?.map(mappers.vendor) ?? [],
+      items: res.value?.entities?.map(mappers.Vendor) ?? [],
     }
   },
   getBalanceSheet: async ({instance, input}) => {

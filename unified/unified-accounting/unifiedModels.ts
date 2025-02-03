@@ -20,12 +20,6 @@ const transaciton_line = z.object({
   account_id: z.string(),
 })
 
-const transaction_lines = z
-  .array(transaciton_line)
-  .describe(
-    'Minimum 1 lines to balance the implicit line from parent transaction itself. 2 lines or more for split transactions',
-  )
-
 // MARK: - Models
 
 const commonFields = {
@@ -43,11 +37,15 @@ export const transaction = z
       description:
         'Posted date for accounting purpose, may not be the same as transaction date',
     }),
-    account_id: z.string().optional(),
-    amount: z.number().optional(),
-    currency: currency_code.optional(),
-    memo: z.string().optional(),
-    lines: transaction_lines,
+    account_id: z.string().nullish(),
+    amount: z.number().nullish(),
+    currency: currency_code.nullish(),
+    memo: z.string().nullish(),
+    lines: z
+      .array(transaciton_line)
+      .describe(
+        'Minimum 1 lines to balance the implicit line from parent transaction itself. 2 lines or more for split transactions',
+      ),
     bank_category: z
       .string()
       .optional()

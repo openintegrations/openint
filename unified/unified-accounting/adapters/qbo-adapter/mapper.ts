@@ -5,8 +5,138 @@ import * as unified from '../../unifiedModels'
 
 type QBO = QBOSDKTypes['oas']['components']['schemas']
 
+const tranactionMappers = {
+  Purchase: mapper(zCast<QBO['Purchase']>(), unified.transaction, {
+    id: 'Id',
+    date: 'TxnDate',
+    account_id: 'AccountRef.value',
+    currency: 'CurrencyRef.value',
+    memo: 'PrivateNote',
+    amount: (p) => {
+      const sign = p.Credit ? 1 : -1
+      return sign * p.TotalAmt
+    },
+    lines: (p) => {
+      const sign = p.Credit ? 1 : -1
+      return p.Line.map((line) => ({
+        id: line.Id,
+        memo: line.Description,
+        amount: -1 * sign * line.Amount,
+        currency: p.CurrencyRef.value,
+        account_id: line.AccountBasedExpenseLineDetail?.AccountRef.value ?? '',
+      }))
+    },
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  Deposit: mapper(zCast<QBO['Deposit']>(), unified.transaction, {
+    id: 'Id',
+    date: 'TxnDate',
+    account_id: 'DepositToAccountRef.value',
+    currency: 'CurrencyRef.value',
+    memo: 'PrivateNote',
+    amount: 'TotalAmt',
+    lines: (p) =>
+      p.Line.map((line) => ({
+        id: line.Id,
+        memo: line.Description,
+        amount: -1 * line.Amount,
+        currency: p.CurrencyRef.value,
+        account_id: line.DepositLineDetail?.AccountRef?.value ?? '',
+      })),
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  journalEntry: mapper(zCast<QBO['JournalEntry']>(), unified.transaction, {
+    id: 'Id',
+    date: 'TxnDate',
+    account_id: () => null,
+    amount: () => null,
+    currency: () => null,
+    memo: 'PrivateNote',
+    lines: (record) =>
+      record.Line.filter((l) => l.DetailType !== 'DescriptionOnly').map(
+        (l) => ({
+          id: l.Id,
+          amount:
+            (l.JournalEntryLineDetail.PostingType === 'Credit' ? -1 : 1) *
+            l.Amount,
+          currency: record.CurrencyRef.value,
+          account_id: l.JournalEntryLineDetail.AccountRef.value,
+          memo: l.Description,
+        }),
+      ),
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  Payment: mapper(zCast<QBO['Payment']>(), unified.transaction, {
+    id: 'Id',
+    date: 'TxnDate',
+    account_id: 'DepositToAccountRef.value',
+    amount: 'TotalAmt',
+    currency: 'CurrencyRef.value',
+    memo: 'PrivateNote',
+    lines: () => [], // TODO: Figure out how to map these properly
+    // lines: (record) =>
+    //   record.Line.map((line, i) => ({
+    //     id: `${i}`,
+    //     memo: null,
+    //     amount: line.Amount,
+    //     currency: record.CurrencyRef.value,
+    //     account_id: line.Amoun
+    //   })),
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  Invoice: mapper(zCast<QBO['Invoice']>(), unified.transaction, {
+    id: 'Id',
+    date: 'TxnDate',
+    account_id: () => null,
+    amount: 'TotalAmt',
+    currency: 'CurrencyRef.value',
+    memo: 'PrivateNote',
+    lines: () => [], // TODO: Figure out how to map these properly
+    // lines: (record) =>
+    //   record.Line.map((line, i) => ({
+    //     id: line.Id,
+    //     memo: line.Description,
+    //     currency: record.CurrencyRef.value,
+    //     ...(line.SalesItemLineDetail && {
+    //       amount: -1 * line.Amount, // income is negative
+    //       account_id: line.SalesItemLineDetail.ItemRef.value,
+    //     }),
+    //     ...(line.DiscountLineDetail && {
+    //       amount: line.Amount, // discount is positive
+    //       account_id: line.DiscountLineDetail.DiscountAccountRef.value,
+    //     }),
+    //   })),
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+}
+
 export const mappers = {
-  account: mapper(zCast<QBO['Account']>(), unified.qboAccount, {
+  ...tranactionMappers,
+  Account: mapper(zCast<QBO['Account']>(), unified.account, {
+    id: 'Id',
+    name: 'Name',
+    classification: 'Classification',
+    currency: 'CurrencyRef.value',
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+
+  Vendor: mapper(zCast<QBO['Vendor']>(), unified.vendor, {
+    id: 'Id',
+    name: 'DisplayName',
+    url: 'domain',
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  // TODO: Add customer and attachment object from QBO
+
+  // MARK: -
+  qboAccount: mapper(zCast<QBO['Account']>(), unified.qboAccount, {
     id: 'Id',
     name: 'Name',
     type: 'Classification',
@@ -17,11 +147,6 @@ export const mappers = {
     amount: 'TotalAmt',
     currency: 'CurrencyRef.value',
     payment_account: 'AccountRef.value',
-  }),
-  vendor: mapper(zCast<QBO['Vendor']>(), unified.vendor, {
-    id: 'Id',
-    name: 'DisplayName',
-    url: 'domain',
   }),
   balanceSheet: mapper(zCast<{data: QBO['Report']}>(), unified.balanceSheet, {
     reportName: (e) => e?.data?.Header?.ReportName ?? '',
