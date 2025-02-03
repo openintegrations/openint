@@ -1,3 +1,5 @@
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 import fetchSync from 'sync-fetch'
 import type {Id} from '@openint/cdk'
 import {testEnv, testEnvRequired} from '@openint/env'
@@ -98,3 +100,15 @@ export function getConnectionAndConfig() {
   // from testEnvVar?
   // from openInt server...
 }
+
+export function getFixtureJson(...segments: string[]) {
+  try {
+    const content = fs.readFileSync(path.join(...segments), 'utf-8')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return JSON.parse(content)
+  } catch {
+    return null
+  }
+}
+
+export const testIf = (condition: unknown) => (condition ? test : test.skip)
