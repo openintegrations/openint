@@ -47,7 +47,7 @@ const tranactionMappers = {
     created_at: 'MetaData.CreateTime',
     updated_at: 'MetaData.LastUpdatedTime',
   }),
-  journalEntry: mapper(zCast<QBO['JournalEntry']>(), unified.transaction, {
+  JournalEntry: mapper(zCast<QBO['JournalEntry']>(), unified.transaction, {
     id: 'Id',
     date: 'TxnDate',
     account_id: () => null,

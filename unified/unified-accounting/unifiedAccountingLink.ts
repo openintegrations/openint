@@ -40,14 +40,27 @@ export function unifiedAccountingLink(ctx: {
       return rxjs.EMPTY
     }
 
+    // TODO: Should build this into the mapper itself
+    const stream =
+      {
+        Purchase: 'transaction',
+        JournalEntry: 'transaction',
+        Deposit: 'transaction',
+        Payment: 'transaction',
+        Invoice: 'transaction',
+        Account: 'account',
+        Vendor: 'vendor',
+        Customer: 'customer',
+      }[op.data.entityName] ?? op.data.entityName
+
     const mapped = applyMapper(mapper, op.data.entity)
 
     return rxjs.of({
       ...op,
       data: {
-        id: mapped.id,
-        entityName,
-        entity: {raw: op.data.entity, unified: mapped},
+        stream,
+        data: mapped,
+        upsert: {key_columns: ['connection_id', 'id']},
       },
     })
   })
