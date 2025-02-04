@@ -46,7 +46,7 @@ const zOauthCredentials = z.object({
     token_type: z.string(), //'bearer',
     scope: z.string().optional(),
   }),
-});
+})
 export const oauthBaseSchema = {
   name: z.literal('__oauth__'), // TODO: This is a noop
   connectorConfig: z.object({
@@ -159,14 +159,13 @@ export function makeOauthConnectorServer({
             },
           },
         })
-        .then((r) => r.data as OauthBaseTypes['connectionSettings'])
+        .then((r) => r.data as OauthBaseTypes['connectionSettings']['oauth'])
 
-      
-      const parsed = zOauthCredentials.safeParse(res)
+      const parsed = zOauthCredentials.safeParse(res.credentials)
       if (!parsed.success) {
         console.error(
           'Provider did not return valid connection settings',
-          parsed?.error?.format(),
+          parsed?.error,
         )
         throw new Error('Provider did not return valid connection settings')
       }
