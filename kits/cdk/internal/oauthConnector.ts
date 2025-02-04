@@ -159,7 +159,12 @@ export function makeOauthConnectorServer({
             },
           },
         })
-        .then((r) => r.data as OauthBaseTypes['connectionSettings']['oauth'])
+        .then(
+          (r) =>
+            r.data as OauthBaseTypes['connectionSettings']['oauth'] & {
+              error: z.infer<typeof zOauthConnectionError>
+            },
+        )
 
       const parsed = zOauthCredentials.safeParse(res.credentials)
       if (!parsed.success) {
