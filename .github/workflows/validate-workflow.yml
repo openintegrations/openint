@@ -9,35 +9,6 @@ jobs:
     name: Run type checks, lint, and tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    services:
-      # https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers
-      postgres:
-        image: postgres:latest
-        # service environment variables
-        env:
-          # `POSTGRES_HOST` is `postgres`
-          # optional (defaults to `postgres`)
-          POSTGRES_DB: test
-          # required
-          POSTGRES_PASSWORD: test
-          # optional (defaults to `5432`)
-          POSTGRES_PORT: 5432
-          # optional (defaults to `postgres`)
-          POSTGRES_USER: postgres
-        ports:
-          # maps tcp port 5432 on service container to the host
-          - 5432:5432
-        # set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      # This is not working for some reason...
-      # inngest:
-      #   image: inngest/inngest
-      #   ports:
-      #     - 8288:8288
 
     env:
       NODE_OPTIONS: --max-old-space-size=4096
@@ -47,6 +18,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Start Docker services
+        run: docker compose up -d
 
       - name: Install Node.js
         uses: actions/setup-node@v3
