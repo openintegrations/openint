@@ -13,7 +13,7 @@ jobs:
     env:
       NODE_OPTIONS: --max-old-space-size=4096
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      DATABASE_URL: postgres://postgres:test@db.localtest.me:5432/test
+      DATABASE_URL: postgres://postgres:password@db.localtest.me:5432/postgres
 
     steps:
       - name: Checkout
