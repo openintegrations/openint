@@ -157,7 +157,7 @@ export function makeSyncService({
             return bankingLink({source})
           case 'unified_ats':
             return unifiedAtsLink({source})
-          case 'unified_accouting':
+          case 'unified_accounting':
             return unifiedAccountingLink({source})
           case 'prefix_connector_name':
             return prefixConnectorNameLink({source})

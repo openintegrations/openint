@@ -113,7 +113,7 @@ export const zLink = z
   .enum([
     'unified_banking',
     'unified_ats',
-    'unified_accouting',
+    'unified_accounting',
     'prefix_connector_name',
     'single_table',
     'unified_crm',
