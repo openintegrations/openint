@@ -1,4 +1,3 @@
-import {NeonQueryFunction} from '@neondatabase/serverless'
 import {camelCase, snakeCase} from 'change-case'
 // Need to use version 4.x of change-case that still supports cjs
 // pureESM modules are idealistic...
@@ -65,10 +64,7 @@ const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   }
   const db = _getDb()
   type NeonHttpDatabase = ReturnType<typeof getDb>['db']
-  type DbClient = NeonHttpDatabase & {
-    $client: NeonQueryFunction<false, false>
-  }
-
+  type DbClient = NeonHttpDatabase
   return {
     db,
     getDb: _getDb,

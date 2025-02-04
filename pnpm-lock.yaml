@@ -2048,9 +2048,6 @@ importers:
 
   packages/db:
     dependencies:
-      '@neondatabase/serverless':
-        specifier: ^0.10.4
-        version: 0.10.4
       '@openint/env':
         specifier: workspace:*
         version: link:../env
@@ -18561,6 +18558,7 @@ snapshots:
   '@neondatabase/serverless@0.10.4':
     dependencies:
       '@types/pg': 8.11.6
+    optional: true
 
   '@next/env@14.2.13': {}
 
@@ -22071,6 +22069,7 @@ snapshots:
       '@types/node': 20.17.16
       pg-protocol: 1.5.0
       pg-types: 4.0.2
+    optional: true
 
   '@types/pg@8.6.1':
     dependencies:
@@ -29026,7 +29025,8 @@ snapshots:
 
   oblivious-set@1.0.0: {}
 
-  obuf@1.1.2: {}
+  obuf@1.1.2:
+    optional: true
 
   on-finished@2.4.1:
     dependencies:
@@ -29283,7 +29283,8 @@ snapshots:
       readable-stream: 1.0.31
     optional: true
 
-  pg-numeric@1.0.2: {}
+  pg-numeric@1.0.2:
+    optional: true
 
   pg-pool@3.5.2(pg@8.8.0(pg-native@3.0.1)):
     dependencies:
@@ -29318,6 +29319,7 @@ snapshots:
       postgres-date: 2.1.0
       postgres-interval: 3.0.0
       postgres-range: 1.1.4
+    optional: true
 
   pg@8.8.0(pg-native@3.0.1):
     dependencies:
@@ -29450,25 +29452,30 @@ snapshots:
 
   postgres-array@2.0.0: {}
 
-  postgres-array@3.0.2: {}
+  postgres-array@3.0.2:
+    optional: true
 
   postgres-bytea@1.0.0: {}
 
   postgres-bytea@3.0.0:
     dependencies:
       obuf: 1.1.2
+    optional: true
 
   postgres-date@1.0.7: {}
 
-  postgres-date@2.1.0: {}
+  postgres-date@2.1.0:
+    optional: true
 
   postgres-interval@1.2.0:
     dependencies:
       xtend: 4.0.2
 
-  postgres-interval@3.0.0: {}
+  postgres-interval@3.0.0:
+    optional: true
 
-  postgres-range@1.1.4: {}
+  postgres-range@1.1.4:
+    optional: true
 
   postgres@3.4.5: {}
 
