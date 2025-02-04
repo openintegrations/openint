@@ -57,8 +57,19 @@ export const account = z
   .object({
     ...commonFields,
     name: z.string(),
-    classification: account_classification,
-    currency: currency_code.optional(),
+    classification: account_classification
+      .nullish()
+      .describe(
+        'null for non-posting accounts such as those used to track payroll',
+      ),
+    number: z
+      .string()
+      .nullish()
+      .describe(
+        'Account number. User defined. Typically 3-5 digits to help organize the Chart of Accounts',
+      ),
+
+    currency: currency_code.nullish(),
   })
   .openapi({ref: 'accounting.account'})
 

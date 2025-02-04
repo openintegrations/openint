@@ -117,14 +117,27 @@ const tranactionMappers = {
 
 export const mappers = {
   ...tranactionMappers,
-  Account: mapper(zCast<QBO['Account']>(), unified.account, {
-    id: 'Id',
-    name: 'Name',
-    classification: 'Classification',
-    currency: 'CurrencyRef.value',
-    created_at: 'MetaData.CreateTime',
-    updated_at: 'MetaData.LastUpdatedTime',
-  }),
+  Account: mapper(
+    zCast<QBO['Account'] & {AcctNum?: string}>(),
+    unified.account,
+    {
+      id: 'Id',
+      name: 'Name',
+      number: 'AcctNum',
+      // Classification is actually nullable
+      classification: (a) =>
+        ({
+          Asset: 'asset' as const,
+          Equity: 'equity' as const,
+          Expense: 'expense' as const,
+          Liability: 'liability' as const,
+          Revenue: 'income' as const,
+        })[a.Classification] ?? null,
+      currency: 'CurrencyRef.value',
+      created_at: 'MetaData.CreateTime',
+      updated_at: 'MetaData.LastUpdatedTime',
+    },
+  ),
 
   Vendor: mapper(zCast<QBO['Vendor']>(), unified.vendor, {
     id: 'Id',

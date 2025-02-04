@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as rxjs from 'rxjs'
 import * as Rx from 'rxjs/operators'
@@ -22,7 +21,6 @@ export function unifiedAccountingLink(ctx: {
     if (op.type !== 'data') {
       return rxjs.of(op)
     }
-    // console.log('opdata', op)
 
     // TODO; generalize
     const mappers =
@@ -58,15 +56,13 @@ export function unifiedAccountingLink(ctx: {
       remote_data_key: 'remote_data',
     })
 
-    // console.log('mapped', mapped)
-
     return rxjs.of({
       ...op,
       data: {
         stream,
         data: {
           ...mapped,
-          connection_id: ctx.source.id,
+          connection_id: ctx.source.id, // Should this be the default somehow?
         },
         upsert: {key_columns: ['connection_id', 'id']},
       },
