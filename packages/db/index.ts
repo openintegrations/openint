@@ -1,29 +1,29 @@
+import {neon} from '@neondatabase/serverless'
 import type {DrizzleConfig, SQL} from 'drizzle-orm'
 import {sql} from 'drizzle-orm'
-import {drizzle} from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
+import {drizzle} from 'drizzle-orm/neon-http'
 import {env} from '@openint/env'
 import * as schema from './schema'
 
 export * from 'drizzle-orm'
 export * from './stripeNullByte'
 export * from './upsert'
-export {schema, drizzle, postgres}
+export {schema, drizzle, neon}
 
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
 >(urlString: string, config?: DrizzleConfig<TSchema>) {
-  const pg = postgres(urlString)
-  const db = drizzle(pg, {logger: !!env['DEBUG'], ...config})
+  const sql = neon(urlString)
+  const db = drizzle(sql, {logger: !!env['DEBUG'], ...config})
 
   const url = new URL(urlString)
   if (env.DEBUG) {
     console.log('[db] host', url.host)
   }
-  return {db, pg}
+  return {db, sql}
 }
 
-export const {pg, db} = getDb(env.DATABASE_URL, {schema})
+export const {sql: pg, db} = getDb(env.DATABASE_URL, {schema})
 
 export async function ensureSchema(
   thisDb: ReturnType<typeof getDb>['db'],
@@ -34,7 +34,7 @@ export async function ensureSchema(
     .execute(
       sql`SELECT true as exists FROM information_schema.schemata WHERE schema_name = ${schema}`,
     )
-    .then((r) => r[0]?.['exists'] === true)
+    .then((r) => r.rows[0]?.['exists'] === true)
   if (exists) {
     return
   }

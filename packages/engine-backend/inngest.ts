@@ -29,18 +29,22 @@ export const persistEventsMiddleware = new InngestMiddleware({
             )
 
             const rows = connectionIds.length
-              ? await db.execute<{
-                  id: string
-                  org_id: string
-                  customer_id: string
-                }>(sql`
+              ? await db
+                  .execute<{
+                    id: string
+                    org_id: string
+                    customer_id: string
+                  }>(
+                    sql`
                   SELECT c.id, cc.org_id, c.customer_id as cus_id
                   FROM ${schema.connection} c
                   JOIN ${
                     schema.connector_config
                   } cc ON c.connector_config_id = cc.id
                   WHERE c.id = ANY(${sql.param(connectionIds)})
-                `)
+                `,
+                  )
+                  .then((r) => r.rows)
               : []
 
             const infoByConnId = Object.fromEntries(

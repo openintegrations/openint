@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import plaidSdkDef, {initPlaidSDK} from '@opensdks/sdk-plaid'
-import {drizzle, eq, schema, sql} from '@openint/db'
+import {drizzle, eq, neon, schema, sql} from '@openint/db'
 import {createAppTrpcClient} from '@openint/engine-frontend/lib/trpcClient'
 import {env, testEnv, testEnvRequired} from '@openint/env'
 import {initOpenIntSDK} from '@openint/sdk'
@@ -13,7 +13,7 @@ let sdk: ReturnType<typeof initOpenIntSDK>
 
 let trpc: ReturnType<typeof createAppTrpcClient>
 
-const db = drizzle(env.DATABASE_URL, {logger: true, schema})
+const db = drizzle(neon(env.DATABASE_URL), {logger: true, schema})
 async function setupTestDb(dbName: string) {
   await db.execute(`DROP DATABASE IF EXISTS ${dbName}`)
   await db.execute(`CREATE DATABASE ${dbName}`)
@@ -21,7 +21,7 @@ async function setupTestDb(dbName: string) {
   url.pathname = `/${dbName}`
   console.log('setupTestDb url:', url.toString())
   console.log(url.toString())
-  return {url, db: drizzle(url.toString(), {logger: true})}
+  return {url, db: drizzle(neon(url.toString()), {logger: true})}
 }
 
 beforeAll(async () => {
@@ -41,7 +41,7 @@ beforeAll(async () => {
 afterAll(async () => {
   if (!testEnv.DEBUG) {
     await tearDownTestOrg(fixture)
-    await testDb.db.$client.end()
+    // No need to close connections with neon
     // Cannot drop because database connection is still kept open by connector-postgres/server
     // await db.execute(`DROP DATABASE IF EXISTS test_${fixture.testId}`)
   }
@@ -125,7 +125,7 @@ test('create and sync plaid connection', async () => {
   const rows = await testDb.db.execute(
     sql`SELECT * FROM openint.banking_transaction`,
   )
-  expect(rows[0]).toMatchObject({
+  expect(rows.rows[0]).toMatchObject({
     source_id: connId,
     id: expect.any(String),
     customer_id: null,
@@ -178,7 +178,7 @@ test('create and sync greenhouse connection', async () => {
   })
 
   const rows = await testDb.db.execute(sql`SELECT * FROM openint.job`)
-  expect(rows[0]).toMatchObject({
+  expect(rows.rows[0]).toMatchObject({
     source_id: connId,
     id: expect.any(String),
     customer_id: null,

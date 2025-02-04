@@ -4,13 +4,7 @@ import {camelCase, snakeCase} from 'change-case'
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
-import {
-  applyLimitOffset,
-  dbUpsertOne,
-  drizzle,
-  postgres,
-  sql,
-} from '@openint/db'
+import {applyLimitOffset, dbUpsertOne, drizzle, getDb, sql} from '@openint/db'
 import type {
   CustomerResultRow,
   MetaService,
@@ -64,15 +58,18 @@ async function assumeRole(options: {
 type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const {viewer, databaseUrl} = opts
-  const pg = postgres(databaseUrl)
-  const getDb = () => drizzle(pg, {logger: __DEBUG__})
-  const db = getDb()
-  type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
+  const _getDb = () => {
+    const {db} = getDb(databaseUrl)
+    return db
+  }
+  const db = _getDb()
+  type PgTransaction = Parameters<
+    Parameters<ReturnType<typeof _getDb>['transaction']>[0]
+  >[0]
 
   return {
     db,
-    pg,
-    getDb,
+    getDb: _getDb,
     runQueries: async <T>(
       handler: (trxn: PgTransaction) => Promise<T>,
       // eslint-disable-next-line arrow-body-style
@@ -124,7 +121,7 @@ export const makePostgresMetaService = zFunction(
         return runQueries(async (trxn) => {
           const rows = await trxn.execute(query)
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return rows.map((r) => camelCaseKeys(r) as CustomerResultRow)
+          return rows.rows.map((r) => camelCaseKeys(r) as CustomerResultRow)
         })
       },
       searchIntegrations: ({keywords, connectorNames, ...rest}) => {
@@ -143,8 +140,8 @@ export const makePostgresMetaService = zFunction(
             .execute(
               applyLimitOffset(sql`SELECT * FROM integration ${where}`, rest),
             )
-            .then((rows) =>
-              rows.map((r) => camelCaseKeys(r) as ZRaw['integration']),
+            .then((res) =>
+              res.rows.map((r) => camelCaseKeys(r) as ZRaw['integration']),
             ),
         )
       },
@@ -172,7 +169,7 @@ export const makePostgresMetaService = zFunction(
         return runQueries((trxn) =>
           trxn
             .execute(sql`SELECT * FROM pipeline ${where}`)
-            .then((rows) => rows.map((r) => camelCaseKeys(r))),
+            .then((res) => res.rows.map((r) => camelCaseKeys(r))),
         )
       },
       listConnectorConfigInfos: ({id, connectorName} = {}) => {
@@ -190,7 +187,7 @@ export const makePostgresMetaService = zFunction(
                       : sql`WHERE disabled = FALSE`
               }`,
             )
-            .then((rows) => rows.map((r) => camelCaseKeys(r))),
+            .then((res) => res.rows.map((r) => camelCaseKeys(r))),
         )
       },
       findConnectionsMissingDefaultPipeline: () => {
@@ -213,7 +210,7 @@ export const makePostgresMetaService = zFunction(
             WHERE (cc.default_pipe_out_destination_id IS NOT NULL AND pipe_out IS NULL)
               OR (cc.default_pipe_in_source_id IS NOT NULL AND pipe_in IS NULL)
           `),
-        )
+        ).then((res) => res.rows)
       },
       isHealthy: async (checkDefaultPostgresConnections = false) => {
         const {runQueries} = _getDeps({
@@ -226,7 +223,7 @@ export const makePostgresMetaService = zFunction(
           trxn.execute(sql`SELECT 1`),
         )
 
-        if (!isMainDbHealthy || isMainDbHealthy.length !== 1) {
+        if (!isMainDbHealthy || isMainDbHealthy.rows.length !== 1) {
           return {healthy: false, error: 'Main database is not healthy'}
         }
 
@@ -238,7 +235,7 @@ export const makePostgresMetaService = zFunction(
         )
 
         if (checkDefaultPostgresConnections) {
-          for (const connection of top3DefaultPostgresConnections) {
+          for (const connection of top3DefaultPostgresConnections.rows) {
             if (!connection['database_url']) {
               continue
             }
@@ -246,7 +243,7 @@ export const makePostgresMetaService = zFunction(
               logger: __DEBUG__,
             })
             const res = await connDb.execute(sql`SELECT 1`)
-            if (res.length !== 1) {
+            if (res.rows.length !== 1) {
               return {
                 healthy: false,
                 error: `Default postgres connection with id ${connection['id']} is not healthy`,
@@ -307,14 +304,14 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
         const res = await trxn.execute<T>(
           applyLimitOffset(sql`SELECT * FROM ${table} ${where}`, rest),
         )
-        return res.map((r) => camelCaseKeys(r) as T)
+        return res.rows.map((r) => camelCaseKeys(r) as T)
       }),
     get: (id) =>
       runQueries(async (trxn) => {
         const rows = await trxn.execute<T>(
           sql`SELECT * FROM ${table} where id = ${id}`,
         )
-        return rows.map(camelCaseKeys)[0] as T | undefined
+        return rows.rows[0] ? (camelCaseKeys(rows.rows[0]) as T) : undefined
       }),
     set: (id, data) =>
       dbUpsertOne(getDb(), tableName, snakeCaseKeys({...data, id}), {
