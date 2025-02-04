@@ -23,8 +23,8 @@ const transaciton_line = z.object({
 // MARK: - Models
 
 const commonFields = {
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.string().datetime().optional(),
+  updated_at: z.string().datetime().optional(),
   raw: z.record(z.string(), z.unknown()).optional(),
   id: z.string(),
 }

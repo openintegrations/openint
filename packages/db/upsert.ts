@@ -30,7 +30,8 @@ export interface DbUpsertOptions<TTable extends PgTable> {
    */
   insertOnlyColumns?: Array<ColumnKeyOf<TTable>>
   /**
-   * These columns will have to match for the row to be updated
+   * These columns will have to match for the row to be updated. Useful when
+   * wanting to ensure value of certain columns do not change for things like permission
    */
   mustMatchColumns?: Array<ColumnKeyOf<TTable>>
   /**

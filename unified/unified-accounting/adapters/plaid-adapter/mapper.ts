@@ -35,11 +35,8 @@ export const mappers = {
           return 'asset'
       }
     },
-    // TODO: Sometimes we do not have created / updated at. should make these fields optional...
-    created_at: (a) =>
-      a.balances?.last_updated_datetime ?? new Date().toISOString(),
-    updated_at: (a) =>
-      a.balances?.last_updated_datetime ?? new Date().toISOString(),
+    updated_at: (a) => a.balances?.last_updated_datetime ?? undefined,
+    // created_at: (a) => a.balances?.last_updated_datetime ?? undefined,
   }),
   transaction: mapper(zCast<Plaid['Transaction']>(), unified.transaction, {
     id: 'transaction_id',
@@ -48,12 +45,18 @@ export const mappers = {
     amount: 'amount',
     currency: 'iso_currency_code',
     memo: 'original_description',
-    bank_category: (t) => t.personal_finance_category?.primary,
+    bank_category: (t) =>
+      [
+        t.personal_finance_category?.primary,
+        t.personal_finance_category?.detailed,
+      ]
+        .filter((c) => !!c)
+        .join(''),
     // Plaid transactions are single entry and therefore unbalanced
     // We should probably not set any "lines" at all in this case.
     // Would also need some semantic to communicate set if null, aka set default value,
     lines: () => [],
-    created_at: (t) => t.datetime ?? new Date().toISOString(),
-    updated_at: (t) => t.datetime ?? new Date().toISOString(),
+    // created_at: (t) => t.datetime ?? new Date().toISOString(),
+    // updated_at: (t) => t.datetime ?? new Date().toISOString(),
   }),
 }

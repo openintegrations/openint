@@ -2,7 +2,10 @@
 import * as rxjs from 'rxjs'
 import * as Rx from 'rxjs/operators'
 import type {AnyEntityPayload, Id, Link} from '@openint/cdk'
-import type {postgresHelpers} from '@openint/connector-postgres'
+import type {
+  postgresHelpers,
+  RecordMessageBody,
+} from '@openint/connector-postgres'
 import {applyMapper} from '@openint/vdk'
 import {mappers as plaidMapper} from './adapters/plaid-adapter/mapper'
 import {mappers as qboMapper} from './adapters/qbo-adapter/mapper'
@@ -65,8 +68,12 @@ export function unifiedAccountingLink(ctx: {
           ...mapped,
           connection_id: ctx.source.id, // Should this be the default somehow?
         },
-        upsert: {key_columns: ['connection_id', 'id']},
-      },
+        upsert: {
+          key_columns: ['connection_id', 'id'],
+          insert_only_columns: ['created_at'],
+          no_diff_columns: ['updated_at'],
+        },
+      } satisfies RecordMessageBody,
     })
   })
 }
