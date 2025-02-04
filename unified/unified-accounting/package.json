@@ -1,8 +1,13 @@
 {
   "name": "@openint/unified-accounting",
   "dependencies": {
+    "@openint/connector-plaid": "workspace:*",
     "@openint/connector-qbo": "workspace:*",
-    "@openint/vdk": "workspace:*"
+    "@openint/vdk": "workspace:*",
+    "rxjs": "7.5.6"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@openint/cdk": "workspace:*",
+    "@openint/connector-postgres": "workspace:*"
+  }
 }

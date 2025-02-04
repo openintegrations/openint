@@ -123,6 +123,7 @@ export const pipeline = pgTable(
     source_state: jsonb().default({}).notNull(),
     destination_id: varchar(),
     destination_state: jsonb().default({}).notNull(),
+    /** @deprecated Not used in prod despite field existing... */
     link_options: jsonb().default([]).notNull(),
     last_sync_started_at: timestamp({withTimezone: true, mode: 'string'}),
     last_sync_completed_at: timestamp({withTimezone: true, mode: 'string'}),

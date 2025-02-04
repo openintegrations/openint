@@ -5619,19 +5619,7 @@
                     "items": {
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "url": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["id", "name", "url"]
+                        "$ref": "#/components/schemas/accounting.vendor"
                       }
                     }
                   },
@@ -6239,28 +6227,28 @@
                             "type": "string"
                           },
                           "documentNumber": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "posting": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "name": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "department": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "memo": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "account": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "split": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "amount": {
-                            "type": "number"
+                            "type": ["number", "null"]
                           },
                           "raw_data": {}
                         },
@@ -8528,9 +8516,10 @@
         "type": "string",
         "enum": [
           "unified_banking",
+          "unified_ats",
+          "unified_accounting",
           "prefix_connector_name",
           "single_table",
-          "unified_ats",
           "unified_crm",
           "custom_link_ag"
         ]
@@ -9922,6 +9911,33 @@
           }
         },
         "required": ["id", "date", "amount", "currency"]
+      },
+      "accounting.vendor": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "raw": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name", "url"]
       },
       "ats.job": {
         "type": "object",

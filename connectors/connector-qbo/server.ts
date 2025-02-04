@@ -3,7 +3,7 @@ import type {QBOSDKTypes} from '@opensdks/sdk-qbo'
 import {qboSdkDef} from '@opensdks/sdk-qbo'
 import type {ConnectorServer} from '@openint/cdk'
 import {nangoProxyLink} from '@openint/cdk'
-import {delay, Rx, rxjs, snakeCase} from '@openint/util'
+import {delay, Rx, rxjs} from '@openint/util'
 import type {QBO, qboSchemas, TransactionTypeName} from './def'
 import {QBO_ENTITY_NAME, qboHelpers} from './def'
 
@@ -66,8 +66,6 @@ export const qboServer = {
   // @ts-expect-error QQ check _opState
   sourceSync: ({instance: qbo, streams, state}) => {
     async function* iterateEntities() {
-      const entityUpdatedSince = state.entityUpdatedSince || undefined
-
       console.log('[qbo] Starting sync', streams)
       for (const type of Object.values(QBO_ENTITY_NAME)) {
         if (type === 'BalanceSheet' || type === 'ProfitAndLoss') {
@@ -78,15 +76,19 @@ export const qboServer = {
           continue
         }
         await delay(200)
-        for await (const res of qbo.getAll(type, {
-          updatedSince: entityUpdatedSince,
+        const partialState = state[type] ?? {max_last_updated_time: null}
+        const maxLastUpdatedTime =
+          partialState.max_last_updated_time ?? undefined
+
+        for await (const res of qbo.getAll(type as 'Purchase', {
+          updatedSince: maxLastUpdatedTime,
         })) {
           const entities = res.entities as Array<QBO[TransactionTypeName]>
           if (entities.length === 0) {
             continue
           }
           // console.log('[qbo] entities', JSON.stringify(entities))
-          let newLastUpdatedTime: any = entities.reduce((max, entity) => {
+          let newMaxLastUpdatedTime: any = entities.reduce((max, entity) => {
             const updatedTime = new Date(
               entity.MetaData.LastUpdatedTime ?? 0,
             ).getTime()
@@ -94,22 +96,19 @@ export const qboServer = {
           }, 0)
 
           // this is in case there is no entity.MetaData.LastUpdatedTime and date === new Date(0)
-          if (newLastUpdatedTime === new Date(0).getTime()) {
-            newLastUpdatedTime = new Date(entityUpdatedSince ?? 0).getTime()
+          if (newMaxLastUpdatedTime === new Date(0).getTime()) {
+            newMaxLastUpdatedTime = new Date(maxLastUpdatedTime ?? 0).getTime()
           }
 
           // removing the trailing .000Z
-          newLastUpdatedTime = new Date(newLastUpdatedTime)
+          newMaxLastUpdatedTime = new Date(newMaxLastUpdatedTime)
             .toISOString()
             .slice(0, -5)
-
+          partialState.max_last_updated_time = newMaxLastUpdatedTime
+          state[type] = partialState
           yield [
-            ...entities.map((t) =>
-              qboHelpers._opData(snakeCase(type), t.Id, t),
-            ),
-            qboHelpers._opState({
-              entityUpdatedSince: newLastUpdatedTime,
-            }),
+            ...entities.map((t) => qboHelpers._opData(type, t.Id, t)),
+            qboHelpers._opState(state),
           ]
         }
       }

@@ -1,13 +1,201 @@
-import {type QBOSDK, type QBOSDKTypes} from '@openint/connector-qbo'
-import {makeUlid} from '@openint/util'
+import type {QBO_ENTITY_NAME} from '@openint/connector-qbo'
+import {type QBOSDKTypes} from '@openint/connector-qbo'
+import {snakeCase, type z} from '@openint/util'
 import {mapper, zCast} from '@openint/vdk'
-import type {AccountingAdapter} from '../router'
-import * as unified from '../unifiedModels'
+import * as unified from '../../unifiedModels'
 
 type QBO = QBOSDKTypes['oas']['components']['schemas']
 
-const mappers = {
-  account: mapper(zCast<QBO['Account']>(), unified.account, {
+/** QBO Ids are unique per data type per realm, whereas we need id to be unique per realm */
+function makeQboId(type: keyof typeof QBO_ENTITY_NAME, id: string) {
+  return `${type}_${id}`
+}
+
+const tranactionMappers = {
+  Purchase: mapper(zCast<QBO['Purchase']>(), unified.transaction, {
+    id: (t) => makeQboId('Purchase', t.Id),
+    date: 'TxnDate',
+    account_id: (t) => makeQboId('Account', t.AccountRef.value),
+    currency: 'CurrencyRef.value',
+    memo: 'PrivateNote',
+    amount: (p) => {
+      const sign = p.Credit ? 1 : -1
+      return sign * p.TotalAmt
+    },
+    lines: (p) => {
+      const sign = p.Credit ? 1 : -1
+      return p.Line.map((line) => ({
+        id: line.Id,
+        memo: line.Description,
+        amount: -1 * sign * line.Amount,
+        currency: p.CurrencyRef.value,
+        account_id: makeQboId(
+          'Account',
+          line.AccountBasedExpenseLineDetail?.AccountRef.value ?? '',
+        ),
+      }))
+    },
+    bank_category: () => 'Purchase',
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  Deposit: mapper(zCast<QBO['Deposit']>(), unified.transaction, {
+    id: (t) => makeQboId('Deposit', t.Id),
+    date: 'TxnDate',
+    account_id: (t) => makeQboId('Account', t.DepositToAccountRef.value),
+    currency: 'CurrencyRef.value',
+    memo: 'PrivateNote',
+    amount: 'TotalAmt',
+    lines: (p) =>
+      p.Line.map((line) => ({
+        id: line.Id,
+        memo: line.Description,
+        amount: -1 * line.Amount,
+        currency: p.CurrencyRef.value,
+        account_id: makeQboId(
+          'Account',
+          line.DepositLineDetail?.AccountRef?.value ?? '',
+        ),
+      })),
+    bank_category: () => 'Deposit',
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  JournalEntry: mapper(zCast<QBO['JournalEntry']>(), unified.transaction, {
+    id: (t) => makeQboId('JournalEntry', t.Id),
+    date: 'TxnDate',
+    account_id: () => null,
+    amount: () => null,
+    currency: () => null,
+    memo: 'PrivateNote',
+    lines: (record) =>
+      record.Line.filter((l) => l.DetailType !== 'DescriptionOnly').map(
+        (l) => ({
+          id: l.Id,
+          amount:
+            (l.JournalEntryLineDetail.PostingType === 'Credit' ? -1 : 1) *
+            l.Amount,
+          currency: record.CurrencyRef.value,
+          account_id: makeQboId(
+            'Account',
+            l.JournalEntryLineDetail.AccountRef.value,
+          ),
+          memo: l.Description,
+        }),
+      ),
+    bank_category: () => 'JournalEntry',
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  Payment: mapper(zCast<QBO['Payment']>(), unified.transaction, {
+    id: (t) => makeQboId('Payment', t.Id),
+    date: 'TxnDate',
+    account_id: (t) => makeQboId('Account', t.DepositToAccountRef?.value ?? ''),
+    amount: 'TotalAmt',
+    currency: 'CurrencyRef.value',
+    memo: 'PrivateNote',
+    lines: () => [], // TODO: Figure out how to map these properly
+    // lines: (record) =>
+    //   record.Line.map((line, i) => ({
+    //     id: `${i}`,
+    //     memo: null,
+    //     amount: line.Amount,
+    //     currency: record.CurrencyRef.value,
+    //     account_id: line.Amoun
+    //   })),
+    bank_category: () => 'Payment',
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  Invoice: mapper(zCast<QBO['Invoice']>(), unified.transaction, {
+    id: (t) => makeQboId('Invoice', t.Id),
+    date: 'TxnDate',
+    account_id: () => null,
+    amount: 'TotalAmt',
+    currency: 'CurrencyRef.value',
+    memo: 'PrivateNote',
+    lines: () => [], // TODO: Figure out how to map these properly
+    // lines: (record) =>
+    //   record.Line.map((line, i) => ({
+    //     id: line.Id,
+    //     memo: line.Description,
+    //     currency: record.CurrencyRef.value,
+    //     ...(line.SalesItemLineDetail && {
+    //       amount: -1 * line.Amount, // income is negative
+    //       account_id: makeQboId('Account', line.SalesItemLineDetail.ItemRef.value),
+    //     }),
+    //     ...(line.DiscountLineDetail && {
+    //       amount: line.Amount, // discount is positive
+    //       account_id: makeQboId('Account', line.DiscountLineDetail.DiscountAccountRef.value),
+    //     }),
+    //   })),
+    bank_category: () => 'Invoice',
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+}
+
+export const mappers = {
+  ...tranactionMappers,
+  Account: mapper(
+    zCast<QBO['Account'] & {AcctNum?: string}>(),
+    unified.account,
+    {
+      id: (t) => makeQboId('Account', t.Id),
+      name: 'Name',
+      number: 'AcctNum',
+      // Classification is actually nullable
+      classification: (a) =>
+        ({
+          Asset: 'asset' as const,
+          Equity: 'equity' as const,
+          Expense: 'expense' as const,
+          Liability: 'liability' as const,
+          Revenue: 'income' as const,
+        })[a.Classification] ?? null,
+      currency: 'CurrencyRef.value',
+      created_at: 'MetaData.CreateTime',
+      updated_at: 'MetaData.LastUpdatedTime',
+    },
+  ),
+
+  Vendor: mapper(zCast<QBO['Vendor']>(), unified.vendor, {
+    id: (t) => makeQboId('Vendor', t.Id),
+    name: 'DisplayName',
+    url: 'domain',
+    created_at: 'MetaData.CreateTime',
+    updated_at: 'MetaData.LastUpdatedTime',
+  }),
+  // Missing types in opensdk for them..
+  Customer: mapper(
+    zCast<Pick<QBO['Vendor'], 'Id' | 'DisplayName' | 'MetaData'>>(),
+    unified.customer,
+    {
+      id: (t) => makeQboId('Customer', t.Id),
+      name: 'DisplayName',
+      created_at: 'MetaData.CreateTime',
+      updated_at: 'MetaData.LastUpdatedTime',
+    },
+  ),
+  Attachable: mapper(
+    zCast<
+      Pick<QBO['Vendor'], 'Id' | 'MetaData'> & {
+        TempDownloadUri: string
+        FileName: string
+      }
+    >(),
+    unified.attachment,
+    {
+      id: (t) => makeQboId('Attachable', t.Id),
+      file_name: 'FileName',
+      file_url: 'TempDownloadUri',
+      created_at: 'MetaData.CreateTime',
+      updated_at: 'MetaData.LastUpdatedTime',
+    },
+  ),
+
+  // MARK: -
+  qboAccount: mapper(zCast<QBO['Account']>(), unified.qboAccount, {
     id: 'Id',
     name: 'Name',
     type: 'Classification',
@@ -18,11 +206,6 @@ const mappers = {
     amount: 'TotalAmt',
     currency: 'CurrencyRef.value',
     payment_account: 'AccountRef.value',
-  }),
-  vendor: mapper(zCast<QBO['Vendor']>(), unified.vendor, {
-    id: 'Id',
-    name: 'DisplayName',
-    url: 'domain',
   }),
   balanceSheet: mapper(zCast<{data: QBO['Report']}>(), unified.balanceSheet, {
     reportName: (e) => e?.data?.Header?.ReportName ?? '',
@@ -135,36 +318,49 @@ const mappers = {
       endPeriod: (e) => e?.data?.Header?.EndPeriod ?? '',
       currency: (e) => e?.data?.Header?.Currency ?? 'USD',
       transactions: (e) => {
-        const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+        // const columnMap = createColumnMap(e?.data?.Columns?.Column ?? [])
+        // TODO: maybe make use of the transaction type also?
+
+        const toKeyValueMap = rowKeyValueMapper<{
+          Date: string
+          'Transaction Type': {id: string; value: string}
+          Num: string
+          Posting: string
+          Name: {id: string; value: string}
+          'Memo/Description': string
+          Account: {id: string; value: string}
+          Split: {id: string; value: string}
+          Amount: string
+        }>(e.data)
 
         return (
-          e?.data?.Rows?.Row?.map((row) => ({
-            id:
-              row?.ColData?.[
-                columnMap['Transaction Type'] as number
-              ]?.value?.toLowerCase() +
-              '_' +
-              row?.ColData?.[columnMap['Transaction Type'] as number]?.id,
-            date: row?.ColData?.[columnMap['Date'] as number]?.value ?? '',
-            transactionType:
-              row?.ColData?.[columnMap['Transaction Type'] as number]?.value ??
-              '',
-            documentNumber:
-              row?.ColData?.[columnMap['Num'] as number]?.value ?? '',
-            posting:
-              row?.ColData?.[columnMap['Posting'] as number]?.value ?? '',
-            name: row?.ColData?.[columnMap['Name'] as number]?.value ?? '',
-            memo:
-              row?.ColData?.[columnMap['Memo/Description'] as number]?.value ??
-              '',
-            account:
-              row?.ColData?.[columnMap['Account'] as number]?.value ?? '',
-            split: row?.ColData?.[columnMap['Split'] as number]?.value ?? '',
-            amount: parseFloat(
-              row?.ColData?.[columnMap['Amount'] as number]?.value ?? '0',
-            ),
-            raw_data: {Column: e?.data?.Columns?.Column, Row: row},
-          })) ?? []
+          e?.data?.Rows?.Row?.map(
+            (row): z.infer<typeof unified.transactionListItemSchema> => {
+              const raw = toKeyValueMap(row)
+
+              const amount =
+                typeof raw['Amount'] === 'string'
+                  ? Number.parseFloat(raw['Amount'])
+                  : null
+              const standard = {
+                id:
+                  snakeCase(raw['Transaction Type'].value) +
+                  '_' +
+                  raw['Transaction Type'].id,
+                date: raw['Date'],
+                transactionType: raw['Transaction Type'].value,
+                documentNumber: raw['Num'],
+                posting: raw['Posting'],
+                name: raw['Name'].value,
+                memo: raw['Memo/Description'],
+                account: raw['Account'].value,
+                split: raw['Split'].value,
+                amount,
+                raw_data: raw,
+              }
+              return standard
+            },
+          ) ?? []
         )
       },
     },
@@ -253,6 +449,22 @@ const mappers = {
   ),
 }
 
+function rowKeyValueMapper<
+  T = Record<string, string | {id: string; value: string}>,
+>(report: QBO['Report']) {
+  return function toKeyValueMap(row: QBO['Report']['Rows']['Row'][number]): T {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return Object.fromEntries(
+      (row.ColData ?? []).map((item, index) => [
+        report.Columns?.Column[index]?.ColTitle,
+        'id' in item
+          ? {id: item.id || null, value: item.value}
+          : item.value || null,
+      ]),
+    )
+  }
+}
+
 function createColumnMap(columns: {ColTitle: string}[]): {
   [key: string]: number
 } {
@@ -277,105 +489,3 @@ function getReportValue(e: QBO['Report'], group: string) {
     (row?.Summary?.ColData?.length ?? 1) - 1
   return Number.parseFloat(row?.Summary?.ColData?.[totalColIndex]?.value || '0')
 }
-
-export const qboAdapter = {
-  listAccounts: async ({instance}) => {
-    const res = await instance.getAll('Account').next()
-    return {
-      has_next_page: true,
-      items: res.value?.entities?.map(mappers.account) ?? [],
-    }
-  },
-  listExpenses: async ({instance}) => {
-    const res = await instance.getAll('Purchase').next()
-    return {
-      has_next_page: true,
-      items: res.value?.entities?.map(mappers.expense) ?? [],
-    }
-  },
-  listVendors: async ({instance}) => {
-    const res = await instance.getAll('Vendor').next()
-    return {
-      has_next_page: true,
-      items: res.value?.entities?.map(mappers.vendor) ?? [],
-    }
-  },
-  getBalanceSheet: async ({instance, input}) => {
-    const res = await instance.GET('/reports/BalanceSheet', {
-      params: {
-        query: input,
-      },
-    })
-    return mappers.balanceSheet(res)
-  },
-  getProfitAndLoss: async ({instance, input}) => {
-    const res = await instance.GET('/reports/ProfitAndLoss', {
-      params: {
-        query: input,
-      },
-    })
-    return mappers.profitAndLoss(res)
-  },
-  getCashFlow: async ({instance, input}) => {
-    const res = await instance.GET('/reports/CashFlow', {
-      params: {
-        query: input,
-      },
-    })
-    return mappers.cashFlow(res)
-  },
-  getTransactionList: async ({instance, input}) => {
-    const res = await instance.GET('/reports/TransactionList', {
-      params: {
-        query: input,
-      },
-    })
-    return mappers.transactionList(res)
-  },
-  getCustomerBalance: async ({instance, input}) => {
-    const res = await instance.GET('/reports/CustomerBalance', {
-      params: {
-        query: input,
-      },
-    })
-    return mappers.customerBalance(res)
-  },
-  getCustomerIncome: async ({instance, input}) => {
-    const res = await instance.GET('/reports/CustomerIncome', {
-      params: {
-        query: input,
-      },
-    })
-    return mappers.customerIncome(res)
-  },
-  // @ts-expect-error we can tighten up the types here after opensdks support qbo v4
-  getBankAccounts: async ({instance, input, env}) => {
-    // https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts#get-a-list-of-bank-accounts
-    const res = await instance.request(
-      'GET',
-      `/bank-accounts/${input.customer}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          'request-Id': makeUlid(),
-        },
-      },
-    )
-    return res.data
-  },
-  // @ts-expect-error we can tighten up the types here after opensdks support qbo v4
-  getPaymentReceipt: async ({instance, input}) => {
-    // https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/paymentreceipt
-    const res = await instance.request(
-      'GET',
-      `/payment-receipts/${input.customer_transaction_id}`,
-      {
-        headers: {
-          Accept: 'application/pdf, application/json',
-          'request-Id': makeUlid(),
-        },
-      },
-    )
-    return res.data
-  },
-} satisfies AccountingAdapter<QBOSDK>
