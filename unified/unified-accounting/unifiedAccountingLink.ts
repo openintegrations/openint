@@ -22,6 +22,7 @@ export function unifiedAccountingLink(ctx: {
     if (op.type !== 'data') {
       return rxjs.of(op)
     }
+    // console.log('opdata', op)
 
     // TODO; generalize
     const mappers =
@@ -53,13 +54,20 @@ export function unifiedAccountingLink(ctx: {
         Customer: 'customer',
       }[op.data.entityName] ?? op.data.entityName
 
-    const mapped = applyMapper(mapper, op.data.entity)
+    const mapped = applyMapper(mapper, op.data.entity, {
+      remote_data_key: 'remote_data',
+    })
+
+    // console.log('mapped', mapped)
 
     return rxjs.of({
       ...op,
       data: {
         stream,
-        data: mapped,
+        data: {
+          ...mapped,
+          connection_id: ctx.source.id,
+        },
         upsert: {key_columns: ['connection_id', 'id']},
       },
     })

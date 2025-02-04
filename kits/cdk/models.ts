@@ -197,6 +197,7 @@ export const zRaw = {
       destinationId: zId('conn').optional(),
       destinationState: z.record(z.unknown()).optional(),
       destinationVertical: z.string().optional().nullable(),
+      /** @deprecated, not used in production at the moment, despite the fact that field exist */
       linkOptions: z
         .array(z.unknown())
         // z.union([
