@@ -1,4 +1,4 @@
-import {neon} from '@neondatabase/serverless'
+import {neon, neonConfig} from '@neondatabase/serverless'
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {
@@ -14,6 +14,12 @@ import {env} from '@openint/env'
 import {drizzle} from './'
 import {dbUpsert, dbUpsertOne, inferTableForUpsert} from './upsert'
 
+neonConfig.fetchEndpoint = (host) => {
+  const [protocol, port] =
+    host === 'db.localtest.me' ? ['http', 4444] : ['https', 443]
+  return `${protocol}://${host}:${port}/sql`
+}
+
 async function formatSql(sqlString: string) {
   const prettier = await import('prettier')
   const prettierSql = await import('prettier-plugin-sql')
@@ -25,7 +31,12 @@ async function formatSql(sqlString: string) {
   })
 }
 
-const noopDb = drizzle('postgres://noop', {logger: true})
+const noopDb = drizzle(
+  neon('postgres://noop:noop@localhost:5432/noop?schema=public'),
+  {
+    logger: true,
+  },
+)
 
 test('upsert query', async () => {
   const engagement_sequence = pgTable(
@@ -237,7 +248,9 @@ test('upsert query with inferred table', async () => {
     "
   `)
 
-  const query = dbUpsertOne(drizzle(''), table, row, {keyColumns: ['id']})
+  const query = dbUpsertOne(noopDb, table, row, {
+    keyColumns: ['id'],
+  })
   expect(query.toSQL().params).toEqual([
     '123',
     'abc',
@@ -272,6 +285,8 @@ test('upsert query with inferred table', async () => {
 })
 
 describe('with db', () => {
+  jest.setTimeout(30000) // 30 seconds
+
   const dbName = 'upsert_db'
 
   const dbUrl = new URL(env.DATABASE_URL)
@@ -280,7 +295,7 @@ describe('with db', () => {
 
   beforeAll(async () => {
     const masterDb = drizzle(neon(env.DATABASE_URL), {logger: true})
-    await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
+    await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName} WITH (FORCE)`)
     await masterDb.execute(`CREATE DATABASE ${dbName}`)
 
     await db.execute(sql`
