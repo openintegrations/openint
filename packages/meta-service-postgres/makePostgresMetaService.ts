@@ -1,3 +1,4 @@
+import {NeonQueryFunction} from '@neondatabase/serverless'
 import {camelCase, snakeCase} from 'change-case'
 // Need to use version 4.x of change-case that still supports cjs
 // pureESM modules are idealistic...
@@ -63,24 +64,20 @@ const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
     return db
   }
   const db = _getDb()
-  type PgTransaction = Parameters<
-    Parameters<ReturnType<typeof _getDb>['transaction']>[0]
-  >[0]
+  type NeonHttpDatabase = ReturnType<typeof getDb>['db']
+  type DbClient = NeonHttpDatabase & {
+    $client: NeonQueryFunction<false, false>
+  }
 
   return {
     db,
     getDb: _getDb,
-    runQueries: async <T>(
-      handler: (trxn: PgTransaction) => Promise<T>,
-      // eslint-disable-next-line arrow-body-style
-    ) => {
+    runQueries: async <T>(handler: (db: DbClient) => Promise<T>) => {
       // const res = await db.transaction(async (trxn) => {
       //   return !!trxn
       // })
-      return await db.transaction(async (txn) => {
-        await assumeRole({db: txn, viewer})
-        return handler(txn)
-      })
+      await assumeRole({db, viewer})
+      return handler(db)
     },
   }
 }
