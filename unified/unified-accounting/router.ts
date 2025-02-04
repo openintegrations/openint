@@ -42,7 +42,7 @@ export const accountingRouter = trpc.router({
       }),
     )
     .input(zPaginationParams.nullish())
-    .output(zPaginatedResult.extend({items: z.array(unified.account)}))
+    .output(zPaginatedResult.extend({items: z.array(unified.qboAccount)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listExpenses: procedure
     .meta(
