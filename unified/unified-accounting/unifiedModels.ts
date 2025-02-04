@@ -12,7 +12,7 @@ const account_classification = z.enum([
   'expense',
 ])
 
-const transaciton_line = z.object({
+const transaction_line = z.object({
   id: z.string().optional(),
   memo: z.string().nullable().optional().describe('Private line note'),
   amount: z.number().describe('(positive) debit or (negative) credit'),
@@ -42,7 +42,7 @@ export const transaction = z
     currency: currency_code.nullish(),
     memo: z.string().nullish(),
     lines: z
-      .array(transaciton_line)
+      .array(transaction_line)
       .describe(
         'null value for data that came from a single-entry system. Min 1 line is needed to balance the implicit line from parent transaction itself. 2 lines or more for split transactions',
       )
@@ -98,7 +98,7 @@ export const attachment = z
   })
   .openapi({ref: 'accounting.attachment'})
 
-// MAKR: -
+// MARK: -
 
 export const qboAccount = z
   .object({
