@@ -91,9 +91,9 @@ export const customer = z
 export const attachment = z
   .object({
     ...commonFields,
-    file_name: z.string().optional(),
-    file_url: z.string().optional(),
-    transaction_id: z.string().optional(),
+    file_name: z.string().nullish(),
+    file_url: z.string().nullish(),
+    transaction_id: z.string().nullish(),
   })
   .openapi({ref: 'accounting.attachment'})
 

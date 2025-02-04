@@ -19,7 +19,7 @@ export const TRANSACTION_TYPE_NAME: EnumOf<TransactionTypeName> = {
   Payment: 'Payment',
 }
 
-export const QBO_ENTITY_NAME: EnumOf<QBO['EntityName']> = {
+export const QBO_ENTITY_NAME: EnumOf<QBO['EntityName'] | 'Attachable'> = {
   ...TRANSACTION_TYPE_NAME,
   Account: 'Account',
   Bill: 'Bill',
@@ -32,6 +32,7 @@ export const QBO_ENTITY_NAME: EnumOf<QBO['EntityName']> = {
   CompanyInfo: 'CompanyInfo',
   BalanceSheet: 'BalanceSheet',
   ProfitAndLoss: 'ProfitAndLoss',
+  Attachable: 'Attachable',
 }
 
 export const zConfig = oauthBaseSchema.connectorConfig.extend({

@@ -3,7 +3,7 @@ import type {QBOSDKTypes} from '@opensdks/sdk-qbo'
 import {qboSdkDef} from '@opensdks/sdk-qbo'
 import type {ConnectorServer} from '@openint/cdk'
 import {nangoProxyLink} from '@openint/cdk'
-import {delay, Rx, rxjs, snakeCase} from '@openint/util'
+import {delay, Rx, rxjs} from '@openint/util'
 import type {QBO, qboSchemas, TransactionTypeName} from './def'
 import {QBO_ENTITY_NAME, qboHelpers} from './def'
 
@@ -104,9 +104,7 @@ export const qboServer = {
             .slice(0, -5)
 
           yield [
-            ...entities.map((t) =>
-              qboHelpers._opData(snakeCase(type), t.Id, t),
-            ),
+            ...entities.map((t) => qboHelpers._opData(type, t.Id, t)),
             qboHelpers._opState({
               entityUpdatedSince: newLastUpdatedTime,
             }),

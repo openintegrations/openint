@@ -146,7 +146,33 @@ export const mappers = {
     created_at: 'MetaData.CreateTime',
     updated_at: 'MetaData.LastUpdatedTime',
   }),
-  // TODO: Add customer and attachment object from QBO
+  // Missing types in opensdk for them..
+  Customer: mapper(
+    zCast<Pick<QBO['Vendor'], 'Id' | 'DisplayName' | 'MetaData'>>(),
+    unified.customer,
+    {
+      id: 'Id',
+      name: 'DisplayName',
+      created_at: 'MetaData.CreateTime',
+      updated_at: 'MetaData.LastUpdatedTime',
+    },
+  ),
+  Attachable: mapper(
+    zCast<
+      Pick<QBO['Vendor'], 'Id' | 'MetaData'> & {
+        TempDownloadUri: string
+        FileName: string
+      }
+    >(),
+    unified.attachment,
+    {
+      id: 'Id',
+      file_name: 'FileName',
+      file_url: 'TempDownloadUri',
+      created_at: 'MetaData.CreateTime',
+      updated_at: 'MetaData.LastUpdatedTime',
+    },
+  ),
 
   // MARK: -
   qboAccount: mapper(zCast<QBO['Account']>(), unified.qboAccount, {
