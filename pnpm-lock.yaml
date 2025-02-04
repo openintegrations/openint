@@ -2048,6 +2048,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@neondatabase/serverless':
+        specifier: ^0.10.4
+        version: 0.10.4
       '@openint/env':
         specifier: workspace:*
         version: link:../env
@@ -7320,9 +7323,6 @@ packages:
 
   '@types/pg@8.6.1':
     resolution: {integrity: sha512-1Kc4oAGzAl7uqUStZCDvaLFqZrW9qWSjXOmBfdgyBP5La7Us6Mg4GBvRlSoaZMhQF/zSj1C8CtKMBkoiT8eL8w==}
-
-  '@types/pg@8.6.5':
-    resolution: {integrity: sha512-tOkGtAqRVkHa/PVZicq67zuujI4Oorfglsr2IbKofDwBSysnaqSx7W1mDqFqdkGE6Fbgh+PZAl0r/BWON/mozw==}
 
   '@types/pluralize@0.0.29':
     resolution: {integrity: sha512-BYOID+l2Aco2nBik+iYS4SZX0Lf20KPILP5RGmM1IgzdwNdTs0eebiFriOPcej1sX9mLnSoiNte5zcFxssgpGA==}
@@ -18558,7 +18558,6 @@ snapshots:
   '@neondatabase/serverless@0.10.4':
     dependencies:
       '@types/pg': 8.11.6
-    optional: true
 
   '@next/env@14.2.13': {}
 
@@ -22062,22 +22061,15 @@ snapshots:
 
   '@types/pg-pool@2.0.6':
     dependencies:
-      '@types/pg': 8.6.5
+      '@types/pg': 8.11.6
 
   '@types/pg@8.11.6':
     dependencies:
       '@types/node': 20.17.16
       pg-protocol: 1.5.0
       pg-types: 4.0.2
-    optional: true
 
   '@types/pg@8.6.1':
-    dependencies:
-      '@types/node': 20.17.16
-      pg-protocol: 1.5.0
-      pg-types: 2.2.0
-
-  '@types/pg@8.6.5':
     dependencies:
       '@types/node': 20.17.16
       pg-protocol: 1.5.0
@@ -29025,8 +29017,7 @@ snapshots:
 
   oblivious-set@1.0.0: {}
 
-  obuf@1.1.2:
-    optional: true
+  obuf@1.1.2: {}
 
   on-finished@2.4.1:
     dependencies:
@@ -29283,8 +29274,7 @@ snapshots:
       readable-stream: 1.0.31
     optional: true
 
-  pg-numeric@1.0.2:
-    optional: true
+  pg-numeric@1.0.2: {}
 
   pg-pool@3.5.2(pg@8.8.0(pg-native@3.0.1)):
     dependencies:
@@ -29319,7 +29309,6 @@ snapshots:
       postgres-date: 2.1.0
       postgres-interval: 3.0.0
       postgres-range: 1.1.4
-    optional: true
 
   pg@8.8.0(pg-native@3.0.1):
     dependencies:
@@ -29452,30 +29441,25 @@ snapshots:
 
   postgres-array@2.0.0: {}
 
-  postgres-array@3.0.2:
-    optional: true
+  postgres-array@3.0.2: {}
 
   postgres-bytea@1.0.0: {}
 
   postgres-bytea@3.0.0:
     dependencies:
       obuf: 1.1.2
-    optional: true
 
   postgres-date@1.0.7: {}
 
-  postgres-date@2.1.0:
-    optional: true
+  postgres-date@2.1.0: {}
 
   postgres-interval@1.2.0:
     dependencies:
       xtend: 4.0.2
 
-  postgres-interval@3.0.0:
-    optional: true
+  postgres-interval@3.0.0: {}
 
-  postgres-range@1.1.4:
-    optional: true
+  postgres-range@1.1.4: {}
 
   postgres@3.4.5: {}
 
