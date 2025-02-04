@@ -15,7 +15,7 @@ let trpc: ReturnType<typeof createAppTrpcClient>
 
 const db = drizzle(neon(env.DATABASE_URL), {logger: true, schema})
 async function setupTestDb(dbName: string) {
-  await db.execute(`DROP DATABASE IF EXISTS ${dbName}`)
+  await db.execute(`DROP DATABASE IF EXISTS ${dbName} WITH (FORCE)`)
   await db.execute(`CREATE DATABASE ${dbName}`)
   const url = new URL(env.DATABASE_URL)
   url.pathname = `/${dbName}`
