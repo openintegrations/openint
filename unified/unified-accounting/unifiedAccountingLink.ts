@@ -50,6 +50,7 @@ export function unifiedAccountingLink(ctx: {
         Account: 'account',
         Vendor: 'vendor',
         Customer: 'customer',
+        Attachable: 'attachment',
       }[op.data.entityName] ?? op.data.entityName
 
     const mapped = applyMapper(mapper, op.data.entity, {

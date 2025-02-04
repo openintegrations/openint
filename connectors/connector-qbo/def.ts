@@ -61,9 +61,12 @@ export const qboSchemas = {
   connectorConfig: zConfig,
   connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
-  sourceState: z.object({
-    entityUpdatedSince: z.string().nullish(),
-  }),
+  sourceState: z.record(
+    z.string(),
+    z.object({
+      max_last_updated_time: z.string().nullish(),
+    }),
+  ),
   sourceOutputEntity: zEntityPayload,
   sourceOutputEntities: R.mapValues(
     Object.fromEntries(
