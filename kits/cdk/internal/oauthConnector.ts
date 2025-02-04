@@ -169,16 +169,19 @@ export function makeOauthConnectorServer({
         )
         throw new Error('Provider did not return valid connection settings')
       }
+      /* eslint-disable */
+      const r = res as any
 
       return {
         connectionExternalId: extractId(connId)[2],
         settings: {
-          oauth: res as any,
-          ...(res?.error?.code || res?.error?.message
-            ? {error: {code: res?.error?.code, message: res?.error?.message}}
+          oauth: r,
+          ...(r?.error?.code || r?.error?.message
+            ? {error: {code: r?.error?.code, message: r?.error?.message}}
             : {}),
         },
       }
+      /* eslint-enable */
     },
   } satisfies ConnectorServer<typeof oauthBaseSchema>
   return {

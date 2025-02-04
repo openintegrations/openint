@@ -72,7 +72,11 @@ export function applyMapper<
     ReturnType<typeof mapper>,
     'mapping' | '_in' | '_out' | 'inputSchema' | 'outputSchema'
   >,
->(mapper: T, input: T['_in']): T['_out'] {
+>(
+  mapper: T,
+  input: T['_in'],
+  opts: {remote_data_key?: string} = {remote_data_key: 'raw_data'},
+): T['_out'] {
   if (typeof mapper.mapping === 'function') {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return mapper.mapping(input)
@@ -89,7 +93,9 @@ export function applyMapper<
     throw new Error(`Invalid mapping ${m as unknown} at ${key.toString()}`)
   })
   // TODO: Does this belong here?
-  Object.assign(output, {raw_data: input})
+  if (opts.remote_data_key) {
+    Object.assign(output, {[opts.remote_data_key]: input})
+  }
   return output
 }
 

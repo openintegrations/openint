@@ -1,6 +1,106 @@
 import {z} from '@openint/vdk'
 
+// MARK: - Fields
+
+const currency_code = z.string().describe('ISO 4217 currency code')
+
+const account_classification = z.enum([
+  'asset',
+  'liability',
+  'equity',
+  'income',
+  'expense',
+])
+
+const transaction_line = z.object({
+  id: z.string().optional(),
+  memo: z.string().nullable().optional().describe('Private line note'),
+  amount: z.number().describe('(positive) debit or (negative) credit'),
+  currency: currency_code,
+  account_id: z.string(),
+})
+
+// MARK: - Models
+
+const commonFields = {
+  created_at: z.string().datetime().optional(),
+  updated_at: z.string().datetime().optional(),
+  raw: z.record(z.string(), z.unknown()).optional(),
+  id: z.string(),
+}
+
+export const transaction = z
+  .object({
+    ...commonFields,
+    date: z.string().openapi({
+      format: 'date',
+      description:
+        'Posted date for accounting purpose, may not be the same as transaction date',
+    }),
+    account_id: z.string().nullish(),
+    amount: z.number().nullish(),
+    currency: currency_code.nullish(),
+    memo: z.string().nullish(),
+    lines: z
+      .array(transaction_line)
+      .describe(
+        'null value for data that came from a single-entry system. Min 1 line is needed to balance the implicit line from parent transaction itself. 2 lines or more for split transactions',
+      )
+      .nullish(),
+    bank_category: z
+      .string()
+      .optional()
+      .describe('Categorization from bank or upstream provider'),
+  })
+  .openapi({ref: 'accounting.transaction'})
+
 export const account = z
+  .object({
+    ...commonFields,
+    name: z.string(),
+    classification: account_classification
+      .nullish()
+      .describe(
+        'null for non-posting accounts such as those used to track payroll',
+      ),
+    number: z
+      .string()
+      .nullish()
+      .describe(
+        'Account number. User defined. Typically 3-5 digits to help organize the Chart of Accounts',
+      ),
+
+    currency: currency_code.nullish(),
+  })
+  .openapi({ref: 'accounting.account'})
+
+export const vendor = z
+  .object({
+    ...commonFields,
+    name: z.string(),
+    url: z.string(),
+  })
+  .openapi({ref: 'accounting.vendor'})
+
+export const customer = z
+  .object({
+    ...commonFields,
+    name: z.string(),
+  })
+  .openapi({ref: 'accounting.customer'})
+
+export const attachment = z
+  .object({
+    ...commonFields,
+    file_name: z.string().nullish(),
+    file_url: z.string().nullish(),
+    transaction_id: z.string().nullish(),
+  })
+  .openapi({ref: 'accounting.attachment'})
+
+// MARK: -
+
+export const qboAccount = z
   .object({
     id: z.string(),
     number: z.string().nullish(),
@@ -32,11 +132,7 @@ export const expense = z.object({
   payment_account: z.string(),
 })
 // .openapi({format: 'prefix:exp'}),
-export const vendor = z.object({
-  id: z.string(),
-  name: z.string(),
-  url: z.string(),
-})
+
 // .openapi({format: 'prefix:ven'}),
 
 // TODO: expand
@@ -84,18 +180,18 @@ export const cashFlow = z.object({
   endingCash: z.number().nullable(),
 })
 
-const transactionSchema = z.object({
+export const transactionListItemSchema = z.object({
   id: z.string(),
   date: z.string(),
   transactionType: z.string(),
-  documentNumber: z.string().optional(),
-  posting: z.string().optional(),
-  name: z.string().optional(),
-  department: z.string().optional(),
-  memo: z.string().optional(),
-  account: z.string().optional(),
-  split: z.string().optional(),
-  amount: z.number(),
+  documentNumber: z.string().nullish(),
+  posting: z.string().nullish(),
+  name: z.string().nullish(),
+  department: z.string().nullish(),
+  memo: z.string().nullish(),
+  account: z.string().nullish(),
+  split: z.string().nullish(),
+  amount: z.number().nullable(),
   raw_data: z.any(),
 })
 
@@ -104,7 +200,7 @@ export const transactionList = z.object({
   startPeriod: z.string(),
   endPeriod: z.string(),
   currency: z.string(),
-  transactions: z.array(transactionSchema),
+  transactions: z.array(transactionListItemSchema),
 })
 
 const customerBalanceEntrySchema = z.object({
