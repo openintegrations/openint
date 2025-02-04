@@ -44,8 +44,9 @@ export const transaction = z
     lines: z
       .array(transaciton_line)
       .describe(
-        'Minimum 1 lines to balance the implicit line from parent transaction itself. 2 lines or more for split transactions',
-      ),
+        'null value for data that came from a single-entry system. Min 1 line is needed to balance the implicit line from parent transaction itself. 2 lines or more for split transactions',
+      )
+      .nullish(),
     bank_category: z
       .string()
       .optional()
