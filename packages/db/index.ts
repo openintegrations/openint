@@ -1,4 +1,4 @@
-import {neon} from '@neondatabase/serverless'
+import {neon, neonConfig} from '@neondatabase/serverless'
 import type {DrizzleConfig, SQL} from 'drizzle-orm'
 import {sql} from 'drizzle-orm'
 import {drizzle} from 'drizzle-orm/neon-http'
@@ -8,7 +8,7 @@ import * as schema from './schema'
 export * from 'drizzle-orm'
 export * from './stripeNullByte'
 export * from './upsert'
-export {schema, drizzle, neon}
+export {schema, drizzle, neon, neonConfig}
 
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
