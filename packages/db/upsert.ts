@@ -98,24 +98,27 @@ export function dbUpsert<
   ) as TTable
 
   const tbCfg = getTableConfig(table)
-  const getColumn = (name: string) => {
-    const col = table[name as keyof PgTable] as PgColumn
+  const getColumnOrThrow = (name: string) => {
+    const col = getColumn(name)
     if (!col) {
       throw new Error(`Column ${name} not found in table ${tbCfg.name}`)
     }
     return col
   }
+  const getColumn = (name: string) => table[name as keyof PgTable] as PgColumn
 
   const keyColumns =
-    options.keyColumns?.map(getColumn) ??
+    options.keyColumns?.map(getColumnOrThrow) ??
     tbCfg.primaryKeys[0]?.columns ??
     tbCfg.columns.filter((c) => c.primary) // Presumably only a single primary key column will be possible in this scenario
   const shallowMergeJsonbColumns =
     typeof options.shallowMergeJsonbColumns === 'boolean'
       ? tbCfg.columns.filter((c) => c.columnType === 'PgJsonb')
-      : options.shallowMergeJsonbColumns?.map(getColumn)
-  const noDiffColumns = options.noDiffColumns?.map(getColumn)
-  const insertOnlyColumns = options.insertOnlyColumns?.map(getColumn)
+      : options.shallowMergeJsonbColumns?.map(getColumn).filter((c) => !!c)
+  const noDiffColumns = options.noDiffColumns?.map(getColumn).filter((c) => !!c)
+  const insertOnlyColumns = options.insertOnlyColumns
+    ?.map(getColumn)
+    .filter((c) => !!c)
 
   if (!keyColumns.length) {
     throw new Error(
