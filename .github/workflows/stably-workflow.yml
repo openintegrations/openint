@@ -16,8 +16,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for 5 minutes for any remaining Vercel Main Branch Deployment
-        run: sleep 300
+      - uses: UnlyEd/github-action-await-vercel@v1 # TODO best practices recommend to use a fixed version instead of @v1 for production usage (i.e: @v1.2.32)
+        id: await-vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        with:
+          deployment-url: openint-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
+          timeout: 10 # Wait for 10 seconds before failing
+          poll-interval: 1 # Wait for 1 second before each retry
       - name: Stably Runner Action
         id: stably-runner
         uses: stablyhq/stably-runner-action@v3
