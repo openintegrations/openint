@@ -65,6 +65,12 @@ const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const db = _getDb()
   type NeonHttpDatabase = ReturnType<typeof getDb>['db']
   type DbClient = NeonHttpDatabase
+  if (__DEBUG__) {
+    console.log(
+      'Setting up postgres meta service for database in host',
+      new URL(databaseUrl).host,
+    )
+  }
   return {
     db,
     getDb: _getDb,
