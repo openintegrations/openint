@@ -1,4 +1,4 @@
-import {ArrowLeft} from 'lucide-react'
+import {ArrowLeft, Loader} from 'lucide-react'
 import type {ConnectorConfig} from '../../engine-frontend/hocs/WithConnectConfig'
 import {Button} from '../shadcn'
 import {IntegrationLogo} from './ConnectionRawCard'
@@ -19,16 +19,23 @@ interface ConnectionDetailsProps {
     type?: string
   }
   deleteConnection: ({id}: {id: string}) => void
+  isDeleting: boolean
   onClose: () => void
 }
 
 export function ConnectionDetails({
   connection,
   deleteConnection,
+  isDeleting,
   onClose,
 }: ConnectionDetailsProps) {
   return (
-    <div className="flex flex-col gap-4 p-4 pt-2">
+    <div className="relative flex flex-col gap-4 p-4 pt-2">
+      {isDeleting && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md bg-card-loading">
+          <Loader className="size-8 animate-spin text-button" />
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-4 rounded-lg bg-muted p-6">
         <div className="flex items-center gap-2">
           <ArrowLeft
@@ -84,8 +91,9 @@ export function ConnectionDetails({
           <Button
             variant="destructive"
             onClick={() => deleteConnection({id: connection.id})}
+            disabled={isDeleting}
             className="h-9">
-            Delete Connection
+            {isDeleting ? 'Deleting...' : 'Delete Connection'}
           </Button>
         </div>
       </div>

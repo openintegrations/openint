@@ -125,10 +125,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         const connectionCount = connections.length
 
         const isLoading =
-          listConnectionsRes.isLoading ||
-          listConnectionsRes.isFetching ||
-          listConnectionsRes.isRefetching ||
-          deleteConnection.isLoading
+          listConnectionsRes.isLoading || listConnectionsRes.isFetching
 
         const baseView = getBaseView(searchParams?.get('view'))
 
@@ -142,6 +139,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
               <ConnectionsTabContent
                 connectionCount={connectionCount}
                 deleteConnection={deleteConnection.mutate}
+                isDeleting={deleteConnection.isLoading}
                 connections={connections}
                 onConnect={() => navigateToTab('add')}
                 refetch={() => ctx.listConnections.invalidate()}
@@ -158,8 +156,9 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
               <AddConnectionTabContent
                 connectorConfigFilters={{}}
                 refetch={listConnectionsRes.refetch}
-                onSuccessCallback={() => {
+                onSuccessCallback={async () => {
                   navigateToTab('manage')
+                  await listConnectionsRes.refetch()
                 }}
               />
             ),
