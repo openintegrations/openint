@@ -1,6 +1,6 @@
 'use client'
 
-import {Loader} from 'lucide-react'
+import {Loader2} from 'lucide-react'
 import {useTheme} from 'next-themes'
 import {usePathname, useRouter, useSearchParams} from 'next/navigation'
 import {useEffect} from 'react'
@@ -33,7 +33,7 @@ const getBaseView = (
 export function LoadingSpinner() {
   return (
     <div className="flex h-full min-h-[600px] flex-1 items-center justify-center">
-      <Loader className="size-7 animate-spin text-button" />
+      <Loader2 className="size-7 animate-spin text-button" />
     </div>
   )
 }

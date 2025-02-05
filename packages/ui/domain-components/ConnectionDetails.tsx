@@ -1,4 +1,4 @@
-import {ArrowLeft, Loader} from 'lucide-react'
+import {ArrowLeft, Loader2} from 'lucide-react'
 import type {ConnectorConfig} from '../../engine-frontend/hocs/WithConnectConfig'
 import {Button} from '../shadcn'
 import {IntegrationLogo} from './ConnectionRawCard'
@@ -33,7 +33,7 @@ export function ConnectionDetails({
     <div className="relative flex flex-col gap-4 p-4 pt-2">
       {isDeleting && (
         <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md bg-card-loading">
-          <Loader className="size-8 animate-spin text-button" />
+          <Loader2 className="size-8 animate-spin text-button" />
         </div>
       )}
       <div className="grid grid-cols-1 gap-4 rounded-lg bg-muted p-6">
