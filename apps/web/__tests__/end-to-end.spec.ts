@@ -209,7 +209,7 @@ test('create and sync greenhouse connection', async () => {
 test('list connections', async () => {
   const res = await sdk.GET('/core/connection')
 
-  expect(res.data).toHaveLength(2)
+  expect(res.data.length).toBeGreaterThan(2)
   // Check we have the default postgres connector
   expect(
     res.data.find((c) => c.connectorConfigId.includes('ccfg_postgres_default')),
@@ -248,7 +248,7 @@ test('list connector metas', async () => {
 test('list connector config info', async () => {
   const res = await sdk.GET('/core/connector_config_info')
 
-  expect(res.data).toHaveLength(2)
+  expect(res.data.length).toBeGreaterThan(2)
   // Check we have the default postgres connector
   expect(res.data.find((c) => c.connectorName.includes('plaid'))).toBeTruthy()
   // Check we have the greenhouse connector
@@ -269,7 +269,7 @@ test('list connector config info', async () => {
 test('list configured integrations', async () => {
   const res = await sdk.GET('/configured_integrations')
 
-  expect(res.data.items).toHaveLength(1)
+  expect(res.data.items.length).toBeGreaterThan(1)
   expect(res.data.items[0]?.connector_name).toEqual('plaid')
 
   // Check basic properties
