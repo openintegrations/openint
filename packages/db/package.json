@@ -19,6 +19,7 @@
     "json-stable-stringify": "^1.1.1",
     "postgres": "^3.4.5",
     "remeda": "1.6.1",
+    "ws": "^8.18.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
