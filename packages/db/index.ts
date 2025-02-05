@@ -10,6 +10,12 @@ export * from './stripeNullByte'
 export * from './upsert'
 export {schema, drizzle, neon, neonConfig}
 
+neonConfig.fetchEndpoint = (host) => {
+  const [protocol, port] =
+    host === 'db.localtest.me' ? ['http', 4444] : ['https', 443]
+  return `${protocol}://${host}:${port}/sql`
+}
+
 export function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
 >(urlString: string, config?: DrizzleConfig<TSchema>) {
