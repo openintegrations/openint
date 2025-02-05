@@ -1,3 +1,4 @@
+import {neon, neonConfig} from '@neondatabase/serverless'
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {
@@ -9,10 +10,15 @@ import {
   serial,
   varchar,
 } from 'drizzle-orm/pg-core'
-import postgres from 'postgres'
 import {env} from '@openint/env'
 import {drizzle} from './'
 import {dbUpsert, dbUpsertOne, inferTableForUpsert} from './upsert'
+
+neonConfig.fetchEndpoint = (host) => {
+  const [protocol, port] =
+    host === 'db.localtest.me' ? ['http', 4444] : ['https', 443]
+  return `${protocol}://${host}:${port}/sql`
+}
 
 async function formatSql(sqlString: string) {
   const prettier = await import('prettier')
@@ -25,7 +31,12 @@ async function formatSql(sqlString: string) {
   })
 }
 
-const noopDb = drizzle('postgres://noop', {logger: true})
+const noopDb = drizzle(
+  neon('postgres://noop:noop@localhost:5432/noop?schema=public'),
+  {
+    logger: true,
+  },
+)
 
 test('upsert query', async () => {
   const engagement_sequence = pgTable(
@@ -237,7 +248,9 @@ test('upsert query with inferred table', async () => {
     "
   `)
 
-  const query = dbUpsertOne(drizzle(''), table, row, {keyColumns: ['id']})
+  const query = dbUpsertOne(noopDb, table, row, {
+    keyColumns: ['id'],
+  })
   expect(query.toSQL().params).toEqual([
     '123',
     'abc',
@@ -272,18 +285,18 @@ test('upsert query with inferred table', async () => {
 })
 
 describe('with db', () => {
-  // console.log('filename', __filename)
+  jest.setTimeout(30000) // 30 seconds
+
   const dbName = 'upsert_db'
 
   const dbUrl = new URL(env.DATABASE_URL)
   dbUrl.pathname = `/${dbName}`
-  const db = drizzle(dbUrl.toString(), {logger: true})
+  const db = drizzle(neon(dbUrl.toString()), {logger: true})
 
   beforeAll(async () => {
-    const masterDb = drizzle(env.DATABASE_URL, {logger: true})
-    await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
+    const masterDb = drizzle(neon(env.DATABASE_URL), {logger: true})
+    await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName} WITH (FORCE)`)
     await masterDb.execute(`CREATE DATABASE ${dbName}`)
-    await masterDb.$client.end()
 
     await db.execute(sql`
       CREATE TABLE IF NOT EXISTS "test_user" (
@@ -314,7 +327,7 @@ describe('with db', () => {
 
   test('upsert with inferred table', async () => {
     const ret = await db.execute(sql`SELECT * FROM "test_user"`)
-    expect(ret[0]).toEqual(row)
+    expect(ret.rows[0]).toEqual(row)
   })
 
   test('null means null', async () => {
@@ -325,7 +338,7 @@ describe('with db', () => {
       {keyColumns: ['id']},
     )
     const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
-    expect(ret2[0]).toEqual({...row, name: null})
+    expect(ret2.rows[0]).toEqual({...row, name: null})
   })
 
   test('ignore undefined values by default', async () => {
@@ -336,7 +349,7 @@ describe('with db', () => {
       {keyColumns: ['id']},
     )
     const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
-    expect(ret2[0]).toEqual(row)
+    expect(ret2.rows[0]).toEqual(row)
   })
 
   test('treat undefined as sql DEFAULT keyword', async () => {
@@ -347,7 +360,7 @@ describe('with db', () => {
       {keyColumns: ['id'], undefinedAsDefault: true},
     )
     const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
-    expect(ret2[0]).toEqual({...row, name: 'unnamed'})
+    expect(ret2.rows[0]).toEqual({...row, name: 'unnamed'})
   })
 
   test('only use the firstRow for inferring schema', async () => {
@@ -362,7 +375,7 @@ describe('with db', () => {
     )
 
     expect(
-      await db.execute(sql`SELECT * FROM "test_user"`).then((r) => r[0]),
+      await db.execute(sql`SELECT * FROM "test_user"`).then((r) => r.rows[0]),
     ).toEqual({...row, name: 'original'})
   })
 
@@ -391,13 +404,13 @@ describe('with db', () => {
     ;(db as any).dialect.casing.clearCache()
     await dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']})
 
-    // recreating the db each time works better
-    const pg = postgres(dbUrl.toString())
-    const d = () => drizzle(pg, {logger: true})
+    // recreating the db connection each time works better
+    const neonClient = neon(dbUrl.toString())
+    const d = () => drizzle(neonClient, {logger: true})
     await dbUpsertOne(d(), 'pipeline', {id: 3, num: 223}, {keyColumns: ['id']})
     await dbUpsertOne(d(), 'pipeline', {id: 4, str: 'my'}, {keyColumns: ['id']})
     const res = await d().execute('SELECT * FROM "pipeline"')
-    expect(res).toEqual([
+    expect(res.rows).toEqual([
       {id: '1', num: 123, str: null},
       {id: '2', num: null, str: 'my'},
       {id: '3', num: 223, str: null},
@@ -406,6 +419,7 @@ describe('with db', () => {
   })
 
   afterAll(async () => {
-    await db.$client.end()
+    // neon does not support end
+    // await db.$client.end()
   })
 })
