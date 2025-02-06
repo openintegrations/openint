@@ -80,9 +80,9 @@ export function ConnectorConfigForm({
                 links: zRaw.connector_config.shape.defaultPipeOut
                   .unwrap()
                   .unwrap().shape.links,
-                destination_id: zConnId.optional().openapi({
-                  description: 'Defaults to the org-wide postgres',
-                }),
+                // destination_id: zConnId.optional().openapi({
+                //   description: 'Defaults to the org-wide postgres',
+                // }),
               })
               .openapi({title: 'Enabled'}),
           ])
