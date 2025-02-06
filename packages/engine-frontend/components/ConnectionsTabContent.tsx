@@ -103,9 +103,7 @@ export function ConnectionsTabContent({
                 <ConnectionCard
                   key={`${conn.id}-${resetKey}`}
                   conn={conn}
-                  onDelete={() => {
-                    setSelectedConnection(conn)
-                  }}
+                  onDelete={deleteConnection}
                   onReconnect={openConnect}
                   onSelect={() => setSelectedConnection(conn)}
                 />
