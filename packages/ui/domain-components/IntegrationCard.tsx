@@ -1,4 +1,4 @@
-import {Loader, Plus} from 'lucide-react'
+import {Loader2, Plus} from 'lucide-react'
 import {useEffect, useRef, useState} from 'react'
 import {Card, CardContent} from '../shadcn'
 import {
@@ -72,7 +72,7 @@ export function IntegrationCard({
             </CardContent>
             {isLoading && (
               <div className="absolute inset-0 z-10 flex items-center justify-center">
-                <Loader className="size-7 animate-spin text-button" />
+                <Loader2 className="size-7 animate-spin text-button" />
               </div>
             )}
           </Card>

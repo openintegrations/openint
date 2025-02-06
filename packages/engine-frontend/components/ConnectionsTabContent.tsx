@@ -22,6 +22,7 @@ interface Connection {
 interface ConnectionsTabContentProps {
   connectionCount: number
   deleteConnection: ({id}: {id: string}) => void
+  isDeleting: boolean
   onConnect: () => void
   refetch: () => void
   connections: Connection[]
@@ -31,6 +32,7 @@ export function ConnectionsTabContent({
   connectionCount,
   deleteConnection,
   connections,
+  isDeleting,
   onConnect,
   refetch,
 }: ConnectionsTabContentProps) {
@@ -78,6 +80,7 @@ export function ConnectionsTabContent({
           connection={selectedConnection}
           deleteConnection={deleteConnection}
           onClose={() => setSelectedConnection(null)}
+          isDeleting={isDeleting}
         />
       ) : (
         <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
