@@ -27,6 +27,8 @@ export function AddConnectionTabContent({
           } else if (event.type === 'success') {
             onSuccessCallback?.()
             refetch()
+          } else if (event.type === 'error') {
+            refetch()
           }
         }}
       />

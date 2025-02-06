@@ -1,6 +1,6 @@
 'use client'
 
-import {Loader, Search} from 'lucide-react'
+import {Loader2, Search} from 'lucide-react'
 import {useSearchParams} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
@@ -168,7 +168,7 @@ export function IntegrationSearch({
       <div className="relative flex-1 overflow-y-auto">
         {listIntegrationsRes.isLoading ? (
           <div className="flex h-full min-h-[500px] items-center justify-center">
-            <Loader className="size-7 animate-spin text-button" />
+            <Loader2 className="size-7 animate-spin text-button" />
           </div>
         ) : (
           <div className="space-y-6 p-4">

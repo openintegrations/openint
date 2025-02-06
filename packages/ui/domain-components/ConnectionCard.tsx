@@ -1,4 +1,4 @@
-import {Loader} from 'lucide-react'
+import {Loader2} from 'lucide-react'
 import * as React from 'react'
 import type {ConnectorConfig} from '../../engine-frontend/hocs/WithConnectConfig'
 import {Ellipsis} from '../components'
@@ -59,7 +59,7 @@ export function ConnectionCard({
       {/* Overlay spinner */}
       {isProcessing && (
         <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md bg-card-loading">
-          <Loader className="size-8 animate-spin text-button" />
+          <Loader2 className="size-8 animate-spin text-button" />
         </div>
       )}
 
@@ -118,7 +118,7 @@ export function ConnectionCard({
               </p>
             ) : conn.syncInProgress ? (
               <div className="flex flex-row items-center justify-start gap-2">
-                <Loader className="size-5 animate-spin text-button" />
+                <Loader2 className="size-5 animate-spin text-button" />
                 <p className="text-center text-sm text-button">Syncing...</p>
               </div>
             ) : (
