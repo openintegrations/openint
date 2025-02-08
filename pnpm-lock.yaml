@@ -176,6 +176,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/cnext':
+        specifier: workspace:*
+        version: link:../../connectors/cnext
       '@openint/connector-airtable':
         specifier: workspace:*
         version: link:../../connectors/connector-airtable
@@ -747,6 +750,18 @@ importers:
       webpack:
         specifier: '*'
         version: 5.74.0(esbuild@0.17.5)
+
+  connectors/cnext:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      airtable:
+        specifier: 0.11.4
+        version: 0.11.4
 
   connectors/connector-airtable:
     dependencies:

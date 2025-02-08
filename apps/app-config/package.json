@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/nextjs": "5.6.0",
     "@openint/cdk": "workspace:*",
+    "@openint/cnext": "workspace:*",
     "@openint/connector-airtable": "workspace:*",
     "@openint/connector-alphavantage": "workspace:*",
     "@openint/connector-apollo": "workspace:*",
