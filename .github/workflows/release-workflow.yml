@@ -28,9 +28,16 @@ jobs:
       - name: Get the latest tag or set initial version
         id: get_latest_tag
         run: |
-          git fetch --tags
-          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
+          # Clean any local tags
+          git tag -l | xargs git tag -d
+          # Fetch all tags from remote
+          git fetch --prune --tags origin
+          LATEST_TAG=$(git tag -l "v*" --sort=-v:refname | head -n 1 || echo "v0.0.0")
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
+          echo "Found latest tag: $LATEST_TAG"
+          # Debug output
+          echo "All available tags:"
+          git tag -l
 
       - name: Calculate new version
         run: |
