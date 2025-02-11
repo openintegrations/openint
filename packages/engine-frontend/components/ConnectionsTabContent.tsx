@@ -1,6 +1,7 @@
 import {useSearchParams} from 'next/navigation'
 import {useEffect, useState} from 'react'
 import {Button, ConnectionDetails} from '@openint/ui'
+import {DeleteConfirmation} from '@openint/ui/components/DeleteConfirmation'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
 import {WithConnectorConnect} from '../hocs/WithConnectorConnect'
@@ -39,12 +40,17 @@ export function ConnectionsTabContent({
   const [resetKey, setResetKey] = useState(0)
   const [selectedConnection, setSelectedConnection] =
     useState<Connection | null>(null)
+  const [showConfirmation, setShowConfirmation] = useState(false)
   // this is so that the timer in the connection card is reset
   const reset = () => setResetKey((prev) => prev + 1)
   const searchParams = useSearchParams()
   const view = searchParams.get('view') ?? ''
   const connectionId = searchParams.get('connectionId')
   const isDeeplinkView = view.split('-')[1] === 'deeplink'
+
+  const openConfirmation = () => {
+    setShowConfirmation(true)
+  }
 
   useEffect(() => {
     if (isDeeplinkView) {
@@ -53,64 +59,80 @@ export function ConnectionsTabContent({
     }
   }, [connections, isDeeplinkView, connectionId])
 
-  return connectionCount === 0 ? (
-    <div className="flex flex-col p-4 pt-0">
-      <div>
-        <p className="font-semibold text-foreground">
-          You have no connections yet
-        </p>
-        <p className="text-sm text-foreground">
-          Add a connection to start integrating and streamlining your workflow!
-        </p>
-      </div>
-      <div
-        className="my-4"
-        style={{width: '250px', borderTop: '1px solid #E6E6E6'}}
-      />
-      <Button
-        onClick={onConnect}
-        className="h-10 items-center justify-center self-start">
-        Visit Add a Connection
-      </Button>
-    </div>
-  ) : (
+  return (
     <>
-      {selectedConnection ? (
-        <ConnectionDetails
-          connection={selectedConnection}
-          deleteConnection={deleteConnection}
-          onClose={() => setSelectedConnection(null)}
-          isDeleting={isDeleting}
-        />
-      ) : (
-        <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
-          {connections.map((conn: any) => (
-            <WithConnectorConnect
-              key={conn.id + ''}
-              connectorConfig={{
-                id: conn.connectorConfig.id,
-                connector: conn.connectorConfig.connector,
-              }}
-              integration={conn.integration}
-              connection={conn}
-              onEvent={(event) => {
-                if (event.type === 'success' || event.type === 'error') {
-                  refetch()
-                  reset()
-                }
-              }}>
-              {({openConnect}) => (
-                <ConnectionCard
-                  key={`${conn.id}-${resetKey}`}
-                  conn={conn}
-                  onDelete={deleteConnection}
-                  onReconnect={openConnect}
-                  onSelect={() => setSelectedConnection(conn)}
-                />
-              )}
-            </WithConnectorConnect>
-          ))}
+      <DeleteConfirmation
+        isOpen={showConfirmation}
+        setIsOpen={setShowConfirmation}
+        onDelete={() => {
+          deleteConnection({id: selectedConnection?.id ?? ''})
+        }}
+        title="Delete Connection"
+        description="Are you sure you want to delete this connection? This action cannot be undone."
+        confirmText="Delete"
+        isDeleting={isDeleting}
+      />
+      {connectionCount === 0 ? (
+        <div className="flex flex-col p-4 pt-0">
+          <div>
+            <p className="font-semibold text-foreground">
+              You have no connections yet
+            </p>
+            <p className="text-sm text-foreground">
+              Add a connection to start integrating and streamlining your
+              workflow!
+            </p>
+          </div>
+          <div
+            className="my-4"
+            style={{width: '250px', borderTop: '1px solid #E6E6E6'}}
+          />
+          <Button
+            onClick={onConnect}
+            className="h-10 items-center justify-center self-start">
+            Visit Add a Connection
+          </Button>
         </div>
+      ) : (
+        <>
+          {selectedConnection ? (
+            <ConnectionDetails
+              connection={selectedConnection}
+              deleteConnection={openConfirmation}
+              onClose={() => setSelectedConnection(null)}
+              isDeleting={isDeleting}
+            />
+          ) : (
+            <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
+              {connections.map((conn: any) => (
+                <WithConnectorConnect
+                  key={conn.id + ''}
+                  connectorConfig={{
+                    id: conn.connectorConfig.id,
+                    connector: conn.connectorConfig.connector,
+                  }}
+                  integration={conn.integration}
+                  connection={conn}
+                  onEvent={(event) => {
+                    if (event.type === 'success' || event.type === 'error') {
+                      refetch()
+                      reset()
+                    }
+                  }}>
+                  {({openConnect}) => (
+                    <ConnectionCard
+                      key={`${conn.id}-${resetKey}`}
+                      conn={conn}
+                      onDelete={openConfirmation}
+                      onReconnect={openConnect}
+                      onSelect={() => setSelectedConnection(conn)}
+                    />
+                  )}
+                </WithConnectorConnect>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </>
   )
