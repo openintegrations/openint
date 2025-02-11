@@ -1,5 +1,5 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
-import {connHelpers} from '@openint/cdk'
+import {connHelpers, zId} from '@openint/cdk'
 import {R, z} from '@openint/util'
 
 export const AIRCALL_ENTITY_NAMES = ['call', 'contact'] as const
@@ -11,6 +11,10 @@ export const aircallSchema = {
     e,
     z.unknown().optional(),
   ]),
+  connectOutput: z.object({
+    providerConfigKey: zId('ccfg'),
+    connectionId: zId('conn'),
+  }),
 } satisfies ConnectorSchemas
 
 export const aircallHelpers = connHelpers(aircallSchema)
