@@ -21,10 +21,10 @@ export const aircallServer = {
     })
     return aircall
   },
-  postConnect: async (connectOutput, _, context) => {
+  checkConnection: async ({settings}) => {
     // Encoding credentials:
-    const apiId = context.connection?.settings.apiId
-    const apiToken = context.connection?.settings.apiToken
+    const apiId = settings.apiId
+    const apiToken = settings.apiToken
     const encodedCredentials = Buffer.from(`${apiId}:${apiToken}`).toString(
       'base64',
     )
@@ -53,8 +53,7 @@ export const aircallServer = {
     }
 
     return {
-      connectionExternalId: connectOutput.connectionId,
-      providerConfigKey: connectOutput.providerConfigKey,
+      connectionExternalId: settings.apiId,
     }
   },
 } satisfies ConnectorServer<
