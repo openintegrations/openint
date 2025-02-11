@@ -125,17 +125,14 @@ export function oauthConnect({
       connectorConfigId,
       connectionId ?? makeId('conn', connectorName, makeUlid()),
       {
+        ...authOptions,
         params: {
           ...authOptions?.connection_params,
         },
         authorization_params: {
+          ...authOptions?.authorization_params,
           ...(redirect_uri ? {redirect_uri} : {}),
         },
-        ...authOptions,
-        // authOptions would tend to contain the authorization_params needed to make the initial connection
-        // authorization_params: {
-        //   scope: 'https://www.googleapis.com/auth/drive.readonly',
-        // },
       },
     )
     .then((r) => oauthBaseSchema.connectOutput.parse(r))
