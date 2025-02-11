@@ -118,7 +118,7 @@ export function oauthConnect({
     connectorName === 'google'
       ? 'https://agents.doubleo.ai/connect/callback'
       : undefined
-  console.log('redirect_uri', redirect_uri, {orgId, connectorName})
+  // console.log('redirect_uri', redirect_uri, {orgId, connectorName})
 
   return nangoFrontend
     .auth(

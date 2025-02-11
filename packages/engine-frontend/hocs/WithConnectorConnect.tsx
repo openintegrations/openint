@@ -93,7 +93,7 @@ export const WithConnectorConnect = ({
           if (!nangoFrontend) {
             throw new Error('Missing nango public key')
           }
-          if (!viewer.orgId) {
+          if (!viewer || !viewer.orgId) {
             throw new Error('Missing orgId')
           }
           return oauthConnect({
