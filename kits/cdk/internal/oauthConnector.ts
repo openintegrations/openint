@@ -92,6 +92,7 @@ export function oauthConnect({
   connectorConfigId,
   connectionId,
   authOptions,
+  orgId,
 }: {
   nangoFrontend: NangoFrontend
   connectorName: string
@@ -102,6 +103,7 @@ export function oauthConnect({
     authorization_params?: Record<string, string | undefined>
     connection_params?: Record<string, string>
   }
+  orgId: Id['org']
 }): Promise<OauthBaseTypes['connectOutput']> {
   // console.log('oauthConnect', {
   //   connectorName,
@@ -109,12 +111,26 @@ export function oauthConnect({
   //   connectionId,
   //   authOptions,
   // })
+
+  const redirect_uri =
+    (orgId === 'org_2n4lEDaqfBgyEtFmbsDnFFppAR5' ||
+      orgId === 'org_2n4lU7bvAbbAOqVSHhCNKCAYmft') &&
+    connectorName === 'google'
+      ? 'https://agents.doubleo.ai/connect/callback'
+      : undefined
+  console.log('redirect_uri', redirect_uri, {orgId, connectorName})
+
   return nangoFrontend
     .auth(
       connectorConfigId,
       connectionId ?? makeId('conn', connectorName, makeUlid()),
       {
-        params: {...authOptions?.connection_params},
+        params: {
+          ...authOptions?.connection_params,
+        },
+        authorization_params: {
+          ...(redirect_uri ? {redirect_uri} : {}),
+        },
         ...authOptions,
         // authOptions would tend to contain the authorization_params needed to make the initial connection
         // authorization_params: {

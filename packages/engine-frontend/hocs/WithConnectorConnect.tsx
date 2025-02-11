@@ -24,6 +24,7 @@ import {
   useToast,
 } from '@openint/ui'
 import {z} from '@openint/util'
+import {useViewerContext} from '@/components/viewer-context'
 import {
   useOpenIntConnectContext,
   useOptionalOpenIntConnectContext,
@@ -63,6 +64,7 @@ export const WithConnectorConnect = ({
   }) => React.ReactNode
 }) => {
   // console.log('WithConnectorConnect', int.id, int.connector)
+  const {viewer} = useViewerContext()
   const {clientConnectors} = useOpenIntConnectContext()
   // TODO: Restore connectFnMap so that we respect the rules of hooks to always render all hooks
   // and not skip rendering or conditionally rendering hooks
@@ -91,12 +93,16 @@ export const WithConnectorConnect = ({
           if (!nangoFrontend) {
             throw new Error('Missing nango public key')
           }
+          if (!viewer.orgId) {
+            throw new Error('Missing orgId')
+          }
           return oauthConnect({
             connectorConfigId,
             nangoFrontend,
             connectorName: ccfg.connector.name,
             connectionId: connection?.id,
             authOptions: connInput,
+            orgId: viewer.orgId,
           })
         }
       : undefined)
