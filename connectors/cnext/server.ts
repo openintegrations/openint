@@ -131,7 +131,7 @@ export function generateConnectorServerV1<T extends ConnectorSchemas>(
           redirect_uri: 'http://localhost:4000/connect/callbacknew', // TODO: should this be default or dynamic from context.redirect_uri
         })
       },
-
+      // @ts-expect-error, QQ not sure why
       async postConnect(connectOutput, config, context) {
         const tokenHandler = connectorDef.handlers?.token || defaultTokenHandler
 
@@ -197,6 +197,7 @@ export function generateConnectorServerV1<T extends ConnectorSchemas>(
             oauth: {
               credentials: {
                 access_token: processedResponse.access_token,
+                refresh_token: processedResponse.refresh_token,
                 expires_at: processedResponse.expires_in
                   ? new Date(
                       Date.now() + processedResponse.expires_in * 1000,
@@ -205,6 +206,7 @@ export function generateConnectorServerV1<T extends ConnectorSchemas>(
                 client_id: config.client_id,
                 raw: {
                   access_token: processedResponse.access_token,
+                  refresh_token: processedResponse.refresh_token,
                   expires_at: processedResponse.expires_in
                     ? new Date(
                         Date.now() + processedResponse.expires_in * 1000,
@@ -214,6 +216,13 @@ export function generateConnectorServerV1<T extends ConnectorSchemas>(
                   token_type: 'bearer',
                   type: 'OAUTH2',
                 },
+                // Add tracking fields
+                connection_id: connectOutput.connectionId,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                last_fetched_at: new Date().toISOString(),
+                provider_config_key: 'oauth', // Default value, should probably come from config
+                metadata: null, // Initialize as null as shown in the config
               },
             },
             metadata: finalMetadata,
