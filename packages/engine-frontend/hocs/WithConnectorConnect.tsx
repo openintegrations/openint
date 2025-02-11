@@ -277,6 +277,29 @@ export const WithConnectorConnect = ({
                   </TooltipProvider>
                 </div>
               )}
+              {ccfg.connector.name === 'aircall' && (
+                <div className="relative inline-block">
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <InfoIcon className="h-5 w-5 cursor-help text-gray-500" />
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p className="max-w-[300px] italic">
+                          Generate your API ID and Token with{' '}
+                          <a
+                            href="https://developer.aircall.io/tutorials/basic-authentication/"
+                            className="font-bold underline"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            these instructions
+                          </a>{' '}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              )}
             </div>
           </DialogTitle>
           {debug && (

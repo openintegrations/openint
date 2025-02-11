@@ -2,6 +2,15 @@
 
 module.exports = [
   {
+    name: 'aircall',
+    dirName: 'connector-aircall',
+    varName: 'connectorAircall',
+    imports: {
+      def: '@openint/connector-aircall/def',
+      server: '@openint/connector-aircall/server',
+    },
+  },
+  {
     name: 'airtable',
     dirName: 'connector-airtable',
     varName: 'connectorAirtable',
