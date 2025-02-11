@@ -176,6 +176,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/connector-aircall':
+        specifier: workspace:*
+        version: link:../../connectors/connector-aircall
       '@openint/connector-airtable':
         specifier: workspace:*
         version: link:../../connectors/connector-airtable
@@ -747,6 +750,21 @@ importers:
       webpack:
         specifier: '*'
         version: 5.74.0(esbuild@0.17.5)
+
+  connectors/connector-aircall:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@opensdks/runtime':
+        specifier: ^0.0.19
+        version: 0.0.19
+      '@opensdks/sdk-greenhouse':
+        specifier: ^0.0.8
+        version: 0.0.8
 
   connectors/connector-airtable:
     dependencies:
