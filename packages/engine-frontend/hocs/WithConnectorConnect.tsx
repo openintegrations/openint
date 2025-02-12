@@ -93,16 +93,12 @@ export const WithConnectorConnect = ({
           if (!nangoFrontend) {
             throw new Error('Missing nango public key')
           }
-          if (!viewer || !viewer.orgId) {
-            throw new Error('Missing orgId')
-          }
           return oauthConnect({
             connectorConfigId,
             nangoFrontend,
             connectorName: ccfg.connector.name,
             connectionId: connection?.id,
             authOptions: connInput,
-            orgId: viewer.orgId,
           })
         }
       : undefined)
@@ -114,9 +110,16 @@ export const WithConnectorConnect = ({
     ? extractId(integration.id)[2]
     : undefined
 
+  if (!viewer || !viewer.orgId) {
+    throw new Error('Missing orgId')
+  }
   // TODO: Handle preConnectInput schema and such... for example for Plaid
   const preConnect = _trpcReact.preConnect.useQuery(
-    [ccfg.id, {connectionExternalId, integrationExternalId}, {}],
+    [
+      ccfg.id,
+      {connectionExternalId, integrationExternalId},
+      {orgId: viewer?.orgId},
+    ],
     // note: this used to be enabled: ccfg.connector.hasPreConnect
     // but we disabled it as it made too many calls for plaid and just left
     // it as a noop to be lazy called by the refetch below

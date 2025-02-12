@@ -94,7 +94,7 @@ export const googleServer = {
   //     body: JSON.stringify(input.body),
   //   }),
   // eslint-disable-next-line @typescript-eslint/require-await
-  async preConnect(_, context) {
+  async preConnect(_, context, config) {
     // This returns auth options for Nango connect because it is an oauth integration
     // this behavior is not type checked though and could use some improvement
     // May be fixed if we turn nango into a connector
@@ -110,6 +110,18 @@ export const googleServer = {
       {} as Record<string, string | undefined>,
     )
 
+    const orgId = (config as any).orgId
+
+    if (!orgId) {
+      throw new Error('orgId is required in preconnect() config param')
+    }
+
+    const redirect_uri =
+      orgId === 'org_2n4lEDaqfBgyEtFmbsDnFFppAR5' ||
+      orgId === 'org_2n4lU7bvAbbAOqVSHhCNKCAYmft'
+        ? 'https://agents.doubleo.ai/connect/callback'
+        : undefined
+
     if (
       context.integrationExternalId &&
       context.integrationExternalId in integrationScopesMap
@@ -122,6 +134,7 @@ export const googleServer = {
               context.integrationExternalId as keyof typeof integrationScopesMap
             ],
           ),
+          ...(redirect_uri ? {redirect_uri} : {}),
         },
       }
       console.log('[googleServer] authParams', authParams)
