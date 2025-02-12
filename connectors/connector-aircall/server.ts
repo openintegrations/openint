@@ -44,12 +44,14 @@ export const aircallServer = {
         console.error(
           `HTTP error! status: ${response.status} - ${response.statusText}`,
         )
+        throw new Error('Invalid Aircall credentials')
       }
 
       const body = await response.text()
       console.log('Response from Aircall Ping:', body)
     } catch (error) {
       console.error('Error during fetch:', error)
+      throw error
     }
 
     return {
