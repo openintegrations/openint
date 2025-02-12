@@ -21,10 +21,10 @@ export const aircallServer = {
     })
     return aircall
   },
-  postConnect: async (connectOutput, _, context) => {
+  checkConnection: async ({settings}) => {
     // Encoding credentials:
-    const apiId = context.connection?.settings.apiId
-    const apiToken = context.connection?.settings.apiToken
+    const apiId = settings.apiId
+    const apiToken = settings.apiToken
     const encodedCredentials = Buffer.from(`${apiId}:${apiToken}`).toString(
       'base64',
     )
@@ -44,17 +44,18 @@ export const aircallServer = {
         console.error(
           `HTTP error! status: ${response.status} - ${response.statusText}`,
         )
+        throw new Error('Invalid Aircall credentials')
       }
 
       const body = await response.text()
       console.log('Response from Aircall Ping:', body)
     } catch (error) {
       console.error('Error during fetch:', error)
+      throw error
     }
 
     return {
-      connectionExternalId: connectOutput.connectionId,
-      providerConfigKey: connectOutput.providerConfigKey,
+      connectionExternalId: settings.apiId,
     }
   },
 } satisfies ConnectorServer<
