@@ -25,7 +25,7 @@
     "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
-    "@opensdks/runtime": "0.0.20",
+    "@trpc/client": "next",
     "bun-types": "latest",
     "openapi-typescript": "^7.6.1"
   }

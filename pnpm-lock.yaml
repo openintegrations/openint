@@ -2014,9 +2014,9 @@ importers:
         specifier: ^4.2.3
         version: 4.2.3(zod@3.24.2)
     devDependencies:
-      '@opensdks/runtime':
-        specifier: 0.0.20
-        version: 0.0.20
+      '@trpc/client':
+        specifier: next
+        version: 11.0.0-rc.764(@trpc/server@11.0.0-rc.764(typescript@5.7.3))(typescript@5.7.3)
       bun-types:
         specifier: latest
         version: 1.2.2
