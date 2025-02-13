@@ -1,6 +1,6 @@
 'use client'
 
-import {useUser} from '@clerk/nextjs'
+import {useOrganization, useUser} from '@clerk/nextjs'
 import {Loader2, Lock, Pencil, Plus} from 'lucide-react'
 import Image from 'next/image'
 import React, {useState} from 'react'
@@ -58,6 +58,11 @@ export default function ConnectorConfigsPage({
     open: false,
   })
   const {user} = useUser()
+  const {organization} = useOrganization()
+
+  const orgPublicMetadata = organization?.publicMetadata
+  const isWhitelisted = orgPublicMetadata?.['whitelisted'] === true
+
   const connectorConfigsRes = _trpcReact.adminListConnectorConfigs.useQuery()
 
   useRefetchOnSwitch(connectorConfigsRes.refetch)
@@ -65,7 +70,7 @@ export default function ConnectorConfigsPage({
   // either if whitelisted or already has a connector other than default postgres
   const canAddNewConnectors =
     !isProd ||
-    user?.publicMetadata?.['whitelisted'] === true ||
+    isWhitelisted ||
     connectorConfigsRes.data?.some(
       (c) => c.connectorName !== 'default_postgres',
     )
@@ -264,7 +269,7 @@ export default function ConnectorConfigsPage({
                 ) : (
                   <Card
                     key={`${vertical}-request-access`}
-                    className="m-3 size-[150px] border border-border bg-gray-100 cursor-pointer hover:bg-gray-50 transition-colors duration-150 group">
+                    className="group m-3 size-[150px] cursor-pointer border border-border bg-gray-100 transition-colors duration-150 hover:bg-gray-50">
                     <CardContent
                       className="flex size-full flex-1 flex-col items-center justify-center pt-4"
                       onClick={() => {
@@ -275,7 +280,7 @@ export default function ConnectorConfigsPage({
                         })
                         setOpenCalendar(true)
                       }}>
-                      <p className="text-center text-sm font-semibold text-gray-600 group-hover:text-gray-400 transition-colors duration-150">
+                      <p className="text-center text-sm font-semibold text-gray-600 transition-colors duration-150 group-hover:text-gray-400">
                         Request {parseCategory(vertical)} Integration
                       </p>
                     </CardContent>
