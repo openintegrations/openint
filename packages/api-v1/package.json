@@ -6,12 +6,11 @@
   "module": "./index.ts",
   "scripts": {
     "gen": "run-s gen:*",
-    "gen:oas": "npx tsx ./appRouter.ts > ./client/openapi.json",
+    "gen:oas": "bun ./scripts/generate.ts",
     "gen:types": "npx @opensdks/cli --meta-dir ./client/ --types-dir ./client/ ./client/openapi.json"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.11.2",
-    "@lilyrose2798/trpc-openapi": "^1.4.1",
     "@openint/app-config": "workspace:*",
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
@@ -20,6 +19,7 @@
     "@trpc/server": "next",
     "elysia": "^1.2.12",
     "remeda": "^2.20.1",
+    "trpc-to-openapi": "^2.1.3",
     "zod": "^3.24.2",
     "zod-openapi": "^4.2.3"
   },
