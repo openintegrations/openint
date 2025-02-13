@@ -72,25 +72,6 @@ export function ConnectionCard({
                 }`}>
                 {connectionName}
               </p>
-              <div>
-                {conn.status !== 'healthy' ? (
-                  <p
-                    className={`text-center text-sm ${
-                      reconnectId ? 'text-button' : 'text-red-500'
-                    }`}>
-                    {reconnectId ? 'Processing...' : 'Reconnect Required'}
-                  </p>
-                ) : conn.syncInProgress ? (
-                  <div className="flex flex-row items-center justify-start gap-2">
-                    <Loader2 className="size-5 animate-spin text-button" />
-                    <p className="text-center text-sm text-button">
-                      Syncing...
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-center text-sm text-[#808080]">Synced</p>
-                )}
-              </div>
             </>
           )}
         </div>
