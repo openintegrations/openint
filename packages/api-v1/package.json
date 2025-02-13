@@ -6,12 +6,11 @@
   "module": "./index.ts",
   "scripts": {
     "gen": "run-s gen:*",
-    "gen:oas": "bun ./scripts/generate.ts",
-    "gen:types": "npx @opensdks/cli --meta-dir ./client/ --types-dir ./client/ ./client/openapi.json"
+    "gen:oas": "bun ./scripts/gen-oas.ts",
+    "gen:types": "bunx openapi-typescript ./openapi.json --output ./openapi.types.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.11.2",
-    "@openint/app-config": "workspace:*",
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",
@@ -25,6 +24,7 @@
   },
   "devDependencies": {
     "@opensdks/runtime": "0.0.20",
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "openapi-typescript": "^7.6.1"
   }
 }
