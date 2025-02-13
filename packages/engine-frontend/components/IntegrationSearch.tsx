@@ -180,7 +180,7 @@ export function IntegrationSearch({
                     <h3 className="mb-2 text-lg font-semibold text-foreground">
                       {parseCategory(category)}
                     </h3>
-                    <div className="hidden w-full flex-row flex-wrap gap-4 [@media(min-width:800px)]:flex [@media(min-width:800px)]:w-[60%]">
+                    <div className="hidden w-full flex-row flex-wrap gap-4 md:flex md:w-[60%]">
                       {categoryInts.map((int) => (
                         <WithConnectorConnect
                           key={int.id}
@@ -212,7 +212,7 @@ export function IntegrationSearch({
                         </WithConnectorConnect>
                       ))}
                     </div>
-                    <div className="flex w-full flex-col gap-2 [@media(min-width:800px)]:hidden">
+                    <div className="flex w-full flex-col gap-2 md:hidden">
                       {categoryInts.map((int, index) => (
                         <WithConnectorConnect
                           key={int.id}
