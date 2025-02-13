@@ -42,6 +42,8 @@ const _VERTICAL_BY_KEY = {
   },
   email: {},
   messaging: {},
+  communication: {},
+  wiki: {},
 } satisfies Record<string, VerticalInfo>
 
 // MARK: -
