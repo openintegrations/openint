@@ -1,4 +1,6 @@
-import {createEnv} from '@t3-oss/env-core/dist'
+// @ts-expect-error ts(2307)
+import {createEnv as _createEnv} from '@t3-oss/env-core'
+import type {createEnv as createEnvType} from '@t3-oss/env-core/dist'
 import {
   Configuration,
   CountryCode,
@@ -10,6 +12,8 @@ import z2 from 'zod'
 import {getDefaultProxyAgent, memoize, z, zCast, zFunction} from '@openint/util'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {WebhookShape} from './plaid.types'
+
+export const createEnv: typeof createEnvType = _createEnv
 
 type EnvName = z.infer<typeof zPlaidEnvName>
 export const zPlaidEnvName = z.enum(['sandbox', 'development', 'production'])

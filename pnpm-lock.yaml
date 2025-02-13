@@ -2270,8 +2270,8 @@ importers:
   packages/env:
     dependencies:
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
       '@t3-oss/env-nextjs':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.7.3)(zod@3.24.2)
@@ -4953,6 +4953,9 @@ packages:
 
   '@opensdks/util-zod@0.0.15':
     resolution: {integrity: sha512-CHyk/ay5yKNFBZKDfGcJQGZ4ZhScfNhGe6xon6XjqbhP+AYv4tYJl1GTbTqJdN2N15KnG3vuXjbi6SX0SGwbhw==}
+
+  '@opensdks/util-zod@0.0.16':
+    resolution: {integrity: sha512-Khgn6Wra02ikZgN9tAV/xAoCN/Oz+3ntuC103RVXR+d1rFD4jziArUHxJWYSkZQ6a+5HKcApIWOl7C2U2CWRZQ==}
 
   '@opentelemetry/api-logs@0.52.1':
     resolution: {integrity: sha512-qnSqB2DQ9TPP96dl8cDubDvrUyWc0/sK81xHTK8eSUspzDM3bsewX903qclQFvVhgStjRWdC5bLb3kQqMkfV5A==}
@@ -19056,6 +19059,11 @@ snapshots:
     dependencies:
       zod: 3.22.4
       zod-openapi: 2.14.0(zod@3.22.4)
+
+  '@opensdks/util-zod@0.0.16':
+    dependencies:
+      zod: 3.24.2
+      zod-openapi: 4.2.3(zod@3.24.2)
 
   '@opentelemetry/api-logs@0.52.1':
     dependencies:

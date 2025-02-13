@@ -1,5 +1,5 @@
 import {z} from '@opensdks/util-zod'
-import {createEnv} from '@t3-oss/env-nextjs/dist'
+import {createEnv} from './createEnv'
 import {proxyRequired} from './proxyRequired'
 
 export const envConfig = {
