@@ -1,0 +1,26 @@
+{
+  "name": "@openint/api-v1",
+  "version": "0.0.0",
+  "private": true,
+  "sideEffects": false,
+  "module": "./index.ts",
+  "scripts": {
+    "gen": "run-s gen:*",
+    "gen:oas": "npx tsx ./appRouter.ts > ./client/openapi.json",
+    "gen:types": "npx @opensdks/cli --meta-dir ./client/ --types-dir ./client/ ./client/openapi.json"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.11.2",
+    "@lilyrose2798/trpc-openapi": "^1.4.1",
+    "@openint/app-config": "workspace:*",
+    "@openint/cdk": "workspace:*",
+    "@openint/env": "workspace:*",
+    "@openint/events": "workspace:*",
+    "@opensdks/fetch-links": "^0.0.22",
+    "@opensdks/util-zod": "^0.0.15",
+    "remeda": "^2.20.1"
+  },
+  "devDependencies": {
+    "@opensdks/runtime": "0.0.20"
+  }
+}
