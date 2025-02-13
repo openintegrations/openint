@@ -1,4 +1,4 @@
-import {createEnv} from '@t3-oss/env-core'
+import {createEnv} from '@t3-oss/env-core/dist'
 import {
   Configuration,
   CountryCode,
@@ -6,6 +6,7 @@ import {
   PlaidEnvironments,
   Products,
 } from 'plaid'
+import z2 from 'zod'
 import {getDefaultProxyAgent, memoize, z, zCast, zFunction} from '@openint/util'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {WebhookShape} from './plaid.types'
@@ -91,10 +92,10 @@ export function makePlaidClient(config: {
 export function getPlatformConfig(envName: EnvName) {
   const env = createEnv({
     server: {
-      int_plaid__CLIENT_ID: z.string(),
-      int_plaid__CLIENT_SECRET_SANDBOX: z.string(),
-      int_plaid__CLIENT_SECRET_DEVELOPMENT: z.string(),
-      int_plaid__CLIENT_SECRET_PRODUCTION: z.string(),
+      int_plaid__CLIENT_ID: z2.string(),
+      int_plaid__CLIENT_SECRET_SANDBOX: z2.string(),
+      int_plaid__CLIENT_SECRET_DEVELOPMENT: z2.string(),
+      int_plaid__CLIENT_SECRET_PRODUCTION: z2.string(),
     },
     runtimeEnv: process.env,
   })
