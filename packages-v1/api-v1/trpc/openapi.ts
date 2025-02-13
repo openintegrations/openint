@@ -9,6 +9,7 @@ export function generateOpenAPISpec({
   const oas = generateOpenApiDocument(appRouter, {
     title: 'OpenInt',
     version: '1.0.0',
+    openApiVersion: '3.1.0',
     baseUrl,
   })
 
