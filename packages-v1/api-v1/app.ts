@@ -1,6 +1,6 @@
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
-import {handleOpenApiRequest, handleTrpcRequest} from './trpc/handlers'
+import {createOpenApiHandler, createTrpcHandler} from './trpc/handlers'
 import {generateOpenAPISpec} from './trpc/openapi'
 
 export const app = new Elysia({prefix: '/api'})
@@ -17,8 +17,8 @@ export const app = new Elysia({prefix: '/api'})
   // empirically, the first one without * works for trpc, and the second one with * works for openapi
   // no other settings seems to work when mounted inside next.js. Direct elysia listen works
   // in a more consistent way and we should probably add some test specifically for next.js mounted behavior
-  .mount('/v1/trpc', handleTrpcRequest)
-  .mount('/v1*', handleOpenApiRequest)
+  .mount('/v1/trpc', createTrpcHandler({endpoint: '/trpc'}))
+  .mount('/v1*', createOpenApiHandler({endpoint: '/v1'}))
 
 // @ts-expect-error Property 'main' does not exist on type 'ImportMeta'.ts(2339)
 if (import.meta.main) {
