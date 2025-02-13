@@ -12,10 +12,8 @@
   "dependencies": {
     "@clerk/nextjs": "^6.11.2",
     "@elysiajs/swagger": "^1.2.0",
-    "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",
-    "@opensdks/fetch-links": "^0.0.22",
     "@sinclair/typebox": "^0.34.20",
     "@trpc/server": "next",
     "elysia": "^1.2.12",
@@ -25,6 +23,8 @@
     "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
+    "@openint/cdk": "workspace:*",
+    "@opensdks/fetch-links": "^0.0.22",
     "@trpc/client": "next",
     "bun-types": "latest",
     "openapi-fetch": "^0.13.4",

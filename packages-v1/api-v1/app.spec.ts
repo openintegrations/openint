@@ -1,3 +1,4 @@
+import {applyLinks, logLink} from '@opensdks/fetch-links'
 import {createTRPCClient, httpLink} from '@trpc/client'
 import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
 import type {paths} from './__generated__/openapi.types'
@@ -46,4 +47,13 @@ test('openapi route with OpenAPI client', async () => {
   const pathBasedClient = wrapAsPathBasedClient(openapiClient)
   const res2 = await pathBasedClient['/health'].GET()
   expect(res2.data).toBeTruthy()
+})
+
+test('OpenAPI client with links', async () => {
+  const openapiClient = createClient<paths>({
+    baseUrl: 'http://localhost/api/v1',
+    fetch: (req) => applyLinks(req, [logLink(), app.handle]),
+  })
+  const res = await openapiClient.GET('/health')
+  expect(res.data).toBeTruthy()
 })
