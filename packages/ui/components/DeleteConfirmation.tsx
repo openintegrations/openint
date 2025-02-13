@@ -1,14 +1,12 @@
 import {Loader2} from 'lucide-react'
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '../shadcn'
 
 export function DeleteConfirmation({
@@ -28,36 +26,29 @@ export function DeleteConfirmation({
   description?: string
   confirmText?: string
 }) {
-  return isOpen ? (
-    <AlertDialog open>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          {title && <AlertDialogTitle>{title}</AlertDialogTitle>}
-          {description && (
-            <AlertDialogDescription>{description}</AlertDialogDescription>
-          )}
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="w-[400px]">
+        <DialogHeader>
+          {title && <DialogTitle>{title}</DialogTitle>}
+          {description && <DialogDescription>{description}</DialogDescription>}
+        </DialogHeader>
+        <DialogFooter>
+          <Button
             disabled={isDeleting}
+            variant="outline"
             onClick={() => setIsOpen(false)}>
             Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button
-              disabled={isDeleting}
-              className="mr-auto"
-              onClick={(e) => {
-                onDelete()
-                e.preventDefault()
-              }}
-              variant="destructive">
-              {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {confirmText ?? 'Confirm'}
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  ) : null
+          </Button>
+          <Button
+            disabled={isDeleting}
+            onClick={onDelete}
+            variant="destructive">
+            {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {confirmText ?? 'Confirm'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
 }
