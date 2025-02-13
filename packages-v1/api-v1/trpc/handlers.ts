@@ -1,6 +1,6 @@
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
-import {appRouter} from './appRouter'
+import {appRouter} from './routers'
 
 function contextFromRequest(_req: Request) {
   return {viewer: {role: 'system' as const}}

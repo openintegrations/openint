@@ -1,10 +1,10 @@
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
-import {openApiDocument} from './trpc/appRouter'
+import {openApiDocument} from './trpc/routers'
 import {
   handleOpenApiRequest,
   handleTrpcRequest,
-} from './trpc/createRouteHandler'
+} from './trpc/handlers'
 
 export const app = new Elysia()
   .get('/health', () => ({status: 'ok'}))

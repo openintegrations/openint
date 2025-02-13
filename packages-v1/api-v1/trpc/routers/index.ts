@@ -1,6 +1,6 @@
 import {generateOpenApiDocument} from 'trpc-to-openapi'
 import {z} from 'zod'
-import {publicProcedure, router} from './trpc'
+import {publicProcedure, router} from '../_base'
 
 export const appRouter = router({
   // getOpenapiDocument: publicProcedure
