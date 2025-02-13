@@ -11,7 +11,7 @@ export const handleTrpcRequest = (req: Request) => {
   return fetchRequestHandler({
     router: appRouter,
     createContext: () => contextFromRequest(req),
-    endpoint: '/', // '/api/trpc', Assume we are hosted at root and let middleware handle prefixing
+    endpoint: '/trpc', // '/api/trpc', Assume we are hosted at root and let middleware handle prefixing
     req,
   })
 }
@@ -21,7 +21,7 @@ export const handleOpenApiRequest = (req: Request) => {
   return createOpenApiFetchHandler({
     router: appRouter,
     createContext: () => contextFromRequest(req),
-    endpoint: '/', // '/api/v1', Assume we are hosted at root and let middleware handle prefixing
+    endpoint: '/v1', // '/', // '/api/v1', Assume we are hosted at root and let middleware handle prefixing
     req,
   })
 }
