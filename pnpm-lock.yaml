@@ -643,7 +643,7 @@ importers:
         version: 4.28.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@trpc/react-query':
         specifier: 10.40.0
-        version: 10.40.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.40.0(@trpc/server@10.40.0))(@trpc/server@10.40.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 10.40.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@11.0.0-rc.764(@trpc/server@10.40.0)(typescript@5.7.3))(@trpc/server@10.40.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -2062,9 +2062,6 @@ importers:
       elysia:
         specifier: ^1.2.12
         version: 1.2.12(@sinclair/typebox@0.33.12)(openapi-types@12.1.0)(typescript@5.7.3)
-      openapi-typescript:
-        specifier: ^7.6.1
-        version: 7.6.1(typescript@5.7.3)
       remeda:
         specifier: ^2.20.1
         version: 2.20.1
@@ -2084,6 +2081,9 @@ importers:
       bun-types:
         specifier: latest
         version: 1.2.2
+      openapi-typescript:
+        specifier: ^7.6.1
+        version: 7.6.1(typescript@5.7.3)
 
   packages/custom-links:
     dependencies:
@@ -2371,6 +2371,22 @@ importers:
       redis:
         specifier: 3.1.2
         version: 3.1.2
+
+  packages/sdk-v1:
+    dependencies:
+      '@trpc/client':
+        specifier: next
+        version: 11.0.0-rc.764(@trpc/server@11.0.0-rc.764(typescript@5.7.3))(typescript@5.7.3)
+      openapi-fetch:
+        specifier: ^0.13.4
+        version: 0.13.4
+    devDependencies:
+      '@openint/api-v1':
+        specifier: workspace:*
+        version: link:../api-v1
+      bun-types:
+        specifier: latest
+        version: 1.2.2
 
   packages/trpc:
     dependencies:
@@ -7146,6 +7162,12 @@ packages:
     resolution: {integrity: sha512-bT6BcdWjj0KzGQiimE6rB2tIaRYX0Ear4Gthb5szN/c01wrP0yC1Fbz2uCcm/QTVAwu4Lve5M+YjPoEaTHG6lg==}
     peerDependencies:
       '@trpc/server': 10.40.0
+
+  '@trpc/client@11.0.0-rc.764':
+    resolution: {integrity: sha512-6NXnOm5c4U3CYqaIzZ9YHqwyEpGj8aMVpY7jvUwvpJjX11n1j52YbwqoeuUpz1JJzYw6g23PFORD4JQanqQntQ==}
+    peerDependencies:
+      '@trpc/server': 11.0.0-rc.764+71c7ccc49
+      typescript: '>=5.7.2'
 
   '@trpc/react-query@10.40.0':
     resolution: {integrity: sha512-DpJrV3lmYNo9xtPtcg49lfh9CUFap3ZivjhlSmfe4QPf7H6xBjAE+ml4OdJ0RmKvSTFvbLSOiNdB1k5O8zIdzQ==}
@@ -22028,10 +22050,28 @@ snapshots:
     dependencies:
       '@trpc/server': 10.40.0
 
+  '@trpc/client@11.0.0-rc.764(@trpc/server@10.40.0)(typescript@5.7.3)':
+    dependencies:
+      '@trpc/server': 10.40.0
+      typescript: 5.7.3
+
+  '@trpc/client@11.0.0-rc.764(@trpc/server@11.0.0-rc.764(typescript@5.7.3))(typescript@5.7.3)':
+    dependencies:
+      '@trpc/server': 11.0.0-rc.764(typescript@5.7.3)
+      typescript: 5.7.3
+
   '@trpc/react-query@10.40.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.40.0(@trpc/server@10.40.0))(@trpc/server@10.40.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/react-query': 4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/client': 10.40.0(@trpc/server@10.40.0)
+      '@trpc/server': 10.40.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@trpc/react-query@10.40.0(@tanstack/react-query@4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@11.0.0-rc.764(@trpc/server@10.40.0)(typescript@5.7.3))(@trpc/server@10.40.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@tanstack/react-query': 4.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@trpc/client': 11.0.0-rc.764(@trpc/server@10.40.0)(typescript@5.7.3)
       '@trpc/server': 10.40.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)

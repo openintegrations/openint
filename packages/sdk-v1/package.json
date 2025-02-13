@@ -1,0 +1,16 @@
+{
+  "name": "@openint/sdk-v1",
+  "version": "0.0.0",
+  "private": true,
+  "sideEffects": false,
+  "module": "./index.ts",
+  "scripts": {},
+  "dependencies": {
+    "@trpc/client": "next",
+    "openapi-fetch": "^0.13.4"
+  },
+  "devDependencies": {
+    "@openint/api-v1": "workspace:*",
+    "bun-types": "latest"
+  }
+}
