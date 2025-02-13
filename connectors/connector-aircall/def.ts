@@ -25,7 +25,7 @@ export const aircallDef = {
   metadata: {
     displayName: 'Aircall',
     stage: 'beta',
-    verticals: ['crm'],
+    verticals: ['communication'],
     logoUrl: '/_assets/logo-aircall.svg',
   },
 } satisfies ConnectorDef<typeof aircallSchema>
