@@ -4,6 +4,38 @@
  */
 
 export interface paths {
+    "/connection": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listConnections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/connector-config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listConnectorConfigs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -24,34 +56,28 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /**
-         * Authorization not provided error (401)
-         * @description The error information
-         * @example {
-         *       "code": "UNAUTHORIZED",
-         *       "message": "Authorization not provided",
-         *       "issues": []
-         *     }
-         */
-        "error.UNAUTHORIZED": {
-            /**
-             * @description The error message
-             * @example Authorization not provided
-             */
-            message: string;
-            /**
-             * @description The error code
-             * @example UNAUTHORIZED
-             */
-            code: string;
-            /**
-             * @description An array of issues that were responsible for the error
-             * @example []
-             */
-            issues?: {
-                message: string;
-            }[];
-        };
+        /** Connection */
+        "core.connection": {
+            connector_name: "core.connection";
+        } & ({
+            id: string;
+            /** Format: date-time */
+            updated_at: string;
+            /** Format: date-time */
+            created_at: string;
+            connector_config_id: string;
+        } & Omit<components["schemas"]["plaid.connection"] | components["schemas"]["greenhouse.connection"], "connector_name">);
+        /** Connector Config */
+        "core.connector_config": {
+            connector_name: "core.connector_config";
+        } & ({
+            id: string;
+            /** Format: date-time */
+            updated_at: string;
+            /** Format: date-time */
+            created_at: string;
+            org_id: string;
+        } & Omit<components["schemas"]["plaid.connector_config"] | components["schemas"]["greenhouse.connector_config"], "connector_name">);
         /**
          * Insufficient access error (403)
          * @description The error information
@@ -108,6 +134,86 @@ export interface components {
                 message: string;
             }[];
         };
+        /**
+         * Authorization not provided error (401)
+         * @description The error information
+         * @example {
+         *       "code": "UNAUTHORIZED",
+         *       "message": "Authorization not provided",
+         *       "issues": []
+         *     }
+         */
+        "error.UNAUTHORIZED": {
+            /**
+             * @description The error message
+             * @example Authorization not provided
+             */
+            message: string;
+            /**
+             * @description The error code
+             * @example UNAUTHORIZED
+             */
+            code: string;
+            /**
+             * @description An array of issues that were responsible for the error
+             * @example []
+             */
+            issues?: {
+                message: string;
+            }[];
+        };
+        /** @description Greenhouse Connection */
+        "greenhouse.connection": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "greenhouse";
+            secrets: {
+                api_key: string;
+            };
+            settings: Record<string, never>;
+        };
+        /** @description Greenhouse Connector Config */
+        "greenhouse.connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "greenhouse";
+            secrets: Record<string, never>;
+            config: Record<string, never>;
+        };
+        /** @description Plaid Connection */
+        "plaid.connection": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "plaid";
+            secrets: {
+                access_token: string;
+            };
+            settings: {
+                item_id: string;
+            };
+        };
+        /** @description Plaid Connector Config */
+        "plaid.connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "plaid";
+            secrets: {
+                client_id: string;
+                client_secret: string;
+            };
+            config: {
+                client_name: string;
+                products: ("transactions" | "balances")[];
+            };
+        };
     };
     responses: never;
     parameters: never;
@@ -117,6 +223,104 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    listConnections: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["core.connection"][];
+                    };
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    listConnectorConfigs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["core.connector_config"][];
+                    };
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
     health: {
         parameters: {
             query?: never;
