@@ -15,11 +15,17 @@ export interface MetaTable<
     connectorConfigId?: Id['ccfg'] | null
     /** Maybe remove this? not applicable everywhere */
     connectorName?: string | null
+    where?: Record<string, string>
     /** Used for search */
     keywords?: string | null
+    /** Used for limiting results to only events after a certain time */
+    since?: number
     /** Pagination, not necessarily supported */
     limit?: number
     offset?: number
+    /** Used for ordering results */
+    orderBy?: string
+    order?: string
   }): Promise<readonly T[]>
   set(id: TID, data: Omit<T, 'id'>): Promise<void>
   patch?(id: TID, partial: ObjectPartialDeep<NoInfer<T>>): Promise<void>

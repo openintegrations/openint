@@ -5,6 +5,7 @@ import {getProtectedContext, TRPCError} from '@openint/trpc'
 import {R, z} from '@openint/util'
 import {zBaseRecord, zPaginatedResult, zPaginationParams} from '@openint/vdk'
 import {publicProcedure, trpc} from './_base'
+import {connectionRouter} from './connectionRouter'
 
 const tags = ['Connectors']
 
@@ -193,6 +194,8 @@ export const connectorRouter = trpc.mergeRouters(
         zPaginationParams.extend({
           search_text: z.string().optional(),
           connector_config_ids: z.array(z.string()).optional(),
+          connectorNames: z.array(z.string()).optional(),
+          integrationIds: z.array(z.string()).optional(), // Support int_google_drive, google_drive, jira,etc.
         }),
       )
       .output(
@@ -232,13 +235,49 @@ export const connectorRouter = trpc.mergeRouters(
                 }))
             }),
         )
+        const connections = await connectionRouter
+          .createCaller(ctx)
+          .listConnection()
 
         // TODO: Implement filtering in each of the connectors instead?
 
         // integration should have connector name...
         return {
           has_next_page: integrations.some((int) => int.has_next_page),
-          items: integrations.flatMap((int) => int.items),
+          items: integrations
+            .flatMap((int) => int.items)
+            .filter((int) => {
+              const connectorNameMatches =
+                !input.connectorNames ||
+                input.connectorNames.length === 0 ||
+                input.connectorNames.includes(int.connector_name)
+
+              const integrationMatches =
+                !input.integrationIds ||
+                input.integrationIds.length === 0 ||
+                input.integrationIds.some((filter) => int.id.includes(filter))
+
+              // Check if this integration is already connected
+              const existingConnection = connections.find(
+                (conn) =>
+                  conn.integrationId === int.id ||
+                  (conn.integrationId === null &&
+                    conn.connectorConfigId === int.connector_config_id),
+              )
+
+              const integrationWithinConnector = input.connectorNames?.some(
+                (connectorName) =>
+                  int.id.includes(connectorName) && int.id.startsWith('int_'),
+              )
+
+              return (
+                ((connectorNameMatches &&
+                  integrationMatches &&
+                  integrationWithinConnector) ||
+                  (connectorNameMatches && !integrationWithinConnector)) &&
+                !existingConnection
+              )
+            }),
           next_cursor: null, // Implement me...
         }
       }),

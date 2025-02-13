@@ -1,4 +1,4 @@
-import {getTableName} from 'drizzle-orm'
+import {getTableName, sql} from 'drizzle-orm'
 import {drizzle} from 'drizzle-orm/node-postgres'
 import jsonStableStringify from 'json-stable-stringify'
 import * as R from 'remeda'
@@ -23,8 +23,12 @@ postgresHelpers._types['destinationInputEntity'] = {
 export const postgresServer = {
   // sourceSync removed for now as it is not used yet: https://github.com/openintegrations/openint/pull/64/commits/20ef41123b1f72378e312c2c3114c462423e16e7
 
-  destinationSync: ({customer, source, settings: {databaseUrl}}) => {
-    const db = drizzle(databaseUrl, {logger: Boolean(process.env['DEBUG'])})
+  destinationSync: ({customer, source, settings}) => {
+    const url = new URL(settings.databaseUrl)
+    const schema = url.searchParams.get('schema') ?? 'public'
+    url.searchParams.delete('schema') // otherwise PostgresError: unrecognized configuration parameter "schema"
+    const db = drizzle(url.toString(), {logger: Boolean(process.env['DEBUG'])})
+    let schemaSetup = false
     const migrationRan: Record<string, boolean> = {}
     let messagesByConfig: Record<string, NonEmptyArray<RecordMessageBody>> = {}
 
@@ -37,8 +41,11 @@ export const postgresServer = {
       await runMigrationForStandardTable(db, tableName)
     }
 
+    // TODO: Introduce an end event that allows database connection to be closed explicitly
+    // when not in serverless environments
     return handlersLink({
       data: (op) => {
+        // Transforming old format into new format...
         const body =
           'entityName' in op.data
             ? ({
@@ -64,6 +71,19 @@ export const postgresServer = {
         return rxjs.of(op)
       },
       commit: async (op) => {
+        if (schema !== 'public' && !schemaSetup) {
+          // TODO: support scenario in which we have no create schema privileges
+          // and the destination schema already exists and have been created
+          await db.execute(
+            sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)}`,
+          )
+          // False means apply to entire session, not just current transaction
+          await db.execute(
+            sql`SELECT set_config('search_path', ${schema}, false)`,
+          )
+          schemaSetup = true
+        }
+
         for (const msgs of Object.values(messagesByConfig)) {
           // TODO(p1): Infer table may NOT end up with the right schema if columns are `null` or `undefined`
           // in particular it could be hard to differentiate between a string and a jsonb column

@@ -41,6 +41,9 @@ const _VERTICAL_BY_KEY = {
     objects: ['job', 'offer', 'candidate', 'opening'],
   },
   email: {},
+  messaging: {},
+  communication: {},
+  wiki: {},
 } satisfies Record<string, VerticalInfo>
 
 // MARK: -

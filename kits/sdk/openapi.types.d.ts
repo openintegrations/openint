@@ -22,13 +22,25 @@ export interface paths {
     /** Health check */
     get: operations['health']
   }
+  '/clerk-testing-token': {
+    /** Create clerk testing token */
+    get: operations['createClerkTestingToken']
+  }
   '/connect/token': {
-    /** Create a connect token */
+    /** Create connect token */
     post: operations['createConnectToken']
   }
   '/connect/magic-link': {
-    /** Create a magic link */
+    /** Create magic link */
     post: operations['createMagicLink']
+  }
+  '/connect/file-picker': {
+    /** Create file picker link */
+    post: operations['createFilePickerLink']
+  }
+  '/core/customer/{id}': {
+    /** Upsert customer */
+    put: operations['upsertCustomer']
   }
   '/passthrough': {
     /** Passthrough */
@@ -127,9 +139,9 @@ export interface paths {
     /** Sync pipeline */
     post: operations['syncPipeline']
   }
-  '/core/sync_run': {
-    /** List sync runs */
-    get: operations['listSyncRuns']
+  '/core/events': {
+    /** List events */
+    get: operations['listEvents']
   }
   '/viewer': {
     /** Get current viewer accessing the API */
@@ -138,6 +150,8 @@ export interface paths {
   '/viewer/organization': {
     /** Get current organization of viewer accessing the API */
     get: operations['getCurrentOrganization']
+    /** Update current organization */
+    patch: operations['updateCurrentOrganization']
   }
   '/openapi.json': {
     /** Get openapi document */
@@ -372,45 +386,49 @@ export interface paths {
     /** List Individuals */
     get: operations['hris-listIndividual']
   }
-  '/unified/etl/read/{stream}': {
+  '/unified/sync/read/{stream}': {
     /** Read Stream */
-    get: operations['etl-readStream']
+    get: operations['sync-readStream']
   }
-  '/unified/etl/discover': {
+  '/unified/sync/discover': {
     /** Discover */
-    get: operations['etl-discover']
+    get: operations['sync-discover']
   }
-  '/unified/etl/read': {
+  '/unified/sync/read': {
     /** Read Data */
-    post: operations['etl-read']
+    post: operations['sync-read']
   }
-  '/unified/etl/write': {
+  '/unified/sync/write': {
     /** Write Data */
-    post: operations['etl-write']
+    post: operations['sync-write']
+  }
+  '/unified/file-storage/drive-group': {
+    /** List drive groups */
+    get: operations['fileStorage-listDriveGroups']
   }
   '/unified/file-storage/drive': {
     /** List drives */
     get: operations['fileStorage-listDrives']
   }
-  '/unified/file-storage/drive/{driveId}': {
-    /** Get drive */
-    get: operations['fileStorage-getDrive']
-  }
-  '/unified/file-storage/drive/{driveId}/folder': {
-    /** List folders */
-    get: operations['fileStorage-listFolders']
-  }
-  '/unified/file-storage/drive/{driveId}/folder/{folderId}': {
-    /** Get folder */
-    get: operations['fileStorage-getFolder']
-  }
-  '/unified/file-storage/drive/{driveId}/file': {
+  '/unified/file-storage/file': {
     /** List files */
     get: operations['fileStorage-listFiles']
   }
-  '/unified/file-storage/drive/{driveId}/file/{fileId}': {
+  '/unified/file-storage/file/{id}': {
     /** Get file */
     get: operations['fileStorage-getFile']
+  }
+  '/unified/file-storage/file/{id}/export': {
+    /** Export file */
+    get: operations['fileStorage-exportFile']
+  }
+  '/unified/file-storage/file/{id}/download': {
+    /** Download file */
+    get: operations['fileStorage-downloadFile']
+  }
+  '/unified/file-storage/folder': {
+    /** List folders */
+    get: operations['fileStorage-listFolders']
   }
 }
 
@@ -420,6 +438,16 @@ export interface webhooks {
       requestBody?: {
         content: {
           'application/json': components['schemas']['webhooks.sync.completed']
+        }
+      }
+      responses: {}
+    }
+  }
+  pageview: {
+    post: {
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['webhooks.pageview']
         }
       }
       responses: {}
@@ -440,6 +468,15 @@ export interface components {
       }
       /** @enum {string} */
       name: 'sync.completed'
+      id?: string
+    }
+    'webhooks.pageview': {
+      data: {
+        current_url: string
+        path: string
+      }
+      /** @enum {string} */
+      name: 'pageview'
       id?: string
     }
     /**
@@ -543,7 +580,7 @@ export interface components {
         [key: string]: unknown
       } | null
       standard?: {
-        displayName: string
+        displayName?: string | null
         /** @enum {string|null} */
         status?: 'healthy' | 'disconnected' | 'error' | 'manual'
         statusMessage?: string | null
@@ -604,9 +641,10 @@ export interface components {
     /** @enum {string} */
     Link:
       | 'unified_banking'
+      | 'unified_ats'
+      | 'unified_accounting'
       | 'prefix_connector_name'
       | 'single_table'
-      | 'unified_ats'
       | 'unified_crm'
       | 'custom_link_ag'
     'core.integration': {
@@ -640,6 +678,9 @@ export interface components {
             | 'calendar'
             | 'ats'
             | 'email'
+            | 'messaging'
+            | 'communication'
+            | 'wiki'
           )[]
         | null
       connector_name: string
@@ -685,6 +726,23 @@ export interface components {
        *   During updates this object will be shallowly merged
        */
       metadata?: unknown
+    }
+    Event: {
+      /** @description Must start with 'evt_' */
+      id: string
+      name: string
+      data?: {
+        [key: string]: unknown
+      } | null
+      timestamp: string
+      user?: {
+        [key: string]: unknown
+      } | null
+      /** @description Must start with 'org_' */
+      org_id?: string | null
+      customer_id?: string | null
+      /** @description Must start with 'user_' */
+      user_id?: string | null
     }
     Viewer: OneOf<
       [
@@ -1150,6 +1208,18 @@ export interface components {
       account_id?: string | null
       account_name?: string | null
     }
+    'accounting.vendor': {
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+      raw?: {
+        [key: string]: unknown
+      }
+      id: string
+      name: string
+      url: string
+    }
     /** @description An (open) role */
     'ats.job': {
       id: string
@@ -1243,42 +1313,53 @@ export interface components {
         [key: string]: unknown
       }
     }
+    /** @description A unified representation of a drive group */
+    'unified.drivegroup': {
+      id: string
+      name: string
+      description?: string | null
+      updated_at?: string | null
+      created_at?: string | null
+      raw_data?: unknown
+    }
     /** @description A unified representation of a storage drive */
     'unified.drive': {
       id: string
       name: string
+      description?: string | null
+      updated_at?: string | null
       created_at?: string | null
-      modified_at?: string | null
-      raw_data?: {
-        [key: string]: unknown
-      }
+      raw_data?: unknown
     }
-    /** @description A unified representation of a folder within a drive */
+    /** @description A unified representation of a file */
+    'unified.file': {
+      id: string
+      name?: string | null
+      description?: string | null
+      /** @enum {string} */
+      type: 'file' | 'folder' | 'url'
+      path?: string | null
+      mime_type?: string | null
+      downloadable: boolean
+      size?: number | null
+      permissions: {
+        download: boolean
+      }
+      exportable: boolean
+      export_formats?: string[] | null
+      updated_at?: string | null
+      created_at?: string | null
+      raw_data?: unknown
+    }
+    /** @description A unified representation of a folder */
     'unified.folder': {
       id: string
       name: string
-      parent_id?: string | null
-      drive_id: string
+      description?: string | null
+      path: string
+      updated_at?: string | null
       created_at?: string | null
-      modified_at?: string | null
-      raw_data?: {
-        [key: string]: unknown
-      }
-    }
-    /** @description A unified representation of a file within a drive */
-    'unified.file': {
-      id: string
-      name: string
-      file_url?: string | null
-      download_url?: string | null
-      mime_type?: string | null
-      size?: number | null
-      drive_id: string
-      created_at?: string | null
-      modified_at?: string | null
-      raw_data?: {
-        [key: string]: unknown
-      }
+      raw_data?: unknown
     }
   }
   responses: never
@@ -1307,6 +1388,11 @@ export interface operations {
           'application/json': {
             healthy: boolean
             error?: string
+            deps?: {
+              nango: boolean
+              inngest: boolean
+              clerk: boolean
+            }
           }
         }
       }
@@ -1330,7 +1416,43 @@ export interface operations {
       }
     }
   }
-  /** Create a connect token */
+  /** Create clerk testing token */
+  createClerkTestingToken: {
+    parameters: {
+      query: {
+        secret: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            testing_token: string
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Create connect token */
   createConnectToken: {
     requestBody: {
       content: {
@@ -1368,7 +1490,7 @@ export interface operations {
       }
     }
   }
-  /** Create a magic link */
+  /** Create magic link */
   createMagicLink: {
     requestBody: {
       content: {
@@ -1384,14 +1506,22 @@ export interface operations {
           displayName?: string | null
           /** @description Where to send user to after connect / if they press back button */
           redirectUrl?: string | null
-          /** @description Filter connector config by connector name */
-          connectorName?: string | null
-          /** @description Filter connector config by displayName */
-          connectorConfigDisplayName?: string | null
-          /** @description Must start with 'ccfg_' */
-          connectorConfigId?: string
-          /** @default true */
-          showExisting?: boolean
+          /** @description Filter integrations by comma separated connector names */
+          connectorNames?: string | null
+          /** @description Filter integrations by comma separated integration ids */
+          integrationIds?: string | null
+          /** @description Filter managed connections by connection id */
+          connectionId?: string | null
+          /**
+           * @description Magic Link display theme
+           * @enum {string|null}
+           */
+          theme?: 'light' | 'dark'
+          /**
+           * @description Magic Link tab view
+           * @enum {string|null}
+           */
+          view?: 'manage' | 'manage-deeplink' | 'add' | 'add-deeplink'
         }
       }
     }
@@ -1408,6 +1538,119 @@ export interface operations {
       400: {
         content: {
           'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Create file picker link */
+  createFilePickerLink: {
+    requestBody: {
+      content: {
+        'application/json': {
+          /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
+          customerId?: string
+          /**
+           * @description How long the magic link will be valid for (in seconds) before it expires
+           * @default 2592000
+           */
+          validityInSeconds?: number
+          /** @enum {string|null} */
+          theme?: 'light' | 'dark'
+          multiSelect?: boolean | null
+          folderSelect?: boolean | null
+          themeColors?: {
+            accent?: string | null
+            background?: string | null
+            border?: string | null
+            button?: string | null
+            buttonLight?: string | null
+            buttonForeground?: string | null
+            buttonHover?: string | null
+            buttonStroke?: string | null
+            buttonSecondary?: string | null
+            buttonSecondaryForeground?: string | null
+            buttonSecondaryStroke?: string | null
+            buttonSecondaryHover?: string | null
+            card?: string | null
+            cardForeground?: string | null
+            foreground?: string | null
+            navbar?: string | null
+            primary?: string | null
+            primaryForeground?: string | null
+            secondary?: string | null
+            secondaryForeground?: string | null
+            sidebar?: string | null
+            tab?: string | null
+          } | null
+          /** @description Must start with 'conn_' */
+          connectionId: string
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            url: string
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Upsert customer */
+  upsertCustomer: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          metadata?: unknown
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            id: string
+            orgId: string
+            metadata?: unknown
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
         }
       }
       /** @description Internal server error */
@@ -1682,7 +1925,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': unknown
+          'application/json': Record<string, never>
         }
       }
       /** @description Invalid input data */
@@ -1836,7 +2079,13 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': unknown
+          'application/json': {
+            connection_requested_event_id?: string
+            pipeline_syncs?: {
+              pipeline_id: string
+              sync_completed_event_id: string
+            }[]
+          }
         }
       }
       /** @description Invalid input data */
@@ -2095,6 +2344,9 @@ export interface operations {
               | 'calendar'
               | 'ats'
               | 'email'
+              | 'messaging'
+              | 'communication'
+              | 'wiki'
             )[]
             integrations: string[]
           }[]
@@ -2322,6 +2574,8 @@ export interface operations {
         page_size?: number
         search_text?: string
         connector_config_ids?: string[]
+        connectorNames?: string[]
+        integrationIds?: string[]
       }
     }
     responses: {
@@ -2565,7 +2819,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': unknown
+          'application/json': Record<string, never>
         }
       }
       /** @description Invalid input data */
@@ -2582,19 +2836,27 @@ export interface operations {
       }
     }
   }
-  /** List sync runs */
-  listSyncRuns: {
+  /** List events */
+  listEvents: {
     parameters: {
-      query?: {
-        limit?: number
-        offset?: number
+      query: {
+        sync_mode?: 'full' | 'incremental'
+        cursor?: string | null
+        page_size?: number
+        since: number
+        customerId?: string | null
+        name?: string | null
       }
     }
     responses: {
       /** @description Successful response */
       200: {
         content: {
-          'application/json': unknown[]
+          'application/json': {
+            next_cursor?: string | null
+            has_next_page: boolean
+            items: components['schemas']['Event'][]
+          }
         }
       }
       /** @description Invalid input data */
@@ -2669,6 +2931,93 @@ export interface operations {
               migrate_tables?: boolean
             }
           }
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Update current organization */
+  updateCurrentOrganization: {
+    requestBody: {
+      content: {
+        'application/json': {
+          publicMetadata: {
+            /**
+             * PostgreSQL Database URL
+             * @description This is where data from connections are synced to by default
+             * @example postgres://username:password@host:port/database
+             */
+            database_url?: string
+            /**
+             * Synced Data Schema
+             * @description Postgres schema to pipe data synced from customer connections into. Defaults to "synced" if missing.
+             */
+            synced_data_schema?: string
+            /**
+             * Webhook URL
+             * @description Events like sync.completed and connection.created can be sent to url of your choosing
+             */
+            webhook_url?: string
+            /**
+             * Migrate Tables
+             * @description If enabled, table migrations will be run if needed when entities are persisted
+             * @default true
+             */
+            migrate_tables?: boolean
+          }
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            /** @description Must start with 'org_' */
+            id: string
+            slug?: string | null
+            publicMetadata: {
+              /**
+               * PostgreSQL Database URL
+               * @description This is where data from connections are synced to by default
+               * @example postgres://username:password@host:port/database
+               */
+              database_url?: string
+              /**
+               * Synced Data Schema
+               * @description Postgres schema to pipe data synced from customer connections into. Defaults to "synced" if missing.
+               */
+              synced_data_schema?: string
+              /**
+               * Webhook URL
+               * @description Events like sync.completed and connection.created can be sent to url of your choosing
+               */
+              webhook_url?: string
+              /**
+               * Migrate Tables
+               * @description If enabled, table migrations will be run if needed when entities are persisted
+               * @default true
+               */
+              migrate_tables?: boolean
+            }
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
         }
       }
       /** @description Internal server error */
@@ -4463,11 +4812,7 @@ export interface operations {
           'application/json': {
             next_cursor?: string | null
             has_next_page: boolean
-            items: {
-              id: string
-              name: string
-              url: string
-            }[]
+            items: components['schemas']['accounting.vendor'][]
           }
         }
       }
@@ -4558,6 +4903,7 @@ export interface operations {
         customer?: string
         department?: string
         date_macro?: string
+        summarize_by?: string
       }
     }
     responses: {
@@ -4679,16 +5025,18 @@ export interface operations {
             endPeriod: string
             currency: string
             transactions: {
+              id: string
               date: string
               transactionType: string
-              documentNumber?: string
-              posting?: string
-              name?: string
-              department?: string
-              memo?: string
-              account?: string
-              split?: string
-              amount: number
+              documentNumber?: string | null
+              posting?: string | null
+              name?: string | null
+              department?: string | null
+              memo?: string | null
+              account?: string | null
+              split?: string | null
+              amount: number | null
+              raw_data?: unknown
             }[]
           }
         }
@@ -5266,7 +5614,7 @@ export interface operations {
     }
   }
   /** Read Stream */
-  'etl-readStream': {
+  'sync-readStream': {
     parameters: {
       query?: {
         sync_mode?: 'full' | 'incremental'
@@ -5310,7 +5658,7 @@ export interface operations {
     }
   }
   /** Discover */
-  'etl-discover': {
+  'sync-discover': {
     responses: {
       /** @description Successful response */
       200: {
@@ -5337,7 +5685,7 @@ export interface operations {
     }
   }
   /** Read Data */
-  'etl-read': {
+  'sync-read': {
     requestBody: {
       content: {
         'application/json': {
@@ -5401,7 +5749,7 @@ export interface operations {
     }
   }
   /** Write Data */
-  'etl-write': {
+  'sync-write': {
     requestBody: {
       content: {
         'application/json': {
@@ -5464,6 +5812,46 @@ export interface operations {
       }
     }
   }
+  /** List drive groups */
+  'fileStorage-listDriveGroups': {
+    parameters: {
+      query?: {
+        sync_mode?: 'full' | 'incremental'
+        cursor?: string | null
+        page_size?: number
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            next_cursor?: string | null
+            has_next_page: boolean
+            items: components['schemas']['unified.drivegroup'][]
+          }
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
   /** List drives */
   'fileStorage-listDrives': {
     parameters: {
@@ -5471,6 +5859,7 @@ export interface operations {
         sync_mode?: 'full' | 'incremental'
         cursor?: string | null
         page_size?: number
+        drive_group_id?: string
       }
     }
     responses: {
@@ -5504,118 +5893,6 @@ export interface operations {
       }
     }
   }
-  /** Get drive */
-  'fileStorage-getDrive': {
-    parameters: {
-      path: {
-        driveId: string
-      }
-    }
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': components['schemas']['unified.drive']
-        }
-      }
-      /** @description Invalid input data */
-      400: {
-        content: {
-          'application/json': components['schemas']['error.BAD_REQUEST']
-        }
-      }
-      /** @description Not found */
-      404: {
-        content: {
-          'application/json': components['schemas']['error.NOT_FOUND']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /** List folders */
-  'fileStorage-listFolders': {
-    parameters: {
-      query?: {
-        sync_mode?: 'full' | 'incremental'
-        cursor?: string | null
-        page_size?: number
-      }
-      path: {
-        driveId: string
-      }
-    }
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': {
-            next_cursor?: string | null
-            has_next_page: boolean
-            items: components['schemas']['unified.folder'][]
-          }
-        }
-      }
-      /** @description Invalid input data */
-      400: {
-        content: {
-          'application/json': components['schemas']['error.BAD_REQUEST']
-        }
-      }
-      /** @description Not found */
-      404: {
-        content: {
-          'application/json': components['schemas']['error.NOT_FOUND']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
-  /** Get folder */
-  'fileStorage-getFolder': {
-    parameters: {
-      path: {
-        driveId: string
-        folderId: string
-      }
-    }
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          'application/json': components['schemas']['unified.folder']
-        }
-      }
-      /** @description Invalid input data */
-      400: {
-        content: {
-          'application/json': components['schemas']['error.BAD_REQUEST']
-        }
-      }
-      /** @description Not found */
-      404: {
-        content: {
-          'application/json': components['schemas']['error.NOT_FOUND']
-        }
-      }
-      /** @description Internal server error */
-      500: {
-        content: {
-          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
-        }
-      }
-    }
-  }
   /** List files */
   'fileStorage-listFiles': {
     parameters: {
@@ -5623,10 +5900,8 @@ export interface operations {
         sync_mode?: 'full' | 'incremental'
         cursor?: string | null
         page_size?: number
-        folderId?: string | null
-      }
-      path: {
-        driveId: string
+        drive_id?: string
+        folder_id?: string
       }
     }
     responses: {
@@ -5664,8 +5939,7 @@ export interface operations {
   'fileStorage-getFile': {
     parameters: {
       path: {
-        driveId: string
-        fileId: string
+        id: string
       }
     }
     responses: {
@@ -5673,6 +5947,118 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['unified.file']
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Export file */
+  'fileStorage-exportFile': {
+    parameters: {
+      query: {
+        format: string
+      }
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': unknown
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** Download file */
+  'fileStorage-downloadFile': {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': unknown
+        }
+      }
+      /** @description Invalid input data */
+      400: {
+        content: {
+          'application/json': components['schemas']['error.BAD_REQUEST']
+        }
+      }
+      /** @description Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['error.NOT_FOUND']
+        }
+      }
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['error.INTERNAL_SERVER_ERROR']
+        }
+      }
+    }
+  }
+  /** List folders */
+  'fileStorage-listFolders': {
+    parameters: {
+      query?: {
+        sync_mode?: 'full' | 'incremental'
+        cursor?: string | null
+        page_size?: number
+        drive_id?: string
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          'application/json': {
+            next_cursor?: string | null
+            has_next_page: boolean
+            items: components['schemas']['unified.folder'][]
+          }
         }
       }
       /** @description Invalid input data */

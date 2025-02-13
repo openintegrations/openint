@@ -4,6 +4,9 @@ const {withSentryConfig} = require('@sentry/nextjs')
 
 const connectorInfos = require('../app-config/connectors/meta')
 
+const isDevOrStaging =
+  process.env.NODE_ENV !== 'production' ||
+  process.env['VERCEL_URL'] == 'openint-git-main-openint-dev.vercel.app'
 /**
  * Meta: change from `@type` to @satisfies once ts 5.0 is out
  * @type {import('next').NextConfig}
@@ -104,56 +107,87 @@ const nextConfig = {
   productionBrowserSourceMaps: true, // Let's see if this helps with Sentry... We are OSS anyways so doesn't matter too much if source code is "leaked" to client
   headers: async () => [
     {
-      source: "/",
+      source: '/',
       headers: [
         {
-          key: "Access-Control-Allow-Origin",
-          value: "*", // Allow any origin 
+          key: 'Access-Control-Allow-Origin',
+          value: '*', // Allow any origin
         },
         {
-          key: "Access-Control-Allow-Methods",
-          value: "GET, POST, PUT, DELETE, OPTIONS",
+          key: 'Access-Control-Allow-Methods',
+          value: 'GET, POST, PUT, DELETE, OPTIONS',
         },
         {
-          key: "Access-Control-Allow-Headers",
-          value: "Content-Type, Authorization",
+          key: 'Access-Control-Allow-Headers',
+          value: 'Content-Type, Authorization',
         },
-      ],
+      ].concat(
+        isDevOrStaging
+          ? [
+              {
+                key: 'Cross-Origin-Embedder-Policy',
+                value: 'unsafe-none',
+              },
+            ]
+          : [],
+      ),
     },
   ],
   output: 'standalone',
-
 }
 
 module.exports = nextConfig
 
-// /**
-//  * @type {import('next').NextConfig}
-//  */
-// module.exports = withSentryConfig(
-//   {
-//     ...nextConfig,
-//     sentry: {
-//       // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`
-//       // for client-side builds. (This will be the default starting in
-//       // `@sentry/nextjs` version 8.0.0.) See
-//       // https://webpack.js.org/configuration/devtool/ and
-//       // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#use-hidden-source-map
-//       // for more information.
-//       hideSourceMaps: true,
-//       tunnelRoute: '/_sentry',
-//     },
-//   },
-//   {
-//     // Additional config options for the Sentry Webpack plugin. Keep in mind that
-//     // the following options are set automatically, and overriding them is not
-//     // recommended:
-//     //   release, url, org, project, authToken, configFile, stripPrefix,
-//     //   urlPrefix, include, ignore
+/**
+ * @type {import('next').NextConfig}
+ */
+module.exports = withSentryConfig(
+  {
+    ...nextConfig,
+    sentry: {
+      // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`
+      // for client-side builds. (This will be the default starting in
+      // `@sentry/nextjs` version 8.0.0.) See
+      // https://webpack.js.org/configuration/devtool/ and
+      // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#use-hidden-source-map
+      // for more information.
+      hideSourceMaps: true,
+      tunnelRoute: '/_sentry',
+    },
+  },
+  {
+    // Additional config options for the Sentry Webpack plugin. Keep in mind that
+    // the following options are set automatically, and overriding them is not
+    // recommended:
+    //   release, url, org, project, authToken, configFile, stripPrefix,
+    //   urlPrefix, include, ignore
 
-//     // setCommits: {auto: true},
-//     silent: false, // true to suppresses all logs
-//     // For all available options, see:
-//     // https://github.com/getsentry/sentry-webpack-plugin#options.
-//   },
-// )
+    // setCommits: {auto: true},
+    // For all available options, see:
+    // https://github.com/getsentry/sentry-webpack-plugin#options
+
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_ORG,
+
+    // Only print logs for uploading source maps in CI
+    silent: !process.env.CI,
+
+    // For all available options, see:
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: true,
+
+    // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+    // This can increase your server load as well as your hosting bill.
+    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+    // side errors will fail.
+    // tunnelRoute: "/monitoring",
+
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
+
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
+  },
+)

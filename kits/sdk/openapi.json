@@ -13,7 +13,7 @@
     "/connect/token": {
       "post": {
         "operationId": "createConnectToken",
-        "summary": "Create a connect token",
+        "summary": "Create connect token",
         "tags": ["Connect"],
         "requestBody": {
           "required": true,
@@ -80,7 +80,7 @@
     "/connect/magic-link": {
       "post": {
         "operationId": "createMagicLink",
-        "summary": "Create a magic link",
+        "summary": "Create magic link",
         "tags": ["Connect"],
         "requestBody": {
           "required": true,
@@ -107,21 +107,32 @@
                     "type": ["string", "null"],
                     "description": "Where to send user to after connect / if they press back button"
                   },
-                  "connectorName": {
+                  "connectorNames": {
                     "type": ["string", "null"],
-                    "description": "Filter connector config by connector name"
+                    "description": "Filter integrations by comma separated connector names"
                   },
-                  "connectorConfigDisplayName": {
+                  "integrationIds": {
                     "type": ["string", "null"],
-                    "description": "Filter connector config by displayName "
+                    "description": "Filter integrations by comma separated integration ids"
                   },
-                  "connectorConfigId": {
-                    "type": "string",
-                    "description": "Must start with 'ccfg_'"
+                  "connectionId": {
+                    "type": ["string", "null"],
+                    "description": "Filter managed connections by connection id"
                   },
-                  "showExisting": {
-                    "type": "boolean",
-                    "default": true
+                  "theme": {
+                    "type": ["string", "null"],
+                    "enum": ["light", "dark"],
+                    "description": "Magic Link display theme"
+                  },
+                  "view": {
+                    "type": ["string", "null"],
+                    "enum": [
+                      "manage",
+                      "manage-deeplink",
+                      "add",
+                      "add-deeplink"
+                    ],
+                    "description": "Magic Link tab view"
                   }
                 }
               }
@@ -151,6 +162,241 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/connect/file-picker": {
+      "post": {
+        "operationId": "createFilePickerLink",
+        "summary": "Create file picker link",
+        "tags": ["Connect"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customerId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
+                  },
+                  "validityInSeconds": {
+                    "type": "number",
+                    "default": 2592000,
+                    "description": "How long the magic link will be valid for (in seconds) before it expires"
+                  },
+                  "theme": {
+                    "type": ["string", "null"],
+                    "enum": ["light", "dark"]
+                  },
+                  "multiSelect": {
+                    "type": ["boolean", "null"]
+                  },
+                  "folderSelect": {
+                    "type": ["boolean", "null"]
+                  },
+                  "themeColors": {
+                    "type": ["object", "null"],
+                    "properties": {
+                      "accent": {
+                        "type": ["string", "null"]
+                      },
+                      "background": {
+                        "type": ["string", "null"]
+                      },
+                      "border": {
+                        "type": ["string", "null"]
+                      },
+                      "button": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonLight": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonHover": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonStroke": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonSecondary": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonSecondaryForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonSecondaryStroke": {
+                        "type": ["string", "null"]
+                      },
+                      "buttonSecondaryHover": {
+                        "type": ["string", "null"]
+                      },
+                      "card": {
+                        "type": ["string", "null"]
+                      },
+                      "cardForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "foreground": {
+                        "type": ["string", "null"]
+                      },
+                      "navbar": {
+                        "type": ["string", "null"]
+                      },
+                      "primary": {
+                        "type": ["string", "null"]
+                      },
+                      "primaryForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "secondary": {
+                        "type": ["string", "null"]
+                      },
+                      "secondaryForeground": {
+                        "type": ["string", "null"]
+                      },
+                      "sidebar": {
+                        "type": ["string", "null"]
+                      },
+                      "tab": {
+                        "type": ["string", "null"]
+                      }
+                    }
+                  },
+                  "connectionId": {
+                    "type": "string",
+                    "description": "Must start with 'conn_'"
+                  }
+                },
+                "required": ["connectionId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["url"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/core/customer/{id}": {
+      "put": {
+        "operationId": "upsertCustomer",
+        "summary": "Upsert customer",
+        "tags": ["Core"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "metadata": {}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "orgId": {
+                      "type": "string"
+                    },
+                    "metadata": {}
+                  },
+                  "required": ["id", "orgId"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
                 }
               }
             }
@@ -508,7 +754,10 @@
             "description": "Successful response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
               }
             }
           },
@@ -804,7 +1053,29 @@
             "description": "Successful response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "connection_requested_event_id": {
+                      "type": "string"
+                    },
+                    "pipeline_syncs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pipeline_id": {
+                            "type": "string"
+                          },
+                          "sync_completed_event_id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["pipeline_id", "sync_completed_event_id"]
+                      }
+                    }
+                  }
+                }
               }
             }
           },
@@ -1257,7 +1528,10 @@
                             "payroll",
                             "calendar",
                             "ats",
-                            "email"
+                            "email",
+                            "messaging",
+                            "communication",
+                            "wiki"
                           ]
                         }
                       },
@@ -1685,7 +1959,10 @@
             "description": "Successful response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
               }
             }
           },
@@ -1712,24 +1989,55 @@
         }
       }
     },
-    "/core/sync_run": {
+    "/core/events": {
       "get": {
-        "operationId": "listSyncRuns",
-        "summary": "List sync runs",
-        "tags": ["Core"],
+        "operationId": "listEvents",
+        "summary": "List events",
+        "tags": ["Connect"],
         "parameters": [
           {
             "in": "query",
-            "name": "limit",
+            "name": "sync_mode",
+            "schema": {
+              "type": "string",
+              "enum": ["full", "incremental"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": ["string", "null"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
             "schema": {
               "type": "number"
             }
           },
           {
             "in": "query",
-            "name": "offset",
+            "name": "since",
             "schema": {
-              "type": "number"
+              "type": "integer"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "customerId",
+            "schema": {
+              "type": ["string", "null"],
+              "minLength": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": ["string", "null"]
             }
           }
         ],
@@ -1739,8 +2047,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {}
+                  "type": "object",
+                  "properties": {
+                    "next_cursor": {
+                      "type": ["string", "null"]
+                    },
+                    "has_next_page": {
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Event"
+                      }
+                    }
+                  },
+                  "required": ["has_next_page", "items"]
                 }
               }
             }
@@ -5299,19 +5621,7 @@
                     "items": {
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "url": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["id", "name", "url"]
+                        "$ref": "#/components/schemas/accounting.vendor"
                       }
                     }
                   },
@@ -5559,6 +5869,13 @@
           {
             "in": "query",
             "name": "date_macro",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "summarize_by",
             "schema": {
               "type": "string"
             }
@@ -5902,6 +6219,9 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "date": {
                             "type": "string"
                           },
@@ -5909,31 +6229,32 @@
                             "type": "string"
                           },
                           "documentNumber": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "posting": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "name": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "department": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "memo": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "account": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "split": {
-                            "type": "string"
+                            "type": ["string", "null"]
                           },
                           "amount": {
-                            "type": "number"
-                          }
+                            "type": ["number", "null"]
+                          },
+                          "raw_data": {}
                         },
-                        "required": ["date", "transactionType", "amount"]
+                        "required": ["id", "date", "transactionType", "amount"]
                       }
                     }
                   },
@@ -7261,6 +7582,94 @@
         }
       }
     },
+    "/unified/file-storage/drive-group": {
+      "get": {
+        "operationId": "fileStorage-listDriveGroups",
+        "summary": "List drive groups",
+        "tags": ["File Storage"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "sync_mode",
+            "schema": {
+              "type": "string",
+              "enum": ["full", "incremental"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": ["string", "null"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "next_cursor": {
+                      "type": ["string", "null"]
+                    },
+                    "has_next_page": {
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/unified.drivegroup"
+                      }
+                    }
+                  },
+                  "required": ["has_next_page", "items"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/unified/file-storage/drive": {
       "get": {
         "operationId": "fileStorage-listDrives",
@@ -7287,6 +7696,13 @@
             "name": "page_size",
             "schema": {
               "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "drive_group_id",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -7349,243 +7765,13 @@
         }
       }
     },
-    "/unified/file-storage/drive/{driveId}": {
-      "get": {
-        "operationId": "fileStorage-getDrive",
-        "summary": "Get drive",
-        "tags": ["File Storage"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unified.drive"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/unified/file-storage/drive/{driveId}/folder": {
-      "get": {
-        "operationId": "fileStorage-listFolders",
-        "summary": "List folders",
-        "tags": ["File Storage"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "sync_mode",
-            "schema": {
-              "type": "string",
-              "enum": ["full", "incremental"]
-            }
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "schema": {
-              "type": ["string", "null"]
-            }
-          },
-          {
-            "in": "query",
-            "name": "page_size",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "next_cursor": {
-                      "type": ["string", "null"]
-                    },
-                    "has_next_page": {
-                      "type": "boolean"
-                    },
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/unified.folder"
-                      }
-                    }
-                  },
-                  "required": ["has_next_page", "items"]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/unified/file-storage/drive/{driveId}/folder/{folderId}": {
-      "get": {
-        "operationId": "fileStorage-getFolder",
-        "summary": "Get folder",
-        "tags": ["File Storage"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "folderId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unified.folder"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/unified/file-storage/drive/{driveId}/file": {
+    "/unified/file-storage/file": {
       "get": {
         "operationId": "fileStorage-listFiles",
         "summary": "List files",
         "tags": ["File Storage"],
         "parameters": [
           {
-            "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
             "in": "query",
             "name": "sync_mode",
             "schema": {
@@ -7609,9 +7795,16 @@
           },
           {
             "in": "query",
-            "name": "folderId",
+            "name": "drive_id",
             "schema": {
-              "type": ["string", "null"]
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "folder_id",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -7674,7 +7867,7 @@
         }
       }
     },
-    "/unified/file-storage/drive/{driveId}/file/{fileId}": {
+    "/unified/file-storage/file/{id}": {
       "get": {
         "operationId": "fileStorage-getFile",
         "summary": "Get file",
@@ -7682,15 +7875,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "driveId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "fileId",
+            "name": "id",
             "schema": {
               "type": "string"
             },
@@ -7704,6 +7889,223 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/unified.file"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/file-storage/file/{id}/export": {
+      "get": {
+        "operationId": "fileStorage-exportFile",
+        "summary": "Export file",
+        "tags": ["File Storage"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/file-storage/file/{id}/download": {
+      "get": {
+        "operationId": "fileStorage-downloadFile",
+        "summary": "Download file",
+        "tags": ["File Storage"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unified/file-storage/folder": {
+      "get": {
+        "operationId": "fileStorage-listFolders",
+        "summary": "List folders",
+        "tags": ["File Storage"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "sync_mode",
+            "schema": {
+              "type": "string",
+              "enum": ["full", "incremental"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": ["string", "null"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "drive_id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "next_cursor": {
+                      "type": ["string", "null"]
+                    },
+                    "has_next_page": {
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/unified.folder"
+                      }
+                    }
+                  },
+                  "required": ["has_next_page", "items"]
                 }
               }
             }
@@ -7756,6 +8158,20 @@
         },
         "responses": {}
       }
+    },
+    "pageview": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/webhooks.pageview"
+              }
+            }
+          }
+        },
+        "responses": {}
+      }
     }
   },
   "components": {
@@ -7801,6 +8217,31 @@
           "name": {
             "type": "string",
             "enum": ["sync.completed"]
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": ["data", "name"]
+      },
+      "webhooks.pageview": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "current_url": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": ["current_url", "path"]
+          },
+          "name": {
+            "type": "string",
+            "enum": ["pageview"]
           },
           "id": {
             "type": "string"
@@ -7959,7 +8400,7 @@
             "type": ["object", "null"],
             "properties": {
               "displayName": {
-                "type": "string"
+                "type": ["string", "null"]
               },
               "status": {
                 "type": ["string", "null"],
@@ -7974,8 +8415,7 @@
                   "type": "string"
                 }
               }
-            },
-            "required": ["displayName"]
+            }
           },
           "disabled": {
             "type": "boolean"
@@ -8078,9 +8518,10 @@
         "type": "string",
         "enum": [
           "unified_banking",
+          "unified_ats",
+          "unified_accounting",
           "prefix_connector_name",
           "single_table",
-          "unified_ats",
           "unified_crm",
           "custom_link_ag"
         ]
@@ -8131,7 +8572,10 @@
                 "payroll",
                 "calendar",
                 "ats",
-                "email"
+                "email",
+                "messaging",
+                "communication",
+                "wiki"
               ]
             }
           },
@@ -8226,6 +8670,42 @@
           }
         },
         "required": ["createdAt", "updatedAt", "id"]
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Must start with 'evt_'"
+          },
+          "name": {
+            "type": "string"
+          },
+          "data": {
+            "type": ["object", "null"],
+            "additionalProperties": {}
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "user": {
+            "type": ["object", "null"],
+            "additionalProperties": {}
+          },
+          "org_id": {
+            "type": ["string", "null"],
+            "description": "Must start with 'org_'"
+          },
+          "customer_id": {
+            "type": ["string", "null"],
+            "minLength": 1
+          },
+          "user_id": {
+            "type": ["string", "null"],
+            "description": "Must start with 'user_'"
+          }
+        },
+        "required": ["id", "name", "timestamp"]
       },
       "Viewer": {
         "oneOf": [
@@ -9436,6 +9916,33 @@
         },
         "required": ["id", "date", "amount", "currency"]
       },
+      "accounting.vendor": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "raw": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name", "url"]
+      },
       "ats.job": {
         "type": "object",
         "properties": {
@@ -9667,6 +10174,29 @@
         "required": ["id"],
         "description": "A candidate for a job"
       },
+      "unified.drivegroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "updated_at": {
+            "type": ["string", "null"]
+          },
+          "created_at": {
+            "type": ["string", "null"]
+          },
+          "raw_data": {}
+        },
+        "required": ["id", "name"],
+        "description": "A unified representation of a drive group"
+      },
       "unified.drive": {
         "type": "object",
         "properties": {
@@ -9676,19 +10206,76 @@
           "name": {
             "type": "string"
           },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "updated_at": {
+            "type": ["string", "null"]
+          },
           "created_at": {
             "type": ["string", "null"]
           },
-          "modified_at": {
-            "type": ["string", "null"]
-          },
-          "raw_data": {
-            "type": "object",
-            "additionalProperties": {}
-          }
+          "raw_data": {}
         },
         "required": ["id", "name"],
         "description": "A unified representation of a storage drive"
+      },
+      "unified.file": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": ["string", "null"]
+          },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["file", "folder", "url"]
+          },
+          "path": {
+            "type": ["string", "null"]
+          },
+          "mime_type": {
+            "type": ["string", "null"]
+          },
+          "downloadable": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": ["number", "null"]
+          },
+          "permissions": {
+            "type": "object",
+            "properties": {
+              "download": {
+                "type": "boolean"
+              }
+            },
+            "required": ["download"]
+          },
+          "exportable": {
+            "type": "boolean"
+          },
+          "export_formats": {
+            "type": ["array", "null"],
+            "items": {
+              "type": "string"
+            }
+          },
+          "updated_at": {
+            "type": ["string", "null"]
+          },
+          "created_at": {
+            "type": ["string", "null"]
+          },
+          "raw_data": {}
+        },
+        "required": ["id", "type", "downloadable", "permissions", "exportable"],
+        "description": "A unified representation of a file"
       },
       "unified.folder": {
         "type": "object",
@@ -9699,63 +10286,22 @@
           "name": {
             "type": "string"
           },
-          "parent_id": {
+          "description": {
             "type": ["string", "null"]
           },
-          "drive_id": {
+          "path": {
             "type": "string"
+          },
+          "updated_at": {
+            "type": ["string", "null"]
           },
           "created_at": {
             "type": ["string", "null"]
           },
-          "modified_at": {
-            "type": ["string", "null"]
-          },
-          "raw_data": {
-            "type": "object",
-            "additionalProperties": {}
-          }
+          "raw_data": {}
         },
-        "required": ["id", "name", "drive_id"],
-        "description": "A unified representation of a folder within a drive"
-      },
-      "unified.file": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "file_url": {
-            "type": ["string", "null"]
-          },
-          "download_url": {
-            "type": ["string", "null"]
-          },
-          "mime_type": {
-            "type": ["string", "null"]
-          },
-          "size": {
-            "type": ["number", "null"]
-          },
-          "drive_id": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": ["string", "null"]
-          },
-          "modified_at": {
-            "type": ["string", "null"]
-          },
-          "raw_data": {
-            "type": "object",
-            "additionalProperties": {}
-          }
-        },
-        "required": ["id", "name", "drive_id"],
-        "description": "A unified representation of a file within a drive"
+        "required": ["id", "name", "path"],
+        "description": "A unified representation of a folder"
       }
     }
   },

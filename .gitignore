@@ -69,3 +69,9 @@ dist/
 # Cloudflare
 .wrangler
 .dev.vars
+
+# CI Artifacts
+/artifacts
+
+# Next.js
+.next/

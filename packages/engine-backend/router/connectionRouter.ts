@@ -12,7 +12,7 @@ import {
 } from '@openint/cdk'
 import {TRPCError} from '@openint/trpc'
 import {joinPath, makeUlid, R, Rx, rxjs, z} from '@openint/util'
-import {inngest} from '../events'
+import {inngest} from '../inngest'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {zSyncOptions} from '../types'
 import {protectedProcedure, remoteProcedure, trpc} from './_base'
@@ -34,7 +34,11 @@ const zExpandConnector = z.object({
   logoUrl: z.string().url(),
 })
 
-async function performConnectionCheck(ctx: any, connId: string, opts: any) {
+export async function performConnectionCheck(
+  ctx: any,
+  connId: string,
+  opts: any,
+) {
   const remoteCtx = await getRemoteContext({
     ...ctx,
     remoteConnectionId: connId,
@@ -51,8 +55,13 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
       webhookBaseUrl: joinPath(ctx.apiUrl, parseWebhookRequest.pathOf(int.id)),
     },
   })
-
-  if (connUpdate || opts?.import !== false) {
+  if (
+    conn?.settings?.error ||
+    connUpdate ||
+    opts?.import !== false ||
+    remoteCtx.remote.settings?.oauth?.error
+  ) {
+    /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       customerId: conn.customerId ?? undefined,
       integration: {
@@ -79,18 +88,21 @@ async function performConnectionCheck(ctx: any, connId: string, opts: any) {
     const integration = possibleIntegrations?.items?.find(
       (i: any) => i.id === extractId(connUpdate?.integrationId)[2],
     )
-    connUpdate.integration = {
-      id: connUpdate?.integrationId,
-      name:
-        integration?.name?.toLowerCase() || int.connector.name?.toLowerCase(),
-      logoUrl:
-        (integration?.logo_url &&
-          (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') +
-            integration?.logo_url) ||
-        (int.connector.metadata.logoUrl &&
-          (process.env['NEXT_PUBLIC_SERVER_URL'] || 'https://app.openint.dev') +
-            int.connector.metadata.logoUrl),
-    }
+    connUpdate.integration = connUpdate?.integrationId
+      ? {
+          id: connUpdate?.integrationId,
+          name:
+            integration?.name?.toLowerCase() ||
+            int.connector.name?.toLowerCase(),
+          logoUrl:
+            (integration?.logo_url &&
+              (process.env['NEXT_PUBLIC_SERVER_URL'] ||
+                'https://app.openint.dev') + integration?.logo_url) ||
+            (int.connector.metadata.logoUrl &&
+              (process.env['NEXT_PUBLIC_SERVER_URL'] ||
+                'https://app.openint.dev') + int.connector.metadata.logoUrl),
+        }
+      : undefined
   }
   if (opts?.expand?.includes('integration.connector')) {
     connUpdate.connector = {
@@ -179,7 +191,7 @@ export const connectionRouter = trpc.router({
     // Questionable why `zConnectContextInput` should be there. Examine whether this is actually
     // needed
     // How do we verify that the userId here is the same as the userId from preConnectOption?
-    .output(z.string())
+    .output(z.string()) // TODO(api): We should not return just a string here. Should return an object
     .mutation(async ({input: {connectorConfigId, settings, ...input}, ctx}) => {
       const int =
         await ctx.asOrgIfNeeded.getConnectorConfigOrFail(connectorConfigId)
@@ -245,12 +257,15 @@ export const connectionRouter = trpc.router({
   deleteConnection: protectedProcedure
     .meta({openapi: {method: 'DELETE', path: '/core/connection/{id}', tags}})
     .input(z.object({id: zId('conn'), skipRevoke: z.boolean().optional()}))
-    .output(z.void())
+    .output(z.object({}))
     .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
-        await ctx.services.getConnectionOrFail(connId)
+        await ctx.services.getConnectionOrFail(connId, true)
       }
-      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
+      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(
+        connId,
+        true,
+      )
       const {settings, connectorConfig: ccfg} = conn
       if (!opts?.skipRevoke) {
         await ccfg.connector.revokeConnection?.(
@@ -270,6 +285,7 @@ export const connectionRouter = trpc.router({
       // We should probably introduce a reset / delete event...
       // }
       await ctx.asOrgIfNeeded.metaService.tables.connection.delete(conn.id)
+      return {}
     }),
   listConnection: protectedProcedure
     .meta({
@@ -394,7 +410,7 @@ export const connectionRouter = trpc.router({
 
       // do not expand for now otherwise permission issues..
       let conn = await ctx.services.getConnectionOrFail(input.id)
-      const ccfg = await ctx.services.getConnectorConfigOrFail(
+      const ccfg = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(
         conn.connectorConfigId,
       )
 
@@ -422,6 +438,8 @@ export const connectionRouter = trpc.router({
 
       return {
         ...conn,
+        // NOTE: careful to not return the entire object as it has secrets
+        // and this method is open to end user auth
         connector_config: R.pick(ccfg, ['id', 'orgId', 'connectorName']),
       }
     }),
@@ -450,17 +468,29 @@ export const connectionRouter = trpc.router({
       openapi: {method: 'POST', path: '/core/connection/{id}/_sync', tags},
     })
     .input(z.object({id: zId('conn')}).merge(zSyncOptions))
-    .output(z.void())
+    .output(
+      z.object({
+        connection_requested_event_id: z.string().optional(),
+        pipeline_syncs: z
+          .array(
+            z.object({
+              pipeline_id: z.string(),
+              sync_completed_event_id: z.string(),
+            }),
+          )
+          .optional(),
+      }),
+    )
     .mutation(async ({input: {id: connId, ...opts}, ctx}) => {
       if (ctx.viewer.role === 'customer') {
         await ctx.services.getConnectionOrFail(connId)
       }
       if (opts?.async) {
-        await inngest.send({
+        const {ids} = await inngest.send({
           name: 'sync/connection-requested',
           data: {connectionId: connId},
         })
-        return
+        return {connection_requested_event_id: ids[0]}
       }
       const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId)
       // No need to checkConnection here as sourceSync should take care of it
@@ -486,22 +516,26 @@ export const connectionRouter = trpc.router({
             src: conn,
           }),
         })
-        return
+        return {pipeline_syncs: []}
       }
 
       // TODO: Figure how to handle situations where connection does not exist yet
       // but pipeline is already being persisted properly. This current solution
       // is vulnerable to race condition and feels brittle. Though syncConnection is only
       // called from the UI so we are fine for now.
-      await ctx.asOrgIfNeeded._syncConnectionUpdate(conn.connectorConfig, {
-        customerId: conn.customerId,
-        settings: conn.settings,
-        connectionExternalId: extractId(conn.id)[2],
-        integration: conn.integration && {
-          externalId: extractId(conn.integration.id)[2],
-          data: conn.integration.external ?? {},
+      const connSync = await ctx.asOrgIfNeeded._syncConnectionUpdate(
+        conn.connectorConfig,
+        {
+          customerId: conn.customerId,
+          settings: conn.settings,
+          connectionExternalId: extractId(conn.id)[2],
+          integration: conn.integration && {
+            externalId: extractId(conn.integration.id)[2],
+            data: conn.integration.external ?? {},
+          },
+          triggerDefaultSync: true,
         },
-        triggerDefaultSync: true,
-      })
+      )
+      return connSync
     }),
 })

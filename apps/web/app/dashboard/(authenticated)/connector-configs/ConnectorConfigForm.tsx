@@ -27,15 +27,17 @@ export function ConnectorConfigForm({
   isLoading,
 }: ConnectorConfigFormProps) {
   const trpcUtils = _trpcReact.useContext()
-  const connectionsRes = _trpcReact.listConnections.useQuery();
+  const connectionsRes = _trpcReact.listConnections.useQuery()
 
   const zConnId = connectionsRes.data?.length
     ? z.union(
-        connectionsRes.data.filter(r => r.connectorName === 'postgres').map((r) =>
-          z.literal(r.id).openapi({
-            title: r.displayName ? `${r.displayName} <${r.id}>` : r.id,
-          }),
-        ) as [z.ZodLiteral<string>, z.ZodLiteral<string>],
+        connectionsRes.data
+          .filter((r) => r.connectorName === 'postgres')
+          .map((r) =>
+            z.literal(r.id).openapi({
+              title: r.displayName ? `${r.displayName} <${r.id}>` : r.id,
+            }),
+          ) as [z.ZodLiteral<string>, z.ZodLiteral<string>],
       )
     : zId('conn')
 
@@ -66,7 +68,7 @@ export function ConnectorConfigForm({
                       Object.fromEntries(
                         (connectorMeta.sourceStreams as [string]).map((s) => [
                           s,
-                          z.boolean(),
+                          z.boolean().optional(),
                         ]),
                       ),
                       // z.enum(connectorMeta.sourceStreams as [string]),
@@ -78,9 +80,9 @@ export function ConnectorConfigForm({
                 links: zRaw.connector_config.shape.defaultPipeOut
                   .unwrap()
                   .unwrap().shape.links,
-                destination_id: zConnId.optional().openapi({
-                  description: 'Defaults to the org-wide postgres',
-                }),
+                // destination_id: zConnId.optional().openapi({
+                //   description: 'Defaults to the org-wide postgres',
+                // }),
               })
               .openapi({title: 'Enabled'}),
           ])

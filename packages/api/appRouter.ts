@@ -5,17 +5,18 @@ import type {
 } from '@lilyrose2798/trpc-openapi/dist/generator'
 import {generateOpenApiDocument} from '@lilyrose2798/trpc-openapi/dist/generator'
 import {getServerUrl} from '@openint/app-config/constants'
-import {flatRouter, outgoingWebhookEventMap} from '@openint/engine-backend'
+import {flatRouter} from '@openint/engine-backend'
 import {env} from '@openint/env'
+import {outgoingWebhookEventMap} from '@openint/events'
 import accountingRouter from '@openint/unified-accounting'
 import atsRouter from '@openint/unified-ats'
 import bankingRouter from '@openint/unified-banking'
 import {crmRouter} from '@openint/unified-crm'
-import eltRouter from '@openint/unified-etl'
 import fileStorageRouter from '@openint/unified-file-storage'
 import hrisRouter from '@openint/unified-hris'
 import ptaRouter from '@openint/unified-pta'
 import {salesEngagementRouter} from '@openint/unified-sales-engagement'
+import syncRouter from '@openint/unified-sync'
 import {sentenceCase} from '@openint/util'
 import type {AnyRouter, RouterMeta} from '@openint/vdk'
 import {mapKeys, mapValues, publicProcedure, trpc, z} from '@openint/vdk'
@@ -39,7 +40,7 @@ export const _appRouter = trpc.router({
   pta: ptaRouter,
   ats: atsRouter,
   hris: hrisRouter,
-  etl: eltRouter,
+  sync: syncRouter,
   fileStorage: fileStorageRouter,
 })
 
@@ -147,22 +148,59 @@ export function getOpenAPISpec(includeInternal = true) {
 }
 
 function removeInternalPaths(oas: any): any {
-  const paths = oas.paths;
-  const filteredPaths = Object.fromEntries(
-    Object.entries(paths).filter(([_, operations]) =>
-      !Object.values(operations as Record<string, any>).some((operation: any) =>
-        operation.tags?.includes('Internal') ||
-          operation.tags?.includes('Connectors') ||
-          operation.tags?.includes('ETL'),
-      ),
-    ),
-  );
+  const paths = oas.paths
 
-  // Return the updated OAS object with filtered paths
+  // hardcoded tags for enforcing consistency in docs
+  const whitelistedTags = [
+    'Connect',
+    'Core',
+    'Sales Engagement',
+    'CRM',
+    'Banking',
+    'Accounting',
+    'PTA',
+    'ATS',
+    'HRIS',
+    'File Storage',
+  ]
+
+  const internalTags = ['Internal', 'Connectors', 'ETL', 'Sync']
+
+  const filteredPaths = Object.fromEntries(
+    Object.entries(paths).filter(([path, operations]) => {
+      const operationValues = Object.values(operations as Record<string, any>)
+
+      // Validate all tags are recognized
+      operationValues.forEach((operation: any) => {
+        operation.tags?.forEach((tag: string) => {
+          if (!whitelistedTags.includes(tag) && !internalTags.includes(tag)) {
+            throw new Error(
+              `Unrecognized tag "${tag}" found in path "${path}". All tags must be whitelisted in the 'removeInternalPaths' function.`,
+            )
+          }
+        })
+      })
+
+      // Keep paths that have whitelisted tags
+      const hasWhitelistedTag = operationValues.some(
+        (operation: any) =>
+          operation.tags?.some((tag: string) => whitelistedTags.includes(tag)),
+      )
+
+      // Filter out internal paths unless they have a whitelisted tag
+      const hasInternalTag = operationValues.some(
+        (operation: any) =>
+          operation.tags?.some((tag: string) => internalTags.includes(tag)),
+      )
+
+      return hasWhitelistedTag || !hasInternalTag
+    }),
+  )
+
   return {
     ...oas,
-    paths: filteredPaths
-  };
+    paths: filteredPaths,
+  }
 }
 
 if (require.main === module) {

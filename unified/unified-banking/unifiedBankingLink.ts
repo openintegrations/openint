@@ -43,8 +43,8 @@ export function unifiedBankingLink(ctx: {
             ...op,
             data: {
               id: mapped.id,
-              stream: 'banking_category',
-              data: {raw: op.data.entity, unified: mapped},
+              entityName: 'banking_category',
+              entity: {raw: op.data.entity, unified: mapped},
             } satisfies PostgresInputPayload,
           })
         } else {
@@ -56,8 +56,8 @@ export function unifiedBankingLink(ctx: {
             ...op,
             data: {
               id: mapped.id,
-              stream: 'banking_account',
-              data: {raw: op.data.entity, unified: mapped},
+              entityName: 'banking_account',
+              entity: {raw: op.data.entity, unified: mapped},
             } satisfies PostgresInputPayload,
           })
         }
@@ -93,8 +93,8 @@ export function unifiedBankingLink(ctx: {
           ...op,
           data: {
             id: mapped.id,
-            stream: 'banking_transaction',
-            data: {raw: op.data.entity, unified: mapped},
+            entityName: 'banking_transaction',
+            entity: {raw: op.data.entity, unified: mapped},
           } satisfies PostgresInputPayload,
         })
       }
@@ -130,8 +130,8 @@ export function unifiedBankingLink(ctx: {
           ...op,
           data: {
             id: mapped.id,
-            stream: 'banking_transaction',
-            data: {raw: op.data.entity, unified: mapped},
+            entityName: 'banking_transaction',
+            entity: {raw: op.data.entity, unified: mapped},
           } satisfies PostgresInputPayload,
         })
       }
@@ -149,8 +149,8 @@ export function unifiedBankingLink(ctx: {
             ...op,
             data: {
               id: mapped.id,
-              stream: 'banking_category',
-              data: {raw: op.data.entity, unified: mapped},
+              entityName: 'banking_category',
+              entity: {raw: op.data.entity, unified: mapped},
             } satisfies PostgresInputPayload,
           })
         } else {
@@ -162,8 +162,8 @@ export function unifiedBankingLink(ctx: {
             ...op,
             data: {
               id: mapped.id,
-              stream: 'banking_account',
-              data: {raw: op.data.entity, unified: mapped},
+              entityName: 'banking_account',
+              entity: {raw: op.data.entity, unified: mapped},
             } satisfies PostgresInputPayload,
           })
         }
@@ -177,8 +177,8 @@ export function unifiedBankingLink(ctx: {
           ...op,
           data: {
             id: mapped.id,
-            stream: 'banking_merchant',
-            data: {raw: op.data.entity, unified: mapped},
+            entityName: 'banking_merchant',
+            entity: {raw: op.data.entity, unified: mapped},
           } satisfies PostgresInputPayload,
         })
       }
@@ -193,8 +193,8 @@ export function unifiedBankingLink(ctx: {
           ...op,
           data: {
             id: mapped.id,
-            stream: 'banking_transaction',
-            data: {raw: op.data.entity, unified: mapped},
+            entityName: 'banking_transaction',
+            entity: {raw: op.data.entity, unified: mapped},
           } satisfies PostgresInputPayload,
         })
       }
@@ -207,8 +207,8 @@ export function unifiedBankingLink(ctx: {
           ...op,
           data: {
             id: mapped.id,
-            stream: 'banking_account',
-            data: {raw: op.data.entity, unified: mapped},
+            entityName: 'banking_account',
+            entity: {raw: op.data.entity, unified: mapped},
           } satisfies PostgresInputPayload,
         })
       }

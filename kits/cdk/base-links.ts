@@ -1,7 +1,7 @@
 import type {
   AnyEntityPayload,
+  ConnectionUpdateData,
   Link,
-  ResoUpdateData,
   StateUpdateData,
   SyncOperation,
 } from '@openint/sync'
@@ -13,11 +13,11 @@ type OperationType = SyncOperation['type']
 export type OpHandlers<
   TRet,
   T = any,
-  TResoUpdate extends object = ResoUpdateData,
+  TConnUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 > = Partial<{
   [k in OperationType]: (
-    op: Extract<SyncOperation<T, TResoUpdate, TStateUpdate>, {type: k}>,
+    op: Extract<SyncOperation<T, TConnUpdate, TStateUpdate>, {type: k}>,
   ) => TRet | Promise<TRet>
 }>
 
@@ -27,13 +27,13 @@ export type OpHandlers<
  */
 export function handlersLink<
   TData = any,
-  TResoUpdate extends object = ResoUpdateData,
+  TConnUpdate extends object = ConnectionUpdateData,
   TStateUpdate extends object = StateUpdateData,
 >(
   handlers: OpHandlers<
     rxjs.ObservableInput<SyncOperation<TData>> | void,
     TData,
-    TResoUpdate,
+    TConnUpdate,
     TStateUpdate
   >,
 ): Link<TData> {

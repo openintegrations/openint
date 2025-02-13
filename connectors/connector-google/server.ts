@@ -65,17 +65,18 @@ const integrations = [
 
 export const googleServer = {
   // newInstance: ({settings, fetchLinks}) => {
-  //   const sdk = initHubspotSDK({
+  //   const sdk = initGoogleSDK({
   //     // We rely on nango to refresh the access token...
   //     headers: {
   //       authorization: `Bearer ${settings.oauth.credentials.access_token}`,
   //     },
   //     links: (defaultLinks) => [
   //       (req, next) => {
-  //         if (sdk.clientOptions.baseUrl) {
+  //         // TODO: make this dynamic to different base URLs than just drive_v2
+  //         if (sdk.drive_v2.clientOptions.baseUrl) {
   //           req.headers.set(
   //             nangoProxyLink.kBaseUrlOverride,
-  //             sdk.clientOptions.baseUrl,
+  //             sdk.drive_v2.clientOptions.baseUrl,
   //           )
   //         }
   //         return next(req)
@@ -121,6 +122,8 @@ export const googleServer = {
               context.integrationExternalId as keyof typeof integrationScopesMap
             ],
           ),
+          // could be calculated from (config as any).orgId
+          // ...(redirect_uri ? {redirect_uri} : {}),
         },
       }
       console.log('[googleServer] authParams', authParams)
@@ -165,7 +168,7 @@ export const googleServer = {
 
     const defaultResource = {
       connectionExternalId: extractId(connectOutput.connectionId)[2],
-      settings: {oauth: nangoConnection},
+      settings: {oauth: nangoConnection, client_id: config.oauth.client_id},
     }
     if (!context.integrationId) {
       return defaultResource

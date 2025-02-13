@@ -12,6 +12,7 @@ import {makeJwtClient, zViewerFromJwtPayload} from '@openint/cdk/viewer'
 import {TRPCError} from '@openint/trpc'
 import {R} from '@openint/util'
 import type {Env} from '../../apps/app-config/env'
+import {inngest} from './inngest'
 import {makeServices as _makeServices} from './services'
 import type {AuthProvider} from './services/AuthProvider'
 // Should we actually do this hmm
@@ -31,6 +32,7 @@ export interface RouterContext {
 
   /** Need to refactor this */
   clerk: typeof clerkClient
+  inngest: typeof inngest
   // Non-viewer dependent
   connectorMap: Record<string, AnyConnectorImpl>
   jwt: JWTClient
@@ -50,6 +52,9 @@ export interface RouterContext {
 
   /** For vertical API calls */
   remoteConnectionId: Id['conn'] | null
+
+  /** For custom headers setting */
+  resHeaders: Headers
 }
 
 export interface ContextFactoryOptions<
@@ -94,7 +99,9 @@ export function getContextFactory<
       authProvider: config.authProvider,
     })
 
-  function fromViewer(viewer: Viewer): Omit<RouterContext, 'remoteConnectionId'> {
+  function fromViewer(
+    viewer: Viewer,
+  ): Omit<RouterContext, 'remoteConnectionId'> {
     return {
       viewer,
       as: (role, data) => getServices({role, ...data} as Viewer),
@@ -109,6 +116,8 @@ export function getContextFactory<
       apiUrl,
       getRedirectUrl,
       clerk: config.clerk,
+      inngest,
+      resHeaders: new Headers(),
     }
   }
 

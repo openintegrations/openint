@@ -1,4 +1,11 @@
-import type {AnyEntityPayload, Id, IDS, OpHandlers, ZRaw} from '@openint/cdk'
+import type {
+  AnyEntityPayload,
+  ConnectionUpdateData,
+  Id,
+  IDS,
+  OpHandlers,
+  ZRaw,
+} from '@openint/cdk'
 import {extractId, handlersLink, IDS_INVERTED, makeId} from '@openint/cdk'
 import type {ObjectPartialDeep} from '@openint/util'
 import {deepMerge, R} from '@openint/util'
@@ -51,7 +58,7 @@ export function makeMetaLinks(metaBase: MetaService) {
   }) =>
     ({
       // TODO: make standard insitution and connection here...
-      connUpdate: async (op) => {
+      connUpdate: async (op: ConnectionUpdateData) => {
         if (op.id !== connection?.id) {
           console.warn(`Unexpected connection id ${op.id} != ${connection?.id}`)
           return
@@ -120,6 +127,7 @@ export function makeMetaLinks(metaBase: MetaService) {
             extractId(pipeline.destinationId)[2] === ''
               ? undefined
               : pipeline.destinationId
+          const nowStr = new Date().toISOString()
           await patch('pipeline', pipeline.id, {
             sourceState: op.sourceState,
             destinationState: op.destinationState,
@@ -128,11 +136,10 @@ export function makeMetaLinks(metaBase: MetaService) {
             destinationId,
             id: pipeline.id,
             linkOptions: pipeline.linkOptions,
-            lastSyncStartedAt: op.subtype === 'init' ? new Date() : undefined,
+            lastSyncStartedAt: op.subtype === 'init' ? nowStr : undefined,
             // Idealy this should use the database timestamp if possible (e.g. postgres)
             // However we don't always know if db supports it (e.g. local files...)
-            lastSyncCompletedAt:
-              op.subtype === 'complete' ? new Date() : undefined,
+            lastSyncCompletedAt: op.subtype === 'complete' ? nowStr : undefined,
           })
         }
       },

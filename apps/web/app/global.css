@@ -12,8 +12,8 @@
     --background: hsl(0, 0%, 100%);
     --foreground: hsl(250, 12%, 20%);
 
-    --muted: hsl(220, 41%, 75%);
-    --muted-foreground: hsl(235, 16%, 29%);
+    --muted: hsl(0, 0%, 95%);
+    --muted-foreground: hsl(0, 0%, 27%);
 
     --popover: hsl(0, 0%, 100%);
     --popover-foreground: hsl(250, 12%, 20%);
@@ -34,7 +34,7 @@
     --secondary: hsl(0, 0%, 100%);
     --secondary-foreground: hsl(250, 12%, 20%);
 
-    --accent: hsl(210, 51%, 78%);
+    --accent: hsl(0, 0%, 95%);
     --accent-foreground: hsl(250, 12%, 20%);
 
     --destructive: hsl(0, 100%, 50%);
@@ -57,23 +57,36 @@
     --tab: hsl(0, 0%, 100%);
     --navbar: hsl(0, 0%, 100%);
     --sidebar: hsl(0, 0%, 100%);
+
+    
+    --toast-bg-default: hsl(0, 0%, 100%);
+    --toast-border-default: hsl(220, 25%, 86%);
+    --toast-bg-success: hsl(134, 58%, 47%);
+    --toast-border-success: hsl(134, 79%, 32%); 
+    --toast-bg-loading: hsl(0, 0%, 64%);
+    --toast-border-loading: hsl(0, 0%, 42%);
+    --toast-bg-destructive: hsl(0, 100%, 63%); 
+    --toast-border-destructive: hsl(0, 60%, 55%);
+    --toast-foreground: hsl(0, 0%, 100%);
+
+    --spinner-bg: hsla(0, 0%, 100%, 0.7); /* Equivalent to bg-white/70 */
   }
 
   .dark {
     --background: hsl(0, 0, 11%);
     --foreground: hsl(0, 0%, 96.5%);
 
-    --muted: hsl(215, 50%, 61%);
+    --muted: hsla(0, 0%, 100%, 0.097);
     --muted-foreground: hsl(0, 0%, 60%);
 
-    --accent: hsl(220, 21%, 39%);
-    --accent-foreground: hsl(220, 35%, 92%);
+    --accent: hsla(0, 0%, 100%, 0.097);
+    --accent-foreground: hsla(0, 0%, 92%, 0.635);
 
     --popover: hsl(0, 0%, 14%);
     --popover-foreground: hsl(0, 0%, 96.5%);
 
     --border: hsl(0, 0%, 20%);
-    --input: hsl(220, 21%, 39%);
+    --input: hsla(0, 0%, 100%, 0.097);
 
     --card: hsl(0, 0%, 14%);
     --card-border: hsl(0, 0%, 20%);
@@ -88,7 +101,7 @@
     --destructive: hsl(7, 68%, 53%);
     --destructive-foreground: hsl(220, 35%, 92%);
 
-    --ring: hsl(220, 21%, 39%);
+    --ring: hsla(0, 0%, 100%, 0.097);
 
     --button: hsl(255, 90%, 66%);
     --button-light: hsl(255, 90%, 96%);
@@ -103,6 +116,19 @@
     --tab: hsl(0, 0%, 14%);
     --navbar: hsl(0, 0%, 100%);
     --sidebar: hsl(0, 0%, 100%);
+
+  
+    --toast-bg-default: hsl(0, 0%, 14%);
+    --toast-border-default: hsl(0, 0%, 20%);
+    --toast-bg-success: hsl(138, 41%, 25%); 
+    --toast-border-success: hsl(138, 47%, 48%);
+    --toast-bg-loading: hsl(0, 0%, 27%);
+    --toast-border-loading: hsl(0, 0%, 42%);
+    --toast-bg-destructive: hsl(0, 50%, 28%);
+    --toast-border-destructive: hsl(0, 41%, 50%);
+    --toast-foreground: hsl(0, 0%, 100%);
+
+    --spinner-bg: hsla(0, 0%, 100%, 0.098); /* Keep the same for light theme */
   }
 }
 

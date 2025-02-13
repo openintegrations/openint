@@ -3,6 +3,7 @@ import {mergeHeaders, modifyRequest} from '@opensdks/fetch-links'
 import {initNangoSDK} from '@opensdks/sdk-nango'
 import {z} from '@opensdks/util-zod'
 import {isHttpError, NotAuthenticatedError} from '@openint/trpc'
+import {zOauthConnectionError} from './oauthConnector'
 
 const kBaseUrlOverride = 'base-url-override'
 
@@ -206,4 +207,5 @@ export const nangoConnectionWithCredentials = z.object({
   deleted_at: z.string().nullish(),
   last_fetched_at: z.string().nullish(),
   config_id: z.number().nullish(),
+  error: zOauthConnectionError.nullish(),
 })

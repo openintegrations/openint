@@ -1,5 +1,5 @@
-import {Plus} from 'lucide-react'
-import {useState} from 'react'
+import {Loader2, Plus} from 'lucide-react'
+import {useEffect, useRef, useState} from 'react'
 import {Card, CardContent} from '../shadcn'
 import {
   Tooltip,
@@ -12,12 +12,26 @@ export function IntegrationCard({
   logo,
   name,
   onClick,
+  hasDeeplink,
+  isLoading = false,
 }: {
   logo: string
   name: string
   onClick: () => void
+  hasDeeplink: boolean
+  isLoading?: boolean
 }) {
   const [isHovered, setIsHovered] = useState(false)
+  const hasAutoConnected = useRef(false)
+
+  useEffect(() => {
+    if (!hasAutoConnected.current && hasDeeplink) {
+      hasAutoConnected.current = true
+      setTimeout(() => {
+        onClick()
+      }, 500)
+    }
+  }, [hasDeeplink, onClick])
 
   return (
     <TooltipProvider>
@@ -28,7 +42,9 @@ export function IntegrationCard({
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
             <CardContent
-              className="flex h-full flex-col items-center justify-center py-4"
+              className={`flex h-full flex-col items-center justify-center py-4 ${
+                isLoading ? 'opacity-40' : ''
+              }`}
               onClick={onClick}>
               {isHovered ? (
                 <div className="flex h-full flex-col items-center justify-center">
@@ -54,6 +70,11 @@ export function IntegrationCard({
                 </div>
               )}
             </CardContent>
+            {isLoading && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center">
+                <Loader2 className="size-7 animate-spin text-button" />
+              </div>
+            )}
           </Card>
         </TooltipTrigger>
         <TooltipContent>

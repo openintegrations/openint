@@ -21,11 +21,12 @@ import {
 } from '@openint/cdk'
 import type {z} from '@openint/util'
 import {rxjs} from '@openint/util'
-// Amadeo Q: how do I make the atsLink part of the openint/cdk? is there some sort of release process?
+import {unifiedAccountingLink} from '../../../unified/unified-accounting/unifiedAccountingLink'
+// Amadeo Q: how do I make the atsLink part of the openint/cdk? is there some sort of release process? A: We don't. cdk stands for connector development kit and atsLink does not belong
 import {unifiedAtsLink} from '../../../unified/unified-ats'
 import {unifiedCrmLink} from '../../../unified/unified-crm'
 import {agLink} from '../../custom-links/agLink'
-import {inngest} from '../events'
+import {inngest} from '../inngest'
 import type {zSyncOptions} from '../types'
 import type {AuthProvider} from './AuthProvider'
 import type {
@@ -154,10 +155,12 @@ export function makeSyncService({
         switch (l) {
           case 'unified_banking':
             return bankingLink({source})
-          case 'prefix_connector_name':
-            return prefixConnectorNameLink({source})
           case 'unified_ats':
             return unifiedAtsLink({source})
+          case 'unified_accounting':
+            return unifiedAccountingLink({source})
+          case 'prefix_connector_name':
+            return prefixConnectorNameLink({source})
           case 'single_table':
             return singleTableLink({source})
           case 'unified_crm':
@@ -415,7 +418,7 @@ export function makeSyncService({
         .stateUpdate({type: 'stateUpdate', subtype: 'complete'}),
     )
 
-    await inngest.send({
+    const res = await inngest.send({
       name: 'sync.completed',
       data: {
         pipeline_id: pipeline.id,
@@ -425,6 +428,11 @@ export function makeSyncService({
       },
       user: {webhook_url: org?.webhook_url || ''},
     })
+    // console.log('res', res)
+    return {
+      pipeline_id: pipeline.id,
+      sync_completed_event_id: res.ids[0] as string,
+    }
   }
 
   const _syncConnectionUpdate = async (
@@ -451,29 +459,32 @@ export function makeSyncService({
       .handlers({
         connection: {id, connectorConfigId: int.id, customerId},
       })
-      .connUpdate({type: 'connUpdate', id, settings, integration})
+      .connUpdate({id, settings, integration})
 
     // TODO: This should be happening async
     if (!connUpdate.source$ && !connUpdate.triggerDefaultSync) {
       console.log(
         `[_syncConnectionUpdate] Returning early skip syncing pipelines for connection id ${id} and source ${connUpdate.source$} with triggerDefaultSync ${connUpdate.triggerDefaultSync}`,
       )
-      return id
+      return {connection_id: id}
     }
 
     await ensurePipelinesForConnection(id)
     const pipelines = await getPipelinesForConnection(id)
 
     console.log('_syncConnectionUpdate existingPipes.len', pipelines.length)
-    await Promise.all(
-      pipelines.map(async (pipe) => {
-        await _syncPipeline(pipe, {
+    const pipelineSyncs = await Promise.all(
+      pipelines.map((pipe) =>
+        _syncPipeline(pipe, {
           source$: connUpdate.source$,
           source$ConcatDefault: connUpdate.triggerDefaultSync,
-        })
-      }),
+        }),
+      ),
     )
-    return id
+    return {
+      connection_id: id,
+      pipeline_syncs: pipelineSyncs,
+    }
   }
 
   return {

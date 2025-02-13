@@ -1,6 +1,13 @@
 import type {AdapterMap} from '@openint/vdk'
-import {microsoftGraphAdapter} from './microsoft-adapter'
+import {
+  sharepointAdapter,
+  downloadFileById as sharepointDownloadFileById,
+} from './sharepoint-adapter'
 
 export default {
-  microsoft: microsoftGraphAdapter,
+  microsoft: sharepointAdapter,
 } satisfies AdapterMap
+
+export const downloadFileById = {
+  microsoft: sharepointDownloadFileById,
+}

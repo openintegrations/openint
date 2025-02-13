@@ -2,12 +2,12 @@
 
 module.exports = [
   {
-    name: 'airtable',
-    dirName: 'connector-airtable',
-    varName: 'connectorAirtable',
+    name: 'aircall',
+    dirName: 'connector-aircall',
+    varName: 'connectorAircall',
     imports: {
-      def: '@openint/connector-airtable/def',
-      server: '@openint/connector-airtable/server',
+      def: '@openint/connector-aircall/def',
+      server: '@openint/connector-aircall/server',
     },
   },
   {
@@ -90,6 +90,24 @@ module.exports = [
     },
   },
   {
+    name: 'github',
+    dirName: 'connector-github',
+    varName: 'connectorGithub',
+    imports: {
+      def: '@openint/connector-github/def',
+      server: '@openint/connector-github/server',
+    },
+  },
+  {
+    name: 'gong',
+    dirName: 'connector-gong',
+    varName: 'connectorGong',
+    imports: {
+      def: '@openint/connector-gong/def',
+      server: '@openint/connector-gong/server',
+    },
+  },
+  {
     name: 'google',
     dirName: 'connector-google',
     varName: 'connectorGoogle',
@@ -126,12 +144,48 @@ module.exports = [
     },
   },
   {
+    name: 'intercom',
+    dirName: 'connector-intercom',
+    varName: 'connectorIntercom',
+    imports: {
+      def: '@openint/connector-intercom/def',
+      server: '@openint/connector-intercom/server',
+    },
+  },
+  {
+    name: 'jira',
+    dirName: 'connector-jira',
+    varName: 'connectorJira',
+    imports: {
+      def: '@openint/connector-jira/def',
+      server: '@openint/connector-jira/server',
+    },
+  },
+  {
+    name: 'kustomer',
+    dirName: 'connector-kustomer',
+    varName: 'connectorKustomer',
+    imports: {
+      def: '@openint/connector-kustomer/def',
+      server: '@openint/connector-kustomer/server',
+    },
+  },
+  {
     name: 'lever',
     dirName: 'connector-lever',
     varName: 'connectorLever',
     imports: {
       def: '@openint/connector-lever/def',
       server: '@openint/connector-lever/server',
+    },
+  },
+  {
+    name: 'linear',
+    dirName: 'connector-linear',
+    varName: 'connectorLinear',
+    imports: {
+      def: '@openint/connector-linear/def',
+      server: '@openint/connector-linear/server',
     },
   },
   {
@@ -341,5 +395,57 @@ module.exports = [
       def: '@openint/connector-twenty/def',
       server: '@openint/connector-twenty/server',
     },
-  }
+  },
+  {
+    name: 'venmo',
+    dirName: 'connector-venmo',
+    varName: 'connectorVenmo',
+    imports: {def: '@openint/connector-venmo/def'},
+  },
+  {
+    name: 'webhook',
+    dirName: 'connector-webhook',
+    varName: 'connectorWebhook',
+    imports: {
+      def: '@openint/connector-webhook/def',
+      server: '@openint/connector-webhook/server',
+    },
+  },
+  {
+    name: 'wise',
+    dirName: 'connector-wise',
+    varName: 'connectorWise',
+    imports: {
+      def: '@openint/connector-wise/def',
+      server: '@openint/connector-wise/server',
+    },
+  },
+  {
+    name: 'xero',
+    dirName: 'connector-xero',
+    varName: 'connectorXero',
+    imports: {
+      def: '@openint/connector-xero/def',
+      server: '@openint/connector-xero/server',
+    },
+  },
+  {
+    name: 'yodlee',
+    dirName: 'connector-yodlee',
+    varName: 'connectorYodlee',
+    imports: {
+      def: '@openint/connector-yodlee/def',
+      client: '@openint/connector-yodlee/client',
+      server: '@openint/connector-yodlee/server',
+    },
+  },
+  {
+    name: 'zohodesk',
+    dirName: 'connector-zohodesk',
+    varName: 'connectorZohodesk',
+    imports: {
+      def: '@openint/connector-zohodesk/def',
+      server: '@openint/connector-zohodesk/server',
+    },
+  },
 ]

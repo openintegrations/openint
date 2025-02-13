@@ -12,9 +12,8 @@ import {
   zId,
   zPostConnectOptions,
 } from '@openint/cdk'
-import {TRPCError} from '@openint/trpc'
+import {adminProcedure, TRPCError} from '@openint/trpc'
 import {joinPath, z} from '@openint/util'
-import {inngest} from '../events'
 import {parseWebhookRequest} from '../parseWebhookRequest'
 import {protectedProcedure, trpc} from './_base'
 
@@ -44,18 +43,64 @@ export const zConnectPageParams = z.object({
       'Where to send user to after connect / if they press back button',
     ),
   // TODO: How to make sure we actually have a typed api here and can use zProviderName
-  connectorName: z
+  connectorNames: z
     .string()
     .nullish()
-    .describe('Filter connector config by connector name'),
-  connectorConfigDisplayName: z
+    .describe('Filter integrations by comma separated connector names'),
+  integrationIds: z
     .string()
     .nullish()
-    .describe('Filter connector config by displayName '),
-  /** Launch the conector with config right away */
-  connectorConfigId: zId('ccfg').optional(),
-  /** Whether to show existing connections */
-  showExisting: z.coerce.boolean().optional().default(true),
+    .describe('Filter integrations by comma separated integration ids'),
+  connectionId: zId('conn')
+    .nullish()
+    .describe('Filter managed connections by connection id'),
+  theme: z
+    .enum(['light', 'dark'])
+    .nullish()
+    .describe('Magic Link display theme'),
+  view: z
+    .enum(['manage', 'manage-deeplink', 'add', 'add-deeplink'])
+    .nullish()
+    .describe('Magic Link tab view'),
+})
+
+export const zFilePickerParams = z.object({
+  theme: z.enum(['light', 'dark']).nullish(),
+  multiSelect: z.boolean().nullish(),
+  folderSelect: z.boolean().nullish(),
+  themeColors: z
+    .object({
+      accent: z.string().nullish(),
+      background: z.string().nullish(),
+      border: z.string().nullish(),
+      button: z.string().nullish(),
+      buttonLight: z.string().nullish(),
+      buttonForeground: z.string().nullish(),
+      buttonHover: z.string().nullish(),
+      buttonStroke: z.string().nullish(),
+      buttonSecondary: z.string().nullish(),
+      buttonSecondaryForeground: z.string().nullish(),
+      buttonSecondaryStroke: z.string().nullish(),
+      buttonSecondaryHover: z.string().nullish(),
+      card: z.string().nullish(),
+      cardForeground: z.string().nullish(),
+      foreground: z.string().nullish(),
+      navbar: z.string().nullish(),
+      primary: z.string().nullish(),
+      primaryForeground: z.string().nullish(),
+      secondary: z.string().nullish(),
+      secondaryForeground: z.string().nullish(),
+      sidebar: z.string().nullish(),
+      tab: z.string().nullish(),
+    })
+    .nullish(),
+  connectionId: zId('conn'),
+  validityInSeconds: z
+    .number()
+    .default(30 * 24 * 60 * 60)
+    .describe(
+      'How long the magic link will be valid for (in seconds) before it expires',
+    ),
 })
 
 /**
@@ -74,6 +119,9 @@ export const customerRouterSchema = {
   createConnectToken: {input: zConnectTokenPayload},
   createMagicLink: {
     input: zConnectTokenPayload.merge(zConnectPageParams.omit({token: true})),
+  },
+  createFilePickerLink: {
+    input: zConnectTokenPayload.merge(zFilePickerParams),
   },
 } satisfies Record<string, {input?: z.ZodTypeAny; output?: z.ZodTypeAny}>
 
@@ -125,7 +173,6 @@ export const customerRouter = trpc.router({
         method: 'POST',
         path: '/connect/token',
         tags,
-        summary: 'Create a connect token',
       },
     })
     .input(customerRouterSchema.createConnectToken.input)
@@ -146,7 +193,6 @@ export const customerRouter = trpc.router({
         method: 'POST',
         path: '/connect/magic-link',
         tags,
-        summary: 'Create a magic link',
       },
     })
     .input(customerRouterSchema.createMagicLink.input)
@@ -155,12 +201,86 @@ export const customerRouter = trpc.router({
       const token = ctx.jwt.signViewer(asCustomer(ctx.viewer, {customerId}), {
         validityInSeconds,
       })
+      // Mapping integrationIds and connectorNames to a clean format removing any extra spaces
+      // and ensuring they are prefixed with int_ if they are in the format of connectorName_integrationId.
+      const mappedParams = {
+        ...params,
+        token,
+        integrationIds: params.integrationIds?.split(',').map((id) => {
+          const trimmedId = id.trim()
+
+          return trimmedId.includes('_') &&
+            trimmedId.split('_').length === 2 &&
+            !trimmedId.startsWith('int_')
+            ? `int_${trimmedId}`
+            : trimmedId
+        }),
+        connectorNames: params.connectorNames
+          ?.split(',')
+          .map((name) => name.trim()),
+        theme: params.theme ?? 'light',
+        view: params.view ?? 'add',
+      }
+
       const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
-      for (const [key, value] of Object.entries({...params, token})) {
-        url.searchParams.set(key, `${value ?? ''}`)
+      for (const [key, value] of Object.entries(mappedParams)) {
+        if (value) {
+          url.searchParams.set(key, `${value ?? ''}`)
+        }
       }
       return {url: url.toString()}
     }),
+  createFilePickerLink: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/connect/file-picker',
+        tags,
+      },
+    })
+    .input(customerRouterSchema.createFilePickerLink.input)
+    .output(z.object({url: z.string()}))
+    .mutation(
+      async ({input: {validityInSeconds, themeColors, ...params}, ctx}) => {
+        const connection = await ctx.services.getConnectionOrFail(
+          params.connectionId,
+        )
+
+        const token = ctx.jwt.signViewer(
+          asCustomer(ctx.viewer, {customerId: connection.customerId}),
+          {
+            validityInSeconds,
+          },
+        )
+
+        const url = new URL('/connect/file-picker', ctx.apiUrl)
+        url.searchParams.set('token', token)
+        url.searchParams.set('connection_id', params.connectionId)
+        url.searchParams.set('theme', params.theme ?? 'light')
+        if (params.multiSelect) {
+          url.searchParams.set('multi_select', params.multiSelect.toString())
+        }
+        if (params.folderSelect) {
+          url.searchParams.set('folder_select', params.folderSelect.toString())
+        }
+
+        // Add theme colors if provided
+        if (themeColors) {
+          Object.entries(themeColors).forEach(([key, value]) => {
+            if (value) {
+              // Convert camelCase to snake_case for URL params
+              const paramKey = key.replace(
+                /[A-Z]/g,
+                (letter) => `_${letter.toLowerCase()}`,
+              )
+              url.searchParams.set(`theme_colors.${paramKey}`, value)
+            }
+          })
+        }
+
+        return {url: url.toString()}
+      },
+    ),
 
   // MARK: - Connect
   preConnect: protectedProcedure
@@ -282,7 +402,10 @@ export const customerRouter = trpc.router({
         })()
 
         if (!connUpdate) {
-          return 'Noop'
+          return {
+            message: 'Noop',
+            connectionId: null,
+          }
         }
 
         const syncInBackground =
@@ -300,16 +423,18 @@ export const customerRouter = trpc.router({
         //   },
         // )
 
-        const connectionId = await ctx.asOrgIfNeeded._syncConnectionUpdate(
-          int,
-          {
+        const {connection_id: connectionId} =
+          await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
             ...connUpdate,
             // No need for each connector to worry about this, unlike in the case of handleWebhook.
             customerId:
               ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
             triggerDefaultSync,
-          },
-        )
+            settings: {
+              ...connUpdate?.settings,
+              error: connUpdate?.settings?.['error'] || null,
+            },
+          })
 
         if (process.env['NEXT_PUBLIC_RUNTIME_ENV'] === 'edge') {
           console.log('[postConnect] skipping inngest for edge runtime')
@@ -322,7 +447,7 @@ export const customerRouter = trpc.router({
         })
 
         if (syncInBackground) {
-          await inngest.send({
+          await ctx.inngest.send({
             name: 'sync/connection-requested',
             data: {connectionId},
           })
@@ -334,7 +459,30 @@ export const customerRouter = trpc.router({
           `syncInBackground: ${syncInBackground}`,
           `triggerDefaultSync: ${triggerDefaultSync}`,
         )
-        return 'Connection successfully connected'
+        return {
+          connectionId,
+          message: 'Connection successfully connected',
+        }
       },
     ),
+  upsertCustomer: adminProcedure
+    .meta({
+      openapi: {method: 'PUT', path: '/core/customer/{id}', tags: ['Core']},
+    })
+    .input(z.object({id: z.string(), metadata: z.unknown()}))
+    .output(
+      z.object({
+        id: z.string(),
+        orgId: z.string(),
+        metadata: z.unknown(),
+      }),
+    )
+    .mutation(({input: {id, metadata}, ctx}) => {
+      console.log('createCustomer', ctx.viewer, id, metadata)
+      return {
+        id,
+        orgId: ctx.viewer.orgId + '',
+        metadata,
+      }
+    }),
 })

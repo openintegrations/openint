@@ -1,6 +1,6 @@
 {
   "name": "@openint/connect",
-  "version": "0.2.1",
+  "version": "0.2.17",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,6 +13,7 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
+    "@openint/open-file-picker": "workspace:*",
     "@types/react": "*",
     "typescript": "*"
   },

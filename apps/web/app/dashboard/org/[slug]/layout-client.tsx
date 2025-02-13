@@ -11,6 +11,7 @@ import React from 'react'
 import {LoadingText} from '@openint/ui'
 import {NoSSR} from '@/components/NoSSR'
 import {RedirectToNext13} from '@/components/RedirectTo'
+import {browserAnalytics} from '@/lib-client/analytics-browser'
 
 // import {Sidebar} from './Sidebar'
 
@@ -43,6 +44,15 @@ export default function OrgLayoutClient({
         .catch((err) => {
           console.error('[OrgLayout] error setting active org', err)
         })
+
+      // TODO: this does not seem to be working, parking for now
+      console.log('identify', auth.userId, auth.orgId, auth.isSignedIn)
+      if (auth.isSignedIn) {
+        browserAnalytics.identify(auth.userId, {
+          email: undefined,
+          orgId,
+        })
+      }
     }
   }, [auth.orgId, clerk, clerkReady, orgId, ready])
 

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "run-s build:*",
     "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
-    "build:migration": "if [ \"$VERCEL_ENV\" = production ] || [ \"$VERCEL_GIT_COMMIT_REF\" = main ]; then pnpm --dir ../../ run-migration; else echo 'Skip non prod/staging migration'; fi",
+    "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
     "build:worker": "SKIP_NEXT_APP_BUILD=true cloudflare && node patch-cloudflare.bin.js",
     "codegen:supabase": "supabase gen types typescript --linked --schema public > ./supabase/supabase.gen.d.ts",
@@ -26,10 +26,13 @@
     "@openint/db": "workspace:*",
     "@openint/engine-backend": "workspace:*",
     "@openint/engine-frontend": "workspace:*",
+    "@openint/env": "workspace:*",
+    "@openint/events": "workspace:*",
+    "@openint/open-file-picker": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/util": "workspace:*",
     "@opennextjs/cloudflare": "https://pkg.pr.new/@opennextjs/cloudflare@2ab976f",
-    "@opensdks/fetch-links": "^0.0.19",
+    "@opensdks/fetch-links": "^0.0.22",
     "@sentry/nextjs": "^8.33.1",
     "@stoplight/elements": "7.7.10",
     "@tanstack/query-core": "4.27.0",
@@ -61,6 +64,7 @@
     "trpc-panel": "1.3.4"
   },
   "devDependencies": {
+    "@opensdks/sdk-plaid": "^0.0.19",
     "@sentry/cli": "^2.36.6",
     "@types/http-proxy": "1.17.10",
     "@types/react": "18.0.27",

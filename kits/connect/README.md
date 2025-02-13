@@ -13,3 +13,11 @@ In addition, should be usable from
 
 - Vanilla JS
 - React
+
+## Release Process
+
+Ensure to increment the version in `package.json` and run the following commands:
+
+```
+pnpm clean && pnpm build && pnpm pub
+```

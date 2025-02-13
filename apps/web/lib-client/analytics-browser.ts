@@ -1,8 +1,8 @@
 import posthog from 'posthog-js'
 import {zUserId} from '@openint/cdk'
-import {zEvent, zUserTraits} from '@openint/engine-backend/events'
+import {zEvent, zUserTraits} from '@openint/events'
 import {z, zFunction} from '@openint/util'
-import {Sentry} from '../sentry.client.config'
+import {getSentryEnvironment, Sentry} from '../sentry.client.config'
 
 let initialized = false
 
@@ -14,8 +14,15 @@ export const browserAnalytics = {
     if (!writeKey) {
       console.warn('No write key provided, analytics will be noop')
     }
-    posthog.init(writeKey, {api_host: '/_posthog', autocapture: true})
-    initialized = true
+    posthog.init(writeKey, {
+      api_host: 'https://eu.i.posthog.com',
+      autocapture: true,
+      capture_pageview: false,
+      loaded: () => {
+        posthog.register({environment: getSentryEnvironment()})
+        initialized = true
+      },
+    })
   }),
   identify: z
     .function()
@@ -35,6 +42,7 @@ export const browserAnalytics = {
         return
       }
       posthog.capture(event.name, event.data)
+      // QQ: why is this null?
       Sentry.setUser(null)
     }),
   reset: () => {

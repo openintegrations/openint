@@ -48,13 +48,13 @@ const dbName = 'connector_postgres'
 
 // TODO: Add me back in once we know CI is working
 beforeAll(async () => {
-  const masterDb = drizzle(env.POSTGRES_URL, {logger: true})
+  const masterDb = drizzle(env.DATABASE_URL, {logger: true})
   await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
   await masterDb.execute(`CREATE DATABASE ${dbName}`)
   await masterDb.$client.end()
 })
 
-const dbUrl = new URL(env.POSTGRES_URL)
+const dbUrl = new URL(env.DATABASE_URL)
 dbUrl.pathname = `/${dbName}`
 const db = drizzle(dbUrl.toString(), {logger: true})
 
@@ -102,11 +102,13 @@ describe('standard schema', () => {
 
 const messages = [
   ['insert', [{stream: 'house', data: {id: 112, name: 'White'}}]],
+  // This is currently failing due to the removal of `IF NOT EXISTS` clause in drizzle-kit
+  // Need to figure out if we should add it back, probably so?
   [
     'insert multiple',
     [
       {stream: 'account', data: {id: 555, name: 'Bank'}},
-      {stream: 'account', data: {id: 555}},
+      {stream: 'trxn', data: {id: 555}},
     ],
   ],
   [

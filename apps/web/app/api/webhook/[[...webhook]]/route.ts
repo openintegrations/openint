@@ -1,4 +1,4 @@
-import {inngest} from '@openint/engine-backend/events'
+import {inngest} from '@openint/engine-backend/inngest'
 import {makeUlid} from '@openint/util'
 import {NextResponse} from 'next/server'
 

@@ -11,7 +11,8 @@ export const testEnv = createEnv({
 
     // MARK: - Not validated, may not be used...
     // Core env vars
-    POSTGRES_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL_UNPOOLED: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
     // Required for worker to work when deployed
     INNGEST_SIGNING_KEY: z.string().optional(),
@@ -43,6 +44,17 @@ export const testEnv = createEnv({
 
     // Turn on debug output, including drizzle. Should be a boolean tho
     DEBUG: z.string().optional(),
+
+    DOCKER_POSTGRES_URL: z.string().optional(),
+    DOCKER_SUPABASE_URL: z.string().optional(),
+    conn_greenhouse_API_KEY: z.string().optional(),
+    ccfg_plaid__CLIENT_ID: z.string().optional(),
+    ccfg_plaid__CLIENT_SECRET_PRODUCTION: z.string().optional(),
+    ccfg_plaid__CLIENT_SECRET_SANDBOX: z.string().optional(),
+    conn_plaid__ACCESS_TOKEN: z.string().optional(),
+    INTEGRATION_TEST_SECRET: z.string().optional(),
+    INTEGRATION_TEST_ORG_ID: z.string().optional(),
+    INTEGRATION_TEST_API_KEY: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -60,7 +72,7 @@ export const testEnv = createEnv({
     NEXT_PUBLIC_PORT: process.env['NEXT_PUBLIC_PORT'],
     NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
     PAGE_SIZE: process.env['PAGE_SIZE'],
-    POSTGRES_URL: process.env['POSTGRES_URL'],
+    DATABASE_URL: process.env['DATABASE_URL'],
     PROVIDER_CONFIG_KEY: process.env['PROVIDER_CONFIG_KEY'],
     CONNECTOR_NAME: process.env['CONNECTOR_NAME'],
     SFDC_ACCESS_TOKEN: process.env['SFDC_ACCESS_TOKEN'],
@@ -69,6 +81,19 @@ export const testEnv = createEnv({
     UNIFIED_OBJECT: process.env['UNIFIED_OBJECT'],
     VERCEL_URL: process.env['VERCEL_URL'],
     VERTICAL: process.env['VERTICAL'],
+    DOCKER_POSTGRES_URL: process.env['DOCKER_POSTGRES_URL'],
+    DOCKER_SUPABASE_URL: process.env['DOCKER_SUPABASE_URL'],
+    DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
+    conn_greenhouse_API_KEY: process.env['conn_greenhouse_API_KEY'],
+    ccfg_plaid__CLIENT_ID: process.env['ccfg_plaid__CLIENT_ID'],
+    ccfg_plaid__CLIENT_SECRET_PRODUCTION:
+      process.env['ccfg_plaid__CLIENT_SECRET_PRODUCTION'],
+    ccfg_plaid__CLIENT_SECRET_SANDBOX:
+      process.env['ccfg_plaid__CLIENT_SECRET_SANDBOX'],
+    INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
+    conn_plaid__ACCESS_TOKEN: process.env['conn_plaid__ACCESS_TOKEN'],
+    INTEGRATION_TEST_ORG_ID: process.env['INTEGRATION_TEST_ORG_ID'],
+    INTEGRATION_TEST_API_KEY: process.env['INTEGRATION_TEST_API_KEY'],
   },
 })
 

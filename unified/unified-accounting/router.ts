@@ -42,7 +42,7 @@ export const accountingRouter = trpc.router({
       }),
     )
     .input(zPaginationParams.nullish())
-    .output(zPaginatedResult.extend({items: z.array(unified.account)}))
+    .output(zPaginatedResult.extend({items: z.array(unified.qboAccount)}))
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
   listExpenses: procedure
     .meta(
@@ -93,9 +93,24 @@ export const accountingRouter = trpc.router({
         summary: 'Get Profit and Loss',
       }),
     )
-    .input(baseReportQueryParams.extend({}))
+    .input(
+      baseReportQueryParams.extend({
+        // NOTE: in QBO this is summarize_column_by but we're doing it for consistency with other APIS
+        // we expose that wil work across non column accounting system reports
+        // QBO Supported Values: Total, Month, Week, Days, Quarter, Year, Customers, Vendors, Classes, Departments, Employees, ProductsAndServices
+        summarize_by: z.string().optional(),
+      }),
+    )
     .output(unified.profitAndLoss)
-    .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
+    .query(async ({input, ctx}) => {
+      if (input.summarize_by) {
+        console.log('Received summarize_by', input.summarize_by)
+        // @ts-expect-error
+        input.summarize_column_by = input.summarize_by
+        delete input.summarize_by
+      }
+      return proxyCallAdapter({input, ctx})
+    }),
   getCashFlow: procedure
     .meta(
       oapi({

@@ -3,7 +3,7 @@ import {env} from '@openint/app-config/env'
 import '@openint/app-config/register.node'
 import type {SendEventPayload} from 'inngest/helpers/types'
 import {flatRouter} from '@openint/engine-backend'
-import type {Events, OrgProperties} from '@openint/engine-backend'
+import type {Events, OrgProperties} from '@openint/events'
 import {makeSentryClient} from '../lib-server/sentry-client'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -59,6 +59,8 @@ export async function scheduleSyncs({step}: FunctionInput<never>) {
       scheduledCount: pipelines.length,
       // For debugging
       // sentryCheckinId: checkinId,
+
+      // NOTE: this has not been rotated since we moved to the new sentry org yet
       // sentryMonitorId: backendEnv.SENTRY_CRON_MONITOR_ID,
     }
   })

@@ -19,7 +19,6 @@
   },
   "devDependencies": {
     "@openint/env": "workspace:*",
-    "@types/json-stable-stringify": "^1.1.0",
-    "@types/pg": "8.6.5"
+    "@types/json-stable-stringify": "^1.1.0"
   }
 }

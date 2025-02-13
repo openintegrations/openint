@@ -7,6 +7,8 @@ import {default as connectorBrex_def} from '@openint/connector-brex/def'
 import {default as connectorBrex_server} from '@openint/connector-brex/server'
 import {default as connectorCoda_def} from '@openint/connector-coda/def'
 import {default as connectorCoda_server} from '@openint/connector-coda/server'
+import {default as connectorConfluence_def} from '@openint/connector-confluence/def'
+import {default as connectorConfluence_server} from '@openint/connector-confluence/server'
 import {default as connectorDebug_def} from '@openint/connector-debug/def'
 import {default as connectorDebug_server} from '@openint/connector-debug/server'
 import {default as connectorDiscord_def} from '@openint/connector-discord/def'
@@ -15,6 +17,10 @@ import {default as connectorFinch_def} from '@openint/connector-finch/def'
 import {default as connectorFinch_server} from '@openint/connector-finch/server'
 import {default as connectorFs_def} from '@openint/connector-fs/def'
 import {default as connectorFs_server} from '@openint/connector-fs/server'
+import {default as connectorGithub_def} from '@openint/connector-github/def'
+import {default as connectorGithub_server} from '@openint/connector-github/server'
+import {default as connectorGong_def} from '@openint/connector-gong/def'
+import {default as connectorGong_server} from '@openint/connector-gong/server'
 import {default as connectorGoogle_def} from '@openint/connector-google/def'
 import {default as connectorGoogle_server} from '@openint/connector-google/server'
 import {default as connectorGreenhouse_def} from '@openint/connector-greenhouse/def'
@@ -23,8 +29,16 @@ import {default as connectorHeron_def} from '@openint/connector-heron/def'
 import {default as connectorHeron_server} from '@openint/connector-heron/server'
 import {default as connectorHubspot_def} from '@openint/connector-hubspot/def'
 import {default as connectorHubspot_server} from '@openint/connector-hubspot/server'
+import {default as connectorIntercom_def} from '@openint/connector-intercom/def'
+import {default as connectorIntercom_server} from '@openint/connector-intercom/server'
+import {default as connectorJira_def} from '@openint/connector-jira/def'
+import {default as connectorJira_server} from '@openint/connector-jira/server'
+import {default as connectorKustomer_def} from '@openint/connector-kustomer/def'
+import {default as connectorKustomer_server} from '@openint/connector-kustomer/server'
 import {default as connectorLever_def} from '@openint/connector-lever/def'
 import {default as connectorLever_server} from '@openint/connector-lever/server'
+import {default as connectorLinear_def} from '@openint/connector-linear/def'
+import {default as connectorLinear_server} from '@openint/connector-linear/server'
 import {default as connectorLunchmoney_def} from '@openint/connector-lunchmoney/def'
 import {default as connectorLunchmoney_server} from '@openint/connector-lunchmoney/server'
 import {default as connectorMercury_def} from '@openint/connector-mercury/def'
@@ -79,6 +93,8 @@ import {default as connectorXero_def} from '@openint/connector-xero/def'
 import {default as connectorXero_server} from '@openint/connector-xero/server'
 import {default as connectorYodlee_def} from '@openint/connector-yodlee/def'
 import {default as connectorYodlee_server} from '@openint/connector-yodlee/server'
+import {default as connectorZohodesk_def} from '@openint/connector-zohodesk/def'
+import {default as connectorZohodesk_server} from '@openint/connector-zohodesk/server'
 
 const connectorApollo = {
   ...connectorApollo_def,
@@ -98,6 +114,11 @@ const connectorBrex = {
 const connectorCoda = {
   ...connectorCoda_def,
   ...connectorCoda_server,
+}
+
+const connectorConfluence = {
+  ...connectorConfluence_def,
+  ...connectorConfluence_server,
 }
 
 const connectorDebug = {
@@ -120,6 +141,16 @@ const connectorFs = {
   ...connectorFs_server,
 }
 
+const connectorGithub = {
+  ...connectorGithub_def,
+  ...connectorGithub_server,
+}
+
+const connectorGong = {
+  ...connectorGong_def,
+  ...connectorGong_server,
+}
+
 const connectorGoogle = {
   ...connectorGoogle_def,
   ...connectorGoogle_server,
@@ -140,9 +171,29 @@ const connectorHubspot = {
   ...connectorHubspot_server,
 }
 
+const connectorIntercom = {
+  ...connectorIntercom_def,
+  ...connectorIntercom_server,
+}
+
+const connectorJira = {
+  ...connectorJira_def,
+  ...connectorJira_server,
+}
+
+const connectorKustomer = {
+  ...connectorKustomer_def,
+  ...connectorKustomer_server,
+}
+
 const connectorLever = {
   ...connectorLever_def,
   ...connectorLever_server,
+}
+
+const connectorLinear = {
+  ...connectorLinear_def,
+  ...connectorLinear_server,
 }
 
 const connectorLunchmoney = {
@@ -283,20 +334,32 @@ const connectorYodlee = {
   ...connectorYodlee_server,
 }
 
+const connectorZohodesk = {
+  ...connectorZohodesk_def,
+  ...connectorZohodesk_server,
+}
+
 export const mergedConnectors = {
   apollo: connectorApollo,
   beancount: connectorBeancount,
   brex: connectorBrex,
   coda: connectorCoda,
+  confluence: connectorConfluence,
   debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,
   fs: connectorFs,
+  github: connectorGithub,
+  gong: connectorGong,
   google: connectorGoogle,
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   hubspot: connectorHubspot,
+  intercom: connectorIntercom,
+  jira: connectorJira,
+  kustomer: connectorKustomer,
   lever: connectorLever,
+  linear: connectorLinear,
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
   merge: connectorMerge,
@@ -325,4 +388,5 @@ export const mergedConnectors = {
   wise: connectorWise,
   xero: connectorXero,
   yodlee: connectorYodlee,
+  zohodesk: connectorZohodesk,
 }

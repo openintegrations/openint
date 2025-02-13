@@ -57,13 +57,16 @@
         {
           "group": "Connect",
           "pages": [
-            "unified-apis/connect/create-a-connect-token",
-            "unified-apis/connect/create-a-magic-link"
+            "unified-apis/connect/create-connect-token",
+            "unified-apis/connect/create-magic-link",
+            "unified-apis/connect/create-file-picker-link",
+            "unified-apis/connect/list-events"
           ]
         },
         {
           "group": "Core",
           "pages": [
+            "unified-apis/core/upsert-customer",
             "unified-apis/core/list-connections",
             "unified-apis/core/create-connection",
             "unified-apis/core/get-connection",
@@ -81,8 +84,7 @@
             "unified-apis/core/create-pipeline",
             "unified-apis/core/delete-pipeline",
             "unified-apis/core/update-pipeline",
-            "unified-apis/core/sync-pipeline",
-            "unified-apis/core/list-sync-runs"
+            "unified-apis/core/sync-pipeline"
           ]
         },
         {
@@ -184,12 +186,13 @@
         {
           "group": "File Storage",
           "pages": [
+            "unified-apis/file-storage/list-drive-groups",
             "unified-apis/file-storage/list-drives",
-            "unified-apis/file-storage/get-drive",
-            "unified-apis/file-storage/list-folders",
-            "unified-apis/file-storage/get-folder",
             "unified-apis/file-storage/list-files",
-            "unified-apis/file-storage/get-file"
+            "unified-apis/file-storage/get-file",
+            "unified-apis/file-storage/export-file",
+            "unified-apis/file-storage/download-file",
+            "unified-apis/file-storage/list-folders"
           ]
         }
       ]

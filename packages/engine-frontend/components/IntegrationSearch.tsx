@@ -1,6 +1,7 @@
 'use client'
 
-import {Loader, Search} from 'lucide-react'
+import {Loader2, Search} from 'lucide-react'
+import {useSearchParams} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
 import {Button, cn, Input, parseCategory, Separator} from '@openint/ui'
@@ -16,12 +17,10 @@ export function IntegrationSearch({
   className,
   connectorConfigs,
   onEvent,
-  enabledIntegrationIds = [],
 }: {
   className?: string
   /** TODO: Make this optional so it is easier to use it as a standalone component */
   connectorConfigs: ConnectorConfig[]
-  enabledIntegrationIds?: string[]
   onEvent?: (event: {
     integration: {
       connectorConfigId: string
@@ -34,6 +33,14 @@ export function IntegrationSearch({
   const [debouncedSearchText, setDebouncedSearchText] = useState('')
   // Main state after applying filters.
   const [categoryFilter, setCategoryFilter] = useState<string[]>([])
+
+  const searchParams = useSearchParams()
+  const view = searchParams.get('view') ?? ''
+  const integrationIds = searchParams.get('integrationIds')
+  const connectorNames = searchParams.get('connectorNames')
+
+  const integrationIdList = integrationIds?.split(',') ?? []
+  const connectorNameList = connectorNames?.split(',') ?? []
 
   const debouncedSetSearch = useCallback((value: string) => {
     const timeoutId = setTimeout(() => {
@@ -51,15 +58,13 @@ export function IntegrationSearch({
   const listIntegrationsRes = _trpcReact.listConfiguredIntegrations.useQuery({
     connector_config_ids: connectorConfigs.map((ccfg) => ccfg.id),
     search_text: debouncedSearchText,
+    integrationIds: integrationIdList,
+    connectorNames: connectorNameList,
   })
-  const ints = listIntegrationsRes.data?.items
-    .map((int) => ({
-      ...int,
-      ccfg: connectorConfigs.find(
-        (ccfg) => ccfg.id === int.connector_config_id,
-      )!,
-    }))
-    .filter((int) => !enabledIntegrationIds.includes(int.id))
+  const ints = listIntegrationsRes.data?.items.map((int) => ({
+    ...int,
+    ccfg: connectorConfigs.find((ccfg) => ccfg.id === int.connector_config_id)!,
+  }))
 
   const categories = Array.from(
     new Set(connectorConfigs.flatMap((ccfg) => ccfg.verticals)),
@@ -109,6 +114,19 @@ export function IntegrationSearch({
     setCategoryFilter(selected)
   }
 
+  const isDeeplinkView = view.split('-')[1] === 'deeplink'
+  const isFullIntegrationId =
+    integrationIdList.length === 1 && integrationIdList[0]?.includes('int_')
+  const hasRelatedIntegration = Boolean(
+    connectorNameList.length === 1 &&
+      ((connectorNameList[0] &&
+        isFullIntegrationId &&
+        integrationIdList[0]?.includes(connectorNameList[0])) ||
+        (ints && ints.length === 1 && ints[0]?.ccfg.integrations.length === 0)),
+  )
+
+  const hasDeeplink = isDeeplinkView && hasRelatedIntegration
+
   return (
     <div className={cn('flex h-full flex-col', className)}>
       {/* Search integrations - Fixed header */}
@@ -150,7 +168,7 @@ export function IntegrationSearch({
       <div className="relative flex-1 overflow-y-auto">
         {listIntegrationsRes.isLoading ? (
           <div className="flex h-full min-h-[500px] items-center justify-center">
-            <Loader className="size-7 animate-spin text-button" />
+            <Loader2 className="size-7 animate-spin text-button" />
           </div>
         ) : (
           <div className="space-y-6 p-4">
@@ -162,7 +180,7 @@ export function IntegrationSearch({
                     <h3 className="mb-2 text-lg font-semibold text-foreground">
                       {parseCategory(category)}
                     </h3>
-                    <div className="hidden w-full flex-row flex-wrap gap-4 lg:flex lg:w-[60%]">
+                    <div className="hidden w-full flex-row flex-wrap gap-4 md:flex md:w-[60%]">
                       {categoryInts.map((int) => (
                         <WithConnectorConnect
                           key={int.id}
@@ -180,19 +198,21 @@ export function IntegrationSearch({
                               },
                             })
                           }}>
-                          {({openConnect}) => (
+                          {({openConnect, loading}) => (
                             <IntegrationCard
                               onClick={openConnect}
                               logo={
                                 int.logo_url ?? int.ccfg.connector.logoUrl ?? ''
                               }
                               name={int.name}
+                              hasDeeplink={hasDeeplink}
+                              isLoading={loading}
                             />
                           )}
                         </WithConnectorConnect>
                       ))}
                     </div>
-                    <div className="flex w-full flex-col gap-2 lg:hidden">
+                    <div className="flex w-full flex-col gap-2 md:hidden">
                       {categoryInts.map((int, index) => (
                         <WithConnectorConnect
                           key={int.id}

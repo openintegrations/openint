@@ -5,7 +5,7 @@ import type {AppRouter} from '@openint/api'
 import {zOrganization} from '@openint/engine-backend/services/AuthProvider'
 import type {TRPCReact} from '@openint/engine-frontend'
 import {_trpcReact, useMutationToast} from '@openint/engine-frontend'
-import {SchemaForm} from '@openint/ui'
+import {Button, SchemaForm} from '@openint/ui'
 import useRefetchOnSwitch from '../useRefetchOnSwitch'
 
 const trpcReact = _trpcReact as unknown as TRPCReact<AppRouter>
@@ -28,6 +28,7 @@ export default function SettingsPage() {
   return res && !(res.isLoading || res.isRefetching) ? (
     <div className="p-6">
       <h2 className="mb-4 text-2xl font-semibold tracking-tight">Settings</h2>
+      <p className="mb-4 font-semibold">Organization ID: {res.data.id}</p>
       <p className="mb-4 text-sm text-gray-600">
         Configure your database, schema, and webhook settings to manage how data
         is stored, organized, and synced across your integrations.
@@ -53,7 +54,11 @@ export default function SettingsPage() {
             },
           )
         }}
-      />
+      >
+        <Button type="submit" className="mt-4">
+          Save Settings
+        </Button>
+      </SchemaForm>
     </div>
   ) : (
     <div className="flex size-full flex-1 items-center justify-center">

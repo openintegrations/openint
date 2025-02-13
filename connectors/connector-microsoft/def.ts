@@ -7,6 +7,7 @@ export const zConfig = oauthBaseSchema.connectorConfig
 const oReso = oauthBaseSchema.connectionSettings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
+  client_id: z.string().optional(),
 })
 
 export const microsoftSchemas = {
@@ -29,6 +30,26 @@ export const microsoftSchemas = {
             .optional()
             // Sites.Read.All, Sites.ReadWrite.All, Sites.Manage.All, Sites.FullControl.All Delegated permissions: Sites.Read.All, Sites.ReadWrite.All
             .describe('sharepoint specific space separated scopes'),
+        })
+        .optional(),
+      outlook: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z
+            .string()
+            .optional()
+            .describe('outlook specific space separated scopes'),
+        })
+        .optional(),
+      teams: z
+        .object({
+          enabled: z.boolean().optional(),
+          scopes: z
+            .string()
+            .optional()
+            // User.Read, Team.ReadBasic.All, Team.Read.All, Channel.ReadBasic.All, Channel.Read.All, Chat.Read, Chat.ReadWrite, ChatMessage.Read,
+            // ChatMessage.Send, Presence.Read, User.ReadBasic.All, Calls.AccessMedia.All
+            .describe('teams specific space separated scopes'),
         })
         .optional(),
     }),

@@ -1,6 +1,11 @@
 import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
 import {initMsgraphSDK} from '@opensdks/sdk-msgraph'
-import {extractId, initNangoSDK, nangoProxyLink, type ConnectorServer} from '@openint/cdk'
+import {
+  extractId,
+  initNangoSDK,
+  nangoProxyLink,
+  type ConnectorServer,
+} from '@openint/cdk'
 import type {microsoftSchemas} from './def'
 
 function mergeScopes(
@@ -31,7 +36,15 @@ const integrations = [
     verticals: ['email'],
     updated_at: new Date().toISOString(),
     logo_url: '/_assets/logo-outlook.svg',
-  }
+  },
+  {
+    id: 'teams',
+    name: 'Teams',
+    raw_data: {} as any,
+    verticals: ['messaging'],
+    updated_at: new Date().toISOString(),
+    logo_url: '/_assets/logo-teams.svg',
+  },
 ]
 
 export const microsoftServer = {
@@ -51,7 +64,7 @@ export const microsoftServer = {
           return next(req)
         },
         ...fetchLinks,
-        ...defaultLinks
+        ...defaultLinks,
       ],
     })
     return msGraph
@@ -86,7 +99,7 @@ export const microsoftServer = {
           ),
         },
         // note: doesn't seem to be working
-        auth_mode: "OAUTH2_CC"
+        auth_mode: 'OAUTH2_CC',
       }
       return authParams
     }
@@ -121,7 +134,7 @@ export const microsoftServer = {
 
     const defaultResource = {
       connectionExternalId: extractId(connectOutput.connectionId)[2],
-      settings: {oauth: nangoConnection},
+      settings: {oauth: nangoConnection, client_id: config.oauth.client_id},
     }
     if (!context.integrationId) {
       return defaultResource

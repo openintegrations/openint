@@ -24,6 +24,7 @@ import {
   useToast,
 } from '@openint/ui'
 import {z} from '@openint/util'
+import {useViewerContext} from '@/components/viewer-context'
 import {
   useOpenIntConnectContext,
   useOptionalOpenIntConnectContext,
@@ -63,9 +64,12 @@ export const WithConnectorConnect = ({
   }) => React.ReactNode
 }) => {
   // console.log('WithConnectorConnect', int.id, int.connector)
+  const {viewer} = useViewerContext()
   const {clientConnectors} = useOpenIntConnectContext()
   // TODO: Restore connectFnMap so that we respect the rules of hooks to always render all hooks
   // and not skip rendering or conditionally rendering hooks
+
+  const [isPreconnecting, setIsPreconnecting] = React.useState(false)
 
   const useConnectHook = clientConnectors[ccfg.connector.name]?.useConnectHook
   const nangoProvider = ccfg.connector.nangoProvider
@@ -106,9 +110,16 @@ export const WithConnectorConnect = ({
     ? extractId(integration.id)[2]
     : undefined
 
+  if (!viewer || !viewer.orgId) {
+    throw new Error('Missing orgId')
+  }
   // TODO: Handle preConnectInput schema and such... for example for Plaid
   const preConnect = _trpcReact.preConnect.useQuery(
-    [ccfg.id, {connectionExternalId, integrationExternalId}, {}],
+    [
+      ccfg.id,
+      {connectionExternalId, integrationExternalId},
+      {orgId: viewer?.orgId},
+    ],
     // note: this used to be enabled: ccfg.connector.hasPreConnect
     // but we disabled it as it made too many calls for plaid and just left
     // it as a noop to be lazy called by the refetch below
@@ -136,13 +147,20 @@ export const WithConnectorConnect = ({
       const connInput = ccfg.connector.hasPreConnect
         ? (await preConnect.refetch()).data
         : {}
-      console.log(`[OpenIntConnect] ${ccfg.id} connInput`, connInput)
+      console.log(
+        `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id} connInput`,
+        connInput,
+      )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const connOutput = connectFn
         ? await connectFn?.(connInput, {connectorConfigId: ccfg.id})
         : connInput
-      console.log(`[OpenIntConnect] ${ccfg.id} connOutput`, connOutput)
+      console.log(
+        `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id}
+        connOutput`,
+        connOutput,
+      )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const postConnOutput = ccfg.connector.hasPostConnect
@@ -172,6 +190,7 @@ export const WithConnectorConnect = ({
           })
         }
         setOpen(false)
+        setIsPreconnecting(false)
         onEvent?.({type: 'success'})
       },
       onError: (err) => {
@@ -203,98 +222,135 @@ export const WithConnectorConnect = ({
     // non modal dialog do not add pointer events none to the body
     // which workaround issue with multiple portals (dropdown, dialog) conflicting
     // as well as other modals introduced by things like Plaid
-    <Dialog open={open} onOpenChange={setOpen} modal={false}>
-      {children({
-        // Children is responsible for rendering dialog triggers as needed
-        openConnect: () => {
-          onEvent?.({type: 'open'})
-          // noop, allow the dialog to open instead via Trigger?
-          if (!connectFn) {
-            // The whole dialog trigger thing is a bit funky to work with
-            // it requires the children to know whether a dialog would pop up or not
-            // and a hard api to work with. We sacrifice some accessiblity by
-            // using explicit callback rather than DialogTrigger component
-            setOpen(true)
-            return
-          }
-          connect.mutate(undefined)
-        },
-        loading: connect.isLoading,
-        variant: connection?.status === 'disconnected' ? 'default' : 'ghost',
-        label: connection ? 'Reconnect' : 'Connect',
-      })}
+    <>
+      {(connect.isLoading || isPreconnecting) && (
+        <div className="bg-background/80 fixed inset-0 z-50 backdrop-blur-sm" />
+      )}
 
-      <DialogContent
-        className="flex flex-col overflow-visible"
-        style={{
-          maxHeight: 'min(90vh, 700px)',
-        }}>
-        <DialogHeader className="shrink-0">
-          <DialogTitle>
-            <div className="flex items-center">
-              <span className="mr-2">
-                Connect to {ccfg.connector.displayName}
-              </span>
-              {ccfg.connector.name === 'greenhouse' && (
-                <div className="relative inline-block">
-                  <TooltipProvider delayDuration={0}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <InfoIcon className="h-5 w-5 cursor-help text-gray-500" />
-                      </TooltipTrigger>
-                      <TooltipContent side="right">
-                        <p className="max-w-[300px] italic">
-                          Generate a custom API key with{' '}
-                          <a
-                            href="https://support.greenhouse.io/hc/en-us/articles/202842799-Create-an-API-key-in-Greenhouse-Recruiting"
-                            className="font-bold underline"
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            these instructions
-                          </a>{' '}
-                          and include all Harvest V3 permissions.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              )}
-            </div>
-          </DialogTitle>
-          {debug && (
-            <DialogDescription>
-              Using connector config ID: {ccfg.id}
-            </DialogDescription>
-          )}
-        </DialogHeader>
-        <div className="overflow-y-auto">
-          <SchemaForm
-            ref={formRef}
-            schema={z.object({})}
-            jsonSchemaTransform={(schema) =>
-              ccfg.connector.schemas.connectionSettings ?? schema
+      <Dialog
+        open={open}
+        onOpenChange={(newValue) => {
+          setOpen(newValue)
+          setIsPreconnecting(newValue)
+        }}
+        modal={false}>
+        {children({
+          // Children is responsible for rendering dialog triggers as needed
+          openConnect: () => {
+            onEvent?.({type: 'open'})
+            // noop, allow the dialog to open instead via Trigger?
+            if (!connectFn) {
+              // The whole dialog trigger thing is a bit funky to work with
+              // it requires the children to know whether a dialog would pop up or not
+              // and a hard api to work with. We sacrifice some accessiblity by
+              // using explicit callback rather than DialogTrigger component
+              setOpen(true)
+              setIsPreconnecting(true)
+
+              return
             }
-            formData={{}}
-            loading={connect.isLoading}
-            onSubmit={({formData}) => {
-              console.log('connection form submitted', formData)
-              connect.mutate({connectorConfigId: ccfg.id, settings: formData})
-            }}
-            hideSubmitButton
-          />
-        </div>
-        <DialogFooter className="shrink-0">
-          <Button
-            disabled={connect.isLoading}
-            onClick={() => formRef.current?.submit()}
-            type="submit">
-            {connect.isLoading && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            connect.mutate(undefined)
+          },
+          loading: connect.isLoading || isPreconnecting,
+          variant: connection?.status === 'disconnected' ? 'default' : 'ghost',
+          label: connection ? 'Reconnect' : 'Connect',
+        })}
+
+        <DialogContent
+          className="flex flex-col overflow-visible"
+          style={{
+            maxHeight: 'min(90vh, 700px)',
+          }}>
+          <DialogHeader className="shrink-0">
+            <DialogTitle>
+              <div className="flex items-center">
+                <span className="mr-2">
+                  Connect to {ccfg.connector.displayName}
+                </span>
+                {ccfg.connector.name === 'greenhouse' && (
+                  <div className="relative inline-block">
+                    <TooltipProvider delayDuration={0}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InfoIcon className="h-5 w-5 cursor-help text-gray-500" />
+                        </TooltipTrigger>
+                        <TooltipContent side="right">
+                          <p className="max-w-[300px] italic">
+                            Generate a custom API key with{' '}
+                            <a
+                              href="https://support.greenhouse.io/hc/en-us/articles/202842799-Create-an-API-key-in-Greenhouse-Recruiting"
+                              className="font-bold underline"
+                              target="_blank"
+                              rel="noopener noreferrer">
+                              these instructions
+                            </a>{' '}
+                            and include all Harvest V3 permissions.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                )}
+                {ccfg.connector.name === 'aircall' && (
+                  <div className="relative inline-block">
+                    <TooltipProvider delayDuration={0}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InfoIcon className="h-5 w-5 cursor-help text-gray-500" />
+                        </TooltipTrigger>
+                        <TooltipContent side="right">
+                          <p className="max-w-[300px] italic">
+                            Generate your API ID and Token with{' '}
+                            <a
+                              href="https://developer.aircall.io/tutorials/basic-authentication/"
+                              className="font-bold underline"
+                              target="_blank"
+                              rel="noopener noreferrer">
+                              these instructions
+                            </a>{' '}
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                )}
+              </div>
+            </DialogTitle>
+            {debug && (
+              <DialogDescription>
+                Using connector config ID: {ccfg.id}
+              </DialogDescription>
             )}
-            Submit
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </DialogHeader>
+          <div className="overflow-y-auto">
+            <SchemaForm
+              ref={formRef}
+              schema={z.object({})}
+              jsonSchemaTransform={(schema) =>
+                ccfg.connector.schemas.connectionSettings ?? schema
+              }
+              formData={{}}
+              loading={connect.isLoading}
+              onSubmit={({formData}) => {
+                console.log('connection form submitted', formData)
+                connect.mutate({connectorConfigId: ccfg.id, settings: formData})
+              }}
+              hideSubmitButton
+            />
+          </div>
+          <DialogFooter className="shrink-0">
+            <Button
+              disabled={connect.isLoading}
+              onClick={() => formRef.current?.submit()}
+              type="submit">
+              {connect.isLoading && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Submit
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }

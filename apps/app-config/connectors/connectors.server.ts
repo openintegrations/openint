@@ -3,15 +3,22 @@ import {default as connectorApollo} from '@openint/connector-apollo/server'
 import {default as connectorBeancount} from '@openint/connector-beancount/server'
 import {default as connectorBrex} from '@openint/connector-brex/server'
 import {default as connectorCoda} from '@openint/connector-coda/server'
+import {default as connectorConfluence} from '@openint/connector-confluence/server'
 import {default as connectorDebug} from '@openint/connector-debug/server'
 import {default as connectorDiscord} from '@openint/connector-discord/server'
 import {default as connectorFinch} from '@openint/connector-finch/server'
 import {default as connectorFs} from '@openint/connector-fs/server'
+import {default as connectorGithub} from '@openint/connector-github/server'
+import {default as connectorGong} from '@openint/connector-gong/server'
 import {default as connectorGoogle} from '@openint/connector-google/server'
 import {default as connectorGreenhouse} from '@openint/connector-greenhouse/server'
 import {default as connectorHeron} from '@openint/connector-heron/server'
 import {default as connectorHubspot} from '@openint/connector-hubspot/server'
+import {default as connectorIntercom} from '@openint/connector-intercom/server'
+import {default as connectorJira} from '@openint/connector-jira/server'
+import {default as connectorKustomer} from '@openint/connector-kustomer/server'
 import {default as connectorLever} from '@openint/connector-lever/server'
+import {default as connectorLinear} from '@openint/connector-linear/server'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/server'
 import {default as connectorMerge} from '@openint/connector-merge/server'
 import {default as connectorMicrosoft} from '@openint/connector-microsoft/server'
@@ -38,21 +45,30 @@ import {default as connectorWebhook} from '@openint/connector-webhook/server'
 import {default as connectorWise} from '@openint/connector-wise/server'
 import {default as connectorXero} from '@openint/connector-xero/server'
 import {default as connectorYodlee} from '@openint/connector-yodlee/server'
+import {default as connectorZohodesk} from '@openint/connector-zohodesk/server'
 
 export const serverConnectors = {
+  airtable: connectorAirtable,
   apollo: connectorApollo,
   beancount: connectorBeancount,
   brex: connectorBrex,
   coda: connectorCoda,
+  confluence: connectorConfluence,
   debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,
   fs: connectorFs,
+  github: connectorGithub,
+  gong: connectorGong,
   google: connectorGoogle,
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   hubspot: connectorHubspot,
+  intercom: connectorIntercom,
+  jira: connectorJira,
+  kustomer: connectorKustomer,
   lever: connectorLever,
+  linear: connectorLinear,
   lunchmoney: connectorLunchmoney,
   merge: connectorMerge,
   microsoft: connectorMicrosoft,
@@ -79,4 +95,5 @@ export const serverConnectors = {
   wise: connectorWise,
   xero: connectorXero,
   yodlee: connectorYodlee,
+  zohodesk: connectorZohodesk,
 }

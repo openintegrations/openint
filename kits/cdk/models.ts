@@ -1,5 +1,5 @@
 import {z} from '@opensdks/util-zod'
-import {zCustomerId, zId} from './id.types'
+import {zCustomerId, zId, zUserId} from './id.types'
 import {zVerticalKey} from './verticals'
 
 // Utility types
@@ -63,7 +63,7 @@ export const zStandard = {
   }),
   connection: z.object({
     id: zId('conn'),
-    displayName: z.string(),
+    displayName: z.string().nullish(),
     /**
      * This correspond to the connection status.
      * Pipeline shall have a separate syncStatus */
@@ -112,9 +112,10 @@ export type StreamsV1 = z.infer<typeof zStreamsV1>
 export const zLink = z
   .enum([
     'unified_banking',
+    'unified_ats',
+    'unified_accounting',
     'prefix_connector_name',
     'single_table',
-    'unified_ats',
     'unified_crm',
     'custom_link_ag',
   ])
@@ -196,6 +197,7 @@ export const zRaw = {
       destinationId: zId('conn').optional(),
       destinationState: z.record(z.unknown()).optional(),
       destinationVertical: z.string().optional().nullable(),
+      /** @deprecated, not used in production at the moment, despite the fact that field exist */
       linkOptions: z
         .array(z.unknown())
         // z.union([
@@ -207,8 +209,8 @@ export const zRaw = {
       // TODO: Add two separate tables sync_jobs to keep track of this instead of these two
       // though questionnable whether it should be in a separate database completely
       // just like Airbyte. Or perhaps using airbyte itself as the jobs database
-      lastSyncStartedAt: z.date().nullish(),
-      lastSyncCompletedAt: z.date().nullish(),
+      lastSyncStartedAt: z.string().nullish(),
+      lastSyncCompletedAt: z.string().nullish(),
       disabled: z.boolean().optional(),
       metadata: zMetadata,
     })
@@ -222,4 +224,25 @@ export const zRaw = {
     })
     .openapi({ref: 'Integration'}),
   // TODO: Add connection_attempts
+  // TODO: Figure out how to add this later
+  event: z
+    .object({
+      // ev_{external_id} i.e. from inngest, clerk, stripe, etc
+      id: zId('evt'),
+      name: z.string(),
+      data: z.record(z.unknown()).nullish(),
+      timestamp: z.string(),
+      user: z.record(z.unknown()).nullish(),
+      org_id: zId('org').nullish(),
+      customer_id: zCustomerId.nullish(),
+      user_id: zUserId.nullish(),
+    })
+    .openapi({ref: 'Event'}),
+  // customer: zBase
+  //   .extend({
+  //     id: zCustomerId,
+  //     org_id: zId('org'),
+  //     metadata: z.unknown(),
+  //   })
+  //   .openapi({ref: 'Customer'}),
 }
