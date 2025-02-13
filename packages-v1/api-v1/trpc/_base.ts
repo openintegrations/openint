@@ -6,7 +6,7 @@ export interface RouterContext {
   viewer: Viewer
 }
 
-const t = initTRPC.meta<OpenApiMeta>().context<RouterContext>().create()
+export const trpc = initTRPC.meta<OpenApiMeta>().context<RouterContext>().create()
 
-export const router = t.router
-export const publicProcedure = t.procedure
+export const router = trpc.router
+export const publicProcedure = trpc.procedure
