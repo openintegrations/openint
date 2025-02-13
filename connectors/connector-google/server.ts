@@ -110,18 +110,6 @@ export const googleServer = {
       {} as Record<string, string | undefined>,
     )
 
-    const orgId = (config as any).orgId
-
-    if (!orgId) {
-      throw new Error('orgId is required in preconnect() config param')
-    }
-
-    const redirect_uri =
-      orgId === 'org_2n4lEDaqfBgyEtFmbsDnFFppAR5' ||
-      orgId === 'org_2n4lU7bvAbbAOqVSHhCNKCAYmft'
-        ? 'https://agents.doubleo.ai/connect/callback'
-        : undefined
-
     if (
       context.integrationExternalId &&
       context.integrationExternalId in integrationScopesMap
@@ -134,7 +122,8 @@ export const googleServer = {
               context.integrationExternalId as keyof typeof integrationScopesMap
             ],
           ),
-          ...(redirect_uri ? {redirect_uri} : {}),
+          // could be calculated from (config as any).orgId
+          // ...(redirect_uri ? {redirect_uri} : {}),
         },
       }
       console.log('[googleServer] authParams', authParams)
