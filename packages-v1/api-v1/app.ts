@@ -9,11 +9,10 @@ export const app = new Elysia()
   .mount('/api/v1', handleOpenApiRequest)
   .mount('/api/trpc', handleTrpcRequest)
 
-async function main() {
-  const res = await app.handle(new Request('http://localhost/api/v1/health'))
-  console.log(await res.json())
-
-  const res2 = await app.handle(new Request('http://localhost/api/trpc/health'))
-  console.log(await res2.json())
+// @ts-expect-error Property 'main' does not exist on type 'ImportMeta'.ts(2339)
+if (import.meta.main) {
+  app.listen(process.env['PORT'] || 3002)
+  console.log(
+    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+  )
 }
-void main()
