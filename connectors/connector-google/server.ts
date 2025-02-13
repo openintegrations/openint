@@ -94,7 +94,7 @@ export const googleServer = {
   //     body: JSON.stringify(input.body),
   //   }),
   // eslint-disable-next-line @typescript-eslint/require-await
-  async preConnect(_, context, config) {
+  async preConnect(_, context) {
     // This returns auth options for Nango connect because it is an oauth integration
     // this behavior is not type checked though and could use some improvement
     // May be fixed if we turn nango into a connector
