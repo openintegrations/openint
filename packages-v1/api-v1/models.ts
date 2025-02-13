@@ -68,7 +68,11 @@ const coreBase = z.object({
 export const core = {
   connection: z
     .intersection(
-      coreBase.describe('Connection Base'),
+      coreBase
+        .extend({
+          connector_config_id: z.string(),
+        })
+        .describe('Connection Base'),
       z
         .discriminatedUnion('connector_name', [
           plaid.connection,
@@ -80,7 +84,11 @@ export const core = {
 
   connector_config: z
     .intersection(
-      coreBase.describe('Connector Config Base'),
+      coreBase
+        .extend({
+          org_id: z.string(),
+        })
+        .describe('Connector Config Base'),
       z
         .discriminatedUnion('connector_name', [
           plaid.connector_config,
