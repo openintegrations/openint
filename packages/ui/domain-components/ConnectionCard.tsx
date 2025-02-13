@@ -72,6 +72,15 @@ export function ConnectionCard({
                 }`}>
                 {connectionName}
               </p>
+
+              {conn.status !== 'healthy' && (
+                <p
+                  className={`text-center text-sm ${
+                    reconnectId ? 'text-button' : 'text-red-500'
+                  }`}>
+                  {reconnectId ? 'Processing...' : 'Reconnect Required'}
+                </p>
+              )}
             </>
           )}
         </div>
