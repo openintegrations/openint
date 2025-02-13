@@ -65,8 +65,8 @@ export function ConnectionsTabContent({
   const isOAuthConnector =
     selectedConnection?.status !== 'healthy' &&
     ((
-      selectedConnection?.connectorConfig.connector.schemas
-        .connectorConfig as any
+      selectedConnection?.connectorConfig?.connector?.schemas
+        ?.connectorConfig as any
     )?.required?.includes('oauth') as boolean)
 
   return (
