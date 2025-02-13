@@ -1,1 +1,1 @@
-export {appRouter, AppRouter, openApiDocument} from './trpc/routers'
+export {appRouter, AppRouter} from './trpc/routers'

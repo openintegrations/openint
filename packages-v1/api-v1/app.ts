@@ -1,14 +1,11 @@
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
-import {openApiDocument} from './trpc/routers'
-import {
-  handleOpenApiRequest,
-  handleTrpcRequest,
-} from './trpc/handlers'
+import {handleOpenApiRequest, handleTrpcRequest} from './trpc/handlers'
+import {generateOpenAPISpec} from './trpc/openapi'
 
 export const app = new Elysia()
   .get('/health', () => ({status: 'ok'}))
-  .get('/api/v1/openapi.json', () => openApiDocument)
+  .get('/api/v1/openapi.json', () => generateOpenAPISpec({}))
   .mount('/api/v1', handleOpenApiRequest)
   .mount('/api/trpc', handleTrpcRequest)
   .use(
