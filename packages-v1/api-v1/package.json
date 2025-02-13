@@ -27,6 +27,7 @@
   "devDependencies": {
     "@trpc/client": "next",
     "bun-types": "latest",
+    "openapi-fetch": "^0.13.4",
     "openapi-typescript": "^7.6.1"
   }
 }

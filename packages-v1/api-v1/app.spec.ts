@@ -1,4 +1,6 @@
 import {createTRPCClient, httpLink} from '@trpc/client'
+import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
+import type {paths} from './__generated__/openapi.types'
 import {app} from './app'
 import type {AppRouter} from './trpc/routers'
 
@@ -30,4 +32,18 @@ test('trpc route with TRPCClient', async () => {
   })
   const res = await client.health.query()
   expect(res).toEqual('ok')
+})
+
+test('openapi route with OpenAPI client', async () => {
+  const openapiClient = createClient<paths>({
+    baseUrl: 'http://localhost/api/v1',
+    fetch: app.handle,
+  })
+
+  const res = await openapiClient.GET('/health')
+  expect(res.data).toBeTruthy()
+
+  const pathBasedClient = wrapAsPathBasedClient(openapiClient)
+  const res2 = await pathBasedClient['/health'].GET()
+  expect(res2.data).toBeTruthy()
 })

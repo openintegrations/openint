@@ -2020,6 +2020,9 @@ importers:
       bun-types:
         specifier: latest
         version: 1.2.2
+      openapi-fetch:
+        specifier: ^0.13.4
+        version: 0.13.4
       openapi-typescript:
         specifier: ^7.6.1
         version: 7.6.1(typescript@5.7.3)
