@@ -1986,12 +1986,15 @@ importers:
       '@opensdks/fetch-links':
         specifier: ^0.0.22
         version: 0.0.22
+      '@sinclair/typebox':
+        specifier: ^0.34.20
+        version: 0.34.20
       '@trpc/server':
         specifier: next
         version: 11.0.0-rc.764(typescript@5.7.3)
       elysia:
         specifier: ^1.2.12
-        version: 1.2.12(@sinclair/typebox@0.33.12)(openapi-types@12.1.0)(typescript@5.7.3)
+        version: 1.2.12(@sinclair/typebox@0.34.20)(openapi-types@12.1.0)(typescript@5.7.3)
       remeda:
         specifier: ^2.20.1
         version: 2.20.1
@@ -6642,6 +6645,9 @@ packages:
 
   '@sinclair/typebox@0.33.12':
     resolution: {integrity: sha512-d5KrXIdPolLp8VpGpZAQvEz8ioVtFlUQSyCIS2sEBi7FKhceIB7nj9BlNfqqvp5wmOfg8v8bP1rAvYYkjz21/Q==}
+
+  '@sinclair/typebox@0.34.20':
+    resolution: {integrity: sha512-rVNFD9dFMzZgnuv0LZHZHIjS3R5nSOWIQaxP7GrcgsA3yf/tCH5xZ7zJkxWCee4EXfiTuQWbtcBcQMsd4AiCzg==}
 
   '@sindresorhus/is@4.6.0':
     resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
@@ -21168,6 +21174,8 @@ snapshots:
 
   '@sinclair/typebox@0.33.12': {}
 
+  '@sinclair/typebox@0.34.20': {}
+
   '@sindresorhus/is@4.6.0': {}
 
   '@sindresorhus/is@5.6.0': {}
@@ -24547,9 +24555,9 @@ snapshots:
 
   electron-to-chromium@1.5.87: {}
 
-  elysia@1.2.12(@sinclair/typebox@0.33.12)(openapi-types@12.1.0)(typescript@5.7.3):
+  elysia@1.2.12(@sinclair/typebox@0.34.20)(openapi-types@12.1.0)(typescript@5.7.3):
     dependencies:
-      '@sinclair/typebox': 0.33.12
+      '@sinclair/typebox': 0.34.20
       cookie: 1.0.2
       memoirist: 0.3.0
     optionalDependencies:

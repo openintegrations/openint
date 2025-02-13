@@ -1,16 +1,6 @@
-import {initTRPC} from '@trpc/server'
-import {generateOpenApiDocument, type OpenApiMeta} from 'trpc-to-openapi'
+import {generateOpenApiDocument} from 'trpc-to-openapi'
 import {z} from 'zod'
-import type {Viewer} from '@openint/cdk'
-
-export interface RouterContext {
-  viewer: Viewer
-}
-
-const t = initTRPC.meta<OpenApiMeta>().context<RouterContext>().create()
-
-export const router = t.router
-export const publicProcedure = t.procedure
+import {publicProcedure, router} from './trpc'
 
 export const appRouter = router({
   // getOpenapiDocument: publicProcedure
