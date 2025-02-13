@@ -40,7 +40,10 @@ export function ConnectionsTabContent({
   const [resetKey, setResetKey] = useState(0)
   const [selectedConnection, setSelectedConnection] =
     useState<Connection | null>(null)
+  const [reconnect, setReconnect] = useState<() => void>(() => {})
   const [showConfirmation, setShowConfirmation] = useState(false)
+  // Is processing state is used for card loader on reconnect.
+  const [reconnectId, setReconnectId] = useState<string | null>(null)
   // this is so that the timer in the connection card is reset
   const reset = () => setResetKey((prev) => prev + 1)
   const searchParams = useSearchParams()
@@ -59,6 +62,13 @@ export function ConnectionsTabContent({
     }
   }, [connections, isDeeplinkView, connectionId])
 
+  const isOAuthConnector =
+    selectedConnection?.status !== 'healthy' &&
+    ((
+      selectedConnection?.connectorConfig.connector.schemas
+        .connectorConfig as any
+    )?.required?.includes('oauth') as boolean)
+
   return (
     <>
       <DeleteConfirmation
@@ -72,6 +82,24 @@ export function ConnectionsTabContent({
         confirmText="Delete"
         isDeleting={isDeleting}
       />
+      {selectedConnection && (
+        <ConnectionDetails
+          connection={selectedConnection}
+          deleteConnection={openConfirmation}
+          onClose={() => {
+            if (!showConfirmation) {
+              setSelectedConnection(null)
+            }
+          }}
+          isDeleting={isDeleting}
+          open={!!selectedConnection}
+          isOAuthConnector={isOAuthConnector}
+          onReconnect={() => {
+            setReconnectId(selectedConnection.id)
+            reconnect()
+          }}
+        />
+      )}
       {connectionCount === 0 ? (
         <div className="flex flex-col p-4 pt-0">
           <div>
@@ -94,45 +122,38 @@ export function ConnectionsTabContent({
           </Button>
         </div>
       ) : (
-        <>
-          {selectedConnection ? (
-            <ConnectionDetails
-              connection={selectedConnection}
-              deleteConnection={openConfirmation}
-              onClose={() => setSelectedConnection(null)}
-              isDeleting={isDeleting}
-            />
-          ) : (
-            <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
-              {connections.map((conn: any) => (
-                <WithConnectorConnect
-                  key={conn.id + ''}
-                  connectorConfig={{
-                    id: conn.connectorConfig.id,
-                    connector: conn.connectorConfig.connector,
+        <div className="flex flex-row flex-wrap gap-4 p-4 lg:w-[70%]">
+          {connections.map((conn: any) => (
+            <WithConnectorConnect
+              key={conn.id + ''}
+              connectorConfig={{
+                id: conn.connectorConfig.id,
+                connector: conn.connectorConfig.connector,
+              }}
+              integration={conn.integration}
+              connection={conn}
+              onEvent={(event) => {
+                if (event.type === 'success' || event.type === 'error') {
+                  refetch()
+                  reset()
+                }
+              }}>
+              {({openConnect}) => (
+                <ConnectionCard
+                  key={`${conn.id}-${resetKey}`}
+                  conn={conn}
+                  onSelect={() => {
+                    setSelectedConnection(conn)
+                    setReconnect(() => openConnect)
                   }}
-                  integration={conn.integration}
-                  connection={conn}
-                  onEvent={(event) => {
-                    if (event.type === 'success' || event.type === 'error') {
-                      refetch()
-                      reset()
-                    }
-                  }}>
-                  {({openConnect}) => (
-                    <ConnectionCard
-                      key={`${conn.id}-${resetKey}`}
-                      conn={conn}
-                      onDelete={openConfirmation}
-                      onReconnect={openConnect}
-                      onSelect={() => setSelectedConnection(conn)}
-                    />
-                  )}
-                </WithConnectorConnect>
-              ))}
-            </div>
-          )}
-        </>
+                  reconnectId={
+                    conn.id === reconnectId ? (conn.id as string) : null
+                  }
+                />
+              )}
+            </WithConnectorConnect>
+          ))}
+        </div>
       )}
     </>
   )
