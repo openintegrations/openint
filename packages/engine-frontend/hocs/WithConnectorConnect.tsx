@@ -24,6 +24,7 @@ import {
   useToast,
 } from '@openint/ui'
 import {z} from '@openint/util'
+import {useViewerContext} from '@/components/viewer-context'
 import {
   useOpenIntConnectContext,
   useOptionalOpenIntConnectContext,
@@ -63,6 +64,7 @@ export const WithConnectorConnect = ({
   }) => React.ReactNode
 }) => {
   // console.log('WithConnectorConnect', int.id, int.connector)
+  const {viewer} = useViewerContext()
   const {clientConnectors} = useOpenIntConnectContext()
   // TODO: Restore connectFnMap so that we respect the rules of hooks to always render all hooks
   // and not skip rendering or conditionally rendering hooks
@@ -108,9 +110,16 @@ export const WithConnectorConnect = ({
     ? extractId(integration.id)[2]
     : undefined
 
+  if (!viewer || !viewer.orgId) {
+    throw new Error('Missing orgId')
+  }
   // TODO: Handle preConnectInput schema and such... for example for Plaid
   const preConnect = _trpcReact.preConnect.useQuery(
-    [ccfg.id, {connectionExternalId, integrationExternalId}, {}],
+    [
+      ccfg.id,
+      {connectionExternalId, integrationExternalId},
+      {orgId: viewer?.orgId},
+    ],
     // note: this used to be enabled: ccfg.connector.hasPreConnect
     // but we disabled it as it made too many calls for plaid and just left
     // it as a noop to be lazy called by the refetch below
