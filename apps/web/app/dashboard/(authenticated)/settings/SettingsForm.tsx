@@ -40,6 +40,7 @@ export default function SettingsForm() {
         schema={zOrganization.shape.publicMetadata.omit({
           synced_data_schema: true,
           migrate_tables: true,
+          // @ts-expect-error boolean vs true type mismatch
           database_url: res.data.id !== 'org_2nkeyWpfGKK6W011qwV8dA1la8n',
         })}
         uiSchema={{
