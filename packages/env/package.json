@@ -6,7 +6,7 @@
   "scripts": {},
   "dependencies": {
     "@opensdks/util-zod": "0.0.16",
-    "@t3-oss/env-nextjs": "0.9.1"
+    "@t3-oss/env-nextjs": "0.7.0"
   },
   "devDependencies": {}
 }
