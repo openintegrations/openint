@@ -1,5 +1,5 @@
 import {z} from '@opensdks/util-zod'
-import {createEnv} from './createEnv'
+import {createEnv} from '@t3-oss/env-nextjs'
 
 export * from './env'
 export * from './env-test'

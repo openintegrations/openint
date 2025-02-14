@@ -73,7 +73,7 @@
     "@openint/env": "workspace:*",
     "@openint/meta-service-postgres": "workspace:*",
     "@openint/util": "workspace:*",
-    "@t3-oss/env-nextjs": "0.7.0",
+    "@t3-oss/env-nextjs": "0.7.3",
     "chokidar": "3.5.3",
     "cross-fetch": "4.0.0",
     "execa": "6.1.0",
