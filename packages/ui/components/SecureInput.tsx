@@ -60,7 +60,9 @@ export default function SecureInput({
 
   return (
     <div className="w-full max-w-sm space-y-2">
-      <Label htmlFor="secureInput">{label}</Label>
+      <Label className="text-md font-bold" htmlFor="secureInput">
+        {label}
+      </Label>
       <div className="flex">
         <div className="relative flex-grow">
           <Input

@@ -10,16 +10,14 @@ export default async function SettingsPage() {
 
   return (
     <div className="p-6">
-      <h2 className="mb-4 text-2xl font-semibold tracking-tight">Settings</h2>
-      <p className="mb-4 text-sm text-gray-600">
-        Use the API key to authenticate your requests.
+      <h2 className="mb-4 text-2xl font-bold tracking-tight">Settings</h2>
+      <p className="mb-4 font-bold">
+        Organization ID: <span className="font-normal">{viewer.orgId}</span>
       </p>
+
       <div className="mt-4 flex items-center">
         <SecureInput label="API Key" readOnly value={apikey} />
       </div>
-      <p className="m-4">
-        Use `{kApikeyHeader}` header or `{kApikeyUrlParam}` url param{' '}
-      </p>
       <SettingsForm />
     </div>
   )

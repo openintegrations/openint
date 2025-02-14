@@ -35,19 +35,21 @@ export default function SettingsForm() {
 
   return (
     <>
-      <p className="mb-4 font-semibold">Organization ID: {res.data.id}</p>
-      <p className="mb-4 text-sm text-gray-600">
-        Configure your database, schema, and webhook settings to manage how data
-        is stored, organized, and synced across your integrations.
-      </p>
       <SchemaForm
-        schema={zOrganization.shape.publicMetadata}
+        className="mt-4"
+        schema={zOrganization.shape.publicMetadata.omit({
+          synced_data_schema: true,
+          migrate_tables: true,
+          database_url: res.data.id !== 'org_2nkeyWpfGKK6W011qwV8dA1la8n',
+        })}
         uiSchema={{
           // Would be nice if this can be extracted from example field of the openapi spec
           database_url: {
             'ui:placeholder': 'postgres://username:password@host:port/database',
           },
-          webhook_url: {'ui:placeholder': 'https://yourapp.com/webhook'},
+          webhook_url: {
+            'ui:placeholder': 'https://yourapp.com/webhook',
+          },
         }}
         formData={res.data.publicMetadata}
         loading={updateOrg.isLoading}
