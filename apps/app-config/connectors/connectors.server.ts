@@ -48,7 +48,6 @@ import {default as connectorYodlee} from '@openint/connector-yodlee/server'
 import {default as connectorZohodesk} from '@openint/connector-zohodesk/server'
 
 export const serverConnectors = {
-  airtable: connectorAirtable,
   apollo: connectorApollo,
   beancount: connectorBeancount,
   brex: connectorBrex,

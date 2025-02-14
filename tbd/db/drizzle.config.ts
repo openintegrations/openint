@@ -6,11 +6,9 @@ export default defineConfig({
   out: './migrations',
   dialect: 'postgresql',
   schema: './schema.ts',
-  dbCredentials: {url: env.DATABASE_URL_UNPOOLED ?? env.DATABASE_URL},
+  dbCredentials: {url: env.DATABASE_URL},
   introspect: {casing: 'preserve'},
-  migrations: {
-    schema: 'public',
-  },
+
   // migrations: {
   //   prefix: 'timestamp',
   //   table: '__drizzle_migrations__',

@@ -9,7 +9,6 @@ import {
   type PgTable,
   type PgUpdateSetSource,
 } from 'drizzle-orm/pg-core'
-import {isPlainObject} from '@openint/util'
 
 type ColumnKeyOf<T extends PgTable> = Extract<keyof T['_']['columns'], string>
 
@@ -30,15 +29,9 @@ export interface DbUpsertOptions<TTable extends PgTable> {
    */
   insertOnlyColumns?: Array<ColumnKeyOf<TTable>>
   /**
-   * These columns will have to match for the row to be updated. Useful when
-   * wanting to ensure value of certain columns do not change for things like permission
+   * These columns will have to match for the row to be updated
    */
   mustMatchColumns?: Array<ColumnKeyOf<TTable>>
-  /**
-   * If true, undefined values will be interpreted as the `DEFAULT` keyword in the generated query
-   * If false, undefined values will be ignored
-   */
-  undefinedAsDefault?: boolean
 }
 
 export type DbUpsertQuery<TTable extends PgTable> = Omit<
@@ -81,13 +74,9 @@ export function dbUpsert<
 >(
   db: DB,
   _table: TTable | string,
-  _values: Array<PgInsertValue<TTable>>,
+  values: Array<PgInsertValue<TTable>>,
   options: DbUpsertOptions<TTable> = {},
 ) {
-  const values = options.undefinedAsDefault
-    ? _values
-    : _values.map(removeUndefinedValues)
-
   const firstRow = values[0]
   if (!firstRow) {
     return
@@ -98,29 +87,26 @@ export function dbUpsert<
   ) as TTable
 
   const tbCfg = getTableConfig(table)
-  const getColumnOrThrow = (name: string) => {
-    const col = getColumn(name)
+  const getColumn = (name: string) => {
+    const col = table[name as keyof PgTable] as PgColumn
     if (!col) {
       throw new Error(`Column ${name} not found in table ${tbCfg.name}`)
     }
     return col
   }
-  const getColumn = (name: string) => table[name as keyof PgTable] as PgColumn
 
   const keyColumns =
-    options.keyColumns?.map(getColumnOrThrow) ??
+    options.keyColumns?.map(getColumn) ??
     tbCfg.primaryKeys[0]?.columns ??
     tbCfg.columns.filter((c) => c.primary) // Presumably only a single primary key column will be possible in this scenario
   const shallowMergeJsonbColumns =
     typeof options.shallowMergeJsonbColumns === 'boolean'
       ? tbCfg.columns.filter((c) => c.columnType === 'PgJsonb')
-      : options.shallowMergeJsonbColumns?.map(getColumn).filter((c) => !!c)
-  const noDiffColumns = options.noDiffColumns?.map(getColumn).filter((c) => !!c)
-  const insertOnlyColumns = options.insertOnlyColumns
-    ?.map(getColumn)
-    .filter((c) => !!c)
+      : options.shallowMergeJsonbColumns?.map(getColumn)
+  const noDiffColumns = options.noDiffColumns?.map(getColumn)
+  const insertOnlyColumns = options.insertOnlyColumns?.map(getColumn)
 
-  if (!keyColumns.length) {
+  if (!keyColumns) {
     throw new Error(
       `Unable to upsert without keyColumns for table ${tbCfg.name}`,
     )
@@ -181,11 +167,11 @@ export function dbUpsert<
   })
 }
 
-/**
- * For the purpose of upserting, we only care about ]
- * whether a column is jsonb or now because it needs different encoding
- * No other columns needs separate encoding to generate the right SQL and params
- */
+/** Simple test */
+function isObjectOrArray(input: unknown) {
+  return typeof input === 'object' && input !== null
+}
+
 export function inferTableForUpsert(
   name: string,
   record: Record<string, unknown>,
@@ -197,7 +183,7 @@ export function inferTableForUpsert(
     Object.fromEntries(
       Object.entries(record).map(([k, v]) => [
         k,
-        opts?.jsonColumns?.includes(k) || isPlainObject(v) || Array.isArray(v)
+        opts?.jsonColumns?.includes(k) || isObjectOrArray(v)
           ? t.jsonb()
           : // text() works as a catch all for scalar types because none of them require
             // the value to be escaped in anyway
@@ -206,13 +192,3 @@ export function inferTableForUpsert(
     ),
   )
 }
-
-// TODO: dedupe with hubspot/utils.ts
-const removeUndefinedValues = <T extends Record<string, unknown>>(
-  obj: T,
-): {[k in keyof T]: Exclude<T[k], undefined>} =>
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  Object.fromEntries(
-    Object.entries(obj).filter(([, v]) => v !== undefined),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) as any

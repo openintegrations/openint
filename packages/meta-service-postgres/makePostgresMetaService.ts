@@ -1,23 +1,14 @@
 import {camelCase, snakeCase} from 'change-case'
-// Need to use version 4.x of change-case that still supports cjs
-// pureESM modules are idealistic...
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
-import {
-  applyLimitOffset,
-  dbUpsertOne,
-  drizzle,
-  postgres,
-  sql,
-} from '@openint/db'
+import {applyLimitOffset, dbUpsertOne, drizzle, sql} from '@openint/db'
 import type {
   CustomerResultRow,
   MetaService,
   MetaTable,
 } from '@openint/engine-backend'
 import {R, zFunction} from '@openint/util'
-import {__DEBUG__} from '../../apps/app-config/constants'
 
 /**
  * This sets the postgres grand unified config (GUC) and determines the identity
@@ -56,7 +47,6 @@ async function assumeRole(options: {
 }) {
   const {db, viewer} = options
   for (const [key, value] of Object.entries(localGucForViewer(viewer))) {
-    // true is for isLocal, which means it will only affect the current transaction, not the whole session
     await db.execute(sql`SELECT set_config(${key}, ${value}, true)`)
   }
 }
@@ -64,15 +54,12 @@ async function assumeRole(options: {
 type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const {viewer, databaseUrl} = opts
-  const pg = postgres(databaseUrl)
-  const getDb = () => drizzle(pg, {logger: __DEBUG__})
-  const db = getDb()
+
+  const db = drizzle(databaseUrl, {logger: true})
   type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
 
   return {
     db,
-    pg,
-    getDb,
     runQueries: async <T>(
       handler: (trxn: PgTransaction) => Promise<T>,
       // eslint-disable-next-line arrow-body-style
@@ -92,7 +79,6 @@ export const makePostgresMetaService = zFunction(
   zPgConfig.pick({databaseUrl: true}).extend({viewer: zViewer}),
   (opts): MetaService => {
     const tables: MetaService['tables'] = {
-      // customer: metaTable('customer', _getDeps(opts)),
       // Delay calling of __getDeps until later..
       connection: metaTable('connection', _getDeps(opts)),
       integration: metaTable('integration', _getDeps(opts)),
@@ -245,7 +231,7 @@ export const makePostgresMetaService = zFunction(
               continue
             }
             const connDb = drizzle(connection['database_url'] as string, {
-              logger: __DEBUG__,
+              logger: true,
             })
             const {rows: res} = await connDb.execute(sql`SELECT 1`)
             if (res.length !== 1) {
@@ -264,7 +250,7 @@ export const makePostgresMetaService = zFunction(
 
 function metaTable<TID extends string, T extends Record<string, unknown>>(
   tableName: keyof ZRaw,
-  {runQueries, getDb}: Deps,
+  {runQueries, db}: Deps,
 ): MetaTable<TID, T> {
   const table = sql.identifier(tableName)
 
@@ -277,31 +263,20 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
       customerId,
       connectorConfigId,
       connectorName,
-      since,
       keywords,
-      orderBy,
-      order,
       ...rest
     }) =>
       runQueries(async (trxn) => {
         const conditions = R.compact([
           ids && sql`id = ANY(${sql.param(ids)})`,
-          customerId ? sql`customer_id = ${customerId}` : null,
+          customerId && sql`customer_id = ${customerId}`,
           connectorConfigId && sql`connector_config_id = ${connectorConfigId}`,
           connectorName && sql`connector_name = ${connectorName}`,
           // Temp solution, shall use fts and make this work for any table...
           keywords &&
             tableName === 'integration' &&
             sql`standard->>'name' ILIKE ${'%' + keywords + '%'}`,
-          since &&
-            (tableName === 'event'
-              ? sql`timestamp > ${sql.param(new Date(since).toISOString())}`
-              : sql`created_at > ${sql.param(new Date(since).toISOString())}`),
-          ...Object.entries(rest.where ?? {}).map(
-            ([k, v]) => sql`${sql.identifier(k)} = ${v}`,
-          ),
         ])
-        console.log('conditions ', customerId, rest)
         const where =
           conditions.length > 0
             ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
@@ -319,12 +294,11 @@ function metaTable<TID extends string, T extends Record<string, unknown>>(
         return rows.map(camelCaseKeys)[0] as T | undefined
       }),
     set: (id, data) =>
-      dbUpsertOne(getDb(), tableName, snakeCaseKeys({...data, id}), {
+      dbUpsertOne(db, tableName, snakeCaseKeys({...data, id}), {
         keyColumns: ['id'],
       }),
     patch: (id, data) =>
-      // use getDb to workaround drizzle schema cache issue
-      dbUpsertOne(getDb(), tableName, snakeCaseKeys({...data, id}), {
+      dbUpsertOne(db, tableName, snakeCaseKeys({...data, id}), {
         keyColumns: ['id'],
         shallowMergeJsonbColumns: true,
       }),

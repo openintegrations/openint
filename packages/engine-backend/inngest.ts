@@ -1,7 +1,7 @@
 import {sentryMiddleware} from '@inngest/middleware-sentry'
 import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import {makeId} from '@openint/cdk'
-import {db, schema, sql} from '@openint/db'
+import {configDb, schema, sql} from '@openint/db'
 import {eventMapForInngest} from '@openint/events'
 import {makeUlid, R} from '@openint/util'
 
@@ -29,7 +29,7 @@ export const persistEventsMiddleware = new InngestMiddleware({
             )
 
             const rows = connectionIds.length
-              ? await db.execute<{
+              ? await configDb.execute<{
                   id: string
                   org_id: string
                   customer_id: string
@@ -44,7 +44,9 @@ export const persistEventsMiddleware = new InngestMiddleware({
               : []
 
             const infoByConnId = Object.fromEntries(
-              rows.map(({id, ...info}) => [id, info]),
+              (Array.isArray(rows) ? rows : rows.rows).map(
+                ({id, ...info}: any) => [id, info],
+              ),
             )
             const now = new Date()
             const ts = now.getTime()
@@ -70,7 +72,7 @@ export const persistEventsMiddleware = new InngestMiddleware({
             // use it for its internal event id...
             // TODO: store inngest internal event id to allow for better lookup by event id
             output.result = {ids: pendingEvents.map((ev) => ev.id!)}
-            await db.insert(schema.event).values(pendingEvents)
+            await configDb.insert(schema.event).values(pendingEvents)
             pendingEvents = []
             // return {result: {ids: pendingEvents.map((ev) => ev.id!)}}
           },

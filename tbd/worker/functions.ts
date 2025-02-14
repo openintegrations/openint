@@ -1,22 +1,23 @@
-import {eq, sql} from 'drizzle-orm'
+// import {eq, sql} from 'drizzle-orm'
 import type {SendEventPayload} from 'inngest/helpers/types'
 import type {OpenIntHeaders} from '@openint/api'
 import {createAppOpenAPIHandler} from '@openint/api'
 import type {Id} from '@openint/cdk'
-import {makeJwtClient, VERTICAL_BY_KEY} from '@openint/cdk'
-import {
-  configDb,
-  dbUpsert,
-  ensureSchema,
-  getCommonObjectTable,
-  getDb,
-  schemaWip as schema,
-  stripNullByte,
-} from '@openint/db'
+import {makeJwtClient} from '@openint/cdk'
+// import {
+//   configDb,
+//   dbUpsert,
+//   ensureSchema,
+//   getCommonObjectTable,
+//   getDb,
+//   schemaWip as schema,
+//   stripNullByte,
+// } from '@openint/db'
 import {envRequired} from '@openint/env'
 import type {Events} from '@openint/events'
 import {initOpenIntSDK} from '@openint/sdk'
-import {HTTPError, parseErrorInfo} from '../../packages/trpc/errors'
+
+// import {HTTPError, parseErrorInfo} from '../../packages/trpc/errors'
 
 /**
  * Unlike functions, routines are designed to run without dependency on Inngest
@@ -37,328 +38,328 @@ export type FunctionInput<T extends keyof Events> = {
 type SingleNoArray<T> = T extends Array<infer U> ? U : T
 export type EventPayload = SingleNoArray<SendEventPayload<Events>>
 
-export async function scheduleSyncs({
-  step,
-  event,
-}: FunctionInput<'scheduler.requested'>) {
-  console.log('[scheduleSyncs]', event)
-  const {openint} = initSDK()
-  // TODO: Deal with pagination
-  const connections = await openint.GET('/core/connection').then((r) => r.data)
+// export async function scheduleSyncs({
+//   step,
+//   event,
+// }: FunctionInput<'scheduler.requested'>) {
+//   console.log('[scheduleSyncs]', event)
+//   const {openint} = initSDK()
+//   // TODO: Deal with pagination
+//   const connections = await openint.GET('/core/connection').then((r) => r.data)
 
-  const events = connections
-    .map((r) => {
-      if (!event.data.connector_names.includes(r.connectorName)) {
-        // Only sync these for now...
-        return null
-      }
-      console.log(`[scheduleSyncs] Will sendEvent for ${r.id}`)
-      return {
-        name: 'sync.requested',
-        data: {
-          connection_id: r.id,
-          vertical: event.data.vertical,
-          sync_mode: event.data.sync_mode,
-        },
-      } satisfies EventPayload
-    })
-    .filter((c): c is NonNullable<typeof c> => !!c)
+//   const events = connections
+//     .map((r) => {
+//       if (!event.data.connector_names.includes(r.connectorName)) {
+//         // Only sync these for now...
+//         return null
+//       }
+//       console.log(`[scheduleSyncs] Will sendEvent for ${r.id}`)
+//       return {
+//         name: 'sync.requested',
+//         data: {
+//           connection_id: r.id,
+//           vertical: event.data.vertical,
+//           sync_mode: event.data.sync_mode,
+//         },
+//       } satisfies EventPayload
+//     })
+//     .filter((c): c is NonNullable<typeof c> => !!c)
 
-  console.log('[scheduleSyncs] Metrics', {
-    num_connections: connections.length,
-    num_connections_to_sync: events.length,
-  })
+//   console.log('[scheduleSyncs] Metrics', {
+//     num_connections: connections.length,
+//     num_connections_to_sync: events.length,
+//   })
 
-  await step.sendEvent('emit-connection-sync-events', events)
-  // make it easier to see...
-  return events.map((e) => ({
-    customer_id: e.data.connection_id,
-  }))
-}
+//   await step.sendEvent('emit-connection-sync-events', events)
+//   // make it easier to see...
+//   return events.map((e) => ({
+//     customer_id: e.data.connection_id,
+//   }))
+// }
 
 // TODO: We should Cancel previous sync if it's still running...
 // or not allow new syncs. Full sync should probably be prioritized over incremental syncs.
-export async function syncConnection({
-  event,
-  step,
-}: FunctionInput<'sync.requested'>) {
-  const {
-    data: {
-      connection_id,
-      vertical,
-      unified_objects: _unified_objects,
-      sync_mode = 'incremental',
-      page_size,
-    },
-  } = event
+// export async function syncConnection({
+//   event,
+//   step,
+// }: FunctionInput<'sync.requested'>) {
+//   const {
+//     data: {
+//       connection_id,
+//       vertical,
+//       unified_objects: _unified_objects,
+//       sync_mode = 'incremental',
+//       page_size,
+//     },
+//   } = event
 
-  const unified_objects =
-    _unified_objects ?? VERTICAL_BY_KEY[vertical].objects ?? []
+//   const unified_objects =
+//     _unified_objects ?? VERTICAL_BY_KEY[vertical].objects ?? []
 
-  console.log('[syncConnection] Start', {
-    connection_id,
-    eventId: event.id,
-    sync_mode,
-    vertical,
-    unified_objects,
-  })
+//   console.log('[syncConnection] Start', {
+//     connection_id,
+//     eventId: event.id,
+//     sync_mode,
+//     vertical,
+//     unified_objects,
+//   })
 
-  // This can probably be done via an upsert returning...
-  const syncState = await configDb.query.sync_state
-    .findFirst({
-      where: (sync_state, {eq}) => eq(sync_state.connection_id, connection_id),
-    })
-    .then(
-      (ss) =>
-        ss ??
-        // eslint-disable-next-line promise/no-nesting
-        configDb
-          .insert(schema.sync_state)
-          .values({connection_id, state: sql`${{}}::jsonb`})
-          .returning()
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          .then((rows) => rows[0]!),
-    )
+//   // This can probably be done via an upsert returning...
+//   const syncState = await configDb.query.sync_state
+//     .findFirst({
+//       where: (sync_state, {eq}) => eq(sync_state.connection_id, connection_id),
+//     })
+//     .then(
+//       (ss) =>
+//         ss ??
+//         // eslint-disable-next-line promise/no-nesting
+//         configDb
+//           .insert(schema.sync_state)
+//           .values({connection_id, state: sql`${{}}::jsonb`})
+//           .returning()
+//           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//           .then((rows) => rows[0]!),
+//     )
 
-  const syncRunId = await configDb
-    .insert(schema.sync_run)
-    .values({
-      input_event: sql`${event}::jsonb`,
-      initial_state: sql`${syncState.state}::jsonb`,
-      started_at: 'now()',
-    })
-    .returning()
-    .then((rows) => rows[0]!.id)
+//   const syncRunId = await configDb
+//     .insert(schema.sync_run)
+//     .values({
+//       input_event: sql`${event}::jsonb`,
+//       initial_state: sql`${syncState.state}::jsonb`,
+//       started_at: 'now()',
+//     })
+//     .returning()
+//     .then((rows) => rows[0]!.id)
 
-  const {openint, jwt} = initSDK({
-    'x-connection-id': connection_id as `conn_${string}`,
-  })
+//   const {openint, jwt} = initSDK({
+//     'x-connection-id': connection_id as `conn_${string}`,
+//   })
 
-  // Should we get the orgId and customerId as part of input ideally already?
+//   // Should we get the orgId and customerId as part of input ideally already?
 
-  const overallState = (syncState.state ?? {}) as Record<
-    string,
-    {cursor?: string | null}
-  >
+//   const overallState = (syncState.state ?? {}) as Record<
+//     string,
+//     {cursor?: string | null}
+//   >
 
-  let errorInfo: Awaited<ReturnType<typeof parseErrorInfo>> | undefined
+//   let errorInfo: Awaited<ReturnType<typeof parseErrorInfo>> | undefined
 
-  const metrics: Record<string, number | string> = {}
+//   const metrics: Record<string, number | string> = {}
 
-  function incrementMetric(name: string, amount = 1) {
-    const metric = metrics[name]
-    metrics[name] = (typeof metric === 'number' ? metric : 0) + amount
-    return metrics[name] as number
-  }
-  function setMetric<T extends string | number>(name: string, value: T) {
-    metrics[name] = value
-    return metrics[name] as T
-  }
+//   function incrementMetric(name: string, amount = 1) {
+//     const metric = metrics[name]
+//     metrics[name] = (typeof metric === 'number' ? metric : 0) + amount
+//     return metrics[name] as number
+//   }
+//   function setMetric<T extends string | number>(name: string, value: T) {
+//     metrics[name] = value
+//     return metrics[name] as T
+//   }
 
-  try {
-    async function syncStreamPage(
-      stream: string,
-      table: ReturnType<typeof getCommonObjectTable>,
-      state: {cursor?: string | null},
-    ) {
-      try {
-        const res = await openint.GET(
-          `/unified/${vertical}/${stream}` as '/unified/crm/contact',
-          {params: {query: {cursor: state.cursor, page_size}}},
-        )
-        const count = incrementMetric(`${stream}_count`, res.data.items.length)
-        incrementMetric(`${stream}_page_count`)
-        console.log(`Syncing ${vertical} ${stream} count=${count}`)
-        if (res.data.items.length) {
-          await dbUpsert(
-            db,
-            table,
-            res.data.items.map(({raw_data, ...item}) => ({
-              // Primary keys
-              source_id: connection_id,
-              id: item.id,
-              // Other columns
-              created_at: 'now()',
-              updated_at: 'now()',
-              is_deleted: false,
-              // Workaround jsonb support issue... https://github.com/drizzle-team/drizzle-orm/issues/724
-              raw: sql`${stripNullByte(raw_data) ?? null}::jsonb`,
-              unified: sql`${stripNullByte(item)}::jsonb`,
-            })),
-            {insertOnlyColumns: ['created_at'], noDiffColumns: ['updated_at']},
-          )
-        }
-        return {
-          next_cursor: res.data.next_cursor,
-          has_next_page: res.data.has_next_page,
-        }
-      } catch (err) {
-        // HTTP 501 not implemented
-        if (err instanceof HTTPError && err.code === 501) {
-          // NOTE: vercel doesn't understand console.warn unfortunately... so this will show up as error
-          // https://vercel.com/docs/observability/runtime-logs#level
-          console.warn(
-            `[sync progress] ${connection_id} does not implement ${stream}`,
-          )
-          return {has_next_page: false, next_cursor: null}
-        }
-        throw err
-      }
-    }
+//   try {
+//     async function syncStreamPage(
+//       stream: string,
+//       table: ReturnType<typeof getCommonObjectTable>,
+//       state: {cursor?: string | null},
+//     ) {
+//       try {
+//         const res = await openint.GET(
+//           `/unified/${vertical}/${stream}` as '/unified/crm/contact',
+//           {params: {query: {cursor: state.cursor, page_size}}},
+//         )
+//         const count = incrementMetric(`${stream}_count`, res.data.items.length)
+//         incrementMetric(`${stream}_page_count`)
+//         console.log(`Syncing ${vertical} ${stream} count=${count}`)
+//         if (res.data.items.length) {
+//           await dbUpsert(
+//             db,
+//             table,
+//             res.data.items.map(({raw_data, ...item}) => ({
+//               // Primary keys
+//               source_id: connection_id,
+//               id: item.id,
+//               // Other columns
+//               created_at: 'now()',
+//               updated_at: 'now()',
+//               is_deleted: false,
+//               // Workaround jsonb support issue... https://github.com/drizzle-team/drizzle-orm/issues/724
+//               raw: sql`${stripNullByte(raw_data) ?? null}::jsonb`,
+//               unified: sql`${stripNullByte(item)}::jsonb`,
+//             })),
+//             {insertOnlyColumns: ['created_at'], noDiffColumns: ['updated_at']},
+//           )
+//         }
+//         return {
+//           next_cursor: res.data.next_cursor,
+//           has_next_page: res.data.has_next_page,
+//         }
+//       } catch (err) {
+//         // HTTP 501 not implemented
+//         if (err instanceof HTTPError && err.code === 501) {
+//           // NOTE: vercel doesn't understand console.warn unfortunately... so this will show up as error
+//           // https://vercel.com/docs/observability/runtime-logs#level
+//           console.warn(
+//             `[sync progress] ${connection_id} does not implement ${stream}`,
+//           )
+//           return {has_next_page: false, next_cursor: null}
+//         }
+//         throw err
+//       }
+//     }
 
-    async function syncStream(stream: string) {
-      const fullEntity = `${vertical}_${stream}`
-      console.log('[syncConnection] Syncing', fullEntity)
-      const table = getCommonObjectTable(fullEntity, {
-        schema: synced_data_schema,
-      })
-      await db.execute(table.createIfNotExistsSql())
-      const state = sync_mode === 'full' ? {} : overallState[stream] ?? {}
-      overallState[stream] = state
-      const streamSyncMode = state.cursor ? 'incremental' : 'full'
-      setMetric(`${stream}_sync_mode`, streamSyncMode)
+//     async function syncStream(stream: string) {
+//       const fullEntity = `${vertical}_${stream}`
+//       console.log('[syncConnection] Syncing', fullEntity)
+//       const table = getCommonObjectTable(fullEntity, {
+//         schema: synced_data_schema,
+//       })
+//       await db.execute(table.createIfNotExistsSql())
+//       const state = sync_mode === 'full' ? {} : overallState[stream] ?? {}
+//       overallState[stream] = state
+//       const streamSyncMode = state.cursor ? 'incremental' : 'full'
+//       setMetric(`${stream}_sync_mode`, streamSyncMode)
 
-      while (true) {
-        // const ret = await step.run(
-        //   `${stream}-sync-${state.cursor ?? ''}`,
-        //   iteratePage,
-        // )
-        const ret = await syncStreamPage(stream, table, state)
-        console.log('[sync progress]', {
-          stream,
-          completed_cursor: state.cursor,
-          ...ret,
-        })
-        state.cursor = ret.next_cursor
-        // Persist state. TODO: Figure out how to make this work with step function
-        await Promise.all([
-          dbUpsert(
-            configDb,
-            schema.sync_state,
-            [
-              {
-                ...syncState,
-                state: sql`${overallState}::jsonb`,
-                updated_at: 'now()',
-              },
-            ],
-            {
-              shallowMergeJsonbColumns: ['state'], // For race condition / concurrent sync of multiple streams
-              noDiffColumns: ['created_at', 'updated_at'],
-            },
-          ),
-          // Should this happen in a transaction? doesn't seem necessary but still
-          configDb
-            .update(schema.sync_run)
-            .set({
-              // Should we call it currentState instead? Also do we need it on the sync_state itself?
-              final_state: sql`${overallState}::jsonb`,
-              metrics: sql`${metrics}::jsonb`,
-            })
-            .where(eq(schema.sync_run.id, syncRunId)),
-        ])
-        if (!ret.has_next_page) {
-          break
-        }
-      }
-    }
-    const conn = await openint
-      .GET('/core/connection/{id}', {params: {path: {id: connection_id}}})
-      .then((r) => r.data)
+//       while (true) {
+//         // const ret = await step.run(
+//         //   `${stream}-sync-${state.cursor ?? ''}`,
+//         //   iteratePage,
+//         // )
+//         const ret = await syncStreamPage(stream, table, state)
+//         console.log('[sync progress]', {
+//           stream,
+//           completed_cursor: state.cursor,
+//           ...ret,
+//         })
+//         state.cursor = ret.next_cursor
+//         // Persist state. TODO: Figure out how to make this work with step function
+//         await Promise.all([
+//           dbUpsert(
+//             configDb,
+//             schema.sync_state,
+//             [
+//               {
+//                 ...syncState,
+//                 state: sql`${overallState}::jsonb`,
+//                 updated_at: 'now()',
+//               },
+//             ],
+//             {
+//               shallowMergeJsonbColumns: ['state'], // For race condition / concurrent sync of multiple streams
+//               noDiffColumns: ['created_at', 'updated_at'],
+//             },
+//           ),
+//           // Should this happen in a transaction? doesn't seem necessary but still
+//           configDb
+//             .update(schema.sync_run)
+//             .set({
+//               // Should we call it currentState instead? Also do we need it on the sync_state itself?
+//               final_state: sql`${overallState}::jsonb`,
+//               metrics: sql`${metrics}::jsonb`,
+//             })
+//             .where(eq(schema.sync_run.id, syncRunId)),
+//         ])
+//         if (!ret.has_next_page) {
+//           break
+//         }
+//       }
+//     }
+//     const conn = await openint
+//       .GET('/core/connection/{id}', {params: {path: {id: connection_id}}})
+//       .then((r) => r.data)
 
-    const org = await openint
-      .GET('/viewer/organization', {
-        headers: {
-          authorization: `Bearer ${jwt.signViewer({
-            role: 'org',
-            orgId: conn.connector_config.orgId as Id['org'],
-          })}`,
-        },
-      })
-      .then((r) => r.data)
+//     const org = await openint
+//       .GET('/viewer/organization', {
+//         headers: {
+//           authorization: `Bearer ${jwt.signViewer({
+//             role: 'org',
+//             orgId: conn.connector_config.orgId as Id['org'],
+//           })}`,
+//         },
+//       })
+//       .then((r) => r.data)
 
-    if (!org.publicMetadata.database_url) {
-      throw new Error(`org does not have a database_url: ${org.id}`)
-    }
-    const synced_data_schema = org.publicMetadata.synced_data_schema ?? 'synced'
-    const {db} = getDb(org.publicMetadata.database_url, {})
+//     if (!org.publicMetadata.database_url) {
+//       throw new Error(`org does not have a database_url: ${org.id}`)
+//     }
+//     const synced_data_schema = org.publicMetadata.synced_data_schema ?? 'synced'
+//     const {db} = getDb(org.publicMetadata.database_url, {})
 
-    // Load this from a config please...
-    if (synced_data_schema) {
-      await ensureSchema(db, synced_data_schema)
-      console.log('[syncConnection] Ensured schema', synced_data_schema)
-    }
-    // TODO: Collect list of errors not just the last one...
-    for (const stream of unified_objects) {
-      try {
-        await syncStream(stream)
-      } catch (err) {
-        errorInfo = await parseErrorInfo(err)
-        // No longer authenticated error means we should be able to break out of all other streams, it's unnecessary.
-        // Will need to think more about how this works for parallel read scenarios though.
-        if (errorInfo?.error_type === 'USER_ERROR') {
-          break
-        }
-        console.error('[syncConnection] Error syncing stream', stream, err)
-      }
-    }
-    // TODO: Put pg.end() in a finally block
-    // await pg.end()
-  } catch (err) {
-    errorInfo = await parseErrorInfo(err)
-  } finally {
-    await configDb
-      .update(schema.sync_run)
-      .set({
-        ...errorInfo,
-        completed_at: 'now()',
-        final_state: sql`${overallState}::jsonb`,
-        metrics: sql`${metrics}::jsonb`,
-      })
-      .where(eq(schema.sync_run.id, syncRunId))
-  }
+//     // Load this from a config please...
+//     if (synced_data_schema) {
+//       await ensureSchema(db, synced_data_schema)
+//       console.log('[syncConnection] Ensured schema', synced_data_schema)
+//     }
+//     // TODO: Collect list of errors not just the last one...
+//     for (const stream of unified_objects) {
+//       try {
+//         await syncStream(stream)
+//       } catch (err) {
+//         errorInfo = await parseErrorInfo(err)
+//         // No longer authenticated error means we should be able to break out of all other streams, it's unnecessary.
+//         // Will need to think more about how this works for parallel read scenarios though.
+//         if (errorInfo?.error_type === 'USER_ERROR') {
+//           break
+//         }
+//         console.error('[syncConnection] Error syncing stream', stream, err)
+//       }
+//     }
+//     // TODO: Put pg.end() in a finally block
+//     // await pg.end()
+//   } catch (err) {
+//     errorInfo = await parseErrorInfo(err)
+//   } finally {
+//     await configDb
+//       .update(schema.sync_run)
+//       .set({
+//         ...errorInfo,
+//         completed_at: 'now()',
+//         final_state: sql`${overallState}::jsonb`,
+//         metrics: sql`${metrics}::jsonb`,
+//       })
+//       .where(eq(schema.sync_run.id, syncRunId))
+//   }
 
-  const status = errorInfo?.error_type ?? 'SUCCESS'
-  await step.sendEvent('sync.completed', {
-    name: 'sync.completed',
-    data: {
-      connection_id,
-      vertical,
-      unified_objects,
-      sync_mode,
-      page_size,
-      //
-      request_event_id: event.id,
-      run_id: syncRunId,
-      metrics,
-      result: status,
-      error_detail: errorInfo?.error_detail,
-    },
-  })
-  console.log(`[syncConnection] Complete ${status}`, {
-    connection_id,
-    status,
-    event_id: event.id,
-    metrics,
-    error: errorInfo,
-    final_state: overallState,
-  })
-  // Return metrics to make it easier to debug in inngest
-  return {syncRunId, metrics}
-}
+//   const status = errorInfo?.error_type ?? 'SUCCESS'
+//   await step.sendEvent('sync.completed', {
+//     name: 'sync.completed',
+//     data: {
+//       connection_id,
+//       vertical,
+//       unified_objects,
+//       sync_mode,
+//       page_size,
+//       //
+//       request_event_id: event.id,
+//       run_id: syncRunId,
+//       metrics,
+//       result: status,
+//       error_detail: errorInfo?.error_detail,
+//     },
+//   })
+//   console.log(`[syncConnection] Complete ${status}`, {
+//     connection_id,
+//     status,
+//     event_id: event.id,
+//     metrics,
+//     error: errorInfo,
+//     final_state: overallState,
+//   })
+//   // Return metrics to make it easier to debug in inngest
+//   return {syncRunId, metrics}
+// }
 
-export async function triggerImmediateSync({
-  event,
-  step,
-}: FunctionInput<'connection.created'>) {
-  const data = {
-    ...event.data,
-    vertical: 'crm',
-  } satisfies Events['sync.requested']['data']
-  await step.sendEvent('sync.requested', {name: 'sync.requested', data})
+// export async function triggerImmediateSync({
+//   event,
+//   step,
+// }: FunctionInput<'connection.created'>) {
+//   const data = {
+//     ...event.data,
+//     vertical: 'crm',
+//   } satisfies Events['sync.requested']['data']
+//   await step.sendEvent('sync.requested', {name: 'sync.requested', data})
 
-  return data
-}
+//   return data
+// }
 
 export async function sendWebhook({event}: FunctionInput<keyof Events>) {
   const connectionId =

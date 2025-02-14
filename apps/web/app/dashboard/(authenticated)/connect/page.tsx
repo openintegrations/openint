@@ -152,6 +152,10 @@ export default function MagicLinkPage() {
           })}
           uiSchema={uiSchema}
           loading={createMagicLink.isLoading}
+          formData={{
+            theme: 'light',
+            view: 'manage',
+          }}
           onSubmit={({formData: values}) => {
             createMagicLink.mutate(values, {
               onSuccess: async (data) => {

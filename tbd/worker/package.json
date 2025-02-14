@@ -12,7 +12,6 @@
     "@openint/events": "workspace:*",
     "@openint/sdk": "workspace:*",
     "@openint/sync": "workspace:*",
-    "@openint/unified-etl": "workspace:*",
     "drizzle-orm": "^0.38.2",
     "inngest": "^3.22.13",
     "postgres": "^3.4.5",

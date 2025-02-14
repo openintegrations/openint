@@ -51,7 +51,8 @@ beforeAll(async () => {
   const masterDb = drizzle(env.DATABASE_URL, {logger: true})
   await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
   await masterDb.execute(`CREATE DATABASE ${dbName}`)
-  await masterDb.$client.end()
+  // EDGE
+  // await masterDb.$client.end()
 })
 
 const dbUrl = new URL(env.DATABASE_URL)
@@ -220,4 +221,5 @@ describe.each(messages)('custom schema: %s', (_, messages) => {
   })
 })
 
-afterAll(() => db.$client.end())
+// EDGE
+// afterAll(() => db.$client.end())

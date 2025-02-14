@@ -14,16 +14,6 @@ interface LinkItem {
   icon?: IconName
 }
 
-const devSectionedLinks: LinkItem[] = __DEBUG__
-  ? [
-      {
-        title: 'Pipeline Runs',
-        href: '/dashboard/pipeline-runs',
-        icon: 'ArrowLeftRight',
-      },
-    ]
-  : []
-
 const sectionedLinks: Array<{
   title?: string
   items: LinkItem[]
@@ -36,30 +26,10 @@ const sectionedLinks: Array<{
       //   icon: 'Home',
       // },
       {
-        title: 'Magic Link',
-        href: '/dashboard/magic-link',
+        title: 'Connect',
+        href: '/dashboard/connect',
         icon: 'Wand',
       },
-      __DEBUG__ && {
-        title: 'Metrics',
-        href: '/dashboard/metrics',
-        icon: 'BarChart2',
-      },
-    ]),
-  },
-  {
-    title: 'Console',
-    items: [
-      {
-        title: 'SQL Editor',
-        href: '/dashboard/sql-editor',
-        icon: 'Code',
-      },
-    ],
-  },
-  {
-    title: 'Entities',
-    items: [
       {
         title: 'Customers',
         href: '/dashboard/customers',
@@ -76,37 +46,16 @@ const sectionedLinks: Array<{
         icon: 'Layers',
       },
       {
-        title: 'Pipelines',
-        href: '/dashboard/pipelines',
-        icon: 'ArrowLeftRight',
-      },
-      ...devSectionedLinks,
-    ],
-  },
-  {
-    title: 'Developers',
-    items: [
-      // {
-      //   title: 'Logs',
-      //   href: '/dashboard/logs',
-      //   icon: 'Footprints',
-      // },
-      {
-        title: 'API Key',
-        href: '/dashboard/api-access',
-        icon: 'Key',
-      },
-      {
-        title: 'API Docs',
-        href: 'https://docs.openint.dev',
-        icon: 'Cpu',
-      },
-      {
         title: 'Settings',
         href: '/dashboard/settings',
         icon: 'Settings',
       },
-    ],
+      {
+        title: 'API Docs',
+        href: 'https://docs.openint.dev',
+        icon: 'FileText',
+      },
+    ]),
   },
 ]
 
@@ -159,13 +108,15 @@ export function Sidebar({className, hasPgConnection}: SidebarProps) {
               </div>
             </div>
           ))}
-          <div className="mt-4 flex items-start text-sm text-gray-400 p-2 px-4">
+          <div className="mt-4 flex items-start p-2 px-4 text-sm text-gray-400">
             <Icon name="Info" className="mr-2 h-5 w-5 text-gray-400" />
-            <span>Access command shortcut with <kbd>cmd</kbd> + <kbd>k</kbd></span>
+            <span>
+              Access command shortcut with <kbd>cmd</kbd> + <kbd>k</kbd>
+            </span>
           </div>
         </div>
       </ScrollArea>
-      <div className="mt-auto p-4">
+      <div className="mt-auto p-7">
         <Button
           variant="default"
           size="sm"

@@ -7,6 +7,7 @@ import * as schema from './schema'
 import * as schemaWip from './schema-wip'
 
 export * from 'drizzle-orm'
+export * from './schema-dynamic'
 export * from './stripeNullByte'
 export * from './upsert'
 export {drizzle, migrate, schema, schemaWip}
@@ -24,7 +25,6 @@ export function getDb<
 
   return {db, pg: {end: () => {}}}
 }
-
 export const {pg: configPg, db: configDb} = getDb(env.DATABASE_URL, {
   schema: schemaWip,
 })
@@ -47,13 +47,39 @@ export async function ensureSchema(
   )
 }
 
+/** Will close the postgres client connection by default */
+export async function runMigration(opts?: {keepAlive?: boolean}) {
+  console.log('[db] Running migrations...')
+  const path = await import('node:path')
+  // const fs = await import('node:fs')
+  // const url = await import('node:url')
+
+  const schema = env['POSTGRES_SCHEMA']
+  if (schema) {
+    await ensureSchema(configDb, schema)
+    await configDb.execute(sql`
+      SET search_path TO ${sql.identifier(schema)};
+    `)
+  }
+
+  // const __filename = url.fileURLToPath(import.meta.url)
+  // const __dirname = path.dirname(__filename)
+  await migrate(configDb, {
+    migrationsFolder: path.join(__dirname, 'migrations'),
+    // Seems to have no impact, and unconditionally creates a drizzle schema... 🤔
+    // migrationsTable: '_migrations',
+  })
+
+  if (!opts?.keepAlive) {
+    await configPg.end()
+  }
+}
+
 export function applyLimitOffset<T>(
   query: SQL<T>,
-  opts: {limit?: number; offset?: number; orderBy?: string; order?: string},
+  opts: {limit?: number; offset?: number},
 ) {
   const limit = opts.limit ? sql` LIMIT ${opts.limit}` : sql``
   const offset = opts.offset ? sql` OFFSET ${opts.offset}` : sql``
-  const orderBy = opts.orderBy ? sql` ORDER BY ${opts.orderBy}` : sql``
-  const order = opts.order ? sql` ${opts.order}` : sql``
-  return sql<T>`${query}${limit}${offset}${orderBy}${order}`
+  return sql<T>`${query}${limit}${offset}`
 }

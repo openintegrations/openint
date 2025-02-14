@@ -50,7 +50,6 @@ import {default as connectorYodlee} from '@openint/connector-yodlee/def'
 import {default as connectorZohodesk} from '@openint/connector-zohodesk/def'
 
 export const defConnectors = {
-  airtable: connectorAirtable,
   apollo: connectorApollo,
   beancount: connectorBeancount,
   brex: connectorBrex,

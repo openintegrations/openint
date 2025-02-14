@@ -327,3 +327,67 @@ export const connector_config = pgTable(
     }),
   ],
 )
+
+/** https://www.inngest.com/docs/features/events-triggers/event-format */
+export const event = pgTable(
+  'event',
+  {
+    id: varchar()
+      .default("concat('evt_', generate_ulid())")
+      .primaryKey()
+      .notNull(),
+    name: varchar().notNull(),
+    data: jsonb().notNull(),
+    timestamp: timestamp({withTimezone: true, mode: 'string'})
+      .defaultNow()
+      .notNull(),
+    user: jsonb(),
+    v: varchar(),
+
+    /**
+     * optional metadata contained inside `user` field, should probably be generated
+     * Will be used for RLS policies
+     * Slightly inconsistent given that user_id and customer_id are not abbreviated
+     */
+    org_id: varchar().generatedAlwaysAs(sql`"user"->>'org_id'`), // organization_id
+    user_id: varchar().generatedAlwaysAs(sql`"user"->>'user_id'`), // user_id
+    customer_id: varchar().generatedAlwaysAs(sql`"user"->>'customer_id'`), // customer_id
+  },
+  (table) => [
+    index('event_timestamp').on(table.timestamp),
+    index('event_org_id').on(table.org_id),
+    index('event_user_id').on(table.user_id),
+    index('event_customer_id').on(table.customer_id),
+    check('event_id_prefix_check', sql`starts_with(id, 'evt_')`),
+    pgPolicy('org_read', {
+      to: 'org',
+      for: 'select',
+      using: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('org_member_read', {
+      to: 'authenticated',
+      for: 'select',
+      using: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('customer_read', {
+      to: 'customer',
+      for: 'select',
+      using: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('org_append', {
+      to: 'org',
+      for: 'insert',
+      withCheck: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('org_member_append', {
+      to: 'authenticated',
+      for: 'insert',
+      withCheck: sql`org_id = public.jwt_org_id()`,
+    }),
+    pgPolicy('customer_append', {
+      to: 'customer',
+      for: 'insert',
+      withCheck: sql`org_id = public.jwt_org_id()`,
+    }),
+  ],
+)

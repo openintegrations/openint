@@ -11,7 +11,6 @@ interface Connection {
   connectorConfig: ConnectorConfig
   connectorName: string
   pipelineIds: string[]
-  syncInProgress: boolean
   integration: any
   status?: string | null
   statusMessage?: string | null

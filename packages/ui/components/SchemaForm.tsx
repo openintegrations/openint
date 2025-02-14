@@ -68,7 +68,7 @@ function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
       const friendlyLabel = titleCase(key)
       uiSchema[key] = {
         'ui:title': friendlyLabel,
-        'ui:classNames': 'pt-2 mx-1',
+        'ui:classNames': 'pt-2',
       }
 
       if (typeof value === 'object') {
