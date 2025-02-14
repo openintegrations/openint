@@ -1,4 +1,3 @@
-import {kApikeyHeader, kApikeyUrlParam} from '@openint/app-config/constants'
 import SecureInput from '@openint/ui/components/SecureInput'
 import {getOrCreateApikey} from '@/lib-server'
 import {serverComponentGetViewer} from '@/lib-server/server-component-helpers'
