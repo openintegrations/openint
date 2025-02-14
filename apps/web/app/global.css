@@ -58,14 +58,13 @@
     --navbar: hsl(0, 0%, 100%);
     --sidebar: hsl(0, 0%, 100%);
 
-    
     --toast-bg-default: hsl(0, 0%, 100%);
     --toast-border-default: hsl(220, 25%, 86%);
     --toast-bg-success: hsl(134, 58%, 47%);
-    --toast-border-success: hsl(134, 79%, 32%); 
+    --toast-border-success: hsl(134, 79%, 32%);
     --toast-bg-loading: hsl(0, 0%, 64%);
     --toast-border-loading: hsl(0, 0%, 42%);
-    --toast-bg-destructive: hsl(0, 100%, 63%); 
+    --toast-bg-destructive: hsl(0, 100%, 63%);
     --toast-border-destructive: hsl(0, 60%, 55%);
     --toast-foreground: hsl(0, 0%, 100%);
 
@@ -117,10 +116,9 @@
     --navbar: hsl(0, 0%, 100%);
     --sidebar: hsl(0, 0%, 100%);
 
-  
     --toast-bg-default: hsl(0, 0%, 14%);
     --toast-border-default: hsl(0, 0%, 20%);
-    --toast-bg-success: hsl(138, 41%, 25%); 
+    --toast-bg-success: hsl(138, 41%, 25%);
     --toast-border-success: hsl(138, 47%, 48%);
     --toast-bg-loading: hsl(0, 0%, 27%);
     --toast-border-loading: hsl(0, 0%, 42%);
@@ -165,10 +163,6 @@
 /* TODO: Move this to schema-form.css */
 
 @layer components {
-  .schema-form {
-    /* Left side is not needed due to fieldset left margin */
-    @apply mr-2;
-  }
   /* Aka sections */
   .schema-form fieldset > legend {
     /* Display block doesn't work for some reason. Does not fill parent width which is still a div, not sure why */
