@@ -15,7 +15,6 @@ export function ConnectionCard({
   conn: {
     id: string
     pipelineIds: string[]
-    syncInProgress: boolean
     connectorConfig: ConnectorConfig
     integration: any
     status: string
