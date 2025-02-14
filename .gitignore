@@ -75,3 +75,5 @@ dist/
 
 # Next.js
 .next/
+
+wrangler.toml

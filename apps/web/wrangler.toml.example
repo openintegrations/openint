@@ -1,0 +1,18 @@
+main = ".open-next/worker.ts"
+name = "openint-production-govsignals"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+assets = { directory = ".open-next/assets", binding = "ASSETS" }
+
+# wrangler.toml
+[observability.logs]
+enabled = true
+
+
+[alias]
+"#crypto" = "./worker-aliases/crypto"
+"critters" = "./worker-aliases/critters"
+"depd" = "./worker-aliases/depd"
+
+[vars]
+## .env copy goes here 
