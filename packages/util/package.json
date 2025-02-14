@@ -6,7 +6,7 @@
   "module": "./index.ts",
   "dependencies": {
     "@blossomfinance/iso-4217-currencies": "0.2.5",
-    "@opensdks/util-zod": "^0.0.15",
+    "@opensdks/util-zod": "0.0.16",
     "@trpc/server": "10.40.0",
     "accounting": "0.4.1",
     "async-sema": "3.1.1",
@@ -38,7 +38,7 @@
     "ts-brand": "0.0.2",
     "type-fest": "3.8.0",
     "ulidx": "0.4.0",
-    "zod": "3.22.4",
+    "zod": "^3.24.2",
     "zod-openapi": "2.14.0"
   },
   "devDependencies": {

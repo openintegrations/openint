@@ -361,7 +361,7 @@ importers:
         version: link:../../packages/util
       '@t3-oss/env-nextjs':
         specifier: 0.7.3
-        version: 0.7.3(typescript@5.7.3)(zod@3.22.4)
+        version: 0.7.3(typescript@5.7.3)(zod@3.24.2)
       chokidar:
         specifier: 3.5.3
         version: 3.5.3
@@ -384,8 +384,8 @@ importers:
         specifier: 1.3.1
         version: 1.3.1
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@types/find-config':
         specifier: 1.0.1
@@ -901,8 +901,8 @@ importers:
         specifier: ^0.0.4
         version: 0.0.4
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -1308,8 +1308,8 @@ importers:
         specifier: ^3.4.5
         version: 3.4.5
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@openint/env':
         specifier: workspace:*
@@ -1354,8 +1354,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
 
   connectors/connector-salesforce:
     dependencies:
@@ -1494,8 +1494,8 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
 
   connectors/connector-venmo:
     dependencies:
@@ -1539,8 +1539,8 @@ importers:
         specifier: ^0.0.7
         version: 0.0.7
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
 
   connectors/connector-yodlee:
     dependencies:
@@ -1652,8 +1652,8 @@ importers:
         specifier: 0.0.6
         version: 0.0.6
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -1704,8 +1704,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@openint/open-file-picker':
         specifier: workspace:*
@@ -1935,8 +1935,8 @@ importers:
   kits/sync:
     dependencies:
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
 
   kits/vdk:
     dependencies:
@@ -1953,8 +1953,8 @@ importers:
         specifier: ^0.0.22
         version: 0.0.22
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
       remeda:
         specifier: 1.6.1
         version: 1.6.1
@@ -2029,8 +2029,8 @@ importers:
         specifier: ^0.0.22
         version: 0.0.22
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
       remeda:
         specifier: 1.6.1
         version: 1.6.1
@@ -2088,8 +2088,8 @@ importers:
         specifier: 1.6.1
         version: 1.6.1
       zod:
-        specifier: ^3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@openint/loopback-link':
         specifier: workspace:*
@@ -2131,8 +2131,8 @@ importers:
         specifier: workspace:*
         version: link:../../kits/vdk
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -2220,8 +2220,8 @@ importers:
         specifier: workspace:*
         version: link:../../kits/cdk
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
     devDependencies:
       inngest:
         specifier: ^3.22.13
@@ -2246,13 +2246,13 @@ importers:
         version: 10.40.0
       '@zodios/core':
         specifier: 10.9.6
-        version: 10.9.6(axios@0.21.1)(zod@3.22.4)
+        version: 10.9.6(axios@0.21.1)(zod@3.24.2)
       '@zodios/fetch':
         specifier: 11.0.0-beta.19
-        version: 11.0.0-beta.19(@zodios/core@10.9.6(axios@0.21.1)(zod@3.22.4))(fp-ts@2.12.3)(io-ts@2.2.19(fp-ts@2.12.3))(zod@3.22.4)
+        version: 11.0.0-beta.19(@zodios/core@10.9.6(axios@0.21.1)(zod@3.24.2))(fp-ts@2.12.3)(io-ts@2.2.19(fp-ts@2.12.3))(zod@3.24.2)
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@openint/engine-backend':
         specifier: workspace:*
@@ -2338,8 +2338,8 @@ importers:
         specifier: 0.0.19
         version: 0.0.19
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -2504,8 +2504,8 @@ importers:
         specifier: 0.2.5
         version: 0.2.5
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: 0.0.16
+        version: 0.0.16
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -2600,11 +2600,11 @@ importers:
         specifier: 0.4.0
         version: 0.4.0
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
       zod-openapi:
         specifier: 2.14.0
-        version: 2.14.0(zod@3.22.4)
+        version: 2.14.0(zod@3.24.2)
     devDependencies:
       '@types/accounting':
         specifier: 0.4.2
@@ -4853,9 +4853,6 @@ packages:
 
   '@opensdks/sdk-yodlee@0.0.0':
     resolution: {integrity: sha512-cAt5HuzC5UJbXMZ1BATMz7FlVMMXG6kvWHIu34nZt4YKCIsdZbVR4qCThnqQEk1OA+gl7kCuOWOkcRBOiDg9EA==}
-
-  '@opensdks/util-zod@0.0.15':
-    resolution: {integrity: sha512-CHyk/ay5yKNFBZKDfGcJQGZ4ZhScfNhGe6xon6XjqbhP+AYv4tYJl1GTbTqJdN2N15KnG3vuXjbi6SX0SGwbhw==}
 
   '@opensdks/util-zod@0.0.16':
     resolution: {integrity: sha512-Khgn6Wra02ikZgN9tAV/xAoCN/Oz+3ntuC103RVXR+d1rFD4jziArUHxJWYSkZQ6a+5HKcApIWOl7C2U2CWRZQ==}
@@ -18938,11 +18935,6 @@ snapshots:
 
   '@opensdks/sdk-yodlee@0.0.0': {}
 
-  '@opensdks/util-zod@0.0.15':
-    dependencies:
-      zod: 3.22.4
-      zod-openapi: 2.14.0(zod@3.22.4)
-
   '@opensdks/util-zod@0.0.16':
     dependencies:
       zod: 3.24.2
@@ -21761,22 +21753,9 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.7.3(typescript@5.7.3)(zod@3.22.4)':
-    dependencies:
-      zod: 3.22.4
-    optionalDependencies:
-      typescript: 5.7.3
-
   '@t3-oss/env-core@0.7.3(typescript@5.7.3)(zod@3.24.2)':
     dependencies:
       zod: 3.24.2
-    optionalDependencies:
-      typescript: 5.7.3
-
-  '@t3-oss/env-nextjs@0.7.3(typescript@5.7.3)(zod@3.22.4)':
-    dependencies:
-      '@t3-oss/env-core': 0.7.3(typescript@5.7.3)(zod@3.22.4)
-      zod: 3.22.4
     optionalDependencies:
       typescript: 5.7.3
 
@@ -22674,18 +22653,18 @@ snapshots:
 
   '@xtuc/long@4.2.2': {}
 
-  '@zodios/core@10.9.6(axios@0.21.1)(zod@3.22.4)':
+  '@zodios/core@10.9.6(axios@0.21.1)(zod@3.24.2)':
     dependencies:
       axios: 0.21.1
-      zod: 3.22.4
+      zod: 3.24.2
 
-  '@zodios/fetch@11.0.0-beta.19(@zodios/core@10.9.6(axios@0.21.1)(zod@3.22.4))(fp-ts@2.12.3)(io-ts@2.2.19(fp-ts@2.12.3))(zod@3.22.4)':
+  '@zodios/fetch@11.0.0-beta.19(@zodios/core@10.9.6(axios@0.21.1)(zod@3.24.2))(fp-ts@2.12.3)(io-ts@2.2.19(fp-ts@2.12.3))(zod@3.24.2)':
     dependencies:
-      '@zodios/core': 10.9.6(axios@0.21.1)(zod@3.22.4)
+      '@zodios/core': 10.9.6(axios@0.21.1)(zod@3.24.2)
     optionalDependencies:
       fp-ts: 2.12.3
       io-ts: 2.2.19(fp-ts@2.12.3)
-      zod: 3.22.4
+      zod: 3.24.2
 
   abort-controller@3.0.0:
     dependencies:
@@ -32696,10 +32675,6 @@ snapshots:
   zod-openapi@2.11.0(zod@3.24.2):
     dependencies:
       zod: 3.24.2
-
-  zod-openapi@2.14.0(zod@3.22.4):
-    dependencies:
-      zod: 3.22.4
 
   zod-openapi@2.14.0(zod@3.24.2):
     dependencies:
