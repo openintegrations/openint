@@ -6,7 +6,7 @@
   "scripts": {},
   "dependencies": {
     "@openint/cdk": "workspace:*",
-    "@opensdks/util-zod": "0.0.15"
+    "@opensdks/util-zod": "0.0.16"
   },
   "devDependencies": {
     "inngest": "^3.22.13"

@@ -12,7 +12,7 @@
     "@openint/trpc": "workspace:*",
     "@openint/util": "workspace:*",
     "@openint/vdk": "workspace:*",
-    "@opensdks/util-zod": "^0.0.15",
+    "@opensdks/util-zod": "0.0.16",
     "@trpc/server": "10.40.0",
     "drizzle-orm": "^0.38.2",
     "inngest": "^3.22.13",
