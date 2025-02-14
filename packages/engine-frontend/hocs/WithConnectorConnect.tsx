@@ -75,7 +75,7 @@ export const WithConnectorConnect = ({
   const nangoProvider = ccfg.connector.nangoProvider
 
   const nangoPublicKey =
-    _trpcReact.getPublicEnv.useQuery().data?.NEXT_PUBLIC_NANGO_PUBLIC_KEY
+    _trpcReact.getPublicEnv.useQuery().data?.['NEXT_PUBLIC_NANGO_PUBLIC_KEY']
   const nangoFrontend = React.useMemo(
     () =>
       nangoPublicKey &&

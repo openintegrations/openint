@@ -79,8 +79,15 @@ export function oasWebhooksEventsMap(
   type Schemas = NonNullable<ZodOpenApiComponentsObject['schemas']>
   const components = {
     schemas: mapKeys(
-      mapValues(eMap, (shape, name): Schemas[string] =>
-        z.object({...shape, name: z.literal(name), id: z.string().optional()}),
+      mapValues(
+        eMap,
+        (shape, name) =>
+          // Not sure why this is erroring, we should probably fix everywhere
+          z.object({
+            ...shape,
+            name: z.literal(name),
+            id: z.string().optional(),
+          }) as unknown as Schemas[string],
       ),
       (name) => `webhooks.${name}`,
     ),
