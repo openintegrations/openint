@@ -32,6 +32,18 @@ export default function SettingsForm() {
   if (!res.data) {
     return null
   }
+  const orgsToShowUrlFor = [
+    // orgs in openint clerk app for ag
+    'org_2nJZrA4Dk8i3wszhm6PsP3M2Vwy',
+    'org_2lcCCimyICKI8cpPNQt195h5zrP',
+    'org_2ms9FdeczlbrDIHJLcwGdpv3dTx',
+    // orgs in ag app sh
+    'org_2pBMOEKROMpNR7zckHtah4ebxAk',
+    'org_2pBM0RSOqs5QzZi40A73hZ5aTjD',
+    // orgs in ot app
+    'org_2nkeyWpfGKK6W011qwV8dA1la8n',
+  ]
+  const showDatabaseUrl = Boolean(!orgsToShowUrlFor.includes(res.data.id))
 
   return (
     <>
@@ -40,8 +52,7 @@ export default function SettingsForm() {
         schema={zOrganization.shape.publicMetadata.omit({
           synced_data_schema: true,
           migrate_tables: true,
-          // @ts-expect-error boolean vs true type mismatch
-          database_url: res.data.id !== 'org_2nkeyWpfGKK6W011qwV8dA1la8n',
+          database_url: showDatabaseUrl ? true : undefined,
         })}
         uiSchema={{
           // Would be nice if this can be extracted from example field of the openapi spec
