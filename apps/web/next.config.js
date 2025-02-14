@@ -35,6 +35,9 @@ const nextConfig = {
   // experimental: {esmExternals: 'loose', typedRoutes: true},
   experimental: {
     serverComponentsExternalPackages: ['@openint/connector-mongodb'],
+    instrumentationHook:
+      process.env['NEXT_PUBLIC_RUNTIME_ENV'] &&
+      process.env['NEXT_PUBLIC_RUNTIME_ENV'] !== 'edge',
   },
   reactStrictMode: true,
   rewrites: async () => ({
