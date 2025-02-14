@@ -154,7 +154,7 @@ export default function MagicLinkPage() {
           loading={createMagicLink.isLoading}
           formData={{
             theme: 'light',
-            view: 'manage',
+            view: 'add',
           }}
           onSubmit={({formData: values}) => {
             createMagicLink.mutate(values, {
