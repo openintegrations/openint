@@ -360,8 +360,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/util
       '@t3-oss/env-nextjs':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.7.3)(zod@3.22.4)
+        specifier: 0.9.1
+        version: 0.9.1(typescript@5.7.3)(zod@3.22.4)
       chokidar:
         specifier: 3.5.3
         version: 3.5.3
@@ -1256,8 +1256,8 @@ importers:
         specifier: ^0.0.19
         version: 0.0.19
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.7.3)(zod@3.24.2)
+        specifier: 0.9.1
+        version: 0.9.1(typescript@5.7.3)(zod@3.24.2)
       plaid:
         specifier: 12.3.0
         version: 12.3.0
@@ -2211,8 +2211,8 @@ importers:
         specifier: 0.0.16
         version: 0.0.16
       '@t3-oss/env-nextjs':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.7.3)(zod@3.24.2)
+        specifier: 0.9.1
+        version: 0.9.1(typescript@5.7.3)(zod@3.24.2)
 
   packages/events:
     dependencies:
@@ -6933,32 +6933,22 @@ packages:
     resolution: {integrity: sha512-+PmQX0PiAYPMeVYe237LJAYvOMYW1j2rH5YROyS3b4CTVJum34HfRvKvAzozHAQG0TnHNdUfY9nCeUyRAs//cw==}
     engines: {node: '>=14.16'}
 
-  '@t3-oss/env-core@0.12.0':
-    resolution: {integrity: sha512-lOPj8d9nJJTt81mMuN9GMk8x5veOt7q9m11OSnCBJhwp1QrL/qR+M8Y467ULBSm9SunosryWNbmQQbgoiMgcdw==}
+  '@t3-oss/env-core@0.9.1':
+    resolution: {integrity: sha512-QgR4jV2BmRMdq+in5DbI9Ox/mgpNM/b1H1wB6a0Zf015RsuLk12mIC9FKzDtLITgSSSI/Gt8ZbarqugAUtRslw==}
     peerDependencies:
       typescript: '>=5.0.0'
-      valibot: ^1.0.0-beta.7 || ^1.0.0
-      zod: ^3.24.0
+      zod: ^3.0.0
     peerDependenciesMeta:
       typescript:
-        optional: true
-      valibot:
-        optional: true
-      zod:
         optional: true
 
-  '@t3-oss/env-nextjs@0.12.0':
-    resolution: {integrity: sha512-rFnvYk1049RnNVUPvY8iQ55AuQh1Rr+qZzQBh3t++RttCGK4COpXGNxS4+45afuQq02lu+QAOy/5955aU8hRKw==}
+  '@t3-oss/env-nextjs@0.9.1':
+    resolution: {integrity: sha512-c5JbI8ADarxhItsimm0fnbrr6YLFC+8l509IFlc6v0Y6aEaAidhJkRj+SwyKtKzz/6gJ4c98vxd5kOLb3FoGWQ==}
     peerDependencies:
       typescript: '>=5.0.0'
-      valibot: ^1.0.0-beta.7 || ^1.0.0
-      zod: ^3.24.0
+      zod: ^3.0.0
     peerDependenciesMeta:
       typescript:
-        optional: true
-      valibot:
-        optional: true
-      zod:
         optional: true
 
   '@tanstack/query-core@4.27.0':
@@ -21771,29 +21761,31 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.12.0(typescript@5.7.3)(zod@3.22.4)':
-    optionalDependencies:
-      typescript: 5.7.3
-      zod: 3.22.4
-
-  '@t3-oss/env-core@0.12.0(typescript@5.7.3)(zod@3.24.2)':
-    optionalDependencies:
-      typescript: 5.7.3
-      zod: 3.24.2
-
-  '@t3-oss/env-nextjs@0.12.0(typescript@5.7.3)(zod@3.22.4)':
+  '@t3-oss/env-core@0.9.1(typescript@5.7.3)(zod@3.22.4)':
     dependencies:
-      '@t3-oss/env-core': 0.12.0(typescript@5.7.3)(zod@3.22.4)
-    optionalDependencies:
-      typescript: 5.7.3
       zod: 3.22.4
-
-  '@t3-oss/env-nextjs@0.12.0(typescript@5.7.3)(zod@3.24.2)':
-    dependencies:
-      '@t3-oss/env-core': 0.12.0(typescript@5.7.3)(zod@3.24.2)
     optionalDependencies:
       typescript: 5.7.3
+
+  '@t3-oss/env-core@0.9.1(typescript@5.7.3)(zod@3.24.2)':
+    dependencies:
       zod: 3.24.2
+    optionalDependencies:
+      typescript: 5.7.3
+
+  '@t3-oss/env-nextjs@0.9.1(typescript@5.7.3)(zod@3.22.4)':
+    dependencies:
+      '@t3-oss/env-core': 0.9.1(typescript@5.7.3)(zod@3.22.4)
+      zod: 3.22.4
+    optionalDependencies:
+      typescript: 5.7.3
+
+  '@t3-oss/env-nextjs@0.9.1(typescript@5.7.3)(zod@3.24.2)':
+    dependencies:
+      '@t3-oss/env-core': 0.9.1(typescript@5.7.3)(zod@3.24.2)
+      zod: 3.24.2
+    optionalDependencies:
+      typescript: 5.7.3
 
   '@tanstack/query-core@4.27.0': {}
 
