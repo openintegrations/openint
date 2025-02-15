@@ -63,11 +63,14 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   hasPgConnection: boolean
 }
 
+const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
+
 export function Sidebar({className, hasPgConnection}: SidebarProps) {
   const pathname = usePathname()
-  const links = hasPgConnection
-    ? sectionedLinks
-    : sectionedLinks.filter((s) => s.title !== 'Console')
+  const links =
+    hasPgConnection && currentUrl.includes('openint.dev')
+      ? sectionedLinks
+      : sectionedLinks.filter((s) => s.title !== 'Console')
 
   return (
     <nav className={cn('flex flex-col', className)}>

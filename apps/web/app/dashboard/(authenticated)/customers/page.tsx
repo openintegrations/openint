@@ -55,11 +55,13 @@ export default function CustomersPage() {
           {
             accessorKey: 'firstCreatedAt',
             header: 'First created',
+            // @ts-expect-error EDGE
             cell: ({row}) => formatDate(row.original.firstCreatedAt ?? ''),
           },
           {
             accessorKey: 'lastUpdatedAt',
             header: 'Last updated',
+            // @ts-expect-error EDGE
             cell: ({row}) => formatDate(row.original.lastUpdatedAt ?? ''),
           },
         ]}

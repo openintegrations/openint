@@ -7,7 +7,12 @@
     "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
     "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
-    "dev": "next dev -p 4000 --turbo",
+    "build:worker": "SKIP_NEXT_APP_BUILD=true cloudflare && node patch-cloudflare.bin.js",
+    "codegen:supabase": "supabase gen types typescript --linked --schema public > ./supabase/supabase.gen.d.ts",
+    "deploy:worker": "wrangler deploy",
+    "dev": "next dev -p 4000",
+    "dev:worker": "wrangler dev --port 4000",
+    "preview:worker": "pnpm run build:worker && pnpm run dev:worker",
     "start": "next start"
   },
   "dependencies": {
@@ -26,6 +31,7 @@
     "@openint/open-file-picker": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/util": "workspace:*",
+    "@opennextjs/cloudflare": "https://pkg.pr.new/@opennextjs/cloudflare@2ab976f",
     "@opensdks/fetch-links": "^0.0.22",
     "@sentry/nextjs": "^8.33.1",
     "@stoplight/elements": "7.7.10",
@@ -33,8 +39,8 @@
     "@tanstack/query-sync-storage-persister": "4.27.1",
     "@tanstack/react-query": "4.28.0",
     "@tanstack/react-query-persist-client": "4.28.0",
-    "@trpc/react-query": "10.40.0",
-    "@trpc/server": "10.40.0",
+    "@trpc/react-query": "10.45.2",
+    "@trpc/server": "10.45.2",
     "commandbar": "1.7.3",
     "cookies-next": "4.0.0",
     "graphql": "^16.6.0",
@@ -47,6 +53,8 @@
     "next-themes": "0.3.0",
     "nextjs-toploader": "1.4.2",
     "node-http-proxy-json": "0.1.9",
+    "pg": "8.13.1",
+    "pg-cloudflare": "^1.1.1",
     "posthog-js": "^1.166.1",
     "posthog-node": "2.5.4",
     "react": "18.3.1",
@@ -70,6 +78,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-radix": "^3.0.5",
     "tilg": "0.1.1",
-    "webpack": "*"
+    "webpack": "*",
+    "wrangler": "^3.99.0"
   }
 }

@@ -9,6 +9,8 @@ export const envConfig = {
     DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
     DATABASE_URL_UNPOOLED: z.string().optional(),
 
+    POSTGRES_SCHEMA: z.string().optional(),
+
     JWT_SECRET: z.string().optional(),
     CLERK_SECRET_KEY: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
@@ -70,6 +72,7 @@ export const envConfig = {
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
     VERCEL_URL: process.env['VERCEL_URL'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
+    POSTGRES_SCHEMA: process.env['POSTGRES_SCHEMA'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 

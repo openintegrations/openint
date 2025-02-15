@@ -35,6 +35,9 @@ const nextConfig = {
   // experimental: {esmExternals: 'loose', typedRoutes: true},
   experimental: {
     serverComponentsExternalPackages: ['@openint/connector-mongodb'],
+    instrumentationHook:
+      process.env['NEXT_PUBLIC_RUNTIME_ENV'] &&
+      process.env['NEXT_PUBLIC_RUNTIME_ENV'] !== 'edge',
   },
   reactStrictMode: true,
   rewrites: async () => ({
@@ -72,6 +75,14 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       handlebars: 'handlebars/dist/handlebars.js',
+      crypto: 'node:crypto',
+      depd: path.resolve('./worker-aliases/depd.js'),
+      // '#crypto': 'node:crypto',
+      // // Map node: prefixed modules to their standard names
+      // 'node:async_hooks': 'async_hooks',
+      // 'node:crypto': 'crypto',
+      // 'node:fs': 'fs',
+      // 'node:path': 'path',
     }
     config.resolve.fallback = {
       fs: false,
@@ -80,6 +91,9 @@ const nextConfig = {
       tls: false,
       net: false,
       dns: false,
+      crypto: 'node:crypto',
+      depd: path.resolve('./worker-aliases/depd.js'),
+      // '#crypto': 'node:crypto',
     }
     config.plugins.push(
       new webpack.IgnorePlugin({
@@ -127,6 +141,7 @@ const nextConfig = {
       ),
     },
   ],
+  output: 'standalone',
 }
 
 module.exports = nextConfig

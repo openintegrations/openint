@@ -14,7 +14,7 @@
     "@opensdks/runtime": "^0.0.19",
     "@opensdks/sdk-nango": "0.0.6",
     "@opensdks/util-zod": "0.0.15",
-    "@trpc/server": "10.40.0",
+    "@trpc/server": "10.45.2",
     "jsonwebtoken": "9.0.0",
     "react-script-hook": "1.7.2",
     "remeda": "1.6.1"

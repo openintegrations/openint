@@ -11,15 +11,6 @@ module.exports = [
     },
   },
   {
-    name: 'airtable',
-    dirName: 'connector-airtable',
-    varName: 'connectorAirtable',
-    imports: {
-      def: '@openint/connector-airtable/def',
-      server: '@openint/connector-airtable/server',
-    },
-  },
-  {
     dirName: 'connector-alphavantage',
     varName: 'connectorAlphavantage',
     imports: {},
@@ -61,16 +52,6 @@ module.exports = [
     },
   },
   {
-    name: 'confluence',
-    dirName: 'connector-confluence',
-    varName: 'connectorConfluence',
-    imports: {
-      def: '@openint/connector-confluence/def',
-      server: '@openint/connector-confluence/server',
-    },
-  },
-  {dirName: 'connector-copilot', varName: 'connectorCopilot', imports: {}},
-  {
     name: 'debug',
     dirName: 'connector-debug',
     varName: 'connectorDebug',
@@ -97,24 +78,6 @@ module.exports = [
       def: '@openint/connector-finch/def',
       client: '@openint/connector-finch/client',
       server: '@openint/connector-finch/server',
-    },
-  },
-  {
-    name: 'firebase',
-    dirName: 'connector-firebase',
-    varName: 'connectorFirebase',
-    imports: {
-      def: '@openint/connector-firebase/def',
-      server: '@openint/connector-firebase/server',
-    },
-  },
-  {
-    name: 'foreceipt',
-    dirName: 'connector-foreceipt',
-    varName: 'connectorForeceipt',
-    imports: {
-      def: '@openint/connector-foreceipt/def',
-      server: '@openint/connector-foreceipt/server',
     },
   },
   {
@@ -257,15 +220,6 @@ module.exports = [
     imports: {
       def: '@openint/connector-microsoft/def',
       server: '@openint/connector-microsoft/server',
-    },
-  },
-  {
-    name: 'mongodb',
-    dirName: 'connector-mongodb',
-    varName: 'connectorMongodb',
-    imports: {
-      def: '@openint/connector-mongodb/def',
-      server: '@openint/connector-mongodb/server',
     },
   },
   {

@@ -1,10 +1,11 @@
 packages:
   - 'apps/*'
   - 'packages/*'
-  - 'packages-v1/*'
   - 'dev-packages/*'
+  - 'tbd/*'
   - 'connectors/*'
   - 'unified/*'
   - 'kits/*'
   - 'utils/*'
   - 'docs/'
+  - 'packages-v1/*'

@@ -1,5 +1,5 @@
 import {getTableName, sql} from 'drizzle-orm'
-import {drizzle} from 'drizzle-orm/postgres-js'
+import {drizzle} from 'drizzle-orm/node-postgres'
 import jsonStableStringify from 'json-stable-stringify'
 import * as R from 'remeda'
 import type {ConnectorServer} from '@openint/cdk'

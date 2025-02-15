@@ -12,6 +12,8 @@
 # next.js
 /apps/web/.next/
 /apps/web/out/
+.worker-next/
+.dev.vars
 
 # production
 /apps/web/build
@@ -64,6 +66,8 @@ dist/
 /gateway/config.json
 /gateway/wrangler.toml
 
+# Cloudflare
+.wrangler
 .dev.vars
 
 # CI Artifacts
@@ -71,3 +75,5 @@ dist/
 
 # Next.js
 .next/
+
+wrangler.toml

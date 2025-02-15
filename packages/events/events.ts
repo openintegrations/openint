@@ -26,6 +26,18 @@ export const zOrgProperties = z
 
 export type OrgProperties = z.infer<typeof zOrgProperties>
 
+const syncRequestedData = z.object({
+  connection_id: z.string(),
+  vertical: z.enum(['crm', 'engagement', 'ats']),
+  unified_objects: z.array(z.string()).optional(),
+  sync_mode: z
+    .enum(['full', 'incremental'])
+    .optional()
+    .describe('Incremental by default'),
+  /** Override the default page sizing, will be provider default otherwise... */
+  page_size: z.number().optional(),
+})
+
 // TODO: Can we learn from trpc to make all the events here easy to refactor across the codebase?
 export const eventMap = {
   // New format for event name. Having `/` is not supported in event names due to slash having
@@ -37,6 +49,7 @@ export const eventMap = {
   },
   // Backend events
   'debug/debug': {},
+  'sync.requested': {data: syncRequestedData},
   'sync/scheduler-debug': {},
   'sync/pipeline-requested': {pipelineId: zId('pipe')},
   'sync/connection-requested': {connectionId: zId('conn')},
@@ -67,6 +80,13 @@ export const eventMap = {
   pageview: {
     current_url: z.string(),
     path: z.string(),
+  },
+  'scheduler.requested': {
+    data: z.object({
+      connector_names: z.array(z.string()),
+      vertical: z.enum(['crm', 'engagement', 'ats']),
+      sync_mode: z.enum(['full', 'incremental']),
+    }),
   },
 } satisfies Record<string, z.ZodRawShape>
 

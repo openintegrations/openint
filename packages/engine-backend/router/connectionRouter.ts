@@ -64,12 +64,10 @@ export async function performConnectionCheck(
     /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       customerId: conn.customerId ?? undefined,
-      integration: conn.integrationId
-        ? {
-            externalId: extractId(conn.integrationId)[2],
-            data: conn.integration?.external ?? {},
-          }
-        : undefined,
+      integration: {
+        externalId: extractId(conn.integrationId)[2],
+        data: conn.integration?.external ?? {},
+      },
       ...connUpdate,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
@@ -264,7 +262,10 @@ export const connectionRouter = trpc.router({
       if (ctx.viewer.role === 'customer') {
         await ctx.services.getConnectionOrFail(connId, true)
       }
-      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId, true)
+      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(
+        connId,
+        true,
+      )
       const {settings, connectorConfig: ccfg} = conn
       if (!opts?.skipRevoke) {
         await ccfg.connector.revokeConnection?.(
