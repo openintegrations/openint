@@ -90,5 +90,5 @@ export const inngest = new Inngest({
   // This is needed in the browser otherwise we get failed to execute fetch on Window
   // due to the way Inngest uses this.fetch when invoking fetch
   fetch: globalThis.fetch.bind(globalThis),
-  middleware: [persistEventsMiddleware, sentryMiddleware()],
+  middleware: [sentryMiddleware()],
 })

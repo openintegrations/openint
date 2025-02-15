@@ -78,6 +78,11 @@ const nextConfig = {
       crypto: 'node:crypto',
       depd: path.resolve('./worker-aliases/depd.js'),
       // '#crypto': 'node:crypto',
+      // // Map node: prefixed modules to their standard names
+      // 'node:async_hooks': 'async_hooks',
+      // 'node:crypto': 'crypto',
+      // 'node:fs': 'fs',
+      // 'node:path': 'path',
     }
     config.resolve.fallback = {
       fs: false,

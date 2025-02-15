@@ -442,17 +442,17 @@ export const customerRouter = trpc.router({
           return 'Connection successfully connected'
         }
 
-        await inngest.send({
-          name: 'connect/connection-connected',
-          data: {connectionId},
-        })
+        // await inngest.send({
+        //   name: 'connect/connection-connected',
+        //   data: {connectionId},
+        // })
 
-        if (syncInBackground) {
-          await ctx.inngest.send({
-            name: 'sync/connection-requested',
-            data: {connectionId},
-          })
-        }
+        // if (syncInBackground) {
+        //   await ctx.inngest.send({
+        //     name: 'sync/connection-requested',
+        //     data: {connectionId},
+        //   })
+        // }
         console.log(
           'didConnect finish',
           int.connector.name,
