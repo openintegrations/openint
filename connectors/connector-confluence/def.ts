@@ -24,7 +24,7 @@ export const confluenceDef = {
   metadata: {
     displayName: 'Confluence',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['wiki'],
     logoUrl: '/_assets/logo-confluence.svg',
     nangoProvider: 'confluence',
   },

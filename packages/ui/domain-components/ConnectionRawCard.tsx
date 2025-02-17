@@ -3,7 +3,6 @@ import {Landmark} from 'lucide-react'
 import type {ZStandard} from '@openint/cdk'
 import type {RouterOutput} from '@openint/engine-backend'
 import {titleCase} from '@openint/util'
-import {LoadingText} from '../components/LoadingText'
 import {Badge, Card} from '../shadcn'
 import {cn} from '../utils'
 import type {ConnectorMeta, UIProps, UIPropsNoChildren} from './ConnectorCard'
@@ -54,7 +53,7 @@ export const ConnectionRawCard = ({
           <span className="rounded-full bg-gray-300 px-2 py-1 text-xs font-medium text-white">
             Primary
           </span>
-          {(connection.syncInProgress || connection.status) && (
+          {connection.status && (
             <Badge
               variant="secondary"
               className={cn(
@@ -65,7 +64,7 @@ export const ConnectionRawCard = ({
                   'bg-pink-200',
               )}>
               {
-                connection.syncInProgress ? 'Syncing' : connection.status
+                connection.status
                 // TODO: Implement the concept of a primary connection
                 // || 'Primary'
               }
@@ -73,16 +72,12 @@ export const ConnectionRawCard = ({
           )}
         </div>
         <div className="text-black-mid truncate text-sm tracking-[-0.01em] antialiased">
-          {connection.syncInProgress ? (
-            <LoadingText text="Syncing" />
-          ) : connection.lastSyncCompletedAt ? (
-            `Synced ${formatDistanceToNowStrict(
-              new Date(connection.lastSyncCompletedAt),
-              {addSuffix: true},
-            )}`
-          ) : (
-            'No sync information'
-          )}
+          {connection.lastSyncCompletedAt
+            ? `Synced ${formatDistanceToNowStrict(
+                new Date(connection.lastSyncCompletedAt),
+                {addSuffix: true},
+              )}`
+            : 'No sync information'}
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@
   "module": "./index.ts",
   "scripts": {},
   "dependencies": {
-    "@opensdks/util-zod": "0.0.15",
+    "@opensdks/util-zod": "0.0.16",
     "@t3-oss/env-nextjs": "0.7.3"
   },
   "devDependencies": {}

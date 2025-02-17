@@ -3,8 +3,8 @@ import {
   connectorGoogledrive_def,
   connectorGoogledrive_server,
 } from '@openint/cnext'
-import {default as connectorAirtable_def} from '@openint/connector-airtable/def'
-import {default as connectorAirtable_server} from '@openint/connector-airtable/server'
+import {default as connectorAircall_def} from '@openint/connector-aircall/def'
+import {default as connectorAircall_server} from '@openint/connector-aircall/server'
 import {default as connectorApollo_def} from '@openint/connector-apollo/def'
 import {default as connectorApollo_server} from '@openint/connector-apollo/server'
 import {default as connectorBeancount_def} from '@openint/connector-beancount/def'
@@ -107,6 +107,11 @@ import {default as connectorYodlee_def} from '@openint/connector-yodlee/def'
 import {default as connectorYodlee_server} from '@openint/connector-yodlee/server'
 import {default as connectorZohodesk_def} from '@openint/connector-zohodesk/def'
 import {default as connectorZohodesk_server} from '@openint/connector-zohodesk/server'
+
+const connectorAircall = {
+  ...connectorAircall_def,
+  ...connectorAircall_server,
+}
 
 const connectorAirtable = {
   ...connectorAirtable_def,
@@ -377,6 +382,7 @@ const connectorGoogledrive = {
 }
 
 export const mergedConnectors = {
+  aircall: connectorAircall,
   airtable: connectorAirtable,
   apollo: connectorApollo,
   beancount: connectorBeancount,

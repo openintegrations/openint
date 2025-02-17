@@ -145,7 +145,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
                 refetch={() => ctx.listConnections.invalidate()}
               />
             ),
-            status: connections.some((c) => c.syncInProgress),
           },
           {
             key: 'add',

@@ -24,7 +24,7 @@ export const zohodeskDef = {
   metadata: {
     displayName: 'Zoho Desk',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['communication'],
     logoUrl: '/_assets/logo-zohodesk.svg',
     nangoProvider: 'zoho-desk',
   },

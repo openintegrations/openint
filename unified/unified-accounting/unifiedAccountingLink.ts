@@ -18,6 +18,7 @@ export function unifiedAccountingLink(ctx: {
     id: Id['conn']
     connectorConfig: {connectorName: string}
     metadata?: unknown
+    customerId?: string | null
   }
 }): Link<AnyEntityPayload, PostgresInputPayload> {
   return Rx.mergeMap((op) => {
@@ -67,6 +68,9 @@ export function unifiedAccountingLink(ctx: {
         data: {
           ...mapped,
           connection_id: ctx.source.id, // Should this be the default somehow?
+          // Denormalize customer_id onto entities for now, though may be better
+          // to just sync connection also?
+          customer_id: ctx.source.customerId,
         },
         upsert: {
           key_columns: ['connection_id', 'id'],

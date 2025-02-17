@@ -145,9 +145,17 @@ export default function MagicLinkPage() {
       </p>
       <div className="max-w-xl">
         <SchemaForm
-          schema={customerRouterSchema.createMagicLink.input}
+          // Omit theme from schema since there's a bug where the tailwind theme setting
+          // is shared between connect and console
+          schema={customerRouterSchema.createMagicLink.input.omit({
+            theme: true,
+          })}
           uiSchema={uiSchema}
           loading={createMagicLink.isLoading}
+          formData={{
+            theme: 'light',
+            view: 'add',
+          }}
           onSubmit={({formData: values}) => {
             createMagicLink.mutate(values, {
               onSuccess: async (data) => {
