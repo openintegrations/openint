@@ -8,14 +8,14 @@ const connectorDef = {
   display_name: 'Google Drive',
   readiness: 'ga',
   version: 1,
-  web_url: 'https://drive.google.com',
-  docs_url: 'https://developers.google.com/drive/api/guides/about-sdk',
+  links: {
+    web_url: 'https://drive.google.com',
+    api_docs_url: 'https://developers.google.com/drive',
+  },
   auth_type: 'OAUTH2',
   authorization_request_url: 'https://accounts.google.com/o/oauth2/v2/auth',
   token_request_url: 'https://oauth2.googleapis.com/token',
   auth_scope_separator: ' ',
-  logo: '/_assets/logo-google-drive.svg',
-
   auth_params: {
     authorize: {
       access_type: 'offline',

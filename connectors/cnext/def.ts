@@ -174,6 +174,26 @@ export const zAPIKeyConnectorDef = z.object({
     .describe('Custom override functions for API Key authentication'),
 })
 
+// the idea is that this is provided by a CMS like payload and
+// is searchable based on the connector name
+const zlinks = z.object({
+  web_url: z.string().url().describe("URL to the provider's website"),
+  api_docs_url: z
+    .string()
+    .url()
+    .describe("URL to the provider's API documentation")
+    .optional(),
+  other: z
+    .array(
+      z.object({
+        description: z.string().describe('Description of the link'),
+        url: z.string().url().describe('URL of the link'),
+      }),
+    )
+    .describe('Other links relevant to the connector')
+    .optional(),
+})
+
 export const zConnectorDef = z
   .object({
     connector_name: z
@@ -196,14 +216,7 @@ export const zConnectorDef = z
     post_connect_input: z.object({}).optional(),
     post_connect_output: z.object({}).optional(),
     webhook_input: z.object({}).optional(),
-    web_url: z.string().url().describe("URL to the provider's website"),
-    docs_url: z
-      .string()
-      .url()
-      .describe("URL to the provider's API documentation"),
-    logo: z
-      .string()
-      .describe("The path to the provider's SVG logo location in the repo."),
+    links: zlinks,
   })
   .and(
     z.discriminatedUnion('auth_type', [
