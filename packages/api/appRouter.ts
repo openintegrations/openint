@@ -118,7 +118,7 @@ function setDefaultOpenAPIMeta(router: AnyRouter) {
 export function getOpenAPISpec(includeInternal = true) {
   const {webhooks, components} = oasWebhooksEventsMap(outgoingWebhookEventMap)
 
-  let oas = generateOpenApiDocument(appRouter, {
+  let oas = generateOpenApiDocument(appRouter as any, {
     openApiVersion: '3.1.0', // Want jsonschema
     title: 'OpenInt OpenAPI',
     version: '0.0.0',
