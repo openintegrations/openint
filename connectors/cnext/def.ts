@@ -1,7 +1,7 @@
 import {z} from 'zod'
 import {zVerticalKey} from '../../kits/cdk'
 
-const zConnectorConfig = z
+export const zConnectorConfig = z
   .object({
     client_id: z.string(),
     client_secret: z.string(),
@@ -91,6 +91,7 @@ export const zOAuthConnectorDef = z.object({
             auth_params: zAuthParams,
             connector_config: zConnectorConfig,
             redirect_uri: z.string(),
+            connection_id: z.string(),
           }),
         )
         .returns(
@@ -209,9 +210,9 @@ export const zConnectorDef = z
       .max(20)
       .describe('The version of the connector'),
     display_name: z.string().describe('The display name of the provider'),
-    vertical: zVerticalKey.describe(
-      'The industry vertical this provider belongs to',
-    ),
+    verticals: z
+      .array(zVerticalKey)
+      .describe('The industry verticals this provider belongs to'),
     pre_connect_input: z.object({}).optional(),
     post_connect_input: z.object({}).optional(),
     post_connect_output: z.object({}).optional(),

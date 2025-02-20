@@ -1,54 +1,47 @@
 import {z} from '@openint/util'
-import {ConnectorSchemas} from '../../kits/cdk'
-import {ConnectorDef} from './def'
+import {ConnectorDef as LegacyConnectorDef} from '../../kits/cdk'
+import {ConnectorDef, zConnectorConfig} from './def'
 
-// NOTE this needs to be injected later and not as a schema
-// as otherwise it'll be returned to the client and the default
-// openint credentials will be expsed
-// function getDefaultConnectorConfig(def: ConnectorDef): z.ZodRawShape {
-//   if (
-//     def.auth_type === 'OAUTH2' &&
-//     process.env[`ccfg_${def.connector_name}__CLIENT_ID`] &&
-//     process.env[`ccfg_${def.connector_name}__CLIENT_SECRET`]
-//   ) {
-//     return {
-//       client_id: z.literal(
-//         process.env[`ccfg_${def.connector_name}__CLIENT_ID`],
-//       ),
-//       client_secret: z.literal(
-//         process.env[`ccfg_${def.connector_name}__CLIENT_SECRET`],
-//       ),
-//       scopes: z.array(z.string()).default(def.openint_scopes ?? []),
-//     }
-//   }
+export function generateConnectorDef(def: ConnectorDef): LegacyConnectorDef {
+  const connectorConfig = () => {
+    if (['OAUTH1', 'OAUTH2'].includes(def.auth_type)) {
+      return z
+        .object(zConnectorConfig.shape)
+        .merge(z.object(def.connector_config))
+    }
 
-//   return {}
-// }
-export function generateConnectorDef(def: ConnectorDef): ConnectorSchemas {
+    return def.connector_config
+  }
+
   return {
-    name: z.literal(def.connector_name),
-    connectorConfig: z.object({
-      client_id: z.string(),
-      client_secret: z.string(),
-    }),
-    connectionSettings: z.object({
-      oauth: z.object({
-        access_token: z.string(),
-        refresh_token: z.string().optional(),
-        expires_at: z.number().optional(),
+    name: def.connector_name,
+    schemas: {
+      name: z.literal(def.connector_name),
+      connectorConfig: connectorConfig(),
+      connectionSettings:
+        def.connection_settings &&
+        Object.keys(def.connection_settings).length > 0
+          ? z.any().parse(def.connection_settings)
+          : undefined,
+      // TODO: review these 3
+      preConnectInput: z.object({
+        scopes: z.array(z.string()).optional(),
       }),
-      client_id: z.string(),
-      metadata: z.record(z.string(), z.unknown()).optional(),
-    }),
-    preConnectInput: z.object({
-      scopes: z.array(z.string()).optional(),
-    }),
-    connectInput: z.object({
-      authorization_url: z.string(),
-    }),
-    connectOutput: z.object({
-      code: z.string(),
-      connectionId: z.string(),
-    }),
+      connectInput: z.object({
+        authorization_url: z.string(),
+      }),
+      connectOutput: z.object({
+        code: z.string(),
+        connectionId: z.string(),
+      }),
+    },
+    metadata: {
+      displayName: def.display_name,
+      stage: def.readiness,
+      verticals: def.verticals,
+      // TODO: Make this dynamic
+      logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-drive.svg`,
+      authType: def.auth_type,
+    },
   }
 }

@@ -4,7 +4,7 @@ import {generateConnectorServerV1} from '../server'
 
 const connectorDef = {
   connector_name: 'googledrive',
-  vertical: 'file-storage',
+  verticals: ['file-storage'],
   display_name: 'Google Drive',
   readiness: 'ga',
   version: 1,
