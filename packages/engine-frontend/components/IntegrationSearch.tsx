@@ -130,8 +130,8 @@ export function IntegrationSearch({
   return (
     <div className={cn('flex h-full flex-col', className)}>
       {/* Search integrations - Fixed header */}
-      <div className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10 backdrop-blur">
-        <div className="flex flex-row gap-2 px-4 pb-2">
+      <div className="sticky top-0 z-10 border-b bg-popover pt-2">
+        <div className="flex flex-row gap-2 px-6 pb-2">
           <div className="relative w-[450px]">
             <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center">
               <Search className="h-4 w-4 text-muted-foreground" />
@@ -165,7 +165,7 @@ export function IntegrationSearch({
         />
       </div>
       {/* Search results - Scrollable content */}
-      <div className="relative flex-1 overflow-y-auto">
+      <div className="relative flex-1 overflow-y-auto p-2">
         {listIntegrationsRes.isLoading ? (
           <div className="flex h-full min-h-[500px] items-center justify-center">
             <Loader2 className="size-7 animate-spin text-button" />
