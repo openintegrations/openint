@@ -5,7 +5,13 @@ import {useMutation} from '@tanstack/react-query'
 import {InfoIcon, Loader2} from 'lucide-react'
 import React from 'react'
 import type {Id} from '@openint/cdk'
-import {CANCELLATION_TOKEN, extractId, oauthConnect} from '@openint/cdk'
+import {
+  CANCELLATION_TOKEN,
+  createNativeOauthConnect,
+  extractId,
+  makeId,
+  oauthConnect,
+} from '@openint/cdk'
 import type {RouterInput, RouterOutput} from '@openint/engine-backend'
 import type {SchemaFormElement} from '@openint/ui'
 import {
@@ -83,6 +89,17 @@ export const WithConnectorConnect = ({
     [nangoPublicKey],
   )
 
+  const isNativeOauth =
+    ccfg.connector.authType &&
+    ['OAUTH2', 'OAUTH2CC', 'OAUTH1'].includes(ccfg.connector.authType)
+
+  const connectionExternalId = connection
+    ? extractId(connection.id)[2]
+    : undefined
+  const integrationExternalId = integration
+    ? extractId(integration.id)[2]
+    : undefined
+
   const connectFn =
     useConnectHook?.({
       // TODO: Implement me
@@ -101,14 +118,22 @@ export const WithConnectorConnect = ({
             authOptions: connInput,
           })
         }
-      : undefined)
-
-  const connectionExternalId = connection
-    ? extractId(connection.id)[2]
-    : undefined
-  const integrationExternalId = integration
-    ? extractId(integration.id)[2]
-    : undefined
+      : isNativeOauth
+        ? (connInput) => {
+            if (!connInput?.authorization_url) {
+              throw new Error('Missing pre connect authorization_url')
+            }
+            return createNativeOauthConnect({
+              connectorName: ccfg.connector.name,
+              authType: ccfg.connector.authType as
+                | 'OAUTH2'
+                | 'OAUTH1'
+                | 'OAUTH2CC',
+              authorizationUrl: connInput.authorization_url,
+              connectionId: connInput.connection_id,
+            })
+          }
+        : undefined)
 
   if (!viewer || !viewer.orgId) {
     throw new Error('Missing orgId')
@@ -118,7 +143,10 @@ export const WithConnectorConnect = ({
     [
       ccfg.id,
       {connectionExternalId, integrationExternalId},
-      {orgId: viewer?.orgId},
+      {
+        orgId: viewer?.orgId,
+        connectionId: connection?.id ?? undefined,
+      },
     ],
     // note: this used to be enabled: ccfg.connector.hasPreConnect
     // but we disabled it as it made too many calls for plaid and just left
