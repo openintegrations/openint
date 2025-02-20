@@ -8,8 +8,8 @@ export interface OpenIntConnectEmbedProps
   onReady?: () => void
 }
 
-const DEFAULT_HEIGHT = 700
-
+const DEFAULT_HEIGHT = 500
+const DEFAULT_WIDTH = 350
 export const OpenIntConnectEmbed = React.forwardRef(
   (
     {baseUrl, params, onReady, ...iframeProps}: OpenIntConnectEmbedProps,
@@ -17,18 +17,34 @@ export const OpenIntConnectEmbed = React.forwardRef(
   ) => {
     const url = getIFrameUrl({baseUrl, params})
     const [loading, setLoading] = React.useState(true)
-    if (
-      typeof iframeProps.height === 'number' &&
-      iframeProps.height < DEFAULT_HEIGHT
-    ) {
-      console.warn('Optimal height for Connect is 700px. Using 700px instead.')
-    }
+
+    React.useEffect(() => {
+      if (
+        typeof iframeProps.height === 'number' &&
+        iframeProps.height < DEFAULT_HEIGHT
+      ) {
+        console.warn(
+          'Optimal height for Connect is 500px. Using 500px instead.',
+        )
+      }
+      if (typeof iframeProps.width === 'number' && iframeProps.width < 350) {
+        console.warn('Minimum width for Connect is 350px. Using 350px instead.')
+      }
+    }, [iframeProps.height, iframeProps.width])
+
     const height =
       typeof iframeProps.height === 'number'
         ? iframeProps.height > DEFAULT_HEIGHT
           ? iframeProps.height
           : DEFAULT_HEIGHT
         : iframeProps.height
+
+    const width =
+      typeof iframeProps.width === 'number'
+        ? iframeProps.width > DEFAULT_WIDTH
+          ? iframeProps.width
+          : DEFAULT_WIDTH
+        : iframeProps.width || '100%'
 
     // Add a more reliable way to know iframe has fully finished loading
     // by sending message from iframe to parent when ready
@@ -46,17 +62,16 @@ export const OpenIntConnectEmbed = React.forwardRef(
           </svg>
         </div>
         <iframe
-          width="100%"
-          style={{minWidth: '800px'}}
-          {...iframeProps}
-          ref={forwardedRef}
           name="openint-connect-frame"
           id="openint-connect-frame"
+          {...iframeProps}
+          ref={forwardedRef}
           onLoad={() => {
             setLoading(false)
             onReady?.()
           }}
           src={url}
+          width={width}
           height={height}
         />
 
