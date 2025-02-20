@@ -5,6 +5,8 @@ import {
 } from '@openint/cnext'
 import {default as connectorAircall_def} from '@openint/connector-aircall/def'
 import {default as connectorAircall_server} from '@openint/connector-aircall/server'
+import {default as connectorAirtable_def} from '@openint/connector-airtable/def'
+import {default as connectorAirtable_server} from '@openint/connector-airtable/server'
 import {default as connectorApollo_def} from '@openint/connector-apollo/def'
 import {default as connectorApollo_server} from '@openint/connector-apollo/server'
 import {default as connectorBeancount_def} from '@openint/connector-beancount/def'

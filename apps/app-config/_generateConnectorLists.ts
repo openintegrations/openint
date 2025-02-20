@@ -148,14 +148,24 @@ async function main() {
   const entries = ['def', 'client', 'server'] as const
 
   for (const entry of entries) {
-    const list = connectorList.filter((int) => !!int.imports[entry])
+    const list = connectorList.filter(
+      (int) => !!int.imports[entry as keyof typeof int.imports],
+    )
     await writePretty(
       `connectors.${entry}.ts`,
       `${list
-        .map(
-          (int) =>
-            `import {default as ${int.varName}} from '${int.imports[entry]}'`,
-        )
+        .map((int) => {
+          // Check if this is a cnext connector
+          const isCnext = int.dirName.startsWith('cnext-')
+          if (isCnext) {
+            return `import {${int.varName}_${entry} as ${int.varName}} from '${
+              int.imports[entry as keyof typeof int.imports]
+            }'`
+          }
+          return `import {default as ${int.varName}} from '${
+            int.imports[entry as keyof typeof int.imports]
+          }'`
+        })
         .join('\n')}
     export const ${entry}Connectors = {${list
       .map(({name, varName}) => `'${name}': ${varName},`)
@@ -186,7 +196,7 @@ async function main() {
           isCnext
             ? `import {${Object.keys(validImports)
                 .map((k) => `${int.varName}_${k}`)
-                .join(', ')}} from '${validImports.def}'`
+                .join(', ')}} from '${validImports['def']}'`
             : Object.entries(validImports)
                 .map(
                   ([k, v]) =>
@@ -206,7 +216,7 @@ async function main() {
       .map(({name, varName}) => {
         // Skip node_modules
         if (name === 'node_modules') return null
-        return `'${name.toLowerCase().replace(/-/g, '')}': ${varName},`
+        return `'${name?.toLowerCase().replace(/-/g, '')}': ${varName},`
       })
       .filter(Boolean)
       .join('\n')}}
