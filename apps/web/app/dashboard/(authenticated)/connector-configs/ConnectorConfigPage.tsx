@@ -232,6 +232,15 @@ export default function ConnectorConfigsPage({
           } as unknown as ConnectorMeta,
         ]
 
+        connectorsWithCTA.forEach((connector, i) => {
+          if (!connector) {
+            console.warn(
+              `connector ${i} is undefined in vertical ${vertical}`,
+              connectorsWithCTA,
+            )
+          }
+        })
+
         return (
           <div key={vertical}>
             <h3 className="ml-4 text-xl font-semibold tracking-tight">
