@@ -65,18 +65,16 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   useEffect(() => {
     const themeParam = searchParams.get('theme')
 
-    if (themeParam && isValidTheme(themeParam)) {
-      if (themeParam !== theme) {
-        setTheme(themeParam)
-      }
-    } else {
+    // Only update if there's a valid theme parameter that differs from current theme
+    if (themeParam && isValidTheme(themeParam) && themeParam !== theme) {
+      setTheme(themeParam)
+    } else if (!themeParam && theme) {
+      // Only update URL if there's no theme parameter but we have a theme set
       const params = new URLSearchParams(searchParams)
-      if (theme) {
-        params.set('theme', theme)
-        router.replace(`${pathname}?${params.toString()}`, {
-          scroll: false,
-        })
-      }
+      params.set('theme', theme)
+      router.replace(`${pathname}?${params.toString()}`, {
+        scroll: false,
+      })
     }
   }, [searchParams, setTheme, theme, pathname, router])
 

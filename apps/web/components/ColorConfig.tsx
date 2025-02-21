@@ -21,7 +21,11 @@ interface ThemeColors {
   card: string
   cardForeground: string
   foreground: string
+  muted: string
+  mutedForeground: string
   navbar: string
+  popover: string
+  popoverForeground: string
   primary: string
   primaryForeground: string
   secondary: string
@@ -46,7 +50,11 @@ const defaultThemeColors: Partial<ThemeColors> = {
   card: 'hsl(0, 0%, 100%)', // #ffffff - White
   cardForeground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
   foreground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
+  muted: 'hsl(0, 0%, 95%)',
+  mutedForeground: 'hsl(0, 0%, 27%)',
   navbar: 'hsl(0, 0%, 100%)', // #ffffff - White
+  popover: 'hsl(0, 0%, 100%)',
+  popoverForeground: 'hsl(250, 12%, 20%)',
   primary: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
   primaryForeground: 'hsl(222, 35%, 92%)', // #e2e6f1 - Very Light Grayish Blue
   secondary: 'hsl(0, 0%, 100%)', // #ffffff - White
@@ -66,12 +74,16 @@ const defaultDarkThemeColors: Partial<ThemeColors> = {
   buttonStroke: 'hsl(255, 45%, 51%)',
   buttonSecondary: 'hsl(0, 0%, 14%)',
   buttonSecondaryForeground: 'hsl(0, 0%, 96.5%)',
-  buttonSecondaryStroke: 'hsl(0, 0%, 20%)',
+  buttonSecondaryStroke: 'hsl(0, 0%, 60%)',
   buttonSecondaryHover: 'hsl(0, 0%, 24%)',
   card: 'hsl(0, 0%, 14%)',
   cardForeground: 'hsl(0, 0%, 96.5%)',
   foreground: 'hsl(0, 0%, 96.5%)',
+  muted: 'hsla(0, 0%, 100%, 0.097)',
+  mutedForeground: 'hsl(0, 0%, 60%)',
   navbar: 'hsl(0, 0%, 100%)',
+  popover: 'hsl(0, 0%, 14%)',
+  popoverForeground: 'hsl(0, 0%, 96.5%)',
   primary: 'hsl(0, 0%, 96.5%)',
   primaryForeground: 'hsl(0, 0%, 11%)',
   secondary: 'hsl(0, 0%, 14%)',
@@ -151,7 +163,11 @@ export function ColorConfig({orgId}: {orgId: string}) {
         --card: ${themeColors.card};
         --card-foreground: ${themeColors.cardForeground};
         --foreground: ${themeColors.foreground};
+        --muted: ${themeColors.muted};
+        --muted-foreground: ${themeColors.mutedForeground};
         --navbar: ${themeColors.navbar};
+        --popover: ${themeColors.popover};
+        --popover-foreground: ${themeColors.popoverForeground};
         --primary: ${themeColors.primary};
         --primary-foreground: ${themeColors.primaryForeground};
         --secondary: ${themeColors.secondary};
