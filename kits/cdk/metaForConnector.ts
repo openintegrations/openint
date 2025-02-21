@@ -38,4 +38,5 @@ export const metaForConnector = (
     }
   }) as Record<keyof ConnectorSchemas, JSONSchema>,
   openapiSpec: opts.includeOas ? connector.metadata?.openapiSpec : undefined,
+  authType: connector.metadata?.authType,
 })

@@ -24,7 +24,7 @@ export const slackDef = {
   metadata: {
     displayName: 'slack',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['messaging'],
     logoUrl: '/_assets/logo-slack.svg',
     nangoProvider: 'slack',
   },

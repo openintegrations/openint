@@ -7,6 +7,7 @@ import type {
   Source,
 } from '@openint/sync'
 import {castIs} from '@openint/util'
+import {AuthType} from '../../connectors/cnext'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
 import {zExternalId, zId} from './id.types'
@@ -34,6 +35,9 @@ export interface ConnectorMetadata {
 
   /** Whether this is an oauth integration? */
   nangoProvider?: NangoProvider
+
+  /* Native oauth type */
+  authType?: AuthType
 }
 
 // MARK: - Shared connect types
