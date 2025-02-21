@@ -584,6 +584,9 @@ importers:
       '@openint/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@openint/api-v1':
+        specifier: workspace:*
+        version: link:../../packages-v1/api-v1
       '@openint/app-config':
         specifier: workspace:*
         version: link:../app-config
