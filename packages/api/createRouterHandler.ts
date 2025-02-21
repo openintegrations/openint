@@ -215,7 +215,7 @@ type SkipTrpcRoutes = {
 
 const skipTrpcRoutes: SkipTrpcRoutes = {
   GET: {
-    '/api/v0/unified/file-storage/files/{fileId}/download': async (
+    '/api/v0/unified/file-storage/file/{fileId}/download': async (
       req: Request,
       ctx: RouterContext,
     ) => {
