@@ -14,7 +14,8 @@ export default function Home() {
           view: 'manage-deeplink',
           theme: 'light',
         }}
-        height={700}
+        height={500}
+        width={350}
       />
     </div>
   )
