@@ -84,8 +84,8 @@ export function getContextFactory<
     config
   for (const connector of connectors) {
     if (typeof connector.name !== 'string') {
-      console.error('Invalid connector', connector)
-      throw new Error(`Invalid connector: name=${connector.name}`)
+      console.error('Invalid connector', JSON.stringify(connector, null, 2))
+      throw new Error(`Invalid connector: name=${JSON.stringify(connector)}`)
     }
   }
   const connectorMap = R.mapToObj(connectors, (p) => [p.name, p])
