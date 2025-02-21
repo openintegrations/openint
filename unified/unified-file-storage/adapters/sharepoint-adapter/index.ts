@@ -340,7 +340,7 @@ export const sharepointAdapter = {
     return {
       has_next_page: !!filesResponse['@odata.nextLink'],
       items: filesResponse.value
-        .filter((item: any) => item.file)
+        // .filter((item: any) => item.file)
         .map(mappers.File),
       cursor: extractCursor(filesResponse['@odata.nextLink'] ?? ''),
     }
