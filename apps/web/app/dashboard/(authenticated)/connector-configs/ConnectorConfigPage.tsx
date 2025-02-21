@@ -239,7 +239,7 @@ export default function ConnectorConfigsPage({
             </h3>
             <div className="mb-4 flex flex-wrap">
               {connectorsWithCTA.map((connector, index) =>
-                index < connectorsWithCTA.length - 1 ? (
+                index < connectorsWithCTA.length - 1 && connector ? (
                   <ConnectorCard
                     key={`${vertical}-${connector.name}`}
                     connector={connector}>
