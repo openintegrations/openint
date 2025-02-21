@@ -141,31 +141,31 @@ jobs:
           cat formatted_release_notes.txt >> release_notes.txt
           echo "Release notes written to release_notes.txt"
 
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes-file release_notes.txt
+      # - name: Create GitHub Release
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes-file release_notes.txt
 
-      - name: Update production branch
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-          git fetch origin main
-          git checkout main
-          git push origin main:production -f
-      - uses: UnlyEd/github-action-await-vercel@v1 # TODO best practices recommend to use a fixed version instead of @v1 for production usage (i.e: @v1.2.32)
-        id: await-vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        with:
-          deployment-url: openint-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
-          timeout: 10 # Wait for 10 seconds before failing
-          poll-interval: 1 # Wait for 1 second before each retry
+      # - name: Update production branch
+      #   run: |
+      #     git config user.name "GitHub Actions Bot"
+      #     git config user.email "<>"
+      #     git fetch origin main
+      #     git checkout main
+      #     git push origin main:production -f
+      # - uses: UnlyEd/github-action-await-vercel@v1 # TODO best practices recommend to use a fixed version instead of @v1 for production usage (i.e: @v1.2.32)
+      #   id: await-vercel
+      #   env:
+      #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      #   with:
+      #     deployment-url: openint-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
+      #     timeout: 10 # Wait for 10 seconds before failing
+      #     poll-interval: 1 # Wait for 1 second before each retry
 
-      - name: Stably Runner Action
-        id: stably-runner
-        uses: stablyhq/stably-runner-action@v3
-        with:
-          api-key: ${{ secrets.STABLY_API_KEY }}
-          test-group-id: cm5g8i6nc0005l103urkixuxz
+      # - name: Stably Runner Action
+      #   id: stably-runner
+      #   uses: stablyhq/stably-runner-action@v3
+      #   with:
+      #     api-key: ${{ secrets.STABLY_API_KEY }}
+      #     test-group-id: cm5g8i6nc0005l103urkixuxz
