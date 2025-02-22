@@ -1,7 +1,6 @@
 import {z} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-// where is this require from?
 import type {ConnectorSchemas} from '@openint/cdk'
 
 extendZodWithOpenApi(z)
@@ -41,9 +40,9 @@ const connectorSchemas = Object.fromEntries(
           connector_name: z.literal(name),
           [key]:
           // Have to do this due to zod version mismatch
-            (schemas[key] as unknown as z.ZodTypeAny | undefined)?.openapi({
-              ref: `${name}.${key}`,
-            }) ?? z.null(),
+          // Also declaring .openapi on mismatched zod does not work due to
+          // differing registration holders in zod-openapi
+            (schemas[key] as unknown as z.ZodTypeAny | undefined) ?? z.null(),
         })
       }),
   ]),
@@ -74,10 +73,14 @@ export const core = {
           'connector_name',
           parseNonEmpty(
             connectorSchemas.connectionSettings.map((s) =>
-              z.object({
-                connector_name: s.shape.connector_name,
-                settings: s.shape.connectionSettings,
-              }),
+              z
+                .object({
+                  connector_name: s.shape.connector_name,
+                  settings: s.shape.connectionSettings,
+                })
+                .openapi({
+                  ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
+                }),
             ),
           ),
         )
@@ -97,10 +100,14 @@ export const core = {
           'connector_name',
           parseNonEmpty(
             connectorSchemas.connectorConfig.map((s) =>
-              z.object({
-                connector_name: s.shape.connector_name,
-                config: s.shape.connectorConfig,
-              }),
+              z
+                .object({
+                  connector_name: s.shape.connector_name,
+                  config: s.shape.connectorConfig,
+                })
+                .openapi({
+                  ref: `connectors.${s.shape.connector_name.value}.connectorConfig`,
+                }),
             ),
           ),
         )
