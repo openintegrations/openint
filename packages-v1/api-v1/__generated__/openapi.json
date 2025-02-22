@@ -228,19 +228,66 @@
           {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/plaid.connection"
+                "type": "object",
+                "properties": {
+                  "connector_name": {
+                    "type": "string",
+                    "const": "greenhouse"
+                  },
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "apiKey": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "apiKey"
+                    ]
+                  }
+                },
+                "required": [
+                  "connector_name",
+                  "settings"
+                ]
               },
               {
-                "$ref": "#/components/schemas/greenhouse.connection"
+                "type": "object",
+                "properties": {
+                  "connector_name": {
+                    "type": "string",
+                    "const": "plaid"
+                  },
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "itemId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "accessToken": {
+                        "type": "string"
+                      },
+                      "institution": {},
+                      "item": {},
+                      "status": {},
+                      "webhookItemError": {
+                        "type": "null"
+                      }
+                    },
+                    "required": [
+                      "accessToken"
+                    ]
+                  }
+                },
+                "required": [
+                  "connector_name",
+                  "settings"
+                ]
               }
             ],
-            "discriminator": {
-              "propertyName": "connector_name",
-              "mapping": {
-                "plaid": "#/components/schemas/plaid.connection",
-                "greenhouse": "#/components/schemas/greenhouse.connection"
-              }
-            },
             "description": "Connector specific data"
           }
         ],
@@ -277,19 +324,149 @@
           {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/plaid.connector_config"
+                "type": "object",
+                "properties": {
+                  "connector_name": {
+                    "type": "string",
+                    "const": "greenhouse"
+                  },
+                  "config": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "connector_name",
+                  "config"
+                ]
               },
               {
-                "$ref": "#/components/schemas/greenhouse.connector_config"
+                "type": "object",
+                "properties": {
+                  "connector_name": {
+                    "type": "string",
+                    "const": "plaid"
+                  },
+                  "config": {
+                    "type": "object",
+                    "properties": {
+                      "envName": {
+                        "type": "string",
+                        "enum": [
+                          "sandbox",
+                          "development",
+                          "production"
+                        ]
+                      },
+                      "credentials": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "clientId": {
+                                "type": "string"
+                              },
+                              "clientSecret": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "clientId",
+                              "clientSecret"
+                            ]
+                          }
+                        ]
+                      },
+                      "clientName": {
+                        "type": "string",
+                        "maxLength": 30,
+                        "default": "This Application"
+                      },
+                      "products": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "assets",
+                            "auth",
+                            "balance",
+                            "identity",
+                            "investments",
+                            "liabilities",
+                            "payment_initiation",
+                            "identity_verification",
+                            "transactions",
+                            "credit_details",
+                            "income",
+                            "income_verification",
+                            "deposit_switch",
+                            "standing_orders",
+                            "transfer",
+                            "employment",
+                            "recurring_transactions"
+                          ]
+                        },
+                        "default": [
+                          "transactions"
+                        ]
+                      },
+                      "countryCodes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "US",
+                            "GB",
+                            "ES",
+                            "NL",
+                            "FR",
+                            "IE",
+                            "CA",
+                            "DE",
+                            "IT",
+                            "PL",
+                            "DK",
+                            "NO",
+                            "SE",
+                            "EE",
+                            "LT",
+                            "LV"
+                          ]
+                        },
+                        "default": [
+                          "US",
+                          "CA"
+                        ]
+                      },
+                      "language": {
+                        "type": "string",
+                        "enum": [
+                          "en",
+                          "fr",
+                          "es",
+                          "nl",
+                          "de"
+                        ],
+                        "default": "en"
+                      }
+                    },
+                    "required": [
+                      "envName",
+                      "clientName",
+                      "products",
+                      "countryCodes",
+                      "language"
+                    ]
+                  }
+                },
+                "required": [
+                  "connector_name",
+                  "config"
+                ]
               }
             ],
-            "discriminator": {
-              "propertyName": "connector_name",
-              "mapping": {
-                "plaid": "#/components/schemas/plaid.connector_config",
-                "greenhouse": "#/components/schemas/greenhouse.connector_config"
-              }
-            },
             "description": "Connector specific data"
           }
         ],
@@ -420,145 +597,6 @@
           "message": "Authorization not provided",
           "issues": []
         }
-      },
-      "greenhouse.connection": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "greenhouse"
-          },
-          "secrets": {
-            "type": "object",
-            "properties": {
-              "api_key": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "api_key"
-            ]
-          },
-          "settings": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "connector_name",
-          "secrets",
-          "settings"
-        ],
-        "description": "Greenhouse Connection"
-      },
-      "greenhouse.connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "greenhouse"
-          },
-          "secrets": {
-            "type": "object"
-          },
-          "config": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "connector_name",
-          "secrets",
-          "config"
-        ],
-        "description": "Greenhouse Connector Config"
-      },
-      "plaid.connection": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "plaid"
-          },
-          "secrets": {
-            "type": "object",
-            "properties": {
-              "access_token": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "access_token"
-            ]
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "item_id": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "item_id"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "secrets",
-          "settings"
-        ],
-        "description": "Plaid Connection"
-      },
-      "plaid.connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "plaid"
-          },
-          "secrets": {
-            "type": "object",
-            "properties": {
-              "client_id": {
-                "type": "string"
-              },
-              "client_secret": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "client_id",
-              "client_secret"
-            ]
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "client_name": {
-                "type": "string"
-              },
-              "products": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "enum": [
-                    "transactions",
-                    "balances"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "client_name",
-              "products"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "secrets",
-          "config"
-        ],
-        "description": "Plaid Connector Config"
       }
     }
   }
