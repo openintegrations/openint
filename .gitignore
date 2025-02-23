@@ -65,6 +65,7 @@ dist/
 /gateway/wrangler.toml
 
 .dev.vars
+wrangler.toml
 
 # CI Artifacts
 /artifacts
