@@ -760,6 +760,190 @@ importers:
         specifier: '*'
         version: 5.74.0(esbuild@0.17.5)
 
+  connectors/all-connectors:
+    dependencies:
+      '@openint/cnext':
+        specifier: workspace:*
+        version: link:../cnext
+      '@openint/connector-aircall':
+        specifier: workspace:*
+        version: link:../connector-aircall
+      '@openint/connector-airtable':
+        specifier: workspace:*
+        version: link:../connector-airtable
+      '@openint/connector-alphavantage':
+        specifier: workspace:*
+        version: link:../connector-alphavantage
+      '@openint/connector-apollo':
+        specifier: workspace:*
+        version: link:../connector-apollo
+      '@openint/connector-beancount':
+        specifier: workspace:*
+        version: link:../connector-beancount
+      '@openint/connector-brex':
+        specifier: workspace:*
+        version: link:../connector-brex
+      '@openint/connector-coda':
+        specifier: workspace:*
+        version: link:../connector-coda
+      '@openint/connector-confluence':
+        specifier: workspace:*
+        version: link:../connector-confluence
+      '@openint/connector-debug':
+        specifier: workspace:*
+        version: link:../connector-debug
+      '@openint/connector-discord':
+        specifier: workspace:*
+        version: link:../connector-discord
+      '@openint/connector-expensify':
+        specifier: workspace:*
+        version: link:../connector-expensify
+      '@openint/connector-finch':
+        specifier: workspace:*
+        version: link:../connector-finch
+      '@openint/connector-firebase':
+        specifier: workspace:*
+        version: link:../connector-firebase
+      '@openint/connector-foreceipt':
+        specifier: workspace:*
+        version: link:../connector-foreceipt
+      '@openint/connector-fs':
+        specifier: workspace:*
+        version: link:../connector-fs
+      '@openint/connector-github':
+        specifier: workspace:*
+        version: link:../connector-github
+      '@openint/connector-gong':
+        specifier: workspace:*
+        version: link:../connector-gong
+      '@openint/connector-google':
+        specifier: workspace:*
+        version: link:../connector-google
+      '@openint/connector-greenhouse':
+        specifier: workspace:*
+        version: link:../connector-greenhouse
+      '@openint/connector-heron':
+        specifier: workspace:*
+        version: link:../connector-heron
+      '@openint/connector-hubspot':
+        specifier: workspace:*
+        version: link:../connector-hubspot
+      '@openint/connector-intercom':
+        specifier: workspace:*
+        version: link:../connector-intercom
+      '@openint/connector-jira':
+        specifier: workspace:*
+        version: link:../connector-jira
+      '@openint/connector-kustomer':
+        specifier: workspace:*
+        version: link:../connector-kustomer
+      '@openint/connector-lever':
+        specifier: workspace:*
+        version: link:../connector-lever
+      '@openint/connector-linear':
+        specifier: workspace:*
+        version: link:../connector-linear
+      '@openint/connector-lunchmoney':
+        specifier: workspace:*
+        version: link:../connector-lunchmoney
+      '@openint/connector-mercury':
+        specifier: workspace:*
+        version: link:../connector-mercury
+      '@openint/connector-merge':
+        specifier: workspace:*
+        version: link:../connector-merge
+      '@openint/connector-microsoft':
+        specifier: workspace:*
+        version: link:../connector-microsoft
+      '@openint/connector-mongodb':
+        specifier: workspace:*
+        version: link:../connector-mongodb
+      '@openint/connector-moota':
+        specifier: workspace:*
+        version: link:../connector-moota
+      '@openint/connector-onebrick':
+        specifier: workspace:*
+        version: link:../connector-onebrick
+      '@openint/connector-outreach':
+        specifier: workspace:*
+        version: link:../connector-outreach
+      '@openint/connector-pipedrive':
+        specifier: workspace:*
+        version: link:../connector-pipedrive
+      '@openint/connector-plaid':
+        specifier: workspace:*
+        version: link:../connector-plaid
+      '@openint/connector-postgres':
+        specifier: workspace:*
+        version: link:../connector-postgres
+      '@openint/connector-qbo':
+        specifier: workspace:*
+        version: link:../connector-qbo
+      '@openint/connector-ramp':
+        specifier: workspace:*
+        version: link:../connector-ramp
+      '@openint/connector-revert':
+        specifier: workspace:*
+        version: link:../connector-revert
+      '@openint/connector-salesforce':
+        specifier: workspace:*
+        version: link:../connector-salesforce
+      '@openint/connector-salesloft':
+        specifier: workspace:*
+        version: link:../connector-salesloft
+      '@openint/connector-saltedge':
+        specifier: workspace:*
+        version: link:../connector-saltedge
+      '@openint/connector-slack':
+        specifier: workspace:*
+        version: link:../connector-slack
+      '@openint/connector-splitwise':
+        specifier: workspace:*
+        version: link:../connector-splitwise
+      '@openint/connector-spreadsheet':
+        specifier: workspace:*
+        version: link:../connector-spreadsheet
+      '@openint/connector-stripe':
+        specifier: workspace:*
+        version: link:../connector-stripe
+      '@openint/connector-teller':
+        specifier: workspace:*
+        version: link:../connector-teller
+      '@openint/connector-toggl':
+        specifier: workspace:*
+        version: link:../connector-toggl
+      '@openint/connector-twenty':
+        specifier: workspace:*
+        version: link:../connector-twenty
+      '@openint/connector-venmo':
+        specifier: workspace:*
+        version: link:../connector-venmo
+      '@openint/connector-webhook':
+        specifier: workspace:*
+        version: link:../connector-webhook
+      '@openint/connector-wise':
+        specifier: workspace:*
+        version: link:../connector-wise
+      '@openint/connector-xero':
+        specifier: workspace:*
+        version: link:../connector-xero
+      '@openint/connector-yodlee':
+        specifier: workspace:*
+        version: link:../connector-yodlee
+      '@openint/connector-zohodesk':
+        specifier: workspace:*
+        version: link:../connector-zohodesk
+      '@openint/engine-backend':
+        specifier: workspace:*
+        version: link:../../packages/engine-backend
+      '@openint/engine-frontend':
+        specifier: workspace:*
+        version: link:../../packages/engine-frontend
+    devDependencies:
+      prettier:
+        specifier: 3.1.0
+        version: 3.1.0
+
   connectors/cnext:
     dependencies:
       '@openint/cdk':
@@ -1998,6 +2182,9 @@ importers:
       '@elysiajs/swagger':
         specifier: ^1.2.0
         version: 1.2.0(elysia@1.2.12(@sinclair/typebox@0.34.20)(openapi-types@12.1.3)(typescript@5.7.3))
+      '@openint/all-connectors':
+        specifier: workspace:*
+        version: link:../../connectors/all-connectors
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env

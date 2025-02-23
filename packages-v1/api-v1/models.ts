@@ -1,62 +1,57 @@
 import {z} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
+import {defConnectors} from '@openint/all-connectors/connectors.def'
+import type {ConnectorSchemas} from '@openint/cdk'
 
 extendZodWithOpenApi(z)
 
-// TODO: Import these from the corresponding connector packages...
-const plaid = {
-  connection: z
-    .object({
-      connector_name: z.literal('plaid'),
-      secrets: z.object({
-        access_token: z.string(),
-      }),
-      settings: z.object({
-        item_id: z.string(),
-      }),
-    })
-    .openapi({ref: 'plaid.connection', description: 'Plaid Connection'}),
-  connector_config: z
-    .object({
-      connector_name: z.literal('plaid'),
-      secrets: z.object({
-        client_id: z.string(),
-        client_secret: z.string(),
-      }),
-      config: z.object({
-        client_name: z.string(),
-        products: z.array(z.enum(['transactions', 'balances'])),
-      }),
-    })
-    .openapi({
-      ref: 'plaid.connector_config',
-      description: 'Plaid Connector Config',
-    }),
+// Maybe this belongs in the all-connectors package?
+type NonEmptyArray<T> = [T, ...T[]]
+
+function parseNonEmpty<T>(arr: T[]) {
+  if (arr.length === 0) {
+    throw new Error('Array is empty')
+  }
+  return arr as NonEmptyArray<T>
 }
 
-const greenhouse = {
-  connection: z
-    .object({
-      connector_name: z.literal('greenhouse'),
-      secrets: z.object({
-        api_key: z.string(),
+const schemaKeys = [
+  'connectorConfig',
+  'connectionSettings',
+  'integrationData',
+  'webhookInput',
+  'preConnectInput',
+  'connectInput',
+  'connectOutput',
+] as const
+
+const validNames = ['plaid', 'greenhouse'] as const
+
+const connectorSchemas = Object.fromEntries(
+  schemaKeys.map((key) => [
+    key,
+    Object.entries(defConnectors)
+      .filter(([name]) =>
+        validNames.includes(name as (typeof validNames)[number]),
+      )
+      .map(([name, def]) => {
+        const schemas = def.schemas as ConnectorSchemas
+        return z.object({
+          connector_name: z.literal(name),
+          [key]:
+          // Have to do this due to zod version mismatch
+          // Also declaring .openapi on mismatched zod does not work due to
+          // differing registration holders in zod-openapi
+            (schemas[key] as unknown as z.ZodTypeAny | undefined) ?? z.null(),
+        })
       }),
-      settings: z.object({}),
-    })
-    .openapi({
-      ref: 'greenhouse.connection',
-      description: 'Greenhouse Connection',
-    }),
-  connector_config: z
-    .object({
-      connector_name: z.literal('greenhouse'),
-      secrets: z.object({}),
-      config: z.object({}),
-    })
-    .openapi({
-      ref: 'greenhouse.connector_config',
-      description: 'Greenhouse Connector Config',
-    }),
+  ]),
+) as {
+  [Key in (typeof schemaKeys)[number]]: NonEmptyArray<
+    z.ZodObject<
+      {connector_name: z.ZodLiteral<string>} & {[k in Key]: z.ZodTypeAny}
+    >
+  >
 }
 
 const coreBase = z.object({
@@ -74,10 +69,21 @@ export const core = {
         })
         .describe('Connection Base'),
       z
-        .discriminatedUnion('connector_name', [
-          plaid.connection,
-          greenhouse.connection,
-        ])
+        .discriminatedUnion(
+          'connector_name',
+          parseNonEmpty(
+            connectorSchemas.connectionSettings.map((s) =>
+              z
+                .object({
+                  connector_name: s.shape.connector_name,
+                  settings: s.shape.connectionSettings,
+                })
+                .openapi({
+                  ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
+                }),
+            ),
+          ),
+        )
         .describe('Connector specific data'),
     )
     .openapi({ref: 'core.connection', title: 'Connection'}),
@@ -90,10 +96,21 @@ export const core = {
         })
         .describe('Connector Config Base'),
       z
-        .discriminatedUnion('connector_name', [
-          plaid.connector_config,
-          greenhouse.connector_config,
-        ])
+        .discriminatedUnion(
+          'connector_name',
+          parseNonEmpty(
+            connectorSchemas.connectorConfig.map((s) =>
+              z
+                .object({
+                  connector_name: s.shape.connector_name,
+                  config: s.shape.connectorConfig,
+                })
+                .openapi({
+                  ref: `connectors.${s.shape.connector_name.value}.connectorConfig`,
+                }),
+            ),
+          ),
+        )
         .describe('Connector specific data'),
     )
     .openapi({
