@@ -147,9 +147,7 @@ export default function MagicLinkPage() {
         <SchemaForm
           // Omit theme from schema since there's a bug where the tailwind theme setting
           // is shared between connect and console
-          schema={customerRouterSchema.createMagicLink.input.omit({
-            theme: true,
-          })}
+          schema={customerRouterSchema.createMagicLink.input}
           uiSchema={uiSchema}
           loading={createMagicLink.isLoading}
           formData={{

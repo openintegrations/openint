@@ -55,6 +55,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   const pathname = usePathname()
   const {theme, setTheme} = useTheme()
   const connectionId = searchParams.get('connectionId')
+  const themeParam = searchParams.get('theme')
 
   const {toast} = useToast()
   const ctx = _trpcReact.useContext()
@@ -63,20 +64,11 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   })
 
   useEffect(() => {
-    const themeParam = searchParams.get('theme')
-
     // Only update if there's a valid theme parameter that differs from current theme
     if (themeParam && isValidTheme(themeParam) && themeParam !== theme) {
       setTheme(themeParam)
-    } else if (!themeParam && theme) {
-      // Only update URL if there's no theme parameter but we have a theme set
-      const params = new URLSearchParams(searchParams)
-      params.set('theme', theme)
-      router.replace(`${pathname}?${params.toString()}`, {
-        scroll: false,
-      })
     }
-  }, [searchParams, setTheme, theme, pathname, router])
+  }, [themeParam, setTheme, theme])
 
   const deleteConnection = _trpcReact.deleteConnection.useMutation({
     onSuccess: () => {
