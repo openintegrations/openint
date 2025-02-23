@@ -10,9 +10,8 @@ export default function Home() {
         baseUrl="http://localhost:4000"
         params={{
           token: process.env['OPENINT_TOKEN'],
-          connectionId: 'conn_github_01JH6FR8H2E1G79HJVYEANYM7T',
-          view: 'manage-deeplink',
-          theme: 'light',
+          view: 'manage',
+          theme: 'dark',
         }}
         height={500}
         width={350}
