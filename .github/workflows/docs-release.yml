@@ -3,6 +3,9 @@ name: Manual Docs Release
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   upload-docs:
     runs-on: ubuntu-latest
