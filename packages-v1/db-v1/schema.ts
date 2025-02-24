@@ -35,7 +35,10 @@ export const connector_config = pgTable(
     org_id: t.varchar().notNull(),
     created_at: timestampField,
     updated_at: timestampField,
-    connector_name: t.varchar().notNull(),
+    connector_name: t
+      .varchar()
+      .notNull()
+      .generatedAlwaysAs(sql`nullif(split_part(id, '_', 2), '')`),
     config: t.jsonb(),
   }),
   (table) => [index().on(table.org_id)],
@@ -50,6 +53,12 @@ export const integration = pgTable(
       .$defaultFn(() => makeId('int'))
       .$type<Id['int']>(),
     connector_config_id: t.varchar().notNull(),
+    connector_name: t
+      .varchar()
+      .notNull()
+      .generatedAlwaysAs(
+        sql`nullif(split_part(connector_config_id, '_', 2), '')`,
+      ),
     name: t.varchar().notNull(),
     logo_url: t.varchar(),
     remote_data: t.jsonb(),
@@ -68,6 +77,13 @@ export const connection = pgTable(
       .$defaultFn(() => makeId('conn'))
       .$type<Id['conn']>(),
     connector_config_id: t.varchar().notNull(),
+    connector_name: t
+      .varchar()
+      .notNull()
+      .generatedAlwaysAs(
+        sql`nullif(split_part(connector_config_id, '_', 2), '')`,
+      ),
+    settings: t.jsonb(),
     integration_id: t.varchar().notNull(),
     customer_id: t.varchar().notNull(),
     remote_data: t.jsonb(),
