@@ -2188,6 +2188,9 @@ importers:
       '@openint/all-connectors':
         specifier: workspace:*
         version: link:../../connectors/all-connectors
+      '@openint/db-v1':
+        specifier: workspace:*
+        version: link:../db-v1
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
