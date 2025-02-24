@@ -76,3 +76,7 @@ export const core = {
       title: 'Connector Config',
     }),
 }
+
+export type Core = {
+  [k in keyof typeof core]: z.infer<(typeof core)[k]>
+}

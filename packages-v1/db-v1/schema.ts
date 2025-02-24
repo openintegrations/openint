@@ -35,6 +35,8 @@ export const connector_config = pgTable(
     org_id: t.varchar().notNull(),
     created_at: timestampField,
     updated_at: timestampField,
+    connector_name: t.varchar().notNull(),
+    config: t.jsonb(),
   }),
   (table) => [index().on(table.org_id)],
 )
