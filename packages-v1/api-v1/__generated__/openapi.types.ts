@@ -56,6 +56,623 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        "connectors.aircall.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "aircall";
+            settings: {
+                apiId: string;
+                apiToken: string;
+            };
+        };
+        "connectors.aircall.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "aircall";
+            config: null;
+        };
+        "connectors.airtable.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "airtable";
+            settings: {
+                apiKey: string;
+                airtableBase: string;
+            };
+        };
+        "connectors.airtable.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "airtable";
+            config: null;
+        };
+        "connectors.apollo.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "apollo";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.apollo.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "apollo";
+            config: null;
+        };
+        "connectors.beancount.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "beancount";
+            settings: null;
+        };
+        "connectors.beancount.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "beancount";
+            config: null;
+        };
+        "connectors.brex.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "brex";
+            settings: {
+                accessToken: string;
+            };
+        };
+        "connectors.brex.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "brex";
+            config: {
+                oauth?: null | {
+                    clientId: string;
+                    clientSecret: string;
+                };
+                apikeyAuth?: boolean;
+            };
+        };
+        "connectors.coda.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "coda";
+            settings: {
+                apiKey: string;
+            };
+        };
+        "connectors.coda.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "coda";
+            config: null;
+        };
+        "connectors.confluence.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "confluence";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.confluence.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "confluence";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.debug.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "debug";
+            settings?: unknown;
+        };
+        "connectors.debug.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "debug";
+            config?: unknown;
+        };
+        "connectors.discord.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "discord";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.discord.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "discord";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.finch.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "finch";
+            settings: {
+                access_token: string;
+            };
+        };
+        "connectors.finch.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "finch";
+            config: {
+                client_id: string;
+                client_secret: string;
+                api_version?: string;
+                products: ("company" | "directory" | "individual" | "ssn" | "employment" | "payment" | "pay_statement" | "benefits")[];
+            };
+        };
+        "connectors.firebase.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "firebase";
+            settings: {
+                /** @constant */
+                role: "admin";
+                serviceAccount: {
+                    project_id: string;
+                } & {
+                    [key: string]: unknown;
+                };
+            } | {
+                /** @constant */
+                role: "user";
+                firebaseConfig: {
+                    projectId: string;
+                    apiKey: string;
+                    appId: string;
+                    authDomain: string;
+                    databaseURL: string;
+                    storageBucket?: string;
+                    measurementId?: string;
+                    messagingSenderId?: string;
+                };
+                authData: {
+                    /** @constant */
+                    method: "userJson";
+                    userJson: {
+                        uid: string;
+                        appName: string;
+                        stsTokenManager: {
+                            [key: string]: unknown;
+                        };
+                    } & {
+                        [key: string]: unknown;
+                    };
+                } | {
+                    /** @constant */
+                    method: "customToken";
+                    customToken: string;
+                } | {
+                    /** @constant */
+                    method: "emailPassword";
+                    email: string;
+                    password: string;
+                };
+            };
+        };
+        "connectors.firebase.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "firebase";
+            config: null;
+        };
+        "connectors.foreceipt.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "foreceipt";
+            settings: {
+                credentials?: unknown;
+                options?: unknown;
+                _id?: unknown;
+                /** @enum {string} */
+                envName: "staging" | "production";
+            };
+        };
+        "connectors.foreceipt.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "foreceipt";
+            config: null;
+        };
+        "connectors.fs.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "fs";
+            settings: {
+                basePath: string;
+            };
+        };
+        "connectors.fs.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "fs";
+            config: null;
+        };
+        "connectors.github.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "github";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.github.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "github";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.gong.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gong";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.gong.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "gong";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.google.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "google";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+                client_id?: string;
+            };
+        };
+        "connectors.google.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "google";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+                integrations: {
+                    drive?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                    gmail?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                    calendar?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                    sheets?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                    docs?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                    slides?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                };
+            };
+        };
+        "connectors.googledrive.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "googledrive";
+            settings: null;
+        };
+        "connectors.googledrive.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "googledrive";
+            config: {
+                client_id: string;
+                client_secret: string;
+                scopes?: string[] | null;
+            };
+        };
         "connectors.greenhouse.connectionSettings": {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -73,6 +690,679 @@ export interface components {
              */
             connector_name: "greenhouse";
             config: null;
+        };
+        "connectors.heron.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "heron";
+            settings: null;
+        };
+        "connectors.heron.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "heron";
+            config: {
+                apiKey: string;
+            };
+        };
+        "connectors.hubspot.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "hubspot";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+                extra?: unknown;
+            };
+        };
+        "connectors.hubspot.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "hubspot";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.intercom.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "intercom";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.intercom.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "intercom";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.jira.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "jira";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.jira.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "jira";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.kustomer.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "kustomer";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.kustomer.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "kustomer";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.lever.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "lever";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.lever.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "lever";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+                /** @enum {string} */
+                envName: "sandbox" | "production";
+            };
+        };
+        "connectors.linear.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "linear";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.linear.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "linear";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.lunchmoney.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "lunchmoney";
+            settings: null;
+        };
+        "connectors.lunchmoney.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "lunchmoney";
+            config: {
+                accessToken: string;
+            };
+        };
+        "connectors.mercury.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "mercury";
+            settings: null;
+        };
+        "connectors.mercury.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "mercury";
+            config: {
+                oauth?: null | {
+                    clientId: string;
+                    clientSecret: string;
+                };
+                apikeyAuth?: boolean;
+            };
+        };
+        "connectors.merge.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "merge";
+            settings: {
+                accountToken: string;
+                accountDetails?: unknown;
+            };
+        };
+        "connectors.merge.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "merge";
+            config: {
+                apiKey: string;
+            };
+        };
+        "connectors.microsoft.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "microsoft";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+                client_id?: string;
+            };
+        };
+        "connectors.microsoft.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "microsoft";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+                integrations: {
+                    sharepoint?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                    outlook?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                    teams?: {
+                        enabled?: boolean;
+                        scopes?: string;
+                    };
+                };
+            };
+        };
+        "connectors.mongodb.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "mongodb";
+            settings: {
+                databaseUrl: string;
+                databaseName: string;
+            };
+        };
+        "connectors.mongodb.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "mongodb";
+            config: null;
+        };
+        "connectors.moota.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "moota";
+            settings: null;
+        };
+        "connectors.moota.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "moota";
+            config: {
+                token: string;
+            };
+        };
+        "connectors.onebrick.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "onebrick";
+            settings: {
+                accessToken: string;
+            };
+        };
+        "connectors.onebrick.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "onebrick";
+            config: {
+                /** @enum {string} */
+                envName: "sandbox" | "production";
+                clientId: string;
+                clientSecret: string;
+                publicToken: string;
+                accessToken?: string | null;
+                redirectUrl?: string | null;
+            };
+        };
+        "connectors.outreach.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "outreach";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.outreach.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "outreach";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.pipedrive.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pipedrive";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.pipedrive.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pipedrive";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
         };
         "connectors.plaid.connectionSettings": {
             /**
@@ -120,6 +1410,706 @@ export interface components {
                 language: "en" | "fr" | "es" | "nl" | "de";
             };
         };
+        "connectors.postgres.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "postgres";
+            settings: {
+                databaseUrl: string;
+                migrateTables?: boolean;
+                sourceQueries?: {
+                    invoice?: string | null;
+                };
+            };
+        };
+        "connectors.postgres.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "postgres";
+            config: null;
+        };
+        "connectors.qbo.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "qbo";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config: {
+                        realmId: string;
+                    };
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.qbo.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "qbo";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+                /** @enum {string} */
+                envName: "sandbox" | "production";
+                url?: string | null;
+                verifierToken?: string | null;
+            };
+        };
+        "connectors.ramp.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "ramp";
+            settings: {
+                accessToken?: string | null;
+                startAfterTransactionId?: string | null;
+            };
+        };
+        "connectors.ramp.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "ramp";
+            config: {
+                oauth: {
+                    clientId: string;
+                    clientSecret: string;
+                };
+            };
+        };
+        "connectors.revert.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "revert";
+            settings: {
+                tenant_id: string;
+            };
+        };
+        "connectors.revert.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "revert";
+            config: {
+                api_token: string;
+                api_version?: string;
+            };
+        };
+        "connectors.salesforce.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesforce";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.salesforce.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesforce";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.salesloft.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesloft";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.salesloft.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesloft";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.saltedge.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "saltedge";
+            settings?: unknown;
+        };
+        "connectors.saltedge.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "saltedge";
+            config: {
+                appId: string;
+                secret: string;
+                url?: string | null;
+            };
+        };
+        "connectors.slack.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "slack";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.slack.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "slack";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.splitwise.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "splitwise";
+            settings: {
+                currentUser?: {
+                    country_code: string;
+                    custom_picture: boolean;
+                    date_format: string;
+                    default_currency: string;
+                    default_group_id: number;
+                    email: string;
+                    first_name: string;
+                    force_refresh_at: string;
+                    id: number;
+                    last_name: string;
+                    locale: string;
+                    notifications: {
+                        added_as_friend: boolean;
+                        added_to_group: boolean;
+                        announcements: boolean;
+                        bills: boolean;
+                        expense_added: boolean;
+                        expense_updated: boolean;
+                        monthly_summary: boolean;
+                        payments: boolean;
+                    };
+                    notifications_count: number;
+                    notifications_read: string;
+                    picture: {
+                        original?: string | null;
+                        xxlarge?: string | null;
+                        xlarge?: string | null;
+                        large?: string | null;
+                        medium?: string | null;
+                        small?: string | null;
+                    };
+                    registration_status: string;
+                } | null;
+                accessToken: string;
+            };
+        };
+        "connectors.splitwise.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "splitwise";
+            config: null;
+        };
+        "connectors.spreadsheet.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "spreadsheet";
+            settings: {
+                /** @enum {string} */
+                preset: "ramp" | "apple-card" | "alliant-credit-union" | "bbva-mexico" | "brex-cash" | "brex" | "capitalone-bank" | "capitalone" | "coinbase" | "coinkeeper" | "etrade" | "first-republic" | "wise";
+                accountExternalId: string;
+            };
+        };
+        "connectors.spreadsheet.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "spreadsheet";
+            config?: {
+                enabledPresets?: ("ramp" | "apple-card" | "alliant-credit-union" | "bbva-mexico" | "brex-cash" | "brex" | "capitalone-bank" | "capitalone" | "coinbase" | "coinkeeper" | "etrade" | "first-republic" | "wise")[] | null;
+                sourceProviders?: unknown[] | null;
+            } | null;
+        };
+        "connectors.stripe.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "stripe";
+            settings: {
+                secretKey: string;
+            };
+        };
+        "connectors.stripe.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "stripe";
+            config: {
+                oauth?: null | {
+                    clientId: string;
+                    clientSecret: string;
+                };
+                apikeyAuth?: boolean;
+            };
+        };
+        "connectors.teller.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "teller";
+            settings: {
+                token: string;
+            };
+        };
+        "connectors.teller.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "teller";
+            config: {
+                applicationId: string;
+                token?: string | null;
+            };
+        };
+        "connectors.toggl.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "toggl";
+            settings: {
+                apiToken: string;
+                email?: string | null;
+                password?: string | null;
+            };
+        };
+        "connectors.toggl.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "toggl";
+            config: null;
+        };
+        "connectors.twenty.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twenty";
+            settings: {
+                access_token: string;
+            };
+        };
+        "connectors.twenty.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twenty";
+            config: null;
+        };
+        "connectors.venmo.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "venmo";
+            settings: {
+                me?: unknown;
+                credentials?: unknown;
+            };
+        };
+        "connectors.venmo.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "venmo";
+            config: {
+                v1BaseURL?: string | null;
+                v5BaseURL?: string | null;
+                proxy?: {
+                    url: string;
+                    cert: string;
+                } | null;
+            };
+        };
+        "connectors.webhook.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "webhook";
+            settings: {
+                destinationUrl: string;
+            };
+        };
+        "connectors.webhook.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "webhook";
+            config: null;
+        };
+        "connectors.wise.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wise";
+            settings: {
+                /** @enum {string} */
+                envName: "sandbox" | "live";
+                apiToken?: string | null;
+            };
+        };
+        "connectors.wise.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "wise";
+            config: null;
+        };
+        "connectors.xero.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "xero";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.xero.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "xero";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        "connectors.yodlee.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "yodlee";
+            settings: {
+                accessToken?: {
+                    accessToken: string;
+                    issuedAt: string;
+                    expiresIn: number;
+                } | null;
+                loginName: string;
+                providerAccountId: number | string;
+                user?: null;
+                provider?: null;
+                providerAccount?: {
+                    aggregationSource: string;
+                    createdDate: string;
+                    dataset: unknown[];
+                    id: number;
+                    isManual: boolean;
+                    providerId: number;
+                    /** @enum {string} */
+                    status: "LOGIN_IN_PROGRESS" | "USER_INPUT_REQUIRED" | "IN_PROGRESS" | "PARTIAL_SUCCESS" | "SUCCESS" | "FAILED";
+                    isDeleted?: boolean | null;
+                } | null;
+            };
+        };
+        "connectors.yodlee.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "yodlee";
+            config: {
+                /** @enum {string} */
+                envName: "sandbox" | "development" | "production";
+                clientId: string;
+                clientSecret: string;
+                adminLoginName: string;
+                sandboxLoginName?: string | null;
+                proxy?: {
+                    url: string;
+                    cert: string;
+                } | null;
+            };
+        };
+        "connectors.zohodesk.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zohodesk";
+            settings: {
+                oauth: {
+                    credentials: {
+                        /** @enum {string} */
+                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type: string;
+                            scope?: string;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        "connectors.zohodesk.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zohodesk";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
         /** Connection */
         "core.connection": {
             connector_name: "core.connection";
@@ -130,7 +2120,7 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             connector_config_id: string;
-        } & Omit<components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"], "connector_name">);
+        } & Omit<components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.beancount.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.debug.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.fs.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.google.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.mongodb.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.qbo.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.revert.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.spreadsheet.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.webhook.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"], "connector_name">);
         /** Connector Config */
         "core.connector_config": {
             connector_name: "core.connector_config";
@@ -141,7 +2131,7 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             org_id: string;
-        } & Omit<components["schemas"]["connectors.greenhouse.connectorConfig"] | components["schemas"]["connectors.plaid.connectorConfig"], "connector_name">);
+        } & Omit<components["schemas"]["connectors.aircall.connectorConfig"] | components["schemas"]["connectors.airtable.connectorConfig"] | components["schemas"]["connectors.apollo.connectorConfig"] | components["schemas"]["connectors.beancount.connectorConfig"] | components["schemas"]["connectors.brex.connectorConfig"] | components["schemas"]["connectors.coda.connectorConfig"] | components["schemas"]["connectors.confluence.connectorConfig"] | components["schemas"]["connectors.debug.connectorConfig"] | components["schemas"]["connectors.discord.connectorConfig"] | components["schemas"]["connectors.finch.connectorConfig"] | components["schemas"]["connectors.firebase.connectorConfig"] | components["schemas"]["connectors.foreceipt.connectorConfig"] | components["schemas"]["connectors.fs.connectorConfig"] | components["schemas"]["connectors.github.connectorConfig"] | components["schemas"]["connectors.gong.connectorConfig"] | components["schemas"]["connectors.google.connectorConfig"] | components["schemas"]["connectors.greenhouse.connectorConfig"] | components["schemas"]["connectors.heron.connectorConfig"] | components["schemas"]["connectors.hubspot.connectorConfig"] | components["schemas"]["connectors.intercom.connectorConfig"] | components["schemas"]["connectors.jira.connectorConfig"] | components["schemas"]["connectors.kustomer.connectorConfig"] | components["schemas"]["connectors.lever.connectorConfig"] | components["schemas"]["connectors.linear.connectorConfig"] | components["schemas"]["connectors.lunchmoney.connectorConfig"] | components["schemas"]["connectors.mercury.connectorConfig"] | components["schemas"]["connectors.merge.connectorConfig"] | components["schemas"]["connectors.microsoft.connectorConfig"] | components["schemas"]["connectors.mongodb.connectorConfig"] | components["schemas"]["connectors.moota.connectorConfig"] | components["schemas"]["connectors.onebrick.connectorConfig"] | components["schemas"]["connectors.outreach.connectorConfig"] | components["schemas"]["connectors.pipedrive.connectorConfig"] | components["schemas"]["connectors.plaid.connectorConfig"] | components["schemas"]["connectors.postgres.connectorConfig"] | components["schemas"]["connectors.qbo.connectorConfig"] | components["schemas"]["connectors.ramp.connectorConfig"] | components["schemas"]["connectors.revert.connectorConfig"] | components["schemas"]["connectors.salesforce.connectorConfig"] | components["schemas"]["connectors.salesloft.connectorConfig"] | components["schemas"]["connectors.saltedge.connectorConfig"] | components["schemas"]["connectors.slack.connectorConfig"] | components["schemas"]["connectors.splitwise.connectorConfig"] | components["schemas"]["connectors.spreadsheet.connectorConfig"] | components["schemas"]["connectors.stripe.connectorConfig"] | components["schemas"]["connectors.teller.connectorConfig"] | components["schemas"]["connectors.toggl.connectorConfig"] | components["schemas"]["connectors.twenty.connectorConfig"] | components["schemas"]["connectors.venmo.connectorConfig"] | components["schemas"]["connectors.webhook.connectorConfig"] | components["schemas"]["connectors.wise.connectorConfig"] | components["schemas"]["connectors.xero.connectorConfig"] | components["schemas"]["connectors.yodlee.connectorConfig"] | components["schemas"]["connectors.zohodesk.connectorConfig"] | components["schemas"]["connectors.googledrive.connectorConfig"], "connector_name">);
         /**
          * Insufficient access error (403)
          * @description The error information
