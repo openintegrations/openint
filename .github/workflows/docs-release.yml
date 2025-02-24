@@ -18,3 +18,11 @@ jobs:
           output_path: 'packages-v1/api-v1/__generated__/openapi.documented.json'
           project_name: 'openint'
           commit_message: 'feat(docs): updating documented docs for mintlify'
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git add packages-v1/api-v1/__generated__/openapi.documented.json
+          git commit -m "feat(docs): update documented OpenAPI spec"
+          git push origin HEAD:main
