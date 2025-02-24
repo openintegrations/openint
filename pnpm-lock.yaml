@@ -1505,7 +1505,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       handlebars:
         specifier: 4.7.7
         version: 4.7.7
@@ -2235,6 +2235,37 @@ importers:
         specifier: ^7.6.1
         version: 7.6.1(typescript@5.7.3)
 
+  packages-v1/db-v1:
+    dependencies:
+      '@electric-sql/pglite':
+        specifier: ^0.2.16
+        version: 0.2.17
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../../packages/env
+      '@openint/util-v1':
+        specifier: workspace:*
+        version: link:../util-v1
+      drizzle-orm:
+        specifier: ^0.39.1
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
+    devDependencies:
+      '@openint/api-v1':
+        specifier: workspace:*
+        version: link:../api-v1
+      bun-types:
+        specifier: latest
+        version: 1.2.2
+      drizzle-kit:
+        specifier: ^0.30.4
+        version: 0.30.4
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
+
   packages-v1/sdk-v1:
     dependencies:
       '@trpc/client':
@@ -2250,6 +2281,25 @@ importers:
       bun-types:
         specifier: latest
         version: 1.2.4
+
+  packages-v1/util-v1:
+    dependencies:
+      '@sinclair/typebox':
+        specifier: ^0.34.15
+        version: 0.34.20
+      ulid:
+        specifier: ^2.3.0
+        version: 2.3.0
+    devDependencies:
+      bun-types:
+        specifier: latest
+        version: 1.2.2
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
+      zod:
+        specifier: ^3.22.4
+        version: 3.24.2
 
   packages/api:
     dependencies:
@@ -2344,7 +2394,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
@@ -2362,7 +2412,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
@@ -2426,7 +2476,7 @@ importers:
         version: 10.40.0
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.7.3)
@@ -4062,6 +4112,9 @@ packages:
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
+
+  '@electric-sql/pglite@0.2.17':
+    resolution: {integrity: sha512-qEpKRT2oUaWDH6tjRxLHjdzMqRUGYDnGZlKrnL4dJ77JVMcP2Hpo3NYnOSPKdZdeec57B6QPprCUFg0picx5Pw==}
 
   '@elysiajs/swagger@1.2.0':
     resolution: {integrity: sha512-OPx93DP6rM2VHjA3D44Xiz5MYm9AYlO2NGWPsnSsdyvaOCiL9wJj529583h7arX4iIEYE5LiLB0/A45unqbopw==}
@@ -9597,6 +9650,10 @@ packages:
     resolution: {integrity: sha512-HmA/NeewvHywhJ2ENXD3KvOuM/+K2dGLJfxVfIHsGwaqKICJnS+Ke2L6UcSrSrtMJLJaT0Im1Qv4TFXfaZShyw==}
     hasBin: true
 
+  drizzle-kit@0.30.4:
+    resolution: {integrity: sha512-B2oJN5UkvwwNHscPWXDG5KqAixu7AUzZ3qbe++KU9SsQ+cZWR4DXEPYcvWplyFAno0dhRJECNEhNxiDmFaPGyQ==}
+    hasBin: true
+
   drizzle-orm@0.38.2:
     resolution: {integrity: sha512-eCE3yPRAskLo1WpM9OHpFaM70tBEDsWhwR/0M3CKyztAXKR9Qs3asZlcJOEliIcUSg8GuwrlY0dmYDgmm6y5GQ==}
     peerDependencies:
@@ -9683,6 +9740,92 @@ packages:
       prisma:
         optional: true
       react:
+        optional: true
+      sql.js:
+        optional: true
+      sqlite3:
+        optional: true
+
+  drizzle-orm@0.39.3:
+    resolution: {integrity: sha512-EZ8ZpYvDIvKU9C56JYLOmUskazhad+uXZCTCRN4OnRMsL+xAJ05dv1eCpAG5xzhsm1hqiuC5kAZUCS924u2DTw==}
+    peerDependencies:
+      '@aws-sdk/client-rds-data': '>=3'
+      '@cloudflare/workers-types': '>=4'
+      '@electric-sql/pglite': '>=0.2.0'
+      '@libsql/client': '>=0.10.0'
+      '@libsql/client-wasm': '>=0.10.0'
+      '@neondatabase/serverless': '>=0.10.0'
+      '@op-engineering/op-sqlite': '>=2'
+      '@opentelemetry/api': ^1.4.1
+      '@planetscale/database': '>=1'
+      '@prisma/client': '*'
+      '@tidbcloud/serverless': '*'
+      '@types/better-sqlite3': '*'
+      '@types/pg': '*'
+      '@types/sql.js': '*'
+      '@vercel/postgres': '>=0.8.0'
+      '@xata.io/client': '*'
+      better-sqlite3: '>=7'
+      bun-types: '*'
+      expo-sqlite: '>=14.0.0'
+      knex: '*'
+      kysely: '*'
+      mysql2: '>=2'
+      pg: '>=8'
+      postgres: '>=3'
+      prisma: '*'
+      sql.js: '>=1'
+      sqlite3: '>=5'
+    peerDependenciesMeta:
+      '@aws-sdk/client-rds-data':
+        optional: true
+      '@cloudflare/workers-types':
+        optional: true
+      '@electric-sql/pglite':
+        optional: true
+      '@libsql/client':
+        optional: true
+      '@libsql/client-wasm':
+        optional: true
+      '@neondatabase/serverless':
+        optional: true
+      '@op-engineering/op-sqlite':
+        optional: true
+      '@opentelemetry/api':
+        optional: true
+      '@planetscale/database':
+        optional: true
+      '@prisma/client':
+        optional: true
+      '@tidbcloud/serverless':
+        optional: true
+      '@types/better-sqlite3':
+        optional: true
+      '@types/pg':
+        optional: true
+      '@types/sql.js':
+        optional: true
+      '@vercel/postgres':
+        optional: true
+      '@xata.io/client':
+        optional: true
+      better-sqlite3:
+        optional: true
+      bun-types:
+        optional: true
+      expo-sqlite:
+        optional: true
+      knex:
+        optional: true
+      kysely:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+      postgres:
+        optional: true
+      prisma:
         optional: true
       sql.js:
         optional: true
@@ -15686,6 +15829,10 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
+  ulid@2.3.0:
+    resolution: {integrity: sha512-keqHubrlpvT6G2wH0OEfSW4mquYRcbe/J8NMmveoQOjUqmo+hXtO+ORCpWhdbZ7k72UtY61BL7haGxW6enBnjw==}
+    hasBin: true
+
   ulidx@0.4.0:
     resolution: {integrity: sha512-Ih/3tOXQ4w+zriMzjas8F1Yl4iNM+IQoamnY+n3XX01MBQC9lMiMnO/ONT8jXQfzprYhymrNcYpwgq6QutxUUA==}
 
@@ -17755,6 +17902,8 @@ snapshots:
       minimist: 1.2.6
 
   '@drizzle-team/brocli@0.10.2': {}
+
+  '@electric-sql/pglite@0.2.17': {}
 
   '@elysiajs/swagger@1.2.0(elysia@1.2.12(@sinclair/typebox@0.34.20)(openapi-types@12.1.3)(typescript@5.7.3))':
     dependencies:
@@ -24974,9 +25123,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
+  drizzle-kit@0.30.4:
+    dependencies:
+      '@drizzle-team/brocli': 0.10.2
+      '@esbuild-kit/esm-loader': 2.6.5
+      esbuild: 0.17.5
+      esbuild-register: 3.5.0(esbuild@0.17.5)
+    transitivePeerDependencies:
+      - supports-color
+
+  drizzle-orm@0.38.2(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
     optionalDependencies:
-      '@neondatabase/serverless': 0.10.4
+      '@electric-sql/pglite': 0.2.17
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.11
       '@types/react': 18.0.27
@@ -24984,6 +25142,15 @@ snapshots:
       pg: 8.8.0(pg-native@3.0.1)
       postgres: 3.4.5
       react: 18.3.1
+
+  drizzle-orm@0.39.3(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.5)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5):
+    optionalDependencies:
+      '@electric-sql/pglite': 0.2.17
+      '@opentelemetry/api': 1.9.0
+      '@types/pg': 8.6.5
+      bun-types: 1.2.2
+      pg: 8.8.0(pg-native@3.0.1)
+      postgres: 3.4.5
 
   dunder-proto@1.0.1:
     dependencies:
@@ -32677,6 +32844,8 @@ snapshots:
 
   uglify-js@3.17.3:
     optional: true
+
+  ulid@2.3.0: {}
 
   ulidx@0.4.0:
     dependencies:
