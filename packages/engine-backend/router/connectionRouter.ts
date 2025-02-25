@@ -64,10 +64,12 @@ export async function performConnectionCheck(
     /** Do not update the `customerId` here... */
     await ctx.asOrgIfNeeded._syncConnectionUpdate(int, {
       customerId: conn.customerId ?? undefined,
-      integration: {
-        externalId: extractId(conn.integrationId)[2],
-        data: conn.integration?.external ?? {},
-      },
+      integration: conn.integrationId
+        ? {
+            externalId: extractId(conn.integrationId)[2],
+            data: conn.integration?.external ?? {},
+          }
+        : undefined,
       ...connUpdate,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       settings: {
