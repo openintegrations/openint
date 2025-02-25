@@ -56,6 +56,70 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        "connectors.greenhouse.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "greenhouse";
+            settings: {
+                apiKey: string;
+            };
+        };
+        "connectors.greenhouse.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "greenhouse";
+            config: null;
+        };
+        "connectors.plaid.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "plaid";
+            settings: {
+                itemId?: string | null;
+                accessToken: string;
+                institution?: unknown;
+                item?: unknown;
+                status?: unknown;
+                webhookItemError?: null;
+            };
+        };
+        "connectors.plaid.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "plaid";
+            config: {
+                /** @enum {string} */
+                envName: "sandbox" | "development" | "production";
+                credentials?: null | {
+                    clientId: string;
+                    clientSecret: string;
+                };
+                /** @default This Application */
+                clientName: string;
+                /** @default [
+                 *       "transactions"
+                 *     ] */
+                products: ("assets" | "auth" | "balance" | "identity" | "investments" | "liabilities" | "payment_initiation" | "identity_verification" | "transactions" | "credit_details" | "income" | "income_verification" | "deposit_switch" | "standing_orders" | "transfer" | "employment" | "recurring_transactions")[];
+                /** @default [
+                 *       "US",
+                 *       "CA"
+                 *     ] */
+                countryCodes: ("US" | "GB" | "ES" | "NL" | "FR" | "IE" | "CA" | "DE" | "IT" | "PL" | "DK" | "NO" | "SE" | "EE" | "LT" | "LV")[];
+                /**
+                 * @default en
+                 * @enum {string}
+                 */
+                language: "en" | "fr" | "es" | "nl" | "de";
+            };
+        };
         /** Connection */
         "core.connection": {
             connector_name: "core.connection";
@@ -66,7 +130,7 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             connector_config_id: string;
-        } & Omit<components["schemas"]["plaid.connection"] | components["schemas"]["greenhouse.connection"], "connector_name">);
+        } & Omit<components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"], "connector_name">);
         /** Connector Config */
         "core.connector_config": {
             connector_name: "core.connector_config";
@@ -77,7 +141,7 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             org_id: string;
-        } & Omit<components["schemas"]["plaid.connector_config"] | components["schemas"]["greenhouse.connector_config"], "connector_name">);
+        } & Omit<components["schemas"]["connectors.greenhouse.connectorConfig"] | components["schemas"]["connectors.plaid.connectorConfig"], "connector_name">);
         /**
          * Insufficient access error (403)
          * @description The error information
@@ -161,58 +225,6 @@ export interface components {
             issues?: {
                 message: string;
             }[];
-        };
-        /** @description Greenhouse Connection */
-        "greenhouse.connection": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "greenhouse";
-            secrets: {
-                api_key: string;
-            };
-            settings: Record<string, never>;
-        };
-        /** @description Greenhouse Connector Config */
-        "greenhouse.connector_config": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "greenhouse";
-            secrets: Record<string, never>;
-            config: Record<string, never>;
-        };
-        /** @description Plaid Connection */
-        "plaid.connection": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "plaid";
-            secrets: {
-                access_token: string;
-            };
-            settings: {
-                item_id: string;
-            };
-        };
-        /** @description Plaid Connector Config */
-        "plaid.connector_config": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "plaid";
-            secrets: {
-                client_id: string;
-                client_secret: string;
-            };
-            config: {
-                client_name: string;
-                products: ("transactions" | "balances")[];
-            };
         };
     };
     responses: never;
