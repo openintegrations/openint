@@ -6,8 +6,23 @@ export const envConfig = {
   server: {
     // MARK: - Not validated, may not be used...
     // Core env vars
-    DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL: z
+      .string()
+      .default('postgres://postgres:password@db.localtest.me:5432/postgres'),
     DATABASE_URL_UNPOOLED: z.string().optional(),
+    // rls specific connection strings
+    DATABASE_URL_ROLE_ANON: z
+      .string()
+      .default('postgres://anon:pw@db.localtest.me:5432/postgres'),
+    DATABASE_URL_ROLE_AUTHENTICATED: z
+      .string()
+      .default('postgres://authenticated:pw@db.localtest.me:5432/postgres'),
+    DATABASE_URL_ROLE_ORG: z
+      .string()
+      .default('postgres://org:pw@db.localtest.me:5432/postgres'),
+    DATABASE_URL_ROLE_CUSTOMER: z
+      .string()
+      .default('postgres://customer:pw@db.localtest.me:5432/postgres'),
 
     JWT_SECRET: z.string().optional(),
     CLERK_SECRET_KEY: z.string().optional(),
