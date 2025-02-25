@@ -46,3 +46,7 @@ export const __DEBUG__ =
       !!process.env['DEBUG']
 
 export const isProd = getServerUrl(null).includes('app.openint.dev')
+
+export const isMainPreview = getServerUrl(null).includes(
+  'openint-git-main-openint-dev.vercel.app',
+)
