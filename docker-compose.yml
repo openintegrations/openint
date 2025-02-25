@@ -12,6 +12,11 @@ services:
       POSTGRES_DB: postgres # Only database named `postgres` works with pg_cron by default
       POSTGRES_PASSWORD: password
     command: ["postgres", "-c", "log_statement=all", "-c", "max_connections=500"]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   supabase:
     image: supabase/postgres:15.8.1.017 # For some reason "lastest tag" is having issues... so we pin to a specific version latest as of 2024-12-20_0055
@@ -24,7 +29,17 @@ services:
       POSTGRES_PASSWORD: password
 
   inngest:
-      image: inngest/inngest
-      command: 'inngest dev'
-      ports:
-        - '8288:8288'
+    image: inngest/inngest
+    command: 'inngest dev'
+    ports:
+      - '8288:8288'
+
+  neon-proxy:
+    image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+    environment:
+      PG_CONNECTION_STRING: postgres://postgres:password@postgres:5432/postgres
+    ports:
+      - '4444:4444'
+    depends_on:
+      postgres:
+        condition: service_healthy
