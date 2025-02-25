@@ -1,5 +1,10 @@
-import fs from 'node:fs'
 import {exportJWK, generateKeyPair} from 'jose'
+import {z} from 'zod'
+
+const envName = z
+  .enum(['development', 'preview', 'production'])
+  .default('development')
+  .parse(process.argv[2])
 
 // Function to generate a new RSA key pair, converts the keys to JWK (JSON Web Key) format,
 // adds necessary metadata, and saves them to separate files.
@@ -16,15 +21,17 @@ async function generateAndExportKeys() {
   // 'kid': A unique identifier for the key, useful for key management and rotation.
   // 'alg': Specifies the algorithm to be used with the key (Neon RLS Authorize supports only RS256 and ES256 currently).
   privateJwk.use = 'sig'
-  privateJwk.kid = 'my-key-id'
+  privateJwk.kid = `openint-${envName}`
   privateJwk.alg = 'RS256'
   // Add the same metadata to the public key JWK for consistency.
   publicJwk.use = 'sig'
-  publicJwk.kid = 'my-key-id'
+  publicJwk.kid = `openint-${envName}`
   publicJwk.alg = 'RS256'
   // Save the keys to separate JSON files.
-  fs.writeFileSync('privateKey.jwk.json', JSON.stringify(privateJwk, null, 2))
-  fs.writeFileSync('publicKey.jwk.json', JSON.stringify(publicJwk, null, 2))
-  console.log('Keys generated and saved to files.')
+  console.log('--- privateKey.jwk.json')
+  console.log(JSON.stringify(privateJwk))
+  console.log('--- publicKey.jwk.json')
+  console.log(JSON.stringify(publicJwk))
+  console.log('--- Keys generated and saved to files.')
 }
 generateAndExportKeys()

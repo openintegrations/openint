@@ -25,6 +25,7 @@ export const envConfig = {
       .default('postgres://customer:pw@db.localtest.me:5432/postgres'),
 
     JWT_SECRET: z.string().optional(),
+    JWT_PRIVATE_KEY: z.string().optional(),
     CLERK_SECRET_KEY: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
 
@@ -62,6 +63,8 @@ export const envConfig = {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
 
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: z.string().optional(),
+
+    NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
@@ -87,6 +90,8 @@ export const envConfig = {
     VERCEL_URL: process.env['VERCEL_URL'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
     PGLITE: process.env['PGLITE'],
+    JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
+    NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
