@@ -53,7 +53,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const {theme, setTheme} = useTheme()
+  const {setTheme} = useTheme()
   const connectionId = searchParams.get('connectionId')
   const themeParam = searchParams.get('theme')
 
@@ -64,11 +64,10 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   })
 
   useEffect(() => {
-    // Only update if there's a valid theme parameter that differs from current theme
-    if (themeParam && isValidTheme(themeParam) && themeParam !== theme) {
+    if (themeParam && isValidTheme(themeParam)) {
       setTheme(themeParam)
     }
-  }, [themeParam, setTheme, theme])
+  }, [themeParam, setTheme])
 
   const deleteConnection = _trpcReact.deleteConnection.useMutation({
     onSuccess: () => {
@@ -158,7 +157,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           <div
             className={cn(
               'flex size-full flex-col gap-4 overflow-hidden bg-background',
-              theme === 'dark' ? 'dark' : '',
               className,
             )}>
             <Tabs

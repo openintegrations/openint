@@ -44,7 +44,7 @@ export const OpenIntConnectEmbed = React.forwardRef(
         ? iframeProps.width > DEFAULT_WIDTH
           ? iframeProps.width
           : DEFAULT_WIDTH
-        : iframeProps.width || '100%'
+        : iframeProps.width || DEFAULT_WIDTH
 
     // Add a more reliable way to know iframe has fully finished loading
     // by sending message from iframe to parent when ready
@@ -93,6 +93,8 @@ export const OpenIntConnectEmbed = React.forwardRef(
           height: 100%;
           background: white;
           transition: opacity 0.3s ease;
+          max-width: ${width}px;
+          max-height: ${height}px;
         }
         .spinner-container.loaded {
           opacity: 0;
@@ -100,8 +102,8 @@ export const OpenIntConnectEmbed = React.forwardRef(
         }
         .spinner {
           animation: rotate 2s linear infinite;
-          width: 50px;
-          height: 50px;
+          width: 30px;
+          height: 30px;
         }
         .path {
           stroke: #5652BF;

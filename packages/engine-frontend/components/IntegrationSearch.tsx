@@ -130,7 +130,10 @@ export function IntegrationSearch({
   return (
     <div className={cn('flex h-full flex-col', className)}>
       {/* Search integrations - Fixed header */}
-      <div className="sticky top-0 z-10 border-b bg-popover pt-2">
+      <div
+        className={`sticky top-0 z-10 border-b bg-popover pt-2 ${
+          (ints?.length ?? 0) < 8 ? 'hidden md:block' : ''
+        }`}>
         <div className="flex flex-row gap-2 px-6 pb-2">
           <div className="relative w-[450px]">
             <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center">
