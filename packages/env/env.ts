@@ -6,10 +6,26 @@ export const envConfig = {
   server: {
     // MARK: - Not validated, may not be used...
     // Core env vars
-    DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL: z
+      .string()
+      .default('postgres://postgres:password@db.localtest.me:5432/postgres'),
     DATABASE_URL_UNPOOLED: z.string().optional(),
+    // rls specific connection strings
+    DATABASE_URL_ROLE_ANON: z
+      .string()
+      .default('postgres://anon:pw@db.localtest.me:5432/postgres'),
+    DATABASE_URL_ROLE_AUTHENTICATED: z
+      .string()
+      .default('postgres://authenticated:pw@db.localtest.me:5432/postgres'),
+    DATABASE_URL_ROLE_ORG: z
+      .string()
+      .default('postgres://org:pw@db.localtest.me:5432/postgres'),
+    DATABASE_URL_ROLE_CUSTOMER: z
+      .string()
+      .default('postgres://customer:pw@db.localtest.me:5432/postgres'),
 
     JWT_SECRET: z.string().optional(),
+    JWT_PRIVATE_KEY: z.string().optional(),
     CLERK_SECRET_KEY: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
 
@@ -27,6 +43,7 @@ export const envConfig = {
     VERCEL_URL: z.string().optional(),
     VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
     INTEGRATION_TEST_SECRET: z.string().optional(),
+    PGLITE: z.boolean().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -46,6 +63,8 @@ export const envConfig = {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
 
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: z.string().optional(),
+
+    NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
@@ -70,6 +89,9 @@ export const envConfig = {
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
     VERCEL_URL: process.env['VERCEL_URL'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
+    PGLITE: process.env['PGLITE'],
+    JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
+    NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
