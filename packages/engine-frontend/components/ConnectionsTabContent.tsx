@@ -102,10 +102,10 @@ export function ConnectionsTabContent({
       {connectionCount === 0 ? (
         <div className="flex flex-col p-4 pt-0">
           <div>
-            <p className="font-semibold text-foreground">
+            <p className="pt-4 font-semibold text-foreground">
               You have no connections yet
             </p>
-            <p className="text-sm text-foreground">
+            <p className="pt-2 text-sm text-foreground">
               Add a connection to start integrating and streamlining your
               workflow!
             </p>

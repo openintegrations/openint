@@ -24,7 +24,7 @@ export const linearDef = {
   metadata: {
     displayName: 'Linear',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['ticketing'],
     logoUrl: '/_assets/logo-linear.svg',
     nangoProvider: 'linear',
   },
