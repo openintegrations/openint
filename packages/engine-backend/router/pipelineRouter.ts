@@ -161,20 +161,13 @@ export const pipelineRouter = trpc.router({
               : null,
         }
       }
-      const pipelines = _pipelines.map((pipe) => ({
-        ...pipe,
-        syncInProgress:
-          (pipe.lastSyncStartedAt && !pipe.lastSyncCompletedAt) ||
-          (pipe.lastSyncStartedAt &&
-            pipe.lastSyncCompletedAt &&
-            pipe.lastSyncStartedAt > pipe.lastSyncCompletedAt),
-      }))
+
       return filteredConnections
         .map(parseConnection)
         .filter((r): r is NonNullable<typeof r> => !!r)
         .map((r) => {
-          const pipesOut = pipelines.filter((p) => p.sourceId === r.id)
-          const pipesIn = pipelines.filter((p) => p.destinationId === r.id)
+          const pipesOut = _pipelines.filter((p) => p.sourceId === r.id)
+          const pipesIn = _pipelines.filter((p) => p.destinationId === r.id)
           const pipes = [...pipesOut, ...pipesIn]
           // TODO: Look up based on provider name
           const type: ConnType | null = r.id.startsWith('conn_postgres')
@@ -186,7 +179,6 @@ export const pipelineRouter = trpc.router({
 
           return {
             ...r,
-            syncInProgress: pipes.some((p) => p.syncInProgress),
             type,
             pipelineIds: pipes.map((p) => p.id),
             // TODO: Fix me

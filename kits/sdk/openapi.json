@@ -1529,7 +1529,9 @@
                             "calendar",
                             "ats",
                             "email",
-                            "messaging"
+                            "messaging",
+                            "communication",
+                            "wiki"
                           ]
                         }
                       },
@@ -8571,7 +8573,9 @@
                 "calendar",
                 "ats",
                 "email",
-                "messaging"
+                "messaging",
+                "communication",
+                "wiki"
               ]
             }
           },

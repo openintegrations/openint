@@ -31,7 +31,6 @@ import {
   z,
   type AnyRouter,
 } from '@openint/vdk'
-import type {AppRouter} from './appRouter'
 
 export const zOpenIntHeaders = z
   .object({
@@ -215,7 +214,7 @@ type SkipTrpcRoutes = {
 
 const skipTrpcRoutes: SkipTrpcRoutes = {
   GET: {
-    '/api/v0/unified/file-storage/files/{fileId}/download': async (
+    '/api/v0/unified/file-storage/file/{fileId}/download': async (
       req: Request,
       ctx: RouterContext,
     ) => {
@@ -310,7 +309,7 @@ export function createRouterOpenAPIHandler({
       const res = await createOpenApiFetchHandler({
         endpoint,
         req,
-        router: router as AppRouter,
+        router: router as any,
         createContext: () => context,
         // TODO: handle error status code from passthrough endpoints
         // onError, // can only have side effect and not modify response error status code unfortunately...

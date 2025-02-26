@@ -132,16 +132,20 @@ export async function downloadFileById({
       },
     }
   }
-
   const headers = new Headers()
   headers.set(
     'content-type',
     downloadResponse.headers.get('content-type') ?? '',
   )
-  headers.set(
-    'content-length',
-    downloadResponse.headers.get('content-length') ?? '',
-  )
+  if (
+    downloadResponse.headers.get('content-length') &&
+    !downloadResponse.headers.get('transfer-encoding')?.includes('chunked')
+  ) {
+    headers.set(
+      'content-length',
+      downloadResponse.headers.get('content-length') ?? '',
+    )
+  }
   headers.set(
     'content-disposition',
     downloadResponse.headers.get('content-disposition') ?? '',
@@ -336,7 +340,7 @@ export const sharepointAdapter = {
     return {
       has_next_page: !!filesResponse['@odata.nextLink'],
       items: filesResponse.value
-        .filter((item: any) => item.file)
+        // .filter((item: any) => item.file)
         .map(mappers.File),
       cursor: extractCursor(filesResponse['@odata.nextLink'] ?? ''),
     }

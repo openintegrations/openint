@@ -2,6 +2,15 @@
 
 module.exports = [
   {
+    name: 'aircall',
+    dirName: 'connector-aircall',
+    varName: 'connectorAircall',
+    imports: {
+      def: '@openint/connector-aircall/def',
+      server: '@openint/connector-aircall/server',
+    },
+  },
+  {
     name: 'airtable',
     dirName: 'connector-airtable',
     varName: 'connectorAirtable',
@@ -278,6 +287,7 @@ module.exports = [
       server: '@openint/connector-onebrick/server',
     },
   },
+  {dirName: 'connector-outlook', varName: 'connectorOutlook', imports: {}},
   {
     name: 'outreach',
     dirName: 'connector-outreach',
@@ -396,6 +406,7 @@ module.exports = [
       server: '@openint/connector-spreadsheet/server',
     },
   },
+  {dirName: 'connector-starbase', varName: 'connectorStarbase', imports: {}},
   {
     name: 'stripe',
     dirName: 'connector-stripe',
@@ -484,5 +495,11 @@ module.exports = [
       def: '@openint/connector-zohodesk/def',
       server: '@openint/connector-zohodesk/server',
     },
+  },
+  {
+    name: 'googledrive',
+    dirName: 'cnext-googledrive',
+    varName: 'connectorGoogledrive',
+    imports: {def: '@openint/cnext', server: '@openint/cnext'},
   },
 ]

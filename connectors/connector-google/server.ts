@@ -122,6 +122,8 @@ export const googleServer = {
               context.integrationExternalId as keyof typeof integrationScopesMap
             ],
           ),
+          // could be calculated from (config as any).orgId
+          // ...(redirect_uri ? {redirect_uri} : {}),
         },
       }
       console.log('[googleServer] authParams', authParams)

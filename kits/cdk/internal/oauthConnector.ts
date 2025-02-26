@@ -103,23 +103,20 @@ export function oauthConnect({
     connection_params?: Record<string, string>
   }
 }): Promise<OauthBaseTypes['connectOutput']> {
-  // console.log('oauthConnect', {
-  //   connectorName,
-  //   connectorConfigId,
-  //   connectionId,
-  //   authOptions,
-  // })
   return nangoFrontend
     .auth(
       connectorConfigId,
       connectionId ?? makeId('conn', connectorName, makeUlid()),
       {
-        params: {...authOptions?.connection_params},
         ...authOptions,
-        // authOptions would tend to contain the authorization_params needed to make the initial connection
-        // authorization_params: {
-        //   scope: 'https://www.googleapis.com/auth/drive.readonly',
-        // },
+        params: {
+          ...authOptions?.connection_params,
+        },
+        authorization_params: {
+          ...authOptions?.authorization_params,
+          // note: we can in future make this dependant ont he host if not passed by authorization_params
+          // ...(redirect_uri ? {redirect_uri} : {}),
+        },
       },
     )
     .then((r) => oauthBaseSchema.connectOutput.parse(r))

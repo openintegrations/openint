@@ -57,10 +57,10 @@ export const zCreds = z.discriminatedUnion('role', [
 
 /** Yodlee comma-delimited ids */
 type YodleeIds = z.input<typeof zYodleeIds>
-export const zYodleeId = z
-  .union([z.number(), z.string()])
-  .transform((id) => (typeof id === 'string' ? Number.parseInt(id) : id))
-  .openapi({refType: 'input'}) // @see https://github.com/samchungy/zod-openapi#zod-effects
+export const zYodleeId = z.union([z.number(), z.string()])
+// cannot use transform for now because .openapi() does not work due to differing zod versions
+// .transform((id) => (typeof id === 'string' ? Number.parseInt(id) : id))
+// .openapi({refType: 'input'}) // @see https://github.com/samchungy/zod-openapi#zod-effects
 // Ideally when converting we should default to always refType input... Or basically
 // allow the zodToOas31Schema to control this instead.
 const zYodleeIds = z.union([zYodleeId, z.array(zYodleeId)])
@@ -157,7 +157,16 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
 
   const getProvider = zFunction(zYodleeId, async (providerId) =>
     api
-      .GET('/providers/{providerId}', {params: {path: {providerId}}})
+      .GET('/providers/{providerId}', {
+        params: {
+          path: {
+            providerId:
+              typeof providerId === 'string'
+                ? Number.parseInt(providerId)
+                : providerId,
+          },
+        },
+      })
       .then((r) => {
         if (!r.data?.provider?.[0]) {
           throw new YodleeNotFoundError({

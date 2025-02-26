@@ -1,6 +1,6 @@
 'use client'
 
-import {Loader} from 'lucide-react'
+import {Loader2} from 'lucide-react'
 import {useTheme} from 'next-themes'
 import {usePathname, useRouter, useSearchParams} from 'next/navigation'
 import {useEffect} from 'react'
@@ -33,7 +33,7 @@ const getBaseView = (
 export function LoadingSpinner() {
   return (
     <div className="flex h-full min-h-[600px] flex-1 items-center justify-center">
-      <Loader className="size-7 animate-spin text-button" />
+      <Loader2 className="size-7 animate-spin text-button" />
     </div>
   )
 }
@@ -53,8 +53,9 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const {theme, setTheme} = useTheme()
+  const {setTheme} = useTheme()
   const connectionId = searchParams.get('connectionId')
+  const themeParam = searchParams.get('theme')
 
   const {toast} = useToast()
   const ctx = _trpcReact.useContext()
@@ -63,22 +64,10 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
   })
 
   useEffect(() => {
-    const themeParam = searchParams.get('theme')
-
     if (themeParam && isValidTheme(themeParam)) {
-      if (themeParam !== theme) {
-        setTheme(themeParam)
-      }
-    } else {
-      const params = new URLSearchParams(searchParams)
-      if (theme) {
-        params.set('theme', theme)
-        router.replace(`${pathname}?${params.toString()}`, {
-          scroll: false,
-        })
-      }
+      setTheme(themeParam)
     }
-  }, [searchParams, setTheme, theme, pathname, router])
+  }, [themeParam, setTheme])
 
   const deleteConnection = _trpcReact.deleteConnection.useMutation({
     onSuccess: () => {
@@ -125,10 +114,7 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
         const connectionCount = connections.length
 
         const isLoading =
-          listConnectionsRes.isLoading ||
-          listConnectionsRes.isFetching ||
-          listConnectionsRes.isRefetching ||
-          deleteConnection.isLoading
+          listConnectionsRes.isLoading || listConnectionsRes.isFetching
 
         const baseView = getBaseView(searchParams?.get('view'))
 
@@ -142,12 +128,12 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
               <ConnectionsTabContent
                 connectionCount={connectionCount}
                 deleteConnection={deleteConnection.mutate}
+                isDeleting={deleteConnection.isLoading}
                 connections={connections}
                 onConnect={() => navigateToTab('add')}
                 refetch={() => ctx.listConnections.invalidate()}
               />
             ),
-            status: connections.some((c) => c.syncInProgress),
           },
           {
             key: 'add',
@@ -158,8 +144,9 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
               <AddConnectionTabContent
                 connectorConfigFilters={{}}
                 refetch={listConnectionsRes.refetch}
-                onSuccessCallback={() => {
+                onSuccessCallback={async () => {
                   navigateToTab('manage')
+                  await listConnectionsRes.refetch()
                 }}
               />
             ),
@@ -170,7 +157,6 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
           <div
             className={cn(
               'flex size-full flex-col gap-4 overflow-hidden bg-background',
-              theme === 'dark' ? 'dark' : '',
               className,
             )}>
             <Tabs

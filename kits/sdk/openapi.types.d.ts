@@ -679,6 +679,8 @@ export interface components {
             | 'ats'
             | 'email'
             | 'messaging'
+            | 'communication'
+            | 'wiki'
           )[]
         | null
       connector_name: string
@@ -2343,6 +2345,8 @@ export interface operations {
               | 'ats'
               | 'email'
               | 'messaging'
+              | 'communication'
+              | 'wiki'
             )[]
             integrations: string[]
           }[]

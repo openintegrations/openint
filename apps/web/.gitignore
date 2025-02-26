@@ -48,3 +48,6 @@ yarn-error.log*
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+wrangler.toml
+.dev.vars

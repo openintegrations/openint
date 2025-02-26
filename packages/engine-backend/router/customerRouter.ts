@@ -386,7 +386,10 @@ export const customerRouter = trpc.router({
 
           return await int.connector.postConnect(
             int.connector.schemas.connectOutput.parse(input),
-            int.config,
+            {
+              id: ccfgId,
+              ...int.config,
+            },
             {
               ...connCtxInput,
               extCustomerId: ctx.extCustomerId,

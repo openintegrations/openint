@@ -13,7 +13,7 @@ export function AddConnectionTabContent({
   onSuccessCallback,
 }: AddConnectionTabContentProps) {
   return (
-    <div className="flex flex-col p-4 pt-0">
+    <div className="flex flex-col pt-0">
       <div>
         {/* <p className="text-sm">
           Choose a connector to integrate with your current setup.
@@ -26,6 +26,8 @@ export function AddConnectionTabContent({
             refetch()
           } else if (event.type === 'success') {
             onSuccessCallback?.()
+            refetch()
+          } else if (event.type === 'error') {
             refetch()
           }
         }}

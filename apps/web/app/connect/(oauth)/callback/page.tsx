@@ -18,8 +18,7 @@ export const metadata = {
 
 /**
  * Workaround for searchParams being empty on production. Will ahve to check
- * @see https://github.com/vercel/next.js/issues/43077#issuecomment-1383742153
- */
+@@ -23,104 +11,25 @@ export const metadata = {
 export const dynamic = 'force-dynamic'
 
 /** https://beta.nextjs.org/docs/api-reference/file-conventions/page#searchparams-optional */
@@ -41,23 +40,19 @@ export default async function ConnectCallback({
     }
     return redirect(url.toString())
   }
-
   const msg = await (async (): Promise<FrameMessage | null> => {
     try {
       const res = await NangoConnect.doOauthCallback(searchParams)
-
       if (!res) {
         // This means that we are using the @nango/frontend websocket client...
         return null
       }
-
       if (!cookie) {
         return {
           type: 'ERROR',
           data: {code: 'BAD_REQUEST', message: 'No session found'},
         }
       }
-
       if (res.eventType !== 'AUTHORIZATION_SUCEEDED') {
         return {
           type: 'ERROR',
@@ -68,7 +63,6 @@ export default async function ConnectCallback({
       const viewer = await serverComponentGetViewer({
         searchParams: {[kAccessToken]: session.token},
       })
-
       const connectionId = res.data.connectionId as Id['conn']
       if (session.connectionId !== connectionId) {
         console.warn('Revoking due to unmatched connectionId')
@@ -89,7 +83,6 @@ export default async function ConnectCallback({
           },
         }
       }
-
       const {caller} = serverSideHelpersFromViewer(viewer)
       await caller.postConnect([res.data, res.data.providerConfigKey, {}])
       return {
@@ -104,7 +97,6 @@ export default async function ConnectCallback({
       }
     }
   })()
-
   console.log('[oauth] callback result', msg)
 
   // How do we do redirect here?

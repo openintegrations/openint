@@ -10,10 +10,15 @@ import type {ConnectorDef} from '@openint/cdk'
 import {camelCase} from '@openint/util/string-utils'
 import prettierConfig from '../../prettier.config'
 
-async function writePretty(filename: string, content: string, pretty = true) {
-  fs.mkdirSync(pathJoin(__dirname, 'connectors'), {recursive: true})
+async function writePretty(
+  filename: string,
+  content: string,
+  outputPath = pathJoin(__dirname, 'connectors'),
+  pretty = true,
+) {
+  fs.mkdirSync(outputPath, {recursive: true})
   fs.writeFileSync(
-    pathJoin(__dirname, 'connectors', filename),
+    pathJoin(outputPath, filename),
     !pretty
       ? content
       : await prettier.format(
@@ -25,42 +30,114 @@ async function writePretty(filename: string, content: string, pretty = true) {
   )
 }
 
-const connectorList = fs
-  .readdirSync(pathJoin(__dirname, '../../connectors'), {
-    withFileTypes: true,
-  })
-  .filter((r) => r.isDirectory())
-  .map((d) => {
-    const path = pathJoin(__dirname, '../../connectors', d.name)
-    const def = fs.existsSync(pathJoin(path, 'def.ts'))
-      ? // TODO: Automate generation of package.json is still needed, otherwise does not work for new packages
-        // @see https://share.cleanshot.com/wDmqwsHS
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        (require(`@openint/${d.name}/def`).default as ConnectorDef)
-      : undefined
-    // we do some validation also
+async function generateCnextIndex() {
+  const cnextPath = pathJoin(__dirname, '../../connectors/cnext')
+  const cnextConnectors = fs
+    .readdirSync(cnextPath, {
+      withFileTypes: true,
+    })
+    .filter(
+      (r) =>
+        r.isDirectory() &&
+        r.name !== 'def' &&
+        !r.name.startsWith('.') &&
+        r.name !== 'node_modules',
+    )
 
-    if (def && `connector-${def.name}` !== d.name) {
-      throw new Error(`Mismatched connector: ${def.name} dir: ${d.name}`)
-    }
-    return {
-      name: def?.name,
-      dirName: d.name,
-      varName: camelCase(d.name),
+  await writePretty(
+    'index.ts',
+    `export type {ConnectorDef} from './def'
+    export type {AuthType} from './def'
+
+    ${cnextConnectors
+      .map((d) => {
+        const connectorName = `connector${d.name
+          .charAt(0)
+          .toUpperCase()}${camelCase(d.name.slice(1))}`
+        return `import {server as ${connectorName}_server, def as ${connectorName}_def} from './${d.name}'`
+      })
+      .join('\n')}
+
+    export {
+      ${cnextConnectors
+        .map((d) => {
+          const connectorName = `connector${d.name
+            .charAt(0)
+            .toUpperCase()}${camelCase(d.name.slice(1))}`
+          return `${connectorName}_server, ${connectorName}_def`
+        })
+        .join(',\n      ')}
+    }`,
+    cnextPath,
+  )
+}
+
+const connectorList = [
+  ...fs
+    .readdirSync(pathJoin(__dirname, '../../connectors'), {
+      withFileTypes: true,
+    })
+    .filter((r) => r.isDirectory() && r.name !== 'cnext')
+    .map((d) => {
+      const path = pathJoin(__dirname, '../../connectors', d.name)
+      const def = fs.existsSync(pathJoin(path, 'def.ts'))
+        ? // TODO: Automate generation of package.json is still needed, otherwise does not work for new packages
+          // @see https://share.cleanshot.com/wDmqwsHS
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          (require(`@openint/${d.name}/def`).default as ConnectorDef)
+        : undefined
+      // we do some validation also
+
+      if (def && `connector-${def.name}` !== d.name) {
+        throw new Error(`Mismatched connector: ${def.name} dir: ${d.name}`)
+      }
+      return {
+        name: def?.name,
+        dirName: d.name,
+        varName: camelCase(d.name),
+        imports: {
+          def: fs.existsSync(pathJoin(path, 'def.ts'))
+            ? `@openint/${d.name}/def`
+            : undefined,
+          client: fs.existsSync(pathJoin(path, 'client.ts'))
+            ? `@openint/${d.name}/client`
+            : undefined,
+          server: fs.existsSync(pathJoin(path, 'server.ts'))
+            ? `@openint/${d.name}/server`
+            : undefined,
+        },
+      }
+    }),
+
+  // Add cnext connectors
+  ...fs
+    .readdirSync(pathJoin(__dirname, '../../connectors/cnext'), {
+      withFileTypes: true,
+    })
+    .filter(
+      (r) =>
+        r.isDirectory() &&
+        r.name !== 'def' &&
+        !r.name.startsWith('.') &&
+        r.name !== 'node_modules',
+    )
+    .map((d) => ({
+      name: d.name,
+      dirName: `cnext-${d.name}`,
+      varName: `connector${d.name.charAt(0).toUpperCase()}${camelCase(
+        d.name.slice(1),
+      )}`,
       imports: {
-        def: fs.existsSync(pathJoin(path, 'def.ts'))
-          ? `@openint/${d.name}/def`
-          : undefined,
-        client: fs.existsSync(pathJoin(path, 'client.ts'))
-          ? `@openint/${d.name}/client`
-          : undefined,
-        server: fs.existsSync(pathJoin(path, 'server.ts'))
-          ? `@openint/${d.name}/server`
-          : undefined,
+        def: '@openint/cnext',
+        server: '@openint/cnext',
       },
-    }
-  })
+    })),
+]
+
 async function main() {
+  // Generate the cnext index.ts first
+  await generateCnextIndex()
+
   await writePretty(
     'meta.js',
     `
@@ -71,21 +148,32 @@ async function main() {
   const entries = ['def', 'client', 'server'] as const
 
   for (const entry of entries) {
-    const list = connectorList.filter((int) => !!int.imports[entry])
+    const list = connectorList.filter(
+      (int) => !!int.imports[entry as keyof typeof int.imports],
+    )
     await writePretty(
       `connectors.${entry}.ts`,
       `${list
-        .map(
-          (int) =>
-            `import {default as ${int.varName}} from '${int.imports[entry]}'`,
-        )
+        .map((int) => {
+          // Check if this is a cnext connector
+          const isCnext = int.dirName.startsWith('cnext-')
+          if (isCnext) {
+            return `import {${int.varName}_${entry} as ${int.varName}} from '${
+              int.imports[entry as keyof typeof int.imports]
+            }'`
+          }
+          return `import {default as ${int.varName}} from '${
+            int.imports[entry as keyof typeof int.imports]
+          }'`
+        })
         .join('\n')}
     export const ${entry}Connectors = {${list
-      .map(({name, varName}) => `${name}: ${varName},`)
+      .map(({name, varName}) => `'${name}': ${varName},`)
       .join('\n')}}
   `,
     )
   }
+
   const mergedlist = connectorList.filter((int) =>
     Object.values(int.imports).some((v) => !!v),
   )
@@ -101,26 +189,38 @@ async function main() {
             // This avoids server needing to import client side code unnecessarily
             .filter(([k]) => k !== 'client'),
         )
+        // Check if this is a cnext connector
+        const isCnext = int.dirName.startsWith('cnext-')
+
         return [
-          Object.entries(validImports)
-            .map(
-              ([k, v]) => `import {default as ${int.varName}_${k}} from '${v}'`,
-            )
-            .join('\n'),
+          isCnext
+            ? `import {${Object.keys(validImports)
+                .map((k) => `${int.varName}_${k}`)
+                .join(', ')}} from '${validImports['def']}'`
+            : Object.entries(validImports)
+                .map(
+                  ([k, v]) =>
+                    `import {default as ${int.varName}_${k}} from '${v}'`,
+                )
+                .join('\n'),
           `const ${int.varName} = {
             ${Object.keys(validImports)
               .map((k) => `...${int.varName}_${k}`)
               .join(',')}
-        }`,
+          }`,
         ]
       })
       .join('\n')}
 
-
-  export const mergedConnectors = {${mergedlist
-    .map(({name, varName}) => `${name}: ${varName},`)
-    .join('\n')}}
-`,
+    export const mergedConnectors = {${mergedlist
+      .map(({name, varName}) => {
+        // Skip node_modules
+        if (name === 'node_modules') return null
+        return `'${name?.toLowerCase().replace(/-/g, '')}': ${varName},`
+      })
+      .filter(Boolean)
+      .join('\n')}}
+  `,
   )
 }
 

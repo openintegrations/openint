@@ -1,6 +1,6 @@
 'use client'
 
-import {Loader, Search} from 'lucide-react'
+import {Loader2, Search} from 'lucide-react'
 import {useSearchParams} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
@@ -130,8 +130,11 @@ export function IntegrationSearch({
   return (
     <div className={cn('flex h-full flex-col', className)}>
       {/* Search integrations - Fixed header */}
-      <div className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10 backdrop-blur">
-        <div className="flex flex-row gap-2 px-4 pb-2">
+      <div
+        className={`sticky top-0 z-10 border-b bg-popover pt-2 ${
+          (ints?.length ?? 0) < 8 ? 'hidden md:block' : ''
+        }`}>
+        <div className="flex flex-row gap-2 px-6 pb-2">
           <div className="relative w-[450px]">
             <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center">
               <Search className="h-4 w-4 text-muted-foreground" />
@@ -165,10 +168,10 @@ export function IntegrationSearch({
         />
       </div>
       {/* Search results - Scrollable content */}
-      <div className="relative flex-1 overflow-y-auto">
+      <div className="relative flex-1 overflow-y-auto p-2">
         {listIntegrationsRes.isLoading ? (
           <div className="flex h-full min-h-[500px] items-center justify-center">
-            <Loader className="size-7 animate-spin text-button" />
+            <Loader2 className="size-7 animate-spin text-button" />
           </div>
         ) : (
           <div className="space-y-6 p-4">
@@ -180,7 +183,7 @@ export function IntegrationSearch({
                     <h3 className="mb-2 text-lg font-semibold text-foreground">
                       {parseCategory(category)}
                     </h3>
-                    <div className="hidden w-full flex-row flex-wrap gap-4 lg:flex lg:w-[60%]">
+                    <div className="hidden w-full flex-row flex-wrap gap-4 md:flex md:w-[60%]">
                       {categoryInts.map((int) => (
                         <WithConnectorConnect
                           key={int.id}
@@ -212,7 +215,7 @@ export function IntegrationSearch({
                         </WithConnectorConnect>
                       ))}
                     </div>
-                    <div className="flex w-full flex-col gap-2 lg:hidden">
+                    <div className="flex w-full flex-col gap-2 md:hidden">
                       {categoryInts.map((int, index) => (
                         <WithConnectorConnect
                           key={int.id}
