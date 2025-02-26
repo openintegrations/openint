@@ -24,7 +24,7 @@ export const kustomerDef = {
   metadata: {
     displayName: 'Kustomer',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['communication'],
     logoUrl: '/_assets/logo-kustomer.svg',
     // TODO: Update opensdks NangoProvider type to include kustomer
     // @ts-expect-error
