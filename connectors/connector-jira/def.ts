@@ -24,7 +24,7 @@ export const jiraDef = {
   metadata: {
     displayName: 'Jira',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['ticketing'],
     logoUrl: '/_assets/logo-jira.svg',
     nangoProvider: 'jira',
   },
