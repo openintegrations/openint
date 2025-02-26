@@ -133,7 +133,7 @@ jobs:
           pnpm wait-on tcp:8288
 
       - name: Run tests
-        run: ./bin/shdotenv -e ./apps/web/.env.local pnpm run test::ci
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
 
       - name: Send Slack notification for job status
         uses: 8398a7/action-slack@v3

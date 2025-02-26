@@ -4,7 +4,7 @@
 
 # Open Integrations
 
-OpenInt is an open-source integration platform as a service (iPaaS) that helps you ship product integrations in hours, not weeks. 
+OpenInt is an open-source integration platform as a service (iPaaS) that helps you ship product integrations in hours, not weeks.
 
 <img src="./docs/banner.png"/>
 
@@ -86,5 +86,5 @@ pnpm --dir  kits/connect/ pub
 ```
 
 ```bash
-NEXT_PUBLIC_SERVER_URL=https://openint.dev shdotenv -e .env.prod pnpm --dir ./kits/sdk gen
+NEXT_PUBLIC_SERVER_URL=https://openint.dev shdotenv -q -e .env.prod pnpm --dir ./kits/sdk gen
 ```
