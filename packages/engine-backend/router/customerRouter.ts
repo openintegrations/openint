@@ -177,12 +177,12 @@ export const customerRouter = trpc.router({
     })
     .input(customerRouterSchema.createConnectToken.input)
     .output(z.object({token: z.string()}))
-    .mutation(({input: {validityInSeconds, ...input}, ctx}) =>
+    .mutation(async ({input: {validityInSeconds, ...input}, ctx}) =>
       // console.log('[createConnectToken]', ctx.viewer, input, {
       //   validityInSeconds,
       // })
       ({
-        token: ctx.jwt.signViewer(asCustomer(ctx.viewer, input), {
+        token: await ctx.jwt.signViewer(asCustomer(ctx.viewer, input), {
           validityInSeconds,
         }),
       }),
@@ -197,39 +197,44 @@ export const customerRouter = trpc.router({
     })
     .input(customerRouterSchema.createMagicLink.input)
     .output(z.object({url: z.string()}))
-    .mutation(({input: {customerId, validityInSeconds, ...params}, ctx}) => {
-      const token = ctx.jwt.signViewer(asCustomer(ctx.viewer, {customerId}), {
-        validityInSeconds,
-      })
-      // Mapping integrationIds and connectorNames to a clean format removing any extra spaces
-      // and ensuring they are prefixed with int_ if they are in the format of connectorName_integrationId.
-      const mappedParams = {
-        ...params,
-        token,
-        integrationIds: params.integrationIds?.split(',').map((id) => {
-          const trimmedId = id.trim()
+    .mutation(
+      async ({input: {customerId, validityInSeconds, ...params}, ctx}) => {
+        const token = await ctx.jwt.signViewer(
+          asCustomer(ctx.viewer, {customerId}),
+          {
+            validityInSeconds,
+          },
+        )
+        // Mapping integrationIds and connectorNames to a clean format removing any extra spaces
+        // and ensuring they are prefixed with int_ if they are in the format of connectorName_integrationId.
+        const mappedParams = {
+          ...params,
+          token,
+          integrationIds: params.integrationIds?.split(',').map((id) => {
+            const trimmedId = id.trim()
 
-          return trimmedId.includes('_') &&
-            trimmedId.split('_').length === 2 &&
-            !trimmedId.startsWith('int_')
-            ? `int_${trimmedId}`
-            : trimmedId
-        }),
-        connectorNames: params.connectorNames
-          ?.split(',')
-          .map((name) => name.trim()),
-        theme: params.theme ?? 'light',
-        view: params.view ?? 'add',
-      }
-
-      const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
-      for (const [key, value] of Object.entries(mappedParams)) {
-        if (value) {
-          url.searchParams.set(key, `${value ?? ''}`)
+            return trimmedId.includes('_') &&
+              trimmedId.split('_').length === 2 &&
+              !trimmedId.startsWith('int_')
+              ? `int_${trimmedId}`
+              : trimmedId
+          }),
+          connectorNames: params.connectorNames
+            ?.split(',')
+            .map((name) => name.trim()),
+          theme: params.theme ?? 'light',
+          view: params.view ?? 'add',
         }
-      }
-      return {url: url.toString()}
-    }),
+
+        const url = new URL('/connect/portal', ctx.apiUrl) // `/` will start from the root hostname itself
+        for (const [key, value] of Object.entries(mappedParams)) {
+          if (value) {
+            url.searchParams.set(key, `${value ?? ''}`)
+          }
+        }
+        return {url: url.toString()}
+      },
+    ),
   createFilePickerLink: protectedProcedure
     .meta({
       openapi: {
@@ -246,7 +251,7 @@ export const customerRouter = trpc.router({
           params.connectionId,
         )
 
-        const token = ctx.jwt.signViewer(
+        const token = await ctx.jwt.signViewer(
           asCustomer(ctx.viewer, {customerId: connection.customerId}),
           {
             validityInSeconds,

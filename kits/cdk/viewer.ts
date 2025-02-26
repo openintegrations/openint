@@ -115,6 +115,8 @@ export const zJwtPayload = z.object({
   org_role: z.string().nullish(),
   /** For readable urls, unique across org */
   org_slug: z.string().nullish(),
+  /** Issued at time */
+  iat: z.number(),
 })
 
 export const zViewerFromJwtPayload = zJwtPayload
@@ -162,65 +164,142 @@ export function jwtDecode(token: string) {
 }
 
 export const makeJwtClient = zFunction(
-  z.object({secretOrPublicKey: z.string()}),
-  ({secretOrPublicKey}) => ({
-    verifyViewer: (token?: string | null): Viewer => {
-      if (!token) {
-        return {role: 'anon'}
-      }
-      try {
-        const data = jwt.verify(token, secretOrPublicKey)
-        if (typeof data === 'string') {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'JWT payload must be an object, not a string.',
-          })
-        }
-        // console.log('jwt.verify', data)
-        return zViewerFromJwtPayload.parse(data)
-      } catch (err) {
-        // console.log('jwt.verify Error', err)
-        // Actually throw token expired errror
-        throw new TRPCError({code: 'UNAUTHORIZED', message: `${err}`})
-        // if (!`${err}`.includes('TokenExpiredError')) {
-        //   // This dependency is not great... But don't know of a better pattern for now
-        // }
-        // return {role: 'anon'}
-      }
-    },
-    signViewer: (
-      viewer: Viewer,
-      {validityInSeconds = 3600}: {validityInSeconds?: number} = {},
-    ) => {
-      const payload = {
-        role: 'anon',
-        exp: Math.floor(Date.now() / 1000) + validityInSeconds,
-        ...(viewer.role === 'customer' && {
-          role: 'customer',
-          sub: `${viewer.orgId}/${viewer.customerId}`,
-          customer_id: viewer.customerId, // Needed for RLS
-          org_id: viewer.orgId, // Needed for RLS
-        }),
-        ...(viewer.role === 'org' && {
-          role: 'org',
-          sub: viewer.orgId,
-          org_id: viewer.orgId, // Needed for RLS
-        }),
-        ...(viewer.role === 'user' && {
-          role: 'authenticated',
-          sub: viewer.userId,
-          org_id: viewer.orgId, // Needed for RLS
-        }),
-        ...(viewer.role === 'system' && {
-          role: 'system',
-          sub: 'system',
-        }),
-        // Partial is a lie, it should not happen
-      } satisfies Partial<z.input<typeof zViewerFromJwtPayload>>
-
-      return jwt.sign(payload, secretOrPublicKey)
-    },
+  z.object({
+    secretOrPrivateKey: z.string(),
+    publicKey: z.string().optional(),
   }),
+  ({secretOrPrivateKey, publicKey}) => {
+    // Determine if we're using asymmetric keys (RS256) or symmetric secret (HS256)
+    const isAsymmetric =
+      !!publicKey &&
+      (() => {
+        try {
+          JSON.parse(secretOrPrivateKey)
+          JSON.parse(publicKey)
+          return true
+        } catch {
+          return false
+        }
+      })()
+
+    return {
+      verifyViewer: async (token?: string | null): Promise<Viewer> => {
+        if (!token) {
+          return {role: 'anon'}
+        }
+
+        try {
+          let payload
+
+          if (isAsymmetric) {
+            // Dynamically import jose
+            const {jwtVerify} = await import('jose')
+            // RS256 with jose
+            const {payload: verifiedPayload} = await jwtVerify(
+              token,
+              JSON.parse(publicKey),
+              {algorithms: ['RS256']},
+            )
+            payload = verifiedPayload
+          } else {
+            // HS256 with jsonwebtoken
+            const data = jwt.verify(token, secretOrPrivateKey)
+            if (typeof data === 'string') {
+              throw new TRPCError({
+                code: 'BAD_REQUEST',
+                message: 'JWT payload must be an object, not a string.',
+              })
+            }
+            payload = data
+          }
+
+          return zViewerFromJwtPayload.parse(payload)
+        } catch (err) {
+          throw new TRPCError({code: 'UNAUTHORIZED', message: `${err}`})
+        }
+      },
+
+      signViewer: async (
+        viewer: Viewer,
+        {
+          validityInSeconds = 3600,
+          keyId,
+        }: {validityInSeconds?: number; keyId?: string} = {},
+      ) => {
+        const exp = Math.floor(Date.now() / 1000) + validityInSeconds
+        const iat = Math.floor(Date.now() / 1000)
+
+        let sub = ''
+        let role: ViewerRole | 'authenticated' = 'anon'
+        let extraClaims: Record<string, any> = {}
+
+        switch (viewer.role) {
+          case 'customer':
+            role = 'customer'
+            sub = `${viewer.orgId}/${viewer.customerId}`
+            extraClaims = {
+              customer_id: viewer.customerId,
+              org_id: viewer.orgId,
+            }
+            break
+          case 'org':
+            role = 'org'
+            sub = viewer.orgId
+            extraClaims = {
+              org_id: viewer.orgId,
+            }
+            break
+          case 'user':
+            role = 'authenticated'
+            sub = viewer.userId
+            extraClaims = {
+              org_id: viewer.orgId,
+            }
+            break
+          case 'system':
+            role = 'system'
+            sub = 'system'
+            break
+          // anon case is handled by default values
+        }
+
+        if (isAsymmetric) {
+          // Dynamically import jose
+          const {SignJWT} = await import('jose')
+          // RS256 with jose
+          const jwtToken = new SignJWT({
+            role,
+            exp,
+            ...extraClaims,
+          })
+            .setProtectedHeader({alg: 'RS256', ...(keyId ? {kid: keyId} : {})})
+            .setSubject(sub)
+            .setExpirationTime(exp)
+            .setIssuedAt(iat)
+            .sign(JSON.parse(secretOrPrivateKey))
+
+          return jwtToken
+        } else {
+          // HS256 with jsonwebtoken
+          const payload = {
+            role: role as
+              | 'anon'
+              | 'customer'
+              | 'user'
+              | 'org'
+              | 'system'
+              | 'authenticated',
+            sub,
+            exp,
+            iat,
+            ...extraClaims,
+          } satisfies Partial<z.input<typeof zViewerFromJwtPayload>>
+
+          return jwt.sign(payload, secretOrPrivateKey)
+        }
+      },
+    }
+  },
 )
 
 export type JWTClient = ReturnType<typeof makeJwtClient>

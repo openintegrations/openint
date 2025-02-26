@@ -57,7 +57,7 @@ if (require.main === module) {
       ...R.mapValues(parseConnectorConfigsFromRawEnv(), (v) => () => v),
       '': () => parseConnectorConfigsFromRawEnv(),
     }),
-    jwt: () => makeJwtClient({secretOrPublicKey: env().JWT_SECRET!}),
+    jwt: () => makeJwtClient({secretOrPrivateKey: env().JWT_SECRET!}),
     pgMeta: () =>
       makePostgresMetaService({
         databaseUrl: env().DATABASE_URL,
