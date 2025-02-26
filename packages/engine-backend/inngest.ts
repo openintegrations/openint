@@ -1,7 +1,7 @@
 import {sentryMiddleware} from '@inngest/middleware-sentry'
 import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import {makeId} from '@openint/cdk'
-import {db, schema, sql} from '@openint/db'
+import {getDb, schema, sql} from '@openint/db'
 import {eventMapForInngest} from '@openint/events'
 import {makeUlid, R} from '@openint/util'
 
@@ -15,6 +15,8 @@ export const persistEventsMiddleware = new InngestMiddleware({
       onSendEvent() {
         return {
           async transformInput({payloads}) {
+            const {db} = await getDb({role: 'system'})
+
             function getConnIdForEvent(ev: {data?: Record<string, unknown>}) {
               // TODO: QQ, how to best cleanup this?
               return (ev.data?.['connectionId'] ??
@@ -70,6 +72,7 @@ export const persistEventsMiddleware = new InngestMiddleware({
             return {payloads: events}
           },
           async transformOutput(output) {
+            const {db} = await getDb({role: 'system'})
             // Inngest only use our ids for idempotency, and does not in fact
             // use it for its internal event id...
             // TODO: store inngest internal event id to allow for better lookup by event id
