@@ -27,6 +27,7 @@ export const envConfig = {
     VERCEL_URL: z.string().optional(),
     VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
     INTEGRATION_TEST_SECRET: z.string().optional(),
+    JWT_PRIVATE_KEY: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -44,8 +45,8 @@ export const envConfig = {
     NEXT_PUBLIC_SENTRY_ORG: z.string().optional(),
     NEXT_PUBLIC_POSTHOG_WRITEKEY: z.string().optional(),
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
-
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: z.string().optional(),
+    NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
@@ -70,6 +71,8 @@ export const envConfig = {
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
     VERCEL_URL: process.env['VERCEL_URL'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
+    JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
+    NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
