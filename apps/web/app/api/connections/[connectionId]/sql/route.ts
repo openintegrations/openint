@@ -59,7 +59,7 @@ export async function GET(
       format === 'csv'
         ? new NextResponse(
             Papa.unparse([
-              ...rows.map((r) =>
+              ...rows.rows.map((r) =>
                 R.mapValues(r, (v) =>
                   v instanceof Date
                     ? v.toISOString()

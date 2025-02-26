@@ -1,32 +1,58 @@
-import type {DrizzleConfig, SQL} from 'drizzle-orm'
+import {neon, neonConfig} from '@neondatabase/serverless'
+import type {DrizzleConfig} from 'drizzle-orm'
 import {sql} from 'drizzle-orm'
-import {drizzle} from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
+import {drizzle} from 'drizzle-orm/neon-http'
+import ws from 'ws'
 import {env} from '@openint/env'
+import {makeJwtClient, Viewer} from '../../kits/cdk'
 import * as schema from './schema'
 
 export * from 'drizzle-orm'
 export * from './stripeNullByte'
 export * from './upsert'
-export {schema, drizzle, postgres}
+export {schema, drizzle, neon, neonConfig}
 
-export function getDb<
+neonConfig.webSocketConstructor = ws // <-- this is the key bit
+
+neonConfig.fetchEndpoint = (host) => {
+  const [protocol, port] =
+    host === 'db.localtest.me' ? ['http', 4444] : ['https', 443]
+  return `${protocol}://${host}:${port}/sql`
+}
+
+export async function getDb<
   TSchema extends Record<string, unknown> = Record<string, never>,
->(urlString: string, config?: DrizzleConfig<TSchema>) {
-  const pg = postgres(urlString)
-  const db = drizzle(pg, {logger: !!env['DEBUG'], ...config})
+>(viewer: Viewer = {role: 'anon'}, config?: DrizzleConfig<TSchema>) {
+  if (!env.JWT_PRIVATE_KEY) {
+    throw new Error('JWT_PRIVATE_KEY is not set')
+  }
+  // NOTE: we currently sign on every DB request as we don't want to rotate organization API keys.
+  // this may have performance implications.
+  const start = performance.now()
+  const jwt = makeJwtClient({
+    secretOrPrivateKey: env.JWT_PRIVATE_KEY,
+    publicKey: env.NEXT_PUBLIC_JWT_PUBLIC_KEY,
+  })
+  // TODO: ensure this works with ES256 or RS256
+  const authToken = await jwt.signViewer(viewer)
+  const duration = performance.now() - start
+  console.warn(`[db] db JWT signing took ${duration.toFixed(2)}ms`)
 
-  const url = new URL(urlString)
+  // TODO: make this AUTHENTICATED_DATABASE URL if viewer of type org or user.
+  // Pending creating it on Neon
+  const sql = neon(env.DATABASE_URL, {authToken})
+  const url = new URL(env.DATABASE_URL)
+
+  const db = drizzle(sql, {logger: !!env['DEBUG'], ...config})
+
   if (env.DEBUG) {
     console.log('[db] host', url.host)
   }
-  return {db, pg}
+  return {db, sql}
 }
 
-export const {pg, db} = getDb(env.DATABASE_URL, {schema})
-
 export async function ensureSchema(
-  thisDb: ReturnType<typeof getDb>['db'],
+  thisDb: Awaited<ReturnType<typeof getDb>>['db'],
   schema: string,
 ) {
   // Check existence first because we may not have permission to actually create the schema
@@ -34,7 +60,7 @@ export async function ensureSchema(
     .execute(
       sql`SELECT true as exists FROM information_schema.schemata WHERE schema_name = ${schema}`,
     )
-    .then((r) => r[0]?.['exists'] === true)
+    .then((r) => r.rows[0]?.['exists'] === true)
   if (exists) {
     return
   }
@@ -43,13 +69,12 @@ export async function ensureSchema(
   )
 }
 
-export function applyLimitOffset<T>(
-  query: SQL<T>,
+export function applyLimitOffset(
+  query: any,
   opts: {limit?: number; offset?: number; orderBy?: string; order?: string},
 ) {
-  const limit = opts.limit ? sql` LIMIT ${opts.limit}` : sql``
-  const offset = opts.offset ? sql` OFFSET ${opts.offset}` : sql``
-  const orderBy = opts.orderBy ? sql` ORDER BY ${opts.orderBy}` : sql``
-  const order = opts.order ? sql` ${opts.order}` : sql``
-  return sql<T>`${query}${limit}${offset}${orderBy}${order}`
+  const order = opts.order ? ` ${opts.order}` : ''
+  return sql`${query} ${opts.limit ? `LIMIT ${opts.limit}` : ''} ${
+    opts.offset ? `OFFSET ${opts.offset}` : ''
+  } ${opts.orderBy ? `ORDER BY ${opts.orderBy}` : ''} ${order}`
 }

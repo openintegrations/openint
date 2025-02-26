@@ -8,8 +8,7 @@ import type {
 } from '@openint/cdk'
 import {initNangoSDK} from '@openint/cdk'
 import type {JWTClient, Viewer, ViewerRole} from '@openint/cdk/viewer'
-import {makeJwtClient, zViewerFromJwtPayload} from '@openint/cdk/viewer'
-import {TRPCError} from '@openint/trpc'
+import {makeJwtClient} from '@openint/cdk/viewer'
 import {R} from '@openint/util'
 import type {Env} from '../../apps/app-config/env'
 import {inngest} from './inngest'
@@ -89,7 +88,7 @@ export function getContextFactory<
     }
   }
   const connectorMap = R.mapToObj(connectors, (p) => [p.name, p])
-  const jwt = makeJwtClient({secretOrPublicKey: jwtSecret})
+  const jwt = makeJwtClient({secretOrPrivateKey: jwtSecret})
 
   const getServices = (viewer: Viewer) =>
     _makeServices({
@@ -121,20 +120,5 @@ export function getContextFactory<
     }
   }
 
-  /** not sure if this is needed as most codepath gets us viewer via multiple methods */
-  function fromJwtToken(token?: string) {
-    if (!token) {
-      return fromViewer({role: 'anon'})
-    }
-
-    try {
-      const data = jwt.verifyViewer(token)
-      return fromViewer(zViewerFromJwtPayload.parse(data))
-    } catch (err) {
-      console.warn('JwtError', err)
-      throw new TRPCError({code: 'UNAUTHORIZED', message: `${err}`})
-    }
-  }
-
-  return {config, fromViewer, fromJwtToken}
+  return {config, fromViewer}
 }
