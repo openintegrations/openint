@@ -1,0 +1,9 @@
+:4444 {
+	reverse_proxy https://localhost:4445 {
+		transport http {
+			tls_trusted_ca_certs server.pem
+			tls_server_name db.localtest.me
+		}
+		header_up Host db.localtest.me:4445
+	}
+}

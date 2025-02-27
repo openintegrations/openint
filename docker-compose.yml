@@ -4,6 +4,9 @@ version: '3'
 services:
   postgres:
     image: postgres
+    # build:
+    #   context: ./docker/postgres/
+    #   dockerfile: Dockerfile
     ports:
       - 5432:5432
     # command: postgres -c log_statement=all
@@ -36,6 +39,9 @@ services:
 
   neon-proxy:
     image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+    # build:
+    #   context: ./docker/neon-proxy/
+    #   dockerfile: Dockerfile
     environment:
       PG_CONNECTION_STRING: postgres://postgres:password@postgres:5432/postgres
     ports:
