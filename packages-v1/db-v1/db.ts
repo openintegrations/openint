@@ -1,4 +1,6 @@
 import {PGlite} from '@electric-sql/pglite'
+import {neon} from '@neondatabase/serverless'
+import {drizzle as drizzleNeon} from 'drizzle-orm/neon-http'
 import {drizzle as drizzleLite} from 'drizzle-orm/pglite'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
@@ -15,6 +17,12 @@ export function createLiteDatabase() {
 export function createDatabase(opts: {url: string}) {
   const pg = postgres(opts.url)
   const db = drizzle({client: pg, schema, logger: true})
+  return db
+}
+
+export function createNeonDatabase(opts: {url: string}) {
+  const pg = neon(opts.url)
+  const db = drizzleNeon({client: pg, schema, logger: true})
   return db
 }
 
