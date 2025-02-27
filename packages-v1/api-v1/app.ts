@@ -1,11 +1,19 @@
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
+import {createDatabase} from '@openint/db-v1'
 import {envRequired} from '@openint/env'
 import {createOpenApiHandler, createTrpcHandler} from './trpc/handlers'
 import {generateOpenAPISpec} from './trpc/openapi'
 
 export const app = new Elysia({prefix: '/api'})
-  .get('/health', () => ({status: 'ok'}))
+  .get('/health', async () => {
+    const db = createDatabase({url: envRequired.DATABASE_URL})
+    const start = new Date()
+    await db.execute('SELECT 1')
+    const durationMs = Date.now() - start.getTime()
+
+    return {healthy: true, dbLatencyMs: durationMs}
+  })
   .use(
     swagger({
       // For some reason spec.content doesn't work. so we are forced tos specify url instead
