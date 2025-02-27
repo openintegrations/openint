@@ -46,15 +46,15 @@ beforeAll(async () => {
 })
 
 describe.each(Object.keys(dbs))('drizzle: %s', (key) => {
-  const db = dbs[key as keyof typeof dbs]
-
   test('select', async () => {
+    const db = dbs[key as keyof typeof dbs]
     const res = await db.execute(sql`SELECT 1 + 1 AS result`)
     const rows = 'rows' in res ? res.rows : res
     expect(rows[0]).toEqual({result: 2})
   })
 
   test('migration then use migrated tables', async () => {
+    const db = dbs[key as keyof typeof dbs]
     await bootstrap(db)
     const returning = await db
       .insert(schema.organization)
@@ -72,6 +72,6 @@ describe.each(Object.keys(dbs))('drizzle: %s', (key) => {
 })
 
 afterAll(async () => {
-  await dbs.pglite.$client.close()
+  // await dbs.pglite.$client.close()
   await dbs.postgres.$client.end()
 })

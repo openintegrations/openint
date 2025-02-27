@@ -3,9 +3,12 @@ import {index, pgTable, timestamp} from 'drizzle-orm/pg-core'
 import type {Id} from '@openint/util-v1'
 import {makeId} from '@openint/util-v1'
 
-const timestampField = timestamp({withTimezone: true, mode: 'string'})
-  .notNull()
-  .default(sql`now()`)
+// Needs to be create a new timestamp each time to avoid implicit drizzle caching issues
+// that would cause updated_at to be the same as created_at
+const timestampField = () =>
+  timestamp({withTimezone: true, mode: 'string'})
+    .notNull()
+    .default(sql`now()`)
 
 export const organization = pgTable(
   'organization',
@@ -17,8 +20,8 @@ export const organization = pgTable(
       .$type<Id['org']>(),
     name: t.varchar().notNull(),
     api_key: t.varchar().notNull(),
-    created_at: timestampField,
-    updated_at: timestampField,
+    created_at: timestampField(),
+    updated_at: timestampField(),
   }),
   () => [],
 )
@@ -33,8 +36,8 @@ export const connector_config = pgTable(
       .$type<Id['ccfg']>(),
 
     org_id: t.varchar().notNull(),
-    created_at: timestampField,
-    updated_at: timestampField,
+    created_at: timestampField(),
+    updated_at: timestampField(),
     connector_name: t
       .varchar()
       .notNull()
@@ -62,8 +65,8 @@ export const integration = pgTable(
     name: t.varchar().notNull(),
     logo_url: t.varchar(),
     remote_data: t.jsonb(),
-    created_at: timestampField,
-    updated_at: timestampField,
+    created_at: timestampField(),
+    updated_at: timestampField(),
   }),
   () => [],
 )
@@ -87,8 +90,8 @@ export const connection = pgTable(
     integration_id: t.varchar().notNull(),
     customer_id: t.varchar().notNull(),
     remote_data: t.jsonb(),
-    created_at: timestampField,
-    updated_at: timestampField,
+    created_at: timestampField(),
+    updated_at: timestampField(),
   }),
   () => [],
 )
