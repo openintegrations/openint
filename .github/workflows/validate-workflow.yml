@@ -90,7 +90,8 @@ jobs:
         run: |
           npm install --global vercel@latest
           vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
-          vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local
+          vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
+          cat ./apps/web/.env.local.orig | pnpm bun scripts/escape-env.ts > ./apps/web/.env.local
 
       - name: Ensure OpenAPI spec and docs are up to date
         run: pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate && git diff --exit-code
