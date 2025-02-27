@@ -2262,9 +2262,6 @@ importers:
         specifier: ^3.4.5
         version: 3.4.5
     devDependencies:
-      '@openint/api-v1':
-        specifier: workspace:*
-        version: link:../api-v1
       bun:
         specifier: latest
         version: 1.2.3
@@ -8742,7 +8739,6 @@ packages:
 
   bun@1.2.3:
     resolution: {integrity: sha512-i8F+I3wxmt9omnLh3lOg0APQtqxZaMU0x6xuC+9YH4Eg/7fu8SM4YbdwyvV8Z6sy3OMtGFB0SYOjU2STuId4FQ==}
-    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 
