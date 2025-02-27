@@ -51,7 +51,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20 # TODO: Can we get this from "engine" field in package.json?
+          node-version: 22 # TODO: Can we get this from "engine" field in package.json?
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
@@ -91,7 +91,7 @@ jobs:
           npm install --global vercel@latest
           vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
           vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
-          cat ./apps/web/.env.local.orig | pnpm bun scripts/escape-env.ts > ./apps/web/.env.local
+          cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
 
       - name: Ensure OpenAPI spec and docs are up to date
         run: pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate && git diff --exit-code
@@ -132,8 +132,7 @@ jobs:
         run: |
           npx inngest-cli@latest dev &
           pnpm wait-on tcp:8288
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
+
       - name: Run tests
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
 

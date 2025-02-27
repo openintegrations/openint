@@ -25,9 +25,9 @@
     "pgdump": "pg_dump --schema public --schema-only --no-owner --exclude-schema=graphile_migrate --file=packages/db/schema.sql $DATABASE_URL",
     "worker:setup": "tsx ./bin/openint setupWorker",
     "worker:run": "tsx ./bin/openint runWorker",
-    "env:pull:development": "vercel env pull --environment development .env.dev.orig && cat .env.dev.orig | pnpm bun scripts/escape-env.ts > .env.dev",
-    "env:pull:preview": "vercel env pull --environment preview --git-branch $(git rev-parse --abbrev-ref HEAD) .env.pre.orig && cat .env.pre.orig | pnpm bun scripts/escape-env.ts > .env.pre",
-    "env:pull:production": "vercel env pull --environment production .env.prod.orig && cat .env.prod.orig | pnpm bun scripts/escape-env.ts > .env.prod",
+    "env:pull:development": "vercel env pull --environment development .env.dev.orig && cat .env.dev.orig | pnpm --silent bun scripts/escape-env.ts > .env.dev",
+    "env:pull:preview": "vercel env pull --environment preview --git-branch $(git rev-parse --abbrev-ref HEAD) .env.pre.orig && cat .env.pre.orig | pnpm --silent bun scripts/escape-env.ts > .env.pre",
+    "env:pull:production": "vercel env pull --environment production .env.prod.orig && cat .env.prod.orig | pnpm --silent bun scripts/escape-env.ts > .env.prod",
     "env:pull": "run-s env:pull:*"
   },
   "lint-staged": {
