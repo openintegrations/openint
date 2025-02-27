@@ -1,7 +1,7 @@
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import type {Database} from '@openint/db-v1'
-import {createDatabase} from '@openint/db-v1'
+import {createDatabase, createNeonDatabase} from '@openint/db-v1'
 import {envRequired} from '@openint/env'
 import {createOpenApiHandler, createTrpcHandler} from './trpc/handlers'
 import {generateOpenAPISpec} from './trpc/openapi'
@@ -19,7 +19,9 @@ export const app = new Elysia({prefix: '/api'})
       createDatabase({url: envRequired.DATABASE_URL}),
     )
     const neonLatencyMs = await checkLatency(
-      createDatabase({url: envRequired.DATABASE_URL}),
+      createNeonDatabase({
+        url: envRequired.DATABASE_URL,
+      }) as unknown as Database,
     )
     return {healthy: true, postgresJsLatencyMs, neonLatencyMs}
   })
