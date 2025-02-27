@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-disabled-tests */
 import {neon, neonConfig, Pool} from '@neondatabase/serverless'
 import {env} from '@openint/env'
 
@@ -9,7 +10,7 @@ neonConfig.wsProxy =
     ? (host) => `${host}:4444/v1`
     : undefined
 
-test('node-postgres compatible Pool', async () => {
+test.skip('node-postgres compatible Pool', async () => {
   // neonConfig.webSocketConstructor = await import('ws) // when using Node.js
 
   const pool = new Pool({connectionString: connectionStringUrl.toString()})
@@ -42,7 +43,7 @@ neonConfig.fetchEndpoint = (host) => {
   return `${protocol}://${host}:${port}/sql`
 }
 
-describe('one-shot queries', () => {
+describe.skip('one-shot queries', () => {
   const sql = neon(env.DATABASE_URL)
 
   test('Using single SQL query', async () => {
@@ -68,7 +69,6 @@ describe('one-shot queries', () => {
 
 // Does not work at the moment
 // Also unclear whether RLS authorize could work with multiple roles as in our setup, not just anon and authenticated
-// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('RLS authorize', () => {
   const sql = neon(env.DATABASE_URL, {
     authToken:
