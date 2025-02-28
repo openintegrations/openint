@@ -24,7 +24,7 @@ export const gongDef = {
   metadata: {
     displayName: 'Gong',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['sales-enablement'],
     logoUrl: '/_assets/logo-gong.svg',
     nangoProvider: 'gong',
   },

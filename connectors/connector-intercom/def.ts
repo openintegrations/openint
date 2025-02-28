@@ -24,7 +24,7 @@ export const intercomDef = {
   metadata: {
     displayName: 'Intercom',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['communication'],
     logoUrl: '/_assets/logo-intercom.svg',
     nangoProvider: 'intercom',
   },

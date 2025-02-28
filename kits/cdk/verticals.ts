@@ -12,26 +12,7 @@ interface VerticalInfo {
 // Also maybe should be distributed in a metadata file associated with each unified api
 // impl.
 const _VERTICAL_BY_KEY = {
-  banking: {},
   accounting: {},
-  crm: {
-    name: 'CRM',
-    objects: ['account', 'contact', 'opportunity', 'lead', 'user'],
-  },
-  'sales-engagement': {},
-  engagement: {}, // TODO: merge me
-  commerce: {},
-  'expense-management': {},
-  enrichment: {},
-  database: {},
-  'flat-files-and-spreadsheets': {},
-  'file-storage': {},
-  streaming: {},
-  'personal-finance': {},
-  other: {},
-  hris: {},
-  payroll: {},
-  calendar: {},
   ats: {
     name: 'ATS',
     description: `Our secure API identifies employees and compensation by
@@ -40,9 +21,31 @@ const _VERTICAL_BY_KEY = {
                 one-way with no impact on original data.`,
     objects: ['job', 'offer', 'candidate', 'opening'],
   },
-  email: {},
-  messaging: {},
+  banking: {},
+  calendar: {},
+  commerce: {},
   communication: {},
+  crm: {
+    name: 'CRM',
+    objects: ['account', 'contact', 'opportunity', 'lead', 'user'],
+  },
+  database: {},
+  'developer-tools': {},
+  email: {},
+  engagement: {}, // TODO: merge me
+  enrichment: {},
+  'expense-management': {},
+  'file-storage': {},
+  'flat-files-and-spreadsheets': {},
+  hris: {},
+  messaging: {},
+  other: {},
+  payroll: {},
+  'personal-finance': {},
+  'sales-enablement': {},
+  'sales-engagement': {},
+  streaming: {},
+  ticketing: {},
   wiki: {},
 } satisfies Record<string, VerticalInfo>
 
