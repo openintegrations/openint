@@ -309,23 +309,25 @@ export default function ConnectorConfigsPage({
           refetch={connectorConfigsRes.refetch}
         />
       )}
-      <CalendarBooking
-        description={calProps?.description ?? DEFAULT_DESCRIPTION}
-        header={calProps?.header ?? DEFAULT_HEADER}
-        isVisible={openCalendar}
-        onClose={closeCalendar}
-        onDismiss={closeCalendar}
-        email={
-          user?.emailAddresses?.length
-            ? user?.emailAddresses?.[0]?.emailAddress
-            : undefined
-        }
-        name={
-          user?.firstName && user?.lastName
-            ? `${user?.firstName} ${user?.lastName}`
-            : undefined
-        }
-      />
+      {isProd && (
+        <CalendarBooking
+          description={calProps?.description ?? DEFAULT_DESCRIPTION}
+          header={calProps?.header ?? DEFAULT_HEADER}
+          isVisible={openCalendar}
+          onClose={closeCalendar}
+          onDismiss={closeCalendar}
+          email={
+            user?.emailAddresses?.length
+              ? user?.emailAddresses?.[0]?.emailAddress
+              : undefined
+          }
+          name={
+            user?.firstName && user?.lastName
+              ? `${user?.firstName} ${user?.lastName}`
+              : undefined
+          }
+        />
+      )}
     </div>
   )
 }
