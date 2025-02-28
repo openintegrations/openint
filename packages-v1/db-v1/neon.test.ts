@@ -80,3 +80,102 @@ describe.skip('RLS authorize', () => {
     expect(res?.['sum']).toEqual(2)
   })
 })
+
+describe.skip('rls', () => {
+  const sql = neon(env.DATABASE_URL)
+
+  afterAll(async () => {
+    // Clean up if needed
+    await sql.transaction([
+      // Drop policies first
+      sql`DROP POLICY IF EXISTS alice_data_access ON customer_data;`,
+      sql`DROP POLICY IF EXISTS bob_data_access ON customer_data;`,
+
+      // Revoke permissions
+      sql`REVOKE SELECT ON customer_data FROM manager_alice, manager_bob;`,
+      sql`REVOKE USAGE ON SCHEMA public FROM manager_alice, manager_bob;`,
+
+      // Drop the table (this will also delete all data)
+      sql`DROP TABLE IF EXISTS customer_data;`,
+
+      // Drop roles
+      sql`DROP ROLE IF EXISTS manager_alice;`,
+      sql`DROP ROLE IF EXISTS manager_bob;`,
+    ])
+  })
+
+  beforeAll(async () => {
+    // Create a sample table
+    await sql.transaction([
+      sql`
+        CREATE TABLE customer_data (
+            id SERIAL PRIMARY KEY,
+            customer_name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            account_balance DECIMAL(10, 2) NOT NULL,
+            account_manager TEXT NOT NULL
+        );
+      `,
+      // Enable Row-Level Security on the table
+      sql`ALTER TABLE customer_data ENABLE ROW LEVEL SECURITY;`,
+      // Insert first sample row
+      sql`
+        INSERT INTO customer_data (customer_name, email, account_balance, account_manager)
+                VALUES ('Acme Corporation', 'contact@acme.com', 50000.00, 'manager_alice');
+      `,
+      // Insert second sample row
+      sql`
+        INSERT INTO customer_data (customer_name, email, account_balance, account_manager)
+                VALUES ('Globex Industries', 'info@globex.com', 75000.00, 'manager_bob');
+      `,
+      // Create first role
+      sql`CREATE ROLE manager_alice;`,
+      // Create second role
+      sql`CREATE ROLE manager_bob;`,
+      // Grant schema usage to both roles
+      sql`GRANT USAGE ON SCHEMA public TO manager_alice, manager_bob;`,
+      // Grant SELECT permission on the table to both roles
+      sql`GRANT SELECT ON customer_data TO manager_alice, manager_bob;`,
+      // Create policy for manager_alice
+      sql`
+        CREATE POLICY alice_data_access ON customer_data
+                    FOR ALL
+                    TO manager_alice
+                    USING (account_manager = 'manager_alice');
+      `,
+      // Create policy for manager_bob
+      sql`
+        CREATE POLICY bob_data_access ON customer_data
+                    FOR ALL
+                    TO manager_bob
+                    USING (account_manager = 'manager_bob');
+      `,
+    ])
+  })
+
+  test('non-interactive transaction with RLS', async () => {
+    const [, res1] = await sql.transaction([
+      sql`select set_config('role', 'manager_alice', true);`, // sql`SET LOCAL ROLE manager_alice;` equivalent
+      sql`SELECT * FROM customer_data;`,
+    ])
+    expect(res1).toHaveLength(1)
+    expect(res1?.[0]).toMatchObject({account_manager: 'manager_alice'})
+
+    const [, res2] = await sql.transaction([
+      sql`select set_config('role', 'manager_bob', true);`, // sql`SET LOCAL ROLE manager_bob;` equivalent
+      sql`SELECT * FROM customer_data;`,
+    ])
+    expect(res2).toHaveLength(1)
+    expect(res2?.[0]).toMatchObject({account_manager: 'manager_bob'})
+
+    const [res3] = await sql.transaction([sql`SELECT * FROM customer_data;`])
+    expect(res3).toHaveLength(2)
+    expect(res3?.[0]).toMatchObject({account_manager: 'manager_alice'})
+    expect(res3?.[1]).toMatchObject({account_manager: 'manager_bob'})
+
+    const res4 = await sql`SELECT * FROM customer_data;`
+    expect(res4).toHaveLength(2)
+    expect(res4?.[0]).toMatchObject({account_manager: 'manager_alice'})
+    expect(res4?.[1]).toMatchObject({account_manager: 'manager_bob'})
+  })
+})
