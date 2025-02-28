@@ -7809,6 +7809,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "drive_group_id",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
