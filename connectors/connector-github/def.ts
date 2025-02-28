@@ -24,7 +24,7 @@ export const githubDef = {
   metadata: {
     displayName: 'GitHub',
     stage: 'beta',
-    verticals: ['other'],
+    verticals: ['developer-tools'],
     logoUrl: '/_assets/logo-github.svg',
     nangoProvider: 'github',
   },

@@ -17,6 +17,7 @@ export const discordDef = {
   metadata: {
     displayName: 'Discord',
     stage: 'beta',
+    verticals: ['messaging'],
     logoUrl: '/_assets/logo-discord.svg',
     nangoProvider: 'discord',
   },
