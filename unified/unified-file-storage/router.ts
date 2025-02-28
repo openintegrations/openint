@@ -43,6 +43,7 @@ export const fileStorageRouter = trpc.router({
         .extend({
           drive_id: z.string().optional(),
           folder_id: z.string().optional(),
+          drive_group_id: z.string().optional(),
         })
         .nullish(),
     )

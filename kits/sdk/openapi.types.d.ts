@@ -5908,6 +5908,7 @@ export interface operations {
         page_size?: number
         drive_id?: string
         folder_id?: string
+        drive_group_id?: string
       }
     }
     responses: {
