@@ -67,7 +67,7 @@ export async function getRemoteContext(ctx: ProtectedContext) {
           return nangoConnectionWithCredentials.parse(r.data)
         })
         .catch((error) => {
-          console.error('nangoConnectionWithCredentials error', error)
+          console.error('Refresh credentials error', error.message)
           throw error
         }),
     }),
