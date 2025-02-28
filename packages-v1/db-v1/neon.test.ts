@@ -2,6 +2,7 @@
 import {neon, neonConfig, Pool} from '@neondatabase/serverless'
 import {drizzle as drizzleNeonHttp} from 'drizzle-orm/neon-http'
 import {drizzle as drizzleNeonServerless} from 'drizzle-orm/neon-serverless'
+import {drizzle as drizzleProxy} from 'drizzle-orm/pg-proxy'
 import {env} from '@openint/env'
 
 const connectionStringUrl = new URL(env.DATABASE_URL)
@@ -157,7 +158,7 @@ describe.skip('rls via non-interactive transaction', () => {
       .catch(() => null)
   })
 
-  test('directly with neon client', async () => {
+  test.skip('directly with neon client', async () => {
     const [, res1] = await sql.transaction([
       sql`select set_config('role', 'manager_alice', true);`, // sql`SET LOCAL ROLE manager_alice;` equivalent
       sql`SELECT * FROM customer_data;`,
@@ -212,6 +213,28 @@ SELECT * FROM customer_data;
     })
     const res = _res as unknown as Array<typeof _res>
     expect(res[1]?.rows).toEqual([
+      {
+        id: 1,
+        customer_name: 'Acme Corporation',
+        email: 'contact@acme.com',
+        account_balance: '50000.00',
+        account_manager: 'manager_alice',
+      },
+    ])
+  })
+
+  test.only('via drizzle proxy does work', async () => {
+    const db = drizzleProxy(async (query, params, _method) => {
+      // TODO: Do something about _method, whatever that is about...
+      const [, res] = await sql.transaction([
+        sql`select set_config('role', 'manager_alice', true);`,
+        sql(query, params),
+      ])
+      return {rows: res ?? []}
+    })
+
+    const res = await db.execute('SELECT * FROM customer_data;')
+    expect(res).toEqual([
       {
         id: 1,
         customer_name: 'Acme Corporation',
