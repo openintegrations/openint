@@ -1,7 +1,11 @@
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import type {Database} from '@openint/db-v1'
-import {createDatabase} from '@openint/db-v1'
+import {
+  createDatabase,
+  createNeonHttpDatabase,
+  createNeonWebSocketDatabase,
+} from '@openint/db-v1'
 import {envRequired} from '@openint/env'
 import {createOpenApiHandler, createTrpcHandler} from './trpc/handlers'
 import {generateOpenAPISpec} from './trpc/openapi'
@@ -14,17 +18,27 @@ async function checkLatency(db: Database) {
 }
 
 export const app = new Elysia({prefix: '/api'})
-  .get('/health', async () => {
+  .get('/check-latency', async () => {
     const postgresJsLatencyMs = await checkLatency(
       createDatabase({url: envRequired.DATABASE_URL}),
     )
-    // const neonLatencyMs = await checkLatency(
-    //   createNeonDatabase({
-    //     url: envRequired.DATABASE_URL,
-    //   }) as unknown as Database,
-    // )
-    return {healthy: true, postgresJsLatencyMs}
+    const neonWebsocketLatencyMs = await checkLatency(
+      createNeonWebSocketDatabase({
+        url: envRequired.DATABASE_URL,
+      }) as unknown as Database,
+    )
+    const neonHttpLatencyMs = await checkLatency(
+      createNeonHttpDatabase({
+        url: envRequired.DATABASE_URL,
+      }) as unknown as Database,
+    )
+    return {
+      postgresJsLatencyMs,
+      neonHttpLatencyMs,
+      neonWebsocketLatencyMs,
+    }
   })
+  .get('/health', () => ({healthy: true}))
   .use(
     swagger({
       // For some reason spec.content doesn't work. so we are forced tos specify url instead
