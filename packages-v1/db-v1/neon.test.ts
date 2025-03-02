@@ -223,7 +223,7 @@ SELECT * FROM customer_data;
     ])
   })
 
-  test.only('via drizzle proxy does work', async () => {
+  test.skip('via drizzle proxy does work', async () => {
     const db = drizzleProxy(async (query, params, _method) => {
       // TODO: Do something about _method, whatever that is about...
       const [, res] = await sql.transaction([

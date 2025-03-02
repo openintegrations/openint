@@ -15,6 +15,7 @@
     "postgres": "^3.4.5"
   },
   "devDependencies": {
+    "@openint/cdk": "workspace:*",
     "bun": "latest",
     "bun-types": "latest",
     "drizzle-kit": "^0.30.4",
