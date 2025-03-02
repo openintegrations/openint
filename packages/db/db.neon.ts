@@ -3,7 +3,7 @@ import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import type {Viewer} from '@openint/cdk'
 import type {DrizzleExtension, DbOptions} from './db'
 import {getDrizzleConfig} from './db'
-import {localGucForViewer} from './rls'
+import {localGucForViewer} from './schema/rls'
 
 export function initDbNeon(
   url: string,

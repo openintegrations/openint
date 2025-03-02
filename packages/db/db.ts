@@ -2,7 +2,7 @@ import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {initDbNeon} from './db.neon'
 import type {initDbPg} from './db.pg'
 import type {initDbPGLite} from './db.pglite'
-import * as schema from './schema'
+import * as schema from './schema/schema'
 
 export interface DbOptions
   extends Omit<DrizzleConfig<typeof schema>, 'schema'> {}

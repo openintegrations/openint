@@ -4,8 +4,9 @@ import {camelCase, snakeCase} from 'change-case'
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
-import {applyLimitOffset, dbUpsertOne, sql} from '@openint/db'
+import {dbUpsertOne, sql} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
+import {applyLimitOffset} from '@openint/db/lib/applyLimitOffset'
 import type {
   CustomerResultRow,
   MetaService,
