@@ -1,4 +1,4 @@
-import type {DrizzleConfig} from 'drizzle-orm'
+import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {initDbNeon} from './db.neon'
 import type {initDbPg} from './db.pg'
 import type {initDbPGLite} from './db.pglite'
@@ -17,11 +17,22 @@ export function getDrizzleConfig(
   }
 }
 
-export type DatabaseDriver = 'neon' | 'pg' | 'pglite'
+/** Standardize difference across different drizzle postgres drivers */
+export interface DrizzleExtension<TDriver extends string> {
+  driverType: TDriver
+  exec<T extends Record<string, unknown>>(
+    query: string | SQLWrapper,
+  ): Promise<{rows: Array<Assume<T, {[column: string]: unknown}>>}>
+}
 
-// prettier-ignore
-export type Database<T extends DatabaseDriver = DatabaseDriver>  =
-  T extends 'neon' ? ReturnType<typeof initDbNeon> :
-  T extends 'pg' ? ReturnType<typeof initDbPg> :
-  T extends 'pglite' ? ReturnType<typeof initDbPGLite> :
-  never
+type AnyDatabase =
+  | ReturnType<typeof initDbNeon>
+  | ReturnType<typeof initDbPg>
+  | ReturnType<typeof initDbPGLite>
+
+export type DatabaseDriver = AnyDatabase['driverType']
+
+export type Database<TDriver extends DatabaseDriver = DatabaseDriver> = Extract<
+  AnyDatabase,
+  {driverType: TDriver}
+>

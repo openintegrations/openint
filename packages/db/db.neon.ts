@@ -1,7 +1,7 @@
 import {neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import type {Viewer} from '@openint/cdk'
-import type {DbOptions} from './db'
+import type {DrizzleExtension, DbOptions} from './db'
 import {getDrizzleConfig} from './db'
 import {localGucForViewer} from './rls'
 
@@ -26,6 +26,7 @@ export function initDbNeon(
     return `${protocol}://${host}:${port}/sql`
   }
   const neonSql = neon(url)
+
   const db = drizzlePgProxy(async (query, params, method) => {
     const guc = localGucForViewer(viewer)
 
@@ -66,5 +67,14 @@ export function initDbNeon(
     return {rows: res?.rows ?? []}
   }, getDrizzleConfig(options))
 
-  return db
+  Object.assign(db, {
+    driverType: 'neon',
+    async exec(query) {
+      const res = await db.execute(query)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      return {rows: res as any[]}
+    },
+  } satisfies DrizzleExtension<'neon'>)
+
+  return db as typeof db & DrizzleExtension<'neon'>
 }
