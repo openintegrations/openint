@@ -2352,8 +2352,8 @@ importers:
   packages/db:
     dependencies:
       '@neondatabase/serverless':
-        specifier: github:neondatabase/serverless
-        version: https://codeload.github.com/neondatabase/serverless/tar.gz/71b054d4278901a8f138ad08bd7044857f5f91a6
+        specifier: ^0.10.4
+        version: 0.10.4
       '@openint/env':
         specifier: workspace:*
         version: link:../env
@@ -2362,7 +2362,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@neondatabase/serverless@https://codeload.github.com/neondatabase/serverless/tar.gz/71b054d4278901a8f138ad08bd7044857f5f91a6)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
@@ -4912,11 +4912,6 @@ packages:
 
   '@neondatabase/serverless@0.10.4':
     resolution: {integrity: sha512-2nZuh3VUO9voBauuh+IGYRhGU/MskWHt1IuZvHcJw6GLjDgtqj/KViKo7SIrLdGLdot7vFbiRRw+BgEy3wT9HA==}
-
-  '@neondatabase/serverless@https://codeload.github.com/neondatabase/serverless/tar.gz/71b054d4278901a8f138ad08bd7044857f5f91a6':
-    resolution: {tarball: https://codeload.github.com/neondatabase/serverless/tar.gz/71b054d4278901a8f138ad08bd7044857f5f91a6}
-    version: 0.10.4
-    engines: {node: '>=19.0.0'}
 
   '@next/env@14.2.13':
     resolution: {integrity: sha512-s3lh6K8cbW1h5Nga7NNeXrbe0+2jIIYK9YaA9T7IufDWnZpozdFUp6Hf0d5rNWUKu4fEuSX2rCKlGjCrtylfDw==}
@@ -7699,9 +7694,6 @@ packages:
 
   '@types/pg@8.6.1':
     resolution: {integrity: sha512-1Kc4oAGzAl7uqUStZCDvaLFqZrW9qWSjXOmBfdgyBP5La7Us6Mg4GBvRlSoaZMhQF/zSj1C8CtKMBkoiT8eL8w==}
-
-  '@types/pg@8.6.5':
-    resolution: {integrity: sha512-tOkGtAqRVkHa/PVZicq67zuujI4Oorfglsr2IbKofDwBSysnaqSx7W1mDqFqdkGE6Fbgh+PZAl0r/BWON/mozw==}
 
   '@types/pluralize@0.0.29':
     resolution: {integrity: sha512-BYOID+l2Aco2nBik+iYS4SZX0Lf20KPILP5RGmM1IgzdwNdTs0eebiFriOPcej1sX9mLnSoiNte5zcFxssgpGA==}
@@ -19255,12 +19247,6 @@ snapshots:
   '@neondatabase/serverless@0.10.4':
     dependencies:
       '@types/pg': 8.11.6
-    optional: true
-
-  '@neondatabase/serverless@https://codeload.github.com/neondatabase/serverless/tar.gz/71b054d4278901a8f138ad08bd7044857f5f91a6':
-    dependencies:
-      '@types/node': 22.13.8
-      '@types/pg': 8.11.11
 
   '@next/env@14.2.13': {}
 
@@ -22824,7 +22810,7 @@ snapshots:
 
   '@types/pg-pool@2.0.6':
     dependencies:
-      '@types/pg': 8.6.5
+      '@types/pg': 8.11.11
 
   '@types/pg@8.11.11':
     dependencies:
@@ -22837,15 +22823,8 @@ snapshots:
       '@types/node': 20.17.16
       pg-protocol: 1.5.0
       pg-types: 4.0.2
-    optional: true
 
   '@types/pg@8.6.1':
-    dependencies:
-      '@types/node': 20.17.16
-      pg-protocol: 1.5.0
-      pg-types: 2.2.0
-
-  '@types/pg@8.6.5':
     dependencies:
       '@types/node': 20.17.16
       pg-protocol: 1.5.0
@@ -24998,17 +24977,6 @@ snapshots:
   drizzle-orm@0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
     optionalDependencies:
       '@neondatabase/serverless': 0.10.4
-      '@opentelemetry/api': 1.9.0
-      '@types/pg': 8.11.11
-      '@types/react': 18.0.27
-      bun-types: 1.2.4
-      pg: 8.8.0(pg-native@3.0.1)
-      postgres: 3.4.5
-      react: 18.3.1
-
-  drizzle-orm@0.38.2(@neondatabase/serverless@https://codeload.github.com/neondatabase/serverless/tar.gz/71b054d4278901a8f138ad08bd7044857f5f91a6)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
-    optionalDependencies:
-      '@neondatabase/serverless': https://codeload.github.com/neondatabase/serverless/tar.gz/71b054d4278901a8f138ad08bd7044857f5f91a6
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.11
       '@types/react': 18.0.27
