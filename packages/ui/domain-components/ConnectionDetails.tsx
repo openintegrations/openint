@@ -47,7 +47,7 @@ export function ConnectionDetails({
       onOpenChange={(isOpen) => {
         if (!isOpen) onClose()
       }}>
-      <DialogContent>
+      <DialogContent className="mx-auto w-[90%] max-w-md sm:w-full">
         <DialogHeader>
           <h2 className="text-lg font-semibold text-foreground">
             Connection Details
@@ -59,49 +59,57 @@ export function ConnectionDetails({
               </div>
             )}
             <div className="grid grid-cols-1 gap-4">
-              <div className="flex items-center gap-4">
-                {connection?.integration?.logo_url ||
-                connection?.integration?.logoUrl ? (
-                  <IntegrationLogo
-                    integration={connection.integration}
-                    className="size-[64px] rounded-lg"
-                  />
-                ) : (
-                  <ConnectorLogo
-                    connector={connection.connectorConfig.connector}
-                    className="size-[64px] rounded-lg"
-                  />
-                )}
-                {connection.connectorConfig?.connectorName && (
-                  <div>
-                    <p className="text-sm text-muted-foreground">
+              <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+                  {connection?.integration?.logo_url ||
+                  connection?.integration?.logoUrl ? (
+                    <IntegrationLogo
+                      integration={connection.integration}
+                      className="size-[64px] rounded-lg"
+                    />
+                  ) : (
+                    <div className="[&>*]:!mb-0">
+                      <ConnectorLogo
+                        connector={connection.connectorConfig.connector}
+                        className="size-[64px] rounded-lg"
+                      />
+                    </div>
+                  )}
+                  <div className="flex flex-col justify-center text-center sm:text-left">
+                    <p className="text-xs text-gray-500">
                       Integration Name
                     </p>
-                    <p className="font-medium">
+                    <p className="font-medium text-black dark:text-white">
                       {connection.connectorConfig?.connectorName
                         ?.charAt(0)
                         .toUpperCase() +
                         connection.connectorConfig?.connectorName?.slice(1)}
                     </p>
                   </div>
-                )}
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Connection ID</p>
-                <p className="font-medium">{connection.id}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Connector Name</p>
-                <p className="font-medium">
-                  {connection.connectorConfig.displayName ||
-                    connection.connectorName}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Status</p>
-                <p className="font-medium capitalize">
-                  {connection.status || 'Unknown'}
-                </p>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs text-gray-500">Connection ID</p>
+                  <p className="font-medium break-all overflow-hidden">
+                    {connection.id}
+                  </p>
+                </div>
+                <div className="h-px bg-gray-200 dark:bg-gray-700"></div>
+                <div>
+                  <p className="text-xs text-gray-500">Connector Name</p>
+                  <p className="font-medium">
+                    {connection.connectorConfig.displayName ||
+                      connection.connectorName}
+                  </p>
+                </div>
+                <div className="h-px bg-gray-200 dark:bg-gray-700"></div>
+                <div>
+                  <p className="text-xs text-gray-500">Status</p>
+                  <p className="font-medium capitalize">
+                    {connection.status || 'Unknown'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
