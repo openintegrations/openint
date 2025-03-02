@@ -12,6 +12,7 @@
     "push": "drizzle-kit push"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "@openint/env": "workspace:*",
     "drizzle-kit": "^0.30.1",
     "drizzle-orm": "^0.38.2",
@@ -21,6 +22,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@openint/cdk": "workspace:*",
     "@openint/loopback-link": "workspace:*",
     "@openint/vdk": "workspace:*",
     "@types/json-stable-stringify": "^1.1.0",

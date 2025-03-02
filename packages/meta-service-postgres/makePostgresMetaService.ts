@@ -6,9 +6,8 @@ import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
 import {
   applyLimitOffset,
+  databaseForViewer,
   dbUpsertOne,
-  drizzle,
-  postgres,
   sql,
 } from '@openint/db'
 import type {
@@ -19,71 +18,24 @@ import type {
 import {R, zFunction} from '@openint/util'
 import {__DEBUG__} from '../../apps/app-config/constants'
 
-/**
- * This sets the postgres grand unified config (GUC) and determines the identity
- * that gets used for every request to db for the purpose of authorization
- * in row-level-security! So be very careful
- */
-function localGucForViewer(viewer: Viewer) {
-  switch (viewer.role) {
-    case 'anon':
-      return {role: 'anon'}
-    case 'customer':
-      return {
-        role: 'customer',
-        'request.jwt.claim.customer_id': viewer.customerId,
-        'request.jwt.claim.org_id': viewer.orgId,
-      }
-    case 'user':
-      return {
-        role: 'authenticated',
-        'request.jwt.claim.sub': viewer.userId,
-        'request.jwt.claim.org_id': viewer.orgId ?? null,
-      }
-    case 'org':
-      return {role: 'org', 'request.jwt.claim.org_id': viewer.orgId}
-    case 'system':
-      return {role: null} // Should be the same as reset role and therefore operates without RLS policy
-    default:
-      throw new Error(`Unknown viewer role: ${(viewer as Viewer).role}`)
-  }
-  // Should we erase keys incompatible with current viewer role to avoid confusion?
-}
-
-async function assumeRole(options: {
-  db: Pick<ReturnType<typeof drizzle>, 'execute'>
-  viewer: Viewer
-}) {
-  const {db, viewer} = options
-  for (const [key, value] of Object.entries(localGucForViewer(viewer))) {
-    // true is for isLocal, which means it will only affect the current transaction, not the whole session
-    await db.execute(sql`SELECT set_config(${key}, ${value}, true)`)
-  }
-}
-
 type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
-  const {viewer, databaseUrl} = opts
-  const pg = postgres(databaseUrl)
-  const getDb = () => drizzle(pg, {logger: __DEBUG__})
-  const db = getDb()
+  const {viewer} = opts
+  const db = databaseForViewer(viewer)
+  const getDb = () => db
   type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
 
   return {
     db,
-    pg,
     getDb,
-    runQueries: async <T>(
-      handler: (trxn: PgTransaction) => Promise<T>,
-      // eslint-disable-next-line arrow-body-style
-    ) => {
-      // const res = await db.transaction(async (trxn) => {
-      //   return !!trxn
-      // })
-      return await db.transaction(async (txn) => {
-        await assumeRole({db: txn, viewer})
-        return handler(txn)
-      })
+    runQueries: async <T>(handler: (trxn: PgTransaction) => Promise<T>) => {
+      // Create a proxy object that mimics the transaction interface
+      // but actually uses direct database execution
+      const trxnProxy = {
+        execute: (query: any) => db.execute(query),
+      } as PgTransaction
+
+      return handler(trxnProxy)
     },
   }
 }
@@ -215,7 +167,7 @@ export const makePostgresMetaService = zFunction(
           `),
         )
       },
-      isHealthy: async (checkDefaultPostgresConnections = false) => {
+      isHealthy: async () => {
         const {runQueries} = _getDeps({
           ...opts,
           // hardcoding to system viewer to avoid any authorization checks
@@ -230,30 +182,6 @@ export const makePostgresMetaService = zFunction(
           return {healthy: false, error: 'Main database is not healthy'}
         }
 
-        // TODO:(@pellicceama) to use sql token rather than hard coding here.
-        const top3DefaultPostgresConnections = await runQueries((trxn) =>
-          trxn.execute(
-            sql`SELECT id, settings->>'databaseUrl' as database_url FROM connection where id like 'conn_postgres_default_%' ORDER BY updated_at DESC LIMIT 3`,
-          ),
-        )
-
-        if (checkDefaultPostgresConnections) {
-          for (const connection of top3DefaultPostgresConnections) {
-            if (!connection['database_url']) {
-              continue
-            }
-            const connDb = drizzle(connection['database_url'] as string, {
-              logger: __DEBUG__,
-            })
-            const res = await connDb.execute(sql`SELECT 1`)
-            if (res.length !== 1) {
-              return {
-                healthy: false,
-                error: `Default postgres connection with id ${connection['id']} is not healthy`,
-              }
-            }
-          }
-        }
         return {healthy: true}
       },
     }

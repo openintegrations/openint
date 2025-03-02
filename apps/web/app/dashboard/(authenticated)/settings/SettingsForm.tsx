@@ -42,6 +42,7 @@ export default function SettingsForm() {
     'org_2pBM0RSOqs5QzZi40A73hZ5aTjD',
     // orgs in ot app
     'org_2nkeyWpfGKK6W011qwV8dA1la8n',
+    'org_2n4kz898vV74OmB64jtMYmLYCGs',
   ]
   const showDatabaseUrl = Boolean(!orgsToShowUrlFor.includes(res.data.id))
 

@@ -294,7 +294,9 @@ export const sharepointAdapter = {
 
       const drivesResult = await sharepointAdapter.listDrives({
         instance,
-        input: {},
+        input: {
+          drive_group_id: input?.drive_group_id,
+        },
         ctx,
       })
 

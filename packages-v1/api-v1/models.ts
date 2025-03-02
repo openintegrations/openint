@@ -1,62 +1,15 @@
 import {z} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
+import type {NonEmptyArray} from './connectorSchemas'
+import {connectorSchemas} from './connectorSchemas'
 
 extendZodWithOpenApi(z)
 
-// TODO: Import these from the corresponding connector packages...
-const plaid = {
-  connection: z
-    .object({
-      connector_name: z.literal('plaid'),
-      secrets: z.object({
-        access_token: z.string(),
-      }),
-      settings: z.object({
-        item_id: z.string(),
-      }),
-    })
-    .openapi({ref: 'plaid.connection', description: 'Plaid Connection'}),
-  connector_config: z
-    .object({
-      connector_name: z.literal('plaid'),
-      secrets: z.object({
-        client_id: z.string(),
-        client_secret: z.string(),
-      }),
-      config: z.object({
-        client_name: z.string(),
-        products: z.array(z.enum(['transactions', 'balances'])),
-      }),
-    })
-    .openapi({
-      ref: 'plaid.connector_config',
-      description: 'Plaid Connector Config',
-    }),
-}
-
-const greenhouse = {
-  connection: z
-    .object({
-      connector_name: z.literal('greenhouse'),
-      secrets: z.object({
-        api_key: z.string(),
-      }),
-      settings: z.object({}),
-    })
-    .openapi({
-      ref: 'greenhouse.connection',
-      description: 'Greenhouse Connection',
-    }),
-  connector_config: z
-    .object({
-      connector_name: z.literal('greenhouse'),
-      secrets: z.object({}),
-      config: z.object({}),
-    })
-    .openapi({
-      ref: 'greenhouse.connector_config',
-      description: 'Greenhouse Connector Config',
-    }),
+function parseNonEmpty<T>(arr: T[]) {
+  if (arr.length === 0) {
+    throw new Error('Array is empty')
+  }
+  return arr as NonEmptyArray<T>
 }
 
 const coreBase = z.object({
@@ -74,10 +27,21 @@ export const core = {
         })
         .describe('Connection Base'),
       z
-        .discriminatedUnion('connector_name', [
-          plaid.connection,
-          greenhouse.connection,
-        ])
+        .discriminatedUnion(
+          'connector_name',
+          parseNonEmpty(
+            connectorSchemas.connectionSettings.map((s) =>
+              z
+                .object({
+                  connector_name: s.shape.connector_name,
+                  settings: s.shape.connectionSettings,
+                })
+                .openapi({
+                  ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
+                }),
+            ),
+          ),
+        )
         .describe('Connector specific data'),
     )
     .openapi({ref: 'core.connection', title: 'Connection'}),
@@ -90,10 +54,21 @@ export const core = {
         })
         .describe('Connector Config Base'),
       z
-        .discriminatedUnion('connector_name', [
-          plaid.connector_config,
-          greenhouse.connector_config,
-        ])
+        .discriminatedUnion(
+          'connector_name',
+          parseNonEmpty(
+            connectorSchemas.connectorConfig.map((s) =>
+              z
+                .object({
+                  connector_name: s.shape.connector_name,
+                  config: s.shape.connectorConfig,
+                })
+                .openapi({
+                  ref: `connectors.${s.shape.connector_name.value}.connectorConfig`,
+                }),
+            ),
+          ),
+        )
         .describe('Connector specific data'),
     )
     .openapi({

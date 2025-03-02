@@ -10,72 +10,82 @@ export interface OpenIntConnectEmbedProps
 
 const DEFAULT_HEIGHT = 500
 const DEFAULT_WIDTH = 350
-export const OpenIntConnectEmbed = React.forwardRef(
-  (
-    {baseUrl, params, onReady, ...iframeProps}: OpenIntConnectEmbedProps,
-    forwardedRef: React.ForwardedRef<HTMLIFrameElement>,
-  ) => {
-    const url = getIFrameUrl({baseUrl, params})
-    const [loading, setLoading] = React.useState(true)
+export const OpenIntConnectEmbed = React.memo(
+  React.forwardRef(
+    (
+      props: OpenIntConnectEmbedProps,
+      forwardedRef: React.ForwardedRef<HTMLIFrameElement>,
+    ) => {
+      const {baseUrl, params, onReady, ...iframeProps} = props
 
-    React.useEffect(() => {
-      if (
-        typeof iframeProps.height === 'number' &&
-        iframeProps.height < DEFAULT_HEIGHT
-      ) {
-        console.warn(
-          'Optimal height for Connect is 500px. Using 500px instead.',
-        )
-      }
-      if (typeof iframeProps.width === 'number' && iframeProps.width < 350) {
-        console.warn('Minimum width for Connect is 350px. Using 350px instead.')
-      }
-    }, [iframeProps.height, iframeProps.width])
+      const url = React.useMemo(
+        () => getIFrameUrl({baseUrl, params}),
+        [baseUrl, params],
+      )
 
-    const height =
-      typeof iframeProps.height === 'number'
-        ? iframeProps.height > DEFAULT_HEIGHT
-          ? iframeProps.height
-          : DEFAULT_HEIGHT
-        : iframeProps.height
+      const [loading, setLoading] = React.useState(true)
 
-    const width =
-      typeof iframeProps.width === 'number'
-        ? iframeProps.width > DEFAULT_WIDTH
-          ? iframeProps.width
-          : DEFAULT_WIDTH
-        : iframeProps.width || '100%'
+      React.useEffect(() => {
+        if (
+          typeof iframeProps.height === 'number' &&
+          iframeProps.height < DEFAULT_HEIGHT
+        ) {
+          console.warn(
+            'Optimal height for Connect is 500px. Using 500px instead.',
+          )
+        }
+        if (typeof iframeProps.width === 'number' && iframeProps.width < 350) {
+          console.warn(
+            'Minimum width for Connect is 350px. Using 350px instead.',
+          )
+        }
+      }, [iframeProps.height, iframeProps.width])
 
-    // Add a more reliable way to know iframe has fully finished loading
-    // by sending message from iframe to parent when ready
-    return (
-      <div className="connect-embed-wrapper">
-        <div className={`spinner-container ${loading ? 'loading' : 'loaded'}`}>
-          <svg className="spinner" viewBox="0 0 50 50">
-            <circle
-              className="path"
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              strokeWidth="5"></circle>
-          </svg>
-        </div>
-        <iframe
-          name="openint-connect-frame"
-          id="openint-connect-frame"
-          {...iframeProps}
-          ref={forwardedRef}
-          onLoad={() => {
-            setLoading(false)
-            onReady?.()
-          }}
-          src={url}
-          width={width}
-          height={height}
-        />
+      const height =
+        typeof iframeProps.height === 'number'
+          ? iframeProps.height > DEFAULT_HEIGHT
+            ? iframeProps.height
+            : DEFAULT_HEIGHT
+          : iframeProps.height
 
-        <style>{`
+      const width =
+        typeof iframeProps.width === 'number'
+          ? iframeProps.width > DEFAULT_WIDTH
+            ? iframeProps.width
+            : DEFAULT_WIDTH
+          : iframeProps.width || DEFAULT_WIDTH
+
+      // Add a more reliable way to know iframe has fully finished loading
+      // by sending message from iframe to parent when ready
+      return (
+        <div className="connect-embed-wrapper">
+          <div
+            className={`spinner-container ${loading ? 'loading' : 'loaded'}`}>
+            <svg className="spinner" viewBox="0 0 50 50">
+              <circle
+                className="path"
+                cx="25"
+                cy="25"
+                r="20"
+                fill="none"
+                strokeWidth="5"></circle>
+            </svg>
+          </div>
+          <iframe
+            name="openint-connect-frame"
+            id="openint-connect-frame"
+            {...iframeProps}
+            ref={forwardedRef}
+            onLoad={() => {
+              setLoading(false)
+              onReady?.()
+            }}
+            src={url}
+            width={width}
+            height={height}
+          />
+
+          <style>{`
         .connect-embed-wrapper {
           display: flex;
           height: ${height}px;
@@ -91,8 +101,10 @@ export const OpenIntConnectEmbed = React.forwardRef(
           justify-content: center;
           align-items: center;
           height: 100%;
-          background: white;
+          background: ${params?.theme === 'dark' ? '#1C1C1C' : 'white'};
           transition: opacity 0.3s ease;
+          max-width: ${width}px;
+          max-height: ${height}px;
         }
         .spinner-container.loaded {
           opacity: 0;
@@ -100,8 +112,8 @@ export const OpenIntConnectEmbed = React.forwardRef(
         }
         .spinner {
           animation: rotate 2s linear infinite;
-          width: 50px;
-          height: 50px;
+          width: 30px;
+          height: 30px;
         }
         .path {
           stroke: #5652BF;
@@ -128,8 +140,10 @@ export const OpenIntConnectEmbed = React.forwardRef(
           }
         }
       `}</style>
-      </div>
-    )
-  },
+        </div>
+      )
+    },
+  ),
 )
+
 OpenIntConnectEmbed.displayName = 'OpenIntConnectEmbed'

@@ -9,9 +9,9 @@ import {
   serial,
   varchar,
 } from 'drizzle-orm/pg-core'
+import {drizzle} from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import {env} from '@openint/env'
-import {drizzle} from './'
 import {dbUpsert, dbUpsertOne, inferTableForUpsert} from './upsert'
 
 async function formatSql(sqlString: string) {

@@ -2,6 +2,7 @@
 
 import {ChevronDown} from 'lucide-react'
 import {useState} from 'react'
+import {isMainPreview} from '@openint/app-config/constants'
 import {customerRouterSchema} from '@openint/engine-backend/router/customerRouter'
 import {_trpcReact} from '@openint/engine-frontend'
 import {SchemaForm, useToast} from '@openint/ui'
@@ -157,7 +158,11 @@ export default function MagicLinkPage() {
           onSubmit={({formData: values}) => {
             createMagicLink.mutate(values, {
               onSuccess: async (data) => {
-                await copyToClipboard(data.url)
+                if (isMainPreview) {
+                  window.location.href = data.url
+                } else {
+                  await copyToClipboard(data.url)
+                }
                 toast({
                   title: 'Magic link copied to clipboard',
                   variant: 'success',
