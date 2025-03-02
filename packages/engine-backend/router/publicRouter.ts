@@ -19,6 +19,7 @@ export const publicRouter = trpc.router({
       z.object({
         healthy: z.boolean(),
         error: z.string().optional(),
+        dbRoundtrip: z.number(),
         deps: z
           .object({
             nango: z.boolean(),
@@ -30,16 +31,19 @@ export const publicRouter = trpc.router({
     )
     .query(async ({input, ctx}) => {
       if (process.env['MOCK_HEALTHCHECK']) {
-        return {healthy: true}
+        return {healthy: true, dbRoundtrip: -1}
       }
 
-      const [result, externalChecks] = await Promise.all([
-        ctx.as('anon', {}).metaService.isHealthy(input?.exp),
-        Promise.allSettled([
-          fetch('https://api.nango.dev/health').then((r) => r.ok),
-          fetch('https://api.inngest.com/health').then((r) => r.ok),
-          fetch('https://api.clerk.com/v1/health').then((r) => r.ok),
-        ]),
+      // Measure only the metaService.isHealthy call
+      const startTime = Date.now()
+      const result = await ctx.as('anon', {}).metaService.isHealthy(input?.exp)
+      const dbRoundtrip = Date.now() - startTime
+
+      // Perform external checks separately
+      const externalChecks = await Promise.allSettled([
+        fetch('https://api.nango.dev/health').then((r) => r.ok),
+        fetch('https://api.inngest.com/health').then((r) => r.ok),
+        fetch('https://api.clerk.com/v1/health').then((r) => r.ok),
       ])
 
       if (!result.healthy) {
@@ -48,6 +52,7 @@ export const publicRouter = trpc.router({
 
       return {
         ...result,
+        dbRoundtrip,
         deps: {
           nango:
             externalChecks[0].status === 'fulfilled' && externalChecks[0].value,

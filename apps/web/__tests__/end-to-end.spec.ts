@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import plaidSdkDef, {initPlaidSDK} from '@opensdks/sdk-plaid'
-import {drizzle, eq, schema, sql} from '@openint/db'
+import {drizzle} from 'drizzle-orm/postgres-js'
+import {eq, schema, sql} from '@openint/db'
 import {createAppTrpcClient} from '@openint/engine-frontend/lib/trpcClient'
 import {env, testEnv, testEnvRequired} from '@openint/env'
 import {initOpenIntSDK} from '@openint/sdk'
