@@ -65,12 +65,12 @@ describe('trpc route', () => {
   })
 })
 
-describe('viewer and RLS', () => {
-  function headerForViewer(viewer: Viewer | null) {
-    const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
-    return viewer ? {authorization: `Bearer ${jwt.signViewer(viewer)}`} : {}
-  }
+function headerForViewer(viewer: Viewer | null) {
+  const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
+  return viewer ? {authorization: `Bearer ${jwt.signViewer(viewer)}`} : {}
+}
 
+describe('authentication', () => {
   test.each([
     ['anon no header', null],
     ['anon explicit header', {role: 'anon'}],
