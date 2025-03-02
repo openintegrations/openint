@@ -1,6 +1,7 @@
 import {neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzleProxy} from 'drizzle-orm/pg-proxy'
 import type {Viewer} from '@openint/cdk'
+import schema from './schema'
 
 /** it's a bit weird that config like this is global rather than constructor specific... oh well */
 neonConfig.fetchEndpoint = (host) => {
@@ -47,19 +48,23 @@ export function localGucForViewer(viewer: Viewer) {
 
 export function databaseForViewer(url: string, viewer: Viewer) {
   const neonSql = neon(url)
-  const db = drizzleProxy(async (query, params, method) => {
-    const guc = localGucForViewer(viewer)
-    const allResponses = await neonSql.transaction(
-      [
-        ...Object.entries(guc).map(
-          ([key, value]) => neonSql`SELECT set_config(${key}, ${value}, true)`,
-        ),
-        neonSql(query, params),
-      ],
-      {fullResults: true, arrayMode: method === 'all'},
-    )
-    const res = allResponses.pop()
-    return {rows: res?.rows ?? []}
-  })
+  const db = drizzleProxy(
+    async (query, params, method) => {
+      const guc = localGucForViewer(viewer)
+      const allResponses = await neonSql.transaction(
+        [
+          ...Object.entries(guc).map(
+            ([key, value]) =>
+              neonSql`SELECT set_config(${key}, ${value}, true)`,
+          ),
+          neonSql(query, params),
+        ],
+        {fullResults: true, arrayMode: method === 'all'},
+      )
+      const res = allResponses.pop()
+      return {rows: res?.rows ?? []}
+    },
+    {schema, logger: true}, // make logger configurable
+  )
   return db
 }

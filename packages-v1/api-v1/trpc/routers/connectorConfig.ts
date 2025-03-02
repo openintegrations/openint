@@ -1,5 +1,4 @@
 import {z} from 'zod'
-import {eq, schema} from '@openint/db-v1'
 import {authenticatedProcedure, router} from '../_base'
 import {core} from '../../models'
 
@@ -15,9 +14,7 @@ export const connectorConfigRouter = router({
       }),
     )
     .query(async ({ctx}) => {
-      const connectorConfigs = await ctx.db.query.connector_config.findMany({
-        where: eq(schema.connector_config.org_id, ctx.viewer.orgId!),
-      })
+      const connectorConfigs = await ctx.db.query.connector_config.findMany({})
       return {items: connectorConfigs}
     }),
 })

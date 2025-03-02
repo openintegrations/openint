@@ -6,6 +6,7 @@ import {drizzle as drizzleLite} from 'drizzle-orm/pglite'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import {env} from '@openint/env'
+import type {databaseForViewer} from './db-rls'
 import schema from './schema'
 
 export function createLiteDatabase() {
@@ -63,3 +64,4 @@ export async function setupTestDatabase({
 export type Database =
   | ReturnType<typeof createLiteDatabase>
   | ReturnType<typeof createDatabase>
+  | ReturnType<typeof databaseForViewer>

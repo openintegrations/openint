@@ -1,4 +1,5 @@
 import {z} from 'zod'
+import {zViewer} from '@openint/cdk'
 import {publicProcedure, router, trpc} from '../_base'
 import {connectionRouter} from './connection'
 import {connectorConfigRouter} from './connectorConfig'
@@ -9,6 +10,11 @@ const generalRouter = router({
     .input(z.void())
     .output(z.string())
     .query(() => 'ok'),
+  viewer: publicProcedure
+    .meta({openapi: {method: 'GET', path: '/viewer'}})
+    .input(z.void())
+    .output(zViewer)
+    .query(({ctx}) => ctx.viewer),
 })
 
 export const appRouter = trpc.mergeRouters(
