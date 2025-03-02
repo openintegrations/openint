@@ -2191,6 +2191,9 @@ importers:
       '@openint/all-connectors':
         specifier: workspace:*
         version: link:../../connectors/all-connectors
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
       '@openint/db-v1':
         specifier: workspace:*
         version: link:../db-v1
@@ -2209,9 +2212,6 @@ importers:
       elysia:
         specifier: ^1.2.12
         version: 1.2.12(@sinclair/typebox@0.34.20)(openapi-types@12.1.3)(typescript@5.7.3)
-      jose:
-        specifier: ^6.0.7
-        version: 6.0.8
       remeda:
         specifier: ^2.20.1
         version: 2.20.1
@@ -2225,9 +2225,6 @@ importers:
         specifier: ^4.2.3
         version: 4.2.3(zod@3.24.2)
     devDependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
       '@opensdks/fetch-links':
         specifier: ^0.0.22
         version: 0.0.22
@@ -2277,9 +2274,6 @@ importers:
       drizzle-kit:
         specifier: ^0.30.4
         version: 0.30.5
-      jose:
-        specifier: ^6.0.7
-        version: 6.0.8
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
@@ -8751,7 +8745,6 @@ packages:
 
   bun@1.2.4:
     resolution: {integrity: sha512-ZY0EZ/UKqheaLeAtMsfJA6jWoWvV9HAtfFaOJSmS3LrNpFKs1Sg5fZLSsczN1h3a+Dtheo4O3p3ZYWrf40kRGw==}
-    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -12074,9 +12067,6 @@ packages:
   jose@2.0.6:
     resolution: {integrity: sha512-FVoPY7SflDodE4lknJmbAHSUjLCzE2H1F6MS0RYKMQ8SR+lNccpMf8R4eqkNYyyUjR5qZReOzZo5C5YiHOCjjg==}
     engines: {node: '>=10.13.0 < 13 || >=13.7.0'}
-
-  jose@6.0.8:
-    resolution: {integrity: sha512-EyUPtOKyTYq+iMOszO42eobQllaIjJnwkZ2U93aJzNyPibCy7CEvT9UQnaCVB51IAd49gbNdCew1c0LcLTCB2g==}
 
   jotai@1.3.9:
     resolution: {integrity: sha512-b6DvH9gf+7TfjaboCO54g+C0yhaakIaUBtjLf0dk1p15FWCzNw/93sezdXy9cCaZ8qcEdMLJcjBwQlORmIq29g==}
@@ -28502,8 +28492,6 @@ snapshots:
   jose@2.0.6:
     dependencies:
       '@panva/asn1.js': 1.0.0
-
-  jose@6.0.8: {}
 
   jotai@1.3.9(@babel/core@7.25.2)(@babel/template@7.25.9)(immer@9.0.15)(react-query@3.39.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
