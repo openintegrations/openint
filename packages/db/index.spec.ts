@@ -3,6 +3,7 @@ import {sql} from 'drizzle-orm'
 import {check, customType, pgTable} from 'drizzle-orm/pg-core'
 import {drizzle} from 'drizzle-orm/postgres-js'
 import {env} from '@openint/env'
+import {createTestDatabase, urlForDatabase} from './__tests__/test-utils'
 
 describe('test db', () => {
   // console.log('filename', __filename)
@@ -10,15 +11,11 @@ describe('test db', () => {
 
   // TODO: Add me back in once we know CI is working
   beforeAll(async () => {
-    const masterDb = drizzle(env.DATABASE_URL, {logger: true})
-    await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
-    await masterDb.execute(`CREATE DATABASE ${dbName}`)
-    await masterDb.$client.end()
+    await createTestDatabase(env.DATABASE_URL, dbName)
   })
 
-  const dbUrl = new URL(env.DATABASE_URL)
-  dbUrl.pathname = `/${dbName}`
-  const db = drizzle(dbUrl.toString(), {logger: true})
+  const dbUrl = urlForDatabase(env.DATABASE_URL, dbName)
+  const db = drizzle(dbUrl, {logger: true})
 
   test('connect', async () => {
     const res = await db.execute('select 1+1 as sum')
@@ -45,7 +42,7 @@ describe('test db', () => {
     expect(table.data.dataType).toEqual('json')
   })
 
-  test('migrate', async () => {
+  test('generate migration', async () => {
     const migrations = await generateMigration(
       generateDrizzleJson({}),
       generateDrizzleJson({table}),
@@ -112,7 +109,7 @@ describe('test db', () => {
   })
 
   test('camelCase support', async () => {
-    const db2 = drizzle(dbUrl.toString(), {logger: true, casing: 'snake_case'})
+    const db2 = drizzle(dbUrl, {logger: true, casing: 'snake_case'})
     // works for column names only, not table names
     await db2.execute(sql`
       create table if not exists "myAccount" (
