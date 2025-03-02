@@ -80,9 +80,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: 6.21.0
         version: 6.21.0(eslint@8.23.0)(typescript@5.7.3)
-      bun:
-        specifier: latest
-        version: 1.2.4
       esbuild:
         specifier: 0.17.5
         version: 0.17.5
@@ -1508,7 +1505,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       handlebars:
         specifier: 4.7.7
         version: 4.7.7
@@ -2191,9 +2188,6 @@ importers:
       '@openint/all-connectors':
         specifier: workspace:*
         version: link:../../connectors/all-connectors
-      '@openint/db-v1':
-        specifier: workspace:*
-        version: link:../db-v1
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
@@ -2209,9 +2203,6 @@ importers:
       elysia:
         specifier: ^1.2.12
         version: 1.2.12(@sinclair/typebox@0.34.20)(openapi-types@12.1.3)(typescript@5.7.3)
-      jose:
-        specifier: ^6.0.7
-        version: 6.0.7
       remeda:
         specifier: ^2.20.1
         version: 2.20.1
@@ -2244,46 +2235,6 @@ importers:
         specifier: ^7.6.1
         version: 7.6.1(typescript@5.7.3)
 
-  packages-v1/db-v1:
-    dependencies:
-      '@electric-sql/pglite':
-        specifier: ^0.2.16
-        version: 0.2.17
-      '@neondatabase/serverless':
-        specifier: ^0.10.4
-        version: 0.10.4
-      '@openint/env':
-        specifier: workspace:*
-        version: link:../../packages/env
-      '@openint/util-v1':
-        specifier: workspace:*
-        version: link:../util-v1
-      drizzle-orm:
-        specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.5
-    devDependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      bun:
-        specifier: latest
-        version: 1.2.3
-      bun-types:
-        specifier: latest
-        version: 1.2.2
-      drizzle-kit:
-        specifier: ^0.30.4
-        version: 0.30.4
-      jose:
-        specifier: ^6.0.7
-        version: 6.0.7
-      typescript:
-        specifier: ^5.7.3
-        version: 5.7.3
-
   packages-v1/sdk-v1:
     dependencies:
       '@trpc/client':
@@ -2299,25 +2250,6 @@ importers:
       bun-types:
         specifier: latest
         version: 1.2.4
-
-  packages-v1/util-v1:
-    dependencies:
-      '@sinclair/typebox':
-        specifier: ^0.34.15
-        version: 0.34.20
-      ulid:
-        specifier: ^2.3.0
-        version: 2.3.0
-    devDependencies:
-      bun-types:
-        specifier: latest
-        version: 1.2.2
-      typescript:
-        specifier: ^5.7.3
-        version: 5.7.3
-      zod:
-        specifier: ^3.22.4
-        version: 3.24.2
 
   packages/api:
     dependencies:
@@ -2412,7 +2344,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
@@ -2430,7 +2362,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
@@ -2494,7 +2426,7 @@ importers:
         version: 10.40.0
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
+        version: 0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1)
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.7.3)
@@ -4131,9 +4063,6 @@ packages:
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
 
-  '@electric-sql/pglite@0.2.17':
-    resolution: {integrity: sha512-qEpKRT2oUaWDH6tjRxLHjdzMqRUGYDnGZlKrnL4dJ77JVMcP2Hpo3NYnOSPKdZdeec57B6QPprCUFg0picx5Pw==}
-
   '@elysiajs/swagger@1.2.0':
     resolution: {integrity: sha512-OPx93DP6rM2VHjA3D44Xiz5MYm9AYlO2NGWPsnSsdyvaOCiL9wJj529583h7arX4iIEYE5LiLB0/A45unqbopw==}
     peerDependencies:
@@ -5461,116 +5390,6 @@ packages:
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
-
-  '@oven/bun-darwin-aarch64@1.2.3':
-    resolution: {integrity: sha512-wEUBqSD7KDUx6xcOlNs/lDcbzJYH9CEPVZzAaJ+F3Zp8hORQYJ07byidQ0YgNMc1QhJq4xLaClMDLga6u2abIQ==}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@oven/bun-darwin-aarch64@1.2.4':
-    resolution: {integrity: sha512-xBz/Q7X6AFwMg7MXtBemjjt5uB+tvEYBmi9Zbm1r8qnI2V8m/Smuhma0EARhiVfLuIAYj2EM5qjzxeAFV4TBJA==}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@oven/bun-darwin-x64-baseline@1.2.3':
-    resolution: {integrity: sha512-oYqGnocQ7eY5wfthGivpXd0lzLYklXU4rEKXU4+oLaiFeFnY3lyszv85UHjywuB5bl7xybmSIE8tN8ie36WY1w==}
-    cpu: [x64]
-    os: [darwin]
-
-  '@oven/bun-darwin-x64-baseline@1.2.4':
-    resolution: {integrity: sha512-stsq8vBiYgfGunBGlf2M7ST7Ymyw3WnwrxEeJ04vkKmMEEE2LpX8Rkol6UPRvZawab9s9/scFIRgFi6hu9H4SQ==}
-    cpu: [x64]
-    os: [darwin]
-
-  '@oven/bun-darwin-x64@1.2.3':
-    resolution: {integrity: sha512-kBeKYLNAwQrcJ1HPcuDGo3PGEfDvzHbL5N5kiaui1+eluyCS2yJZvuy2ddg9b0vqQkgzNu7D1keiRLpdR2Wneg==}
-    cpu: [x64]
-    os: [darwin]
-
-  '@oven/bun-darwin-x64@1.2.4':
-    resolution: {integrity: sha512-ufyty+2754QCFDhq447H39JiqabMlFRItLn1YFp+2hdpKak7KCYLGOUuHnlr1pmImKJzDHURjnvTTq1QRlUWAA==}
-    cpu: [x64]
-    os: [darwin]
-
-  '@oven/bun-linux-aarch64-musl@1.2.3':
-    resolution: {integrity: sha512-nSB6FU29OW+8zUP5jRrQEAXl9m6Jd8vp5Swplh3prc0L0niYdtan39wouCxDVFNJafC0DaeKQme4UMQJ65s9qw==}
-    cpu: [aarch64]
-    os: [linux]
-
-  '@oven/bun-linux-aarch64-musl@1.2.4':
-    resolution: {integrity: sha512-+lxWF7up9MuB1ZdGxXCH3AH3XmYtdBC6soQ38+yg3+y3iOPrAlSG+wytHEkypN/UU2mGvCuaEED3cMvejrGdDw==}
-    cpu: [aarch64]
-    os: [linux]
-
-  '@oven/bun-linux-aarch64@1.2.3':
-    resolution: {integrity: sha512-hbi7ykhLAtoBZl7mox5Qg6xVy9FcnPNibo/h6A1oElXBl4pRaVGNFDsuDmb80f9sFf4yZL0vwYyb47hL89MiGw==}
-    cpu: [arm64]
-    os: [linux]
-
-  '@oven/bun-linux-aarch64@1.2.4':
-    resolution: {integrity: sha512-OhVpzme2vvLA7w8GYeJg2SQ2h2CwJQN9oYDiGeoML4EwE+DEoYHdxgaBZsQySOwZtFIr8ufpc/8iD4hssJ50qg==}
-    cpu: [arm64]
-    os: [linux]
-
-  '@oven/bun-linux-x64-baseline@1.2.3':
-    resolution: {integrity: sha512-PrkC18s81ImpHMdqgFXvyq9Oxed8mzlYb709DsuuoV9NL3nrzQzfqq8JStz/g3dYMc4obrljG/EKXGfMaJMJVA==}
-    cpu: [x64]
-    os: [linux]
-
-  '@oven/bun-linux-x64-baseline@1.2.4':
-    resolution: {integrity: sha512-3nmDDZJH73MzhBg2sRYioj4CE8wgaz0w24OieMqj4/c44BbNr3X5RewrldsMD2cU6DtVbi52FuD5WpTw3N8nmw==}
-    cpu: [x64]
-    os: [linux]
-
-  '@oven/bun-linux-x64-musl-baseline@1.2.3':
-    resolution: {integrity: sha512-1VsFwYMOryIsnTGPG70N1HAXoa8Fa7s+XAtP2Y010tao0omgpM0S6Go0Uc7VJ8g+yHKyIw79leRMwUs35ysQZA==}
-    cpu: [x64]
-    os: [linux]
-
-  '@oven/bun-linux-x64-musl-baseline@1.2.4':
-    resolution: {integrity: sha512-qDsUvKCW0WUlVOt6Yx5eEzxgCbvzuSJBsu0sXtr6uGt8TnMKghmliRO5FmiMLQ0k/PUDA8vPJCtuv5k14bDi6g==}
-    cpu: [x64]
-    os: [linux]
-
-  '@oven/bun-linux-x64-musl@1.2.3':
-    resolution: {integrity: sha512-481HyvBKKXrKH2VZsSBVsqsqxcnncqpsKz7qgTqnSEToCSyNqc3bGrI6pN6haI9nLawJpIh+oNXCg4JISUi6bg==}
-    cpu: [x64]
-    os: [linux]
-
-  '@oven/bun-linux-x64-musl@1.2.4':
-    resolution: {integrity: sha512-cLdMbK7srNoUbYSG3Tp4GYdPAO0+5mgUhdbU053GZs0DLQmQ8h1JQhALp+ZjrUWstmQe7ddcNu7l7EAu6E76XA==}
-    cpu: [x64]
-    os: [linux]
-
-  '@oven/bun-linux-x64@1.2.3':
-    resolution: {integrity: sha512-oxubd+zJW8+1H02bwzne8lj2EtvgoRU6w245hWMtwjo15IET/YGc01ndFRd42FX02bwo926N+7Jm7NFzS8GOHQ==}
-    cpu: [x64]
-    os: [linux]
-
-  '@oven/bun-linux-x64@1.2.4':
-    resolution: {integrity: sha512-oof3ii92Cz2yIOZRbVFHMHmffCutRPFITIdXLZ2/rkqVuKUe0ZdqWjHPhxJFm31AL9MlJ/dSqDbPb51SaLI7tw==}
-    cpu: [x64]
-    os: [linux]
-
-  '@oven/bun-windows-x64-baseline@1.2.3':
-    resolution: {integrity: sha512-pvtDgWRclz/bxLEWUAppj854MklfTu01DfHAvKzV1UAHbBOlurC8+StpE7EhITAHC/jBK9U39eVYnZNvumVU9w==}
-    cpu: [x64]
-    os: [win32]
-
-  '@oven/bun-windows-x64-baseline@1.2.4':
-    resolution: {integrity: sha512-j/G4bnfsRAiCvpTADda40m29iSGvueIaF9Kc9hBu4jN8dTS9fEXdNNXuf8c30/z7/npxw2dhzsAn8jbc5QvD1A==}
-    cpu: [x64]
-    os: [win32]
-
-  '@oven/bun-windows-x64@1.2.3':
-    resolution: {integrity: sha512-z3G7jft1hbiiX47rY666i3HFJZBqCLgddr7e0ccoE/kUk4U5IB08mqJZYW0vaaL8zy0wuEF2h5VkK0S/iryLWw==}
-    cpu: [x64]
-    os: [win32]
-
-  '@oven/bun-windows-x64@1.2.4':
-    resolution: {integrity: sha512-4YRJd4pdaTWEM+uawYmchOeNv874RGAFpIZQubWnN4SBf6HfcDm0OMMZcm0f0I70Wd5gbPg1+rvCRtDZWVmZog==}
-    cpu: [x64]
-    os: [win32]
 
   '@panva/asn1.js@1.0.0':
     resolution: {integrity: sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==}
@@ -7867,6 +7686,9 @@ packages:
   '@types/pg-pool@2.0.6':
     resolution: {integrity: sha512-TaAUE5rq2VQYxab5Ts7WZhKNmuN78Q6PiFonTDdpbx8a1H0M1vhy3rhiMjl+e2iHmogyMw7jZF4FrE6eJUy5HQ==}
 
+  '@types/pg@8.11.11':
+    resolution: {integrity: sha512-kGT1qKM8wJQ5qlawUrEkXgvMSXoV213KfMGXcwfDwUIfUHXqXYXOfS1nE1LINRJVVVx5wCm70XnFlMHaIcQAfw==}
+
   '@types/pg@8.11.6':
     resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
 
@@ -8797,16 +8619,6 @@ packages:
 
   bun-types@1.2.4:
     resolution: {integrity: sha512-nDPymR207ZZEoWD4AavvEaa/KZe/qlrbMSchqpQwovPZCKc7pwMoENjEtHgMKaAjJhy+x6vfqSBA1QU3bJgs0Q==}
-
-  bun@1.2.3:
-    resolution: {integrity: sha512-i8F+I3wxmt9omnLh3lOg0APQtqxZaMU0x6xuC+9YH4Eg/7fu8SM4YbdwyvV8Z6sy3OMtGFB0SYOjU2STuId4FQ==}
-    os: [darwin, linux, win32]
-    hasBin: true
-
-  bun@1.2.4:
-    resolution: {integrity: sha512-ZY0EZ/UKqheaLeAtMsfJA6jWoWvV9HAtfFaOJSmS3LrNpFKs1Sg5fZLSsczN1h3a+Dtheo4O3p3ZYWrf40kRGw==}
-    os: [darwin, linux, win32]
-    hasBin: true
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -9785,10 +9597,6 @@ packages:
     resolution: {integrity: sha512-HmA/NeewvHywhJ2ENXD3KvOuM/+K2dGLJfxVfIHsGwaqKICJnS+Ke2L6UcSrSrtMJLJaT0Im1Qv4TFXfaZShyw==}
     hasBin: true
 
-  drizzle-kit@0.30.4:
-    resolution: {integrity: sha512-B2oJN5UkvwwNHscPWXDG5KqAixu7AUzZ3qbe++KU9SsQ+cZWR4DXEPYcvWplyFAno0dhRJECNEhNxiDmFaPGyQ==}
-    hasBin: true
-
   drizzle-orm@0.38.2:
     resolution: {integrity: sha512-eCE3yPRAskLo1WpM9OHpFaM70tBEDsWhwR/0M3CKyztAXKR9Qs3asZlcJOEliIcUSg8GuwrlY0dmYDgmm6y5GQ==}
     peerDependencies:
@@ -9875,92 +9683,6 @@ packages:
       prisma:
         optional: true
       react:
-        optional: true
-      sql.js:
-        optional: true
-      sqlite3:
-        optional: true
-
-  drizzle-orm@0.39.3:
-    resolution: {integrity: sha512-EZ8ZpYvDIvKU9C56JYLOmUskazhad+uXZCTCRN4OnRMsL+xAJ05dv1eCpAG5xzhsm1hqiuC5kAZUCS924u2DTw==}
-    peerDependencies:
-      '@aws-sdk/client-rds-data': '>=3'
-      '@cloudflare/workers-types': '>=4'
-      '@electric-sql/pglite': '>=0.2.0'
-      '@libsql/client': '>=0.10.0'
-      '@libsql/client-wasm': '>=0.10.0'
-      '@neondatabase/serverless': '>=0.10.0'
-      '@op-engineering/op-sqlite': '>=2'
-      '@opentelemetry/api': ^1.4.1
-      '@planetscale/database': '>=1'
-      '@prisma/client': '*'
-      '@tidbcloud/serverless': '*'
-      '@types/better-sqlite3': '*'
-      '@types/pg': '*'
-      '@types/sql.js': '*'
-      '@vercel/postgres': '>=0.8.0'
-      '@xata.io/client': '*'
-      better-sqlite3: '>=7'
-      bun-types: '*'
-      expo-sqlite: '>=14.0.0'
-      knex: '*'
-      kysely: '*'
-      mysql2: '>=2'
-      pg: '>=8'
-      postgres: '>=3'
-      prisma: '*'
-      sql.js: '>=1'
-      sqlite3: '>=5'
-    peerDependenciesMeta:
-      '@aws-sdk/client-rds-data':
-        optional: true
-      '@cloudflare/workers-types':
-        optional: true
-      '@electric-sql/pglite':
-        optional: true
-      '@libsql/client':
-        optional: true
-      '@libsql/client-wasm':
-        optional: true
-      '@neondatabase/serverless':
-        optional: true
-      '@op-engineering/op-sqlite':
-        optional: true
-      '@opentelemetry/api':
-        optional: true
-      '@planetscale/database':
-        optional: true
-      '@prisma/client':
-        optional: true
-      '@tidbcloud/serverless':
-        optional: true
-      '@types/better-sqlite3':
-        optional: true
-      '@types/pg':
-        optional: true
-      '@types/sql.js':
-        optional: true
-      '@vercel/postgres':
-        optional: true
-      '@xata.io/client':
-        optional: true
-      better-sqlite3:
-        optional: true
-      bun-types:
-        optional: true
-      expo-sqlite:
-        optional: true
-      knex:
-        optional: true
-      kysely:
-        optional: true
-      mysql2:
-        optional: true
-      pg:
-        optional: true
-      postgres:
-        optional: true
-      prisma:
         optional: true
       sql.js:
         optional: true
@@ -12114,9 +11836,6 @@ packages:
   jose@2.0.6:
     resolution: {integrity: sha512-FVoPY7SflDodE4lknJmbAHSUjLCzE2H1F6MS0RYKMQ8SR+lNccpMf8R4eqkNYyyUjR5qZReOzZo5C5YiHOCjjg==}
     engines: {node: '>=10.13.0 < 13 || >=13.7.0'}
-
-  jose@6.0.7:
-    resolution: {integrity: sha512-IEsxVzzz+j8mNYlZYSxqNNy9RHbPQSIh9R81ZEgYzjsgAeuLLqhXnHBbc0hEotW0r3j7u9PYYWDepWHdVUOdsQ==}
 
   jotai@1.3.9:
     resolution: {integrity: sha512-b6DvH9gf+7TfjaboCO54g+C0yhaakIaUBtjLf0dk1p15FWCzNw/93sezdXy9cCaZ8qcEdMLJcjBwQlORmIq29g==}
@@ -15967,10 +15686,6 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  ulid@2.3.0:
-    resolution: {integrity: sha512-keqHubrlpvT6G2wH0OEfSW4mquYRcbe/J8NMmveoQOjUqmo+hXtO+ORCpWhdbZ7k72UtY61BL7haGxW6enBnjw==}
-    hasBin: true
-
   ulidx@0.4.0:
     resolution: {integrity: sha512-Ih/3tOXQ4w+zriMzjas8F1Yl4iNM+IQoamnY+n3XX01MBQC9lMiMnO/ONT8jXQfzprYhymrNcYpwgq6QutxUUA==}
 
@@ -18041,8 +17756,6 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
-  '@electric-sql/pglite@0.2.17': {}
-
   '@elysiajs/swagger@1.2.0(elysia@1.2.12(@sinclair/typebox@0.34.20)(openapi-types@12.1.3)(typescript@5.7.3))':
     dependencies:
       '@scalar/themes': 0.9.65
@@ -20064,72 +19777,6 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.26.0(@opentelemetry/api@1.9.0)
-
-  '@oven/bun-darwin-aarch64@1.2.3':
-    optional: true
-
-  '@oven/bun-darwin-aarch64@1.2.4':
-    optional: true
-
-  '@oven/bun-darwin-x64-baseline@1.2.3':
-    optional: true
-
-  '@oven/bun-darwin-x64-baseline@1.2.4':
-    optional: true
-
-  '@oven/bun-darwin-x64@1.2.3':
-    optional: true
-
-  '@oven/bun-darwin-x64@1.2.4':
-    optional: true
-
-  '@oven/bun-linux-aarch64-musl@1.2.3':
-    optional: true
-
-  '@oven/bun-linux-aarch64-musl@1.2.4':
-    optional: true
-
-  '@oven/bun-linux-aarch64@1.2.3':
-    optional: true
-
-  '@oven/bun-linux-aarch64@1.2.4':
-    optional: true
-
-  '@oven/bun-linux-x64-baseline@1.2.3':
-    optional: true
-
-  '@oven/bun-linux-x64-baseline@1.2.4':
-    optional: true
-
-  '@oven/bun-linux-x64-musl-baseline@1.2.3':
-    optional: true
-
-  '@oven/bun-linux-x64-musl-baseline@1.2.4':
-    optional: true
-
-  '@oven/bun-linux-x64-musl@1.2.3':
-    optional: true
-
-  '@oven/bun-linux-x64-musl@1.2.4':
-    optional: true
-
-  '@oven/bun-linux-x64@1.2.3':
-    optional: true
-
-  '@oven/bun-linux-x64@1.2.4':
-    optional: true
-
-  '@oven/bun-windows-x64-baseline@1.2.3':
-    optional: true
-
-  '@oven/bun-windows-x64-baseline@1.2.4':
-    optional: true
-
-  '@oven/bun-windows-x64@1.2.3':
-    optional: true
-
-  '@oven/bun-windows-x64@1.2.4':
-    optional: true
 
   '@panva/asn1.js@1.0.0': {}
 
@@ -23165,17 +22812,7 @@ snapshots:
     dependencies:
       '@types/pg': 8.11.11
 
-<<<<<<< HEAD
   '@types/pg@8.11.11':
-=======
-  '@types/pg@8.11.6':
-    dependencies:
-      '@types/node': 20.17.16
-      pg-protocol: 1.5.0
-      pg-types: 4.0.2
-
-  '@types/pg@8.6.1':
->>>>>>> c1f408e (Adding neon serverless)
     dependencies:
       '@types/node': 20.17.16
       pg-protocol: 1.5.0
@@ -24365,34 +24002,6 @@ snapshots:
       '@types/node': 22.13.8
       '@types/ws': 8.5.14
 
-  bun@1.2.3:
-    optionalDependencies:
-      '@oven/bun-darwin-aarch64': 1.2.3
-      '@oven/bun-darwin-x64': 1.2.3
-      '@oven/bun-darwin-x64-baseline': 1.2.3
-      '@oven/bun-linux-aarch64': 1.2.3
-      '@oven/bun-linux-aarch64-musl': 1.2.3
-      '@oven/bun-linux-x64': 1.2.3
-      '@oven/bun-linux-x64-baseline': 1.2.3
-      '@oven/bun-linux-x64-musl': 1.2.3
-      '@oven/bun-linux-x64-musl-baseline': 1.2.3
-      '@oven/bun-windows-x64': 1.2.3
-      '@oven/bun-windows-x64-baseline': 1.2.3
-
-  bun@1.2.4:
-    optionalDependencies:
-      '@oven/bun-darwin-aarch64': 1.2.4
-      '@oven/bun-darwin-x64': 1.2.4
-      '@oven/bun-darwin-x64-baseline': 1.2.4
-      '@oven/bun-linux-aarch64': 1.2.4
-      '@oven/bun-linux-aarch64-musl': 1.2.4
-      '@oven/bun-linux-x64': 1.2.4
-      '@oven/bun-linux-x64-baseline': 1.2.4
-      '@oven/bun-linux-x64-musl': 1.2.4
-      '@oven/bun-linux-x64-musl-baseline': 1.2.4
-      '@oven/bun-windows-x64': 1.2.4
-      '@oven/bun-windows-x64-baseline': 1.2.4
-
   busboy@1.6.0:
     dependencies:
       streamsearch: 1.1.0
@@ -25365,40 +24974,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-kit@0.30.4:
-    dependencies:
-      '@drizzle-team/brocli': 0.10.2
-      '@esbuild-kit/esm-loader': 2.6.5
-      esbuild: 0.17.5
-      esbuild-register: 3.5.0(esbuild@0.17.5)
-    transitivePeerDependencies:
-      - supports-color
-
-  drizzle-orm@0.38.2(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(@types/react@18.0.27)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
+  drizzle-orm@0.38.2(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@18.0.27)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)(react@18.3.1):
     optionalDependencies:
-      '@electric-sql/pglite': 0.2.17
       '@neondatabase/serverless': 0.10.4
       '@opentelemetry/api': 1.9.0
-<<<<<<< HEAD
       '@types/pg': 8.11.11
-=======
-      '@types/pg': 8.11.6
->>>>>>> c1f408e (Adding neon serverless)
       '@types/react': 18.0.27
       bun-types: 1.2.4
       pg: 8.8.0(pg-native@3.0.1)
       postgres: 3.4.5
       react: 18.3.1
-
-  drizzle-orm@0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(bun-types@1.2.2)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5):
-    optionalDependencies:
-      '@electric-sql/pglite': 0.2.17
-      '@neondatabase/serverless': 0.10.4
-      '@opentelemetry/api': 1.9.0
-      '@types/pg': 8.11.6
-      bun-types: 1.2.2
-      pg: 8.8.0(pg-native@3.0.1)
-      postgres: 3.4.5
 
   dunder-proto@1.0.1:
     dependencies:
@@ -28579,8 +28164,6 @@ snapshots:
   jose@2.0.6:
     dependencies:
       '@panva/asn1.js': 1.0.0
-
-  jose@6.0.7: {}
 
   jotai@1.3.9(@babel/core@7.25.2)(@babel/template@7.25.9)(immer@9.0.15)(react-query@3.39.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -33094,8 +32677,6 @@ snapshots:
 
   uglify-js@3.17.3:
     optional: true
-
-  ulid@2.3.0: {}
 
   ulidx@0.4.0:
     dependencies:

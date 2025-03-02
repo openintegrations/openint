@@ -10,22 +10,8 @@ export const envConfig = {
       .string()
       .default('postgres://postgres:password@db.localtest.me:5432/postgres'),
     DATABASE_URL_UNPOOLED: z.string().optional(),
-    // rls specific connection strings
-    DATABASE_URL_ROLE_ANON: z
-      .string()
-      .default('postgres://anon:pw@db.localtest.me:5432/postgres'),
-    DATABASE_URL_ROLE_AUTHENTICATED: z
-      .string()
-      .default('postgres://authenticated:pw@db.localtest.me:5432/postgres'),
-    DATABASE_URL_ROLE_ORG: z
-      .string()
-      .default('postgres://org:pw@db.localtest.me:5432/postgres'),
-    DATABASE_URL_ROLE_CUSTOMER: z
-      .string()
-      .default('postgres://customer:pw@db.localtest.me:5432/postgres'),
-
     JWT_SECRET: z.string().optional(),
-    JWT_PRIVATE_KEY: z.string().optional(),
+
     CLERK_SECRET_KEY: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
 
@@ -64,7 +50,9 @@ export const envConfig = {
 
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: z.string().optional(),
 
-    NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
+    // Useful later for when we switch to asymmetric jwt rather than symmetric ones
+    // JWT_PRIVATE_KEY: z.string().optional(),
+    // NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
@@ -87,16 +75,11 @@ export const envConfig = {
     NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
     DATABASE_URL: process.env['DATABASE_URL'],
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
-    DATABASE_URL_ROLE_ANON: process.env['DATABASE_URL_ROLE_ANON'],
-    DATABASE_URL_ROLE_AUTHENTICATED:
-      process.env['DATABASE_URL_ROLE_AUTHENTICATED'],
-    DATABASE_URL_ROLE_ORG: process.env['DATABASE_URL_ROLE_ORG'],
-    DATABASE_URL_ROLE_CUSTOMER: process.env['DATABASE_URL_ROLE_CUSTOMER'],
     VERCEL_URL: process.env['VERCEL_URL'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
     PGLITE: process.env['PGLITE'],
-    JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
-    NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
+    // JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
+    // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
