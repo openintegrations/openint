@@ -1,17 +1,8 @@
-import {env} from '@openint/env'
-import type {Database} from './test-utils'
-import {createTestDatabase, runMigration} from './test-utils'
-
-const dbName = 'migration'
-
-let db: Database
-
-beforeAll(async () => {
-  db = await createTestDatabase(env.DATABASE_URL, dbName)
-})
+import {initDbPGLite} from '../db.pglite'
 
 test('run migration', async () => {
-  await runMigration(db)
+  const db = initDbPGLite({logger: true})
+  await db.migrate()
   const res = await db.execute('select * from connector_config')
   expect(res).toEqual([])
 })

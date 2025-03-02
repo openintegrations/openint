@@ -1,69 +1,67 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {check, customType, pgTable} from 'drizzle-orm/pg-core'
-import {drizzle} from 'drizzle-orm/postgres-js'
-import {env} from '@openint/env'
-import {createTestDatabase, urlForDatabase} from './__tests__/test-utils'
+import {initDbPGLite} from './db.pglite'
+
+const customText = customType<{data: unknown}>({dataType: () => 'text'})
+
+const table = pgTable(
+  'account',
+  (t) => ({
+    id: t.serial().primaryKey(),
+    email: t.text(),
+    data: t.jsonb(),
+    ts: t.timestamp({withTimezone: true}).defaultNow(),
+    ts_str: t.timestamp({withTimezone: true, mode: 'string'}).defaultNow(),
+    custom: customText(),
+  }),
+  (table) => [check('email_check', sql`${table.email} LIKE '%@%'`)],
+)
+
+test('generate migrations', async () => {
+  const migrations = await generateMigration(
+    generateDrizzleJson({}),
+    generateDrizzleJson({table}),
+  )
+  expect(migrations).toMatchInlineSnapshot(`
+    [
+      "CREATE TABLE "account" (
+    	"id" serial PRIMARY KEY NOT NULL,
+    	"email" text,
+    	"data" jsonb,
+    	"ts" timestamp with time zone DEFAULT now(),
+    	"ts_str" timestamp with time zone DEFAULT now(),
+    	"custom" text,
+    	CONSTRAINT "email_check" CHECK ("account"."email" LIKE '%@%')
+    );
+    ",
+    ]
+  `)
+})
+
+// TODO: Test against each driver of the database to ensure compatibility across drivers
 
 describe('test db', () => {
-  // console.log('filename', __filename)
-  const dbName = 'db_index'
+  const db = initDbPGLite({logger: true})
 
-  // TODO: Add me back in once we know CI is working
   beforeAll(async () => {
-    await createTestDatabase(env.DATABASE_URL, dbName)
-  })
-
-  const dbUrl = urlForDatabase(env.DATABASE_URL, dbName)
-  const db = drizzle(dbUrl, {logger: true})
-
-  test('connect', async () => {
-    const res = await db.execute('select 1+1 as sum')
-    expect(res[0]).toEqual({sum: 2})
-  })
-
-  const customText = customType<{data: unknown}>({dataType: () => 'text'})
-
-  const table = pgTable(
-    'account',
-    (t) => ({
-      id: t.serial().primaryKey(),
-      email: t.text(),
-      data: t.jsonb(),
-      ts: t.timestamp({withTimezone: true}).defaultNow(),
-      ts_str: t.timestamp({withTimezone: true, mode: 'string'}).defaultNow(),
-      custom: customText(),
-    }),
-    (table) => [check('email_check', sql`${table.email} LIKE '%@%'`)],
-  )
-
-  test('column definition', () => {
-    expect(table.data.columnType).toEqual('PgJsonb')
-    expect(table.data.dataType).toEqual('json')
-  })
-
-  test('generate migration', async () => {
     const migrations = await generateMigration(
       generateDrizzleJson({}),
       generateDrizzleJson({table}),
     )
-    expect(migrations).toMatchInlineSnapshot(`
-      [
-        "CREATE TABLE "account" (
-      	"id" serial PRIMARY KEY NOT NULL,
-      	"email" text,
-      	"data" jsonb,
-      	"ts" timestamp with time zone DEFAULT now(),
-      	"ts_str" timestamp with time zone DEFAULT now(),
-      	"custom" text,
-      	CONSTRAINT "email_check" CHECK ("account"."email" LIKE '%@%')
-      );
-      ",
-      ]
-    `)
     for (const migration of migrations) {
       await db.execute(migration)
     }
+  })
+
+  test('connect', async () => {
+    const res = await db.exec('select 1+1 as sum')
+    expect(res.rows[0]).toEqual({sum: 2})
+  })
+
+  test('column definition', () => {
+    expect(table.data.columnType).toEqual('PgJsonb')
+    expect(table.data.dataType).toEqual('json')
   })
 
   test('date operations', async () => {
@@ -74,11 +72,14 @@ describe('test db', () => {
     await expect(db.insert(table).values({email: 'nihao.com'})).rejects.toThrow(
       'violates check constraint',
     )
-    await expect(
-      db.insert(table).values({ts_str: date as any}),
-    ).rejects.toThrow(
-      '"string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Date',
-    )
+
+    // This fails for postgres.js but works in pglite... Need to think about right behavior
+    // await expect(
+    //   db.insert(table).values({ts_str: date as any}),
+    // ).rejects.toThrow(
+    //   '"string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Date',
+    // )
+
     // fetch with db.select
     const rows = await db.select().from(table).execute()
     expect(rows).toEqual([
@@ -93,7 +94,7 @@ describe('test db', () => {
     ])
 
     // fetch raw with db.execute
-    const rows2 = await db.execute(sql`SELECT * FROM ${table}`)
+    const {rows: rows2} = await db.execute(sql`SELECT * FROM ${table}`)
     expect(rows2).toEqual([
       {
         id: 1,
@@ -109,7 +110,7 @@ describe('test db', () => {
   })
 
   test('camelCase support', async () => {
-    const db2 = drizzle(dbUrl, {logger: true, casing: 'snake_case'})
+    const db2 = initDbPGLite({logger: true, casing: 'snake_case'})
     // works for column names only, not table names
     await db2.execute(sql`
       create table if not exists "myAccount" (
@@ -127,21 +128,21 @@ describe('test db', () => {
     expect(rows).toEqual([{myId: 1}])
 
     // does not work for raw queries...
-    const rows2 = await db2.execute(sql`select * from "myAccount"`)
+    const {rows: rows2} = await db2.execute(sql`select * from "myAccount"`)
     expect(rows2).toEqual([{my_id: 1}])
   })
 
   // Depends on the previous test, cannot be parallel executed
   test('array query', async () => {
     // test array query
-    const res = await db.execute(
+    const {rows: res} = await db.execute(
       sql`SELECT * FROM account where email = ANY(${sql.param([
         'hello@world.com',
         'sup@sup.com',
       ])})`,
     )
     expect(res).toMatchObject([{id: 1, email: 'hello@world.com'}])
-    const res2 = await db.execute(
+    const {rows: res2} = await db.execute(
       sql`SELECT * FROM account where email = ANY(${sql.param([])})`,
     )
     expect(res2).toMatchObject([])
@@ -156,34 +157,43 @@ describe('test db', () => {
   })
 
   test('jsonb inserts require string input', async () => {
-    await expect(() =>
+    await expect(
       db.execute(
         sql`INSERT INTO account (email, data) VALUES (${'hi@mail.com'}, ${{
           a: 1,
         }})`,
       ),
-    ).rejects.toThrow(
-      'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Object',
-    )
-    await expect(() =>
+    ).resolves.toBeTruthy()
+    // Breaks in postgres.js but works in pglite
+    // rejects.toThrow(
+    //   'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Object',
+    // )
+    await expect(
       db.execute(
         sql`INSERT INTO account (email, data) VALUES (${'bool@mail.com'}, ${true})`,
       ),
-    ).rejects.toThrow(
-      'column "data" is of type jsonb but expression is of type boolean',
-    )
-    await expect(() =>
+    ).resolves.toBeTruthy()
+    // Breaks in postgres.js but works in pglite
+    // .rejects.toThrow(
+    //       'column "data" is of type jsonb but expression is of type boolean',
+    //     )
+    await expect(
       db.execute(
         sql`INSERT INTO account (email, data) VALUES (${'int@mail.com'}, ${123})`,
       ),
-    ).rejects.toThrow(
-      'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received type number',
-    )
-    await expect(() =>
+    ).resolves.toBeTruthy()
+    // Breaks in postgres.js but works in pglite
+    // .rejects.toThrow(
+    //       'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received type number',
+    //     )
+
+    // Fails in both postgres.js and pglite
+    await expect(
       db.execute(
         sql`INSERT INTO account (email, data) VALUES (${'str@mail.com'}, ${'str'})`,
       ),
     ).rejects.toThrow('invalid input syntax for type json')
+
     await db.execute(
       sql`INSERT INTO account (email, data) VALUES (${'null@mail.com'}, ${'null'})`,
     )
@@ -202,7 +212,7 @@ describe('test db', () => {
         .execute(
           sql`SELECT * FROM ${table} where ${table.email} = ${'hi@mail.com'}`,
         )
-        .then((r) => r[0]),
+        .then((r) => r.rows[0]),
     ).toMatchObject({
       email: 'hi@mail.com',
       data: {a: 1},
@@ -212,7 +222,7 @@ describe('test db', () => {
         .execute(
           sql`SELECT * FROM ${table} where ${table.email} = ${'sqlNULL@mail.com'}`,
         )
-        .then((r) => r[0]),
+        .then((r) => r.rows[0]),
     ).toMatchObject({
       email: 'sqlNULL@mail.com',
       data: null,
@@ -222,7 +232,7 @@ describe('test db', () => {
         .execute(
           sql`SELECT * FROM ${table} where ${table.email} = ${'null@mail.com'}`,
         )
-        .then((r) => r[0]),
+        .then((r) => r.rows[0]),
     ).toMatchObject({
       email: 'null@mail.com',
       data: null,
@@ -235,9 +245,9 @@ describe('test db', () => {
     ).rejects.toThrow('malformed array literal: "a"')
 
     await expect(
-      db.execute(sql`SELECT true WHERE 'a' = ANY(${sql.param(['a'])})`),
-    ).resolves.toEqual([{'?column?': true}])
+      db
+        .execute(sql`SELECT true WHERE 'a' = ANY(${sql.param(['a'])})`)
+        .then((r) => r.rows[0]),
+    ).resolves.toEqual({'?column?': true})
   })
-
-  afterAll(() => db.$client.end())
 })

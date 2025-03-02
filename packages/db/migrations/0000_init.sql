@@ -1,4 +1,5 @@
 BEGIN;
+--> statement-breakpoint
 --- filename: 0_setup-ulid.sql ---
 
 -- pgulid is based on OK Log's Go implementation of the ULID spec
