@@ -1,6 +1,6 @@
 import {env} from '@openint/env'
-import type {Database} from './__tests__/test-utils'
-import {createTestDatabase, runMigration} from './__tests__/test-utils'
+import type {Database} from './test-utils'
+import {createTestDatabase, runMigration} from './test-utils'
 
 const dbName = 'migration'
 

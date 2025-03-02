@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-disabled-tests */
 import {neon, neonConfig, Pool} from '@neondatabase/serverless'
 import {drizzle as drizzleNeonHttp} from 'drizzle-orm/neon-http'
 import {drizzle as drizzleNeonServerless} from 'drizzle-orm/neon-serverless'
@@ -13,7 +12,9 @@ neonConfig.wsProxy =
     ? (host) => `${host}:4444/v1`
     : undefined
 
-test.skip('node-postgres compatible Pool', async () => {
+jest.setTimeout(30000)
+
+test('node-postgres compatible Pool', async () => {
   // neonConfig.webSocketConstructor = await import('ws) // when using Node.js
 
   const pool = new Pool({connectionString: connectionStringUrl.toString()})
@@ -46,66 +47,28 @@ neonConfig.fetchEndpoint = (host) => {
   return `${protocol}://${host}:${port}/sql`
 }
 
-describe.skip('one-shot queries', () => {
+describe('rls via non-interactive transaction', () => {
   const sql = neon(env.DATABASE_URL)
 
-  test('Using single SQL query', async () => {
-    const [res] = await sql`SELECT 1+1 as sum`
-    expect(res?.['sum']).toEqual(2)
-  })
+  afterAll(async () => {
+    // Clean up if needed
+    await sql.transaction([
+      // Drop policies first
+      sql`DROP POLICY IF EXISTS alice_data_access ON customer_data;`,
+      sql`DROP POLICY IF EXISTS bob_data_access ON customer_data;`,
 
-  test('use non-interactive transaction', async () => {
-    const [res2, res3] = await sql.transaction([
-      sql`SELECT 2+2 as sum`,
-      sql`SELECT 3+3 as sum`,
+      // Revoke permissions
+      sql`REVOKE SELECT ON customer_data FROM manager_alice, manager_bob;`,
+      sql`REVOKE USAGE ON SCHEMA public FROM manager_alice, manager_bob;`,
+
+      // Drop the table (this will also delete all data)
+      sql`DROP TABLE IF EXISTS customer_data;`,
+
+      // Drop roles
+      sql`DROP ROLE IF EXISTS manager_alice;`,
+      sql`DROP ROLE IF EXISTS manager_bob;`,
     ])
-    expect(res2?.[0]?.['sum']).toEqual(4)
-    expect(res3?.[0]?.['sum']).toEqual(6)
   })
-
-  test('use non-interactive transaction with error', async () => {
-    await expect(sql.transaction([sql`SELECT 1/0 as sum`])).rejects.toThrow(
-      'division by zero',
-    )
-  })
-})
-
-// Does not work at the moment
-// Also unclear whether RLS authorize could work with multiple roles as in our setup, not just anon and authenticated
-describe.skip('RLS authorize', () => {
-  const sql = neon(env.DATABASE_URL, {
-    authToken:
-      'eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18yUEhTeFB6RzJGczZvRjVLU1o2TUJDQjRQTjAiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL2FwcC5vcGVuaW50LmRldiIsImV4cCI6MTc0MDY3ODE0OSwiZnZhIjpbODc4MiwtMV0sImlhdCI6MTc0MDY3ODA4OSwiaXNzIjoiaHR0cHM6Ly9jbGVyay5vcGVuaW50LmRldiIsImp0aSI6ImE2OGQ1NzUyNTIyOGQyZTcxZmZlIiwibmJmIjoxNzQwNjc4MDc5LCJvcmdfaWQiOiJvcmdfMm44RWFXVkw3YUV1Y3R1MGFJdnRYM0I0cmxIIiwib3JnX3Blcm1pc3Npb25zIjpbXSwib3JnX3JvbGUiOiJhZG1pbiIsIm9yZ19zbHVnIjoiYWNtZS1jb3JwIiwicHVibGljX21ldGFkYXRhIjp7IndoaXRlbGlzdGVkIjp0cnVlfSwic2lkIjoic2Vzc18ydE05Y1pGdEdMWWZOYWc0SzlOSUtiZUJrNFkiLCJzdWIiOiJ1c2VyXzJQSFh5dGVFQkxVRFBVRVBuQThsZUFDZW8zZCJ9.b9VMxQz1xrZS5eTq-rstC9kGnYafK5K2E64tGfQqNwlYsLCjX1LhbYNg5ChBEbSERTQaTCh_m5qqJKYkdJOWUp4TyepgJOibYJgk-uvRwriaAmcbFQtCrXHxnS0cHMpV3SRS2JfNwTZqbpljZZEZzOLrmLDiRxQcegnq2B7A_SQDpCX55Lb2WArdiWEem_KwJdCkJMIbrw3_Gmv64YCommUe7rtiNTkh50vqpPBgSSFtaH2_IyCoO5JmleVm6L-6Aor6BvUZ8ZhyNi4yXIdct8dOff9r16yzgPB8RJuzYBqdd68hF6-8cDvF6tEuJSZYt50YosgX7XhAqT4eg0nNvQ',
-  })
-
-  test('SELECT', async () => {
-    const [res] = await sql`SELECT 1+1 as sum`
-    expect(res?.['sum']).toEqual(2)
-  })
-})
-
-describe.skip('rls via non-interactive transaction', () => {
-  const sql = neon(env.DATABASE_URL)
-
-  // afterAll(async () => {
-  //   // Clean up if needed
-  //   await sql.transaction([
-  //     // Drop policies first
-  //     sql`DROP POLICY IF EXISTS alice_data_access ON customer_data;`,
-  //     sql`DROP POLICY IF EXISTS bob_data_access ON customer_data;`,
-
-  //     // Revoke permissions
-  //     sql`REVOKE SELECT ON customer_data FROM manager_alice, manager_bob;`,
-  //     sql`REVOKE USAGE ON SCHEMA public FROM manager_alice, manager_bob;`,
-
-  //     // Drop the table (this will also delete all data)
-  //     sql`DROP TABLE IF EXISTS customer_data;`,
-
-  //     // Drop roles
-  //     sql`DROP ROLE IF EXISTS manager_alice;`,
-  //     sql`DROP ROLE IF EXISTS manager_bob;`,
-  //   ])
-  // })
 
   beforeAll(async () => {
     // Create a sample table
@@ -158,7 +121,30 @@ describe.skip('rls via non-interactive transaction', () => {
       .catch(() => null)
   })
 
-  test.skip('directly with neon client', async () => {
+  test('via drizzle neon serverless does work', async () => {
+    const pool = new Pool({connectionString: connectionStringUrl.toString()})
+    const db = drizzleNeonServerless({client: pool})
+
+    // eslint-disable-next-line arrow-body-style
+    const _res = await db.transaction(async (trx) => {
+      return trx.execute(`
+          select set_config('role', 'manager_alice', true);
+          SELECT * FROM customer_data;
+        `)
+    })
+    const res = _res as unknown as Array<typeof _res>
+    expect(res[1]?.rows).toEqual([
+      {
+        id: 1,
+        customer_name: 'Acme Corporation',
+        email: 'contact@acme.com',
+        account_balance: '50000.00',
+        account_manager: 'manager_alice',
+      },
+    ])
+  })
+
+  test('directly with neon client', async () => {
     const [, res1] = await sql.transaction([
       sql`select set_config('role', 'manager_alice', true);`, // sql`SET LOCAL ROLE manager_alice;` equivalent
       sql`SELECT * FROM customer_data;`,
@@ -187,43 +173,20 @@ describe.skip('rls via non-interactive transaction', () => {
   // Does not work due to
   // Error: No transactions support in neon-http driver
 
-  test.skip('via drizzle neon http fails', async () => {
+  test('via drizzle neon http fails', async () => {
     const db = drizzleNeonHttp({client: sql})
 
-    // eslint-disable-next-line arrow-body-style
-    const res = await db.transaction(async (trx) => {
-      return trx.execute(`
+    await expect(
+      db.transaction(async (trx) =>
+        trx.execute(`
 select set_config('role', 'manager_alice', true);
 SELECT * FROM customer_data;
-        `)
-    })
-    console.log(res)
+        `),
+      ),
+    ).rejects.toThrow('No transactions support in neon-http driver')
   })
 
-  test.skip('via drizzle neon serverless does work', async () => {
-    const pool = new Pool({connectionString: connectionStringUrl.toString()})
-    const db = drizzleNeonServerless({client: pool})
-
-    // eslint-disable-next-line arrow-body-style
-    const _res = await db.transaction(async (trx) => {
-      return trx.execute(`
-          select set_config('role', 'manager_alice', true);
-          SELECT * FROM customer_data;
-        `)
-    })
-    const res = _res as unknown as Array<typeof _res>
-    expect(res[1]?.rows).toEqual([
-      {
-        id: 1,
-        customer_name: 'Acme Corporation',
-        email: 'contact@acme.com',
-        account_balance: '50000.00',
-        account_manager: 'manager_alice',
-      },
-    ])
-  })
-
-  test.skip('via drizzle proxy does work', async () => {
+  test('via drizzle proxy does work', async () => {
     const db = drizzleProxy(async (query, params, _method) => {
       // TODO: Do something about _method, whatever that is about...
       const [, res] = await sql.transaction([
@@ -243,5 +206,29 @@ SELECT * FROM customer_data;
         account_manager: 'manager_alice',
       },
     ])
+  })
+})
+
+describe('one-shot queries', () => {
+  const sql = neon(env.DATABASE_URL)
+
+  test('Using single SQL query', async () => {
+    const [res] = await sql`SELECT 1+1 as sum`
+    expect(res?.['sum']).toEqual(2)
+  })
+
+  test('use non-interactive transaction', async () => {
+    const [res2, res3] = await sql.transaction([
+      sql`SELECT 2+2 as sum`,
+      sql`SELECT 3+3 as sum`,
+    ])
+    expect(res2?.[0]?.['sum']).toEqual(4)
+    expect(res3?.[0]?.['sum']).toEqual(6)
+  })
+
+  test('use non-interactive transaction with error', async () => {
+    await expect(sql.transaction([sql`SELECT 1/0 as sum`])).rejects.toThrow(
+      'division by zero',
+    )
   })
 })
