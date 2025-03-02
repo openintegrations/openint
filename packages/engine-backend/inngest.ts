@@ -1,7 +1,7 @@
 import {sentryMiddleware} from '@inngest/middleware-sentry'
 import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import {makeId} from '@openint/cdk'
-import {db, schema, sql} from '@openint/db'
+import {databaseForViewer, schema, sql} from '@openint/db'
 import {eventMapForInngest} from '@openint/events'
 import {makeUlid, R} from '@openint/util'
 
@@ -13,6 +13,7 @@ export const persistEventsMiddleware = new InngestMiddleware({
 
     return {
       onSendEvent() {
+        const db = databaseForViewer({role: 'system'})
         return {
           async transformInput({payloads}) {
             function getConnIdForEvent(ev: {data?: Record<string, unknown>}) {
@@ -27,7 +28,6 @@ export const persistEventsMiddleware = new InngestMiddleware({
             const connectionIds = R.uniq(
               payloads.map(getConnIdForEvent).filter((id) => !!id),
             )
-
             const rows = connectionIds.length
               ? await db.execute<{
                   id: string
