@@ -1,6 +1,6 @@
 import type {SQL} from 'drizzle-orm'
 import {sql} from 'drizzle-orm'
-import type {Database} from './db-rls'
+import type {Database} from './db'
 import * as schema from './schema'
 
 export * from 'drizzle-orm'
@@ -8,9 +8,7 @@ export * from './stripeNullByte'
 export * from './upsert'
 export {schema}
 
-export {databaseForViewer} from './db-rls'
-
-export async function ensureSchema(thisDb: Database, schema: string) {
+export async function ensureSchema(thisDb: Database<'neon'>, schema: string) {
   // Check existence first because we may not have permission to actually create the schema
   const exists = await thisDb
     .execute(

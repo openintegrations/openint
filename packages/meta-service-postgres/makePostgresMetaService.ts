@@ -4,24 +4,19 @@ import {camelCase, snakeCase} from 'change-case'
 import type {Id, Viewer, ZRaw} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {zPgConfig} from '@openint/connector-postgres/def'
-import {
-  applyLimitOffset,
-  databaseForViewer,
-  dbUpsertOne,
-  sql,
-} from '@openint/db'
+import {applyLimitOffset, dbUpsertOne, sql} from '@openint/db'
+import {initDbNeon} from '@openint/db/db.neon'
 import type {
   CustomerResultRow,
   MetaService,
   MetaTable,
 } from '@openint/engine-backend'
 import {R, zFunction} from '@openint/util'
-import {__DEBUG__} from '../../apps/app-config/constants'
 
 type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const {viewer} = opts
-  const db = databaseForViewer(viewer)
+  const db = initDbNeon(opts.databaseUrl, viewer)
   const getDb = () => db
   type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
 

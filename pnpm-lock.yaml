@@ -740,7 +740,7 @@ importers:
         version: 10.4.13(postcss@8.4.47)
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       jiti:
         specifier: '*'
         version: 1.18.2
@@ -1508,7 +1508,7 @@ importers:
         version: 0.30.5
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       handlebars:
         specifier: 4.7.7
         version: 4.7.7
@@ -2257,7 +2257,7 @@ importers:
         version: link:../util-v1
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
@@ -2406,28 +2406,31 @@ importers:
         version: 0.30.5
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
 
   packages/db:
     dependencies:
+      '@electric-sql/pglite':
+        specifier: ^0.2.16
+        version: 0.2.17
       '@neondatabase/serverless':
         specifier: ^0.10.4
         version: 0.10.4
       '@openint/env':
         specifier: workspace:*
         version: link:../env
-      drizzle-kit:
-        specifier: ^0.30.4
-        version: 0.30.5
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
+      pg:
+        specifier: ^8.13.3
+        version: 8.13.3(pg-native@3.0.1)
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
@@ -2450,6 +2453,18 @@ importers:
       '@types/json-stable-stringify':
         specifier: ^1.1.0
         version: 1.1.0
+      '@types/pg':
+        specifier: ^8.11.11
+        version: 8.11.11
+      bun:
+        specifier: latest
+        version: 1.2.4
+      bun-types:
+        specifier: latest
+        version: 1.2.4
+      drizzle-kit:
+        specifier: ^0.30.4
+        version: 0.30.5
       prettier:
         specifier: 3.1.0
         version: 3.1.0
@@ -2468,6 +2483,9 @@ importers:
       '@openint/db':
         specifier: workspace:*
         version: link:../db
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../env
       '@openint/events':
         specifier: workspace:*
         version: link:../events
@@ -2488,7 +2506,7 @@ importers:
         version: 10.40.0
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.7.3)
@@ -8718,10 +8736,6 @@ packages:
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
 
-  buffer-writer@2.0.0:
-    resolution: {integrity: sha512-a7ZpuTZU1TRtnwyCNW3I5dc0wWNC3VR9S++Ewyk2HHZdrO3CQJqSpd+95Us590V6AL7JqUAH2IwZ/398PmNFgw==}
-    engines: {node: '>=4'}
-
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
 
@@ -13486,9 +13500,6 @@ packages:
   package-json-from-dist@1.0.0:
     resolution: {integrity: sha512-dATvCeZN/8wQsGywez1mzHtTlP22H8OEfPrVMLNr4/eGa+ijtLn/6M5f0dY8UKNrC2O9UCU6SSoG3qRKnt7STw==}
 
-  packet-reader@1.0.0:
-    resolution: {integrity: sha512-HAKu/fG3HpHFO0AA8WE8q2g+gBJaZ9MG7fcKk+IJPLTGAD6Psw4443l+9DGRbOIh3/aXr7Phy0TjilYivJo5XQ==}
-
   pako@1.0.11:
     resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
 
@@ -13603,8 +13614,11 @@ packages:
   performance-now@2.1.0:
     resolution: {integrity: sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==}
 
-  pg-connection-string@2.5.0:
-    resolution: {integrity: sha512-r5o/V/ORTA6TmUnyWZR9nCj1klXCO2CEKNRlVuJptZe85QuhFayC7WeMic7ndayT5IRIR0S0xFxFi2ousartlQ==}
+  pg-cloudflare@1.1.1:
+    resolution: {integrity: sha512-xWPagP/4B6BgFO+EKz3JONXv3YDgvkbVrGw2mTo3D6tVDQRh1e7cqVGvyR3BE+eQgAvx1XhW/iEASj4/jCWl3Q==}
+
+  pg-connection-string@2.7.0:
+    resolution: {integrity: sha512-PI2W9mv53rXJQEOb8xNR8lH7Hr+EKa6oJa38zsK0S/ky2er16ios1wLKhZyxzD7jUReiWokc9WK5nxSnC7W1TA==}
 
   pg-int8@1.0.1:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
@@ -13617,13 +13631,13 @@ packages:
     resolution: {integrity: sha512-BM/Thnrw5jm2kKLE5uJkXqqExRUY/toLHda65XgFTBTFYZyopbKjBe29Ii3RbkvlsMoFwD+tHeGaCjjv0gHlyw==}
     engines: {node: '>=4'}
 
-  pg-pool@3.5.2:
-    resolution: {integrity: sha512-His3Fh17Z4eg7oANLob6ZvH8xIVen3phEZh2QuyrIl4dQSDVEabNducv6ysROKpDNPSD+12tONZVWfSgMvDD9w==}
+  pg-pool@3.7.1:
+    resolution: {integrity: sha512-xIOsFoh7Vdhojas6q3596mXFsR8nwBQBXX5JiV7p9buEVAGqYL4yFzclON5P9vFrpu1u7Zwl2oriyDa89n0wbw==}
     peerDependencies:
       pg: '>=8.0'
 
-  pg-protocol@1.5.0:
-    resolution: {integrity: sha512-muRttij7H8TqRNu/DxrAJQITO4Ac7RmX3Klyr/9mJEOBeIpgnF8f9jAfRz5d3XwQZl5qBjF9gLsUtMPJE0vezQ==}
+  pg-protocol@1.7.1:
+    resolution: {integrity: sha512-gjTHWGYWsEgy9MsY0Gp6ZJxV24IjDqdpTW7Eh0x+WfJLFsm/TJx1MzL6T0D88mBvkpxotCQ6TwW6N+Kko7lhgQ==}
 
   pg-types@1.13.0:
     resolution: {integrity: sha512-lfKli0Gkl/+za/+b6lzENajczwZHc7D5kiUCZfgm914jipD2kIOIvEkAhZ8GrW3/TUoP9w8FHjwpPObBye5KQQ==}
@@ -13636,8 +13650,8 @@ packages:
     resolution: {integrity: sha512-cRL3JpS3lKMGsKaWndugWQoLOCoP+Cic8oseVcbr0qhPzYD5DWXK+RZ9LY9wxRf7RQia4SCwQlXk0q6FCPrVng==}
     engines: {node: '>=10'}
 
-  pg@8.8.0:
-    resolution: {integrity: sha512-UXYN0ziKj+AeNNP7VDMwrehpACThH7LUl/p8TDFpEUuSejCUIwGSfxpHsPvtM6/WXFy6SU4E5RG4IJV/TZAGjw==}
+  pg@8.13.3:
+    resolution: {integrity: sha512-P6tPt9jXbL9HVu/SSRERNYaYG++MjnscnegFh9pPHihfoBSujsrka0hyuymMzeJKFWrcG8wvCKy8rCe8e5nDUQ==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
       pg-native: '>=3.0.1'
@@ -22997,19 +23011,19 @@ snapshots:
   '@types/pg@8.11.11':
     dependencies:
       '@types/node': 20.17.16
-      pg-protocol: 1.5.0
+      pg-protocol: 1.7.1
       pg-types: 4.0.2
 
   '@types/pg@8.11.6':
     dependencies:
       '@types/node': 20.17.16
-      pg-protocol: 1.5.0
+      pg-protocol: 1.7.1
       pg-types: 4.0.2
 
   '@types/pg@8.6.1':
     dependencies:
       '@types/node': 20.17.16
-      pg-protocol: 1.5.0
+      pg-protocol: 1.7.1
       pg-types: 2.2.0
 
   '@types/pluralize@0.0.29': {}
@@ -24157,9 +24171,6 @@ snapshots:
 
   buffer-from@1.1.2: {}
 
-  buffer-writer@2.0.0:
-    optional: true
-
   buffer@5.7.1:
     dependencies:
       base64-js: 1.5.1
@@ -25171,14 +25182,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.8.0(pg-native@3.0.1))(postgres@3.4.5):
+  drizzle-orm@0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5):
     optionalDependencies:
       '@electric-sql/pglite': 0.2.17
       '@neondatabase/serverless': 0.10.4
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.11
       bun-types: 1.2.4
-      pg: 8.8.0(pg-native@3.0.1)
+      pg: 8.13.3(pg-native@3.0.1)
       postgres: 3.4.5
 
   dunder-proto@1.0.1:
@@ -30206,9 +30217,6 @@ snapshots:
 
   package-json-from-dist@1.0.0: {}
 
-  packet-reader@1.0.0:
-    optional: true
-
   pako@1.0.11: {}
 
   papaparse@5.3.2: {}
@@ -30326,8 +30334,10 @@ snapshots:
 
   performance-now@2.1.0: {}
 
-  pg-connection-string@2.5.0:
+  pg-cloudflare@1.1.1:
     optional: true
+
+  pg-connection-string@2.7.0: {}
 
   pg-int8@1.0.1: {}
 
@@ -30340,12 +30350,11 @@ snapshots:
 
   pg-numeric@1.0.2: {}
 
-  pg-pool@3.5.2(pg@8.8.0(pg-native@3.0.1)):
+  pg-pool@3.7.1(pg@8.13.3(pg-native@3.0.1)):
     dependencies:
-      pg: 8.8.0(pg-native@3.0.1)
-    optional: true
+      pg: 8.13.3(pg-native@3.0.1)
 
-  pg-protocol@1.5.0: {}
+  pg-protocol@1.7.1: {}
 
   pg-types@1.13.0:
     dependencies:
@@ -30374,23 +30383,20 @@ snapshots:
       postgres-interval: 3.0.0
       postgres-range: 1.1.4
 
-  pg@8.8.0(pg-native@3.0.1):
+  pg@8.13.3(pg-native@3.0.1):
     dependencies:
-      buffer-writer: 2.0.0
-      packet-reader: 1.0.0
-      pg-connection-string: 2.5.0
-      pg-pool: 3.5.2(pg@8.8.0(pg-native@3.0.1))
-      pg-protocol: 1.5.0
+      pg-connection-string: 2.7.0
+      pg-pool: 3.7.1(pg@8.13.3(pg-native@3.0.1))
+      pg-protocol: 1.7.1
       pg-types: 2.2.0
       pgpass: 1.0.5
     optionalDependencies:
+      pg-cloudflare: 1.1.1
       pg-native: 3.0.1
-    optional: true
 
   pgpass@1.0.5:
     dependencies:
       split2: 4.1.0
-    optional: true
 
   picocolors@1.1.0: {}
 
