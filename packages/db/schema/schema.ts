@@ -33,7 +33,7 @@ export const connection = pgTable(
     connector_config_id: varchar(),
     integration_id: varchar(),
     env_name: varchar(),
-    settings: jsonb().default({}).notNull(),
+    settings: jsonb().default({}).notNull().$type<any>(),
     created_at: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()
       .notNull(),
@@ -42,7 +42,7 @@ export const connection = pgTable(
       .notNull(),
     display_name: varchar(),
     disabled: boolean().default(false),
-    metadata: jsonb(),
+    metadata: jsonb().$type<any>(),
   },
   (t) => [
     index('connection_created_at').on(t.created_at),
@@ -120,11 +120,11 @@ export const pipeline = pgTable(
       .primaryKey()
       .notNull(),
     source_id: varchar(),
-    source_state: jsonb().default({}).notNull(),
+    source_state: jsonb().$type<any>().default({}).notNull(),
     destination_id: varchar(),
-    destination_state: jsonb().default({}).notNull(),
+    destination_state: jsonb().$type<any>().default({}).notNull(),
     /** @deprecated Not used in prod despite field existing... */
-    link_options: jsonb().default([]).notNull(),
+    link_options: jsonb().$type<any>().default([]).notNull(),
     last_sync_started_at: timestamp({withTimezone: true, mode: 'string'}),
     last_sync_completed_at: timestamp({withTimezone: true, mode: 'string'}),
     created_at: timestamp({withTimezone: true, mode: 'string'})
@@ -134,8 +134,8 @@ export const pipeline = pgTable(
       .defaultNow()
       .notNull(),
     disabled: boolean().default(false),
-    metadata: jsonb(),
-    streams: jsonb(),
+    metadata: jsonb().$type<any>(),
+    streams: jsonb().$type<any>(),
     source_vertical: varchar(),
     destination_vertical: varchar(),
   },
@@ -230,8 +230,8 @@ export const integration = pgTable(
     connector_name: varchar()
       .notNull()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
-    standard: jsonb().default({}).notNull(),
-    external: jsonb().default({}).notNull(),
+    standard: jsonb().$type<any>().default({}).notNull(),
+    external: jsonb().$type<any>().default({}).notNull(),
     created_at: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()
       .notNull(),
@@ -272,7 +272,7 @@ export const connector_config = pgTable(
     connector_name: varchar()
       .notNull()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
-    config: jsonb().default({}).notNull(),
+    config: jsonb().$type<any>().default({}).notNull(),
     created_at: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()
       .notNull(),
@@ -283,15 +283,15 @@ export const connector_config = pgTable(
     display_name: varchar(),
     env_name: varchar().generatedAlwaysAs(sql`(config ->> 'envName'::text)`),
     disabled: boolean().default(false),
-    default_pipe_out: jsonb(),
-    default_pipe_in: jsonb(),
+    default_pipe_out: jsonb().$type<any>(),
+    default_pipe_in: jsonb().$type<any>(),
     default_pipe_out_destination_id: varchar().generatedAlwaysAs(
       sql`(default_pipe_out ->> 'destination_id'::text)`,
     ),
     default_pipe_in_source_id: varchar().generatedAlwaysAs(
       sql`(default_pipe_in ->> 'source_id'::text)`,
     ),
-    metadata: jsonb(),
+    metadata: jsonb().$type<any>(),
   },
   (table) => [
     index('integration_created_at').on(table.created_at),
@@ -339,11 +339,11 @@ export const event = pgTable(
       .primaryKey()
       .notNull(),
     name: varchar().notNull(),
-    data: jsonb().notNull(),
+    data: jsonb().notNull().$type<any>(),
     timestamp: timestamp({withTimezone: true, mode: 'string'})
       .defaultNow()
       .notNull(),
-    user: jsonb(),
+    user: jsonb().$type<any>(),
     v: varchar(),
 
     /**
