@@ -14,7 +14,6 @@
     "@elysiajs/swagger": "^1.2.0",
     "@openint/all-connectors": "workspace:*",
     "@openint/cdk": "workspace:*",
-    "@openint/db-v1": "workspace:*",
     "@openint/db": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",

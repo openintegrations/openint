@@ -6,6 +6,7 @@ export * from 'drizzle-orm'
 export * from './lib/stripeNullByte'
 export * from './lib/upsert'
 export {schema}
+export type {Database}
 
 export async function ensureSchema(thisDb: Database, schema: string) {
   // Check existence first because we may not have permission to actually create the schema
@@ -18,5 +19,7 @@ export async function ensureSchema(thisDb: Database, schema: string) {
   if (exists) {
     return
   }
-  await thisDb.$exec(sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};`)
+  await thisDb.$exec(
+    sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};`,
+  )
 }

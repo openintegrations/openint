@@ -1,7 +1,7 @@
 import {initTRPC, TRPCError} from '@trpc/server'
 import {type OpenApiMeta} from 'trpc-to-openapi'
 import {hasRole, type Viewer} from '@openint/cdk'
-import type {Database} from '@openint/db-v1'
+import type {Database} from '@openint/db'
 
 export interface RouterContext {
   viewer: Viewer

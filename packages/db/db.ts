@@ -6,6 +6,22 @@ import type {initDbPg} from './db.pg'
 import type {initDbPGLite} from './db.pglite'
 import * as schema from './schema/schema'
 
+// MARK: - For users
+
+type AnyDatabase =
+  | ReturnType<typeof initDbNeon>
+  | ReturnType<typeof initDbPg>
+  | ReturnType<typeof initDbPGLite>
+
+export type DatabaseDriver = AnyDatabase['driverType']
+
+export type Database<TDriver extends DatabaseDriver = DatabaseDriver> = Extract<
+  AnyDatabase,
+  {driverType: TDriver}
+>
+
+// MARK: - For Implementors
+
 export interface DbOptions
   extends Omit<DrizzleConfig<typeof schema>, 'schema'> {}
 
@@ -58,15 +74,3 @@ export function dbFactory<TDriver extends string, TDatabase>(
   Object.assign(db, additioanlExtensions)
   return db as typeof db & typeof additioanlExtensions
 }
-
-type AnyDatabase =
-  | ReturnType<typeof initDbNeon>
-  | ReturnType<typeof initDbPg>
-  | ReturnType<typeof initDbPGLite>
-
-export type DatabaseDriver = AnyDatabase['driverType']
-
-export type Database<TDriver extends DatabaseDriver = DatabaseDriver> = Extract<
-  AnyDatabase,
-  {driverType: TDriver}
->

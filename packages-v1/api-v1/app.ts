@@ -1,43 +1,39 @@
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
-import type {Database} from '@openint/db-v1'
 import {
-  createDatabase,
-  createNeonHttpDatabase,
-  createNeonWebSocketDatabase,
-} from '@openint/db-v1'
-import {envRequired} from '@openint/env'
-import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './trpc/handlers'
+  createFetchHandlerOpenAPI,
+  createFetchHandlerTRPC,
+} from './trpc/handlers'
 import {generateOpenAPISpec} from './trpc/openapi'
 
-async function checkLatency(db: Database) {
-  const start = new Date()
-  await db.execute('SELECT 1')
-  const durationMs = Date.now() - start.getTime()
-  return durationMs
-}
+// async function checkLatency(db: Database) {
+//   const start = new Date()
+//   await db.execute('SELECT 1')
+//   const durationMs = Date.now() - start.getTime()
+//   return durationMs
+// }
 
 export const app = new Elysia({prefix: '/api'})
-  .get('/check-latency', async () => {
-    const postgresJsLatencyMs = await checkLatency(
-      createDatabase({url: envRequired.DATABASE_URL}),
-    )
-    const neonWebsocketLatencyMs = await checkLatency(
-      createNeonWebSocketDatabase({
-        url: envRequired.DATABASE_URL,
-      }) as unknown as Database,
-    )
-    const neonHttpLatencyMs = await checkLatency(
-      createNeonHttpDatabase({
-        url: envRequired.DATABASE_URL,
-      }) as unknown as Database,
-    )
-    return {
-      postgresJsLatencyMs,
-      neonHttpLatencyMs,
-      neonWebsocketLatencyMs,
-    }
-  })
+  // .get('/check-latency', async () => {
+  //   const postgresJsLatencyMs = await checkLatency(
+  //     createDatabase({url: envRequired.DATABASE_URL}),
+  //   )
+  //   const neonWebsocketLatencyMs = await checkLatency(
+  //     createNeonWebSocketDatabase({
+  //       url: envRequired.DATABASE_URL,
+  //     }) as unknown as Database,
+  //   )
+  //   const neonHttpLatencyMs = await checkLatency(
+  //     createNeonHttpDatabase({
+  //       url: envRequired.DATABASE_URL,
+  //     }) as unknown as Database,
+  //   )
+  //   return {
+  //     postgresJsLatencyMs,
+  //     neonHttpLatencyMs,
+  //     neonWebsocketLatencyMs,
+  //   }
+  // })
   .get('/health', () => ({healthy: true}))
   .use(
     swagger({

@@ -1,6 +1,7 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {check, customType, pgTable} from 'drizzle-orm/pg-core'
+import {getMigrationStatements} from './__tests__/test-utils'
 import {initDbPGLite} from './db.pglite'
 
 const customText = customType<{data: unknown}>({dataType: () => 'text'})
@@ -19,10 +20,7 @@ const table = pgTable(
 )
 
 test('generate migrations', async () => {
-  const migrations = await generateMigration(
-    generateDrizzleJson({}),
-    generateDrizzleJson({table}),
-  )
+  const migrations = await getMigrationStatements({table})
   expect(migrations).toMatchInlineSnapshot(`
     [
       "CREATE TABLE "account" (

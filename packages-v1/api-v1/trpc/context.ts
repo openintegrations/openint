@@ -1,6 +1,6 @@
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
-import {databaseForViewer} from '@openint/db-v1/db-rls'
+import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
 import type {RouterContext} from './_base'
 
@@ -17,6 +17,6 @@ export function contextFromRequest(req: Request): RouterContext {
   const viewer = viewerFromRequest(req)
 
   // create db once rather than on every request
-  const db = databaseForViewer(envRequired.DATABASE_URL, viewer)
+  const db = initDbNeon(envRequired.DATABASE_URL, viewer)
   return {viewer, db}
 }

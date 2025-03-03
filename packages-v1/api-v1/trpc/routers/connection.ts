@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import {eq, schema} from '@openint/db-v1'
+import {eq, schema} from '@openint/db'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models'
 
