@@ -178,9 +178,10 @@ jobs:
       - name: Ensure mintlify docs build
         # if: steps.check_openapi_changes.outputs.has_changes == 'true'
         run: |
+          pnpm install
           # Wait for before starting the build so that the OpenAPI spec is updated if needed by Stainless
           # may need to be increased if the OpenAPI spec is not updated in time
-          sleep 3s 
+          # sleep 3s 
 
           # Run the docs build command with a timeout and capture output
           timeout 3s pnpm --dir ./docs dev --no-open > docs_build_output.txt 2>&1 || {
