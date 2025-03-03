@@ -7,7 +7,7 @@ import {core} from '../../models'
 import {zListParams, zListResponse} from './index'
 
 // TODO: don't make any
-function formatConnection(connection: any) {
+function formatConnection(connection: any, include_secrets: boolean = false) {
   const connector =
     defConnectors[connection.connector_name as keyof typeof defConnectors]
   if (!connector) {
@@ -23,19 +23,24 @@ function formatConnection(connection: any) {
     connector.metadata.logoUrl?.startsWith('http')
       ? connector.metadata.logoUrl
       : connector.metadata && 'logoUrl' in connector.metadata
-        ? `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/${connector.metadata.logoUrl}`
+        ? // TODO: replace this with our own custom domain
+          `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/${connector.metadata.logoUrl}`
         : undefined
 
   return {
     ...connection,
     logo_url: logoUrl,
+    ...(include_secrets ? {settings: connection.settings} : {}),
   }
 }
 
 export const connectionRouter = router({
   getConnection: publicProcedure
+    .meta({
+      openapi: {method: 'GET', path: '/connection/{id}'},
+    })
     // TODO: make zId('conn')
-    .input(z.object({id: z.string()}))
+    .input(z.object({id: z.string(), include_secrets: z.boolean().optional()}))
     .output(core.connection)
     .query(async ({ctx, input}) => {
       const connection = await ctx.db.query.connection.findFirst({
@@ -48,7 +53,7 @@ export const connectionRouter = router({
         })
       }
 
-      return formatConnection(connection)
+      return formatConnection(connection, input.include_secrets ?? false)
     }),
   listConnections: publicProcedure
     .meta({
@@ -61,6 +66,7 @@ export const connectionRouter = router({
         // TODO: make zId('ccfg').optional()
         // but we get Type 'ZodOptional<ZodEffects<ZodString, `ccfg_${string}${string}`, string>>' is missing the following properties from type 'ZodType<any, any, any>': "~standard", "~validate"
         connector_config_id: z.string().optional(),
+        include_secrets: z.boolean().optional(),
       }),
     )
     .output(zListResponse(core.connection))
@@ -112,7 +118,9 @@ export const connectionRouter = router({
       const total = result.length > 0 ? Number(result[0]?.total ?? 0) : 0
 
       return {
-        items: connections.map((conn) => formatConnection(conn)),
+        items: connections.map((conn) =>
+          formatConnection(conn, input.include_secrets ?? false),
+        ),
         total,
         limit,
         offset,
@@ -126,6 +134,7 @@ export const connectionRouter = router({
       z.object({
         id: z.string(),
         force_refresh: z.boolean().optional(),
+        include_secrets: z.boolean().optional(),
       }),
     )
     .output(core.connection)
@@ -153,13 +162,6 @@ export const connectionRouter = router({
         // Add actual refresh implementation
       }
 
-      return {
-        id: connection.id,
-        connector_name: connection.connector_name,
-        settings: connection.settings,
-        connector_config_id: connection.connector_config_id,
-        created_at: connection.created_at,
-        updated_at: connection.updated_at,
-      }
+      return formatConnection(connection, input.include_secrets ?? false)
     }),
 })
