@@ -15,7 +15,7 @@ export const testDbs = {
       {role: 'system'},
       {logger: false},
     ),
-  pglite: () => initDbPGLite({logger: false}),
+  pglite: () => initDbPGLite({logger: false, enableExtensions: true}),
   pg: () =>
     // TODO: Make test database url separate env var from prod database url to be safer
     initDbPg(env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL, {

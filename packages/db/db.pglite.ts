@@ -10,10 +10,13 @@ import {
   type DbOptions,
 } from './db'
 
-export function initDbPGLite(options: DbOptions = {}) {
+export function initDbPGLite({
+  enableExtensions,
+  ...options
+}: {enableExtensions?: boolean} & DbOptions = {}) {
   const pglite = new PGlite({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    extensions: {uuid_ossp},
+    extensions: enableExtensions ? {uuid_ossp} : undefined,
   })
   const db = drizzleLite({...getDrizzleConfig(options), client: pglite})
   return dbFactory('pglite', db, {
