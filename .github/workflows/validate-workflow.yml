@@ -46,7 +46,7 @@ jobs:
           - '4444:4444'
 
     env:
-      NODE_OPTIONS: --max-old-space-size=4096
+      NODE_OPTIONS: --max-old-space-size=8192
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       DATABASE_URL: postgres://postgres:test@localtest.me:5432/test
 
@@ -88,9 +88,6 @@ jobs:
       #   uses: lhotari/action-upterm@v1
       - name: Run type checks
         run: pnpm run typecheck
-
-      - name: Run lint
-        run: pnpm run lint
 
       - name: Download dev env vars from Vercel
         run: |
@@ -138,6 +135,9 @@ jobs:
 
       - name: Run tests
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
+
+      - name: Run lint
+        run: pnpm run lint
 
       - name: Send Slack notification for job status
         uses: 8398a7/action-slack@v3
