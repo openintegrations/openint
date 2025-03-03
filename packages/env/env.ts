@@ -29,7 +29,6 @@ export const envConfig = {
     VERCEL_URL: z.string().optional(),
     VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
     INTEGRATION_TEST_SECRET: z.string().optional(),
-    PGLITE: z.boolean().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
