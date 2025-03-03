@@ -2197,9 +2197,6 @@ importers:
       '@openint/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@openint/db-v1':
-        specifier: workspace:*
-        version: link:../db-v1
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
@@ -2244,43 +2241,6 @@ importers:
         specifier: ^7.6.1
         version: 7.6.1(typescript@5.7.3)
 
-  packages-v1/db-v1:
-    dependencies:
-      '@electric-sql/pglite':
-        specifier: ^0.2.16
-        version: 0.2.17
-      '@neondatabase/serverless':
-        specifier: ^0.10.4
-        version: 0.10.4
-      '@openint/env':
-        specifier: workspace:*
-        version: link:../../packages/env
-      '@openint/util-v1':
-        specifier: workspace:*
-        version: link:../util-v1
-      drizzle-orm:
-        specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.5
-    devDependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      bun:
-        specifier: latest
-        version: 1.2.4
-      bun-types:
-        specifier: latest
-        version: 1.2.4
-      drizzle-kit:
-        specifier: ^0.30.4
-        version: 0.30.5
-      typescript:
-        specifier: ^5.7.3
-        version: 5.7.3
-
   packages-v1/sdk-v1:
     dependencies:
       '@trpc/client':
@@ -2296,25 +2256,6 @@ importers:
       bun-types:
         specifier: latest
         version: 1.2.4
-
-  packages-v1/util-v1:
-    dependencies:
-      '@sinclair/typebox':
-        specifier: ^0.34.15
-        version: 0.34.20
-      ulid:
-        specifier: ^2.3.0
-        version: 2.3.0
-    devDependencies:
-      bun-types:
-        specifier: latest
-        version: 1.2.4
-      typescript:
-        specifier: ^5.7.3
-        version: 5.7.3
-      zod:
-        specifier: ^3.22.4
-        version: 3.24.2
 
   packages/api:
     dependencies:
@@ -15836,10 +15777,6 @@ packages:
   uglify-js@3.17.3:
     resolution: {integrity: sha512-JmMFDME3iufZnBpyKL+uS78LRiC+mK55zWfM5f/pWBJfpOttXAqYfdDGRukYhJuyRinvPVAtUhvy7rlDybNtFg==}
     engines: {node: '>=0.8.0'}
-    hasBin: true
-
-  ulid@2.3.0:
-    resolution: {integrity: sha512-keqHubrlpvT6G2wH0OEfSW4mquYRcbe/J8NMmveoQOjUqmo+hXtO+ORCpWhdbZ7k72UtY61BL7haGxW6enBnjw==}
     hasBin: true
 
   ulidx@0.4.0:
@@ -32897,8 +32834,6 @@ snapshots:
 
   uglify-js@3.17.3:
     optional: true
-
-  ulid@2.3.0: {}
 
   ulidx@0.4.0:
     dependencies:
