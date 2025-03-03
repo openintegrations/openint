@@ -9,9 +9,9 @@
   "navigation": {
     "versions": [
       {
-        "version": "v1 (current)",
+        "version": "v0 (current)",
         "label": "Version 1",
-        "openapi": "https://app.stainless.com/api/spec/documented/openint",
+        "openapi": "https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json",
         "groups": [
           {
             "group": "Getting Started",
@@ -36,9 +36,9 @@
         ]
       },
       {
-        "version": "v0 (legacy)",
-        "label": "Version 0",
-        "openapi": "https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json"
+        "version": "v1 (new)",
+        "label": "Version 1",
+        "openapi": "https://app.stainless.com/api/spec/documented/openint"
       }
     ]
   }
