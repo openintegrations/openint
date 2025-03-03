@@ -6,8 +6,10 @@ import {publicProcedure, router} from '../_base'
 import {core} from '../../models'
 import {zListParams, zListResponse} from './index'
 
-// TODO: don't make any
-function formatConnection(connection: any, include_secrets: boolean = false) {
+function formatConnection(
+  connection: z.infer<typeof core.connection>,
+  include_secrets: boolean = false,
+) {
   const connector =
     defConnectors[connection.connector_name as keyof typeof defConnectors]
   if (!connector) {
@@ -53,7 +55,11 @@ export const connectionRouter = router({
         })
       }
 
-      return formatConnection(connection, input.include_secrets ?? false)
+      return formatConnection(
+        // TODO: fix this
+        connection as any as z.infer<typeof core.connection>,
+        input.include_secrets ?? false,
+      )
     }),
   listConnections: publicProcedure
     .meta({
@@ -95,11 +101,10 @@ export const connectionRouter = router({
       const whereClause =
         whereConditions.length > 0
           ? whereConditions.reduce(
-              (acc, condition) => {
-                if (acc === true) return condition
-                return acc && condition
+              (acc, condition, index) => {
+                return index === 0 ? condition : acc && condition
               },
-              true as boolean | SQL<unknown>,
+              undefined as unknown as SQL<unknown>,
             )
           : undefined
 
@@ -120,7 +125,11 @@ export const connectionRouter = router({
 
       return {
         items: connections.map((conn) =>
-          formatConnection(conn, input.include_secrets ?? false),
+          formatConnection(
+            // TODO: fix this
+            conn as any as z.infer<typeof core.connection>,
+            input.include_secrets ?? false,
+          ),
         ),
         total,
         limit,
@@ -152,10 +161,10 @@ export const connectionRouter = router({
 
       const credentialsRequiresRefresh =
         input.force_refresh ||
-        connection.settings.oauth?.credentials?.expires_at
+        (connection.settings.oauth?.credentials?.expires_at
           ? new Date(connection.settings.oauth.credentials.expires_at) <
             new Date()
-          : false
+          : false)
 
       if (credentialsRequiresRefresh) {
         // TODO: implement refresh logic here
@@ -163,6 +172,10 @@ export const connectionRouter = router({
         // Add actual refresh implementation
       }
 
-      return formatConnection(connection, input.include_secrets ?? false)
+      return formatConnection(
+        // TODO: fix this
+        connection as any as z.infer<typeof core.connection>,
+        input.include_secrets ?? false,
+      )
     }),
 })
