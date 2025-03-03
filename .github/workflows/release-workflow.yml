@@ -192,13 +192,13 @@ jobs:
       #   run: |
       #     gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes-file release_notes.txt
 
-      # - name: Update production branch
-      #   run: |
-      #     git config user.name "GitHub Actions Bot"
-      #     git config user.email "<>"
-      #     git fetch origin main
-      #     git checkout main
-      #     git push origin main:production -f
+      - name: Update production branch
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git fetch origin main
+          git checkout main
+          git push origin main:production -f
       # - uses: UnlyEd/github-action-await-vercel@v1 # TODO best practices recommend to use a fixed version instead of @v1 for production usage (i.e: @v1.2.32)
       #   id: await-vercel
       #   env:
