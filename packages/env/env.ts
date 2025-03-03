@@ -6,10 +6,12 @@ export const envConfig = {
   server: {
     // MARK: - Not validated, may not be used...
     // Core env vars
-    DATABASE_URL: z.string().default('postgres://localhost:5432/postgres'),
+    DATABASE_URL: z
+      .string()
+      .default('postgres://postgres:password@db.localtest.me:5432/postgres'),
     DATABASE_URL_UNPOOLED: z.string().optional(),
-
     JWT_SECRET: z.string().optional(),
+
     CLERK_SECRET_KEY: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
 
@@ -46,6 +48,10 @@ export const envConfig = {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
 
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: z.string().optional(),
+
+    // Useful later for when we switch to asymmetric jwt rather than symmetric ones
+    // JWT_PRIVATE_KEY: z.string().optional(),
+    // NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
@@ -70,6 +76,9 @@ export const envConfig = {
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
     VERCEL_URL: process.env['VERCEL_URL'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
+    PGLITE: process.env['PGLITE'],
+    // JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
+    // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 

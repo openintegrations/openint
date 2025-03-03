@@ -101,7 +101,7 @@ export function getExtCustomerId(
  */
 export const zJwtPayload = z.object({
   /** Different meaning in different contexts */
-  sub: z.string(),
+  sub: z.string().nullish(),
   /**
    * Jwt role is different from viewer role because supabase uses `authenticated`
    * by default and it's a bit too much work right now to switch to `user` so we shall
@@ -134,7 +134,7 @@ export const zViewerFromJwtPayload = zJwtPayload
         }
       // good reason to rename customer to customer
       case 'customer': {
-        const [orgId, customerId] = payload.sub.split('/') as [
+        const [orgId, customerId] = (payload.sub?.split('/') ?? []) as [
           Id['org'],
           CustomerId,
         ]

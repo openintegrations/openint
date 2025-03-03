@@ -47,6 +47,7 @@ export type DbUpsertQuery<TTable extends PgTable> = Omit<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     any,
     undefined,
+    undefined,
     false,
     'onConflictDoNothing' | 'onConflictDoUpdate'
   >,

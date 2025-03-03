@@ -1,15 +1,15 @@
 -- Drop the indices
-DROP INDEX IF EXISTS "event_org_id";
-DROP INDEX IF EXISTS "event_usr_id";
-DROP INDEX IF EXISTS "event_cus_id";
+DROP INDEX IF EXISTS "event_org_id"; --> statement-breakpoint
+DROP INDEX IF EXISTS "event_usr_id"; --> statement-breakpoint
+DROP INDEX IF EXISTS "event_cus_id"; --> statement-breakpoint
 
 -- Drop the policies
-DROP POLICY IF EXISTS "org_read" ON "event";
-DROP POLICY IF EXISTS "org_member_read" ON "event";
-DROP POLICY IF EXISTS "customer_read" ON "event";
-DROP POLICY IF EXISTS "org_append" ON "event";
-DROP POLICY IF EXISTS "org_member_append" ON "event";
-DROP POLICY IF EXISTS "customer_append" ON "event";
+DROP POLICY IF EXISTS "org_read" ON "event"; --> statement-breakpoint
+DROP POLICY IF EXISTS "org_member_read" ON "event"; --> statement-breakpoint
+DROP POLICY IF EXISTS "customer_read" ON "event"; --> statement-breakpoint
+DROP POLICY IF EXISTS "org_append" ON "event"; --> statement-breakpoint
+DROP POLICY IF EXISTS "org_member_append" ON "event"; --> statement-breakpoint
+DROP POLICY IF EXISTS "customer_append" ON "event"; --> statement-breakpoint
 
 ALTER TABLE "event" drop column "org_id";--> statement-breakpoint
 ALTER TABLE "event" ADD COLUMN "org_id" varchar GENERATED ALWAYS AS ("user"->>'org_id') STORED;--> statement-breakpoint
@@ -58,4 +58,5 @@ INSERT
   TO "customer" WITH CHECK (org_id = public.jwt_org_id());
 
 -- Forgotten statement from earlier, no impact on drizzle schema though.
+--> statement-breakpoint
 GRANT SELECT ON public.event TO "customer";

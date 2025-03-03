@@ -1,7 +1,9 @@
 import {sentryMiddleware} from '@inngest/middleware-sentry'
 import {EventSchemas, Inngest, InngestMiddleware} from 'inngest'
 import {makeId} from '@openint/cdk'
-import {databaseForViewer, schema, sql} from '@openint/db'
+import {schema, sql} from '@openint/db'
+import {initDbNeon} from '@openint/db/db.neon'
+import {env} from '@openint/env'
 import {eventMapForInngest} from '@openint/events'
 import {makeUlid, R} from '@openint/util'
 
@@ -13,7 +15,7 @@ export const persistEventsMiddleware = new InngestMiddleware({
 
     return {
       onSendEvent() {
-        const db = databaseForViewer({role: 'system'})
+        const db = initDbNeon(env.DATABASE_URL, {role: 'system'})
         return {
           async transformInput({payloads}) {
             function getConnIdForEvent(ev: {data?: Record<string, unknown>}) {

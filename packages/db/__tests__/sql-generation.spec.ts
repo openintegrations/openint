@@ -1,6 +1,6 @@
 import {sql} from 'drizzle-orm'
 import {PgDialect, pgTable, serial, text} from 'drizzle-orm/pg-core'
-import {applyLimitOffset} from '..'
+import {applyLimitOffset} from '../lib/applyLimitOffset'
 
 describe('sql generation', () => {
   const pgDialect = new PgDialect()

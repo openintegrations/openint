@@ -38,11 +38,17 @@ jobs:
       #   image: inngest/inngest
       #   ports:
       #     - 8288:8288
+      neon-proxy:
+        image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+        env:
+          PG_CONNECTION_STRING: postgres://postgres:test@db.localtest.me:5432/test
+        ports:
+          - '4444:4444'
 
     env:
-      NODE_OPTIONS: --max-old-space-size=4096
+      NODE_OPTIONS: --max-old-space-size=8192
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      DATABASE_URL: postgres://postgres:test@localhost:5432/test
+      DATABASE_URL: postgres://postgres:test@db.localtest.me:5432/test
 
     steps:
       - name: Checkout
@@ -51,7 +57,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20 # TODO: Can we get this from "engine" field in package.json?
+          node-version: 22 # TODO: Can we get this from "engine" field in package.json?
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
@@ -83,14 +89,12 @@ jobs:
       - name: Run type checks
         run: pnpm run typecheck
 
-      - name: Run lint
-        run: pnpm run lint
-
       - name: Download dev env vars from Vercel
         run: |
           npm install --global vercel@latest
           vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
-          vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local
+          vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
+          cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
 
       - name: Run migration and store the completed schema
         # TODO: consider diffing schema with stored schema?
@@ -129,8 +133,14 @@ jobs:
           npx inngest-cli@latest dev &
           pnpm wait-on tcp:8288
 
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+
       - name: Run tests
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
+
+      - name: Run lint
+        run: pnpm run lint
 
       - name: Send Slack notification for job status
         uses: 8398a7/action-slack@v3

@@ -84,7 +84,11 @@ const name = [label, `${url.username}@${url.hostname}${port ? `:${port}` : ''}`]
 
 const {label: _, ...options} = args.values
 
-if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+if (
+  url.hostname === 'localhost' ||
+  url.hostname === '127.0.0.1' ||
+  url.hostname.includes('localtest.me')
+) {
   options.env = options.env || 'local'
   options.statusColor = options.statusColor || '007F3D'
   options.safeModeLevel = '0'

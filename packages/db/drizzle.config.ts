@@ -5,7 +5,7 @@ import {env} from '@openint/env'
 export default defineConfig({
   out: './migrations',
   dialect: 'postgresql',
-  schema: './schema.ts',
+  schema: './schema/schema.ts',
   dbCredentials: {url: env.DATABASE_URL_UNPOOLED ?? env.DATABASE_URL},
   introspect: {casing: 'preserve'},
   migrations: {
