@@ -1,4 +1,4 @@
-import {count, schema} from '@openint/db'
+import {count, desc, schema} from '@openint/db'
 import {zListParams, zListResponse} from '.'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models'
@@ -35,6 +35,7 @@ export const eventRouter = router({
           total: count(),
         })
         .from(schema.event)
+        .orderBy(desc(schema.event.timestamp))
         .limit(limit)
         .offset(offset)
 

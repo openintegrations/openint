@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {count, eq, schema, SQL} from '@openint/db'
+import {count, desc, eq, schema, SQL} from '@openint/db'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models'
 import {zListParams, zListResponse} from './index'
@@ -111,6 +111,7 @@ export const connectionRouter = router({
         })
         .from(schema.connection)
         .where(whereClause as SQL<unknown>)
+        .orderBy(desc(schema.connection.created_at))
         .limit(limit)
         .offset(offset)
 

@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import {count, eq, schema, SQL} from '@openint/db'
+import {count, desc, eq, schema, SQL} from '@openint/db'
 import {zListParams, zListResponse} from '.'
 import {authenticatedProcedure, router} from '../_base'
 import {core} from '../../models'
@@ -47,6 +47,7 @@ export const connectorConfigRouter = router({
         })
         .from(schema.connector_config)
         .where(whereClause as SQL<unknown>)
+        .orderBy(desc(schema.connector_config.created_at))
         .limit(limit)
         .offset(offset)
 
