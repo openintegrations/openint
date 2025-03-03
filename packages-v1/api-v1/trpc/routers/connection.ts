@@ -1,7 +1,5 @@
 import {z} from 'zod'
-import {eq, schema} from '@openint/db'
 import {publicProcedure, router} from '../_base'
-import {core} from '../../models'
 
 export const connectionRouter = router({
   listConnections: publicProcedure
@@ -11,17 +9,19 @@ export const connectionRouter = router({
     .input(z.void())
     .output(
       z.object({
-        items: z.array(core.connection),
+        // items: z.array(core.connection),
+        items: z.array(
+          z.object({
+            id: z.string(),
+            connector_config_id: z.string().nullable(),
+          }),
+        ),
       }),
     )
     .query(async ({ctx}) => {
-      const connectorConfigs = await ctx.db.query.connection.findMany({
-        // TODO: implement me
-        where: eq(schema.connection.connector_config_id, ctx.viewer.orgId!),
-        with: {
-          connector_config: {},
-        },
+      const connections = await ctx.db.query.connection.findMany({
+        with: {connector_config: {}},
       })
-      return {items: connectorConfigs}
+      return {items: connections}
     }),
 })

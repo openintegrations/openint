@@ -11,8 +11,11 @@ export const eventRouter = router({
     .input(core.event_insert) // Ref does not work for input params for now in zod-openapi. So will be inlined in the spec unfortunately
     .output(core.event)
     .query(async ({ctx, input}) => {
-      const event = await ctx.db.insert(schema.event).values(input).returning()
-      return event
+      const [event] = await ctx.db
+        .insert(schema.event)
+        .values(input)
+        .returning()
+      return event!
     }),
   listEvents: publicProcedure
     .meta({
