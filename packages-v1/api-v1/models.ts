@@ -1,9 +1,18 @@
+import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import {z} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
+import {schema} from '@openint/db'
 import type {NonEmptyArray} from './connectorSchemas'
 import {connectorSchemas} from './connectorSchemas'
 
 extendZodWithOpenApi(z)
+
+const event = createSelectSchema(schema.event).openapi({
+  ref: 'core.event',
+})
+const event_insert = createInsertSchema(schema.event).openapi({
+  ref: 'core.event_insert',
+})
 
 function parseNonEmpty<T>(arr: T[]) {
   if (arr.length === 0) {
@@ -19,6 +28,8 @@ const coreBase = z.object({
 })
 
 export const core = {
+  event,
+  event_insert,
   connection: z
     .intersection(
       coreBase

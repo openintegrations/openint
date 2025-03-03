@@ -3,6 +3,7 @@ import {zViewer} from '@openint/cdk'
 import {publicProcedure, router, trpc} from '../_base'
 import {connectionRouter} from './connection'
 import {connectorConfigRouter} from './connectorConfig'
+import {eventRouter} from './event'
 
 const generalRouter = router({
   health: publicProcedure
@@ -20,6 +21,7 @@ const generalRouter = router({
 export const appRouter = trpc.mergeRouters(
   connectionRouter,
   connectorConfigRouter,
+  eventRouter,
   generalRouter,
 )
 

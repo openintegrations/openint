@@ -19,6 +19,7 @@
     "@openint/events": "workspace:*",
     "@sinclair/typebox": "^0.34.20",
     "@trpc/server": "next",
+    "drizzle-zod": "^0.7.0",
     "elysia": "^1.2.12",
     "remeda": "^2.20.1",
     "trpc-to-openapi": "^2.1.3",
