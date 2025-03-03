@@ -6,7 +6,6 @@
     "register.node.ts"
   ],
   "scripts": {
-    "generate:docs": "pnpm tsx watch ./_generateDocs.bin.ts",
     "generate:lists": "npx tsx ./_generateConnectorLists.ts"
   },
   "dependencies": {

@@ -29,7 +29,9 @@
   "devDependencies": {
     "@opensdks/fetch-links": "^0.0.22",
     "@trpc/client": "next",
-    "bun-types": "latest",
+    "bun": "^1.2.4",
+    "bun-types": "^1.2.4",
+    "bunx": "^0.1.0",
     "openapi-fetch": "^0.13.4",
     "openapi-typescript": "^7.6.1"
   }

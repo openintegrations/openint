@@ -6,7 +6,7 @@
 
 OpenInt is an open-source integration platform as a service (iPaaS) that helps you ship product integrations in hours, not weeks.
 
-<img src="./docs/banner.png"/>
+<img src="./docs/images/banner.png"/>
 
 We just participated [Mega Launch Week Dec 2–6](https://launchweek.dev/lw/MEGA) and introduced [OpenInt](https://openint.dev/launch-week)
 

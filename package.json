@@ -6,7 +6,6 @@
   "license": "UNLICENSED",
   "scripts": {
     "web": "pnpm run --filter web dev",
-    "generate-deprecated:docs": "npx tsx apps/app-config/_generateDocs.bin.ts",
     "generate-deprecated:connectorsList": "npx tsx apps/app-config/_generateConnectorLists.ts",
     "generate": "pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate",
     "docs": "cd docs && mintlify dev",
