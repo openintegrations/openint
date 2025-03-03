@@ -1,6 +1,7 @@
 import {z} from 'zod'
 import {authenticatedProcedure, router} from '../_base'
-import {core} from '../../models'
+
+// import {core} from '../../models'
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -10,11 +11,13 @@ export const connectorConfigRouter = router({
     .input(z.void())
     .output(
       z.object({
-        items: z.array(core.connector_config),
+        // TODO: Fix me by consolidating db and db-v1 finally
+        items: z.array(z.object({id: z.string(), org_id: z.string()})),
       }),
     )
     .query(async ({ctx}) => {
       const connectorConfigs = await ctx.db.query.connector_config.findMany({})
+      console.log('connectorConfigs', connectorConfigs)
       return {items: connectorConfigs}
     }),
 })

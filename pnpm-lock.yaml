@@ -2194,6 +2194,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@openint/db-v1':
         specifier: workspace:*
         version: link:../db-v1

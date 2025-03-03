@@ -15,6 +15,7 @@ export const testDbs = {
     ),
   pglite: () => initDbPGLite({logger: false}),
   pg: () =>
+    // TODO: Make test database url separate env var from prod database url to be safer
     initDbPg(env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL, {
       logger: false,
     }),
@@ -23,7 +24,7 @@ export const testDbs = {
 export interface DescribeEachDatabaseOptions {
   drivers?: DatabaseDriver[]
   migrate?: boolean
-  truncateAfterEach?: boolean
+  truncateBeforeAll?: boolean
 }
 
 export function describeEachDatabase(
@@ -33,7 +34,7 @@ export function describeEachDatabase(
   const {
     drivers = ['pg', 'pglite'],
     migrate = true,
-    truncateAfterEach = true,
+    truncateBeforeAll = true,
   } = options
 
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
@@ -48,13 +49,12 @@ export function describeEachDatabase(
         await db.$migrate()
       })
     }
-
-    testBlock(db)
-
-    if (truncateAfterEach) {
-      afterEach(async () => {
+    if (truncateBeforeAll) {
+      beforeAll(async () => {
         await db.$truncateAll()
       })
     }
+
+    testBlock(db)
   })
 }
