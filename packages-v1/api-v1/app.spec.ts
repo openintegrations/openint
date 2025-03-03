@@ -6,6 +6,10 @@ import {makeJwtClient} from '@openint/cdk'
 import {envRequired} from '@openint/env'
 import type {paths} from './__generated__/openapi.types'
 import {app} from './app'
+import {
+  createFetchHandlerOpenAPI,
+  createFetchHandlerTRPC,
+} from './trpc/handlers'
 import type {AppRouter} from './trpc/routers'
 
 test('elysia route', async () => {
@@ -16,7 +20,13 @@ test('elysia route', async () => {
 describe('openapi route', () => {
   test('healthcheck', async () => {
     const res = await app.handle(new Request('http://localhost/api/v1/health'))
-    expect(await res.json()).toBeTruthy()
+    expect(await res.json()).toMatchObject({ok: true})
+  })
+
+  test('healthcheck bypass elysia', async () => {
+    const handler = createFetchHandlerOpenAPI({endpoint: '/api/v1'})
+    const res = await handler(new Request('http://localhost/api/v1/health'))
+    expect(await res.json()).toMatchObject({ok: true})
   })
 
   test('with OpenAPI client', async () => {
@@ -45,10 +55,16 @@ describe('openapi route', () => {
 
 describe('trpc route', () => {
   test('healthcheck', async () => {
-    const res2 = await app.handle(
+    const res = await app.handle(
       new Request('http://localhost/api/v1/trpc/health'),
     )
-    expect(await res2.json()).toBeTruthy()
+    expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
+  })
+
+  test('healthcheck bypass elysia', async () => {
+    const handler = createFetchHandlerTRPC({endpoint: '/api/trpc'})
+    const res = await handler(new Request('http://localhost/api/trpc/health'))
+    expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
   })
 
   test('with TRPCClient', async () => {
@@ -61,7 +77,7 @@ describe('trpc route', () => {
       ],
     })
     const res = await client.health.query()
-    expect(res).toEqual('ok')
+    expect(res).toEqual({ok: true})
   })
 })
 

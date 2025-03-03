@@ -8,8 +8,8 @@ const generalRouter = router({
   health: publicProcedure
     .meta({openapi: {method: 'GET', path: '/health'}})
     .input(z.void())
-    .output(z.string())
-    .query(() => 'ok'),
+    .output(z.object({ok: z.boolean()}))
+    .query(() => ({ok: true})),
   viewer: publicProcedure
     .meta({openapi: {method: 'GET', path: '/viewer'}})
     .input(z.void())
