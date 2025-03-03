@@ -1,9 +1,36 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
+import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {count, eq, schema, SQL} from '@openint/db'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models'
 import {zListParams, zListResponse} from './index'
+
+// TODO: don't make any
+function formatConnection(connection: any) {
+  const connector =
+    defConnectors[connection.connector_name as keyof typeof defConnectors]
+  if (!connector) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: `Connector not found for connection ${connection.id}`,
+    })
+  }
+
+  const logoUrl =
+    connector.metadata &&
+    'logoUrl' in connector.metadata &&
+    connector.metadata.logoUrl?.startsWith('http')
+      ? connector.metadata.logoUrl
+      : connector.metadata && 'logoUrl' in connector.metadata
+        ? `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/${connector.metadata.logoUrl}`
+        : undefined
+
+  return {
+    ...connection,
+    logo_url: logoUrl,
+  }
+}
 
 export const connectionRouter = router({
   getConnection: publicProcedure
@@ -21,14 +48,7 @@ export const connectionRouter = router({
         })
       }
 
-      return {
-        id: connection.id,
-        connector_name: connection.connector_name,
-        settings: connection.settings,
-        connector_config_id: connection.connector_config_id,
-        created_at: connection.created_at,
-        updated_at: connection.updated_at,
-      }
+      return formatConnection(connection)
     }),
   listConnections: publicProcedure
     .meta({
@@ -92,14 +112,7 @@ export const connectionRouter = router({
       const total = result.length > 0 ? Number(result[0]?.total ?? 0) : 0
 
       return {
-        items: connections.map((conn) => ({
-          id: conn.id,
-          connector_name: conn.connector_name,
-          settings: conn.settings,
-          connector_config_id: conn.connector_config_id!,
-          created_at: conn.created_at,
-          updated_at: conn.updated_at,
-        })),
+        items: connections.map((conn) => formatConnection(conn)),
         total,
         limit,
         offset,
