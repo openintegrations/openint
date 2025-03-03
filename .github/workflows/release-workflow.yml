@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  summarize-prs:
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -174,25 +174,6 @@ jobs:
           output_path: 'packages-v1/api-v1/__generated__/openapi.documented.json'
           project_name: 'openint'
           commit_message: 'feat(docs): updating documented docs for mintlify'
-
-      - name: Ensure mintlify docs build
-        # if: steps.check_openapi_changes.outputs.has_changes == 'true'
-        run: |
-          pnpm install
-          # Wait for before starting the build so that the OpenAPI spec is updated if needed by Stainless
-          # may need to be increased if the OpenAPI spec is not updated in time
-          # sleep 3s 
-
-          # Run the docs build command with a timeout and capture output
-          timeout 3s pnpm --dir ./docs dev --no-open > docs_build_output.txt 2>&1 || {
-            # If timeout or error occurs, print the output and check exit code
-            echo "Docs build output:"
-            cat docs_build_output.txt
-            # Exit code 124 means timeout occurred (which is expected and OK)
-            [ $? -eq 124 ] && exit 0 || exit 1
-          }
-          # If command completes successfully within timeout, print success
-          echo "Docs build completed successfully within timeout"
 
       ## TODO: Reenable the below steps
 
