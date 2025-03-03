@@ -41,14 +41,14 @@ jobs:
       neon-proxy:
         image: ghcr.io/timowilhelm/local-neon-http-proxy:main
         env:
-          PG_CONNECTION_STRING: postgres://postgres:test@localtest.me:5432/test
+          PG_CONNECTION_STRING: postgres://postgres:test@db.localtest.me:5432/test
         ports:
           - '4444:4444'
 
     env:
       NODE_OPTIONS: --max-old-space-size=8192
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      DATABASE_URL: postgres://postgres:test@localtest.me:5432/test
+      DATABASE_URL: postgres://postgres:test@db.localtest.me:5432/test
 
     steps:
       - name: Checkout
@@ -133,8 +133,8 @@ jobs:
           npx inngest-cli@latest dev &
           pnpm wait-on tcp:8288
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
+      # - name: Setup upterm session
+      #   uses: lhotari/action-upterm@v1
 
       - name: Run tests
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
