@@ -10,7 +10,7 @@ export {schema}
 export async function ensureSchema(thisDb: Database, schema: string) {
   // Check existence first because we may not have permission to actually create the schema
   const exists = await thisDb
-    .exec(
+    .$exec(
       sql`SELECT true as exists FROM information_schema.schemata WHERE schema_name = ${schema}`,
     )
     .then((r) => r.rows[0]?.['exists'] === true)
@@ -18,5 +18,5 @@ export async function ensureSchema(thisDb: Database, schema: string) {
   if (exists) {
     return
   }
-  await thisDb.exec(sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};`)
+  await thisDb.$exec(sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};`)
 }

@@ -28,12 +28,35 @@ export function getMigrationConfig(): MigrationConfig {
 }
 
 /** Standardize difference across different drizzle postgres drivers */
-export interface DrizzleExtension<TDriver extends string> {
-  driverType: TDriver
-  exec<T extends Record<string, unknown>>(
+interface SpecificExtensions {
+  $exec<T extends Record<string, unknown>>(
     query: string | SQLWrapper,
   ): Promise<{rows: Array<Assume<T, {[column: string]: unknown}>>}>
-  migrate(): Promise<void>
+  $migrate(): Promise<void>
+}
+
+export function dbFactory<TDriver extends string, TDatabase>(
+  driver: TDriver,
+  _db: TDatabase,
+  extension: SpecificExtensions,
+) {
+  Object.assign(_db as {}, {driverType: driver, ...extension})
+  const db = _db as TDatabase & SpecificExtensions & {driverType: TDriver}
+
+  /** Helpers that are not driver specific */
+  const additioanlExtensions = {
+    $truncateAll: async () => {
+      const tables = await db.$exec<{table_name: string}>(
+        "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' and table_name != '__drizzle_migrations'",
+      )
+      for (const {table_name} of tables.rows) {
+        await db.$exec(`TRUNCATE TABLE ${table_name} CASCADE`)
+      }
+    },
+  }
+
+  Object.assign(db, additioanlExtensions)
+  return db as typeof db & typeof additioanlExtensions
 }
 
 type AnyDatabase =

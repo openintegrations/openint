@@ -55,7 +55,7 @@ describe('test db', () => {
   })
 
   test('connect', async () => {
-    const res = await db.exec('select 1+1 as sum')
+    const res = await db.$exec('select 1+1 as sum')
     expect(res.rows[0]).toEqual({sum: 2})
   })
 

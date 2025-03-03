@@ -2,8 +2,8 @@ import {neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
 import type {Viewer} from '@openint/cdk'
-import type {DbOptions, DrizzleExtension} from './db'
-import {getDrizzleConfig, getMigrationConfig} from './db'
+import type {DbOptions} from './db'
+import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {localGucForViewer} from './schema/rls'
 
 export function initDbNeon(
@@ -68,14 +68,13 @@ export function initDbNeon(
     return {rows: res?.rows ?? []}
   }, getDrizzleConfig(options))
 
-  Object.assign(db, {
-    driverType: 'neon',
-    async exec(query) {
+  return dbFactory('neon', db, {
+    async $exec(query) {
       const res = await db.execute(query)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
       return {rows: res as any[]}
     },
-    migrate() {
+    $migrate() {
       return migrate(
         db,
         async (queries) => {
@@ -84,7 +83,5 @@ export function initDbNeon(
         getMigrationConfig(),
       )
     },
-  } satisfies DrizzleExtension<'neon'>)
-
-  return db as typeof db & DrizzleExtension<'neon'>
+  })
 }

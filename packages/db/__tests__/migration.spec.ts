@@ -19,8 +19,11 @@ describe('for each db', () => {
   }
 
   test.each(Object.entries(dbs))('run migration %s', async (_driver, db) => {
-    await db.migrate()
-    const res = await db.exec('select * from connector_config')
+    await db.$migrate()
+    const res = await db.$exec('select * from connector_config')
     expect(res.rows).toEqual([])
+
+    await db.$truncateAll()
+
   })
 })
