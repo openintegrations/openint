@@ -17,9 +17,9 @@ jobs:
         env:
           # `POSTGRES_HOST` is `postgres`
           # optional (defaults to `postgres`)
-          POSTGRES_DB: test
+          POSTGRES_DB: postgres
           # required
-          POSTGRES_PASSWORD: test
+          POSTGRES_PASSWORD: password
           # optional (defaults to `5432`)
           POSTGRES_PORT: 5432
           # optional (defaults to `postgres`)
@@ -41,14 +41,14 @@ jobs:
       neon-proxy:
         image: ghcr.io/timowilhelm/local-neon-http-proxy:main
         env:
-          PG_CONNECTION_STRING: postgres://postgres:test@postgres:5432/test
+          PG_CONNECTION_STRING: postgres://postgres:password@postgres:5432/postgres
         ports:
           - '4444:4444'
 
     env:
       NODE_OPTIONS: --max-old-space-size=8192
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      DATABASE_URL: postgres://postgres:test@db.localtest.me:5432/test
+      DATABASE_URL: postgres://postgres:password@db.localtest.me:5432/postgres
 
     steps:
       - name: Checkout
