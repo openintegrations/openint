@@ -1,0 +1,45 @@
+{
+  "name": "OpenInt",
+  "theme": "maple",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373"
+  },
+  "navigation": {
+    "versions": [
+      {
+        "version": "v0 (current)",
+        "label": "Version 1",
+        "openapi": "https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "quickstart/quickstart",
+              "quickstart/use-cases",
+              "quickstart/features",
+              "quickstart/integrations"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "core-concepts/connector-config",
+              "core-concepts/magic-link"
+            ]
+          },
+          {
+            "group": "Community",
+            "pages": ["community/join-our-slack", "community/attribution"]
+          }
+        ]
+      },
+      {
+        "version": "v1 (new)",
+        "label": "Version 1",
+        "openapi": "https://app.stainless.com/api/spec/documented/openint"
+      }
+    ]
+  }
+}

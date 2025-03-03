@@ -1,11 +1,10 @@
 {
   "name": "@openint/docs",
   "scripts": {
-    "dev": "mintlify dev",
-    "generate": "pnpm run generate:api-pages && pnpm run generate:mint",
-    "generate:api-pages": "rm -rf unified-apis || true && mkdir -p unified-apis && mintlify-scrape openapi-file -o unified-apis ./../kits/sdk/openapi.json | tail -n +2 > ./unified-apis/index.json",
-    "generate:mint": "npx tsx mint.ts mint.json",
-    "generate:open-sdk-pages": "rm -rf open-sdks || true && npx tsx openSDK.bin.ts"
+    "dev": "mintlify dev"
+  },
+  "dependencies": {
+    "@octokit/graphql": "^8.1.1"
   },
   "devDependencies": {
     "@mintlify/scraping": "^3.0.64",
@@ -19,9 +18,6 @@
     "@opensdks/sdk-openai": "^0.0.14",
     "@opensdks/sdk-slack": "^0.0.14",
     "@opensdks/sdk-venice": "^0.0.14",
-    "mintlify": "4.0.59"
-  },
-  "dependencies": {
-    "@octokit/graphql": "^8.1.1"
+    "mintlify": "latest"
   }
 }
