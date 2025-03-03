@@ -2225,9 +2225,15 @@ importers:
       '@trpc/client':
         specifier: next
         version: 11.0.0-rc.819(@trpc/server@11.0.0-rc.819(typescript@5.7.3))(typescript@5.7.3)
-      bun-types:
-        specifier: latest
+      bun:
+        specifier: ^1.2.4
         version: 1.2.4
+      bun-types:
+        specifier: ^1.2.4
+        version: 1.2.4
+      bunx:
+        specifier: ^0.1.0
+        version: 0.1.0
       openapi-fetch:
         specifier: ^0.13.4
         version: 0.13.4
@@ -5562,6 +5568,61 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
 
+  '@oven/bun-darwin-aarch64@1.2.4':
+    resolution: {integrity: sha512-xBz/Q7X6AFwMg7MXtBemjjt5uB+tvEYBmi9Zbm1r8qnI2V8m/Smuhma0EARhiVfLuIAYj2EM5qjzxeAFV4TBJA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@oven/bun-darwin-x64-baseline@1.2.4':
+    resolution: {integrity: sha512-stsq8vBiYgfGunBGlf2M7ST7Ymyw3WnwrxEeJ04vkKmMEEE2LpX8Rkol6UPRvZawab9s9/scFIRgFi6hu9H4SQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oven/bun-darwin-x64@1.2.4':
+    resolution: {integrity: sha512-ufyty+2754QCFDhq447H39JiqabMlFRItLn1YFp+2hdpKak7KCYLGOUuHnlr1pmImKJzDHURjnvTTq1QRlUWAA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oven/bun-linux-aarch64-musl@1.2.4':
+    resolution: {integrity: sha512-+lxWF7up9MuB1ZdGxXCH3AH3XmYtdBC6soQ38+yg3+y3iOPrAlSG+wytHEkypN/UU2mGvCuaEED3cMvejrGdDw==}
+    cpu: [aarch64]
+    os: [linux]
+
+  '@oven/bun-linux-aarch64@1.2.4':
+    resolution: {integrity: sha512-OhVpzme2vvLA7w8GYeJg2SQ2h2CwJQN9oYDiGeoML4EwE+DEoYHdxgaBZsQySOwZtFIr8ufpc/8iD4hssJ50qg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oven/bun-linux-x64-baseline@1.2.4':
+    resolution: {integrity: sha512-3nmDDZJH73MzhBg2sRYioj4CE8wgaz0w24OieMqj4/c44BbNr3X5RewrldsMD2cU6DtVbi52FuD5WpTw3N8nmw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-linux-x64-musl-baseline@1.2.4':
+    resolution: {integrity: sha512-qDsUvKCW0WUlVOt6Yx5eEzxgCbvzuSJBsu0sXtr6uGt8TnMKghmliRO5FmiMLQ0k/PUDA8vPJCtuv5k14bDi6g==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-linux-x64-musl@1.2.4':
+    resolution: {integrity: sha512-cLdMbK7srNoUbYSG3Tp4GYdPAO0+5mgUhdbU053GZs0DLQmQ8h1JQhALp+ZjrUWstmQe7ddcNu7l7EAu6E76XA==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-linux-x64@1.2.4':
+    resolution: {integrity: sha512-oof3ii92Cz2yIOZRbVFHMHmffCutRPFITIdXLZ2/rkqVuKUe0ZdqWjHPhxJFm31AL9MlJ/dSqDbPb51SaLI7tw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-windows-x64-baseline@1.2.4':
+    resolution: {integrity: sha512-j/G4bnfsRAiCvpTADda40m29iSGvueIaF9Kc9hBu4jN8dTS9fEXdNNXuf8c30/z7/npxw2dhzsAn8jbc5QvD1A==}
+    cpu: [x64]
+    os: [win32]
+
+  '@oven/bun-windows-x64@1.2.4':
+    resolution: {integrity: sha512-4YRJd4pdaTWEM+uawYmchOeNv874RGAFpIZQubWnN4SBf6HfcDm0OMMZcm0f0I70Wd5gbPg1+rvCRtDZWVmZog==}
+    cpu: [x64]
+    os: [win32]
+
   '@panva/asn1.js@1.0.0':
     resolution: {integrity: sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==}
     engines: {node: '>=10.13.0'}
@@ -8878,6 +8939,18 @@ packages:
 
   bun-types@1.2.4:
     resolution: {integrity: sha512-nDPymR207ZZEoWD4AavvEaa/KZe/qlrbMSchqpQwovPZCKc7pwMoENjEtHgMKaAjJhy+x6vfqSBA1QU3bJgs0Q==}
+
+  bun-utilities@0.2.1:
+    resolution: {integrity: sha512-2e4rMaA50zfUqvc3+Cu8I88nCzvF6WsOnxz4iZSSSQt/pBGgpiwgFCx2y5/s69C9iaCVfyrM6kHxYOgvVx1e8Q==}
+
+  bun@1.2.4:
+    resolution: {integrity: sha512-ZY0EZ/UKqheaLeAtMsfJA6jWoWvV9HAtfFaOJSmS3LrNpFKs1Sg5fZLSsczN1h3a+Dtheo4O3p3ZYWrf40kRGw==}
+    cpu: [arm64, x64, aarch64]
+    os: [darwin, linux, win32]
+    hasBin: true
+
+  bunx@0.1.0:
+    resolution: {integrity: sha512-RKz/xk5NJ/oPlnafM9qjujUumy8I/yZL2w+LNu/JCJFty2WbeLhLlqWNnR7kEQFFYVxyZZGHT5c5U288fDM1Sg==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -21053,6 +21126,39 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.26.0(@opentelemetry/api@1.9.0)
 
+  '@oven/bun-darwin-aarch64@1.2.4':
+    optional: true
+
+  '@oven/bun-darwin-x64-baseline@1.2.4':
+    optional: true
+
+  '@oven/bun-darwin-x64@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-aarch64-musl@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-aarch64@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-x64-baseline@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-x64-musl-baseline@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-x64-musl@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-x64@1.2.4':
+    optional: true
+
+  '@oven/bun-windows-x64-baseline@1.2.4':
+    optional: true
+
+  '@oven/bun-windows-x64@1.2.4':
+    optional: true
+
   '@panva/asn1.js@1.0.0': {}
 
   '@pkgjs/parseargs@0.11.0':
@@ -25382,6 +25488,26 @@ snapshots:
     dependencies:
       '@types/node': 22.13.8
       '@types/ws': 8.5.14
+
+  bun-utilities@0.2.1: {}
+
+  bun@1.2.4:
+    optionalDependencies:
+      '@oven/bun-darwin-aarch64': 1.2.4
+      '@oven/bun-darwin-x64': 1.2.4
+      '@oven/bun-darwin-x64-baseline': 1.2.4
+      '@oven/bun-linux-aarch64': 1.2.4
+      '@oven/bun-linux-aarch64-musl': 1.2.4
+      '@oven/bun-linux-x64': 1.2.4
+      '@oven/bun-linux-x64-baseline': 1.2.4
+      '@oven/bun-linux-x64-musl': 1.2.4
+      '@oven/bun-linux-x64-musl-baseline': 1.2.4
+      '@oven/bun-windows-x64': 1.2.4
+      '@oven/bun-windows-x64-baseline': 1.2.4
+
+  bunx@0.1.0:
+    dependencies:
+      bun-utilities: 0.2.1
 
   busboy@1.6.0:
     dependencies:
