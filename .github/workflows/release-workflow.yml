@@ -25,147 +25,192 @@ jobs:
         run: |
           gh auth status
 
-      - name: Get the latest tag or set initial version
-        id: get_latest_tag
+      # - name: Get the latest tag or set initial version
+      #   id: get_latest_tag
+      #   run: |
+      #     # Clean any local tags
+      #     git tag -l | xargs git tag -d
+      #     # Fetch all tags from remote
+      #     git fetch --prune --tags origin
+      #     LATEST_TAG=$(git tag -l "v*" --sort=-v:refname | head -n 1 || echo "v0.0.0")
+      #     echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
+      #     echo "Found latest tag: $LATEST_TAG"
+      #     # Debug output
+      #     echo "All available tags:"
+      #     git tag -l
+
+      # - name: Calculate new version
+      #   run: |
+      #     echo "latest_tag=${{ env.latest_tag }}"
+      #     # Split version into components and increment patch
+      #     LATEST_TAG_NO_V="${{ env.latest_tag }}"
+      #     LATEST_TAG_NO_V=${LATEST_TAG_NO_V#v}  # Remove 'v' prefix
+      #     IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG_NO_V"
+      #     PATCH=$((PATCH + 1))
+      #     NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+
+      #     # Output the new version
+      #     echo "Final new version: $NEW_VERSION"
+      #     echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+
+      # - name: Generate changelog
+      #   id: changelog
+      #   run: |
+      #     CHANGES=$(git log "${{ env.latest_tag }}"..HEAD --pretty=format:"- %s (%h) by %an")
+      #     echo "$CHANGES" > changes.txt
+      #     echo "Changes written to changes.txt"
+
+      # - name: Fetch PR data as JSON
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     # Get the timestamp of the last tag
+      #     LAST_TAG_DATE=$(git log -1 --format=%ct ${{ env.latest_tag }})
+      #     LAST_TAG_ISO=$(date -u --date="@$LAST_TAG_DATE" +"%Y-%m-%dT%H:%M:%SZ")
+
+      #     # Get PRs merged after the last tag
+      #     gh pr list --state merged --base main --search "merged:>$LAST_TAG_ISO" \
+      #       --json number,title,body,author,mergedAt,labels > prs.json
+      #     echo "PR data saved to prs.json"
+
+      # - name: Format PR data
+      #   run: |
+      #     jq -r '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n> [!IMPORTANT]\n> \(.body // "No description provided.")\n"' prs.json > formatted_prs.txt
+      #     echo "Formatted PR data saved to formatted_prs.txt"
+
+      # - name: Combine changelog and PR data
+      #   run: |
+      #     echo "Changes from git log:\n" > changelog.txt
+      #     cat changes.txt >> changelog.txt
+      #     echo "\nChanges from PRs:\n" >> changelog.txt
+      #     cat formatted_prs.txt >> changelog.txt
+      #     echo "Combined changelog written to changelog.txt"
+
+      # - name: Extract PR titles and important lines
+      #   id: parse_changelog
+      #   run: |
+      #     awk -v repo_url="https://github.com/openintegrations/openint" '
+      #     BEGIN {
+      #         last_pr_number = "";
+      #     }
+      #     /^- PR #[0-9]+:/ {
+      #         match($0, /^- PR #([0-9]+):/, pr);
+      #         pr_title = $0;
+      #         pr_number = pr[1];
+      #     }
+      #     /> \[!IMPORTANT\]/ {
+      #         getline;
+      #         important_line = $0;
+      #         if (pr_number != last_pr_number) {
+      #             last_pr_number = pr_number;
+      #             print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
+      #         }
+      #     }' changelog.txt > formatted_release_notes.txt
+      #     echo "Formatted Release Notes:"
+      #     cat formatted_release_notes.txt
+      # - name: Summarize PR changes with OpenAI
+      #   id: summarize
+      #   env:
+      #     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      #   run: |
+      #     FORMATTED_OUTPUT=$(cat formatted_release_notes.txt | jq -Rsa .)
+
+      #     RESPONSE=$(curl -s -X POST https://api.openai.com/v1/chat/completions \
+      #       -H "Content-Type: application/json" \
+      #       -H "Authorization: Bearer $OPENAI_API_KEY" \
+      #       -d "$(jq -n --arg changelog "$FORMATTED_OUTPUT" '{
+      #         model: "gpt-4",
+      #         messages: [
+      #           {role: "system", content: "You are an assistant that generates concise and clear release summaries for software projects."},
+      #           {role: "user", content: ("Summarize the following PR changes into a single two-liner summary highlighting important changes in casual tone of voice:\n\n" + $changelog)}
+      #         ],
+      #         temperature: 0.7
+      #       }')")
+
+      #     echo "OpenAI API Response:"
+      #     echo "$RESPONSE"
+
+      #     SUMMARY=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "No summary generated"')
+      #     echo "summary=$SUMMARY" >> $GITHUB_ENV
+      #     echo "$SUMMARY" > summary_output.txt
+
+      # - name: Create Release Notes
+      #   run: |
+      #     SUMMARY=$(cat summary_output.txt)
+      #     echo -e "### Summary\n\n$SUMMARY\n\n### PR Breakdown:\n" > release_notes.txt
+      #     cat formatted_release_notes.txt >> release_notes.txt
+      #     echo "Release notes written to release_notes.txt"
+
+      - name: Check if OpenAPI spec has changed
+        id: check_openapi_changes
         run: |
-          # Clean any local tags
-          git tag -l | xargs git tag -d
-          # Fetch all tags from remote
-          git fetch --prune --tags origin
-          LATEST_TAG=$(git tag -l "v*" --sort=-v:refname | head -n 1 || echo "v0.0.0")
-          echo "latest_tag=$LATEST_TAG" >> $GITHUB_ENV
-          echo "Found latest tag: $LATEST_TAG"
-          # Debug output
-          echo "All available tags:"
-          git tag -l
+          # Fetch production branch
+          git fetch origin production
 
-      - name: Calculate new version
-        run: |
-          echo "latest_tag=${{ env.latest_tag }}"
-          # Split version into components and increment patch
-          LATEST_TAG_NO_V="${{ env.latest_tag }}"
-          LATEST_TAG_NO_V=${LATEST_TAG_NO_V#v}  # Remove 'v' prefix
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG_NO_V"
-          PATCH=$((PATCH + 1))
-          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          # Check if the file has changed between main and production
+          if git diff --name-only origin/production..HEAD | grep -q "packages-v1/api-v1/__generated__/openapi.json"; then
+            echo "OpenAPI spec has changed between production and main, will push to Stainless"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changes to OpenAPI spec between branches, skipping Stainless push"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
 
-          # Output the new version
-          echo "Final new version: $NEW_VERSION"
-          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
-
-      - name: Generate changelog
-        id: changelog
-        run: |
-          CHANGES=$(git log "${{ env.latest_tag }}"..HEAD --pretty=format:"- %s (%h) by %an")
-          echo "$CHANGES" > changes.txt
-          echo "Changes written to changes.txt"
-
-      - name: Fetch PR data as JSON
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Get the timestamp of the last tag
-          LAST_TAG_DATE=$(git log -1 --format=%ct ${{ env.latest_tag }})
-          LAST_TAG_ISO=$(date -u --date="@$LAST_TAG_DATE" +"%Y-%m-%dT%H:%M:%SZ")
-
-          # Get PRs merged after the last tag
-          gh pr list --state merged --base main --search "merged:>$LAST_TAG_ISO" \
-            --json number,title,body,author,mergedAt,labels > prs.json
-          echo "PR data saved to prs.json"
-
-      - name: Format PR data
-        run: |
-          jq -r '.[] | "- PR #\(.number): \(.title) by \(.author.login)\n> [!IMPORTANT]\n> \(.body // "No description provided.")\n"' prs.json > formatted_prs.txt
-          echo "Formatted PR data saved to formatted_prs.txt"
-
-      - name: Combine changelog and PR data
-        run: |
-          echo "Changes from git log:\n" > changelog.txt
-          cat changes.txt >> changelog.txt
-          echo "\nChanges from PRs:\n" >> changelog.txt
-          cat formatted_prs.txt >> changelog.txt
-          echo "Combined changelog written to changelog.txt"
-
-      - name: Extract PR titles and important lines
-        id: parse_changelog
-        run: |
-          awk -v repo_url="https://github.com/openintegrations/openint" '
-          BEGIN {
-              last_pr_number = "";
-          }
-          /^- PR #[0-9]+:/ {
-              match($0, /^- PR #([0-9]+):/, pr);
-              pr_title = $0;
-              pr_number = pr[1];
-          }
-          /> \[!IMPORTANT\]/ {
-              getline;
-              important_line = $0;
-              if (pr_number != last_pr_number) {
-                  last_pr_number = pr_number;
-                  print pr_title " (" repo_url "/pull/" pr_number ") -- " important_line;
-              }
-          }' changelog.txt > formatted_release_notes.txt
-          echo "Formatted Release Notes:"
-          cat formatted_release_notes.txt
-      - name: Summarize PR changes with OpenAI
-        id: summarize
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          FORMATTED_OUTPUT=$(cat formatted_release_notes.txt | jq -Rsa .)
-
-          RESPONSE=$(curl -s -X POST https://api.openai.com/v1/chat/completions \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $OPENAI_API_KEY" \
-            -d "$(jq -n --arg changelog "$FORMATTED_OUTPUT" '{
-              model: "gpt-4",
-              messages: [
-                {role: "system", content: "You are an assistant that generates concise and clear release summaries for software projects."},
-                {role: "user", content: ("Summarize the following PR changes into a single two-liner summary highlighting important changes in casual tone of voice:\n\n" + $changelog)}
-              ],
-              temperature: 0.7
-            }')")
-
-          echo "OpenAI API Response:"
-          echo "$RESPONSE"
-
-          SUMMARY=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "No summary generated"')
-          echo "summary=$SUMMARY" >> $GITHUB_ENV
-          echo "$SUMMARY" > summary_output.txt
-
-      - name: Create Release Notes
-        run: |
-          SUMMARY=$(cat summary_output.txt)
-          echo -e "### Summary\n\n$SUMMARY\n\n### PR Breakdown:\n" > release_notes.txt
-          cat formatted_release_notes.txt >> release_notes.txt
-          echo "Release notes written to release_notes.txt"
-
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes-file release_notes.txt
-
-      - name: Update production branch
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-          git fetch origin main
-          git checkout main
-          git push origin main:production -f
-      - uses: UnlyEd/github-action-await-vercel@v1 # TODO best practices recommend to use a fixed version instead of @v1 for production usage (i.e: @v1.2.32)
-        id: await-vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      - name: Push spec and config to Stainless and output documented spec
+        if: steps.check_openapi_changes.outputs.has_changes == 'true'
+        uses: stainless-api/upload-openapi-spec-action@main
         with:
-          deployment-url: openint-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
-          timeout: 10 # Wait for 10 seconds before failing
-          poll-interval: 1 # Wait for 1 second before each retry
+          stainless_api_key: ${{ secrets.STAINLESS_API_KEY }}
+          input_path: '/packages-v1/api-v1/__generated__/openapi.json'
+          output_path: '/packages-v1/api-v1/__generated__/openapi.documented.json'
+          project_name: 'openint'
+          commit_message: 'feat(docs): updating documented docs for mintlify'
 
-      - name: Stably Runner Action
-        id: stably-runner
-        uses: stablyhq/stably-runner-action@v3
-        with:
-          api-key: ${{ secrets.STABLY_API_KEY }}
-          test-group-id: cm5g8i6nc0005l103urkixuxz
+      - name: Ensure mintlify docs build
+        if: steps.check_openapi_changes.outputs.has_changes == 'true'
+        run: |
+          # Wait for before starting the build so that the OpenAPI spec is updated if needed by Stainless
+          # may need to be increased if the OpenAPI spec is not updated in time
+          sleep 3s 
+
+          # Run the docs build command with a timeout and capture output
+          timeout 3s pnpm --dir ./docs dev --no-open > docs_build_output.txt 2>&1 || {
+            # If timeout or error occurs, print the output and check exit code
+            echo "Docs build output:"
+            cat docs_build_output.txt
+            # Exit code 124 means timeout occurred (which is expected and OK)
+            [ $? -eq 124 ] && exit 0 || exit 1
+          }
+          # If command completes successfully within timeout, print success
+          echo "Docs build completed successfully within timeout"
+
+      ## TODO: Reenable the below steps
+
+      # - name: Create GitHub Release
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     gh release create "${{ env.new_version }}" --title "Release ${{ env.new_version }}" --notes-file release_notes.txt
+
+      # - name: Update production branch
+      #   run: |
+      #     git config user.name "GitHub Actions Bot"
+      #     git config user.email "<>"
+      #     git fetch origin main
+      #     git checkout main
+      #     git push origin main:production -f
+      # - uses: UnlyEd/github-action-await-vercel@v1 # TODO best practices recommend to use a fixed version instead of @v1 for production usage (i.e: @v1.2.32)
+      #   id: await-vercel
+      #   env:
+      #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      #   with:
+      #     deployment-url: openint-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
+      #     timeout: 10 # Wait for 10 seconds before failing
+      #     poll-interval: 1 # Wait for 1 second before each retry
+
+      # - name: Stably Runner Action
+      #   id: stably-runner
+      #   uses: stablyhq/stably-runner-action@v3
+      #   with:
+      #     api-key: ${{ secrets.STABLY_API_KEY }}
+      #     test-group-id: cm5g8i6nc0005l103urkixuxz

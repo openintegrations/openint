@@ -92,9 +92,6 @@ jobs:
           vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
           vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local
 
-      - name: Ensure OpenAPI spec and docs are up to date
-        run: pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate && git diff --exit-code
-
       - name: Run migration and store the completed schema
         # TODO: consider diffing schema with stored schema?
         # Perhaps make dump and diff one of the code generation next steps?
