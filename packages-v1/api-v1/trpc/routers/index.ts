@@ -23,6 +23,15 @@ export const zListParams = z.object({
   offset: z.number().optional(),
 })
 
+export function zListResponse<T extends z.ZodTypeAny>(itemSchema: T) {
+  return z.object({
+    items: z.array(itemSchema),
+    total: z.number(),
+    limit: z.number(),
+    offset: z.number(),
+  })
+}
+
 export const appRouter = trpc.mergeRouters(
   connectionRouter,
   connectorConfigRouter,
