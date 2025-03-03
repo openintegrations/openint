@@ -18,6 +18,11 @@ const generalRouter = router({
     .query(({ctx}) => ctx.viewer),
 })
 
+export const zListParams = z.object({
+  limit: z.number().optional(),
+  offset: z.number().optional(),
+})
+
 export const appRouter = trpc.mergeRouters(
   connectionRouter,
   connectorConfigRouter,
