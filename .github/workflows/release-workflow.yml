@@ -165,6 +165,12 @@ jobs:
             echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: 'Generate OpenAPI spec'
+        run: |
+          cd packages-v1/api-v1
+          pnpm install
+          pnpm gen
+
       - name: Push spec and config to Stainless and output documented spec
         # if: steps.check_openapi_changes.outputs.has_changes == 'true'
         uses: stainless-api/upload-openapi-spec-action@main
