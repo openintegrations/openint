@@ -1,32 +1,7 @@
-import {createTRPCClient, httpLink} from '@trpc/client'
 import type {CustomerId, Viewer} from '@openint/cdk'
-import {makeJwtClient} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {envRequired} from '@openint/env'
-import {app} from './app'
-import type {AppRouter} from './trpc/routers'
-
-// MARK: - test-utils
-
-function headerForViewer(viewer: Viewer | null) {
-  const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
-  return viewer ? {authorization: `Bearer ${jwt.signViewer(viewer)}`} : {}
-}
-
-function trpcClientForViewer(viewer: Viewer | null) {
-  return createTRPCClient<AppRouter>({
-    links: [
-      httpLink({
-        url: 'http://localhost/api/v1/trpc',
-        fetch: (input, init) => app.handle(new Request(input, init)),
-        headers: headerForViewer(viewer),
-      }),
-    ],
-  })
-}
-
-// MARK: - tests
+import {trpcClientForViewer} from './test-utils'
 
 const viewers = {
   anon: null,
