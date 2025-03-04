@@ -215,7 +215,7 @@ export const sharepointAdapter = {
     return {
       has_next_page: !!res['@odata.nextLink'],
       items: res.value.map(mappers.DriveGroup),
-      cursor: extractCursor(res['@odata.nextLink']),
+      next_cursor: extractCursor(res['@odata.nextLink']),
     }
   },
 
@@ -286,7 +286,7 @@ export const sharepointAdapter = {
     return {
       has_next_page: !!drivesResponse['@odata.nextLink'],
       items: drivesResponse.value.map(mappers.Drive),
-      cursor: extractCursor(drivesResponse['@odata.nextLink']),
+      next_cursor: extractCursor(drivesResponse['@odata.nextLink']),
     }
   },
 
@@ -376,7 +376,7 @@ export const sharepointAdapter = {
       items: filesResponse.value
         // .filter((item: any) => item.file)
         .map(mappers.File),
-      cursor: extractCursor(filesResponse['@odata.nextLink'] ?? ''),
+      next_cursor: extractCursor(filesResponse['@odata.nextLink'] ?? ''),
     }
   },
 
@@ -466,7 +466,7 @@ export const sharepointAdapter = {
     return {
       has_next_page: !!foldersResponse['@odata.nextLink'],
       items: foldersResponse.value.map(mappers.Folder),
-      cursor: extractCursor(foldersResponse['@odata.nextLink']),
+      next_cursor: extractCursor(foldersResponse['@odata.nextLink']),
     }
   },
 } satisfies FileStorageAdapter<MsgraphSDK>
