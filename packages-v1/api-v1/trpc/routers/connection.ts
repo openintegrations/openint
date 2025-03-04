@@ -131,7 +131,7 @@ export const connectionRouter = router({
           formatConnection(
             // TODO: fix this
             conn as any as z.infer<typeof core.connection>,
-            input?.include_secrets,
+            input?.include_secrets ?? false,
           ),
         ),
         total,
