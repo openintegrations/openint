@@ -52,7 +52,12 @@ export const fileStorageRouter = trpc.router({
 
   getFile: procedure
     .meta(oapi({method: 'GET', path: '/file/{id}'}))
-    .input(z.object({id: z.string()}))
+    .input(
+      z.object({
+        id: z.string(),
+        drive_id: z.string().optional(),
+      }),
+    )
     .output(unified.File)
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
@@ -62,6 +67,7 @@ export const fileStorageRouter = trpc.router({
       z.object({
         id: z.string(),
         format: z.string(),
+        drive_id: z.string().optional(),
       }),
     )
     .output(z.instanceof(ReadableStream))
@@ -69,7 +75,12 @@ export const fileStorageRouter = trpc.router({
 
   downloadFile: procedure
     .meta(oapi({method: 'GET', path: '/file/{id}/download'}))
-    .input(z.object({id: z.string()}))
+    .input(
+      z.object({
+        id: z.string(),
+        drive_id: z.string().optional(),
+      }),
+    )
     .output(z.instanceof(ReadableStream)) // don't validate output
     .query(async ({input, ctx}) => proxyCallAdapter({input, ctx})),
 
