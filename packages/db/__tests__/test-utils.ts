@@ -17,7 +17,6 @@ export const testDbs = {
 }
 
 export interface DescribeEachDatabaseOptions {
-
   randomDatabaseFromFilename?: string
   drivers?: DatabaseDriver[]
   migrate?: boolean
@@ -35,13 +34,6 @@ export function describeEachDatabase(
     truncateBeforeAll = true,
   } = options
 
-  const name = prefix
-    ? `${snakeCase(path.basename(prefix, path.extname(prefix)))}_${new Date()
-        .toISOString()
-        .replaceAll(/[:Z\-\.]/g, '')
-        .replace(/T/, '_')}`
-    : undefined
-
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
     drivers.includes(d as DatabaseDriver),
   ) as Array<[DatabaseDriver, (url: string) => Database]>
@@ -53,6 +45,12 @@ export function describeEachDatabase(
     )
     let baseDb: Database | undefined
 
+    const name = prefix
+      ? `${snakeCase(path.basename(prefix, path.extname(prefix)))}_${new Date()
+          .toISOString()
+          .replaceAll(/[:Z\-\.]/g, '')
+          .replace(/T/, '_')}_${driver}`
+      : undefined
     const url = new URL(baseUrl)
     if (name && url.pathname !== `/${name}`) {
       url.pathname = `/${name}`

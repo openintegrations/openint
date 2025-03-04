@@ -8,7 +8,7 @@ import {dbUpsert, dbUpsertOne} from './upsert'
 const options: DescribeEachDatabaseOptions = {
   randomDatabaseFromFilename: __filename,
   migrate: false,
-  drivers: ['neon', 'pg'],
+  drivers: ['neon', 'pg', 'pglite'],
 }
 
 describeEachDatabase(options, (db) => {
