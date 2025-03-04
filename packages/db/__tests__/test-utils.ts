@@ -1,5 +1,6 @@
 import path from 'node:path'
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
+import {sql} from 'drizzle-orm'
 import {env, envRequired} from '@openint/env'
 import {snakeCase} from '@openint/util'
 import {schema} from '..'
@@ -94,6 +95,22 @@ export function describeEachDatabase<T extends DatabaseDriver>(
       await baseDb?.$end?.()
     }, 1000)
   })
+}
+
+export async function ensureSchema(thisDb: Database, schema: string) {
+  // Check existence first because we may not have permission to actually create the schema
+  const exists = await thisDb
+    .$exec(
+      sql`SELECT true as exists FROM information_schema.schemata WHERE schema_name = ${schema}`,
+    )
+    .then((r) => r.rows[0]?.['exists'] === true)
+
+  if (exists) {
+    return
+  }
+  await thisDb.$exec(
+    sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};`,
+  )
 }
 
 // Importing `drizzle-kit/api` in this file causes next.js to crash... So we are separating it instead

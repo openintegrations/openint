@@ -18,6 +18,6 @@ export function initDbPg(url: string, options: DbOptions = {}) {
     },
     $end() {
       return pool.end()
-    }
+    },
   })
 }
