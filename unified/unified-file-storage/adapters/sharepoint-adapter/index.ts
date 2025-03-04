@@ -27,9 +27,39 @@ async function getFileFromDrives({
   ctx,
 }: {
   instance: MsgraphSDK
-  input: {id: string; cursor?: string}
+  input: {id: string; drive_id?: string; cursor?: string}
   ctx: any
 }) {
+  if (input.drive_id) {
+    try {
+      const response = await instance.GET(
+        '/drives/{drive-id}/items/{driveItem-id}',
+        {
+          params: {
+            path: {
+              'drive-id': input.drive_id,
+              'driveItem-id': input.id,
+            },
+            // @ts-expect-error TODO: "$expandParams is supported by the API but its not clear in the documentation
+            query: {
+              ...expandParams,
+            },
+          },
+        },
+      )
+      return response.data
+    } catch (error: any) {
+      // TODO: fix nesting in this SDK
+      if (error?.error?.error?.code === 'itemNotFound') {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'File not found in the specified drive',
+        })
+      }
+      throw error
+    }
+  }
+
   const drivesResult: any = await sharepointAdapter.listDrives({
     instance,
     input: {},
@@ -87,14 +117,16 @@ interface DownloadFileResult {
 
 export async function downloadFileById({
   fileId,
+  driveId,
   ctx,
 }: {
   fileId: string
+  driveId?: string
   ctx: any
 }): Promise<DownloadFileResult> {
   const file = await getFileFromDrives({
     instance: ctx.remote.instance,
-    input: {id: fileId},
+    input: {id: fileId, drive_id: driveId},
     ctx,
   })
 
@@ -183,7 +215,7 @@ export const sharepointAdapter = {
     return {
       has_next_page: !!res['@odata.nextLink'],
       items: res.value.map(mappers.DriveGroup),
-      cursor: extractCursor(res['@odata.nextLink']),
+      next_cursor: extractCursor(res['@odata.nextLink']),
     }
   },
 
@@ -254,7 +286,7 @@ export const sharepointAdapter = {
     return {
       has_next_page: !!drivesResponse['@odata.nextLink'],
       items: drivesResponse.value.map(mappers.Drive),
-      cursor: extractCursor(drivesResponse['@odata.nextLink']),
+      next_cursor: extractCursor(drivesResponse['@odata.nextLink']),
     }
   },
 
@@ -344,12 +376,19 @@ export const sharepointAdapter = {
       items: filesResponse.value
         // .filter((item: any) => item.file)
         .map(mappers.File),
-      cursor: extractCursor(filesResponse['@odata.nextLink'] ?? ''),
+      next_cursor: extractCursor(filesResponse['@odata.nextLink'] ?? ''),
     }
   },
 
   getFile: async ({instance, input, ctx}) => {
-    const file = await getFileFromDrives({instance, input, ctx})
+    const file = await getFileFromDrives({
+      instance,
+      input: {
+        id: input.id,
+        drive_id: input.drive_id,
+      },
+      ctx,
+    })
     return mappers.File(file)
   },
 
@@ -363,6 +402,7 @@ export const sharepointAdapter = {
   downloadFile: async ({input, ctx}) => {
     const {resHeaders, stream, status, error} = await downloadFileById({
       fileId: input.id,
+      driveId: input.drive_id,
       ctx,
     })
 
@@ -426,7 +466,7 @@ export const sharepointAdapter = {
     return {
       has_next_page: !!foldersResponse['@odata.nextLink'],
       items: foldersResponse.value.map(mappers.Folder),
-      cursor: extractCursor(foldersResponse['@odata.nextLink']),
+      next_cursor: extractCursor(foldersResponse['@odata.nextLink']),
     }
   },
 } satisfies FileStorageAdapter<MsgraphSDK>
