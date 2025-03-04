@@ -1,41 +1,59 @@
-import {PGlite, types} from '@electric-sql/pglite'
+import {ParserOptions, PGlite, QueryOptions, types} from '@electric-sql/pglite'
 // @ts-expect-error need to update module resolution to node_next for typescript to work, but works at runtime
 import {uuid_ossp} from '@electric-sql/pglite/contrib/uuid_ossp'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {drizzle as drizzlePGLite} from 'drizzle-orm/pglite'
 import {migrate as migratePGLite} from 'drizzle-orm/pglite/migrator'
+import {Viewer} from '@openint/cdk'
 import {
   dbFactory,
   getDrizzleConfig,
   getMigrationConfig,
   type DbOptions,
 } from './db'
+import {localGucForViewer} from './schema/rls'
 
 interface InitPgLiteOptions extends DbOptions {
   enableExtensions?: boolean
+  viewer?: Viewer
 }
 export function initDbPGLite({
   enableExtensions,
+  viewer,
   ...options
 }: InitPgLiteOptions) {
   const pglite = new PGlite({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     extensions: enableExtensions ? {uuid_ossp} : undefined,
   })
+
   const db = drizzlePgProxy(async (query, params, method) => {
-    const res = await pglite.query(query, params, {
+    const options: QueryOptions = {
       rowMode: method === 'all' ? 'array' : 'object',
-      // identity parsers, allow drizzle itself to do the work of mapping based on for example
-      // timestamp mode
+      // identity parsers, allow drizzle itself to do the work of mapping based on for example timestamp mode
       parsers: {
         [types.TIMESTAMP]: (value) => value,
         [types.TIMESTAMPTZ]: (value) => value,
         [types.INTERVAL]: (value) => value,
         [types.DATE]: (value) => value,
       },
-    })
-    return {rows: res.rows}
+    }
+    if (viewer) {
+      const gucForRls = localGucForViewer(viewer)
+      const res = await pglite.transaction(async (tx) => {
+        await tx.exec(
+          Object.entries(gucForRls)
+            .map(([k, v]) => `SELECT set_config('${k}', '${v}', true);`)
+            .join('\n'),
+        )
+        return tx.query(query, params, options)
+      })
+      return {rows: res.rows}
+    } else {
+      const res = await pglite.query(query, params, options)
+      return {rows: res.rows}
+    }
   }, getDrizzleConfig(options))
 
   return dbFactory('pglite', db, {
@@ -57,6 +75,7 @@ export function initDbPGLite({
         getMigrationConfig(),
       )
     },
+    // TODO: Implement asViewer so we can actually test it out...
     async $end() {
       return pglite.close()
     },

@@ -48,13 +48,14 @@ export function initDbNeon(
     // that prevent things like DROP DATABASE
     // guc settings are local to transactions anyways and without setting them should have the
     // same impact as reset role
+    const gucForRls = localGucForViewer(viewer)
 
     const allResponses =
       viewer.role === 'system'
         ? await neonSql(query, params, opts).then((r) => [r])
         : await neonSql.transaction(
             [
-              ...Object.entries(localGucForViewer(viewer)).map(
+              ...Object.entries(gucForRls).map(
                 ([key, value]) =>
                   neonSql`SELECT set_config(${key}, ${value}, true)`,
               ),
