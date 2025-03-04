@@ -1,6 +1,6 @@
 import type {QBO_ENTITY_NAME} from '@openint/connector-qbo'
 import {type QBOSDKTypes} from '@openint/connector-qbo'
-import {snakeCase, type z} from '@openint/util'
+import {R, snakeCase, type z} from '@openint/util'
 import {mapper, zCast} from '@openint/vdk'
 import * as unified from '../../unifiedModels'
 
@@ -36,6 +36,10 @@ const tranactionMappers = {
       }))
     },
     bank_category: () => 'Purchase',
+    vendor_id: (t) =>
+      t.EntityRef?.type === 'Vendor' && t.EntityRef?.value
+        ? makeQboId('Vendor', t.EntityRef.value)
+        : '', // for some reason `null` causes vendor_id to be quoted, probably encoded as json, does not add up but...
     created_at: 'MetaData.CreateTime',
     updated_at: 'MetaData.LastUpdatedTime',
   }),
@@ -46,17 +50,33 @@ const tranactionMappers = {
     currency: 'CurrencyRef.value',
     memo: 'PrivateNote',
     amount: 'TotalAmt',
-    lines: (p) =>
-      p.Line.map((line) => ({
-        id: line.Id,
-        memo: line.Description,
-        amount: -1 * line.Amount,
-        currency: p.CurrencyRef.value,
-        account_id: makeQboId(
-          'Account',
-          line.DepositLineDetail?.AccountRef?.value ?? '',
-        ),
-      })),
+    lines: (_t) => {
+      const t = _t as typeof _t & {
+        CashBack?: {
+          Amount: number
+          Memo: string
+          AccountRef: {value: string; name: string}
+        }
+      }
+      return R.compact([
+        ...t.Line.map((line) => ({
+          id: line.Id,
+          memo: line.Description,
+          amount: -1 * line.Amount,
+          currency: t.CurrencyRef.value,
+          account_id: makeQboId(
+            'Account',
+            line.DepositLineDetail?.AccountRef?.value ?? '',
+          ),
+        })),
+        t.CashBack && {
+          amount: t.CashBack.Amount,
+          currency: t.CurrencyRef.value,
+          memo: t.CashBack.Memo,
+          account_id: makeQboId('Account', t.CashBack.AccountRef.value),
+        },
+      ])
+    },
     bank_category: () => 'Deposit',
     created_at: 'MetaData.CreateTime',
     updated_at: 'MetaData.LastUpdatedTime',

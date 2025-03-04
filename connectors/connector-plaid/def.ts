@@ -100,7 +100,13 @@ export const plaidSchemas = {
     })
     .default({}),
   sourceOutputEntities: R.mapToObj(
-    ['transaction', 'account', 'investment_transaction', 'holding'] as const,
+    [
+      'transaction',
+      'account',
+      'investment_transaction',
+      'holding',
+      'merchant',
+    ] as const,
     (e) => [e, z.unknown()],
   ),
   sourceOutputEntity: z.discriminatedUnion('entityName', [
@@ -113,6 +119,11 @@ export const plaidSchemas = {
       id: z.string(),
       entityName: z.literal('transaction'),
       entity: zCast<plaid.Transaction | plaid.InvestmentTransaction>(),
+    }),
+    z.object({
+      id: z.string(),
+      entityName: z.literal('merchant'),
+      entity: zCast<{merchant_entity_id: string; name: string}>(),
     }),
   ]),
   webhookInput: zWebhookInput,
