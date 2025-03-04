@@ -1,5 +1,7 @@
+import path from 'node:path'
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {env, envRequired} from '@openint/env'
+import {snakeCase} from '@openint/util'
 import {schema} from '..'
 import type {Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
@@ -15,7 +17,8 @@ export const testDbs = {
 }
 
 export interface DescribeEachDatabaseOptions {
-  name?: string
+
+  randomDatabaseFromFilename?: string
   drivers?: DatabaseDriver[]
   migrate?: boolean
   truncateBeforeAll?: boolean
@@ -26,11 +29,18 @@ export function describeEachDatabase(
   testBlock: (db: Database) => void,
 ) {
   const {
-    name,
+    randomDatabaseFromFilename: prefix,
     drivers = ['pg', 'pglite'],
     migrate = true,
     truncateBeforeAll = true,
   } = options
+
+  const name = prefix
+    ? `${snakeCase(path.basename(prefix, path.extname(prefix)))}_${new Date()
+        .toISOString()
+        .replaceAll(/[:Z\-\.]/g, '')
+        .replace(/T/, '_')}`
+    : undefined
 
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
     drivers.includes(d as DatabaseDriver),
@@ -67,9 +77,11 @@ export function describeEachDatabase(
 
     afterAll(async () => {
       await db.$end?.()
-      await baseDb?.execute(`DROP DATABASE IF EXISTS ${name}`)
+      // Cleaning is not often possible because connection poolers will attempt
+      // to hold on to references of database preventing drops
+      // await baseDb?.execute(`DROP DATABASE IF EXISTS ${name}`)
       await baseDb?.$end?.()
-    })
+    }, 1000)
   })
 }
 
