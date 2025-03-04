@@ -1,6 +1,7 @@
 import {HTTPQueryOptions, neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
+import {types} from 'pg'
 import type {Viewer} from '@openint/cdk'
 import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
@@ -26,20 +27,21 @@ export function initDbNeon(
       host === 'db.localtest.me' ? ['http', 4444] : ['https', 443]
     return `${protocol}://${host}:${port}/sql`
   }
-  const neonSql = neon(url)
+  // this is also unfortunately global... in particular it shares state with
+  // node postgres driver as well. However at least we want consistent type parsing...
+  types.setTypeParser(types.builtins.DATE, (val) => val)
+  types.setTypeParser(types.builtins.TIMESTAMP, (val) => val)
+  types.setTypeParser(types.builtins.TIMESTAMPTZ, (val) => val)
+  types.setTypeParser(types.builtins.INTERVAL, (val) => val)
+
+  // Finally init neon
+  const neonSql = neon(url, {types})
 
   const db = drizzlePgProxy(async (query, params, method) => {
-    // NOTE: this should work but it doesn't, for now hardcoding converting any updated_at and created_at to iso strings
-    // import types from 'pg-types'
-
-    // types.setTypeParser(1184, (value: string) => {
-    //   console.log('Timestamp parser called with:', value)
-    //   return value ? new Date(value).toISOString() : null
-    // })
     const opts: HTTPQueryOptions<boolean, true> = {
       fullResults: true,
       arrayMode: method === 'all',
-      /* types, */
+      types, // types does not seem to work at initialization time, and thus we have to further add it to every query
     }
 
     // Bypass setting guc for system viewer completely to avoid unnecessary transactions
@@ -61,22 +63,6 @@ export function initDbNeon(
             opts,
           )
     const res = allResponses.pop()
-
-    // TODO: Make me work for arrayMode: true
-    if (res?.rows) {
-      res.rows = res.rows.map((row) => {
-        if (typeof row === 'object' && row !== null) {
-          const newRow: Record<string, unknown> = {...row}
-          for (const key in newRow) {
-            if (newRow[key] instanceof Date) {
-              newRow[key] = newRow[key].toISOString()
-            }
-          }
-          return newRow
-        }
-        return row
-      })
-    }
 
     return {rows: res?.rows ?? []}
   }, getDrizzleConfig(options))
