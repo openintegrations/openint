@@ -133,9 +133,6 @@ jobs:
           npx inngest-cli@latest dev &
           pnpm wait-on tcp:8288
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-
       - name: Run tests
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
 
