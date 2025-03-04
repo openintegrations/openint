@@ -10,21 +10,23 @@ export const connectorConfigRouter = router({
       openapi: {method: 'GET', path: '/connector-config'},
     })
     .input(
-      zListParams.extend({
-        // TODO: make this a valid connector_name instead of string
-        connector_name: z.string().optional(),
-      }),
+      zListParams
+        .extend({
+          // TODO: make this a valid connector_name instead of string
+          connector_name: z.string().optional(),
+        })
+        .optional(),
     )
     .output(zListResponse(core.connector_config))
     .query(async ({ctx, input}) => {
-      const limit = input.limit ?? 50
-      const offset = input.offset ?? 0
+      const limit = input?.limit ?? 50
+      const offset = input?.offset ?? 0
 
       const whereConditions: SQL<unknown>[] = []
 
-      if (input.connector_name) {
+      if (input?.connector_name) {
         whereConditions.push(
-          eq(schema.connector_config.connector_name, input.connector_name),
+          eq(schema.connector_config.connector_name, input?.connector_name),
         )
       }
 

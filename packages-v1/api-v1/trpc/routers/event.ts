@@ -22,11 +22,11 @@ export const eventRouter = router({
     .meta({
       openapi: {method: 'GET', path: '/event'},
     })
-    .input(zListParams)
+    .input(zListParams.optional())
     .output(zListResponse(core.event))
     .query(async ({ctx, input}) => {
-      const limit = input.limit ?? 50
-      const offset = input.offset ?? 0
+      const limit = input?.limit ?? 50
+      const offset = input?.offset ?? 0
 
       // Use a single query with COUNT(*) OVER() to get both results and total count
       const result = await ctx.db

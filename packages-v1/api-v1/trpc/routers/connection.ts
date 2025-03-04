@@ -66,35 +66,37 @@ export const connectionRouter = router({
       openapi: {method: 'GET', path: '/connection'},
     })
     .input(
-      zListParams.extend({
-        connector_name: z.string().optional(),
-        customer_id: z.string().optional(),
-        // TODO: make zId('ccfg').optional()
-        // but we get Type 'ZodOptional<ZodEffects<ZodString, `ccfg_${string}${string}`, string>>' is missing the following properties from type 'ZodType<any, any, any>': "~standard", "~validate"
-        connector_config_id: z.string().optional(),
-        include_secrets: z.boolean().optional(),
-      }),
+      zListParams
+        .extend({
+          connector_name: z.string().optional(),
+          customer_id: z.string().optional(),
+          // TODO: make zId('ccfg').optional()
+          // but we get Type 'ZodOptional<ZodEffects<ZodString, `ccfg_${string}${string}`, string>>' is missing the following properties from type 'ZodType<any, any, any>': "~standard", "~validate"
+          connector_config_id: z.string().optional(),
+          include_secrets: z.boolean().optional(),
+        })
+        .optional(),
     )
     .output(zListResponse(core.connection))
     .query(async ({ctx, input}) => {
-      const limit = input.limit ?? 50
-      const offset = input.offset ?? 0
+      const limit = input?.limit ?? 50
+      const offset = input?.offset ?? 0
 
       const whereConditions: SQL<unknown>[] = []
 
-      if (input.connector_config_id) {
+      if (input?.connector_config_id) {
         whereConditions.push(
           eq(schema.connection.connector_config_id, input.connector_config_id),
         )
       }
-      if (input.customer_id) {
+      if (input?.customer_id) {
         whereConditions.push(
-          eq(schema.connection.customer_id, input.customer_id),
+          eq(schema.connection.customer_id, input?.customer_id ?? ''),
         )
       }
-      if (input.connector_name) {
+      if (input?.connector_name) {
         whereConditions.push(
-          eq(schema.connection.connector_name, input.connector_name),
+          eq(schema.connection.connector_name, input?.connector_name ?? ''),
         )
       }
 
@@ -128,7 +130,7 @@ export const connectionRouter = router({
           formatConnection(
             // TODO: fix this
             conn as any as z.infer<typeof core.connection>,
-            input.include_secrets ?? false,
+            input?.include_secrets,
           ),
         ),
         total,
