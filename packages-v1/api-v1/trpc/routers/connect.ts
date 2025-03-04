@@ -6,7 +6,11 @@ import {getServerUrl} from '../../../../apps/app-config/constants'
 export const connectRouter = router({
   createMagicLink: publicProcedure
     .meta({
-      openapi: {method: 'POST', path: '/connect/magic-link'},
+      openapi: {
+        method: 'POST',
+        path: '/connect/magic-link',
+        description: 'Create a magic link for connecting integrations',
+      },
     })
     .input(
       z.object({
@@ -113,7 +117,11 @@ export const connectRouter = router({
     }),
   createToken: publicProcedure
     .meta({
-      openapi: {method: 'POST', path: '/connect/token'},
+      openapi: {
+        method: 'POST',
+        path: '/connect/token',
+        description: 'Create an authentication token for a customer',
+      },
     })
     .input(
       z.object({

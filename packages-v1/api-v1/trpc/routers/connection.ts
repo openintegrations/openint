@@ -95,7 +95,11 @@ async function formatConnection(
 export const connectionRouter = router({
   getConnection: publicProcedure
     .meta({
-      openapi: {method: 'GET', path: '/connection/{id}'},
+      openapi: {
+        method: 'GET',
+        path: '/connection/{id}',
+        description: 'Get details of a specific connection',
+      },
     })
     // TODO: make zId('conn')
     .input(
@@ -143,7 +147,11 @@ export const connectionRouter = router({
     }),
   listConnections: publicProcedure
     .meta({
-      openapi: {method: 'GET', path: '/connection'},
+      openapi: {
+        method: 'GET',
+        path: '/connection',
+        description: 'List all connections with optional filtering',
+      },
     })
     .input(
       zListParams
@@ -207,7 +215,11 @@ export const connectionRouter = router({
     }),
   checkConnection: publicProcedure
     .meta({
-      openapi: {method: 'POST', path: '/connection/{id}/check'},
+      openapi: {
+        method: 'POST',
+        path: '/connection/{id}/check',
+        description: 'Verify that a connection is healthy',
+      },
     })
     .input(
       z.object({

@@ -13,7 +13,12 @@ import {
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
     .meta({
-      openapi: {method: 'GET', path: '/connector-config'},
+      openapi: {
+        method: 'GET',
+        path: '/connector-config',
+        description:
+          'List all connector configurations with optional filtering',
+      },
     })
     .input(
       zListParams

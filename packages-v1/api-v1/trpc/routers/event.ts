@@ -25,7 +25,11 @@ export const eventRouter = router({
   //   }),
   listEvents: publicProcedure
     .meta({
-      openapi: {method: 'GET', path: '/event'},
+      openapi: {
+        method: 'GET',
+        path: '/event',
+        description: 'List all events for an organization',
+      },
     })
     .input(zListParams.optional())
     .output(zListResponse(core.event))
