@@ -217,6 +217,7 @@ test('upsert query with inferred table', async () => {
     data: {hello: 'world'},
     arr: ['a', 'b'],
     date,
+    null_value: null,
   }
   const table = inferTableForUpsert('test_user', row)
   const createTableSql = await generateMigration(
@@ -230,7 +231,8 @@ test('upsert query with inferred table', async () => {
     	"count" text,
     	"data" jsonb,
     	"arr" jsonb,
-    	"date" text
+    	"date" text,
+    	"null_value" text
     );
     "
   `)
@@ -243,12 +245,21 @@ test('upsert query with inferred table', async () => {
     '{"hello":"world"}',
     '["a","b"]',
     date,
+    null,
   ])
   expect(await formatSql(query.toSQL().sql)).toMatchInlineSnapshot(`
     "insert into
-      "test_user" ("id", "name", "count", "data", "arr", "date")
+      "test_user" (
+        "id",
+        "name",
+        "count",
+        "data",
+        "arr",
+        "date",
+        "null_value"
+      )
     values
-      ($1, $2, $3, $4, $5, $6)
+      ($1, $2, $3, $4, $5, $6, $7)
     on conflict ("id") do
     update
     set
@@ -256,7 +267,8 @@ test('upsert query with inferred table', async () => {
       "count" = excluded."count",
       "data" = excluded."data",
       "arr" = excluded."arr",
-      "date" = excluded."date"
+      "date" = excluded."date",
+      "null_value" = excluded."null_value"
     where
       (
         "test_user"."name" IS DISTINCT FROM excluded."name"
@@ -264,6 +276,7 @@ test('upsert query with inferred table', async () => {
         or "test_user"."data" IS DISTINCT FROM excluded."data"
         or "test_user"."arr" IS DISTINCT FROM excluded."arr"
         or "test_user"."date" IS DISTINCT FROM excluded."date"
+        or "test_user"."null_value" IS DISTINCT FROM excluded."null_value"
       )
     "
   `)
