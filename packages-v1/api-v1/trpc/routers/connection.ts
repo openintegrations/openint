@@ -33,6 +33,7 @@ function formatConnection(
     ...connection,
     logo_url: logoUrl,
     ...(include_secrets ? {settings: connection.settings} : {}),
+    // TODO: add display_name?
   }
 }
 
