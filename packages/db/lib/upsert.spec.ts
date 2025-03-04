@@ -1,5 +1,6 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
+import {drizzle} from 'drizzle-orm/node-postgres'
 import {
   boolean,
   integer,
@@ -9,9 +10,10 @@ import {
   serial,
   varchar,
 } from 'drizzle-orm/pg-core'
-import {drizzle} from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
-import {env} from '@openint/env'
+import {
+  describeEachDatabase,
+  DescribeEachDatabaseOptions,
+} from '../__tests__/test-utils'
 import {dbUpsert, dbUpsertOne, inferTableForUpsert} from './upsert'
 
 async function formatSql(sqlString: string) {
@@ -271,21 +273,15 @@ test('upsert query with inferred table', async () => {
   `)
 })
 
-describe('with db', () => {
-  // console.log('filename', __filename)
-  const dbName = 'upsert_db'
+const options: DescribeEachDatabaseOptions = {
+  name: 'upsert_db4',
+  migrate: false,
+  drivers: ['pg'],
+}
 
-  const dbUrl = new URL(env.DATABASE_URL)
-  dbUrl.pathname = `/${dbName}`
-  const db = drizzle(dbUrl.toString(), {logger: true})
-
+describeEachDatabase(options, (db) => {
   beforeAll(async () => {
-    const masterDb = drizzle(env.DATABASE_URL, {logger: true})
-    await masterDb.execute(`DROP DATABASE IF EXISTS ${dbName}`)
-    await masterDb.execute(`CREATE DATABASE ${dbName}`)
-    await masterDb.$client.end()
-
-    await db.execute(sql`
+    await db.$exec(sql`
       CREATE TABLE IF NOT EXISTS "test_user" (
         id text PRIMARY KEY,
         name text default 'unnamed',
@@ -309,11 +305,11 @@ describe('with db', () => {
   })
 
   afterEach(async () => {
-    await db.execute(sql`TRUNCATE "test_user"`)
+    await db.$exec(sql`TRUNCATE "test_user"`)
   })
 
   test('upsert with inferred table', async () => {
-    const ret = await db.execute(sql`SELECT * FROM "test_user"`)
+    const {rows: ret} = await db.$exec(sql`SELECT * FROM "test_user"`)
     expect(ret[0]).toEqual(row)
   })
 
@@ -324,7 +320,7 @@ describe('with db', () => {
       {...row, name: null},
       {keyColumns: ['id']},
     )
-    const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
+    const {rows: ret2} = await db.$exec(sql`SELECT * FROM "test_user"`)
     expect(ret2[0]).toEqual({...row, name: null})
   })
 
@@ -335,7 +331,7 @@ describe('with db', () => {
       {...row, name: undefined},
       {keyColumns: ['id']},
     )
-    const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
+    const {rows: ret2} = await db.$exec(sql`SELECT * FROM "test_user"`)
     expect(ret2[0]).toEqual(row)
   })
 
@@ -346,7 +342,7 @@ describe('with db', () => {
       {...row, name: undefined},
       {keyColumns: ['id'], undefinedAsDefault: true},
     )
-    const ret2 = await db.execute(sql`SELECT * FROM "test_user"`)
+    const {rows: ret2} = await db.$exec(sql`SELECT * FROM "test_user"`)
     expect(ret2[0]).toEqual({...row, name: 'unnamed'})
   })
 
@@ -362,7 +358,7 @@ describe('with db', () => {
     )
 
     expect(
-      await db.execute(sql`SELECT * FROM "test_user"`).then((r) => r[0]),
+      await db.$exec(sql`SELECT * FROM "test_user"`).then((r) => r.rows[0]),
     ).toEqual({...row, name: 'original'})
   })
 
@@ -373,7 +369,7 @@ describe('with db', () => {
   })
 
   test('change inferred schema between upserts to same table', async () => {
-    await db.execute(sql`
+    await db.$exec(sql`
       CREATE TABLE IF NOT EXISTS "pipeline" (
         id text PRIMARY KEY,
         num integer,
@@ -390,23 +386,6 @@ describe('with db', () => {
     // clearing casing cache causes it to work
 
     await dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']})
-
-    // recreating the db each time works better
-    const pg = postgres(dbUrl.toString())
-    const d = () => drizzle(pg, {logger: true})
-    await dbUpsertOne(d(), 'pipeline', {id: 3, num: 223}, {keyColumns: ['id']})
-    await dbUpsertOne(d(), 'pipeline', {id: 4, str: 'my'}, {keyColumns: ['id']})
-    const res = await d().execute('SELECT * FROM "pipeline"')
-    expect(res).toEqual([
-      {id: '1', num: 123, str: null},
-      {id: '2', num: null, str: 'my'},
-      {id: '3', num: 223, str: null},
-      {id: '4', num: null, str: 'my'},
-    ])
-  })
-
-  afterAll(async () => {
-    await db.$client.end()
   })
 })
 

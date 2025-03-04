@@ -9,21 +9,13 @@ import {initDbPGLite} from '../db.pglite'
 export const testDbs = {
   // neon driver does not work well for migration at the moment and
   // and should therefore not be used for running migrations
-  neon: () =>
-    initDbNeon(
-      env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL,
-      {role: 'system'},
-      {logger: false},
-    ),
+  neon: (url: string) => initDbNeon(url, {role: 'system'}, {logger: false}),
   pglite: () => initDbPGLite({logger: false, enableExtensions: true}),
-  pg: () =>
-    // TODO: Make test database url separate env var from prod database url to be safer
-    initDbPg(env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL, {
-      logger: false,
-    }),
+  pg: (url: string) => initDbPg(url, {logger: false}),
 }
 
 export interface DescribeEachDatabaseOptions {
+  name?: string
   drivers?: DatabaseDriver[]
   migrate?: boolean
   truncateBeforeAll?: boolean
@@ -34,6 +26,7 @@ export function describeEachDatabase(
   testBlock: (db: Database) => void,
 ) {
   const {
+    name,
     drivers = ['pg', 'pglite'],
     migrate = true,
     truncateBeforeAll = true,
@@ -41,23 +34,42 @@ export function describeEachDatabase(
 
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
     drivers.includes(d as DatabaseDriver),
-  )
+  ) as Array<[DatabaseDriver, (url: string) => Database]>
 
-  describe.each(dbEntriesFiltered)('db: %s', (_driver, makeDb) => {
-    const db = makeDb()
+  describe.each(dbEntriesFiltered)('db: %s', (driver, makeDb) => {
+    const baseUrl = new URL(
+      // TODO: Make test database url separate env var from prod database url to be safer
+      env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL,
+    )
+    let baseDb: Database | undefined
 
-    if (migrate) {
-      beforeAll(async () => {
+    const url = new URL(baseUrl)
+    if (name && url.pathname !== `/${name}`) {
+      url.pathname = `/${name}`
+    }
+    const db = makeDb(url.toString())
+
+    beforeAll(async () => {
+      if (driver !== 'pglite' && url.toString() !== baseUrl.toString()) {
+        baseDb = makeDb(baseUrl.toString())
+        await baseDb.execute(`DROP DATABASE IF EXISTS ${name}`)
+        await baseDb.execute(`CREATE DATABASE ${name}`)
+      }
+      if (migrate) {
         await db.$migrate()
-      })
-    }
-    if (truncateBeforeAll) {
-      beforeAll(async () => {
+      }
+      if (truncateBeforeAll) {
         await db.$truncateAll()
-      })
-    }
+      }
+    })
 
     testBlock(db)
+
+    afterAll(async () => {
+      await db.$end?.()
+      await baseDb?.execute(`DROP DATABASE IF EXISTS ${name}`)
+      await baseDb?.$end?.()
+    })
   })
 }
 
