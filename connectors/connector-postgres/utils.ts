@@ -70,9 +70,9 @@ export async function runMigrationForStandardTable(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return await db.execute(sql`
     CREATE TABLE IF NOT EXISTS ${sql.identifier(tableName)} (
-      _openint_customer_id VARCHAR,
-      _openint_source_id VARCHAR NOT NULL,
+      source_id VARCHAR NOT NULL,
       id VARCHAR NOT NULL,
+      customer_id VARCHAR,
       created_at timestamp with time zone DEFAULT now() NOT NULL,
       updated_at timestamp with time zone DEFAULT now() NOT NULL,
       connector_name VARCHAR GENERATED ALWAYS AS (split_part((source_id)::text, '_'::text, 2)) STORED NOT NULL,
