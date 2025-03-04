@@ -26,7 +26,7 @@ export const connectorConfigRouter = router({
 
       if (input?.connector_name) {
         whereConditions.push(
-          eq(schema.connector_config.connector_name, input?.connector_name),
+          eq(schema.connector_config.connector_name, input.connector_name),
         )
       }
 
