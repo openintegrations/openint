@@ -392,7 +392,7 @@ export const sharepointAdapter = {
     return mappers.File(file)
   },
 
-  exportFile: async ({input}) => {
+  exportFile: async () => {
     throw new TRPCError({
       code: 'NOT_IMPLEMENTED',
       message: 'Export file is not available in Sharepoint',
