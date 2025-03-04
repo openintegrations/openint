@@ -25,7 +25,7 @@ async function formatSql(sqlString: string) {
   })
 }
 
-const noopDb = drizzle('postgres://noop', {logger: true})
+const noopDb = drizzle('postgres://noop', {logger: false})
 
 test('upsert query', async () => {
   const engagement_sequence = pgTable(
@@ -372,7 +372,7 @@ describe('with db', () => {
     )
   })
 
-  test('db schema cache causes issue for upsert', async () => {
+  test('change inferred schema between upserts to same table', async () => {
     await db.execute(sql`
       CREATE TABLE IF NOT EXISTS "pipeline" (
         id text PRIMARY KEY,
@@ -383,12 +383,12 @@ describe('with db', () => {
 
     await dbUpsertOne(db, 'pipeline', {id: 1, num: 123}, {keyColumns: ['id']})
 
-    await expect(
-      dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']}),
-    ).rejects.toThrow('column "undefined" of relation "pipeline"')
+    // This is no longer the case due to workaround
+    // await expect(
+    //   dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']}),
+    // ).rejects.toThrow('column "undefined" of relation "pipeline"')
+    // clearing casing cache causes it to work
 
-    // casing cache causes it to work
-    ;(db as any).dialect.casing.clearCache()
     await dbUpsertOne(db, 'pipeline', {id: 2, str: 'my'}, {keyColumns: ['id']})
 
     // recreating the db each time works better
@@ -407,5 +407,42 @@ describe('with db', () => {
 
   afterAll(async () => {
     await db.$client.end()
+  })
+})
+
+describe('casing cache bug', () => {
+  test('repro', () => {
+    const t1 = pgTable('table', (t) => ({
+      id: t.text().primaryKey(),
+    }))
+
+    expect(noopDb.insert(t1).values({id: '1'}).toSQL().sql).toEqual(
+      'insert into "table" ("id") values ($1)',
+    )
+    const t2 = pgTable('table', (t) => ({
+      id: t.text().primaryKey(),
+      name: t.text(),
+    }))
+    expect(
+      noopDb.insert(t2).values({id: '1', name: 'test'}).toSQL().sql,
+    ).toEqual('insert into "table" ("id", "undefined") values ($1, $2)')
+  })
+
+  test('workaround', () => {
+    // explicit name setting cause the column.keyAsName to be set to false, bypassing casing cache completely
+    const t1 = pgTable('table', (t) => ({
+      id: t.text('id').primaryKey(),
+    }))
+
+    expect(noopDb.insert(t1).values({id: '1'}).toSQL().sql).toEqual(
+      'insert into "table" ("id") values ($1)',
+    )
+    const t2 = pgTable('table', (t) => ({
+      id: t.text('id').primaryKey(),
+      name: t.text('name'),
+    }))
+    expect(
+      noopDb.insert(t2).values({id: '1', name: 'test'}).toSQL().sql,
+    ).toEqual('insert into "table" ("id", "name") values ($1, $2)')
   })
 })
