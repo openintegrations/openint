@@ -7890,6 +7890,13 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "drive_id",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -7957,6 +7964,13 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "drive_id",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -8014,6 +8028,13 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "drive_id",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -9951,10 +9972,10 @@
             "type": "string"
           },
           "url": {
-            "type": "string"
+            "type": ["string", "null"]
           }
         },
-        "required": ["id", "name", "url"]
+        "required": ["id", "name"]
       },
       "ats.job": {
         "type": "object",
