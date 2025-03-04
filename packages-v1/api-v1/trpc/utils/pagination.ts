@@ -2,16 +2,16 @@ import {z} from 'zod'
 import {Column, desc, schema} from '@openint/db'
 
 export const zListParams = z.object({
-  limit: z.number().optional(),
-  offset: z.number().optional(),
+  limit: z.number().int().positive().max(100).optional(),
+  offset: z.number().int().nonnegative().optional(),
 })
 
 export function zListResponse<T extends z.ZodTypeAny>(itemSchema: T) {
   return z.object({
     items: z.array(itemSchema),
     total: z.number(),
-    limit: z.number(),
-    offset: z.number(),
+    limit: z.number().int().positive().max(100),
+    offset: z.number().int().nonnegative(),
   })
 }
 export function applyPaginationAndOrder<
