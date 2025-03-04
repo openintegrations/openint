@@ -436,7 +436,7 @@ export function makeSyncService({
   }
 
   const _syncConnectionUpdate = async (
-    int: _ConnectorConfig,
+    ccfg: _ConnectorConfig,
     {
       customerId,
       settings,
@@ -444,7 +444,7 @@ export function makeSyncService({
       ...connUpdate
     }: ConnectionUpdate<AnyEntityPayload, {}>,
   ) => {
-    console.log('[_syncConnectionUpdate]', int.id, {
+    console.log('[_syncConnectionUpdate]', ccfg.id, {
       customerId,
       settings,
       integration,
@@ -452,12 +452,12 @@ export function makeSyncService({
     })
     const id = makeId(
       'conn',
-      int.connector.name,
+      ccfg.connector.name,
       connUpdate.connectionExternalId,
     )
     await metaLinks
       .handlers({
-        connection: {id, connectorConfigId: int.id, customerId},
+        connection: {id, connectorConfigId: ccfg.id, customerId},
       })
       .connUpdate({id, settings, integration})
 

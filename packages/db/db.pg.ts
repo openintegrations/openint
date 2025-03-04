@@ -16,5 +16,8 @@ export function initDbPg(url: string, options: DbOptions = {}) {
     $migrate() {
       return migrate(db, getMigrationConfig())
     },
+    $end() {
+      return pool.end()
+    }
   })
 }

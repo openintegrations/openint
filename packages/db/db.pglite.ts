@@ -28,5 +28,8 @@ export function initDbPGLite({
     $migrate() {
       return migrate(db, getMigrationConfig())
     },
+    $end() {
+      return pglite.close()
+    },
   })
 }

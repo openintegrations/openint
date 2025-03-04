@@ -1,63 +1,98 @@
+import path from 'node:path'
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {env, envRequired} from '@openint/env'
+import {snakeCase} from '@openint/util'
 import {schema} from '..'
 import type {Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
 import {initDbPg} from '../db.pg'
 import {initDbPGLite} from '../db.pglite'
 
+interface TestDbInitOptions {
+  url: string
+  /** For pglite, whether to enable postgres extensions  */
+  enableExtensions?: boolean
+}
+
 export const testDbs = {
   // neon driver does not work well for migration at the moment and
   // and should therefore not be used for running migrations
-  neon: () =>
-    initDbNeon(
-      env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL,
-      {role: 'system'},
-      {logger: false},
-    ),
-  pglite: () => initDbPGLite({logger: false, enableExtensions: true}),
-  pg: () =>
-    // TODO: Make test database url separate env var from prod database url to be safer
-    initDbPg(env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL, {
-      logger: false,
-    }),
+  neon: ({url}: TestDbInitOptions) =>
+    initDbNeon(url, {role: 'system'}, {logger: false}),
+  pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
+  pglite: ({enableExtensions}: TestDbInitOptions) =>
+    initDbPGLite({logger: false, enableExtensions}),
 }
 
-export interface DescribeEachDatabaseOptions {
-  drivers?: DatabaseDriver[]
+export type DescribeEachDatabaseOptions<
+  T extends DatabaseDriver = DatabaseDriver,
+> = {
+  randomDatabaseFromFilename?: string
+  drivers?: T[]
   migrate?: boolean
   truncateBeforeAll?: boolean
-}
 
-export function describeEachDatabase(
-  options: DescribeEachDatabaseOptions,
-  testBlock: (db: Database) => void,
+  enableExtensions?: boolean
+} & Omit<TestDbInitOptions, 'url'>
+
+export function describeEachDatabase<T extends DatabaseDriver>(
+  options: DescribeEachDatabaseOptions<T>,
+  testBlock: (db: Database<T>) => void,
 ) {
   const {
-    drivers = ['pg', 'pglite'],
-    migrate = true,
-    truncateBeforeAll = true,
+    randomDatabaseFromFilename: prefix,
+    drivers = ['pglite'],
+    migrate = false,
+    truncateBeforeAll = false,
+    ...testDbOpts
   } = options
 
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
-    drivers.includes(d as DatabaseDriver),
-  )
+    drivers.includes(d as any),
+  ) as Array<[T, (opts: TestDbInitOptions) => Database<T>]>
 
-  describe.each(dbEntriesFiltered)('db: %s', (_driver, makeDb) => {
-    const db = makeDb()
+  describe.each(dbEntriesFiltered)('db: %s', (driver, makeDb) => {
+    const baseUrl = new URL(
+      // TODO: Make test database url separate env var from prod database url to be safer
+      env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL,
+    )
+    let baseDb: Database | undefined
 
-    if (migrate) {
-      beforeAll(async () => {
+    const name = prefix
+      ? `${snakeCase(path.basename(prefix, path.extname(prefix)))}_${new Date()
+          .toISOString()
+          .replaceAll(/[:Z\-\.]/g, '')
+          .replace(/T/, '_')}_${driver}`
+      : undefined
+    const url = new URL(baseUrl)
+    if (name && url.pathname !== `/${name}`) {
+      url.pathname = `/${name}`
+    }
+    const db = makeDb({url: url.toString(), ...testDbOpts})
+
+    beforeAll(async () => {
+      if (driver !== 'pglite' && url.toString() !== baseUrl.toString()) {
+        baseDb = makeDb({url: baseUrl.toString(), ...testDbOpts})
+        await baseDb.execute(`DROP DATABASE IF EXISTS ${name}`)
+        await baseDb.execute(`CREATE DATABASE ${name}`)
+      }
+      if (migrate) {
         await db.$migrate()
-      })
-    }
-    if (truncateBeforeAll) {
-      beforeAll(async () => {
+      }
+      if (truncateBeforeAll) {
         await db.$truncateAll()
-      })
-    }
+      }
+    })
 
     testBlock(db)
+
+    afterAll(async () => {
+      await db.$end?.()
+      // Cleaning is not often possible because connection poolers will attempt
+      // to hold on to references of database preventing drops
+      // await baseDb?.execute(`DROP DATABASE IF EXISTS ${name}`)
+      await baseDb?.$end?.()
+    }, 1000)
   })
 }
 
