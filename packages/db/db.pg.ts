@@ -39,20 +39,25 @@ export function initDbPg(url: string, options: DbOptions = {}) {
       return migratePgProxy(
         db,
         async (queries) => {
+          // TODO: Debug this more, does not work at the moment
+          console.log('will migrate', queries.length)
           const client = await pool.connect()
           try {
-            await client.query('BEGIN')
-
             for (const query of queries) {
-              await client.query(query)
+              await client
+                .query(query)
+                .catch((err) => {
+                  console.error('error migrating', query, err)
+                  throw err
+                })
+                .then(() => {
+                  console.log('migrated', query)
+                })
             }
-            await client.query('COMMIT')
-          } catch (err) {
-            await client.query('ROLLBACK')
-            throw err
           } finally {
             client.release()
           }
+          console.log('did migrate', queries.length)
         },
         getMigrationConfig(),
       )

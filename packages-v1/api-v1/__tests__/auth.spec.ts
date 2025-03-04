@@ -24,7 +24,7 @@ test.each(Object.entries(viewers))(
 )
 
 describeEachDatabase(
-  {drivers: ['pg'], migrate: true, enableExtensions: true},
+  {drivers: ['pg_direct'], migrate: true, enableExtensions: true},
   (db) => {
     test('anon user has no access to connector_config', async () => {
       await expect(
