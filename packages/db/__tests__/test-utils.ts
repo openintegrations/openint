@@ -8,35 +8,48 @@ import {initDbNeon} from '../db.neon'
 import {initDbPg} from '../db.pg'
 import {initDbPGLite} from '../db.pglite'
 
+interface TestDbInitOptions {
+  url: string
+  /** For pglite, whether to enable postgres extensions  */
+  enableExtensions?: boolean
+}
+
 export const testDbs = {
   // neon driver does not work well for migration at the moment and
   // and should therefore not be used for running migrations
-  neon: (url: string) => initDbNeon(url, {role: 'system'}, {logger: false}),
-  pglite: () => initDbPGLite({logger: false, enableExtensions: true}),
-  pg: (url: string) => initDbPg(url, {logger: false}),
+  neon: ({url}: TestDbInitOptions) =>
+    initDbNeon(url, {role: 'system'}, {logger: false}),
+  pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
+  pglite: ({enableExtensions}: TestDbInitOptions) =>
+    initDbPGLite({logger: false, enableExtensions}),
 }
 
-export interface DescribeEachDatabaseOptions {
+export type DescribeEachDatabaseOptions<
+  T extends DatabaseDriver = DatabaseDriver,
+> = {
   randomDatabaseFromFilename?: string
-  drivers?: DatabaseDriver[]
+  drivers?: T[]
   migrate?: boolean
   truncateBeforeAll?: boolean
-}
 
-export function describeEachDatabase(
-  options: DescribeEachDatabaseOptions,
-  testBlock: (db: Database) => void,
+  enableExtensions?: boolean
+} & Omit<TestDbInitOptions, 'url'>
+
+export function describeEachDatabase<T extends DatabaseDriver>(
+  options: DescribeEachDatabaseOptions<T>,
+  testBlock: (db: Database<T>) => void,
 ) {
   const {
     randomDatabaseFromFilename: prefix,
-    drivers = ['pg', 'pglite'],
-    migrate = true,
-    truncateBeforeAll = true,
+    drivers = ['pglite'],
+    migrate = false,
+    truncateBeforeAll = false,
+    ...testDbOpts
   } = options
 
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
-    drivers.includes(d as DatabaseDriver),
-  ) as Array<[DatabaseDriver, (url: string) => Database]>
+    drivers.includes(d as any),
+  ) as Array<[T, (opts: TestDbInitOptions) => Database]>
 
   describe.each(dbEntriesFiltered)('db: %s', (driver, makeDb) => {
     const baseUrl = new URL(
@@ -55,11 +68,11 @@ export function describeEachDatabase(
     if (name && url.pathname !== `/${name}`) {
       url.pathname = `/${name}`
     }
-    const db = makeDb(url.toString())
+    const db = makeDb({url: url.toString(), ...testDbOpts})
 
     beforeAll(async () => {
       if (driver !== 'pglite' && url.toString() !== baseUrl.toString()) {
-        baseDb = makeDb(baseUrl.toString())
+        baseDb = makeDb({url: baseUrl.toString(), ...testDbOpts})
         await baseDb.execute(`DROP DATABASE IF EXISTS ${name}`)
         await baseDb.execute(`CREATE DATABASE ${name}`)
       }
