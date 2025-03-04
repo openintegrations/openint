@@ -37,7 +37,7 @@ const tranactionMappers = {
     },
     bank_category: () => 'Purchase',
     vendor_id: (t) =>
-      t.EntityRef?.type === 'Vendor'
+      t.EntityRef?.type === 'Vendor' && t.EntityRef?.value
         ? makeQboId('Vendor', t.EntityRef.value)
         : '', // for some reason `null` causes vendor_id to be quoted, probably encoded as json, does not add up but...
     created_at: 'MetaData.CreateTime',

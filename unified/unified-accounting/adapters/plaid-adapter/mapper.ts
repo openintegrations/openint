@@ -57,7 +57,11 @@ export const mappers = {
     // We should probably not set any "lines" at all in this case.
     // Would also need some semantic to communicate set if null, aka set default value,
     lines: (t) => [
-      {account_id: '', amount: t.amount * -1, currency: t.iso_currency_code!},
+      {
+        account_id: '',
+        amount: t.amount * -1,
+        currency: t.iso_currency_code ?? t.unofficial_currency_code ?? 'USD',
+      },
     ],
     // created_at: (t) => t.datetime ?? new Date().toISOString(),
     // updated_at: (t) => t.datetime ?? new Date().toISOString(),
