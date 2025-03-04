@@ -392,18 +392,11 @@ export const sharepointAdapter = {
     return mappers.File(file)
   },
 
-  exportFile: async ({input, ctx}) => {
-    if (input.drive_id) {
-      throw new TRPCError({
-        code: 'NOT_IMPLEMENTED',
-        message: 'Export file is not available in Sharepoint',
-      })
-    } else {
-      throw new TRPCError({
-        code: 'NOT_IMPLEMENTED',
-        message: 'Export file is not available in Sharepoint',
-      })
-    }
+  exportFile: async ({input}) => {
+    throw new TRPCError({
+      code: 'NOT_IMPLEMENTED',
+      message: 'Export file is not available in Sharepoint',
+    })
   },
 
   downloadFile: async ({input, ctx}) => {
