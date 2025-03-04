@@ -1,4 +1,4 @@
-import {neon, neonConfig} from '@neondatabase/serverless'
+import {HTTPQueryOptions, neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
 import type {Viewer} from '@openint/cdk'
@@ -29,8 +29,6 @@ export function initDbNeon(
   const neonSql = neon(url)
 
   const db = drizzlePgProxy(async (query, params, method) => {
-    const guc = localGucForViewer(viewer)
-
     // NOTE: this should work but it doesn't, for now hardcoding converting any updated_at and created_at to iso strings
     // import types from 'pg-types'
 
@@ -38,15 +36,30 @@ export function initDbNeon(
     //   console.log('Timestamp parser called with:', value)
     //   return value ? new Date(value).toISOString() : null
     // })
-    const allResponses = await neonSql.transaction(
-      [
-        ...Object.entries(guc).map(
-          ([key, value]) => neonSql`SELECT set_config(${key}, ${value}, true)`,
-        ),
-        neonSql(query, params),
-      ],
-      {fullResults: true, arrayMode: method === 'all' /* types, */},
-    )
+    const opts: HTTPQueryOptions<boolean, true> = {
+      fullResults: true,
+      arrayMode: method === 'all',
+      /* types, */
+    }
+
+    // Bypass setting guc for system viewer completely to avoid unnecessary transactions
+    // that prevent things like DROP DATABASE
+    // guc settings are local to transactions anyways and without setting them should have the
+    // same impact as reset role
+
+    const allResponses =
+      viewer.role === 'system'
+        ? await neonSql(query, params, opts).then((r) => [r])
+        : await neonSql.transaction(
+            [
+              ...Object.entries(localGucForViewer(viewer)).map(
+                ([key, value]) =>
+                  neonSql`SELECT set_config(${key}, ${value}, true)`,
+              ),
+              neonSql(query, params),
+            ],
+            opts,
+          )
     const res = allResponses.pop()
 
     // TODO: Make me work for arrayMode: true

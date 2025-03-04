@@ -195,18 +195,18 @@ export const connectionRouter = trpc.router({
     // How do we verify that the userId here is the same as the userId from preConnectOption?
     .output(z.string()) // TODO(api): We should not return just a string here. Should return an object
     .mutation(async ({input: {connectorConfigId, settings, ...input}, ctx}) => {
-      const int =
+      const ccfg =
         await ctx.asOrgIfNeeded.getConnectorConfigOrFail(connectorConfigId)
 
-      if (int.orgId !== ctx.viewer.orgId) {
+      if (ccfg.orgId !== ctx.viewer.orgId) {
         throw new TRPCError({
           code: 'FORBIDDEN',
-          message: `You are not allowed to create connections for ${int.connectorName}`,
+          message: `You are not allowed to create connections for ${ccfg.connectorName}`,
         })
       }
 
       const _extId = makeUlid()
-      const connId = makeId('conn', int.connector.name, _extId)
+      const connId = makeId('conn', ccfg.connector.name, _extId)
 
       // Should throw if not working..
       const connUpdate = {
@@ -214,8 +214,8 @@ export const connectionRouter = trpc.router({
         // TODO: Should no longer depend on external ID
         connectionExternalId: _extId,
         settings,
-        ...(await int.connector.checkConnection?.({
-          config: int.config,
+        ...(await ccfg.connector.checkConnection?.({
+          config: ccfg.config,
           settings,
           context: {webhookBaseUrl: ''},
           options: {},
@@ -224,11 +224,14 @@ export const connectionRouter = trpc.router({
         customerId:
           ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
       } satisfies ConnectionUpdate
-      await ctx.asOrgIfNeeded._syncConnectionUpdate(int, connUpdate)
+      await ctx.asOrgIfNeeded._syncConnectionUpdate(ccfg, connUpdate)
 
       // TODO: Do this in one go not two
       if (input.displayName) {
-        await ctx.services.patchReturning('connection', connId, input)
+        await ctx.services.patchReturning('connection', connId, {
+          ...input,
+          connectorConfigId, // UPSERT always requires connectorConfig id even if it's an update otherwise RLS will be violated
+        })
       }
       // TODO: return the entire connection object...
       return connId
@@ -264,7 +267,10 @@ export const connectionRouter = trpc.router({
       if (ctx.viewer.role === 'customer') {
         await ctx.services.getConnectionOrFail(connId, true)
       }
-      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(connId, true)
+      const conn = await ctx.asOrgIfNeeded.getConnectionExpandedOrFail(
+        connId,
+        true,
+      )
       const {settings, connectorConfig: ccfg} = conn
       if (!opts?.skipRevoke) {
         await ccfg.connector.revokeConnection?.(
