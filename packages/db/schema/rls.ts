@@ -1,4 +1,7 @@
+import {sql} from 'drizzle-orm'
 import type {Viewer} from '@openint/cdk'
+import {Database} from '..'
+import {DatabaseDriver, DatabaseTransaction} from '../db'
 
 /**
  * This sets the postgres grand unified config (GUC) and determines the identity
@@ -29,4 +32,24 @@ export function localGucForViewer(viewer: Viewer) {
       throw new Error(`Unknown viewer role: ${(viewer as Viewer).role}`)
   }
   // Should we erase keys incompatible with current viewer role to avoid confusion?
+}
+
+/**
+ * Reference from here https://orm.drizzle.team/docs/rls#using-with-supabase
+ * However making database a callback makes context initialization more diffcult
+ * and standardizing on pg-proxy is probably a good thing for dev & prod parity
+ */
+export function withDatabaseForViewer<T extends DatabaseDriver>(
+  db: Database<T>,
+  viewer: Viewer,
+  fn: (db: DatabaseTransaction<T>) => Promise<void>,
+) {
+  db.transaction(async (tx) => {
+    await Promise.all(
+      Object.entries(localGucForViewer(viewer)).map(([key, value]) =>
+        tx.execute(sql`SELECT set_config(${key}, ${value}, true)`),
+      ),
+    )
+    await fn(tx)
+  })
 }

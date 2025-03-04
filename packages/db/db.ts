@@ -20,6 +20,10 @@ export type Database<TDriver extends DatabaseDriver = DatabaseDriver> = Extract<
   {driverType: TDriver}
 >
 
+export type DatabaseTransaction<
+  TDriver extends DatabaseDriver = DatabaseDriver,
+> = Parameters<Parameters<Database<TDriver>['transaction']>[0]>[0]
+
 // MARK: - For Implementors
 
 export interface DbOptions
