@@ -229,8 +229,11 @@ const skipTrpcRoutes: SkipTrpcRoutes = {
         throw new BadRequestError('No Connection Found For Download')
       }
 
-      const urlParts = new URL(req.url).pathname.split('/')
+      const url = new URL(req.url)
+      const urlParts = url.pathname.split('/')
       const fileId = urlParts.filter((part) => part).slice(-2, -1)[0]
+      // Get drive_id from query parameters
+      const driveId = url.searchParams.get('drive_id') || undefined
 
       if (!fileId) {
         throw new BadRequestError('No fileId found in path')
@@ -252,6 +255,7 @@ const skipTrpcRoutes: SkipTrpcRoutes = {
 
       const {resHeaders, status, error, stream} = await downloadFn({
         fileId,
+        driveId, // Pass the driveId to the download function
         ctx: remoteContext,
       })
 
