@@ -15,32 +15,7 @@ import {
 interface InitPgLiteOptions extends DbOptions {
   enableExtensions?: boolean
 }
-
 export function initDbPGLite({
-  enableExtensions,
-  ...options
-}: InitPgLiteOptions = {}) {
-  const pglite = new PGlite({
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    extensions: enableExtensions ? {uuid_ossp} : undefined,
-  })
-  const db = drizzlePGLite({...getDrizzleConfig(options), client: pglite})
-  return dbFactory('pglite', db, {
-    async $exec(query) {
-      const res = await db.execute(query)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-      return {rows: res.rows as any[]}
-    },
-    $migrate() {
-      return migratePGLite(db, getMigrationConfig())
-    },
-    $end() {
-      return pglite.close()
-    },
-  })
-}
-
-export function initDbPGLiteViaProxy({
   enableExtensions,
   ...options
 }: InitPgLiteOptions) {
@@ -83,6 +58,32 @@ export function initDbPGLiteViaProxy({
       )
     },
     async $end() {
+      return pglite.close()
+    },
+  })
+}
+
+// For comparision, not used in prod as not easily used with viewer due to drizzle abstraction
+
+export function initDbPGLiteDirect({
+  enableExtensions,
+  ...options
+}: InitPgLiteOptions = {}) {
+  const pglite = new PGlite({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    extensions: enableExtensions ? {uuid_ossp} : undefined,
+  })
+  const db = drizzlePGLite({...getDrizzleConfig(options), client: pglite})
+  return dbFactory('pglite', db, {
+    async $exec(query) {
+      const res = await db.execute(query)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      return {rows: res.rows as any[]}
+    },
+    $migrate() {
+      return migratePGLite(db, getMigrationConfig())
+    },
+    $end() {
       return pglite.close()
     },
   })

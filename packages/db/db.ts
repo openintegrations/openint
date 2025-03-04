@@ -3,7 +3,7 @@ import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
 import type {initDbNeon} from './db.neon'
 import type {initDbPg} from './db.pg'
-import type {initDbPGLite} from './db.pglite'
+import type {initDbPGLiteDirect} from './db.pglite'
 import * as schema from './schema/schema'
 
 // MARK: - For users
@@ -11,7 +11,7 @@ import * as schema from './schema/schema'
 type AnyDatabase =
   | ReturnType<typeof initDbNeon>
   | ReturnType<typeof initDbPg>
-  | ReturnType<typeof initDbPGLite>
+  | ReturnType<typeof initDbPGLiteDirect>
 
 export type DatabaseDriver = AnyDatabase['driverType']
 

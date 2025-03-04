@@ -1,8 +1,12 @@
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {check, customType, pgTable} from 'drizzle-orm/pg-core'
-import {getMigrationStatements} from './__tests__/test-utils'
-import {initDbPGLite, initDbPGLiteViaProxy} from './db.pglite'
+import {
+  describeEachDatabase,
+  DescribeEachDatabaseOptions,
+  getMigrationStatements,
+} from './__tests__/test-utils'
+import {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
 
 const customText = customType<{data: unknown}>({dataType: () => 'text'})
 
@@ -39,9 +43,12 @@ test('generate migrations', async () => {
 
 // TODO: Test against each driver of the database to ensure compatibility across drivers
 
-describe('test db', () => {
-  const db = initDbPGLiteViaProxy({logger: true})
+const options: DescribeEachDatabaseOptions = {
+  drivers: ['pglite', 'neon'],
+  randomDatabaseFromFilename: __filename,
+}
 
+describeEachDatabase(options, (db) => {
   beforeAll(async () => {
     const migrations = await generateMigration(
       generateDrizzleJson({}),
@@ -108,7 +115,7 @@ describe('test db', () => {
   })
 
   test('camelCase support', async () => {
-    const db2 = initDbPGLite({logger: true, casing: 'snake_case'})
+    const db2 = initDbPGLiteDirect({logger: true, casing: 'snake_case'})
     // works for column names only, not table names
     await db2.$exec(sql`
       create table if not exists "myAccount" (

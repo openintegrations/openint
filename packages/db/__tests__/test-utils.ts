@@ -7,7 +7,7 @@ import {schema} from '..'
 import type {Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
 import {initDbPg} from '../db.pg'
-import {initDbPGLite} from '../db.pglite'
+import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
 
 interface TestDbInitOptions {
   url: string
@@ -23,6 +23,8 @@ export const testDbs = {
   pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
   pglite: ({enableExtensions}: TestDbInitOptions) =>
     initDbPGLite({logger: false, enableExtensions}),
+  pglite_direct: ({enableExtensions}: TestDbInitOptions) =>
+    initDbPGLiteDirect({logger: false, enableExtensions}),
 }
 
 export type DescribeEachDatabaseOptions<
