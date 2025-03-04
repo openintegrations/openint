@@ -46,6 +46,7 @@ export function unifiedAccountingLink(ctx: {
     // TODO: Should build this into the mapper itself
     const stream =
       {
+        // QBO
         Purchase: 'transaction',
         JournalEntry: 'transaction',
         Deposit: 'transaction',
@@ -55,11 +56,26 @@ export function unifiedAccountingLink(ctx: {
         Vendor: 'vendor',
         Customer: 'customer',
         Attachable: 'attachment',
+        // Plaid
+        merchant: 'vendor',
       }[op.data.entityName] ?? op.data.entityName
 
     const mapped = applyMapper(mapper, op.data.entity, {
       remote_data_key: 'remote_data',
     })
+    if ('lines' in mapped) {
+      const txn = mapped as {
+        amount?: number
+        lines: {amount: number}[]
+        id: string
+      }
+      const trialBalance = txn.lines?.reduce((acc, line) => {
+        return acc + line.amount
+      }, txn.amount ?? 0)
+      if (trialBalance !== 0) {
+        console.warn(`Transaction  does not balance: ${trialBalance} ${txn.id}`)
+      }
+    }
 
     return rxjs.of({
       ...op,
@@ -67,13 +83,13 @@ export function unifiedAccountingLink(ctx: {
         stream,
         data: {
           ...mapped,
-          connection_id: ctx.source.id, // Should this be the default somehow?
+          _openint_connection_id: ctx.source.id, // Should this be the default somehow?
           // Denormalize customer_id onto entities for now, though may be better
           // to just sync connection also?
-          customer_id: ctx.source.customerId,
+          _openint_customer_id: ctx.source.customerId,
         },
         upsert: {
-          key_columns: ['connection_id', 'id'],
+          key_columns: ['_openint_connection_id', 'id'],
           insert_only_columns: ['created_at'],
           no_diff_columns: ['updated_at'],
         },

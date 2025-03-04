@@ -49,6 +49,7 @@ interface SpecificExtensions {
     query: string | SQLWrapper,
   ): Promise<{rows: Array<Assume<T, {[column: string]: unknown}>>}>
   $migrate(): Promise<void>
+  $end?(): Promise<void>
 }
 
 export function dbFactory<TDriver extends string, TDatabase>(

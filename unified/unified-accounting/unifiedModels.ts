@@ -17,7 +17,7 @@ const transaction_line = z.object({
   memo: z.string().nullable().optional().describe('Private line note'),
   amount: z.number().describe('(positive) debit or (negative) credit'),
   currency: currency_code,
-  account_id: z.string(),
+  account_id: z.string().describe('Empty means uncategorized'),
 })
 
 // MARK: - Models
@@ -37,6 +37,7 @@ export const transaction = z
       description:
         'Posted date for accounting purpose, may not be the same as transaction date',
     }),
+    vendor_id: z.string().nullish(),
     account_id: z.string().nullish(),
     amount: z.number().nullish(),
     currency: currency_code.nullish(),
@@ -78,7 +79,7 @@ export const vendor = z
   .object({
     ...commonFields,
     name: z.string(),
-    url: z.string(),
+    url: z.string().nullish(),
   })
   .openapi({ref: 'accounting.vendor'})
 

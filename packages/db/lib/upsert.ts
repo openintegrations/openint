@@ -94,6 +94,8 @@ export function dbUpsert<
     return
   }
 
+  // console.log('db upsert', _table.toString(), values, options)
+
   const table = (
     typeof _table === 'string' ? inferTableForUpsert(_table, firstRow) : _table
   ) as TTable
@@ -101,7 +103,7 @@ export function dbUpsert<
   const tbCfg = getTableConfig(table)
   const getColumnOrThrow = (name: string) => {
     const col = getColumn(name)
-    if (!col) {
+    if (!col || !col.name) {
       throw new Error(`Column ${name} not found in table ${tbCfg.name}`)
     }
     return col
@@ -199,10 +201,10 @@ export function inferTableForUpsert(
       Object.entries(record).map(([k, v]) => [
         k,
         opts?.jsonColumns?.includes(k) || isPlainObject(v) || Array.isArray(v)
-          ? t.jsonb()
+          ? t.jsonb(k)
           : // text() works as a catch all for scalar types because none of them require
             // the value to be escaped in anyway
-            (t.text() as unknown as ReturnType<typeof t.jsonb>),
+            (t.text(k) as unknown as ReturnType<typeof t.jsonb>),
       ]),
     ),
   )
