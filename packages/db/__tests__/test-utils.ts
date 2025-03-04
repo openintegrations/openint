@@ -49,7 +49,7 @@ export function describeEachDatabase<T extends DatabaseDriver>(
 
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
     drivers.includes(d as any),
-  ) as Array<[T, (opts: TestDbInitOptions) => Database]>
+  ) as Array<[T, (opts: TestDbInitOptions) => Database<T>]>
 
   describe.each(dbEntriesFiltered)('db: %s', (driver, makeDb) => {
     const baseUrl = new URL(
