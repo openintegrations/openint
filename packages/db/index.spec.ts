@@ -6,7 +6,7 @@ import {
   DescribeEachDatabaseOptions,
   getMigrationStatements,
 } from './__tests__/test-utils'
-import {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
+import {initDbPGLiteDirect} from './db.pglite'
 
 const customText = customType<{data: unknown}>({dataType: () => 'text'})
 
@@ -41,10 +41,38 @@ test('generate migrations', async () => {
   `)
 })
 
+test('camelCase support', async () => {
+  const db2 = initDbPGLiteDirect({logger: true, casing: 'snake_case'})
+  // works for column names only, not table names
+  await db2.$exec(sql`
+    create table if not exists "myAccount" (
+      my_id serial primary key
+    );
+  `)
+
+  const camelTable = pgTable('myAccount', (t) => ({
+    myId: t.serial().primaryKey(),
+  }))
+
+  // works for queries involving table
+  await db2.insert(camelTable).values({myId: 1})
+  const rows = await db2.select().from(camelTable).execute()
+  expect(rows).toEqual([{myId: 1}])
+
+  // does not work for raw queries...
+  const {rows: rows2} = await db2.$exec(sql`select * from "myAccount"`)
+  expect(rows2).toEqual([{my_id: 1}])
+})
+
+test('column definition', () => {
+  expect(table.data.columnType).toEqual('PgJsonb')
+  expect(table.data.dataType).toEqual('json')
+})
+
 // TODO: Test against each driver of the database to ensure compatibility across drivers
 
 const options: DescribeEachDatabaseOptions = {
-  drivers: ['pglite', 'neon'],
+  drivers: ['pglite', 'neon', 'pg'],
   randomDatabaseFromFilename: __filename,
 }
 
@@ -62,11 +90,6 @@ describeEachDatabase(options, (db) => {
   test('connect', async () => {
     const res = await db.$exec('select 1+1 as sum')
     expect(res.rows[0]).toEqual({sum: 2})
-  })
-
-  test('column definition', () => {
-    expect(table.data.columnType).toEqual('PgJsonb')
-    expect(table.data.dataType).toEqual('json')
   })
 
   test('date operations', async () => {
@@ -112,29 +135,6 @@ describeEachDatabase(options, (db) => {
     ])
     const date2 = new Date(rows2[0]?.['ts'] as string)
     expect(date2.getTime()).toEqual(date.getTime())
-  })
-
-  test('camelCase support', async () => {
-    const db2 = initDbPGLiteDirect({logger: true, casing: 'snake_case'})
-    // works for column names only, not table names
-    await db2.$exec(sql`
-      create table if not exists "myAccount" (
-        my_id serial primary key
-      );
-    `)
-
-    const camelTable = pgTable('myAccount', (t) => ({
-      myId: t.serial().primaryKey(),
-    }))
-
-    // works for queries involving table
-    await db2.insert(camelTable).values({myId: 1})
-    const rows = await db2.select().from(camelTable).execute()
-    expect(rows).toEqual([{myId: 1}])
-
-    // does not work for raw queries...
-    const {rows: rows2} = await db2.$exec(sql`select * from "myAccount"`)
-    expect(rows2).toEqual([{my_id: 1}])
   })
 
   // Depends on the previous test, cannot be parallel executed

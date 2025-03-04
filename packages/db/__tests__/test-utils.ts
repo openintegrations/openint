@@ -6,7 +6,7 @@ import {snakeCase} from '@openint/util'
 import {schema} from '..'
 import type {Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
-import {initDbPg} from '../db.pg'
+import {initDbPg, initDbPgDirect} from '../db.pg'
 import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
 
 interface TestDbInitOptions {
@@ -21,6 +21,7 @@ export const testDbs = {
   neon: ({url}: TestDbInitOptions) =>
     initDbNeon(url, {role: 'system'}, {logger: false}),
   pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
+  pg_direct: ({url}: TestDbInitOptions) => initDbPgDirect(url, {logger: false}),
   pglite: ({enableExtensions}: TestDbInitOptions) =>
     initDbPGLite({logger: false, enableExtensions}),
   pglite_direct: ({enableExtensions}: TestDbInitOptions) =>
