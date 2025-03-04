@@ -11,7 +11,7 @@ import {
   processPaginatedResponse,
   zListParams,
   zListResponse,
-} from './index'
+} from '../utils/pagination'
 
 const zIncludeSecrets = z
   .enum(['none', 'basic', 'all'])

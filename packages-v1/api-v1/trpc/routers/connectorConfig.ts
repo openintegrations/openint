@@ -1,14 +1,14 @@
 import {z} from 'zod'
 import {and, count, eq, schema} from '@openint/db'
+import {authenticatedProcedure, router} from '../_base'
+import {core} from '../../models'
+import {expandConnector, zExpandOptions} from '../utils/connectorUtils'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
   zListParams,
   zListResponse,
-} from '.'
-import {authenticatedProcedure, router} from '../_base'
-import {core} from '../../models'
-import {expandConnector, zExpandOptions} from '../utils/connectorUtils'
+} from '../utils/pagination'
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
