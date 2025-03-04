@@ -1,5 +1,10 @@
-import {count, desc, schema} from '@openint/db'
-import {zListParams, zListResponse} from '.'
+import {count, schema} from '@openint/db'
+import {
+  applyPaginationAndOrder,
+  processPaginatedResponse,
+  zListParams,
+  zListResponse,
+} from '.'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models'
 
@@ -25,25 +30,21 @@ export const eventRouter = router({
     .input(zListParams.optional())
     .output(zListResponse(core.event))
     .query(async ({ctx, input}) => {
-      const limit = input?.limit ?? 50
-      const offset = input?.offset ?? 0
+      const {query, limit, offset} = applyPaginationAndOrder(
+        ctx.db
+          .select({
+            event: schema.event,
+            total: count(),
+          })
+          .from(schema.event),
+        schema.event.timestamp,
+        input,
+      )
 
-      // Use a single query with COUNT(*) OVER() to get both results and total count
-      const result = await ctx.db
-        .select({
-          event: schema.event,
-          total: count(),
-        })
-        .from(schema.event)
-        .orderBy(desc(schema.event.timestamp))
-        .limit(limit)
-        .offset(offset)
-
-      const events = result.map((r) => r.event)
-      const total = result.length > 0 ? Number(result[0]?.total ?? 0) : 0
+      const {items, total} = await processPaginatedResponse(query, 'event')
 
       return {
-        items: events,
+        items,
         total,
         limit,
         offset,

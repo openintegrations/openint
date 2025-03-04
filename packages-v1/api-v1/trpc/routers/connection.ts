@@ -1,14 +1,48 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {count, desc, eq, schema, SQL} from '@openint/db'
-import {publicProcedure, router} from '../_base'
+import {serverConnectors} from '@openint/all-connectors/connectors.server'
+import {and, count, eq, schema} from '@openint/db'
+import {publicProcedure, router, RouterContext} from '../_base'
 import {core} from '../../models'
-import {zListParams, zListResponse} from './index'
+import {expandConnector} from '../utils/connectorUtils'
+import {
+  applyPaginationAndOrder,
+  processPaginatedResponse,
+  zListParams,
+  zListResponse,
+} from './index'
 
-function formatConnection(
+const zIncludeSecrets = z
+  .enum(['none', 'basic', 'all'])
+  .describe(
+    'Controls secret inclusion: none (default), basic (auth only), or all secrets',
+  )
+const zRefreshPolicy = z
+  .enum(['none', 'force', 'auto'])
+  .describe(
+    'Controls credential refresh: none (never), force (always), or auto (when expired, default)',
+  )
+
+const zConnectionStatus = z
+  .enum(['healthy', 'disconnected', 'error', 'manual'])
+  .describe(
+    'Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)',
+  )
+
+const zConnectionError = z
+  .enum(['refresh_failed', 'unknown_external_error'])
+  .describe('Error types: refresh_failed and unknown_external_error')
+
+const zExpandOptions = z
+  .enum(['connector'])
+  .describe('Fields to expand: connector (includes connector details)')
+
+async function formatConnection(
+  ctx: RouterContext,
   connection: z.infer<typeof core.connection>,
-  include_secrets: boolean = false,
+  include_secrets: z.infer<typeof zIncludeSecrets> = 'none',
+  expand: z.infer<typeof zExpandOptions>[] = [],
 ) {
   const connector =
     defConnectors[connection.connector_name as keyof typeof defConnectors]
@@ -19,21 +53,42 @@ function formatConnection(
     })
   }
 
-  const logoUrl =
-    connector.metadata &&
-    'logoUrl' in connector.metadata &&
-    connector.metadata.logoUrl?.startsWith('http')
-      ? connector.metadata.logoUrl
-      : connector.metadata && 'logoUrl' in connector.metadata
-        ? // TODO: replace this with our own custom domain
-          `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/${connector.metadata.logoUrl}`
-        : undefined
+  // Handle different levels of secret inclusion
+  let settingsToInclude = {}
+  if (include_secrets === 'basic' && connection.settings.oauth) {
+    settingsToInclude = {
+      settings: {
+        ...connection.settings,
+        oauth: {
+          credentials: connection.settings.oauth.credentials,
+        },
+      },
+    }
+  } else if (include_secrets === 'all') {
+    settingsToInclude = {settings: connection.settings}
+  }
+
+  let expandedFields = {}
+  if (expand.includes('connector')) {
+    const connectorConfig = await ctx.db.query.connector_config.findFirst({
+      where: eq(schema.connector_config.id, connection.connector_config_id),
+    })
+    if (!connectorConfig) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Connector config not found: ${connection.connector_config_id}`,
+      })
+    }
+
+    expandedFields = {
+      connector: expandConnector(connectorConfig),
+    }
+  }
 
   return {
     ...connection,
-    logo_url: logoUrl,
-    ...(include_secrets ? {settings: connection.settings} : {}),
-    // TODO: add display_name?
+    ...settingsToInclude,
+    ...expandedFields,
   }
 }
 
@@ -43,7 +98,14 @@ export const connectionRouter = router({
       openapi: {method: 'GET', path: '/connection/{id}'},
     })
     // TODO: make zId('conn')
-    .input(z.object({id: z.string(), include_secrets: z.boolean().optional()}))
+    .input(
+      z.object({
+        id: z.string(),
+        include_secrets: zIncludeSecrets.optional().default('none'),
+        refresh_policy: zRefreshPolicy.optional().default('auto'),
+        expand: z.array(zExpandOptions).optional().default([]),
+      }),
+    )
     .output(core.connection)
     .query(async ({ctx, input}) => {
       const connection = await ctx.db.query.connection.findFirst({
@@ -56,10 +118,27 @@ export const connectionRouter = router({
         })
       }
 
+      const credentialsRequiresRefresh =
+        input.refresh_policy === 'force' ||
+        (input.refresh_policy === 'auto' &&
+        connection.settings.oauth?.credentials?.expires_at
+          ? new Date(connection.settings.oauth.credentials.expires_at) <
+            new Date()
+          : false)
+
+      if (credentialsRequiresRefresh) {
+        console.warn(
+          'Credentials require refresh for connection id, skipping: ' +
+            connection.id,
+        )
+      }
+
       return formatConnection(
-        // TODO: fix this
+        ctx,
+        // TODO: fix this any casting
         connection as any as z.infer<typeof core.connection>,
-        input.include_secrets ?? false,
+        input.include_secrets,
+        input.expand,
       )
     }),
   listConnections: publicProcedure
@@ -72,66 +151,53 @@ export const connectionRouter = router({
           connector_name: z.string().optional(),
           customer_id: z.string().optional(),
           // TODO: make zId('ccfg').optional()
-          // but we get Type 'ZodOptional<ZodEffects<ZodString, `ccfg_${string}${string}`, string>>' is missing the following properties from type 'ZodType<any, any, any>': "~standard", "~validate"
           connector_config_id: z.string().optional(),
-          include_secrets: z.boolean().optional(),
+          include_secrets: zIncludeSecrets.optional().default('none'),
+          expand: z.array(zExpandOptions).optional().default([]),
         })
         .optional(),
     )
     .output(zListResponse(core.connection))
     .query(async ({ctx, input}) => {
-      const limit = input?.limit ?? 50
-      const offset = input?.offset ?? 0
+      const {query, limit, offset} = applyPaginationAndOrder(
+        ctx.db
+          .select({
+            connection: schema.connection,
+            total: count(),
+          })
+          .from(schema.connection)
+          .where(
+            and(
+              input?.connector_config_id
+                ? eq(
+                    schema.connection.connector_config_id,
+                    input.connector_config_id,
+                  )
+                : undefined,
+              input?.customer_id
+                ? eq(schema.connection.customer_id, input.customer_id)
+                : undefined,
+              input?.connector_name
+                ? eq(schema.connection.connector_name, input.connector_name)
+                : undefined,
+            ),
+          ),
+        schema.connection.created_at,
+        input,
+      )
 
-      const whereConditions: SQL<unknown>[] = []
-
-      if (input?.connector_config_id) {
-        whereConditions.push(
-          eq(schema.connection.connector_config_id, input.connector_config_id),
-        )
-      }
-      if (input?.customer_id) {
-        whereConditions.push(
-          eq(schema.connection.customer_id, input?.customer_id ?? ''),
-        )
-      }
-      if (input?.connector_name) {
-        whereConditions.push(
-          eq(schema.connection.connector_name, input?.connector_name ?? ''),
-        )
-      }
-
-      const whereClause =
-        whereConditions.length > 0
-          ? whereConditions.reduce(
-              (acc, condition, index) => {
-                return index === 0 ? condition : acc && condition
-              },
-              undefined as unknown as SQL<unknown>,
-            )
-          : undefined
-
-      // Use a single query with COUNT(*) OVER() to get both results and total count
-      const result = await ctx.db
-        .select({
-          connection: schema.connection,
-          total: count(),
-        })
-        .from(schema.connection)
-        .where(whereClause as SQL<unknown>)
-        .orderBy(desc(schema.connection.created_at))
-        .limit(limit)
-        .offset(offset)
-
-      const connections = result.map((r) => r.connection)
-      const total = result.length > 0 ? Number(result[0]?.total ?? 0) : 0
+      const {items, total} = await processPaginatedResponse(query, 'connection')
 
       return {
-        items: connections.map((conn) =>
-          formatConnection(
-            // TODO: fix this
-            conn as any as z.infer<typeof core.connection>,
-            input?.include_secrets,
+        items: await Promise.all(
+          items.map((conn) =>
+            formatConnection(
+              ctx,
+              // @ts-ignore, QQ why is connector_config_id string|null in schema?
+              conn,
+              input?.include_secrets ?? 'none',
+              input?.expand ?? [],
+            ),
           ),
         ),
         total,
@@ -145,12 +211,18 @@ export const connectionRouter = router({
     })
     .input(
       z.object({
+        // TODO: make zId('conn')
         id: z.string(),
-        force_refresh: z.boolean().optional(),
-        include_secrets: z.boolean().optional(),
       }),
     )
-    .output(core.connection)
+    .output(
+      z.object({
+        id: z.string(),
+        status: zConnectionStatus,
+        error: zConnectionError.optional(),
+        errorMessage: z.string().optional(),
+      }),
+    )
     .mutation(async ({ctx, input}) => {
       const connection = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
@@ -162,12 +234,11 @@ export const connectionRouter = router({
         })
       }
 
-      const credentialsRequiresRefresh =
-        input.force_refresh ||
-        (connection.settings.oauth?.credentials?.expires_at
-          ? new Date(connection.settings.oauth.credentials.expires_at) <
-            new Date()
-          : false)
+      const credentialsRequiresRefresh = connection.settings.oauth?.credentials
+        ?.expires_at
+        ? new Date(connection.settings.oauth.credentials.expires_at) <
+          new Date()
+        : false
 
       if (credentialsRequiresRefresh) {
         // TODO: implement refresh logic here
@@ -175,10 +246,41 @@ export const connectionRouter = router({
         // Add actual refresh implementation
       }
 
-      return formatConnection(
-        // TODO: fix this
-        connection as any as z.infer<typeof core.connection>,
-        input.include_secrets ?? false,
-      )
+      const connector =
+        serverConnectors[
+          connection.connector_name as keyof typeof serverConnectors
+        ]
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector not found for connection ${connection.id}`,
+        })
+      }
+
+      if (
+        'checkConnection' in connector &&
+        typeof connector.checkConnection === 'function'
+      ) {
+        try {
+          await connector.checkConnection(connection.settings as any)
+          // QQ: should this parse the results of checkConnection somehow?
+          return {
+            id: connection.id,
+            status: 'healthy',
+          }
+        } catch (error) {
+          return {
+            id: connection.id,
+            status: 'disconnected',
+            error: 'unknown_external_error',
+          }
+        }
+      }
+
+      // QQ: should we return healthy by default even if there's no check connection implemented?
+      return {
+        id: connection.id,
+        status: 'healthy',
+      }
     }),
 })
