@@ -2,7 +2,7 @@ import {createTRPCClient, httpLink} from '@trpc/client'
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {envRequired} from '@openint/env'
-import {app} from '../app'
+import {createFetchHandlerTRPC} from '../trpc/handlers'
 import type {AppRouter} from '../trpc/routers'
 
 export function headersForViewer(viewer: Viewer | null) {
@@ -11,11 +11,14 @@ export function headersForViewer(viewer: Viewer | null) {
 }
 
 export function trpcClientForViewer(viewer: Viewer | null) {
+  const handler = createFetchHandlerTRPC({
+    endpoint: '/api/v1/trpc',
+  })
   return createTRPCClient<AppRouter>({
     links: [
       httpLink({
         url: 'http://localhost/api/v1/trpc',
-        fetch: (input, init) => app.handle(new Request(input, init)),
+        fetch: (input, init) => handler(new Request(input, init)),
         headers: headersForViewer(viewer),
       }),
     ],
