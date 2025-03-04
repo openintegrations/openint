@@ -1218,7 +1218,7 @@ export interface components {
       }
       id: string
       name: string
-      url: string
+      url?: string | null
     }
     /** @description An (open) role */
     'ats.job': {
@@ -1388,6 +1388,7 @@ export interface operations {
           'application/json': {
             healthy: boolean
             error?: string
+            dbRoundtrip: number
             deps?: {
               nango: boolean
               inngest: boolean
@@ -5938,6 +5939,9 @@ export interface operations {
   /** Get file */
   'fileStorage-getFile': {
     parameters: {
+      query?: {
+        drive_id?: string
+      }
       path: {
         id: string
       }
@@ -5974,6 +5978,7 @@ export interface operations {
     parameters: {
       query: {
         format: string
+        drive_id?: string
       }
       path: {
         id: string
@@ -6009,6 +6014,9 @@ export interface operations {
   /** Download file */
   'fileStorage-downloadFile': {
     parameters: {
+      query?: {
+        drive_id?: string
+      }
       path: {
         id: string
       }
