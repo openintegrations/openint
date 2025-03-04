@@ -41,6 +41,7 @@ export const mappers = {
   transaction: mapper(zCast<Plaid['Transaction']>(), unified.transaction, {
     id: 'transaction_id',
     date: 'date',
+    vendor_id: 'merchant_entity_id',
     account_id: 'account_id',
     amount: 'amount',
     currency: 'iso_currency_code',
@@ -55,8 +56,19 @@ export const mappers = {
     // Plaid transactions are single entry and therefore unbalanced
     // We should probably not set any "lines" at all in this case.
     // Would also need some semantic to communicate set if null, aka set default value,
-    lines: () => [],
+    lines: (t) => [
+      {account_id: '', amount: t.amount * -1, currency: t.iso_currency_code!},
+    ],
     // created_at: (t) => t.datetime ?? new Date().toISOString(),
     // updated_at: (t) => t.datetime ?? new Date().toISOString(),
   }),
+  merchant: mapper(
+    zCast<{merchant_entity_id: string; name: string}>(),
+    unified.vendor,
+    {
+      id: 'merchant_entity_id',
+      name: 'name',
+      url: () => null,
+    },
+  ),
 }

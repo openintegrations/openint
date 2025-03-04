@@ -318,10 +318,29 @@ export const plaidServerConnector = {
           }
 
           cursor = res.next_cursor
+          const filteredTxns = [...res.added, ...res.modified].filter(
+            (t) => !accountIds || accountIds.includes(t.account_id),
+          )
+          const merchantNameById = Object.fromEntries(
+            filteredTxns
+              .map((t) =>
+                'merchant_entity_id' in t && t.merchant_entity_id
+                  ? ([
+                      t.merchant_entity_id as string,
+                      t.merchant_name!,
+                    ] as const)
+                  : null,
+              )
+              .filter((i) => !!i),
+          )
+
           yield [
-            ...[...res.added, ...res.modified]
-              .filter((t) => !accountIds || accountIds.includes(t.account_id))
-              .map((t) => def._opData('transaction', t.transaction_id, t)),
+            ...filteredTxns.map((t) =>
+              def._opData('transaction', t.transaction_id, t),
+            ),
+            ...Object.entries(merchantNameById).map(([id, name]) =>
+              def._opData('merchant', id, {merchant_entity_id: id, name}),
+            ),
             ...R.pipe(
               res.removed,
               R.map((t) => t.transaction_id),
