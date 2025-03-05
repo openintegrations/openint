@@ -24,7 +24,7 @@ test.each(Object.entries(viewers))(
   },
 )
 
-describeEachDatabase({drivers: ['pglite', 'neon', 'pg'], migrate: true}, (db) => {
+describeEachDatabase({drivers: ['pglite',  'pg', 'neon'], migrate: true}, (db) => {
   test('anon user has no access to connector_config', async () => {
     await expect(
       getTrpcClient(db, null).listConnectorConfigs.query(),

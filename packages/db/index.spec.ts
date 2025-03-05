@@ -73,7 +73,7 @@ test('column definition', () => {
 
 const options: DescribeEachDatabaseOptions = {
   drivers: ['pglite', 'neon', 'pg'],
-  randomDatabaseFromFilename: __filename,
+  __filename: __filename,
 }
 
 describeEachDatabase(options, (db) => {

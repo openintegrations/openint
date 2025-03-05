@@ -13,22 +13,23 @@ interface TestDbInitOptions {
   url: string
 }
 
+const logger = Boolean(env.DEBUG)
+
 export const testDbs = {
   // neon driver does not work well for migration at the moment and
   // and should therefore not be used for running migrations
-  neon: ({url}: TestDbInitOptions) => initDbNeon(url, {logger: false}),
-  pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
-  'pg-direct': ({url}: TestDbInitOptions) =>
-    initDbPgDirect(url, {logger: false}),
-  pglite: ({}: TestDbInitOptions) => initDbPGLite({logger: false}),
-  'pglite-direct': ({}: TestDbInitOptions) =>
-    initDbPGLiteDirect({logger: false}),
+  neon: ({url}: TestDbInitOptions) => initDbNeon(url, {logger}),
+  pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger}),
+  'pg-direct': ({url}: TestDbInitOptions) => initDbPgDirect(url, {logger}),
+  pglite: ({}: TestDbInitOptions) => initDbPGLite({logger}),
+  'pglite-direct': ({}: TestDbInitOptions) => initDbPGLiteDirect({logger}),
 }
 
 export type DescribeEachDatabaseOptions<
   T extends DatabaseDriver = DatabaseDriver,
 > = {
-  randomDatabaseFromFilename?: string
+  /** Create a random database using the current filename */
+  __filename?: string
   drivers?: T[]
   migrate?: boolean
   truncateBeforeAll?: boolean
@@ -39,7 +40,7 @@ export function describeEachDatabase<T extends DatabaseDriver>(
   testBlock: (db: Database<T>) => void,
 ) {
   const {
-    randomDatabaseFromFilename: prefix,
+    __filename: prefix,
     drivers = ['pglite'],
     migrate = false,
     truncateBeforeAll = false,
@@ -58,10 +59,14 @@ export function describeEachDatabase<T extends DatabaseDriver>(
     let baseDb: AnyDatabase | undefined
 
     const name = prefix
-      ? `${snakeCase(path.basename(prefix, path.extname(prefix)))}_${new Date()
-          .toISOString()
-          .replaceAll(/[:Z\-\.]/g, '')
-          .replace(/T/, '_')}_${driver}`
+      ? [
+          snakeCase(path.basename(prefix, path.extname(prefix))),
+          new Date()
+            .toISOString()
+            .replaceAll(/[:Z\-\.]/g, '')
+            .replace(/T/, '_'),
+          driver.replace(/-/g, '_'),
+        ].join('_')
       : undefined
     const url = new URL(baseUrl)
     if (name && url.pathname !== `/${name}`) {
