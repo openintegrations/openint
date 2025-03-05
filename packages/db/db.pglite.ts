@@ -1,9 +1,10 @@
-import {PGlite, QueryOptions, types} from '@electric-sql/pglite'
+import type {QueryOptions} from '@electric-sql/pglite'
+import {PGlite, types} from '@electric-sql/pglite'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {drizzle as drizzlePGLite} from 'drizzle-orm/pglite'
 import {migrate as migratePGLite} from 'drizzle-orm/pglite/migrator'
-import {Viewer} from '@openint/cdk'
+import type {Viewer} from '@openint/cdk'
 import {
   dbFactory,
   getDrizzleConfig,
@@ -50,7 +51,7 @@ export function initDbPGLite(options: DbOptions = {}) {
     $asViewer: (viewer) => drizzleForViewer(pglite, viewer, options),
     async $exec(query) {
       const res = await db.execute(query)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res as any[]}
     },
     async $migrate() {
@@ -77,7 +78,7 @@ export function initDbPGLiteDirect(options: DbOptions) {
   return dbFactory('pglite-direct', db, {
     async $exec(query) {
       const res = await db.execute(query)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res.rows as any[]}
     },
     $migrate() {
