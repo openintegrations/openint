@@ -1,7 +1,8 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {trpcClientForViewer} from './test-utils'
+import {initDbPGLite} from '@openint/db/db.pglite'
+import {getTrpcClient} from './test-utils'
 
 const viewers = {
   anon: null,
@@ -17,16 +18,16 @@ const viewers = {
 test.each(Object.entries(viewers))(
   'authenticating as %s',
   async (_desc, viewer) => {
-    const client = trpcClientForViewer(viewer)
+    const client = getTrpcClient(initDbPGLite({}), viewer)
     const res = await client.viewer.query()
     expect(res).toEqual(viewer ?? {role: 'anon'})
   },
 )
 
-describeEachDatabase({drivers: ['pg_direct'], migrate: true}, (db) => {
+describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   test('anon user has no access to connector_config', async () => {
     await expect(
-      trpcClientForViewer(null).listConnectorConfigs.query(),
+      getTrpcClient(db, null).listConnectorConfigs.query(),
     ).rejects.toThrow('Admin only')
   })
 
@@ -38,14 +39,14 @@ describeEachDatabase({drivers: ['pg_direct'], migrate: true}, (db) => {
   })
 
   test('org has access to its own connector config', async () => {
-    const client = trpcClientForViewer({role: 'org', orgId: 'org_123'})
+    const client = getTrpcClient(db, {role: 'org', orgId: 'org_123'})
     const res = await client.listConnectorConfigs.query()
     expect(res.items).toHaveLength(1)
     expect(res.items[0]?.id).toEqual('ccfg_123')
   })
 
   test('org has no access to other orgs connector config', async () => {
-    const client = trpcClientForViewer({role: 'org', orgId: 'org_456'})
+    const client = getTrpcClient(db, {role: 'org', orgId: 'org_456'})
     const res = await client.listConnectorConfigs.query()
     expect(res.items).toHaveLength(0)
   })

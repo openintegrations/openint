@@ -1,6 +1,7 @@
 import path from 'node:path'
 import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
+import {Viewer} from '@openint/cdk'
 import type {initDbNeon} from './db.neon'
 import type {initDbPg, initDbPgDirect} from './db.pg'
 import type {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
@@ -50,7 +51,8 @@ export function getMigrationConfig(): MigrationConfig {
 }
 
 /** Standardize difference across different drizzle postgres drivers */
-interface SpecificExtensions {
+interface SpecificExtensions<TDatabase> {
+  $asViewer?: (viewer: Viewer) => TDatabase
   $exec<T extends Record<string, unknown>>(
     query: string | SQLWrapper,
   ): Promise<{rows: Array<Assume<T, {[column: string]: unknown}>>}>
@@ -61,10 +63,10 @@ interface SpecificExtensions {
 export function dbFactory<TDriver extends string, TDatabase>(
   driver: TDriver,
   _db: TDatabase,
-  extension: SpecificExtensions,
+  extension: SpecificExtensions<TDatabase>,
 ) {
   Object.assign(_db as {}, {driverType: driver, ...extension})
-  const db = _db as TDatabase & SpecificExtensions & {driverType: TDriver}
+  const db = _db as typeof _db & typeof extension & {driverType: TDriver}
 
   /** Helpers that are not driver specific */
   const additioanlExtensions = {

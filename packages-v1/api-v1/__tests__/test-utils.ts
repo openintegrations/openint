@@ -1,6 +1,7 @@
 import {createTRPCClient, httpLink} from '@trpc/client'
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
+import {Database} from '@openint/db'
 import {envRequired} from '@openint/env'
 import {createFetchHandlerTRPC} from '../trpc/handlers'
 import type {AppRouter} from '../trpc/routers'
@@ -10,10 +11,8 @@ export function headersForViewer(viewer: Viewer | null) {
   return viewer ? {authorization: `Bearer ${jwt.signViewer(viewer)}`} : {}
 }
 
-export function trpcClientForViewer(viewer: Viewer | null) {
-  const handler = createFetchHandlerTRPC({
-    endpoint: '/api/v1/trpc',
-  })
+export function getTrpcClient(db: Database, viewer: Viewer | null) {
+  const handler = createFetchHandlerTRPC({endpoint: '/api/v1/trpc', db})
   return createTRPCClient<AppRouter>({
     links: [
       httpLink({

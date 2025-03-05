@@ -1,14 +1,15 @@
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
-import {contextFromRequest} from './context'
+import {Database} from '@openint/db'
+import {contextFromRequest, createRouterContext} from './context'
 import {appRouter} from './routers'
 
 export const createFetchHandlerTRPC =
-  (opts: {endpoint: `/${string}`}) => (req: Request) => {
+  (opts: {endpoint: `/${string}`; db: Database}) => (req: Request) => {
     console.log('handleTrpcRequest', req.url)
     return fetchRequestHandler({
       router: appRouter,
-      createContext: () => contextFromRequest(req),
+      createContext: () => createRouterContext({req, db: opts.db}),
       endpoint: opts.endpoint,
       req,
     })

@@ -15,10 +15,13 @@ import {localGucForViewer} from './schema/rls'
 interface InitPgLiteOptions extends DbOptions {
   viewer?: Viewer
 }
-export function initDbPGLite({viewer, ...options}: InitPgLiteOptions) {
-  const pglite = new PGlite()
 
-  const db = drizzlePgProxy(async (query, params, method) => {
+function drizzleForViewer(
+  pglite: PGlite,
+  viewer: Viewer | null,
+  options: DbOptions,
+) {
+  return drizzlePgProxy(async (query, params, method) => {
     const options: QueryOptions = {
       rowMode: method === 'all' ? 'array' : 'object',
       // identity parsers, allow drizzle itself to do the work of mapping based on for example timestamp mode
@@ -45,8 +48,15 @@ export function initDbPGLite({viewer, ...options}: InitPgLiteOptions) {
       return {rows: res.rows}
     }
   }, getDrizzleConfig(options))
+}
+
+export function initDbPGLite({viewer, ...options}: InitPgLiteOptions) {
+  const pglite = new PGlite()
+
+  const db = drizzleForViewer(pglite, null, options)
 
   return dbFactory('pglite', db, {
+    $asViewer: (viewer) => drizzleForViewer(pglite, viewer, options),
     async $exec(query) {
       const res = await db.execute(query)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
