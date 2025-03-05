@@ -85,7 +85,11 @@ export function describeEachDatabase<T extends DatabaseDriver>(
     const db = makeDb({url: url.toString(), ...testDbOpts})
 
     beforeAll(async () => {
-      if (driver !== 'pglite' && url.toString() !== baseUrl.toString()) {
+      if (
+        driver !== 'pglite' &&
+        driver !== 'pglite-direct' &&
+        url.toString() !== baseUrl.toString()
+      ) {
         baseDb = makeDb({url: baseUrl.toString(), ...testDbOpts})
         await baseDb.execute(`DROP DATABASE IF EXISTS ${name}`)
         await baseDb.execute(`CREATE DATABASE ${name}`)
