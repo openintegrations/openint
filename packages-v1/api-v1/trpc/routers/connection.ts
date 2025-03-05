@@ -2,12 +2,13 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {zCustomerId, zId} from '@openint/cdk'
 import {and, count, eq, schema} from '@openint/db'
 import {publicProcedure, router, RouterContext} from '../_base'
 import {core} from '../../models'
 import {
   expandConnector,
+  zConnectionId,
+  zConnectorConfigId,
   zConnectorName,
   zExpandOptions,
 } from '../utils/connectorUtils'
@@ -104,10 +105,9 @@ export const connectionRouter = router({
         summary: 'Get Connection & Credentials',
       },
     })
-    // TODO: make zId('conn')
     .input(
       z.object({
-        id: zId('conn') as any,
+        id: zConnectionId,
         include_secrets: zIncludeSecrets.optional().default('none'),
         refresh_policy: zRefreshPolicy.optional().default('auto'),
         expand: z.array(zExpandOptions).optional().default([]),
@@ -161,9 +161,8 @@ export const connectionRouter = router({
       zListParams
         .extend({
           connector_name: zConnectorName.optional(),
-          customer_id: zCustomerId.optional() as any,
-          // TODO: make zId('ccfg').optional()
-          connector_config_id: zId('ccfg').optional() as any,
+          customer_id: z.string().optional(),
+          connector_config_id: zConnectorConfigId.optional(),
           include_secrets: zIncludeSecrets.optional().default('none'),
           expand: z.array(zExpandOptions).optional().default([]),
         })
@@ -228,13 +227,12 @@ export const connectionRouter = router({
     })
     .input(
       z.object({
-        // TODO: make zId('conn')
-        id: zId('conn') as any,
+        id: zConnectionId,
       }),
     )
     .output(
       z.object({
-        id: zId('conn') as any,
+        id: zConnectionId,
         status: zConnectionStatus,
         error: zConnectionError.optional(),
         errorMessage: z.string().optional(),

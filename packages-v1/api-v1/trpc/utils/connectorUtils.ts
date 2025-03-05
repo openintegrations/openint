@@ -17,6 +17,10 @@ export const zConnectorName = z
   )
   .describe('The name of the connector')
 
+// temp ids
+export const zConnectionId = z.string().startsWith('conn_')
+export const zConnectorConfigId = z.string().startsWith('ccfg_')
+
 export async function expandConnector(
   connectorConfig: z.infer<typeof core.connector_config>,
 ) {

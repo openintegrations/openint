@@ -1,9 +1,9 @@
 import {z} from 'zod'
-import {makeJwtClient, zCustomerId, zId} from '@openint/cdk'
+import {makeJwtClient} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
 import {getServerUrl} from '../../../../apps/app-config/constants'
 import {asCustomer} from '../../../../packages/engine-backend/router/customerRouter'
-import {zConnectorName} from './connection'
+import {zConnectionId, zConnectorName} from '../utils/connectorUtils'
 
 export const connectRouter = router({
   createMagicLink: publicProcedure
@@ -21,9 +21,11 @@ export const connectRouter = router({
           .string()
           .optional()
           .describe('The email address of the customer'),
-        customer_id: (zCustomerId as any).describe(
-          'Anything that uniquely identifies the customer that you will be sending the magic link to',
-        ),
+        customer_id: z
+          .string()
+          .describe(
+            'Anything that uniquely identifies the customer that you will be sending the magic link to',
+          ),
         validity_in_seconds: z
           .number()
           .optional()
@@ -42,7 +44,7 @@ export const connectRouter = router({
           .nullable()
           .optional()
           .describe('Filter integrations by comma separated connector names'),
-        connection_id: (zId('conn') as any)
+        connection_id: zConnectionId
           .nullable()
           .optional()
           .describe('Filter managed connections by connection id'),
