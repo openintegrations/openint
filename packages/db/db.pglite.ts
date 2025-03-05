@@ -12,10 +12,6 @@ import {
 } from './db'
 import {localGucForViewer} from './schema/rls'
 
-interface InitPgLiteOptions extends DbOptions {
-  viewer?: Viewer
-}
-
 function drizzleForViewer(
   pglite: PGlite,
   viewer: Viewer | null,
@@ -50,7 +46,7 @@ function drizzleForViewer(
   }, getDrizzleConfig(options))
 }
 
-export function initDbPGLite({viewer, ...options}: InitPgLiteOptions) {
+export function initDbPGLite(options: DbOptions = {}) {
   const pglite = new PGlite()
 
   const db = drizzleForViewer(pglite, null, options)
@@ -80,7 +76,7 @@ export function initDbPGLite({viewer, ...options}: InitPgLiteOptions) {
 
 // For comparision, not used in prod as not easily used with viewer due to drizzle abstraction
 
-export function initDbPGLiteDirect({...options}: InitPgLiteOptions = {}) {
+export function initDbPGLiteDirect(options: DbOptions) {
   const pglite = new PGlite({})
   const db = drizzlePGLite({...getDrizzleConfig(options), client: pglite})
   return dbFactory('pglite_direct', db, {

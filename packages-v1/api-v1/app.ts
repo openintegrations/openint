@@ -1,5 +1,7 @@
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
+import {initDbNeon} from '@openint/db/db.neon'
+import {envRequired} from '@openint/env'
 import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
@@ -12,6 +14,9 @@ import {generateOpenAPISpec} from './trpc/openapi'
 //   const durationMs = Date.now() - start.getTime()
 //   return durationMs
 // }
+
+// It's annoying how elysia does not really allow for dependency injection like TRPC
+const db = initDbNeon(envRequired.DATABASE_URL)
 
 export const app = new Elysia({prefix: '/api'})
   // .get('/check-latency', async () => {
@@ -47,8 +52,8 @@ export const app = new Elysia({prefix: '/api'})
   // empirically, the first one without * works for trpc, and the second one with * works for openapi
   // no other settings seems to work when mounted inside next.js. Direct elysia listen works
   // in a more consistent way and we should probably add some test specifically for next.js mounted behavior
-  .mount('/v1/trpc', createFetchHandlerTRPC({endpoint: '/trpc'}))
-  .mount('/v1*', createFetchHandlerOpenAPI({endpoint: '/v1'}))
+  .mount('/v1/trpc', createFetchHandlerTRPC({endpoint: '/trpc', db}))
+  .mount('/v1*', createFetchHandlerOpenAPI({endpoint: '/v1', db}))
 
 // @ts-expect-error Property 'main' does not exist on type 'ImportMeta'.ts(2339)
 if (import.meta.main) {

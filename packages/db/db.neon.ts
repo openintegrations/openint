@@ -1,4 +1,9 @@
-import {HTTPQueryOptions, neon, neonConfig} from '@neondatabase/serverless'
+import {
+  HTTPQueryOptions,
+  neon,
+  neonConfig,
+  NeonQueryFunction,
+} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
 import {types} from 'pg'
@@ -7,11 +12,41 @@ import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {localGucForViewer} from './schema/rls'
 
-export function initDbNeon(
-  url: string,
-  viewer: Viewer,
-  options: DbOptions = {},
+function drizzleForViewer(
+  neonSql: NeonQueryFunction<false, false>,
+  viewer: Viewer | null,
+  options: DbOptions,
 ) {
+  return drizzlePgProxy(async (query, params, method) => {
+    const opts: HTTPQueryOptions<boolean, true> = {
+      fullResults: true,
+      arrayMode: method === 'all',
+      types, // types does not seem to work at initialization time, and thus we have to further add it to every query
+    }
+
+    const allResponses = !viewer
+      ? await neonSql(query, params, opts).then((r) => [r])
+      : await neonSql.transaction(
+          [
+            // Arguably system viewer does not need to be surrounded in transaction, but we need it for consistency
+            // Also that prevent things like DROP DATABASE
+            // guc settings are local to transactions anyways and without setting them should have the
+            // same impact as reset role
+            ...Object.entries(localGucForViewer(viewer)).map(
+              ([key, value]) =>
+                neonSql`SELECT set_config(${key}, ${value}, true)`,
+            ),
+            neonSql(query, params),
+          ],
+          opts,
+        )
+    const res = allResponses.pop()
+
+    return {rows: res?.rows ?? []}
+  }, getDrizzleConfig(options))
+}
+
+export function initDbNeon(url: string, options: DbOptions = {}) {
   if (!url.includes('neon') && !url.includes('localtest')) {
     throw new Error('Only neon database urls are supported with initDbNeon')
   }
@@ -34,41 +69,12 @@ export function initDbNeon(
   types.setTypeParser(types.builtins.TIMESTAMPTZ, (val) => val)
   types.setTypeParser(types.builtins.INTERVAL, (val) => val)
 
-  // Finally init neon
   const neonSql = neon(url, {types})
 
-  const db = drizzlePgProxy(async (query, params, method) => {
-    const opts: HTTPQueryOptions<boolean, true> = {
-      fullResults: true,
-      arrayMode: method === 'all',
-      types, // types does not seem to work at initialization time, and thus we have to further add it to every query
-    }
-
-    // Bypass setting guc for system viewer completely to avoid unnecessary transactions
-    // that prevent things like DROP DATABASE
-    // guc settings are local to transactions anyways and without setting them should have the
-    // same impact as reset role
-    const gucForRls = localGucForViewer(viewer)
-
-    const allResponses =
-      viewer.role === 'system'
-        ? await neonSql(query, params, opts).then((r) => [r])
-        : await neonSql.transaction(
-            [
-              ...Object.entries(gucForRls).map(
-                ([key, value]) =>
-                  neonSql`SELECT set_config(${key}, ${value}, true)`,
-              ),
-              neonSql(query, params),
-            ],
-            opts,
-          )
-    const res = allResponses.pop()
-
-    return {rows: res?.rows ?? []}
-  }, getDrizzleConfig(options))
+  const db = drizzleForViewer(neonSql, null, options)
 
   return dbFactory('neon', db, {
+    $asViewer: (viewer) => drizzleForViewer(neonSql, viewer, options),
     async $exec(query) {
       const res = await db.execute(query)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any

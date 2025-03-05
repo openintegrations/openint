@@ -16,8 +16,7 @@ interface TestDbInitOptions {
 export const testDbs = {
   // neon driver does not work well for migration at the moment and
   // and should therefore not be used for running migrations
-  neon: ({url}: TestDbInitOptions) =>
-    initDbNeon(url, {role: 'system'}, {logger: false}),
+  neon: ({url}: TestDbInitOptions) => initDbNeon(url, {logger: false}),
   pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
   pg_direct: ({url}: TestDbInitOptions) => initDbPgDirect(url, {logger: false}),
   pglite: ({}: TestDbInitOptions) => initDbPGLite({logger: false}),
