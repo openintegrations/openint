@@ -1,7 +1,8 @@
 import {z} from 'zod'
-import {and, count, eq, schema} from '@openint/db'
-import {authenticatedProcedure, router} from '../_base'
-import {core} from '../../models'
+import {makeId} from '@openint/cdk'
+import {and, eq, schema, sql} from '@openint/db'
+import {makeUlid} from '@openint/util'
+import {authenticatedProcedure, orgProcedure, router} from '../_base'
 import {
   expandConnector,
   zConnectorName,
@@ -13,6 +14,13 @@ import {
   zListParams,
   zListResponse,
 } from '../utils/pagination'
+
+/** TODO: Use the real type */
+const connector_config = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  connector_name: z.string(),
+})
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -34,7 +42,7 @@ export const connectorConfigRouter = router({
         .optional(),
     )
     .output(
-      zListResponse(core.connector_config).describe(
+      zListResponse(connector_config).describe(
         'The list of connector configurations',
       ),
     )
@@ -43,7 +51,7 @@ export const connectorConfigRouter = router({
         ctx.db
           .select({
             connector_config: schema.connector_config,
-            total: count(),
+            total: sql`count(*) over ()`,
           })
           .from(schema.connector_config)
           .where(
@@ -66,6 +74,8 @@ export const connectorConfigRouter = router({
       )
 
       return {
+        // @pellicceama use drizzle.query.$table.findMany({with:{... }}) for db-based expansion
+        // so we get all the data in one go. For connector it's fine since it's not stored in db
         items: await Promise.all(
           items.map(async (ccfg) =>
             input?.expand.includes('connector')
@@ -77,5 +87,26 @@ export const connectorConfigRouter = router({
         limit,
         offset,
       }
+    }),
+  createConnectorConfig: orgProcedure
+    .meta({
+      openapi: {method: 'POST', path: '/connector-config'},
+    })
+    .input(
+      z.object({
+        connector_name: z.string(),
+      }),
+    )
+    .output(connector_config)
+    .mutation(async ({ctx, input}) => {
+      const {connector_name} = input
+      const [ccfg] = await ctx.db
+        .insert(schema.connector_config)
+        .values({
+          org_id: ctx.viewer.orgId,
+          id: makeId('ccfg', connector_name, makeUlid()),
+        })
+        .returning()
+      return ccfg!
     }),
 })

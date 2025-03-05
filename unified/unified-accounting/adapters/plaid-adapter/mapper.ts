@@ -41,7 +41,8 @@ export const mappers = {
   transaction: mapper(zCast<Plaid['Transaction']>(), unified.transaction, {
     id: 'transaction_id',
     date: 'date',
-    vendor_id: 'merchant_entity_id',
+    // for some reason `null` causes vendor_id to be quoted, probably encoded as json, does not add up but...
+    vendor_id: (t) => t.merchant_entity_id ?? '',
     account_id: 'account_id',
     amount: 'amount',
     currency: 'iso_currency_code',

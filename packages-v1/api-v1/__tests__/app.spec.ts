@@ -1,10 +1,19 @@
 import {createTRPCClient, httpLink} from '@trpc/client'
-import {app} from '../app'
+import {initDbPGLite} from '@openint/db/db.pglite'
+import {createApp} from '../app'
 import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
 } from '../trpc/handlers'
 import type {AppRouter} from '../trpc/routers'
+
+const db = initDbPGLite()
+const app = createApp({db})
+
+// Important to ensure we always close the database otherwise jest flakiness can cause test failures...
+afterAll(async () => {
+  await db.$end()
+})
 
 test('elysia route', async () => {
   const res = await app.handle(new Request('http://localhost/api/health'))
@@ -18,7 +27,7 @@ describe('openapi route', () => {
   })
 
   test('healthcheck bypass elysia', async () => {
-    const handler = createFetchHandlerOpenAPI({endpoint: '/api/v1'})
+    const handler = createFetchHandlerOpenAPI({endpoint: '/api/v1', db})
     const res = await handler(new Request('http://localhost/api/v1/health'))
     expect(await res.json()).toMatchObject({ok: true})
   })
@@ -58,7 +67,7 @@ describe('trpc route', () => {
   })
 
   test('healthcheck bypass elysia', async () => {
-    const handler = createFetchHandlerTRPC({endpoint: '/api/trpc'})
+    const handler = createFetchHandlerTRPC({endpoint: '/api/trpc', db})
     const res = await handler(new Request('http://localhost/api/trpc/health'))
     expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
   })

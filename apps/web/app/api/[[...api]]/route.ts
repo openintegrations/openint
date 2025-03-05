@@ -1,13 +1,19 @@
-import {app} from '@openint/api-v1'
+import {createApp} from '@openint/api-v1'
+import {initDbNeon} from '@openint/db/db.neon'
+import {envRequired} from '@openint/env'
+
+const app = createApp({
+  db: initDbNeon(envRequired.DATABASE_URL),
+})
 
 const handler = app.handle
 
 export {
+  handler as DELETE,
+  handler as GET,
   handler as HEAD,
   handler as OPTIONS,
-  handler as GET,
+  handler as PATCH,
   handler as POST,
   handler as PUT,
-  handler as PATCH,
-  handler as DELETE,
 }

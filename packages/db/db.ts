@@ -1,22 +1,25 @@
-import path from 'node:path'
 import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
+import {Viewer} from '@openint/cdk'
 import type {initDbNeon} from './db.neon'
-import type {initDbPg} from './db.pg'
-import type {initDbPGLite} from './db.pglite'
+import type {initDbPg, initDbPgDirect} from './db.pg'
+import type {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
+import drizzleKitConfig, {type Config} from './drizzle.config'
 import * as schema from './schema/schema'
 
 // MARK: - For users
 
-type AnyDatabase =
+type _Database =
   | ReturnType<typeof initDbNeon>
   | ReturnType<typeof initDbPg>
+  | ReturnType<typeof initDbPgDirect>
   | ReturnType<typeof initDbPGLite>
+  | ReturnType<typeof initDbPGLiteDirect>
 
-export type DatabaseDriver = AnyDatabase['driverType']
+export type DatabaseDriver = _Database['driverType']
 
 export type Database<TDriver extends DatabaseDriver = DatabaseDriver> = Extract<
-  AnyDatabase,
+  _Database,
   {driverType: TDriver}
 >
 
@@ -35,16 +38,18 @@ export function getDrizzleConfig(
   }
 }
 
-/** Needs to be manually kept in sync with ../drizzle.config.ts */
 export function getMigrationConfig(): MigrationConfig {
+  const config: Config = drizzleKitConfig
   return {
-    migrationsFolder: path.join(__dirname, './migrations'),
-    migrationsSchema: 'public',
+    migrationsFolder: drizzleKitConfig.out,
+    migrationsSchema: config.migrations?.schema,
+    migrationsTable: config.migrations?.table,
   }
 }
 
 /** Standardize difference across different drizzle postgres drivers */
-interface SpecificExtensions {
+interface SpecificExtensions<TDrizzle> {
+  $asViewer?: (viewer: Viewer) => TDrizzle
   $exec<T extends Record<string, unknown>>(
     query: string | SQLWrapper,
   ): Promise<{rows: Array<Assume<T, {[column: string]: unknown}>>}>
@@ -52,13 +57,14 @@ interface SpecificExtensions {
   $end?(): Promise<void>
 }
 
-export function dbFactory<TDriver extends string, TDatabase>(
-  driver: TDriver,
-  _db: TDatabase,
-  extension: SpecificExtensions,
-) {
+export function dbFactory<
+  TDriver extends string,
+  TDrizzle,
+  TExtension extends SpecificExtensions<TDrizzle>,
+>(driver: TDriver, _db: TDrizzle, extension: TExtension) {
   Object.assign(_db as {}, {driverType: driver, ...extension})
-  const db = _db as TDatabase & SpecificExtensions & {driverType: TDriver}
+  const db = _db as typeof _db &
+    typeof extension & {driverType: TDriver; readonly _drizzle?: TDrizzle}
 
   /** Helpers that are not driver specific */
   const additioanlExtensions = {
@@ -75,3 +81,8 @@ export function dbFactory<TDriver extends string, TDatabase>(
   Object.assign(db, additioanlExtensions)
   return db as typeof db & typeof additioanlExtensions
 }
+
+export type AnyDrizzle = NonNullable<Database['_drizzle']>
+export type AnyDatabase = ReturnType<
+  typeof dbFactory<DatabaseDriver, AnyDrizzle, SpecificExtensions<AnyDrizzle>>
+>

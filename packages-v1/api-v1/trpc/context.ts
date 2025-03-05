@@ -1,8 +1,8 @@
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
-import {initDbNeon} from '@openint/db/db.neon'
+import {AnyDatabase} from '@openint/db/db'
 import {envRequired} from '@openint/env'
-import type {RouterContext} from './_base'
+import type {RouterContext, ViewerContext} from './_base'
 
 const jwt = makeJwtClient({
   secretOrPublicKey: envRequired.JWT_SECRET,
@@ -13,10 +13,29 @@ export function viewerFromRequest(req: Request): Viewer {
   return jwt.verifyViewer(token)
 }
 
-export function contextFromRequest(req: Request): RouterContext {
-  const viewer = viewerFromRequest(req)
+export function routerContextFromRequest({
+  req,
+  ...ctx
+}: {req: Request} & Omit<CreateRouterContextOptions, 'viewer'>) {
+  return routerContextFromViewer({...ctx, viewer: viewerFromRequest(req)})
+}
 
-  // create db once rather than on every request
-  const db = initDbNeon(envRequired.DATABASE_URL, viewer)
-  return {viewer, db}
+interface CreateRouterContextOptions {
+  viewer: Viewer
+  db: AnyDatabase
+}
+
+export function routerContextFromViewer({
+  viewer: currentViewer,
+  db,
+}: CreateRouterContextOptions): RouterContext {
+  function createViewerContext(viewer: Viewer): ViewerContext {
+    const dbForViewer = db.$asViewer?.(viewer)
+    if (!dbForViewer) {
+      throw new Error(`${db.driverType} does not support asViewer`)
+    }
+    return {viewer, db: dbForViewer}
+  }
+
+  return {...createViewerContext(currentViewer), as: createViewerContext}
 }

@@ -30,6 +30,18 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
+  reporters: [
+    'default',
+    [
+      './node_modules/jest-html-reporter',
+      {
+        outputPath: './artifacts/test-report.html',
+        includeFailureMsg: true,
+        includeConsoleLog: false,
+        includeSuiteFailure: true,
+      },
+    ],
+  ],
 }
 
 // NOTE maybe required for kits/file-picker
