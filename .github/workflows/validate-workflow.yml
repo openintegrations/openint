@@ -109,12 +109,6 @@ jobs:
           /usr/lib/postgresql/17/bin/pg_dump $DATABASE_URL --inserts > ./artifacts/dump.sql
           /usr/lib/postgresql/17/bin/pg_dump $DATABASE_URL --inserts --data-only --table drizzle.__drizzle_migrations
 
-      - name: Archive migration artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: migration-artifacts
-          path: |
-            ./artifacts
 
         # To test this with a locally install postgres, run
         # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && DATABASE_URL=postgres://localhost:5432/test pnpm migrate
@@ -140,6 +134,13 @@ jobs:
 
       - name: Run lint
         run: pnpm run lint
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            ./artifacts
 
       - name: Send Slack notification for job status
         uses: 8398a7/action-slack@v3
