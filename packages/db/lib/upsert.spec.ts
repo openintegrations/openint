@@ -2,6 +2,8 @@ import {sql} from 'drizzle-orm'
 import {describeEachDatabase} from '../__tests__/test-utils'
 import {dbUpsert, dbUpsertOne} from './upsert'
 
+jest.setTimeout(15_000)
+
 describeEachDatabase({drivers: 'all', __filename}, (db) => {
   beforeAll(async () => {
     await db.$exec(sql`

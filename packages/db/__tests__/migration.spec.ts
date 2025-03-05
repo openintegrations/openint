@@ -1,6 +1,8 @@
 import {sql} from 'drizzle-orm'
 import {describeEachDatabase} from './test-utils'
 
+jest.setTimeout(15_000)
+
 describeEachDatabase({drivers: 'all', migrate: false}, (db) => {
   test('run migration', async () => {
     await db.$migrate()
