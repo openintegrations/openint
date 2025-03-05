@@ -104,7 +104,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/connect/magic-link": {
+    "/customer/magic-link": {
         parameters: {
             query?: never;
             header?: never;
@@ -124,7 +124,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/connect/token": {
+    "/customer/token": {
         parameters: {
             query?: never;
             header?: never;
@@ -366,24 +366,6 @@ export interface components {
                 };
             };
         };
-        /** debug */
-        "connectors.debug.connectionSettings": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "debug";
-            settings?: unknown;
-        };
-        /** debug */
-        "connectors.debug.connectorConfig": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "debug";
-            config?: unknown;
-        };
         /** discord */
         "connectors.discord.connectionSettings": {
             /**
@@ -551,26 +533,6 @@ export interface components {
              * @enum {string}
              */
             connector_name: "foreceipt";
-            config: null;
-        };
-        /** fs */
-        "connectors.fs.connectionSettings": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "fs";
-            settings: {
-                basePath: string;
-            };
-        };
-        /** fs */
-        "connectors.fs.connectorConfig": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "fs";
             config: null;
         };
         /** github */
@@ -1337,27 +1299,6 @@ export interface components {
                 };
             };
         };
-        /** mongodb */
-        "connectors.mongodb.connectionSettings": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "mongodb";
-            settings: {
-                databaseUrl: string;
-                databaseName: string;
-            };
-        };
-        /** mongodb */
-        "connectors.mongodb.connectorConfig": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "mongodb";
-            config: null;
-        };
         /** moota */
         "connectors.moota.connectionSettings": {
             /**
@@ -1682,29 +1623,6 @@ export interface components {
                 };
             };
         };
-        /** revert */
-        "connectors.revert.connectionSettings": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "revert";
-            settings: {
-                tenant_id: string;
-            };
-        };
-        /** revert */
-        "connectors.revert.connectorConfig": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "revert";
-            config: {
-                api_token: string;
-                api_version?: string;
-            };
-        };
         /** salesforce */
         "connectors.salesforce.connectionSettings": {
             /**
@@ -1958,31 +1876,6 @@ export interface components {
             connector_name: "splitwise";
             config: null;
         };
-        /** spreadsheet */
-        "connectors.spreadsheet.connectionSettings": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "spreadsheet";
-            settings: {
-                /** @enum {string} */
-                preset: "ramp" | "apple-card" | "alliant-credit-union" | "bbva-mexico" | "brex-cash" | "brex" | "capitalone-bank" | "capitalone" | "coinbase" | "coinkeeper" | "etrade" | "first-republic" | "wise";
-                accountExternalId: string;
-            };
-        };
-        /** spreadsheet */
-        "connectors.spreadsheet.connectorConfig": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "spreadsheet";
-            config?: {
-                enabledPresets?: ("ramp" | "apple-card" | "alliant-credit-union" | "bbva-mexico" | "brex-cash" | "brex" | "capitalone-bank" | "capitalone" | "coinbase" | "coinkeeper" | "etrade" | "first-republic" | "wise")[] | null;
-                sourceProviders?: unknown[] | null;
-            } | null;
-        };
         /** stripe */
         "connectors.stripe.connectionSettings": {
             /**
@@ -2101,26 +1994,6 @@ export interface components {
                     cert: string;
                 } | null;
             };
-        };
-        /** webhook */
-        "connectors.webhook.connectionSettings": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "webhook";
-            settings: {
-                destinationUrl: string;
-            };
-        };
-        /** webhook */
-        "connectors.webhook.connectorConfig": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "webhook";
-            config: null;
         };
         /** wise */
         "connectors.wise.connectionSettings": {
@@ -2322,7 +2195,7 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             connector_config_id: string;
-        } & Omit<components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.beancount.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.debug.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.fs.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.google.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.mongodb.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.qbo.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.revert.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.spreadsheet.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.webhook.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"], "connector_name">);
+        } & Omit<components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.beancount.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.google.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.qbo.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"], "connector_name">);
         /** Connector Config */
         "core.connector_config": {
             connector_name: "core.connector_config";
@@ -2333,7 +2206,7 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             org_id: string;
-        } & Omit<components["schemas"]["connectors.aircall.connectorConfig"] | components["schemas"]["connectors.airtable.connectorConfig"] | components["schemas"]["connectors.apollo.connectorConfig"] | components["schemas"]["connectors.beancount.connectorConfig"] | components["schemas"]["connectors.brex.connectorConfig"] | components["schemas"]["connectors.coda.connectorConfig"] | components["schemas"]["connectors.confluence.connectorConfig"] | components["schemas"]["connectors.debug.connectorConfig"] | components["schemas"]["connectors.discord.connectorConfig"] | components["schemas"]["connectors.finch.connectorConfig"] | components["schemas"]["connectors.firebase.connectorConfig"] | components["schemas"]["connectors.foreceipt.connectorConfig"] | components["schemas"]["connectors.fs.connectorConfig"] | components["schemas"]["connectors.github.connectorConfig"] | components["schemas"]["connectors.gong.connectorConfig"] | components["schemas"]["connectors.google.connectorConfig"] | components["schemas"]["connectors.greenhouse.connectorConfig"] | components["schemas"]["connectors.heron.connectorConfig"] | components["schemas"]["connectors.hubspot.connectorConfig"] | components["schemas"]["connectors.intercom.connectorConfig"] | components["schemas"]["connectors.jira.connectorConfig"] | components["schemas"]["connectors.kustomer.connectorConfig"] | components["schemas"]["connectors.lever.connectorConfig"] | components["schemas"]["connectors.linear.connectorConfig"] | components["schemas"]["connectors.lunchmoney.connectorConfig"] | components["schemas"]["connectors.mercury.connectorConfig"] | components["schemas"]["connectors.merge.connectorConfig"] | components["schemas"]["connectors.microsoft.connectorConfig"] | components["schemas"]["connectors.mongodb.connectorConfig"] | components["schemas"]["connectors.moota.connectorConfig"] | components["schemas"]["connectors.onebrick.connectorConfig"] | components["schemas"]["connectors.outreach.connectorConfig"] | components["schemas"]["connectors.pipedrive.connectorConfig"] | components["schemas"]["connectors.plaid.connectorConfig"] | components["schemas"]["connectors.postgres.connectorConfig"] | components["schemas"]["connectors.qbo.connectorConfig"] | components["schemas"]["connectors.ramp.connectorConfig"] | components["schemas"]["connectors.revert.connectorConfig"] | components["schemas"]["connectors.salesforce.connectorConfig"] | components["schemas"]["connectors.salesloft.connectorConfig"] | components["schemas"]["connectors.saltedge.connectorConfig"] | components["schemas"]["connectors.slack.connectorConfig"] | components["schemas"]["connectors.splitwise.connectorConfig"] | components["schemas"]["connectors.spreadsheet.connectorConfig"] | components["schemas"]["connectors.stripe.connectorConfig"] | components["schemas"]["connectors.teller.connectorConfig"] | components["schemas"]["connectors.toggl.connectorConfig"] | components["schemas"]["connectors.twenty.connectorConfig"] | components["schemas"]["connectors.venmo.connectorConfig"] | components["schemas"]["connectors.webhook.connectorConfig"] | components["schemas"]["connectors.wise.connectorConfig"] | components["schemas"]["connectors.xero.connectorConfig"] | components["schemas"]["connectors.yodlee.connectorConfig"] | components["schemas"]["connectors.zohodesk.connectorConfig"] | components["schemas"]["connectors.googledrive.connectorConfig"], "connector_name">);
+        } & Omit<components["schemas"]["connectors.aircall.connectorConfig"] | components["schemas"]["connectors.airtable.connectorConfig"] | components["schemas"]["connectors.apollo.connectorConfig"] | components["schemas"]["connectors.beancount.connectorConfig"] | components["schemas"]["connectors.brex.connectorConfig"] | components["schemas"]["connectors.coda.connectorConfig"] | components["schemas"]["connectors.confluence.connectorConfig"] | components["schemas"]["connectors.discord.connectorConfig"] | components["schemas"]["connectors.finch.connectorConfig"] | components["schemas"]["connectors.firebase.connectorConfig"] | components["schemas"]["connectors.foreceipt.connectorConfig"] | components["schemas"]["connectors.github.connectorConfig"] | components["schemas"]["connectors.gong.connectorConfig"] | components["schemas"]["connectors.google.connectorConfig"] | components["schemas"]["connectors.greenhouse.connectorConfig"] | components["schemas"]["connectors.heron.connectorConfig"] | components["schemas"]["connectors.hubspot.connectorConfig"] | components["schemas"]["connectors.intercom.connectorConfig"] | components["schemas"]["connectors.jira.connectorConfig"] | components["schemas"]["connectors.kustomer.connectorConfig"] | components["schemas"]["connectors.lever.connectorConfig"] | components["schemas"]["connectors.linear.connectorConfig"] | components["schemas"]["connectors.lunchmoney.connectorConfig"] | components["schemas"]["connectors.mercury.connectorConfig"] | components["schemas"]["connectors.merge.connectorConfig"] | components["schemas"]["connectors.microsoft.connectorConfig"] | components["schemas"]["connectors.moota.connectorConfig"] | components["schemas"]["connectors.onebrick.connectorConfig"] | components["schemas"]["connectors.outreach.connectorConfig"] | components["schemas"]["connectors.pipedrive.connectorConfig"] | components["schemas"]["connectors.plaid.connectorConfig"] | components["schemas"]["connectors.postgres.connectorConfig"] | components["schemas"]["connectors.qbo.connectorConfig"] | components["schemas"]["connectors.ramp.connectorConfig"] | components["schemas"]["connectors.salesforce.connectorConfig"] | components["schemas"]["connectors.salesloft.connectorConfig"] | components["schemas"]["connectors.saltedge.connectorConfig"] | components["schemas"]["connectors.slack.connectorConfig"] | components["schemas"]["connectors.splitwise.connectorConfig"] | components["schemas"]["connectors.stripe.connectorConfig"] | components["schemas"]["connectors.teller.connectorConfig"] | components["schemas"]["connectors.toggl.connectorConfig"] | components["schemas"]["connectors.twenty.connectorConfig"] | components["schemas"]["connectors.venmo.connectorConfig"] | components["schemas"]["connectors.wise.connectorConfig"] | components["schemas"]["connectors.xero.connectorConfig"] | components["schemas"]["connectors.yodlee.connectorConfig"] | components["schemas"]["connectors.zohodesk.connectorConfig"] | components["schemas"]["connectors.googledrive.connectorConfig"], "connector_name">);
         /** event */
         "core.event": {
             id: string;
@@ -2578,7 +2451,7 @@ export interface operations {
                 limit?: number;
                 offset?: number;
                 /** @description The name of the connector */
-                connector_name?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "debug" | "discord" | "finch" | "firebase" | "foreceipt" | "fs" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "mongodb" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "postgres" | "qbo" | "ramp" | "revert" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "spreadsheet" | "stripe" | "teller" | "toggl" | "twenty" | "webhook" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive";
+                connector_name?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive";
                 customer_id?: string;
                 connector_config_id?: string;
                 /** @description Controls secret inclusion: none (default), basic (auth only), or all secrets */
@@ -2730,7 +2603,7 @@ export interface operations {
                 offset?: number;
                 expand?: "connector"[];
                 /** @description The name of the connector */
-                connector_name?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "debug" | "discord" | "finch" | "firebase" | "foreceipt" | "fs" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "mongodb" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "postgres" | "qbo" | "ramp" | "revert" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "spreadsheet" | "stripe" | "teller" | "toggl" | "twenty" | "webhook" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive";
+                connector_name?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive";
             };
             header?: never;
             path?: never;
@@ -2884,6 +2757,7 @@ export interface operations {
                 "application/json": {
                     /** @description The email address of the customer */
                     email?: string;
+                    /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
                     customer_id: string;
                     /**
                      * @description How long the magic link will be valid for (in seconds) before it expires
@@ -2896,7 +2770,8 @@ export interface operations {
                      * @description Filter integrations by comma separated connector names
                      * @enum {string|null}
                      */
-                    connector_names?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "debug" | "discord" | "finch" | "firebase" | "foreceipt" | "fs" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "mongodb" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "postgres" | "qbo" | "ramp" | "revert" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "spreadsheet" | "stripe" | "teller" | "toggl" | "twenty" | "webhook" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive" | null;
+                    connector_names?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive" | null;
+                    /** @description Filter managed connections by connection id */
                     connection_id?: string | null;
                     /**
                      * @description Magic Link display theme
