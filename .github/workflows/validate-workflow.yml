@@ -130,6 +130,8 @@ jobs:
       # - name: Run tests
       #   run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
 
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages-v1/api-v1/__tests__/app.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages-v1/api-v1/__tests__/auth.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-beancount/beancountConverters.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-postgres/server.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-postgres/utils.spec.ts
@@ -141,8 +143,6 @@ jobs:
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/cdk/internal/nangoProxyLink.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/file-picker/src/UnifiedFilePicker.test.tsx
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/vdk/mapper.spec.ts
-      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages-v1/api-v1/__tests__/app.spec.ts
-      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages-v1/api-v1/__tests__/auth.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages-v1/api-v1/trpc/routers/connectorConfig.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/custom-links/agLink.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db/__tests__/migration.spec.ts
