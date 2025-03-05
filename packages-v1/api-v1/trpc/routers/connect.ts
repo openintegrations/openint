@@ -16,7 +16,11 @@ export const connectRouter = router({
     })
     .input(
       z.object({
-        email: z.string().email().describe('The email address of the customer'),
+        email: z
+          .string()
+          .email()
+          .optional()
+          .describe('The email address of the customer'),
         customer_id: (zCustomerId as any).describe(
           'Anything that uniquely identifies the customer that you will be sending the magic link to',
         ),
