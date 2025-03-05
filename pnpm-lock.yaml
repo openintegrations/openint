@@ -38,6 +38,9 @@ patchedDependencies:
   micro-memoize@4.0.10:
     hash: hko3q5jvea7ey3trpjtkqgcale
     path: patches/micro-memoize@4.0.10.patch
+  trpc-to-openapi:
+    hash: u4b6y2446qzulqmfu34o5wzfza
+    path: patches/trpc-to-openapi.patch
 
 importers:
 
@@ -1875,8 +1878,8 @@ importers:
         specifier: 10.40.0
         version: 10.40.0
       jose:
-        specifier: ^6.0.8
-        version: 6.0.8
+        specifier: ^5
+        version: 5.10.0
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -2223,7 +2226,7 @@ importers:
         version: 2.20.1
       trpc-to-openapi:
         specifier: ^2.1.3
-        version: 2.1.3(@trpc/server@11.0.0-rc.824(typescript@5.7.3))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2)
+        version: 2.1.3(patch_hash=u4b6y2446qzulqmfu34o5wzfza)(@trpc/server@11.0.0-rc.824(typescript@5.7.3))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -12484,8 +12487,8 @@ packages:
     resolution: {integrity: sha512-FVoPY7SflDodE4lknJmbAHSUjLCzE2H1F6MS0RYKMQ8SR+lNccpMf8R4eqkNYyyUjR5qZReOzZo5C5YiHOCjjg==}
     engines: {node: '>=10.13.0 < 13 || >=13.7.0'}
 
-  jose@6.0.8:
-    resolution: {integrity: sha512-EyUPtOKyTYq+iMOszO42eobQllaIjJnwkZ2U93aJzNyPibCy7CEvT9UQnaCVB51IAd49gbNdCew1c0LcLTCB2g==}
+  jose@5.10.0:
+    resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
 
   jotai@1.3.9:
     resolution: {integrity: sha512-b6DvH9gf+7TfjaboCO54g+C0yhaakIaUBtjLf0dk1p15FWCzNw/93sezdXy9cCaZ8qcEdMLJcjBwQlORmIq29g==}
@@ -30242,7 +30245,7 @@ snapshots:
     dependencies:
       '@panva/asn1.js': 1.0.0
 
-  jose@6.0.8: {}
+  jose@5.10.0: {}
 
   jotai@1.3.9(@babel/core@7.25.2)(@babel/template@7.25.9)(immer@9.0.15)(react-query@3.39.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -35456,7 +35459,7 @@ snapshots:
       zod: 3.24.2
       zod-to-json-schema: 3.21.1(zod@3.24.2)
 
-  trpc-to-openapi@2.1.3(@trpc/server@11.0.0-rc.824(typescript@5.7.3))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2):
+  trpc-to-openapi@2.1.3(patch_hash=u4b6y2446qzulqmfu34o5wzfza)(@trpc/server@11.0.0-rc.824(typescript@5.7.3))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2):
     dependencies:
       '@trpc/server': 11.0.0-rc.824(typescript@5.7.3)
       co-body: 6.1.0

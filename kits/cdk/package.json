@@ -15,7 +15,7 @@
     "@opensdks/sdk-nango": "0.0.6",
     "@opensdks/util-zod": "0.0.15",
     "@trpc/server": "10.40.0",
-    "jose": "^6.0.8",
+    "jose": "^5",
     "react-script-hook": "1.7.2",
     "remeda": "1.6.1"
   },
