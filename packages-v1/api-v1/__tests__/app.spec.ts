@@ -3,7 +3,7 @@ import {createTRPCClient, httpLink} from '@trpc/client'
 import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
 import {initDbPGLite} from '@openint/db/db.pglite'
 import type {paths} from '../__generated__/openapi.types'
-import {app} from '../app'
+import {createApp} from '../app'
 import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
@@ -11,6 +11,7 @@ import {
 import type {AppRouter} from '../trpc/routers'
 
 const db = initDbPGLite()
+const app = createApp({db})
 
 test('elysia route', async () => {
   const res = await app.handle(new Request('http://localhost/api/health'))

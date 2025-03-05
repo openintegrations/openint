@@ -2,9 +2,10 @@ import {createTRPCClient, httpLink} from '@trpc/client'
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {envRequired} from '@openint/env'
+import {createApp} from '../app'
 import {
+  CreateFetchHandlerOptions,
   createFetchHandlerTRPC,
-  type CreateFetchHandlerOptions,
 } from '../trpc/handlers'
 import {type AppRouter} from '../trpc/routers'
 
@@ -15,11 +16,15 @@ export function headersForViewer(viewer: Viewer) {
     : {authorization: `Bearer ${jwt.signViewer(viewer)}`}
 }
 
+/** Prefer to operate at the highest level of stack possible while still bienbeing performant */
 export function getTestTRPCClient(
-  ctx: Omit<CreateFetchHandlerOptions, 'endpoint'>,
+  {router, ...opts}: Omit<CreateFetchHandlerOptions, 'endpoint'>,
   viewer: Viewer,
 ) {
-  const handler = createFetchHandlerTRPC({...ctx, endpoint: '/api/v1/trpc'})
+  const handler = router
+    ? createFetchHandlerTRPC({...opts, router, endpoint: '/api/v1/trpc'})
+    : createApp(opts).handle
+
   return createTRPCClient<AppRouter>({
     links: [
       httpLink({
