@@ -129,31 +129,57 @@ jobs:
       # - name: Setup upterm session
       #   uses: lhotari/action-upterm@v1
 
-      # Run fewer tests as running multiple tests together causes issues
+      # Does not work WTF
+      # - name: Run tests
+      #   run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
 
-      - name: Run tests -- packages/db
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db
-
-      - name: Run tests -- api-v1
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- api-v1
-
-      - name: Run tests -- connectors/
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/
-
-      - name: Run tests -- packages/util
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util
-
-      - name: Run tests -- packages/ui
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/ui
-
-      - name: Run tests -- kits/
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/
-
-      - name: Run tests -- unified/
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- unified/
-
-      - name: Run tests -- apps/web/
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web/
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-beancount/beancountConverters.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-postgres/server.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-postgres/utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-revert/sdk.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-spreadsheet/RowIdMaker.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-twenty/sdk.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/connector-twenty/server.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/cdk/internal/NangoClient.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/cdk/internal/nangoProxyLink.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/file-picker/src/UnifiedFilePicker.test.tsx
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/vdk/mapper.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages-v1/api-v1/__tests__/app.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages-v1/api-v1/__tests__/auth.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages-v1/api-v1/trpc/routers/connectorConfig.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/custom-links/agLink.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db/__tests__/migration.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db/__tests__/neon.test.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db/__tests__/rls.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db/__tests__/sql-generation.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db/index.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db/lib/upsert-sql.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db/lib/upsert.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/ui/command/command-fns.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/amount-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/date-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/env-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/formatting-amount.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/iterable-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/object-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/proxy-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/schrono/__tests__/iso-date.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/schrono/__tests__/natural-date.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/schrono/__tests__/schrono.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/schrono/MPInterval.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/schrono/schrono-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/schrono/simple-duration.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/schrono/simple-schedule.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/string-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util/url-utils.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- unified/unified-accounting/adapters/plaid-adapter/mapper.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- unified/unified-accounting/adapters/qbo-adapter/mapper.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- unified/unified-accounting/router.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- unified/unified-banking/router.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- unified/unified-file-storage/router.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web/__tests__/end-to-end.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web/__tests__/healthcheck.spec.ts
+      - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web/__tests__/unified-accounting.spec.ts
 
       - name: Run lint
         run: pnpm run lint
