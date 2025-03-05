@@ -2,6 +2,7 @@ import {z} from 'zod'
 import {makeJwtClient} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
 import {getServerUrl} from '../../../../apps/app-config/constants'
+import {asCustomer} from '../../../../packages/engine-backend/router/customerRouter'
 
 export const connectRouter = router({
   createMagicLink: publicProcedure
@@ -68,9 +69,12 @@ export const connectRouter = router({
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
-      const token = jwt.signViewer(ctx.viewer, {
-        validityInSeconds: input.validity_in_seconds,
-      })
+      const token = jwt.signViewer(
+        asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
+        {
+          validityInSeconds: input.validity_in_seconds,
+        },
+      )
 
       const url = new URL('/connect/portal', getServerUrl(null))
       url.searchParams.set('token', token)
@@ -146,9 +150,12 @@ export const connectRouter = router({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
 
-      const token = jwt.signViewer(ctx.viewer, {
-        validityInSeconds: input.validity_in_seconds,
-      })
+      const token = jwt.signViewer(
+        asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
+        {
+          validityInSeconds: input.validity_in_seconds,
+        },
+      )
 
       return {
         token: token,
