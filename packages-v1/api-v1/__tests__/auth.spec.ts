@@ -18,18 +18,27 @@ const viewers = {
 
 jest.setTimeout(15_000)
 
-test.each(Object.entries(viewers))(
-  'authenticating as %s',
-  async (_desc, viewer) => {
-    const client = getTestTRPCClient({db: initDbPGLite()}, viewer)
-    const res = await client.viewer.query()
-    expect(res).toEqual(viewer ?? {role: 'anon'})
+describe('authentication', () => {
+  // Important to ensure we always close the database otherwise jest flakiness can cause test failures...
+  const db = initDbPGLite()
 
-    const caller = createTRPCCaller({db: initDbPGLite()}, viewer)
-    const res2 = await caller.viewer()
-    expect(res2).toEqual(viewer ?? {role: 'anon'})
-  },
-)
+  afterAll(async () => {
+    await db.$end()
+  })
+
+  test.each(Object.entries(viewers))(
+    'authenticating as %s',
+    async (_desc, viewer) => {
+      const client = getTestTRPCClient({db}, viewer)
+      const res = await client.viewer.query()
+      expect(res).toEqual(viewer ?? {role: 'anon'})
+
+      const caller = createTRPCCaller({db}, viewer)
+      const res2 = await caller.viewer()
+      expect(res2).toEqual(viewer ?? {role: 'anon'})
+    },
+  )
+})
 
 describeEachDatabase({drivers: 'rls', migrate: true}, (db) => {
   function getClient(viewer: Viewer) {

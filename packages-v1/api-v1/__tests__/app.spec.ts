@@ -13,6 +13,7 @@ import type {AppRouter} from '../trpc/routers'
 const db = initDbPGLite()
 const app = createApp({db})
 
+// Important to ensure we always close the database otherwise jest flakiness can cause test failures...
 afterAll(async () => {
   await db.$end()
 })

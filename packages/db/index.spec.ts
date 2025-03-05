@@ -61,6 +61,8 @@ test('camelCase support', async () => {
   // does not work for raw queries...
   const {rows: rows2} = await db2.$exec(sql`select * from "myAccount"`)
   expect(rows2).toEqual([{my_id: 1}])
+
+  await db2.$end()
 })
 
 test('column definition', () => {
