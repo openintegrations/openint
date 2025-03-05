@@ -695,6 +695,9 @@ importers:
       node-http-proxy-json:
         specifier: 0.1.9
         version: 0.1.9
+      pg:
+        specifier: ^8.13.3
+        version: 8.13.3(pg-native@3.0.1)
       posthog-js:
         specifier: ^1.166.1
         version: 1.166.1

@@ -49,6 +49,7 @@
     "next-themes": "0.3.0",
     "nextjs-toploader": "1.4.2",
     "node-http-proxy-json": "0.1.9",
+    "pg": "^8.13.3",
     "posthog-js": "^1.166.1",
     "posthog-node": "2.5.4",
     "react": "18.3.1",
