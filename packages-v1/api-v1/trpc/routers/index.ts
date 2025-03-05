@@ -1,6 +1,7 @@
 import {z} from 'zod'
 import {zViewer} from '@openint/cdk'
 import {publicProcedure, router, trpc} from '../_base'
+import {connectRouter} from './connect'
 import {connectionRouter} from './connection'
 import {connectorConfigRouter} from './connectorConfig'
 import {eventRouter} from './event'
@@ -23,6 +24,7 @@ export const appRouter = trpc.mergeRouters(
   connectorConfigRouter,
   eventRouter,
   generalRouter,
+  connectRouter,
 )
 
 export type AppRouter = typeof appRouter
