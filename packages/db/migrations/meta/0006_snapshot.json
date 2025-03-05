@@ -1,5 +1,5 @@
 {
-  "id": "4b7a6a0a-8616-4c5b-b09f-4369a990c047",
+  "id": "a7a0fb25-5736-4c51-bbcd-9db6b1cfc3df",
   "prevId": "6fb050c3-41f3-48ae-8424-9ca4b8bece82",
   "version": "7",
   "dialect": "postgresql",
@@ -944,7 +944,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "organization_api_key_unique": {
+          "name": "organization_api_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "api_key"
+          ]
+        }
+      },
       "policies": {
         "org_read": {
           "name": "org_read",

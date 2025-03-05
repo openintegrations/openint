@@ -15,7 +15,8 @@ CREATE TABLE "organization" (
 	"slug" varchar,
 	"metadata" jsonb,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "organization_api_key_unique" UNIQUE("api_key")
 );
 --> statement-breakpoint
 ALTER TABLE "organization" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint

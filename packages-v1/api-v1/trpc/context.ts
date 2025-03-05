@@ -15,7 +15,6 @@ export async function viewerFromRequest(
   req: Request,
 ): Promise<Viewer> {
   const token = req.headers.get('authorization')?.match(/^Bearer (.+)/)?.[1]
-  console.log('token', token)
   // API Key here
   if (token?.startsWith('key_')) {
     const org = await ctx.db.query.organization.findFirst({
