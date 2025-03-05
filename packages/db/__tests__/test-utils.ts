@@ -104,13 +104,14 @@ export function describeEachDatabase<T extends DatabaseDriver>(
 
     testBlock(db as Database<T>)
 
-    afterAll(async () => {
-      await db.$end?.()
-      // Cleaning is not often possible because connection poolers will attempt
-      // to hold on to references of database preventing drops
-      // await baseDb?.execute(`DROP DATABASE IF EXISTS ${name}`)
-      await baseDb?.$end?.()
-    }, 1000)
+    // Seems to be causing issues with the test runner
+    // afterAll(async () => {
+    //   await db.$end?.()
+    //   // Cleaning is not often possible because connection poolers will attempt
+    //   // to hold on to references of database preventing drops
+    //   // await baseDb?.execute(`DROP DATABASE IF EXISTS ${name}`)
+    //   await baseDb?.$end?.()
+    // }, 1000)
   })
 }
 
