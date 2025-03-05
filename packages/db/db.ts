@@ -1,10 +1,10 @@
-import path from 'node:path'
 import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
 import {Viewer} from '@openint/cdk'
 import type {initDbNeon} from './db.neon'
 import type {initDbPg, initDbPgDirect} from './db.pg'
 import type {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
+import drizzleKitConfig, {type Config} from './drizzle.config'
 import * as schema from './schema/schema'
 
 // MARK: - For users
@@ -38,12 +38,12 @@ export function getDrizzleConfig(
   }
 }
 
-/** Needs to be manually kept in sync with ../drizzle.config.ts */
 export function getMigrationConfig(): MigrationConfig {
+  const config: Config = drizzleKitConfig
   return {
-    migrationsFolder: path.join(__dirname, './migrations'),
-    // Schema public does not work as not all variants support it (e.g. pg-proxy)
-    // migrationsSchema: 'public',
+    migrationsFolder: drizzleKitConfig.out,
+    migrationsSchema: config.migrations?.schema,
+    migrationsTable: config.migrations?.table,
   }
 }
 
