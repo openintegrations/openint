@@ -1,7 +1,4 @@
-import {applyLinks, logLink} from '@opensdks/fetch-links'
 import {createTRPCClient, httpLink} from '@trpc/client'
-import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
-import type {paths} from '../__generated__/openapi.types'
 import {app} from '../app'
 import {
   createFetchHandlerOpenAPI,
@@ -26,28 +23,30 @@ describe('openapi route', () => {
     expect(await res.json()).toMatchObject({ok: true})
   })
 
-  test('with OpenAPI client', async () => {
-    const openapiClient = createClient<paths>({
-      baseUrl: 'http://localhost/api/v1',
-      fetch: app.handle,
-    })
+  // AP Note: These endpoints exist but i removed them from the OAS to not expose them in the docs
+  // since Mintlify doesn't have a hide feature and setting enabled: false makes them stop working
+  //   test('with OpenAPI client', async () => {
+  //     const openapiClient = createClient<paths>({
+  //       baseUrl: 'http://localhost/api/v1',
+  //       fetch: app.handle,
+  //     })
 
-    const res = await openapiClient.GET('/health')
-    expect(res.data).toBeTruthy()
+  //     const res = await openapiClient.GET('/health')
+  //     expect(res.data).toBeTruthy()
 
-    const pathBasedClient = wrapAsPathBasedClient(openapiClient)
-    const res2 = await pathBasedClient['/health'].GET()
-    expect(res2.data).toBeTruthy()
-  })
+  //     const pathBasedClient = wrapAsPathBasedClient(openapiClient)
+  //     const res2 = await pathBasedClient['/health'].GET()
+  //     expect(res2.data).toBeTruthy()
+  //   })
 
-  test('with OpenAPI client with links', async () => {
-    const openapiClient = createClient<paths>({
-      baseUrl: 'http://localhost/api/v1',
-      fetch: (req) => applyLinks(req, [logLink(), app.handle]),
-    })
-    const res = await openapiClient.GET('/health')
-    expect(res.data).toBeTruthy()
-  })
+  //   test('with OpenAPI client with links', async () => {
+  //     const openapiClient = createClient<paths>({
+  //       baseUrl: 'http://localhost/api/v1',
+  //       fetch: (req) => applyLinks(req, [logLink(), app.handle]),
+  //     })
+  //     const res = await openapiClient.GET('/health')
+  //     expect(res.data).toBeTruthy()
+  //   })
 })
 
 describe('trpc route', () => {

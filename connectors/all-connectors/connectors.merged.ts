@@ -17,8 +17,6 @@ import {default as connectorCoda_def} from '@openint/connector-coda/def'
 import {default as connectorCoda_server} from '@openint/connector-coda/server'
 import {default as connectorConfluence_def} from '@openint/connector-confluence/def'
 import {default as connectorConfluence_server} from '@openint/connector-confluence/server'
-import {default as connectorDebug_def} from '@openint/connector-debug/def'
-import {default as connectorDebug_server} from '@openint/connector-debug/server'
 import {default as connectorDiscord_def} from '@openint/connector-discord/def'
 import {default as connectorDiscord_server} from '@openint/connector-discord/server'
 import {default as connectorFinch_def} from '@openint/connector-finch/def'
@@ -27,8 +25,6 @@ import {default as connectorFirebase_def} from '@openint/connector-firebase/def'
 import {default as connectorFirebase_server} from '@openint/connector-firebase/server'
 import {default as connectorForeceipt_def} from '@openint/connector-foreceipt/def'
 import {default as connectorForeceipt_server} from '@openint/connector-foreceipt/server'
-import {default as connectorFs_def} from '@openint/connector-fs/def'
-import {default as connectorFs_server} from '@openint/connector-fs/server'
 import {default as connectorGithub_def} from '@openint/connector-github/def'
 import {default as connectorGithub_server} from '@openint/connector-github/server'
 import {default as connectorGong_def} from '@openint/connector-gong/def'
@@ -58,8 +54,6 @@ import {default as connectorMerge_def} from '@openint/connector-merge/def'
 import {default as connectorMerge_server} from '@openint/connector-merge/server'
 import {default as connectorMicrosoft_def} from '@openint/connector-microsoft/def'
 import {default as connectorMicrosoft_server} from '@openint/connector-microsoft/server'
-import {default as connectorMongodb_def} from '@openint/connector-mongodb/def'
-import {default as connectorMongodb_server} from '@openint/connector-mongodb/server'
 import {default as connectorMoota_def} from '@openint/connector-moota/def'
 import {default as connectorMoota_server} from '@openint/connector-moota/server'
 import {default as connectorOnebrick_def} from '@openint/connector-onebrick/def'
@@ -76,8 +70,6 @@ import {default as connectorQbo_def} from '@openint/connector-qbo/def'
 import {default as connectorQbo_server} from '@openint/connector-qbo/server'
 import {default as connectorRamp_def} from '@openint/connector-ramp/def'
 import {default as connectorRamp_server} from '@openint/connector-ramp/server'
-import {default as connectorRevert_def} from '@openint/connector-revert/def'
-import {default as connectorRevert_server} from '@openint/connector-revert/server'
 import {default as connectorSalesforce_def} from '@openint/connector-salesforce/def'
 import {default as connectorSalesforce_server} from '@openint/connector-salesforce/server'
 import {default as connectorSalesloft_def} from '@openint/connector-salesloft/def'
@@ -88,8 +80,6 @@ import {default as connectorSlack_def} from '@openint/connector-slack/def'
 import {default as connectorSlack_server} from '@openint/connector-slack/server'
 import {default as connectorSplitwise_def} from '@openint/connector-splitwise/def'
 import {default as connectorSplitwise_server} from '@openint/connector-splitwise/server'
-import {default as connectorSpreadsheet_def} from '@openint/connector-spreadsheet/def'
-import {default as connectorSpreadsheet_server} from '@openint/connector-spreadsheet/server'
 import {default as connectorStripe_def} from '@openint/connector-stripe/def'
 import {default as connectorStripe_server} from '@openint/connector-stripe/server'
 import {default as connectorTeller_def} from '@openint/connector-teller/def'
@@ -99,8 +89,6 @@ import {default as connectorToggl_server} from '@openint/connector-toggl/server'
 import {default as connectorTwenty_def} from '@openint/connector-twenty/def'
 import {default as connectorTwenty_server} from '@openint/connector-twenty/server'
 import {default as connectorVenmo_def} from '@openint/connector-venmo/def'
-import {default as connectorWebhook_def} from '@openint/connector-webhook/def'
-import {default as connectorWebhook_server} from '@openint/connector-webhook/server'
 import {default as connectorWise_def} from '@openint/connector-wise/def'
 import {default as connectorWise_server} from '@openint/connector-wise/server'
 import {default as connectorXero_def} from '@openint/connector-xero/def'
@@ -145,11 +133,6 @@ const connectorConfluence = {
   ...connectorConfluence_server,
 }
 
-const connectorDebug = {
-  ...connectorDebug_def,
-  ...connectorDebug_server,
-}
-
 const connectorDiscord = {
   ...connectorDiscord_def,
   ...connectorDiscord_server,
@@ -168,11 +151,6 @@ const connectorFirebase = {
 const connectorForeceipt = {
   ...connectorForeceipt_def,
   ...connectorForeceipt_server,
-}
-
-const connectorFs = {
-  ...connectorFs_def,
-  ...connectorFs_server,
 }
 
 const connectorGithub = {
@@ -249,11 +227,6 @@ const connectorMicrosoft = {
   ...connectorMicrosoft_server,
 }
 
-const connectorMongodb = {
-  ...connectorMongodb_def,
-  ...connectorMongodb_server,
-}
-
 const connectorMoota = {
   ...connectorMoota_def,
   ...connectorMoota_server,
@@ -294,11 +267,6 @@ const connectorRamp = {
   ...connectorRamp_server,
 }
 
-const connectorRevert = {
-  ...connectorRevert_def,
-  ...connectorRevert_server,
-}
-
 const connectorSalesforce = {
   ...connectorSalesforce_def,
   ...connectorSalesforce_server,
@@ -324,11 +292,6 @@ const connectorSplitwise = {
   ...connectorSplitwise_server,
 }
 
-const connectorSpreadsheet = {
-  ...connectorSpreadsheet_def,
-  ...connectorSpreadsheet_server,
-}
-
 const connectorStripe = {
   ...connectorStripe_def,
   ...connectorStripe_server,
@@ -351,11 +314,6 @@ const connectorTwenty = {
 
 const connectorVenmo = {
   ...connectorVenmo_def,
-}
-
-const connectorWebhook = {
-  ...connectorWebhook_def,
-  ...connectorWebhook_server,
 }
 
 const connectorWise = {
@@ -391,12 +349,10 @@ export const mergedConnectors = {
   brex: connectorBrex,
   coda: connectorCoda,
   confluence: connectorConfluence,
-  debug: connectorDebug,
   discord: connectorDiscord,
   finch: connectorFinch,
   firebase: connectorFirebase,
   foreceipt: connectorForeceipt,
-  fs: connectorFs,
   github: connectorGithub,
   gong: connectorGong,
   google: connectorGoogle,
@@ -412,7 +368,6 @@ export const mergedConnectors = {
   mercury: connectorMercury,
   merge: connectorMerge,
   microsoft: connectorMicrosoft,
-  mongodb: connectorMongodb,
   moota: connectorMoota,
   onebrick: connectorOnebrick,
   outreach: connectorOutreach,
@@ -421,19 +376,16 @@ export const mergedConnectors = {
   postgres: connectorPostgres,
   qbo: connectorQbo,
   ramp: connectorRamp,
-  revert: connectorRevert,
   salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
   slack: connectorSlack,
   splitwise: connectorSplitwise,
-  spreadsheet: connectorSpreadsheet,
   stripe: connectorStripe,
   teller: connectorTeller,
   toggl: connectorToggl,
   twenty: connectorTwenty,
   venmo: connectorVenmo,
-  webhook: connectorWebhook,
   wise: connectorWise,
   xero: connectorXero,
   yodlee: connectorYodlee,

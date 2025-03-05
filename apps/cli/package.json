@@ -5,12 +5,10 @@
   "dependencies": {
     "@openint/app-config": "workspace:*",
     "@openint/cdk": "workspace:*",
-    "@openint/connector-alphavantage": "workspace:*",
     "@openint/connector-beancount": "workspace:*",
     "@openint/connector-brex": "workspace:*",
     "@openint/connector-expensify": "workspace:*",
     "@openint/connector-firebase": "workspace:*",
-    "@openint/connector-fs": "workspace:*",
     "@openint/connector-heron": "workspace:*",
     "@openint/connector-lunchmoney": "workspace:*",
     "@openint/connector-merge": "workspace:*",

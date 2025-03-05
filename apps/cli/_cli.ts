@@ -3,7 +3,6 @@ import '@openint/app-config/register.node'
 import {parseConnectorConfigsFromRawEnv} from '@openint/app-config/connector-envs'
 import type {defConnectors} from '@openint/app-config/connectors/connectors.def'
 import {makeJwtClient} from '@openint/cdk'
-import {makeAlphavantageClient} from '@openint/connector-alphavantage'
 import {makeLunchmoneyClient} from '@openint/connector-lunchmoney'
 import {makeMootaClient} from '@openint/connector-moota'
 import {makeOneBrickClient} from '@openint/connector-onebrick'
@@ -75,7 +74,6 @@ if (require.main === module) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         getEnvVar('YODLEE_CREDS', {json: true}) as any,
       ),
-    alphavantage: () => makeAlphavantageClient({apikey: ''}),
     // asana: () => makeAsanaClient({baseURL: ''}),
     lunchmoney: () => makeLunchmoneyClient(intConfig('lunchmoney')),
     moota: () => makeMootaClient(intConfig('moota')),
