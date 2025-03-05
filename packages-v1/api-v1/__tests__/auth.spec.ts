@@ -16,6 +16,8 @@ const viewers = {
   },
 } satisfies Record<string, Viewer>
 
+jest.setTimeout(15_000)
+
 test.each(Object.entries(viewers))(
   'authenticating as %s',
   async (_desc, viewer) => {

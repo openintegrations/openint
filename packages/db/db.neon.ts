@@ -12,6 +12,13 @@ import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {rlsStatementsForViewer} from './schema/rls'
 
+// this is also unfortunately global... in particular it shares state with
+// node postgres driver as well. However at least we want consistent type parsing...
+types.setTypeParser(types.builtins.DATE, (val) => val)
+types.setTypeParser(types.builtins.TIMESTAMP, (val) => val)
+types.setTypeParser(types.builtins.TIMESTAMPTZ, (val) => val)
+types.setTypeParser(types.builtins.INTERVAL, (val) => val)
+
 function drizzleForViewer(
   neonSql: NeonQueryFunction<false, false>,
   viewer: Viewer | null,
@@ -39,6 +46,22 @@ function drizzleForViewer(
         )
     const res = allResponses.pop()
 
+    // TODO: Make me work for arrayMode: true
+    if (res?.rows) {
+      res.rows = res.rows.map((row) => {
+        if (typeof row === 'object' && row !== null) {
+          const newRow: Record<string, unknown> = {...row}
+          for (const key in newRow) {
+            if (newRow[key] instanceof Date) {
+              newRow[key] = newRow[key].toISOString()
+            }
+          }
+          return newRow
+        }
+        return row
+      })
+    }
+
     return {rows: res?.rows ?? []}
   }, getDrizzleConfig(options))
 }
@@ -59,12 +82,6 @@ export function initDbNeon(url: string, options: DbOptions = {}) {
       host === 'db.localtest.me' ? ['http', 4444] : ['https', 443]
     return `${protocol}://${host}:${port}/sql`
   }
-  // this is also unfortunately global... in particular it shares state with
-  // node postgres driver as well. However at least we want consistent type parsing...
-  types.setTypeParser(types.builtins.DATE, (val) => val)
-  types.setTypeParser(types.builtins.TIMESTAMP, (val) => val)
-  types.setTypeParser(types.builtins.TIMESTAMPTZ, (val) => val)
-  types.setTypeParser(types.builtins.INTERVAL, (val) => val)
 
   const neonSql = neon(url, {types})
 
