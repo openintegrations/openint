@@ -2,6 +2,7 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
+import {zCustomerId, zId} from '@openint/cdk'
 import {and, count, eq, schema} from '@openint/db'
 import {publicProcedure, router, RouterContext} from '../_base'
 import {core} from '../../models'
@@ -37,6 +38,10 @@ const zConnectionError = z
 const zExpandOptions = z
   .enum(['connector'])
   .describe('Fields to expand: connector (includes connector details)')
+
+export const zConnectorName = z
+  .enum(Object.keys(serverConnectors) as [string, ...string[]])
+  .describe('The name of the connector')
 
 async function formatConnection(
   ctx: RouterContext,
@@ -95,12 +100,16 @@ async function formatConnection(
 export const connectionRouter = router({
   getConnection: publicProcedure
     .meta({
-      openapi: {method: 'GET', path: '/connection/{id}'},
+      openapi: {
+        method: 'GET',
+        path: '/connection/{id}',
+        description: 'Get details of a specific connection',
+      },
     })
     // TODO: make zId('conn')
     .input(
       z.object({
-        id: z.string(),
+        id: zId('conn') as any,
         include_secrets: zIncludeSecrets.optional().default('none'),
         refresh_policy: zRefreshPolicy.optional().default('auto'),
         expand: z.array(zExpandOptions).optional().default([]),
@@ -143,15 +152,19 @@ export const connectionRouter = router({
     }),
   listConnections: publicProcedure
     .meta({
-      openapi: {method: 'GET', path: '/connection'},
+      openapi: {
+        method: 'GET',
+        path: '/connection',
+        description: 'List all connections with optional filtering',
+      },
     })
     .input(
       zListParams
         .extend({
-          connector_name: z.string().optional(),
-          customer_id: z.string().optional(),
+          connector_name: zConnectorName.optional(),
+          customer_id: zCustomerId.optional() as any,
           // TODO: make zId('ccfg').optional()
-          connector_config_id: z.string().optional(),
+          connector_config_id: zId('ccfg').optional() as any,
           include_secrets: zIncludeSecrets.optional().default('none'),
           expand: z.array(zExpandOptions).optional().default([]),
         })
@@ -174,11 +187,11 @@ export const connectionRouter = router({
                     input.connector_config_id,
                   )
                 : undefined,
-              input?.customer_id
-                ? eq(schema.connection.customer_id, input.customer_id)
+              input?.['customer_id']
+                ? eq(schema.connection.customer_id, input['customer_id'])
                 : undefined,
-              input?.connector_name
-                ? eq(schema.connection.connector_name, input.connector_name)
+              input?.['connector_name']
+                ? eq(schema.connection.connector_name, input['connector_name'])
                 : undefined,
             ),
           ),
@@ -207,17 +220,21 @@ export const connectionRouter = router({
     }),
   checkConnection: publicProcedure
     .meta({
-      openapi: {method: 'POST', path: '/connection/{id}/check'},
+      openapi: {
+        method: 'POST',
+        path: '/connection/{id}/check',
+        description: 'Verify that a connection is healthy',
+      },
     })
     .input(
       z.object({
         // TODO: make zId('conn')
-        id: z.string(),
+        id: zId('conn') as any,
       }),
     )
     .output(
       z.object({
-        id: z.string(),
+        id: zId('conn') as any,
         status: zConnectionStatus,
         error: zConnectionError.optional(),
         errorMessage: z.string().optional(),

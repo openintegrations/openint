@@ -9,17 +9,23 @@ import {
   zListParams,
   zListResponse,
 } from '../utils/pagination'
+import {zConnectorName} from './connection'
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
     .meta({
-      openapi: {method: 'GET', path: '/connector-config'},
+      openapi: {
+        method: 'GET',
+        path: '/connector-config',
+        description:
+          'List all connector configurations with optional filtering',
+      },
     })
     .input(
       zListParams
         .extend({
           expand: z.array(zExpandOptions).optional().default([]),
-          connector_name: z.string().optional(),
+          connector_name: zConnectorName.optional(),
         })
         .optional(),
     )
