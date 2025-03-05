@@ -129,16 +129,31 @@ jobs:
       # - name: Setup upterm session
       #   uses: lhotari/action-upterm@v1
 
-      # Run filter tests...
+      # Run fewer tests as running multiple tests together causes issues
 
-      - name: Run tests -- db
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- db
+      - name: Run tests -- packages/db
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/db
 
       - name: Run tests -- api-v1
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- api-v1
 
-      - name: Run tests -- apps/web
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web
+      - name: Run tests -- connectors/
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- connectors/
+
+      - name: Run tests -- packages/util
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/util
+
+      - name: Run tests -- packages/ui
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- packages/ui
+
+      - name: Run tests -- kits/
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- kits/
+
+      - name: Run tests -- unified/
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- unified/
+
+      - name: Run tests -- apps/web/
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web/
 
       - name: Run lint
         run: pnpm run lint
