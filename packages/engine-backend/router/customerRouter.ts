@@ -177,12 +177,12 @@ export const customerRouter = trpc.router({
     })
     .input(customerRouterSchema.createConnectToken.input)
     .output(z.object({token: z.string()}))
-    .mutation(({input: {validityInSeconds, ...input}, ctx}) =>
+    .mutation(async ({input: {validityInSeconds, ...input}, ctx}) =>
       // console.log('[createConnectToken]', ctx.viewer, input, {
       //   validityInSeconds,
       // })
       ({
-        token: ctx.jwt.signViewer(asCustomer(ctx.viewer, input), {
+        token: await ctx.jwt.signViewer(asCustomer(ctx.viewer, input), {
           validityInSeconds,
         }),
       }),
@@ -246,7 +246,7 @@ export const customerRouter = trpc.router({
           params.connectionId,
         )
 
-        const token = ctx.jwt.signViewer(
+        const token = await ctx.jwt.signViewer(
           asCustomer(ctx.viewer, {customerId: connection.customerId}),
           {
             validityInSeconds,
