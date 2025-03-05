@@ -13,15 +13,22 @@ export function viewerFromRequest(req: Request): Viewer {
   return jwt.verifyViewer(token)
 }
 
-export function createRouterContext({
+export function routerContextFromRequest({
   req,
-  db,
-}: {
-  req: Request
-  db: AnyDatabase
-}): RouterContext {
-  const currentViewer = viewerFromRequest(req)
+  ...ctx
+}: {req: Request} & Omit<CreateRuterContextOptions, 'viewer'>) {
+  return routerContextFromViewer({...ctx, viewer: viewerFromRequest(req)})
+}
 
+interface CreateRuterContextOptions {
+  viewer: Viewer
+  db: AnyDatabase
+}
+
+export function routerContextFromViewer({
+  viewer: currentViewer,
+  db,
+}: CreateRuterContextOptions): RouterContext {
   function createViewerContext(viewer: Viewer): ViewerContext {
     const dbForViewer = db.$asViewer?.(viewer)
     if (!dbForViewer) {

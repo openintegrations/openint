@@ -23,23 +23,38 @@ export const publicProcedure = trpc.procedure
 export const authenticatedProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
   if (!hasRole(viewer, ['customer', 'user', 'org'])) {
-    throw new TRPCError({code: 'FORBIDDEN', message: 'Admin only'})
+    throw new TRPCError({code: 'FORBIDDEN', message: 'Authentication required'})
   }
   return next({ctx: {...ctx, viewer}})
 })
 
 export const customerProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
-  if (!hasRole(ctx.viewer, ['customer'])) {
+  if (!hasRole(viewer, ['customer'])) {
     throw new TRPCError({code: 'FORBIDDEN', message: 'Customer only'})
   }
   return next({ctx: {...ctx, viewer}})
 })
 
-export const adminProcedure = publicProcedure.use(({next, ctx}) => {
+export const orgProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
-  if (!hasRole(ctx.viewer, ['user', 'org'])) {
+  if (!hasRole(viewer, ['user', 'org'])) {
     throw new TRPCError({code: 'FORBIDDEN', message: 'Admin only'})
   }
-  return next({ctx: {...ctx, viewer}})
+  if (!viewer.orgId) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: `orgId missing in token for user ${viewer.userId}`,
+    })
+  }
+  return next({
+    ctx: {
+      ...ctx,
+      viewer: viewer as WithRequiredNonNull<Viewer<'user' | 'org'>, 'orgId'>,
+    },
+  })
 })
+
+type WithRequiredNonNull<T, K extends keyof T> = T & {
+  [P in K]-?: NonNullable<T[P]>
+}

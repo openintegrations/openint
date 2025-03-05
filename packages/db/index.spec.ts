@@ -3,7 +3,6 @@ import {sql} from 'drizzle-orm'
 import {check, customType, pgTable} from 'drizzle-orm/pg-core'
 import {
   describeEachDatabase,
-  DescribeEachDatabaseOptions,
   getMigrationStatements,
 } from './__tests__/test-utils'
 import {initDbPGLiteDirect} from './db.pglite'

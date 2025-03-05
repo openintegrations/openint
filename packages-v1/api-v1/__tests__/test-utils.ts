@@ -1,18 +1,25 @@
 import {createTRPCClient, httpLink} from '@trpc/client'
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
-import {Database} from '@openint/db'
 import {envRequired} from '@openint/env'
-import {createFetchHandlerTRPC} from '../trpc/handlers'
-import type {AppRouter} from '../trpc/routers'
+import {
+  createFetchHandlerTRPC,
+  type CreateFetchHandlerOptions,
+} from '../trpc/handlers'
+import {type AppRouter} from '../trpc/routers'
 
-export function headersForViewer(viewer: Viewer | null) {
+export function headersForViewer(viewer: Viewer) {
   const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
-  return viewer ? {authorization: `Bearer ${jwt.signViewer(viewer)}`} : {}
+  return viewer.role === 'anon'
+    ? {}
+    : {authorization: `Bearer ${jwt.signViewer(viewer)}`}
 }
 
-export function getTrpcClient(db: Database, viewer: Viewer | null) {
-  const handler = createFetchHandlerTRPC({endpoint: '/api/v1/trpc', db})
+export function getTestTRPCClient(
+  ctx: Omit<CreateFetchHandlerOptions, 'endpoint'>,
+  viewer: Viewer,
+) {
+  const handler = createFetchHandlerTRPC({...ctx, endpoint: '/api/v1/trpc'})
   return createTRPCClient<AppRouter>({
     links: [
       httpLink({
