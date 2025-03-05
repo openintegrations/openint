@@ -87,7 +87,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/core.connection"
+                  "$ref": "#/components/schemas/core.connection",
+                  "description": "The connection details"
                 }
               }
             }
@@ -327,7 +328,8 @@
                     "total",
                     "limit",
                     "offset"
-                  ]
+                  ],
+                  "description": "The list of connections"
                 }
               }
             }
@@ -646,7 +648,8 @@
                     "total",
                     "limit",
                     "offset"
-                  ]
+                  ],
+                  "description": "The list of connector configurations"
                 }
               }
             }
@@ -704,141 +707,7 @@
         }
       }
     },
-    "/event": {
-      "get": {
-        "operationId": "listEvents",
-        "summary": "List Organization Events",
-        "description": "List all events for an organization",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "limit",
-            "description": "Limit the number of items returned",
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 100,
-              "default": 50,
-              "description": "Limit the number of items returned"
-            }
-          },
-          {
-            "in": "query",
-            "name": "offset",
-            "description": "Offset the items returned",
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "description": "Offset the items returned"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/core.event"
-                      }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "description": "Total number of items"
-                    },
-                    "limit": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 100,
-                      "default": 50,
-                      "description": "Limit the number of items returned"
-                    },
-                    "offset": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "default": 0,
-                      "description": "Offset the items returned"
-                    }
-                  },
-                  "required": [
-                    "items",
-                    "total",
-                    "limit",
-                    "offset"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customer/magic-link": {
+    "/customer/{customer_id}/magic-link": {
       "post": {
         "operationId": "createMagicLink",
         "summary": "Create Magic Link",
@@ -851,6 +720,18 @@
             "CustomerToken": []
           }
         ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "description": "The id of the customer in your application. Ensure it is unique for that customer.",
+            "schema": {
+              "type": "string",
+              "description": "The id of the customer in your application. Ensure it is unique for that customer."
+            },
+            "required": true
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -858,10 +739,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "customer_id": {
-                    "type": "string",
-                    "description": "The id of the customer in your application. Ensure it is unique for that customer."
-                  },
                   "validity_in_seconds": {
                     "type": "number",
                     "default": 2592000,
@@ -961,10 +838,7 @@
                     ],
                     "description": "Magic Link tab view to load as default"
                   }
-                },
-                "required": [
-                  "customer_id"
-                ]
+                }
               }
             }
           }
@@ -978,7 +852,8 @@
                   "type": "object",
                   "properties": {
                     "magic_link_url": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "The Connect magic link url to share with the user. This url will expire in 30 days"
                     }
                   },
                   "required": [
@@ -1031,7 +906,7 @@
         }
       }
     },
-    "/customer/token": {
+    "/customer/{customer_id}/token": {
       "post": {
         "operationId": "createToken",
         "summary": "Create Customer Authentication Token",
@@ -1044,6 +919,18 @@
             "CustomerToken": []
           }
         ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "description": "The id of the customer in your application. Ensure it is unique for that customer.",
+            "schema": {
+              "type": "string",
+              "description": "The id of the customer in your application. Ensure it is unique for that customer."
+            },
+            "required": true
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1051,20 +938,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "customer_id": {
-                    "type": "string",
-                    "description": "The id of the customer in your application. Ensure it is unique for that customer."
-                  },
                   "validity_in_seconds": {
                     "type": "number",
                     "exclusiveMinimum": 0,
                     "default": 2592000,
                     "description": "How long the token will be valid for (in seconds) before it expires"
                   }
-                },
-                "required": [
-                  "customer_id"
-                ]
+                }
               }
             }
           }
@@ -1078,7 +958,8 @@
                   "type": "object",
                   "properties": {
                     "token": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "The authentication token to use for API requests"
                     }
                   },
                   "required": [

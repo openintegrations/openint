@@ -33,7 +33,11 @@ export const connectorConfigRouter = router({
         })
         .optional(),
     )
-    .output(zListResponse(core.connector_config))
+    .output(
+      zListResponse(core.connector_config).describe(
+        'The list of connector configurations',
+      ),
+    )
     .query(async ({ctx, input}) => {
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db

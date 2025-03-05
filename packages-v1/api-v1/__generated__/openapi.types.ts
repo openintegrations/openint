@@ -84,27 +84,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/event": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Organization Events
-         * @description List all events for an organization
-         */
-        get: operations["listEvents"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/customer/magic-link": {
+    "/customer/{customer_id}/magic-link": {
         parameters: {
             query?: never;
             header?: never;
@@ -124,7 +104,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/customer/token": {
+    "/customer/{customer_id}/token": {
         parameters: {
             query?: never;
             header?: never;
@@ -2700,102 +2680,19 @@ export interface operations {
             };
         };
     };
-    listEvents: {
-        parameters: {
-            query?: {
-                /** @description Limit the number of items returned */
-                limit?: number;
-                /** @description Offset the items returned */
-                offset?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["core.event"][];
-                        /** @description Total number of items */
-                        total: number;
-                        /**
-                         * @description Limit the number of items returned
-                         * @default 50
-                         */
-                        limit: number;
-                        /**
-                         * @description Offset the items returned
-                         * @default 0
-                         */
-                        offset: number;
-                    };
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
     createMagicLink: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                /** @description The id of the customer in your application. Ensure it is unique for that customer. */
+                customer_id: string;
+            };
             cookie?: never;
         };
         requestBody: {
             content: {
                 "application/json": {
-                    /** @description The id of the customer in your application. Ensure it is unique for that customer. */
-                    customer_id: string;
                     /**
                      * @description How long the magic link will be valid for (in seconds) before it expires
                      * @default 2592000
@@ -2831,6 +2728,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        /** @description The Connect magic link url to share with the user. This url will expire in 30 days */
                         magic_link_url: string;
                     };
                 };
@@ -2877,14 +2775,15 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                /** @description The id of the customer in your application. Ensure it is unique for that customer. */
+                customer_id: string;
+            };
             cookie?: never;
         };
         requestBody: {
             content: {
                 "application/json": {
-                    /** @description The id of the customer in your application. Ensure it is unique for that customer. */
-                    customer_id: string;
                     /**
                      * @description How long the token will be valid for (in seconds) before it expires
                      * @default 2592000
@@ -2901,6 +2800,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        /** @description The authentication token to use for API requests */
                         token: string;
                     };
                 };

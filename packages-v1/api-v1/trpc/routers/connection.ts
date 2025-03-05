@@ -114,7 +114,7 @@ export const connectionRouter = router({
         expand: z.array(zExpandOptions).optional().default([]),
       }),
     )
-    .output(core.connection)
+    .output(core.connection.describe('The connection details'))
     .query(async ({ctx, input}) => {
       const connection = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
@@ -169,7 +169,7 @@ export const connectionRouter = router({
         })
         .optional(),
     )
-    .output(zListResponse(core.connection))
+    .output(zListResponse(core.connection).describe('The list of connections'))
     .query(async ({ctx, input}) => {
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db

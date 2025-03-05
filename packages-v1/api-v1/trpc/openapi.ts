@@ -33,6 +33,7 @@ export function generateOpenAPISpec({
   if (oas.paths) {
     delete oas.paths['/health']
     delete oas.paths['/viewer']
+    delete oas.paths['/event']
   }
 
   if (oas.components?.schemas) {

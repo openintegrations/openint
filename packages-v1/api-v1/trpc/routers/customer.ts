@@ -14,14 +14,16 @@ export const customerRouter = router({
     .meta({
       openapi: {
         method: 'POST',
-        path: '/customer/magic-link',
+        path: '/customer/{customer_id}/magic-link',
         description: 'Create a magic link for connecting integrations',
         summary: 'Create Magic Link',
       },
     })
     .input(
       z.object({
-        customer_id: zCustomerId,
+        customer_id: zCustomerId.openapi({
+          param: {in: 'path', name: 'customer_id'},
+        }),
         validity_in_seconds: z
           .number()
           .optional()
@@ -56,7 +58,13 @@ export const customerRouter = router({
           .describe('Magic Link tab view to load as default'),
       }),
     )
-    .output(z.object({magic_link_url: z.string()}))
+    .output(
+      z.object({
+        magic_link_url: z
+          .string()
+          .describe('The Connect magic link url to share with the user.'),
+      }),
+    )
     .mutation(async ({ctx, input}) => {
       // TODO: replace with new signing and persisting mechanism
       const jwt = makeJwtClient({
@@ -103,14 +111,16 @@ export const customerRouter = router({
     .meta({
       openapi: {
         method: 'POST',
-        path: '/customer/token',
+        path: '/customer/{customer_id}/token',
         description: 'Create an authentication token for a customer',
         summary: 'Create Customer Authentication Token',
       },
     })
     .input(
       z.object({
-        customer_id: zCustomerId,
+        customer_id: zCustomerId.openapi({
+          param: {in: 'path', name: 'customer_id'},
+        }),
         validity_in_seconds: z
           .number()
           .positive()
@@ -121,7 +131,13 @@ export const customerRouter = router({
           ),
       }),
     )
-    .output(z.object({token: z.string()}))
+    .output(
+      z.object({
+        token: z
+          .string()
+          .describe('The authentication token to use for API requests'),
+      }),
+    )
     .mutation(async ({ctx, input}) => {
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
