@@ -3,14 +3,17 @@ import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {expandConnector, zExpandOptions} from '../utils/connectorUtils'
+import {
+  expandConnector,
+  zConnectorName,
+  zExpandOptions,
+} from '../utils/connectorUtils'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
   zListParams,
   zListResponse,
 } from '../utils/pagination'
-import {zConnectorName} from './connection'
 
 /** TODO: Use the real type */
 const connector_config = z.object({
@@ -27,6 +30,7 @@ export const connectorConfigRouter = router({
         path: '/connector-config',
         description:
           'List all connector configurations with optional filtering',
+        summary: 'List Connector Configurations',
       },
     })
     .input(
@@ -37,7 +41,11 @@ export const connectorConfigRouter = router({
         })
         .optional(),
     )
-    .output(zListResponse(connector_config))
+    .output(
+      zListResponse(connector_config).describe(
+        'The list of connector configurations',
+      ),
+    )
     .query(async ({ctx, input}) => {
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db

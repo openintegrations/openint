@@ -1,0 +1,57 @@
+---
+title: Share Magic Links
+description: Share secure, time-limited connection links with your users
+---
+
+# Share Magic Links
+
+Magic Links provide a seamless way to share secure, time-limited connection links with your users without handling complex OAuth flows directly.
+
+## How Magic Links Work
+
+1. **Generation**
+
+   - Create a unique, time-limited link
+   - Embed connection parameters
+   - Set security constraints
+
+2. **Authentication Flow**
+   - User clicks the magic link
+   - Automatic OAuth handling
+   - Secure token exchange
+
+## Implementation
+
+```typescript
+// Generate a magic link
+const magicLink = await client.magicLinks.create({
+  provider: 'salesforce',
+  redirectUrl: 'https://your-app.com/callback',
+  metadata: {
+    userId: '123',
+    teamId: '456'
+  }
+});
+
+// Get the URL to send to your user
+const url = magicLink.url;
+
+// Later, verify the connection
+const connection = await client.magicLinks.verify(token);
+```
+
+## Security Considerations
+
+- Links expire after a set time
+- One-time use only
+- IP-based restrictions available
+- Secure token storage
+- HTTPS required
+
+## Best Practices
+
+- Set appropriate expiration times
+- Include relevant metadata
+- Handle errors gracefully
+- Implement proper logging
+- Monitor usage patterns
