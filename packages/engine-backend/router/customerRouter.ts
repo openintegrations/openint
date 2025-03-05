@@ -127,7 +127,7 @@ export const customerRouterSchema = {
 
 // MARK: - Helpers
 
-function asCustomer(
+export function asCustomer(
   viewer: Viewer,
   input: {customerId?: CustomerId | null},
 ): Viewer<'customer'> {

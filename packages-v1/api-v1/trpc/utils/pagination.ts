@@ -1,0 +1,58 @@
+import {z} from 'zod'
+import {Column, desc, schema} from '@openint/db'
+
+export const zListParams = z.object({
+  limit: z.number().int().positive().max(100).optional(),
+  offset: z.number().int().nonnegative().optional(),
+})
+
+export function zListResponse<T extends z.ZodTypeAny>(itemSchema: T) {
+  return z.object({
+    items: z.array(itemSchema),
+    total: z.number(),
+    limit: z.number().int().positive().max(100),
+    offset: z.number().int().nonnegative(),
+  })
+}
+export function applyPaginationAndOrder<
+  T extends {orderBy: Function; limit: Function; offset: Function},
+  P extends {limit?: number; offset?: number} | undefined,
+>(
+  query: T,
+  orderByColumn: Column<any, any, any> = schema.connection.created_at,
+  params?: P,
+  orderDirection: 'asc' | 'desc' = 'desc',
+): {query: T; limit: number; offset: number} {
+  // Process pagination parameters
+  const limit = params?.limit ?? 50
+  const offset = params?.offset ?? 0
+
+  // Apply ordering
+  let modifiedQuery = query.orderBy(
+    orderDirection === 'desc' ? desc(orderByColumn) : orderByColumn,
+  ) as T
+
+  // Apply pagination
+  modifiedQuery = modifiedQuery.limit(limit).offset(offset) as T
+
+  return {query: modifiedQuery, limit, offset}
+}
+
+export async function processPaginatedResponse<T extends keyof typeof schema>(
+  query: any,
+  entityKey: T,
+): Promise<{
+  items: Array<(typeof schema)[T] extends {$inferSelect: infer U} ? U : never>
+  total: number
+}> {
+  // note in future we can add db specific error handling here
+  const result = await query
+  const total = result.length > 0 ? Number(result[0]?.total ?? 0) : 0
+
+  const items = result.map((r: any) => r[entityKey])
+
+  return {
+    items,
+    total,
+  }
+}

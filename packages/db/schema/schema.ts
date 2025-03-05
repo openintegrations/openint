@@ -20,6 +20,7 @@ export const userRole = pgRole('authenticated')
 // TODO: Missing jwt_org_id() function definition
 
 export const connection = pgTable(
+  // NOTE: shouldn't this have a status or should it calculated based on settings?
   'connection',
   {
     id: varchar()
