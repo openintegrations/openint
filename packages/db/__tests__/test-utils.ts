@@ -1,38 +1,41 @@
 import path from 'node:path'
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
+import {sql} from 'drizzle-orm'
 import {env, envRequired} from '@openint/env'
 import {snakeCase} from '@openint/util'
 import {schema} from '..'
-import type {Database, DatabaseDriver} from '../db'
+import type {AnyDatabase, Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
-import {initDbPg} from '../db.pg'
-import {initDbPGLite} from '../db.pglite'
+import {initDbPg, initDbPgDirect} from '../db.pg'
+import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
 
 interface TestDbInitOptions {
   url: string
-  /** For pglite, whether to enable postgres extensions  */
-  enableExtensions?: boolean
+  logger?: boolean
 }
 
 export const testDbs = {
   // neon driver does not work well for migration at the moment and
   // and should therefore not be used for running migrations
-  neon: ({url}: TestDbInitOptions) =>
-    initDbNeon(url, {role: 'system'}, {logger: false}),
-  pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
-  pglite: ({enableExtensions}: TestDbInitOptions) =>
-    initDbPGLite({logger: false, enableExtensions}),
-}
+  neon: ({url, logger}) => initDbNeon(url, {logger}),
+  pg: ({url, logger}) => initDbPg(url, {logger}),
+  'pg-direct': ({url, logger}) => initDbPgDirect(url, {logger}),
+  pglite: ({logger}) => initDbPGLite({logger}),
+  'pglite-direct': ({logger}) => initDbPGLiteDirect({logger}),
+} satisfies {[k in DatabaseDriver]: (opts: TestDbInitOptions) => Database<k>}
+
+export const ALL_DRIVERS = Object.keys(testDbs) as DatabaseDriver[]
+export const RLS_DRIVERS = ['pg', 'pglite', 'neon'] satisfies DatabaseDriver[]
 
 export type DescribeEachDatabaseOptions<
   T extends DatabaseDriver = DatabaseDriver,
 > = {
-  randomDatabaseFromFilename?: string
-  drivers?: T[]
+  /** Create a random database using the current filename */
+  __filename?: string
+  /** Defaults to `pglite` */
+  drivers?: T[] | 'all' | 'rls'
   migrate?: boolean
   truncateBeforeAll?: boolean
-
-  enableExtensions?: boolean
 } & Omit<TestDbInitOptions, 'url'>
 
 export function describeEachDatabase<T extends DatabaseDriver>(
@@ -40,29 +43,40 @@ export function describeEachDatabase<T extends DatabaseDriver>(
   testBlock: (db: Database<T>) => void,
 ) {
   const {
-    randomDatabaseFromFilename: prefix,
-    drivers = ['pglite'],
+    __filename: prefix,
+    drivers: _drivers = ['pglite'],
     migrate = false,
     truncateBeforeAll = false,
     ...testDbOpts
   } = options
 
+  const drivers: DatabaseDriver[] =
+    _drivers === 'all'
+      ? ALL_DRIVERS
+      : _drivers === 'rls'
+        ? RLS_DRIVERS
+        : _drivers
+
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
-    drivers.includes(d as any),
-  ) as Array<[T, (opts: TestDbInitOptions) => Database<T>]>
+    drivers.includes(d as DatabaseDriver),
+  ) as Array<[T, (opts: TestDbInitOptions) => AnyDatabase]>
 
   describe.each(dbEntriesFiltered)('db: %s', (driver, makeDb) => {
     const baseUrl = new URL(
       // TODO: Make test database url separate env var from prod database url to be safer
       env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL,
     )
-    let baseDb: Database | undefined
+    let baseDb: AnyDatabase | undefined
 
     const name = prefix
-      ? `${snakeCase(path.basename(prefix, path.extname(prefix)))}_${new Date()
-          .toISOString()
-          .replaceAll(/[:Z\-\.]/g, '')
-          .replace(/T/, '_')}_${driver}`
+      ? [
+          snakeCase(path.basename(prefix, path.extname(prefix))),
+          new Date()
+            .toISOString()
+            .replaceAll(/[:Z\-\.]/g, '')
+            .replace(/T/, '_'),
+          driver.replace(/-/g, '_'),
+        ].join('_')
       : undefined
     const url = new URL(baseUrl)
     if (name && url.pathname !== `/${name}`) {
@@ -71,7 +85,11 @@ export function describeEachDatabase<T extends DatabaseDriver>(
     const db = makeDb({url: url.toString(), ...testDbOpts})
 
     beforeAll(async () => {
-      if (driver !== 'pglite' && url.toString() !== baseUrl.toString()) {
+      if (
+        driver !== 'pglite' &&
+        driver !== 'pglite-direct' &&
+        url.toString() !== baseUrl.toString()
+      ) {
         baseDb = makeDb({url: baseUrl.toString(), ...testDbOpts})
         await baseDb.execute(`DROP DATABASE IF EXISTS ${name}`)
         await baseDb.execute(`CREATE DATABASE ${name}`)
@@ -84,7 +102,7 @@ export function describeEachDatabase<T extends DatabaseDriver>(
       }
     })
 
-    testBlock(db)
+    testBlock(db as Database<T>)
 
     afterAll(async () => {
       await db.$end?.()
@@ -94,6 +112,22 @@ export function describeEachDatabase<T extends DatabaseDriver>(
       await baseDb?.$end?.()
     }, 1000)
   })
+}
+
+export async function ensureSchema(thisDb: Database, schema: string) {
+  // Check existence first because we may not have permission to actually create the schema
+  const exists = await thisDb
+    .$exec(
+      sql`SELECT true as exists FROM information_schema.schemata WHERE schema_name = ${schema}`,
+    )
+    .then((r) => r.rows[0]?.['exists'] === true)
+
+  if (exists) {
+    return
+  }
+  await thisDb.$exec(
+    sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};`,
+  )
 }
 
 // Importing `drizzle-kit/api` in this file causes next.js to crash... So we are separating it instead

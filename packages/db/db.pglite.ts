@@ -1,32 +1,88 @@
-import {PGlite} from '@electric-sql/pglite'
-// @ts-expect-error need to update module resolution to node_next for typescript to work, but works at runtime
-import {uuid_ossp} from '@electric-sql/pglite/contrib/uuid_ossp'
-import {drizzle as drizzleLite} from 'drizzle-orm/pglite'
-import {migrate} from 'drizzle-orm/pglite/migrator'
+import type {QueryOptions} from '@electric-sql/pglite'
+import {PGlite, types} from '@electric-sql/pglite'
+import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
+import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
+import {drizzle as drizzlePGLite} from 'drizzle-orm/pglite'
+import {migrate as migratePGLite} from 'drizzle-orm/pglite/migrator'
+import type {Viewer} from '@openint/cdk'
 import {
   dbFactory,
   getDrizzleConfig,
   getMigrationConfig,
   type DbOptions,
 } from './db'
+import {rlsStatementsForViewer} from './schema/rls'
 
-export function initDbPGLite({
-  enableExtensions,
-  ...options
-}: {enableExtensions?: boolean} & DbOptions = {}) {
-  const pglite = new PGlite({
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    extensions: enableExtensions ? {uuid_ossp} : undefined,
-  })
-  const db = drizzleLite({...getDrizzleConfig(options), client: pglite})
+function drizzleForViewer(
+  pglite: PGlite,
+  viewer: Viewer | null,
+  options: DbOptions,
+) {
+  return drizzlePgProxy(async (query, params, method) => {
+    const options: QueryOptions = {
+      rowMode: method === 'all' ? 'array' : 'object',
+      // identity parsers, allow drizzle itself to do the work of mapping based on for example timestamp mode
+      parsers: {
+        [types.TIMESTAMP]: (value) => value,
+        [types.TIMESTAMPTZ]: (value) => value,
+        [types.INTERVAL]: (value) => value,
+        [types.DATE]: (value) => value,
+      },
+    }
+    if (viewer) {
+      const res = await pglite.transaction(async (tx) => {
+        await tx.exec(rlsStatementsForViewer(viewer).join('\n'))
+        return tx.query(query, params, options)
+      })
+      return {rows: res.rows}
+    } else {
+      const res = await pglite.query(query, params, options)
+      return {rows: res.rows}
+    }
+  }, getDrizzleConfig(options))
+}
+
+export function initDbPGLite(options: DbOptions = {}) {
+  const pglite = new PGlite()
+
+  const db = drizzleForViewer(pglite, null, options)
+
   return dbFactory('pglite', db, {
+    $asViewer: (viewer) => drizzleForViewer(pglite, viewer, options),
     async $exec(query) {
       const res = await db.execute(query)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return {rows: res as any[]}
+    },
+    async $migrate() {
+      return migratePgProxy(
+        db,
+        async (queries) => {
+          await pglite.exec(queries.join(';\n'))
+        },
+        getMigrationConfig(),
+      )
+    },
+    // TODO: Implement asViewer so we can actually test it out...
+    async $end() {
+      return pglite.close()
+    },
+  })
+}
+
+// For comparision, not used in prod as not easily used with viewer due to drizzle abstraction
+
+export function initDbPGLiteDirect(options: DbOptions) {
+  const pglite = new PGlite({})
+  const db = drizzlePGLite({...getDrizzleConfig(options), client: pglite})
+  return dbFactory('pglite-direct', db, {
+    async $exec(query) {
+      const res = await db.execute(query)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res.rows as any[]}
     },
     $migrate() {
-      return migrate(db, getMigrationConfig())
+      return migratePGLite(db, getMigrationConfig())
     },
     $end() {
       return pglite.close()

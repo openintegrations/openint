@@ -1,17 +1,10 @@
 import {sql} from 'drizzle-orm'
-import {
-  describeEachDatabase,
-  DescribeEachDatabaseOptions,
-} from '../__tests__/test-utils'
+import {describeEachDatabase} from '../__tests__/test-utils'
 import {dbUpsert, dbUpsertOne} from './upsert'
 
-const options: DescribeEachDatabaseOptions = {
-  randomDatabaseFromFilename: __filename,
-  migrate: false,
-  drivers: ['neon', 'pg', 'pglite'],
-}
+jest.setTimeout(15_000)
 
-describeEachDatabase(options, (db) => {
+describeEachDatabase({drivers: 'all', __filename}, (db) => {
   beforeAll(async () => {
     await db.$exec(sql`
       CREATE TABLE IF NOT EXISTS "test_user" (
