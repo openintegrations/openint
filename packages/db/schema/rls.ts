@@ -39,7 +39,8 @@ export function rlsStatementsForViewer(
   local = true,
 ) {
   return Object.entries(rlsGucForViewer(viewer)).map(
-    ([k, v]) => `SELECT set_config('${k}', '${v}', ${local});`,
+    ([k, v]) =>
+      `SELECT set_config('${k}', ${v != null ? `'${v}'` : 'null'}, ${local});`,
   )
 }
 
