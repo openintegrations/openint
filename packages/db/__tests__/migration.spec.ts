@@ -1,24 +1,17 @@
 import {sql} from 'drizzle-orm'
 import {describeEachDatabase} from './test-utils'
 
-describeEachDatabase(
-  {
-    drivers: ['pglite', 'pglite-direct', 'neon', 'pg', 'pg-direct'],
-    migrate: false,
-  },
-  (db) => {
-    test('run migration', async () => {
-      await db.$migrate()
-      const res = await db.$exec(
-        'select count(*) as count from connector_config',
-      )
-      expect(res.rows[0]).toMatchObject({count: expect.anything()})
+describeEachDatabase({drivers: 'all', migrate: false}, (db) => {
+  test('run migration', async () => {
+    await db.$migrate()
+    const res = await db.$exec('select count(*) as count from connector_config')
+    expect(res.rows[0]).toMatchObject({count: expect.anything()})
 
-      // Should be noop
-      await db.$migrate()
-      const rows = await db
-        .$exec<{table_schema: string; table_name: string}>(
-          sql`
+    // Should be noop
+    await db.$migrate()
+    const rows = await db
+      .$exec<{table_schema: string; table_name: string}>(
+        sql`
           SELECT
             table_schema,
             table_name
@@ -31,13 +24,12 @@ describeEachDatabase(
             table_schema,
             table_name;
         `,
-        )
-        .then((r) => r.rows)
+      )
+      .then((r) => r.rows)
 
-      expect(rows).toContainEqual({
-        table_schema: 'public',
-        table_name: 'event',
-      })
+    expect(rows).toContainEqual({
+      table_schema: 'public',
+      table_name: 'event',
     })
-  },
-)
+  })
+})

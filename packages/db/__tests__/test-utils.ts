@@ -12,25 +12,28 @@ import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
 interface TestDbInitOptions {
   url: string
 }
-
 const logger = Boolean(env.DEBUG)
 
 export const testDbs = {
   // neon driver does not work well for migration at the moment and
   // and should therefore not be used for running migrations
-  neon: ({url}: TestDbInitOptions) => initDbNeon(url, {logger}),
-  pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger}),
-  'pg-direct': ({url}: TestDbInitOptions) => initDbPgDirect(url, {logger}),
-  pglite: ({}: TestDbInitOptions) => initDbPGLite({logger}),
-  'pglite-direct': ({}: TestDbInitOptions) => initDbPGLiteDirect({logger}),
-}
+  neon: ({url}) => initDbNeon(url, {logger}),
+  pg: ({url}) => initDbPg(url, {logger}),
+  'pg-direct': ({url}) => initDbPgDirect(url, {logger}),
+  pglite: ({}) => initDbPGLite({logger}),
+  'pglite-direct': ({}) => initDbPGLiteDirect({logger}),
+} satisfies {[k in DatabaseDriver]: (opts: TestDbInitOptions) => Database<k>}
+
+export const ALL_DRIVERS = Object.keys(testDbs) as DatabaseDriver[]
+export const RLS_DRIVERS = ['pg', 'pglite', 'neon'] satisfies DatabaseDriver[]
 
 export type DescribeEachDatabaseOptions<
   T extends DatabaseDriver = DatabaseDriver,
 > = {
   /** Create a random database using the current filename */
   __filename?: string
-  drivers?: T[]
+  /** Defaults to `pglite` */
+  drivers?: T[] | 'all' | 'rls'
   migrate?: boolean
   truncateBeforeAll?: boolean
 } & Omit<TestDbInitOptions, 'url'>
@@ -41,14 +44,21 @@ export function describeEachDatabase<T extends DatabaseDriver>(
 ) {
   const {
     __filename: prefix,
-    drivers = ['pglite'],
+    drivers: _drivers = ['pglite'],
     migrate = false,
     truncateBeforeAll = false,
     ...testDbOpts
   } = options
 
+  const drivers: DatabaseDriver[] =
+    _drivers === 'all'
+      ? ALL_DRIVERS
+      : _drivers === 'rls'
+        ? RLS_DRIVERS
+        : _drivers
+
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
-    drivers.includes(d as any),
+    drivers.includes(d as DatabaseDriver),
   ) as Array<[T, (opts: TestDbInitOptions) => AnyDatabase]>
 
   describe.each(dbEntriesFiltered)('db: %s', (driver, makeDb) => {

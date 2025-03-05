@@ -69,14 +69,7 @@ test('column definition', () => {
   expect(table.data.dataType).toEqual('json')
 })
 
-// TODO: Test against each driver of the database to ensure compatibility across drivers
-
-const options: DescribeEachDatabaseOptions = {
-  drivers: ['pglite', 'neon', 'pg'],
-  __filename: __filename,
-}
-
-describeEachDatabase(options, (db) => {
+describeEachDatabase({drivers: 'rls', __filename}, (db) => {
   beforeAll(async () => {
     const migrations = await generateMigration(
       generateDrizzleJson({}),
