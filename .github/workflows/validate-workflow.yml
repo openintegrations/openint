@@ -107,7 +107,7 @@ jobs:
           sudo apt-get install -y postgresql-client-17
           mkdir -p ./artifacts
           /usr/lib/postgresql/17/bin/pg_dump $DATABASE_URL --inserts > ./artifacts/dump.sql
-          /usr/lib/postgresql/17/bin/pg_dump $DATABASE_URL --inserts --data-only --table __drizzle_migrations
+          /usr/lib/postgresql/17/bin/pg_dump $DATABASE_URL --inserts --data-only --table drizzle.__drizzle_migrations
 
       - name: Archive migration artifacts
         uses: actions/upload-artifact@v4
