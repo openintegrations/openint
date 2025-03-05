@@ -1,6 +1,6 @@
 import {z} from '@opensdks/util-zod'
 import {TRPCError} from '@trpc/server'
-import * as jwt from 'jsonwebtoken'
+import * as jose from 'jose'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util'
 import {R, zFunction} from '@openint/util'
 import type {CustomerId, ExtCustomerId, Id, UserId} from './id.types'
@@ -151,33 +151,26 @@ export const zViewerFromJwtPayload = zJwtPayload
 export const zViewerFromUnverifiedJwtToken = z
   .string()
   .nullish()
-  .transform((token) => (token ? jwt.decode(token, {json: true}) : token))
+  .transform((token) => (token ? jose.decodeJwt(token) : token))
   .pipe(zViewerFromJwtPayload)
 
 // MARK: - JWT Client, maybe doesn't actually belong in here? Among
 // other things would allow us to not have to import @trpc/server on the frontend
 
-export function jwtDecode(token: string) {
-  return jwt.decode(token, {json: true})
-}
-
 export const makeJwtClient = zFunction(
   z.object({secretOrPublicKey: z.string()}),
   ({secretOrPublicKey}) => ({
-    verifyViewer: (token?: string | null): Viewer => {
+    verifyViewer: async (token?: string | null): Promise<Viewer> => {
       if (!token) {
         return {role: 'anon'}
       }
       try {
-        const data = jwt.verify(token, secretOrPublicKey)
-        if (typeof data === 'string') {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'JWT payload must be an object, not a string.',
-          })
-        }
+        const result = await jose.jwtVerify(
+          token,
+          new TextEncoder().encode(secretOrPublicKey),
+        )
         // console.log('jwt.verify', data)
-        return zViewerFromJwtPayload.parse(data)
+        return zViewerFromJwtPayload.parse(result.payload)
       } catch (err) {
         // console.log('jwt.verify Error', err)
         // Actually throw token expired errror
@@ -188,7 +181,7 @@ export const makeJwtClient = zFunction(
         // return {role: 'anon'}
       }
     },
-    signViewer: (
+    signViewer: async (
       viewer: Viewer,
       {validityInSeconds = 3600}: {validityInSeconds?: number} = {},
     ) => {
@@ -217,8 +210,11 @@ export const makeJwtClient = zFunction(
         }),
         // Partial is a lie, it should not happen
       } satisfies Partial<z.input<typeof zViewerFromJwtPayload>>
-
-      return jwt.sign(payload, secretOrPublicKey)
+      return new jose.SignJWT(payload)
+        .setProtectedHeader({alg: 'HS256'})
+        .setIssuedAt()
+        .setExpirationTime(validityInSeconds)
+        .sign(new TextEncoder().encode(secretOrPublicKey))
     },
   }),
 )
