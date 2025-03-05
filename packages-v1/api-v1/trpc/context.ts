@@ -15,8 +15,8 @@ export async function viewerFromRequest(
   req: Request,
 ): Promise<Viewer> {
   const token = req.headers.get('authorization')?.match(/^Bearer (.+)/)?.[1]
-  // API Key here
-  if (token?.startsWith('key_')) {
+  // JWT always include a dot. Without a dot we assume it's an API key
+  if (token && !token.includes('.')) {
     const org = await ctx.db.query.organization.findFirst({
       columns: {id: true},
       where: eq(schema.organization.api_key, token),
