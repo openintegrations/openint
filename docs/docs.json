@@ -6,6 +6,15 @@
     "light": "#07C983",
     "dark": "#0D9373"
   },
+  "footerSocials": {
+    "github": "https://github.com/openintegrations/openint",
+    "twitter": "https://twitter.com/openintdev"
+  },
+  "analytics": {
+    "posthog": {
+      "apiKey": "phc_30EStnJPoshPRjyPvxEe8gYP85AaacFPMYHsiPddpRX"
+    }
+  },
   "navigation": {
     "versions": [
       {
