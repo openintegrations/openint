@@ -74,7 +74,7 @@ export function initDbPGLite(options: DbOptions = {}) {
 export function initDbPGLiteDirect(options: DbOptions) {
   const pglite = new PGlite({})
   const db = drizzlePGLite({...getDrizzleConfig(options), client: pglite})
-  return dbFactory('pglite_direct', db, {
+  return dbFactory('pglite-direct', db, {
     async $exec(query) {
       const res = await db.execute(query)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any

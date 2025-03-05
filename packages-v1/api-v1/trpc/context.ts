@@ -1,6 +1,6 @@
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
-import {Database} from '@openint/db'
+import {AnyDatabase} from '@openint/db/db'
 import {envRequired} from '@openint/env'
 import type {RouterContext, ViewerContext} from './_base'
 
@@ -18,7 +18,7 @@ export function createRouterContext({
   db,
 }: {
   req: Request
-  db: Database
+  db: AnyDatabase
 }): RouterContext {
   const currentViewer = viewerFromRequest(req)
 

@@ -86,7 +86,7 @@ export function initDbPg(url: string, options: DbOptions = {}) {
 export function initDbPgDirect(url: string, options: DbOptions = {}) {
   const pool = new Pool({connectionString: url})
   const db = drizzlePg({...getDrizzleConfig(options), client: pool})
-  return dbFactory('pg_direct', db, {
+  return dbFactory('pg-direct', db, {
     async $exec(query) {
       const res = await db.execute(query)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any

@@ -1,7 +1,6 @@
 import {sql} from 'drizzle-orm'
 import type {Viewer} from '@openint/cdk'
-import {Database} from '..'
-import {DatabaseDriver, DatabaseTransaction} from '../db'
+import type {Database, DatabaseDriver} from '../db'
 
 /**
  * This sets the postgres grand unified config (GUC) and determines the identity
@@ -63,3 +62,7 @@ export function withDatabaseForViewer<T extends DatabaseDriver>(
     await fn(tx)
   })
 }
+
+export type DatabaseTransaction<
+  TDriver extends DatabaseDriver = DatabaseDriver,
+> = Parameters<Parameters<Database<TDriver>['transaction']>[0]>[0]

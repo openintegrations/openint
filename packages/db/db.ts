@@ -9,23 +9,19 @@ import * as schema from './schema/schema'
 
 // MARK: - For users
 
-type AnyDatabase =
+type _Database =
   | ReturnType<typeof initDbNeon>
   | ReturnType<typeof initDbPg>
   | ReturnType<typeof initDbPgDirect>
   | ReturnType<typeof initDbPGLite>
   | ReturnType<typeof initDbPGLiteDirect>
 
-export type DatabaseDriver = AnyDatabase['driverType']
+export type DatabaseDriver = _Database['driverType']
 
 export type Database<TDriver extends DatabaseDriver = DatabaseDriver> = Extract<
-  AnyDatabase,
+  _Database,
   {driverType: TDriver}
 >
-
-export type DatabaseTransaction<
-  TDriver extends DatabaseDriver = DatabaseDriver,
-> = Parameters<Parameters<Database<TDriver>['transaction']>[0]>[0]
 
 // MARK: - For Implementors
 
@@ -85,3 +81,8 @@ export function dbFactory<
   Object.assign(db, additioanlExtensions)
   return db as typeof db & typeof additioanlExtensions
 }
+
+export type AnyDrizzle = NonNullable<Database['_drizzle']>
+export type AnyDatabase = ReturnType<
+  typeof dbFactory<DatabaseDriver, AnyDrizzle, SpecificExtensions<AnyDrizzle>>
+>

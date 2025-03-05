@@ -1,11 +1,11 @@
 import {initTRPC, TRPCError} from '@trpc/server'
 import {type OpenApiMeta} from 'trpc-to-openapi'
 import {hasRole, type Viewer} from '@openint/cdk'
-import type {Database} from '@openint/db'
+import {AnyDrizzle} from '@openint/db/db'
 
 export interface ViewerContext {
   viewer: Viewer
-  db: NonNullable<Database['_drizzle']>
+  db: AnyDrizzle
 }
 
 export interface RouterContext extends ViewerContext {

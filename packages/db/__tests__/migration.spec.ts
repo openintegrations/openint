@@ -3,7 +3,7 @@ import {describeEachDatabase} from './test-utils'
 
 describeEachDatabase(
   {
-    drivers: ['pglite', 'pglite_direct', 'neon', 'pg', 'pg_direct'],
+    drivers: ['pglite', 'pglite-direct', 'neon', 'pg', 'pg-direct'],
     migrate: false,
   },
   (db) => {

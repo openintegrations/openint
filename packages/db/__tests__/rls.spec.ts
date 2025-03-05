@@ -1,7 +1,7 @@
 import {sql} from 'drizzle-orm'
 import {describeEachDatabase} from './test-utils'
 
-describeEachDatabase({drivers: ['pglite_direct']}, (db) => {
+describeEachDatabase({drivers: ['pglite-direct']}, (db) => {
   beforeAll(async () => {
     for (const query of [
       sql`

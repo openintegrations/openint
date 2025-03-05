@@ -4,7 +4,7 @@ import {sql} from 'drizzle-orm'
 import {env, envRequired} from '@openint/env'
 import {snakeCase} from '@openint/util'
 import {schema} from '..'
-import type {Database, DatabaseDriver} from '../db'
+import type {AnyDatabase, Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
 import {initDbPg, initDbPgDirect} from '../db.pg'
 import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
@@ -18,9 +18,11 @@ export const testDbs = {
   // and should therefore not be used for running migrations
   neon: ({url}: TestDbInitOptions) => initDbNeon(url, {logger: false}),
   pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
-  pg_direct: ({url}: TestDbInitOptions) => initDbPgDirect(url, {logger: false}),
+  'pg-direct': ({url}: TestDbInitOptions) =>
+    initDbPgDirect(url, {logger: false}),
   pglite: ({}: TestDbInitOptions) => initDbPGLite({logger: false}),
-  pglite_direct: ({}: TestDbInitOptions) => initDbPGLiteDirect({logger: false}),
+  'pglite-direct': ({}: TestDbInitOptions) =>
+    initDbPGLiteDirect({logger: false}),
 }
 
 export type DescribeEachDatabaseOptions<
@@ -46,14 +48,14 @@ export function describeEachDatabase<T extends DatabaseDriver>(
 
   const dbEntriesFiltered = Object.entries(testDbs).filter(([d]) =>
     drivers.includes(d as any),
-  ) as Array<[T, (opts: TestDbInitOptions) => Database<T>]>
+  ) as Array<[T, (opts: TestDbInitOptions) => AnyDatabase]>
 
   describe.each(dbEntriesFiltered)('db: %s', (driver, makeDb) => {
     const baseUrl = new URL(
       // TODO: Make test database url separate env var from prod database url to be safer
       env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL,
     )
-    let baseDb: Database | undefined
+    let baseDb: AnyDatabase | undefined
 
     const name = prefix
       ? `${snakeCase(path.basename(prefix, path.extname(prefix)))}_${new Date()
@@ -81,7 +83,7 @@ export function describeEachDatabase<T extends DatabaseDriver>(
       }
     })
 
-    testBlock(db)
+    testBlock(db as Database<T>)
 
     afterAll(async () => {
       await db.$end?.()
