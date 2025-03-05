@@ -56,11 +56,7 @@ export function initDbPGLite({viewer, ...options}: InitPgLiteOptions) {
       return migratePgProxy(
         db,
         async (queries) => {
-          await pglite.transaction(async (tx) => {
-            for (const query of queries) {
-              await tx.exec(query)
-            }
-          })
+          await pglite.exec(queries.join(';\n'))
         },
         getMigrationConfig(),
       )
