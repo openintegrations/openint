@@ -46,13 +46,13 @@ export function getDrizzleConfig(
 export function getMigrationConfig(): MigrationConfig {
   return {
     migrationsFolder: path.join(__dirname, './migrations'),
-    migrationsSchema: 'public',
+    // Schema public does not work as not all variants support it (e.g. pg-proxy)
+    // migrationsSchema: 'public',
   }
 }
 
 /** Standardize difference across different drizzle postgres drivers */
 interface SpecificExtensions<TDrizzle> {
-  _drizzle?: TDrizzle
   $asViewer?: (viewer: Viewer) => TDrizzle
   $exec<T extends Record<string, unknown>>(
     query: string | SQLWrapper,
@@ -61,13 +61,14 @@ interface SpecificExtensions<TDrizzle> {
   $end?(): Promise<void>
 }
 
-export function dbFactory<TDriver extends string, TDrizzle>(
-  driver: TDriver,
-  _db: TDrizzle,
-  extension: SpecificExtensions<TDrizzle>,
-) {
+export function dbFactory<
+  TDriver extends string,
+  TDrizzle,
+  TExtension extends SpecificExtensions<TDrizzle>,
+>(driver: TDriver, _db: TDrizzle, extension: TExtension) {
   Object.assign(_db as {}, {driverType: driver, ...extension})
-  const db = _db as typeof _db & typeof extension & {driverType: TDriver}
+  const db = _db as typeof _db &
+    typeof extension & {driverType: TDriver; readonly _drizzle?: TDrizzle}
 
   /** Helpers that are not driver specific */
   const additioanlExtensions = {

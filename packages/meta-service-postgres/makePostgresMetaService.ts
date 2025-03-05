@@ -17,7 +17,7 @@ import {R, zFunction} from '@openint/util'
 type Deps = ReturnType<typeof _getDeps>
 const _getDeps = (opts: {databaseUrl: string; viewer: Viewer}) => {
   const {viewer} = opts
-  const db = initDbNeon(opts.databaseUrl).$asViewer!(viewer)
+  const db = initDbNeon(opts.databaseUrl).$asViewer(viewer)
   const getDb = () => db
   type PgTransaction = Parameters<Parameters<(typeof db)['transaction']>[0]>[0]
 

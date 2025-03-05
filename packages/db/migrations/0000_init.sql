@@ -85,6 +85,7 @@ BEGIN
   LANGUAGE plpgsql
   VOLATILE;
 
+  RAISE NOTICE 'generate_ulid() via pgcrypto created';
 EXCEPTION WHEN OTHERS THEN
   -- This block executes if the extension creation fails
   RAISE NOTICE 'Failed to load pgcrypto for ulid, fallback for tests: %', SQLERRM;

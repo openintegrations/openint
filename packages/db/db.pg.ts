@@ -68,17 +68,7 @@ export function initDbPg(url: string, options: DbOptions = {}) {
           }
           const client = await pool.connect()
           try {
-            for (const query of queries) {
-              await client
-                .query(query)
-                .catch((err) => {
-                  console.error('error migrating', query, err)
-                  throw err
-                })
-                .then(() => {
-                  console.log('migrated', query)
-                })
-            }
+            await client.query(queries.join(';\n'))
           } finally {
             client.release()
           }

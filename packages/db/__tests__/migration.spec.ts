@@ -1,13 +1,11 @@
 import {sql} from 'drizzle-orm'
 import {describeEachDatabase} from './test-utils'
 
-// Extension always cause issues... so we just disable pglite for now...
-// ReferenceError: You are trying to `import` a file outside of the scope of the test code.
-
-// at Runtime.linkAndEvaluateModule (node_modules/.pnpm/jest-runtime@30.0.0-alpha.6/node_modules/jest-runtime/build/index.js:678:13)
-// at Yr (node_modules/.pnpm/@electric-sql+pglite@0.2.17/node_modules/@electric-sql/pglite/src/extensionUtils.ts:11:5)
 describeEachDatabase(
-  {drivers: ['pglite', 'pglite_direct'], migrate: false},
+  {
+    drivers: ['pglite', 'pglite_direct', 'neon', 'pg', 'pg_direct'],
+    migrate: false,
+  },
   (db) => {
     test('run migration', async () => {
       await db.$migrate()
@@ -16,6 +14,8 @@ describeEachDatabase(
       )
       expect(res.rows[0]).toMatchObject({count: expect.anything()})
 
+      // Should be noop
+      await db.$migrate()
       const rows = await db
         .$exec<{table_schema: string; table_name: string}>(
           sql`
