@@ -46,6 +46,7 @@ function drizzleForViewer(
         )
     const res = allResponses.pop()
 
+    // This is a really poor workaround because `types` is not working on prod though works in tests... What gives?
     // TODO: Make me work for arrayMode: true
     if (res?.rows) {
       res.rows = res.rows.map((row) => {
