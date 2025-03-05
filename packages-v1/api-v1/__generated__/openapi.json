@@ -307,7 +307,7 @@
                     "total": {
                       "type": "integer",
                       "minimum": 0,
-                      "description": "Total number of items"
+                      "description": "Total number of items in the database for the organization"
                     },
                     "limit": {
                       "type": "integer",
@@ -627,7 +627,7 @@
                     "total": {
                       "type": "integer",
                       "minimum": 0,
-                      "description": "Total number of items"
+                      "description": "Total number of items in the database for the organization"
                     },
                     "limit": {
                       "type": "integer",
@@ -745,98 +745,90 @@
                     "description": "How long the magic link will be valid for (in seconds) before it expires"
                   },
                   "redirect_url": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": "string",
                     "description": "Where to send user to after connect / if they press back button"
                   },
                   "connector_names": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
-                    "enum": [
-                      "aircall",
-                      "airtable",
-                      "apollo",
-                      "beancount",
-                      "brex",
-                      "coda",
-                      "confluence",
-                      "discord",
-                      "finch",
-                      "firebase",
-                      "foreceipt",
-                      "github",
-                      "gong",
-                      "google",
-                      "greenhouse",
-                      "heron",
-                      "hubspot",
-                      "intercom",
-                      "jira",
-                      "kustomer",
-                      "lever",
-                      "linear",
-                      "lunchmoney",
-                      "merge",
-                      "microsoft",
-                      "moota",
-                      "onebrick",
-                      "outreach",
-                      "pipedrive",
-                      "plaid",
-                      "qbo",
-                      "ramp",
-                      "salesforce",
-                      "salesloft",
-                      "saltedge",
-                      "slack",
-                      "splitwise",
-                      "stripe",
-                      "teller",
-                      "toggl",
-                      "twenty",
-                      "wise",
-                      "xero",
-                      "yodlee",
-                      "zohodesk",
-                      "googledrive"
-                    ],
-                    "description": "Filter integrations by comma separated connector names"
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "aircall",
+                        "airtable",
+                        "apollo",
+                        "beancount",
+                        "brex",
+                        "coda",
+                        "confluence",
+                        "discord",
+                        "finch",
+                        "firebase",
+                        "foreceipt",
+                        "github",
+                        "gong",
+                        "google",
+                        "greenhouse",
+                        "heron",
+                        "hubspot",
+                        "intercom",
+                        "jira",
+                        "kustomer",
+                        "lever",
+                        "linear",
+                        "lunchmoney",
+                        "merge",
+                        "microsoft",
+                        "moota",
+                        "onebrick",
+                        "outreach",
+                        "pipedrive",
+                        "plaid",
+                        "qbo",
+                        "ramp",
+                        "salesforce",
+                        "salesloft",
+                        "saltedge",
+                        "slack",
+                        "splitwise",
+                        "stripe",
+                        "teller",
+                        "toggl",
+                        "twenty",
+                        "wise",
+                        "xero",
+                        "yodlee",
+                        "zohodesk",
+                        "googledrive"
+                      ],
+                      "description": ""
+                    },
+                    "default": [],
+                    "description": "Filter integrations by connector names"
                   },
                   "connection_id": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": "string",
                     "pattern": "^conn_",
                     "description": "The specific connection id to load"
                   },
                   "theme": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": "string",
                     "enum": [
                       "light",
                       "dark"
                     ],
+                    "default": "light",
                     "description": "Magic Link display theme"
                   },
                   "view": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": "string",
                     "enum": [
                       "manage",
                       "manage-deeplink",
                       "add",
                       "add-deeplink"
                     ],
-                    "description": "Magic Link tab view to load as default"
+                    "default": "add",
+                    "description": "Magic Link tab view to load in the connect magic link"
                   }
                 }
               }
@@ -853,7 +845,7 @@
                   "properties": {
                     "magic_link_url": {
                       "type": "string",
-                      "description": "The Connect magic link url to share with the user. This url will expire in 30 days"
+                      "description": "The Connect magic link url to share with the user."
                     }
                   },
                   "required": [

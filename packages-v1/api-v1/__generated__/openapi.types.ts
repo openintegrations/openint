@@ -2457,7 +2457,7 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["core.connection"][];
-                        /** @description Total number of items */
+                        /** @description Total number of items in the database for the organization */
                         total: number;
                         /**
                          * @description Limit the number of items returned
@@ -2618,7 +2618,7 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["core.connector_config"][];
-                        /** @description Total number of items */
+                        /** @description Total number of items in the database for the organization */
                         total: number;
                         /**
                          * @description Limit the number of items returned
@@ -2699,24 +2699,26 @@ export interface operations {
                      */
                     validity_in_seconds?: number;
                     /** @description Where to send user to after connect / if they press back button */
-                    redirect_url?: string | null;
+                    redirect_url?: string;
                     /**
-                     * @description Filter integrations by comma separated connector names
-                     * @enum {string|null}
+                     * @description Filter integrations by connector names
+                     * @default []
                      */
-                    connector_names?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive" | null;
+                    connector_names?: ("aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive")[];
                     /** @description The specific connection id to load */
-                    connection_id?: string | null;
+                    connection_id?: string;
                     /**
                      * @description Magic Link display theme
-                     * @enum {string|null}
+                     * @default light
+                     * @enum {string}
                      */
-                    theme?: "light" | "dark" | null;
+                    theme?: "light" | "dark";
                     /**
-                     * @description Magic Link tab view to load as default
-                     * @enum {string|null}
+                     * @description Magic Link tab view to load in the connect magic link
+                     * @default add
+                     * @enum {string}
                      */
-                    view?: "manage" | "manage-deeplink" | "add" | "add-deeplink" | null;
+                    view?: "manage" | "manage-deeplink" | "add" | "add-deeplink";
                 };
             };
         };
@@ -2728,7 +2730,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description The Connect magic link url to share with the user. This url will expire in 30 days */
+                        /** @description The Connect magic link url to share with the user. */
                         magic_link_url: string;
                     };
                 };

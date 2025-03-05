@@ -22,7 +22,11 @@ export const zListParams = z.object({
 export function zListResponse<T extends z.ZodTypeAny>(itemSchema: T) {
   return z.object({
     items: z.array(itemSchema),
-    total: z.number().int().min(0).describe('Total number of items'),
+    total: z
+      .number()
+      .int()
+      .min(0)
+      .describe('Total number of items in the database for the organization'),
     limit: z
       .number()
       .int()

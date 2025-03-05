@@ -33,29 +33,28 @@ export const customerRouter = router({
           ),
         redirect_url: z
           .string()
-          .nullable()
           .optional()
           .describe(
             'Where to send user to after connect / if they press back button',
           ),
-        connector_names: zConnectorName
-          .nullable()
+        connector_names: z
+          .array(zConnectorName.describe(''))
           .optional()
-          .describe('Filter integrations by comma separated connector names'),
+          .default([])
+          .describe('Filter integrations by connector names'),
         connection_id: zConnectionId
-          .nullable()
           .optional()
           .describe('The specific connection id to load'),
         theme: z
           .enum(['light', 'dark'])
-          .nullable()
           .optional()
+          .default('light')
           .describe('Magic Link display theme'),
         view: z
           .enum(['manage', 'manage-deeplink', 'add', 'add-deeplink'])
-          .nullable()
+          .default('add')
           .optional()
-          .describe('Magic Link tab view to load as default'),
+          .describe('Magic Link tab view to load in the connect magic link'),
       }),
     )
     .output(
@@ -85,9 +84,7 @@ export const customerRouter = router({
       }
 
       if (input.connector_names) {
-        const connectorNames = input.connector_names
-          .split(',')
-          .map((name) => name.trim())
+        const connectorNames = input.connector_names.map((name) => name.trim())
         url.searchParams.set('connectorNames', connectorNames.join(','))
       }
 
