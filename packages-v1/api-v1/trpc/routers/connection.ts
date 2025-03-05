@@ -4,7 +4,7 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zCustomerId, zId} from '@openint/cdk'
 import {and, count, eq, schema} from '@openint/db'
-import {publicProcedure, router, RouterContext} from '../_base'
+import {publicProcedure, router, type RouterContext} from '../_base'
 import {core} from '../../models'
 import {expandConnector} from '../utils/connectorUtils'
 import {
@@ -206,8 +206,7 @@ export const connectionRouter = router({
           items.map((conn) =>
             formatConnection(
               ctx,
-              // @ts-ignore, QQ why is connector_config_id string|null in schema?
-              conn,
+              conn as any,
               input?.include_secrets ?? 'none',
               input?.expand ?? [],
             ),

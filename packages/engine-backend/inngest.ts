@@ -15,7 +15,7 @@ export const persistEventsMiddleware = new InngestMiddleware({
 
     return {
       onSendEvent() {
-        const db = initDbNeon(env.DATABASE_URL, {role: 'system'})
+        const db = initDbNeon(env.DATABASE_URL)
         return {
           async transformInput({payloads}) {
             function getConnIdForEvent(ev: {data?: Record<string, unknown>}) {
