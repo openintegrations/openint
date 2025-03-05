@@ -206,7 +206,7 @@ export const connectionRouter = router({
           items.map((conn) =>
             formatConnection(
               ctx,
-              conn,
+              conn as any,
               input?.include_secrets ?? 'none',
               input?.expand ?? [],
             ),

@@ -127,6 +127,7 @@ jobs:
           pnpm wait-on tcp:8288
 
       - name: Run tests
+        if: always()
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
 
       # - name: Setup upterm session
