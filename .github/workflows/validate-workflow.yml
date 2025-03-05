@@ -126,17 +126,26 @@ jobs:
           npx inngest-cli@latest dev &
           pnpm wait-on tcp:8288
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
+      # - name: Setup upterm session
+      #   uses: lhotari/action-upterm@v1
 
-      - name: Run tests
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
+      # Run filter tests...
+
+      - name: Run tests -- db
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- db
+
+      - name: Run tests -- api-v1
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- api-v1
+
+      - name: Run tests -- apps/web
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web
 
       - name: Run lint
         run: pnpm run lint
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: build-artifacts
           path: |
