@@ -34,7 +34,12 @@ module.exports = {
     'default',
     [
       './node_modules/jest-html-reporter',
-      {outputPath: './artifacts/test-report.html'},
+      {
+        outputPath: './artifacts/test-report.html',
+        includeFailureMsg: true,
+        includeConsoleLog: false,
+        includeSuiteFailure: true,
+      },
     ],
   ],
 }
