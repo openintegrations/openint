@@ -2383,6 +2383,7 @@ export interface operations {
             };
             header?: never;
             path: {
+                /** @description The id of the connection, starts with `conn_` */
                 id: string;
             };
             cookie?: never;
@@ -2448,11 +2449,15 @@ export interface operations {
     listConnections: {
         parameters: {
             query?: {
+                /** @description Limit the number of items returned */
                 limit?: number;
+                /** @description Offset the items returned */
                 offset?: number;
                 /** @description The name of the connector */
                 connector_name?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive";
+                /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                 customer_id?: string;
+                /** @description The id of the connector config, starts with `ccfg_` */
                 connector_config_id?: string;
                 /** @description Controls secret inclusion: none (default), basic (auth only), or all secrets */
                 include_secrets?: "none" | "basic" | "all";
@@ -2472,8 +2477,17 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["core.connection"][];
+                        /** @description Total number of items */
                         total: number;
+                        /**
+                         * @description Limit the number of items returned
+                         * @default 50
+                         */
                         limit: number;
+                        /**
+                         * @description Offset the items returned
+                         * @default 0
+                         */
                         offset: number;
                     };
                 };
@@ -2530,6 +2544,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description The id of the connection, starts with `conn_` */
                 id: string;
             };
             cookie?: never;
@@ -2543,6 +2558,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        /** @description The id of the connection, starts with `conn_` */
                         id: string;
                         /**
                          * @description Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)
@@ -2554,6 +2570,7 @@ export interface operations {
                          * @enum {string}
                          */
                         error?: "refresh_failed" | "unknown_external_error";
+                        /** @description Optional expanded error message */
                         errorMessage?: string;
                     };
                 };
@@ -2599,7 +2616,9 @@ export interface operations {
     listConnectorConfigs: {
         parameters: {
             query?: {
+                /** @description Limit the number of items returned */
                 limit?: number;
+                /** @description Offset the items returned */
                 offset?: number;
                 expand?: "connector"[];
                 /** @description The name of the connector */
@@ -2619,8 +2638,17 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["core.connector_config"][];
+                        /** @description Total number of items */
                         total: number;
+                        /**
+                         * @description Limit the number of items returned
+                         * @default 50
+                         */
                         limit: number;
+                        /**
+                         * @description Offset the items returned
+                         * @default 0
+                         */
                         offset: number;
                     };
                 };
@@ -2675,7 +2703,9 @@ export interface operations {
     listEvents: {
         parameters: {
             query?: {
+                /** @description Limit the number of items returned */
                 limit?: number;
+                /** @description Offset the items returned */
                 offset?: number;
             };
             header?: never;
@@ -2692,8 +2722,17 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["core.event"][];
+                        /** @description Total number of items */
                         total: number;
+                        /**
+                         * @description Limit the number of items returned
+                         * @default 50
+                         */
                         limit: number;
+                        /**
+                         * @description Offset the items returned
+                         * @default 0
+                         */
                         offset: number;
                     };
                 };
@@ -2755,9 +2794,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /** @description The email address of the customer */
-                    email?: string;
-                    /** @description Anything that uniquely identifies the customer that you will be sending the magic link to */
+                    /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                     customer_id: string;
                     /**
                      * @description How long the magic link will be valid for (in seconds) before it expires
@@ -2771,7 +2808,7 @@ export interface operations {
                      * @enum {string|null}
                      */
                     connector_names?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive" | null;
-                    /** @description Filter managed connections by connection id */
+                    /** @description The specific connection id to load */
                     connection_id?: string | null;
                     /**
                      * @description Magic Link display theme
@@ -2779,7 +2816,7 @@ export interface operations {
                      */
                     theme?: "light" | "dark" | null;
                     /**
-                     * @description Magic Link tab view
+                     * @description Magic Link tab view to load as default
                      * @enum {string|null}
                      */
                     view?: "manage" | "manage-deeplink" | "add" | "add-deeplink" | null;
@@ -2794,7 +2831,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        url: string;
+                        magic_link_url: string;
                     };
                 };
             };
@@ -2846,7 +2883,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /** @description Anything that uniquely identifies the customer that you will be sending the token to */
+                    /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                     customer_id: string;
                     /**
                      * @description How long the token will be valid for (in seconds) before it expires

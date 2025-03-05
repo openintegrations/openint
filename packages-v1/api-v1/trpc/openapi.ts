@@ -17,14 +17,14 @@ export function generateOpenAPISpec({
         name: 'authorization',
         in: 'header',
         description:
-          'Organization API key passed in the authorization header with format: Bearer {apiKey}',
+          'Organization API key generated in the OpenInt Console and passed in the `authorization` header with format: `Bearer {apiKey}`',
       },
       CustomerToken: {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
         description:
-          'Customer authentication token created using the API passed in the authorization header with format: Bearer {token}',
+          'Customer authentication token created using the create customer token API and passed in the `authorization` header with format: `Bearer {token}`',
       },
     },
   })

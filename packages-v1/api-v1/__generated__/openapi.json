@@ -27,9 +27,11 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The id of the connection, starts with `conn_`",
             "schema": {
               "type": "string",
-              "pattern": "^conn_"
+              "pattern": "^conn_",
+              "description": "The id of the connection, starts with `conn_`"
             },
             "required": true
           },
@@ -160,18 +162,24 @@
           {
             "in": "query",
             "name": "limit",
+            "description": "Limit the number of items returned",
             "schema": {
               "type": "integer",
-              "exclusiveMinimum": 0,
-              "maximum": 100
+              "minimum": 0,
+              "maximum": 100,
+              "default": 50,
+              "description": "Limit the number of items returned"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "Offset the items returned",
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
             }
           },
           {
@@ -234,16 +242,20 @@
           {
             "in": "query",
             "name": "customer_id",
+            "description": "The id of the customer in your application. Ensure it is unique for that customer.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The id of the customer in your application. Ensure it is unique for that customer."
             }
           },
           {
             "in": "query",
             "name": "connector_config_id",
+            "description": "The id of the connector config, starts with `ccfg_`",
             "schema": {
               "type": "string",
-              "pattern": "^ccfg_"
+              "pattern": "^ccfg_",
+              "description": "The id of the connector config, starts with `ccfg_`"
             }
           },
           {
@@ -292,16 +304,22 @@
                       }
                     },
                     "total": {
-                      "type": "number"
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Total number of items"
                     },
                     "limit": {
                       "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 100
+                      "minimum": 0,
+                      "maximum": 100,
+                      "default": 50,
+                      "description": "Limit the number of items returned"
                     },
                     "offset": {
                       "type": "integer",
-                      "minimum": 0
+                      "minimum": 0,
+                      "default": 0,
+                      "description": "Offset the items returned"
                     }
                   },
                   "required": [
@@ -384,9 +402,11 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The id of the connection, starts with `conn_`",
             "schema": {
               "type": "string",
-              "pattern": "^conn_"
+              "pattern": "^conn_",
+              "description": "The id of the connection, starts with `conn_`"
             },
             "required": true
           }
@@ -401,7 +421,8 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "pattern": "^conn_"
+                      "pattern": "^conn_",
+                      "description": "The id of the connection, starts with `conn_`"
                     },
                     "status": {
                       "type": "string",
@@ -422,7 +443,8 @@
                       "description": "Error types: refresh_failed and unknown_external_error"
                     },
                     "errorMessage": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Optional expanded error message"
                     }
                   },
                   "required": [
@@ -493,18 +515,24 @@
           {
             "in": "query",
             "name": "limit",
+            "description": "Limit the number of items returned",
             "schema": {
               "type": "integer",
-              "exclusiveMinimum": 0,
-              "maximum": 100
+              "minimum": 0,
+              "maximum": 100,
+              "default": 50,
+              "description": "Limit the number of items returned"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "Offset the items returned",
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
             }
           },
           {
@@ -595,16 +623,22 @@
                       }
                     },
                     "total": {
-                      "type": "number"
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Total number of items"
                     },
                     "limit": {
                       "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 100
+                      "minimum": 0,
+                      "maximum": 100,
+                      "default": 50,
+                      "description": "Limit the number of items returned"
                     },
                     "offset": {
                       "type": "integer",
-                      "minimum": 0
+                      "minimum": 0,
+                      "default": 0,
+                      "description": "Offset the items returned"
                     }
                   },
                   "required": [
@@ -687,18 +721,24 @@
           {
             "in": "query",
             "name": "limit",
+            "description": "Limit the number of items returned",
             "schema": {
               "type": "integer",
-              "exclusiveMinimum": 0,
-              "maximum": 100
+              "minimum": 0,
+              "maximum": 100,
+              "default": 50,
+              "description": "Limit the number of items returned"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "Offset the items returned",
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
             }
           }
         ],
@@ -717,16 +757,22 @@
                       }
                     },
                     "total": {
-                      "type": "number"
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Total number of items"
                     },
                     "limit": {
                       "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 100
+                      "minimum": 0,
+                      "maximum": 100,
+                      "default": 50,
+                      "description": "Limit the number of items returned"
                     },
                     "offset": {
                       "type": "integer",
-                      "minimum": 0
+                      "minimum": 0,
+                      "default": 0,
+                      "description": "Offset the items returned"
                     }
                   },
                   "required": [
@@ -812,13 +858,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "The email address of the customer"
-                  },
                   "customer_id": {
                     "type": "string",
-                    "description": "Anything that uniquely identifies the customer that you will be sending the magic link to"
+                    "description": "The id of the customer in your application. Ensure it is unique for that customer."
                   },
                   "validity_in_seconds": {
                     "type": "number",
@@ -893,7 +935,7 @@
                       "null"
                     ],
                     "pattern": "^conn_",
-                    "description": "Filter managed connections by connection id"
+                    "description": "The specific connection id to load"
                   },
                   "theme": {
                     "type": [
@@ -917,7 +959,7 @@
                       "add",
                       "add-deeplink"
                     ],
-                    "description": "Magic Link tab view"
+                    "description": "Magic Link tab view to load as default"
                   }
                 },
                 "required": [
@@ -935,12 +977,12 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "url": {
+                    "magic_link_url": {
                       "type": "string"
                     }
                   },
                   "required": [
-                    "url"
+                    "magic_link_url"
                   ]
                 }
               }
@@ -1011,8 +1053,7 @@
                 "properties": {
                   "customer_id": {
                     "type": "string",
-                    "minLength": 1,
-                    "description": "Anything that uniquely identifies the customer that you will be sending the token to"
+                    "description": "The id of the customer in your application. Ensure it is unique for that customer."
                   },
                   "validity_in_seconds": {
                     "type": "number",
@@ -1097,13 +1138,13 @@
         "type": "apiKey",
         "name": "authorization",
         "in": "header",
-        "description": "Organization API key passed in the authorization header with format: Bearer {apiKey}"
+        "description": "Organization API key generated in the OpenInt Console and passed in the `authorization` header with format: `Bearer {apiKey}`"
       },
       "CustomerToken": {
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "Customer authentication token created using the API passed in the authorization header with format: Bearer {token}"
+        "description": "Customer authentication token created using the create customer token API and passed in the `authorization` header with format: `Bearer {token}`"
       }
     },
     "schemas": {

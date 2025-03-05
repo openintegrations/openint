@@ -3,7 +3,11 @@ import {makeJwtClient} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
 import {getServerUrl} from '../../../../apps/app-config/constants'
 import {asCustomer} from '../../../../packages/engine-backend/router/customerRouter'
-import {zConnectionId, zConnectorName} from '../utils/connectorUtils'
+import {
+  zConnectionId,
+  zConnectorName,
+  zCustomerId,
+} from '../utils/connectorUtils'
 
 export const customerRouter = router({
   createMagicLink: publicProcedure
@@ -17,11 +21,7 @@ export const customerRouter = router({
     })
     .input(
       z.object({
-        customer_id: z
-          .string()
-          .describe(
-            'Anything that uniquely identifies the customer that you will be sending the magic link to',
-          ),
+        customer_id: zCustomerId,
         validity_in_seconds: z
           .number()
           .optional()
@@ -43,7 +43,7 @@ export const customerRouter = router({
         connection_id: zConnectionId
           .nullable()
           .optional()
-          .describe('Filter managed connections by connection id'),
+          .describe('The specific connection id to load'),
         theme: z
           .enum(['light', 'dark'])
           .nullable()
@@ -53,10 +53,10 @@ export const customerRouter = router({
           .enum(['manage', 'manage-deeplink', 'add', 'add-deeplink'])
           .nullable()
           .optional()
-          .describe('Magic Link tab view'),
+          .describe('Magic Link tab view to load as default'),
       }),
     )
-    .output(z.object({magic_link: z.string()}))
+    .output(z.object({magic_link_url: z.string()}))
     .mutation(async ({ctx, input}) => {
       // TODO: replace with new signing and persisting mechanism
       const jwt = makeJwtClient({
@@ -96,7 +96,7 @@ export const customerRouter = router({
       }
 
       return {
-        magic_link: url.toString(),
+        magic_link_url: url.toString(),
       }
     }),
   createToken: publicProcedure
@@ -110,12 +110,7 @@ export const customerRouter = router({
     })
     .input(
       z.object({
-        customer_id: z
-          .string()
-          .min(1)
-          .describe(
-            'Anything that uniquely identifies the customer that you will be sending the token to',
-          ),
+        customer_id: zCustomerId,
         validity_in_seconds: z
           .number()
           .positive()

@@ -10,6 +10,7 @@ import {
   zConnectionId,
   zConnectorConfigId,
   zConnectorName,
+  zCustomerId,
   zExpandOptions,
 } from '../utils/connectorUtils'
 import {
@@ -161,7 +162,7 @@ export const connectionRouter = router({
       zListParams
         .extend({
           connector_name: zConnectorName.optional(),
-          customer_id: z.string().optional(),
+          customer_id: zCustomerId.optional(),
           connector_config_id: zConnectorConfigId.optional(),
           include_secrets: zIncludeSecrets.optional().default('none'),
           expand: z.array(zExpandOptions).optional().default([]),
@@ -235,7 +236,10 @@ export const connectionRouter = router({
         id: zConnectionId,
         status: zConnectionStatus,
         error: zConnectionError.optional(),
-        errorMessage: z.string().optional(),
+        errorMessage: z
+          .string()
+          .optional()
+          .describe('Optional expanded error message'),
       }),
     )
     .mutation(async ({ctx, input}) => {
@@ -280,12 +284,12 @@ export const connectionRouter = router({
           await connector.checkConnection(connection.settings as any)
           // QQ: should this parse the results of checkConnection somehow?
           return {
-            id: connection.id,
+            id: connection.id as `conn_${string}`,
             status: 'healthy',
           }
         } catch (error) {
           return {
-            id: connection.id,
+            id: connection.id as `conn_${string}`,
             status: 'disconnected',
             error: 'unknown_external_error',
           }
@@ -294,7 +298,7 @@ export const connectionRouter = router({
 
       // QQ: should we return healthy by default even if there's no check connection implemented?
       return {
-        id: connection.id,
+        id: connection.id as `conn_${string}`,
         status: 'healthy',
       }
     }),
