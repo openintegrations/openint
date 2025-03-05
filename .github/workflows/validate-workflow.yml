@@ -126,9 +126,6 @@ jobs:
           npx inngest-cli@latest dev &
           pnpm wait-on tcp:8288
 
-      # - name: Setup upterm session
-      #   uses: lhotari/action-upterm@v1
-
       # Does not work WTF
       # - name: Run tests
       #   run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
@@ -180,6 +177,10 @@ jobs:
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web/__tests__/end-to-end.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web/__tests__/healthcheck.spec.ts
       - run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci -- apps/web/__tests__/unified-accounting.spec.ts
+
+      - name: Setup upterm session
+        if: always()
+        uses: lhotari/action-upterm@v1
 
       - name: Run lint
         run: pnpm run lint
