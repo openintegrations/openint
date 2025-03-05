@@ -13,6 +13,10 @@ import type {AppRouter} from '../trpc/routers'
 const db = initDbPGLite()
 const app = createApp({db})
 
+afterAll(async () => {
+  await db.$end()
+})
+
 test('elysia route', async () => {
   const res = await app.handle(new Request('http://localhost/api/health'))
   expect(await res.json()).toBeTruthy()
