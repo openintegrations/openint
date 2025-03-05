@@ -17,10 +17,6 @@ export const customerRouter = router({
     })
     .input(
       z.object({
-        email: z
-          .string()
-          .optional()
-          .describe('The email address of the customer'),
         customer_id: z
           .string()
           .describe(
@@ -60,7 +56,7 @@ export const customerRouter = router({
           .describe('Magic Link tab view'),
       }),
     )
-    .output(z.object({url: z.string()}))
+    .output(z.object({magic_link: z.string()}))
     .mutation(async ({ctx, input}) => {
       // TODO: replace with new signing and persisting mechanism
       const jwt = makeJwtClient({
@@ -100,7 +96,7 @@ export const customerRouter = router({
       }
 
       return {
-        url: url.toString(),
+        magic_link: url.toString(),
       }
     }),
   createToken: publicProcedure

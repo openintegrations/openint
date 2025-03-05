@@ -63,13 +63,6 @@ export default function MagicLinkPage() {
         </span>
       ),
     },
-    displayName: {
-      'ui:widget': showAdvanced ? 'text' : 'hidden',
-      'ui:title': <span className="font-semibold">Display Name</span>,
-      'ui:description': (
-        <span className="text-sm text-gray-600">What to call user by</span>
-      ),
-    },
     redirectUrl: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
       'ui:title': <span className="font-semibold">Redirect URL</span>,
