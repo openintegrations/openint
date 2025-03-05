@@ -39,7 +39,7 @@ patchedDependencies:
     hash: hko3q5jvea7ey3trpjtkqgcale
     path: patches/micro-memoize@4.0.10.patch
   trpc-to-openapi:
-    hash: u4b6y2446qzulqmfu34o5wzfza
+    hash: tek2bdhjtodkombmgjlruhwdv4
     path: patches/trpc-to-openapi.patch
 
 importers:
@@ -2226,7 +2226,7 @@ importers:
         version: 2.20.1
       trpc-to-openapi:
         specifier: ^2.1.3
-        version: 2.1.3(patch_hash=u4b6y2446qzulqmfu34o5wzfza)(@trpc/server@11.0.0-rc.824(typescript@5.7.3))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2)
+        version: 2.1.3(patch_hash=tek2bdhjtodkombmgjlruhwdv4)(@trpc/server@11.0.0-rc.824(typescript@5.7.3))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -35459,7 +35459,7 @@ snapshots:
       zod: 3.24.2
       zod-to-json-schema: 3.21.1(zod@3.24.2)
 
-  trpc-to-openapi@2.1.3(patch_hash=u4b6y2446qzulqmfu34o5wzfza)(@trpc/server@11.0.0-rc.824(typescript@5.7.3))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2):
+  trpc-to-openapi@2.1.3(patch_hash=tek2bdhjtodkombmgjlruhwdv4)(@trpc/server@11.0.0-rc.824(typescript@5.7.3))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2):
     dependencies:
       '@trpc/server': 11.0.0-rc.824(typescript@5.7.3)
       co-body: 6.1.0
