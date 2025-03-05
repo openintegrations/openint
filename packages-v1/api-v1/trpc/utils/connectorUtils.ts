@@ -1,11 +1,21 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
+import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {core} from '../../models'
 
 export const zExpandOptions = z
   .enum(['connector'])
   .describe('Fields to expand: connector (includes connector details)')
+
+export const zConnectorName = z
+  .enum(
+    Object.keys(serverConnectors).filter((key) => key !== 'postgres') as [
+      string,
+      ...string[],
+    ],
+  )
+  .describe('The name of the connector')
 
 export async function expandConnector(
   connectorConfig: z.infer<typeof core.connector_config>,

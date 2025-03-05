@@ -6,7 +6,11 @@ import {zCustomerId, zId} from '@openint/cdk'
 import {and, count, eq, schema} from '@openint/db'
 import {publicProcedure, router, RouterContext} from '../_base'
 import {core} from '../../models'
-import {expandConnector} from '../utils/connectorUtils'
+import {
+  expandConnector,
+  zConnectorName,
+  zExpandOptions,
+} from '../utils/connectorUtils'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -34,14 +38,6 @@ const zConnectionStatus = z
 const zConnectionError = z
   .enum(['refresh_failed', 'unknown_external_error'])
   .describe('Error types: refresh_failed and unknown_external_error')
-
-const zExpandOptions = z
-  .enum(['connector'])
-  .describe('Fields to expand: connector (includes connector details)')
-
-export const zConnectorName = z
-  .enum(Object.keys(serverConnectors) as [string, ...string[]])
-  .describe('The name of the connector')
 
 async function formatConnection(
   ctx: RouterContext,
