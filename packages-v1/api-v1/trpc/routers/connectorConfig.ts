@@ -9,6 +9,7 @@ import {
   zListParams,
   zListResponse,
 } from '../utils/pagination'
+import {zConnectorName} from './connection'
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -24,7 +25,7 @@ export const connectorConfigRouter = router({
       zListParams
         .extend({
           expand: z.array(zExpandOptions).optional().default([]),
-          connector_name: z.string().optional(),
+          connector_name: zConnectorName.optional(),
         })
         .optional(),
     )

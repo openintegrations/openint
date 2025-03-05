@@ -1,8 +1,9 @@
 import {z} from 'zod'
-import {makeJwtClient} from '@openint/cdk'
+import {makeJwtClient, zCustomerId, zId} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
 import {getServerUrl} from '../../../../apps/app-config/constants'
 import {asCustomer} from '../../../../packages/engine-backend/router/customerRouter'
+import {zConnectorName} from './connection'
 
 export const connectRouter = router({
   createMagicLink: publicProcedure
@@ -15,13 +16,10 @@ export const connectRouter = router({
     })
     .input(
       z.object({
-        email: z.string().email(),
-        customer_id: z
-          .string()
-          .min(1)
-          .describe(
-            'Anything that uniquely identifies the customer that you will be sending the magic link to',
-          ),
+        email: z.string().email().describe('The email address of the customer'),
+        customer_id: (zCustomerId as any).describe(
+          'Anything that uniquely identifies the customer that you will be sending the magic link to',
+        ),
         validity_in_seconds: z
           .number()
           .optional()
@@ -36,18 +34,11 @@ export const connectRouter = router({
           .describe(
             'Where to send user to after connect / if they press back button',
           ),
-        connector_names: z
-          .string()
+        connector_names: zConnectorName
           .nullable()
           .optional()
           .describe('Filter integrations by comma separated connector names'),
-        integration_ids: z
-          .string()
-          .nullable()
-          .optional()
-          .describe('Filter integrations by comma separated integration ids'),
-        connection_id: z
-          .string()
+        connection_id: (zId('conn') as any)
           .nullable()
           .optional()
           .describe('Filter managed connections by connection id'),
@@ -90,19 +81,6 @@ export const connectRouter = router({
         url.searchParams.set('connectorNames', connectorNames.join(','))
       }
 
-      if (input.integration_ids) {
-        const integrationIds = input.integration_ids.split(',').map((id) => {
-          const trimmedId = id.trim()
-          // Add int_ prefix if needed
-          return trimmedId.includes('_') &&
-            trimmedId.split('_').length === 2 &&
-            !trimmedId.startsWith('int_')
-            ? `int_${trimmedId}`
-            : trimmedId
-        })
-        url.searchParams.set('integrationIds', integrationIds.join(','))
-      }
-
       if (input.connection_id) {
         url.searchParams.set('connectionId', input.connection_id)
       }
@@ -137,6 +115,7 @@ export const connectRouter = router({
           ),
         validity_in_seconds: z
           .number()
+          .positive()
           .optional()
           .default(2592000)
           .describe(
