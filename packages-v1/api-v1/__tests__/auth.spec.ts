@@ -23,33 +23,30 @@ test.each(Object.entries(viewers))(
   },
 )
 
-describeEachDatabase(
-  {drivers: ['pg_direct'], migrate: true, enableExtensions: true},
-  (db) => {
-    test('anon user has no access to connector_config', async () => {
-      await expect(
-        trpcClientForViewer(null).listConnectorConfigs.query(),
-      ).rejects.toThrow('Admin only')
-    })
+describeEachDatabase({drivers: ['pg_direct'], migrate: true}, (db) => {
+  test('anon user has no access to connector_config', async () => {
+    await expect(
+      trpcClientForViewer(null).listConnectorConfigs.query(),
+    ).rejects.toThrow('Admin only')
+  })
 
-    beforeAll(async () => {
-      await db.$truncateAll()
-      await db
-        .insert(schema.connector_config)
-        .values({org_id: 'org_123', id: 'ccfg_123'})
-    })
+  beforeAll(async () => {
+    await db.$truncateAll()
+    await db
+      .insert(schema.connector_config)
+      .values({org_id: 'org_123', id: 'ccfg_123'})
+  })
 
-    test('org has access to its own connector config', async () => {
-      const client = trpcClientForViewer({role: 'org', orgId: 'org_123'})
-      const res = await client.listConnectorConfigs.query()
-      expect(res.items).toHaveLength(1)
-      expect(res.items[0]?.id).toEqual('ccfg_123')
-    })
+  test('org has access to its own connector config', async () => {
+    const client = trpcClientForViewer({role: 'org', orgId: 'org_123'})
+    const res = await client.listConnectorConfigs.query()
+    expect(res.items).toHaveLength(1)
+    expect(res.items[0]?.id).toEqual('ccfg_123')
+  })
 
-    test('org has no access to other orgs connector config', async () => {
-      const client = trpcClientForViewer({role: 'org', orgId: 'org_456'})
-      const res = await client.listConnectorConfigs.query()
-      expect(res.items).toHaveLength(0)
-    })
-  },
-)
+  test('org has no access to other orgs connector config', async () => {
+    const client = trpcClientForViewer({role: 'org', orgId: 'org_456'})
+    const res = await client.listConnectorConfigs.query()
+    expect(res.items).toHaveLength(0)
+  })
+})

@@ -11,8 +11,6 @@ import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
 
 interface TestDbInitOptions {
   url: string
-  /** For pglite, whether to enable postgres extensions  */
-  enableExtensions?: boolean
 }
 
 export const testDbs = {
@@ -22,10 +20,8 @@ export const testDbs = {
     initDbNeon(url, {role: 'system'}, {logger: false}),
   pg: ({url}: TestDbInitOptions) => initDbPg(url, {logger: false}),
   pg_direct: ({url}: TestDbInitOptions) => initDbPgDirect(url, {logger: false}),
-  pglite: ({enableExtensions}: TestDbInitOptions) =>
-    initDbPGLite({logger: false, enableExtensions}),
-  pglite_direct: ({enableExtensions}: TestDbInitOptions) =>
-    initDbPGLiteDirect({logger: false, enableExtensions}),
+  pglite: ({}: TestDbInitOptions) => initDbPGLite({logger: false}),
+  pglite_direct: ({}: TestDbInitOptions) => initDbPGLiteDirect({logger: false}),
 }
 
 export type DescribeEachDatabaseOptions<
@@ -35,8 +31,6 @@ export type DescribeEachDatabaseOptions<
   drivers?: T[]
   migrate?: boolean
   truncateBeforeAll?: boolean
-
-  enableExtensions?: boolean
 } & Omit<TestDbInitOptions, 'url'>
 
 export function describeEachDatabase<T extends DatabaseDriver>(
