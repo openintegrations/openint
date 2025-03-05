@@ -17,7 +17,6 @@ export const connectorConfigRouter = router({
     )
     .query(async ({ctx}) => {
       const connectorConfigs = await ctx.db.query.connector_config.findMany({})
-      console.log('connectorConfigs', connectorConfigs)
       return {items: connectorConfigs}
     }),
 })

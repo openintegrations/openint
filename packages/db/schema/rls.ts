@@ -8,7 +8,7 @@ import {DatabaseDriver, DatabaseTransaction} from '../db'
  * that gets used for every request to db for the purpose of authorization
  * in row-level-security! So be very careful
  */
-export function localGucForViewer(viewer: Viewer) {
+export function rlsGucForViewer(viewer: Viewer) {
   switch (viewer.role) {
     case 'anon':
       return {role: 'anon'}
@@ -34,6 +34,16 @@ export function localGucForViewer(viewer: Viewer) {
   // Should we erase keys incompatible with current viewer role to avoid confusion?
 }
 
+export function rlsStatementsForViewer(
+  viewer: Viewer,
+  /** If true, config will only apply to the current transaction */
+  local = true,
+) {
+  return Object.entries(rlsGucForViewer(viewer)).map(
+    ([k, v]) => `SELECT set_config('${k}', '${v}', ${local});`,
+  )
+}
+
 /**
  * Reference from here https://orm.drizzle.team/docs/rls#using-with-supabase
  * However making database a callback makes context initialization more diffcult
@@ -46,7 +56,7 @@ export function withDatabaseForViewer<T extends DatabaseDriver>(
 ) {
   db.transaction(async (tx) => {
     await Promise.all(
-      Object.entries(localGucForViewer(viewer)).map(([key, value]) =>
+      Object.entries(rlsGucForViewer(viewer)).map(([key, value]) =>
         tx.execute(sql`SELECT set_config(${key}, ${value}, true)`),
       ),
     )

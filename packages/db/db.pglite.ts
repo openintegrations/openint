@@ -10,7 +10,7 @@ import {
   getMigrationConfig,
   type DbOptions,
 } from './db'
-import {localGucForViewer} from './schema/rls'
+import {rlsStatementsForViewer} from './schema/rls'
 
 function drizzleForViewer(
   pglite: PGlite,
@@ -29,13 +29,8 @@ function drizzleForViewer(
       },
     }
     if (viewer) {
-      const gucForRls = localGucForViewer(viewer)
       const res = await pglite.transaction(async (tx) => {
-        await tx.exec(
-          Object.entries(gucForRls)
-            .map(([k, v]) => `SELECT set_config('${k}', '${v}', true);`)
-            .join('\n'),
-        )
+        await tx.exec(rlsStatementsForViewer(viewer).join('\n'))
         return tx.query(query, params, options)
       })
       return {rows: res.rows}

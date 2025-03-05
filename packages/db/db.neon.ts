@@ -10,7 +10,7 @@ import {types} from 'pg'
 import type {Viewer} from '@openint/cdk'
 import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
-import {localGucForViewer} from './schema/rls'
+import {rlsStatementsForViewer} from './schema/rls'
 
 function drizzleForViewer(
   neonSql: NeonQueryFunction<false, false>,
@@ -27,15 +27,12 @@ function drizzleForViewer(
     const allResponses = !viewer
       ? await neonSql(query, params, opts).then((r) => [r])
       : await neonSql.transaction(
+          // Arguably system viewer does not need to be surrounded in transaction, but we need it for consistency
+          // Also that prevent things like DROP DATABASE
+          // guc settings are local to transactions anyways and without setting them should have the
+          // same impact as reset role
           [
-            // Arguably system viewer does not need to be surrounded in transaction, but we need it for consistency
-            // Also that prevent things like DROP DATABASE
-            // guc settings are local to transactions anyways and without setting them should have the
-            // same impact as reset role
-            ...Object.entries(localGucForViewer(viewer)).map(
-              ([key, value]) =>
-                neonSql`SELECT set_config(${key}, ${value}, true)`,
-            ),
+            ...rlsStatementsForViewer(viewer).map((q) => neonSql(q)),
             neonSql(query, params),
           ],
           opts,
