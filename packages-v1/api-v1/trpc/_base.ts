@@ -3,9 +3,13 @@ import {type OpenApiMeta} from 'trpc-to-openapi'
 import {hasRole, type Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
 
-export interface RouterContext {
+export interface ViewerContext {
   viewer: Viewer
-  db: Database
+  db: NonNullable<Database['_drizzle']>
+}
+
+export interface RouterContext extends ViewerContext {
+  as: (viewer: Viewer) => ViewerContext
 }
 
 export const trpc = initTRPC

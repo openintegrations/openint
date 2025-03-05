@@ -51,8 +51,9 @@ export function getMigrationConfig(): MigrationConfig {
 }
 
 /** Standardize difference across different drizzle postgres drivers */
-interface SpecificExtensions<TDatabase> {
-  $asViewer?: (viewer: Viewer) => TDatabase
+interface SpecificExtensions<TDrizzle> {
+  _drizzle?: TDrizzle
+  $asViewer?: (viewer: Viewer) => TDrizzle
   $exec<T extends Record<string, unknown>>(
     query: string | SQLWrapper,
   ): Promise<{rows: Array<Assume<T, {[column: string]: unknown}>>}>
@@ -60,10 +61,10 @@ interface SpecificExtensions<TDatabase> {
   $end?(): Promise<void>
 }
 
-export function dbFactory<TDriver extends string, TDatabase>(
+export function dbFactory<TDriver extends string, TDrizzle>(
   driver: TDriver,
-  _db: TDatabase,
-  extension: SpecificExtensions<TDatabase>,
+  _db: TDrizzle,
+  extension: SpecificExtensions<TDrizzle>,
 ) {
   Object.assign(_db as {}, {driverType: driver, ...extension})
   const db = _db as typeof _db & typeof extension & {driverType: TDriver}

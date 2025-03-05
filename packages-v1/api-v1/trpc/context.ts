@@ -2,7 +2,7 @@ import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {Database} from '@openint/db'
 import {envRequired} from '@openint/env'
-import type {RouterContext} from './_base'
+import type {RouterContext, ViewerContext} from './_base'
 
 const jwt = makeJwtClient({
   secretOrPublicKey: envRequired.JWT_SECRET,
@@ -13,15 +13,22 @@ export function viewerFromRequest(req: Request): Viewer {
   return jwt.verifyViewer(token)
 }
 
-export function createRouterContext(input: {
+export function createRouterContext({
+  req,
+  db,
+}: {
   req: Request
   db: Database
 }): RouterContext {
-  const viewer = viewerFromRequest(input.req)
+  const currentViewer = viewerFromRequest(req)
 
-  const db = input.db.$asViewer?.(viewer)
-  if (!db) {
-    throw new Error('as viewer not possible')
+  function createViewerContext(viewer: Viewer): ViewerContext {
+    const dbForViewer = db.$asViewer?.(viewer)
+    if (!dbForViewer) {
+      throw new Error(`${db.driverType} does not support asViewer`)
+    }
+    return {viewer, db: dbForViewer}
   }
-  return {viewer, db: db as any}
+
+  return {...createViewerContext(currentViewer), as: createViewerContext}
 }
