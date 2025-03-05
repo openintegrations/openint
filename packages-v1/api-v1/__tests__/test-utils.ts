@@ -3,10 +3,8 @@ import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {envRequired} from '@openint/env'
 import {createApp} from '../app'
-import {
-  CreateFetchHandlerOptions,
-  createFetchHandlerTRPC,
-} from '../trpc/handlers'
+import type {CreateFetchHandlerOptions} from '../trpc/handlers'
+import {createFetchHandlerTRPC} from '../trpc/handlers'
 import {type AppRouter} from '../trpc/routers'
 
 export function headersForViewer(viewer: Viewer) {
@@ -19,7 +17,7 @@ export function headersForViewer(viewer: Viewer) {
 /** Prefer to operate at the highest level of stack possible while still bienbeing performant */
 export function getTestTRPCClient(
   {router, ...opts}: Omit<CreateFetchHandlerOptions, 'endpoint'>,
-  viewer: Viewer,
+  viewerOrKey: Viewer | {api_key: string},
 ) {
   const handler = router
     ? createFetchHandlerTRPC({...opts, router, endpoint: '/api/v1/trpc'})
@@ -30,7 +28,10 @@ export function getTestTRPCClient(
       httpLink({
         url: 'http://localhost/api/v1/trpc',
         fetch: (input, init) => handler(new Request(input, init)),
-        headers: headersForViewer(viewer),
+        headers:
+          'api_key' in viewerOrKey
+            ? {authorization: `Bearer ${viewerOrKey.api_key}`}
+            : headersForViewer(viewerOrKey),
       }),
     ],
   })

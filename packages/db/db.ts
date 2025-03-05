@@ -1,3 +1,4 @@
+import path from 'node:path'
 import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
 import type {Viewer} from '@openint/cdk'
@@ -42,7 +43,7 @@ export function getMigrationConfig(): MigrationConfig {
   const config: Config = drizzleKitConfig
   return {
     // WARNING This only works if config is in the same folder as current file
-    migrationsFolder: drizzleKitConfig.out,
+    migrationsFolder: path.join(__dirname, drizzleKitConfig.out),
     migrationsSchema: config.migrations?.schema,
     migrationsTable: config.migrations?.table,
   }

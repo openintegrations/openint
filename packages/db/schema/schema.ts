@@ -403,7 +403,7 @@ export const organization = pgTable(
       .default("concat('org_', generate_ulid())")
       .primaryKey()
       .notNull(),
-    api_key: varchar(),
+    api_key: varchar().unique(),
     name: varchar(),
     slug: varchar(),
     metadata: jsonb().$type<any>(),
