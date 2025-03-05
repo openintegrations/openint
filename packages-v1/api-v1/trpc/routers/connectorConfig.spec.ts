@@ -4,7 +4,9 @@ import {getTestTRPCClient} from '../../__tests__/test-utils'
 import {routerContextFromViewer} from '../context'
 import {connectorConfigRouter} from './connectorConfig'
 
-describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
+const logger = false
+
+describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   /** Preferred approach */
   function getCaller(viewer: Viewer) {
     return connectorConfigRouter.createCaller(
@@ -50,6 +52,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     expect(res.items).toHaveLength(1)
     expect(res.items[0]?.id).toEqual(expect.any(String))
     expect(res.items[0]?.org_id).toEqual('org_222')
+    expect(res.total).toEqual(1)
   })
 
   test('list connector config via custom client', async () => {

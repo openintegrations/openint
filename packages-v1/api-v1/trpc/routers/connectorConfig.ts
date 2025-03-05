@@ -1,9 +1,8 @@
 import {z} from 'zod'
 import {makeId} from '@openint/cdk'
-import {and, count, eq, schema} from '@openint/db'
+import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {core} from '../../models'
 import {expandConnector, zExpandOptions} from '../utils/connectorUtils'
 import {
   applyPaginationAndOrder,
@@ -12,6 +11,13 @@ import {
   zListResponse,
 } from '../utils/pagination'
 import {zConnectorName} from './connection'
+
+/** TODO: Use the real type */
+const connector_config = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  connector_name: z.string(),
+})
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -31,13 +37,13 @@ export const connectorConfigRouter = router({
         })
         .optional(),
     )
-    .output(zListResponse(core.connector_config))
+    .output(zListResponse(connector_config))
     .query(async ({ctx, input}) => {
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
             connector_config: schema.connector_config,
-            total: count(),
+            total: sql`count(*) over ()`,
           })
           .from(schema.connector_config)
           .where(
@@ -60,6 +66,8 @@ export const connectorConfigRouter = router({
       )
 
       return {
+        // @pellicceama use drizzle.query.$table.findMany({with:{... }}) for db-based expansion
+        // so we get all the data in one go. For connector it's fine since it's not stored in db
         items: await Promise.all(
           items.map(async (ccfg) =>
             input?.expand.includes('connector')
@@ -81,7 +89,7 @@ export const connectorConfigRouter = router({
         connector_name: z.string(),
       }),
     )
-    .output(core.connector_config)
+    .output(connector_config)
     .mutation(async ({ctx, input}) => {
       const {connector_name} = input
       const [ccfg] = await ctx.db

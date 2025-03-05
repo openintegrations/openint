@@ -11,17 +11,17 @@ import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
 
 interface TestDbInitOptions {
   url: string
+  logger?: boolean
 }
-const logger = Boolean(env.DEBUG)
 
 export const testDbs = {
   // neon driver does not work well for migration at the moment and
   // and should therefore not be used for running migrations
-  neon: ({url}) => initDbNeon(url, {logger}),
-  pg: ({url}) => initDbPg(url, {logger}),
-  'pg-direct': ({url}) => initDbPgDirect(url, {logger}),
-  pglite: ({}) => initDbPGLite({logger}),
-  'pglite-direct': ({}) => initDbPGLiteDirect({logger}),
+  neon: ({url, logger}) => initDbNeon(url, {logger}),
+  pg: ({url, logger}) => initDbPg(url, {logger}),
+  'pg-direct': ({url, logger}) => initDbPgDirect(url, {logger}),
+  pglite: ({logger}) => initDbPGLite({logger}),
+  'pglite-direct': ({logger}) => initDbPGLiteDirect({logger}),
 } satisfies {[k in DatabaseDriver]: (opts: TestDbInitOptions) => Database<k>}
 
 export const ALL_DRIVERS = Object.keys(testDbs) as DatabaseDriver[]
