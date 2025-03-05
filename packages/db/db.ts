@@ -1,6 +1,6 @@
 import type {Assume, DrizzleConfig, SQLWrapper} from 'drizzle-orm'
 import type {MigrationConfig} from 'drizzle-orm/migrator'
-import {Viewer} from '@openint/cdk'
+import type {Viewer} from '@openint/cdk'
 import type {initDbNeon} from './db.neon'
 import type {initDbPg, initDbPgDirect} from './db.pg'
 import type {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
