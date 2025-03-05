@@ -2,16 +2,44 @@ import {z} from 'zod'
 import {Column, desc, schema} from '@openint/db'
 
 export const zListParams = z.object({
-  limit: z.number().int().positive().max(100).optional(),
-  offset: z.number().int().nonnegative().optional(),
+  limit: z
+    .number()
+    .int()
+    .min(0)
+    .max(100)
+    .optional()
+    .default(50)
+    .describe('Limit the number of items returned'),
+  offset: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .default(0)
+    .describe('Offset the items returned'),
 })
 
 export function zListResponse<T extends z.ZodTypeAny>(itemSchema: T) {
   return z.object({
     items: z.array(itemSchema),
-    total: z.number(),
-    limit: z.number().int().positive().max(100),
-    offset: z.number().int().nonnegative(),
+    total: z
+      .number()
+      .int()
+      .min(0)
+      .describe('Total number of items in the database for the organization'),
+    limit: z
+      .number()
+      .int()
+      .nonnegative()
+      .max(100)
+      .default(50)
+      .describe('Limit the number of items returned'),
+    offset: z
+      .number()
+      .int()
+      .min(0)
+      .default(0)
+      .describe('Offset the items returned'),
   })
 }
 export function applyPaginationAndOrder<

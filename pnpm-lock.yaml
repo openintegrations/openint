@@ -191,9 +191,6 @@ importers:
       '@openint/connector-airtable':
         specifier: workspace:*
         version: link:../../connectors/connector-airtable
-      '@openint/connector-alphavantage':
-        specifier: workspace:*
-        version: link:../../connectors/connector-alphavantage
       '@openint/connector-apollo':
         specifier: workspace:*
         version: link:../../connectors/connector-apollo
@@ -209,15 +206,9 @@ importers:
       '@openint/connector-confluence':
         specifier: workspace:*
         version: link:../../connectors/connector-confluence
-      '@openint/connector-debug':
-        specifier: workspace:*
-        version: link:../../connectors/connector-debug
       '@openint/connector-discord':
         specifier: workspace:*
         version: link:../../connectors/connector-discord
-      '@openint/connector-expensify':
-        specifier: workspace:*
-        version: link:../../connectors/connector-expensify
       '@openint/connector-finch':
         specifier: workspace:*
         version: link:../../connectors/connector-finch
@@ -227,9 +218,6 @@ importers:
       '@openint/connector-foreceipt':
         specifier: workspace:*
         version: link:../../connectors/connector-foreceipt
-      '@openint/connector-fs':
-        specifier: workspace:*
-        version: link:../../connectors/connector-fs
       '@openint/connector-github':
         specifier: workspace:*
         version: link:../../connectors/connector-github
@@ -275,9 +263,6 @@ importers:
       '@openint/connector-microsoft':
         specifier: workspace:*
         version: link:../../connectors/connector-microsoft
-      '@openint/connector-mongodb':
-        specifier: workspace:*
-        version: link:../../connectors/connector-mongodb
       '@openint/connector-moota':
         specifier: workspace:*
         version: link:../../connectors/connector-moota
@@ -302,9 +287,6 @@ importers:
       '@openint/connector-ramp':
         specifier: workspace:*
         version: link:../../connectors/connector-ramp
-      '@openint/connector-revert':
-        specifier: workspace:*
-        version: link:../../connectors/connector-revert
       '@openint/connector-salesforce':
         specifier: workspace:*
         version: link:../../connectors/connector-salesforce
@@ -320,9 +302,6 @@ importers:
       '@openint/connector-splitwise':
         specifier: workspace:*
         version: link:../../connectors/connector-splitwise
-      '@openint/connector-spreadsheet':
-        specifier: workspace:*
-        version: link:../../connectors/connector-spreadsheet
       '@openint/connector-stripe':
         specifier: workspace:*
         version: link:../../connectors/connector-stripe
@@ -338,9 +317,6 @@ importers:
       '@openint/connector-venmo':
         specifier: workspace:*
         version: link:../../connectors/connector-venmo
-      '@openint/connector-webhook':
-        specifier: workspace:*
-        version: link:../../connectors/connector-webhook
       '@openint/connector-wise':
         specifier: workspace:*
         version: link:../../connectors/connector-wise
@@ -417,9 +393,6 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
-      '@openint/connector-alphavantage':
-        specifier: workspace:*
-        version: link:../../connectors/connector-alphavantage
       '@openint/connector-beancount':
         specifier: workspace:*
         version: link:../../connectors/connector-beancount
@@ -432,9 +405,6 @@ importers:
       '@openint/connector-firebase':
         specifier: workspace:*
         version: link:../../connectors/connector-firebase
-      '@openint/connector-fs':
-        specifier: workspace:*
-        version: link:../../connectors/connector-fs
       '@openint/connector-heron':
         specifier: workspace:*
         version: link:../../connectors/connector-heron
@@ -783,9 +753,6 @@ importers:
       '@openint/connector-airtable':
         specifier: workspace:*
         version: link:../connector-airtable
-      '@openint/connector-alphavantage':
-        specifier: workspace:*
-        version: link:../connector-alphavantage
       '@openint/connector-apollo':
         specifier: workspace:*
         version: link:../connector-apollo
@@ -801,15 +768,9 @@ importers:
       '@openint/connector-confluence':
         specifier: workspace:*
         version: link:../connector-confluence
-      '@openint/connector-debug':
-        specifier: workspace:*
-        version: link:../connector-debug
       '@openint/connector-discord':
         specifier: workspace:*
         version: link:../connector-discord
-      '@openint/connector-expensify':
-        specifier: workspace:*
-        version: link:../connector-expensify
       '@openint/connector-finch':
         specifier: workspace:*
         version: link:../connector-finch
@@ -819,9 +780,6 @@ importers:
       '@openint/connector-foreceipt':
         specifier: workspace:*
         version: link:../connector-foreceipt
-      '@openint/connector-fs':
-        specifier: workspace:*
-        version: link:../connector-fs
       '@openint/connector-github':
         specifier: workspace:*
         version: link:../connector-github
@@ -867,9 +825,6 @@ importers:
       '@openint/connector-microsoft':
         specifier: workspace:*
         version: link:../connector-microsoft
-      '@openint/connector-mongodb':
-        specifier: workspace:*
-        version: link:../connector-mongodb
       '@openint/connector-moota':
         specifier: workspace:*
         version: link:../connector-moota
@@ -894,9 +849,6 @@ importers:
       '@openint/connector-ramp':
         specifier: workspace:*
         version: link:../connector-ramp
-      '@openint/connector-revert':
-        specifier: workspace:*
-        version: link:../connector-revert
       '@openint/connector-salesforce':
         specifier: workspace:*
         version: link:../connector-salesforce
@@ -912,9 +864,6 @@ importers:
       '@openint/connector-splitwise':
         specifier: workspace:*
         version: link:../connector-splitwise
-      '@openint/connector-spreadsheet':
-        specifier: workspace:*
-        version: link:../connector-spreadsheet
       '@openint/connector-stripe':
         specifier: workspace:*
         version: link:../connector-stripe
@@ -930,9 +879,6 @@ importers:
       '@openint/connector-venmo':
         specifier: workspace:*
         version: link:../connector-venmo
-      '@openint/connector-webhook':
-        specifier: workspace:*
-        version: link:../connector-webhook
       '@openint/connector-wise':
         specifier: workspace:*
         version: link:../connector-wise
@@ -995,15 +941,6 @@ importers:
         specifier: 0.11.4
         version: 0.11.4
 
-  connectors/connector-alphavantage:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-
   connectors/connector-apollo:
     dependencies:
       '@openint/cdk':
@@ -1063,27 +1000,6 @@ importers:
       '@openint/vdk':
         specifier: workspace:*
         version: link:../../kits/vdk
-
-  connectors/connector-copilot:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/connector-firebase':
-        specifier: workspace:*
-        version: link:../connector-firebase
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-
-  connectors/connector-debug:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
 
   connectors/connector-discord:
     dependencies:
@@ -1172,15 +1088,6 @@ importers:
       firebase:
         specifier: 9.8.1
         version: 9.8.1(patch_hash=xv6drfi56cgifjvxlrcjb2s3qe)(bufferutil@4.0.7)(utf-8-validate@5.0.10)
-
-  connectors/connector-fs:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
 
   connectors/connector-github:
     dependencies:
@@ -1385,18 +1292,6 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
 
-  connectors/connector-mongodb:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      mongodb:
-        specifier: 4.9.1
-        version: 4.9.1
-
   connectors/connector-moota:
     dependencies:
       '@openint/cdk':
@@ -1559,21 +1454,6 @@ importers:
         specifier: workspace:*
         version: link:../../packages/util
 
-  connectors/connector-revert:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      '@opensdks/sdk-revert':
-        specifier: ^0.0.1
-        version: 0.0.1
-      '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
-
   connectors/connector-salesforce:
     dependencies:
       '@openint/cdk':
@@ -1640,25 +1520,6 @@ importers:
         specifier: workspace:*
         version: link:../../packages/util
 
-  connectors/connector-spreadsheet:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      papaparse:
-        specifier: 5.3.2
-        version: 5.3.2
-      xlsx:
-        specifier: 0.17.5
-        version: 0.17.5
-    devDependencies:
-      '@types/papaparse':
-        specifier: 5.3.5
-        version: 5.3.5
-
   connectors/connector-stripe:
     dependencies:
       '@openint/cdk':
@@ -1715,15 +1576,6 @@ importers:
         version: 0.0.15
 
   connectors/connector-venmo:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-
-  connectors/connector-webhook:
     dependencies:
       '@openint/cdk':
         specifier: workspace:*
@@ -1823,9 +1675,6 @@ importers:
       '@openint/unified-banking':
         specifier: workspace:*
         version: link:../unified/unified-banking
-      '@openint/unified-sync':
-        specifier: workspace:*
-        version: link:../unified/unified-sync
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
@@ -2322,9 +2171,6 @@ importers:
       '@openint/unified-sales-engagement':
         specifier: workspace:*
         version: link:../../unified/unified-sales-engagement
-      '@openint/unified-sync':
-        specifier: workspace:*
-        version: link:../../unified/unified-sync
       '@openint/vdk':
         specifier: workspace:*
         version: link:../../kits/vdk
@@ -2482,9 +2328,6 @@ importers:
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
         version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.24.2)
-      '@openint/unified-sync':
-        specifier: workspace:*
-        version: link:../../unified/unified-sync
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
@@ -2594,22 +2437,6 @@ importers:
         specifier: 2.3.4
         version: 2.3.4
 
-  packages/meta-service-fs:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/connector-fs':
-        specifier: workspace:*
-        version: link:../../connectors/connector-fs
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../util
-    devDependencies:
-      '@openint/engine-backend':
-        specifier: workspace:*
-        version: link:../engine-backend
-
   packages/meta-service-postgres:
     dependencies:
       '@openint/cdk':
@@ -2634,24 +2461,6 @@ importers:
       '@opensdks/runtime':
         specifier: 0.0.20
         version: 0.0.20
-
-  packages/meta-service-redis:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/engine-backend':
-        specifier: workspace:*
-        version: link:../engine-backend
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../util
-      handy-redis:
-        specifier: 2.3.1
-        version: 2.3.1
-      redis:
-        specifier: 3.1.2
-        version: 3.1.2
 
   packages/trpc:
     dependencies:
@@ -3132,15 +2941,6 @@ importers:
       '@opensdks/sdk-salesloft':
         specifier: 0.0.17
         version: 0.0.17
-
-  unified/unified-sync:
-    dependencies:
-      '@openint/connector-revert':
-        specifier: workspace:*
-        version: link:../../connectors/connector-revert
-      '@openint/vdk':
-        specifier: workspace:*
-        version: link:../../kits/vdk
 
 packages:
 
@@ -7970,9 +7770,6 @@ packages:
   '@types/nprogress@0.2.0':
     resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
 
-  '@types/papaparse@5.3.5':
-    resolution: {integrity: sha512-R1icl/hrJPFRpuYj9PVG03WBAlghJj4JW9Py5QdR8FFSxaLmZRyu7xYDCCBZIJNfUv3MYaeBbhBoX958mUTAaw==}
-
   '@types/parse5@6.0.3':
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==}
 
@@ -8012,9 +7809,6 @@ packages:
 
   '@types/react@18.0.27':
     resolution: {integrity: sha512-3vtRKHgVxu3Jp9t718R9BuzoD4NcQ8YJ5XRzsSKxNDiDonD2MXIT1TmSkenxuCycZJoQT5d2vE8LwWJxBC1gmA==}
-
-  '@types/redis@2.8.32':
-    resolution: {integrity: sha512-7jkMKxcGq9p242exlbsVzuJb57KqHRhNl4dHoQu2Y5v9bCAbtIXXH0R3HleSQW4CTOqpHIYUW3t6tpUj4BVQ+w==}
 
   '@types/resolve@1.20.6':
     resolution: {integrity: sha512-A4STmOXPhMUtHH+S6ymgE2GiBSMqf4oTvcQZMcHzokuTLVYzXTB8ttjcgxOVaAp2lGwEdzZ0J+cRbbeevQj1UQ==}
@@ -8385,15 +8179,6 @@ packages:
   address@1.2.2:
     resolution: {integrity: sha512-4B/qKCfeE/ODUaAUpSwfzazo5x29WD4r3vXiWsB7I2mSDAihwEqKO+g8GELZUQSSAo5e1XTYh3ZVfLyxBc12nA==}
     engines: {node: '>= 10.0.0'}
-
-  adler-32@1.2.0:
-    resolution: {integrity: sha512-/vUqU/UY4MVeFsg+SsK6c+/05RZXIHZMGJA+PX5JyWI0ZRcBpupnRuPLU/NXXoFwMYCPCoxIfElM2eS+DUXCqQ==}
-    engines: {node: '>=0.8'}
-    hasBin: true
-
-  adler-32@1.3.1:
-    resolution: {integrity: sha512-ynZ4w/nUUv5rrsR8UUGoe1VC9hZj6V5hU9Qw1HlMDJGEJw5S7TfTErWTjMys6M7vr0YWcPqs3qAr4ss0nDfP+A==}
-    engines: {node: '>=0.8'}
 
   agent-base@6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
@@ -9089,10 +8874,6 @@ packages:
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
 
-  cfb@1.2.2:
-    resolution: {integrity: sha512-KfdUZsSOw19/ObEWasvBP/Ac4reZvAGauZhs6S/gqNhXhI7cKwvlH7ulj+dOEYnca4bm4SGo8C1bTAQvnTjgQA==}
-    engines: {node: '>=0.8'}
-
   chai@5.1.1:
     resolution: {integrity: sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==}
     engines: {node: '>=12'}
@@ -9329,10 +9110,6 @@ packages:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
 
-  codepage@1.15.0:
-    resolution: {integrity: sha512-3g6NUTPd/YtuuGrhMnOMRjFc+LJw/bnMp3+0r/Wcz3IXUuCosKRJvMphm5+Q+bvTVGcJJuRvVLuYba+WojaFaA==}
-    engines: {node: '>=0.8'}
-
   collapse-white-space@2.1.0:
     resolution: {integrity: sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw==}
 
@@ -9538,11 +9315,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  crc-32@1.2.2:
-    resolution: {integrity: sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==}
-    engines: {node: '>=0.8'}
-    hasBin: true
 
   create-jest@29.7.0:
     resolution: {integrity: sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q==}
@@ -9844,10 +9616,6 @@ packages:
   delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
-
-  denque@1.5.1:
-    resolution: {integrity: sha512-XwE+iZ4D6ZUB7mfYRMb5wByE8L74HCn30FBN7sWnXksWc1LO1bPDl67pBR9o/kC4z/xSNAwkMYcGgqDV3BE3Hw==}
-    engines: {node: '>=0.10'}
 
   denque@2.1.0:
     resolution: {integrity: sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==}
@@ -10623,10 +10391,6 @@ packages:
     resolution: {integrity: sha512-QVWlX2e50heYJcCPG0iWtf8r0xjEYfz/OYLGDYH+IyjWezzPNxz63qNFOu0l4YftGWuizFVZHHs8PrLU5p2IDA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  exit-on-epipe@1.0.1:
-    resolution: {integrity: sha512-h2z5mrROTxce56S+pnvAV890uu7ls7f1kEvVGJbw1OlFH3/mlJ5bkXu0KRyW94v37zzHPiUd55iLn3DA7TjWpw==}
-    engines: {node: '>=0.8'}
-
   exit@0.1.2:
     resolution: {integrity: sha512-Zk/eNKV2zbjpKzrsQ+n1G6poVbErQxJ0LBOJXaKZ1EViLzH+hrLu9cdXI4zw9dBQJslwBEpbQ2P1oS7nDxs6jQ==}
     engines: {node: '>= 0.8.0'}
@@ -10924,10 +10688,6 @@ packages:
 
   fp-ts@2.12.3:
     resolution: {integrity: sha512-8m0XvW8kZbfnJOA4NvSVXu95mLbPf4LQGwQyqVukIYS4KzSNJiyKSmuZUmbVHteUi6MGkAJGPb0goPZqI+Tsqg==}
-
-  frac@1.1.2:
-    resolution: {integrity: sha512-w/XBfkibaTl3YDqASwfDUqkna4Z2p9cFSr1aHDt0WoMTECnRfBOv2WArlZILlqgWlmdIlALXGpM2AOhEk5W3IA==}
-    engines: {node: '>=0.8'}
 
   fraction.js@4.2.0:
     resolution: {integrity: sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==}
@@ -11256,11 +11016,6 @@ packages:
     resolution: {integrity: sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==}
     engines: {node: '>=0.4.7'}
     hasBin: true
-
-  handy-redis@2.3.1:
-    resolution: {integrity: sha512-ilZYZ4l9+BSxavnjzSbI0yNpM8wfuEP8wAjsPAoL5ThfcCEswN7EpuSCJ4PfRpuGvxRRrivjSImbqpM9NkDB7w==}
-    engines: {node: '>= 10.0.0'}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   har-schema@2.0.0:
     resolution: {integrity: sha512-Oqluz6zhGX8cyRaTQlFMPw80bSJVG2x/cFb8ZPhUILGgHka9SsokCCOQgpveePerqidZOrT14ipqfJb7ILcW5Q==}
@@ -14230,9 +13985,6 @@ packages:
   pako@1.0.11:
     resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
 
-  papaparse@5.3.2:
-    resolution: {integrity: sha512-6dNZu0Ki+gyV0eBsFKJhYr+MdQYAzFUGlBMNj3GNrmHxmz1lfRa24CjFObPXtjcetlOv5Ad299MhIK0znp3afw==}
-
   param-case@3.0.4:
     resolution: {integrity: sha512-RXlj7zCYokReqWpOPH9oYivUzLYZ5vAPIfEmCTNViosC78F8F0H9y7T7gG2M39ymgutxF5gcFEsyZQSph9Bp3A==}
 
@@ -14699,11 +14451,6 @@ packages:
 
   prettyjson@1.2.5:
     resolution: {integrity: sha512-rksPWtoZb2ZpT5OVgtmy0KHVM+Dca3iVwWY9ifwhcexfjebtgjg3wmrUt9PvJ59XIYBcknQeYHD8IAnVlh9lAw==}
-    hasBin: true
-
-  printj@1.1.2:
-    resolution: {integrity: sha512-zA2SmoLaxZyArQTOPj5LXecR+RagfPSU5Kw1qP+jkWeNlrq+eJZyY2oS68SU1Z/7/myXM4lo9716laOFAVStCQ==}
-    engines: {node: '>=0.8'}
     hasBin: true
 
   prism-react-renderer@1.3.5:
@@ -15182,21 +14929,6 @@ packages:
   redent@3.0.0:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
     engines: {node: '>=8'}
-
-  redis-commands@1.7.0:
-    resolution: {integrity: sha512-nJWqw3bTFy21hX/CPKHth6sfhZbdiHP6bTawSgQBlKOVRG7EZkfHbbHwQJnrE4vsQf0CMNE+3gJ4Fmm16vdVlQ==}
-
-  redis-errors@1.2.0:
-    resolution: {integrity: sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==}
-    engines: {node: '>=4'}
-
-  redis-parser@3.0.0:
-    resolution: {integrity: sha512-DJnGAeenTdpMEH6uAJRK/uiyEIH9WVsUmoLwzudwGJUwZPp80PDBWPHXSAGNPwNvIXAbe7MSUB1zQFugFml66A==}
-    engines: {node: '>=4'}
-
-  redis@3.1.2:
-    resolution: {integrity: sha512-grn5KoZLr/qrRQVwoSkmzdbw6pwF+/rwODtrOr6vuBRiR/f3rjSTGupbF90Zpqm2oenix8Do6RV7pYEkGwlKkw==}
-    engines: {node: '>=10'}
 
   reflect.getprototypeof@1.0.10:
     resolution: {integrity: sha512-00o4I+DVrefhv+nX0ulyi3biSHCPDe+yLv5o/p6d/UVlirijB8E16FtfwSAi4g3tcqrQ4lRAqQSoFEZJehYEcw==}
@@ -15974,10 +15706,6 @@ packages:
   sql-formatter@15.4.2:
     resolution: {integrity: sha512-Pw4aAgfuyml/SHMlhbJhyOv+GR+Z1HNb9sgX3CVBVdN5YNM+v2VWkYJ3NNbYS7cu37GY3vP/PgnwoVynCuXRxg==}
     hasBin: true
-
-  ssf@0.11.2:
-    resolution: {integrity: sha512-+idbmIXoYET47hH+d7dfm2epdOMUDjqcB4648sTZ+t2JwoyBFL/insLfB/racrDmsKB3diwsDA696pZMieAC5g==}
-    engines: {node: '>=0.8'}
 
   sshpk@1.17.0:
     resolution: {integrity: sha512-/9HIEs1ZXGhSPE8X6Ccm7Nam1z8KcoCqPdI7ecm1N33EzAetWahvQWVqLZtaZQ+IDKX4IyA2o0gBzqIMkAagHQ==}
@@ -17321,10 +17049,6 @@ packages:
     engines: {node: ^16.13.0 || >=18.0.0}
     hasBin: true
 
-  wmf@1.0.2:
-    resolution: {integrity: sha512-/p9K7bEh0Dj6WbXg4JG0xvLQmIadrner1bi45VMJTfnbVHsc7yIajZyoSoK60/dtVBs12Fm6WkUI5/3WAVsNMw==}
-    engines: {node: '>=0.8'}
-
   wolfy87-eventemitter@5.2.9:
     resolution: {integrity: sha512-P+6vtWyuDw+MB01X7UeF8TaHBvbCovf4HPEMF/SV7BdDc1SMTiBy13SRD71lQh4ExFTG1d/WNzDGDCyOKSMblw==}
 
@@ -17335,10 +17059,6 @@ packages:
   word-wrap@1.2.5:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
-
-  word@0.3.0:
-    resolution: {integrity: sha512-OELeY0Q61OXpdUfTp+oweA/vtLVg5VDOXh+3he3PNzLGG/y0oylSOC1xRVj0+l4vQ3tj/bB1HVHv1ocXkQceFA==}
-    engines: {node: '>=0.8'}
 
   wordwrap@1.0.0:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
@@ -17426,11 +17146,6 @@ packages:
   xdg-basedir@4.0.0:
     resolution: {integrity: sha512-PSNhEJDejZYV7h50BohL09Er9VaIefr2LMAf3OEmpCkjOi34eYyQYAXUTjEQtZJTKcF0E2UKTh+osDLsgNim9Q==}
     engines: {node: '>=8'}
-
-  xlsx@0.17.5:
-    resolution: {integrity: sha512-lXNU0TuYsvElzvtI6O7WIVb9Zar1XYw7Xb3VAx2wn8N/n0whBYrCnHMxtFyIiUU1Wjf09WzmLALDfBO5PqTb1g==}
-    engines: {node: '>=0.8'}
-    hasBin: true
 
   xml-formatter@2.6.1:
     resolution: {integrity: sha512-dOiGwoqm8y22QdTNI7A+N03tyVfBlQ0/oehAzxIZtwnFAHGeSlrfjF73YQvzSsa/Kt6+YZasKsrdu6OIpuBggw==}
@@ -24288,10 +24003,6 @@ snapshots:
 
   '@types/nprogress@0.2.0': {}
 
-  '@types/papaparse@5.3.5':
-    dependencies:
-      '@types/node': 20.17.16
-
   '@types/parse5@6.0.3': {}
 
   '@types/pg-pool@2.0.6':
@@ -24339,10 +24050,6 @@ snapshots:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
       csstype: 3.1.3
-
-  '@types/redis@2.8.32':
-    dependencies:
-      '@types/node': 20.17.16
 
   '@types/resolve@1.20.6': {}
 
@@ -24834,13 +24541,6 @@ snapshots:
   acorn@8.8.0: {}
 
   address@1.2.2: {}
-
-  adler-32@1.2.0:
-    dependencies:
-      exit-on-epipe: 1.0.1
-      printj: 1.1.2
-
-  adler-32@1.3.1: {}
 
   agent-base@6.0.2:
     dependencies:
@@ -25688,11 +25388,6 @@ snapshots:
 
   ccount@2.0.1: {}
 
-  cfb@1.2.2:
-    dependencies:
-      adler-32: 1.3.1
-      crc-32: 1.2.2
-
   chai@5.1.1:
     dependencies:
       assertion-error: 2.0.1
@@ -25948,8 +25643,6 @@ snapshots:
 
   co@4.6.0: {}
 
-  codepage@1.15.0: {}
-
   collapse-white-space@2.1.0: {}
 
   collect-v8-coverage@1.0.1: {}
@@ -26155,8 +25848,6 @@ snapshots:
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 5.7.3
-
-  crc-32@1.2.2: {}
 
   create-jest@29.7.0(@types/node@20.17.16):
     dependencies:
@@ -26454,8 +26145,6 @@ snapshots:
       esprima: 4.0.1
 
   delayed-stream@1.0.0: {}
-
-  denque@1.5.1: {}
 
   denque@2.1.0: {}
 
@@ -27501,8 +27190,6 @@ snapshots:
       signal-exit: 3.0.7
       strip-final-newline: 3.0.0
 
-  exit-on-epipe@1.0.1: {}
-
   exit@0.1.2: {}
 
   expand-brackets@2.1.4:
@@ -27955,8 +27642,6 @@ snapshots:
 
   fp-ts@2.12.3: {}
 
-  frac@1.1.2: {}
-
   fraction.js@4.2.0: {}
 
   fraction.js@4.3.7: {}
@@ -28403,10 +28088,6 @@ snapshots:
       wordwrap: 1.0.0
     optionalDependencies:
       uglify-js: 3.17.3
-
-  handy-redis@2.3.1:
-    dependencies:
-      '@types/redis': 2.8.32
 
   har-schema@2.0.0: {}
 
@@ -32627,8 +32308,6 @@ snapshots:
 
   pako@1.0.11: {}
 
-  papaparse@5.3.2: {}
-
   param-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
@@ -33059,8 +32738,6 @@ snapshots:
     dependencies:
       colors: 1.4.0
       minimist: 1.2.6
-
-  printj@1.1.2: {}
 
   prism-react-renderer@1.3.5(react@18.3.1):
     dependencies:
@@ -33691,21 +33368,6 @@ snapshots:
     dependencies:
       indent-string: 4.0.0
       strip-indent: 3.0.0
-
-  redis-commands@1.7.0: {}
-
-  redis-errors@1.2.0: {}
-
-  redis-parser@3.0.0:
-    dependencies:
-      redis-errors: 1.2.0
-
-  redis@3.1.2:
-    dependencies:
-      denque: 1.5.1
-      redis-commands: 1.7.0
-      redis-errors: 1.2.0
-      redis-parser: 3.0.0
 
   reflect.getprototypeof@1.0.10:
     dependencies:
@@ -34794,10 +34456,6 @@ snapshots:
       argparse: 2.0.1
       get-stdin: 8.0.0
       nearley: 2.20.1
-
-  ssf@0.11.2:
-    dependencies:
-      frac: 1.1.2
 
   sshpk@1.17.0:
     dependencies:
@@ -36412,15 +36070,11 @@ snapshots:
     dependencies:
       isexe: 3.1.1
 
-  wmf@1.0.2: {}
-
   wolfy87-eventemitter@5.2.9: {}
 
   word-wrap@1.2.3: {}
 
   word-wrap@1.2.5: {}
-
-  word@0.3.0: {}
 
   wordwrap@1.0.0: {}
 
@@ -36492,16 +36146,6 @@ snapshots:
 
   xdg-basedir@4.0.0:
     optional: true
-
-  xlsx@0.17.5:
-    dependencies:
-      adler-32: 1.2.0
-      cfb: 1.2.2
-      codepage: 1.15.0
-      crc-32: 1.2.2
-      ssf: 0.11.2
-      wmf: 1.0.2
-      word: 0.3.0
 
   xml-formatter@2.6.1:
     dependencies:

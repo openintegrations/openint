@@ -2,11 +2,17 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {zCustomerId, zId} from '@openint/cdk'
 import {and, count, eq, schema} from '@openint/db'
 import {publicProcedure, router, type RouterContext} from '../_base'
 import {core} from '../../models'
-import {expandConnector} from '../utils/connectorUtils'
+import {
+  expandConnector,
+  zConnectionId,
+  zConnectorConfigId,
+  zConnectorName,
+  zCustomerId,
+  zExpandOptions,
+} from '../utils/connectorUtils'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -34,14 +40,6 @@ const zConnectionStatus = z
 const zConnectionError = z
   .enum(['refresh_failed', 'unknown_external_error'])
   .describe('Error types: refresh_failed and unknown_external_error')
-
-const zExpandOptions = z
-  .enum(['connector'])
-  .describe('Fields to expand: connector (includes connector details)')
-
-export const zConnectorName = z
-  .enum(Object.keys(serverConnectors) as [string, ...string[]])
-  .describe('The name of the connector')
 
 async function formatConnection(
   ctx: RouterContext,
@@ -103,19 +101,20 @@ export const connectionRouter = router({
       openapi: {
         method: 'GET',
         path: '/connection/{id}',
-        description: 'Get details of a specific connection',
+        description:
+          'Get details of a specific connection, including credentials',
+        summary: 'Get Connection & Credentials',
       },
     })
-    // TODO: make zId('conn')
     .input(
       z.object({
-        id: zId('conn') as any,
+        id: zConnectionId,
         include_secrets: zIncludeSecrets.optional().default('none'),
         refresh_policy: zRefreshPolicy.optional().default('auto'),
         expand: z.array(zExpandOptions).optional().default([]),
       }),
     )
-    .output(core.connection)
+    .output(core.connection.describe('The connection details'))
     .query(async ({ctx, input}) => {
       const connection = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
@@ -156,21 +155,21 @@ export const connectionRouter = router({
         method: 'GET',
         path: '/connection',
         description: 'List all connections with optional filtering',
+        summary: 'List Connections',
       },
     })
     .input(
       zListParams
         .extend({
           connector_name: zConnectorName.optional(),
-          customer_id: zCustomerId.optional() as any,
-          // TODO: make zId('ccfg').optional()
-          connector_config_id: zId('ccfg').optional() as any,
+          customer_id: zCustomerId.optional(),
+          connector_config_id: zConnectorConfigId.optional(),
           include_secrets: zIncludeSecrets.optional().default('none'),
           expand: z.array(zExpandOptions).optional().default([]),
         })
         .optional(),
     )
-    .output(zListResponse(core.connection))
+    .output(zListResponse(core.connection).describe('The list of connections'))
     .query(async ({ctx, input}) => {
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
@@ -223,20 +222,23 @@ export const connectionRouter = router({
         method: 'POST',
         path: '/connection/{id}/check',
         description: 'Verify that a connection is healthy',
+        summary: 'Check Connection Health',
       },
     })
     .input(
       z.object({
-        // TODO: make zId('conn')
-        id: zId('conn') as any,
+        id: zConnectionId,
       }),
     )
     .output(
       z.object({
-        id: zId('conn') as any,
+        id: zConnectionId,
         status: zConnectionStatus,
         error: zConnectionError.optional(),
-        errorMessage: z.string().optional(),
+        errorMessage: z
+          .string()
+          .optional()
+          .describe('Optional expanded error message'),
       }),
     )
     .mutation(async ({ctx, input}) => {
@@ -281,12 +283,12 @@ export const connectionRouter = router({
           await connector.checkConnection(connection.settings as any)
           // QQ: should this parse the results of checkConnection somehow?
           return {
-            id: connection.id,
+            id: connection.id as `conn_${string}`,
             status: 'healthy',
           }
         } catch (error) {
           return {
-            id: connection.id,
+            id: connection.id as `conn_${string}`,
             status: 'disconnected',
             error: 'unknown_external_error',
           }
@@ -295,7 +297,7 @@ export const connectionRouter = router({
 
       // QQ: should we return healthy by default even if there's no check connection implemented?
       return {
-        id: connection.id,
+        id: connection.id as `conn_${string}`,
         status: 'healthy',
       }
     }),

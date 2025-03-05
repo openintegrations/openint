@@ -2,9 +2,9 @@
   "name": "OpenInt",
   "theme": "maple",
   "colors": {
-    "primary": "#0D9373",
+    "primary": "#6200ff",
     "light": "#07C983",
-    "dark": "#0D9373"
+    "dark": "#000000"
   },
   "footerSocials": {
     "github": "https://github.com/openintegrations/openint",
@@ -25,29 +25,50 @@
           {
             "group": "Getting Started",
             "pages": [
-              "quickstart/quickstart",
-              "quickstart/use-cases",
-              "quickstart/features",
-              "quickstart/integrations"
+              "quickstart-v0/quickstart",
+              "quickstart-v0/use-cases",
+              "quickstart-v0/features",
+              "quickstart-v0/integrations"
             ]
           },
           {
             "group": "Core Concepts",
             "pages": [
-              "core-concepts/connector-config",
-              "core-concepts/magic-link"
+              "core-concepts-v0/connector-config",
+              "core-concepts-v0/magic-link"
             ]
-          },
-          {
-            "group": "Community",
-            "pages": ["community/join-our-slack", "community/attribution"]
           }
         ]
       },
       {
         "version": "v1 (preview)",
         "label": "Version 1",
-        "openapi": "https://app.stainless.com/api/spec/documented/openint"
+        "openapi": "https://app.stainless.com/api/spec/documented/openint",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "quickstart/intro",
+              "quickstart/quickstart",
+              "quickstart/integrations"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "core-concepts/data-flow",
+              "core-concepts/webhooks-events"
+            ]
+          },
+          {
+            "group": "Using Connect",
+            "pages": [
+              "connect/share-magic-links",
+              "connect/react-embed",
+              "connect/web-applications"
+            ]
+          }
+        ]
       }
     ]
   }

@@ -21,11 +21,6 @@ module.exports = [
     },
   },
   {
-    dirName: 'connector-alphavantage',
-    varName: 'connectorAlphavantage',
-    imports: {},
-  },
-  {
     name: 'apollo',
     dirName: 'connector-apollo',
     varName: 'connectorApollo',
