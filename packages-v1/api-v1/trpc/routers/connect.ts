@@ -12,6 +12,7 @@ export const connectRouter = router({
         method: 'POST',
         path: '/connect/magic-link',
         description: 'Create a magic link for connecting integrations',
+        summary: 'Create Magic Link',
       },
     })
     .input(
@@ -107,6 +108,7 @@ export const connectRouter = router({
         method: 'POST',
         path: '/connect/token',
         description: 'Create an authentication token for a customer',
+        summary: 'Create Customer Authentication Token',
       },
     })
     .input(

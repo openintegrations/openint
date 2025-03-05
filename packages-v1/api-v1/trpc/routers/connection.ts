@@ -104,6 +104,7 @@ export const connectionRouter = router({
         method: 'GET',
         path: '/connection/{id}',
         description: 'Get details of a specific connection',
+        summary: 'Get Connection Details',
       },
     })
     // TODO: make zId('conn')
@@ -156,6 +157,7 @@ export const connectionRouter = router({
         method: 'GET',
         path: '/connection',
         description: 'List all connections with optional filtering',
+        summary: 'List Connections',
       },
     })
     .input(
@@ -224,6 +226,7 @@ export const connectionRouter = router({
         method: 'POST',
         path: '/connection/{id}/check',
         description: 'Verify that a connection is healthy',
+        summary: 'Check Connection Health',
       },
     })
     .input(

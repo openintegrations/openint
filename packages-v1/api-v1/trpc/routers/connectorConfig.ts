@@ -19,6 +19,7 @@ export const connectorConfigRouter = router({
         path: '/connector-config',
         description:
           'List all connector configurations with optional filtering',
+        summary: 'List Connector Configurations',
       },
     })
     .input(

@@ -29,6 +29,7 @@ export const eventRouter = router({
         method: 'GET',
         path: '/event',
         description: 'List all events for an organization',
+        summary: 'List Organization Events',
       },
     })
     .input(zListParams.optional())
