@@ -16,11 +16,11 @@ export function viewerFromRequest(req: Request): Viewer {
 export function routerContextFromRequest({
   req,
   ...ctx
-}: {req: Request} & Omit<CreateRuterContextOptions, 'viewer'>) {
+}: {req: Request} & Omit<CreateRouterContextOptions, 'viewer'>) {
   return routerContextFromViewer({...ctx, viewer: viewerFromRequest(req)})
 }
 
-interface CreateRuterContextOptions {
+interface CreateRouterContextOptions {
   viewer: Viewer
   db: AnyDatabase
 }
@@ -28,7 +28,7 @@ interface CreateRuterContextOptions {
 export function routerContextFromViewer({
   viewer: currentViewer,
   db,
-}: CreateRuterContextOptions): RouterContext {
+}: CreateRouterContextOptions): RouterContext {
   function createViewerContext(viewer: Viewer): ViewerContext {
     const dbForViewer = db.$asViewer?.(viewer)
     if (!dbForViewer) {

@@ -59,7 +59,6 @@ export function createApp({db}: CreateAppOptions) {
     .mount('/v1*', createFetchHandlerOpenAPI({endpoint: '/v1', db}))
   return app
 }
-export const app = 123
 
 // @ts-expect-error Property 'main' does not exist on type 'ImportMeta'.ts(2339)
 if (import.meta.main) {
