@@ -6,17 +6,21 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://api.openint.dev/v1"
     }
   ],
   "paths": {
     "/connection/{id}": {
       "get": {
         "operationId": "getConnection",
-        "description": "Get details of a specific connection",
+        "summary": "Get Connection & Credentials",
+        "description": "Get details of a specific connection, including credentials",
         "security": [
           {
-            "Authorization": []
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
           }
         ],
         "parameters": [
@@ -141,10 +145,14 @@
     "/connection": {
       "get": {
         "operationId": "listConnections",
+        "summary": "List Connections",
         "description": "List all connections with optional filtering",
         "security": [
           {
-            "Authorization": []
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
           }
         ],
         "parameters": [
@@ -368,10 +376,14 @@
     "/connection/{id}/check": {
       "post": {
         "operationId": "checkConnection",
+        "summary": "Check Connection Health",
         "description": "Verify that a connection is healthy",
         "security": [
           {
-            "Authorization": []
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
           }
         ],
         "parameters": [
@@ -471,10 +483,14 @@
     "/connector-config": {
       "get": {
         "operationId": "listConnectorConfigs",
+        "summary": "List Connector Configurations",
         "description": "List all connector configurations with optional filtering",
         "security": [
           {
-            "Authorization": []
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
           }
         ],
         "parameters": [
@@ -668,10 +684,14 @@
     "/event": {
       "get": {
         "operationId": "listEvents",
+        "summary": "List Organization Events",
         "description": "List all events for an organization",
         "security": [
           {
-            "Authorization": []
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
           }
         ],
         "parameters": [
@@ -783,217 +803,17 @@
         }
       }
     },
-    "/health": {
-      "get": {
-        "operationId": "health",
-        "security": [
-          {
-            "Authorization": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "ok": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "ok"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/viewer": {
-      "get": {
-        "operationId": "viewer",
-        "security": [
-          {
-            "Authorization": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "anon"
-                        }
-                      },
-                      "required": [
-                        "role"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "customer"
-                        },
-                        "customerId": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "orgId": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "role",
-                        "customerId",
-                        "orgId"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "user"
-                        },
-                        "userId": {
-                          "type": "string"
-                        },
-                        "orgId": {
-                          "type": [
-                            "string",
-                            "null"
-                          ]
-                        },
-                        "extra": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        }
-                      },
-                      "required": [
-                        "role",
-                        "userId"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "org"
-                        },
-                        "orgId": {
-                          "type": "string"
-                        },
-                        "extra": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        }
-                      },
-                      "required": [
-                        "role",
-                        "orgId"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "system"
-                        }
-                      },
-                      "required": [
-                        "role"
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/connect/magic-link": {
       "post": {
         "operationId": "createMagicLink",
+        "summary": "Create Magic Link",
         "description": "Create a magic link for connecting integrations",
         "security": [
           {
-            "Authorization": []
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
           }
         ],
         "requestBody": {
@@ -1005,7 +825,6 @@
                 "properties": {
                   "email": {
                     "type": "string",
-                    "format": "email",
                     "description": "The email address of the customer"
                   },
                   "customer_id": {
@@ -1118,7 +937,6 @@
                   }
                 },
                 "required": [
-                  "email",
                   "customer_id"
                 ]
               }
@@ -1190,10 +1008,14 @@
     "/connect/token": {
       "post": {
         "operationId": "createToken",
+        "summary": "Create Customer Authentication Token",
         "description": "Create an authentication token for a customer",
         "security": [
           {
-            "Authorization": []
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
           }
         ],
         "requestBody": {
@@ -1287,9 +1109,17 @@
   },
   "components": {
     "securitySchemes": {
-      "Authorization": {
+      "ApiKey": {
+        "type": "apiKey",
+        "name": "authorization",
+        "in": "header",
+        "description": "Organization API key passed in the authorization header with format: Bearer {apiKey}"
+      },
+      "CustomerToken": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Customer authentication token created using the API passed in the authorization header with format: Bearer {token}"
       }
     },
     "schemas": {
@@ -1319,7 +1149,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "aircall"
       },
       "connectors.aircall.connectorConfig": {
         "type": "object",
@@ -1335,7 +1166,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "aircall"
       },
       "connectors.airtable.connectionSettings": {
         "type": "object",
@@ -1363,7 +1195,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "airtable"
       },
       "connectors.airtable.connectorConfig": {
         "type": "object",
@@ -1379,7 +1212,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "airtable"
       },
       "connectors.apollo.connectionSettings": {
         "type": "object",
@@ -1538,7 +1372,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "apollo"
       },
       "connectors.apollo.connectorConfig": {
         "type": "object",
@@ -1554,7 +1389,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "apollo"
       },
       "connectors.beancount.connectionSettings": {
         "type": "object",
@@ -1570,7 +1406,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "beancount"
       },
       "connectors.beancount.connectorConfig": {
         "type": "object",
@@ -1586,7 +1423,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "beancount"
       },
       "connectors.brex.connectionSettings": {
         "type": "object",
@@ -1610,7 +1448,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "brex"
       },
       "connectors.brex.connectorConfig": {
         "type": "object",
@@ -1653,7 +1492,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "brex"
       },
       "connectors.coda.connectionSettings": {
         "type": "object",
@@ -1677,7 +1517,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "coda"
       },
       "connectors.coda.connectorConfig": {
         "type": "object",
@@ -1693,7 +1534,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "coda"
       },
       "connectors.confluence.connectionSettings": {
         "type": "object",
@@ -1852,7 +1694,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "confluence"
       },
       "connectors.confluence.connectorConfig": {
         "type": "object",
@@ -1891,7 +1734,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "confluence"
       },
       "connectors.debug.connectionSettings": {
         "type": "object",
@@ -1904,7 +1748,8 @@
         },
         "required": [
           "connector_name"
-        ]
+        ],
+        "title": "debug"
       },
       "connectors.debug.connectorConfig": {
         "type": "object",
@@ -1917,7 +1762,8 @@
         },
         "required": [
           "connector_name"
-        ]
+        ],
+        "title": "debug"
       },
       "connectors.discord.connectionSettings": {
         "type": "object",
@@ -2076,7 +1922,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "discord"
       },
       "connectors.discord.connectorConfig": {
         "type": "object",
@@ -2115,7 +1962,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "discord"
       },
       "connectors.finch.connectionSettings": {
         "type": "object",
@@ -2139,7 +1987,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "finch"
       },
       "connectors.finch.connectorConfig": {
         "type": "object",
@@ -2187,7 +2036,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "finch"
       },
       "connectors.firebase.connectionSettings": {
         "type": "object",
@@ -2353,7 +2203,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "firebase"
       },
       "connectors.firebase.connectorConfig": {
         "type": "object",
@@ -2369,7 +2220,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "firebase"
       },
       "connectors.foreceipt.connectionSettings": {
         "type": "object",
@@ -2400,7 +2252,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "foreceipt"
       },
       "connectors.foreceipt.connectorConfig": {
         "type": "object",
@@ -2416,7 +2269,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "foreceipt"
       },
       "connectors.fs.connectionSettings": {
         "type": "object",
@@ -2440,7 +2294,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "fs"
       },
       "connectors.fs.connectorConfig": {
         "type": "object",
@@ -2456,7 +2311,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "fs"
       },
       "connectors.github.connectionSettings": {
         "type": "object",
@@ -2615,7 +2471,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "github"
       },
       "connectors.github.connectorConfig": {
         "type": "object",
@@ -2654,7 +2511,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "github"
       },
       "connectors.gong.connectionSettings": {
         "type": "object",
@@ -2813,7 +2671,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "gong"
       },
       "connectors.gong.connectorConfig": {
         "type": "object",
@@ -2852,7 +2711,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "gong"
       },
       "connectors.google.connectionSettings": {
         "type": "object",
@@ -3014,7 +2874,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "google"
       },
       "connectors.google.connectorConfig": {
         "type": "object",
@@ -3125,7 +2986,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "google"
       },
       "connectors.googledrive.connectionSettings": {
         "type": "object",
@@ -3141,7 +3003,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "googledrive"
       },
       "connectors.googledrive.connectorConfig": {
         "type": "object",
@@ -3178,7 +3041,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "googledrive"
       },
       "connectors.greenhouse.connectionSettings": {
         "type": "object",
@@ -3202,7 +3066,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "greenhouse"
       },
       "connectors.greenhouse.connectorConfig": {
         "type": "object",
@@ -3218,7 +3083,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "greenhouse"
       },
       "connectors.heron.connectionSettings": {
         "type": "object",
@@ -3234,7 +3100,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "heron"
       },
       "connectors.heron.connectorConfig": {
         "type": "object",
@@ -3258,7 +3125,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "heron"
       },
       "connectors.hubspot.connectionSettings": {
         "type": "object",
@@ -3418,7 +3286,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "hubspot"
       },
       "connectors.hubspot.connectorConfig": {
         "type": "object",
@@ -3457,7 +3326,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "hubspot"
       },
       "connectors.intercom.connectionSettings": {
         "type": "object",
@@ -3616,7 +3486,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "intercom"
       },
       "connectors.intercom.connectorConfig": {
         "type": "object",
@@ -3655,7 +3526,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "intercom"
       },
       "connectors.jira.connectionSettings": {
         "type": "object",
@@ -3814,7 +3686,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "jira"
       },
       "connectors.jira.connectorConfig": {
         "type": "object",
@@ -3853,7 +3726,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "jira"
       },
       "connectors.kustomer.connectionSettings": {
         "type": "object",
@@ -4012,7 +3886,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "kustomer"
       },
       "connectors.kustomer.connectorConfig": {
         "type": "object",
@@ -4051,7 +3926,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "kustomer"
       },
       "connectors.lever.connectionSettings": {
         "type": "object",
@@ -4210,7 +4086,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "lever"
       },
       "connectors.lever.connectorConfig": {
         "type": "object",
@@ -4257,7 +4134,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "lever"
       },
       "connectors.linear.connectionSettings": {
         "type": "object",
@@ -4416,7 +4294,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "linear"
       },
       "connectors.linear.connectorConfig": {
         "type": "object",
@@ -4455,7 +4334,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "linear"
       },
       "connectors.lunchmoney.connectionSettings": {
         "type": "object",
@@ -4471,7 +4351,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "lunchmoney"
       },
       "connectors.lunchmoney.connectorConfig": {
         "type": "object",
@@ -4495,7 +4376,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "lunchmoney"
       },
       "connectors.mercury.connectionSettings": {
         "type": "object",
@@ -4511,7 +4393,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "mercury"
       },
       "connectors.mercury.connectorConfig": {
         "type": "object",
@@ -4554,7 +4437,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "mercury"
       },
       "connectors.merge.connectionSettings": {
         "type": "object",
@@ -4579,7 +4463,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "merge"
       },
       "connectors.merge.connectorConfig": {
         "type": "object",
@@ -4603,7 +4488,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "merge"
       },
       "connectors.microsoft.connectionSettings": {
         "type": "object",
@@ -4765,7 +4651,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "microsoft"
       },
       "connectors.microsoft.connectorConfig": {
         "type": "object",
@@ -4843,7 +4730,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "microsoft"
       },
       "connectors.mongodb.connectionSettings": {
         "type": "object",
@@ -4871,7 +4759,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "mongodb"
       },
       "connectors.mongodb.connectorConfig": {
         "type": "object",
@@ -4887,7 +4776,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "mongodb"
       },
       "connectors.moota.connectionSettings": {
         "type": "object",
@@ -4903,7 +4793,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "moota"
       },
       "connectors.moota.connectorConfig": {
         "type": "object",
@@ -4927,7 +4818,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "moota"
       },
       "connectors.onebrick.connectionSettings": {
         "type": "object",
@@ -4951,7 +4843,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "onebrick"
       },
       "connectors.onebrick.connectorConfig": {
         "type": "object",
@@ -5003,7 +4896,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "onebrick"
       },
       "connectors.outreach.connectionSettings": {
         "type": "object",
@@ -5162,7 +5056,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "outreach"
       },
       "connectors.outreach.connectorConfig": {
         "type": "object",
@@ -5201,7 +5096,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "outreach"
       },
       "connectors.pipedrive.connectionSettings": {
         "type": "object",
@@ -5360,7 +5256,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "pipedrive"
       },
       "connectors.pipedrive.connectorConfig": {
         "type": "object",
@@ -5399,7 +5296,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "pipedrive"
       },
       "connectors.plaid.connectionSettings": {
         "type": "object",
@@ -5435,7 +5333,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "plaid"
       },
       "connectors.plaid.connectorConfig": {
         "type": "object",
@@ -5562,7 +5461,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "plaid"
       },
       "connectors.postgres.connectionSettings": {
         "type": "object",
@@ -5600,7 +5500,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "postgres"
       },
       "connectors.postgres.connectorConfig": {
         "type": "object",
@@ -5616,7 +5517,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "postgres"
       },
       "connectors.qbo.connectionSettings": {
         "type": "object",
@@ -5766,7 +5668,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "qbo"
       },
       "connectors.qbo.connectorConfig": {
         "type": "object",
@@ -5825,7 +5728,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "qbo"
       },
       "connectors.ramp.connectionSettings": {
         "type": "object",
@@ -5855,7 +5759,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "ramp"
       },
       "connectors.ramp.connectorConfig": {
         "type": "object",
@@ -5891,7 +5796,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "ramp"
       },
       "connectors.revert.connectionSettings": {
         "type": "object",
@@ -5915,7 +5821,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "revert"
       },
       "connectors.revert.connectorConfig": {
         "type": "object",
@@ -5942,7 +5849,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "revert"
       },
       "connectors.salesforce.connectionSettings": {
         "type": "object",
@@ -6101,7 +6009,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "salesforce"
       },
       "connectors.salesforce.connectorConfig": {
         "type": "object",
@@ -6140,7 +6049,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "salesforce"
       },
       "connectors.salesloft.connectionSettings": {
         "type": "object",
@@ -6299,7 +6209,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "salesloft"
       },
       "connectors.salesloft.connectorConfig": {
         "type": "object",
@@ -6338,7 +6249,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "salesloft"
       },
       "connectors.saltedge.connectionSettings": {
         "type": "object",
@@ -6351,7 +6263,8 @@
         },
         "required": [
           "connector_name"
-        ]
+        ],
+        "title": "saltedge"
       },
       "connectors.saltedge.connectorConfig": {
         "type": "object",
@@ -6385,7 +6298,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "saltedge"
       },
       "connectors.slack.connectionSettings": {
         "type": "object",
@@ -6544,7 +6458,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "slack"
       },
       "connectors.slack.connectorConfig": {
         "type": "object",
@@ -6583,7 +6498,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "slack"
       },
       "connectors.splitwise.connectionSettings": {
         "type": "object",
@@ -6755,7 +6671,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "splitwise"
       },
       "connectors.splitwise.connectorConfig": {
         "type": "object",
@@ -6771,7 +6688,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "splitwise"
       },
       "connectors.spreadsheet.connectionSettings": {
         "type": "object",
@@ -6814,7 +6732,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "spreadsheet"
       },
       "connectors.spreadsheet.connectorConfig": {
         "type": "object",
@@ -6865,7 +6784,8 @@
         },
         "required": [
           "connector_name"
-        ]
+        ],
+        "title": "spreadsheet"
       },
       "connectors.stripe.connectionSettings": {
         "type": "object",
@@ -6889,7 +6809,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "stripe"
       },
       "connectors.stripe.connectorConfig": {
         "type": "object",
@@ -6932,7 +6853,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "stripe"
       },
       "connectors.teller.connectionSettings": {
         "type": "object",
@@ -6956,7 +6878,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "teller"
       },
       "connectors.teller.connectorConfig": {
         "type": "object",
@@ -6986,7 +6909,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "teller"
       },
       "connectors.toggl.connectionSettings": {
         "type": "object",
@@ -7022,7 +6946,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "toggl"
       },
       "connectors.toggl.connectorConfig": {
         "type": "object",
@@ -7038,7 +6963,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "toggl"
       },
       "connectors.twenty.connectionSettings": {
         "type": "object",
@@ -7062,7 +6988,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "twenty"
       },
       "connectors.twenty.connectorConfig": {
         "type": "object",
@@ -7078,7 +7005,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "twenty"
       },
       "connectors.venmo.connectionSettings": {
         "type": "object",
@@ -7098,7 +7026,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "venmo"
       },
       "connectors.venmo.connectorConfig": {
         "type": "object",
@@ -7146,7 +7075,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "venmo"
       },
       "connectors.webhook.connectionSettings": {
         "type": "object",
@@ -7170,7 +7100,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "webhook"
       },
       "connectors.webhook.connectorConfig": {
         "type": "object",
@@ -7186,7 +7117,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "webhook"
       },
       "connectors.wise.connectionSettings": {
         "type": "object",
@@ -7220,7 +7152,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "wise"
       },
       "connectors.wise.connectorConfig": {
         "type": "object",
@@ -7236,7 +7169,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "wise"
       },
       "connectors.xero.connectionSettings": {
         "type": "object",
@@ -7395,7 +7329,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "xero"
       },
       "connectors.xero.connectorConfig": {
         "type": "object",
@@ -7434,7 +7369,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "xero"
       },
       "connectors.yodlee.connectionSettings": {
         "type": "object",
@@ -7550,7 +7486,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "yodlee"
       },
       "connectors.yodlee.connectorConfig": {
         "type": "object",
@@ -7615,7 +7552,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "yodlee"
       },
       "connectors.zohodesk.connectionSettings": {
         "type": "object",
@@ -7774,7 +7712,8 @@
         "required": [
           "connector_name",
           "settings"
-        ]
+        ],
+        "title": "zohodesk"
       },
       "connectors.zohodesk.connectorConfig": {
         "type": "object",
@@ -7813,7 +7752,8 @@
         "required": [
           "connector_name",
           "config"
-        ]
+        ],
+        "title": "zohodesk"
       },
       "core.connection": {
         "allOf": [
@@ -8443,7 +8383,8 @@
           "org_id",
           "user_id",
           "customer_id"
-        ]
+        ],
+        "title": "event"
       },
       "error.BAD_REQUEST": {
         "type": "object",

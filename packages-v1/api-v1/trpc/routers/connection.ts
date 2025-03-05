@@ -103,8 +103,9 @@ export const connectionRouter = router({
       openapi: {
         method: 'GET',
         path: '/connection/{id}',
-        description: 'Get details of a specific connection',
-        summary: 'Get Connection Details',
+        description:
+          'Get details of a specific connection, including credentials',
+        summary: 'Get Connection & Credentials',
       },
     })
     // TODO: make zId('conn')

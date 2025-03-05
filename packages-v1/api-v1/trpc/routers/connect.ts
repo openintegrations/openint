@@ -19,7 +19,6 @@ export const connectRouter = router({
       z.object({
         email: z
           .string()
-          .email()
           .optional()
           .describe('The email address of the customer'),
         customer_id: (zCustomerId as any).describe(
