@@ -1,0 +1,41 @@
+diff --git a/dist/cjs/adapters/index.js b/dist/cjs/adapters/index.js
+index 9fa5a5a75c42a0ce2ffef3a2272e99cca463641e..a465ff856846f24fb49733203f2e07032e0bcea1 100644
+--- a/dist/cjs/adapters/index.js
++++ b/dist/cjs/adapters/index.js
+@@ -14,11 +14,11 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
+     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-__exportStar(require("./standalone"), exports);
+-__exportStar(require("./express"), exports);
+-__exportStar(require("./next"), exports);
+-__exportStar(require("./fastify"), exports);
++// __exportStar(require("./standalone"), exports);
++// __exportStar(require("./express"), exports);
++// __exportStar(require("./next"), exports);
++// __exportStar(require("./fastify"), exports);
+ __exportStar(require("./fetch"), exports);
+-__exportStar(require("./nuxt"), exports);
+-__exportStar(require("./node-http"), exports);
++// __exportStar(require("./nuxt"), exports);
++// __exportStar(require("./node-http"), exports);
+ //# sourceMappingURL=index.js.map
+diff --git a/dist/esm/adapters/index.mjs b/dist/esm/adapters/index.mjs
+index 6ea22f01c95c841c880591a17b430a6fa9559d70..26ae1f8790a81485ffc133f51a7844f848b0020a 100644
+--- a/dist/esm/adapters/index.mjs
++++ b/dist/esm/adapters/index.mjs
+@@ -1,8 +1,8 @@
+-export * from './standalone.mjs';
+-export * from './express.mjs';
+-export * from './next.mjs';
++// export * from './standalone.mjs';
++// export * from './express.mjs';
++// export * from './next.mjs';
+ export * from './fastify.mjs';
+-export * from './fetch.mjs';
+-export * from './nuxt.mjs';
+-export * from './node-http/index.mjs';
++// export * from './fetch.mjs';
++// export * from './nuxt.mjs';
++// export * from './node-http/index.mjs';
+ //# sourceMappingURL=index.js.map

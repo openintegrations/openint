@@ -76,13 +76,13 @@ export async function viewerFromRequest(
   // access token via query param
   let accessToken = url.searchParams.get(kAccessToken) ?? undefined
 
-  let viewer = jwt.verifyViewer(accessToken)
+  let viewer = await jwt.verifyViewer(accessToken)
   if (viewer.role !== 'anon') {
     return {...viewer, accessToken}
   }
   // access token via header
   accessToken = req.headers.get('authorization')?.match(/^Bearer (.+)/)?.[1]
-  viewer = jwt.verifyViewer(accessToken)
+  viewer = await jwt.verifyViewer(accessToken)
   if (viewer.role !== 'anon') {
     return {...viewer, accessToken}
   }

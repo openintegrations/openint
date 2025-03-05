@@ -1,6 +1,6 @@
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
-import {AnyDatabase} from '@openint/db/db'
+import type {AnyDatabase} from '@openint/db/db'
 import {envRequired} from '@openint/env'
 import type {RouterContext, ViewerContext} from './_base'
 
@@ -8,16 +8,16 @@ const jwt = makeJwtClient({
   secretOrPublicKey: envRequired.JWT_SECRET,
 })
 
-export function viewerFromRequest(req: Request): Viewer {
+export function viewerFromRequest(req: Request): Promise<Viewer> {
   const token = req.headers.get('authorization')?.match(/^Bearer (.+)/)?.[1]
   return jwt.verifyViewer(token)
 }
 
-export function routerContextFromRequest({
+export async function routerContextFromRequest({
   req,
   ...ctx
 }: {req: Request} & Omit<CreateRouterContextOptions, 'viewer'>) {
-  return routerContextFromViewer({...ctx, viewer: viewerFromRequest(req)})
+  return routerContextFromViewer({...ctx, viewer: await viewerFromRequest(req)})
 }
 
 interface CreateRouterContextOptions {

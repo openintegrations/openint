@@ -122,13 +122,13 @@ export function getContextFactory<
   }
 
   /** not sure if this is needed as most codepath gets us viewer via multiple methods */
-  function fromJwtToken(token?: string) {
+  async function fromJwtToken(token?: string) {
     if (!token) {
       return fromViewer({role: 'anon'})
     }
 
     try {
-      const data = jwt.verifyViewer(token)
+      const data = await jwt.verifyViewer(token)
       return fromViewer(zViewerFromJwtPayload.parse(data))
     } catch (err) {
       console.warn('JwtError', err)

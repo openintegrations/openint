@@ -114,7 +114,8 @@
       "cac@6.7.12": "patches/cac@6.7.12.patch",
       "esbuild-jest@0.5.0": "patches/esbuild-jest@0.5.0.patch",
       "firebase@9.8.1": "patches/firebase@9.8.1.patch",
-      "micro-memoize@4.0.10": "patches/micro-memoize@4.0.10.patch"
+      "micro-memoize@4.0.10": "patches/micro-memoize@4.0.10.patch",
+      "trpc-to-openapi": "patches/trpc-to-openapi.patch"
     }
   }
 }

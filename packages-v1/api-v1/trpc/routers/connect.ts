@@ -60,7 +60,7 @@ export const connectRouter = router({
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
-      const token = jwt.signViewer(
+      const token = await jwt.signViewer(
         asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
         {
           validityInSeconds: input.validity_in_seconds,
@@ -129,7 +129,7 @@ export const connectRouter = router({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
 
-      const token = jwt.signViewer(
+      const token = await jwt.signViewer(
         asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
         {
           validityInSeconds: input.validity_in_seconds,

@@ -1,7 +1,7 @@
 import type {AnyTRPCRouter} from '@trpc/server'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
-import {Viewer} from '@openint/cdk'
+import type {Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
 import {routerContextFromRequest, routerContextFromViewer} from './context'
 import {appRouter} from './routers'

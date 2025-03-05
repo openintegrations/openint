@@ -1,11 +1,11 @@
-import path from 'node:path'
+// import path from 'node:path'
 import type {Config} from 'drizzle-kit'
 import {env} from '@openint/env'
 
 export default {
-  out: path.join(__dirname, './migrations'),
+  out: './migrations', // path.join(__dirname, './migrations'),
   dialect: 'postgresql',
-  schema: path.join(__dirname, './schema/schema.ts'),
+  schema: './schema/schema.ts', // path.join(__dirname, './schema/schema.ts'),
   dbCredentials: {url: env.DATABASE_URL_UNPOOLED ?? env.DATABASE_URL},
   introspect: {casing: 'preserve'},
   migrations: {},
