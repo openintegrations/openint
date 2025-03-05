@@ -1,0 +1,46 @@
+---
+title: Webhooks & Events
+description: Real-time updates with OpenInt webhooks and events
+---
+
+# Webhooks & Events
+
+OpenInt's webhook system allows you to receive real-time updates about changes in your connected services.
+
+## Event Types
+
+1. **Connection Events**
+
+   - Connection created
+   - Connection updated
+   - Connection deleted
+   - Authentication status changes
+
+## Implementing Webhooks
+
+You can register a webhook endpoint on the Openint console.
+
+## Event Payload Structure
+
+```typescript
+interface WebhookPayload {
+  id: string;
+  type: string;
+  created: string;
+  data: {
+    // Event-specific data
+  };
+  metadata: {
+    // Additional context
+  };
+}
+```
+
+## Best Practices
+
+- Implement proper signature verification
+- Handle retries appropriately
+- Process events asynchronously
+- Monitor webhook health
+- Implement proper error handling
+- Keep secrets secure
