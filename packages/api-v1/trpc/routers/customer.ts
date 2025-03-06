@@ -1,14 +1,45 @@
+import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
-import {makeJwtClient} from '@openint/cdk'
+import {getServerUrl} from '@openint/app-config/constants'
+import {CustomerId, makeJwtClient, Viewer} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
-// @pellicceama fix me
-import {getServerUrl} from '../../../../apps/app-config/constants'
-import {asCustomer} from '../../../../packages/engine-backend/router/customerRouter'
 import {
   zConnectionId,
   zConnectorName,
   zCustomerId,
 } from '../utils/connectorUtils'
+
+function asCustomer(
+  viewer: Viewer,
+  input: {customerId?: CustomerId | null},
+): Viewer<'customer'> {
+  if (!('orgId' in viewer) || !viewer.orgId) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Current viewer missing orgId to create token',
+    })
+  }
+  if (
+    viewer.role === 'customer' &&
+    input.customerId &&
+    input.customerId !== viewer.customerId
+  ) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Current viewer cannot create token for other customer',
+    })
+  }
+  const customerId =
+    viewer.role === 'customer' ? viewer.customerId : input.customerId
+  if (!customerId) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Either call as an customer or pass customerId explicitly',
+    })
+  }
+
+  return {role: 'customer', customerId, orgId: viewer.orgId}
+}
 
 export const customerRouter = router({
   createMagicLink: publicProcedure
@@ -70,6 +101,7 @@ export const customerRouter = router({
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
+
       const token = jwt.signViewer(
         asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
         {
