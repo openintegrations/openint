@@ -15,15 +15,41 @@ afterAll(async () => {
   await db.$end()
 })
 
-test('elysia route', async () => {
-  const res = await app.handle(new Request('http://localhost/api/health'))
-  expect(await res.json()).toBeTruthy()
+describe('elysia', () => {
+  test('GET /health', async () => {
+    const res = await app.handle(new Request('http://localhost/api/health'))
+    expect(await res.json()).toBeTruthy()
+  })
+
+  test('POST /health', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/api/health', {
+        method: 'POST',
+        body: JSON.stringify({foo: 'bar'}),
+        headers: {'Content-Type': 'application/json'},
+      }),
+    )
+
+    expect(await res.json()).toMatchObject({body: {foo: 'bar'}})
+  })
 })
 
 describe('openapi route', () => {
   test('healthcheck', async () => {
     const res = await app.handle(new Request('http://localhost/api/v1/health'))
     expect(await res.json()).toMatchObject({ok: true})
+  })
+
+  test.skip('POST healthcheck', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/api/v1/health', {
+        method: 'POST',
+        body: JSON.stringify({foo: 'bar'}),
+        headers: {'Content-Type': 'application/json'},
+      }),
+    )
+    console.log(await res.text())
+    // expect(await res.json()).toMatchObject({input: {foo: 'bar'}})
   })
 
   test('healthcheck bypass elysia', async () => {

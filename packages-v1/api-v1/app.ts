@@ -43,6 +43,7 @@ export function createApp({db}: CreateAppOptions) {
     //   }
     // })
     .get('/health', () => ({healthy: true}))
+    .post('/health', (ctx) => ({healthy: true, body: ctx.body}))
     .use(
       swagger({
         // For some reason spec.content doesn't work. so we are forced tos specify url instead

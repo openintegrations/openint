@@ -1,7 +1,7 @@
 import {initTRPC, TRPCError} from '@trpc/server'
 import {type OpenApiMeta} from 'trpc-to-openapi'
 import {hasRole, type Viewer} from '@openint/cdk'
-import {AnyDrizzle} from '@openint/db/db'
+import type {AnyDrizzle} from '@openint/db/db'
 
 export interface ViewerContext {
   viewer: Viewer
