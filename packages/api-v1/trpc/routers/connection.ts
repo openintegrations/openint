@@ -2,7 +2,7 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {and, count, eq, schema} from '@openint/db'
+import {and, count, eq, schema, sql} from '@openint/db'
 import {publicProcedure, router, type RouterContext} from '../_base'
 import {core} from '../../models'
 import {
@@ -171,11 +171,12 @@ export const connectionRouter = router({
     )
     .output(zListResponse(core.connection).describe('The list of connections'))
     .query(async ({ctx, input}) => {
+      // Create a query that selects all fields from connection and adds a window function for the count
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
             connection: schema.connection,
-            total: count(),
+            total: sql`count(*) over()`,
           })
           .from(schema.connection)
           .where(
