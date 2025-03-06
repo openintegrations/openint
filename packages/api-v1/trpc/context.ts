@@ -48,7 +48,9 @@ export function routerContextFromViewer<T extends Viewer>({
   viewer: currentViewer,
   db,
 }: CreateRouterContextOptions<T>): RouterContext<T> {
-  function createViewerContext<T2 extends Viewer>(viewer: T2): ViewerContext {
+  function createViewerContext<T2 extends Viewer>(
+    viewer: T2,
+  ): ViewerContext<T2> {
     const dbForViewer = db.$asViewer?.(viewer)
     if (!dbForViewer) {
       throw new Error(`${db.driverType} does not support asViewer`)

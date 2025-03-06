@@ -121,7 +121,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
-  test('does not find other customer connection', async () => {
+  test('other customer also finds own connection', async () => {
     const res = await asOtherCustomer.db.query.connection.findMany()
     expect(res).toHaveLength(1)
     expect(res[0]).toMatchObject({
