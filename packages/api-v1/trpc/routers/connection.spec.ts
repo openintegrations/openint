@@ -67,13 +67,18 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     return res[0]!.id
   })
 
-  test('find own connection connection', async () => {
+  test('find own connection', async () => {
     const res = await asCustomer.db.query.connection.findMany()
     expect(res[0]).toMatchObject({
       id: connIdRef.current,
       connector_config_id: connConfigIdRef.current,
       customer_id: 'cus_222',
     })
+
+    // @pellicceama this is failing due to
+    //     error: column "connection.id" must appear in the GROUP BY clause or be used in an aggregate function
+    // const conns = await asCustomer.caller.listConnections()
+    // console.log(conns)
   })
 
   test('does not find other customer connection', async () => {
