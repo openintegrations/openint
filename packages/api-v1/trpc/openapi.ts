@@ -34,7 +34,6 @@ export function generateOpenAPISpec({
   // Remove health and viewer endpoints
   if (removePrivateEndpoints && oas.paths) {
     delete oas.paths['/health']
-    delete oas.paths['/viewer']
     delete oas.paths['/event']
   }
 
