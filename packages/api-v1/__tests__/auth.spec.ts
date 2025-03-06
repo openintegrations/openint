@@ -62,7 +62,7 @@ describeEachDatabase({drivers: 'rls', migrate: true}, (db) => {
   test('apikey auth success', async () => {
     const client = getTestTRPCClient({db}, {api_key: apiKey})
     const res = await client.viewer.query()
-    expect(res).toEqual({role: 'org', orgId: 'org_123'})
+    expect(res).toEqual({role: 'org'})
   })
 
   test('apikey auth failure', async () => {
