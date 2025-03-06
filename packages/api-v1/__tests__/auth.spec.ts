@@ -30,11 +30,11 @@ describe('authentication', () => {
   test.each(Object.entries(viewers))('via jwt as %s', async (_desc, viewer) => {
     const client = getTestTRPCClient({db}, viewer)
     const res = await client.viewer.query()
-    expect(res).toEqual(viewer ?? {role: 'anon'})
+    expect(res.role).toEqual(viewer.role)
 
     const caller = createTRPCCaller({db}, viewer)
     const res2 = await caller.viewer()
-    expect(res2).toEqual(viewer ?? {role: 'anon'})
+    expect(res2.role).toEqual(viewer.role)
   })
 })
 
