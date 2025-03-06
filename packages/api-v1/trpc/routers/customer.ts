@@ -1,8 +1,9 @@
 import {z} from 'zod'
 import {makeJwtClient} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
-import {getServerUrl} from '@openint/app-config/constants'
-import {asCustomer} from '@openint/engine-backend/router/customerRouter'
+// @pellicceama fix me
+import {getServerUrl} from '../../../../apps/app-config/constants'
+import {asCustomer} from '../../../../packages/engine-backend/router/customerRouter'
 import {
   zConnectionId,
   zConnectorName,
