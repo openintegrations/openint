@@ -3,8 +3,10 @@ import {appRouter} from './routers'
 
 export function generateOpenAPISpec({
   baseUrl = 'https://api.openint.dev/v1',
+  removePrivateEndpoints = false,
 }: {
   baseUrl?: string
+  removePrivateEndpoints?: boolean
 }) {
   const oas = generateOpenApiDocument(appRouter, {
     title: 'OpenInt',
@@ -30,7 +32,7 @@ export function generateOpenAPISpec({
   })
 
   // Remove health and viewer endpoints
-  if (oas.paths) {
+  if (removePrivateEndpoints && oas.paths) {
     delete oas.paths['/health']
     delete oas.paths['/viewer']
     delete oas.paths['/event']
