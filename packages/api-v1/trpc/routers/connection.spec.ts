@@ -40,7 +40,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     const res = await asUser.db
       .insert(schema.connector_config)
       .values({
-        id: makeId('ccfg', 'qbo', makeUlid()),
+        id: makeId('ccfg', 'greenhouse', makeUlid()),
         org_id: asUser.viewer.orgId,
       })
       .returning()
@@ -48,7 +48,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res[0]).toMatchObject({
       id: expect.any(String),
       org_id: asUser.viewer.orgId,
-      connector_name: 'qbo',
+      connector_name: 'greenhouse',
     })
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return res[0]!.id
@@ -59,8 +59,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     const res = await asOrg.db
       .insert(schema.connection)
       .values({
+        // TODO: Add check to make sure id format is respected for connection ids
+        id: makeId('conn', 'greenhouse', makeUlid()),
         connector_config_id: connConfigIdRef.current,
         customer_id: asCustomer.viewer.customerId,
+        settings: {apiKey: ''},
       })
       .returning()
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -73,8 +76,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       const res = await asOrg.db
         .insert(schema.connection)
         .values({
+          id: makeId('conn', 'greenhouse', makeUlid()),
           connector_config_id: connConfigIdRef.current,
           customer_id: asOtherCustomer.viewer.customerId,
+          settings: {apiKey: ''},
         })
         .returning()
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -98,6 +103,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   })
 
   test('find own connection', async () => {
+    // direct db access
     const res = await asCustomer.db.query.connection.findMany()
     expect(res).toHaveLength(1)
     expect(res[0]).toMatchObject({
@@ -106,10 +112,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       customer_id: asCustomer.viewer.customerId,
     })
 
-    // @pellicceama this is failing due to
-    //     error: column "connection.id" must appear in the GROUP BY clause or be used in an aggregate function
-    // const conns = await asCustomer.caller.listConnections()
-    // console.log(conns)
+    // Via trpc
+    const conns = await asCustomer.caller.listConnections()
+    expect(conns.items).toHaveLength(1)
+    expect(conns.items[0]).toMatchObject({
+      id: connIdRef.current,
+      connector_config_id: connConfigIdRef.current,
+    })
   })
 
   test('does not find other customer connection', async () => {
