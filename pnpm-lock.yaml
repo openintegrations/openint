@@ -2113,6 +2113,9 @@ importers:
       '@openint/all-connectors':
         specifier: workspace:*
         version: link:../../connectors/all-connectors
+      '@openint/app-config':
+        specifier: workspace:*
+        version: link:../../apps/app-config
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
