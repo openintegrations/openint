@@ -27,6 +27,7 @@
     "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
+    "@openint/loopback-link": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@trpc/client": "next",
     "bun": "^1.2.4",
