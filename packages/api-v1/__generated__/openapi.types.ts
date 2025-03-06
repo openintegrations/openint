@@ -1527,9 +1527,7 @@ export interface components {
             connector_name: "core.connection";
         } & ({
             id: string;
-            /** Format: date-time */
             updated_at: string;
-            /** Format: date-time */
             created_at: string;
             connector_config_id: string;
         } & Omit<components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.beancount.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.google.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.qbo.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"], "connector_name">);
@@ -2309,31 +2307,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @constant */
-                        role: "anon";
-                    } | {
-                        /** @constant */
-                        role: "customer";
-                        customerId: string;
-                        orgId: string;
-                    } | {
-                        /** @constant */
-                        role: "user";
-                        userId: string;
-                        orgId?: string | null;
-                        extra?: {
-                            [key: string]: unknown;
-                        };
-                    } | {
-                        /** @constant */
-                        role: "org";
-                        orgId: string;
-                        extra?: {
-                            [key: string]: unknown;
-                        };
-                    } | {
-                        /** @constant */
-                        role: "system";
+                        /** @enum {string} */
+                        role: "customer" | "org" | "anon" | "user";
                     };
                 };
             };

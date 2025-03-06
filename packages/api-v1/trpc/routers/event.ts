@@ -1,4 +1,4 @@
-import {count, schema} from '@openint/db'
+import {schema, sql} from '@openint/db'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models'
 import {
@@ -39,7 +39,7 @@ export const eventRouter = router({
         ctx.db
           .select({
             event: schema.event,
-            total: count(),
+            total: sql`count(*) over()`,
           })
           .from(schema.event),
         schema.event.timestamp,

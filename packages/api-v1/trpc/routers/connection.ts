@@ -171,11 +171,12 @@ export const connectionRouter = router({
     )
     .output(zListResponse(core.connection).describe('The list of connections'))
     .query(async ({ctx, input}) => {
+      // Create a query that selects all fields from connection and adds a window function for the count
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
             connection: schema.connection,
-            total: sql`count(*) over ()`,
+            total: sql`count(*) over()`,
           })
           .from(schema.connection)
           .where(
