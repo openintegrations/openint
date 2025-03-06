@@ -15,9 +15,8 @@ export function generateOpenAPISpec({
     baseUrl,
     securitySchemes: {
       ApiKey: {
-        type: 'apiKey',
-        name: 'authorization',
-        in: 'header',
+        type: 'http',
+        scheme: 'bearer',
         description:
           'Organization API key generated in the OpenInt Console and passed in the `authorization` header with format: `Bearer {apiKey}`',
       },

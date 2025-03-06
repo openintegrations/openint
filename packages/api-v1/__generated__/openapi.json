@@ -1113,98 +1113,19 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "anon"
-                        }
-                      },
-                      "required": [
-                        "role"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "customer"
-                        },
-                        "customerId": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "orgId": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "role",
-                        "customerId",
-                        "orgId"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "user"
-                        },
-                        "userId": {
-                          "type": "string"
-                        },
-                        "orgId": {
-                          "type": [
-                            "string",
-                            "null"
-                          ]
-                        },
-                        "extra": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        }
-                      },
-                      "required": [
-                        "role",
-                        "userId"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "org"
-                        },
-                        "orgId": {
-                          "type": "string"
-                        },
-                        "extra": {
-                          "type": "object",
-                          "additionalProperties": {}
-                        }
-                      },
-                      "required": [
-                        "role",
-                        "orgId"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "role": {
-                          "type": "string",
-                          "const": "system"
-                        }
-                      },
-                      "required": [
-                        "role"
+                  "type": "object",
+                  "properties": {
+                    "role": {
+                      "type": "string",
+                      "enum": [
+                        "customer",
+                        "org",
+                        "anon"
                       ]
                     }
+                  },
+                  "required": [
+                    "role"
                   ]
                 }
               }
@@ -1544,9 +1465,8 @@
   "components": {
     "securitySchemes": {
       "ApiKey": {
-        "type": "apiKey",
-        "name": "authorization",
-        "in": "header",
+        "type": "http",
+        "scheme": "bearer",
         "description": "Organization API key generated in the OpenInt Console and passed in the `authorization` header with format: `Bearer {apiKey}`"
       },
       "CustomerToken": {

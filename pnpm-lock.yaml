@@ -2129,8 +2129,8 @@ importers:
         specifier: workspace:*
         version: link:../events
       '@openint/sdk':
-        specifier: 0.1.0-alpha.16
-        version: 0.1.0-alpha.16
+        specifier: 0.1.0-alpha.20
+        version: 0.1.0-alpha.20
       '@sinclair/typebox':
         specifier: ^0.34.20
         version: 0.34.20
@@ -5067,8 +5067,8 @@ packages:
   '@octokit/types@9.3.2':
     resolution: {integrity: sha512-D4iHGTdAnEEVsB8fl95m1hiz7D5YiRdQ9b/OEb3BYRVwbLsGHcRVPz+u+BgRLNk0Q0/4iZCBqDN96j2XNxfXrA==}
 
-  '@openint/sdk@0.1.0-alpha.16':
-    resolution: {integrity: sha512-j1HBHrT8KIe/sQ5brA4QyTkMzOBd1Ln++mLVBjcNt4Ycby7GzjPtMceEpyfb3Wm6Y77yii9ijz7yY9ZQGlImXg==}
+  '@openint/sdk@0.1.0-alpha.20':
+    resolution: {integrity: sha512-KDpKbTXZOfrmk+o66NXnne7BoyIKVFSkiWbtARQ/lFzgF1XE06qj4X2pQJ8z64x0xeXtYnSH/DGSXPsOjGAOpQ==}
 
   '@opensdks/fetch-links@0.0.18':
     resolution: {integrity: sha512-EhBj92wLXoj3pF4ERxzoEhAlwlefIzQ31At0zaksSbA9zqMlod9DyfypQRX/6J8w4iZzraV33BtFEk7l98nsLA==}
@@ -20523,7 +20523,7 @@ snapshots:
     dependencies:
       '@octokit/openapi-types': 18.1.1
 
-  '@openint/sdk@0.1.0-alpha.16': {}
+  '@openint/sdk@0.1.0-alpha.20': {}
 
   '@opensdks/fetch-links@0.0.18': {}
 

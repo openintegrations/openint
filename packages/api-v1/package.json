@@ -18,7 +18,7 @@
     "@openint/db": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",
-    "@openint/sdk": "0.1.0-alpha.16",
+    "@openint/sdk": "0.1.0-alpha.20",
     "@sinclair/typebox": "^0.34.20",
     "@trpc/server": "next",
     "drizzle-zod": "^0.7.0",

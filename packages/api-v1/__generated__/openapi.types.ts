@@ -2309,31 +2309,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @constant */
-                        role: "anon";
-                    } | {
-                        /** @constant */
-                        role: "customer";
-                        customerId: string;
-                        orgId: string;
-                    } | {
-                        /** @constant */
-                        role: "user";
-                        userId: string;
-                        orgId?: string | null;
-                        extra?: {
-                            [key: string]: unknown;
-                        };
-                    } | {
-                        /** @constant */
-                        role: "org";
-                        orgId: string;
-                        extra?: {
-                            [key: string]: unknown;
-                        };
-                    } | {
-                        /** @constant */
-                        role: "system";
+                        /** @enum {string} */
+                        role: "customer" | "org" | "anon";
                     };
                 };
             };

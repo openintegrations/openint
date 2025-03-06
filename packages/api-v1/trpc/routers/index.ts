@@ -1,5 +1,4 @@
 import {z} from 'zod'
-import {zViewer} from '@openint/cdk'
 import {publicProcedure, router, trpc} from '../_base'
 import {connectionRouter} from './connection'
 import {connectorConfigRouter} from './connectorConfig'
@@ -36,8 +35,13 @@ const generalRouter = router({
       },
     })
     .input(z.void())
-    .output(zViewer)
-    .query(({ctx}) => ctx.viewer),
+    // note: not returning zViewer as it seems to be tripping up the stainless sdk generation
+    .output(z.object({role: z.enum(['customer', 'org', 'anon'])}))
+    // @ts-expect-error
+    .query(({ctx}) => {
+      console.log('ctx', ctx)
+      return {role: ctx.viewer.role}
+    }),
 })
 
 export const appRouter = trpc.mergeRouters(
