@@ -83,7 +83,7 @@ jobs:
       - name: Run lint
         run: pnpm run lint
         env:
-          NODE_OPTIONS: --max-old-space-size=4096
+          NODE_OPTIONS: --max-old-space-size=8192
 
   tests:
     runs-on: ubuntu-latest
