@@ -43,6 +43,7 @@ export function createApp({db}: CreateAppOptions) {
     //   }
     // })
     .get('/health', () => ({healthy: true}))
+    .post('/health', (ctx) => ({healthy: true, body: ctx.body}))
     .use(
       swagger({
         // For some reason spec.content doesn't work. so we are forced tos specify url instead
@@ -55,8 +56,12 @@ export function createApp({db}: CreateAppOptions) {
     // empirically, the first one without * works for trpc, and the second one with * works for openapi
     // no other settings seems to work when mounted inside next.js. Direct elysia listen works
     // in a more consistent way and we should probably add some test specifically for next.js mounted behavior
-    .mount('/v1/trpc', createFetchHandlerTRPC({endpoint: '/trpc', db}))
-    .mount('/v1*', createFetchHandlerOpenAPI({endpoint: '/v1', db}))
+    .all('/v1/trpc/*', ({request}) =>
+      createFetchHandlerTRPC({endpoint: '/api/v1/trpc', db})(request),
+    )
+    .all('/v1/*', ({request}) =>
+      createFetchHandlerOpenAPI({endpoint: '/api/v1', db})(request),
+    )
   return app
 }
 

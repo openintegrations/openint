@@ -15,21 +15,59 @@ afterAll(async () => {
   await db.$end()
 })
 
-test('elysia route', async () => {
-  const res = await app.handle(new Request('http://localhost/api/health'))
-  expect(await res.json()).toBeTruthy()
+describe('elysia', () => {
+  test('GET /health', async () => {
+    const res = await app.handle(new Request('http://localhost/api/health'))
+    expect(await res.json()).toBeTruthy()
+  })
+
+  test('POST /health', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/api/health', {
+        method: 'POST',
+        body: JSON.stringify({foo: 'bar'}),
+        headers: {'Content-Type': 'application/json'},
+      }),
+    )
+
+    expect(await res.json()).toMatchObject({body: {foo: 'bar'}})
+  })
 })
 
 describe('openapi route', () => {
-  test('healthcheck', async () => {
+  test('GET /health', async () => {
     const res = await app.handle(new Request('http://localhost/api/v1/health'))
     expect(await res.json()).toMatchObject({ok: true})
+  })
+
+  test('POST /health', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/api/v1/health', {
+        method: 'POST',
+        body: JSON.stringify({foo: 'bar'}),
+        headers: {'Content-Type': 'application/json'},
+      }),
+    )
+    expect(res.ok).toBe(true)
+    expect(await res.json()).toMatchObject({input: {foo: 'bar'}})
   })
 
   test('healthcheck bypass elysia', async () => {
     const handler = createFetchHandlerOpenAPI({endpoint: '/api/v1', db})
     const res = await handler(new Request('http://localhost/api/v1/health'))
     expect(await res.json()).toMatchObject({ok: true})
+  })
+
+  test('POST healthcheck bypass elysia', async () => {
+    const handler = createFetchHandlerOpenAPI({endpoint: '/api/v1', db})
+    const res = await handler(
+      new Request('http://localhost/api/v1/health', {
+        method: 'POST',
+        body: JSON.stringify({foo: 'bar'}),
+        headers: {'Content-Type': 'application/json'},
+      }),
+    )
+    expect(await res.json()).toMatchObject({input: {foo: 'bar'}})
   })
 
   // AP Note: These endpoints exist but i removed them from the OAS to not expose them in the docs
@@ -59,16 +97,31 @@ describe('openapi route', () => {
 })
 
 describe('trpc route', () => {
-  test('healthcheck', async () => {
+  test('query health', async () => {
     const res = await app.handle(
       new Request('http://localhost/api/v1/trpc/health'),
     )
     expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
   })
 
-  test('healthcheck bypass elysia', async () => {
-    const handler = createFetchHandlerTRPC({endpoint: '/api/trpc', db})
-    const res = await handler(new Request('http://localhost/api/trpc/health'))
+  test('mutation health', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/api/v1/trpc/healthEcho', {
+        method: 'POST',
+        body: JSON.stringify({foo: 'bar'}),
+        headers: {'Content-Type': 'application/json'},
+      }),
+    )
+    expect(await res.json()).toMatchObject({
+      result: {data: {input: {foo: 'bar'}}},
+    })
+  })
+
+  test('query health bypass elysia', async () => {
+    const handler = createFetchHandlerTRPC({endpoint: '/api/v1/trpc', db})
+    const res = await handler(
+      new Request('http://localhost/api/v1/trpc/health'),
+    )
     expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
   })
 
