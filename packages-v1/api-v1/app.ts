@@ -3,7 +3,6 @@ import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
 import {
-  createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
   type CreateFetchHandlerOptions,
 } from './trpc/handlers'
@@ -56,7 +55,6 @@ export function createApp({db}: CreateAppOptions) {
     // no other settings seems to work when mounted inside next.js. Direct elysia listen works
     // in a more consistent way and we should probably add some test specifically for next.js mounted behavior
     .mount('/v1/trpc', createFetchHandlerTRPC({endpoint: '/trpc', db}))
-    .mount('/v1*', createFetchHandlerOpenAPI({endpoint: '/v1', db}))
   return app
 }
 

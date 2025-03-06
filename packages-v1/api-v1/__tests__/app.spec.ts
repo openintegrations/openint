@@ -4,10 +4,7 @@ import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
 import {initDbPGLite} from '@openint/db/db.pglite'
 import type {paths} from '../__generated__/openapi.types'
 import {createApp} from '../app'
-import {
-  createFetchHandlerOpenAPI,
-  createFetchHandlerTRPC,
-} from '../trpc/handlers'
+import {createFetchHandlerTRPC} from '../trpc/handlers'
 import type {AppRouter} from '../trpc/routers'
 
 const db = initDbPGLite()
@@ -26,12 +23,6 @@ test('elysia route', async () => {
 describe('openapi route', () => {
   test('healthcheck', async () => {
     const res = await app.handle(new Request('http://localhost/api/v1/health'))
-    expect(await res.json()).toMatchObject({ok: true})
-  })
-
-  test('healthcheck bypass elysia', async () => {
-    const handler = createFetchHandlerOpenAPI({endpoint: '/api/v1', db})
-    const res = await handler(new Request('http://localhost/api/v1/health'))
     expect(await res.json()).toMatchObject({ok: true})
   })
 
