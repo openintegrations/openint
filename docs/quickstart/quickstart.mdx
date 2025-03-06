@@ -3,47 +3,22 @@ title: Quickstart Guide
 description: Get started with OpenInt v1 in minutes
 ---
 
-# Quickstart Guide
+OpenInt is the fastest way to add native product integrations to your app. It helps developers connect their apps to a universe of other apps and gain an edge.
 
-This guide will help you get up and running with OpenInt v1 quickly. We'll cover the basic setup and your first integration.
+## Watch our 1-minute Demo Video
 
-## Prerequisites
+<Frame>
+  <iframe
+    width="700"
+    height="315"
+    src="https://www.youtube.com/embed/FpG7otZZhRw"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
+</Frame>
 
-- An OpenInt account
-- API credentials
-- Node.js 16 or higher
+## How is OpenInt different from other integration platforms?
 
-## Installation
-
-```bash
-npm install @openint/sdk
-# or
-yarn add @openint/sdk
-```
-
-## Basic Setup
-
-```typescript
-import { OpenInt } from '@openint/sdk';
-
-const client = new OpenInt({
-  apiKey: 'your-api-key'
-});
-```
-
-## Creating Your First Connection
-
-```typescript
-const connection = await client.connections.create({
-  provider: 'salesforce',
-  settings: {
-    // your connection settings
-  }
-});
-```
-
-## Next Steps
-
-- Explore our [Integrations Guide](./integrations)
-- Learn about [Core Concepts](../core-concepts-new/connectors)
-- Set up [Webhooks](../core-concepts-new/webhooks-events)
+- Open Source and entirely focused on authentication
+- Launch instantly with our pre-approved Apps and no code integrations portal
+- Access hundreds of integrations directly and thousands via aggregator integrations like Plaid, Merge, Finch.
