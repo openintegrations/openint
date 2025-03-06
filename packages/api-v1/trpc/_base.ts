@@ -3,12 +3,13 @@ import {type OpenApiMeta} from 'trpc-to-openapi'
 import {hasRole, type Viewer} from '@openint/cdk'
 import type {AnyDrizzle} from '@openint/db/db'
 
-export interface ViewerContext {
-  viewer: Viewer
+export interface ViewerContext<T extends Viewer = Viewer> {
+  viewer: T
   db: AnyDrizzle
 }
 
-export interface RouterContext extends ViewerContext {
+export interface RouterContext<T extends Viewer = Viewer>
+  extends ViewerContext<T> {
   as: (viewer: Viewer) => ViewerContext
 }
 
