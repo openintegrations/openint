@@ -8,7 +8,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   const app = createApp({db})
   const appFetch = (input: RequestInfo | URL, init?: RequestInit) => {
     const request = new Request(input, init)
-    console.log('request headers', request.headers)
     return app.handle(request)
   }
 

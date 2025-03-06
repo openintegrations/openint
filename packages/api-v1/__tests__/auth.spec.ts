@@ -38,7 +38,7 @@ describe('authentication', () => {
   })
 })
 
-describeEachDatabase({drivers: 'rls', migrate: true}, (db) => {
+describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   function getClient(viewerOrKey: Viewer | {api_key: string}) {
     return getTestTRPCClient({db}, viewerOrKey)
   }

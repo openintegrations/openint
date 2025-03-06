@@ -36,7 +36,7 @@ const generalRouter = router({
     })
     .input(z.void())
     // note: not returning zViewer as it seems to be tripping up the stainless sdk generation
-    .output(z.object({role: z.enum(['customer', 'org', 'anon'])}))
+    .output(z.object({role: z.enum(['customer', 'org', 'anon', 'user'])}))
     // @ts-expect-error
     .query(({ctx}) => {
       console.log('ctx', ctx)

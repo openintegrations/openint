@@ -1120,7 +1120,8 @@
                       "enum": [
                         "customer",
                         "org",
-                        "anon"
+                        "anon",
+                        "user"
                       ]
                     }
                   },
@@ -5933,12 +5934,10 @@
                 "type": "string"
               },
               "updated_at": {
-                "type": "string",
-                "format": "date-time"
+                "type": "string"
               },
               "created_at": {
-                "type": "string",
-                "format": "date-time"
+                "type": "string"
               },
               "connector_config_id": {
                 "type": "string"
