@@ -1,7 +1,7 @@
 // TODO: Fix standalone expect calls
 /* eslint-disable jest/no-standalone-expect */
 import {makeId, type CustomerId, type Viewer} from '@openint/cdk'
-import {schema} from '@openint/db'
+import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {makeUlid} from '@openint/util'
 import {$test} from '@openint/util/__tests__/test-utils'
@@ -67,12 +67,43 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     return res[0]!.id
   })
 
+  const otherConnIdRef = $test(
+    'org creates connection for other customer',
+    async () => {
+      const res = await asOrg.db
+        .insert(schema.connection)
+        .values({
+          connector_config_id: connConfigIdRef.current,
+          customer_id: asOtherCustomer.viewer.customerId,
+        })
+        .returning()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return res[0]!.id
+    },
+  )
+
+  test('window function query works', async () => {
+    const res = await asCustomer.db
+      .select({
+        connection: schema.connection,
+        total: sql`count(*) over ()`,
+      })
+      .from(schema.connection)
+    expect(res[0]?.total).toEqual(1)
+    expect(res[0]?.connection).toMatchObject({
+      id: connIdRef.current,
+      connector_config_id: connConfigIdRef.current,
+      customer_id: asCustomer.viewer.customerId,
+    })
+  })
+
   test('find own connection', async () => {
     const res = await asCustomer.db.query.connection.findMany()
+    expect(res).toHaveLength(1)
     expect(res[0]).toMatchObject({
       id: connIdRef.current,
       connector_config_id: connConfigIdRef.current,
-      customer_id: 'cus_222',
+      customer_id: asCustomer.viewer.customerId,
     })
 
     // @pellicceama this is failing due to
@@ -83,6 +114,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('does not find other customer connection', async () => {
     const res = await asOtherCustomer.db.query.connection.findMany()
-    expect(res).toEqual([])
+    expect(res).toHaveLength(1)
+    expect(res[0]).toMatchObject({
+      id: otherConnIdRef.current,
+      connector_config_id: connConfigIdRef.current,
+      customer_id: asOtherCustomer.viewer.customerId,
+    })
   })
 })
