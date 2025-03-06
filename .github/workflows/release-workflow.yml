@@ -151,7 +151,7 @@ jobs:
           echo "Release notes written to release_notes.txt"
       - name: 'Generate OpenAPI spec'
         run: |
-          cd packages-v1/api-v1
+          cd packages/api-v1
           pnpm install
           pnpm gen
           cd ../../
@@ -163,7 +163,7 @@ jobs:
           git fetch origin production
 
           # Check if the file has changed between main and production
-          if git diff --name-only origin/production..HEAD | grep -q "packages-v1/api-v1/__generated__/openapi.json"; then
+          if git diff --name-only origin/production..HEAD | grep -q "packages/api-v1/__generated__/openapi.json"; then
             echo "OpenAPI spec has changed between production and main, will push to Stainless"
             echo "has_changes=true" >> $GITHUB_OUTPUT
           else
@@ -176,8 +176,8 @@ jobs:
         uses: stainless-api/upload-openapi-spec-action@main
         with:
           stainless_api_key: ${{ secrets.STAINLESS_API_KEY }}
-          input_path: 'packages-v1/api-v1/__generated__/openapi.json'
-          output_path: 'packages-v1/api-v1/__generated__/openapi.documented.json'
+          input_path: 'packages/api-v1/__generated__/openapi.json'
+          output_path: 'packages/api-v1/__generated__/openapi.documented.json'
           project_name: 'openint'
           commit_message: 'feat(docs): updating documented docs for mintlify'
 
