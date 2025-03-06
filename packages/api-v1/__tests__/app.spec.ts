@@ -2,6 +2,7 @@ import {applyLinks, logLink} from '@opensdks/fetch-links'
 import {createTRPCClient, httpLink} from '@trpc/client'
 import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
 import {initDbPGLite} from '@openint/db/db.pglite'
+import {loopbackLink} from '@openint/loopback-link'
 import type {paths} from '../__generated__/openapi.types'
 import {createApp} from '../app'
 import {
@@ -21,6 +22,13 @@ afterAll(async () => {
 describe('elysia', () => {
   test('GET /health', async () => {
     const res = await app.handle(new Request('http://localhost/api/health'))
+    expect(await res.json()).toBeTruthy()
+  })
+
+  test('GET /health with loopback link', async () => {
+    const handler = (req: Request) =>
+      applyLinks(req, [loopbackLink(), app.handle])
+    const res = await handler(new Request('http://localhost/api/health'))
     expect(await res.json()).toBeTruthy()
   })
 
