@@ -1,7 +1,6 @@
 packages:
   - 'apps/*'
   - 'packages/*'
-  - 'packages-v1/*'
   - 'dev-packages/*'
   - 'connectors/*'
   - 'unified/*'
