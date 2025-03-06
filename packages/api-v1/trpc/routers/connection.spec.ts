@@ -1,7 +1,10 @@
+// TODO: Fix standalone expect calls
+/* eslint-disable jest/no-standalone-expect */
 import {makeId, type CustomerId, type Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {makeUlid} from '@openint/util'
+import {$test} from '@openint/util/__tests__/test-utils'
 import {routerContextFromViewer} from '../context'
 import {connectionRouter} from './connection'
 
@@ -32,9 +35,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   })
 
   // Tests linearly depend on each other for performance and simplicty
-  let connConfigId: string
 
-  test('user create connector config', async () => {
+  const connConfigIdRef = $test('user create connector config', async () => {
     const res = await asUser.db
       .insert(schema.connector_config)
       .values({
@@ -42,33 +44,34 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         org_id: asUser.viewer.orgId,
       })
       .returning()
+
     expect(res[0]).toMatchObject({
       id: expect.any(String),
       org_id: asUser.viewer.orgId,
       connector_name: 'qbo',
     })
-    connConfigId = res[0]!.id
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return res[0]!.id
   })
 
-  let connId: string
-
   // Customers not allowed to create just yet...
-  test('org creates connection for customer', async () => {
+  const connIdRef = $test('org creates connection for customer', async () => {
     const res = await asOrg.db
       .insert(schema.connection)
       .values({
-        connector_config_id: connConfigId,
+        connector_config_id: connConfigIdRef.current,
         customer_id: asCustomer.viewer.customerId,
       })
       .returning()
-    connId = res[0]!.id
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return res[0]!.id
   })
 
   test('find own connection connection', async () => {
     const res = await asCustomer.db.query.connection.findMany()
     expect(res[0]).toMatchObject({
-      id: connId,
-      connector_config_id: connConfigId,
+      id: connIdRef.current,
+      connector_config_id: connConfigIdRef.current,
       customer_id: 'cus_222',
     })
   })
