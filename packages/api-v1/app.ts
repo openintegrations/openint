@@ -9,39 +9,12 @@ import {
 } from './trpc/handlers'
 import {generateOpenAPISpec} from './trpc/openapi'
 
-// async function checkLatency(db: Database) {
-//   const start = new Date()
-//   await db.execute('SELECT 1')
-//   const durationMs = Date.now() - start.getTime()
-//   return durationMs
-// }
-
 export interface CreateAppOptions
   extends Omit<CreateFetchHandlerOptions, 'endpoint' | 'router'> {}
 
 // It's annoying how elysia does not really allow for dependency injection like TRPC, so we do ourselves
 export function createApp({db}: CreateAppOptions) {
   const app = new Elysia({prefix: '/api'})
-    // .get('/check-latency', async () => {
-    //   const postgresJsLatencyMs = await checkLatency(
-    //     createDatabase({url: envRequired.DATABASE_URL}),
-    //   )
-    //   const neonWebsocketLatencyMs = await checkLatency(
-    //     createNeonWebSocketDatabase({
-    //       url: envRequired.DATABASE_URL,
-    //     }) as unknown as Database,
-    //   )
-    //   const neonHttpLatencyMs = await checkLatency(
-    //     createNeonHttpDatabase({
-    //       url: envRequired.DATABASE_URL,
-    //     }) as unknown as Database,
-    //   )
-    //   return {
-    //     postgresJsLatencyMs,
-    //     neonHttpLatencyMs,
-    //     neonWebsocketLatencyMs,
-    //   }
-    // })
     .get('/health', () => ({healthy: true}))
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}))
     .use(
