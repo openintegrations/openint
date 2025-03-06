@@ -1,0 +1,163 @@
+name: Validate
+
+on:
+  push:
+    branches: [main, production]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.9.0
+          run_install: false
+
+      - name: Cache pnpm store
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+  typecheck:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.9.0
+      - uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: pnpm install --frozen-lockfile
+      - name: Run type checks
+        run: pnpm run typecheck
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.9.0
+      - uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: pnpm install --frozen-lockfile
+      - name: Run lint
+        run: pnpm run lint
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      neon-proxy:
+        image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+        env:
+          PG_CONNECTION_STRING: postgres://postgres:password@postgres:5432/postgres
+        ports:
+          - '4444:4444'
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      DATABASE_URL: postgres://postgres:password@db.localtest.me:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.9.0
+      - uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: pnpm install --frozen-lockfile
+      - name: Setup test environment
+        run: |
+          npm install --global vercel@latest
+          vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
+          vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
+          cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
+      - name: Run migrations
+        run: |
+          pnpm migrate
+      - name: Start dev servers
+        run: |
+          pnpm run web --port 4000 &
+          pnpm wait-on tcp:4000
+          npx inngest-cli@latest dev &
+          pnpm wait-on tcp:8288
+      - name: Run tests
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: ./artifacts
+
+  slack-notification:
+    runs-on: ubuntu-latest
+    needs: [typecheck, lint, tests]
+    if: always()
+    steps:
+      - name: Send Slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLATIFY_SLACK_WEBHOOK_URL }}
