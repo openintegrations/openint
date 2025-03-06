@@ -2,6 +2,7 @@ import type {CustomerId, Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {initDbPGLite} from '@openint/db/db.pglite'
+import {makeUlid} from '@openint/util'
 import {createTRPCCaller} from '../trpc/handlers'
 import {getTestTRPCClient} from './test-utils'
 
@@ -26,33 +27,47 @@ describe('authentication', () => {
     await db.$end()
   })
 
-  test.each(Object.entries(viewers))(
-    'authenticating as %s',
-    async (_desc, viewer) => {
-      const client = getTestTRPCClient({db}, viewer)
-      const res = await client.viewer.query()
-      expect(res).toEqual(viewer ?? {role: 'anon'})
+  test.each(Object.entries(viewers))('via jwt as %s', async (_desc, viewer) => {
+    const client = getTestTRPCClient({db}, viewer)
+    const res = await client.viewer.query()
+    expect(res).toEqual(viewer ?? {role: 'anon'})
 
-      const caller = createTRPCCaller({db}, viewer)
-      const res2 = await caller.viewer()
-      expect(res2).toEqual(viewer ?? {role: 'anon'})
-    },
-  )
+    const caller = createTRPCCaller({db}, viewer)
+    const res2 = await caller.viewer()
+    expect(res2).toEqual(viewer ?? {role: 'anon'})
+  })
 })
 
 describeEachDatabase({drivers: 'rls', migrate: true}, (db) => {
-  function getClient(viewer: Viewer) {
-    return getTestTRPCClient({db}, viewer)
+  function getClient(viewerOrKey: Viewer | {api_key: string}) {
+    return getTestTRPCClient({db}, viewerOrKey)
   }
   function getCaller(viewer: Viewer) {
     return createTRPCCaller({db}, viewer)
   }
+
+  const apiKey = `key_${makeUlid()}`
 
   beforeAll(async () => {
     await db.$truncateAll()
     await db
       .insert(schema.connector_config)
       .values({org_id: 'org_123', id: 'ccfg_123'})
+    await db.insert(schema.organization).values({
+      id: 'org_123',
+      api_key: apiKey,
+    })
+  })
+
+  test('apikey auth success', async () => {
+    const client = getTestTRPCClient({db}, {api_key: apiKey})
+    const res = await client.viewer.query()
+    expect(res).toEqual({role: 'org', orgId: 'org_123'})
+  })
+
+  test('apikey auth failure', async () => {
+    const client = getTestTRPCClient({db}, {api_key: 'key_badddd'})
+    await expect(client.viewer.query()).rejects.toThrow('Invalid API key')
   })
 
   test('anon user has no access to connector_config', async () => {

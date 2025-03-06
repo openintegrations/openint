@@ -9,6 +9,7 @@ import {
   pgPolicy,
   pgRole,
   pgTable,
+  primaryKey,
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
@@ -391,6 +392,72 @@ export const event = pgTable(
       to: 'customer',
       for: 'insert',
       withCheck: sql`org_id = public.jwt_org_id()`,
+    }),
+  ],
+)
+
+export const organization = pgTable(
+  'organization',
+  {
+    id: varchar()
+      .default("concat('org_', generate_ulid())")
+      .primaryKey()
+      .notNull(),
+    api_key: varchar().unique(),
+    name: varchar(),
+    slug: varchar(),
+    metadata: jsonb().$type<any>(),
+    created_at: timestamp({withTimezone: true, mode: 'string'})
+      .defaultNow()
+      .notNull(),
+    updated_at: timestamp({withTimezone: true, mode: 'string'})
+      .defaultNow()
+      .notNull(),
+  },
+  () => [
+    pgPolicy('org_read', {
+      to: 'org',
+      for: 'select',
+      using: sql`id = jwt_org_id()`,
+    }),
+    pgPolicy('org_member_read', {
+      to: 'authenticated',
+      for: 'select',
+      using: sql`id = jwt_org_id()`,
+    }),
+  ],
+)
+
+export const customer = pgTable(
+  'customer',
+  {
+    org_id: varchar()
+      .notNull()
+      .references(() => organization.id),
+    id: varchar().default("concat('cus_', generate_ulid())").notNull(),
+    metadata: jsonb().$type<any>(),
+    created_at: timestamp({withTimezone: true, mode: 'string'})
+      .defaultNow()
+      .notNull(),
+    updated_at: timestamp({withTimezone: true, mode: 'string'})
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [
+    primaryKey({columns: [t.org_id, t.id]}),
+    pgPolicy('org_access', {
+      to: 'org',
+      using: sql`org_id = jwt_org_id()`,
+      withCheck: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('org_member_access', {
+      to: 'authenticated',
+      using: sql`org_id = jwt_org_id()`,
+      withCheck: sql`org_id = jwt_org_id()`,
+    }),
+    pgPolicy('customer_read', {
+      to: 'customer',
+      using: sql`org_id = jwt_org_id() AND id = jwt_customer_id()`,
     }),
   ],
 )
