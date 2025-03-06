@@ -6,7 +6,6 @@ import {
   createFetchHandlerTRPC,
   type CreateFetchHandlerOptions,
 } from './trpc/handlers'
-import {generateOpenAPISpec} from './trpc/openapi'
 
 // async function checkLatency(db: Database) {
 //   const start = new Date()
@@ -49,7 +48,7 @@ export function createApp({db}: CreateAppOptions) {
         path: '/v1',
       }),
     )
-    .get('/v1/openapi.json', () => generateOpenAPISpec({}))
+    // .get('/v1/openapi.json', () => generateOpenAPISpec({}))
     // These two ways of mounting are very inconsistent, but I don't know why.
     // empirically, the first one without * works for trpc, and the second one with * works for openapi
     // no other settings seems to work when mounted inside next.js. Direct elysia listen works
