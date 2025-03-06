@@ -11,22 +11,27 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     return app.handle(request)
   }
 
+  // Organization setup
   const orgId = 'org_123'
-  const customerId = 'cus_123'
   const apiKey = `key_${makeUlid()}`
+
+  // Customer 1 setup
+  const customerId = 'cus_123'
   const connectionId = `conn_${makeUlid()}`
 
+  // Customer 2 setup
+  const otherCustomerId = 'cus_456'
+  const otherConnectionId = `conn_${makeUlid()}`
+
+  // Invalid auth setup
+  const wrongApiKey = `key_${makeUlid()}`
+
+  // Client definitions
   const apiKeyClient = new Openint({
     apiKey: apiKey,
     baseURL: 'http://localhost/api/v1',
     fetch: appFetch,
   })
-
-  let tokenClient: Openint
-
-  const otherCustomerId = 'cus_456'
-  const otherConnectionId = `conn_${makeUlid()}`
-  const wrongApiKey = `key_${makeUlid()}`
 
   const noAuthClient = new Openint({
     baseURL: 'http://localhost/api/v1',
@@ -39,23 +44,28 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     fetch: appFetch,
   })
 
+  // Token clients will be initialized in beforeAll
+  let tokenClient: Openint
   let otherCustomerClient: Openint
 
   beforeAll(async () => {
     await db.$truncateAll()
 
+    // Insert organization
     await db.insert(schema.organization).values({
       id: orgId,
       api_key: apiKey,
     })
 
-    await db.insert(schema.customer).values({
-      id: customerId,
+    // Insert connector config (shared)
+    await db.insert(schema.connector_config).values({
+      id: 'ccfg_123',
       org_id: orgId,
     })
 
-    await db.insert(schema.connector_config).values({
-      id: 'ccfg_123',
+    // Setup Customer 1 and their connection
+    await db.insert(schema.customer).values({
+      id: customerId,
       org_id: orgId,
     })
 
@@ -65,14 +75,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       connector_config_id: 'ccfg_123',
     })
 
-    const tokenResponse = await apiKeyClient.createToken(customerId, {})
-
-    tokenClient = new Openint({
-      customerToken: tokenResponse.token,
-      baseURL: 'http://localhost/api/v1',
-      fetch: appFetch,
-    })
-
+    // Setup Customer 2 and their connection
     await db.insert(schema.customer).values({
       id: otherCustomerId,
       org_id: orgId,
@@ -84,11 +87,18 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       connector_config_id: 'ccfg_123',
     })
 
+    // Create token clients
+    const tokenResponse = await apiKeyClient.createToken(customerId, {})
+    tokenClient = new Openint({
+      customerToken: tokenResponse.token,
+      baseURL: 'http://localhost/api/v1',
+      fetch: appFetch,
+    })
+
     const otherTokenResponse = await apiKeyClient.createToken(
       otherCustomerId,
       {},
     )
-
     otherCustomerClient = new Openint({
       customerToken: otherTokenResponse.token,
       baseURL: 'http://localhost/api/v1',
@@ -98,28 +108,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
 
   describe('top level methods with API key auth', () => {
     test('getConnection', async () => {
-      try {
-        const responsePromise = apiKeyClient.getConnection(connectionId)
-        const rawResponse = await responsePromise.asResponse()
-        expect(rawResponse).toBeInstanceOf(Response)
-        const response = await responsePromise
-        expect(response).not.toBeInstanceOf(Response)
-      } catch (error: any) {
-        expect(error.status).toBe(500)
-      }
+      const responsePromise = apiKeyClient.getConnection(connectionId)
+      const rawResponse = await responsePromise.asResponse()
+      expect(rawResponse).toBeInstanceOf(Response)
+      const response = await responsePromise
+      expect(response).not.toBeInstanceOf(Response)
     })
 
     describe('top level methods with token auth', () => {
       test('listConnections with token auth', async () => {
-        try {
-          const responsePromise = tokenClient.listConnections()
-          const response = await responsePromise
-          expect(response).toBeDefined()
-          expect(response.items.length).toBe(1)
-          expect(response.items[0]?.id).toBe(connectionId)
-        } catch (error: any) {
-          expect(error.status).toBe(500)
-        }
+        const responsePromise = tokenClient.listConnections()
+        const response = await responsePromise
+        expect(response).toBeDefined()
+        expect(response.items.length).toBe(1)
+        expect(response.items[0]?.id).toBe(connectionId)
       })
     })
   })
@@ -138,57 +140,35 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     })
 
     test('customer token should not access other customer connections', async () => {
-      try {
-        const connections = await tokenClient.listConnections()
-        expect(
-          connections.items.find((conn) => conn.id === otherConnectionId),
-        ).toBeUndefined()
-      } catch (error: any) {
-        expect(error.status).toBe(500)
-      }
+      const connections = await tokenClient.listConnections()
+      expect(
+        connections.items.find((conn) => conn.id === otherConnectionId),
+      ).toBeUndefined()
 
-      try {
-        await tokenClient.getConnection(otherConnectionId)
-        fail('Should have thrown an error')
-      } catch (error: any) {
-        // This is expected
-      }
+      await expect(
+        tokenClient.getConnection(otherConnectionId),
+      ).rejects.toThrow()
 
-      try {
-        const otherConnections = await otherCustomerClient.listConnections()
-        expect(
-          otherConnections.items.find((conn) => conn.id === connectionId),
-        ).toBeUndefined()
-      } catch (error: any) {
-        expect(error.status).toBe(500)
-      }
+      const otherConnections = await otherCustomerClient.listConnections()
+      expect(
+        otherConnections.items.find((conn) => conn.id === connectionId),
+      ).toBeUndefined()
 
-      try {
-        await otherCustomerClient.getConnection(connectionId)
-        fail('Should have thrown an error')
-      } catch (error: any) {
-        // This is expected
-      }
+      await expect(
+        otherCustomerClient.getConnection(connectionId),
+      ).rejects.toThrow()
     }, 10000) // Increase timeout to 10 seconds
 
     test('customer token should only access own connections', async () => {
-      try {
-        const connections = await tokenClient.listConnections()
-        expect(
-          connections.items.find((conn) => conn.id === connectionId),
-        ).toBeDefined()
-      } catch (error: any) {
-        expect(error.status).toBe(500)
-      }
+      const connections = await tokenClient.listConnections()
+      expect(
+        connections.items.find((conn) => conn.id === connectionId),
+      ).toBeDefined()
 
-      try {
-        const otherConnections = await otherCustomerClient.listConnections()
-        expect(
-          otherConnections.items.find((conn) => conn.id === otherConnectionId),
-        ).toBeDefined()
-      } catch (error: any) {
-        expect(error.status).toBe(500)
-      }
+      const otherConnections = await otherCustomerClient.listConnections()
+      expect(
+        otherConnections.items.find((conn) => conn.id === otherConnectionId),
+      ).toBeDefined()
     })
   })
 })
