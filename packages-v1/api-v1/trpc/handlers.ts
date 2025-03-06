@@ -1,7 +1,7 @@
 import type {AnyTRPCRouter} from '@trpc/server'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
-import {Viewer} from '@openint/cdk'
+import type {Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
 import {routerContextFromRequest, routerContextFromViewer} from './context'
 import {appRouter} from './routers'
@@ -14,7 +14,7 @@ export interface CreateFetchHandlerOptions {
 
 export const createFetchHandlerTRPC =
   (opts: CreateFetchHandlerOptions) => (req: Request) => {
-    console.log('handleTrpcRequest', req.url)
+    console.log('handleTrpcRequest', req.url, opts.endpoint)
     return fetchRequestHandler({
       router: opts.router ?? appRouter,
       createContext: () => routerContextFromRequest({req, db: opts.db}),
@@ -25,7 +25,7 @@ export const createFetchHandlerTRPC =
 
 export const createFetchHandlerOpenAPI =
   (opts: CreateFetchHandlerOptions) => (req: Request) => {
-    console.log('handleOpenApiRequest', req.url)
+    console.log('handleOpenApiRequest', req.url, opts.endpoint)
     return createOpenApiFetchHandler({
       router: opts.router ?? appRouter,
       createContext: () => routerContextFromRequest({req, db: opts.db}),

@@ -19,6 +19,13 @@ const generalRouter = router({
     .input(z.void())
     .output(z.object({ok: z.boolean()}))
     .query(() => ({ok: true})),
+
+  healthEcho: publicProcedure
+    .meta({openapi: {method: 'POST', path: '/health'}})
+    .input(z.object({}).passthrough())
+    .output(z.object({}).passthrough())
+    .mutation(({input}) => ({input})),
+
   viewer: publicProcedure
     .meta({
       openapi: {
