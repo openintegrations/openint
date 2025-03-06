@@ -23,8 +23,8 @@ function parseNonEmpty<T>(arr: T[]) {
 
 const coreBase = z.object({
   id: z.string(),
-  updated_at: z.string().datetime(),
-  created_at: z.string().datetime(),
+  updated_at: z.string(), // .datetime(), // TODO: Ensure date time format is respected
+  created_at: z.string(), // .datetime(), // TODO: Ensure date time format is respected
 })
 
 export const core = {
