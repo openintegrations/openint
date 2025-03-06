@@ -49,8 +49,15 @@ test('POST to /test2 should return the request body', async () => {
   expect(responseBody).toBe(testBody)
 })
 
-test.skip('listen', async () => {
-  app.listen(3555)
-  const response = await fetch('http://localhost:3555/test')
-  expect(response.status).toBe(200)
+test('listen', async () => {
+  if (detectRuntime().isNode) {
+  } else {
+    const port = await new Promise<number>((resolve) => {
+      app.listen(0, (server) => {
+        resolve(server.port)
+      })
+    })
+    const response = await fetch(`http://localhost:${port}/test`)
+    expect(response.status).toBe(200)
+  }
 })
