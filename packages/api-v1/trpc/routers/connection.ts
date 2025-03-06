@@ -2,7 +2,7 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {and, count, eq, schema, sql} from '@openint/db'
+import {and, eq, schema, sql} from '@openint/db'
 import {publicProcedure, router, type RouterContext} from '../_base'
 import {core} from '../../models'
 import {
