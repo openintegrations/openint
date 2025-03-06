@@ -53,7 +53,7 @@ export function routerContextFromViewer({
     if (!dbForViewer) {
       throw new Error(`${db.driverType} does not support asViewer`)
     }
-    return {viewer, db: dbForViewer, getToken: () => {}}
+    return {viewer, db: dbForViewer}
   }
 
   return {...createViewerContext(currentViewer), as: createViewerContext}
