@@ -88,7 +88,9 @@ jobs:
       - name: Run type checks
         run: pnpm run typecheck
 
+      # Don't need to block tests if type checks are failing
       - name: Download dev env vars from Vercel
+        if: always()
         run: |
           npm install --global vercel@latest
           vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
@@ -96,6 +98,7 @@ jobs:
           cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
 
       - name: Run migration and store the completed schema
+        if: always()
         # TODO: consider diffing schema with stored schema?
         # Perhaps make dump and diff one of the code generation next steps?
         run: |
@@ -114,14 +117,17 @@ jobs:
         # psql postgres -c 'drop database if exists test;' && psql postgres -c 'create database test;' && DATABASE_URL=postgres://localhost:5432/test pnpm migrate
 
       - name: Run health check
+        if: always()
         run: MOCK_HEALTHCHECK=true NANGO_SECRET_KEY=noop JWT_SECRET=NOOP npx tsx ./bin/openint.ts health
 
       - name: Start dev server in background
+        if: always()
         run: |
           pnpm run web --port 4000 &
           pnpm wait-on tcp:4000
 
       - name: Start inngest dev server in background
+        if: always()
         run: |
           npx inngest-cli@latest dev &
           pnpm wait-on tcp:8288
@@ -130,9 +136,9 @@ jobs:
         if: always()
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
 
-      - name: Setup upterm session
-        if: always()
-        uses: lhotari/action-upterm@v1
+      # - name: Setup upterm session
+      #   if: always()
+      #   uses: lhotari/action-upterm@v1
 
       - name: Run lint
         run: pnpm run lint
