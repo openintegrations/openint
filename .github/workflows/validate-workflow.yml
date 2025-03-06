@@ -130,9 +130,9 @@ jobs:
         if: always()
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
 
-      # - name: Setup upterm session
-      #   if: always()
-      #   uses: lhotari/action-upterm@v1
+      - name: Setup upterm session
+        if: always()
+        uses: lhotari/action-upterm@v1
 
       - name: Run lint
         run: pnpm run lint
