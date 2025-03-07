@@ -1,7 +1,17 @@
-// eslint-ignore
 // until we figure out how to get tsconfig to include this file
 import {dirname, join} from 'node:path'
 import type {StorybookConfig} from '@storybook/experimental-nextjs-vite'
+
+// import {default as svgr} from 'vite-plugin-svgr'
+
+/**
+ * defineMain does not exist in storybook/experimental-nextjs-vite
+ * so we still hack for now use the type based config
+ * https://storybook.js.org/docs/api/csf/csf-factories#2-update-your-main-storybook-config-file
+ */
+// function defineMain<T>(config: T) {
+//   return config
+// }
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -11,7 +21,7 @@ function getAbsolutePath(value) {
   return dirname(require.resolve(join(value, 'package.json')))
 }
 
-const config: StorybookConfig = {
+const config = {
   stories: [
     '../stories/**/*.mdx',
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
@@ -22,48 +32,19 @@ const config: StorybookConfig = {
     getAbsolutePath('@storybook/addon-onboarding'),
     getAbsolutePath('@chromatic-com/storybook'),
     getAbsolutePath('@storybook/experimental-addon-test'),
+    //     getAbsolutePath('@storybook/addon-links'),
+    //     getAbsolutePath('@storybook/addon-interactions'),
   ],
   framework: {
     name: getAbsolutePath('@storybook/experimental-nextjs-vite'),
     options: {},
   },
-}
+  //   async viteFinal(config, {configType}) {
+  //     config.plugins = config.plugins || []
+  //     config.plugins.push(svgr())
+
+  //     return config
+  //   },
+} satisfies StorybookConfig
+
 export default config
-// const {dirname, join} = require('path')
-// const {default: svgr} = require('vite-plugin-svgr')
-
-// /**
-//  * This function is used to resolve the absolute path of a package.
-//  * It is needed in projects that use Yarn PnP or are set up within a monorepo.
-//  */
-// function getAbsolutePath(value) {
-//   return dirname(require.resolve(join(value, 'package.json')))
-// }
-
-// /** @type { import('@storybook/react-vite').StorybookConfig } */
-// const config = {
-//   stories: [
-//     '../stories/**/*.mdx',
-//     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-//   ],
-//   addons: [
-//     getAbsolutePath('@storybook/addon-onboarding'),
-//     getAbsolutePath('@storybook/addon-links'),
-//     getAbsolutePath('@storybook/addon-essentials'),
-//     getAbsolutePath('@chromatic-com/storybook'),
-//     getAbsolutePath('@storybook/addon-interactions'),
-//   ],
-//   framework: {
-//     name: getAbsolutePath('@storybook/react-vite'),
-//     options: {},
-//   },
-
-//   async viteFinal(config, {configType}) {
-//     config.plugins = config.plugins || []
-//     config.plugins.push(svgr())
-
-//     return config
-//   },
-// }
-
-// export default config
