@@ -106,11 +106,11 @@ export default async function createNativeOauthConnect(
       // Listen for messages from popup
       activeListener = async (event: MessageEvent) => {
         try {
-          // console.log('received message', {
-          //   data: event.data,
-          //   origin: event.origin,
-          //   source: event.source === activePopup ? 'popup' : 'other',
-          // })
+          console.log('received message', {
+            data: event.data,
+            origin: event.origin,
+            source: event.source === activePopup ? 'popup' : 'other',
+          })
           // Verify message is from our popup window
           if (event.source !== activePopup) {
             return
@@ -149,6 +149,11 @@ export default async function createNativeOauthConnect(
             throw createOAuthError('auth_error', 'Invalid connection id')
           }
 
+          console.log('resolving oauth promise', {
+            code: response.code,
+            state: response.state,
+            connectionId: parsedConnectionId,
+          })
           // Return the authorization response
           resolve({
             code: response.code,

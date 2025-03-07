@@ -111,7 +111,10 @@ const defaultTokenHandler: TokenHandler = async (args) => {
     return makeTokenRequest(token_request_url, baseParams, 'exchange')
   }
 
-  throw new Error('Invalid flow type')
+  throw new Error(
+    // @ts-expect-error
+    `Invalid oauth flow type passed to token handler: ${args.flow_type}`,
+  )
 }
 
 const defaultResponseHandler: ResponseHandler = async ({
@@ -221,7 +224,9 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         authorization_request_url: connectorDef.authorization_request_url,
         auth_params: connectorDef.auth_params,
         connector_config: connectorConfig,
-        redirect_uri: getServerUrl(null) + '/connect/callback',
+        // TODO: revert
+        redirect_uri: 'https://f887-38-9-28-71.ngrok-free.app/connect/callback',
+        // redirect_uri: getServerUrl(null) + '/connect/callback',
         connection_id: connectionId,
         // this is currently returning T['_types']['connectInput']
         // which is defined as {authorization_url} in cnext/schema.ts
