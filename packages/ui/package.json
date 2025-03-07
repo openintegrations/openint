@@ -6,6 +6,7 @@
   "module": "./index.ts",
   "scripts": {
     "build-storybook": "storybook build",
+    "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
     "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
@@ -59,6 +60,7 @@
     "@types/react": "*",
     "@vitest/browser": "^3.0.8",
     "@vitest/coverage-v8": "^3.0.8",
+    "chromatic": "^11.27.0",
     "playwright": "^1.51.0",
     "prop-types": "^15.8.1",
     "storybook": "^8.6.4",
