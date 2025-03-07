@@ -1,50 +1,26 @@
 // TODO: Move me into opensdks
-import type {AddressInfo} from 'node:net'
-import {serve} from '@hono/node-server'
 import type {Link as FetchLink} from '@opensdks/fetch-links'
 import {modifyRequest} from '@opensdks/fetch-links'
+import {serverFromHandler} from './server-utils'
 
-interface ServeOptions {
+interface LoopbackOptions {
   /** defaults to 0 which is a random port */
   port?: number
 }
 
-export function serveAsync(
-  handler: (request: Request) => Promise<Response>,
-  opts: ServeOptions = {},
-) {
-  console.log('[loopbackLink] Serving', opts)
-  return new Promise<AddressInfo & {close: () => Promise<void>}>((resolve) => {
-    // 0 means random
-    const server = serve({fetch: handler, port: opts.port ?? 0}, (info) =>
-      resolve({
-        ...info,
-        close: () =>
-          // eslint-disable-next-line promise/param-names
-          new Promise((res, rej) =>
-            server.close((err) => (err ? rej(err) : res())),
-          ),
-      }),
-    )
-  })
-}
-
-// TODO: Add option for re-using the server between requests
+// Figure out how to re-use server between requests while still being able to clean up
 export const loopbackLink =
-  (opts?: ServeOptions): FetchLink =>
+  (opts?: LoopbackOptions): FetchLink =>
   async (req, next) => {
-    const server = await serveAsync(next, opts)
+    const server = serverFromHandler(next)
+    await server.startIfNeeded(opts?.port)
     const res = await fetch(
       modifyRequest(req, {
         url: {hostname: 'localhost', port: server.port.toString()},
       }),
     )
-    await server.close()
+    await server.stop()
     return res
   }
-
-// void serveAsync(async () => new Response('👋')).then((info) => {
-//   console.log(`Server running at ${info.address}:${info.port}`)
-// })
 
 export {createFetchWithLinks} from '@opensdks/fetch-links'

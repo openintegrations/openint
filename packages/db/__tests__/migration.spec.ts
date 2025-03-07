@@ -3,6 +3,7 @@ import {describeEachDatabase} from './test-utils'
 
 jest.setTimeout(15_000)
 
+// runs in bun but is in fact slower than jest!
 describeEachDatabase({drivers: 'all', migrate: false}, (db) => {
   test('run migration', async () => {
     await db.$migrate()
