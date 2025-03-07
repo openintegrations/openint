@@ -1,7 +1,10 @@
+// Is this the right way to import css?
 import '../../../apps/web/app/tailwind.css'
 
-/** @type { import('@storybook/react').Preview } */
-const preview = {
+import {definePreview} from '@storybook/experimental-nextjs-vite'
+import type {Preview} from '@storybook/react'
+
+export const preview = {
   parameters: {
     controls: {
       matchers: {
@@ -10,6 +13,7 @@ const preview = {
       },
     },
   },
-}
+} satisfies Preview
 
-export default preview
+// Should be noop, identical
+export default definePreview(preview)

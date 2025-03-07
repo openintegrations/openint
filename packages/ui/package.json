@@ -3,6 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "sideEffects": false,
+  "imports": {
+    "#*": [
+      "./*",
+      "./*.ts",
+      "./*.tsx"
+    ]
+  },
   "module": "./index.ts",
   "scripts": {
     "build-storybook": "storybook build",

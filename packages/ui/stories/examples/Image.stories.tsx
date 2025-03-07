@@ -1,5 +1,5 @@
-import type {Meta, StoryObj} from '@storybook/react'
-import Image from 'next/image'
+import type {Meta, StoryObj} from '@storybook/react';
+import Image from 'next/image';
 
 export function CustomImage({src, alt}: {src: string; alt: string}) {
   return <Image src={src} alt={alt} width={200} height={200} />
