@@ -53,7 +53,7 @@ export const mappers = {
         t.personal_finance_category?.detailed,
       ]
         .filter((c) => !!c)
-        .join(''),
+        .join('/'),
     // Plaid transactions are single entry and therefore unbalanced
     // We should probably not set any "lines" at all in this case.
     // Would also need some semantic to communicate set if null, aka set default value,
