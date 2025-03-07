@@ -1,11 +1,9 @@
 import {fn} from '@storybook/test'
-// import preview from '#.storybook/preview'
-import preview from '../../.storybook/preview'
-import {Button} from './Button'
+import {Button} from '../shadcn/Button'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
-const meta = preview.meta({
-  title: 'Examples/Button',
+export default {
+  title: 'Example/Icon',
   component: Button,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
@@ -19,32 +17,27 @@ const meta = preview.meta({
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
   args: {onClick: fn()},
-})
-// export default meta
+}
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Primary = meta.story({
+export const Default = {
   args: {
-    primary: true,
-    label: 'Button',
+    'aria-label': 'Copy to clipboard',
+    variant: 'default',
+    size: 'default',
   },
-})
-
-export const Secondary = meta.story({
+}
+export const Primary = {
   args: {
-    label: 'Button',
+    'aria-label': 'Copy to clipboard',
+    variant: 'primary',
+    size: 'default',
   },
-})
-export const Large = meta.story({
+}
+export const Secondary = {
   args: {
-    size: 'large',
-    label: 'Button',
+    'aria-label': 'Copy to clipboard',
+    variant: 'secondary',
+    size: 'default',
   },
-})
-
-export const Small = meta.story({
-  args: {
-    size: 'small',
-    label: 'Button',
-  },
-})
+}
