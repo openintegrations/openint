@@ -245,8 +245,15 @@ const zlinks = z.object({
     .optional(),
 })
 
+export const zAudience = z
+  .enum(['consumer', 'business', 'enterprise'])
+  .describe('The target audience of the connector')
+
+export type Audience = z.infer<typeof zAudience>
+
 export const zConnectorDef = z
   .object({
+    audience: z.array(zAudience).describe('The audiences of the connector'),
     connector_name: z
       .string()
       .describe('The unique name of the provider in kebab-case'),

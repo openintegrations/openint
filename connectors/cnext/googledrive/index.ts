@@ -3,6 +3,7 @@ import {ConnectorDef} from '../def'
 import {generateConnectorDef} from '../schema'
 
 const connectorDef = {
+  audience: ['consumer', 'business'],
   connector_name: 'googledrive',
   verticals: ['file-storage'],
   display_name: 'Google Drive',
