@@ -3,6 +3,7 @@ import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
+import {core} from '../../models'
 import {
   expandConnector,
   zConnectorName,
@@ -14,13 +15,6 @@ import {
   zListParams,
   zListResponse,
 } from '../utils/pagination'
-
-/** TODO: Use the real type */
-const connector_config = z.object({
-  id: z.string(),
-  org_id: z.string(),
-  connector_name: z.string(),
-})
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -42,7 +36,7 @@ export const connectorConfigRouter = router({
         .optional(),
     )
     .output(
-      zListResponse(connector_config).describe(
+      zListResponse(core.connector_config).describe(
         'The list of connector configurations',
       ),
     )
@@ -95,9 +89,10 @@ export const connectorConfigRouter = router({
     .input(
       z.object({
         connector_name: z.string(),
+        config: z.record(z.unknown()).nullish(),
       }),
     )
-    .output(connector_config)
+    .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
       const {connector_name} = input
       const [ccfg] = await ctx.db
@@ -105,6 +100,7 @@ export const connectorConfigRouter = router({
         .values({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
+          config: input.config,
         })
         .returning()
       return ccfg!

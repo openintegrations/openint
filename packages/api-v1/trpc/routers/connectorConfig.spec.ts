@@ -39,11 +39,21 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   test('create connector config', async () => {
     const res = await asOrg.createConnectorConfig({
       connector_name: 'qbo',
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
     })
     expect(res).toEqual({
       id: expect.any(String),
       org_id: 'org_222',
       connector_name: 'qbo',
+      created_at: expect.any(String),
+      updated_at: expect.any(String),
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
     })
   })
 
