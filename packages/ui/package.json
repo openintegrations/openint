@@ -12,7 +12,7 @@
     "tailwind": "pnpm build-tailwind -- --watch"
   },
   "dependencies": {
-    "@calcom/embed-react": "^1.5.1",
+    "@calcom/embed-react": "^1.5.2",
     "@glideapps/glide-data-grid": "5.2.1",
     "@monaco-editor/react": "4.4.6",
     "@radix-ui/react-alert-dialog": "1.0.3",
