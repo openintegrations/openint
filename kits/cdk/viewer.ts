@@ -213,7 +213,7 @@ export const makeJwtClient = zFunction(
       return new jose.SignJWT(payload)
         .setProtectedHeader({alg: 'HS256'})
         .setIssuedAt()
-        .setExpirationTime(validityInSeconds)
+        .setExpirationTime(Date.now() / 1000 + validityInSeconds)
         .sign(new TextEncoder().encode(secretOrPublicKey))
     },
   }),
