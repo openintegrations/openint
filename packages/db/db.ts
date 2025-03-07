@@ -5,7 +5,6 @@ import type {Viewer} from '@openint/cdk'
 import type {initDbNeon} from './db.neon'
 import type {initDbPg, initDbPgDirect} from './db.pg'
 import type {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
-import drizzleKitConfig from './drizzle.config'
 import * as schema from './schema/schema'
 
 // MARK: - For users
