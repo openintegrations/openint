@@ -2129,9 +2129,6 @@ importers:
       '@openint/sdk':
         specifier: 0.1.0-alpha.20
         version: 0.1.0-alpha.20
-      '@sinclair/typebox':
-        specifier: ^0.34.20
-        version: 0.34.20
       '@trpc/server':
         specifier: next
         version: 11.0.0-rc.824(typescript@5.7.3)
