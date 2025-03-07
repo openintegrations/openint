@@ -1,11 +1,11 @@
 /* eslint-disable jest/no-conditional-expect */
-// import {node} from '@elysiajs/node'
-import {Elysia} from 'elysia'
+
 import {
-  elysiaStartServer,
-  nodeServerFromHandler,
-} from '@openint/loopback-link/elysia-utils'
+  serverFromElysia,
+  serverFromHandler,
+} from '@openint/loopback-link/server-utils'
 import {detectRuntime} from '@openint/util/__tests__/test-utils'
+import {Elysia} from 'elysia'
 
 const {isNode} = detectRuntime()
 
@@ -64,12 +64,12 @@ test('POST to /test2 should return the request body', async () => {
 
 test('listen on random random port and handling request', async () => {
   if (isNode) {
-    const server = await nodeServerFromHandler(app.handle).start()
+    const server = await serverFromHandler(app.handle).start()
     const response = await fetch(`http://localhost:${server.port}`)
     expect(response.status).toBe(200)
     await server.stop()
   } else {
-    const server = await elysiaStartServer(app)
+    const server = await serverFromElysia(app).start()
     const response = await fetch(`http://localhost:${server.port}`)
     expect(response.status).toBe(200)
     await server.stop()

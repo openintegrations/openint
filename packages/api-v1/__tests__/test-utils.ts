@@ -1,5 +1,4 @@
 import {createTRPCClient, httpLink} from '@trpc/client'
-import type {Elysia} from 'elysia'
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {envRequired} from '@openint/env'
@@ -37,14 +36,3 @@ export function getTestTRPCClient(
     ],
   })
 }
-
-/** 0 means random, but not supported by node adapter */
-export const listenWithPort = (app: Elysia, port = 0) =>
-  new Promise<number>((resolve) => {
-    app.listen(port, (server) => {
-      resolve(server.port)
-    })
-  })
-
-export const getRandomPort = (min = 10000, max = 65535) =>
-  Math.floor(Math.random() * (max - min + 1)) + min

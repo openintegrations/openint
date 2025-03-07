@@ -27,7 +27,6 @@
     "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
-    "@elysiajs/node": "^1.2.6",
     "@openint/loopback-link": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@trpc/client": "next",

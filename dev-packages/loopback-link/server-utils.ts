@@ -35,8 +35,10 @@ export async function writeWebResponseToNodeResponse(
   res.end(Buffer.from(body))
 }
 
+// Mark: -
+
 /** Web Request handler as node HTTP server */
-export function nodeServerFromHandler(
+export function serverFromHandler(
   handler: (request: Request) => Promise<Response>,
 ) {
   const server = createServer(
@@ -58,22 +60,71 @@ export function nodeServerFromHandler(
       server.close((err) => (err ? reject(err) : resolve()))
     })
 
+  let resolvedPort: number | null = null
+
+  const start = (port = 0) =>
+    new Promise<{port: number; stop: typeof stop}>((resolve) =>
+      server.listen(port, () => {
+        resolvedPort = (server.address() as {port: number}).port
+        resolve({port: resolvedPort, stop})
+      }),
+    )
+
+  let startPromise: ReturnType<typeof start> | null = null
+
+  const startIfNeeded = async (port = 0) => {
+    if (startPromise) {
+      return startPromise
+    }
+    startPromise = start(port)
+    return startPromise
+  }
+
   return {
-    start: (port = 0) =>
-      new Promise<{port: number; stop: typeof stop}>((resolve) =>
-        server.listen(port, () => {
-          resolve({port: (server.address() as {port: number}).port, stop})
-        }),
-      ),
+    get port() {
+      if (resolvedPort === null) {
+        throw new Error('Server is not started yet')
+      }
+      return resolvedPort
+    },
+    start,
     stop,
+    startIfNeeded,
     server,
   }
 }
 
-/** 0 means random, but not supported by node adapter */
-export const elysiaStartServer = (app: Elysia, port = 0) =>
-  new Promise<{port: number; stop: () => Promise<void>}>((resolve) => {
-    app.listen(port, (server) => {
-      resolve({port: server.port, stop: () => app.stop()})
-    })
-  })
+/** WinterTG compliant environments like bun */
+export const serverFromElysia = (app: Elysia) => {
+  const stop = app.stop
+
+  let resolvedPort: number | null = null
+  const start = (port = 0) =>
+    new Promise<{port: number; stop: typeof stop}>((resolve) =>
+      app.listen(port, (server) => {
+        resolvedPort = server.port
+        resolve({port: server.port, stop})
+      }),
+    )
+
+  let startPromise: ReturnType<typeof start> | null = null
+  const startIfNeeded = async (port = 0) => {
+    if (startPromise) {
+      return startPromise
+    }
+    startPromise = start(port)
+    return startPromise
+  }
+
+  return {
+    get port() {
+      if (resolvedPort === null) {
+        throw new Error('Server is not started yet')
+      }
+      return resolvedPort
+    },
+    start,
+    stop,
+    startIfNeeded,
+  }
+}
