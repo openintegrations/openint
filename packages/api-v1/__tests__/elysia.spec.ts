@@ -1,87 +1,77 @@
 /* eslint-disable jest/no-conditional-expect */
-import {node} from '@elysiajs/node'
+// import {node} from '@elysiajs/node'
 import {Elysia} from 'elysia'
-import {$beforeAll, detectRuntime} from '@openint/util/__tests__/test-utils'
-import {getRandomPort, listenWithPort} from './test-utils'
+import {
+  elysiaStartServer,
+  nodeServerFromHandler,
+} from '@openint/loopback-link/elysia-utils'
+import {detectRuntime} from '@openint/util/__tests__/test-utils'
 
 const {isNode} = detectRuntime()
 
-const app = new Elysia({adapter: isNode ? node() : undefined})
+const app = new Elysia()
   .get('/', () => new Response('ok'))
   .mount('/test', async (req) => new Response(await req.text()))
   .all('/test2', async ({request: req}) => new Response(await req.text()))
 
-function sharedTests() {
-  test('GET /', async () => {
-    const res = await app.handle(new Request('http://localhost/'))
-    expect(await res.text()).toBe('ok')
-  })
+test('GET /', async () => {
+  const res = await app.handle(new Request('http://localhost/'))
+  expect(await res.text()).toBe('ok')
+})
 
-  test('POST to /test should return the request body but crashes for now', async () => {
-    const testBody = JSON.stringify({hello: 'world'})
-    const response = await app.handle(
-      new Request('http://localhost/test', {
-        method: 'POST',
-        body: testBody,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }),
+test('POST to /test should return the request body but crashes for now', async () => {
+  const testBody = JSON.stringify({hello: 'world'})
+  const response = await app.handle(
+    new Request('http://localhost/test', {
+      method: 'POST',
+      body: testBody,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+  )
+  const responseBody = await response.text()
+  if (isNode) {
+    // Does not work on node
+    expect(response.status).toBe(500)
+    expect(responseBody).toEqual(
+      'TypeError: Request with GET/HEAD method cannot have body.',
     )
-    const responseBody = await response.text()
-    if (detectRuntime().isNode) {
-      // Does not work on node
-      expect(response.status).toBe(500)
-      expect(responseBody).toEqual(
-        'TypeError: Request with GET/HEAD method cannot have body.',
-      )
-    } else {
-      // works on bun for sure, and maybe others?
-      expect(response.status).toBe(200)
-      expect(responseBody).toBe(testBody)
-    }
-  })
-
-  test('POST to /test2 should return the request body', async () => {
-    const testBody = JSON.stringify({hello: 'world'})
-    const response = await app.handle(
-      new Request('http://localhost/test2/', {
-        method: 'POST',
-        body: testBody,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }),
-    )
-
-    const responseBody = await response.text()
-    // console.log(responseBody)
+  } else {
+    // works on bun for sure, and maybe others?
     expect(response.status).toBe(200)
     expect(responseBody).toBe(testBody)
-  })
-}
+  }
+})
 
-if (isNode) {
-  describe('with node compat', () => {
-    const portRef = $beforeAll(() =>
-      // in node.js, elysia needs to call listen before .handle otherwise
-      // we get TypeError: Cannot read properties of undefined (reading 'writeHead')
-      isNode ? listenWithPort(app, getRandomPort()) : undefined,
-    )
+test('POST to /test2 should return the request body', async () => {
+  const testBody = JSON.stringify({hello: 'world'})
+  const response = await app.handle(
+    new Request('http://localhost/test2/', {
+      method: 'POST',
+      body: testBody,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+  )
 
-    sharedTests()
+  const responseBody = await response.text()
+  // console.log(responseBody)
+  expect(response.status).toBe(200)
+  expect(responseBody).toBe(testBody)
+})
 
-    test('listen on random port', async () => {
-      const response = await fetch(`http://localhost:${portRef.current}`)
-      expect(response.status).toBe(200)
-    })
-  })
-} else {
-  sharedTests()
-
-  test('listen on random port', async () => {
-    const port = await listenWithPort(app)
-    const response = await fetch(`http://localhost:${port}`)
+test('listen on random random port and handling request', async () => {
+  if (isNode) {
+    const server = await nodeServerFromHandler(app.handle).start()
+    const response = await fetch(`http://localhost:${server.port}`)
     expect(response.status).toBe(200)
-  })
-}
+    await server.stop()
+  } else {
+    const server = await elysiaStartServer(app)
+    const response = await fetch(`http://localhost:${server.port}`)
+    expect(response.status).toBe(200)
+    await server.stop()
+  }
+})
