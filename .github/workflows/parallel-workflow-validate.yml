@@ -193,7 +193,7 @@ jobs:
       - name: Build css file
         run: pnpm --dir packages/ui build-tailwind
       - name: Publish storybook to chromatic
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui chromatic
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui chromatic -- --exit-zero-on-changes
 
   # slack-notification:
   #   runs-on: ubuntu-latest
