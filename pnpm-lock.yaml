@@ -2576,9 +2576,18 @@ importers:
       '@chromatic-com/storybook':
         specifier: ^3.2.5
         version: 3.2.5(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))
+      '@electric-sql/pglite':
+        specifier: ^0.2.16
+        version: 0.2.17
+      '@openint/api-v1':
+        specifier: workspace:*
+        version: link:../api-v1
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/db':
+        specifier: workspace:*
+        version: link:../db
       '@openint/engine-backend':
         specifier: workspace:*
         version: link:../engine-backend

@@ -12,7 +12,6 @@
     "push": "drizzle-kit push"
   },
   "dependencies": {
-    "@electric-sql/pglite": "^0.2.16",
     "@neondatabase/serverless": "^0.10.4",
     "@openint/env": "workspace:*",
     "drizzle-orm": "^0.39.1",

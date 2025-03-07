@@ -1,13 +1,25 @@
 import type {Meta, StoryObj} from '@storybook/react'
+import React from 'react'
+import {initDbPGLite} from '@openint/db/db.pglite'
 
-export function TailwindExample({className}: {className: string}) {
-  return <div className={className}>Hello World</div>
+export function App({className}: {className: string}) {
+  const [count, setCount] = React.useState(0)
+  React.useEffect(() => {
+    void (async () => {
+      const db = initDbPGLite()
+      const res = await db.$exec('SELECT 1+1 as count')
+
+      setCount(res.rows[0]['count'])
+      console.log(res)
+    })()
+  }, [])
+  return <div className={className}>Hello World {count}</div>
 }
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Examples/Tailwind',
-  component: TailwindExample,
+  title: 'App',
+  component: App,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     // layout: 'centered',
@@ -20,7 +32,7 @@ const meta = {
   // },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
   // args: {onClick: fn()},
-} satisfies Meta<typeof TailwindExample>
+} satisfies Meta<typeof App>
 
 export default meta
 type Story = StoryObj<typeof meta>

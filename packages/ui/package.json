@@ -47,7 +47,10 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",
+    "@electric-sql/pglite": "^0.2.16",
+    "@openint/api-v1": "workspace:*",
     "@openint/cdk": "workspace:*",
+    "@openint/db": "workspace:*",
     "@openint/engine-backend": "workspace:*",
     "@storybook/addon-essentials": "^8.6.4",
     "@storybook/addon-interactions": "^8.6.4",
