@@ -136,6 +136,21 @@ export interface ConnectorServer<
   TInstance = any,
   T extends ConnHelpers<TDef> = ConnHelpers<TDef>,
 > {
+  /**
+   * Work around typescript not having contextual typing support for classes that implement interfaces
+   * We recommend against using classes (which might be more convenient) due to the lack
+   * of contextual typing for interfaces. @see https://github.com/microsoft/TypeScript/issues/1373
+   */
+  newInstance?: (opts: {
+    config: T['_types']['connectorConfig']
+    settings: T['_types']['connectionSettings']
+    fetchLinks: FetchLink[]
+    /** @deprecated, use fetchLinks instead for things like token refreshes or connection status update */
+    onSettingsChange: (
+      newSettings: T['_types']['connectionSettings'],
+    ) => MaybePromise<void>
+  }) => TInstance
+
   // MARK: - Connect
 
   preConnect?: (
@@ -186,6 +201,23 @@ export interface ConnectorServer<
 
   // MARK: - Sync
 
+  // pagination params
+  listIntegrations?: (params: unknown) => Promise<{
+    has_next_page: boolean
+    next_cursor: string | null
+    // Institution
+
+    items: Array<{
+      id: string
+      name: string
+      logo_url?: string | null
+      updated_at: string
+      verticals?: VerticalKey[]
+      raw_data: T['_intOpType']['data']
+    }>
+  }>
+
+  /** @deprecated */
   sourceSync?: (
     input: OmitNever<{
       instance: TInstance
@@ -205,6 +237,7 @@ export interface ConnectorServer<
     }>,
   ) => Source<T['_types']['sourceOutputEntity']>
 
+  /** @deprecated */
   destinationSync?: (
     input: OmitNever<{
       /** Needed for namespacing when syncing multiple source into same destination */
@@ -216,22 +249,7 @@ export interface ConnectorServer<
     }>,
   ) => Destination<T['_types']['destinationInputEntity']>
 
-  // pagination params
-  listIntegrations?: (params: unknown) => Promise<{
-    has_next_page: boolean
-    next_cursor: string | null
-    // Institution
-
-    items: Array<{
-      id: string
-      name: string
-      logo_url?: string | null
-      updated_at: string
-      verticals?: VerticalKey[]
-      raw_data: T['_intOpType']['data']
-    }>
-  }>
-
+  /** @deprecated */
   metaSync?: (
     input: OmitNever<{
       config: T['_types']['connectorConfig']
@@ -242,6 +260,8 @@ export interface ConnectorServer<
   // MARK - Webhook
   // Need to add a input schema for each provider to verify the shape of the received
   // webhook requests...
+
+  /** @deprecated */
   handleWebhook?: (
     webhookInput: T['_types']['webhookInput'],
     config: T['_types']['connectorConfig'],
@@ -252,24 +272,11 @@ export interface ConnectorServer<
     >
   >
 
-  /**
-   * Work around typescript not having contextual typing support for classes that implement interfaces
-   * We recommend against using classes (which might be more convenient) due to the lack
-   * of contextual typing for interfaces. @see https://github.com/microsoft/TypeScript/issues/1373
-   */
-  newInstance?: (opts: {
-    config: T['_types']['connectorConfig']
-    settings: T['_types']['connectionSettings']
-    fetchLinks: FetchLink[]
-    /** @deprecated, use fetchLinks instead for things like token refreshes or connection status update */
-    onSettingsChange: (
-      newSettings: T['_types']['connectionSettings'],
-    ) => MaybePromise<void>
-  }) => TInstance
-
   /** Passthrough request proxy */
+  /** @deprecated */
   proxy?: (instance: TInstance, req: Request) => Promise<Response>
 
+  /** @deprecated */
   passthrough?: (
     instance: TInstance,
     input: z.infer<typeof zPassthroughInput>,
