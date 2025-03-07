@@ -2597,12 +2597,15 @@ importers:
       '@storybook/blocks':
         specifier: ^8.6.4
         version: 8.6.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))
+      '@storybook/experimental-addon-test':
+        specifier: ^8.6.4
+        version: 8.6.4(@vitest/browser@3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.8)(bufferutil@4.0.7)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(vitest@3.0.8))(@vitest/runner@3.0.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(vitest@3.0.8(@types/debug@4.1.12)(@types/node@22.13.8)(@vitest/browser@3.0.8)(msw@2.7.3(@types/node@22.13.8)(typescript@5.7.3))(terser@5.15.1))
+      '@storybook/experimental-nextjs-vite':
+        specifier: 8.6.4
+        version: 8.6.4(@babel/core@7.25.2)(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.24.0)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(webpack-sources@3.2.3)
       '@storybook/react':
         specifier: ^8.6.4
         version: 8.6.4(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)
-      '@storybook/react-vite':
-        specifier: ^8.6.4
-        version: 8.6.4(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.24.0)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(webpack-sources@3.2.3)
       '@storybook/test':
         specifier: ^8.6.4
         version: 8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))
@@ -2612,6 +2615,15 @@ importers:
       '@types/react':
         specifier: 18.0.27
         version: 18.0.27
+      '@vitest/browser':
+        specifier: ^3.0.8
+        version: 3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.8)(bufferutil@4.0.7)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(vitest@3.0.8)
+      '@vitest/coverage-v8':
+        specifier: ^3.0.8
+        version: 3.0.8(@vitest/browser@3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.8)(bufferutil@4.0.7)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(vitest@3.0.8))(vitest@3.0.8(@types/debug@4.1.12)(@types/node@22.13.8)(@vitest/browser@3.0.8)(msw@2.7.3(@types/node@22.13.8)(typescript@5.7.3))(terser@5.15.1))
+      playwright:
+        specifier: ^1.51.0
+        version: 1.51.0
       prop-types:
         specifier: ^15.8.1
         version: 15.8.1
@@ -2621,6 +2633,9 @@ importers:
       vite-plugin-svgr:
         specifier: ^4.2.0
         version: 4.2.0(rollup@4.24.0)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))
+      vitest:
+        specifier: ^3.0.8
+        version: 3.0.8(@types/debug@4.1.12)(@types/node@22.13.8)(@vitest/browser@3.0.8)(msw@2.7.3(@types/node@22.13.8)(typescript@5.7.3))(terser@5.15.1)
 
   packages/ui-v1:
     devDependencies:
@@ -2641,7 +2656,7 @@ importers:
         version: 8.6.4(@vitest/browser@3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.8)(bufferutil@4.0.7)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(vitest@3.0.8))(@vitest/runner@3.0.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(vitest@3.0.8(@types/debug@4.1.12)(@types/node@22.13.8)(@vitest/browser@3.0.8)(msw@2.7.3(@types/node@22.13.8)(typescript@5.7.3))(terser@5.15.1))
       '@storybook/experimental-nextjs-vite':
         specifier: 8.6.4
-        version: 8.6.4(@babel/core@7.25.2)(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(webpack-sources@3.2.3)
+        version: 8.6.4(@babel/core@7.25.2)(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.24.0)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(webpack-sources@3.2.3)
       '@storybook/react':
         specifier: ^8.6.4
         version: 8.6.4(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)
@@ -8973,7 +8988,6 @@ packages:
 
   bun@1.2.4:
     resolution: {integrity: sha512-ZY0EZ/UKqheaLeAtMsfJA6jWoWvV9HAtfFaOJSmS3LrNpFKs1Sg5fZLSsczN1h3a+Dtheo4O3p3ZYWrf40kRGw==}
-    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -9875,10 +9889,6 @@ packages:
 
   detect-libc@2.0.1:
     resolution: {integrity: sha512-463v3ZeIrcWtdgIg6vI6XUncguvr2TnGl4SzDXinkt9mSLpBJKXT3mW6xT3VQdDN11+WVs29pgvivTc4Lp8v+w==}
-    engines: {node: '>=8'}
-
-  detect-libc@2.0.2:
-    resolution: {integrity: sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==}
     engines: {node: '>=8'}
 
   detect-libc@2.0.3:
@@ -12094,10 +12104,6 @@ packages:
   isstream@0.1.2:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
 
-  istanbul-lib-coverage@3.2.0:
-    resolution: {integrity: sha512-eOeJ5BHCmHYvQK7xt9GkdHuzuCGS1Y6g9Gvnx3Ym33fz/HpLRYxiS0wHNr+m/MBC8B647Xt608vCDEvhl9c6Mw==}
-    engines: {node: '>=8'}
-
   istanbul-lib-coverage@3.2.2:
     resolution: {integrity: sha512-O8dpsF+r0WV/8MNRKfnmrtCWhuKjxrq2w+jpzBL5UZKTi2LeVWnWOmWRxFlesJONmc+wLAGvKQZEOanko0LFTg==}
     engines: {node: '>=8'}
@@ -12114,10 +12120,6 @@ packages:
     resolution: {integrity: sha512-Vtgk7L/R2JHyyGW07spoFlB8/lpjiOLTjMdms6AFMraYt3BaJauod/NGrfnVG/y4Ix1JEuMRPDPEj2ua+zz1/Q==}
     engines: {node: '>=10'}
 
-  istanbul-lib-report@3.0.0:
-    resolution: {integrity: sha512-wcdi+uAKzfiGT2abPpKZ0hSU1rGQjUQnLvtY5MpQ7QCTahD3VODhcu4wcfY1YtkGaDD5yuydOLINXsfbus9ROw==}
-    engines: {node: '>=8'}
-
   istanbul-lib-report@3.0.1:
     resolution: {integrity: sha512-GCfE1mtsHGOELCU8e/Z7YWzpmybrx/+dSTfLrvY8qRmaY6zXTKWn6WQIjaAFw069icm6GVMNkgu0NzI4iPZUNw==}
     engines: {node: '>=10'}
@@ -12129,10 +12131,6 @@ packages:
   istanbul-lib-source-maps@5.0.6:
     resolution: {integrity: sha512-yg2d+Em4KizZC5niWhQaIomgf5WlL4vOOjZ5xGCmF8SnPE/mDWWXgvRExdcpCgh9lLRRa1/fSYp2ymmbJ1pI+A==}
     engines: {node: '>=10'}
-
-  istanbul-reports@3.1.5:
-    resolution: {integrity: sha512-nUsEMa9pBt/NOHqbcbeJEgqIlY/K7rVWUX6Lql2orY5e9roQOthbR3vtY4zzf2orPELg80fnxxk9zUyPlgwD1w==}
-    engines: {node: '>=8'}
 
   istanbul-reports@3.1.7:
     resolution: {integrity: sha512-BewmUXImeuRk2YY0PVbxgKAysvhRPUQE0h5QRM++nVWyubKGV0l8qQ5op8+B2DOmwSe63Jivj0BjkPQVf8fP5g==}
@@ -12963,9 +12961,6 @@ packages:
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
-
-  loupe@3.1.2:
-    resolution: {integrity: sha512-23I4pFZHmAemUnz8WZXbYRSKYj801VDaNv9ETuMh7IrMc7VuVVSo+Z9iLE3ni30+U48iDWfi30d3twAXBYmnCg==}
 
   loupe@3.1.3:
     resolution: {integrity: sha512-kkIp7XSkP78ZxJEsSxW3712C6teJVoeHHwgo9zJ380de7IYyJ2ISlxojcH2pC5OFLewESmnRi/+XCDIEEVyoug==}
@@ -17736,7 +17731,7 @@ snapshots:
 
   '@babel/core@7.19.3':
     dependencies:
-      '@ampproject/remapping': 2.2.0
+      '@ampproject/remapping': 2.3.0
       '@babel/code-frame': 7.26.2
       '@babel/generator': 7.21.1
       '@babel/helper-compilation-targets': 7.19.3(@babel/core@7.19.3)
@@ -17747,7 +17742,7 @@ snapshots:
       '@babel/traverse': 7.21.2
       '@babel/types': 7.21.2
       convert-source-map: 1.8.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.1
@@ -17756,7 +17751,7 @@ snapshots:
 
   '@babel/core@7.23.3':
     dependencies:
-      '@ampproject/remapping': 2.2.0
+      '@ampproject/remapping': 2.3.0
       '@babel/code-frame': 7.23.4
       '@babel/generator': 7.23.4
       '@babel/helper-compilation-targets': 7.22.15
@@ -17767,7 +17762,7 @@ snapshots:
       '@babel/traverse': 7.23.4
       '@babel/types': 7.23.4
       convert-source-map: 2.0.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -17787,7 +17782,7 @@ snapshots:
       '@babel/traverse': 7.26.5
       '@babel/types': 7.26.5
       convert-source-map: 2.0.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -17875,7 +17870,7 @@ snapshots:
       '@babel/core': 7.25.2
       '@babel/helper-compilation-targets': 7.26.5
       '@babel/helper-plugin-utils': 7.26.5
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -18793,7 +18788,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.18.6
       '@babel/parser': 7.21.2
       '@babel/types': 7.21.2
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -18808,7 +18803,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.18.6
       '@babel/parser': 7.26.5
       '@babel/types': 7.26.5
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -18823,7 +18818,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.23.4
       '@babel/types': 7.23.4
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -18835,7 +18830,7 @@ snapshots:
       '@babel/parser': 7.26.5
       '@babel/template': 7.25.9
       '@babel/types': 7.26.5
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -19125,7 +19120,7 @@ snapshots:
   '@eslint/eslintrc@1.3.3':
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.1
@@ -19139,7 +19134,7 @@ snapshots:
   '@eslint/eslintrc@2.1.4':
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.1
@@ -19682,7 +19677,7 @@ snapshots:
   '@humanwhocodes/config-array@0.10.7':
     dependencies:
       '@humanwhocodes/object-schema': 1.2.1
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -19690,7 +19685,7 @@ snapshots:
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -20121,11 +20116,11 @@ snapshots:
       exit: 0.1.2
       glob: 7.2.3
       graceful-fs: 4.2.11
-      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-coverage: 3.2.2
       istanbul-lib-instrument: 6.0.3
-      istanbul-lib-report: 3.0.0
+      istanbul-lib-report: 3.0.1
       istanbul-lib-source-maps: 4.0.1
-      istanbul-reports: 3.1.5
+      istanbul-reports: 3.1.7
       jest-message-util: 29.7.0
       jest-util: 29.7.0
       jest-worker: 29.7.0
@@ -20150,11 +20145,11 @@ snapshots:
       exit: 0.1.2
       glob: 10.4.5
       graceful-fs: 4.2.11
-      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-coverage: 3.2.2
       istanbul-lib-instrument: 6.0.1
-      istanbul-lib-report: 3.0.0
+      istanbul-lib-report: 3.0.1
       istanbul-lib-source-maps: 5.0.6
-      istanbul-reports: 3.1.5
+      istanbul-reports: 3.1.7
       jest-message-util: 30.0.0-alpha.6
       jest-util: 30.0.0-alpha.6
       jest-worker: 30.0.0-alpha.6
@@ -21476,7 +21471,7 @@ snapshots:
 
   '@puppeteer/browsers@2.3.0':
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       extract-zip: 2.0.1
       progress: 2.0.3
       proxy-agent: 6.5.0
@@ -23813,7 +23808,7 @@ snapshots:
       - react
       - react-dom
 
-  '@storybook/experimental-nextjs-vite@8.6.4(@babel/core@7.25.2)(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(webpack-sources@3.2.3)':
+  '@storybook/experimental-nextjs-vite@8.6.4(@babel/core@7.25.2)(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(next@14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.24.0)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(webpack-sources@3.2.3)':
     dependencies:
       '@storybook/builder-vite': 8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(webpack-sources@3.2.3)
       '@storybook/react': 8.6.4(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)
@@ -23870,7 +23865,7 @@ snapshots:
       '@storybook/builder-vite': 8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(vite@5.4.9(@types/node@22.13.8)(terser@5.15.1))(webpack-sources@3.2.3)
       '@storybook/react': 8.6.4(@storybook/test@8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))(typescript@5.7.3)
       find-up: 5.0.0
-      magic-string: 0.30.11
+      magic-string: 0.30.17
       react: 18.3.1
       react-docgen: 7.0.3
       react-dom: 18.3.1(react@18.3.1)
@@ -24567,7 +24562,7 @@ snapshots:
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/type-utils': 5.62.0(eslint@8.57.1)(typescript@5.6.2)
       '@typescript-eslint/utils': 5.62.0(eslint@8.57.1)(typescript@5.6.2)
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       eslint: 8.57.1
       graphemer: 1.4.0
       ignore: 5.3.1
@@ -24604,7 +24599,7 @@ snapshots:
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.7.3)
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       eslint: 8.23.0
     optionalDependencies:
       typescript: 5.7.3
@@ -24616,7 +24611,7 @@ snapshots:
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.6.2)
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       eslint: 8.57.1
     optionalDependencies:
       typescript: 5.6.2
@@ -24655,7 +24650,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.6.2)
       '@typescript-eslint/utils': 5.62.0(eslint@8.57.1)(typescript@5.6.2)
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       eslint: 8.57.1
       tsutils: 3.21.0(typescript@5.6.2)
     optionalDependencies:
@@ -24667,7 +24662,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.7.3)
       '@typescript-eslint/utils': 6.21.0(eslint@8.23.0)(typescript@5.7.3)
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       eslint: 8.23.0
       ts-api-utils: 1.3.0(typescript@5.7.3)
     optionalDependencies:
@@ -24685,7 +24680,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 5.57.1
       '@typescript-eslint/visitor-keys': 5.57.1
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.6.3
@@ -24699,7 +24694,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/visitor-keys': 5.62.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.6.3
@@ -24713,7 +24708,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/visitor-keys': 5.62.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.6.3
@@ -24727,7 +24722,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/visitor-keys': 6.21.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.3
@@ -24829,7 +24824,7 @@ snapshots:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@9.4.0)
       istanbul-lib-coverage: 3.2.2
       istanbul-lib-report: 3.0.1
       istanbul-lib-source-maps: 5.0.6
@@ -24903,13 +24898,13 @@ snapshots:
     dependencies:
       '@vitest/pretty-format': 2.0.5
       estree-walker: 3.0.3
-      loupe: 3.1.2
+      loupe: 3.1.3
       tinyrainbow: 1.2.0
 
   '@vitest/utils@2.1.3':
     dependencies:
       '@vitest/pretty-format': 2.1.3
-      loupe: 3.1.2
+      loupe: 3.1.3
       tinyrainbow: 1.2.0
 
   '@vitest/utils@3.0.8':
@@ -25046,7 +25041,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -25897,7 +25892,7 @@ snapshots:
       assertion-error: 2.0.1
       check-error: 2.1.1
       deep-eql: 5.0.2
-      loupe: 3.1.2
+      loupe: 3.1.3
       pathval: 2.0.0
 
   chai@5.2.0:
@@ -25905,7 +25900,7 @@ snapshots:
       assertion-error: 2.0.1
       check-error: 2.1.1
       deep-eql: 5.0.2
-      loupe: 3.1.2
+      loupe: 3.1.3
       pathval: 2.0.0
 
   chalk@1.1.3:
@@ -26557,15 +26552,15 @@ snapshots:
     dependencies:
       ms: 2.1.2
 
-  debug@4.3.7(supports-color@9.4.0):
+  debug@4.3.7:
+    dependencies:
+      ms: 2.1.3
+
+  debug@4.4.0(supports-color@9.4.0):
     dependencies:
       ms: 2.1.3
     optionalDependencies:
       supports-color: 9.4.0
-
-  debug@4.4.0:
-    dependencies:
-      ms: 2.1.3
 
   decimal.js-light@2.5.1: {}
 
@@ -26680,10 +26675,7 @@ snapshots:
 
   detect-libc@2.0.1: {}
 
-  detect-libc@2.0.2: {}
-
-  detect-libc@2.0.3:
-    optional: true
+  detect-libc@2.0.3: {}
 
   detect-newline@3.1.0: {}
 
@@ -26696,7 +26688,7 @@ snapshots:
   detect-port@1.5.1:
     dependencies:
       address: 1.2.2
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -26920,7 +26912,7 @@ snapshots:
   engine.io-client@6.2.2(bufferutil@4.0.7)(utf-8-validate@5.0.10):
     dependencies:
       '@socket.io/component-emitter': 3.1.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       engine.io-parser: 5.0.4
       ws: 8.2.3(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       xmlhttprequest-ssl: 2.0.0
@@ -26942,7 +26934,7 @@ snapshots:
       base64id: 2.0.0
       cookie: 0.4.2
       cors: 2.8.5
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       engine.io-parser: 5.2.1
       ws: 8.11.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
@@ -27200,7 +27192,7 @@ snapshots:
 
   esbuild-register@3.5.0(esbuild@0.17.5):
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       esbuild: 0.17.5
     transitivePeerDependencies:
       - supports-color
@@ -27287,7 +27279,7 @@ snapshots:
 
   eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.29.0)(eslint@8.23.0):
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       enhanced-resolve: 5.10.0
       eslint: 8.23.0
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.21.0(eslint@8.23.0)(typescript@5.7.3))(eslint@8.23.0)
@@ -27550,7 +27542,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2
@@ -27856,7 +27848,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -28268,7 +28260,7 @@ snapshots:
   gel@2.0.0:
     dependencies:
       '@petamoriken/float16': 3.9.1
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       env-paths: 3.0.0
       semver: 7.6.3
       shell-quote: 1.8.1
@@ -28347,7 +28339,7 @@ snapshots:
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -28974,7 +28966,7 @@ snapshots:
     dependencies:
       '@tootallnate/once': 2.0.0
       agent-base: 6.0.2
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - supports-color
     optional: true
@@ -28982,7 +28974,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -29017,14 +29009,14 @@ snapshots:
   https-proxy-agent@5.0.1:
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
   https-proxy-agent@7.0.6(supports-color@9.4.0):
     dependencies:
       agent-base: 7.1.3
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -29567,8 +29559,6 @@ snapshots:
 
   isstream@0.1.2: {}
 
-  istanbul-lib-coverage@3.2.0: {}
-
   istanbul-lib-coverage@3.2.2: {}
 
   istanbul-lib-instrument@5.2.1:
@@ -29576,7 +29566,7 @@ snapshots:
       '@babel/core': 7.25.2
       '@babel/parser': 7.26.5
       '@istanbuljs/schema': 0.1.3
-      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-coverage: 3.2.2
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -29586,7 +29576,7 @@ snapshots:
       '@babel/core': 7.25.2
       '@babel/parser': 7.26.5
       '@istanbuljs/schema': 0.1.3
-      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-coverage: 3.2.2
       semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
@@ -29596,16 +29586,10 @@ snapshots:
       '@babel/core': 7.25.2
       '@babel/parser': 7.26.5
       '@istanbuljs/schema': 0.1.3
-      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-coverage: 3.2.2
       semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
-
-  istanbul-lib-report@3.0.0:
-    dependencies:
-      istanbul-lib-coverage: 3.2.0
-      make-dir: 3.1.0
-      supports-color: 7.2.0
 
   istanbul-lib-report@3.0.1:
     dependencies:
@@ -29615,8 +29599,8 @@ snapshots:
 
   istanbul-lib-source-maps@4.0.1:
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
-      istanbul-lib-coverage: 3.2.0
+      debug: 4.4.0(supports-color@9.4.0)
+      istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
     transitivePeerDependencies:
       - supports-color
@@ -29624,15 +29608,10 @@ snapshots:
   istanbul-lib-source-maps@5.0.6:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@9.4.0)
       istanbul-lib-coverage: 3.2.2
     transitivePeerDependencies:
       - supports-color
-
-  istanbul-reports@3.1.5:
-    dependencies:
-      html-escaper: 2.0.2
-      istanbul-lib-report: 3.0.0
 
   istanbul-reports@3.1.7:
     dependencies:
@@ -30665,7 +30644,7 @@ snapshots:
     dependencies:
       '@types/express': 4.17.14
       '@types/jsonwebtoken': 8.5.9
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       jose: 2.0.6
       limiter: 1.1.5
       lru-memoizer: 2.1.4
@@ -30897,8 +30876,6 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  loupe@3.1.2: {}
-
   loupe@3.1.3: {}
 
   lower-case@2.0.2:
@@ -30974,6 +30951,7 @@ snapshots:
   make-dir@3.1.0:
     dependencies:
       semver: 6.3.1
+    optional: true
 
   make-dir@4.0.0:
     dependencies:
@@ -32037,7 +32015,7 @@ snapshots:
 
   micromark@2.11.4:
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       parse-entities: 2.0.0
     transitivePeerDependencies:
       - supports-color
@@ -32045,7 +32023,7 @@ snapshots:
   micromark@3.2.0:
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       decode-named-character-reference: 1.0.2
       micromark-core-commonmark: 1.1.0
       micromark-factory-space: 1.1.0
@@ -32067,7 +32045,7 @@ snapshots:
   micromark@4.0.2:
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       decode-named-character-reference: 1.0.2
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
@@ -32855,7 +32833,7 @@ snapshots:
     dependencies:
       '@tootallnate/quickjs-emscripten': 0.23.0
       agent-base: 7.1.3
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       get-uri: 6.0.4
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6(supports-color@9.4.0)
@@ -33387,7 +33365,7 @@ snapshots:
   proxy-agent@6.5.0:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6(supports-color@9.4.0)
       lru-cache: 7.18.3
@@ -33450,7 +33428,7 @@ snapshots:
     dependencies:
       '@puppeteer/browsers': 2.3.0
       chromium-bidi: 0.6.3(devtools-protocol@0.0.1312386)
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       devtools-protocol: 0.0.1312386
       ws: 8.18.1(bufferutil@4.0.7)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
@@ -34251,7 +34229,7 @@ snapshots:
 
   require-in-the-middle@7.4.0:
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       module-details-from-path: 1.0.3
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -34338,7 +34316,7 @@ snapshots:
 
   retry-request@4.2.2:
     dependencies:
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       extend: 3.0.2
     transitivePeerDependencies:
       - supports-color
@@ -34655,7 +34633,7 @@ snapshots:
   sharp@0.32.6:
     dependencies:
       color: 4.2.3
-      detect-libc: 2.0.2
+      detect-libc: 2.0.3
       node-addon-api: 6.1.0
       prebuild-install: 7.1.1
       semver: 7.6.3
@@ -34878,7 +34856,7 @@ snapshots:
   socket.io-client@4.5.2(bufferutil@4.0.7)(utf-8-validate@5.0.10):
     dependencies:
       '@socket.io/component-emitter': 3.1.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       engine.io-client: 6.2.2(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       socket.io-parser: 4.2.1
     transitivePeerDependencies:
@@ -34889,14 +34867,14 @@ snapshots:
   socket.io-parser@4.2.1:
     dependencies:
       '@socket.io/component-emitter': 3.1.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
   socket.io-parser@4.2.4:
     dependencies:
       '@socket.io/component-emitter': 3.1.0
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -34905,7 +34883,7 @@ snapshots:
       accepts: 1.3.8
       base64id: 2.0.0
       cors: 2.8.5
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.3.7
       engine.io: 6.5.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       socket.io-adapter: 2.5.2(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       socket.io-parser: 4.2.4
@@ -34917,7 +34895,7 @@ snapshots:
   socks-proxy-agent@8.0.5:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.3.7(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
       socks: 2.8.4
     transitivePeerDependencies:
       - supports-color
@@ -36490,7 +36468,7 @@ snapshots:
   vite-node@3.0.8(@types/node@22.13.8)(terser@5.15.1):
     dependencies:
       cac: 6.7.14
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@9.4.0)
       es-module-lexer: 1.6.0
       pathe: 2.0.3
       vite: 5.4.9(@types/node@22.13.8)(terser@5.15.1)
@@ -36510,7 +36488,7 @@ snapshots:
       '@next/env': 15.2.1
       '@storybook/test': 8.6.4(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))
       image-size: 2.0.0
-      magic-string: 0.30.11
+      magic-string: 0.30.17
       module-alias: 2.2.3
       next: 14.2.13(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       storybook: 8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10)
@@ -36547,7 +36525,7 @@ snapshots:
       '@vitest/spy': 3.0.8
       '@vitest/utils': 3.0.8
       chai: 5.2.0
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@9.4.0)
       expect-type: 1.2.0
       magic-string: 0.30.17
       pathe: 2.0.3
