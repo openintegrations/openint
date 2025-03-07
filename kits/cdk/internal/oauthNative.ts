@@ -80,6 +80,7 @@ export default async function createNativeOauthConnect(
           const code = popupUrl.searchParams.get('code')
           const state = popupUrl.searchParams.get('state')
 
+          console.log('popupUrl', {popupUrl, code, state})
           if (code && state) {
             clearInterval(popupCheck)
             closePopup()
@@ -136,17 +137,19 @@ export default async function createNativeOauthConnect(
           clearInterval(popupCheck)
           closePopup()
 
-          const parsedConnectionId = Buffer.from(
-            response.state,
-            'base64',
-          ).toString('utf8')
+          const parsedConnectionId = decodeURIComponent(
+            window.atob(response.state.replace(/-/g, '+').replace(/_/g, '/')),
+          )
 
           if (
-            parsedConnectionId.startsWith('conn_') ||
+            !parsedConnectionId.startsWith('conn_') ||
             (config.connectionId && parsedConnectionId !== config.connectionId)
           ) {
             // note: should this be here?
-            throw createOAuthError('auth_error', 'Invalid connection id')
+            throw createOAuthError(
+              'auth_error',
+              `Invalid connection id: raw=${response.state} parsed=${parsedConnectionId} config=${config.connectionId}`,
+            )
           }
 
           console.log('resolving oauth promise', {
