@@ -14,8 +14,8 @@ export default function OAuthCallback({
 }: {
   searchParams: {[key: string]: string | string[] | undefined}
 }) {
-  const code = searchParams.code as string | null
-  const state = searchParams.state as string | null
+  const code = searchParams['code'] as string | null
+  const state = searchParams['state'] as string | null
 
   if (code && state) {
     // Just close the window - parent that opens this in a popup after redirect will read params directly

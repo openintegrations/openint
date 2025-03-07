@@ -116,29 +116,89 @@ export const connectionRouter = router({
     )
     .output(core.connection.describe('The connection details'))
     .query(async ({ctx, input}) => {
-      const connection = await ctx.db.query.connection.findFirst({
+      console.log(
+        'getConnection',
+        input.id,
+        input.include_secrets,
+        input.refresh_policy,
+        input.expand,
+      )
+      let connection = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
       })
-      if (!connection || !connection.connector_config_id) {
+
+      if (!connection) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Connection not found',
         })
       }
 
+      const connector_config = await ctx.db.query.connector_config.findFirst({
+        where: eq(schema.connector_config.id, connection.connector_config_id),
+        columns: {
+          id: true,
+          name: true,
+          connector_name: true,
+          config: true,
+          created_at: true,
+          updated_at: true,
+        },
+      })
+
+      if (!connector_config) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Connector config not found',
+        })
+      }
+
+      const connector =
+        serverConnectors[
+          connection.connector_name as keyof typeof serverConnectors
+        ]
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector not found for connection ${connection.id}`,
+        })
+      }
+
       const credentialsRequiresRefresh =
-        input.refresh_policy === 'force' ||
-        (input.refresh_policy === 'auto' &&
-        connection.settings.oauth?.credentials?.expires_at
-          ? new Date(connection.settings.oauth.credentials.expires_at) <
-            new Date()
-          : false)
+        'refreshConnection' in connector &&
+        typeof connector.refreshConnection === 'function' &&
+        (input.refresh_policy === 'force' ||
+          (input.refresh_policy === 'auto' &&
+          connection.settings.oauth?.credentials?.expires_at
+            ? new Date(connection.settings.oauth.credentials.expires_at) <
+              new Date()
+            : false))
 
       if (credentialsRequiresRefresh) {
-        console.warn(
-          'Credentials require refresh for connection id, skipping: ' +
-            connection.id,
+        // @ts-expect-error at this point connector and refreshConnection should exist...
+        const refreshedConnectionSettings = await connector.refreshConnection(
+          connection.settings,
+          connector_config,
         )
+        const updatedConnection = await ctx.db
+          .update(schema.connection)
+          .set({
+            settings: refreshedConnectionSettings,
+            updated_at: new Date().toISOString(),
+          })
+          .where(eq(schema.connection.id, connection.id))
+          .returning()
+          .then((rows) => rows[0])
+
+        if (!updatedConnection) {
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to update connection',
+          })
+        }
+
+        // the initial type of connection has an extra connector_config field so the type doesn't match, hence the any cast
+        connection = updatedConnection as any
       }
 
       return formatConnection(

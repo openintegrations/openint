@@ -225,8 +225,8 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         auth_params: connectorDef.auth_params,
         connector_config: connectorConfig,
         // TODO: revert
-        redirect_uri: 'https://f887-38-9-28-71.ngrok-free.app/connect/callback',
-        // redirect_uri: getServerUrl(null) + '/connect/callback',
+        // redirect_uri: 'https://f887-38-9-28-71.ngrok-free.app/connect/callback',
+        redirect_uri: getServerUrl(null) + '/connect/callback',
         connection_id: connectionId,
         // this is currently returning T['_types']['connectInput']
         // which is defined as {authorization_url} in cnext/schema.ts
@@ -248,7 +248,8 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       }
 
       const redirect_uri = getServerUrl(null) + '/connect/callback'
-
+      // const redirect_uri =
+      //   'https://f887-38-9-28-71.ngrok-free.app/connect/callback'
       console.log(
         `Oauth2 Postconnect called with connect output`,
         connectOutput,
@@ -295,7 +296,7 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       } as any
     },
 
-    async refreshConnection({settings, config}) {
+    async refreshConnection(settings, config) {
       const tokenHandler = connectorDef.handlers?.token || defaultTokenHandler
       const responseHandler =
         connectorDef.handlers?.response || defaultResponseHandler
@@ -308,20 +309,25 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         )
       }
 
-      const refreshToken = settings.oauth?.credentials?.refresh_token
+      const refreshToken = settings?.oauth?.credentials?.refresh_token
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
       }
 
-      console.log(`Oauth2 Refresh connection called with settings`, settings)
+      console.log(
+        `Oauth2 Refresh connection called `,
+        // settings,
+        // config,
+      )
 
       const tokenResponse = await tokenHandler({
         flow_type: 'refresh',
         auth_params: connectorDef.auth_params as RefreshParams,
-        connector_config: config,
+        connector_config: config.config,
         token_request_url: connectorDef.token_request_url,
         refresh_token: refreshToken,
       })
+      // console.log(`Oauth2 Refresh connection token response`, tokenResponse)
 
       const result = await processTokenResponse(
         tokenResponse,
@@ -329,26 +335,25 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         connectorDef.auth_params?.capture_response_fields,
         refreshToken,
       )
+      // console.log(`Oauth2 Refresh connection result`, result)
 
       return {
-        settings: {
-          oauth: {
-            credentials: {
-              ...result.credentials,
-              client_id: config.client_id,
-              connection_id: settings.oauth?.credentials?.connection_id,
-              created_at: settings.oauth?.credentials?.created_at,
-              updated_at: new Date().toISOString(),
-              last_fetched_at: new Date().toISOString(),
-              provider_config_key:
-                settings.oauth?.credentials?.provider_config_key || config.id,
-              metadata: settings.oauth?.credentials?.metadata || null,
-            },
+        oauth: {
+          credentials: {
+            ...result.credentials,
+            client_id: config.config.client_id,
+            connection_id: settings.oauth?.credentials?.connection_id,
+            created_at: settings.oauth?.credentials?.created_at,
+            updated_at: new Date().toISOString(),
+            last_fetched_at: new Date().toISOString(),
+            provider_config_key:
+              settings.oauth?.credentials?.provider_config_key || config.id,
+            metadata: settings.oauth?.credentials?.metadata || null,
           },
-          metadata: {
-            ...settings.metadata,
-            ...result.metadata,
-          },
+        },
+        metadata: {
+          ...settings.metadata,
+          ...result.metadata,
         },
         // NOTE: this is currently returning T['_types']['connectionSettings']
       } as any
