@@ -5,8 +5,9 @@
   "module": "./index.ts",
   "scripts": {},
   "dependencies": {
-    "@hono/node-server": "^1.11.0",
     "@opensdks/fetch-links": "^0.0.22"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "elysia": "^1.2.12"
+  }
 }
