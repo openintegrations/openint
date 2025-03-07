@@ -1,0 +1,9 @@
+{
+  "name": "@openint/ui-v1",
+  "version": "0.0.0",
+  "private": true,
+  "module": "./index.ts",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {}
+}
