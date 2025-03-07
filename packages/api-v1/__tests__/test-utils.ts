@@ -7,11 +7,11 @@ import type {CreateFetchHandlerOptions} from '../trpc/handlers'
 import {createFetchHandlerTRPC} from '../trpc/handlers'
 import {type AppRouter} from '../trpc/routers'
 
-export function headersForViewer(viewer: Viewer) {
+export async function headersForViewer(viewer: Viewer) {
   const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
   return viewer.role === 'anon'
     ? {}
-    : {authorization: `Bearer ${jwt.signViewer(viewer)}`}
+    : {authorization: `Bearer ${await jwt.signViewer(viewer)}`}
 }
 
 /** Prefer to operate at the highest level of stack possible while still bienbeing performant */
@@ -31,7 +31,7 @@ export function getTestTRPCClient(
         headers:
           'api_key' in viewerOrKey
             ? {authorization: `Bearer ${viewerOrKey.api_key}`}
-            : headersForViewer(viewerOrKey),
+            : () => headersForViewer(viewerOrKey),
       }),
     ],
   })

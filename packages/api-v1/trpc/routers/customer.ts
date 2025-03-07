@@ -1,7 +1,8 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {getServerUrl} from '@openint/app-config/constants'
-import {CustomerId, makeJwtClient, Viewer} from '@openint/cdk'
+import type {CustomerId, Viewer} from '@openint/cdk'
+import {makeJwtClient} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
 import {
   zConnectionId,
@@ -101,8 +102,7 @@ export const customerRouter = router({
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
-
-      const token = jwt.signViewer(
+      const token = await jwt.signViewer(
         asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
         {
           validityInSeconds: input.validity_in_seconds,
@@ -173,7 +173,7 @@ export const customerRouter = router({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
 
-      const token = jwt.signViewer(
+      const token = await jwt.signViewer(
         asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
         {
           validityInSeconds: input.validity_in_seconds,

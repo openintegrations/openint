@@ -55,8 +55,7 @@
     "@openint/connector-xero": "workspace:*",
     "@openint/connector-yodlee": "workspace:*",
     "@openint/connector-zohodesk": "workspace:*",
-    "@openint/engine-backend": "workspace:*",
-    "@openint/engine-frontend": "workspace:*"
+    "@openint/engine-backend": "workspace:*"
   },
   "devDependencies": {
     "prettier": "3.1.0"

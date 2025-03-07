@@ -332,9 +332,6 @@ importers:
       '@openint/engine-backend':
         specifier: workspace:*
         version: link:../../packages/engine-backend
-      '@openint/engine-frontend':
-        specifier: workspace:*
-        version: link:../../packages/engine-frontend
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
@@ -894,9 +891,6 @@ importers:
       '@openint/engine-backend':
         specifier: workspace:*
         version: link:../../packages/engine-backend
-      '@openint/engine-frontend':
-        specifier: workspace:*
-        version: link:../../packages/engine-frontend
     devDependencies:
       prettier:
         specifier: 3.1.0
@@ -1724,9 +1718,9 @@ importers:
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
-      jsonwebtoken:
-        specifier: 9.0.0
-        version: 9.0.0
+      jose:
+        specifier: ^5
+        version: 5.10.0
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -1755,9 +1749,6 @@ importers:
       '@opensdks/sdk-qbo':
         specifier: ^0.0.23
         version: 0.0.23
-      '@types/jsonwebtoken':
-        specifier: 9.0.2
-        version: 9.0.2
       '@types/react':
         specifier: 18.0.27
         version: 18.0.27
@@ -2576,9 +2567,15 @@ importers:
       '@chromatic-com/storybook':
         specifier: ^3.2.5
         version: 3.2.5(react@18.3.1)(storybook@8.6.4(bufferutil@4.0.7)(prettier@3.1.0)(utf-8-validate@5.0.10))
+      '@openint/api-v1':
+        specifier: workspace:*
+        version: link:../api-v1
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/db':
+        specifier: workspace:*
+        version: link:../db
       '@openint/engine-backend':
         specifier: workspace:*
         version: link:../engine-backend
@@ -7833,9 +7830,6 @@ packages:
   '@types/jsonwebtoken@8.5.9':
     resolution: {integrity: sha512-272FMnFGzAVMGtu9tkr29hRL6bZj4Zs1KZNeHLnKqAvp06tAIcarTMwOh8/8bz4FmKRcMxZhZNeUAQsNLoiPhg==}
 
-  '@types/jsonwebtoken@9.0.2':
-    resolution: {integrity: sha512-drE6uz7QBKq1fYqqoFKTDRdFCPHd5TCub75BM+D+cMx7NU9hUz7SESLfC2fSCXVFMO5Yj8sOWHuGqPgjc+fz0Q==}
-
   '@types/katex@0.16.6':
     resolution: {integrity: sha512-rZYO1HInM99rAFYNwGqbYPxHZHxu2IwZYKj4bJ4oh6edVrm1UId8mmbHIZLBtG253qU6y3piag0XYe/joNnwzQ==}
 
@@ -12456,6 +12450,9 @@ packages:
     resolution: {integrity: sha512-FVoPY7SflDodE4lknJmbAHSUjLCzE2H1F6MS0RYKMQ8SR+lNccpMf8R4eqkNYyyUjR5qZReOzZo5C5YiHOCjjg==}
     engines: {node: '>=10.13.0 < 13 || >=13.7.0'}
 
+  jose@5.10.0:
+    resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
+
   jotai@1.3.9:
     resolution: {integrity: sha512-b6DvH9gf+7TfjaboCO54g+C0yhaakIaUBtjLf0dk1p15FWCzNw/93sezdXy9cCaZ8qcEdMLJcjBwQlORmIq29g==}
     engines: {node: '>=12.7.0'}
@@ -12659,10 +12656,6 @@ packages:
   jsonwebtoken@8.5.1:
     resolution: {integrity: sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==}
     engines: {node: '>=4', npm: '>=1.4.28'}
-
-  jsonwebtoken@9.0.0:
-    resolution: {integrity: sha512-tuGfYXxkQGDPnLJ7SibiQgVgeDgfbPq2k2ICcbgqW8WxWLBAxKQM/ZCu/IT8SOSwmaYl4dpTFCW5xZv7YbbWUw==}
-    engines: {node: '>=12', npm: '>=6'}
 
   jsox@1.2.119:
     resolution: {integrity: sha512-f37obwxWKKuylcaOzNlUlzfDvURSCpqTXs8yEivhvsp86D/DTIySxP4v5Qdlg24qCuzDSZ0mJr3krc/f7TZ/5A==}
@@ -24295,10 +24288,6 @@ snapshots:
     dependencies:
       '@types/node': 20.17.16
 
-  '@types/jsonwebtoken@9.0.2':
-    dependencies:
-      '@types/node': 20.17.16
-
   '@types/katex@0.16.6': {}
 
   '@types/keyv@3.1.4':
@@ -30380,6 +30369,8 @@ snapshots:
     dependencies:
       '@panva/asn1.js': 1.0.0
 
+  jose@5.10.0: {}
+
   jotai@1.3.9(@babel/core@7.25.2)(@babel/template@7.25.9)(immer@9.0.15)(react-query@3.39.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -30539,13 +30530,6 @@ snapshots:
       lodash.once: 4.1.1
       ms: 2.1.3
       semver: 5.7.1
-
-  jsonwebtoken@9.0.0:
-    dependencies:
-      jws: 3.2.2
-      lodash: 4.17.21
-      ms: 2.1.3
-      semver: 7.5.4
 
   jsox@1.2.119: {}
 

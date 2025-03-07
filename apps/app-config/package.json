@@ -61,7 +61,6 @@
     "@openint/connector-yodlee": "workspace:*",
     "@openint/connector-zohodesk": "workspace:*",
     "@openint/engine-backend": "workspace:*",
-    "@openint/engine-frontend": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/meta-service-postgres": "workspace:*",
     "@openint/util": "workspace:*",
