@@ -1,4 +1,4 @@
-import Cal, {getCalApi} from '@calcom/embed-react'
+// import Cal, {getCalApi} from '@calcom/embed-react'
 import {X} from 'lucide-react'
 import {useEffect} from 'react'
 
@@ -56,7 +56,7 @@ export default function CalendarBooking({
         <h2 className="mb-4 text-xl font-bold">{header}</h2>
         <p className="mb-4">{description}</p>
         <div className="mb-4 h-[700px] overflow-auto rounded border border-gray-100">
-          <Cal
+          {/* <Cal
             calLink={link ?? 'ap-openint/discovery'}
             config={{
               layout: 'month_view',
@@ -65,7 +65,7 @@ export default function CalendarBooking({
             }}
             namespace="discovery"
             style={{height: '100%', width: '100%'}}
-          />
+          /> */}
         </div>
         {/* <div className="flex justify-end">
           <Button variant="secondary" onClick={onDismiss}>
