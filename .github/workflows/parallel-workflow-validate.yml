@@ -169,6 +169,8 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need more than 1 commit https://www.chromatic.com/docs/github-actions/
       - uses: actions/setup-node@v4
         with:
           node-version: 22
