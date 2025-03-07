@@ -28,6 +28,7 @@ test.each(
   })
 
   expect(await res.json()).toMatchObject({foo: 'bar'})
+  await server.stop()
 })
 
 const handler = (req: Request) =>
