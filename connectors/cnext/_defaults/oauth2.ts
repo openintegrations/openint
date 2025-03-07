@@ -215,6 +215,8 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         input.connectionId ??
         makeId('conn', connectorDef.connector_name, makeUlid())
 
+      console.log(`Oauth2 Preconnect called with input`, input)
+
       return authorizeHandler({
         authorization_request_url: connectorDef.authorization_request_url,
         auth_params: connectorDef.auth_params,
@@ -242,6 +244,10 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
 
       const redirect_uri = getServerUrl(null) + '/connect/callback'
 
+      console.log(
+        `Oauth2 Postconnect called with connect output`,
+        connectOutput,
+      )
       const tokenResponse = await tokenHandler({
         flow_type: 'exchange',
         auth_params: connectorDef.auth_params as TokenParams,
@@ -258,8 +264,10 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         connectorDef.auth_params?.capture_response_fields,
       )
 
+      console.log(`Oauth2 Postconnect result`, result)
+
       return {
-        // NOTE: is this the right thing to do here
+        // NOTE: is this the right thing to do here?
         connectionExternalId: extractId(connectOutput.connectionId)[2],
         settings: {
           oauth: {
@@ -299,6 +307,8 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
       }
+
+      console.log(`Oauth2 Refresh connection called with settings`, settings)
 
       const tokenResponse = await tokenHandler({
         flow_type: 'refresh',
