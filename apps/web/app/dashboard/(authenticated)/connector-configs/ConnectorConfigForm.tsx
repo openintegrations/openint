@@ -14,7 +14,7 @@ interface ConnectorConfigFormProps {
   ccfg?: Omit<ConnectorConfig, 'connectorName'>
   connectorMeta: ConnectorMeta
   setOpen: (open: boolean) => void
-  formRef: React.RefObject<SchemaFormElement>
+  formRef: React.RefObject<SchemaFormElement | null>
   isLoading: boolean
 }
 

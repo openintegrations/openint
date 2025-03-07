@@ -36,14 +36,14 @@ export const dynamic = 'force-dynamic'
  * Embed this fully featured page to allow customers to fully manage their own connections
  * Include checking sync status, adding, removing, and reauthenticating their connections
  */
-export default async function PortalPage({
-  //  https://beta.nextjs.org/docs/api-reference/file-conventions/page#searchparams-optional
-  searchParams,
-}: {
-  // Search params in Next.js are only accessible in PageComponent and no accessible in layout component, too bad
-  // @see https://github.com/vercel/next.js/issues/43704
-  searchParams: Record<string, string | string[] | undefined>
-}) {
+export default async function PortalPage(
+  props: {
+    // Search params in Next.js are only accessible in PageComponent and no accessible in layout component, too bad
+    // @see https://github.com/vercel/next.js/issues/43704
+    searchParams: Promise<Record<string, string | string[] | undefined>>
+  }
+) {
+  const searchParams = await props.searchParams;
   const {token} = zConnectPageParams.parse(searchParams)
   const {getDehydratedState, viewer} = await createServerComponentHelpers({
     searchParams: {[kAccessToken]: token},
