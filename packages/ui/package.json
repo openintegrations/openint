@@ -6,7 +6,7 @@
   "module": "./index.ts",
   "scripts": {
     "build-storybook": "storybook build",
-    "build-tailwind": "tailwindcss -i ./.storybook/global.css -o ./.storybook/tailwind.css",
+    "build-tailwind": "tailwindcss -i ./global.css -o ./.storybook/tailwind.css",
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
     "storybook": "storybook dev -p 6006",
     "tailwind": "pnpm build-tailwind -- --watch"
