@@ -58,7 +58,6 @@
     "@storybook/experimental-nextjs-vite": "8.6.4",
     "@storybook/react": "^8.6.4",
     "@storybook/test": "^8.6.4",
-    "@tailwindcss/vite": "^4.0.12",
     "@tanstack/react-query": "*",
     "@types/react": "*",
     "@vitest/browser": "^3.0.8",

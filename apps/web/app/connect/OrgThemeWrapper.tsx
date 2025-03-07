@@ -14,7 +14,7 @@ export function OrgThemeWrapper({children}: {children: React.ReactNode}) {
 
   return (
     // is org-theme-wrapper the right way to achieve scoped style?
-    /// eslint-disable-next-line tailwindcss/no-custom-classname
+    // eslint-disable-next-line tailwindcss/no-custom-classname
     <div className="org-theme-wrapper h-screen w-screen">
       <style
         dangerouslySetInnerHTML={{

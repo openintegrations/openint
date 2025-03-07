@@ -16,14 +16,15 @@ module.exports = {
     'codegen',
     'eslint-comments',
     'promise',
-    // "tailwindcss",
+    //
+    'tailwindcss',
     'unicorn',
   ],
   extends: [
     'next/core-web-vitals',
     'plugin:eslint-comments/recommended',
     'plugin:promise/recommended',
-    // 'plugin:tailwindcss/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   rules: {
     'arrow-body-style': 'warn',
