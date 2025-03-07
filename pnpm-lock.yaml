@@ -332,9 +332,6 @@ importers:
       '@openint/engine-backend':
         specifier: workspace:*
         version: link:../../packages/engine-backend
-      '@openint/engine-frontend':
-        specifier: workspace:*
-        version: link:../../packages/engine-frontend
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
