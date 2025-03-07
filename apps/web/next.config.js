@@ -53,6 +53,16 @@ const nextConfig = {
       permanent: false,
     },
     {
+      source: '/storybook/:branch*',
+      destination: 'https://:branch*--67cafc438c6d3b09671849dd.chromatic.com',
+      permanent: false,
+    },
+    {
+      source: '/chromatic/:branch*',
+      destination: 'https://www.chromatic.com/library?appId=67cafc438c6d3b09671849dd&branch=:branch*',
+      permanent: false,
+    },
+    {
       source: '/api/v0/verticals/:p*',
       destination: '/api/v0/unified/:p*',
       permanent: false,
