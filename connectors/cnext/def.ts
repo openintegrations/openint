@@ -9,9 +9,8 @@ export const zConnectorConfig = z
   })
   .describe('Base oauth configuration for the connector')
 
-export const zAuthParams = z.object({
-  authorize: z.record(z.string(), z.string()).optional(),
-  token: z.record(z.string(), z.string()).optional(),
+// Base auth params shared across flows
+export const zBaseAuthParams = z.object({
   capture_response_fields: z.array(z.string()).optional(),
   field_mappings: z
     .object({
@@ -28,11 +27,72 @@ export const zAuthParams = z.object({
     .optional(),
 })
 
+// Auth params for authorization flow
+export const zAuthorizeParams = zBaseAuthParams.extend({
+  authorize: z.record(z.string(), z.string()),
+})
+
+// Auth params for token exchange flow
+export const zTokenParams = zBaseAuthParams.extend({
+  token: z.record(z.string(), z.string()),
+})
+
+// Auth params for refresh token flow
+export const zRefreshParams = zBaseAuthParams.extend({
+  refresh: z.record(z.string(), z.string()),
+})
+
+// Combined auth params
+export const zAuthParams = zBaseAuthParams.extend({
+  authorize: z.record(z.string(), z.string()).optional(),
+  token: z.record(z.string(), z.string()).optional(),
+  refresh: z.record(z.string(), z.string()).optional(),
+})
+
 export type AuthParams = z.infer<typeof zAuthParams>
+export type AuthorizeParams = z.infer<typeof zAuthorizeParams>
+export type TokenParams = z.infer<typeof zTokenParams>
+export type RefreshParams = z.infer<typeof zRefreshParams>
+
+// Define strongly typed handler argument types
+export const zAuthorizeHandlerArgs = z.object({
+  authorization_request_url: z.string().url(),
+  auth_params: zAuthorizeParams,
+  connector_config: zConnectorConfig,
+  redirect_uri: z.string(),
+  connection_id: z.string(),
+})
+
+export const zTokenExchangeHandlerArgs = z.object({
+  auth_params: zTokenParams,
+  connector_config: zConnectorConfig,
+  code: z.string(),
+  state: z.string(),
+  token_request_url: z.string().url(),
+  redirect_uri: z.string(),
+})
+
+export const zTokenRefreshHandlerArgs = z.object({
+  auth_params: zRefreshParams,
+  connector_config: zConnectorConfig,
+  token_request_url: z.string().url(),
+  refresh_token: z.string(),
+})
+
+// Combined token handler args with discriminated union
+export const zTokenHandlerArgs = z.discriminatedUnion('flow_type', [
+  zTokenExchangeHandlerArgs.extend({flow_type: z.literal('exchange')}),
+  zTokenRefreshHandlerArgs.extend({flow_type: z.literal('refresh')}),
+])
+
+export type AuthorizeHandlerArgs = z.infer<typeof zAuthorizeHandlerArgs>
+export type TokenExchangeHandlerArgs = z.infer<typeof zTokenExchangeHandlerArgs>
+export type TokenRefreshHandlerArgs = z.infer<typeof zTokenRefreshHandlerArgs>
+export type TokenHandlerArgs = z.infer<typeof zTokenHandlerArgs>
 
 export const zOAuthConnectorDef = z.object({
   auth_type: z
-    .enum(['OAUTH1', 'OAUTH2', 'OAUTH2CC'])
+    .enum(['OAUTH2', 'OAUTH2CC'])
     .describe('The authentication type for OAuth-based providers'),
   authorization_request_url: z
     .string()
@@ -61,6 +121,14 @@ export const zOAuthConnectorDef = z.object({
       access_token: z.string(),
       refresh_token: z.string(),
       expires_at: z.number(),
+      client_id: z.string(),
+      token_type: z.string(),
+      connection_id: z.string(),
+      created_at: z.string(),
+      updated_at: z.string(),
+      last_fetched_at: z.string(),
+      provider_config_key: z.string(),
+      metadata: z.record(z.unknown()).nullable(),
     })
     .optional()
     .describe('Output of the postConnect hook'),
@@ -85,15 +153,7 @@ export const zOAuthConnectorDef = z.object({
     .object({
       authorize: z
         .function()
-        .args(
-          z.object({
-            authorization_request_url: z.string().url(),
-            auth_params: zAuthParams,
-            connector_config: zConnectorConfig,
-            redirect_uri: z.string(),
-            connection_id: z.string(),
-          }),
-        )
+        .args(zAuthorizeHandlerArgs)
         .returns(
           z.promise(
             z.object({
@@ -104,16 +164,7 @@ export const zOAuthConnectorDef = z.object({
         .optional(),
       token: z
         .function()
-        .args(
-          z.object({
-            auth_params: zAuthParams,
-            connector_config: zConnectorConfig,
-            code: z.string(),
-            state: z.string(),
-            token_request_url: z.string().url(),
-            redirect_uri: z.string(),
-          }),
-        )
+        .args(zTokenHandlerArgs)
         .returns(z.promise(z.instanceof(Response)))
         .optional(),
       response: z
@@ -136,7 +187,6 @@ export const zOAuthConnectorDef = z.object({
         )
         .optional(),
     })
-    // TODO: figure out how to make this optional and default
     .optional()
     .default({}),
 })
