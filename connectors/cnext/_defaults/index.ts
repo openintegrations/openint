@@ -9,6 +9,6 @@ export function generateConnectorServerV1<T extends ConnectorSchemas>(
     case 'OAUTH2':
       return generateOAuth2Server(connectorDef)
     default:
-      return {}
+      throw new Error(`Unsupported auth type: ${connectorDef.auth_type}`)
   }
 }
