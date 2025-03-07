@@ -2,11 +2,7 @@
   "name": "@openint/open-file-picker",
   "version": "0.0.2",
   "description": "A unified file picker for Sharepoint, One Drive, Google Drive, Dropbox, Box, iCloud Drive, and more",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "./src/index.ts",
   "scripts": {
     "build": "rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc -p tsconfig.json",
     "lint": "eslint . --ext .ts,.tsx",
