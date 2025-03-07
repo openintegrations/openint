@@ -138,7 +138,6 @@ export const connectionRouter = router({
         where: eq(schema.connector_config.id, connection.connector_config_id),
         columns: {
           id: true,
-          name: true,
           connector_name: true,
           config: true,
           created_at: true,
