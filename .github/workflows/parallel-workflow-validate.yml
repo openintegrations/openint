@@ -153,7 +153,7 @@ jobs:
           npx inngest-cli@latest dev &
           pnpm wait-on tcp:8288
       - name: Run tests
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run test::ci
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm run jest::ci
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
