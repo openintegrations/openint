@@ -207,7 +207,7 @@ export function IntegrationSearch({
                               logo={
                                 int.logo_url ?? int.ccfg.connector.logoUrl ?? ''
                               }
-                              name={int.name}
+                              name={int.ccfg.displayName ?? int.name}
                               hasDeeplink={hasDeeplink}
                               isLoading={loading}
                             />
