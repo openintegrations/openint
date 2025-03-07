@@ -32,7 +32,7 @@ export async function viewerFromRequest(
 
   try {
     const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
-    return jwt.verifyViewer(token)
+    return await jwt.verifyViewer(token)
   } catch (err) {
     throw new TRPCError({code: 'UNAUTHORIZED', message: `${err}`})
   }

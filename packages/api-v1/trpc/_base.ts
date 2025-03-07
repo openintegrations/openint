@@ -16,7 +16,7 @@ export interface RouterContext<T extends Viewer = Viewer>
 export const trpc = initTRPC
   .meta<OpenApiMeta>()
   .context<RouterContext>()
-  .create()
+  .create({allowOutsideOfServer: true})
 
 export const router = trpc.router
 export const publicProcedure = trpc.procedure

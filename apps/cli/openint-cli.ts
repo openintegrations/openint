@@ -80,10 +80,10 @@ cli
             path: procedure,
             req,
             res,
-            createContext: ({req}) => ({
-              ...contextFactory.fromJwtToken(
+            createContext: async ({req}) => ({
+              ...(await contextFactory.fromJwtToken(
                 req.headers.authorization?.match(/^Bearer (.+)/)?.[1],
-              ),
+              )),
               remoteConnectionId: req.headers['x-connection-id'] as Id['conn'],
             }),
             // onError: ({error}) => {

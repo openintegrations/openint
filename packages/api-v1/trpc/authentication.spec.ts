@@ -91,7 +91,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
         userId: testUserId,
         orgId: testOrgId,
       }
-      const token = jwtClient.signViewer(expectedViewer)
+      const token = await jwtClient.signViewer(expectedViewer)
 
       const headers = new Headers()
       headers.set('authorization', `Bearer ${token}`)
@@ -113,7 +113,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       const ctx = {db}
 
       // Act & Assert
-      await expect(viewerFromRequest(ctx, req)).rejects.toThrow('invalid token')
+      await expect(viewerFromRequest(ctx, req)).rejects.toThrow('invalid')
     })
 
     it('should throw UNAUTHORIZED with expired JWT token', async () => {
@@ -122,7 +122,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       const jwtClientWithExpiry = makeJwtClient({
         secretOrPublicKey: envRequired.JWT_SECRET,
       })
-      const expiredToken = jwtClientWithExpiry.signViewer(
+      const expiredToken = await jwtClientWithExpiry.signViewer(
         {
           role: 'user',
           userId: testUserId,
@@ -137,7 +137,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       const ctx = {db}
 
       // Act & Assert
-      await expect(viewerFromRequest(ctx, req)).rejects.toThrow('jwt expired')
+      await expect(viewerFromRequest(ctx, req)).rejects.toThrow('JWTExpired')
     })
   })
 })

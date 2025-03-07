@@ -12,7 +12,7 @@
     "lint": "eslint --ext .js,.ts,.tsx --cache . --quiet --ignore-pattern /gateway",
     "mitm": "mitmweb --listen-port 3010 --web-port 3011 --mode reverse:http://localhost:3000",
     "preinstall": "npx only-allow pnpm",
-    "test::ci": "NODE_OPTIONS=--experimental-vm-modules pnpm run jest --ci --forceExit --detectOpenHandles --runInBand",
+    "jest::ci": "NODE_OPTIONS=--experimental-vm-modules pnpm run jest --ci --forceExit --detectOpenHandles --runInBand",
     "jest::debug": "NODE_OPTIONS=--experimental-vm-modules node --inspect-brk $(pnpm bin)/jest --runInBand --watch",
     "jest::watch": "pnpm run jest --watch",
     "jest": "NODE_OPTIONS=--experimental-vm-modules jest",
