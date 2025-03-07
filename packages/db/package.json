@@ -12,6 +12,7 @@
     "push": "drizzle-kit push"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.2.16",
     "@neondatabase/serverless": "^0.10.4",
     "@openint/env": "workspace:*",
     "drizzle-orm": "^0.39.1",
@@ -22,11 +23,11 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/pg": "^8.11.11",
     "@openint/cdk": "workspace:*",
     "@openint/loopback-link": "workspace:*",
     "@openint/vdk": "workspace:*",
     "@types/json-stable-stringify": "^1.1.0",
+    "@types/pg": "^8.11.11",
     "bun": "latest",
     "bun-types": "latest",
     "drizzle-kit": "^0.30.4",
