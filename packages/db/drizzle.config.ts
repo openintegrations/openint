@@ -5,10 +5,7 @@ export default {
   out: './migrations',
   dialect: 'postgresql',
   schema: './schema/schema.ts',
-  // dbCredentials:
-  //   typeof window === 'undefined'
-  //     ? {url: env.DATABASE_URL_UNPOOLED ?? env.DATABASE_URL}
-  //     : undefined,
+  dbCredentials: {url: env.DATABASE_URL_UNPOOLED ?? env.DATABASE_URL},
   introspect: {casing: 'preserve'},
   migrations: {},
   // migrations: {

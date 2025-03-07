@@ -5,7 +5,7 @@ import type {Viewer} from '@openint/cdk'
 import type {initDbNeon} from './db.neon'
 import type {initDbPg, initDbPgDirect} from './db.pg'
 import type {initDbPGLite, initDbPGLiteDirect} from './db.pglite'
-import drizzleKitConfig, {type Config} from './drizzle.config'
+import drizzleKitConfig from './drizzle.config'
 import * as schema from './schema/schema'
 
 // MARK: - For users
@@ -40,12 +40,14 @@ export function getDrizzleConfig(
 }
 
 export function getMigrationConfig(): MigrationConfig {
-  const config: Config = drizzleKitConfig
+  // const config: Config = drizzleKitConfig
   return {
     // WARNING This only works if config is in the same folder as current file
     migrationsFolder: path.join(__dirname, drizzleKitConfig.out),
-    migrationsSchema: config.migrations?.schema,
-    migrationsTable: config.migrations?.table,
+    // import drizzle config causes to many issues
+    // including accessing server side env from client error when running app in browser...
+    // migrationsSchema: config.migrations?.schema,
+    // migrationsTable: config.migrations?.table,
   }
 }
 
