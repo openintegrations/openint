@@ -42,9 +42,10 @@ export function getDrizzleConfig(
 export function getMigrationConfig(): MigrationConfig {
   // const config: Config = drizzleKitConfig
   return {
+    // import drizzle config causes to many issue, so we are hard-coding again here...
+    migrationsFolder: path.join(__dirname, './migrations'),
     // WARNING This only works if config is in the same folder as current file
-    migrationsFolder: path.join(__dirname, drizzleKitConfig.out),
-    // import drizzle config causes to many issues
+    // migrationsFolder: path.join(__dirname, drizzleKitConfig.out),
     // including accessing server side env from client error when running app in browser...
     // migrationsSchema: config.migrations?.schema,
     // migrationsTable: config.migrations?.table,
