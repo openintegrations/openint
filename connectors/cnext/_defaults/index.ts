@@ -1,0 +1,14 @@
+import {ConnectorSchemas, ConnectorServer} from '../../../kits/cdk'
+import {ConnectorDef} from '../def'
+import {generateOAuth2Server} from './oauth2'
+
+export function generateConnectorServerV1<T extends ConnectorSchemas>(
+  connectorDef: ConnectorDef,
+): ConnectorServer<T> {
+  switch (connectorDef.auth_type) {
+    case 'OAUTH2':
+      return generateOAuth2Server(connectorDef)
+    default:
+      return {}
+  }
+}

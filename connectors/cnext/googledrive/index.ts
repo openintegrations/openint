@@ -1,6 +1,6 @@
+import {generateConnectorServerV1} from '../_defaults'
 import {ConnectorDef} from '../def'
 import {generateConnectorDef} from '../schema'
-import {generateConnectorServerV1} from '../server'
 
 const connectorDef = {
   connector_name: 'googledrive',

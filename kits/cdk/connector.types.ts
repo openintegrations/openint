@@ -217,6 +217,11 @@ export interface ConnectorServer<
     }>
   }>
 
+  refreshConnection?: (
+    settings: T['_types']['connectionSettings'],
+    config: T['_types']['connectorConfig'],
+  ) => Promise<T['_types']['connectionSettings']>
+
   /** @deprecated */
   sourceSync?: (
     input: OmitNever<{
