@@ -1,8 +1,7 @@
 // until we figure out how to get tsconfig to include this file
 import {dirname, join} from 'node:path'
 import type {StorybookConfig} from '@storybook/experimental-nextjs-vite'
-
-// import {default as svgr} from 'vite-plugin-svgr'
+import {default as svgr} from 'vite-plugin-svgr'
 
 /**
  * defineMain does not exist in storybook/experimental-nextjs-vite
@@ -39,12 +38,15 @@ const config = {
     name: getAbsolutePath('@storybook/experimental-nextjs-vite'),
     options: {},
   },
-  //   async viteFinal(config, {configType}) {
-  //     config.plugins = config.plugins || []
-  //     config.plugins.push(svgr())
+  async viteFinal(config, {configType}) {
+    config.plugins = config.plugins || []
+    config.plugins.push(svgr())
+    // Only works in v4 storybook...
+    // https://github.com/tailwindlabs/tailwindcss/issues/13216#issuecomment-1992094356
+    // config.plugins.push((await import('@tailwindcss/vite')).default())
 
-  //     return config
-  //   },
+    return config
+  },
 } satisfies StorybookConfig
 
 export default config

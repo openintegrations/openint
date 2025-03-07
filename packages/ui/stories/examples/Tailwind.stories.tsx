@@ -27,6 +27,6 @@ type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
   args: {
-    className: 'bg-blue-500 text-white p-4',
+    className: 'bg-blue-100 text-white p-4',
   },
 }

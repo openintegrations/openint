@@ -6,8 +6,10 @@
   "module": "./index.ts",
   "scripts": {
     "build-storybook": "storybook build",
+    "build-tailwind": "tailwindcss -i ./.storybook/global.css -o ./.storybook/tailwind.css",
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
-    "storybook": "storybook dev -p 6006"
+    "storybook": "storybook dev -p 6006",
+    "tailwind": "pnpm build-tailwind -- --watch"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.1",
@@ -56,6 +58,7 @@
     "@storybook/experimental-nextjs-vite": "8.6.4",
     "@storybook/react": "^8.6.4",
     "@storybook/test": "^8.6.4",
+    "@tailwindcss/vite": "^4.0.12",
     "@tanstack/react-query": "*",
     "@types/react": "*",
     "@vitest/browser": "^3.0.8",
@@ -64,6 +67,9 @@
     "playwright": "^1.51.0",
     "prop-types": "^15.8.1",
     "storybook": "^8.6.4",
+    "tailwindcss": "3.4.12",
+    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-radix": "^3.0.5",
     "vite-plugin-svgr": "^4.2.0",
     "vitest": "^3.0.8"
   },
