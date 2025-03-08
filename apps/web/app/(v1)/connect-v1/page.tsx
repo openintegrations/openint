@@ -14,8 +14,7 @@ export default async function Page(props: PageProps) {
 
   const api = createAPICaller(viewer)
 
-  const res = await api.listConnectorConfigs()
-  console.log('res', res)
+  const res = api.listConnectorConfigs()
 
   return (
     <div>
@@ -24,7 +23,9 @@ export default async function Page(props: PageProps) {
       </pre>
       <Suspense fallback={<Fallback />}>
         <AddConnection
-          connector_names={R.uniq(res.items.map((r) => r.connector_name))}
+          connector_names={res.then((r) =>
+            R.uniq(r.items.map((r) => r.connector_name)),
+          )}
         />
       </Suspense>
     </div>

@@ -3,8 +3,6 @@
 import dynamic from 'next/dynamic'
 import React, {Suspense} from 'react'
 
-// const useStuff = dynamic(() => import('@openint/connector-plaid/client'), {})
-
 function wrapModule(options: {useConnectorLogic: () => [string, unknown]}) {
   return function ModuleWrapper(props: {connector_name?: string}) {
     const [state] = options.useConnectorLogic()
@@ -30,14 +28,31 @@ const connectorImports = {
 const ConnectorComponents = Object.fromEntries(
   Object.entries(connectorImports).map(([name, mod]) => [
     name,
-    dynamic(() => mod().then((m) => wrapModule(m))),
+    dynamic(
+      () =>
+        mod()
+          .then((r) => {
+            // Add a random delay for testing/development purposes
+            const randomDelay = Math.floor(Math.random() * 2000) // Random delay up to 2000ms (2 seconds)
+            return new Promise<typeof r>((resolve) => {
+              setTimeout(() => {
+                resolve(r)
+              }, randomDelay)
+            })
+          })
+          .then((m) => wrapModule(m)),
+      {
+        loading: () => <div>...Loading {name}...</div>,
+      },
+    ),
   ]),
 )
 
-export function AddConnection(props: {connector_names: string[]}) {
+export function AddConnection(props: {connector_names: Promise<string[]>}) {
+  const connector_names = React.use(props.connector_names)
   return (
     <Suspense>
-      <AddConnectionInner connector_names={props.connector_names} />
+      <AddConnectionInner connector_names={connector_names} />
     </Suspense>
   )
 }
