@@ -70,7 +70,9 @@ export function ClientApp({
   )
 }
 
-export function AddConnection({initialData}: {initialData?: any}) {
+export function AddConnection(props: {initialData: Promise<any>}) {
+  const initialData = React.use(props.initialData)
+
   // Simulate a random delay between 0-2 seconds
   // await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000))
 
@@ -104,7 +106,9 @@ export function AddConnection({initialData}: {initialData?: any}) {
   )
 }
 
-export function ConnectionList({initialData}: {initialData?: any}) {
+export function ConnectionList(props: {initialData?: Promise<any>}) {
+  const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
+
   // Simulate a random delay between 0-2 seconds
   // await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000))
 

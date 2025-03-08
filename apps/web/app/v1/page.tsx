@@ -33,22 +33,6 @@ async function AddConnectionServer({
   )
 }
 
-async function AddConnectionServer2({
-  viewer,
-}: {
-  api?: APICaller
-  viewer: Viewer
-}) {
-  const api = createAPICaller(viewer)
-
-  // Simulate a random delay between 0-2 seconds
-  await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000))
-
-  const connectorConfigs = await api.listConnectorConfigs()
-
-  return <AddConnection initialData={connectorConfigs} />
-}
-
 async function ConnectionListServer({
   viewer,
 }: {
@@ -79,7 +63,7 @@ async function ConnectionListServer({
  * @returns A new promise that resolves with the original promise's value after a delay
  */
 async function withRandomDelay<T>(promise: Promise<T>): Promise<T> {
-  const delay = Math.random() * 2000 // Random delay between 0-2 seconds
+  const delay = Math.random() * 4000 // Random delay between 0-2 seconds
   await new Promise((resolve) => setTimeout(resolve, delay))
   return promise
 }
@@ -102,22 +86,21 @@ export default async function Page(props: PageProps) {
       <ClientApp token={token}>
         <h1>AddConnection</h1>
         <Suspense fallback={<Fallback />}>
-          {/* <AddConnection
-            initialData={await withRandomDelay(api.listConnectorConfigs())}
-          /> */}
-          <AddConnectionServer2 viewer={viewer} />
+          <AddConnection
+            initialData={withRandomDelay(api.listConnectorConfigs())}
+          />
         </Suspense>
 
         <h1>ConnectionList</h1>
 
         <Suspense fallback={<Fallback />}>
           <ConnectionList
-            initialData={await withRandomDelay(api.listConnections())}
+            initialData={withRandomDelay(api.listConnections())}
           />
         </Suspense>
       </ClientApp>
 
-      {/* <hr />
+      <hr />
       <hr />
       <hr />
       <h1>AddConnection</h1>
@@ -129,7 +112,7 @@ export default async function Page(props: PageProps) {
 
       <Suspense fallback={<Fallback />}>
         <ConnectionListServer viewer={viewer} />
-      </Suspense> */}
+      </Suspense>
     </div>
   )
 }
