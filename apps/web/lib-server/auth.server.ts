@@ -13,7 +13,18 @@ export const getClerkClient = () =>
     publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
   })
 
-type ViewerWithToken = {viewer: Viewer; token: string | undefined}
+// TODO: Put this into serverSession
+// export async function revokeSession() {
+//   const authInfo = await auth()
+//   if (!authInfo.sessionId) {
+//     return
+//   }
+
+//   const clerk = getClerkClient()
+//   return clerk.sessions.revokeSession(authInfo.sessionId)
+// }
+
+export type ServerSession = {viewer: Viewer; token: string | undefined}
 
 export async function currentViewerFromCookie() {
   const authInfo = await auth()
@@ -26,6 +37,9 @@ export async function currentViewerFromCookie() {
       }
     : {role: 'anon'}
   // how do we get the token as well without signing again?
+  // TODO: we need a way to ensure api calling token does not expire while user is still logged in
+  // and that's why we don't want to sign separate token but rather
+  // reuse the token they have existing...
   const token = await jwt.signViewer(viewer)
 
   return {viewer, token}
@@ -52,8 +66,8 @@ export async function currentViewer(props?: PageProps) {
 }
 
 async function firstNonAnonViewerOrFirst(
-  _viewers: NonEmptyArray<MaybePromise<ViewerWithToken>>,
-): Promise<ViewerWithToken> {
+  _viewers: NonEmptyArray<MaybePromise<ServerSession>>,
+): Promise<ServerSession> {
   const viewers = await Promise.all(_viewers)
   return viewers.find((v) => v.viewer.role !== 'anon') ?? viewers[0]
 }
