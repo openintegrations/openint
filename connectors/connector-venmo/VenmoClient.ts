@@ -1,4 +1,4 @@
-import type {HTTPError, HTTPRequestConfig, MPDate} from '@openint/util'
+import type {HTTPError, HTTPRequestConfig} from '@openint/util'
 import {
   $makeProxyAgent,
   createHTTPClient,
@@ -165,7 +165,10 @@ export const makeVenmoClient = zFunction([zConfig, zCreds], (config, creds) => {
         earliestDate = parseDateTime(currentUser.user.date_joined)
       }
       // Eliminate any effect of timezones by expanding the date range by 1 day
-      earliestDate = earliestDate?.minus({days: 1}).startOf('day') as MPDate
+      earliestDate = earliestDate?.minus({days: 1}).startOf('day') ?? null
+      if (!earliestDate) {
+        throw new Error('No earliest date')
+      }
       // A transaction that happened at 7:30pm Feb 9 PT is actually considered 2/10
       // by Venmo in the statement API because of UTC, which handles dates differently
       // compare to feeds
