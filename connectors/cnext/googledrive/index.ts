@@ -1,8 +1,9 @@
+import {generateConnectorServerV1} from '../_defaults'
 import {ConnectorDef} from '../def'
 import {generateConnectorDef} from '../schema'
-import {generateConnectorServerV1} from '../server'
 
 const connectorDef = {
+  audience: ['consumer', 'business'],
   connector_name: 'googledrive',
   verticals: ['file-storage'],
   display_name: 'Google Drive',

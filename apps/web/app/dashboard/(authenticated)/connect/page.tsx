@@ -72,15 +72,11 @@ export default function MagicLinkPage() {
         </span>
       ),
     },
-    connectorConfigDisplayName: {
+    displayName: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
-      'ui:title': (
-        <span className="font-semibold">Connector Config Display Name</span>
-      ),
+      'ui:title': <span className="font-semibold">Customer Display Name </span>,
       'ui:description': (
-        <span className="text-sm text-gray-600">
-          Filter connector config by displayName
-        </span>
+        <span className="text-sm text-gray-600">What to call user by</span>
       ),
     },
     connectorConfigId: {

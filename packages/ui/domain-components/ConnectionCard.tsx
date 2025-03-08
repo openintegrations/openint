@@ -23,7 +23,7 @@ export function ConnectionCard({
 }) {
   const [isHovered, setIsHovered] = useState(false)
   let connectionName =
-    conn?.integration?.name ?? conn.connectorConfig.connector.displayName
+    conn.connectorConfig.displayName ?? conn?.integration?.name
   connectionName =
     connectionName.charAt(0).toUpperCase() + connectionName.slice(1)
 
