@@ -31,4 +31,4 @@ if (!SENTRY_DSN) {
   })
 }
 
-console.log('sentry initialized')
+console.log('[sentry.server] initialized')

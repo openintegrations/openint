@@ -73,7 +73,7 @@ if (!SENTRY_DSN) {
     : undefined
   posthogSentry?.setupOnce(Sentry.addEventProcessor, () => {})
 
-  console.log('sentry initialized')
+  console.log('[sentry.client] initialized')
 }
 
 export {Sentry}
