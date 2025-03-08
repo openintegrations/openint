@@ -145,10 +145,10 @@ export default function MagicLinkPage() {
           onSubmit={({formData: values}) => {
             createMagicLink.mutate(values, {
               onSuccess: async (data) => {
+                await copyToClipboard(data.url)
+
                 if (isMainPreview) {
                   window.location.href = data.url
-                } else {
-                  await copyToClipboard(data.url)
                 }
                 toast({
                   title: 'Magic link copied to clipboard',
