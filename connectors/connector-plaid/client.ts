@@ -79,3 +79,7 @@ export const plaidClientConnector = {
 } satisfies ConnectorClient<typeof plaidSchemas>
 
 export default plaidClientConnector
+
+export function useConnectorLogic() {
+  return React.useState('hello plaid')
+}

@@ -22,7 +22,7 @@ export default async function Page(props: PageProps) {
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
       <Suspense fallback={<Fallback />}>
-        <AddConnection connector_names={[]} />
+        <AddConnection connector_names={['plaid', 'finch', 'greenhouse']} />
       </Suspense>
     </div>
   )
