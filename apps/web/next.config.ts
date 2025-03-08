@@ -1,16 +1,13 @@
-const path = require('node:path')
-const webpack = require('webpack')
-const {withSentryConfig} = require('@sentry/nextjs')
-
-const connectorInfos = require('../app-config/connectors/meta')
+import path from 'node:path'
+import {withSentryConfig} from '@sentry/nextjs'
+import type {NextConfig} from 'next'
+import webpack from 'webpack'
+import connectorInfos from '../app-config/connectors/meta'
 
 const isDevOrStaging =
   process.env.NODE_ENV !== 'production' ||
   process.env['VERCEL_URL'] == 'openint-git-main-openint-dev.vercel.app'
-/**
- * Meta: change from `@type` to @satisfies once ts 5.0 is out
- * @type {import('next').NextConfig}
- */
+
 const nextConfig = {
   // TODO: Figure out why this is still needed. Does not appear to be needed in byos anymore...
   transpilePackages: [
@@ -34,9 +31,7 @@ const nextConfig = {
   // suppress error where 'debug' module requires 'supports-color' module dynamically
   // @see https://share.cleanshot.com/dWSLnpnS
   // experimental: {esmExternals: 'loose', typedRoutes: true},
-  experimental: {
-    serverComponentsExternalPackages: ['@openint/connector-mongodb'],
-  },
+  serverExternalPackages: ['@openint/connector-mongodb'],
   reactStrictMode: true,
   rewrites: async () => ({
     beforeFiles: [
@@ -111,6 +106,7 @@ const nextConfig = {
   },
 
   productionBrowserSourceMaps: true, // Let's see if this helps with Sentry... We are OSS anyways so doesn't matter too much if source code is "leaked" to client
+  // eslint-disable-next-line @typescript-eslint/require-await
   headers: async () => [
     {
       source: '/',
@@ -143,14 +139,9 @@ const nextConfig = {
       ),
     },
   ],
-}
+} satisfies NextConfig
 
-module.exports = nextConfig
-
-/**
- * @type {import('next').NextConfig}
- */
-module.exports = withSentryConfig(
+export default withSentryConfig(
   {
     ...nextConfig,
     sentry: {
@@ -175,11 +166,11 @@ module.exports = withSentryConfig(
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
 
-    org: process.env.SENTRY_ORG,
-    project: process.env.SENTRY_ORG,
+    org: process.env['SENTRY_ORG'],
+    project: process.env['SENTRY_ORG'],
 
     // Only print logs for uploading source maps in CI
-    silent: !process.env.CI,
+    silent: !process.env['CI'],
 
     // For all available options, see:
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -194,6 +185,8 @@ module.exports = withSentryConfig(
     // tunnelRoute: "/monitoring",
 
     // Hides source maps from generated client bundles
+
+    // @ts-expect-error not sure not to fix this yet
     hideSourceMaps: true,
 
     // Automatically tree-shake Sentry logger statements to reduce bundle size
