@@ -1,6 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalPassThroughEnv": ["DATABASE_URL", "DATABASE_URL_UNPOOLED"],
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
+    "DATABASE_URL_UNPOOLED",
+    "JWT_SECRET"
+  ],
   "tasks": {
     "download": {
       "outputs": ["*.oas.json"]
