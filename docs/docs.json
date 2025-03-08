@@ -48,24 +48,18 @@
           {
             "group": "Getting Started",
             "pages": [
-              "quickstart/intro",
-              "quickstart/quickstart",
-              "quickstart/integrations"
+              "getting-started/intro",
+              "getting-started/quickstart",
+              "getting-started/integrations"
             ]
           },
           {
-            "group": "Core Concepts",
+            "group": "Using @Connect",
             "pages": [
-              "core-concepts/data-flow",
-              "core-concepts/webhooks-events"
-            ]
-          },
-          {
-            "group": "Using Connect",
-            "pages": [
-              "connect/share-magic-links",
-              "connect/react-embed",
-              "connect/web-applications"
+              "connect/embed",
+              "connect/customize",
+              "connect/data-flow",
+              "connect/faq"
             ]
           }
         ]
