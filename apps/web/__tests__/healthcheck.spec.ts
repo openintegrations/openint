@@ -43,8 +43,8 @@ test.each([
   expect(json.payload?.pathParams).toEqual(params)
 })
 
-test('/api/trpc', async () => {
-  const trpc = createAppTrpcClient({apiUrl: endpoint('/api/trpc')})
+test('/api/v0/trpc', async () => {
+  const trpc = createAppTrpcClient({apiUrl: endpoint('/api/v0/trpc')})
   const res = await trpc.getPublicEnv.query()
   expect(res['NEXT_PUBLIC_NANGO_PUBLIC_KEY']).toBeDefined()
 })
