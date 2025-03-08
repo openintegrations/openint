@@ -343,7 +343,7 @@ importers:
         version: link:../../packages/util
       '@t3-oss/env-nextjs':
         specifier: 0.7.3
-        version: 0.7.3(typescript@5.7.3)(zod@3.22.4)
+        version: 0.7.3(typescript@5.7.3)(zod@3.24.2)
       chokidar:
         specifier: 3.5.3
         version: 3.5.3
@@ -366,8 +366,8 @@ importers:
         specifier: 1.3.1
         version: 1.3.1
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@types/find-config':
         specifier: 1.0.1
@@ -846,6 +846,9 @@ importers:
       airtable:
         specifier: 0.11.4
         version: 0.11.4
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
 
   connectors/connector-aircall:
     dependencies:
@@ -1352,9 +1355,12 @@ importers:
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
+      remeda:
+        specifier: 1.6.1
+        version: 1.6.1
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@openint/env':
         specifier: workspace:*
@@ -1701,8 +1707,8 @@ importers:
         specifier: 19.0.0
         version: 19.0.0
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@openint/open-file-picker':
         specifier: workspace:*
@@ -2155,8 +2161,8 @@ importers:
         specifier: 1.6.1
         version: 1.6.1
       zod:
-        specifier: ^3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@openint/cdk':
         specifier: workspace:*
@@ -2273,6 +2279,9 @@ importers:
       lucide-react:
         specifier: '*'
         version: 0.115.0(react@19.0.0)
+      next:
+        specifier: 15.2.1
+        version: 15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -2328,13 +2337,13 @@ importers:
         version: 10.40.0
       '@zodios/core':
         specifier: 10.9.6
-        version: 10.9.6(axios@0.21.1)(zod@3.22.4)
+        version: 10.9.6(axios@0.21.1)(zod@3.24.2)
       '@zodios/fetch':
         specifier: 11.0.0-beta.19
-        version: 11.0.0-beta.19(@zodios/core@10.9.6(axios@0.21.1)(zod@3.22.4))(fp-ts@2.12.3)(io-ts@2.2.19(fp-ts@2.12.3))(zod@3.22.4)
+        version: 11.0.0-beta.19(@zodios/core@10.9.6(axios@0.21.1)(zod@3.24.2))(fp-ts@2.12.3)(io-ts@2.2.19(fp-ts@2.12.3))(zod@3.24.2)
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@openint/engine-backend':
         specifier: workspace:*
@@ -2478,6 +2487,9 @@ importers:
       lucide-react:
         specifier: '*'
         version: 0.115.0(react@19.0.0)
+      next:
+        specifier: 15.2.1
+        version: 15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       re-resizable:
         specifier: 6.9.9
         version: 6.9.9(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -2681,11 +2693,11 @@ importers:
         specifier: 0.4.0
         version: 0.4.0
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: ^3.24.2
+        version: 3.24.2
       zod-openapi:
         specifier: 2.14.0
-        version: 2.14.0(zod@3.22.4)
+        version: 2.14.0(zod@3.24.2)
     devDependencies:
       '@types/accounting':
         specifier: 0.4.2
@@ -18994,7 +19006,7 @@ snapshots:
 
   '@emnapi/runtime@1.3.1':
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
     optional: true
 
   '@esbuild-kit/cjs-loader@2.4.1':
@@ -19249,7 +19261,7 @@ snapshots:
   '@firebase/component@0.5.13':
     dependencies:
       '@firebase/util': 1.5.2
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   '@firebase/component@0.5.14':
     dependencies:
@@ -19302,7 +19314,7 @@ snapshots:
       '@firebase/logger': 0.3.2
       '@firebase/util': 1.5.2
       faye-websocket: 0.11.4
-      tslib: 2.7.0
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app-types'
 
@@ -19494,7 +19506,7 @@ snapshots:
 
   '@firebase/util@1.5.2':
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   '@firebase/util@1.6.0':
     dependencies:
@@ -19502,7 +19514,7 @@ snapshots:
 
   '@firebase/util@1.7.0':
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   '@firebase/webchannel-wrapper@0.6.1': {}
 
@@ -21070,8 +21082,8 @@ snapshots:
 
   '@opensdks/util-zod@0.0.15':
     dependencies:
-      zod: 3.22.4
-      zod-openapi: 2.14.0(zod@3.22.4)
+      zod: 3.24.2
+      zod-openapi: 2.14.0(zod@3.24.2)
 
   '@opensdks/util-zod@0.0.16':
     dependencies:
@@ -21378,7 +21390,7 @@ snapshots:
       open: 8.4.0
       picocolors: 1.1.1
       tiny-glob: 0.2.9
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   '@pnp/core@4.9.0':
     dependencies:
@@ -23502,7 +23514,7 @@ snapshots:
 
   '@stoplight/lifecycle@2.3.3':
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
       wolfy87-eventemitter: 5.2.9
 
   '@stoplight/markdown-viewer@5.5.1(@stoplight/mosaic-code-viewer@1.40.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@stoplight/mosaic@1.40.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
@@ -23540,7 +23552,7 @@ snapshots:
       remark-gfm: 1.0.0
       remark-parse: 9.0.0
       remark-stringify: 9.0.1
-      tslib: 2.7.0
+      tslib: 2.8.1
       unified: 9.2.2
       unist-util-select: 4.0.3
       unist-util-visit: 3.1.0
@@ -23571,7 +23583,7 @@ snapshots:
       react-fast-compare: 3.2.0
       react-overflow-list: 0.5.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       ts-keycode-enum: 1.0.6
-      tslib: 2.7.0
+      tslib: 2.8.1
       use-resize-observer: 9.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       zustand: 3.7.2(react@19.0.0)
     transitivePeerDependencies:
@@ -23600,7 +23612,7 @@ snapshots:
       react-fast-compare: 3.2.0
       react-overflow-list: 0.5.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       ts-keycode-enum: 1.0.6
-      tslib: 2.7.0
+      tslib: 2.8.1
       use-resize-observer: 9.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       zustand: 3.7.2(react@19.0.0)
     transitivePeerDependencies:
@@ -24041,22 +24053,9 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.7.3(typescript@5.7.3)(zod@3.22.4)':
-    dependencies:
-      zod: 3.22.4
-    optionalDependencies:
-      typescript: 5.7.3
-
   '@t3-oss/env-core@0.7.3(typescript@5.7.3)(zod@3.24.2)':
     dependencies:
       zod: 3.24.2
-    optionalDependencies:
-      typescript: 5.7.3
-
-  '@t3-oss/env-nextjs@0.7.3(typescript@5.7.3)(zod@3.22.4)':
-    dependencies:
-      '@t3-oss/env-core': 0.7.3(typescript@5.7.3)(zod@3.22.4)
-      zod: 3.22.4
     optionalDependencies:
       typescript: 5.7.3
 
@@ -25021,18 +25020,18 @@ snapshots:
 
   '@xtuc/long@4.2.2': {}
 
-  '@zodios/core@10.9.6(axios@0.21.1)(zod@3.22.4)':
+  '@zodios/core@10.9.6(axios@0.21.1)(zod@3.24.2)':
     dependencies:
       axios: 0.21.1
-      zod: 3.22.4
+      zod: 3.24.2
 
-  '@zodios/fetch@11.0.0-beta.19(@zodios/core@10.9.6(axios@0.21.1)(zod@3.22.4))(fp-ts@2.12.3)(io-ts@2.2.19(fp-ts@2.12.3))(zod@3.22.4)':
+  '@zodios/fetch@11.0.0-beta.19(@zodios/core@10.9.6(axios@0.21.1)(zod@3.24.2))(fp-ts@2.12.3)(io-ts@2.2.19(fp-ts@2.12.3))(zod@3.24.2)':
     dependencies:
-      '@zodios/core': 10.9.6(axios@0.21.1)(zod@3.22.4)
+      '@zodios/core': 10.9.6(axios@0.21.1)(zod@3.24.2)
     optionalDependencies:
       fp-ts: 2.12.3
       io-ts: 2.2.19(fp-ts@2.12.3)
-      zod: 3.22.4
+      zod: 3.24.2
 
   abort-controller@3.0.0:
     dependencies:
@@ -25195,7 +25194,7 @@ snapshots:
   aria-hidden@1.2.1(@types/react@19.0.10)(react@19.0.0):
     dependencies:
       react: 19.0.0
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
@@ -25312,11 +25311,11 @@ snapshots:
 
   ast-types@0.13.4:
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   ast-types@0.16.1:
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   astral-regex@2.0.0: {}
 
@@ -30918,7 +30917,7 @@ snapshots:
 
   lower-case@2.0.2:
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   lowercase-keys@2.0.0: {}
 
@@ -33656,7 +33655,7 @@ snapshots:
     dependencies:
       react: 19.0.0
       react-style-singleton: 2.2.1(@types/react@19.0.10)(react@19.0.0)
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
@@ -33664,7 +33663,7 @@ snapshots:
     dependencies:
       react: 19.0.0
       react-style-singleton: 2.2.3(@types/react@19.0.10)(react@19.0.0)
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
@@ -33673,7 +33672,7 @@ snapshots:
       react: 19.0.0
       react-remove-scroll-bar: 2.3.3(@types/react@19.0.10)(react@19.0.0)
       react-style-singleton: 2.2.1(@types/react@19.0.10)(react@19.0.0)
-      tslib: 2.7.0
+      tslib: 2.8.1
       use-callback-ref: 1.3.0(@types/react@19.0.10)(react@19.0.0)
       use-sidecar: 1.1.2(@types/react@19.0.10)(react@19.0.0)
     optionalDependencies:
@@ -33684,7 +33683,7 @@ snapshots:
       react: 19.0.0
       react-remove-scroll-bar: 2.3.3(@types/react@19.0.10)(react@19.0.0)
       react-style-singleton: 2.2.1(@types/react@19.0.10)(react@19.0.0)
-      tslib: 2.7.0
+      tslib: 2.8.1
       use-callback-ref: 1.3.0(@types/react@19.0.10)(react@19.0.0)
       use-sidecar: 1.1.2(@types/react@19.0.10)(react@19.0.0)
     optionalDependencies:
@@ -33760,7 +33759,7 @@ snapshots:
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 19.0.0
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
@@ -33768,7 +33767,7 @@ snapshots:
     dependencies:
       get-nonce: 1.0.1
       react: 19.0.0
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
@@ -33781,10 +33780,10 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  react-universal-interface@0.6.2(react@19.0.0)(tslib@2.7.0):
+  react-universal-interface@0.6.2(react@19.0.0)(tslib@2.8.1):
     dependencies:
       react: 19.0.0
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   react-use@17.4.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
@@ -33797,13 +33796,13 @@ snapshots:
       nano-css: 5.3.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
-      react-universal-interface: 0.6.2(react@19.0.0)(tslib@2.7.0)
+      react-universal-interface: 0.6.2(react@19.0.0)(tslib@2.8.1)
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
       set-harmonic-interval: 1.0.1
       throttle-debounce: 3.0.1
       ts-easing: 0.2.0
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   react@19.0.0: {}
 
@@ -33866,7 +33865,7 @@ snapshots:
       esprima: 4.0.1
       source-map: 0.6.1
       tiny-invariant: 1.3.3
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   recharts-scale@0.4.5:
     dependencies:
@@ -34424,7 +34423,7 @@ snapshots:
 
   rxjs@7.8.1:
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   sade@1.8.1:
     dependencies:
@@ -35421,12 +35420,12 @@ snapshots:
   synckit@0.8.5:
     dependencies:
       '@pkgr/utils': 2.3.1
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   synckit@0.9.1:
     dependencies:
       '@pkgr/core': 0.1.1
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   tabbable@6.1.1: {}
 
@@ -36253,11 +36252,11 @@ snapshots:
 
   upper-case-first@2.0.2:
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   upper-case@2.0.2:
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   uri-js-replace@1.0.1: {}
 
@@ -36284,14 +36283,14 @@ snapshots:
   use-callback-ref@1.3.0(@types/react@19.0.10)(react@19.0.0):
     dependencies:
       react: 19.0.0
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
   use-callback-ref@1.3.3(@types/react@19.0.10)(react@19.0.0):
     dependencies:
       react: 19.0.0
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
@@ -36311,7 +36310,7 @@ snapshots:
     dependencies:
       detect-node-es: 1.1.0
       react: 19.0.0
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
@@ -36319,7 +36318,7 @@ snapshots:
     dependencies:
       detect-node-es: 1.1.0
       react: 19.0.0
-      tslib: 2.7.0
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.10
 
@@ -36938,10 +36937,6 @@ snapshots:
   zod-openapi@2.11.0(zod@3.24.2):
     dependencies:
       zod: 3.24.2
-
-  zod-openapi@2.14.0(zod@3.22.4):
-    dependencies:
-      zod: 3.22.4
 
   zod-openapi@2.14.0(zod@3.24.2):
     dependencies:
