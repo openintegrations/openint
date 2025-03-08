@@ -51,23 +51,19 @@ const ConnectorComponents = Object.fromEntries(
 export function AddConnection(props: {connector_names: Promise<string[]>}) {
   const connector_names = React.use(props.connector_names)
   return (
-    <Suspense>
-      <AddConnectionInner connector_names={connector_names} />
-    </Suspense>
+    <>
+      {connector_names.map((name) => (
+        <AddConnectionInner key={name} connector_name={name} />
+      ))}
+    </>
   )
 }
 
-function AddConnectionInner(props: {connector_names: string[]}) {
-  return (
-    <>
-      {props.connector_names.map((name) => {
-        const Component =
-          ConnectorComponents[name as keyof typeof ConnectorComponents]
-        if (!Component) {
-          throw new Error(`Unknown connector: ${name}`)
-        }
-        return <Component key={name} connector_name={name} />
-      })}
-    </>
-  )
+function AddConnectionInner({connector_name: name}: {connector_name: string}) {
+  const Component =
+    ConnectorComponents[name as keyof typeof ConnectorComponents]
+  if (!Component) {
+    throw new Error(`Unknown connector: ${name}`)
+  }
+  return <Component key={name} connector_name={name} />
 }

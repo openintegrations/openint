@@ -23,9 +23,17 @@ export default async function Page(props: PageProps) {
       </pre>
       <Suspense fallback={<Fallback />}>
         <AddConnection
-          connector_names={res.then((r) =>
-            R.uniq(r.items.map((r) => r.connector_name)),
-          )}
+          connector_names={res
+            .then((r) => {
+              // Add a random delay for testing/development purposes
+              const randomDelay = Math.floor(Math.random() * 2000) // Random delay up to 2000ms (2 seconds)
+              return new Promise<typeof r>((resolve) => {
+                setTimeout(() => {
+                  resolve(r)
+                }, randomDelay)
+              })
+            })
+            .then((r) => R.uniq(r.items.map((r) => r.connector_name)))}
         />
       </Suspense>
     </div>
