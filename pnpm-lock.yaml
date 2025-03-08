@@ -570,6 +570,9 @@ importers:
       commandbar:
         specifier: 1.7.3
         version: 1.7.3(react@19.0.0)
+      concurrently:
+        specifier: 8.2.2
+        version: 8.2.2
       cookies-next:
         specifier: 4.0.0
         version: 4.0.0

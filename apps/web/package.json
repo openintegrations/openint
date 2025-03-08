@@ -43,6 +43,7 @@
     "@trpc/react-query": "10.40.0",
     "@trpc/server": "10.40.0",
     "commandbar": "1.7.3",
+    "concurrently": "8.2.2",
     "cookies-next": "4.0.0",
     "inngest": "^3.22.13",
     "lucide-react": "^0.479.0",
