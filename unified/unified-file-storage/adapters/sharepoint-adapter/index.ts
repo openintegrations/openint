@@ -1,5 +1,5 @@
 import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
-import {TRPCError} from '@trpc/server'
+import {TRPCError} from '@openint/vdk'
 import {type FileStorageAdapter} from '../../router'
 import {mappers} from './mappers'
 

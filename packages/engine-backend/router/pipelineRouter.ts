@@ -130,7 +130,7 @@ export const pipelineRouter = trpc.router({
         const integrations = intById[conn.integrationId!]
         const mappers = ctx.connectorMap[connectorName]?.standardMappers
         const standardConn = zStandard.connection
-          .omit({id: true, settings: true})
+          .omit({id: true})
           .nullish()
           .parse(
             mappers?.connection?.(conn.settings) ||

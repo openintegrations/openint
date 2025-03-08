@@ -2,7 +2,6 @@ import type {RequestLike} from '@clerk/nextjs/dist/types/server/types'
 import {clerkClient, getAuth} from '@clerk/nextjs/server'
 import {createOpenApiFetchHandler} from '@lilyrose2798/trpc-openapi'
 import {applyLinks, corsLink} from '@opensdks/fetch-links'
-import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {pickBy} from 'remeda'
 import {contextFactory} from '@openint/app-config/backendConfig'
 import {
@@ -21,6 +20,7 @@ import {
 } from '@openint/cdk'
 import type {RouterContext} from '@openint/engine-backend'
 import {envRequired} from '@openint/env'
+import {fetchRequestHandler} from '@openint/trpc'
 import {downloadFileById} from '@openint/unified-file-storage/adapters'
 import {
   BadRequestError,
