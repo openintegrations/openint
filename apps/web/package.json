@@ -28,6 +28,7 @@
     "@openint/events": "workspace:*",
     "@openint/open-file-picker": "workspace:*",
     "@openint/ui": "workspace:*",
+    "@openint/ui-v1": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@sentry/nextjs": "^9.5.0",

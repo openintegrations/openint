@@ -9,7 +9,7 @@ import {
   QueryClient,
   QueryClientProvider,
   useSuspenseQuery,
-} from '@openint/ui/trpc11'
+} from '@openint/ui-v1'
 
 export const {TRPCProvider, useTRPC, useTRPCClient} =
   createTRPCContext<AppRouter>()
