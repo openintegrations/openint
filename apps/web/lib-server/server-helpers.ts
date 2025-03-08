@@ -40,7 +40,7 @@ type NextContext =
   // Next.js 13 server components
   | {
       headers?: () => ReadonlyHeaders
-      cookies?: () => ReadonlyRequestCookies
+      cookies?: () => Promise<ReadonlyRequestCookies>
       /** Query Params */
       searchParams?:
         | Record<string, string[] | string | undefined>
