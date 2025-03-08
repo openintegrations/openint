@@ -21,7 +21,7 @@
     "@types/react": "*"
   },
   "peerDependencies": {
-    "lucide-react": "*",
+    "lucide-react": "^0.479.0",
     "react": "*"
   }
 }

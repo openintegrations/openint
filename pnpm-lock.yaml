@@ -569,8 +569,8 @@ importers:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.8.2)
       lucide-react:
-        specifier: 0.447.0
-        version: 0.447.0(react@19.0.0)
+        specifier: ^0.479.0
+        version: 0.479.0(react@19.0.0)
       mongodb:
         specifier: 4.9.1
         version: 4.9.1
@@ -1801,8 +1801,8 @@ importers:
         specifier: ^1.1.0
         version: 1.4.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       lucide-react:
-        specifier: ^0.474.0
-        version: 0.474.0(react@19.0.0)
+        specifier: ^0.479.0
+        version: 0.479.0(react@19.0.0)
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -1825,8 +1825,8 @@ importers:
         specifier: ^1.4.0
         version: 1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwind-merge:
-        specifier: ^2.0.0
-        version: 2.6.0
+        specifier: ^3.0.2
+        version: 3.0.2
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
@@ -2241,8 +2241,8 @@ importers:
         specifier: 10.40.0
         version: 10.40.0
       lucide-react:
-        specifier: '*'
-        version: 0.115.0(react@19.0.0)
+        specifier: ^0.479.0
+        version: 0.479.0(react@19.0.0)
       next:
         specifier: 15.2.1
         version: 15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -2434,8 +2434,8 @@ importers:
         specifier: 8.9.1
         version: 8.9.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       class-variance-authority:
-        specifier: 0.6.0
-        version: 0.6.0(typescript@5.8.2)
+        specifier: ^0.7.1
+        version: 0.7.1
       clsx:
         specifier: 1.2.1
         version: 1.2.1
@@ -2446,8 +2446,8 @@ importers:
         specifier: ^2.29.3
         version: 2.29.3
       lucide-react:
-        specifier: '*'
-        version: 0.115.0(react@19.0.0)
+        specifier: ^0.479.0
+        version: 0.479.0(react@19.0.0)
       next:
         specifier: 15.2.1
         version: 15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -2467,8 +2467,8 @@ importers:
         specifier: 12.2.1
         version: 12.2.1
       tailwind-merge:
-        specifier: 1.6.0
-        version: 1.6.0
+        specifier: ^3.0.2
+        version: 3.0.2
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^3.2.5
@@ -8791,14 +8791,6 @@ packages:
     resolution: {integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==}
     engines: {node: '>=0.10.0'}
 
-  class-variance-authority@0.6.0:
-    resolution: {integrity: sha512-qdRDgfjx3GRb9fpwpSvn+YaidnT7IUJNe4wt5/SWwM+PmUwJUhQRk/8zAyNro0PmVfmen2635UboTjIBXXxy5A==}
-    peerDependencies:
-      typescript: '>= 4.5.5 < 6'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   class-variance-authority@0.7.1:
     resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
 
@@ -12190,18 +12182,8 @@ packages:
   lru-memoizer@2.1.4:
     resolution: {integrity: sha512-IXAq50s4qwrOBrXJklY+KhgZF+5y98PDaNo0gi/v2KQBFLyWr+JyFvijZXkGKjQj/h9c0OwoE+JZbwUXce76hQ==}
 
-  lucide-react@0.115.0:
-    resolution: {integrity: sha512-VGL7jBKN6pEXi6peXoyn9t9O7olvinaAonnoe+iFi/F2q7/yQzAFM5KR1OY15u9PlrB3scI9HvcTFoOrIjUaVQ==}
-    peerDependencies:
-      react: 19.0.0
-
-  lucide-react@0.447.0:
-    resolution: {integrity: sha512-SZ//hQmvi+kDKrNepArVkYK7/jfeZ5uFNEnYmd45RKZcbGD78KLnrcNXmgeg6m+xNHFvTG+CblszXCy4n6DN4w==}
-    peerDependencies:
-      react: 19.0.0
-
-  lucide-react@0.474.0:
-    resolution: {integrity: sha512-CmghgHkh0OJNmxGKWc0qfPJCYHASPMVSyGY8fj3xgk4v84ItqDg64JNKFZn5hC6E0vHi6gxnbCgwhyVB09wQtA==}
+  lucide-react@0.479.0:
+    resolution: {integrity: sha512-aBhNnveRhorBOK7uA4gDjgaf+YlHMdMhQ/3cupk6exM10hWlEU+2QtWYOfhXhjAsmdb6LeKR+NZnow4UxRRiTQ==}
     peerDependencies:
       react: 19.0.0
 
@@ -15067,11 +15049,8 @@ packages:
     resolution: {integrity: sha512-7N05gRK7t6B4g8AtedUsKoKtPjplmUjOPr/V4kVB+7U3yGiB3WvKqMTTQzVCZyhfZUXgQFp9YyN9ZgC52uCPKw==}
     engines: {node: '>=14.16'}
 
-  tailwind-merge@1.6.0:
-    resolution: {integrity: sha512-lfpys05uZMcVGIbgrrM/HlQGYKiPIcUhs76H1VrXo0gerpYkoLk4zjQTppdyAcBcmpzlzXJw7X0JniUKOr2hkg==}
-
-  tailwind-merge@2.6.0:
-    resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
+  tailwind-merge@3.0.2:
+    resolution: {integrity: sha512-l7z+OYZ7mu3DTqrL88RiKrKIqO3NcpEO8V/Od04bNpvk0kiIFndGEoqfuzvj4yuhRkHKjRkII2z+KS2HfPcSxw==}
 
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
@@ -23953,12 +23932,6 @@ snapshots:
       isobject: 3.0.1
       static-extend: 0.1.2
 
-  class-variance-authority@0.6.0(typescript@5.8.2):
-    dependencies:
-      clsx: 1.2.1
-    optionalDependencies:
-      typescript: 5.8.2
-
   class-variance-authority@0.7.1:
     dependencies:
       clsx: 2.1.1
@@ -28381,15 +28354,7 @@ snapshots:
       lodash.clonedeep: 4.5.0
       lru-cache: 4.0.2
 
-  lucide-react@0.115.0(react@19.0.0):
-    dependencies:
-      react: 19.0.0
-
-  lucide-react@0.447.0(react@19.0.0):
-    dependencies:
-      react: 19.0.0
-
-  lucide-react@0.474.0(react@19.0.0):
+  lucide-react@0.479.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 
@@ -32287,9 +32252,7 @@ snapshots:
       sentence-case: 3.0.4
       split-text-to-chunks: 1.0.0
 
-  tailwind-merge@1.6.0: {}
-
-  tailwind-merge@2.6.0: {}
+  tailwind-merge@3.0.2: {}
 
   tailwindcss-animate@1.0.7(tailwindcss@3.4.12):
     dependencies:

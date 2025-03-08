@@ -41,7 +41,7 @@
     "commandbar": "1.7.3",
     "cookies-next": "4.0.0",
     "inngest": "^3.22.13",
-    "lucide-react": "0.447.0",
+    "lucide-react": "^0.479.0",
     "mongodb": "4.9.1",
     "next": "15.2.1",
     "next-themes": "0.3.0",

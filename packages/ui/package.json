@@ -35,16 +35,16 @@
     "@rjsf/utils": "5.6.2",
     "@rjsf/validator-ajv8": "5.6.2",
     "@tanstack/react-table": "8.9.1",
-    "class-variance-authority": "0.6.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "1.2.1",
     "cmdk": "0.2.0",
     "date-fns": "^2.29.3",
-    "lucide-react": "*",
+    "lucide-react": "^0.479.0",
     "next": "15.2.1",
     "re-resizable": "6.9.9",
     "react-hook-form": "7.43.1",
     "sql-formatter": "12.2.1",
-    "tailwind-merge": "1.6.0"
+    "tailwind-merge": "^3.0.2"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",
