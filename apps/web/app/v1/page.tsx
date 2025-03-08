@@ -5,7 +5,7 @@ import {setupFixture} from '@/__tests__/test-utils.v1'
 import type {PageProps} from '@/lib-common/next-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
 import type {APICaller} from '@/lib-server/globals'
-import {createAPICaller} from '@/lib-server/globals'
+import {createAPICaller, jwt} from '@/lib-server/globals'
 import {AddConnection, ClientApp, ConnectionList} from './client'
 
 async function AddConnectionServer({
@@ -74,11 +74,13 @@ function Fallback() {
 
 export default async function Page(props: PageProps) {
   const {
-    searchParams: {org_id},
+    searchParams: {token},
   } = await parsePageProps(props, {
-    searchParams: z.object({org_id: z.string().optional()}),
+    searchParams: z.object({token: z.string()}),
   })
-  const {viewer, token} = await setupFixture({orgId: org_id ?? 'org_123'})
+
+  const viewer = await jwt.verifyViewer(token)
+
   const api = createAPICaller(viewer)
 
   return (

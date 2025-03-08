@@ -1,8 +1,14 @@
-import type {Id, Viewer} from '@openint/cdk'
+import {makeJwtClient, type Id, type Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
-import {db, jwt} from '@/lib-server/globals'
+import {initDbNeon} from '@openint/db/db.neon'
+import {envRequired} from '@openint/env'
 
 export async function setupFixture(info: {orgId: string}) {
+  const db = initDbNeon(envRequired.DATABASE_URL)
+  const jwt = makeJwtClient({
+    secretOrPublicKey: envRequired.JWT_SECRET,
+  })
+
   const viewer: Viewer = {role: 'org', orgId: info.orgId as Id['org']}
 
   const api_key = 'key_123'
@@ -30,3 +36,6 @@ export async function setupFixture(info: {orgId: string}) {
 
   return {token, viewer}
 }
+
+const res = await setupFixture({orgId: 'org_123'})
+console.log(res)
