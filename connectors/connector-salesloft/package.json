@@ -6,7 +6,7 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
-    "@opensdks/runtime": "^0.0.22",
+    "@opensdks/runtime": "^0.0.19",
     "@opensdks/sdk-salesloft": "0.0.16"
   },
   "devDependencies": {}

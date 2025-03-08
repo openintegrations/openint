@@ -15,7 +15,7 @@
   "devDependencies": {
     "@openint/open-file-picker": "workspace:*",
     "@types/react": "*",
-    "typescript": "^5.8.2"
+    "typescript": "*"
   },
   "peerDependencies": {
     "react": "*"

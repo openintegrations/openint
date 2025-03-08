@@ -6,7 +6,7 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
-    "@opensdks/runtime": "^0.0.22",
+    "@opensdks/runtime": "^0.0.19",
     "@opensdks/sdk-greenhouse": "^0.0.8",
     "http-link-header": "^1.1.3"
   },

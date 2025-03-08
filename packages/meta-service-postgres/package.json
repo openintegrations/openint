@@ -13,6 +13,6 @@
   },
   "devDependencies": {
     "@openint/engine-backend": "workspace:*",
-    "@opensdks/runtime": "^0.0.22"
+    "@opensdks/runtime": "0.0.20"
   }
 }

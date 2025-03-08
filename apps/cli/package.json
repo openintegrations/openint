@@ -38,6 +38,6 @@
     "ngrok": "5.0.0-beta.2"
   },
   "devDependencies": {
-    "@opensdks/runtime": "^0.0.22"
+    "@opensdks/runtime": "^0.0.19"
   }
 }

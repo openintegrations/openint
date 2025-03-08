@@ -23,6 +23,6 @@
   "devDependencies": {
     "@clerk/nextjs": "^6.12.4",
     "@lilyrose2798/trpc-openapi": "1.3.10",
-    "@opensdks/runtime": "^0.0.22"
+    "@opensdks/runtime": "^0.0.19"
   }
 }
