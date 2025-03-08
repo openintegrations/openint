@@ -18,6 +18,7 @@ const nextConfig = {
     // Should we generate this list from fs also?
     path.resolve(__dirname, '../../kits/cdk'),
     path.resolve(__dirname, '../../kits/connect'),
+    path.resolve(__dirname, '../../kits/file-picker'),
     path.resolve(__dirname, '../../packages/engine-backend'),
     path.resolve(__dirname, '../../packages/engine-frontend'),
     path.resolve(__dirname, '../../packages/ui'),
@@ -50,6 +51,17 @@ const nextConfig = {
     {
       source: '/docs/:p*',
       destination: 'https://openint.docs.buildwithfern.com/:p*',
+      permanent: false,
+    },
+    {
+      source: '/storybook/:branch*',
+      destination: 'https://:branch*--67cafc438c6d3b09671849dd.chromatic.com',
+      permanent: false,
+    },
+    {
+      source: '/chromatic/:branch*',
+      destination:
+        'https://www.chromatic.com/library?appId=67cafc438c6d3b09671849dd&branch=:branch*',
       permanent: false,
     },
     {

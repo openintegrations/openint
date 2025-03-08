@@ -12,7 +12,7 @@
     "lint": "eslint --ext .js,.ts,.tsx --cache . --quiet --ignore-pattern /gateway",
     "mitm": "mitmweb --listen-port 3010 --web-port 3011 --mode reverse:http://localhost:3000",
     "preinstall": "npx only-allow pnpm",
-    "test::ci": "NODE_OPTIONS=--experimental-vm-modules pnpm run jest --ci --forceExit --detectOpenHandles --runInBand",
+    "jest::ci": "NODE_OPTIONS=--experimental-vm-modules pnpm run jest --ci --forceExit --detectOpenHandles --runInBand",
     "jest::debug": "NODE_OPTIONS=--experimental-vm-modules node --inspect-brk $(pnpm bin)/jest --runInBand --watch",
     "jest::watch": "pnpm run jest --watch",
     "jest": "NODE_OPTIONS=--experimental-vm-modules jest",
@@ -100,12 +100,12 @@
     },
     "overrides": {
       "@tanstack/react-query": "4.28.0",
-      "@types/react": "18.0.27",
-      "@types/react-dom": "18.0.10",
+      "@types/react": "19.0.10",
+      "@types/react-dom": "19.0.4",
       "axios": "0.21.1",
       "esbuild": "0.17.5",
-      "react": "18.3.1",
-      "react-dom": "18.3.1"
+      "react": "19.0.0",
+      "react-dom": "19.0.0"
     },
     "patchedDependencies": {
       "@jsonurl/jsonurl@1.1.7": "patches/@jsonurl__jsonurl@1.1.7.patch",

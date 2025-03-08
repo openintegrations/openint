@@ -135,7 +135,7 @@ export const connectionRouter = router({
       }
 
       const connector_config = await ctx.db.query.connector_config.findFirst({
-        // @ts-expect-error connector_config_id is not nullable
+        // @ts-expect-error connector_config_id pack
         where: eq(schema.connector_config.id, connection.connector_config_id),
         columns: {
           id: true,

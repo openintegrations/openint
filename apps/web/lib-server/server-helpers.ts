@@ -40,7 +40,7 @@ type NextContext =
   // Next.js 13 server components
   | {
       headers?: () => ReadonlyHeaders
-      cookies?: () => ReadonlyRequestCookies
+      cookies?: () => Promise<ReadonlyRequestCookies>
       /** Query Params */
       searchParams?:
         | Record<string, string[] | string | undefined>
@@ -124,7 +124,7 @@ export async function serverGetViewer(
 
   // access token via query param
   let accessToken = fromMaybeArray(searchParams[kAccessToken])[0]
-  let viewer = jwt.verifyViewer(accessToken)
+  let viewer = await jwt.verifyViewer(accessToken)
   // console.log('accessToken', accessToken, viewer)
 
   if (viewer.role !== 'anon') {
@@ -132,7 +132,7 @@ export async function serverGetViewer(
   }
   // access token via header
   accessToken = headers.authorization?.match(/^Bearer (.+)/)?.[1]
-  viewer = jwt.verifyViewer(accessToken)
+  viewer = await jwt.verifyViewer(accessToken)
   if (viewer.role !== 'anon') {
     return {...viewer, accessToken}
   }
