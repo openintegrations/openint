@@ -1,4 +1,4 @@
-import {clerkClient} from '@clerk/nextjs/server'
+import {createClerkClient} from '@clerk/nextjs/server'
 import type {LinkFactory} from '@openint/cdk'
 import {logLink, renameAccountLink} from '@openint/cdk'
 import type {PipelineInput} from '@openint/engine-backend'
@@ -15,6 +15,11 @@ import {getServerUrl} from './constants'
 import {env, envRequired} from './env'
 
 export const backendEnv = env
+
+const clerkClient = createClerkClient({
+  secretKey: env.CLERK_SECRET_KEY,
+  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+})
 
 /**
  * This requires the env vars to exist...

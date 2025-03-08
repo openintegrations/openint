@@ -1,9 +1,16 @@
 // import '@openint/app-config/register.node'
-import {clerkClient} from '@clerk/nextjs/server'
+
+import {createClerkClient} from '@clerk/nextjs/server'
 import {kApikeyMetadata} from '@openint/app-config/constants'
 import type {Viewer} from '@openint/cdk'
 import {encodeApiKey, hasRole} from '@openint/cdk'
+import {env} from '@openint/env'
 import {makeUlid} from '@openint/util'
+
+const clerkClient = createClerkClient({
+  secretKey: env.CLERK_SECRET_KEY,
+  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+})
 
 export async function getOrCreateApikey(viewer: Viewer) {
   const orgId = hasRole(viewer, ['org', 'user']) ? viewer.orgId : null

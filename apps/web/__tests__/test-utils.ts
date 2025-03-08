@@ -1,6 +1,12 @@
-import {clerkClient} from '@clerk/nextjs/server'
+import {createClerkClient} from '@clerk/nextjs/server'
 import type {Id, Viewer} from '@openint/cdk'
+import {env} from '@openint/env'
 import {getOrCreateApikey} from '../lib-server/procedures'
+
+const clerkClient = createClerkClient({
+  secretKey: env.CLERK_SECRET_KEY,
+  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+})
 
 export async function resetClerkTestData() {
   const orgs = await clerkClient.organizations.getOrganizationList({limit: 100})
@@ -42,7 +48,9 @@ export async function setupTestOrg() {
   return {user, org, viewer, apiKey, testId}
 }
 
-export async function tearDownTestOrg(testOrg: Awaited<ReturnType<typeof setupTestOrg>>) {
+export async function tearDownTestOrg(
+  testOrg: Awaited<ReturnType<typeof setupTestOrg>>,
+) {
   await clerkClient.organizations.deleteOrganization(testOrg.org.id)
   await clerkClient.users.deleteUser(testOrg.user.id)
 }
