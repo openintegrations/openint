@@ -49,13 +49,19 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   const apiKey = `key_${makeUlid()}`
 
   beforeAll(async () => {
+    const client = getClient({role: 'org', orgId: 'org_123'})
     await db.$truncateAll()
-    await db
-      .insert(schema.connector_config)
-      .values({org_id: 'org_123', id: 'ccfg_123'})
+
     await db.insert(schema.organization).values({
       id: 'org_123',
       api_key: apiKey,
+    })
+    await client.createConnectorConfig.mutate({
+      connector_name: 'qbo',
+      config: {
+        oauth: {client_id: 'client_123', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
     })
   })
 

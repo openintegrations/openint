@@ -86,6 +86,19 @@ export const core = {
       ref: 'core.connector_config',
       title: 'Connector Config',
     }),
+  connector: z
+    .object({
+      name: z.string(),
+      display_name: z.string().optional(),
+      logo_url: z.string().optional(),
+      stage: z.string().optional(),
+      platforms: z.array(z.string()).optional(),
+    })
+    .openapi({ref: 'core.connector', title: 'Connector'}),
+  integration: z
+    .object({})
+    .passthrough()
+    .openapi({ref: 'core.integration', title: 'Integration'}),
 }
 
 export type Core = {

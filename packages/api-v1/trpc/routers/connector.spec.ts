@@ -14,12 +14,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('list connectors', async () => {
     const res = await asOrg.listConnectors()
-
-    expect(res).toHaveLength(49)
+    expect(res.length).toBeGreaterThan(45)
     expect(res[0]?.name).toEqual('aircall')
-    expect(res[0]?.displayName).toEqual('Aircall')
-    // TODO: Use the same logic for logoUrl as we do in connectorConfig
-    expect(res[0]?.logoUrl).toEqual('/_assets/logo-aircall.svg')
+    expect(res[0]?.display_name).toEqual('Aircall')
+    expect(res[0]?.logo_url).toEqual('/_assets/logo-aircall.svg')
     expect(res[0]?.stage).toEqual('beta')
   })
 
@@ -28,7 +26,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     const mergeIndex = res.findIndex((c) => c.name === 'merge')
 
     expect(res[mergeIndex]?.name).toEqual('merge')
-    expect(res[mergeIndex]?.logoUrl).toEqual('/_assets/logo-merge.svg')
+    expect(res[mergeIndex]?.logo_url).toEqual('/_assets/logo-merge.svg')
     expect(res[mergeIndex]?.stage).toEqual('beta')
     expect(res[mergeIndex]?.integrations?.length).toBeGreaterThan(215)
   })

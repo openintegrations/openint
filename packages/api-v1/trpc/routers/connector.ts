@@ -2,7 +2,8 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {ConnectorMetadata} from '@openint/cdk'
-import {authenticatedProcedure, router} from '../_base'
+import {publicProcedure, router} from '../_base'
+import {core} from '../../models'
 import {zExpandOptions} from '../utils/connectorUtils'
 
 type ConnectorOutputType = {
@@ -18,18 +19,22 @@ interface IntegrationsResponse {
   items: Array<Record<string, unknown>>
 }
 
-const connectorOutput = z.object({
-  name: z.string(),
-  displayName: z.string().optional(),
-  logoUrl: z.string().optional(),
-  stage: z.string().optional(),
-  platforms: z.array(z.string()).optional(),
-  integrations: z.array(z.object({}).passthrough()).optional(),
+interface ListIntegrationsFunction {
+  (params: any): Promise<IntegrationsResponse>
+}
+
+function isListIntegrationsFunction(
+  value: unknown,
+): value is ListIntegrationsFunction {
+  return typeof value === 'function'
+}
+
+const connectorOutput = core.connector.extend({
+  integrations: z.array(core.integration).optional(),
 })
 
 export const connectorRouter = router({
-  // TODO: This should be an unauthenticated procedure
-  listConnectors: authenticatedProcedure
+  listConnectors: publicProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -56,8 +61,8 @@ export const connectorRouter = router({
           const metadata = connector.metadata as ConnectorMetadata
           const result = {
             name,
-            displayName: metadata?.displayName,
-            logoUrl: metadata?.logoUrl,
+            display_name: metadata?.displayName,
+            logo_url: metadata?.logoUrl,
             stage: metadata?.stage,
             platforms: metadata?.platforms,
           } as ConnectorOutputType
@@ -66,18 +71,20 @@ export const connectorRouter = router({
           if (
             input?.expand.includes('integrations') &&
             server &&
-            'listIntegrations' in server &&
-            typeof server.listIntegrations === 'function'
+            'listIntegrations' in server
           ) {
-            try {
-              const listIntegrations = server.listIntegrations as (
-                params: any,
-              ) => Promise<IntegrationsResponse>
-              const integrations = await listIntegrations({})
-
-              result.integrations = integrations?.items || []
-            } catch (error) {
-              console.error(`Error fetching integrations for ${name}:`, error)
+            if (isListIntegrationsFunction(server.listIntegrations)) {
+              const integrations = await server.listIntegrations({})
+              if (
+                integrations &&
+                'items' in integrations &&
+                Array.isArray(integrations.items)
+              ) {
+                result.integrations = integrations.items
+              } else {
+                result.integrations = []
+              }
+            } else {
               result.integrations = []
             }
           }
