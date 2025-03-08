@@ -1,11 +1,9 @@
 import {Suspense} from 'react'
 import type {Viewer} from '@openint/cdk'
-import {z} from '@openint/util'
-import {setupFixture} from '@/__tests__/test-utils.v1'
 import type {PageProps} from '@/lib-common/next-utils'
-import {parsePageProps} from '@/lib-common/next-utils'
+import {currentViewer} from '@/lib-server/auth.server'
 import type {APICaller} from '@/lib-server/globals'
-import {createAPICaller, jwt} from '@/lib-server/globals'
+import {createAPICaller} from '@/lib-server/globals'
 import {AddConnection, ClientApp, ConnectionList} from './client'
 
 async function AddConnectionServer({
@@ -73,18 +71,15 @@ function Fallback() {
 }
 
 export default async function Page(props: PageProps) {
-  const {
-    searchParams: {token},
-  } = await parsePageProps(props, {
-    searchParams: z.object({token: z.string()}),
-  })
-
-  const viewer = await jwt.verifyViewer(token)
+  const {viewer, token = ''} = await currentViewer(props)
 
   const api = createAPICaller(viewer)
 
   return (
     <div>
+      <pre>
+        <code>{JSON.stringify(viewer, null, 2)}</code>
+      </pre>
       <ClientApp token={token}>
         <h1>AddConnection</h1>
         <Suspense fallback={<Fallback />}>
