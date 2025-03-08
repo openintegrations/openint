@@ -7,7 +7,9 @@
     "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
     "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
-    "dev": "next dev -p 4000 --turbopack",
+    "dev": "concurrently npm:dev:*",
+    "dev:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --watch",
+    "dev:next": "next dev -p 4000 --turbopack",
     "start": "next start"
   },
   "dependencies": {
@@ -38,6 +40,7 @@
     "@trpc/react-query": "10.40.0",
     "@trpc/server": "10.40.0",
     "commandbar": "1.7.3",
+    "concurrently": "8.2.2",
     "cookies-next": "4.0.0",
     "graphql": "^16.6.0",
     "graphql-ws": "^5.11.3",

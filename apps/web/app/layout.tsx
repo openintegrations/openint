@@ -1,7 +1,7 @@
-import './global.css'
+import './tailwind.css'
 
 export const metadata = {
-  title: `OpenInt Dashboard`,
+  title: 'OpenInt Dashboard',
   icons: [{url: '/favicon.svg', type: 'image/svg+xml'}],
 }
 
