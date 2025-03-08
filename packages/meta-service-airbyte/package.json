@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@openint/engine-backend": "workspace:*",
-    "concurrently": "8.2.2",
+    "concurrently": "^9.1.2",
     "openapi-fetch": "0.8.1",
     "yaml": "2.3.4"
   }

@@ -58,7 +58,7 @@
     "@openint/engine-backend": "workspace:*"
   },
   "devDependencies": {
-    "prettier": "3.1.0"
+    "prettier": "^3.5.3"
   },
   "//": "find-config is needed for the @next/env patch"
 }
