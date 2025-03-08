@@ -30,7 +30,7 @@ export const backendEnv = env
 //   OpenIntRouter['_def']['mutations']['syncPipeline']
 // >[0]
 export type OpenIntInput = PipelineInput<
-  // @ts-expect-error QQ check qbo _opState
+  // @ts-expect-error QQ check qbo _opState and all-connectors cnext
   (typeof mergedConnectors)[keyof typeof mergedConnectors],
   (typeof mergedConnectors)[keyof typeof mergedConnectors]
 >

@@ -19,15 +19,26 @@ export function generateConnectorDef(def: ConnectorDef): LegacyConnectorDef {
       name: z.literal(def.connector_name),
       connectorConfig: connectorConfig(),
       connectionSettings:
-        def.connection_settings &&
-        Object.keys(def.connection_settings).length > 0
-          ? z.any().parse(def.connection_settings)
-          : undefined,
+        // TODO: consider generalizing this
+        ['OAUTH1', 'OAUTH2', 'OAUTH2CC'].includes(def.auth_type)
+          ? z.object({
+              oauth: z.object({
+                credentials: def.connection_settings
+                  ? z.any().parse(def.connection_settings)
+                  : z.object({}),
+              }),
+              metadata: z.record(z.unknown()).optional(),
+            })
+          : def.connection_settings &&
+              Object.keys(def.connection_settings).length > 0
+            ? z.any().parse(def.connection_settings)
+            : undefined,
       // TODO: review these 3
       preConnectInput: z.object({
         scopes: z.array(z.string()).optional(),
       }),
       connectInput: z.object({
+        // important for oauth2 but we may need a more generic way to handle this
         authorization_url: z.string(),
       }),
       connectOutput: z.object({
