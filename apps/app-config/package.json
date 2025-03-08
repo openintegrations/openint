@@ -9,7 +9,7 @@
     "generate:lists": "npx tsx ./_generateConnectorLists.ts"
   },
   "dependencies": {
-    "@clerk/nextjs": "5.6.0",
+    "@clerk/nextjs": "^6.12.4",
     "@openint/cdk": "workspace:*",
     "@openint/cnext": "workspace:*",
     "@openint/connector-aircall": "workspace:*",
