@@ -68,6 +68,17 @@ const nextConfig = {
   ],
   typescript: {ignoreBuildErrors: true},
   eslint: {ignoreDuringBuilds: true},
+
+  // MARK: - Wtrubo pack and webpack configs...
+  experimental: {
+    turbo: {
+      // Define rules for file transformations (similar to webpack loaders)
+      rules: {
+        // For .node files
+        '*.node': {loaders: ['node-loader']},
+      },
+    },
+  },
   webpack: (config) => {
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false
@@ -75,10 +86,6 @@ const nextConfig = {
       test: /\.node$/,
       use: [{loader: 'node-loader'}],
     })
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      handlebars: 'handlebars/dist/handlebars.js',
-    }
     config.resolve.fallback = {
       fs: false,
       child_process: false, // Reference: https://stackoverflow.com/questions/54459442/module-not-found-error-cant-resolve-child-process-how-to-fix
@@ -95,6 +102,7 @@ const nextConfig = {
     )
     return config
   },
+  // MARK: -
   images: {
     remotePatterns: [
       {hostname: 'yodlee-1.hs.llnwd.net'},
