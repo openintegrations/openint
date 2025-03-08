@@ -1,9 +1,10 @@
 import {
-  parseUrl,
-  stringifyUrl,
   joinPath,
+  parseUrl,
   stringifyQueryParams,
+  stringifyUrl,
 } from './url-utils'
+
 // import path from 'node:path'
 
 test.each([

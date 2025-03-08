@@ -66,7 +66,6 @@
     "@openint/util": "workspace:*",
     "@t3-oss/env-nextjs": "0.7.3",
     "chokidar": "3.5.3",
-    "cross-fetch": "4.0.0",
     "execa": "6.1.0",
     "find-config": "1.0.0",
     "read-file-safe": "1.0.10",

@@ -62,9 +62,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.13.10",
     "@types/react": "*",
     "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
@@ -77,6 +75,6 @@
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
     "ts-jest": "^29.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   }
 }

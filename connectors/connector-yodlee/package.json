@@ -10,7 +10,7 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
-    "@opensdks/runtime": "^0.0.19",
+    "@opensdks/runtime": "^0.0.22",
     "@opensdks/sdk-yodlee": "^0.0.0"
   },
   "devDependencies": {

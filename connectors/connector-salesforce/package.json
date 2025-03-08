@@ -7,7 +7,7 @@
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
     "@openint/vdk": "workspace:*",
-    "@opensdks/runtime": "^0.0.19",
+    "@opensdks/runtime": "^0.0.22",
     "@opensdks/sdk-salesforce": "0.0.2"
   },
   "devDependencies": {}

@@ -6,7 +6,7 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
-    "@opensdks/runtime": "^0.0.19",
+    "@opensdks/runtime": "^0.0.22",
     "@opensdks/sdk-hubspot": "0.0.6"
   },
   "devDependencies": {}
