@@ -1,14 +1,9 @@
 import {createApp} from '@openint/api-v1'
-import {initDbNeon} from '@openint/db/db.neon'
-import {envRequired} from '@openint/env'
+import {api} from '@/lib-server/globals'
 
-// export const runtime = 'edge'
+const app = createApp({db})
 
-const app = createApp({
-  db: initDbNeon(envRequired.DATABASE_URL),
-})
-
-const handler = app.handle
+const handler = api.handle
 
 export {
   handler as DELETE,
