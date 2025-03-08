@@ -8,7 +8,7 @@
     "build-storybook": "storybook build",
     "build-tailwind": "tailwindcss -i ./global.css -o ./.storybook/tailwind.css",
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
-    "dev": "concurrently npm:dev:*",
+    "dev": "pnpm build-tailwind && concurrently npm:dev:*",
     "dev:storybook": "storybook dev -p 6006",
     "dev:tailwind": "pnpm build-tailwind -- --watch"
   },

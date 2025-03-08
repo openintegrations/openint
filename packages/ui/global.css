@@ -37,20 +37,24 @@
 
     --destructive: hsl(0, 100%, 50%);
     --destructive-foreground: hsl(220, 35%, 92%);
+    --destructive-hover: hsl(0, 100%, 40%);
+    --destructive-stroke: hsl(0, 100%, 65%);
+
+    --outline-hover-foreground: hsl(0, 0%, 32%);
 
     --ring: hsl(235, 7%, 46%);
 
     --radius: 0.5rem;
 
-    --button: hsl(255, 90%, 66%);
+    --button: hsl(265, 100%, 57%);
     --button-light: hsl(255, 90%, 96%);
     --button-foreground: hsl(0, 0%, 100%);
-    --button-hover: hsl(255, 70%, 71%);
-    --button-stroke: hsl(255, 45%, 51%);
-    --button-secondary: hsl(0, 0%, 100%);
-    --button-secondary-foreground: hsl(0, 0%, 0%);
-    --button-secondary-stroke: hsl(0, 0%, 90%);
-    --button-secondary-hover: hsl(0, 0%, 94%);
+    --button-hover: hsl(258, 67%, 46%);
+    --button-stroke: #a884ff;
+    --button-secondary: transparent;
+    --button-secondary-foreground: hsl(250, 12%, 20%);
+    --button-secondary-stroke: hsl(220, 25%, 86%);
+    --button-secondary-hover: hsl(0, 0%, 95%);
 
     --tab: hsl(0, 0%, 100%);
     --navbar: hsl(0, 0%, 100%);
