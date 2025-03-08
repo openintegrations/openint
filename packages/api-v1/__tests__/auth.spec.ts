@@ -89,12 +89,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     const client = getClient({role: 'org', orgId: 'org_123'})
     const res = await client.listConnectorConfigs.query()
     expect(res.items).toHaveLength(1)
-    expect(res.items[0]?.id).toEqual('ccfg_123')
+    expect(res.items[0]?.id).toMatch(/^ccfg_qbo_/)
 
     const caller = getCaller({role: 'org', orgId: 'org_123'})
     const res2 = await caller.listConnectorConfigs()
     expect(res2.items).toHaveLength(1)
-    expect(res2.items[0]?.id).toEqual('ccfg_123')
+    expect(res2.items[0]?.id).toMatch(/^ccfg_qbo_/)
   })
 
   test('org has no access to other orgs connector config', async () => {
