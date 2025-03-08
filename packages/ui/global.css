@@ -1,8 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-/* v4 tailwind, not used at the moment */
-/* @import 'tailwindcss'; */
+@import 'tailwindcss';
 
 /* Via shadcn */
 @layer base {
