@@ -6,8 +6,14 @@ import type {PageProps} from '@/lib-common/next-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
 import type {APICaller} from '@/lib-server/globals'
 import {createAPICaller} from '@/lib-server/globals'
+import {AddConnection, ClientApp, ConnectionList} from './client'
 
-async function AddConnection({viewer}: {api?: APICaller; viewer: Viewer}) {
+async function AddConnectionServer({
+  viewer,
+}: {
+  api?: APICaller
+  viewer: Viewer
+}) {
   const api = createAPICaller(viewer)
 
   // Simulate a random delay between 0-2 seconds
@@ -27,7 +33,12 @@ async function AddConnection({viewer}: {api?: APICaller; viewer: Viewer}) {
   )
 }
 
-async function ConnectionList({viewer}: {api?: APICaller; viewer: Viewer}) {
+async function ConnectionListServer({
+  viewer,
+}: {
+  api?: APICaller
+  viewer: Viewer
+}) {
   const api = createAPICaller(viewer)
 
   // Simulate a random delay between 0-2 seconds
@@ -55,19 +66,35 @@ export default async function Page(props: PageProps) {
   } = await parsePageProps(props, {
     searchParams: z.object({org_id: z.string().optional()}),
   })
-  const {viewer} = await setupFixture({orgId: org_id ?? 'org_123'})
+  const {viewer, token} = await setupFixture({orgId: org_id ?? 'org_123'})
 
   return (
     <div>
+      <ClientApp token={token}>
+        <h1>AddConnection</h1>
+        <Suspense fallback={<Fallback />}>
+          <AddConnection initialData={{}} />
+        </Suspense>
+
+        <h1>ConnectionList</h1>
+
+        <Suspense fallback={<Fallback />}>
+          <ConnectionList initialData={{}} />
+        </Suspense>
+      </ClientApp>
+
+      <hr />
+      <hr />
+      <hr />
       <h1>AddConnection</h1>
       <Suspense fallback={<Fallback />}>
-        <AddConnection viewer={viewer} />
+        <AddConnectionServer viewer={viewer} />
       </Suspense>
 
       <h1>ConnectionList</h1>
 
       <Suspense fallback={<Fallback />}>
-        <ConnectionList viewer={viewer} />
+        <ConnectionListServer viewer={viewer} />
       </Suspense>
     </div>
   )

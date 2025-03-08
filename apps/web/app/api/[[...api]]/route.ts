@@ -1,9 +1,9 @@
 import {createApp} from '@openint/api-v1'
-import {api} from '@/lib-server/globals'
+import {db} from '@/lib-server/globals'
 
 const app = createApp({db})
 
-const handler = api.handle
+const handler = app.handle
 
 export {
   handler as DELETE,
