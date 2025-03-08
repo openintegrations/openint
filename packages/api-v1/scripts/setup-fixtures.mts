@@ -1,9 +1,13 @@
-import {makeJwtClient, type Id, type Viewer} from '@openint/cdk'
+import {parseArgs} from 'node:util'
+import {makeId, makeJwtClient, type Id, type Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
+import {makeUlid} from '@openint/util'
 
-export async function setupFixture(info: {orgId: string}) {
+type Info = Required<typeof values>
+
+export async function setupFixture(info: Info) {
   const db = initDbNeon(envRequired.DATABASE_URL)
   const jwt = makeJwtClient({
     secretOrPublicKey: envRequired.JWT_SECRET,
@@ -17,25 +21,36 @@ export async function setupFixture(info: {orgId: string}) {
     .insert(schema.organization)
     .values({id: info.orgId, name: 'Test Organization', api_key})
     .onConflictDoNothing()
+  const ccfgId = makeId('ccfg', 'greenhouse', makeUlid())
+  const connId = makeId('conn', 'greenhouse', makeUlid())
 
   await db
     .insert(schema.connector_config)
-    .values({org_id: info.orgId, id: 'ccfg_greenhouse_123'})
+    .values({org_id: info.orgId, id: ccfgId})
     .onConflictDoNothing()
 
   await db
     .insert(schema.connection)
     .values({
-      connector_config_id: 'ccfg_greenhouse_123',
-      id: 'conn_greenhouse_123',
-      customer_id: 'cus_123',
+      connector_config_id: ccfgId,
+      id: connId,
+      customer_id: info.cusId,
       settings: {apiKey: ''},
     })
     .onConflictDoNothing()
   const token = await jwt.signViewer(viewer)
 
-  return {token, viewer}
+  return {...info, token, viewer}
 }
 
-const res = await setupFixture({orgId: 'org_123'})
+const {values} = parseArgs({
+  options: {
+    orgId: {type: 'string', short: 'o'},
+    cusId: {type: 'string', short: 'c'},
+  },
+})
+const {orgId = `org_${makeUlid()}`, cusId = `cus_${makeUlid()}`} = values
+
+// @ts-expect-error esmodule all right
+const res = await setupFixture({orgId, cusId})
 console.log(res)
