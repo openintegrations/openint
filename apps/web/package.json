@@ -29,9 +29,9 @@
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",
     "@openint/open-file-picker": "workspace:*",
+    "@openint/shadcn": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/ui-v1": "workspace:*",
-    "@openint/shadcn": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@sentry/nextjs": "^9.5.0",
@@ -77,6 +77,12 @@
     "tailwindcss-radix": "^3.0.5",
     "tilg": "0.1.1",
     "webpack": "*"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.0.10",
+      "@types/react-dom": "19.0.4"
+    }
   },
   "//": "@trpc/client version needs to be explicitly specified here otherwise we can end up with v10 try to import stuff from v11. pnpm quirk, not sure."
 }
