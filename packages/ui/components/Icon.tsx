@@ -10,6 +10,7 @@ export type IconName = Exclude<
   | 'LucideProps'
   | `Lucide${string}`
   | `${string}Icon`
+  | 'icons'
 >
 
 export function Icon(props: {name: IconName} & lucide.LucideProps) {
