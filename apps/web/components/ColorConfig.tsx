@@ -20,6 +20,10 @@ interface ThemeColors {
   buttonSecondaryHover: string
   card: string
   cardForeground: string
+  destructive: string
+  destructiveForeground: string
+  destructiveHover: string
+  destructiveStroke: string
   foreground: string
   muted: string
   mutedForeground: string
@@ -32,23 +36,28 @@ interface ThemeColors {
   secondaryForeground: string
   sidebar: string
   tab: string
+  outlineHoverForeground: string
 }
 
 const defaultThemeColors: Partial<ThemeColors> = {
   accent: 'hsl(210, 51%, 78%)',
   background: 'hsl(0, 0%, 100%)', // #ffffff - White
   border: 'hsl(222, 23%, 87%)', // #d6d9e4 - Light Grayish Blue
-  button: 'hsl(255, 90%, 66%)', // #8a5df6 - Bright Purple
-  buttonLight: 'hsl(255, 90%, 96%)', // Light Purple
+  button: 'hsl(265, 100%, 57%)', // Updated from hsl(114, 89.70%, 65.90%)
+  buttonLight: 'hsl(255, 90%, 96%)', // Light Purples
   buttonForeground: 'hsl(0, 0%, 100%)', // #ffffff - White
-  buttonHover: 'hsl(258, 70%, 71%)', // #a082e9 - Light Purple
-  buttonStroke: 'hsl(255, 90%, 66%)', // #6947bb - Medium Purple
-  buttonSecondary: 'hsl(0, 0%, 100%)', // #ffffff - White
-  buttonSecondaryForeground: 'hsl(0, 0%, 0%)', // #000000 - Black
-  buttonSecondaryStroke: 'hsl(0, 0%, 90%)', // #e6e6e6 - Very Light Gray
-  buttonSecondaryHover: 'hsl(0, 0%, 94%)', // #efefef - Nearly White Gray
+  buttonHover: 'hsl(258, 67%, 46%)', // Updated from hsl(258, 70%, 71%)
+  buttonStroke: '#a884ff', // Updated from hsl(255, 90%, 66%)
+  buttonSecondary: 'transparent',
+  buttonSecondaryForeground: 'hsl(245, 12%, 20%)', // Same as foreground
+  buttonSecondaryStroke: 'hsl(220, 25%, 86%)', // Same as border
+  buttonSecondaryHover: 'hsl(0, 0%, 95%)', // Same as accent
   card: 'hsl(0, 0%, 100%)', // #ffffff - White
   cardForeground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
+  destructive: 'hsl(0, 100%, 50%)',
+  destructiveForeground: 'hsl(220, 35%, 92%)',
+  destructiveHover: 'hsl(0, 100%, 40%)',
+  destructiveStroke: 'hsl(0, 100%, 65%)',
   foreground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
   muted: 'hsl(0, 0%, 95%)',
   mutedForeground: 'hsl(0, 0%, 27%)',
@@ -61,6 +70,7 @@ const defaultThemeColors: Partial<ThemeColors> = {
   secondaryForeground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
   sidebar: 'hsl(0, 0%, 100%)', // #ffffff - White
   tab: 'hsl(0, 0%, 100%)', // #ffffff - White
+  outlineHoverForeground: 'hsl(0, 0%, 32%)',
 }
 
 const defaultDarkThemeColors: Partial<ThemeColors> = {
@@ -72,12 +82,16 @@ const defaultDarkThemeColors: Partial<ThemeColors> = {
   buttonForeground: 'hsl(0, 0%, 96.5%)',
   buttonHover: 'hsl(255, 70%, 71%)',
   buttonStroke: 'hsl(255, 45%, 51%)',
-  buttonSecondary: 'hsl(0, 0%, 14%)',
-  buttonSecondaryForeground: 'hsl(0, 0%, 96.5%)',
-  buttonSecondaryStroke: 'hsl(0, 0%, 60%)',
-  buttonSecondaryHover: 'hsl(0, 0%, 24%)',
+  buttonSecondary: 'transparent',
+  buttonSecondaryForeground: 'hsl(0, 0%, 96.5%)', // Same as foreground
+  buttonSecondaryStroke: 'hsl(0, 0%, 20%)', // Same as border
+  buttonSecondaryHover: 'hsla(0, 0%, 100%, 0.097)', // Same as accent
   card: 'hsl(0, 0%, 14%)',
   cardForeground: 'hsl(0, 0%, 96.5%)',
+  destructive: 'hsl(7, 68%, 53%)',
+  destructiveForeground: 'hsl(220, 35%, 92%)',
+  destructiveHover: 'hsl(7, 68%, 43%)',
+  destructiveStroke: 'hsl(7, 68%, 63%)',
   foreground: 'hsl(0, 0%, 96.5%)',
   muted: 'hsla(0, 0%, 100%, 0.097)',
   mutedForeground: 'hsl(0, 0%, 60%)',
@@ -90,6 +104,7 @@ const defaultDarkThemeColors: Partial<ThemeColors> = {
   secondaryForeground: 'hsl(0, 0%, 96.5%)',
   sidebar: 'hsl(0, 0%, 100%)',
   tab: 'hsl(0, 0%, 14%)',
+  outlineHoverForeground: 'hsl(0, 0%, 85%)',
 }
 
 const defaultColorsByTheme = {
@@ -162,6 +177,10 @@ export function ColorConfig({orgId}: {orgId: string}) {
         --button-secondary-hover: ${themeColors.buttonSecondaryHover};
         --card: ${themeColors.card};
         --card-foreground: ${themeColors.cardForeground};
+        --destructive: ${themeColors.destructive};
+        --destructive-foreground: ${themeColors.destructiveForeground};
+        --destructive-hover: ${themeColors.destructiveHover};
+        --destructive-stroke: ${themeColors.destructiveStroke};
         --foreground: ${themeColors.foreground};
         --muted: ${themeColors.muted};
         --muted-foreground: ${themeColors.mutedForeground};
@@ -176,6 +195,7 @@ export function ColorConfig({orgId}: {orgId: string}) {
         --tab: ${themeColors.tab};
         --input: ${themeColors.foreground};
         --ring: ${themeColors.secondary};
+        --outline-hover-foreground: ${themeColors.outlineHoverForeground};
       }
     `}</style>
   ) : null

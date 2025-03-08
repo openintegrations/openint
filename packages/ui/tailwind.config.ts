@@ -102,6 +102,8 @@ export default {
         destructive: {
           DEFAULT: 'var(--destructive)',
           foreground: 'var(--destructive-foreground)',
+          hover: 'var(--destructive-hover)',
+          stroke: 'var(--destructive-stroke)',
         },
         muted: {
           DEFAULT: 'var(--muted)',
@@ -140,6 +142,9 @@ export default {
         'openint-gray-muted': OpenIntTheme.gray,
         'openint-green': OpenIntTheme.green,
         'openint-red': OpenIntTheme.red,
+        outline: {
+          'hover-foreground': 'var(--outline-hover-foreground)',
+        },
       },
       current: 'currentColor',
       fontFamily: {

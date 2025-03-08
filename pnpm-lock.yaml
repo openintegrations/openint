@@ -2566,6 +2566,9 @@ importers:
       chromatic:
         specifier: ^11.27.0
         version: 11.27.0
+      concurrently:
+        specifier: 8.2.2
+        version: 8.2.2
       playwright:
         specifier: ^1.51.0
         version: 1.51.0
@@ -36235,7 +36238,7 @@ snapshots:
   update-browserslist-db@1.0.10(browserslist@4.21.4):
     dependencies:
       browserslist: 4.21.4
-      escalade: 3.1.1
+      escalade: 3.2.0
       picocolors: 1.1.1
 
   update-browserslist-db@1.1.0(browserslist@4.23.3):
@@ -36886,7 +36889,7 @@ snapshots:
   yargs@16.2.0:
     dependencies:
       cliui: 7.0.4
-      escalade: 3.1.1
+      escalade: 3.2.0
       get-caller-file: 2.0.5
       require-directory: 2.1.1
       string-width: 4.2.3
@@ -36916,7 +36919,7 @@ snapshots:
   yargs@17.7.2:
     dependencies:
       cliui: 8.0.1
-      escalade: 3.1.1
+      escalade: 3.2.0
       get-caller-file: 2.0.5
       require-directory: 2.1.1
       string-width: 4.2.3
