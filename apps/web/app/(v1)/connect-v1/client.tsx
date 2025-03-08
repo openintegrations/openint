@@ -19,18 +19,20 @@ function wrapModule(options: {useConnectorLogic: () => [string, unknown]}) {
 }
 
 const connectorImports = {
-  plaid: dynamic(() =>
-    import('@openint/connector-plaid/client').then((m) => wrapModule(m)),
-  ),
-  greenhouse: dynamic(() =>
+  plaid: () => import('@openint/connector-plaid/client'),
+  greenhouse: () =>
     Promise.resolve({
       useConnectorLogic: () => React.useState('greenhouse'),
-    }).then((m) => wrapModule(m)),
-  ),
-  finch: dynamic(() =>
-    import('@openint/connector-finch/client').then((m) => wrapModule(m)),
-  ),
+    }),
+  finch: () => import('@openint/connector-finch/client'),
 }
+
+const ConnectorComponents = Object.fromEntries(
+  Object.entries(connectorImports).map(([name, mod]) => [
+    name,
+    dynamic(() => mod().then((m) => wrapModule(m))),
+  ]),
+)
 
 export function AddConnection(props: {connector_names: string[]}) {
   return (
@@ -45,7 +47,7 @@ function AddConnectionInner(props: {connector_names: string[]}) {
     <>
       {props.connector_names.map((name) => {
         const Component =
-          connectorImports[name as keyof typeof connectorImports]
+          ConnectorComponents[name as keyof typeof ConnectorComponents]
         if (!Component) {
           throw new Error(`Unknown connector: ${name}`)
         }
