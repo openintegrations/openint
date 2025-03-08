@@ -76,7 +76,6 @@
     "prettier-plugin-tailwindcss": "0.6.6",
     "ts-brand": "0.0.2",
     "tsx": "3.12.2",
-    "turbo": "^2.4.4",
     "typescript": "^5.7.3",
     "typescript-snapshots-plugin": "^1.7.0",
     "wait-on": "^8.0.1"
