@@ -1,0 +1,91 @@
+---
+title: Embedding @Connect
+description: Integrate OpenInt Connect into your Web Application
+---
+
+In the [Quickstart Guide](/getting-starter/quickstart) guide we showed you how to create your first @Connect magic link.
+
+You can embed @Connect within your web application by creating these programmatically with our [SDKs or directly on the API](/api-reference/create-customer-authentication-token).
+
+<Steps>
+  <Step title="Create a Customer Token in the Backend">
+    The first step is to create a customer Token in the Backend. You can do that with your OpenInt API Key [available in the Console](https://app.openint.dev/dashboard/settings).
+    <CodeGroup>
+
+    ```javascript JS SDK
+    const openint = new Openint({
+      apiKey: process.env['OPENINT_API_KEY'],
+    })
+
+    const {token} = await openint.createToken('YOUR_CUSTOMER_ID')
+    ```
+
+    ```python Python SDK
+    import os
+    from openint import Openint
+
+    client = Openint(
+        api_key=os.environ.get("OPENINT_API_KEY")
+    )
+    response = client.create_token(
+        customer_id="YOUR_CUSTOMER_ID",
+    )
+    ```
+
+    ```bash cURL
+    curl --request POST \
+      --url https://api.openint.dev/v1/customer/{YOUR_CUSTOMER_ID}/token \
+      --header 'Authorization: Bearer <OPENINT_API_KEY>' \
+      --header 'Content-Type: application/json'
+    ```
+
+ </CodeGroup>
+ See the full [create customer token API reference](/api-reference/create-customer-authentication-token)
+
+</Step>
+<Step title="Embed the Connect Widget">
+ The second step is to embed the Connect Widget into your web application.
+ <CodeGroup>
+     ```javascript React
+     import { Connect } from '@openint/connect'
+
+     // from the previous step, generated in the backend
+     return <Connect token={token} />
+     ```
+
+     ```javascript Vanilla JS
+     import { renderConnect } from '@openint/connect'
+
+     renderConnect({
+       token: 'YOUR_CUSTOMER_TOKEN', // from the previous step, generated in the backend
+       container: '#openint-connect-container', // the id of the container element
+     })
+     ```
+
+ </CodeGroup>
+
+</Step>
+</Steps>
+
+## Examples in popular frameworks
+
+OpenInt has published a [repository](https://github.com/openintegrations/openint-starter) with examples for popular frameworks.
+
+<CardGroup cols="4">
+  <Card
+    title="NextJS"
+    icon="js"
+    href="https://github.com/openintegrations/openint-starter"
+  />
+  <Card
+    title="Django"
+    icon="python"
+    href="https://github.com/openintegrations/openint-starter"
+  />
+  <Card
+    title="Laravel"
+    icon="php"
+    href="https://github.com/openintegrations/openint-starter"
+  />
+</CardGroup>
+````
