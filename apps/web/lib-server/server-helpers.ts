@@ -1,5 +1,5 @@
 import {
-  clerkClient,
+  createClerkClient,
   getAuth,
   auth as serverComponentGetAuth,
 } from '@clerk/nextjs/server'
@@ -28,7 +28,13 @@ import {envRequired} from '@openint/app-config/env'
 import type {Id, UserId, Viewer} from '@openint/cdk'
 import {decodeApikey, makeJwtClient} from '@openint/cdk'
 import {flatRouter} from '@openint/engine-backend'
+import {env} from '@openint/env'
 import {fromMaybeArray} from '@openint/util'
+
+const clerkClient = createClerkClient({
+  secretKey: env.CLERK_SECRET_KEY,
+  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+})
 
 export interface PageProps {
   dehydratedState?: SuperJSONResult // SuperJSONResult<import('@tanstack/react-query').DehydratedState>
@@ -163,7 +169,7 @@ export async function serverGetViewer(
   }
   // TODO: Do not crash if we do not have middleware... super annoying...
   const auth =
-    'req' in context ? getAuth(context.req) : serverComponentGetAuth()
+    'req' in context ? getAuth(context.req) : await serverComponentGetAuth()
 
   // console.log('auth', auth)
   if (auth.userId) {

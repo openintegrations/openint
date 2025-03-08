@@ -1,24 +1,27 @@
-import {clerkClient, auth as serverComponentGetAuth} from '@clerk/nextjs/server'
+import {
+  createClerkClient,
+  auth as serverComponentGetAuth,
+} from '@clerk/nextjs/server'
 import {notFound} from 'next/navigation'
+import {env} from '@openint/env'
 import OrgLayoutClient from './layout-client'
 
-export default async function OrgLayout(
-  props: {
-    children: React.ReactNode
-    params: Promise<{slug: string}>
-  }
-) {
-  const params = await props.params;
+const clerkClient = createClerkClient({
+  secretKey: env.CLERK_SECRET_KEY,
+  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+})
 
-  const {
-    slug
-  } = params;
+export default async function OrgLayout(props: {
+  children: React.ReactNode
+  params: Promise<{slug: string}>
+}) {
+  const params = await props.params
 
-  const {
-    children
-  } = props;
+  const {slug} = params
 
-  const auth = serverComponentGetAuth()
+  const {children} = props
+
+  const auth = await serverComponentGetAuth()
 
   // TODO: Handle edge cases, such as
   // Org deleted but still in token
