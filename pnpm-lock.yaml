@@ -607,6 +607,12 @@ importers:
         specifier: 1.3.4
         version: 1.3.4(@trpc/server@10.40.0)(zod@3.24.2)
     devDependencies:
+      '@openint/connector-greenhouse':
+        specifier: workspace:*
+        version: link:../../connectors/connector-greenhouse
+      '@openint/connector-plaid':
+        specifier: workspace:*
+        version: link:../../connectors/connector-plaid
       '@opensdks/sdk-plaid':
         specifier: ^0.0.19
         version: 0.0.19
