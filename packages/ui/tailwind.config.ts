@@ -1,9 +1,11 @@
-import type {Config} from 'tailwindcss'
+// @ts-expect-error tailwind exports the file just not the ts type...
 import defaultTheme from 'tailwindcss/defaultTheme'
+import type {default as createPlugin} from 'tailwindcss/dist/plugin'
 import {OpenIntTheme} from './themes'
 
-// TODO: Get apps/web to import from here instead of duplicating the config
-// css file import is probably sligthly more tricky though
+// Workaround for tailwindcss 4 not exporting Config type
+// import type {Config} from 'tailwindcss'
+export type Config = NonNullable<ReturnType<typeof createPlugin>['config']>
 
 export default {
   darkMode: 'class',
@@ -141,7 +143,7 @@ export default {
         'openint-green': OpenIntTheme.green,
         'openint-red': OpenIntTheme.red,
       },
-      current: 'currentColor',
+      current: 'currentColor' as never, // tailwind 4 broke it
       fontFamily: {
         sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
         mono: ['Source Code Pro', ...defaultTheme.fontFamily.mono],
@@ -149,7 +151,7 @@ export default {
       textColor: {
         'openint-gray': '#c0c0c0',
       },
-      transparent: 'transparent',
+      transparent: 'transparent' as never, // tailwind 4 broke it
     },
   },
   plugins: [require('tailwindcss-animate'), require('tailwindcss-radix')()],

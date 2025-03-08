@@ -1,5 +1,4 @@
-import type {Config} from 'tailwindcss'
-import {default as config} from '@openint/ui/tailwind.config'
+import {default as config, type Config} from '@openint/ui/tailwind.config'
 
 export default {
   ...config,
