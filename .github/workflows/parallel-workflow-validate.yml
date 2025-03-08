@@ -14,37 +14,20 @@ jobs:
   install-dependencies:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    outputs:
-      cache-key: ${{ steps.set-cache-key.outputs.cache-key }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set cache key
-        id: set-cache-key
-        run: echo "cache-key=${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: package.json
+          cache: 'pnpm'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          run_install: false
-
-      - name: Cache pnpm store
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          run_install: true
 
   typecheck:
     runs-on: ubuntu-latest
@@ -55,14 +38,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
+          cache: 'pnpm'
       - uses: pnpm/action-setup@v4
-      - uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
-          key: ${{ needs.install-dependencies.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
+          run_install: true
       - name: Run type checks
         run: pnpm run typecheck
 
@@ -75,14 +54,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
+          cache: 'pnpm'
       - uses: pnpm/action-setup@v4
-      - uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
-          key: ${{ needs.install-dependencies.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
+          run_install: true
       - name: Run lint
         run: pnpm run lint
         env:
@@ -122,14 +97,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
+          cache: 'pnpm'
       - uses: pnpm/action-setup@v4
-      - uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
-          key: ${{ needs.install-dependencies.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
+          run_install: true
       - name: Download environment variables
         run: |
           npm install --global vercel@latest
@@ -168,14 +139,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
+          cache: 'pnpm'
       - uses: pnpm/action-setup@v4
-      - uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
-          key: ${{ needs.install-dependencies.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
+          run_install: true
       - name: Download environment variables
         run: |
           npm install --global vercel@latest
