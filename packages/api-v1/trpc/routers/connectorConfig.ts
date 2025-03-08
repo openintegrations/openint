@@ -6,6 +6,7 @@ import {authenticatedProcedure, orgProcedure, router} from '../_base'
 import {core} from '../../models'
 import {
   expandConnector,
+  expandIntegrations,
   zConnectorName,
   zExpandOptions,
 } from '../utils/connectorUtils'
@@ -15,6 +16,11 @@ import {
   zListParams,
   zListResponse,
 } from '../utils/pagination'
+
+type ExpandedConnectorConfig = z.infer<typeof core.connector_config> & {
+  connector?: any
+  integrations?: Record<string, any>
+}
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -67,16 +73,29 @@ export const connectorConfigRouter = router({
         'connector_config',
       )
 
+      // Process items with proper typing
+      const processedItems: ExpandedConnectorConfig[] = await Promise.all(
+        items.map(async (ccfg) => {
+          const result = {...ccfg} as ExpandedConnectorConfig
+
+          if (input?.expand?.includes('connector')) {
+            result.connector = await expandConnector(ccfg)
+          }
+
+          if (input?.expand?.includes('integrations')) {
+            const filteredIntegrations = expandIntegrations(ccfg)
+
+            if (filteredIntegrations && result.config) {
+              result.config.integrations = filteredIntegrations
+            }
+          }
+
+          return result
+        }),
+      )
+
       return {
-        // @pellicceama use drizzle.query.$table.findMany({with:{... }}) for db-based expansion
-        // so we get all the data in one go. For connector it's fine since it's not stored in db
-        items: await Promise.all(
-          items.map(async (ccfg) =>
-            input?.expand.includes('connector')
-              ? {...ccfg, connector: await expandConnector(ccfg)}
-              : ccfg,
-          ),
-        ),
+        items: processedItems,
         total,
         limit,
         offset,

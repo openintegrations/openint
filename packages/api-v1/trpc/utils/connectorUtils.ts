@@ -70,3 +70,38 @@ export async function expandConnector(
     logo_url: logoUrl,
   }
 }
+
+interface IntegrationConfig {
+  enabled?: boolean
+  scopes?: string | string[]
+  [key: string]: any
+}
+
+export function expandIntegrations(
+  connectorConfig: z.infer<typeof core.connector_config>,
+): Record<string, IntegrationConfig> | undefined {
+  if (
+    !connectorConfig ||
+    !connectorConfig.config ||
+    !connectorConfig.config.integrations
+  ) {
+    return undefined
+  }
+
+  const {integrations} = connectorConfig.config
+  const enabledIntegrations = Object.entries(
+    integrations as Record<string, IntegrationConfig>,
+  )
+    .filter(([_, config]) => config && config.enabled === true)
+    .reduce(
+      (acc, [key, config]) => {
+        acc[key] = config
+        return acc
+      },
+      {} as Record<string, IntegrationConfig>,
+    )
+
+  return Object.keys(enabledIntegrations).length > 0
+    ? enabledIntegrations
+    : undefined
+}
