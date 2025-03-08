@@ -47,11 +47,6 @@ export default function MagicLinkPage() {
           sending the magic link to
         </span>
       ),
-      'ui:options': {
-        // @snrondina: this placeholder is too non-faint to work well.
-        // I mistook it for real value and got confused why magic link creation failed
-        // placeholder: 'my-user-id',
-      },
     },
     validityInSeconds: {
       'ui:widget': showAdvanced ? 'text' : 'hidden',
@@ -143,6 +138,9 @@ export default function MagicLinkPage() {
           formData={{
             theme: 'light',
             view: 'add',
+            customerId: isMainPreview
+              ? `stably-user-${Math.random().toString(36).substring(2, 12)}`
+              : undefined,
           }}
           onSubmit={({formData: values}) => {
             createMagicLink.mutate(values, {
