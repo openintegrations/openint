@@ -1,3 +1,4 @@
+import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
@@ -8,8 +9,8 @@ import {zExpandOptions} from '../utils/connectorUtils'
 
 type ConnectorOutputType = {
   name: string
-  displayName?: string
-  logoUrl?: string
+  display_name?: string
+  logo_url?: string
   stage?: string
   platforms?: string[]
   integrations?: Record<string, unknown>[]
@@ -74,15 +75,23 @@ export const connectorRouter = router({
             'listIntegrations' in server
           ) {
             if (isListIntegrationsFunction(server.listIntegrations)) {
-              const integrations = await server.listIntegrations({})
-              if (
-                integrations &&
-                'items' in integrations &&
-                Array.isArray(integrations.items)
-              ) {
-                result.integrations = integrations.items
-              } else {
-                result.integrations = []
+              try {
+                const integrations = await server.listIntegrations({})
+
+                if (
+                  integrations &&
+                  'items' in integrations &&
+                  Array.isArray(integrations.items)
+                ) {
+                  result.integrations = integrations.items
+                } else {
+                  result.integrations = []
+                }
+              } catch (error) {
+                throw new TRPCError({
+                  code: 'INTERNAL_SERVER_ERROR',
+                  message: `Error listing integrations for connector: ${name}`,
+                })
               }
             } else {
               result.integrations = []
