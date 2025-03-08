@@ -1,11 +1,15 @@
-import type {GetServerSidePropsContext} from 'next'
+interface GetServerSidePropsContext {
+  req: {headers: Record<string, string>}
+}
 
 export function getServerUrl(req: GetServerSidePropsContext['req'] | null) {
   return (
     (typeof window !== 'undefined' &&
       `${window.location.protocol}//${window.location.host}`) ||
     (req &&
-      `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host}`) ||
+      `${req.headers['x-forwarded-proto'] || 'http'}://${
+        req.headers['host']
+      }`) ||
     (process.env['NEXT_PUBLIC_SERVER_URL']
       ? process.env['NEXT_PUBLIC_SERVER_URL']
       : null) ||

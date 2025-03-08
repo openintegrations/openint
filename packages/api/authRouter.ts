@@ -1,6 +1,5 @@
 import {clerkClient} from '@clerk/nextjs/server'
 import {z} from '@opensdks/util-zod'
-import {TRPCError} from '@trpc/server'
 import type {Viewer} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
 import {
@@ -12,6 +11,7 @@ import {
   zOrganization,
   zUser,
 } from '@openint/engine-backend/services/AuthProvider'
+import {TRPCError} from '@openint/trpc'
 import {R} from '@openint/util'
 
 export type ClerkOrg = Awaited<

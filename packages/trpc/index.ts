@@ -4,6 +4,7 @@ export * from './trpc'
 // codegen:end
 
 export {TRPCError} from '@trpc/server'
+export {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 export type {
   AnyRouter,
   inferProcedureInput,
