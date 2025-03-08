@@ -1,8 +1,6 @@
 import {DateTime} from 'luxon'
 import {format as formatTimeAgo} from 'timeago.js'
 
-import {MPDate} from './schrono'
-
 export {DateTime, Interval, Settings} from 'luxon'
 export type {DurationObjectUnits} from 'luxon'
 
@@ -92,11 +90,11 @@ export function parseDateTime(
   value: string | Date | DateTime | null | undefined,
 ) {
   if (value instanceof DateTime) {
-    return MPDate.create(value, 'millisecond', undefined)
+    return value
   } else if (value instanceof Date) {
-    return MPDate.fromJSDate(value)
+    return DateTime.fromJSDate(value)
   } else if (typeof value === 'string') {
-    return MPDate.parse(value)
+    return DateTime.fromISO(value)
   }
   return null
 }

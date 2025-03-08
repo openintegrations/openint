@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@types/react": "*",
-    "prettier": "3.1.0",
+    "prettier": "^3.5.3",
     "yamljs": "0.3.0"
   },
   "peerDependencies": {

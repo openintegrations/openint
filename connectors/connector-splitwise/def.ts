@@ -1,14 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas, Pta} from '@openint/cdk'
 import {connHelpers, makePostingsMap} from '@openint/cdk'
-import {
-  A,
-  DateTime,
-  formatAmount,
-  math,
-  objectFromArray,
-  parseMoney,
-  z,
-} from '@openint/util'
+import {A, DateTime, math, objectFromArray, parseMoney, z} from '@openint/util'
 import type {zUser} from './splitwise-schema'
 import {zCurrentUser, zExpense, zGroup} from './splitwise-schema'
 
@@ -38,7 +30,8 @@ export const splitwiseHelpers = connHelpers(splitwiseSchemas)
 export const splitwiseDef = {
   name: 'splitwise',
   schemas: splitwiseSchemas,
-  metadata: {verticals: ['personal-finance'],
+  metadata: {
+    verticals: ['personal-finance'],
     logoUrl: '/_assets/logo-splitwise.svg',
   },
   standardMappers: {
@@ -75,9 +68,9 @@ export const splitwiseDef = {
             entityName: 'transaction',
             entity: {
               ...partialTxn,
-              description: `${formatUser(from)} paid ${formatUser(
-                to,
-              )} ${formatAmount(cost)}`,
+              description: `${formatUser(from)} paid ${formatUser(to)} ${
+                cost.quantity
+              } ${cost.unit}`,
               postingsMap: makePostingsMap(
                 {},
                 {
