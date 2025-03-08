@@ -1,13 +1,10 @@
-import {z} from 'zod'
+import type {z} from 'zod'
+import type {ConnectorSchemas, ConnectorServer} from '@openint/cdk'
+import {extractId, makeId} from '@openint/cdk'
 import {makeUlid} from '@openint/util'
+// TODO: Fix me as this is technically a cyclical dep
 import {getServerUrl} from '../../../apps/app-config/constants'
-import {
-  ConnectorSchemas,
-  ConnectorServer,
-  extractId,
-  makeId,
-} from '../../../kits/cdk'
-import {
+import type {
   ConnectorDef,
   RefreshParams,
   TokenParams,
