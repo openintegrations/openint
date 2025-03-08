@@ -1,4 +1,4 @@
-import {clerkClient} from '@clerk/nextjs/server'
+import {createClerkClient} from '@clerk/nextjs/server'
 import {z} from '@opensdks/util-zod'
 import type {Viewer} from '@openint/cdk'
 import {zViewer} from '@openint/cdk'
@@ -11,16 +11,20 @@ import {
   zOrganization,
   zUser,
 } from '@openint/engine-backend/services/AuthProvider'
+import {env} from '@openint/env'
 import {TRPCError} from '@openint/trpc'
 import {R} from '@openint/util'
 
+const clerkClient = createClerkClient({
+  secretKey: env.CLERK_SECRET_KEY,
+  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+})
+type ClerkClient = typeof clerkClient
 export type ClerkOrg = Awaited<
-  ReturnType<(typeof clerkClient)['organizations']['getOrganization']>
+  ReturnType<ClerkClient['organizations']['getOrganization']>
 >
 
-export type ClerkUser = Awaited<
-  ReturnType<(typeof clerkClient)['users']['getUser']>
->
+export type ClerkUser = Awaited<ReturnType<ClerkClient['users']['getUser']>>
 
 export const authRouter = trpc.router({
   getViewer: publicProcedure

@@ -1,4 +1,4 @@
-import type {clerkClient} from '@clerk/nextjs/server'
+import type {createClerkClient} from '@clerk/nextjs/server'
 import type {
   AnyConnectorImpl,
   CustomerId,
@@ -31,7 +31,7 @@ export interface RouterContext {
   as<R extends ViewerRole>(role: R, data: Omit<Viewer<R>, 'role'>): Services
 
   /** Need to refactor this */
-  clerk: typeof clerkClient
+  clerk: ReturnType<typeof createClerkClient>
   inngest: typeof inngest
   // Non-viewer dependent
   connectorMap: Record<string, AnyConnectorImpl>
