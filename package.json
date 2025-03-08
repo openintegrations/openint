@@ -81,7 +81,7 @@
     "typescript-snapshots-plugin": "^1.7.0",
     "wait-on": "^8.0.1"
   },
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "pnpm@10.6.1",
   "engines": {
     "node": "22"
   },

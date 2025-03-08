@@ -76,11 +76,5 @@
     "tilg": "0.1.1",
     "webpack": "*"
   },
-  "//": "@trpc/client version needs to be explicitly specified here otherwise we can end up with v10 try to import stuff from v11. pnpm quirk, not sure.",
-  "pnpm": {
-    "overrides": {
-      "@types/react": "19.0.10",
-      "@types/react-dom": "19.0.4"
-    }
-  }
+  "//": "@trpc/client version needs to be explicitly specified here otherwise we can end up with v10 try to import stuff from v11. pnpm quirk, not sure."
 }
