@@ -5,8 +5,10 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {core} from '../../models'
 
 export const zExpandOptions = z
-  .enum(['connector'])
-  .describe('Fields to expand: connector (includes connector details)')
+  .enum(['connector', 'integrations'])
+  .describe(
+    'Fields to expand: connector (includes connector details), integrations (includes integrations details)',
+  )
 
 export const zConnectorName = z
   .enum(
