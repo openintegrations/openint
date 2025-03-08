@@ -42,12 +42,10 @@ export default function CalendarBooking({
   return isVisible ? (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center border border-gray-200 backdrop-blur-sm"
-      onClick={onClose}
-    >
+      onClick={onClose}>
       <div
         className="relative w-full max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-xl"
-        onClick={(e) => e.stopPropagation()}
-      >
+        onClick={(e) => e.stopPropagation()}>
         <button
           className="absolute right-2 top-2 text-gray-400"
           onClick={onClose}>

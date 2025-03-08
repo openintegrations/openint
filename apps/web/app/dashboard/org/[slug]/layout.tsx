@@ -2,13 +2,22 @@ import {clerkClient, auth as serverComponentGetAuth} from '@clerk/nextjs/server'
 import {notFound} from 'next/navigation'
 import OrgLayoutClient from './layout-client'
 
-export default async function OrgLayout({
-  children,
-  params: {slug},
-}: {
-  children: React.ReactNode
-  params: {slug: string}
-}) {
+export default async function OrgLayout(
+  props: {
+    children: React.ReactNode
+    params: Promise<{slug: string}>
+  }
+) {
+  const params = await props.params;
+
+  const {
+    slug
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const auth = serverComponentGetAuth()
 
   // TODO: Handle edge cases, such as

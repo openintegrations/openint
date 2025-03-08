@@ -22,15 +22,16 @@ export const metadata = {
 export const dynamic = 'force-dynamic'
 
 /** https://beta.nextjs.org/docs/api-reference/file-conventions/page#searchparams-optional */
-export default async function ConnectCallback({
-  searchParams,
-}: {
-  // Only accessible in PageComponent rather than layout component
-  // @see https://github.com/vercel/next.js/issues/43704
-  searchParams: Record<string, string | string[] | undefined>
-}) {
+export default async function ConnectCallback(
+  props: {
+    // Only accessible in PageComponent rather than layout component
+    // @see https://github.com/vercel/next.js/issues/43704
+    searchParams: Promise<Record<string, string | string[] | undefined>>
+  }
+) {
+  const searchParams = await props.searchParams;
   // TODO: Can we use cookies-next to read cookie in this environment?
-  const cookie = cookies().get(kConnectSession)
+  const cookie = (await cookies()).get(kConnectSession)
   if (!cookie) {
     console.warn('No cookie found, redirecting to openint')
     // Temporary hack to redirect to the right place to accomodate for oauth url not fully changed yet

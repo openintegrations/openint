@@ -1,6 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import Image from 'next/image'
 
+// Image component is broken by next.js 15 upgrade....
 export function CustomImage({src, alt}: {src: string; alt: string}) {
   return <Image src={src} alt={alt} width={200} height={200} />
 }
