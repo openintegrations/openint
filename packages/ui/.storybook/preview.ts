@@ -1,4 +1,4 @@
-import './tailwind.css'
+import '../global.css'
 // definePreview causes crash and does not work yet
 // import {definePreview} from '@storybook/experimental-nextjs-vite'
 import type {Preview} from '@storybook/react'

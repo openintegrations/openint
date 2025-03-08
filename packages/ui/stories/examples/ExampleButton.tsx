@@ -66,8 +66,10 @@ export const Button = ({
   }
 
   return (
-    <button type="button" style={buttonStyle} {...props}>
-      {label}
-    </button>
+    <div className="bg-blue-500 p-5">
+      <button type="button" style={buttonStyle} {...props}>
+        {label}
+      </button>
+    </div>
   )
 }

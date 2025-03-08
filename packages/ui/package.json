@@ -6,7 +6,7 @@
   "module": "./index.ts",
   "scripts": {
     "build-storybook": "storybook build",
-    "build-tailwind": "@tailwindcss/cli -i ./global.css -o ./.storybook/tailwind.css",
+    "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./.storybook/tailwind.css",
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
     "storybook": "storybook dev -p 6006",
     "tailwind": "pnpm build-tailwind -- --watch"
@@ -62,6 +62,7 @@
     "@storybook/react": "^8.6.4",
     "@storybook/test": "^8.6.4",
     "@tailwindcss/cli": "^4.0.12",
+    "@tailwindcss/vite": "^4.0.12",
     "@tanstack/react-query": "*",
     "@types/react": "*",
     "@vitest/browser": "^3.0.8",

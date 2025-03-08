@@ -28,7 +28,7 @@
       "@openint/open-file-picker": ["./kits/file-picker/src"]
     }
   },
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "packages/ui/tailwind.config.js"],
   "exclude": ["node_modules", "gateway"],
   "plugins": [{"name": "typescript-snapshots-plugin"}]
 }
