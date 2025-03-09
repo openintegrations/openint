@@ -30,9 +30,8 @@ export function generateOpenAPISpec({
     },
   })
 
-  // Remove health and viewer endpoints
+  // Remove the event endpoint which is a draft one that will be changed and not ready for public use
   if (removePrivateEndpoints && oas.paths) {
-    delete oas.paths['/health']
     delete oas.paths['/event']
   }
 

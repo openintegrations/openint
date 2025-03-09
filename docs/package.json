@@ -1,10 +1,12 @@
 {
   "name": "@openint/docs",
   "scripts": {
-    "dev": "mintlify dev"
+    "dev": "NODE_ENV=development pnpm run gen:docs-oas && mintlify dev",
+    "gen:docs-oas": "node generateDocsOas.bin.cjs"
   },
   "dependencies": {
-    "@octokit/graphql": "^8.1.1"
+    "@octokit/graphql": "^8.1.1",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@mintlify/scraping": "^3.0.64",
