@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import ReleaseStage from './ReleaseStage'
+import ConnectorAudience from '../shadcn/ConnectorAudience'
 
 const meta = {
-  title: 'UI/Badges/ReleaseStage',
-  component: ReleaseStage,
+  title: 'UI/Badges/ConnectorAudience',
+  component: ConnectorAudience,
   parameters: {
     layout: 'centered',
   },
@@ -18,7 +18,7 @@ const meta = {
   args: {
     children: 'Badge',
   },
-} satisfies Meta<typeof ReleaseStage>
+} satisfies Meta<typeof ConnectorAudience>
 
 export default meta
 type Story = StoryObj<typeof meta>

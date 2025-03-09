@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { CodeSnippet } from './CodeSnippet'
+import { CodeSnippet } from '../components/CodeSnippet'
 
 const meta = {
   title: 'UI/CodeSnippet',

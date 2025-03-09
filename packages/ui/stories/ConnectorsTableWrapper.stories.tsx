@@ -1,5 +1,5 @@
 import React from 'react'
-import { ConnectorsTableWrapper } from './ConnectorsTableWrapper'
+import { ConnectorsTableWrapper } from '../components/ConnectorsTableWrapper'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Create a client

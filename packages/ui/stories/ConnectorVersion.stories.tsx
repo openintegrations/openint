@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import ConnectorVersion from './ConnectorVersion'
+import ConnectorVersion from '../shadcn/ConnectorVersion'
 
 const meta = {
   title: 'UI/Badges/ConnectorVersion',

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
-import { CheckboxFilter } from './CheckboxFilter'
-import { FilterBadges } from './FilterBadges'
+import { CheckboxFilter } from '../components/CheckboxFilter'
+import { FilterBadges } from '../components/FilterBadges'
 
 // Interactive wrapper component for the story
 const InteractiveCheckboxFilter = ({ initialCheckedState = {} }) => {
@@ -16,17 +16,23 @@ const InteractiveCheckboxFilter = ({ initialCheckedState = {} }) => {
   );
   
   // State for the checkbox filter
-  const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
-    initialCheckedState.constructor === Object && Object.keys(initialCheckedState).length > 0
-      ? initialCheckedState
-      : categories.reduce(
-          (acc, option) => {
-            acc[option] = false;
-            return acc;
-          },
-          {} as Record<string, boolean>,
-        )
-  );
+  const [checkedState, setCheckedState] = useState<Record<string, boolean>>(() => {
+    // Check if initialCheckedState is a non-empty object
+    if (typeof initialCheckedState === 'object' && 
+        initialCheckedState !== null && 
+        Object.keys(initialCheckedState).length > 0) {
+      return initialCheckedState;
+    }
+    
+    // Otherwise, initialize with all options unchecked
+    return categories.reduce(
+      (acc, option) => {
+        acc[option] = false;
+        return acc;
+      },
+      {} as Record<string, boolean>
+    );
+  });
 
   // Clear all filters
   const onClearFilter = () => {

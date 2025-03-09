@@ -1,7 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import VerticalBadge from './VerticalBadge'
-import { VERTICAL_BY_KEY } from '@openint/cdk'
+import VerticalBadge from '../shadcn/VerticalBadge'
+import { VERTICAL_BY_KEY, VerticalKey } from '@openint/cdk'
 
+// Define the component props interface to match the component
+interface VerticalBadgeProps {
+  vertical: VerticalKey;
+  className?: string;
+}
+
+// Use the correct type annotation
 const meta = {
   title: 'UI/Badges/VerticalBadge',
   component: VerticalBadge,
@@ -16,9 +23,9 @@ const meta = {
     },
   },
   args: {
-    vertical: 'commerce',
+    vertical: 'commerce' as VerticalKey,
   },
-} satisfies Meta<typeof VerticalBadge>
+} as Meta<VerticalBadgeProps>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -26,10 +33,9 @@ type Story = StoryObj<typeof meta>
 // Create a default story
 export const Default: Story = {
   args: {
-    vertical: 'commerce',
+    vertical: 'commerce' as VerticalKey,
   },
 }
-
 
 // TODO: see how to dynamically create stories for each vertical
 // const stories: Record<string, Story> = {}
@@ -49,24 +55,24 @@ export const Default: Story = {
 
 export const Crm: Story = {
   args: {
-    vertical: 'crm',
+    vertical: 'crm' as VerticalKey,
   },
 }
 
 export const Hris: Story = {
   args: {
-    vertical: 'hris',
+    vertical: 'hris' as VerticalKey,
   },
 }
 
 export const Banking: Story = {
   args: {
-    vertical: 'banking',
+    vertical: 'banking' as VerticalKey,
   },
 }
 
 export const FileStorage: Story = {
   args: {
-    vertical: 'file-storage',
+    vertical: 'file-storage' as VerticalKey,
   },
 }
