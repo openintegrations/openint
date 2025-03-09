@@ -21,6 +21,9 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",
+    "@openint/api-v1": "workspace:*",
+    "@openint/cdk": "workspace:*",
+    "@openint/db": "workspace:*",
     "@storybook/addon-essentials": "^8.6.4",
     "@storybook/addon-interactions": "^8.6.4",
     "@storybook/addon-links": "^8.6.4",

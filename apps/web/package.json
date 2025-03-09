@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "build": "run-s build:*",
-    "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
+    "build:css": "tailwindcss -i ./app/v0.css -o ./app/tailwind-v3.css --minify",
     "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
     "dev": "concurrently npm:dev:*",
-    "dev:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --watch",
+    "dev:css": "tailwindcss -i ./app/v0.css -o ./app/tailwind-v3.css --watch",
     "dev:next": "next dev -p 4000 --turbopack",
     "start": "next start"
   },

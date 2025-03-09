@@ -3,5 +3,6 @@
 @source "./components/**/*.tsx";
 
 @import '@openint/shadcn/global.css';
+@import '../ui/schema-form.css';
 
 @plugin 'tailwindcss-radix';

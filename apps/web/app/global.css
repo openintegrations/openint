@@ -1,7 +1,0 @@
-/*
-Compiling this is the perf bottleneck on next.js startup...
-Let's see if upgrading to tailwind 4 fixes it or otherwise use a different solution
-For now let's compile tailwind separately rather than part of postcss
-*/
-@import '../../../packages/ui/global.css';
-
