@@ -193,8 +193,8 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git fetch 
-          git add /docs/stainless.oas.yml
-          git add /packages/api-v1/__generated__/openapi.documented.json
+          git add docs/stainless.oas.yml
+          git add packages/api-v1/__generated__/openapi.documented.json
           git commit -m "feat(docs): updating documented docs for stainless"
           git push origin main --force
           git checkout production
