@@ -48,7 +48,7 @@
       {
         "version": "v1 (preview)",
         "label": "Version 1",
-        "openapi": "https://app.stainless.com/api/spec/documented/openint",
+        "openapi": "mintlify.oas.yml",
         "groups": [
           {
             "group": "Getting Started",
