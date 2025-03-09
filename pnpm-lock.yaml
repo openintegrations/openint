@@ -2753,6 +2753,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^3.0.8
         version: 3.0.8(@vitest/browser@3.0.8)(vitest@3.0.8)
+      chromatic:
+        specifier: ^11.27.0
+        version: 11.27.0
       concurrently:
         specifier: ^9.1.2
         version: 9.1.2
