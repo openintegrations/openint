@@ -25,6 +25,7 @@ const config = {
     '../stories/**/*.mdx',
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../shadcn/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
     getAbsolutePath('@storybook/addon-essentials'),
