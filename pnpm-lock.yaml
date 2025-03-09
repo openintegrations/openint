@@ -528,6 +528,9 @@ importers:
       '@openint/open-file-picker':
         specifier: workspace:*
         version: link:../../kits/file-picker
+      '@openint/shadcn':
+        specifier: workspace:*
+        version: link:../../packages/shadcn
       '@openint/ui':
         specifier: workspace:*
         version: link:../../packages/ui

@@ -1,9 +1,8 @@
-export const metadata = {
-  title: 'OpenInt Dashboard',
-  icons: [{url: '/favicon.svg', type: 'image/svg+xml'}],
-}
+// tailwind.css file will be built separately
+// eslint-disable-next-line import/no-unresolved
+import './tailwind.css'
 
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default function RootLayoutV1({children}: {children: React.ReactNode}) {
   return (
     // TODO Fix hydration error rather than suppress warning
     // https://nextjs.org/docs/messages/react-hydration-error#solution-3-using-suppresshydrationwarning

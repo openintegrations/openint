@@ -22,10 +22,18 @@ function getAbsolutePath(value) {
 
 const config = {
   stories: [
+    // Should be kept in sync with global.css files
     '../stories/**/*.mdx',
-    '../**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../shadcn/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../shadcn/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../shadcn/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../shadcn/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../ui/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../ui/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    // Will only work in (v1) directory
+    // Generally speaking all stories should be in ui-v1
+    '../../../apps/web/app/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
     getAbsolutePath('@storybook/addon-essentials'),

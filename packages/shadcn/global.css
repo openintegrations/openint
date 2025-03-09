@@ -1,4 +1,5 @@
 @source "./components/**/*.tsx";
+@source "./ui/**/*.tsx";
 @source "./stories/**/*.tsx";
 
 @import 'tailwindcss';
