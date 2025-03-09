@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '../utils'
 import OAuthLabelType from './OAuthLabelType'
-import ConnectorType from './ConnectorType'
+import ConnectorVerticalBadge from './VerticalBadge'
 import ReleaseStage from './ReleaseStage'
 import ConnectorVersion from './ConnectorVersion'
 import ConnectorAudience from './ConnectorAudience'
@@ -65,12 +65,12 @@ const ConnectorCard = React.forwardRef<HTMLDivElement, ConnectorCardProps>(
             )}
             
             {connectorType && (
-              <ConnectorType variant={
+              <ConnectorVerticalBadge variant={
                 connectorType === 'CRM' ? 'variant1' : 
                 connectorType === 'File Storage' ? 'variant2' : 'default'
               }>
                 {connectorType}
-              </ConnectorType>
+              </ConnectorVerticalBadge>
             )}
             
             {releaseStage && (

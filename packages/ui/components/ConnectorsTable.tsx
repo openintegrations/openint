@@ -4,7 +4,7 @@ import { UseQueryResult } from '@tanstack/react-query'
 
 import { DataTable } from './DataTable'
 import { Button } from '../shadcn/Button'
-import ConnectorType from '../shadcn/ConnectorType'
+import ConnectorVerticalBadge from '../shadcn/VerticalBadge'
 import ConnectorVersion from '../shadcn/ConnectorVersion'
 import OAuthLabelType from '../shadcn/OAuthLabelType'
 import ConnectorAudience from '../shadcn/ConnectorAudience'
@@ -53,7 +53,7 @@ export function ConnectorsTable({
             <span className="font-medium">{connector.name}</span>
             
             <div className="ml-2 flex flex-wrap gap-2">
-              <ConnectorType>{connector.type}</ConnectorType>
+              <ConnectorVerticalBadge>{connector.type}</ConnectorVerticalBadge>
               <OAuthLabelType>{connector.authType}</OAuthLabelType>
               <ConnectorAudience>{connector.audience}</ConnectorAudience>
               <ConnectorVersion>{connector.version}</ConnectorVersion>
