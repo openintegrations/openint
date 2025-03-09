@@ -2474,6 +2474,9 @@ importers:
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react:
+        specifier: 19.0.0
+        version: 19.0.0
       react-day-picker:
         specifier: 8.10.1
         version: 8.10.1(date-fns@2.30.0)(react@19.0.0)
@@ -2505,6 +2508,9 @@ importers:
       '@tailwindcss/cli':
         specifier: ^4.0.12
         version: 4.0.12
+      '@types/react':
+        specifier: 19.0.10
+        version: 19.0.10
 
   packages/trpc:
     dependencies:
