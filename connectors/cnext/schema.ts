@@ -1,16 +1,23 @@
 import {z} from '@openint/util'
 import {ConnectorDef as LegacyConnectorDef} from '../../kits/cdk'
-import {ConnectorDef, zConnectorConfig} from './def'
+import {ConnectorDef, zOauthConnectorConfig} from './def'
 
 export function generateConnectorDef(def: ConnectorDef): LegacyConnectorDef {
   const connectorConfig = () => {
+    let schema = zOauthConnectorConfig
     if (['OAUTH1', 'OAUTH2'].includes(def.auth_type)) {
-      return z
-        .object(zConnectorConfig.shape)
-        .merge(z.object(def.connector_config))
+      // QQ: is this the right way to do this?
+      // this needs to extend the schema of the json connector
+      schema = z.object({
+        ...schema.shape,
+        ...(def.connector_config as Record<string, z.ZodTypeAny>),
+      })
     }
 
-    return def.connector_config
+    return z.union([
+      z.null().openapi({title: 'Use OpenInt platform credentials'}),
+      schema.openapi({title: 'Use my own'}),
+    ])
   }
 
   return {
@@ -25,7 +32,9 @@ export function generateConnectorDef(def: ConnectorDef): LegacyConnectorDef {
               oauth: z.object({
                 credentials: def.connection_settings
                   ? z.any().parse(def.connection_settings)
-                  : z.object({}),
+                  : // note: this needs to extend the schema of the json connector
+                    // we need to do this in a way that works for oauth
+                    z.object({}),
               }),
               metadata: z.record(z.unknown()).optional(),
             })

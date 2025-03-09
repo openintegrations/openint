@@ -191,6 +191,24 @@ async function processTokenResponse(
   }
 }
 
+function addCcfgDefaultCredentials(
+  config: any,
+  connectorName: string,
+): {
+  client_id: string
+  client_secret: string
+  scopes?: string[] | null | undefined
+} {
+  return {
+    client_id:
+      config.client_id ?? process.env[`ccfg_${connectorName}__CLIENT_ID`],
+    client_secret:
+      config.client_secret ??
+      process.env[`ccfg_${connectorName}__CLIENT_SECRET`],
+    scopes: config.scopes,
+  }
+}
+
 export function generateOAuth2Server<T extends ConnectorSchemas>(
   connectorDef: ConnectorDef,
 ): ConnectorServer<T> {
@@ -205,14 +223,6 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
   const connectorName = connectorDef.connector_name
   let clientId: string | undefined
   let clientSecret: string | undefined
-  
-  function addCcfgDefaultCredentials(config: any): {client_id: string; client_secret: string; scopes?: string[] | null | undefined  {
-    return {
-      client_id: config.client_id ?? process.env[`ccfg_${connectorName}__CLIENT_ID`],
-      client_secret: config.client_secret ?? process.env[`ccfg_${connectorName}__CLIENT_SECRET`],
-      scopes: config.scopes,
-    }
-  }
 
   return {
     newInstance: ({config, settings}) => {
@@ -228,7 +238,10 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         )
       }
 
-      if(settings?.oauth?.credentials?.client_id && settings?.oauth?.credentials?.client_id !== clientId) {
+      if (
+        settings?.oauth?.credentials?.client_id &&
+        settings?.oauth?.credentials?.client_id !== clientId
+      ) {
         throw new Error(
           `Client ID mismatch for ${connectorName}. Expected ${clientId}, got ${settings?.oauth?.credentials?.client_id}`,
         )
@@ -288,7 +301,7 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       const tokenResponse = await tokenHandler({
         flow_type: 'exchange',
         auth_params: connectorDef.auth_params as TokenParams,
-        connector_config: addCcfgDefaultCredentials(config),
+        connector_config: addCcfgDefaultCredentials(config, connectorName),
         code: connectOutput.code,
         state: connectOutput.state,
         token_request_url: connectorDef.token_request_url,
@@ -354,7 +367,7 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       const tokenResponse = await tokenHandler({
         flow_type: 'refresh',
         auth_params: connectorDef.auth_params as RefreshParams,
-        connector_config: addCcfgDefaultCredentials(config),
+        connector_config: addCcfgDefaultCredentials(config, connectorName),
         token_request_url: connectorDef.token_request_url,
         refresh_token: refreshToken,
       })
@@ -391,4 +404,3 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
     },
   }
 }
-

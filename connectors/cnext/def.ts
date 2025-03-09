@@ -1,7 +1,7 @@
 import {z} from 'zod'
 import {zVerticalKey} from '../../kits/cdk'
 
-export const zConnectorConfig = z
+export const zOauthConnectorConfig = z
   .object({
     client_id: z.string(),
     client_secret: z.string(),
@@ -58,14 +58,14 @@ export type RefreshParams = z.infer<typeof zRefreshParams>
 export const zAuthorizeHandlerArgs = z.object({
   authorization_request_url: z.string().url(),
   auth_params: zAuthorizeParams,
-  connector_config: zConnectorConfig,
+  connector_config: zOauthConnectorConfig,
   redirect_uri: z.string(),
   connection_id: z.string(),
 })
 
 export const zTokenExchangeHandlerArgs = z.object({
   auth_params: zTokenParams,
-  connector_config: zConnectorConfig,
+  connector_config: zOauthConnectorConfig,
   code: z.string(),
   state: z.string(),
   token_request_url: z.string().url(),
@@ -74,7 +74,7 @@ export const zTokenExchangeHandlerArgs = z.object({
 
 export const zTokenRefreshHandlerArgs = z.object({
   auth_params: zRefreshParams,
-  connector_config: zConnectorConfig,
+  connector_config: zOauthConnectorConfig,
   token_request_url: z.string().url(),
   refresh_token: z.string(),
 })
@@ -115,7 +115,7 @@ export const zOAuthConnectorDef = z.object({
     .default(' ')
     .optional()
     .describe('Separator used to join multiple scopes. Defaults to comma.'),
-  connector_config: z.union([zConnectorConfig, z.any()]).default({}),
+  connector_config: z.union([zOauthConnectorConfig, z.any()]).default({}),
   connection_settings: z
     .object({
       access_token: z.string(),
