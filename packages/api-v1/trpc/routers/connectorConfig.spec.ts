@@ -133,12 +133,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
-  test('list connector config with expand integrations', async () => {
+  test('list connector config with expand enabled_integrations', async () => {
     const res = await getClient({
       role: 'org',
       orgId: 'org_222',
     }).listConnectorConfigs.query({
-      expand: ['integrations'],
+      expand: ['enabled_integrations'],
     })
     expect(res.items).toHaveLength(2)
 
@@ -154,5 +154,22 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         scopes: 'https://www.googleapis.com/auth/drive',
       },
     })
+  })
+
+  test('list connector config with expand connector and enabled_integrations', async () => {
+    const res = await getClient({
+      role: 'org',
+      orgId: 'org_222',
+    }).listConnectorConfigs.query({
+      expand: ['connector', 'enabled_integrations'],
+    })
+
+    const googleConnector = res.items.find(
+      (item) => item.connector_name === 'google',
+    )
+    console.warn(res.items)
+
+    expect(googleConnector?.config?.integrations).toBeDefined()
+    expect(googleConnector?.connector).toBeDefined()
   })
 })

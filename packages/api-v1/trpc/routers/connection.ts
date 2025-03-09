@@ -6,19 +6,19 @@ import {and, eq, schema, sql} from '@openint/db'
 import {publicProcedure, router, type RouterContext} from '../_base'
 import {core} from '../../models'
 import {
+  applyPaginationAndOrder,
+  processPaginatedResponse,
+  zListParams,
+  zListResponse,
+} from '../utils/pagination'
+import {
   expandConnector,
   zConnectionId,
   zConnectorConfigId,
   zConnectorName,
   zCustomerId,
   zExpandOptions,
-} from '../utils/connectorUtils'
-import {
-  applyPaginationAndOrder,
-  processPaginatedResponse,
-  zListParams,
-  zListResponse,
-} from '../utils/pagination'
+} from './connectorConfig'
 
 const zIncludeSecrets = z
   .enum(['none', 'basic', 'all'])

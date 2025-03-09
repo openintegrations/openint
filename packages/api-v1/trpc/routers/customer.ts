@@ -4,11 +4,7 @@ import {getServerUrl} from '@openint/app-config/constants'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
-import {
-  zConnectionId,
-  zConnectorName,
-  zCustomerId,
-} from '../utils/connectorUtils'
+import {zConnectionId, zConnectorName, zCustomerId} from './connectorConfig'
 
 function asCustomer(
   viewer: Viewer,

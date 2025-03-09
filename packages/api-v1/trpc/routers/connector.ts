@@ -5,16 +5,6 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {ConnectorMetadata} from '@openint/cdk'
 import {publicProcedure, router} from '../_base'
 import {core} from '../../models'
-import {zExpandOptions} from '../utils/connectorUtils'
-
-type ConnectorOutputType = {
-  name: string
-  display_name?: string
-  logo_url?: string
-  stage?: string
-  platforms?: string[]
-  integrations?: Record<string, unknown>[]
-}
 
 interface IntegrationsResponse {
   items: Array<Record<string, unknown>>
@@ -33,6 +23,10 @@ function isListIntegrationsFunction(
 const connectorOutput = core.connector.extend({
   integrations: z.array(core.integration).optional(),
 })
+
+export const zExpandOptions = z
+  .enum(['integrations'])
+  .describe('Fields to expand connector with its integrations')
 
 export const connectorRouter = router({
   listConnectors: publicProcedure
@@ -66,7 +60,7 @@ export const connectorRouter = router({
             logo_url: metadata?.logoUrl,
             stage: metadata?.stage,
             platforms: metadata?.platforms,
-          } as ConnectorOutputType
+          } as z.infer<typeof connectorOutput>
 
           const server = serverConnectors[name as keyof typeof serverConnectors]
           if (
