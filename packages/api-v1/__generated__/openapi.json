@@ -954,217 +954,6 @@
         }
       }
     },
-    "/health": {
-      "get": {
-        "operationId": "health",
-        "summary": "Health Check",
-        "description": "Check if the API is operational",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "ok": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "ok"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "operationId": "healthEcho",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/viewer": {
-      "get": {
-        "operationId": "viewer",
-        "summary": "Get Current User",
-        "description": "Get information about the current authenticated user",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "role": {
-                      "type": "string",
-                      "enum": [
-                        "customer",
-                        "org",
-                        "anon",
-                        "user"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "role"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/customer/{customer_id}/magic-link": {
       "post": {
         "operationId": "createMagicLink",
@@ -1461,6 +1250,217 @@
           }
         }
       }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "summary": "Health Check",
+        "description": "Check if the API is operational",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "healthEcho",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/viewer": {
+      "get": {
+        "operationId": "viewer",
+        "summary": "Get Current User",
+        "description": "Get information about the current authenticated user",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "role": {
+                      "type": "string",
+                      "enum": [
+                        "customer",
+                        "org",
+                        "anon",
+                        "user"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "role"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1478,6 +1478,16 @@
       }
     },
     "schemas": {
+      "AuthMode": {
+        "type": "string",
+        "enum": [
+          "OAUTH2",
+          "OAUTH1",
+          "BASIC",
+          "API_KEY"
+        ],
+        "title": "AuthMode"
+      },
       "connectors.aircall.connectionSettings": {
         "type": "object",
         "properties": {
@@ -1553,13 +1563,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -1780,13 +1784,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -1940,13 +1938,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -2324,13 +2316,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -2484,13 +2470,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -2644,13 +2624,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -2798,7 +2772,27 @@
             "const": "googledrive"
           },
           "settings": {
-            "type": "null"
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "credentials"
+                ]
+              },
+              "metadata": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "oauth"
+            ]
           }
         },
         "required": [
@@ -2866,13 +2860,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -3027,13 +3015,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -3187,13 +3169,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -3347,13 +3323,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -3507,13 +3477,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -3667,13 +3631,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -3887,13 +3845,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -4092,13 +4044,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -4252,13 +4198,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -4455,7 +4395,8 @@
                     "type": [
                       "string",
                       "null"
-                    ]
+                    ],
+                    "description": "Should order by lastModifiedAt and id descending"
                   }
                 }
               }
@@ -4488,13 +4429,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -4670,13 +4605,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -4830,13 +4759,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -5004,13 +4927,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -5505,13 +5422,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
@@ -5782,13 +5693,7 @@
                     "type": "object",
                     "properties": {
                       "type": {
-                        "type": "string",
-                        "enum": [
-                          "OAUTH2",
-                          "OAUTH1",
-                          "BASIC",
-                          "API_KEY"
-                        ]
+                        "$ref": "#/components/schemas/AuthMode"
                       },
                       "api_key": {
                         "type": [
