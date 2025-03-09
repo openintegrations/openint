@@ -2,7 +2,9 @@
 
 import {_trpcReact} from '@openint/engine-frontend'
 import 'next/image'
-import '../global.css'
+// tailwind.css file will be built separately
+// eslint-disable-next-line import/no-unresolved
+import '../tailwind-v3.css'
 import {QueryClientProvider} from '@tanstack/react-query'
 import React from 'react'
 import {TRPCProvider} from '@openint/engine-frontend'

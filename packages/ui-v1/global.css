@@ -1,0 +1,19 @@
+/*
+Bit weird dependency-wise, once we only have tailwind v4 consider
+having a global.css file in apps/web and import this file instead.
+*/
+/* Should be kept in sync with .storybook/main.ts file */
+@source "../../apps/web/app/(v1)/**/*.tsx";
+/* Migrate schema form once we make sure it is good */
+@import '../ui/schema-form.css';
+
+@source "./components/**/*.tsx";
+
+/* @import '@openint/shadcn/global.css'; Relative path works better in vscode, same thing tho */
+@import '../shadcn/global.css';
+
+@plugin 'tailwindcss-radix';
+
+/*
+TODO: @snrondina Apply tailwind v3 styles to v4 css files
+*/

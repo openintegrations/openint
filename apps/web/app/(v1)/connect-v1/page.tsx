@@ -18,7 +18,7 @@ export default async function Page(props: PageProps) {
 
   return (
     <div>
-      <pre>
+      <pre className="bg-pink-400">
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
       <Dummy />
