@@ -1,0 +1,13 @@
+{
+  "name": "@openint/ui-v1",
+  "version": "0.0.0",
+  "private": true,
+  "module": "./index.ts",
+  "scripts": {},
+  "dependencies": {
+    "@tanstack/react-query": "^5.67.2",
+    "@trpc/client": "next",
+    "@trpc/tanstack-react-query": "next"
+  },
+  "devDependencies": {}
+}

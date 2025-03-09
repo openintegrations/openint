@@ -45,7 +45,7 @@ export const contextFactory = getContextFactory({
   connectors: Object.values(mergedConnectors),
   // routerUrl: 'http://localhost:3010/api', // apiUrl?
   // TODO: Rename to just serverUrl as we will need it for redirects and everything else
-  apiUrl: joinPath(getServerUrl(null), '/api/trpc'),
+  apiUrl: joinPath(getServerUrl(null), '/api/v0/trpc'),
   // TODO: Clean up the duplication .env and .env.NANGO_SECRET_KEY etc.
   env,
   jwtSecret: envRequired.JWT_SECRET,
