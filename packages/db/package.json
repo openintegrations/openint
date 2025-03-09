@@ -31,7 +31,7 @@
     "bun": "latest",
     "bun-types": "latest",
     "drizzle-kit": "^0.30.4",
-    "prettier": "3.1.0",
+    "prettier": "^3.5.3",
     "prettier-plugin-sql": "0.18.1"
   }
 }

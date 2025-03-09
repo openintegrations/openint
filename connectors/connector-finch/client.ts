@@ -1,5 +1,6 @@
 /** Used for the side effect of window.FinchConnect */
 import type {useFinchConnect} from '@tryfinch/react-connect'
+import React from 'react'
 import type {ConnectorClient} from '@openint/cdk'
 import {CANCELLATION_TOKEN, useScript} from '@openint/cdk'
 import type {finchSchemas} from './def'
@@ -45,3 +46,5 @@ export const finchClient = {
 } satisfies ConnectorClient<typeof finchSchemas>
 
 export default finchClient
+
+export const useConnectorLogic = () => React.useState('i am inside finch')

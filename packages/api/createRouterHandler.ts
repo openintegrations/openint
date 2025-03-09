@@ -1,5 +1,5 @@
 import type {RequestLike} from '@clerk/nextjs/dist/types/server/types'
-import {clerkClient, getAuth} from '@clerk/nextjs/server'
+import {createClerkClient, getAuth} from '@clerk/nextjs/server'
 import {createOpenApiFetchHandler} from '@lilyrose2798/trpc-openapi'
 import {applyLinks, corsLink} from '@opensdks/fetch-links'
 import {pickBy} from 'remeda'
@@ -19,7 +19,7 @@ import {
   zId,
 } from '@openint/cdk'
 import type {RouterContext} from '@openint/engine-backend'
-import {envRequired} from '@openint/env'
+import {env, envRequired} from '@openint/env'
 import {fetchRequestHandler} from '@openint/trpc'
 import {downloadFileById} from '@openint/unified-file-storage/adapters'
 import {
@@ -31,6 +31,11 @@ import {
   z,
   type AnyRouter,
 } from '@openint/vdk'
+
+const clerkClient = createClerkClient({
+  secretKey: env.CLERK_SECRET_KEY,
+  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+})
 
 export const zOpenIntHeaders = z
   .object({

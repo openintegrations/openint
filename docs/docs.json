@@ -15,6 +15,11 @@
       "apiKey": "phc_30EStnJPoshPRjyPvxEe8gYP85AaacFPMYHsiPddpRX"
     }
   },
+  "integrations": {
+    "intercom": {
+      "appId": "ds5wvi2k"
+    }
+  },
   "navigation": {
     "versions": [
       {
@@ -43,29 +48,23 @@
       {
         "version": "v1 (preview)",
         "label": "Version 1",
-        "openapi": "https://app.stainless.com/api/spec/documented/openint",
+        "openapi": "mintlify.oas.yml",
         "groups": [
           {
             "group": "Getting Started",
             "pages": [
-              "quickstart/intro",
-              "quickstart/quickstart",
-              "quickstart/integrations"
+              "getting-started/intro",
+              "getting-started/quickstart",
+              "getting-started/integrations"
             ]
           },
           {
-            "group": "Core Concepts",
+            "group": "Using @Connect",
             "pages": [
-              "core-concepts/data-flow",
-              "core-concepts/webhooks-events"
-            ]
-          },
-          {
-            "group": "Using Connect",
-            "pages": [
-              "connect/share-magic-links",
-              "connect/react-embed",
-              "connect/web-applications"
+              "connect/embed",
+              "connect/customize",
+              "connect/data-flow",
+              "connect/faq"
             ]
           }
         ]

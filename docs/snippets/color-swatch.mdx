@@ -1,0 +1,17 @@
+export const ColorSwatch = ({color}) => (
+  <div>
+    <div
+      style={{
+        display: 'inline-block',
+        width: '20px',
+        height: '20px',
+        backgroundColor: color,
+        marginRight: '8px',
+        verticalAlign: 'middle',
+        borderRadius: '4px',
+        border: '1px solid rgba(128,128,128,0.2)',
+      }}
+    />
+    <code>{color}</code>
+  </div>
+)

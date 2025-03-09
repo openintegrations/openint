@@ -8,7 +8,6 @@ import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import url from 'node:url'
 import chokidar from 'chokidar'
-import crossFetch, {Headers, Request, Response} from 'cross-fetch'
 import {readFile} from 'read-file-safe'
 import tunnel from 'tunnel'
 import {writeFile as _writeFile} from 'write-file-safe'
@@ -25,18 +24,6 @@ import {
   implementProxyFn,
   memoize,
 } from '@openint/util'
-
-/**
- * Do not relace global version unnecessarily.
- * causes among other issue clerk/nextjs to fail mysteriously
- * @see https://share.cleanshot.com/BcYr73DF
- */
-if (!globalThis.fetch) {
-  globalThis.fetch = crossFetch
-  globalThis.Headers = Headers
-  globalThis.Request = Request
-  globalThis.Response = Response
-}
 
 if (process.env['SILENT']) {
   console.log = () => {} // To suppress spurious log

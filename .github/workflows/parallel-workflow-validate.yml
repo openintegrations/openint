@@ -14,58 +14,38 @@ jobs:
   install-dependencies:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    outputs:
-      cache-key: ${{ steps.set-cache-key.outputs.cache-key }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set cache key
-        id: set-cache-key
-        run: echo "cache-key=${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.9.0
-          run_install: false
-
-      - name: Cache pnpm store
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
+          node-version-file: package.json
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
   typecheck:
     runs-on: ubuntu-latest
     needs: install-dependencies
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.9.0
-      - uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ needs.install-dependencies.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
+          node-version-file: package.json
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       - name: Run type checks
         run: pnpm run typecheck
 
@@ -74,20 +54,17 @@ jobs:
     needs: install-dependencies
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.9.0
-      - uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ needs.install-dependencies.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
+          node-version-file: package.json
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       - name: Run lint
         run: pnpm run lint
         env:
@@ -123,20 +100,17 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       DATABASE_URL: postgres://postgres:password@db.localtest.me:5432/postgres
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.9.0
-      - uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ needs.install-dependencies.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
+          node-version-file: package.json
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       - name: Download environment variables
         run: |
           npm install --global vercel@latest
@@ -169,22 +143,19 @@ jobs:
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Need more than 1 commit https://www.chromatic.com/docs/github-actions/
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.9.0
-      - uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ needs.install-dependencies.outputs.cache-key }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
+          node-version-file: package.json
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       - name: Download environment variables
         run: |
           npm install --global vercel@latest
@@ -192,9 +163,9 @@ jobs:
           vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
           cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
       - name: Build css file
-        run: pnpm --dir packages/ui build-tailwind
+        run: pnpm --dir packages/ui-v1 build-tailwind
       - name: Publish storybook to chromatic
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui chromatic --exit-zero-on-changes
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui-v1 chromatic --exit-zero-on-changes
 
   # slack-notification:
   #   runs-on: ubuntu-latest

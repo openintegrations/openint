@@ -3,14 +3,7 @@
   "version": "0.0.2",
   "description": "A unified file picker for Sharepoint, One Drive, Google Drive, Dropbox, Box, iCloud Drive, and more",
   "main": "./src/index.ts",
-  "scripts": {
-    "build": "rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc -p tsconfig.json",
-    "lint": "eslint . --ext .ts,.tsx",
-    "prepublishOnly": "npm run build",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "typecheck": "tsc --noEmit"
-  },
+  "scripts": {},
   "dependencies": {
     "@azure/msal-browser": "^4.0.2",
     "@opensdks/sdk-openint": "^0.1.15",
@@ -48,7 +41,7 @@
     "embla-carousel-react": "^8.0.0",
     "extend-expect": "link:@testing-library/jest-dom/extend-expect",
     "input-otp": "^1.1.0",
-    "lucide-react": "^0.474.0",
+    "lucide-react": "^0.479.0",
     "react": "*",
     "react-day-picker": "^8.10.0",
     "react-dom": "*",
@@ -56,7 +49,7 @@
     "react-resizable-panels": "^2.1.7",
     "recharts": "^2.12.0",
     "sonner": "^1.4.0",
-    "tailwind-merge": "^2.0.0",
+    "tailwind-merge": "^3.0.2",
     "uuid": "^8.3.2",
     "vaul": "^0.9.0"
   },

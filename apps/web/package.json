@@ -4,14 +4,18 @@
   "private": true,
   "scripts": {
     "build": "run-s build:*",
-    "build:css": "tailwindcss -i ./app/global.css -o ./app/tailwind.css --minify",
+    "build:css": "pnpm --dir ../../packages/ui-v1 @tailwindcss/cli -i ./global.css -o '../../apps/web/app/(v1)/tailwind.css'",
+    "build:css-v3": "tailwindcss -i ./app/v0.css -o ./app/tailwind-v3.css --minify",
     "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
-    "dev": "next dev -p 4000 --turbopack",
+    "dev": "concurrently npm:dev:*",
+    "dev:css": "pnpm build:css --watch",
+    "dev:css-v3": "tailwindcss -i ./app/v0.css -o ./app/tailwind-v3.css --watch",
+    "dev:next": "next dev -p 4000 --turbopack",
     "start": "next start"
   },
   "dependencies": {
-    "@clerk/nextjs": "5.6.0",
+    "@clerk/nextjs": "^6.12.4",
     "@lilyrose2798/trpc-openapi": "1.3.10",
     "@openint/api": "workspace:*",
     "@openint/api-v1": "workspace:*",
@@ -26,10 +30,11 @@
     "@openint/events": "workspace:*",
     "@openint/open-file-picker": "workspace:*",
     "@openint/ui": "workspace:*",
+    "@openint/ui-v1": "workspace:*",
+    "@openint/shadcn": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@sentry/nextjs": "^9.5.0",
-    "@stoplight/elements": "7.7.10",
     "@tanstack/query-core": "4.27.0",
     "@tanstack/query-sync-storage-persister": "4.27.1",
     "@tanstack/react-query": "4.28.0",
@@ -39,35 +44,32 @@
     "@trpc/server": "10.40.0",
     "commandbar": "1.7.3",
     "cookies-next": "4.0.0",
-    "graphql": "^16.6.0",
-    "graphql-ws": "^5.11.3",
-    "http-proxy": "1.18.1",
     "inngest": "^3.22.13",
-    "lucide-react": "0.447.0",
+    "lucide-react": "^0.479.0",
     "mongodb": "4.9.1",
     "next": "15.2.1",
     "next-themes": "0.3.0",
     "nextjs-toploader": "1.4.2",
-    "node-http-proxy-json": "0.1.9",
     "pg": "^8.13.3",
     "posthog-js": "^1.166.1",
     "posthog-node": "2.5.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "superjson": "1.9.1",
-    "swagger2openapi": "7.0.8",
     "trpc-panel": "1.3.4"
   },
   "devDependencies": {
+    "@openint/connector-finch": "workspace:*",
+    "@openint/connector-greenhouse": "workspace:*",
+    "@openint/connector-plaid": "workspace:*",
     "@opensdks/sdk-plaid": "^0.0.19",
     "@sentry/cli": "^2.36.6",
     "@types/http-proxy": "1.17.10",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
-    "@types/swagger2openapi": "7.0.0",
     "autoprefixer": "*",
+    "concurrently": "^9.1.2",
     "drizzle-orm": "^0.39.1",
-    "jiti": "*",
     "node-loader": "2.0.0",
     "postcss": "^8.4.47",
     "tailwindcss": "3.4.12",
@@ -76,11 +78,5 @@
     "tilg": "0.1.1",
     "webpack": "*"
   },
-  "//": "@trpc/client version needs to be explicitly specified here otherwise we can end up with v10 try to import stuff from v11. pnpm quirk, not sure.",
-  "pnpm": {
-    "overrides": {
-      "@types/react": "19.0.10",
-      "@types/react-dom": "19.0.4"
-    }
-  }
+  "//": "@trpc/client version needs to be explicitly specified here otherwise we can end up with v10 try to import stuff from v11. pnpm quirk, not sure."
 }

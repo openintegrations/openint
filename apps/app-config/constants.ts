@@ -22,13 +22,6 @@ export function getServerUrl(req: GetServerSidePropsContext['req'] | null) {
   )
 }
 
-export const getGraphqlEndpoint = (
-  req: GetServerSidePropsContext['req'] | null,
-) => new URL('/api/graphql', getServerUrl(req))
-
-export const getRestEndpoint = (req: GetServerSidePropsContext['req'] | null) =>
-  new URL('/api/rest', getServerUrl(req))
-
 export const kApikeyUrlParam = 'apikey' as const
 /** TODO: Dedupe me from AuthProvider.kApiKeyMetadata */
 export const kApikeyMetadata = 'apikey' as const

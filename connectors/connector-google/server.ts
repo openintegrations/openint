@@ -148,7 +148,7 @@ export const googleServer = {
   // "context": {
   //   "integrationId": "int_google_sheets",
   //   "extCustomerId": "cus_1234",
-  //   "webhookBaseUrl": "http://localhost:4000/api/trpc/webhook/ccfg_google_01JBYY6NZ551BR7Y9DXMBZ79K4",
+  //   "webhookBaseUrl": "http://localhost:4000/api/v0/trpc/webhook/ccfg_google_01JBYY6NZ551BR7Y9DXMBZ79K4",
   //   "redirectUrl": "http://localhost:4000/"
   // }
   async postConnect(connectOutput, config, context: any) {

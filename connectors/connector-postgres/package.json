@@ -9,7 +9,6 @@
     "@openint/util": "workspace:*",
     "drizzle-kit": "^0.30.4",
     "drizzle-orm": "^0.39.1",
-    "handlebars": "4.7.7",
     "json-stable-stringify": "^1.1.1",
     "postgres": "^3.4.5",
     "remeda": "1.6.1",

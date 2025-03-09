@@ -104,46 +104,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Health Check
-         * @description Check if the API is operational
-         */
-        get: operations["health"];
-        put?: never;
-        post: operations["healthEcho"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/viewer": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Current User
-         * @description Get information about the current authenticated user
-         */
-        get: operations["viewer"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/customer/{customer_id}/magic-link": {
         parameters: {
             query?: never;
@@ -184,10 +144,55 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Health Check
+         * @description Check if the API is operational
+         */
+        get: operations["health"];
+        put?: never;
+        post: operations["healthEcho"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/viewer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Current User
+         * @description Get information about the current authenticated user
+         */
+        get: operations["viewer"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AuthMode
+         * @enum {string}
+         */
+        AuthMode: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
         /** aircall */
         "connectors.aircall.connectionSettings": {
             /**
@@ -222,8 +227,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -297,8 +301,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -341,8 +344,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -463,8 +465,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -507,8 +508,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -551,8 +551,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -593,7 +592,14 @@ export interface components {
              * @enum {string}
              */
             connector_name: "googledrive";
-            settings: null;
+            settings: {
+                oauth: {
+                    credentials: Record<string, never>;
+                };
+                metadata?: {
+                    [key: string]: unknown;
+                };
+            };
         };
         /** greenhouse */
         "connectors.greenhouse.connectionSettings": {
@@ -625,8 +631,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -670,8 +675,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -714,8 +718,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -758,8 +761,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -802,8 +804,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -846,8 +847,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -920,8 +920,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -985,8 +984,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -1029,8 +1027,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -1090,6 +1087,7 @@ export interface components {
                 databaseUrl: string;
                 migrateTables?: boolean;
                 sourceQueries?: {
+                    /** @description Should order by lastModifiedAt and id descending */
                     invoice?: string | null;
                 };
             };
@@ -1104,8 +1102,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -1157,8 +1154,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -1201,8 +1197,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -1254,8 +1249,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -1414,8 +1408,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -1488,8 +1481,7 @@ export interface components {
             settings: {
                 oauth: {
                     credentials: {
-                        /** @enum {string} */
-                        type: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
+                        type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
                         access_token?: string;
                         refresh_token?: string;
@@ -2178,169 +2170,6 @@ export interface operations {
             };
         };
     };
-    health: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        ok: boolean;
-                    };
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    healthEcho: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    [key: string]: unknown;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    viewer: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @enum {string} */
-                        role: "customer" | "org" | "anon" | "user";
-                    };
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
     createMagicLink: {
         parameters: {
             query?: never;
@@ -2475,6 +2304,169 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    health: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ok: boolean;
+                    };
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    healthEcho: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    viewer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        role: "customer" | "org" | "anon" | "user";
+                    };
                 };
             };
             /** @description Authorization not provided */

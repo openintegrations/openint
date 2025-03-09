@@ -1,0 +1,37 @@
+---
+title: Data Model & Flows
+description: Understanding OpenInt's connector architecture
+---
+
+# Definitions
+
+- **Connector**: A connector is a standardized interface to interact with various third-party services. A connector can be `direct` or `aggregator`.
+- **Connector Config**: A connector config is a configuration for a connector.
+- **Connection**: A connection is a connection to a third-party service.
+- **Customer**: A customer is a user of your application. They can belong to a `customer organization`.
+
+```mermaid
+flowchart TD
+   Connector["Connector"]
+   ConnectorConfig["Connector Config"]
+   Connection["Connection"]
+
+   Connector --> ConnectorConfig
+   ConnectorConfig --> Connection
+
+```
+
+## Data Flows
+
+```mermaid
+flowchart TD
+    A[Customer in Your Front End] -->|Initiates flow| B[OpenInt @Connect]
+    B <--> |Manages Secure Authentication|C[OpenInt]
+    C --> E{Uses Partner Connector i.e. Plaid?}
+    E -->|Yes -> Aggregator Connector| D[Aggregator Connector - i.e. Plaid]
+    E -->|No -> Direct Connector| G[Direct Connector i.e. Chase Bank]
+
+    F[Your Backend] -->|Provides Unified Integrations API| C
+    D -->|Underlying Integration| G
+
+```
