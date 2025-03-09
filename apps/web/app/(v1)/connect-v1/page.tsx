@@ -3,7 +3,7 @@ import {R} from '@openint/util'
 import type {PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
-import {AddConnection} from './client'
+import {AddConnection, Dummy} from './client'
 
 function Fallback() {
   return <div>Loading...</div>
@@ -21,6 +21,7 @@ export default async function Page(props: PageProps) {
       <pre>
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
+      <Dummy />
       <Suspense fallback={<Fallback />}>
         <AddConnection
           connector_names={res

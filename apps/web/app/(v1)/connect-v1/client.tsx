@@ -1,6 +1,5 @@
 'use client'
 
-import {read} from 'fs'
 import dynamic from 'next/dynamic'
 import React from 'react'
 import {R} from '@openint/util'
@@ -10,6 +9,7 @@ function wrapModule(options: {useConnectorLogic: () => [string, unknown]}) {
     connector_name?: string
     onReady: (ctx: {state: string}) => void
   }) {
+    console.log('ModuleWrapper rendering', props.connector_name)
     const [state] = options.useConnectorLogic()
     const {onReady} = props
 
@@ -58,7 +58,13 @@ const ConnectorComponents = Object.fromEntries(
   ]),
 )
 
+export const Dummy = React.memo(function Dummy() {
+  console.log('dummy rendering at least twice guaranteed')
+  return 'Dummy'
+})
+
 export function AddConnection(props: {connector_names: Promise<string[]>}) {
+  console.log('AddConnection rendering')
   const connector_names = R.uniq(React.use(props.connector_names))
   const ref = React.useRef<{[k: string]: {state: string}}>({})
 
@@ -98,6 +104,7 @@ function AddConnectionInner({
   connector_name: string
   onReady: (ctx: {state: string}, name: string) => void
 }) {
+  console.log('AddConnectionInner rendering', name)
   const ref = React.useRef<{state: string} | undefined>(undefined)
 
   const [state, setState] = React.useState<{state: string} | undefined>(
