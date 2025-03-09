@@ -133,28 +133,27 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
-  // test('list connector config with expand enabled_integrations', async () => {
-  //   const res = await getClient({
-  //     role: 'org',
-  //     orgId: 'org_222',
-  //   }).listConnectorConfigs.query({
-  //     expand: ['enabled_integrations'],
-  //   })
-  //   expect(res.items).toHaveLength(2)
+  test('list connector config with expand enabled_integrations', async () => {
+    const res = await getClient({
+      role: 'org',
+      orgId: 'org_222',
+    }).listConnectorConfigs.query({
+      expand: ['enabled_integrations'],
+    })
+    expect(res.items).toHaveLength(2)
 
-  //   // Find the Google connector
-  //   const googleConnector = res.items.find(
-  //     (item) => item.connector_name === 'google',
-  //   )
-  //   expect(googleConnector).toBeTruthy()
+    // Find the Google connector
+    const googleConnector = res.items.find(
+      (item) => item.connector_name === 'google',
+    )
 
-  //   expect(googleConnector?.config?.integrations).toEqual({
-  //     drive: {
-  //       enabled: true,
-  //       scopes: 'https://www.googleapis.com/auth/drive',
-  //     },
-  //   })
-  // })
+    expect(googleConnector?.integrations).toEqual({
+      drive: {
+        enabled: true,
+        scopes: 'https://www.googleapis.com/auth/drive',
+      },
+    })
+  })
 
   test('list connector config with expand connector and enabled_integrations', async () => {
     const res = await getClient({
@@ -168,7 +167,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       (item) => item['connector_name'] === 'google',
     )
 
-    expect(googleConnector?.config?.integrations).toBeDefined()
+    expect(googleConnector?.integrations).toBeDefined()
     expect(googleConnector?.connector).toBeDefined()
   })
 })

@@ -12,13 +12,12 @@ import {
   zListResponse,
 } from '../utils/pagination'
 import {
-  expandConnector,
   zConnectionId,
   zConnectorConfigId,
   zConnectorName,
   zCustomerId,
-  zExpandOptions,
-} from './connectorConfig'
+} from '../utils/types'
+import {expandConnector, zExpandOptions} from './connectorConfig'
 
 const zIncludeSecrets = z
   .enum(['none', 'basic', 'all'])

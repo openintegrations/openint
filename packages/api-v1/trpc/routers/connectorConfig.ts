@@ -1,7 +1,6 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
@@ -13,36 +12,12 @@ import {
   zListParams,
   zListResponse,
 } from '../utils/pagination'
+import {zConnectorName} from '../utils/types'
 
 export const zExpandOptions = z
   .enum(['connector', 'enabled_integrations'])
   .describe(
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
-  )
-
-export const zConnectorName = z
-  .enum(
-    Object.keys(serverConnectors).filter((key) => key !== 'postgres') as [
-      string,
-      ...string[],
-    ],
-  )
-  .describe('The name of the connector')
-
-// temp ids
-export const zConnectionId = z
-  .string()
-  .startsWith('conn_')
-  .describe('The id of the connection, starts with `conn_`')
-export const zConnectorConfigId = z
-  .string()
-  .startsWith('ccfg_')
-  .describe('The id of the connector config, starts with `ccfg_`')
-
-export const zCustomerId = z
-  .string()
-  .describe(
-    'The id of the customer in your application. Ensure it is unique for that customer.',
   )
 
 export function expandConnector(
