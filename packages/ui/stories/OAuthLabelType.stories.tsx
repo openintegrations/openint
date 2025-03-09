@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import ConnectorAudience from './ConnectorAudience'
+import OAuthLabelType from '../shadcn/OAuthLabelType'
 
 const meta = {
-  title: 'UI/Badges/ConnectorAudience',
-  component: ConnectorAudience,
+  title: 'UI/Badges/OAuthLabelType',
+  component: OAuthLabelType,
   parameters: {
     layout: 'centered',
   },
@@ -18,7 +18,7 @@ const meta = {
   args: {
     children: 'Badge',
   },
-} satisfies Meta<typeof ConnectorAudience>
+} satisfies Meta<typeof OAuthLabelType>
 
 export default meta
 type Story = StoryObj<typeof meta>

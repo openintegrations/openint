@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import { ConnectorCard } from './ConnectorCard'
+import { ConnectorCard } from '../shadcn/ConnectorCard'
 
 // Simple logo for the story
 const SalesforceLogo = () => (

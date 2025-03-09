@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
-import FilterBadge from './FilterBadge'
+import FilterBadge from '../shadcn/FilterBadge'
 
 const meta = {
   title: 'UI/Badges/FilterBadge',

@@ -53,7 +53,7 @@ export function ConnectorsTable({
             <span className="font-medium">{connector.name}</span>
             
             <div className="ml-2 flex flex-wrap gap-2">
-              <ConnectorVerticalBadge>{connector.type}</ConnectorVerticalBadge>
+              <ConnectorVerticalBadge vertical={connector.type} />
               <OAuthLabelType>{connector.authType}</OAuthLabelType>
               <ConnectorAudience>{connector.audience}</ConnectorAudience>
               <ConnectorVersion>{connector.version}</ConnectorVersion>

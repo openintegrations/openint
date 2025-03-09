@@ -1,6 +1,6 @@
 import React from 'react'
-import { DataTable } from './DataTable'
-import { ColumnDef } from '@tanstack/react-table'
+import { DataTable } from '../components/DataTable'
+import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '../shadcn/Button'
 import { PlusCircle, ExternalLink, Edit, Play } from 'lucide-react'
 import StatusBadge from '../shadcn/StatusBadge'
@@ -19,12 +19,15 @@ interface Connector {
   status: 'enabled' | 'disabled'
 }
 
-export default {
+// Define the story metadata
+const meta = {
   title: 'UI/Tables/ConnectorsTable',
   parameters: {
     layout: 'centered',
   },
 }
+
+export default meta
 
 // Mock data
 const mockConnectors = [
