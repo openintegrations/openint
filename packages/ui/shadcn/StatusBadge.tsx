@@ -8,6 +8,7 @@ export type StatusBadgeVariant =
   | 'warning'
   | 'info'
   | 'default'
+  | 'disabled'
 
 export interface StatusBadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   status: StatusBadgeVariant
@@ -48,12 +49,20 @@ export function StatusBadge({
       className:
         'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
     },
+    disabled: {
+      label: text || 'Disabled',
+      className:
+        'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400',
+    },
   }
 
   const {label, className: statusClassName} = statusConfig[status]
 
   return (
-    <Badge className={cn('font-medium', statusClassName, className)} {...props}>
+    <Badge 
+      className={cn('font-medium rounded-md', statusClassName, className)} 
+      {...props}
+    >
       {label}
     </Badge>
   )
