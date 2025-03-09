@@ -2731,6 +2731,9 @@ importers:
 
   packages/ui-v1:
     dependencies:
+      '@tailwindcss/cli':
+        specifier: ^4.0.12
+        version: 4.0.12
       '@tanstack/react-query':
         specifier: ^5.67.2
         version: 5.67.2(react@19.0.0)
@@ -2740,6 +2743,9 @@ importers:
       '@trpc/tanstack-react-query':
         specifier: next
         version: 11.0.0-rc.824(@tanstack/react-query@5.67.2(react@19.0.0))(@trpc/client@11.0.0-rc.824(@trpc/server@11.0.0-rc.824(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.0.0-rc.824(typescript@5.8.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)
+      tailwindcss:
+        specifier: ^4.0.12
+        version: 4.0.12
 
   packages/util:
     dependencies:
@@ -9523,6 +9529,7 @@ packages:
 
   bun@1.2.4:
     resolution: {integrity: sha512-ZY0EZ/UKqheaLeAtMsfJA6jWoWvV9HAtfFaOJSmS3LrNpFKs1Sg5fZLSsczN1h3a+Dtheo4O3p3ZYWrf40kRGw==}
+    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 

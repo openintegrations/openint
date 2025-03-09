@@ -3,11 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "module": "./index.ts",
-  "scripts": {},
+  "scripts": {
+    "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./.storybook/tailwind.css"
+  },
   "dependencies": {
     "@tanstack/react-query": "^5.67.2",
     "@trpc/client": "next",
     "@trpc/tanstack-react-query": "next"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.12",
+    "tailwindcss": "^4.0.12"
+  }
 }
