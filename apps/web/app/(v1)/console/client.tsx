@@ -9,7 +9,7 @@ import {
   QueryClient,
   QueryClientProvider,
   useSuspenseQuery,
-} from '@openint/ui-v1'
+} from '@openint/ui-v1/trpc'
 
 // MARK: - Move me into client common
 

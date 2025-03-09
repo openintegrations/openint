@@ -1,7 +1,3 @@
-// tailwind.css file will be built separately
-// eslint-disable-next-line import/no-unresolved
-import './tailwind.css'
-
 export const metadata = {
   title: 'OpenInt Dashboard',
   icons: [{url: '/favicon.svg', type: 'image/svg+xml'}],

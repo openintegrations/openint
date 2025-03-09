@@ -9,7 +9,7 @@ export function ApiV1Schema() {
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'ApiV1Schema',
+  title: 'v0/ApiV1Schema',
   component: ApiV1Schema,
   parameters: {},
 } satisfies Meta<typeof ApiV1Schema>
