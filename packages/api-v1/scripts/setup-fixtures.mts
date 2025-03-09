@@ -21,23 +21,65 @@ export async function setupFixture(info: Info) {
     .insert(schema.organization)
     .values({id: info.orgId, name: 'Test Organization', api_key})
     .onConflictDoNothing()
-  const ccfgId = makeId('ccfg', 'greenhouse', makeUlid())
-  const connId = makeId('conn', 'greenhouse', makeUlid())
 
-  await db
-    .insert(schema.connector_config)
-    .values({org_id: info.orgId, id: ccfgId})
-    .onConflictDoNothing()
+  await (async function setupGreenhouse() {
+    const ccfgId = makeId('ccfg', 'greenhouse', makeUlid())
+    const connId = makeId('conn', 'greenhouse', makeUlid())
 
-  await db
-    .insert(schema.connection)
-    .values({
-      connector_config_id: ccfgId,
-      id: connId,
-      customer_id: info.cusId,
-      settings: {apiKey: ''},
-    })
-    .onConflictDoNothing()
+    await db
+      .insert(schema.connector_config)
+      .values({org_id: info.orgId, id: ccfgId})
+      .onConflictDoNothing()
+
+    await db
+      .insert(schema.connection)
+      .values({
+        connector_config_id: ccfgId,
+        id: connId,
+        customer_id: info.cusId,
+        settings: {apiKey: ''},
+      })
+      .onConflictDoNothing()
+  })()
+
+  await (async function setupPlaid() {
+    const ccfgId = makeId('ccfg', 'plaid', makeUlid())
+    const connId = makeId('conn', 'plaid', makeUlid())
+
+    await db
+      .insert(schema.connector_config)
+      .values({
+        org_id: info.orgId,
+        id: ccfgId,
+        config: {
+          envName: 'sandbox',
+          credentials: null,
+          clientName: 'This Application',
+          products: ['transactions'],
+          countryCodes: ['US', 'CA'],
+          language: 'en',
+        },
+      })
+      .onConflictDoNothing()
+
+    await db
+      .insert(schema.connection)
+      .values({
+        connector_config_id: ccfgId,
+        id: connId,
+        customer_id: info.cusId,
+        settings: {
+          itemId: '',
+          accessToken: '',
+          institution: null,
+          item: null,
+          status: null,
+          webhookItemError: null,
+        },
+      })
+      .onConflictDoNothing()
+  })()
+
   const token = await jwt.signViewer(viewer)
 
   return {...info, token, viewer}

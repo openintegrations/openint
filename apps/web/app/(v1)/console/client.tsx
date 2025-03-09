@@ -11,6 +11,8 @@ import {
   useSuspenseQuery,
 } from '@openint/ui-v1'
 
+// MARK: - Move me into client common
+
 export const {TRPCProvider, useTRPC, useTRPCClient} =
   createTRPCContext<AppRouter>()
 
@@ -69,6 +71,8 @@ export function ClientApp({
     </QueryClientProvider>
   )
 }
+
+// MARK: -
 
 export function AddConnection(props: {initialData: Promise<any>}) {
   const initialData = React.use(props.initialData)
