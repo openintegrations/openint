@@ -177,7 +177,7 @@ export const connectionRouter = router({
         // @ts-expect-error at this point connector and refreshConnection should exist...
         const refreshedConnectionSettings = await connector.refreshConnection(
           connection.settings,
-          connector_config,
+          connector_config.config,
         )
         const updatedConnection = await ctx.db
           .update(schema.connection)

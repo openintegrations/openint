@@ -202,7 +202,38 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
     throw new Error('This server can only be used with OAuth2 connectors')
   }
 
+  const connectorName = connectorDef.connector_name
+  let clientId: string | undefined
+  let clientSecret: string | undefined
+  
+  function addCcfgDefaultCredentials(config: any): {client_id: string; client_secret: string; scopes?: string[] | null | undefined  {
+    return {
+      client_id: config.client_id ?? process.env[`ccfg_${connectorName}__CLIENT_ID`],
+      client_secret: config.client_secret ?? process.env[`ccfg_${connectorName}__CLIENT_SECRET`],
+      scopes: config.scopes,
+    }
+  }
+
   return {
+    newInstance: ({config, settings}) => {
+      clientId =
+        config.client_id ?? process.env[`ccfg_${connectorName}__CLIENT_ID`]
+      clientSecret =
+        config.client_secret ??
+        process.env[`ccfg_${connectorName}__CLIENT_SECRET`]
+
+      if (!clientId || !clientSecret) {
+        throw new Error(
+          `Missing client_id or client_secret for ${connectorName}`,
+        )
+      }
+
+      if(settings?.oauth?.credentials?.client_id && settings?.oauth?.credentials?.client_id !== clientId) {
+        throw new Error(
+          `Client ID mismatch for ${connectorName}. Expected ${clientId}, got ${settings?.oauth?.credentials?.client_id}`,
+        )
+      }
+    },
     async preConnect(connectorConfig, connectionSettings, input) {
       const authorizeHandler =
         connectorDef.handlers?.authorize || defaultAuthorizeHandler
@@ -257,7 +288,7 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       const tokenResponse = await tokenHandler({
         flow_type: 'exchange',
         auth_params: connectorDef.auth_params as TokenParams,
-        connector_config: config,
+        connector_config: addCcfgDefaultCredentials(config),
         code: connectOutput.code,
         state: connectOutput.state,
         token_request_url: connectorDef.token_request_url,
@@ -279,7 +310,7 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
           oauth: {
             credentials: {
               ...result.credentials,
-              client_id: config.client_id,
+              client_id: config.clientSecret,
               connection_id: connectOutput.connectionId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
@@ -323,7 +354,7 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       const tokenResponse = await tokenHandler({
         flow_type: 'refresh',
         auth_params: connectorDef.auth_params as RefreshParams,
-        connector_config: config.config,
+        connector_config: addCcfgDefaultCredentials(config),
         token_request_url: connectorDef.token_request_url,
         refresh_token: refreshToken,
       })
@@ -341,7 +372,7 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         oauth: {
           credentials: {
             ...result.credentials,
-            client_id: config.config.client_id,
+            client_id: clientId,
             connection_id: settings.oauth?.credentials?.connection_id,
             created_at: settings.oauth?.credentials?.created_at,
             updated_at: new Date().toISOString(),
@@ -360,3 +391,4 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
     },
   }
 }
+
