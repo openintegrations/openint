@@ -18,6 +18,7 @@ export const zConnectorStage = z.enum(['hidden', 'alpha', 'beta', 'ga'])
 export type OpenApiSpec = oas30.OpenAPIObject | oas31.OpenAPIObject
 
 export interface ConnectorMetadata {
+  // TODO: @pellicceama add audience and other fields from SimpleConnectorDef
   logoUrl?: string
   logoSvg?: string
   displayName?: string

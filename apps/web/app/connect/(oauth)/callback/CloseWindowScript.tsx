@@ -7,6 +7,11 @@ export function CloseWindowScript() {
   useEffect(() => {
     console.log('New OAuthCallback, extracting params and sending to parent')
 
+    // TODO: @pellicceama  either redirect if there is a redirect url
+    // or close window. need to sigle-window use cases for connect
+    // The client SDK should allow redirect url to be configurable
+    // something like a window = 'same' | 'new-window' | 'auto' where auto uses feature detection
+    // to know what is best
     try {
       // Extract all search params from URL
       const searchParams = new URLSearchParams(window.location.search)

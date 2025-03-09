@@ -1,5 +1,5 @@
-import {ConnectorSchemas, ConnectorServer} from '../../../kits/cdk'
-import {ConnectorDef} from '../def'
+import type {ConnectorSchemas, ConnectorServer} from '../../../kits/cdk'
+import type {ConnectorDef} from '../def'
 import {generateOAuth2Server} from './oauth2'
 
 export function generateConnectorServerV1<T extends ConnectorSchemas>(

@@ -11,6 +11,7 @@ export const zOauthConnectorConfig = z
 
 // Base auth params shared across flows
 export const zBaseAuthParams = z.object({
+  /** Which part of token exchange response to save into config settings */
   capture_response_fields: z.array(z.string()).optional(),
   field_mappings: z
     .object({
