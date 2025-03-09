@@ -1,4 +1,5 @@
 import {z} from '@openint/util'
+// TODO: don't call it legacy, new one is actually simplified json schema
 import {ConnectorDef as LegacyConnectorDef} from '../../kits/cdk'
 import {ConnectorDef, zOauthConnectorConfig} from './def'
 
