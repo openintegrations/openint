@@ -1,2 +1,7 @@
-@import '../shadcn/global.css';
-@source "../shadcn/components/**/*.tsx";
+/* Bit weird dependency-wise, can we be better? */
+@source "../../apps/web/app/(v1)/**/*.tsx";
+@source "./components/**/*.tsx";
+
+@import '@openint/shadcn/global.css';
+
+@plugin 'tailwindcss-radix';
