@@ -1,6 +1,7 @@
 import {z} from '@openint/util'
-import {ConnectorDef as LegacyConnectorDef} from '../../kits/cdk'
-import {ConnectorDef, zConnectorConfig} from './def'
+import type {ConnectorDef as LegacyConnectorDef} from '../../kits/cdk'
+import type {ConnectorDef} from './def'
+import {zConnectorConfig} from './def'
 
 export function generateConnectorDef(def: ConnectorDef): LegacyConnectorDef {
   const connectorConfig = () => {

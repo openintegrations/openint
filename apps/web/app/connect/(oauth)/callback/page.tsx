@@ -27,6 +27,9 @@ export default function OAuthCallback({
     if (isNewState) {
       // We can't close the window server-side, so we'll need client-side JS for this
       // Return a minimal client component that will close the window
+      // TODO: @pellicceama handle token exchange server side via postConnect here rather than
+      // passing the code to the client for call postConnect in a separate roundtrip
+
       return <CloseWindowScript />
     } else {
       const url = new URL('https://api.nango.dev/oauth/callback')
