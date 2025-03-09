@@ -9,7 +9,7 @@
     "@openint/cdk": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/util": "workspace:*",
-    "@tanstack/react-query": "*",
+    "@tanstack/react-query": "4.28.0",
     "@trpc/client": "10.40.0",
     "@trpc/react-query": "10.40.0",
     "@trpc/server": "10.40.0",

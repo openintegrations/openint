@@ -33,7 +33,7 @@ beforeAll(async () => {
     baseUrl: 'http://localhost:4000/api/v0',
   })
   trpc = createAppTrpcClient({
-    apiUrl: 'http://localhost:4000/api/trpc',
+    apiUrl: 'http://localhost:4000/api/v0/trpc',
     // TODO: also test with end user authentication token
     headers: {'x-apikey': fixture.apiKey},
   })

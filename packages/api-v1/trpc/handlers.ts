@@ -35,8 +35,9 @@ export const createFetchHandlerOpenAPI =
   }
 
 /**
- * When testing, generally testTRPClient is preferred to ensure request response
- * goes through the whole handler
+ * When testing,
+ * - trpc client is preferred to ensure request response goes through the whole handler,
+ * - trpc caller is optimized for max performance while still consistency through api handling
  */
 export function createTRPCCaller(
   /** Not able to support custom router at the moment, cannot get types to work */

@@ -32,7 +32,7 @@ export function TRPCProvider({
       _trpcReact.createClient({
         links: [
           (debug || true ? httpLink : httpBatchLink)({
-            url: apiUrl ?? '/api/trpc',
+            url: apiUrl ?? '/api/v0/trpc',
             headers: () => ({
               ...(accessToken ? {Authorization: `Bearer ${accessToken}`} : {}),
             }),

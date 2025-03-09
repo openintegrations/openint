@@ -18,7 +18,7 @@ export function createAppTrpcClient({
   return createTRPCProxyClient<FlatRouter>({
     links: [
       (debug || true ? httpLink : httpBatchLink)({
-        url: apiUrl ?? '/api/trpc',
+        url: apiUrl ?? '/api/v0/trpc',
         headers: () => ({
           ...(accessToken ? {Authorization: `Bearer ${accessToken}`} : {}),
           ...(headers as Record<string, string | undefined>),

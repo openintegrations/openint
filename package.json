@@ -99,7 +99,6 @@
       "urix": "0.1.0"
     },
     "overrides": {
-      "@tanstack/react-query": "4.28.0",
       "@types/react": "19.0.10",
       "@types/react-dom": "19.0.4",
       "axios": "0.21.1",

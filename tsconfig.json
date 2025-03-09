@@ -28,7 +28,15 @@
       "@openint/open-file-picker": ["./kits/file-picker/src"]
     }
   },
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mts",
+    "**/*.mtsx",
+    "**/*.cts",
+    "**/*.ctsx"
+  ],
   "exclude": ["node_modules", "gateway"],
   "plugins": [{"name": "typescript-snapshots-plugin"}]
 }
