@@ -3,11 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "module": "./index.ts",
-  "scripts": {},
+  "scripts": {
+    "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./.storybook/tailwind.css"
+  },
   "dependencies": {
     "@tanstack/react-query": "^5.67.2",
     "@trpc/client": "next",
-    "@trpc/tanstack-react-query": "next"
+    "@trpc/tanstack-react-query": "next",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.479.0",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.12"
+  }
 }
