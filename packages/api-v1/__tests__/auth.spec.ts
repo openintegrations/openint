@@ -49,13 +49,19 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   const apiKey = `key_${makeUlid()}`
 
   beforeAll(async () => {
+    const client = getClient({role: 'org', orgId: 'org_123'})
     await db.$truncateAll()
-    await db
-      .insert(schema.connector_config)
-      .values({org_id: 'org_123', id: 'ccfg_123'})
+
     await db.insert(schema.organization).values({
       id: 'org_123',
       api_key: apiKey,
+    })
+    await client.createConnectorConfig.mutate({
+      connector_name: 'qbo',
+      config: {
+        oauth: {client_id: 'client_123', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
     })
   })
 
@@ -83,12 +89,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     const client = getClient({role: 'org', orgId: 'org_123'})
     const res = await client.listConnectorConfigs.query()
     expect(res.items).toHaveLength(1)
-    expect(res.items[0]?.id).toEqual('ccfg_123')
+    expect(res.items[0]?.id).toMatch(/^ccfg_qbo_/)
 
     const caller = getCaller({role: 'org', orgId: 'org_123'})
     const res2 = await caller.listConnectorConfigs()
     expect(res2.items).toHaveLength(1)
-    expect(res2.items[0]?.id).toEqual('ccfg_123')
+    expect(res2.items[0]?.id).toMatch(/^ccfg_qbo_/)
   })
 
   test('org has no access to other orgs connector config', async () => {

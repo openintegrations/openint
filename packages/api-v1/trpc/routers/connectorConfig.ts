@@ -1,26 +1,109 @@
+import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
+import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {
-  expandConnector,
-  zConnectorName,
-  zExpandOptions,
-} from '../utils/connectorUtils'
+import {core} from '../../models'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
   zListParams,
   zListResponse,
 } from '../utils/pagination'
+import {zConnectorName} from '../utils/types'
 
-/** TODO: Use the real type */
-const connector_config = z.object({
-  id: z.string(),
-  org_id: z.string(),
-  connector_name: z.string(),
-})
+export const zExpandOptions = z
+  .enum(['connector', 'enabled_integrations'])
+  .describe(
+    'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
+  )
+
+export function expandConnector(
+  connectorConfig: z.infer<typeof core.connector_config>,
+): Pick<
+  z.infer<typeof core.connector>,
+  'name' | 'display_name' | 'logo_url' | 'stage' | 'platforms'
+> & {
+  created_at: string
+  updated_at: string
+} {
+  const connectorName = connectorConfig.connector_name
+
+  const connector = defConnectors[connectorName as keyof typeof defConnectors]
+  if (!connector) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: `Connector not found: ${connectorName}`,
+    })
+  }
+
+  const logoUrl =
+    connector.metadata &&
+    'logoUrl' in connector.metadata &&
+    connector.metadata.logoUrl?.startsWith('http')
+      ? connector.metadata.logoUrl
+      : connector.metadata && 'logoUrl' in connector.metadata
+        ? // TODO: replace this with our own custom domain
+          `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/${connector.metadata.logoUrl}`
+        : undefined
+
+  return {
+    // TODO: add more fields?
+    name: connectorName,
+    // TODO: add display_name?
+    // display_name: connectorConfig.display_name,
+    // TODO: add enabled?
+    // enabled: connectorConfig.enabled,
+    created_at: connectorConfig.created_at,
+    updated_at: connectorConfig.updated_at,
+    logo_url: logoUrl,
+  }
+}
+
+interface IntegrationConfig {
+  enabled?: boolean
+  scopes?: string | string[]
+  [key: string]: any
+}
+
+export function expandIntegrations(
+  connectorConfig: z.infer<typeof core.connector_config>,
+): Record<string, IntegrationConfig> | undefined {
+  if (
+    !connectorConfig ||
+    !connectorConfig.config ||
+    !connectorConfig.config.integrations
+  ) {
+    return undefined
+  }
+
+  const {integrations} = connectorConfig.config
+  const enabledIntegrations = Object.entries(
+    integrations as Record<string, IntegrationConfig>,
+  )
+    .filter(([_, config]) => config && config.enabled === true)
+    .reduce(
+      (acc, [key, config]) => {
+        acc[key] = config
+        return acc
+      },
+      {} as Record<string, IntegrationConfig>,
+    )
+
+  return Object.keys(enabledIntegrations).length > 0
+    ? enabledIntegrations
+    : undefined
+}
+
+const connectorConfigWithRelations = z.intersection(
+  core.connector_config,
+  z.object({
+    connector: core.connector.optional(),
+    integrations: z.record(core.integration).optional(),
+  }),
+)
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -28,8 +111,7 @@ export const connectorConfigRouter = router({
       openapi: {
         method: 'GET',
         path: '/connector-config',
-        description:
-          'List all connector configurations with optional filtering',
+        description: 'List all connector configurations',
         summary: 'List Connector Configurations',
       },
     })
@@ -42,7 +124,7 @@ export const connectorConfigRouter = router({
         .optional(),
     )
     .output(
-      zListResponse(connector_config).describe(
+      zListResponse(connectorConfigWithRelations).describe(
         'The list of connector configurations',
       ),
     )
@@ -73,16 +155,35 @@ export const connectorConfigRouter = router({
         'connector_config',
       )
 
+      // Process items with proper typing
+      const processedItems: z.infer<typeof connectorConfigWithRelations>[] =
+        await Promise.all(
+          items.map(async (ccfg) => {
+            const result = {...ccfg} as z.infer<
+              typeof connectorConfigWithRelations
+            >
+
+            if (input?.expand?.includes('connector')) {
+              const connector = expandConnector(ccfg)
+              if (connector) {
+                result.connector = connector
+              }
+            }
+
+            if (input?.expand?.includes('enabled_integrations')) {
+              const filteredIntegrations = expandIntegrations(ccfg)
+
+              if (filteredIntegrations && result.config) {
+                result.integrations = filteredIntegrations
+              }
+            }
+
+            return result
+          }),
+        )
+
       return {
-        // @pellicceama use drizzle.query.$table.findMany({with:{... }}) for db-based expansion
-        // so we get all the data in one go. For connector it's fine since it's not stored in db
-        items: await Promise.all(
-          items.map(async (ccfg) =>
-            input?.expand.includes('connector')
-              ? {...ccfg, connector: await expandConnector(ccfg)}
-              : ccfg,
-          ),
-        ),
+        items: processedItems,
         total,
         limit,
         offset,
@@ -90,14 +191,16 @@ export const connectorConfigRouter = router({
     }),
   createConnectorConfig: orgProcedure
     .meta({
-      openapi: {method: 'POST', path: '/connector-config'},
+      openapi: {method: 'POST', path: '/connector-config', enabled: false},
     })
     .input(
       z.object({
         connector_name: z.string(),
+        // TODO: why is this unknown / any?
+        config: z.record(z.unknown()).nullish(),
       }),
     )
-    .output(connector_config)
+    .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
       const {connector_name} = input
       const [ccfg] = await ctx.db
@@ -105,6 +208,7 @@ export const connectorConfigRouter = router({
         .values({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
+          config: input.config,
         })
         .returning()
       return ccfg!
