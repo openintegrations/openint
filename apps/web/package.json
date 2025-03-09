@@ -32,6 +32,7 @@
     "@openint/shadcn": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/ui-v1": "workspace:*",
+    "@openint/shadcn": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@sentry/nextjs": "^9.5.0",

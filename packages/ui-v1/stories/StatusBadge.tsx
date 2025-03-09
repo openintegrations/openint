@@ -54,7 +54,6 @@ export function StatusBadge({
 
   return (
     <div className="bg-background p-5">
-
       <Badge
         className={cn('font-medium', statusClassName, className)}
         {...props}>
