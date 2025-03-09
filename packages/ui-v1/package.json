@@ -4,13 +4,13 @@
   "private": true,
   "module": "./index.ts",
   "scripts": {
+    "@tailwindcss/cli": "pnpm dlx @tailwindcss/cli",
     "build-storybook": "storybook build",
     "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./.storybook/tailwind.css",
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
     "dev": "concurrently npm:dev:*",
     "dev:storybook": "storybook dev -p 6006",
-    "dev:tailwind": "pnpm build-tailwind --watch",
-    "@tailwindcss/cli": "pnpm dlx @tailwindcss/cli"
+    "dev:tailwind": "pnpm build-tailwind --watch"
   },
   "dependencies": {
     "@openint/shadcn": "workspace:*",
@@ -18,7 +18,8 @@
     "@trpc/client": "next",
     "@trpc/tanstack-react-query": "next",
     "next": "15.2.1",
-    "react": "^19.0.0"
+    "react": "^19.0.0",
+    "sonner": "^1.4.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",

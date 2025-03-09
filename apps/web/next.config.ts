@@ -19,6 +19,8 @@ const nextConfig = {
     path.resolve(__dirname, '../../packages/engine-backend'),
     path.resolve(__dirname, '../../packages/engine-frontend'),
     path.resolve(__dirname, '../../packages/ui'),
+    path.resolve(__dirname, '../../packages/ui-v1'),
+    path.resolve(__dirname, '../../packages/shadcn'),
     path.resolve(__dirname, '../../packages/util'),
     ...connectorInfos.map(({dirName}) =>
       path.resolve(__dirname, `../../connectors/${dirName}`),

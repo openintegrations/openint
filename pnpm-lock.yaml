@@ -2689,6 +2689,9 @@ importers:
       react:
         specifier: 19.0.0
         version: 19.0.0
+      sonner:
+        specifier: ^1.4.0
+        version: 1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^3.2.5
