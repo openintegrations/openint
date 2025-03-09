@@ -39,11 +39,21 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   test('create connector config', async () => {
     const res = await asOrg.createConnectorConfig({
       connector_name: 'qbo',
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
     })
     expect(res).toEqual({
       id: expect.any(String),
       org_id: 'org_222',
       connector_name: 'qbo',
+      created_at: expect.any(String),
+      updated_at: expect.any(String),
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
     })
   })
 
@@ -81,5 +91,83 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   test('other user does not have access to org connector config', async () => {
     const res = await asOtherUser.listConnectorConfigs()
     expect(res.items).toHaveLength(0)
+  })
+
+  test('create connector config with integrations', async () => {
+    const res = await asOrg.createConnectorConfig({
+      connector_name: 'google',
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        integrations: {
+          drive: {
+            enabled: true,
+            scopes: 'https://www.googleapis.com/auth/drive',
+          },
+          gmail: {
+            enabled: false,
+            scopes: 'https://www.googleapis.com/auth/gmail',
+          },
+        },
+      },
+    })
+
+    expect(res).toEqual({
+      id: expect.any(String),
+      org_id: 'org_222',
+      connector_name: 'google',
+      created_at: expect.any(String),
+      updated_at: expect.any(String),
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        integrations: {
+          drive: {
+            enabled: true,
+            scopes: 'https://www.googleapis.com/auth/drive',
+          },
+          gmail: {
+            enabled: false,
+            scopes: 'https://www.googleapis.com/auth/gmail',
+          },
+        },
+      },
+    })
+  })
+
+  test('list connector config with expand enabled_integrations', async () => {
+    const res = await getClient({
+      role: 'org',
+      orgId: 'org_222',
+    }).listConnectorConfigs.query({
+      expand: ['enabled_integrations'],
+    })
+    expect(res.items).toHaveLength(2)
+
+    // Find the Google connector
+    const googleConnector = res.items.find(
+      (item) => item.connector_name === 'google',
+    )
+
+    expect(googleConnector?.integrations).toEqual({
+      drive: {
+        enabled: true,
+        scopes: 'https://www.googleapis.com/auth/drive',
+      },
+    })
+  })
+
+  test('list connector config with expand connector and enabled_integrations', async () => {
+    const res = await getClient({
+      role: 'org',
+      orgId: 'org_222',
+    }).listConnectorConfigs.query({
+      expand: ['connector', 'enabled_integrations'],
+    })
+
+    const googleConnector = res.items.find(
+      (item) => item['connector_name'] === 'google',
+    )
+
+    expect(googleConnector?.integrations).toBeDefined()
+    expect(googleConnector?.connector).toBeDefined()
   })
 })
