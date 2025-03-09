@@ -122,10 +122,13 @@ export function expandIntegrations(
     : undefined
 }
 
-type ExpandedConnectorConfig = z.infer<typeof core.connector_config> & {
-  connector?: Partial<z.infer<typeof core.connector>>
-  integrations?: Record<string, any>
-}
+const connectorConfigWithRelations = z.intersection(
+  core.connector_config,
+  z.object({
+    connector: core.connector.optional(),
+    integrations: z.record(core.integration).optional(),
+  }),
+)
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -133,8 +136,7 @@ export const connectorConfigRouter = router({
       openapi: {
         method: 'GET',
         path: '/connector-config',
-        description:
-          'List all connector configurations with optional filtering',
+        description: 'List all connector configurations',
         summary: 'List Connector Configurations',
       },
     })
@@ -147,7 +149,7 @@ export const connectorConfigRouter = router({
         .optional(),
     )
     .output(
-      zListResponse(core.connector_config).describe(
+      zListResponse(connectorConfigWithRelations).describe(
         'The list of connector configurations',
       ),
     )
@@ -179,28 +181,31 @@ export const connectorConfigRouter = router({
       )
 
       // Process items with proper typing
-      const processedItems: ExpandedConnectorConfig[] = await Promise.all(
-        items.map(async (ccfg) => {
-          const result = {...ccfg} as ExpandedConnectorConfig
+      const processedItems: z.infer<typeof connectorConfigWithRelations>[] =
+        await Promise.all(
+          items.map(async (ccfg) => {
+            const result = {...ccfg} as z.infer<
+              typeof connectorConfigWithRelations
+            >
 
-          if (input?.expand?.includes('connector')) {
-            const connector = expandConnector(ccfg)
-            if (connector) {
-              result.connector = connector
+            if (input?.expand?.includes('connector')) {
+              const connector = expandConnector(ccfg)
+              if (connector) {
+                result.connector = connector
+              }
             }
-          }
 
-          if (input?.expand?.includes('enabled_integrations')) {
-            const filteredIntegrations = expandIntegrations(ccfg)
+            if (input?.expand?.includes('enabled_integrations')) {
+              const filteredIntegrations = expandIntegrations(ccfg)
 
-            if (filteredIntegrations && result.config) {
-              result.config.integrations = filteredIntegrations
+              if (filteredIntegrations && result.config) {
+                result.integrations = filteredIntegrations
+              }
             }
-          }
 
-          return result
-        }),
-      )
+            return result
+          }),
+        )
 
       return {
         items: processedItems,
@@ -211,11 +216,12 @@ export const connectorConfigRouter = router({
     }),
   createConnectorConfig: orgProcedure
     .meta({
-      openapi: {method: 'POST', path: '/connector-config'},
+      openapi: {method: 'POST', path: '/connector-config', enabled: false},
     })
     .input(
       z.object({
         connector_name: z.string(),
+        // TODO: why is this unknown / any?
         config: z.record(z.unknown()).nullish(),
       }),
     )
