@@ -52,7 +52,8 @@ paths:
               type: string
               enum:
                 - connector
-              description: 'Fields to expand: connector (includes connector details)'
+                - enabled_integrations
+              description: 'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)'
             default: []
       responses:
         '200':
@@ -231,7 +232,8 @@ paths:
               type: string
               enum:
                 - connector
-              description: 'Fields to expand: connector (includes connector details)'
+                - enabled_integrations
+              description: 'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)'
             default: []
       responses:
         '200':
@@ -429,7 +431,7 @@ paths:
     get:
       operationId: listConnectorConfigs
       summary: List Connector Configurations
-      description: List all connector configurations with optional filtering
+      description: List all connector configurations
       security:
         - ApiKey: []
         - CustomerToken: []
@@ -459,7 +461,8 @@ paths:
               type: string
               enum:
                 - connector
-              description: 'Fields to expand: connector (includes connector details)'
+                - enabled_integrations
+              description: 'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)'
             default: []
         - in: query
           name: connector_name
@@ -525,18 +528,134 @@ paths:
                   items:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        org_id:
-                          type: string
-                        connector_name:
-                          type: string
-                      required:
-                        - id
-                        - org_id
-                        - connector_name
+                      allOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            updated_at:
+                              type: string
+                            created_at:
+                              type: string
+                            org_id:
+                              type: string
+                          required:
+                            - id
+                            - updated_at
+                            - created_at
+                            - org_id
+                          description: Connector Config Base
+                        - oneOf:
+                            - $ref: '#/components/schemas/connectors.aircall.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.airtable.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.apollo.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.beancount.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.brex.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.coda.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.confluence.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.discord.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.finch.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.firebase.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.foreceipt.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.github.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.gong.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.google.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.greenhouse.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.heron.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.hubspot.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.intercom.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.jira.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.kustomer.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.lever.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.linear.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.lunchmoney.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.mercury.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.merge.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.microsoft.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.moota.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.onebrick.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.outreach.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.pipedrive.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.plaid.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.postgres.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.qbo.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.ramp.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.salesforce.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.salesloft.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.saltedge.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.slack.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.splitwise.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.stripe.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.teller.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.toggl.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.twenty.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.venmo.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.wise.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.xero.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.yodlee.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.zohodesk.connectorConfig'
+                            - $ref: '#/components/schemas/connectors.googledrive.connectorConfig'
+                          discriminator:
+                            propertyName: connector_name
+                            mapping:
+                              aircall: '#/components/schemas/connectors.aircall.connectorConfig'
+                              airtable: '#/components/schemas/connectors.airtable.connectorConfig'
+                              apollo: '#/components/schemas/connectors.apollo.connectorConfig'
+                              beancount: '#/components/schemas/connectors.beancount.connectorConfig'
+                              brex: '#/components/schemas/connectors.brex.connectorConfig'
+                              coda: '#/components/schemas/connectors.coda.connectorConfig'
+                              confluence: '#/components/schemas/connectors.confluence.connectorConfig'
+                              discord: '#/components/schemas/connectors.discord.connectorConfig'
+                              finch: '#/components/schemas/connectors.finch.connectorConfig'
+                              firebase: '#/components/schemas/connectors.firebase.connectorConfig'
+                              foreceipt: '#/components/schemas/connectors.foreceipt.connectorConfig'
+                              github: '#/components/schemas/connectors.github.connectorConfig'
+                              gong: '#/components/schemas/connectors.gong.connectorConfig'
+                              google: '#/components/schemas/connectors.google.connectorConfig'
+                              greenhouse: '#/components/schemas/connectors.greenhouse.connectorConfig'
+                              heron: '#/components/schemas/connectors.heron.connectorConfig'
+                              hubspot: '#/components/schemas/connectors.hubspot.connectorConfig'
+                              intercom: '#/components/schemas/connectors.intercom.connectorConfig'
+                              jira: '#/components/schemas/connectors.jira.connectorConfig'
+                              kustomer: '#/components/schemas/connectors.kustomer.connectorConfig'
+                              lever: '#/components/schemas/connectors.lever.connectorConfig'
+                              linear: '#/components/schemas/connectors.linear.connectorConfig'
+                              lunchmoney: '#/components/schemas/connectors.lunchmoney.connectorConfig'
+                              mercury: '#/components/schemas/connectors.mercury.connectorConfig'
+                              merge: '#/components/schemas/connectors.merge.connectorConfig'
+                              microsoft: '#/components/schemas/connectors.microsoft.connectorConfig'
+                              moota: '#/components/schemas/connectors.moota.connectorConfig'
+                              onebrick: '#/components/schemas/connectors.onebrick.connectorConfig'
+                              outreach: '#/components/schemas/connectors.outreach.connectorConfig'
+                              pipedrive: '#/components/schemas/connectors.pipedrive.connectorConfig'
+                              plaid: '#/components/schemas/connectors.plaid.connectorConfig'
+                              postgres: '#/components/schemas/connectors.postgres.connectorConfig'
+                              qbo: '#/components/schemas/connectors.qbo.connectorConfig'
+                              ramp: '#/components/schemas/connectors.ramp.connectorConfig'
+                              salesforce: '#/components/schemas/connectors.salesforce.connectorConfig'
+                              salesloft: '#/components/schemas/connectors.salesloft.connectorConfig'
+                              saltedge: '#/components/schemas/connectors.saltedge.connectorConfig'
+                              slack: '#/components/schemas/connectors.slack.connectorConfig'
+                              splitwise: '#/components/schemas/connectors.splitwise.connectorConfig'
+                              stripe: '#/components/schemas/connectors.stripe.connectorConfig'
+                              teller: '#/components/schemas/connectors.teller.connectorConfig'
+                              toggl: '#/components/schemas/connectors.toggl.connectorConfig'
+                              twenty: '#/components/schemas/connectors.twenty.connectorConfig'
+                              venmo: '#/components/schemas/connectors.venmo.connectorConfig'
+                              wise: '#/components/schemas/connectors.wise.connectorConfig'
+                              xero: '#/components/schemas/connectors.xero.connectorConfig'
+                              yodlee: '#/components/schemas/connectors.yodlee.connectorConfig'
+                              zohodesk: '#/components/schemas/connectors.zohodesk.connectorConfig'
+                              googledrive: '#/components/schemas/connectors.googledrive.connectorConfig'
+                          description: Connector specific data
+                        - type: object
+                          properties:
+                            connector:
+                              $ref: '#/components/schemas/core.connector'
+                            integrations:
+                              type: object
+                              additionalProperties:
+                                $ref: '#/components/schemas/core.integration'
                   total:
                     type: integer
                     minimum: 0
@@ -600,7 +719,7 @@ paths:
             async function main() {
               // Automatically fetches more pages as needed.
               for await (const listConnectionConfigsResponse of client.listConnectionConfigs()) {
-                console.log(listConnectionConfigsResponse.id);
+                console.log(listConnectionConfigsResponse);
               }
             }
 
@@ -615,41 +734,42 @@ paths:
             )
             page = client.list_connection_configs()
             page = page.items[0]
-            print(page.id)
-    post:
-      operationId: createConnectorConfig
+            print(page)
+  /connector:
+    get:
+      operationId: listConnectors
+      summary: List all connectors
+      description: List all connectors with optional filtering
       security:
         - ApiKey: []
         - CustomerToken: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                connector_name:
-                  type: string
-              required:
-                - connector_name
+      parameters:
+        - in: query
+          name: expand
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - integrations
+              description: Fields to expand connector with its integrations
+            default: []
       responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  org_id:
-                    type: string
-                  connector_name:
-                    type: string
-                required:
-                  - id
-                  - org_id
-                  - connector_name
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/core.connector'
+                  properties:
+                    integrations:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/core.integration'
+                description: List of connectors with selected fields
         '400':
           description: Invalid input data
           content:
@@ -668,6 +788,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
         '500':
           description: Internal server error
           content:
@@ -1064,6 +1190,18 @@ components:
         - connector_name
         - settings
       title: aircall
+    connectors.aircall.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: aircall
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
+      title: aircall
     connectors.airtable.connectionSettings:
       type: object
       properties:
@@ -1083,6 +1221,18 @@ components:
       required:
         - connector_name
         - settings
+      title: airtable
+    connectors.airtable.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: airtable
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
       title: airtable
     connectors.apollo.connectionSettings:
       type: object
@@ -1185,6 +1335,18 @@ components:
         - connector_name
         - settings
       title: apollo
+    connectors.apollo.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: apollo
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
+      title: apollo
     connectors.beancount.connectionSettings:
       type: object
       properties:
@@ -1196,6 +1358,18 @@ components:
       required:
         - connector_name
         - settings
+      title: beancount
+    connectors.beancount.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: beancount
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
       title: beancount
     connectors.brex.connectionSettings:
       type: object
@@ -1214,6 +1388,37 @@ components:
         - connector_name
         - settings
       title: brex
+    connectors.brex.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: brex
+        config:
+          type: object
+          properties:
+            oauth:
+              anyOf:
+                - type: 'null'
+                  description: No oauth
+                - type: object
+                  properties:
+                    clientId:
+                      type: string
+                    clientSecret:
+                      type: string
+                  required:
+                    - clientId
+                    - clientSecret
+                  description: Configure oauth
+              description: Oauth support
+            apikeyAuth:
+              type: boolean
+              description: API key auth support
+      required:
+        - connector_name
+        - config
+      title: brex
     connectors.coda.connectionSettings:
       type: object
       properties:
@@ -1230,6 +1435,18 @@ components:
       required:
         - connector_name
         - settings
+      title: coda
+    connectors.coda.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: coda
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
       title: coda
     connectors.confluence.connectionSettings:
       type: object
@@ -1332,6 +1549,33 @@ components:
         - connector_name
         - settings
       title: confluence
+    connectors.confluence.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: confluence
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: confluence
     connectors.discord.connectionSettings:
       type: object
       properties:
@@ -1433,6 +1677,33 @@ components:
         - connector_name
         - settings
       title: discord
+    connectors.discord.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: discord
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: discord
     connectors.finch.connectionSettings:
       type: object
       properties:
@@ -1449,6 +1720,44 @@ components:
       required:
         - connector_name
         - settings
+      title: finch
+    connectors.finch.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: finch
+        config:
+          type: object
+          properties:
+            client_id:
+              type: string
+            client_secret:
+              type: string
+            api_version:
+              type: string
+              description: Finch API version
+            products:
+              type: array
+              items:
+                type: string
+                enum:
+                  - company
+                  - directory
+                  - individual
+                  - ssn
+                  - employment
+                  - payment
+                  - pay_statement
+                  - benefits
+              description: Finch products to access, @see https://developer.tryfinch.com/api-reference/development-guides/Permissions
+          required:
+            - client_id
+            - client_secret
+            - products
+      required:
+        - connector_name
+        - config
       title: finch
     connectors.firebase.connectionSettings:
       type: object
@@ -1560,6 +1869,18 @@ components:
         - connector_name
         - settings
       title: firebase
+    connectors.firebase.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: firebase
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
+      title: firebase
     connectors.foreceipt.connectionSettings:
       type: object
       properties:
@@ -1582,6 +1903,18 @@ components:
       required:
         - connector_name
         - settings
+      title: foreceipt
+    connectors.foreceipt.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: foreceipt
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
       title: foreceipt
     connectors.github.connectionSettings:
       type: object
@@ -1684,6 +2017,33 @@ components:
         - connector_name
         - settings
       title: github
+    connectors.github.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: github
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: github
     connectors.gong.connectionSettings:
       type: object
       properties:
@@ -1784,6 +2144,33 @@ components:
       required:
         - connector_name
         - settings
+      title: gong
+    connectors.gong.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: gong
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
       title: gong
     connectors.google.connectionSettings:
       type: object
@@ -1888,6 +2275,86 @@ components:
         - connector_name
         - settings
       title: google
+    connectors.google.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: google
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+                  description: global google connector space separated scopes
+              required:
+                - client_id
+                - client_secret
+            integrations:
+              type: object
+              properties:
+                drive:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: drive specific space separated scopes
+                gmail:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: gmail specific space separated scopes
+                calendar:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: calendar specific space separated scopes
+                sheets:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: sheets specific space separated scopes
+                docs:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: docs specific space separated scopes
+                slides:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: slides specific space separated scopes
+          required:
+            - oauth
+            - integrations
+      required:
+        - connector_name
+        - config
+      title: google
     connectors.googledrive.connectionSettings:
       type: object
       properties:
@@ -1913,6 +2380,32 @@ components:
         - connector_name
         - settings
       title: googledrive
+    connectors.googledrive.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: googledrive
+        config:
+          type: object
+          properties:
+            client_id:
+              type: string
+            client_secret:
+              type: string
+            scopes:
+              type:
+                - array
+                - 'null'
+              items:
+                type: string
+          required:
+            - client_id
+            - client_secret
+      required:
+        - connector_name
+        - config
+      title: googledrive
     connectors.greenhouse.connectionSettings:
       type: object
       properties:
@@ -1930,6 +2423,18 @@ components:
         - connector_name
         - settings
       title: greenhouse
+    connectors.greenhouse.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: greenhouse
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
+      title: greenhouse
     connectors.heron.connectionSettings:
       type: object
       properties:
@@ -1941,6 +2446,23 @@ components:
       required:
         - connector_name
         - settings
+      title: heron
+    connectors.heron.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: heron
+        config:
+          type: object
+          properties:
+            apiKey:
+              type: string
+          required:
+            - apiKey
+      required:
+        - connector_name
+        - config
       title: heron
     connectors.hubspot.connectionSettings:
       type: object
@@ -2044,6 +2566,33 @@ components:
         - connector_name
         - settings
       title: hubspot
+    connectors.hubspot.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: hubspot
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: hubspot
     connectors.intercom.connectionSettings:
       type: object
       properties:
@@ -2144,6 +2693,33 @@ components:
       required:
         - connector_name
         - settings
+      title: intercom
+    connectors.intercom.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: intercom
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
       title: intercom
     connectors.jira.connectionSettings:
       type: object
@@ -2246,6 +2822,33 @@ components:
         - connector_name
         - settings
       title: jira
+    connectors.jira.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: jira
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: jira
     connectors.kustomer.connectionSettings:
       type: object
       properties:
@@ -2346,6 +2949,33 @@ components:
       required:
         - connector_name
         - settings
+      title: kustomer
+    connectors.kustomer.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: kustomer
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
       title: kustomer
     connectors.lever.connectionSettings:
       type: object
@@ -2448,6 +3078,39 @@ components:
         - connector_name
         - settings
       title: lever
+    connectors.lever.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: lever
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+            envName:
+              type: string
+              enum:
+                - sandbox
+                - production
+          required:
+            - oauth
+            - envName
+      required:
+        - connector_name
+        - config
+      title: lever
     connectors.linear.connectionSettings:
       type: object
       properties:
@@ -2549,6 +3212,33 @@ components:
         - connector_name
         - settings
       title: linear
+    connectors.linear.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: linear
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: linear
     connectors.lunchmoney.connectionSettings:
       type: object
       properties:
@@ -2561,6 +3251,23 @@ components:
         - connector_name
         - settings
       title: lunchmoney
+    connectors.lunchmoney.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: lunchmoney
+        config:
+          type: object
+          properties:
+            accessToken:
+              type: string
+          required:
+            - accessToken
+      required:
+        - connector_name
+        - config
+      title: lunchmoney
     connectors.mercury.connectionSettings:
       type: object
       properties:
@@ -2572,6 +3279,37 @@ components:
       required:
         - connector_name
         - settings
+      title: mercury
+    connectors.mercury.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: mercury
+        config:
+          type: object
+          properties:
+            oauth:
+              anyOf:
+                - type: 'null'
+                  description: No oauth
+                - type: object
+                  properties:
+                    clientId:
+                      type: string
+                    clientSecret:
+                      type: string
+                  required:
+                    - clientId
+                    - clientSecret
+                  description: Configure oauth
+              description: Oauth support
+            apikeyAuth:
+              type: boolean
+              description: API key auth support
+      required:
+        - connector_name
+        - config
       title: mercury
     connectors.merge.connectionSettings:
       type: object
@@ -2590,6 +3328,23 @@ components:
       required:
         - connector_name
         - settings
+      title: merge
+    connectors.merge.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: merge
+        config:
+          type: object
+          properties:
+            apiKey:
+              type: string
+          required:
+            - apiKey
+      required:
+        - connector_name
+        - config
       title: merge
     connectors.microsoft.connectionSettings:
       type: object
@@ -2694,6 +3449,62 @@ components:
         - connector_name
         - settings
       title: microsoft
+    connectors.microsoft.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: microsoft
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+                  description: global microsoft connector space separated scopes
+              required:
+                - client_id
+                - client_secret
+            integrations:
+              type: object
+              properties:
+                sharepoint:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: sharepoint specific space separated scopes
+                outlook:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: outlook specific space separated scopes
+                teams:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    scopes:
+                      type: string
+                      description: teams specific space separated scopes
+          required:
+            - oauth
+            - integrations
+      required:
+        - connector_name
+        - config
+      title: microsoft
     connectors.moota.connectionSettings:
       type: object
       properties:
@@ -2705,6 +3516,23 @@ components:
       required:
         - connector_name
         - settings
+      title: moota
+    connectors.moota.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: moota
+        config:
+          type: object
+          properties:
+            token:
+              type: string
+          required:
+            - token
+      required:
+        - connector_name
+        - config
       title: moota
     connectors.onebrick.connectionSettings:
       type: object
@@ -2722,6 +3550,43 @@ components:
       required:
         - connector_name
         - settings
+      title: onebrick
+    connectors.onebrick.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: onebrick
+        config:
+          type: object
+          properties:
+            envName:
+              type: string
+              enum:
+                - sandbox
+                - production
+            clientId:
+              type: string
+            clientSecret:
+              type: string
+            publicToken:
+              type: string
+            accessToken:
+              type:
+                - string
+                - 'null'
+            redirectUrl:
+              type:
+                - string
+                - 'null'
+          required:
+            - envName
+            - clientId
+            - clientSecret
+            - publicToken
+      required:
+        - connector_name
+        - config
       title: onebrick
     connectors.outreach.connectionSettings:
       type: object
@@ -2824,6 +3689,33 @@ components:
         - connector_name
         - settings
       title: outreach
+    connectors.outreach.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: outreach
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: outreach
     connectors.pipedrive.connectionSettings:
       type: object
       properties:
@@ -2925,6 +3817,33 @@ components:
         - connector_name
         - settings
       title: pipedrive
+    connectors.pipedrive.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: pipedrive
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: pipedrive
     connectors.plaid.connectionSettings:
       type: object
       properties:
@@ -2950,6 +3869,110 @@ components:
       required:
         - connector_name
         - settings
+      title: plaid
+    connectors.plaid.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: plaid
+        config:
+          type: object
+          properties:
+            envName:
+              type: string
+              enum:
+                - sandbox
+                - development
+                - production
+            credentials:
+              anyOf:
+                - type: 'null'
+                  title: Use OpenInt platform credentials
+                - type: object
+                  properties:
+                    clientId:
+                      type: string
+                    clientSecret:
+                      type: string
+                  required:
+                    - clientId
+                    - clientSecret
+                  title: Use my own
+            clientName:
+              type: string
+              maxLength: 30
+              default: This Application
+              description: |-
+                The name of your application, as it should be displayed in Link.
+                        Maximum length of 30 characters.
+                        If a value longer than 30 characters is provided, Link will display "This Application" instead.
+            products:
+              type: array
+              items:
+                type: string
+                enum:
+                  - assets
+                  - auth
+                  - balance
+                  - identity
+                  - investments
+                  - liabilities
+                  - payment_initiation
+                  - identity_verification
+                  - transactions
+                  - credit_details
+                  - income
+                  - income_verification
+                  - deposit_switch
+                  - standing_orders
+                  - transfer
+                  - employment
+                  - recurring_transactions
+              default:
+                - transactions
+            countryCodes:
+              type: array
+              items:
+                type: string
+                enum:
+                  - US
+                  - GB
+                  - ES
+                  - NL
+                  - FR
+                  - IE
+                  - CA
+                  - DE
+                  - IT
+                  - PL
+                  - DK
+                  - 'NO'
+                  - SE
+                  - EE
+                  - LT
+                  - LV
+              default:
+                - US
+                - CA
+            language:
+              type: string
+              enum:
+                - en
+                - fr
+                - es
+                - nl
+                - de
+              default: en
+          required:
+            - envName
+            - clientName
+            - products
+            - countryCodes
+            - language
+      required:
+        - connector_name
+        - config
       title: plaid
     connectors.postgres.connectionSettings:
       type: object
@@ -2977,6 +4000,18 @@ components:
       required:
         - connector_name
         - settings
+      title: postgres
+    connectors.postgres.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: postgres
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
       title: postgres
     connectors.qbo.connectionSettings:
       type: object
@@ -3073,6 +4108,49 @@ components:
         - connector_name
         - settings
       title: qbo
+    connectors.qbo.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: qbo
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+            envName:
+              type: string
+              enum:
+                - sandbox
+                - production
+            url:
+              type:
+                - string
+                - 'null'
+              description: For proxies, not typically needed
+            verifierToken:
+              type:
+                - string
+                - 'null'
+              description: For webhooks
+          required:
+            - oauth
+            - envName
+      required:
+        - connector_name
+        - config
+      title: qbo
     connectors.ramp.connectionSettings:
       type: object
       properties:
@@ -3093,6 +4171,31 @@ components:
       required:
         - connector_name
         - settings
+      title: ramp
+    connectors.ramp.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: ramp
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                clientId:
+                  type: string
+                clientSecret:
+                  type: string
+              required:
+                - clientId
+                - clientSecret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
       title: ramp
     connectors.salesforce.connectionSettings:
       type: object
@@ -3195,6 +4298,33 @@ components:
         - connector_name
         - settings
       title: salesforce
+    connectors.salesforce.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: salesforce
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: salesforce
     connectors.salesloft.connectionSettings:
       type: object
       properties:
@@ -3296,6 +4426,33 @@ components:
         - connector_name
         - settings
       title: salesloft
+    connectors.salesloft.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: salesloft
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: salesloft
     connectors.saltedge.connectionSettings:
       type: object
       properties:
@@ -3305,6 +4462,30 @@ components:
         settings: {}
       required:
         - connector_name
+      title: saltedge
+    connectors.saltedge.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: saltedge
+        config:
+          type: object
+          properties:
+            appId:
+              type: string
+            secret:
+              type: string
+            url:
+              type:
+                - string
+                - 'null'
+          required:
+            - appId
+            - secret
+      required:
+        - connector_name
+        - config
       title: saltedge
     connectors.slack.connectionSettings:
       type: object
@@ -3406,6 +4587,33 @@ components:
       required:
         - connector_name
         - settings
+      title: slack
+    connectors.slack.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: slack
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
       title: slack
     connectors.splitwise.connectionSettings:
       type: object
@@ -3529,6 +4737,18 @@ components:
         - connector_name
         - settings
       title: splitwise
+    connectors.splitwise.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: splitwise
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
+      title: splitwise
     connectors.stripe.connectionSettings:
       type: object
       properties:
@@ -3546,6 +4766,37 @@ components:
         - connector_name
         - settings
       title: stripe
+    connectors.stripe.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: stripe
+        config:
+          type: object
+          properties:
+            oauth:
+              anyOf:
+                - type: 'null'
+                  description: No oauth
+                - type: object
+                  properties:
+                    clientId:
+                      type: string
+                    clientSecret:
+                      type: string
+                  required:
+                    - clientId
+                    - clientSecret
+                  description: Configure oauth
+              description: Oauth support
+            apikeyAuth:
+              type: boolean
+              description: API key auth support
+      required:
+        - connector_name
+        - config
+      title: stripe
     connectors.teller.connectionSettings:
       type: object
       properties:
@@ -3562,6 +4813,27 @@ components:
       required:
         - connector_name
         - settings
+      title: teller
+    connectors.teller.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: teller
+        config:
+          type: object
+          properties:
+            applicationId:
+              type: string
+            token:
+              type:
+                - string
+                - 'null'
+          required:
+            - applicationId
+      required:
+        - connector_name
+        - config
       title: teller
     connectors.toggl.connectionSettings:
       type: object
@@ -3588,6 +4860,18 @@ components:
         - connector_name
         - settings
       title: toggl
+    connectors.toggl.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: toggl
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
+      title: toggl
     connectors.twenty.connectionSettings:
       type: object
       properties:
@@ -3605,6 +4889,18 @@ components:
         - connector_name
         - settings
       title: twenty
+    connectors.twenty.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: twenty
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
+      title: twenty
     connectors.venmo.connectionSettings:
       type: object
       properties:
@@ -3619,6 +4915,39 @@ components:
       required:
         - connector_name
         - settings
+      title: venmo
+    connectors.venmo.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: venmo
+        config:
+          type: object
+          properties:
+            v1BaseURL:
+              type:
+                - string
+                - 'null'
+            v5BaseURL:
+              type:
+                - string
+                - 'null'
+            proxy:
+              type:
+                - object
+                - 'null'
+              properties:
+                url:
+                  type: string
+                cert:
+                  type: string
+              required:
+                - url
+                - cert
+      required:
+        - connector_name
+        - config
       title: venmo
     connectors.wise.connectionSettings:
       type: object
@@ -3643,6 +4972,18 @@ components:
       required:
         - connector_name
         - settings
+      title: wise
+    connectors.wise.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: wise
+        config:
+          type: 'null'
+      required:
+        - connector_name
+        - config
       title: wise
     connectors.xero.connectionSettings:
       type: object
@@ -3745,6 +5086,33 @@ components:
         - connector_name
         - settings
       title: xero
+    connectors.xero.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: xero
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: xero
     connectors.yodlee.connectionSettings:
       type: object
       properties:
@@ -3824,6 +5192,52 @@ components:
       required:
         - connector_name
         - settings
+      title: yodlee
+    connectors.yodlee.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: yodlee
+        config:
+          type: object
+          properties:
+            envName:
+              type: string
+              enum:
+                - sandbox
+                - development
+                - production
+            clientId:
+              type: string
+            clientSecret:
+              type: string
+            adminLoginName:
+              type: string
+            sandboxLoginName:
+              type:
+                - string
+                - 'null'
+            proxy:
+              type:
+                - object
+                - 'null'
+              properties:
+                url:
+                  type: string
+                cert:
+                  type: string
+              required:
+                - url
+                - cert
+          required:
+            - envName
+            - clientId
+            - clientSecret
+            - adminLoginName
+      required:
+        - connector_name
+        - config
       title: yodlee
     connectors.zohodesk.connectionSettings:
       type: object
@@ -3925,6 +5339,33 @@ components:
       required:
         - connector_name
         - settings
+      title: zohodesk
+    connectors.zohodesk.connectorConfig:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: zohodesk
+        config:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scopes:
+                  type: string
+              required:
+                - client_id
+                - client_secret
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
       title: zohodesk
     core.connection:
       allOf:
@@ -4048,6 +5489,24 @@ components:
               googledrive: '#/components/schemas/connectors.googledrive.connectionSettings'
           description: Connector specific data
       title: Connection
+    core.connector:
+      type: object
+      properties:
+        name:
+          type: string
+        display_name:
+          type: string
+        logo_url:
+          type: string
+        stage:
+          type: string
+        platforms:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+      title: Connector
     core.event:
       type: object
       properties:
@@ -4107,6 +5566,10 @@ components:
         - user_id
         - customer_id
       title: event
+    core.integration:
+      type: object
+      additionalProperties: true
+      title: Integration
     error.BAD_REQUEST:
       type: object
       properties:
