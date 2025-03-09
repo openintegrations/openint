@@ -1,24 +1,30 @@
+import React from 'react'
 import {X} from 'lucide-react'
-import {Badge} from '../shadcn'
 import {parseCategory} from '../utils'
 
-export function FilterBadges({
-  filters,
-  onClick,
-}: {
+interface FilterBadgesProps {
   filters: string[]
   onClick: (filter: string) => void
-}) {
+}
+
+export function FilterBadges({ filters, onClick }: FilterBadgesProps) {
+  if (filters.length === 0) return null
+
   return (
-    <div
-      className={`flex flex-row flex-wrap gap-2 border-b px-4 pt-0 ${
-        filters.length > 0 ? 'pb-2' : ''
-      }`}>
+    <div className="flex flex-wrap gap-2">
       {filters.map((filter) => (
-        <Badge key={filter} variant="button">
+        <div
+          key={filter}
+          className="inline-flex items-center rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-800"
+        >
           {parseCategory(filter)}
-          <X className="ml-1 size-4" onClick={() => onClick(filter)} />
-        </Badge>
+          <button
+            onClick={() => onClick(filter)}
+            className="ml-1.5 inline-flex items-center justify-center"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        </div>
       ))}
     </div>
   )
