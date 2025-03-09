@@ -12,6 +12,7 @@
     "dev:tailwind": "pnpm build-tailwind --watch"
   },
   "dependencies": {
+    "@openint/shadcn": "workspace:*",
     "@tanstack/react-query": "^5.67.2",
     "@trpc/client": "next",
     "@trpc/tanstack-react-query": "next",

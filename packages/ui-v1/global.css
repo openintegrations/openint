@@ -1,1 +1,2 @@
-@import 'tailwindcss';
+@import '../shadcn/global.css';
+@source "../shadcn/components/**/*.tsx";

@@ -2731,6 +2731,9 @@ importers:
 
   packages/ui-v1:
     dependencies:
+      '@openint/shadcn':
+        specifier: workspace:*
+        version: link:../shadcn
       '@tanstack/react-query':
         specifier: ^5.67.2
         version: 5.67.2(react@19.0.0)
