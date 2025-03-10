@@ -41,7 +41,7 @@ export type OpenIntInput = PipelineInput<
 >
 
 export const contextFactory = getContextFactory({
-  // @ts-expect-error QQ check qbo _opState
+  // @ts-expect-error QQ check qbo _opState and all-connectors cnext
   connectors: Object.values(mergedConnectors),
   // routerUrl: 'http://localhost:3010/api', // apiUrl?
   // TODO: Rename to just serverUrl as we will need it for redirects and everything else
