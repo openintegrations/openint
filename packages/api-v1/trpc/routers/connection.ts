@@ -174,7 +174,6 @@ export const connectionRouter = router({
             : false))
 
       if (credentialsRequiresRefresh) {
-        // @ts-expect-error at this point connector and refreshConnection should exist...
         const refreshedConnectionSettings = await connector.refreshConnection(
           connection.settings,
           connector_config.config,

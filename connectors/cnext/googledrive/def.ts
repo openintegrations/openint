@@ -12,31 +12,33 @@ const connectorDef = {
     web_url: 'https://drive.google.com',
     api_docs_url: 'https://developers.google.com/drive',
   },
-  auth_type: 'OAUTH2',
-  authorization_request_url: 'https://accounts.google.com/o/oauth2/v2/auth',
-  token_request_url: 'https://oauth2.googleapis.com/token',
-  auth_scope_separator: ' ',
-  auth_params: {
-    authorize: {
-      access_type: 'offline',
-      prompt: 'consent',
+  auth: {
+    type: 'OAUTH2',
+    authorization_request_url: 'https://accounts.google.com/o/oauth2/v2/auth',
+    token_request_url: 'https://oauth2.googleapis.com/token',
+    scope_separator: ' ',
+    params: {
+      authorize: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
+      capture_response_fields: ['id'],
     },
-    capture_response_fields: ['id'],
+    scopes: [
+      {
+        scope: 'https://www.googleapis.com/auth/drive.readonly',
+        description: 'View files and folders in your Google Drive',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/drive.file',
+        description: 'View and manage files created by this app',
+      },
+      {
+        scope: 'https://www.googleapis.com/auth/drive',
+        description: 'Full access to files and folders in your Google Drive',
+      },
+    ],
   },
-  scopes: [
-    {
-      scope: 'https://www.googleapis.com/auth/drive.readonly',
-      description: 'View files and folders in your Google Drive',
-    },
-    {
-      scope: 'https://www.googleapis.com/auth/drive.file',
-      description: 'View and manage files created by this app',
-    },
-    {
-      scope: 'https://www.googleapis.com/auth/drive',
-      description: 'Full access to files and folders in your Google Drive',
-    },
-  ],
   // TODO (@pellicceama)
   // 1) Get rid of code handlers in def and put it inside `server` instead. def should be json serializable only
   // 2) Have the custom handlers be auth-type specific which then gets normalized into
@@ -48,8 +50,6 @@ const connectorDef = {
   // 8) Add authence and other fields to full ConnectionDef.metadata
   // 10) Have a generic way to create connector server simplified that allows me to access connector specific fields as part
   //     of handlers like check connnection (think api key auth)
-
-  handlers: {},
 } satisfies JsonConnectorDef
 
 export const def = generateConnectorDef(connectorDef)

@@ -1,20 +1,17 @@
-import type {z} from 'zod'
+import {z} from 'zod'
 import type {ConnectorSchemas, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
 import {makeUlid} from '@openint/util'
 // TODO: Fix me as this is technically a cyclical dep
-import {getServerUrl} from '../../../apps/app-config/constants'
-import type {
-  JsonConnectorDef,
-  RefreshParams,
-  TokenParams,
+import {getServerUrl} from '../../../../apps/app-config/constants'
+import type {JsonConnectorDef} from '../../def'
+import {
+  AuthorizeHandler,
+  OAuth2ServerOverrides,
+  ResponseHandler,
+  TokenHandler,
   zOAuthConnectorDef,
-} from '../def'
-
-type Handlers = z.infer<typeof zOAuthConnectorDef>['handlers']
-type AuthorizeHandler = Handlers['authorize']
-type TokenHandler = Handlers['token']
-type ResponseHandler = Handlers['response']
+} from './def'
 
 // Helper function to make token requests
 async function makeTokenRequest(
@@ -42,7 +39,7 @@ async function makeTokenRequest(
 }
 
 const defaultAuthorizeHandler: AuthorizeHandler = async ({
-  auth_params,
+  params,
   connector_config,
   authorization_request_url,
   redirect_uri,
@@ -59,8 +56,8 @@ const defaultAuthorizeHandler: AuthorizeHandler = async ({
     url.searchParams.set('scope', connector_config.scopes.join(' '))
   }
 
-  for (const [key, value] of Object.entries(auth_params.authorize ?? {})) {
-    url.searchParams.set(key, value)
+  for (const [key, value] of Object.entries(params.authorize ?? {})) {
+    url.searchParams.set(key, value as string)
   }
 
   url.searchParams.set('redirect_uri', redirect_uri)
@@ -72,21 +69,20 @@ const defaultAuthorizeHandler: AuthorizeHandler = async ({
 
 const defaultTokenHandler: TokenHandler = async (args) => {
   if (args.flow_type === 'refresh') {
-    const {auth_params, connector_config, token_request_url, refresh_token} =
-      args
+    const {params, connector_config, token_request_url, refresh_token} = args
 
     const baseParams = {
       grant_type: 'refresh_token',
       refresh_token,
       client_id: connector_config.client_id,
       client_secret: connector_config.client_secret,
-      ...auth_params.refresh,
+      ...params.refresh,
     }
 
     return makeTokenRequest(token_request_url, baseParams, 'refresh')
   } else if (args.flow_type === 'exchange') {
     const {
-      auth_params,
+      params,
       connector_config,
       code,
       state,
@@ -100,7 +96,7 @@ const defaultTokenHandler: TokenHandler = async (args) => {
       client_id: connector_config.client_id,
       client_secret: connector_config.client_secret,
       redirect_uri,
-      ...auth_params.token,
+      ...params.token,
     }
 
     console.warn('SKIPPING OAUTH STATE VALIDATION: ', state)
@@ -108,10 +104,7 @@ const defaultTokenHandler: TokenHandler = async (args) => {
     return makeTokenRequest(token_request_url, baseParams, 'exchange')
   }
 
-  throw new Error(
-    // @ts-expect-error
-    `Invalid oauth flow type passed to token handler: ${args.flow_type}`,
-  )
+  throw new Error(`Invalid oauth flow type passed to token handler}`)
 }
 
 const defaultResponseHandler: ResponseHandler = async ({
@@ -207,13 +200,21 @@ function addCcfgDefaultCredentials(
   }
 }
 
+export function isOAuth2ConnectorDef(
+  auth: any,
+): auth is z.infer<typeof zOAuthConnectorDef> {
+  return zOAuthConnectorDef.safeParse(auth).success
+}
+
 export function generateOAuth2Server<T extends ConnectorSchemas>(
   connectorDef: JsonConnectorDef,
+  overrides?: Partial<ConnectorServer<T>> & Partial<OAuth2ServerOverrides>,
 ): ConnectorServer<T> {
   // Only use this for OAuth2 connectors
   if (
-    connectorDef.auth_type !== 'OAUTH2' &&
-    connectorDef.auth_type !== 'OAUTH2CC'
+    // TODO: connectorDef.auth.type !== 'OAUTH2CC'?
+    connectorDef.auth.type !== 'OAUTH2' &&
+    !isOAuth2ConnectorDef(connectorDef.auth)
   ) {
     throw new Error('This server can only be used with OAuth2 connectors')
   }
@@ -222,7 +223,8 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
   let clientId: string | undefined
   let clientSecret: string | undefined
 
-  return {
+  // Create the base server implementation
+  const baseServer: ConnectorServer<T> = {
     newInstance: ({config, settings}) => {
       // Use the same helper function to get credentials
       const credentials = addCcfgDefaultCredentials(config, connectorName)
@@ -244,15 +246,20 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         )
       }
     },
+
     async preConnect(connectorConfig, connectionSettings, input) {
-      const authorizeHandler =
-        connectorDef.handlers?.authorize || defaultAuthorizeHandler
+      // Use override if provided, otherwise use default
+      const authorizeHandler = overrides?.authorize || defaultAuthorizeHandler
 
       if (!authorizeHandler) {
         throw new Error(
           'No authorize handler defined. Has connectionSettings =' +
             !!connectionSettings,
         )
+      }
+
+      if (!isOAuth2ConnectorDef(connectorDef.auth)) {
+        return zOAuthConnectorDef.parse(connectorDef.auth)
       }
 
       const connectionId =
@@ -262,8 +269,8 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       console.log(`Oauth2 Preconnect called with input`, input)
 
       return authorizeHandler({
-        authorization_request_url: connectorDef.authorization_request_url,
-        auth_params: connectorDef.auth_params,
+        authorization_request_url: connectorDef.auth.authorization_request_url,
+        params: connectorDef.auth.params,
         connector_config: connectorConfig,
         // TODO: revert
         // redirect_uri: 'https://f887-38-9-28-71.ngrok-free.app/connect/callback',
@@ -276,9 +283,9 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
     },
 
     async postConnect(connectOutput, config) {
-      const tokenHandler = connectorDef.handlers?.token || defaultTokenHandler
-      const responseHandler =
-        connectorDef.handlers?.response || defaultResponseHandler
+      // Use overrides if provided, otherwise use defaults
+      const tokenHandler = overrides?.token || defaultTokenHandler
+      const responseHandler = overrides?.response || defaultResponseHandler
 
       if (!tokenHandler) {
         throw new Error('No token handler defined')
@@ -286,6 +293,10 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
 
       if (!responseHandler) {
         throw new Error('No response handler defined')
+      }
+
+      if (!isOAuth2ConnectorDef(connectorDef.auth)) {
+        return zOAuthConnectorDef.parse(connectorDef.auth)
       }
 
       const redirect_uri = getServerUrl(null) + '/connect/callback'
@@ -297,19 +308,15 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       )
       const tokenResponse = await tokenHandler({
         flow_type: 'exchange',
-        auth_params: connectorDef.auth_params as TokenParams,
+        params: connectorDef.auth.params,
         connector_config: addCcfgDefaultCredentials(config, connectorName),
         code: connectOutput.code,
         state: connectOutput.state,
-        token_request_url: connectorDef.token_request_url,
+        token_request_url: connectorDef.auth.token_request_url,
         redirect_uri,
       })
 
-      const result = await processTokenResponse(
-        tokenResponse,
-        responseHandler,
-        connectorDef.auth_params?.capture_response_fields,
-      )
+      const result = await processTokenResponse(tokenResponse, responseHandler)
 
       console.log(`Oauth2 Postconnect result`, result)
 
@@ -338,9 +345,9 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
     },
 
     async refreshConnection(settings, config) {
-      const tokenHandler = connectorDef.handlers?.token || defaultTokenHandler
-      const responseHandler =
-        connectorDef.handlers?.response || defaultResponseHandler
+      // Use overrides if provided, otherwise use defaults
+      const tokenHandler = overrides?.token || defaultTokenHandler
+      const responseHandler = overrides?.response || defaultResponseHandler
 
       if (!tokenHandler || !responseHandler) {
         throw new Error(
@@ -350,33 +357,31 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         )
       }
 
+      if (!isOAuth2ConnectorDef(connectorDef.auth)) {
+        return zOAuthConnectorDef.parse(connectorDef.auth)
+      }
+
       const refreshToken = settings?.oauth?.credentials?.refresh_token
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
       }
 
-      console.log(
-        `Oauth2 Refresh connection called `,
-        // settings,
-        // config,
-      )
+      console.log(`Oauth2 Refresh connection called`)
 
       const tokenResponse = await tokenHandler({
         flow_type: 'refresh',
-        auth_params: connectorDef.auth_params as RefreshParams,
+        params: connectorDef.auth.params,
         connector_config: addCcfgDefaultCredentials(config, connectorName),
-        token_request_url: connectorDef.token_request_url,
+        token_request_url: connectorDef.auth.token_request_url,
         refresh_token: refreshToken,
       })
-      // console.log(`Oauth2 Refresh connection token response`, tokenResponse)
 
       const result = await processTokenResponse(
         tokenResponse,
         responseHandler,
-        connectorDef.auth_params?.capture_response_fields,
+        connectorDef.auth.params?.capture_response_fields,
         refreshToken,
       )
-      // console.log(`Oauth2 Refresh connection result`, result)
 
       return {
         oauth: {
@@ -396,7 +401,6 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
           ...settings.metadata,
           ...result.metadata,
         },
-        // NOTE: this is currently returning T['_types']['connectionSettings']
       } as any
     },
 
@@ -439,5 +443,11 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         config,
       }
     },
+  }
+
+  // Apply any server method overrides
+  return {
+    ...baseServer,
+    ...overrides,
   }
 }

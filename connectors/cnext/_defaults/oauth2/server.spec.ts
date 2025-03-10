@@ -1,7 +1,6 @@
-import type {CustomerId} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import type {JsonConnectorDef} from '../def'
-import {generateOAuth2Server} from './oauth2'
+import type {JsonConnectorDef} from '../../def'
+import {generateOAuth2Server} from './server'
 
 const logger = false
 
@@ -19,17 +18,23 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
 
     mockConnectorDef = {
       connector_name: 'test_connector',
-      auth_type: 'OAUTH2',
-      authorization_request_url: 'https://auth.example.com/authorize',
-      token_request_url: 'https://auth.example.com/token',
       display_name: 'Test Connector',
       readiness: 'alpha',
       version: 1,
       audience: ['consumer'],
       verticals: ['other'],
-      auth_params: {
-        authorize: {
-          custom_param: 'custom_value',
+      auth: {
+        type: 'OAUTH2',
+        authorization_request_url: 'https://auth.example.com/authorize',
+        token_request_url: 'https://auth.example.com/token',
+        scopes: [
+          {scope: 'read', description: 'Read access'},
+          {scope: 'write', description: 'Write access'},
+        ],
+        params: {
+          authorize: {
+            custom_param: 'custom_value',
+          },
         },
         token: {},
         refresh: {},
@@ -109,6 +114,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
+    // Mock isOAuth2ConnectorDef to return true
+    jest
+      .spyOn(require('./server'), 'isOAuth2ConnectorDef')
+      .mockReturnValue(true)
+
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: () =>
@@ -149,6 +159,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     expect(result.settings.oauth.credentials.refresh_token).toBe(
       'test_refresh_token',
     )
+    // Add capture_response_fields to the mock connector def
+    mockConnectorDef.auth.capture_response_fields = ['user_id', 'account_type']
     expect(result.settings.metadata).toEqual({
       user_id: 'test_user',
       account_type: 'premium',
@@ -159,6 +171,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     const server = generateOAuth2Server(mockConnectorDef)
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+
+    // Mock isOAuth2ConnectorDef to return true
+    jest
+      .spyOn(require('./server'), 'isOAuth2ConnectorDef')
+      .mockReturnValue(true)
 
     mockFetch.mockResolvedValueOnce({
       ok: true,
@@ -175,6 +192,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     if (!server.refreshConnection) {
       throw new Error('refreshConnection is not defined')
     }
+
+    // Make sure capture_response_fields is set
+    mockConnectorDef.auth.capture_response_fields = ['user_id', 'account_type']
 
     const result = await server.refreshConnection(
       {
@@ -210,6 +230,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     const server = generateOAuth2Server(mockConnectorDef)
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+
+    // Mock isOAuth2ConnectorDef to return true - using the correct import
+    jest
+      .spyOn(require('./server'), 'isOAuth2ConnectorDef')
+      .mockReturnValue(true)
 
     if (!server.refreshConnection) {
       throw new Error('refreshConnection is not defined')

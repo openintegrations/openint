@@ -35,13 +35,11 @@ const clerkClient = createClerkClient({
 //   OpenIntRouter['_def']['mutations']['syncPipeline']
 // >[0]
 export type OpenIntInput = PipelineInput<
-  // @ts-expect-error QQ check qbo _opState and all-connectors cnext
   (typeof mergedConnectors)[keyof typeof mergedConnectors],
   (typeof mergedConnectors)[keyof typeof mergedConnectors]
 >
 
 export const contextFactory = getContextFactory({
-  // @ts-expect-error QQ check qbo _opState
   connectors: Object.values(mergedConnectors),
   // routerUrl: 'http://localhost:3010/api', // apiUrl?
   // TODO: Rename to just serverUrl as we will need it for redirects and everything else
