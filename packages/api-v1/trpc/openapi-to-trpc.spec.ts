@@ -84,7 +84,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     headers.set('accept', 'application/json')
 
     const url = new URL('http://localhost/api/v1/connector-config')
-    url.searchParams.set('expand', 'foo ')
+    url.searchParams.set('expand', 'foo')
 
     const req = new Request(url, {headers})
 

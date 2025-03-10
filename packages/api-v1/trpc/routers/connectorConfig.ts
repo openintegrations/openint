@@ -123,11 +123,7 @@ export const connectorConfigRouter = router({
             .transform((val) => val.split(','))
             .refine(
               (items) =>
-                items.every((item) =>
-                  zExpandOptions.options.includes(
-                    item as 'connector' | 'enabled_integrations',
-                  ),
-                ),
+                items.every((item) => zExpandOptions.safeParse(item).success),
               {
                 message:
                   'Invalid expand option. Valid options are: connector, enabled_integrations',
