@@ -64,7 +64,7 @@ const defaultAuthorizeHandler: AuthorizeHandler = async ({
       client_secret: oauth_connector_def.connector_config.client_secret,
       redirect_uri,
       scope: oauth_connector_def.connector_config.scopes?.join(
-        oauth_connector_def.connector_config.scope_delimiter,
+        oauth_connector_def.scope_separator,
       ),
       state: Buffer.from(connection_id).toString('base64'),
       ...(oauth_connector_def.params_config.authorize ?? {}),
