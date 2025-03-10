@@ -107,7 +107,7 @@ const defaultTokenExchangeHandler: ExchangeTokenHandler = async ({
   })
 
   return makeTokenRequest(
-    oauth_connector_def.authorization_request_url,
+    oauth_connector_def.token_request_url,
     params,
     'exchange',
   )
