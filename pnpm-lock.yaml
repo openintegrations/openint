@@ -830,6 +830,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
@@ -9575,7 +9578,6 @@ packages:
 
   bun@1.2.4:
     resolution: {integrity: sha512-ZY0EZ/UKqheaLeAtMsfJA6jWoWvV9HAtfFaOJSmS3LrNpFKs1Sg5fZLSsczN1h3a+Dtheo4O3p3ZYWrf40kRGw==}
-    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 

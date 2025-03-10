@@ -197,6 +197,7 @@ function addCcfgDefaultCredentials(
   scopes?: string[] | null | undefined
 } {
   return {
+    ...config,
     client_id:
       config.client_id ?? process.env[`ccfg_${connectorName}__CLIENT_ID`],
     client_secret:
@@ -223,11 +224,10 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
 
   return {
     newInstance: ({config, settings}) => {
-      clientId =
-        config.client_id ?? process.env[`ccfg_${connectorName}__CLIENT_ID`]
-      clientSecret =
-        config.client_secret ??
-        process.env[`ccfg_${connectorName}__CLIENT_SECRET`]
+      // Use the same helper function to get credentials
+      const credentials = addCcfgDefaultCredentials(config, connectorName)
+      clientId = credentials.client_id
+      clientSecret = credentials.client_secret
 
       if (!clientId || !clientSecret) {
         throw new Error(
@@ -320,7 +320,7 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
           oauth: {
             credentials: {
               ...result.credentials,
-              client_id: config.clientSecret,
+              client_id: clientId,
               connection_id: connectOutput.connectionId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
