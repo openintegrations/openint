@@ -118,7 +118,22 @@ export const connectorConfigRouter = router({
     .input(
       zListParams
         .extend({
-          expand: z.array(zExpandOptions).optional().default([]),
+          expand: z
+            .string()
+            .transform((val) => val.split(','))
+            .refine(
+              (items) =>
+                items.every((item) =>
+                  zExpandOptions.options.includes(
+                    item as 'connector' | 'enabled_integrations',
+                  ),
+                ),
+              {
+                message:
+                  'Invalid expand option. Valid options are: connector, enabled_integrations',
+              },
+            )
+            .optional(),
           connector_name: zConnectorName.optional(),
         })
         .optional(),
@@ -154,6 +169,7 @@ export const connectorConfigRouter = router({
         query,
         'connector_config',
       )
+      const expandOptions = input?.expand || []
 
       // Process items with proper typing
       const processedItems: z.infer<typeof connectorConfigWithRelations>[] =
@@ -163,14 +179,14 @@ export const connectorConfigRouter = router({
               typeof connectorConfigWithRelations
             >
 
-            if (input?.expand?.includes('connector')) {
+            if (expandOptions.includes('connector')) {
               const connector = expandConnector(ccfg)
               if (connector) {
                 result.connector = connector
               }
             }
 
-            if (input?.expand?.includes('enabled_integrations')) {
+            if (expandOptions.includes('enabled_integrations')) {
               const filteredIntegrations = expandIntegrations(ccfg)
 
               if (filteredIntegrations && result.config) {
