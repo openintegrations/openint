@@ -5,7 +5,7 @@ import {makeUlid} from '@openint/util'
 // TODO: Fix me as this is technically a cyclical dep
 import {getServerUrl} from '../../../apps/app-config/constants'
 import type {
-  ConnectorDef,
+  JsonConnectorDef,
   RefreshParams,
   TokenParams,
   zOAuthConnectorDef,
@@ -208,7 +208,7 @@ function addCcfgDefaultCredentials(
 }
 
 export function generateOAuth2Server<T extends ConnectorSchemas>(
-  connectorDef: ConnectorDef,
+  connectorDef: JsonConnectorDef,
 ): ConnectorServer<T> {
   // Only use this for OAuth2 connectors
   if (
@@ -398,6 +398,46 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         },
         // NOTE: this is currently returning T['_types']['connectionSettings']
       } as any
+    },
+
+    // @ts-expect-error QQ Figure out return types
+    async checkConnection({settings, config}: {settings: any; config: any}) {
+      // If there's no access token, throw an error
+      if (!settings?.oauth?.credentials?.access_token) {
+        throw new Error('No access token available')
+      }
+
+      // Check if token is expired based on expires_at
+      const expiresAt = settings?.oauth?.credentials?.expires_at
+      const refreshToken = settings?.oauth?.credentials?.refresh_token
+
+      if ((expiresAt && new Date(expiresAt) < new Date()) || refreshToken) {
+        // Token is expired, try to refresh if possible
+        if (!refreshToken || !this.refreshConnection) {
+          throw new Error('Token expired and no refresh token available')
+        }
+
+        try {
+          // Attempt to refresh the token
+          const {connectionExternalId, settings: newSettings} =
+            await this.refreshConnection(settings, config)
+          return {connectionExternalId, settings: newSettings, config} // Successfully refreshed
+        } catch (error: any) {
+          throw new Error(`Failed to refresh token: ${error.message}`)
+        }
+      }
+
+      // NOTE:
+      // 1) in the future we could have connector def set up a test connection url, such as /user/info
+      // and then we could use that to validate the connection
+      // for now we're just going to check if the token is expired and try to refresh it
+      // 2) We could also support the token introspection endpoint https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
+
+      return {
+        connectionExternalId: settings.oauth?.credentials?.connection_id,
+        settings,
+        config,
+      }
     },
   }
 }

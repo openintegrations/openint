@@ -252,7 +252,7 @@ export const zAudience = z
 
 export type Audience = z.infer<typeof zAudience>
 
-export const zConnectorDef = z
+export const zJsonConnectorDef = z
   .object({
     audience: z.array(zAudience).describe('The audiences of the connector'),
     connector_name: z
@@ -284,7 +284,7 @@ export const zConnectorDef = z
     ]),
   )
 
-export type ConnectorDef = z.infer<typeof zConnectorDef>
+export type JsonConnectorDef = z.infer<typeof zJsonConnectorDef>
 
 const zAuthType = z
   .union([

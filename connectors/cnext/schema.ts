@@ -1,9 +1,8 @@
+import type {ConnectorDef} from '@openint/cdk'
 import {z} from '@openint/util'
-// TODO: don't call it legacy, new one is actually simplified json schema
-import {ConnectorDef as LegacyConnectorDef} from '../../kits/cdk'
-import {ConnectorDef, zOauthConnectorConfig} from './def'
+import {JsonConnectorDef, zOauthConnectorConfig} from './def'
 
-export function generateConnectorDef(def: ConnectorDef): LegacyConnectorDef {
+export function generateConnectorDef(def: JsonConnectorDef): ConnectorDef {
   const connectorConfig = () => {
     let schema = zOauthConnectorConfig
     if (['OAUTH1', 'OAUTH2'].includes(def.auth_type)) {

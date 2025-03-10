@@ -1,6 +1,6 @@
 import type {CustomerId} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import type {ConnectorDef} from '../def'
+import type {JsonConnectorDef} from '../def'
 import {generateOAuth2Server} from './oauth2'
 
 const logger = false
@@ -8,7 +8,7 @@ const logger = false
 jest.mock('node-fetch')
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
-  let mockConnectorDef: ConnectorDef
+  let mockConnectorDef: JsonConnectorDef
   let mockFetch: jest.Mock
 
   beforeEach(() => {
@@ -36,7 +36,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         capture_response_fields: ['user_id', 'account_type'],
       },
       handlers: undefined,
-    } as unknown as ConnectorDef
+    } as unknown as JsonConnectorDef
   })
 
   test('newInstance should throw error if client credentials are missing', () => {
