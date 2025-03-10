@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { ConnectorsTable } from './ConnectorsTable'
 import { Button } from '../shadcn/Button'

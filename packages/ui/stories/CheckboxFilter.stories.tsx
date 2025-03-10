@@ -21,7 +21,7 @@ const InteractiveCheckboxFilter = ({ initialCheckedState = {} }) => {
     if (typeof initialCheckedState === 'object' && 
         initialCheckedState !== null && 
         Object.keys(initialCheckedState).length > 0) {
-      return initialCheckedState;
+      return initialCheckedState as Record<string, boolean>;
     }
     
     // Otherwise, initialize with all options unchecked

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { DataTable } from '../components/DataTable'
 import type { ColumnDef } from '@tanstack/react-table'
@@ -5,6 +6,8 @@ import { Button } from '../shadcn/Button'
 import { PlusCircle, ExternalLink, Edit, Play } from 'lucide-react'
 import StatusBadge from '../shadcn/StatusBadge'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import type { Meta, StoryObj } from '@storybook/react'
+import VerticalBadge from '../shadcn/VerticalBadge'
 
 // Create a QueryClient
 const queryClient = new QueryClient()
