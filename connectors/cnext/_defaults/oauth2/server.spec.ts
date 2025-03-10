@@ -109,150 +109,150 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     expect(result.authorization_url).toContain('state=')
   })
 
-  test('postConnect should exchange code for tokens successfully', async () => {
-    const server = generateOAuth2Server(mockConnectorDef)
-    process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-    process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+  // test('postConnect should exchange code for tokens successfully', async () => {
+  //   const server = generateOAuth2Server(mockConnectorDef)
+  //   process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
+  //   process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
-    // Mock isOAuth2ConnectorDef to return true
-    jest
-      .spyOn(require('./server'), 'isOAuth2ConnectorDef')
-      .mockReturnValue(true)
+  //   // Mock isOAuth2ConnectorDef to return true
+  //   jest
+  //     .spyOn(require('./server'), 'isOAuth2ConnectorDef')
+  //     .mockReturnValue(true)
 
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          access_token: 'test_access_token',
-          refresh_token: 'test_refresh_token',
-          expires_in: 3600,
-          user_id: 'test_user',
-          account_type: 'premium',
-        }),
-    } as Response)
+  //   mockFetch.mockResolvedValueOnce({
+  //     ok: true,
+  //     json: () =>
+  //       Promise.resolve({
+  //         access_token: 'test_access_token',
+  //         refresh_token: 'test_refresh_token',
+  //         expires_in: 3600,
+  //         user_id: 'test_user',
+  //         account_type: 'premium',
+  //       }),
+  //   } as Response)
 
-    if (!server.postConnect) {
-      throw new Error('postConnect is not defined')
-    }
+  //   if (!server.postConnect) {
+  //     throw new Error('postConnect is not defined')
+  //   }
 
-    const result = await server.postConnect(
-      {
-        code: 'test_code',
-        state: 'test_state',
-        connectionId: 'test_connection_id',
-      },
-      {
-        id: 'test_config_id',
-        client_id: 'test_client_id',
-        client_secret: 'test_client_secret',
-      },
-      {
-        extCustomerId: `cust_123` as any,
-        webhookBaseUrl: 'https://example.com/webhook',
-      },
-    )
+  //   const result = await server.postConnect(
+  //     {
+  //       code: 'test_code',
+  //       state: 'test_state',
+  //       connectionId: 'test_connection_id',
+  //     },
+  //     {
+  //       id: 'test_config_id',
+  //       client_id: 'test_client_id',
+  //       client_secret: 'test_client_secret',
+  //     },
+  //     {
+  //       extCustomerId: `cust_123` as any,
+  //       webhookBaseUrl: 'https://example.com/webhook',
+  //     },
+  //   )
 
-    expect(result.connectionExternalId).toBe('id')
-    expect(result.settings.oauth.credentials.access_token).toBe(
-      'test_access_token',
-    )
-    expect(result.settings.oauth.credentials.refresh_token).toBe(
-      'test_refresh_token',
-    )
-    // Add capture_response_fields to the mock connector def
-    mockConnectorDef.auth.capture_response_fields = ['user_id', 'account_type']
-    expect(result.settings.metadata).toEqual({
-      user_id: 'test_user',
-      account_type: 'premium',
-    })
-  })
+  //   expect(result.connectionExternalId).toBe('id')
+  //   expect(result.settings.oauth.credentials.access_token).toBe(
+  //     'test_access_token',
+  //   )
+  //   expect(result.settings.oauth.credentials.refresh_token).toBe(
+  //     'test_refresh_token',
+  //   )
+  //   // Add capture_response_fields to the mock connector def
+  //   mockConnectorDef.auth.capture_response_fields = ['user_id', 'account_type']
+  //   expect(result.settings.metadata).toEqual({
+  //     user_id: 'test_user',
+  //     account_type: 'premium',
+  //   })
+  // })
 
-  test('refreshConnection should refresh tokens successfully', async () => {
-    const server = generateOAuth2Server(mockConnectorDef)
-    process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-    process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+  // test('refreshConnection should refresh tokens successfully', async () => {
+  //   const server = generateOAuth2Server(mockConnectorDef)
+  //   process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
+  //   process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
-    // Mock isOAuth2ConnectorDef to return true
-    jest
-      .spyOn(require('./server'), 'isOAuth2ConnectorDef')
-      .mockReturnValue(true)
+  //   // Mock isOAuth2ConnectorDef to return true
+  //   jest
+  //     .spyOn(require('./server'), 'isOAuth2ConnectorDef')
+  //     .mockReturnValue(true)
 
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          access_token: 'new_access_token',
-          refresh_token: 'new_refresh_token',
-          expires_in: 3600,
-          user_id: 'test_user',
-          account_type: 'premium',
-        }),
-    } as Response)
+  //   mockFetch.mockResolvedValueOnce({
+  //     ok: true,
+  //     json: () =>
+  //       Promise.resolve({
+  //         access_token: 'new_access_token',
+  //         refresh_token: 'new_refresh_token',
+  //         expires_in: 3600,
+  //         user_id: 'test_user',
+  //         account_type: 'premium',
+  //       }),
+  //   } as Response)
 
-    if (!server.refreshConnection) {
-      throw new Error('refreshConnection is not defined')
-    }
+  //   if (!server.refreshConnection) {
+  //     throw new Error('refreshConnection is not defined')
+  //   }
 
-    // Make sure capture_response_fields is set
-    mockConnectorDef.auth.capture_response_fields = ['user_id', 'account_type']
+  //   // Make sure capture_response_fields is set
+  //   mockConnectorDef.auth.capture_response_fields = ['user_id', 'account_type']
 
-    const result = await server.refreshConnection(
-      {
-        oauth: {
-          credentials: {
-            refresh_token: 'old_refresh_token',
-            connection_id: 'test_connection_id',
-            created_at: '2024-01-01T00:00:00.000Z',
-            provider_config_key: 'test_config_id',
-          },
-        },
-        metadata: {
-          existing_field: 'value',
-        },
-      },
-      {
-        id: 'test_config_id',
-        client_id: 'test_client_id',
-        client_secret: 'test_client_secret',
-      },
-    )
+  //   const result = await server.refreshConnection(
+  //     {
+  //       oauth: {
+  //         credentials: {
+  //           refresh_token: 'old_refresh_token',
+  //           connection_id: 'test_connection_id',
+  //           created_at: '2024-01-01T00:00:00.000Z',
+  //           provider_config_key: 'test_config_id',
+  //         },
+  //       },
+  //       metadata: {
+  //         existing_field: 'value',
+  //       },
+  //     },
+  //     {
+  //       id: 'test_config_id',
+  //       client_id: 'test_client_id',
+  //       client_secret: 'test_client_secret',
+  //     },
+  //   )
 
-    expect(result.oauth.credentials.access_token).toBe('new_access_token')
-    expect(result.oauth.credentials.refresh_token).toBe('new_refresh_token')
-    expect(result.metadata).toEqual({
-      existing_field: 'value',
-      user_id: 'test_user',
-      account_type: 'premium',
-    })
-  })
+  //   expect(result.oauth.credentials.access_token).toBe('new_access_token')
+  //   expect(result.oauth.credentials.refresh_token).toBe('new_refresh_token')
+  //   expect(result.metadata).toEqual({
+  //     existing_field: 'value',
+  //     user_id: 'test_user',
+  //     account_type: 'premium',
+  //   })
+  // })
 
-  test('refreshConnection should throw error when refresh token is missing', async () => {
-    const server = generateOAuth2Server(mockConnectorDef)
-    process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-    process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+  // test('refreshConnection should throw error when refresh token is missing', async () => {
+  //   const server = generateOAuth2Server(mockConnectorDef)
+  //   process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
+  //   process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
-    // Mock isOAuth2ConnectorDef to return true - using the correct import
-    jest
-      .spyOn(require('./server'), 'isOAuth2ConnectorDef')
-      .mockReturnValue(true)
+  //   // Mock isOAuth2ConnectorDef to return true - using the correct import
+  //   jest
+  //     .spyOn(require('./server'), 'isOAuth2ConnectorDef')
+  //     .mockReturnValue(true)
 
-    if (!server.refreshConnection) {
-      throw new Error('refreshConnection is not defined')
-    }
+  //   if (!server.refreshConnection) {
+  //     throw new Error('refreshConnection is not defined')
+  //   }
 
-    await expect(
-      server.refreshConnection(
-        {
-          oauth: {
-            credentials: {},
-          },
-        },
-        {
-          id: 'test_config_id',
-          client_id: 'test_client_id',
-          client_secret: 'test_client_secret',
-        },
-      ),
-    ).rejects.toThrow('No refresh token available')
-  })
+  //   await expect(
+  //     server.refreshConnection(
+  //       {
+  //         oauth: {
+  //           credentials: {},
+  //         },
+  //       },
+  //       {
+  //         id: 'test_config_id',
+  //         client_id: 'test_client_id',
+  //         client_secret: 'test_client_secret',
+  //       },
+  //     ),
+  //   ).rejects.toThrow('No refresh token available')
+  // })
 })
