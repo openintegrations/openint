@@ -7,10 +7,11 @@ import {getServerUrl} from '../../../../apps/app-config/constants'
 import type {JsonConnectorDef} from '../../def'
 import {
   AuthorizeHandler,
+  ExchangeTokenHandler,
   OAuth2ServerOverrides,
-  ResponseHandler,
-  TokenHandler,
+  RefreshTokenHandler,
   zOAuthConnectorDef,
+  zTokenResponse,
 } from './def'
 
 // Helper function to make token requests
@@ -18,7 +19,8 @@ async function makeTokenRequest(
   url: string,
   params: Record<string, string>,
   flowType: 'exchange' | 'refresh',
-): Promise<Response> {
+  // note: we may want to add bodyFormat: form or json
+): Promise<z.infer<typeof zTokenResponse>> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -35,150 +37,102 @@ async function makeTokenRequest(
     )
   }
 
-  return response
+  try {
+    return zTokenResponse.parse(await response.json())
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      throw new Error(
+        `Invalid oauth2 ${flowType} token response format: ${error.message}`,
+      )
+    }
+    throw error
+  }
 }
 
 const defaultAuthorizeHandler: AuthorizeHandler = async ({
-  params,
-  connector_config,
-  authorization_request_url,
+  oauth_connector_def,
   redirect_uri,
   connection_id,
 }) => {
   if (!connection_id) {
     throw new Error('No connection_id provided')
   }
-  const url = new URL(authorization_request_url)
+  const url = new URL(oauth_connector_def.authorization_request_url)
+  const params = mapOauthParams(
+    {
+      client_id: oauth_connector_def.connector_config.client_id,
+      client_secret: oauth_connector_def.connector_config.client_secret,
+      redirect_uri,
+      scope: oauth_connector_def.connector_config.scopes?.join(
+        oauth_connector_def.connector_config.scope_delimiter,
+      ),
+      state: Buffer.from(connection_id).toString('base64'),
+      ...(oauth_connector_def.params_config.authorize ?? {}),
+    },
+    oauth_connector_def.params_config.param_names ?? {},
+  )
 
-  url.searchParams.set('response_type', 'code')
-  url.searchParams.set('client_id', connector_config.client_id)
-  if (connector_config.scopes) {
-    url.searchParams.set('scope', connector_config.scopes.join(' '))
-  }
-
-  for (const [key, value] of Object.entries(params.authorize ?? {})) {
+  Object.entries(params).forEach(([key, value]) => {
     url.searchParams.set(key, value as string)
-  }
-
-  url.searchParams.set('redirect_uri', redirect_uri)
-  const state = Buffer.from(connection_id).toString('base64')
-  url.searchParams.set('state', state)
+  })
 
   return {authorization_url: url.toString()}
 }
 
-const defaultTokenHandler: TokenHandler = async (args) => {
-  if (args.flow_type === 'refresh') {
-    const {params, connector_config, token_request_url, refresh_token} = args
-
-    const baseParams = {
-      grant_type: 'refresh_token',
-      refresh_token,
-      client_id: connector_config.client_id,
-      client_secret: connector_config.client_secret,
-      ...params.refresh,
-    }
-
-    return makeTokenRequest(token_request_url, baseParams, 'refresh')
-  } else if (args.flow_type === 'exchange') {
-    const {
-      params,
-      connector_config,
-      code,
-      state,
-      token_request_url,
+const defaultTokenExchangeHandler: ExchangeTokenHandler = async ({
+  oauth_connector_def,
+  redirect_uri,
+  code,
+  state,
+}) => {
+  const url = new URL(oauth_connector_def.token_request_url)
+  const params = mapOauthParams(
+    {
+      client_id: oauth_connector_def.connector_config.client_id,
+      client_secret: oauth_connector_def.connector_config.client_secret,
       redirect_uri,
-    } = args
-
-    const baseParams = {
+      scope: oauth_connector_def.connector_config.scopes?.join(
+        oauth_connector_def.connector_config.scope_delimiter,
+      ),
+      state,
       grant_type: 'authorization_code',
       code,
-      client_id: connector_config.client_id,
-      client_secret: connector_config.client_secret,
-      redirect_uri,
-      ...params.token,
-    }
-
-    console.warn('SKIPPING OAUTH STATE VALIDATION: ', state)
-
-    return makeTokenRequest(token_request_url, baseParams, 'exchange')
-  }
-
-  throw new Error(`Invalid oauth flow type passed to token handler}`)
-}
-
-const defaultResponseHandler: ResponseHandler = async ({
-  response,
-  metadata,
-}) => {
-  return {
-    access_token: response['access_token'] as string,
-    refresh_token: response['refresh_token'] as string | undefined,
-    expires_in: response['expires_in'] as number | undefined,
-    metadata,
-  }
-}
-
-function extractMetadata(
-  responseData: Record<string, unknown>,
-  captureFields?: string[],
-): Record<string, unknown> {
-  const metadata: Record<string, unknown> = {}
-  if (captureFields) {
-    for (const field of captureFields) {
-      if (field in responseData) {
-        metadata[field] = responseData[field]
-      }
-    }
-  }
-  return metadata
-}
-
-async function processTokenResponse(
-  tokenResponse: Response,
-  responseHandler: ResponseHandler,
-  captureFields?: string[],
-  existingRefreshToken?: string,
-) {
-  if (!responseHandler) {
-    throw new Error('No response handler passed to processTokenResponse')
-  }
-
-  const responseData = await tokenResponse.json()
-  const tokenMetadata = extractMetadata(responseData, captureFields)
-
-  const processedResponse = await responseHandler({
-    response: responseData,
-    metadata: tokenMetadata,
-  })
-
-  const finalMetadata = extractMetadata(
-    {...tokenMetadata, ...processedResponse},
-    captureFields,
+      ...(oauth_connector_def.params_config.token ?? {}),
+    },
+    oauth_connector_def.params_config.param_names ?? {},
   )
 
-  const expiresAt = processedResponse.expires_in
-    ? new Date(Date.now() + processedResponse.expires_in * 1000).toISOString()
-    : undefined
+  Object.entries(params).forEach(([key, value]) => {
+    url.searchParams.set(key, value as string)
+  })
 
-  const refreshToken = processedResponse.refresh_token || existingRefreshToken
+  return makeTokenRequest(
+    oauth_connector_def.authorization_request_url,
+    params,
+    'exchange',
+  )
+}
 
-  return {
-    credentials: {
-      access_token: processedResponse.access_token,
-      refresh_token: refreshToken,
-      expires_at: expiresAt,
-      raw: {
-        access_token: processedResponse.access_token,
-        refresh_token: refreshToken,
-        expires_at: expiresAt,
-        expires_in: processedResponse.expires_in || 1800,
-        token_type: 'bearer',
-        type: 'OAUTH2',
-      },
+const defaultTokenRefreshHandler: RefreshTokenHandler = async ({
+  oauth_connector_def,
+  refresh_token,
+}) => {
+  const params = mapOauthParams(
+    {
+      client_id: oauth_connector_def.connector_config.client_id,
+      client_secret: oauth_connector_def.connector_config.client_secret,
+      refresh_token,
+      grant_type: 'refresh_token',
+      ...(oauth_connector_def.params_config.token ?? {}),
     },
-    metadata: finalMetadata,
-  }
+    oauth_connector_def.params_config.param_names ?? {},
+  )
+
+  return makeTokenRequest(
+    oauth_connector_def.token_request_url,
+    params,
+    'refresh',
+  )
 }
 
 function addCcfgDefaultCredentials(
@@ -206,6 +160,37 @@ export function isOAuth2ConnectorDef(
   return zOAuthConnectorDef.safeParse(auth).success
 }
 
+/*
+ * This function takes the paramNames map where a user can map were fields like client_id and client_secret are named in particular oauth connector.
+ * For example salesforce may call client_id clientKey. In this case, the paramNames would have client_id: clientKey.
+ * Following the SF example, this function will return a new object with the client_id field renamed to clientKey.
+ * Write tests for this function to in different scenarios ensure that the clientKey is returned with the value initially set for client_id
+ */
+export function mapOauthParams(
+  params: Record<string, string>,
+  paramNames: Record<string, string>,
+) {
+  const result: Record<string, string> = {}
+
+  // Process each parameter in the input
+  Object.entries(params).forEach(([key, value]) => {
+    if (key && paramNames && key in paramNames && paramNames[key]) {
+      result[paramNames[key]] = value
+    } else {
+      result[key] = value
+    }
+  })
+
+  return result
+}
+
+/*
+ * This function generates a server implementation for an OAuth2 connector.
+ * It takes a connector definition and overrides for the server implementation.
+ *
+ * Inspired by https://github.com/lelylan/simple-oauth2/blob/master/API.md
+ *
+ */
 export function generateOAuth2Server<T extends ConnectorSchemas>(
   connectorDef: JsonConnectorDef,
   overrides?: Partial<ConnectorServer<T>> & Partial<OAuth2ServerOverrides>,
@@ -269,11 +254,11 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       console.log(`Oauth2 Preconnect called with input`, input)
 
       return authorizeHandler({
-        authorization_request_url: connectorDef.auth.authorization_request_url,
-        params: connectorDef.auth.params,
-        connector_config: connectorConfig,
-        // TODO: revert
-        // redirect_uri: 'https://f887-38-9-28-71.ngrok-free.app/connect/callback',
+        oauth_connector_def: {
+          ...connectorDef.auth,
+          connector_config: connectorConfig,
+          connection_settings: connectionSettings,
+        } as any as z.infer<typeof zOAuthConnectorDef>, // TODO: fix this
         redirect_uri: getServerUrl(null) + '/connect/callback',
         connection_id: connectionId,
         // this is currently returning T['_types']['connectInput']
@@ -282,17 +267,12 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       }) as any
     },
 
-    async postConnect(connectOutput, config) {
+    async postConnect(connectOutput, connectorConfig, connectionSettings) {
       // Use overrides if provided, otherwise use defaults
-      const tokenHandler = overrides?.token || defaultTokenHandler
-      const responseHandler = overrides?.response || defaultResponseHandler
+      const tokenHandler = overrides?.exchange || defaultTokenExchangeHandler
 
       if (!tokenHandler) {
         throw new Error('No token handler defined')
-      }
-
-      if (!responseHandler) {
-        throw new Error('No response handler defined')
       }
 
       if (!isOAuth2ConnectorDef(connectorDef.auth)) {
@@ -306,17 +286,16 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         `Oauth2 Postconnect called with connect output`,
         connectOutput,
       )
-      const tokenResponse = await tokenHandler({
-        flow_type: 'exchange',
-        params: connectorDef.auth.params,
-        connector_config: addCcfgDefaultCredentials(config, connectorName),
+      const result = await tokenHandler({
+        oauth_connector_def: {
+          ...connectorDef.auth,
+          connector_config: connectorConfig,
+          connection_settings: connectionSettings,
+        } as any as z.infer<typeof zOAuthConnectorDef>, // TODO: fix this
         code: connectOutput.code,
         state: connectOutput.state,
-        token_request_url: connectorDef.auth.token_request_url,
         redirect_uri,
       })
-
-      const result = await processTokenResponse(tokenResponse, responseHandler)
 
       console.log(`Oauth2 Postconnect result`, result)
 
@@ -326,17 +305,17 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
         settings: {
           oauth: {
             credentials: {
-              ...result.credentials,
+              ...result,
               client_id: clientId,
               connection_id: connectOutput.connectionId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
               last_fetched_at: new Date().toISOString(),
-              provider_config_key: config.id,
+              provider_config_key: connectorConfig.id,
               metadata: null,
             },
           },
-          metadata: result.metadata,
+          metadata: {}, // QQ: do we need this?
         },
         // NOTE: this is currently returning T['_types']['connectionSettings']
         // which is defined as {authorization_url} in cnext/schema.ts
@@ -344,63 +323,51 @@ export function generateOAuth2Server<T extends ConnectorSchemas>(
       } as any
     },
 
-    async refreshConnection(settings, config) {
+    async refreshConnection(connectionSettings, connectorConfig) {
       // Use overrides if provided, otherwise use defaults
-      const tokenHandler = overrides?.token || defaultTokenHandler
-      const responseHandler = overrides?.response || defaultResponseHandler
+      const refreshTokenHandler =
+        overrides?.refresh || defaultTokenRefreshHandler
 
-      if (!tokenHandler || !responseHandler) {
-        throw new Error(
-          `Missing required handlers: ${!tokenHandler ? 'token' : ''} ${
-            !responseHandler ? 'response' : ''
-          }`.trim(),
-        )
+      if (!refreshTokenHandler) {
+        throw new Error('No refresh token handler defined')
       }
 
       if (!isOAuth2ConnectorDef(connectorDef.auth)) {
         return zOAuthConnectorDef.parse(connectorDef.auth)
       }
 
-      const refreshToken = settings?.oauth?.credentials?.refresh_token
+      const refreshToken = connectionSettings?.oauth?.credentials?.refresh_token
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
       }
 
       console.log(`Oauth2 Refresh connection called`)
 
-      const tokenResponse = await tokenHandler({
-        flow_type: 'refresh',
-        params: connectorDef.auth.params,
-        connector_config: addCcfgDefaultCredentials(config, connectorName),
-        token_request_url: connectorDef.auth.token_request_url,
+      const result = await refreshTokenHandler({
+        oauth_connector_def: {
+          ...connectorDef.auth,
+          connector_config: connectorConfig,
+          connection_settings: connectionSettings,
+        } as any as z.infer<typeof zOAuthConnectorDef>, // TODO: fix this
         refresh_token: refreshToken,
       })
-
-      const result = await processTokenResponse(
-        tokenResponse,
-        responseHandler,
-        connectorDef.auth.params?.capture_response_fields,
-        refreshToken,
-      )
 
       return {
         oauth: {
           credentials: {
-            ...result.credentials,
+            ...result,
             client_id: clientId,
-            connection_id: settings.oauth?.credentials?.connection_id,
-            created_at: settings.oauth?.credentials?.created_at,
+            connection_id: connectionSettings.oauth?.credentials?.connection_id,
+            created_at: connectionSettings.oauth?.credentials?.created_at,
             updated_at: new Date().toISOString(),
             last_fetched_at: new Date().toISOString(),
             provider_config_key:
-              settings.oauth?.credentials?.provider_config_key || config.id,
-            metadata: settings.oauth?.credentials?.metadata || null,
+              connectionSettings.oauth?.credentials?.provider_config_key ||
+              connectorConfig.id,
+            metadata: connectionSettings.oauth?.credentials?.metadata || null,
           },
         },
-        metadata: {
-          ...settings.metadata,
-          ...result.metadata,
-        },
+        metadata: {}, // QQ: do we need this?
       } as any
     },
 

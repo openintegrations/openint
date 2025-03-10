@@ -1,47 +1,5 @@
 import {z} from 'zod'
 
-// // Define OAuth2 handler types
-// export type AuthorizeHandlerArgs = {
-//   authorization_request_url: string
-//   params: any
-//   connector_config: any
-//   redirect_uri: string
-//   connection_id: string
-// }
-
-// export type TokenHandlerArgs = {
-//   flow_type: 'exchange' | 'refresh'
-//   params: any
-//   connector_config: any
-//   token_request_url: string
-//   redirect_uri?: string
-//   code?: string
-//   state?: string
-//   refresh_token?: string
-// }
-
-export type ResponseHandlerArgs = {
-  response: Record<string, unknown>
-  metadata: Record<string, unknown>
-}
-
-export type AuthorizeHandler = (
-  args: AuthorizeHandlerArgs,
-) => Promise<{authorization_url: string}>
-export type TokenHandler = (args: TokenHandlerArgs) => Promise<Response>
-export type ResponseHandler = (args: ResponseHandlerArgs) => Promise<{
-  access_token: string
-  refresh_token?: string
-  expires_in?: number
-  instance_url?: string
-}>
-
-export type OAuth2ServerOverrides = {
-  authorize: AuthorizeHandler
-  token: TokenHandler
-  response: ResponseHandler
-}
-
 export const zOauthConnectorConfig = z
   .object({
     client_id: z.string(),
@@ -50,8 +8,10 @@ export const zOauthConnectorConfig = z
   })
   .describe('Base oauth configuration for the connector')
 
-// Base auth params shared across flows
-export const zBaseAuthParams = z.object({
+export const zAuthParamsConfig = z.object({
+  authorize: z.record(z.string(), z.string()).optional(),
+  token: z.record(z.string(), z.string()).optional(),
+  refresh: z.record(z.string(), z.string()).optional(),
   param_names: z
     .object({
       client_id: z.string().optional(),
@@ -67,69 +27,6 @@ export const zBaseAuthParams = z.object({
     .optional(),
 })
 
-// Auth params for authorization flow
-export const zAuthorizeParams = zBaseAuthParams.extend({
-  authorize: z.record(z.string(), z.string()),
-})
-
-// Auth params for token exchange flow
-export const zTokenParams = zBaseAuthParams.extend({
-  token: z.record(z.string(), z.string()),
-})
-
-// Auth params for refresh token flow
-export const zRefreshParams = zBaseAuthParams.extend({
-  refresh: z.record(z.string(), z.string()),
-})
-
-// Combined auth params
-export const zAuthParams = zBaseAuthParams.extend({
-  authorize: z.record(z.string(), z.string()).optional(),
-  token: z.record(z.string(), z.string()).optional(),
-  refresh: z.record(z.string(), z.string()).optional(),
-})
-
-export type AuthParams = z.infer<typeof zAuthParams>
-export type AuthorizeParams = z.infer<typeof zAuthorizeParams>
-export type TokenParams = z.infer<typeof zTokenParams>
-export type RefreshParams = z.infer<typeof zRefreshParams>
-
-// Define strongly typed handler argument types
-export const zAuthorizeHandlerArgs = z.object({
-  authorization_request_url: z.string().url(),
-  params: zAuthorizeParams,
-  connector_config: zOauthConnectorConfig,
-  redirect_uri: z.string(),
-  connection_id: z.string(),
-})
-
-export const zTokenExchangeHandlerArgs = z.object({
-  params: zTokenParams,
-  connector_config: zOauthConnectorConfig,
-  code: z.string(),
-  state: z.string(),
-  token_request_url: z.string().url(),
-  redirect_uri: z.string(),
-})
-
-export const zTokenRefreshHandlerArgs = z.object({
-  params: zRefreshParams,
-  connector_config: zOauthConnectorConfig,
-  token_request_url: z.string().url(),
-  refresh_token: z.string(),
-})
-
-// Combined token handler args with discriminated union
-export const zTokenHandlerArgs = z.discriminatedUnion('flow_type', [
-  zTokenExchangeHandlerArgs.extend({flow_type: z.literal('exchange')}),
-  zTokenRefreshHandlerArgs.extend({flow_type: z.literal('refresh')}),
-])
-
-export type AuthorizeHandlerArgs = z.infer<typeof zAuthorizeHandlerArgs>
-export type TokenExchangeHandlerArgs = z.infer<typeof zTokenExchangeHandlerArgs>
-export type TokenRefreshHandlerArgs = z.infer<typeof zTokenRefreshHandlerArgs>
-export type TokenHandlerArgs = z.infer<typeof zTokenHandlerArgs>
-
 export const zOAuthConnectorDef = z.object({
   type: z
     .enum(['OAUTH2', 'OAUTH2CC'])
@@ -142,10 +39,6 @@ export const zOAuthConnectorDef = z.object({
     .string()
     .url()
     .describe('URL to obtain an access token from the provider'),
-  scope: z
-    .union([z.string(), z.array(z.string())])
-    .optional()
-    .describe('Scopes required for initial authentication'),
   openint_scopes: z
     .array(z.string())
     .optional()
@@ -190,5 +83,44 @@ export const zOAuthConnectorDef = z.object({
     .describe(
       'Possible OAuth scopes for connector with their descriptions and optional display names',
     ),
-  params: z.union([zAuthParams, z.any()]).optional().default({}),
+  params_config: zAuthParamsConfig.optional().default({}),
 })
+
+export const zAuthorizeHandlerArgs = z.object({
+  oauth_connector_def: zOAuthConnectorDef,
+  redirect_uri: z.string(),
+  connection_id: z.string(),
+})
+
+export const zTokenExchangeHandlerArgs = z.object({
+  oauth_connector_def: zOAuthConnectorDef,
+  code: z.string(),
+  state: z.string(),
+  redirect_uri: z.string(),
+})
+
+export const zTokenRefreshHandlerArgs = z.object({
+  oauth_connector_def: zOAuthConnectorDef,
+  refresh_token: z.string(),
+})
+
+export const zTokenResponse = z.object({
+  access_token: z.string(),
+  refresh_token: z.string().optional(),
+  expires_in: z.number().optional(),
+})
+export type AuthorizeHandler = (
+  args: z.infer<typeof zAuthorizeHandlerArgs>,
+) => Promise<{authorization_url: string}>
+export type ExchangeTokenHandler = (
+  args: z.infer<typeof zTokenExchangeHandlerArgs>,
+) => Promise<z.infer<typeof zTokenResponse>>
+export type RefreshTokenHandler = (
+  args: z.infer<typeof zTokenRefreshHandlerArgs>,
+) => Promise<z.infer<typeof zTokenResponse>>
+
+export type OAuth2ServerOverrides = {
+  authorize: AuthorizeHandler
+  exchange: ExchangeTokenHandler
+  refresh: RefreshTokenHandler
+}

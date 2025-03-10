@@ -164,16 +164,18 @@ export const connectionRouter = router({
       }
 
       const credentialsRequiresRefresh =
-        'refreshConnection' in connector &&
-        typeof connector.refreshConnection === 'function' &&
-        (input.refresh_policy === 'force' ||
-          (input.refresh_policy === 'auto' &&
-          connection.settings.oauth?.credentials?.expires_at
-            ? new Date(connection.settings.oauth.credentials.expires_at) <
-              new Date()
-            : false))
+        input.refresh_policy === 'force' ||
+        (input.refresh_policy === 'auto' &&
+        connection.settings.oauth?.credentials?.expires_at
+          ? new Date(connection.settings.oauth.credentials.expires_at) <
+            new Date()
+          : false)
 
-      if (credentialsRequiresRefresh) {
+      if (
+        credentialsRequiresRefresh &&
+        'refreshConnection' in connector &&
+        typeof connector.refreshConnection === 'function'
+      ) {
         const refreshedConnectionSettings = await connector.refreshConnection(
           connection.settings,
           connector_config.config,

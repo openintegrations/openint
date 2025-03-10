@@ -17,12 +17,11 @@ const connectorDef = {
     authorization_request_url: 'https://accounts.google.com/o/oauth2/v2/auth',
     token_request_url: 'https://oauth2.googleapis.com/token',
     scope_separator: ' ',
-    params: {
+    params_config: {
       authorize: {
         access_type: 'offline',
         prompt: 'consent',
       },
-      capture_response_fields: ['id'],
     },
     scopes: [
       {
@@ -38,15 +37,16 @@ const connectorDef = {
         description: 'Full access to files and folders in your Google Drive',
       },
     ],
+    openint_scopes: ['https://www.googleapis.com/auth/drive.file'],
   },
   // TODO (@pellicceama)
-  // 1) Get rid of code handlers in def and put it inside `server` instead. def should be json serializable only
-  // 2) Have the custom handlers be auth-type specific which then gets normalized into
-  // 3) our getPreConnectParams, preConnect, postConnect lifecycle
+  // xx 1) Get rid of code handlers in def and put it inside `server` instead. def should be json serializable only
+  // xx2) Have the custom handlers be auth-type specific which then gets normalized into
+  //xx 3) our getPreConnectParams, preConnect, postConnect lifecycle
   // 4) Ability to extend standard auth schema, not just override it (e.g. QBO realm_id)
-  // 5) Nest auth fields under an auth object, limit # of fields on top level, continue to leverage the discriminated union
+  // xx 5) Nest auth fields under an auth object, limit # of fields on top level, continue to leverage the discriminated union
   // 6) Allow for simple variable substitutions in connector def based on connection.settings or connector_config.config
-  // 7) Scope should list all possible scopes this oauth connectors we know of, but it's a best effort at then end of day and allow user to specify custom ones..
+  // xx 7) Scope should list all possible scopes this oauth connectors we know of, but it's a best effort at then end of day and allow user to specify custom ones..
   // 8) Add authence and other fields to full ConnectionDef.metadata
   // 10) Have a generic way to create connector server simplified that allows me to access connector specific fields as part
   //     of handlers like check connnection (think api key auth)
