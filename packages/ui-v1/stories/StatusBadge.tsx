@@ -53,7 +53,8 @@ export function StatusBadge({
   const {label, className: statusClassName} = statusConfig[status]
 
   return (
-    <div className="bg-pink-800 p-5">
+    <div className="bg-background p-5">
+
       <Badge
         className={cn('font-medium', statusClassName, className)}
         {...props}>
