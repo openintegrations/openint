@@ -138,7 +138,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       role: 'org',
       orgId: 'org_222',
     }).listConnectorConfigs.query({
-      expand: ['enabled_integrations'],
+      expand: 'enabled_integrations',
     })
     expect(res.items).toHaveLength(2)
 
@@ -160,7 +160,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       role: 'org',
       orgId: 'org_222',
     }).listConnectorConfigs.query({
-      expand: ['connector', 'enabled_integrations'],
+      expand: 'connector,enabled_integrations',
     })
 
     const googleConnector = res.items.find(
