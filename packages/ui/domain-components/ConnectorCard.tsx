@@ -70,6 +70,7 @@ export const ConnectorCard = ({
     <Card
       className={cn(
         'relative m-3 flex h-[150px] w-[150px] flex-col items-center justify-center p-2',
+
         'border-card-border border',
         'transition duration-300 ease-in-out',
         isHovered ? 'border-button bg-button-light' : '',
