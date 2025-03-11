@@ -8,7 +8,7 @@ import {createApp} from '../app'
 import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
-} from '../trpc/handlers'
+} from '../handlers'
 import type {AppRouter} from '../routers'
 
 const db = initDbPGLite()

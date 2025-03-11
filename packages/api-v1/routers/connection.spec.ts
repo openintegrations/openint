@@ -5,8 +5,8 @@ import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {makeUlid} from '@openint/util'
 import {$test} from '@openint/util/__tests__/test-utils'
-import {routerContextFromViewer} from '../context'
-import {connectionRouter} from '../../routers/connection'
+import {routerContextFromViewer} from '../trpc/context'
+import {connectionRouter} from './connection'
 
 const logger = false
 

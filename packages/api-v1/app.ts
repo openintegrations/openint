@@ -6,7 +6,7 @@ import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
   type CreateFetchHandlerOptions,
-} from './trpc/handlers'
+} from './handlers'
 import {generateOpenAPISpec} from './trpc/openapi'
 
 export interface CreateAppOptions
