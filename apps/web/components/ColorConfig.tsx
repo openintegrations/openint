@@ -55,7 +55,7 @@ const defaultThemeColors: Partial<ThemeColors> = {
   card: 'hsl(0, 0%, 100%)', // #ffffff - White
   cardForeground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
   destructive: 'hsl(0, 100%, 50%)',
-  destructiveForeground: 'hsl(0, 0%, 100%)', // Pure white
+  destructiveForeground: 'hsl(220, 35%, 92%)',
   destructiveHover: 'hsl(0, 100%, 40%)',
   destructiveStroke: 'hsl(0, 100%, 65%)',
   foreground: 'hsl(245, 12%, 20%)', // #2f2d3a - Dark Grayish Blue
@@ -89,7 +89,7 @@ const defaultDarkThemeColors: Partial<ThemeColors> = {
   card: 'hsl(0, 0%, 14%)',
   cardForeground: 'hsl(0, 0%, 96.5%)',
   destructive: 'hsl(7, 68%, 53%)',
-  destructiveForeground: 'hsl(0, 0%, 100%)', // Pure white
+  destructiveForeground: 'hsl(220, 35%, 92%)',
   destructiveHover: 'hsl(7, 68%, 43%)',
   destructiveStroke: 'hsl(7, 68%, 63%)',
   foreground: 'hsl(0, 0%, 96.5%)',
