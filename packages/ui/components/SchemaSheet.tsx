@@ -14,8 +14,8 @@ import {
   SheetTitle,
   SheetTrigger,
   useToast,
-} from '../shadcn'
-import type {ButtonProps} from '../shadcn'
+} from '@openint/shadcn/ui'
+import type {ButtonProps} from '@openint/shadcn/ui'
 import type {SchemaFormElement, SchemaFormProps} from './SchemaForm'
 import {SchemaForm} from './SchemaForm'
 

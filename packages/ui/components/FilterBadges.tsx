@@ -1,5 +1,5 @@
 import {X} from 'lucide-react'
-import {Badge} from '../shadcn'
+import {Badge} from '@openint/shadcn/ui'
 import {parseCategory} from '../utils'
 
 export function FilterBadges({

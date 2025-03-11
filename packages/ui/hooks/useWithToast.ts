@@ -1,4 +1,4 @@
-import {useToast} from '../shadcn'
+import {useToast} from '@openint/shadcn/ui'
 
 interface WithToastOptions {
   title?: string

@@ -2,11 +2,11 @@
 
 import {Check, Copy, Eye, EyeOff} from 'lucide-react'
 import {useState} from 'react'
-import {useToast} from '../shadcn'
-import {Button} from '../shadcn/Button'
-import type {InputProps} from '../shadcn/Input'
-import {Input} from '../shadcn/Input'
-import {Label} from '../shadcn/Label'
+import {useToast} from '@openint/shadcn/ui'
+import {Button} from '@openint/shadcn/ui/Button'
+import type {InputProps} from '@openint/shadcn/ui/Input'
+import {Input} from '@openint/shadcn/ui/Input'
+import {Label} from '@openint/shadcn/ui/Label'
 
 interface SecureInputProps {
   label?: string

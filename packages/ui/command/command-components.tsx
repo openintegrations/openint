@@ -3,8 +3,8 @@ import React from 'react'
 import {R} from '@openint/util'
 import {__DEBUG__} from '../../../apps/app-config/constants'
 import {Icon} from '../components/Icon'
-import type {ButtonProps} from '../shadcn'
-import {Button, Popover, PopoverContent, PopoverTrigger} from '../shadcn'
+import type {ButtonProps} from '@openint/shadcn/ui'
+import {Button, Popover, PopoverContent, PopoverTrigger} from '@openint/shadcn/ui'
 import {
   Command,
   CommandDialog,
@@ -14,7 +14,7 @@ import {
   CommandItem,
   CommandList,
   CommandShortcut,
-} from '../shadcn/Command'
+} from '@openint/shadcn/ui/Command'
 import {cn} from '../utils'
 import {filterCommands, prepareCommand, prepareCommands} from './command-fns'
 import type {_infer, CommandDefinitionMap, CommandDraft} from './command-types'

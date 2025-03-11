@@ -1,8 +1,8 @@
 import {Component} from 'lucide-react'
 import {useState} from 'react'
-import {Button} from '../shadcn/Button'
-import {Checkbox} from '../shadcn/Checkbox'
-import {Popover, PopoverContent, PopoverTrigger} from '../shadcn/Popover'
+import {Button} from '@openint/shadcn/ui/button'
+import {Checkbox} from '@openint/shadcn/ui/checkbox'
+import {Popover, PopoverContent, PopoverTrigger} from '@openint/shadcn/ui/popover'
 import {parseCategory} from '../utils'
 
 export function CheckboxFilter({

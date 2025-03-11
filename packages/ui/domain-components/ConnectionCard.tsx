@@ -1,7 +1,7 @@
 import {Loader2, Settings} from 'lucide-react'
 import {useState} from 'react'
 import type {ConnectorConfig} from '../../engine-frontend/hocs/WithConnectConfig'
-import {Card, CardContent} from '../shadcn'
+import {Card, CardContent} from '@openint/shadcn/ui'
 import {IntegrationLogo} from './ConnectionRawCard'
 import {ConnectorLogo} from './ConnectorCard'
 

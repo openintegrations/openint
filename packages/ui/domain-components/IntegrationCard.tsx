@@ -1,12 +1,12 @@
 import {Loader2, Plus} from 'lucide-react'
 import {useEffect, useRef, useState} from 'react'
-import {Card, CardContent} from '../shadcn'
+import {Card, CardContent} from '@openint/shadcn/ui'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '../shadcn/Tooltip'
+} from '@openint/shadcn/ui/Tooltip'
 
 export function IntegrationCard({
   logo,
