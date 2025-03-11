@@ -4,12 +4,9 @@
   "private": true,
   "scripts": {
     "build": "run-s build:*",
-    "build:css": "pnpm --dir ../../packages/ui-v1 build-tailwind",
     "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
-    "dev": "concurrently npm:dev:*",
-    "dev:css": "pnpm build:css --watch",
-    "dev:next": "next dev -p 4000 --turbopack",
+    "dev": "next dev -p 4000 --turbopack",
     "start": "next start"
   },
   "dependencies": {
@@ -62,12 +59,15 @@
     "@openint/connector-plaid": "workspace:*",
     "@opensdks/sdk-plaid": "^0.0.19",
     "@sentry/cli": "^2.36.6",
+    "@tailwindcss/postcss": "^4.0.13",
     "@types/http-proxy": "1.17.10",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "concurrently": "^9.1.2",
     "drizzle-orm": "^0.39.1",
     "node-loader": "2.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.13",
     "tilg": "0.1.1"
   },
   "//": "@trpc/client version needs to be explicitly specified here otherwise we can end up with v10 try to import stuff from v11. pnpm quirk, not sure."
