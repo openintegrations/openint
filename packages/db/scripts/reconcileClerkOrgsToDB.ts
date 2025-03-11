@@ -6,8 +6,12 @@ import {schema} from '..'
 import {initDbNeon} from '../db.neon'
 
 const clerkSecretKey = process.env['CLERK_SECRET_KEY']
+const dbUrl = process.env['DATABASE_URL']
+if (!clerkSecretKey) throw new Error('CLERK_SECRET_KEY is not defined')
+if (!dbUrl) throw new Error('DATABASE_URL is not defined')
+
 const clerk = createClerkClient({secretKey: clerkSecretKey})
-const db = initDbNeon(process.env['DATABASE_URL'] as string)
+const db = initDbNeon(dbUrl)
 
 type OrganizationSelect = InferSelectModel<typeof schema.organization>
 type OrganizationInsert = InferInsertModel<typeof schema.organization>
