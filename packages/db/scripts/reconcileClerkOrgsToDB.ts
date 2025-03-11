@@ -87,9 +87,9 @@ async function reconcileClerkOrgsToDB() {
   const dbOrganizations = await getDbOrganizations()
   console.log({dbOrganizations, clerkOrganizations: clerkOrganizations.data})
 
-  clerkOrganizations.data.forEach(async (clerkOrg) => {
+  for (const clerkOrg of clerkOrganizations.data) {
     const existingDbOrg = dbOrganizations.find((o) => o.id === clerkOrg.id)
-    if (existingDbOrg) {
+    if (existingDbOrg && clerkOrg.privateMetadata['api_key']) {
       if (clerkOrg.privateMetadata['api_key'] === existingDbOrg.api_key) {
         console.log(
           `Org ${clerkOrg.id} already exists in DB with the same api_key`,
@@ -107,7 +107,7 @@ async function reconcileClerkOrgsToDB() {
         await updateOrganization(existingDbOrg, clerkOrg)
       }
     }
-  })
+  }
 
   console.log('Reconciliation completed!')
 }
