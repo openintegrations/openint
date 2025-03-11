@@ -80,10 +80,7 @@ export const eventMapForInngest = R.mapValues(eventMap, (v) => ({
   }
 }
 
-/** slash in name is not supported in openapi spec. Plus we don't want to send all events to orgs for now */
-export const outgoingWebhookEventMap = R.omitBy(eventMapForInngest, (_, name) =>
-  name.includes('/'),
-)
+export const outgoingWebhookEventMap = eventMapForInngest
 
 export type Events = Combine<
   BuiltInEvents,

@@ -14,7 +14,7 @@ const inngestFunctions = [
   // @see https://discord.com/channels/842170679536517141/1214066130860118087/1214283616327180318
   ...Object.keys(outgoingWebhookEventMap).map((name) =>
     inngest.createFunction(
-      {id: `send-webhook/${name}`},
+      {id: `send-webhook.${name}`},
       {event: name as keyof Events},
       sendWebhook,
     ),
