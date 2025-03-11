@@ -1,6 +1,6 @@
+import {NextResponse} from 'next/server'
 import {inngest} from '@openint/engine-backend/inngest'
 import {makeUlid} from '@openint/util'
-import {NextResponse} from 'next/server'
 
 const handler = async (
   req: Request,
@@ -21,7 +21,7 @@ const handler = async (
   }
 
   const res = await inngest
-    .send({name: 'webhook/received', data})
+    .send({name: 'webhook.received', data})
     .catch((err) => err as Error)
   const resData = res instanceof Error ? {error: res.message} : res.ids
   const status = res instanceof Error ? 500 : 200

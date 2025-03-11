@@ -492,7 +492,7 @@ export const connectionRouter = trpc.router({
       }
       if (opts?.async) {
         const {ids} = await inngest.send({
-          name: 'sync/connection-requested',
+          name: 'sync.connection-requested',
           data: {connectionId: connId},
         })
         return {connection_requested_event_id: ids[0]}
