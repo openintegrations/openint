@@ -86,6 +86,7 @@ export async function syncPipeline({
 }
 
 export async function sendWebhook({event}: FunctionInput<keyof Events>) {
+  console.log('Sending webhook', event)
   if (!event.user?.webhook_url) {
     return false
   }
