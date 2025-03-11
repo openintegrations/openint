@@ -3,6 +3,7 @@ import {zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {core, parseNonEmpty} from '../models'
 import {connectorSchemas} from '../models/connectorSchemas'
 import {customerProcedure, router} from '../trpc/_base'
+import {md} from './utils/md'
 
 export const connectRouter = router({
   preConnect: customerProcedure
@@ -14,7 +15,11 @@ export const connectRouter = router({
     })
     .input(
       z.object({
-        id: zId('ccfg'),
+        id: zId('ccfg').describe(md`
+          Must correspond to data.connector_name.
+          Technically id should imply connector_name already but there is no way to
+          specify a discriminated union with id alone.
+        `),
         options: zConnectOptions,
 
         // Unable to put data at the top level due to
