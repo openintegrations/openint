@@ -14,25 +14,25 @@ overrides:
 
 patchedDependencies:
   '@jsonurl/jsonurl@1.1.7':
-    hash: 2048c2869df98564de76ebdd8cdf655260560d85e1c74568aeb503efa2c312b0
+    hash: wymar43eprx3gdqsv4laq3u2ei
     path: patches/@jsonurl__jsonurl@1.1.7.patch
   '@lilyrose2798/trpc-openapi@1.3.10':
-    hash: d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927
+    hash: hesfnkphzbtlqjldce4x4rhy6e
     path: patches/@lilyrose2798__trpc-openapi@1.3.10.patch
   '@nangohq/frontend@0.33.8':
-    hash: f3ed58a71194043d05262c1bfef4d07e30ef42fc0e81c4bdd0e6af766c79f2e5
+    hash: cscdyzeu5adridjxg5g7kdqy6q
     path: patches/@nangohq__frontend@0.33.8.patch
   cac@6.7.12:
-    hash: fde0f83f89537f20ef307e1ea766877dd07701712828ab27337313ab0e819e65
+    hash: nsfmzcycabp3f3q7kw2uyer77u
     path: patches/cac@6.7.12.patch
   esbuild-jest@0.5.0:
-    hash: 54316c22069cdfc2d0cfebdada2732e067b911bd46d3618e30561bbc74958319
+    hash: qbdhvjs7sktehqpuch2x3qhd4y
     path: patches/esbuild-jest@0.5.0.patch
   firebase@9.8.1:
-    hash: 001aa3ff5a667f94ba5d586f63ac2661c4f0a2ff96c24a0f037b8fe5a20c015a
+    hash: xv6drfi56cgifjvxlrcjb2s3qe
     path: patches/firebase@9.8.1.patch
   micro-memoize@4.0.10:
-    hash: 54bd10a1bb0f4f060489e77f161babfeee293b9c2fc2059063f9e639f2a3dd59
+    hash: hko3q5jvea7ey3trpjtkqgcale
     path: patches/micro-memoize@4.0.10.patch
 
 importers:
@@ -78,7 +78,7 @@ importers:
         version: 0.17.5
       esbuild-jest:
         specifier: 0.5.0
-        version: 0.5.0(patch_hash=54316c22069cdfc2d0cfebdada2732e067b911bd46d3618e30561bbc74958319)(esbuild@0.17.5)
+        version: 0.5.0(patch_hash=qbdhvjs7sktehqpuch2x3qhd4y)(esbuild@0.17.5)
       eslint:
         specifier: 8.23.0
         version: 8.23.0
@@ -466,7 +466,7 @@ importers:
         version: 10.40.0
       cac:
         specifier: 6.7.12
-        version: 6.7.12(patch_hash=fde0f83f89537f20ef307e1ea766877dd07701712828ab27337313ab0e819e65)
+        version: 6.7.12(patch_hash=nsfmzcycabp3f3q7kw2uyer77u)
       keytar:
         specifier: 7.9.0
         version: 7.9.0
@@ -488,7 +488,7 @@ importers:
         version: 6.12.4(next@15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.24.2)
       '@openint/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -983,7 +983,7 @@ importers:
         version: link:../../packages/util
       firebase:
         specifier: 9.8.1
-        version: 9.8.1(patch_hash=001aa3ff5a667f94ba5d586f63ac2661c4f0a2ff96c24a0f037b8fe5a20c015a)(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+        version: 9.8.1(patch_hash=xv6drfi56cgifjvxlrcjb2s3qe)(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       firebase-admin:
         specifier: 10.2.0
         version: 10.2.0(@firebase/app-compat@0.1.25)(@firebase/app-types@0.8.0)
@@ -1001,7 +1001,7 @@ importers:
         version: link:../../packages/util
       firebase:
         specifier: 9.8.1
-        version: 9.8.1(patch_hash=001aa3ff5a667f94ba5d586f63ac2661c4f0a2ff96c24a0f037b8fe5a20c015a)(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+        version: 9.8.1(patch_hash=xv6drfi56cgifjvxlrcjb2s3qe)(bufferutil@4.0.7)(utf-8-validate@5.0.10)
 
   connectors/connector-github:
     dependencies:
@@ -1616,7 +1616,7 @@ importers:
     dependencies:
       '@jsonurl/jsonurl':
         specifier: ^1.1.7
-        version: 1.1.7(patch_hash=2048c2869df98564de76ebdd8cdf655260560d85e1c74568aeb503efa2c312b0)
+        version: 1.1.7(patch_hash=wymar43eprx3gdqsv4laq3u2ei)
       '@openint/sync':
         specifier: workspace:*
         version: link:../sync
@@ -1656,10 +1656,10 @@ importers:
     devDependencies:
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.24.2)
       '@nangohq/frontend':
         specifier: 0.33.8
-        version: 0.33.8(patch_hash=f3ed58a71194043d05262c1bfef4d07e30ef42fc0e81c4bdd0e6af766c79f2e5)
+        version: 0.33.8(patch_hash=cscdyzeu5adridjxg5g7kdqy6q)
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
@@ -1936,7 +1936,7 @@ importers:
         version: 6.12.4(next@15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(zod@3.24.2)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(zod@3.24.2)
       '@openint/app-config':
         specifier: workspace:*
         version: link:../../apps/app-config
@@ -2214,7 +2214,7 @@ importers:
         version: 6.12.4(next@15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.24.2)
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
@@ -2223,7 +2223,7 @@ importers:
     dependencies:
       '@nangohq/frontend':
         specifier: 0.33.8
-        version: 0.33.8(patch_hash=f3ed58a71194043d05262c1bfef4d07e30ef42fc0e81c4bdd0e6af766c79f2e5)
+        version: 0.33.8(patch_hash=cscdyzeu5adridjxg5g7kdqy6q)
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
@@ -2357,6 +2357,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^4.1.3
         version: 4.1.3(react-hook-form@7.54.2(react@19.0.0))
+      '@openint/shadcn':
+        specifier: workspace:*
+        version: 'link:'
       '@radix-ui/react-accordion':
         specifier: ^1.1.2
         version: 1.2.2(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -2501,7 +2504,7 @@ importers:
     dependencies:
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)
+        version: 1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.24.2)
       '@openint/env':
         specifier: workspace:*
         version: link:../env
@@ -2821,7 +2824,7 @@ importers:
         version: 3.0.1
       micro-memoize:
         specifier: 4.0.10
-        version: 4.0.10(patch_hash=54bd10a1bb0f4f060489e77f161babfeee293b9c2fc2059063f9e639f2a3dd59)
+        version: 4.0.10(patch_hash=hko3q5jvea7ey3trpjtkqgcale)
       pluralize:
         specifier: 8.0.0
         version: 8.0.0
@@ -19970,11 +19973,11 @@ snapshots:
     dependencies:
       jsep: 1.4.0
 
-  '@jsonurl/jsonurl@1.1.7(patch_hash=2048c2869df98564de76ebdd8cdf655260560d85e1c74568aeb503efa2c312b0)': {}
+  '@jsonurl/jsonurl@1.1.7(patch_hash=wymar43eprx3gdqsv4laq3u2ei)': {}
 
   '@leichtgewicht/ip-codec@2.0.4': {}
 
-  '@lilyrose2798/trpc-openapi@1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)':
+  '@lilyrose2798/trpc-openapi@1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@10.40.0)(zod@3.24.2)':
     dependencies:
       '@trpc/server': 10.40.0
       co-body: 6.1.0
@@ -19985,7 +19988,7 @@ snapshots:
       zod: 3.24.2
       zod-openapi: 2.11.0(zod@3.24.2)
 
-  '@lilyrose2798/trpc-openapi@1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(zod@3.24.2)':
+  '@lilyrose2798/trpc-openapi@1.3.10(patch_hash=hesfnkphzbtlqjldce4x4rhy6e)(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(zod@3.24.2)':
     dependencies:
       '@trpc/server': 11.0.0-rc.828(typescript@5.8.2)
       co-body: 6.1.0
@@ -20420,7 +20423,7 @@ snapshots:
       outvariant: 1.4.3
       strict-event-emitter: 0.5.1
 
-  '@nangohq/frontend@0.33.8(patch_hash=f3ed58a71194043d05262c1bfef4d07e30ef42fc0e81c4bdd0e6af766c79f2e5)': {}
+  '@nangohq/frontend@0.33.8(patch_hash=cscdyzeu5adridjxg5g7kdqy6q)': {}
 
   '@neondatabase/serverless@0.10.4':
     dependencies:
@@ -25754,7 +25757,7 @@ snapshots:
 
   bytes@3.1.2: {}
 
-  cac@6.7.12(patch_hash=fde0f83f89537f20ef307e1ea766877dd07701712828ab27337313ab0e819e65): {}
+  cac@6.7.12(patch_hash=nsfmzcycabp3f3q7kw2uyer77u): {}
 
   cac@6.7.14: {}
 
@@ -27073,7 +27076,7 @@ snapshots:
       esast-util-from-estree: 2.0.0
       vfile-message: 4.0.2
 
-  esbuild-jest@0.5.0(patch_hash=54316c22069cdfc2d0cfebdada2732e067b911bd46d3618e30561bbc74958319)(esbuild@0.17.5):
+  esbuild-jest@0.5.0(patch_hash=qbdhvjs7sktehqpuch2x3qhd4y)(esbuild@0.17.5):
     dependencies:
       '@babel/core': 7.19.3
       '@babel/plugin-transform-modules-commonjs': 7.18.6(@babel/core@7.19.3)
@@ -27902,7 +27905,7 @@ snapshots:
       - encoding
       - supports-color
 
-  firebase@9.8.1(patch_hash=001aa3ff5a667f94ba5d586f63ac2661c4f0a2ff96c24a0f037b8fe5a20c015a)(bufferutil@4.0.7)(utf-8-validate@5.0.10):
+  firebase@9.8.1(patch_hash=xv6drfi56cgifjvxlrcjb2s3qe)(bufferutil@4.0.7)(utf-8-validate@5.0.10):
     dependencies:
       '@firebase/analytics': 0.7.9(@firebase/app@0.7.24)
       '@firebase/analytics-compat': 0.1.10(@firebase/app-compat@0.1.25)(@firebase/app@0.7.24)
@@ -30953,7 +30956,7 @@ snapshots:
 
   methods@1.1.2: {}
 
-  micro-memoize@4.0.10(patch_hash=54bd10a1bb0f4f060489e77f161babfeee293b9c2fc2059063f9e639f2a3dd59): {}
+  micro-memoize@4.0.10(patch_hash=hko3q5jvea7ey3trpjtkqgcale): {}
 
   micro@9.3.5-canary.3:
     dependencies:
