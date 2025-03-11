@@ -432,8 +432,9 @@ export function makeSyncService({
         destination_id: dest.id,
         customer_id: customerId,
       },
-      user: {webhook_url: org?.webhook_url || ''},
+      user: {org_id: src.connectorConfig.orgId},
     })
+
     // console.log('res', res)
     return {
       pipeline_id: pipeline.id,
