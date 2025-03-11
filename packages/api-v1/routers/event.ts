@@ -1,12 +1,12 @@
 import {schema, sql} from '@openint/db'
-import {publicProcedure, router} from '../_base'
-import {core} from '../../models'
+import {publicProcedure, router} from '../trpc/_base'
+import {core} from '../models'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
   zListParams,
   zListResponse,
-} from '../utils/pagination'
+} from './utils/pagination'
 
 export const eventRouter = router({
   // NOTE: why publish this API?

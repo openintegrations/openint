@@ -3,8 +3,8 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {ConnectorMetadata} from '@openint/cdk'
-import {publicProcedure, router} from '../_base'
-import {core} from '../../models'
+import {publicProcedure, router} from '../trpc/_base'
+import {core} from '../models'
 
 interface IntegrationsResponse {
   items: Array<Record<string, unknown>>

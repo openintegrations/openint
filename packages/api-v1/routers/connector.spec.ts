@@ -1,6 +1,6 @@
 import {Viewer} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {routerContextFromViewer} from '../context'
+import {routerContextFromViewer} from '../trpc/context'
 import {connectorRouter} from './connector'
 
 const logger = false

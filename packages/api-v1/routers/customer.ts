@@ -3,8 +3,8 @@ import {z} from 'zod'
 import {getServerUrl} from '@openint/app-config/constants'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
-import {publicProcedure, router} from '../_base'
-import {zConnectionId, zConnectorName, zCustomerId} from '../utils/types'
+import {publicProcedure, router} from '../trpc/_base'
+import {zConnectionId, zConnectorName, zCustomerId} from './utils/types'
 
 function asCustomer(
   viewer: Viewer,

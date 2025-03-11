@@ -4,15 +4,15 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {core} from '../../models'
+import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
+import {core} from '../models'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
   zListParams,
   zListResponse,
-} from '../utils/pagination'
-import {zConnectorName} from '../utils/types'
+} from './utils/pagination'
+import {zConnectorName} from './utils/types'
 
 export const zExpandOptions = z
   .enum(['connector', 'enabled_integrations'])
