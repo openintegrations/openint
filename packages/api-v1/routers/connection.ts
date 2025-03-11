@@ -3,20 +3,21 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, eq, schema, sql} from '@openint/db'
-import {publicProcedure, router, type RouterContext} from '../_base'
-import {core} from '../../models'
+import {publicProcedure, router} from '../trpc/_base'
+import {type RouterContext} from '../trpc/context'
+import {core} from '../models'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
   zListParams,
   zListResponse,
-} from '../utils/pagination'
+} from './utils/pagination'
 import {
   zConnectionId,
   zConnectorConfigId,
   zConnectorName,
   zCustomerId,
-} from '../utils/types'
+} from './utils/types'
 import {expandConnector, zExpandOptions} from './connectorConfig'
 
 const zIncludeSecrets = z

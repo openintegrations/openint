@@ -1,4 +1,4 @@
-import {trpc} from '../_base'
+import {trpc} from '../trpc/_base'
 import {connectionRouter} from './connection'
 import {connectorRouter} from './connector'
 import {connectorConfigRouter} from './connectorConfig'

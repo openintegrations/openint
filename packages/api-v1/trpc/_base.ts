@@ -1,16 +1,14 @@
 import {initTRPC, TRPCError} from '@trpc/server'
 import {type OpenApiMeta} from 'trpc-to-openapi'
 import {hasRole, type Viewer} from '@openint/cdk'
-import type {AnyDrizzle} from '@openint/db/db'
+import type {RouterContext} from './context'
 
-export interface ViewerContext<T extends Viewer = Viewer> {
-  viewer: T
-  db: AnyDrizzle
-}
-
-export interface RouterContext<T extends Viewer = Viewer>
-  extends ViewerContext<T> {
-  as: (viewer: Viewer) => ViewerContext
+export interface RouterMeta extends OpenApiMeta {
+  /**
+   * Indicate whether this is an internal API and
+   * should therefore not be generated as part of the OpenAPI spec
+   */
+  internal?: boolean
 }
 
 export const trpc = initTRPC
@@ -19,6 +17,7 @@ export const trpc = initTRPC
   .create({allowOutsideOfServer: true})
 
 export const router = trpc.router
+
 export const publicProcedure = trpc.procedure
 
 export const authenticatedProcedure = publicProcedure.use(({next, ctx}) => {

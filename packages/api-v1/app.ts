@@ -6,8 +6,8 @@ import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
   type CreateFetchHandlerOptions,
-} from './trpc/handlers'
-import {generateOpenAPISpec} from './trpc/openapi'
+} from './handlers'
+import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 
 export interface CreateAppOptions
   extends Omit<CreateFetchHandlerOptions, 'endpoint' | 'router'> {}
