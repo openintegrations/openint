@@ -18,7 +18,12 @@ having a global.css file in apps/web and import this file instead.
 */
 /* Should be kept in sync with .storybook/main.ts file */
 @source "../ui/components/**/*.tsx";
-@source "../../apps/web/app/(v1)/**/*.tsx";
+@source "../../apps/web/app/**/*.tsx";
+@source "../../apps/web/components/**/*.tsx";
+@source "../../apps/web/lib-client/**/*.tsx";
+@source "../../apps/web/lib-common/**/*.tsx";
+@source "../../apps/web/lib-server/**/*.tsx";
+@source "../../apps/web/vcommands/**/*.tsx";
 /* Migrate schema form once we make sure it is good */
 /* @import '../ui/schema-form.css'; */
 

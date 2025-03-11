@@ -3,7 +3,7 @@
 import 'next/image'
 // tailwind.css file will be built separately
 // eslint-disable-next-line import/no-unresolved
-import '../tailwind-v3.css'
+import '../tailwind.css'
 import {useSearchParams} from 'next/navigation'
 import {Suspense} from 'react'
 import {OpenIntConnectEmbed} from '@openint/connect'
