@@ -14,7 +14,7 @@ const event_insert = createInsertSchema(schema.event).openapi({
   ref: 'core.event_insert',
 })
 
-function parseNonEmpty<T>(arr: T[]) {
+export function parseNonEmpty<T>(arr: T[]) {
   if (arr.length === 0) {
     throw new Error('Array is empty')
   }
