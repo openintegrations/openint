@@ -92,9 +92,16 @@ export async function sendWebhook({event}: FunctionInput<keyof Events>) {
   const clerkSecretKey = process.env['CLERK_SECRET_KEY']
   const clerk = createClerkClient({secretKey: clerkSecretKey})
 
+  const organizationId = event?.data.user?.org_id
+
+  if (!organizationId) {
+    console.error('No organization id found', event)
+    return false
+  }
+
   // TODO: migrate webhook_url to database
   const organization = await clerk.organizations.getOrganization({
-    organizationId: event.data.user?.org_id,
+    organizationId,
   })
   const webhookUrl =
     event.data.user?.webhook_url ||
