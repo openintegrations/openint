@@ -456,14 +456,7 @@ paths:
         - in: query
           name: expand
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - connector
-                - enabled_integrations
-              description: 'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)'
-            default: []
+            type: string
         - in: query
           name: connector_name
           description: The name of the connector
