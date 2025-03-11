@@ -79,9 +79,6 @@ export const eventMapForInngest = R.mapValues(eventMap, (v) => ({
     data: z.ZodObject<(typeof eventMap)[k]>
   }
 }
-
-export const outgoingWebhookEventMap = eventMapForInngest
-
 export type Events = Combine<
   BuiltInEvents,
   ZodToStandardSchema<typeof eventMapForInngest>
