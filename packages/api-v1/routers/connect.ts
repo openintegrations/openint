@@ -1,6 +1,6 @@
 import {z} from 'zod'
-import {zConnectOptions, zId} from '@openint/cdk'
-import {parseNonEmpty} from '../models'
+import {zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
+import {core, parseNonEmpty} from '../models'
 import {connectorSchemas} from '../models/connectorSchemas'
 import {customerProcedure, router} from '../trpc/_base'
 
@@ -19,6 +19,7 @@ export const connectRouter = router({
 
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
+        // this is a limitation of trpc-to-OpenAPI. Need to think more about this
         data: z
           .discriminatedUnion(
             'connector_name',
@@ -59,6 +60,44 @@ export const connectRouter = router({
     )
     .mutation(async ({ctx, input}) => {
       console.log('preConnect', input, ctx)
+      throw new Error('Not implemented')
+    }),
+  postConnect: customerProcedure
+    .meta({
+      openapi: {
+        enabled: false, // tuple type not supported by openAPI
+        method: 'POST',
+        path: '/connect/post-connect',
+      },
+    })
+    .input(
+      z.tuple([
+        zId('ccfg'),
+        zPostConnectOptions,
+        // Unable to put data at the top level due to
+        // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
+        z
+          .discriminatedUnion(
+            'connector_name',
+            parseNonEmpty(
+              connectorSchemas.connectOutput.map((s) =>
+                z
+                  .object({
+                    connector_name: s.shape.connector_name,
+                    input: s.shape.connectOutput,
+                  })
+                  .openapi({
+                    ref: `connectors.${s.shape.connector_name.value}.connectOutput`,
+                  }),
+              ),
+            ),
+          )
+          .describe('Connector specific data'),
+      ]),
+    )
+    .output(core.connection)
+    .mutation(async ({ctx, input}) => {
+      console.log('postConnect', input, ctx)
       throw new Error('Not implemented')
     }),
 })
