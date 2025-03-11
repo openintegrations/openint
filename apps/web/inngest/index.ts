@@ -2,7 +2,7 @@ import type {ServeHandlerOptions} from 'inngest'
 import {serve} from 'inngest/next'
 import {inngest} from '@openint/engine-backend/inngest'
 import type {Events} from '@openint/events'
-import {eventMapForInngest} from '@openint/events'
+import {outgoingWebhookEventMap} from '@openint/events'
 import {withLog} from '@openint/util'
 // import * as functions from './functions'
 import {sendWebhook} from './routines'
@@ -12,7 +12,7 @@ const inngestFunctions = [
   // MARK: - Workaround for Inngest not having support for
   // multiple event triggers in a single function
   // @see https://discord.com/channels/842170679536517141/1214066130860118087/1214283616327180318
-  ...Object.keys(eventMapForInngest).map((name) =>
+  ...Object.keys(outgoingWebhookEventMap).map((name) =>
     inngest.createFunction(
       {id: `send-webhook.${name}`},
       {event: name as keyof Events},

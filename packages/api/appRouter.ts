@@ -7,7 +7,7 @@ import {generateOpenApiDocument} from '@lilyrose2798/trpc-openapi/dist/generator
 import {getServerUrl} from '@openint/app-config/constants'
 import {flatRouter} from '@openint/engine-backend'
 import {env} from '@openint/env'
-import {eventMapForInngest} from '@openint/events'
+import {outgoingWebhookEventMap} from '@openint/events'
 import accountingRouter from '@openint/unified-accounting'
 import atsRouter from '@openint/unified-ats'
 import bankingRouter from '@openint/unified-banking'
@@ -114,7 +114,7 @@ function setDefaultOpenAPIMeta(router: AnyRouter) {
 }
 
 export function getOpenAPISpec(includeInternal = true) {
-  const {webhooks, components} = oasWebhooksEventsMap(eventMapForInngest)
+  const {webhooks, components} = oasWebhooksEventsMap(outgoingWebhookEventMap)
 
   let oas = generateOpenApiDocument(appRouter as any, {
     openApiVersion: '3.1.0', // Want jsonschema
