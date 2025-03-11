@@ -6,11 +6,9 @@
   "scripts": {
     "@tailwindcss/cli": "pnpm dlx @tailwindcss/cli",
     "build-storybook": "storybook build",
-    "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./.storybook/tailwind.css",
+    "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./dist/tailwind.css",
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
-    "dev": "concurrently npm:dev:*",
-    "dev:storybook": "storybook dev -p 6006",
-    "dev:tailwind": "pnpm build-tailwind --watch"
+    "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
     "@openint/shadcn": "workspace:*",
@@ -36,11 +34,11 @@
     "@storybook/react": "^8.6.4",
     "@storybook/test": "^8.6.4",
     "@tailwindcss/cli": "^4.0.12",
+    "@tailwindcss/vite": "^4.0.12",
     "@types/react": "^19.0.10",
     "@vitest/browser": "^3.0.8",
     "@vitest/coverage-v8": "^3.0.8",
     "chromatic": "^11.27.0",
-    "concurrently": "^9.1.2",
     "playwright": "^1.51.0",
     "prop-types": "^15.8.1",
     "storybook": "^8.6.4",
