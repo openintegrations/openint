@@ -71,7 +71,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-packagejson": "2.5.2",
     "prettier-plugin-sql": "0.18.1",
-    "prettier-plugin-tailwindcss": "0.6.6",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "require-in-the-middle": "7.4.0",
     "ts-brand": "0.0.2",
     "tsx": "3.12.2",
