@@ -2714,6 +2714,9 @@ importers:
       '@tailwindcss/cli':
         specifier: ^4.0.12
         version: 4.0.12
+      '@tailwindcss/vite':
+        specifier: ^4.0.12
+        version: 4.0.12(vite@5.4.9(@types/node@22.13.10)(lightningcss@1.29.2)(terser@5.15.1))
       '@types/react':
         specifier: 19.0.10
         version: 19.0.10
@@ -8188,6 +8191,11 @@ packages:
   '@tailwindcss/oxide@4.0.12':
     resolution: {integrity: sha512-DWb+myvJB9xJwelwT9GHaMc1qJj6MDXRDR0CS+T8IdkejAtu8ctJAgV4r1drQJLPeS7mNwq2UHW2GWrudTf63A==}
     engines: {node: '>= 10'}
+
+  '@tailwindcss/vite@4.0.12':
+    resolution: {integrity: sha512-JM3gp601UJiryIZ9R2bSqalzcOy15RCybQ1Q+BJqDEwVyo4LkWKeqQAcrpHapWXY31OJFTuOUVBFDWMhzHm2Bg==}
+    peerDependencies:
+      vite: ^5.2.0 || ^6
 
   '@tanstack/query-core@4.27.0':
     resolution: {integrity: sha512-sm+QncWaPmM73IPwFlmWSKPqjdTXZeFf/7aEmWh00z7yl2FjqophPt0dE1EHW9P1giMC5rMviv7OUbSDmWzXXA==}
@@ -23891,6 +23899,14 @@ snapshots:
       '@tailwindcss/oxide-linux-x64-musl': 4.0.12
       '@tailwindcss/oxide-win32-arm64-msvc': 4.0.12
       '@tailwindcss/oxide-win32-x64-msvc': 4.0.12
+
+  '@tailwindcss/vite@4.0.12(vite@5.4.9(@types/node@22.13.10)(lightningcss@1.29.2)(terser@5.15.1))':
+    dependencies:
+      '@tailwindcss/node': 4.0.12
+      '@tailwindcss/oxide': 4.0.12
+      lightningcss: 1.29.2
+      tailwindcss: 4.0.12
+      vite: 5.4.9(@types/node@22.13.10)(lightningcss@1.29.2)(terser@5.15.1)
 
   '@tanstack/query-core@4.27.0': {}
 
