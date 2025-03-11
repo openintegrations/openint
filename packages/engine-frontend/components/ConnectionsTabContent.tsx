@@ -1,6 +1,6 @@
 import {useSearchParams} from 'next/navigation'
 import {useEffect, useState} from 'react'
-import {Button, ConnectionDetails} from '@openint/ui'
+import {Button, ConnectionDetails} from '../lib/ui-components'
 import {DeleteConfirmation} from '@openint/ui/components/DeleteConfirmation'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'

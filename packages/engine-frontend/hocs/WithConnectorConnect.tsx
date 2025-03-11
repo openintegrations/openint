@@ -13,6 +13,7 @@ import {
 } from '@openint/cdk'
 import type {RouterInput, RouterOutput} from '@openint/engine-backend'
 import type {SchemaFormElement} from '@openint/ui'
+import {SchemaForm} from '@openint/ui'
 import {
   Button,
   Dialog,
@@ -21,13 +22,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  SchemaForm,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  useToast,
-} from '@openint/ui'
+} from '../lib/ui-components'
+import {toast} from '../lib/toast'
 import {z} from '@openint/util'
 import {useViewerContext} from '@/components/viewer-context'
 import {
@@ -155,8 +155,6 @@ export const WithConnectorConnect = ({
   const postConnect = _trpcReact.postConnect.useMutation()
   const createConnection = _trpcReact.createConnection.useMutation()
 
-  const {toast} = useToast()
-
   const connect = useMutation(
     // not sure if it's the right idea to have create and connect together in
     // one mutation, starting to feel a bit confusing...
@@ -210,11 +208,7 @@ export const WithConnectorConnect = ({
     {
       onSuccess(msg) {
         if (msg) {
-          toast({
-            title: `Successfully connected to ${ccfg.connector.displayName}`,
-            // description: `${msg}`,
-            variant: 'success',
-          })
+          toast.success(`Successfully connected to ${ccfg.connector.displayName}`);
         }
         setOpen(false)
         setIsPreconnecting(false)
@@ -225,11 +219,7 @@ export const WithConnectorConnect = ({
           return
         }
         console.log(ccfg.connector.displayName + ' connection error:', err)
-        toast({
-          title: `Failed to connect to ${ccfg.connector.displayName}`,
-          // description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to connect to ${ccfg.connector.displayName}`);
         onEvent?.({type: 'error'})
       },
     },
@@ -256,7 +246,7 @@ export const WithConnectorConnect = ({
 
       <Dialog
         open={open}
-        onOpenChange={(newValue) => {
+        onOpenChange={(newValue: boolean) => {
           setOpen(newValue)
           setIsPreconnecting(newValue)
         }}
@@ -353,12 +343,12 @@ export const WithConnectorConnect = ({
             <SchemaForm
               ref={formRef}
               schema={z.object({})}
-              jsonSchemaTransform={(schema) =>
+              jsonSchemaTransform={(schema: any) =>
                 ccfg.connector.schemas.connectionSettings ?? schema
               }
               formData={{}}
               loading={connect.isLoading}
-              onSubmit={({formData}) => {
+              onSubmit={({formData}: {formData: any}) => {
                 console.log('connection form submitted', formData)
                 connect.mutate({connectorConfigId: ccfg.id, settings: formData})
               }}

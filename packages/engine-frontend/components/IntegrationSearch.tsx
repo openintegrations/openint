@@ -4,7 +4,7 @@ import {Loader2, Search} from 'lucide-react'
 import {useSearchParams} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
-import {Button, cn, Input, parseCategory, Separator} from '@openint/ui'
+import {Button, cn, Input, parseCategory, Separator} from '../lib/ui-components'
 import {CheckboxFilter} from '@openint/ui/components/CheckboxFilter'
 import {FilterBadges} from '@openint/ui/components/FilterBadges'
 import {IntegrationCard} from '@openint/ui/domain-components/IntegrationCard'
@@ -143,7 +143,7 @@ export function IntegrationSearch({
               placeholder="Search or pick a connector for your setup"
               className="truncate pl-8 text-foreground"
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.target.value)}
             />
           </div>
           {categories.length > 1 && (

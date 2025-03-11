@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@openint/ui'
+} from '../lib/ui-components'
 import type {
   ConnectorConfig,
   ConnectorConfigFilters,

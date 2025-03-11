@@ -3,7 +3,8 @@
 import {Loader2} from 'lucide-react'
 import {zId, zRaw} from '@openint/cdk'
 import {_trpcReact} from '@openint/engine-frontend'
-import {SchemaForm, toast} from '@openint/ui'
+import {SchemaForm} from '@openint/ui/components'
+import {useToast} from '@openint/shadcn/ui'
 import type {ConnectorMeta, SchemaFormElement} from '@openint/ui'
 import {z} from '@openint/util'
 import {useCurrengOrg} from '@/components/viewer-context'
@@ -28,6 +29,7 @@ export function ConnectorConfigForm({
 }: ConnectorConfigFormProps) {
   const trpcUtils = _trpcReact.useContext()
   const connectionsRes = _trpcReact.listConnections.useQuery()
+  const {toast} = useToast()
 
   const zConnId = connectionsRes.data?.length
     ? z.union(
@@ -118,16 +120,12 @@ export function ConnectorConfigForm({
     _trpcReact.adminUpsertConnectorConfig.useMutation({
       onSuccess: () => {
         setOpen(false)
-        toast({title: 'connector config saved', variant: 'success'})
+        toast.success('connector config saved')
         void trpcUtils.adminListConnectorConfigs.invalidate()
         void trpcUtils.listConnectorConfigInfos.invalidate()
       },
       onError: (err) => {
-        toast({
-          title: 'Failed to save connector config',
-          description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to save connector config: ${err}`)
       },
     })
 

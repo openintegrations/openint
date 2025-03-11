@@ -17,7 +17,6 @@ import {
   AlertDialogTrigger,
   Badge,
   Button,
-  LoadingText,
   Separator,
   Sheet,
   SheetContent,
@@ -30,7 +29,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
   useToast,
-} from '@openint/ui'
+} from '@openint/shadcn/ui'
+import {LoadingText} from '@openint/ui/components'
 import {cn} from '@/lib-client/ui-utils'
 import {ConnectorConfigForm} from './ConnectorConfigForm'
 import type {ConnectorConfig} from './ConnectorConfigPage'
@@ -63,7 +63,7 @@ export function ConnectorConfigSheet({
   const handleSuccess = React.useCallback(() => {
     setIsSubmitting(false)
     setOpen(false)
-    toast({title: 'connector config saved', variant: 'success'})
+    toast.success('connector config saved')
     void trpcUtils.adminListConnectorConfigs.invalidate()
     void trpcUtils.listConnectorConfigInfos.invalidate()
     refetch?.()
@@ -74,28 +74,20 @@ export function ConnectorConfigSheet({
       onSuccess: handleSuccess,
       onError: (err) => {
         setIsSubmitting(false)
-        toast({
-          title: 'Failed to save connector config',
-          description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to save connector config: ${err}`)
       },
     })
   const deleteConnectorConfig =
     _trpcReact.adminDeleteConnectorConfig.useMutation({
       onSuccess: () => {
         setOpen(false)
-        toast({title: 'connector config deleted', variant: 'success'})
+        toast.success('connector config deleted')
         void trpcUtils.adminListConnectorConfigs.invalidate()
         void trpcUtils.listConnectorConfigInfos.invalidate()
         refetch?.()
       },
       onError: (err) => {
-        toast({
-          title: 'Failed to create connector config saved',
-          description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to create connector config: ${err}`)
       },
     })
   const mutating =
@@ -126,9 +118,8 @@ export function ConnectorConfigSheet({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent
-        position="right"
-        size="lg"
-        className="flex flex-col bg-background relative">
+        side="right"
+        className="flex flex-col bg-background relative w-[800px] max-w-full">
         
         {isSubmitting && (
           <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">

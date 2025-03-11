@@ -1,6 +1,6 @@
 import type {TRPCClientErrorLike} from '@trpc/react-query'
 import type {UseTRPCMutationOptions} from '@trpc/react-query/dist/shared'
-import {useToast} from '@openint/ui'
+import {toast} from './toast'
 
 /** Workaround for https://share.cleanshot.com/Yr1CMhLD */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,18 +21,14 @@ export function useMutationToast(opts: {
   successMessage: string
   errorMessage: string
 }) {
-  const {toast} = useToast()
-
   return {
     onSuccess: () => {
-      toast({title: opts.successMessage, variant: 'success'})
+      toast.success(opts.successMessage)
     },
     onError: (err) => {
-      toast({
-        title: opts.errorMessage,
+      toast.error(opts.errorMessage, {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         description: formatTRPCClientError(err),
-        variant: 'destructive',
       })
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
