@@ -15,12 +15,12 @@ export function GlobalCommandBar() {
       setReady(true)
     }
   }, [])
-  return ready ? <_GlobalCommandBar /> : null
+  return ready ? <GlobalCommandBarInner /> : null
 }
 
 const {commands} = prepareCommands({definitions: vDefinitions})
 
-function _GlobalCommandBar() {
+function GlobalCommandBarInner() {
   const {viewerId} = useViewerContext()
   const {resolvedTheme} = useTheme()
   const router = useRouter()
