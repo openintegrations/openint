@@ -74,7 +74,7 @@ export function AgConnectionRowActions(
   // Is there a way to build the variables into useMutation already?
   const syncConnectionMutate = () =>
     syncConnection.mutate({
-      name: 'sync/connection-requested',
+      name: 'sync.connection-requested',
       data: {connectionId: props.connection.id},
     })
 

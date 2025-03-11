@@ -10,8 +10,8 @@ export {type inferProcedureInput} from '@openint/trpc'
 export const protectedRouter = trpc.router({
   dispatch: protectedProcedure.input(zEvent).mutation(async ({input}) => {
     if (
-      input.name !== 'sync/connection-requested' &&
-      input.name !== 'sync/pipeline-requested'
+      input.name !== 'sync.connection-requested' &&
+      input.name !== 'sync.pipeline-requested'
     ) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
