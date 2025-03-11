@@ -2729,9 +2729,6 @@ importers:
       chromatic:
         specifier: ^11.27.0
         version: 11.27.0
-      concurrently:
-        specifier: ^9.1.2
-        version: 9.1.2
       playwright:
         specifier: ^1.51.0
         version: 1.51.0
