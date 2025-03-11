@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@openint/shadcn/ui/Tooltip'
+} from '@openint/shadcn/ui/tooltip'
 
 export function IntegrationCard({
   logo,

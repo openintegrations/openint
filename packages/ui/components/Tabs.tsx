@@ -5,7 +5,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@openint/shadcn/ui/Tabs'
+} from '@openint/shadcn/ui/tabs'
 
 interface TabsProps {
   tabConfig: Array<{
