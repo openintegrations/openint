@@ -3,7 +3,8 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, eq, schema, sql} from '@openint/db'
-import {publicProcedure, router, type RouterContext} from '../trpc/_base'
+import {publicProcedure, router} from '../trpc/_base'
+import {type RouterContext} from '../trpc/context'
 import {core} from '../models'
 import {
   applyPaginationAndOrder,

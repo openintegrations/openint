@@ -1,7 +1,16 @@
 import type {Viewer} from '@openint/cdk'
-import type {AnyDatabase} from '@openint/db/db'
-import type {RouterContext, ViewerContext} from './_base'
+import type {AnyDatabase, AnyDrizzle} from '@openint/db/db'
 import {viewerFromRequest} from './authentication'
+
+export interface ViewerContext<T extends Viewer = Viewer> {
+  viewer: T
+  db: AnyDrizzle
+}
+
+export interface RouterContext<T extends Viewer = Viewer>
+  extends ViewerContext<T> {
+  as: (viewer: Viewer) => ViewerContext
+}
 
 export async function routerContextFromRequest({
   req,
