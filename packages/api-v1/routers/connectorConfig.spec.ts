@@ -2,7 +2,7 @@ import type {CustomerId, Viewer} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {getTestTRPCClient} from '../../__tests__/test-utils'
 import {routerContextFromViewer} from '../context'
-import {connectorConfigRouter} from './connectorConfig'
+import {connectorConfigRouter} from '../../routers/connectorConfig'
 
 const logger = false
 

@@ -6,7 +6,7 @@ import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {makeUlid} from '@openint/util'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {routerContextFromViewer} from '../context'
-import {connectionRouter} from './connection'
+import {connectionRouter} from '../../routers/connection'
 
 const logger = false
 

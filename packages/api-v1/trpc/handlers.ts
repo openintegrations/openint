@@ -4,7 +4,7 @@ import {createOpenApiFetchHandler} from 'trpc-to-openapi'
 import type {Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
 import {routerContextFromRequest, routerContextFromViewer} from './context'
-import {appRouter} from './routers'
+import {appRouter} from '../routers'
 
 export interface CreateFetchHandlerOptions {
   endpoint: `/${string}`

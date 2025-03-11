@@ -1,5 +1,5 @@
 import {generateOpenApiDocument} from 'trpc-to-openapi'
-import {appRouter} from './routers'
+import {appRouter} from '../routers'
 
 export function generateOpenAPISpec({
   baseUrl = 'https://api.openint.dev/v1',

@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import {publicProcedure, router} from '../_base'
+import {publicProcedure, router} from '../trpc/_base'
 
 export const generalRouter = router({
   health: publicProcedure
