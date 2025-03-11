@@ -9,16 +9,12 @@ export function useWithToast(defaultOptions: WithToastOptions = {}) {
   const {toast} = useToast()
 
   const onSuccessFn = (opts: WithToastOptions) => () =>
-    toast({
-      variant: 'success',
-      title: opts.title ?? 'Success',
+    toast.success(opts.title ?? 'Success', {
       description: opts.description,
     })
 
   const onErrorFn = (opts: WithToastOptions) => (err: unknown) =>
-    toast({
-      variant: 'destructive',
-      title: `Error: ${err}`,
+    toast.error(`Error: ${err}`, {
       description: opts.description,
     })
 
@@ -32,19 +28,24 @@ export function useWithToast(defaultOptions: WithToastOptions = {}) {
     } = {},
   ) => {
     const opts = {...defaultOptions, ...options}
-    const loadingToast = showLoading
-      ? toast({variant: 'loading', title: showLoading})
-      : null
-    // TODO: useMutation hook here rather than tracking it ourselves...
+    let toastId: string | number | undefined
+    
+    if (showLoading) {
+      toastId = toast.loading(showLoading)
+    }
 
     return Promise.resolve(fn())
       .then((res) => {
-        loadingToast?.dismiss()
+        if (toastId) {
+          toast.dismiss(toastId)
+        }
         onSuccessFn(opts)()
         return res
       })
       .catch((err) => {
-        loadingToast?.dismiss()
+        if (toastId) {
+          toast.dismiss(toastId)
+        }
         onErrorFn(opts)(err)
       })
   }

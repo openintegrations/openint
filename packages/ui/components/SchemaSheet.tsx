@@ -85,9 +85,8 @@ export const SchemaSheet = React.forwardRef(function SchemaSheet<
         </SheetTrigger>
       )}
       <SheetContent
-        position="right"
-        size="xl"
-        className="flex flex-col bg-background">
+        side="right"
+        className="flex flex-col bg-background w-[500px] sm:w-[540px] md:w-[600px]">
         {children ?? (
           <SheetHeader>
             <SheetTitle>{title}</SheetTitle>
@@ -105,13 +104,11 @@ export const SchemaSheet = React.forwardRef(function SchemaSheet<
             mutation.mutate(formData, {
               onSuccess: () => {
                 setOpen(false)
-                toast({title: 'Success', variant: 'success'})
+                toast.success('Success')
               },
               onError: (err) => {
-                toast({
-                  title: 'Failed to save',
+                toast.error('Failed to save', {
                   description: `${err.message}`,
-                  variant: 'destructive',
                 })
               },
             })
