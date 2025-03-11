@@ -1,14 +1,8 @@
 import {z} from 'zod'
 import {zConnectOptions, zId} from '@openint/cdk'
-import {schema, sql} from '@openint/db'
-import {core, parseNonEmpty} from '../models'
+import {parseNonEmpty} from '../models'
 import {connectorSchemas} from '../models/connectorSchemas'
 import {customerProcedure, router} from '../trpc/_base'
-import {
-  applyPaginationAndOrder,
-  processPaginatedResponse,
-  zListResponse,
-} from './utils/pagination'
 
 export const connectRouter = router({
   preConnect: customerProcedure
@@ -19,12 +13,13 @@ export const connectRouter = router({
       },
     })
     .input(
-      z.intersection(
-        z.object({
-          id: zId('ccfg'),
-          options: zConnectOptions,
-        }),
-        z
+      z.object({
+        id: zId('ccfg'),
+        options: zConnectOptions,
+
+        // Unable to put data at the top level due to
+        // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
+        data: z
           .discriminatedUnion(
             'connector_name',
             parseNonEmpty(
@@ -41,7 +36,7 @@ export const connectRouter = router({
             ),
           )
           .describe('Connector specific data'),
-      ),
+      }),
     )
     .output(
       z
@@ -62,7 +57,7 @@ export const connectRouter = router({
         )
         .describe('Connector specific data'),
     )
-    .query(async ({ctx, input}) => {
+    .mutation(async ({ctx, input}) => {
       console.log('preConnect', input, ctx)
       throw new Error('Not implemented')
     }),
