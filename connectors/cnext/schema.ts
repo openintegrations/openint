@@ -3,7 +3,7 @@ import {z} from '@openint/util'
 import {zOauthConnectorConfig} from './_defaults/oauth2'
 import {JsonConnectorDef} from './def'
 
-export function generateConnectorDef(def: JsonConnectorDef): ConnectorDef {
+export function generateConnectorDef<T extends JsonConnectorDef>(def: T) {
   const connectorConfig = () => {
     let schema = zOauthConnectorConfig
     if (['OAUTH1', 'OAUTH2'].includes(def.auth.type)) {
@@ -22,9 +22,9 @@ export function generateConnectorDef(def: JsonConnectorDef): ConnectorDef {
   }
 
   return {
-    name: def.connector_name,
+    name: def.connector_name as T['connector_name'],
     schemas: {
-      name: z.literal(def.connector_name),
+      name: z.literal(def.connector_name as T['connector_name']),
       connectorConfig: connectorConfig(),
       connectionSettings:
         // TODO: consider generalizing this
@@ -64,5 +64,5 @@ export function generateConnectorDef(def: JsonConnectorDef): ConnectorDef {
       logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-drive.svg`,
       authType: def.auth.type,
     },
-  }
+  } satisfies ConnectorDef
 }

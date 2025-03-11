@@ -30,3 +30,22 @@ export function generateConnectorServer<
       throw new Error(`Unsupported auth type: ${def.auth.type}`)
   }
 }
+
+export function generateConnectorServerFromSchemas<
+  T extends ConnectorSchemas,
+>(params: {
+  schemas: T
+  overrides?: ServerOverrides<T, any>
+}): ConnectorServer<T> {
+  const {schemas, overrides} = params
+
+  // switch (def.auth.type) {
+  //   case 'OAUTH2': {
+  //     return generateOAuth2Server(def, overrides)
+  //   }
+
+  //   default:
+  //     throw new Error(`Unsupported auth type: ${def.auth.type}`)
+  // }
+  return {schemas, overrides}
+}
