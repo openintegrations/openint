@@ -1,6 +1,7 @@
 import {backendEnv, contextFactory} from '@openint/app-config/backendConfig'
 import {env} from '@openint/app-config/env'
 import '@openint/app-config/register.node'
+import {createClerkClient} from '@clerk/nextjs/server'
 import type {SendEventPayload} from 'inngest/helpers/types'
 import {flatRouter} from '@openint/engine-backend'
 import type {Events, OrgProperties} from '@openint/events'
@@ -87,14 +88,27 @@ export async function syncPipeline({
 
 export async function sendWebhook({event}: FunctionInput<keyof Events>) {
   console.log('Sending webhook', event)
-  if (!event.user?.webhook_url) {
+
+  const clerkSecretKey = process.env['CLERK_SECRET_KEY']
+  const clerk = createClerkClient({secretKey: clerkSecretKey})
+
+  // TODO: migrate webhook_url to database
+  const organization = await clerk.organizations.getOrganization({
+    organizationId: event.data.user?.org_id,
+  })
+  const webhookUrl =
+    event.data.user?.webhook_url ||
+    organization?.publicMetadata?.['webhook_url']
+  if (!webhookUrl) {
     return false
   }
+
+  console.log('Sending webhook to', webhookUrl)
 
   // We shall let inngest handle the retries and backoff for now
   // Would be nice to have a openSDK for sending webhook payloads that are typed actually, after all it has
   // the exact same shape as paths.
-  const res = await fetch(event.user.webhook_url, {
+  const res = await fetch(webhookUrl as string, {
     method: 'POST',
     body: JSON.stringify(event),
     headers: {
@@ -103,7 +117,7 @@ export async function sendWebhook({event}: FunctionInput<keyof Events>) {
     },
   })
   const responseAsJson = await responseToJson(res)
-  return {...responseAsJson, target: event.user.webhook_url}
+  return {...responseAsJson, target: webhookUrl}
 }
 
 async function responseToJson(res: Response) {
