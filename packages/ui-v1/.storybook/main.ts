@@ -52,7 +52,7 @@ const config = {
     config.plugins.push(svgr())
     // Only works in v4 storybook...
     // https://github.com/tailwindlabs/tailwindcss/issues/13216#issuecomment-1992094356
-    config.plugins.push((await import('@tailwindcss/vite')).default())
+    // config.plugins.push((await import('@tailwindcss/vite')).default())
     config.optimizeDeps = {
       ...config.optimizeDeps,
       exclude: [

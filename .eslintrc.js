@@ -1,33 +1,30 @@
 module.exports = {
   root: true,
   settings: {
-    // TODO: Upgrade to next.js 15
     next: {
       rootDir: 'apps/web/',
     },
     react: {
       version: '17.0.2',
     },
-    // tailwindcss: {
-    //   callees: ['twMerge', 'cn'],
-    // },
+    tailwindcss: {
+      callees: ['twMerge', 'cn'],
+      config: 'apps/web/tailwind.config.ts',
+    },
   },
   plugins: [
     'codegen',
     'eslint-comments',
     'promise',
     //
-    // 'tailwindcss',
+    'tailwindcss',
     'unicorn',
   ],
   extends: [
     'next/core-web-vitals',
     'plugin:eslint-comments/recommended',
     'plugin:promise/recommended',
-    // Tailwind v4 not supported by the plugin yet.
-    // // TODO: officially switch to eslint 9 with built in css (and some tailwind) support.
-    // https://github.com/francoismassart/eslint-plugin-tailwindcss/issues/325#issuecomment-2675132163
-    // 'plugin:tailwindcss/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   rules: {
     'arrow-body-style': 'warn',

@@ -5,8 +5,6 @@ import {connectorRouter} from './connector'
 
 const logger = false
 
-jest.setTimeout(1000 * 60 * 15)
-
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   function getCaller(viewer: Viewer) {
     return connectorRouter.createCaller(routerContextFromViewer({db, viewer}))
