@@ -17,6 +17,7 @@ Bit weird dependency-wise, once we only have tailwind v4 consider
 having a global.css file in apps/web and import this file instead.
 */
 /* Should be kept in sync with .storybook/main.ts file */
+@source "../ui/components/**/*.tsx";
 @source "../../apps/web/app/(v1)/**/*.tsx";
 /* Migrate schema form once we make sure it is good */
 /* @import '../ui/schema-form.css'; */
