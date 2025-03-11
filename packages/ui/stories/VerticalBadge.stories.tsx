@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import VerticalBadge from '../shadcn/VerticalBadge'
-import { VERTICAL_BY_KEY, VerticalKey } from '@openint/cdk'
+import type {Meta, StoryObj} from '@storybook/react'
+import {VERTICAL_BY_KEY, VerticalKey} from '@openint/cdk'
+import VerticalBadge from '../components/VerticalBadge'
 
 // Define the component props interface to match the component
 interface VerticalBadgeProps {
-  vertical: VerticalKey;
-  className?: string;
+  vertical: VerticalKey
+  className?: string
 }
 
 // Use the correct type annotation
@@ -51,7 +51,7 @@ export const Default: Story = {
 // // Export all the dynamically created stories
 // Object.entries(stories).forEach(([name, story]) => {
 //   exports[name] = story
-// }) 
+// })
 
 export const Crm: Story = {
   args: {

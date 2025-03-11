@@ -1,49 +1,18 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import { Search } from '../shadcn/Search'
+import {Search} from '../shadcn/Search'
 
-const meta = {
+export default {
   title: 'UI/Search',
   component: Search,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
-  argTypes: {
-    placeholder: { control: 'text' },
-    disabled: { control: 'boolean' },
-  },
-  args: {
-    placeholder: 'Search...',
-  },
-} satisfies Meta<typeof Search>
-
-export default meta
-type Story = StoryObj<typeof meta>
-
-export const Default: Story = {
-  args: {
-    placeholder: 'Search...',
-  },
 }
 
-export const WithValue: Story = {
-  args: {
-    placeholder: 'Search...',
-    defaultValue: 'Search query',
-  },
-}
+export const Default = () => <Search placeholder="Search..." />
 
-export const Disabled: Story = {
-  args: {
-    placeholder: 'Search...',
-    disabled: true,
-  },
-}
+export const Disabled = () => <Search placeholder="Search..." disabled />
 
-export const WithCustomWidth: Story = {
-  args: {
-    placeholder: 'Search...',
-    className: 'w-[300px]',
-  },
-} 
+export const WithCustomWidth = () => (
+  <Search placeholder="Search..." className="w-[300px]" />
+)

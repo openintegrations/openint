@@ -1,54 +1,32 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import OAuthLabelType from '../shadcn/OAuthLabelType'
+import OAuthLabelType from '../components/OAuthLabelType'
 
-const meta = {
+export default {
   title: 'UI/Badges/OAuthLabelType',
   component: OAuthLabelType,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
-  argTypes: {
-    variant: {
-      control: 'select',
-      options: ['variant1', 'variant2', 'variant3', 'variant4', 'variant5'],
-    },
-  },
-  args: {
-    children: 'Badge',
-  },
-} satisfies Meta<typeof OAuthLabelType>
-
-export default meta
-type Story = StoryObj<typeof meta>
-
-export const Default: Story = {
-  args: {
-    variant: 'variant1',
-  },
 }
 
-export const Variant2: Story = {
-  args: {
-    variant: 'variant2',
-  },
-}
+export const Default = () => <OAuthLabelType>Badge</OAuthLabelType>
 
-export const Variant3: Story = {
-  args: {
-    variant: 'variant3',
-  },
-}
+export const Variant1 = () => (
+  <OAuthLabelType variant="variant1">Variant 1</OAuthLabelType>
+)
 
-export const Variant4: Story = {
-  args: {
-    variant: 'variant4',
-  },
-}
+export const Variant2 = () => (
+  <OAuthLabelType variant="variant2">Variant 2</OAuthLabelType>
+)
 
-export const Variant5: Story = {
-  args: {
-    variant: 'variant5',
-  },
-} 
+export const Variant3 = () => (
+  <OAuthLabelType variant="variant3">Variant 3</OAuthLabelType>
+)
+
+export const Variant4 = () => (
+  <OAuthLabelType variant="variant4">Variant 4</OAuthLabelType>
+)
+
+export const Variant5 = () => (
+  <OAuthLabelType variant="variant5">Variant 5</OAuthLabelType>
+)
