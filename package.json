@@ -79,7 +79,8 @@
     "turbo": "^2.4.4",
     "typescript": "^5.8.2",
     "typescript-snapshots-plugin": "^1.7.0",
-    "wait-on": "^8.0.1"
+    "wait-on": "^8.0.1",
+    "webpack": "*"
   },
   "packageManager": "pnpm@10.6.1",
   "engines": {
