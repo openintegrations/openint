@@ -1,5 +1,5 @@
 import React from 'react'
-import {Search} from '../shadcn/Search'
+import {Search} from '../components/Search'
 
 export default {
   title: 'UI/Search',
