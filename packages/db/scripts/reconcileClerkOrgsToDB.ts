@@ -52,6 +52,35 @@ async function getDbOrganizations(): Promise<OrganizationSelect[]> {
 }
 
 /**
+ * Creates a new organization in the database
+ * @param clerkOrg Organization data from Clerk
+ */
+async function createOrganization(clerkOrg: Organization): Promise<string> {
+  try {
+    const newOrgId = `org_${makeUlid()}`
+
+    const newOrg: OrganizationInsert = {
+      id: newOrgId,
+      name: clerkOrg.name,
+      api_key: clerkOrg.privateMetadata['api_key'] as string,
+      metadata: JSON.stringify({
+        ...clerkOrg.publicMetadata,
+      }),
+    }
+
+    await db.insert(schema.organization).values(newOrg)
+
+    console.log(
+      `Created new organization in database: ${newOrgId} for Clerk org: ${clerkOrg.id}`,
+    )
+    return newOrgId
+  } catch (error) {
+    console.error(`Error creating organization: ${clerkOrg.id}`, error)
+    throw error
+  }
+}
+
+/**
  * Updates an existing organization in the database
  * @param dbOrg Existing organization in database
  * @param clerkOrg Organization data from Clerk
@@ -89,8 +118,11 @@ async function reconcileClerkOrgsToDB() {
 
   for (const clerkOrg of clerkOrganizations.data) {
     const existingDbOrg = dbOrganizations.find((o) => o.id === clerkOrg.id)
-    if (existingDbOrg && clerkOrg.privateMetadata['api_key']) {
-      if (clerkOrg.privateMetadata['api_key'] === existingDbOrg.api_key) {
+    if (existingDbOrg) {
+      if (
+        clerkOrg.privateMetadata['api_key'] &&
+        clerkOrg.privateMetadata['api_key'] === existingDbOrg.api_key
+      ) {
         console.log(
           `Org ${clerkOrg.id} already exists in DB with the same api_key`,
         )
@@ -102,14 +134,16 @@ async function reconcileClerkOrgsToDB() {
           existingDbOrg.api_key === '')
       ) {
         console.log(
-          `Org ${clerkOrg.name}(${clerkOrg.id}) has a different api_key in DB`,
+          `Org ${clerkOrg.name}(${clerkOrg.id}) has a different api_key in DB, please review and update it manually`,
         )
         await updateOrganization(existingDbOrg, clerkOrg)
       }
     }
+    console.log(
+      `Org ${clerkOrg.name}(${clerkOrg.id}) does not exist in DB, creating...`,
+    )
+    await createOrganization(clerkOrg)
   }
-
-  console.log('Reconciliation completed!')
 }
 
 if (require.main === module) {
