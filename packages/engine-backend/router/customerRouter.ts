@@ -445,7 +445,7 @@ export const customerRouter = trpc.router({
           })
 
         await ctx.inngest.send({
-          name: 'connect/connection-connected',
+          name: 'connect.connection-connected',
           data: {connectionId},
         })
 
