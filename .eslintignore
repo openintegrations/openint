@@ -26,3 +26,6 @@
 
 docs/openint.oas.json
 .storybook
+
+# For now until we upgrade to new lint
+apps/web/postcss.config.mjs

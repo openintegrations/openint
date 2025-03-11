@@ -1,9 +1,7 @@
 'use client'
-// eslint-disable-next-line import/no-unresolved
-import '@openint/ui-v1/dist/tailwind.css'
 
+import '@openint/ui-v1/global.css'
 import 'next/image'
-// tailwind.css file will be built separately
 import {useSearchParams} from 'next/navigation'
 import {Suspense} from 'react'
 import {OpenIntConnectEmbed} from '@openint/connect'
