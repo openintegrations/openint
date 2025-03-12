@@ -83,8 +83,6 @@ async function createOrganization(clerkOrg: Organization): Promise<string> {
     const newOrgId = `org_${makeUlid()}`
     const {apikey, ...privateMetadata} = clerkOrg.privateMetadata
 
-    delete privateMetadata['apikey']
-
     const newOrg: OrganizationInsert = {
       id: newOrgId,
       name: clerkOrg.name,
@@ -122,8 +120,6 @@ async function updateOrganization(
 ) {
   try {
     const {apikey, ...privateMetadata} = clerkOrg.privateMetadata
-
-    delete privateMetadata['apikey']
 
     await db
       .update(schema.organization)
