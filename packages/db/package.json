@@ -9,9 +9,11 @@
     "export": "drizzle-kit export",
     "introspect": "drizzle-kit introspect",
     "migrate": "drizzle-kit migrate",
-    "push": "drizzle-kit push"
+    "push": "drizzle-kit push",
+    "reconcile-clerk-orgs": "npx tsx scripts/reconcileClerkOrgsToDB.ts"
   },
   "dependencies": {
+    "@clerk/backend": "^1.25.1",
     "@electric-sql/pglite": "^0.2.16",
     "@neondatabase/serverless": "^0.10.4",
     "@openint/env": "workspace:*",

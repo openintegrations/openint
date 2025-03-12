@@ -2111,6 +2111,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@clerk/backend':
+        specifier: ^1.25.1
+        version: 1.25.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@electric-sql/pglite':
         specifier: ^0.2.16
         version: 0.2.17
