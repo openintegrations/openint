@@ -8,14 +8,13 @@ import {
 } from '@clerk/nextjs'
 import NextTopLoader from 'nextjs-toploader'
 import {FormEventHandler, useState} from 'react'
-import {_trpcReact} from '@openint/engine-frontend'
+import {_trpcReact, LoadingSpinner} from '@openint/engine-frontend'
 import {Button} from '@openint/ui/shadcn/Button'
 import {Input} from '@openint/ui/shadcn/Input'
 import {NoSSR} from '@/components/NoSSR'
 import {RedirectToNext13} from '@/components/RedirectTo'
 import {VCommandBar} from '@/vcommands/vcommand-components'
 import {Sidebar} from './Sidebar'
-import useRefetchOnSwitch from './useRefetchOnSwitch'
 
 function CustomCreateOrganization() {
   const {createOrganization, setActive} = useOrganizationList()
@@ -71,60 +70,26 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
   // Clerk react cannot be trusted... Add our own clerk listener instead...
   // auth works for initial request but then subsequently breaks...
   const auth = useAuth()
-  const connections = _trpcReact.listConnections.useQuery({})
-
-  useRefetchOnSwitch(connections.refetch)
-
-  const hasPgConnection =
-    connections.data?.some((c) => c.id.includes('postgres_default')) ?? false
-  // const user = useUser()
-  // const orgs = useOrganizationList()
+  if (!auth.isLoaded) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    )
+  }
 
   if (auth.isLoaded && !auth.isSignedIn) {
     return <RedirectToNext13 url="/dashboard/sign-in" />
   }
 
-  // useEffect(() => {
-  //   if (!auth.orgId && orgs.organizationList?.[0]) {
-  //     void orgs.setActive(orgs.organizationList[0])
-  //   }
-  // }, [auth.orgId, orgs])
-  // console.log('[AuthedLayout]', {user, auth, orgs})
-
-  // return (
-  //   <FullScreenCenter>
-  //     <NoSSR>
-  //       <OrganizationSwitcher hidePersonal defaultOpen />
-  //     </NoSSR>
-  //   </FullScreenCenter>
-  // )
-  // if (!auth.isLoaded) {
-  //   // console.log('[AuthedLayout] auth not loaded', auth, orgs)
-  //   return null
-  // }
-  // // if (!auth.isSignedIn) {
-  // //   console.log('[AuthedLayout] redirect to sign in ')
-  // //   return <RedirectToNext13 url="/dashboard/sign-in" />
-  // // }
-  // if (!orgs.isLoaded) {
-  //   // console.log('[AuthedLayout] orgs not loaded', auth, orgs)
-  //   return null
-  // }
-  // if (!auth.orgId) {
-  //   const firstOrg = orgs.organizationList?.[0]
-  //   return !firstOrg ? (
-  //     <FullScreenCenter>
-  //       <CreateOrganization />
-  //     </FullScreenCenter>
-  //   ) : (
-  //     <EffectContainer
-  //       effect={() => {
-  //         // Eventually would be nice to sync active org with URL...
-  //         void orgs.setActive(firstOrg)
-  //       }}
-  //     />
-  //   )
-  // }
+  if (!auth.orgId) {
+    return (
+      <div className="flex h-screen w-screen flex-col">
+        <h1>Welcome to OpenInt!</h1>
+        <CustomCreateOrganization />
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-screen w-screen flex-col">
@@ -134,19 +99,9 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
       layout on sql page doesn't work when results are long :( donno how to prevent
       it otherwise without setting overflow hidden prop */}
       <main className="ml-[240px] mt-12 max-h-[calc(100vh-3em)] grow overflow-x-hidden bg-background">
-        {auth.orgId ? (
-          children
-        ) : (
-          <div className="flex h-full flex-col p-6" style={{maxWidth: '400px'}}>
-            <h1 className="mb-4 text-2xl font-bold">Welcome to OpenInt!</h1>
-            <CustomCreateOrganization />
-          </div>
-        )}
+        {children}
       </main>
-      <Sidebar
-        className="fixed bottom-0 left-0 top-12 w-[240px] border-r bg-sidebar"
-        hasPgConnection={hasPgConnection}
-      />
+      <Sidebar className="fixed bottom-0 left-0 top-12 w-[240px] border-r bg-sidebar" />
       <header className="fixed inset-x-0 top-0 flex h-12 items-center gap-2 border-b bg-navbar p-4">
         {/* Not working because of bug in clerk js that is unclear that results in hydration issue.. */}
         <NoSSR>

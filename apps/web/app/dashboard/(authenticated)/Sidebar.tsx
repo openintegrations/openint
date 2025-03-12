@@ -14,7 +14,7 @@ interface LinkItem {
   icon?: IconName
 }
 
-const sectionedLinks: Array<{
+const links: Array<{
   title?: string
   items: LinkItem[]
 }> = [
@@ -59,15 +59,10 @@ const sectionedLinks: Array<{
   },
 ]
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  hasPgConnection: boolean
-}
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function Sidebar({className, hasPgConnection}: SidebarProps) {
+export function Sidebar({className}: SidebarProps) {
   const pathname = usePathname()
-  const links = hasPgConnection
-    ? sectionedLinks
-    : sectionedLinks.filter((s) => s.title !== 'Console')
 
   return (
     <nav className={cn('flex flex-col', className)}>
