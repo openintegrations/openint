@@ -2227,9 +2227,15 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/shadcn':
+        specifier: workspace:*
+        version: link:../shadcn
       '@openint/ui':
         specifier: workspace:*
         version: link:../ui
+      '@openint/ui-v1':
+        specifier: workspace:*
+        version: link:../ui-v1
       '@openint/util':
         specifier: workspace:*
         version: link:../util
