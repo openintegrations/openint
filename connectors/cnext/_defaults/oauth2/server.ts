@@ -222,14 +222,14 @@ export function generateOAuth2Server<
       }
 
       if (!isOAuth2ConnectorDef(oauthConfig)) {
-        console.log(`Oauth2 Preconnect called with oauthConfig`, oauthConfig)
+        console.log(`Oauth2 Preconnect issue with oauthConfig`)
         return zOAuthConfig.parse(oauthConfig)
       }
 
       const connectionId =
         input.connectionId ?? makeId('conn', connectorDef.name, makeUlid())
 
-      console.log(`Oauth2 Preconnect called with input`, input)
+      console.log(`Oauth2 Preconnect called`)
 
       return authorizeHandler({
         oauth_config: {
@@ -259,10 +259,7 @@ export function generateOAuth2Server<
       const redirect_uri = getServerUrl(null) + '/connect/callback'
       // const redirect_uri =
       //   'https://f887-38-9-28-71.ngrok-free.app/connect/callback'
-      console.log(
-        `Oauth2 Postconnect called with connect output`,
-        connectOutput,
-      )
+      console.log(`Oauth2 Postconnect called`)
       const result = await tokenHandler({
         oauth_config: {
           ...oauthConfig,
@@ -273,7 +270,7 @@ export function generateOAuth2Server<
         redirect_uri,
       })
 
-      console.log(`Oauth2 Postconnect result`, result)
+      console.log(`Oauth2 Postconnect completed`)
 
       return {
         // NOTE: is this the right thing to do here?
