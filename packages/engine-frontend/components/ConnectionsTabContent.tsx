@@ -1,6 +1,6 @@
 import {useSearchParams} from 'next/navigation'
 import {useEffect, useState} from 'react'
-import {Button} from '../@openint/shadcn/ui'
+import {Button} from '../../../packages/shadcn/ui'
 import {ConnectionDetails} from '../../../packages/ui/domain-components'
 import {DeleteConfirmation} from '@openint/ui/components/DeleteConfirmation'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'

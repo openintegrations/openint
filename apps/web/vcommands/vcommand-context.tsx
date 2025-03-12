@@ -13,7 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   Button,
-} from '@openint/shadcn/ui'
+} from 'packages/shadcn/ui'
 import {useWithToast} from '@openint/ui/hooks'
 import {PipelineSheet} from '@/components/PipelineSheet'
 import {ConnectionSheet} from '@/components/ConnectionSheet'

@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../@openint/shadcn/ui'
+} from '../../../packages/shadcn/ui'
 import type {
   ConnectorConfig,
   ConnectorConfigFilters,
