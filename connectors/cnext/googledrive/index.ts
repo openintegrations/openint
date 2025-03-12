@@ -41,12 +41,12 @@ const connectorDef = {
     openint_scopes: ['https://www.googleapis.com/auth/drive.file'],
   },
   // TODO (@pellicceama)
-  // xx 1) Get rid of code handlers in def and put it inside `server` instead. def should be json serializable only
+  // --> Dropped this req:  1) Get rid of code handlers in def and put it inside `server` instead. def should be json serializable only
   // xx2) Have the custom handlers be auth-type specific which then gets normalized into
   //xx 3) our getPreConnectParams, preConnect, postConnect lifecycle
-  // 4) Ability to extend standard auth schema, not just override it (e.g. QBO realm_id)
+  // Discuss with @openint-bot 4) Ability to extend standard auth schema, not just override it (e.g. QBO realm_id)
   // xx 5) Nest auth fields under an auth object, limit # of fields on top level, continue to leverage the discriminated union
-  // 6) Allow for simple variable substitutions in connector def based on connection.settings or connector_config.config
+  // xx 6) Allow for simple variable substitutions in connector def based on connection.settings or connector_config.config
   // xx 7) Scope should list all possible scopes this oauth connectors we know of, but it's a best effort at then end of day and allow user to specify custom ones..
   // xx 8) Add audience and other fields to full ConnectionDef.metadata so that the new metadata appears in the connector APIs
   // xx 10) Have a generic way to create connector server simplified that allows me to access connector specific fields as part
