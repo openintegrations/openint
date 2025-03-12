@@ -33,8 +33,27 @@ async function getClerkOrganizations() {
   } catch (error) {
     throw error
   }
+  let allOrganizations: Organization[] = []
+  let offset = 0
+  const limit = 100 // Clerk's default page size
 
-  const organizations = await clerk.organizations.getOrganizationList()
+  while (true) {
+    const organizations = await clerk.organizations.getOrganizationList({
+      limit,
+      offset,
+    })
+
+    allOrganizations = [...allOrganizations, ...organizations.data]
+
+    if (allOrganizations.length >= organizations.totalCount) {
+      break
+    }
+
+    offset += limit
+  }
+
+  const totalCount = allOrganizations.length
+  const organizations = {data: allOrganizations, totalCount}
   console.log(`Found ${organizations.data.length} organizations in Clerk`)
 
   return organizations
@@ -66,10 +85,11 @@ async function createOrganization(clerkOrg: Organization): Promise<string> {
     const newOrg: OrganizationInsert = {
       id: newOrgId,
       name: clerkOrg.name,
-      api_key: clerkOrg.privateMetadata['api_key'] as string,
-      metadata: JSON.stringify({
-        ...clerkOrg.publicMetadata,
-      }),
+      slug: clerkOrg.slug,
+      api_key: clerkOrg.privateMetadata['apikey'] as string,
+      metadata: clerkOrg.publicMetadata,
+      created_at: new Date(clerkOrg.createdAt).toISOString(),
+      updated_at: new Date(clerkOrg.updatedAt).toISOString(),
     }
 
     await db.insert(schema.organization).values(newOrg)
@@ -94,15 +114,15 @@ async function updateOrganization(
   clerkOrg: Organization,
 ) {
   try {
-    const apiKey = clerkOrg.privateMetadata['api_key'] as string
-    const metadata = JSON.stringify({
-      clerk_metadata: clerkOrg.publicMetadata,
-    })
+    const apiKey = clerkOrg.privateMetadata['apikey'] as string
     await db
       .update(schema.organization)
       .set({
         api_key: apiKey,
-        metadata,
+        metadata: clerkOrg.publicMetadata,
+        slug: clerkOrg.slug,
+        created_at: new Date(clerkOrg.createdAt).toISOString(),
+        updated_at: new Date(clerkOrg.updatedAt).toISOString(),
       })
       .where(eq(schema.organization.id, dbOrg.id))
 
