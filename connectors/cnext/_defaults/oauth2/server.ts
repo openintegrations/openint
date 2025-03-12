@@ -42,7 +42,8 @@ const defaultAuthorizeHandler: AuthorizeHandler = async ({
       client_secret: oauth_config.connector_config.client_secret,
       redirect_uri,
       response_type: 'code',
-      scope: prepareScopes(oauth_config),
+      // decoding it as url.toString() encodes it alredy
+      scope: decodeURIComponent(prepareScopes(oauth_config)),
       state: Buffer.from(connection_id).toString('base64'),
       ...(oauth_config.params_config.authorize ?? {}),
     },
@@ -53,7 +54,8 @@ const defaultAuthorizeHandler: AuthorizeHandler = async ({
     url.searchParams.set(key, value as string)
   })
 
-  return {authorization_url: url.toString()}
+  // putting it as %20 for spaces instead of the default encoding of url.toString() which is +
+  return {authorization_url: url.toString().replace(/\+/g, '%20')}
 }
 
 const defaultTokenExchangeHandler: ExchangeTokenHandler = async ({

@@ -111,7 +111,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     )
     const scopes = mockOauthConfig.scopes
       .map((s) => s.scope)
-      .join(encodeURIComponent(encodeURIComponent(' ')))
+      .join(encodeURIComponent(' '))
     expect(result.authorization_url).toContain('scope=' + scopes)
     expect(result.authorization_url).toContain(
       'client_id=' + encodeURIComponent('test_client_id'),
