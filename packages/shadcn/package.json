@@ -2,17 +2,6 @@
   "name": "@openint/shadcn",
   "version": "0.0.0",
   "private": true,
-  "exports": {
-    ".": "./index.js",
-    "./ui": "./ui/index.js",
-    "./ui/*": "./ui/*.js",
-    "./lib/*": "./lib/*.js"
-  },
-  "main": "index.js",
-  "types": "index.d.ts",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {},
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
