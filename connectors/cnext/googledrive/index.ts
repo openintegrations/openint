@@ -55,6 +55,7 @@ const connectorDef = {
 
   /*
   Next: 
+    - Move keys of json connector def to as const in the def file
     - Manually test 
     - Point 4 above 
     - review generics and schemas, return types, ts-ignores and <any> casts
