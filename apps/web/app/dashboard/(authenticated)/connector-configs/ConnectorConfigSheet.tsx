@@ -119,7 +119,7 @@ export function ConnectorConfigSheet({
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent
         side="right"
-        className="bg-background relative flex w-[800px] max-w-full flex-col">
+        className="bg-background flex w-[800px] flex-col sm:max-w-full">
         {isSubmitting && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
             <Loader2 className="text-button h-10 w-10 animate-spin" />

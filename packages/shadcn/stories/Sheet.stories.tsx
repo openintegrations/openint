@@ -43,11 +43,11 @@ export const Primary: Story = {
     // children: 'Button',
   },
   render: () => (
-    <Sheet>
+    <Sheet open>
       <SheetTrigger asChild>
         <Button variant="outline">Open</Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="w-[800px] sm:max-w-full">
         <SheetHeader>
           <SheetTitle>Edit profile</SheetTitle>
           <SheetDescription>

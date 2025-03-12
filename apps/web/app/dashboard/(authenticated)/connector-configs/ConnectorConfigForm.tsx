@@ -131,7 +131,7 @@ export function ConnectorConfigForm({
     })
 
   return (
-    <div className="grow overflow-scroll">
+    <div className="grow overflow-scroll px-8">
       {isLoading ? (
         <Loader2 className="size-6 animate-spin" />
       ) : (
