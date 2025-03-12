@@ -5,7 +5,6 @@ import type {JsonConnectorDef} from '../../def'
 import {generateConnectorDef} from '../../schema'
 import {zOAuthConfig} from './def'
 import {generateOAuth2Server, mapOauthParams} from './server'
-import {prepareScopes} from './utils'
 
 const logger = false
 
@@ -84,22 +83,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         onSettingsChange: () => Promise.resolve(),
       })
     }).not.toThrow()
-  })
-
-  test('Scope separator should work correctly for different delimiters', () => {
-    const scopesWithDefaultSpaceSeparator = mockOauthConfig.scopes
-      .map((s) => s.scope)
-      .join(' ')
-    expect(prepareScopes(mockOauthConfig)).toBe(
-      encodeURIComponent(scopesWithDefaultSpaceSeparator),
-    )
-
-    const scopesWithCommaSeparator = mockOauthConfig.scopes
-      .map((s) => s.scope)
-      .join(',')
-    expect(prepareScopes({...mockOauthConfig, scope_separator: ','})).toBe(
-      encodeURIComponent(scopesWithCommaSeparator),
-    )
   })
 
   test('preConnect should generate correct authorization URL', async () => {

@@ -15,7 +15,11 @@ import {
   RefreshTokenHandler,
   zOAuthConfig,
 } from './def'
-import {makeTokenRequest, prepareScopes} from './utils'
+import {
+  fillOutStringTemplateVariables,
+  makeTokenRequest,
+  prepareScopes,
+} from './utils'
 
 const defaultAuthorizeHandler: AuthorizeHandler = async ({
   oauth_config,
@@ -25,7 +29,13 @@ const defaultAuthorizeHandler: AuthorizeHandler = async ({
   if (!connection_id) {
     throw new Error('No connection_id provided')
   }
-  const url = new URL(oauth_config.authorization_request_url)
+  const url = new URL(
+    fillOutStringTemplateVariables(
+      oauth_config.authorization_request_url,
+      oauth_config.connector_config,
+      oauth_config.connection_settings,
+    ),
+  )
   const params = mapOauthParams(
     {
       client_id: oauth_config.connector_config.client_id,
@@ -52,7 +62,6 @@ const defaultTokenExchangeHandler: ExchangeTokenHandler = async ({
   code,
   state,
 }) => {
-  const url = new URL(oauth_config.token_request_url)
   const params = mapOauthParams(
     {
       client_id: oauth_config.connector_config.client_id,
@@ -67,11 +76,12 @@ const defaultTokenExchangeHandler: ExchangeTokenHandler = async ({
     oauth_config.params_config.param_names ?? {},
   )
 
-  Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.set(key, value as string)
-  })
-
-  return makeTokenRequest(oauth_config.token_request_url, params, 'exchange')
+  const url = fillOutStringTemplateVariables(
+    oauth_config.token_request_url,
+    oauth_config.connector_config,
+    oauth_config.connection_settings,
+  )
+  return makeTokenRequest(url, params, 'exchange')
 }
 
 const defaultTokenRefreshHandler: RefreshTokenHandler = async ({
@@ -89,7 +99,12 @@ const defaultTokenRefreshHandler: RefreshTokenHandler = async ({
     oauth_config.params_config.param_names ?? {},
   )
 
-  return makeTokenRequest(oauth_config.token_request_url, params, 'refresh')
+  const url = fillOutStringTemplateVariables(
+    oauth_config.token_request_url,
+    oauth_config.connector_config,
+    oauth_config.connection_settings,
+  )
+  return makeTokenRequest(url, params, 'refresh')
 }
 
 function addCcfgDefaultCredentials(

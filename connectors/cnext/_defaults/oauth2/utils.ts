@@ -31,7 +31,12 @@ export function fillOutStringTemplateVariables(
   connectorConfig: any,
   connectionSettings: any,
 ) {
+  if (!url) return url
   let filledUrl = url
+
+  // Ensure connectorConfig and connectionSettings are objects
+  connectorConfig = connectorConfig || {}
+  connectionSettings = connectionSettings || {}
 
   // Match ${variable} pattern
   const variableRegex = /\${([^}]+)}/g
