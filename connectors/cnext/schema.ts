@@ -58,7 +58,7 @@ export function generateConnectorDef<T extends JsonConnectorDef>(def: T) {
     },
     metadata: {
       displayName: def.display_name,
-      stage: def.readiness,
+      stage: def.stage,
       verticals: def.verticals,
       // TODO: Make this dynamic
       logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-drive.svg`,

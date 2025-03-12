@@ -27,7 +27,7 @@ export const zAuthParamsConfig = z.object({
     .optional(),
 })
 
-export const zOAuthConnectorDef = z.object({
+export const zOAuthConfig = z.object({
   type: z
     .enum(['OAUTH2', 'OAUTH2CC'])
     .describe('The authentication type for OAuth-based providers'),
@@ -47,7 +47,7 @@ export const zOAuthConnectorDef = z.object({
     .string()
     .default(' ')
     .optional()
-    .describe('Separator used to join multiple scopes. Defaults to comma.'),
+    .describe('Separator used to join multiple scopes. Defaults to space.'),
   // TODO: review that it extends the schema of the json connector
   connector_config: z.union([zOauthConnectorConfig, z.any()]).default({}),
   // TODO: review that it extends the schema of the json connector
@@ -87,20 +87,20 @@ export const zOAuthConnectorDef = z.object({
 })
 
 export const zAuthorizeHandlerArgs = z.object({
-  oauth_connector_def: zOAuthConnectorDef,
+  oauth_config: zOAuthConfig,
   redirect_uri: z.string(),
   connection_id: z.string(),
 })
 
 export const zTokenExchangeHandlerArgs = z.object({
-  oauth_connector_def: zOAuthConnectorDef,
+  oauth_config: zOAuthConfig,
   code: z.string(),
   state: z.string(),
   redirect_uri: z.string(),
 })
 
 export const zTokenRefreshHandlerArgs = z.object({
-  oauth_connector_def: zOAuthConnectorDef,
+  oauth_config: zOAuthConfig,
   refresh_token: z.string(),
 })
 

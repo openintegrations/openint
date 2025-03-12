@@ -1,13 +1,33 @@
+import {z} from 'zod'
+import {ConnectorDef} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import type {JsonConnectorDef} from '../../def'
-import {generateOAuth2Server, mapOauthParams} from './server'
+import {generateConnectorDef} from '../../schema'
+import {zOAuthConfig} from './def'
+import {generateOAuth2Server, mapOauthParams, prepareScopes} from './server'
 
 const logger = false
 
 jest.mock('node-fetch')
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
-  let mockConnectorDef: JsonConnectorDef
+  let mockConnectorDef: ConnectorDef
+  let mockOauthConfig = {
+    type: 'OAUTH2',
+    authorization_request_url: 'https://auth.example.com/authorize',
+    token_request_url: 'https://auth.example.com/token',
+    scopes: [
+      {scope: 'read', description: 'Read access'},
+      {scope: 'write', description: 'Write access'},
+    ],
+    params_config: {
+      authorize: {
+        custom_param: 'custom_value',
+      },
+      token: {},
+      refresh: {},
+    },
+  } satisfies z.infer<typeof zOAuthConfig>
   let mockFetch: jest.Mock
 
   beforeEach(() => {
@@ -16,36 +36,22 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     mockFetch = jest.fn()
     global.fetch = mockFetch
 
-    mockConnectorDef = {
+    mockConnectorDef = generateConnectorDef({
       connector_name: 'test_connector',
       display_name: 'Test Connector',
-      readiness: 'alpha',
+      stage: 'alpha',
       version: 1,
       audience: ['consumer'],
       verticals: ['other'],
-      auth: {
-        type: 'OAUTH2',
-        authorization_request_url: 'https://auth.example.com/authorize',
-        token_request_url: 'https://auth.example.com/token',
-        scopes: [
-          {scope: 'read', description: 'Read access'},
-          {scope: 'write', description: 'Write access'},
-        ],
-        params: {
-          authorize: {
-            custom_param: 'custom_value',
-          },
-        },
-        token: {},
-        refresh: {},
-        capture_response_fields: ['user_id', 'account_type'],
+      auth: mockOauthConfig,
+      links: {
+        web_url: 'https://example.com',
       },
-      handlers: undefined,
-    } as unknown as JsonConnectorDef
+    } satisfies JsonConnectorDef)
   })
 
   test('newInstance should throw error if client credentials are missing', () => {
-    const server = generateOAuth2Server(mockConnectorDef)
+    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
 
     expect(server.newInstance).toBeDefined()
     expect(() => {
@@ -62,7 +68,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('newInstance should initialize successfully with valid credentials', () => {
-    const server = generateOAuth2Server(mockConnectorDef)
+    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
@@ -79,8 +85,24 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     }).not.toThrow()
   })
 
+  test('Scope separator should work correctly for different delimiters', () => {
+    const scopesWithDefaultSpaceSeparator = mockOauthConfig.scopes
+      .map((s) => s.scope)
+      .join(' ')
+    expect(prepareScopes(mockOauthConfig)).toBe(
+      encodeURIComponent(scopesWithDefaultSpaceSeparator),
+    )
+
+    const scopesWithCommaSeparator = mockOauthConfig.scopes
+      .map((s) => s.scope)
+      .join(',')
+    expect(prepareScopes({...mockOauthConfig, scope_separator: ','})).toBe(
+      encodeURIComponent(scopesWithCommaSeparator),
+    )
+  })
+
   test('preConnect should generate correct authorization URL', async () => {
-    const server = generateOAuth2Server(mockConnectorDef)
+    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
@@ -103,7 +125,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     expect(result.authorization_url).toContain(
       'https://auth.example.com/authorize',
     )
-    expect(result.authorization_url).toContain('client_id=test_client_id')
+    const scopes = mockOauthConfig.scopes
+      .map((s) => s.scope)
+      .join(encodeURIComponent(encodeURIComponent(' ')))
+    expect(result.authorization_url).toContain('scope=' + scopes)
+    expect(result.authorization_url).toContain(
+      'client_id=' + encodeURIComponent('test_client_id'),
+    )
     expect(result.authorization_url).toContain('response_type=code')
     expect(result.authorization_url).toContain('custom_param=custom_value')
     expect(result.authorization_url).toContain('state=')
@@ -261,7 +289,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       const params = {
         client_id: 'test-client-id',
         client_secret: 'test-client-secret',
-        scope: 'read write',
+        scope: 'read',
       }
 
       const paramNames = {
@@ -275,7 +303,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       expect(result).toEqual({
         clientKey: 'test-client-id',
         clientSecret: 'test-client-secret',
-        scopes: 'read write',
+        scopes: 'read',
       })
     })
 
@@ -335,7 +363,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       const params = {
         client_id: 'salesforce-client-id',
         client_secret: 'salesforce-client-secret',
-        scope: 'api refresh_token',
+        scope: 'api',
       }
 
       const paramNames = {
@@ -349,7 +377,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       expect(result).toEqual({
         consumer_key: 'salesforce-client-id',
         consumer_secret: 'salesforce-client-secret',
-        scope: 'api refresh_token',
+        scope: 'api',
       })
     })
   })

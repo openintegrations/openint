@@ -1,7 +1,7 @@
 import {z} from 'zod'
-import {zVerticalKey} from '../../kits/cdk'
+import {zConnectorStage, zVerticalKey} from '../../kits/cdk'
 import {zAPIKeyConnectorDef} from './_defaults/apikey'
-import {zOAuthConnectorDef} from './_defaults/oauth2'
+import {zOAuthConfig} from './_defaults/oauth2'
 
 // the idea is that this is provided by a CMS like payload and
 // is searchable based on the connector name
@@ -34,9 +34,7 @@ export const zJsonConnectorDef = z.object({
   connector_name: z
     .string()
     .describe('The unique name of the provider in kebab-case'),
-  readiness: z
-    .enum(['alpha', 'beta', 'ga'])
-    .describe('The readiness level of the connector'),
+  stage: zConnectorStage.describe('The readiness level of the connector'),
   version: z
     .number()
     .int()
@@ -48,13 +46,13 @@ export const zJsonConnectorDef = z.object({
     .array(zVerticalKey)
     .describe('The industry verticals this provider belongs to'),
   links: zlinks,
-  auth: z.discriminatedUnion('type', [zOAuthConnectorDef, zAPIKeyConnectorDef]),
+  auth: z.discriminatedUnion('type', [zOAuthConfig, zAPIKeyConnectorDef]),
 })
 
 export type JsonConnectorDef = z.infer<typeof zJsonConnectorDef>
 
 const zAuthType = z
-  .union([zOAuthConnectorDef.shape.type, zAPIKeyConnectorDef.shape.type])
+  .union([zOAuthConfig.shape.type, zAPIKeyConnectorDef.shape.type])
   .describe('Union of supported authentication types')
 
 export type AuthType = z.infer<typeof zAuthType>
