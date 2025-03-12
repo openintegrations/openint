@@ -80,7 +80,7 @@ async function getDbOrganizations(): Promise<OrganizationSelect[]> {
  */
 async function createOrganization(clerkOrg: Organization): Promise<string> {
   try {
-    const newOrgId = `org_${makeUlid()}`
+    const newOrgId = clerkOrg.id
     const {apikey, ...privateMetadata} = clerkOrg.privateMetadata
 
     const newOrg: OrganizationInsert = {
