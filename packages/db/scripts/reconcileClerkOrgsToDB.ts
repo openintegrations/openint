@@ -31,7 +31,7 @@ async function getClerkOrganizations() {
     })
     console.log(`Clerk API connectivity test status: ${response.status}`)
   } catch (error) {
-    console.error('Failed to connect to Clerk API:', error)
+    throw new Error('Failed to connect to Clerk API:', error)
   }
 
   const organizations = await clerk.organizations.getOrganizationList()
@@ -142,11 +142,12 @@ async function reconcileClerkOrgsToDB() {
         )
         await updateOrganization(existingDbOrg, clerkOrg)
       }
+    } else {
+      console.log(
+        `Org ${clerkOrg.name}(${clerkOrg.id}) does not exist in DB, creating...`,
+      )
+      await createOrganization(clerkOrg)
     }
-    console.log(
-      `Org ${clerkOrg.name}(${clerkOrg.id}) does not exist in DB, creating...`,
-    )
-    await createOrganization(clerkOrg)
   }
 }
 
