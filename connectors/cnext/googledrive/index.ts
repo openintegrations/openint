@@ -52,6 +52,15 @@ const connectorDef = {
   // xx 10) Have a generic way to create connector server simplified that allows me to access connector specific fields as part
   //     of handlers like check connnection (think api key auth)
   // zod
+
+  /*
+  Next: 
+    - Manually test 
+    - Point 4 above 
+    - review generics and schemas, return types, ts-ignores and <any> casts
+    - General code review
+    - Script to generate the jsonconnector config def from the connector def based on input 
+  */
 } satisfies JsonConnectorDef
 
 export const def = generateConnectorDef(connectorDef)
