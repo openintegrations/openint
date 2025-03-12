@@ -8,7 +8,7 @@ import {_trpcReact} from '@openint/engine-frontend'
 import {SchemaForm} from '@openint/ui'
 import {toast} from '@openint/ui-v1/components/toast'
 import {copyToClipboard} from '@/lib-client/copyToClipboard'
-import {Button} from 'packages/shadcn/ui'
+import {Button} from '@openint/shadcn/ui'
 
 export default function MagicLinkPage() {
   const [showAdvanced, setShowAdvanced] = useState(false)
