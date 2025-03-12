@@ -26,6 +26,8 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
+
+// @ts-expect-error TODO(@snrondina): Fix me, figure out why type fails
 export const Primary: Story = {
   render: () => (
     <ConnectorConfigSheet
