@@ -40,3 +40,5 @@ export const connectorSchemas = Object.fromEntries(
     >
   >
 }
+
+connectorSchemas.preConnectInput[0]
