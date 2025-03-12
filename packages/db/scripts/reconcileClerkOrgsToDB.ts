@@ -31,7 +31,7 @@ async function getClerkOrganizations() {
     })
     console.log(`Clerk API connectivity test status: ${response.status}`)
   } catch (error) {
-    throw new Error('Failed to connect to Clerk API:', error)
+    throw error
   }
 
   const organizations = await clerk.organizations.getOrganizationList()
