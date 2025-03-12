@@ -1,6 +1,6 @@
 import type {TRPCClientErrorLike} from '@trpc/react-query'
 import type {UseTRPCMutationOptions} from '@trpc/react-query/dist/shared'
-import {toast} from '../../../packages/ui-v1/components/toast'
+import {toast} from '@openint/ui-v1/components/toast'
 
 /** Workaround for https://share.cleanshot.com/Yr1CMhLD */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
