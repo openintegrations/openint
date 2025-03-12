@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   useToast,
-} from '@openint/shadcn/ui'
+} from 'packages/shadcn/ui'
 import {DataTable} from '@openint/ui/components'
 import useRefetchOnSwitch from '../useRefetchOnSwitch'
 
