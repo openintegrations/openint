@@ -8,7 +8,7 @@ import type {ConnectorMeta, SchemaFormElement} from '@openint/ui'
 import {SchemaForm} from '@openint/ui/components'
 import {z} from '@openint/util'
 // TODO(@snrondina): Fix this, breaks package and dependency boundaries
-import {useCurrengOrg} from '../../../../components/viewer-context'
+import {useCurrentOrg} from '../../../../components/viewer-context'
 import type {ConnectorConfig} from './ConnectorConfigPage'
 
 interface ConnectorConfigFormProps {
@@ -115,7 +115,7 @@ export function ConnectorConfigForm({
     })
   connectorMeta?.__typename
 
-  const {orgId} = useCurrengOrg()
+  const {orgId} = useCurrentOrg()
 
   const upsertConnectorConfig =
     _trpcReact.adminUpsertConnectorConfig.useMutation({

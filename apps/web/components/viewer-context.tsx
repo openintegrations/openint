@@ -31,7 +31,7 @@ export function useViewerContext() {
   return React.useMemo(() => ({...context, viewerId}), [context, viewerId])
 }
 
-export const useCurrengOrg = () => {
+export const useCurrentOrg = () => {
   const auth = useAuth()
   if (!auth.orgId) {
     throw new Error('No current org')
