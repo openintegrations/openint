@@ -12,8 +12,6 @@ import {
   oauthConnect,
 } from '@openint/cdk'
 import type {RouterInput, RouterOutput} from '@openint/engine-backend'
-import type {SchemaFormElement} from '@openint/ui'
-import {SchemaForm} from '@openint/ui'
 import {
   Button,
   Dialog,
@@ -26,8 +24,10 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '../../../packages/shadcn/ui'
-import {toast} from '../../../packages/ui-v1/components/toast'
+} from '@openint/shadcn/ui'
+import type {SchemaFormElement} from '@openint/ui'
+import {SchemaForm} from '@openint/ui'
+import {toast} from '@openint/ui-v1/components/toast'
 import {z} from '@openint/util'
 import {useViewerContext} from '@/components/viewer-context'
 import {
@@ -208,7 +208,9 @@ export const WithConnectorConnect = ({
     {
       onSuccess(msg) {
         if (msg) {
-          toast.success(`Successfully connected to ${ccfg.connector.displayName}`);
+          toast.success(
+            `Successfully connected to ${ccfg.connector.displayName}`,
+          )
         }
         setOpen(false)
         setIsPreconnecting(false)
@@ -219,7 +221,7 @@ export const WithConnectorConnect = ({
           return
         }
         console.log(ccfg.connector.displayName + ' connection error:', err)
-        toast.error(`Failed to connect to ${ccfg.connector.displayName}`);
+        toast.error(`Failed to connect to ${ccfg.connector.displayName}`)
         onEvent?.({type: 'error'})
       },
     },

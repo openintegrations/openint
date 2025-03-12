@@ -2,7 +2,13 @@
   "name": "@openint/ui-v1",
   "version": "0.0.0",
   "private": true,
+  "exports": {
+    ".": "./index.js",
+    "./components/*": "./components/*.js"
+  },
+  "main": "./index.js",
   "module": "./index.ts",
+  "types": "./index.d.ts",
   "scripts": {
     "build-storybook": "storybook build",
     "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./dist/tailwind.css # For debugging only, prod uses vite for storybook and postcss for next.js",

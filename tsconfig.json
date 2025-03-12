@@ -25,7 +25,11 @@
       "@openint/sdk/*": ["./kits/sdk/src/*"],
       "@openint/connect": ["./kits/connect/src"],
       "@openint/connect/*": ["./kits/connect/src/*"],
-      "@openint/open-file-picker": ["./kits/file-picker/src"]
+      "@openint/open-file-picker": ["./kits/file-picker/src"],
+      "@openint/shadcn": ["./packages/shadcn"],
+      "@openint/shadcn/ui": ["./packages/shadcn/ui"],
+      "@openint/ui-v1": ["./packages/ui-v1"],
+      "@openint/ui-v1/components/*": ["./packages/ui-v1/components/*"]
     }
   },
   "include": [

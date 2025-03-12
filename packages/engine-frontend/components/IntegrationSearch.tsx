@@ -4,11 +4,11 @@ import {Loader2, Search} from 'lucide-react'
 import {useSearchParams} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 import type {Id} from '@openint/cdk'
-import {Button, Input, Separator} from '../../../packages/shadcn/ui'
-import {cn, parseCategory} from '../../../packages/ui/utils'
+import {Button, Input, Separator} from '@openint/shadcn/ui'
 import {CheckboxFilter} from '@openint/ui/components/CheckboxFilter'
 import {FilterBadges} from '@openint/ui/components/FilterBadges'
 import {IntegrationCard} from '@openint/ui/domain-components/IntegrationCard'
+import {cn, parseCategory} from '@openint/ui/utils'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
 import type {ConnectEventType} from '../hocs/WithConnectorConnect'
 import {WithConnectorConnect} from '../hocs/WithConnectorConnect'
@@ -132,19 +132,21 @@ export function IntegrationSearch({
     <div className={cn('flex h-full flex-col', className)}>
       {/* Search integrations - Fixed header */}
       <div
-        className={`sticky top-0 z-10 border-b bg-popover pt-2 ${
+        className={`bg-popover sticky top-0 z-10 border-b pt-2 ${
           (ints?.length ?? 0) < 8 ? 'hidden md:block' : ''
         }`}>
         <div className="flex flex-row gap-2 px-6 pb-2">
           <div className="relative w-[450px]">
             <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center">
-              <Search className="h-4 w-4 text-muted-foreground" />
+              <Search className="text-muted-foreground h-4 w-4" />
             </div>
             <Input
               placeholder="Search or pick a connector for your setup"
-              className="truncate pl-8 text-foreground"
+              className="text-foreground truncate pl-8"
               value={searchText}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchText(e.target.value)
+              }
             />
           </div>
           {categories.length > 1 && (
@@ -172,7 +174,7 @@ export function IntegrationSearch({
       <div className="relative flex-1 overflow-y-auto p-2">
         {listIntegrationsRes.isLoading ? (
           <div className="flex h-full min-h-[500px] items-center justify-center">
-            <Loader2 className="size-7 animate-spin text-button" />
+            <Loader2 className="text-button size-7 animate-spin" />
           </div>
         ) : (
           <div className="space-y-6 p-4">
@@ -181,7 +183,7 @@ export function IntegrationSearch({
               Object.entries(intsByCategory ?? {}).map(
                 ([category, categoryInts]) => (
                   <div key={category}>
-                    <h3 className="mb-2 text-lg font-semibold text-foreground">
+                    <h3 className="text-foreground mb-2 text-lg font-semibold">
                       {parseCategory(category)}
                     </h3>
                     <div className="hidden w-full flex-row flex-wrap gap-4 md:flex md:w-[60%]">
@@ -247,7 +249,7 @@ export function IntegrationSearch({
                                     alt={`${int.name} logo`}
                                     className="h-12 w-12 rounded-xl"
                                   />
-                                  <p className="m-0 text-center text-sm font-semibold hover:text-button">
+                                  <p className="hover:text-button m-0 text-center text-sm font-semibold">
                                     {int.name}
                                   </p>
                                 </div>
@@ -266,7 +268,7 @@ export function IntegrationSearch({
               )
             ) : (
               <div>
-                <p className="font-normal text-foreground">
+                <p className="text-foreground font-normal">
                   No available connectors, please check that you have configured
                   connectors available or review your filter values.
                 </p>
