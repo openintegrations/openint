@@ -14,50 +14,8 @@ import {
   OAuth2ServerOverrides,
   RefreshTokenHandler,
   zOAuthConfig,
-  zTokenResponse,
 } from './def'
-
-export function prepareScopes(jsonConfig: z.infer<typeof zOAuthConfig>) {
-  const scopes = jsonConfig.scopes
-  const scopeSeparator = jsonConfig.scope_separator
-  return encodeURIComponent(
-    scopes.map((s) => s.scope).join(scopeSeparator ?? ' '),
-  )
-}
-
-async function makeTokenRequest(
-  url: string,
-  params: Record<string, string>,
-  flowType: 'exchange' | 'refresh',
-  // note: we may want to add bodyFormat: form or json
-): Promise<z.infer<typeof zTokenResponse>> {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
-    },
-    body: new URLSearchParams(params),
-  })
-
-  if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(
-      `Token ${flowType} failed: ${response.status} ${response.statusText} - ${errorText}`,
-    )
-  }
-
-  try {
-    return zTokenResponse.parse(await response.json())
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      throw new Error(
-        `Invalid oauth2 ${flowType} token response format: ${error.message}`,
-      )
-    }
-    throw error
-  }
-}
+import {makeTokenRequest, prepareScopes} from './utils'
 
 const defaultAuthorizeHandler: AuthorizeHandler = async ({
   oauth_config,

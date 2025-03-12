@@ -4,7 +4,8 @@ import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import type {JsonConnectorDef} from '../../def'
 import {generateConnectorDef} from '../../schema'
 import {zOAuthConfig} from './def'
-import {generateOAuth2Server, mapOauthParams, prepareScopes} from './server'
+import {generateOAuth2Server, mapOauthParams} from './server'
+import {prepareScopes} from './utils'
 
 const logger = false
 

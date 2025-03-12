@@ -48,7 +48,7 @@ const connectorDef = {
   // xx 5) Nest auth fields under an auth object, limit # of fields on top level, continue to leverage the discriminated union
   // 6) Allow for simple variable substitutions in connector def based on connection.settings or connector_config.config
   // xx 7) Scope should list all possible scopes this oauth connectors we know of, but it's a best effort at then end of day and allow user to specify custom ones..
-  // 8) Add audience and other fields to full ConnectionDef.metadata so that the new metadata appears in the connector APIs
+  // xx 8) Add audience and other fields to full ConnectionDef.metadata so that the new metadata appears in the connector APIs
   // xx 10) Have a generic way to create connector server simplified that allows me to access connector specific fields as part
   //     of handlers like check connnection (think api key auth)
   // zod
