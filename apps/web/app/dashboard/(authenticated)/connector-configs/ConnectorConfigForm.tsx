@@ -3,11 +3,12 @@
 import {Loader2} from 'lucide-react'
 import {zId, zRaw} from '@openint/cdk'
 import {_trpcReact} from '@openint/engine-frontend'
-import {SchemaForm} from '@openint/ui/components'
 import {useToast} from '@openint/shadcn/ui'
 import type {ConnectorMeta, SchemaFormElement} from '@openint/ui'
+import {SchemaForm} from '@openint/ui/components'
 import {z} from '@openint/util'
-import {useCurrengOrg} from '@/components/viewer-context'
+// TODO(@snrondina): Fix this, breaks package and dependency boundaries
+import {useCurrengOrg} from '../../../../components/viewer-context'
 import type {ConnectorConfig} from './ConnectorConfigPage'
 
 interface ConnectorConfigFormProps {

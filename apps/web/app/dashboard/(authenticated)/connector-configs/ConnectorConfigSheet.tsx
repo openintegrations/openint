@@ -2,9 +2,9 @@
 
 import {AlertCircle, Loader2} from 'lucide-react'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import {_trpcReact} from '@openint/engine-frontend'
-import type {SchemaFormElement} from '@openint/ui'
+import {cn} from '@openint/shadcn/lib/utils'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,8 +30,8 @@ import {
   TooltipTrigger,
   useToast,
 } from '@openint/shadcn/ui'
-import {LoadingText} from '@openint/ui/components'
-import {cn} from '@/lib-client/ui-utils'
+import type {SchemaFormElement} from '@openint/ui'
+import {LoadingText} from '@openint/ui/components/LoadingText'
 import {ConnectorConfigForm} from './ConnectorConfigForm'
 import type {ConnectorConfig} from './ConnectorConfigPage'
 
@@ -119,11 +119,10 @@ export function ConnectorConfigSheet({
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent
         side="right"
-        className="flex flex-col bg-background relative w-[800px] max-w-full">
-        
+        className="bg-background relative flex w-[800px] max-w-full flex-col">
         {isSubmitting && (
-          <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
-            <Loader2 className="h-10 w-10 animate-spin text-button" />
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
+            <Loader2 className="text-button h-10 w-10 animate-spin" />
           </div>
         )}
 
@@ -183,7 +182,7 @@ export function ConnectorConfigSheet({
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <AlertCircle className="size-6 text-destructive" />
+                        <AlertCircle className="text-destructive size-6" />
                       </TooltipTrigger>
                       <TooltipContent>
                         Cannot delete connector config while it has active

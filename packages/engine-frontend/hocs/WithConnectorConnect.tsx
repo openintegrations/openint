@@ -29,7 +29,8 @@ import type {SchemaFormElement} from '@openint/ui'
 import {SchemaForm} from '@openint/ui'
 import {toast} from '@openint/ui-v1/components/toast'
 import {z} from '@openint/util'
-import {useViewerContext} from '@/components/viewer-context'
+// TODO(@snrondina): Fix this, breaks package and dependency boundaries
+import {useViewerContext} from '../../../apps/web/components/viewer-context'
 import {
   useOpenIntConnectContext,
   useOptionalOpenIntConnectContext,
