@@ -19,7 +19,7 @@ import {
   Button,
   Card,
   CardContent,
-} from 'packages/shadcn/ui'
+} from '@openint/shadcn/ui'
 import {DataTable} from '@openint/ui/components'
 import {cn, parseCategory} from '@openint/ui/utils'
 import CalendarBooking from '@openint/ui/components/CalendarBooking'

@@ -26,7 +26,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '../../../packages/shadcn/ui'
+} from '../@openint/shadcn/ui'
 import {toast} from '../../../packages/ui-v1/components/toast'
 import {z} from '@openint/util'
 import {useViewerContext} from '@/components/viewer-context'

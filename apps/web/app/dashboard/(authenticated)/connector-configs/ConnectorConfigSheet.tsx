@@ -29,7 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
   useToast,
-} from 'packages/shadcn/ui'
+} from '@openint/shadcn/ui'
 import {LoadingText} from '@openint/ui/components'
 import {cn} from '@/lib-client/ui-utils'
 import {ConnectorConfigForm} from './ConnectorConfigForm'
