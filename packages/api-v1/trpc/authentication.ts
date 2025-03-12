@@ -26,7 +26,7 @@ export async function viewerFromRequest(
     if (!org) {
       throw new TRPCError({code: 'UNAUTHORIZED', message: 'Invalid API key'})
     }
-    if (!org.metadata.api_key_used) {
+    if (!org?.metadata?.api_key_used) {
       await ctx.db.update(schema.organization).set({
         metadata: {
           ...org.metadata,

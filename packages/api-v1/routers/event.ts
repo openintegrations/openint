@@ -113,8 +113,8 @@ export const eventRouter = router({
       return {
         first_connector_configured: connectorConfigs.length > 0,
         first_connection_created: !!firstConnectionCreated,
-        api_key_used: !!org.metadata.api_key_used,
-        onboarding_marked_complete: !!org.metadata.onboarding_marked_complete,
+        api_key_used: !!org?.metadata?.api_key_used,
+        onboarding_marked_complete: !!org?.metadata?.onboarding_marked_complete,
       }
     }),
 
@@ -145,7 +145,7 @@ export const eventRouter = router({
         })
       }
 
-      if (org.metadata.onboarding_marked_complete) {
+      if (org?.metadata?.onboarding_marked_complete) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Onboarding already marked complete',
