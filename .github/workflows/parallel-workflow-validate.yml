@@ -162,10 +162,13 @@ jobs:
           vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
           vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
           cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
+
       - name: Build css file
         run: pnpm --dir packages/ui-v1 build-tailwind
+
+      # Consider using official github action https://www.chromatic.com/docs/github-actions/
       - name: Publish storybook to chromatic
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui-v1 chromatic --exit-zero-on-changes
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui-v1 chromatic --only-changed --exit-zero-on-changes
 
   # slack-notification:
   #   runs-on: ubuntu-latest

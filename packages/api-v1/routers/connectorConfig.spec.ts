@@ -1,7 +1,7 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {getTestTRPCClient} from '../../__tests__/test-utils'
-import {routerContextFromViewer} from '../context'
+import {getTestTRPCClient} from '../__tests__/test-utils'
+import {routerContextFromViewer} from '../trpc/context'
 import {connectorConfigRouter} from './connectorConfig'
 
 const logger = false
@@ -138,7 +138,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       role: 'org',
       orgId: 'org_222',
     }).listConnectorConfigs.query({
-      expand: ['enabled_integrations'],
+      expand: 'enabled_integrations',
     })
     expect(res.items).toHaveLength(2)
 
@@ -160,7 +160,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       role: 'org',
       orgId: 'org_222',
     }).listConnectorConfigs.query({
-      expand: ['connector', 'enabled_integrations'],
+      expand: 'connector,enabled_integrations',
     })
 
     const googleConnector = res.items.find(

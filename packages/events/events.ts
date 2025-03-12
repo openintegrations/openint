@@ -36,12 +36,12 @@ export const eventMap = {
     destination_id: zId('conn'),
   },
   // Backend events
-  'debug/debug': {},
-  'sync/scheduler-debug': {},
-  'sync/pipeline-requested': {pipelineId: zId('pipe')},
-  'sync/connection-requested': {connectionId: zId('conn')},
-  'connect/connection-connected': {connectionId: zId('conn')},
-  'webhook/received': {
+  'debug.debug': {},
+  'sync.scheduler-debug': {},
+  'sync.pipeline-requested': {pipelineId: zId('pipe')},
+  'sync.connection-requested': {connectionId: zId('conn')},
+  'connect.connection-connected': {connectionId: zId('conn')},
+  'webhook.received': {
     /** For debugging requests */
     traceId: z.string(),
     method: z.string(),
@@ -51,19 +51,19 @@ export const eventMap = {
     body: z.unknown(),
   },
   // Analytics events
-  'db/user-created': {},
-  'db/user-deleted': {},
-  'db/connection-created': {connectionId: zId('conn')},
-  'db/connection-deleted': {connectionId: zId('conn')},
-  'user/signin': {},
-  'user/signout': {},
-  'connect/session-started': {connectorName: z.string(), meta: z.unknown()},
-  'connect/session-cancelled': {connectorName: z.string(), meta: z.unknown()},
-  'connect/session-succeeded': {connectorName: z.string(), meta: z.unknown()},
-  'connect/session-errored': {connectorName: z.string(), meta: z.unknown()},
-  'api/token-copied': {},
-  'api/graphql-request': {},
-  'api/rest-request': {},
+  'db.user-created': {},
+  'db.user-deleted': {},
+  'db.connection-created': {connectionId: zId('conn')},
+  'db.connection-deleted': {connectionId: zId('conn')},
+  'user.signin': {},
+  'user.signout': {},
+  'connect.session-started': {connectorName: z.string(), meta: z.unknown()},
+  'connect.session-cancelled': {connectorName: z.string(), meta: z.unknown()},
+  'connect.session-succeeded': {connectorName: z.string(), meta: z.unknown()},
+  'connect.session-errored': {connectorName: z.string(), meta: z.unknown()},
+  'api.token-copied': {},
+  'api.graphql-request': {},
+  'api.rest-request': {},
   pageview: {
     current_url: z.string(),
     path: z.string(),
@@ -80,9 +80,8 @@ export const eventMapForInngest = R.mapValues(eventMap, (v) => ({
   }
 }
 
-/** slash in name is not supported in openapi spec. Plus we don't want to send all events to orgs for now */
-export const outgoingWebhookEventMap = R.omitBy(eventMapForInngest, (_, name) =>
-  name.includes('/'),
+export const outgoingWebhookEventMap = R.pickBy(eventMapForInngest, (_, name) =>
+  ['connect.connection-connected', 'sync.completed'].includes(name),
 )
 
 export type Events = Combine<

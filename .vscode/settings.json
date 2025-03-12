@@ -75,10 +75,10 @@
   "search.exclude": {
     "**/*.generated": true
   },
-  "tailwindCSS.experimental.configFile": "apps/web/tailwind.config.ts",
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
   "typescript.tsdk": "./node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
+  "tailwindCSS.experimental.configFile": "./packages/ui-v1/global.css",
   "workbench.colorCustomizations": {
     "titleBar.activeBackground": "#0C4B33"
   },

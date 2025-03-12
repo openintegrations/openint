@@ -1,9 +1,7 @@
 'use client'
 
+import '@openint/ui-v1/global.css'
 import 'next/image'
-// tailwind.css file will be built separately
-// eslint-disable-next-line import/no-unresolved
-import '../tailwind-v3.css'
 import {useSearchParams} from 'next/navigation'
 import {Suspense} from 'react'
 import {OpenIntConnectEmbed} from '@openint/connect'
@@ -12,7 +10,7 @@ function DemoInner() {
   const params = useSearchParams()
   const token = params?.get('token')
   return (
-    <div className="flex h-screen w-screen flex-col">
+    <div className="flex h-screen w-screen flex-col bg-pink-500">
       {token ? (
         <OpenIntConnectEmbed
           className="flex-1"

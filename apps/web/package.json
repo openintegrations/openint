@@ -4,14 +4,9 @@
   "private": true,
   "scripts": {
     "build": "run-s build:*",
-    "build:css": "pnpm --dir ../../packages/ui-v1 @tailwindcss/cli -i ./global.css -o '../../apps/web/app/(v1)/tailwind.css'",
-    "build:css-v3": "tailwindcss -i ./app/v0.css -o ./app/tailwind-v3.css --minify",
     "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
-    "dev": "concurrently npm:dev:*",
-    "dev:css": "pnpm build:css --watch",
-    "dev:css-v3": "tailwindcss -i ./app/v0.css -o ./app/tailwind-v3.css --watch",
-    "dev:next": "next dev -p 4000 --turbopack",
+    "dev": "next dev -p 4000 --turbopack",
     "start": "next start"
   },
   "dependencies": {
@@ -29,9 +24,9 @@
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",
     "@openint/open-file-picker": "workspace:*",
+    "@openint/shadcn": "workspace:*",
     "@openint/ui": "workspace:*",
     "@openint/ui-v1": "workspace:*",
-    "@openint/shadcn": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@sentry/nextjs": "^9.5.0",
@@ -64,19 +59,16 @@
     "@openint/connector-plaid": "workspace:*",
     "@opensdks/sdk-plaid": "^0.0.19",
     "@sentry/cli": "^2.36.6",
+    "@tailwindcss/postcss": "^4.0.13",
     "@types/http-proxy": "1.17.10",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
-    "autoprefixer": "*",
     "concurrently": "^9.1.2",
     "drizzle-orm": "^0.39.1",
     "node-loader": "2.0.0",
-    "postcss": "^8.4.47",
-    "tailwindcss": "3.4.12",
-    "tailwindcss-animate": "^1.0.7",
-    "tailwindcss-radix": "^3.0.5",
-    "tilg": "0.1.1",
-    "webpack": "*"
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.13",
+    "tilg": "0.1.1"
   },
   "//": "@trpc/client version needs to be explicitly specified here otherwise we can end up with v10 try to import stuff from v11. pnpm quirk, not sure."
 }

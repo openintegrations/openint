@@ -58,7 +58,7 @@ export const OpenIntConnectEmbed = React.memo(
       // Add a more reliable way to know iframe has fully finished loading
       // by sending message from iframe to parent when ready
       return (
-        <div className="connect-embed-wrapper">
+        <div className={`connect-embed-wrapper ${props.className}`}>
           <div
             className={`spinner-container ${loading ? 'loading' : 'loaded'}`}>
             <svg className="spinner" viewBox="0 0 50 50">

@@ -3,7 +3,8 @@ import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
 import type {Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
-import {routerContextFromRequest, routerContextFromViewer} from './context'
+import {routerContextFromRequest, routerContextFromViewer} from './trpc/context'
+// Technically doesn't belong here as it introduces circular dependencies
 import {appRouter} from './routers'
 
 export interface CreateFetchHandlerOptions {

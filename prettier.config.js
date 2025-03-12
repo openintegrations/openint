@@ -24,7 +24,9 @@ module.exports = {
   semi: false,
   singleQuote: true,
   tabWidth: 2,
-  tailwindConfig: './apps/web/tailwind.config.ts',
   trailingComma: 'all',
   useTabs: false,
+  // Extensions not standard in prettier
+  tailwindStylesheet: './packages/ui-v1/global.css',
+  tailwindFunctions: ['cn'],
 }

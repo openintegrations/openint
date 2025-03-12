@@ -1,6 +1,7 @@
 import {backendEnv, contextFactory} from '@openint/app-config/backendConfig'
 import {env} from '@openint/app-config/env'
 import '@openint/app-config/register.node'
+import {createClerkClient} from '@clerk/nextjs/server'
 import type {SendEventPayload} from 'inngest/helpers/types'
 import {flatRouter} from '@openint/engine-backend'
 import type {Events, OrgProperties} from '@openint/events'
@@ -45,9 +46,9 @@ export async function scheduleSyncs({step}: FunctionInput<never>) {
 
     if (pipelines.length > 0) {
       await step.sendEvent(
-        'sync/pipeline-requested',
+        'sync.pipeline-requested',
         pipelines.map((pipe) => ({
-          name: 'sync/pipeline-requested',
+          name: 'sync.pipeline-requested',
           data: {pipelineId: pipe.id},
         })),
       )
@@ -69,7 +70,7 @@ export async function scheduleSyncs({step}: FunctionInput<never>) {
 // Consider automatic inngest function from every trpc function?
 export async function syncPipeline({
   event,
-}: FunctionInput<'sync/pipeline-requested'>) {
+}: FunctionInput<'sync.pipeline-requested'>) {
   const {pipelineId} = event.data
   console.log('Will sync pipeline', pipelineId)
   // TODO: Figure out what is the userId we ought to be using...
@@ -86,14 +87,35 @@ export async function syncPipeline({
 }
 
 export async function sendWebhook({event}: FunctionInput<keyof Events>) {
-  if (!event.user?.webhook_url) {
+  console.log('Sending webhook', event)
+
+  const clerkSecretKey = process.env['CLERK_SECRET_KEY']
+  const clerk = createClerkClient({secretKey: clerkSecretKey})
+
+  const organizationId = event?.data.user?.org_id
+
+  if (!organizationId) {
+    console.error('No organization id found', event)
     return false
   }
+
+  // TODO: migrate webhook_url to database
+  const organization = await clerk.organizations.getOrganization({
+    organizationId,
+  })
+  const webhookUrl =
+    event.data.user?.webhook_url ||
+    organization?.publicMetadata?.['webhook_url']
+  if (!webhookUrl) {
+    return false
+  }
+
+  console.log('Sending webhook to', webhookUrl)
 
   // We shall let inngest handle the retries and backoff for now
   // Would be nice to have a openSDK for sending webhook payloads that are typed actually, after all it has
   // the exact same shape as paths.
-  const res = await fetch(event.user.webhook_url, {
+  const res = await fetch(webhookUrl as string, {
     method: 'POST',
     body: JSON.stringify(event),
     headers: {
@@ -102,7 +124,7 @@ export async function sendWebhook({event}: FunctionInput<keyof Events>) {
     },
   })
   const responseAsJson = await responseToJson(res)
-  return {...responseAsJson, target: event.user.webhook_url}
+  return {...responseAsJson, target: webhookUrl}
 }
 
 async function responseToJson(res: Response) {

@@ -193,10 +193,22 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git fetch 
-          git add docs/mintlify.oas.yml
-          git add packages/api-v1/__generated__/openapi.documented.json
-          git commit -m "feat(docs): updating documented docs for stainless"
-          git push origin main --force
+
+          # Add all generated files
+          git add -f docs/mintlify.oas.yml || true
+          git add -f packages/api-v1/__generated__/openapi.documented.json || true
+          git add -f packages/api-v1/__generated__/openapi.json || true
+          git add -f packages/api-v1/__generated__/openapi.types.ts || true
+
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit, skipping commit step"
+          else
+            git commit -m "feat(docs): updating documented docs for stainless"
+            git push origin main --force
+          fi
+
+          # Always update production branch regardless of whether there were changes
           git checkout production
           git reset --hard origin/main
           git push origin production --force

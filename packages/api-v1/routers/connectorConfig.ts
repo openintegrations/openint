@@ -4,15 +4,15 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {core} from '../../models'
+import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
+import {core} from '../models'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
   zListParams,
   zListResponse,
-} from '../utils/pagination'
-import {zConnectorName} from '../utils/types'
+} from './utils/pagination'
+import {zConnectorName} from './utils/types'
 
 export const zExpandOptions = z
   .enum(['connector', 'enabled_integrations'])
@@ -118,7 +118,18 @@ export const connectorConfigRouter = router({
     .input(
       zListParams
         .extend({
-          expand: z.array(zExpandOptions).optional().default([]),
+          expand: z
+            .string()
+            .transform((val) => val.split(','))
+            .refine(
+              (items) =>
+                items.every((item) => zExpandOptions.safeParse(item).success),
+              {
+                message:
+                  'Invalid expand option. Valid options are: connector, enabled_integrations',
+              },
+            )
+            .optional(),
           connector_name: zConnectorName.optional(),
         })
         .optional(),
@@ -154,6 +165,7 @@ export const connectorConfigRouter = router({
         query,
         'connector_config',
       )
+      const expandOptions = input?.expand || []
 
       // Process items with proper typing
       const processedItems: z.infer<typeof connectorConfigWithRelations>[] =
@@ -163,14 +175,14 @@ export const connectorConfigRouter = router({
               typeof connectorConfigWithRelations
             >
 
-            if (input?.expand?.includes('connector')) {
+            if (expandOptions.includes('connector')) {
               const connector = expandConnector(ccfg)
               if (connector) {
                 result.connector = connector
               }
             }
 
-            if (input?.expand?.includes('enabled_integrations')) {
+            if (expandOptions.includes('enabled_integrations')) {
               const filteredIntegrations = expandIntegrations(ccfg)
 
               if (filteredIntegrations && result.config) {

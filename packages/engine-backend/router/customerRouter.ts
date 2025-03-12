@@ -445,14 +445,24 @@ export const customerRouter = trpc.router({
           })
 
         await ctx.inngest.send({
-          name: 'connect/connection-connected',
-          data: {connectionId},
+          name: 'connect.connection-connected',
+          data: {
+            connectionId,
+            user: {
+              org_id: ctx.viewer.orgId,
+            },
+          },
         })
 
         if (syncInBackground) {
           await ctx.inngest.send({
-            name: 'sync/connection-requested',
-            data: {connectionId},
+            name: 'sync.connection-requested',
+            data: {
+              connectionId,
+              user: {
+                org_id: ctx.viewer.orgId,
+              },
+            },
           })
         }
         console.log(

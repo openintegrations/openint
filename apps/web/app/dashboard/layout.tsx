@@ -1,6 +1,4 @@
-// tailwind.css file will be built separately
-// eslint-disable-next-line import/no-unresolved
-import '../tailwind-v3.css'
+import '@openint/ui-v1/global.css'
 import {ClerkProvider} from '@clerk/nextjs'
 // import {TRPCProvider} from '@openint/engine-frontend'
 import React from 'react'
