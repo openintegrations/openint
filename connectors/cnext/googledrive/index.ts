@@ -2,7 +2,7 @@ import {generateOAuth2Server} from '../_defaults'
 import type {JsonConnectorDef} from '../def'
 import {generateConnectorDef} from '../schema'
 
-const connectorDef = {
+const jsonDef = {
   audience: ['consumer', 'business'],
   connector_name: 'googledrive' as const,
   verticals: ['file-storage'],
@@ -41,14 +41,14 @@ const connectorDef = {
     openint_scopes: ['https://www.googleapis.com/auth/drive.file'],
   },
   // TODO (@pellicceama)
-  // --> Dropped this req:  1) Get rid of code handlers in def and put it inside `server` instead. def should be json serializable only
-  // xx2) Have the custom handlers be auth-type specific which then gets normalized into
-  //xx 3) our getPreConnectParams, preConnect, postConnect lifecycle
+  // - [ ] change openint_scope to default scope
+  // - [ ] Handle local urls dynmaically
+  // - [ ] reembmer to fix logoUrl in metadata
+  // - [ ] Remember to fix template literal in values
+  // - [ ] Use token info endpoint for check connection by default, add def for endpoint
+
   // Discuss with @openint-bot 4) Ability to extend standard auth schema, not just override it (e.g. QBO realm_id)
-  // xx 5) Nest auth fields under an auth object, limit # of fields on top level, continue to leverage the discriminated union
-  // xx 6) Allow for simple variable substitutions in connector def based on connection.settings or connector_config.config
   // xx 7) Scope should list all possible scopes this oauth connectors we know of, but it's a best effort at then end of day and allow user to specify custom ones..
-  // xx 8) Add audience and other fields to full ConnectionDef.metadata so that the new metadata appears in the connector APIs
   // xx 10) Have a generic way to create connector server simplified that allows me to access connector specific fields as part
   //     of handlers like check connnection (think api key auth)
   // zod
@@ -64,5 +64,10 @@ const connectorDef = {
   */
 } satisfies JsonConnectorDef
 
-export const def = generateConnectorDef(connectorDef)
-export const server = generateOAuth2Server(def, connectorDef.auth)
+export const def = generateConnectorDef(jsonDef)
+export const server = generateOAuth2Server(def, jsonDef.auth, {
+  // oauth2: {
+  // },
+  // server: {
+  // }
+})

@@ -64,6 +64,7 @@ const defaultTokenExchangeHandler: ExchangeTokenHandler = async ({
   code,
   state,
 }) => {
+  // TODO (@pellicceama): For every value in params apply template literal substitution
   const params = mapOauthParams(
     {
       client_id: oauth_config.connector_config.client_id,
@@ -171,7 +172,10 @@ export function generateOAuth2Server<
 >(
   connectorDef: D,
   oauthConfig: z.infer<typeof zOAuthConfig>,
-  overrides?: Partial<ConnectorServer<T>> & Partial<OAuth2ServerOverrides>,
+  overrides?: {
+    server?: Partial<ConnectorServer<T>>
+    oauth2?: Partial<OAuth2ServerOverrides>
+  },
 ): ConnectorServer<T> {
   // Only use this for OAuth2 connectors
   if (
