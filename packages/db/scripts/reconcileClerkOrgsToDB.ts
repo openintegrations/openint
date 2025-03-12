@@ -81,13 +81,20 @@ async function getDbOrganizations(): Promise<OrganizationSelect[]> {
 async function createOrganization(clerkOrg: Organization): Promise<string> {
   try {
     const newOrgId = `org_${makeUlid()}`
+    const {apikey, ...privateMetadata} = clerkOrg.privateMetadata
+
+    delete privateMetadata['apikey']
 
     const newOrg: OrganizationInsert = {
       id: newOrgId,
       name: clerkOrg.name,
       slug: clerkOrg.slug,
-      api_key: clerkOrg.privateMetadata['apikey'] as string,
-      metadata: clerkOrg.publicMetadata,
+      api_key: apikey as string,
+      metadata: {
+        ...clerkOrg.publicMetadata,
+        ...privateMetadata,
+        clerk_import: true,
+      },
       created_at: new Date(clerkOrg.createdAt).toISOString(),
       updated_at: new Date(clerkOrg.updatedAt).toISOString(),
     }
@@ -114,12 +121,19 @@ async function updateOrganization(
   clerkOrg: Organization,
 ) {
   try {
-    const apiKey = clerkOrg.privateMetadata['apikey'] as string
+    const {apikey, ...privateMetadata} = clerkOrg.privateMetadata
+
+    delete privateMetadata['apikey']
+
     await db
       .update(schema.organization)
       .set({
-        api_key: apiKey,
-        metadata: clerkOrg.publicMetadata,
+        api_key: apikey as string,
+        metadata: {
+          ...clerkOrg.publicMetadata,
+          ...privateMetadata,
+          clerk_import: true,
+        },
         slug: clerkOrg.slug,
         created_at: new Date(clerkOrg.createdAt).toISOString(),
         updated_at: new Date(clerkOrg.updatedAt).toISOString(),
