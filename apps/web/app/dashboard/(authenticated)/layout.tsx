@@ -16,7 +16,7 @@ import {RedirectToNext13} from '@/components/RedirectTo'
 import {VCommandBar} from '@/vcommands/vcommand-components'
 import {Sidebar} from './Sidebar'
 
-function CustomCreateOrganization() {
+function CustomCreateOrganization({clerkUserId}: {clerkUserId?: string}) {
   const {createOrganization, setActive} = useOrganizationList()
   const [organizationName, setOrganizationName] = useState('')
   // const [referralSource, setReferralSource] = useState('')
@@ -29,14 +29,22 @@ function CustomCreateOrganization() {
     e.preventDefault()
     const newOrg = await createOrganization({
       name: organizationName,
-      // note: this does not seem to be working..
-      // TODO: Fix & Enable
-      // publicMetadata: {
-      //   referralSource,
-      // },
     })
+
     if (newOrg) {
-      await setActive({organization: newOrg.id})
+      const res = await _trpcReact.createOrganization.mutate({
+        id: newOrg.id,
+        name: organizationName,
+        // referrer: 'web', // TODO: add referrer from form
+        clerkUserId: clerkUserId,
+      })
+      if (res.id && res.id == newOrg.id) {
+        await setActive({organization: res.id})
+      } else {
+        console.error(
+          'Failed to create organization, please try again later with a different name',
+        )
+      }
     }
     window.location.href = '/'
   }
@@ -86,7 +94,7 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
     return (
       <div className="flex h-screen w-screen flex-col">
         <h1>Welcome to OpenInt!</h1>
-        <CustomCreateOrganization />
+        <CustomCreateOrganization clerkUserId={auth.userId} />
       </div>
     )
   }

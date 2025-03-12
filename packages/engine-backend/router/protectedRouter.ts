@@ -1,7 +1,11 @@
 import {extractId, zStandard} from '@openint/cdk'
+import {schema, sql} from '@openint/db'
+import {initDbNeon} from '@openint/db/db.neon'
+import {env} from '@openint/env'
 import {zEvent} from '@openint/events'
 import {TRPCError} from '@openint/trpc'
 import {R, z} from '@openint/util'
+import {getOrCreateApikey} from '@/lib-server'
 import {inngest} from '../inngest'
 import {protectedProcedure, trpc} from './_base'
 
@@ -51,4 +55,32 @@ export const protectedRouter = trpc.router({
     }),
   // TODO: Do we need this method at all? Or should we simply add params to args
   // to syncConnection instead? For example, skipPipelines?
+
+  createOrganization: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        referrer: z.string().nullish(),
+        clerkUserId: z.string(),
+      }),
+    )
+    .output(z.object({id: z.string().nullish()}))
+    .mutation(async ({input, ctx}) => {
+      const db = initDbNeon(env.DATABASE_URL)
+
+      const apikey = await getOrCreateApikey(ctx.viewer)
+      const metadata = {
+        referrer: input.referrer,
+        clerk_user_id: input.clerkUserId,
+      }
+      const res = await db.execute<{id: string}>(sql`
+      INSERT INTO ${schema.organization} (id, name, apikey, metadata)
+      VALUES (${sql.param(input.id)}, ${sql.param(input.name)}, ${sql.param(
+        apikey,
+      )}, ${sql.param(metadata)})
+      returning id
+    `)
+      return {id: res[0]?.id}
+    }),
 })
