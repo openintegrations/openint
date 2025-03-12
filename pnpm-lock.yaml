@@ -1706,6 +1706,9 @@ importers:
       '@azure/msal-browser':
         specifier: ^4.0.2
         version: 4.0.2
+      '@openint/shadcn':
+        specifier: workspace:*
+        version: link:../../packages/shadcn
       '@opensdks/sdk-openint':
         specifier: ^0.1.15
         version: 0.1.15(@opensdks/runtime@0.0.22)

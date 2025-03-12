@@ -1,6 +1,6 @@
+import React from 'react'
 import type {Meta, StoryObj} from '@openint/ui-v1/storybook'
 import {ConnectorConfigSheet} from './ConnectorConfigSheet'
-import React from 'react'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -31,14 +31,14 @@ type Story = StoryObj<typeof meta>
 // @ts-expect-error TODO(@snrondina): Fix me, figure out why type fails
 export const Primary: Story = {
   render: () => {
-    const [open, setOpen] = React.useState(false);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [open, setOpen] = React.useState(false)
 
     return (
       <div>
         <button
           onClick={() => setOpen(true)}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
-        >
+          className="rounded bg-blue-500 px-4 py-2 text-white">
           Open Connector Config
         </button>
 
@@ -48,6 +48,6 @@ export const Primary: Story = {
           setOpen={setOpen}
         />
       </div>
-    );
+    )
   },
 }
