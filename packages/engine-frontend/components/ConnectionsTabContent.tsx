@@ -1,6 +1,7 @@
 import {useSearchParams} from 'next/navigation'
 import {useEffect, useState} from 'react'
-import {Button, ConnectionDetails} from '../lib/ui-components'
+import {Button} from '../../../packages/shadcn/ui'
+import {ConnectionDetails} from '../../../packages/ui/domain-components'
 import {DeleteConfirmation} from '@openint/ui/components/DeleteConfirmation'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
