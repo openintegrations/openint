@@ -1,0 +1,2 @@
+ALTER TABLE "event" drop column "customer_id";--> statement-breakpoint
+ALTER TABLE "event" ADD COLUMN "customer_id" varchar GENERATED ALWAYS AS (COALESCE("user"->>'cus_id', "user"->>'customer_id')) STORED;
