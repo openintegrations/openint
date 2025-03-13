@@ -55,6 +55,17 @@ const config = {
     // Only works in v4 storybook...
     // https://github.com/tailwindlabs/tailwindcss/issues/13216#issuecomment-1992094356
     config.plugins.push((await import('@tailwindcss/vite')).default())
+
+    // Add resolve aliases to match tsconfig paths
+    config.resolve = {
+      ...config.resolve,
+      alias: {
+        ...config.resolve?.alias,
+        '@openint/shadcn': join(process.cwd(), '../../packages/shadcn'),
+        '@openint/shadcn/ui': join(process.cwd(), '../../packages/shadcn/ui'),
+      },
+    }
+
     config.optimizeDeps = {
       ...config.optimizeDeps,
       exclude: [
