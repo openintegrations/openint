@@ -5,7 +5,7 @@ import type {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-  VisibilityState,
+  VisibilityState,  
 } from '@tanstack/react-table'
 import {
   flexRender,
@@ -32,7 +32,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../shadcn'
+} from '@openint/shadcn/ui'
 import {cn} from '../utils'
 
 const defaultFilter = () => true

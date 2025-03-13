@@ -12,15 +12,16 @@ import type {ConnectorMeta} from '@openint/ui'
 import {
   ConnectorCard as _ConnectorCard,
   ConnectorConfigCard as _ConnectorConfigCard,
+  ConnectorLogo,
+} from '@openint/ui/domain-components'
+import {
   Badge,
   Button,
   Card,
   CardContent,
-  cn,
-  ConnectorLogo,
-  DataTable,
-  parseCategory,
-} from '@openint/ui'
+} from '@openint/shadcn/ui'
+import {DataTable} from '@openint/ui/components'
+import {cn, parseCategory} from '@openint/ui/utils'
 import CalendarBooking from '@openint/ui/components/CalendarBooking'
 import {inPlaceSort, R, titleCase} from '@openint/util'
 import useRefetchOnSwitch from '../useRefetchOnSwitch'

@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@openint/ui'
+} from '@openint/shadcn/ui'
 import type {
   ConnectorConfig,
   ConnectorConfigFilters,
@@ -56,7 +56,8 @@ export function ConnectDialog({
                 <DialogHeader>
                   <DialogTitle>No Integrations Available</DialogTitle>
                   <DialogDescription>
-                    You have no further integrations available. If you believe this is an error, please contact support.
+                    You have no further integrations available. If you believe
+                    this is an error, please contact support.
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
@@ -99,7 +100,8 @@ function MultipleConnectButton({
   const [internalOpen, setInternalOpen] = React.useState(false)
 
   // Determine if the component is controlled or uncontrolled
-  const isControlled = controlledOpen !== undefined && controlledSetOpen !== undefined
+  const isControlled =
+    controlledOpen !== undefined && controlledSetOpen !== undefined
   const open = isControlled ? controlledOpen : internalOpen
   const setOpen = isControlled ? controlledSetOpen : setInternalOpen
 
@@ -108,7 +110,7 @@ function MultipleConnectButton({
     <IntegrationSearch
       connectorConfigs={connectorConfigs}
       onEvent={(e) => {
-        if (onEvent) onEvent(e);
+        if (onEvent) onEvent(e)
         if (e.type === 'close' || e.type === 'error') {
           setOpen(false)
         }
@@ -131,9 +133,7 @@ function MultipleConnectButton({
       <DialogContent className="flex max-h-screen flex-col sm:max-w-2xl">
         <DialogHeader className="shrink-0">
           <DialogTitle>New connection</DialogTitle>
-          <DialogDescription>
-            Select an integration to start
-          </DialogDescription>
+          <DialogDescription>Select an integration to start</DialogDescription>
         </DialogHeader>
         {content}
         <DialogFooter className="shrink-0">{/* Cancel here */}</DialogFooter>

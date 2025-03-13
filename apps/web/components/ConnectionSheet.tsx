@@ -5,7 +5,8 @@ import React from 'react'
 import {extractConnectorName, zRaw} from '@openint/cdk'
 import {_trpcReact} from '@openint/engine-frontend'
 import type {SchemaSheetRef} from '@openint/ui'
-import {Badge, cn, SchemaSheet, SheetDescription} from '@openint/ui'
+import {cn, SchemaSheet} from '@openint/ui'
+import {Badge, SheetDescription} from '@openint/shadcn/ui'
 import type {ZClient} from '@/lib-common/schemas'
 
 const formSchema = zRaw.connection.pick({

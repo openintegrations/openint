@@ -1,5 +1,5 @@
 import {X} from 'lucide-react'
-import {Badge} from '../shadcn'
+import {Badge} from '@openint/shadcn/ui'
 import {parseCategory} from '../utils'
 
 export function FilterBadges({
@@ -15,7 +15,7 @@ export function FilterBadges({
         filters.length > 0 ? 'pb-2' : ''
       }`}>
       {filters.map((filter) => (
-        <Badge key={filter} variant="button">
+        <Badge key={filter} variant="secondary">
           {parseCategory(filter)}
           <X className="ml-1 size-4" onClick={() => onClick(filter)} />
         </Badge>
