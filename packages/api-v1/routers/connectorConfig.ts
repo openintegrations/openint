@@ -4,8 +4,8 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {core} from '../models'
+import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -174,6 +174,10 @@ export const connectorConfigRouter = router({
             const result = {...ccfg} as z.infer<
               typeof connectorConfigWithRelations
             >
+
+            if (result.config && Object.keys(result.config).length === 0) {
+              result.config = null
+            }
 
             if (expandOptions.includes('connector')) {
               const connector = expandConnector(ccfg)
