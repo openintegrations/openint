@@ -23,6 +23,7 @@ having a global.css file in apps/web and import this file instead.
 @source "../ui/hooks/**/*.tsx";
 @source "../ui/shadcn/**/*.tsx";
 @source "../ui/stories/**/*.tsx";
+@source "../engine-frontend/components/**/*.tsx";
 @source "../../apps/web/app/**/*.tsx";
 @source "../../apps/web/components/**/*.tsx";
 @source "../../apps/web/lib-client/**/*.tsx";
