@@ -5,7 +5,8 @@ import type {AppRouter} from '@openint/api'
 import {zOrganization} from '@openint/engine-backend/services/AuthProvider'
 import type {TRPCReact} from '@openint/engine-frontend'
 import {_trpcReact, useMutationToast} from '@openint/engine-frontend'
-import {Button, SchemaForm} from '@openint/ui'
+import {Button} from '@openint/shadcn/ui'
+import {SchemaForm} from '@openint/ui/components'
 import useRefetchOnSwitch from '../useRefetchOnSwitch'
 
 const trpcReact = _trpcReact as unknown as TRPCReact<AppRouter>

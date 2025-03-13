@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-} from '../shadcn'
+} from '@openint/shadcn/ui'
 import {IntegrationLogo} from './ConnectionRawCard'
 import {ConnectorLogo} from './ConnectorCard'
 

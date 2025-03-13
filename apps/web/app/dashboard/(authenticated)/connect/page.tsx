@@ -5,20 +5,18 @@ import {useState} from 'react'
 import {isMainPreview} from '@openint/app-config/constants'
 import {customerRouterSchema} from '@openint/engine-backend/router/customerRouter'
 import {_trpcReact} from '@openint/engine-frontend'
-import {SchemaForm, useToast} from '@openint/ui'
+import {SchemaForm} from '@openint/ui'
+import {toast} from '@openint/ui-v1/components/toast'
 import {copyToClipboard} from '@/lib-client/copyToClipboard'
-import {Button} from '../../../../../../packages/ui/shadcn/Button'
+import {Button} from '@openint/shadcn/ui'
 
 export default function MagicLinkPage() {
-  const {toast} = useToast()
   const [showAdvanced, setShowAdvanced] = useState(false)
 
   const createMagicLink = _trpcReact.createMagicLink.useMutation({
     onError: (err) => {
-      toast({
-        title: 'Error creating magic link',
+      toast.error('Error creating magic link', {
         description: `${err.message}`,
-        variant: 'destructive',
       })
     },
   })
@@ -150,10 +148,7 @@ export default function MagicLinkPage() {
                 if (isMainPreview) {
                   window.location.href = data.url
                 }
-                toast({
-                  title: 'Magic link copied to clipboard',
-                  variant: 'success',
-                })
+                toast.success('Magic link copied to clipboard')
               },
             })
           }}>

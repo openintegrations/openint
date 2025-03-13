@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import type {Id} from '@openint/cdk'
 import type {RouterOutput} from '@openint/engine-backend'
 import {R} from '@openint/util'
-import {Badge, Card} from '../shadcn'
+import {Badge, Card} from '@openint/shadcn/ui'
 import {cn} from '../utils'
 
 /** Can be img or next/image component */

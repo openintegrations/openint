@@ -23,6 +23,7 @@ having a global.css file in apps/web and import this file instead.
 @source "../ui/hooks/**/*.tsx";
 @source "../ui/shadcn/**/*.tsx";
 @source "../ui/stories/**/*.tsx";
+@source "../engine-frontend/components/**/*.tsx";
 @source "../../apps/web/app/**/*.tsx";
 @source "../../apps/web/components/**/*.tsx";
 @source "../../apps/web/lib-client/**/*.tsx";
@@ -35,6 +36,18 @@ having a global.css file in apps/web and import this file instead.
 /* Global styles */
 
 @custom-variant dark (&:is(.dark *));
+
+/*
+
+TODO: Introduce a way for users to define a simplied set of variables
+that will then be used to generate the full set of variables.
+
+:simplied {
+  --primary: oklch(0.205 0 0);
+  --accent: oklch(0.97 0 0);
+  --background: oklch(1 0 0);
+}
+*/
 
 :root {
   --background: oklch(1 0 0);

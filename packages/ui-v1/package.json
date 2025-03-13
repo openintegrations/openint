@@ -4,8 +4,9 @@
   "private": true,
   "module": "./index.ts",
   "scripts": {
+    "//": "Tailwind commands are for debugging only, prod uses vite for storybook and postcss for next.js",
     "build-storybook": "storybook build",
-    "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./dist/tailwind.css # For debugging only, prod uses vite for storybook and postcss for next.js",
+    "build-tailwind": "pnpm dlx @tailwindcss/cli -i ./global.css -o ./dist/tailwind.css",
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
     "storybook": "storybook dev -p 6006"
   },

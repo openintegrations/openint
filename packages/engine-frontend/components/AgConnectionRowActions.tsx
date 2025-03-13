@@ -46,13 +46,11 @@ export function AgConnectionRowActions(
   const ctx = _trpcReact.useContext()
   const deleteConnection = _trpcReact.deleteConnection.useMutation({
     onSuccess: () => {
-      toast({title: 'Connection deleted', variant: 'success'})
+      toast.success('Connection deleted')
     },
     onError: (err) => {
-      toast({
-        title: 'Failed to delete connection',
-        description: `${err.message}`,
-        variant: 'destructive',
+      toast.error('Failed to delete connection', {
+        description: err.message
       })
     },
     onSettled: () => {
@@ -61,13 +59,11 @@ export function AgConnectionRowActions(
   })
   const syncConnection = _trpcReact.dispatch.useMutation({
     onSuccess: () => {
-      toast({title: 'Sync requested', variant: 'success'})
+      toast.success('Sync requested')
     },
     onError: (err) => {
-      toast({
-        title: 'Failed to start sync',
-        description: `${err.message}`,
-        variant: 'destructive',
+      toast.error('Failed to start sync', {
+        description: err.message
       })
     },
   })
