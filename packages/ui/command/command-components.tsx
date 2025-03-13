@@ -1,11 +1,7 @@
 import {MoreHorizontal} from 'lucide-react'
 import React from 'react'
-import {R} from '@openint/util'
-import {__DEBUG__} from '../../../apps/app-config/constants'
-import {Icon} from '../components/Icon'
-import type {ButtonProps} from '../shadcn'
-import {Button, Popover, PopoverContent, PopoverTrigger} from '../shadcn'
 import {
+  Button,
   Command,
   CommandDialog,
   CommandEmpty,
@@ -14,7 +10,23 @@ import {
   CommandItem,
   CommandList,
   CommandShortcut,
-} from '../shadcn/Command'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@openint/shadcn/ui'
+import {R} from '@openint/util'
+import {__DEBUG__} from '../../../apps/app-config/constants'
+import {Icon} from '../components/Icon'
+/* import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+} from '@openint/shadcn/ui/Command' */
 import {cn} from '../utils'
 import {filterCommands, prepareCommand, prepareCommands} from './command-fns'
 import type {_infer, CommandDefinitionMap, CommandDraft} from './command-types'
@@ -46,7 +58,7 @@ export function CommandButton<
   definitions: TDef
   command: CommandDraft<TDef, TKey, TCtx>
   ctx: TCtx
-} & ButtonProps) {
+}) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const _cmd = prepareCommand([key as string, definitions[key]!])
   const cmd = {..._cmd, ..._cmd.useCommand?.(params ?? {})}
@@ -56,6 +68,7 @@ export function CommandButton<
       {...buttonProps}
       onClick={(e) => {
         void cmd.execute?.({ctx, params: params ?? {}})
+        // @ts-expect-error
         buttonProps.onClick?.(e)
       }}>
       {cmd.title}

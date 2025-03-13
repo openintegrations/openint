@@ -5,7 +5,6 @@ import type {RouterOutput} from '@openint/engine-backend'
 import {_trpcReact} from '@openint/engine-frontend'
 import {
   Button,
-  DataTable,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -13,7 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   useToast,
-} from '@openint/ui'
+} from '@openint/shadcn/ui'
+import {DataTable} from '@openint/ui/components'
 import useRefetchOnSwitch from '../useRefetchOnSwitch'
 
 export default function CustomersPage() {
@@ -103,11 +103,7 @@ function CustomerMenu({customer}: {customer: Customer}) {
                 window.open(res.url)
               })
               .catch((err) =>
-                toast({
-                  title: 'Failed to create connect token',
-                  description: `${err}`,
-                  variant: 'destructive',
-                }),
+                toast.error(`Failed to create connect token: ${err}`)
               )
           }}>
           <RefreshCcw className="mr-2 h-4 w-4" />

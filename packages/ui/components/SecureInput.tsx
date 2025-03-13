@@ -2,18 +2,17 @@
 
 import {Check, Copy, Eye, EyeOff} from 'lucide-react'
 import {useState} from 'react'
-import {useToast} from '../shadcn'
-import {Button} from '../shadcn/Button'
-import type {InputProps} from '../shadcn/Input'
-import {Input} from '../shadcn/Input'
-import {Label} from '../shadcn/Label'
+import {
+  useToast,
+  Button,
+  Input,
+  Label,
+  type InputProps
+} from '@openint/shadcn/ui'
 
-interface SecureInputProps {
-  label?: string
-  placeholder?: string
-}
 interface SecureInputProps extends Omit<InputProps, 'type'> {
   label?: string
+  placeholder?: string
 }
 
 export default function SecureInput({
@@ -28,33 +27,23 @@ export default function SecureInput({
   const {toast} = useToast()
 
   const toggleValueVisibility = () => {
-    setShowValue(!showValue)
+    if (showValue) {
+      setShowValue(false)
+      toast.info('Value hidden')
+    } else {
+      setShowValue(true)
+      toast.info('Value visible')
+    }
   }
 
   const copyToClipboard = async () => {
-    if (typeof value !== 'string' || value.trim() === '') {
-      toast({
-        title: 'Nothing to copy',
-        description: 'The input field is empty.',
-        variant: 'destructive',
-      })
-      return
-    }
-
     try {
-      await navigator.clipboard.writeText(value)
+      await navigator.clipboard.writeText(value as string)
       setCopied(true)
-      toast({
-        title: 'Copied to clipboard',
-        description: 'The text has been copied to your clipboard.',
-      })
+      toast.success('Copied to clipboard')
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
-      toast({
-        title: 'Failed to copy',
-        description: 'There was an error copying the text to your clipboard.',
-        variant: 'destructive',
-      })
+      toast.error('Failed to copy')
     }
   }
 

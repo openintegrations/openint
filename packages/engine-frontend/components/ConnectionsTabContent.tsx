@@ -1,7 +1,8 @@
 import {useSearchParams} from 'next/navigation'
 import {useEffect, useState} from 'react'
-import {Button, ConnectionDetails} from '@openint/ui'
+import {Button} from '@openint/shadcn/ui'
 import {DeleteConfirmation} from '@openint/ui/components/DeleteConfirmation'
+import {ConnectionDetails} from '@openint/ui/domain-components'
 import {ConnectionCard} from '@openint/ui/domain-components/ConnectionCard'
 import type {ConnectorConfig} from '../hocs/WithConnectConfig'
 import {WithConnectorConnect} from '../hocs/WithConnectorConnect'
@@ -102,10 +103,10 @@ export function ConnectionsTabContent({
       {connectionCount === 0 ? (
         <div className="flex flex-col p-4 pt-0">
           <div>
-            <p className="pt-4 font-semibold text-foreground">
+            <p className="text-foreground pt-4 font-semibold">
               You have no connections yet
             </p>
-            <p className="pt-2 text-sm text-foreground">
+            <p className="text-foreground pt-2 text-sm">
               Add a connection to start integrating and streamlining your
               workflow!
             </p>

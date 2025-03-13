@@ -71,17 +71,15 @@ export function ConnectionPortal({className}: ConnectionPortalProps) {
 
   const deleteConnection = _trpcReact.deleteConnection.useMutation({
     onSuccess: () => {
-      toast({title: 'Connection deleted', variant: 'success'})
+      toast.success('Connection deleted')
     },
     onError: (err) => {
-      toast({
-        title: 'Failed to delete connection',
-        description: `${err.message}`,
-        variant: 'destructive',
+      toast.error('Failed to delete connection', {
+        description: `${err.message}`
       })
     },
-    onSettled: () => {
-      ctx.listConnections.invalidate()
+    onSettled: async () => {
+      await ctx.listConnections.invalidate()
     },
   })
 
