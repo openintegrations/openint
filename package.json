@@ -9,7 +9,7 @@
     "generate-deprecated:connectorsList": "npx tsx apps/app-config/_generateConnectorLists.ts",
     "generate": "pnpm --dir ./kits/sdk run gen && pnpm --dir ./docs generate",
     "docs": "cd docs && mintlify dev",
-    "lint": "eslint --ext .js,.ts,.tsx --cache .",
+    "lint": "eslint --cache .",
     "mitm": "mitmweb --listen-port 3010 --web-port 3011 --mode reverse:http://localhost:3000",
     "preinstall": "npx only-allow pnpm",
     "jest::ci": "NODE_OPTIONS=--experimental-vm-modules pnpm run jest --ci --forceExit --detectOpenHandles --runInBand",

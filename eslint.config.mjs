@@ -3,25 +3,26 @@
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {FlatCompat} from '@eslint/eslintrc'
-import eslint from '@eslint/js'
+import pluginJs from '@eslint/js'
 import codegen from 'eslint-plugin-codegen'
 import eslintComments from 'eslint-plugin-eslint-comments'
 import jest from 'eslint-plugin-jest'
 import * as jestFormatting from 'eslint-plugin-jest-formatting'
 import promise from 'eslint-plugin-promise'
 import unicorn from 'eslint-plugin-unicorn'
-import tseslint from 'typescript-eslint'
+import pluginTs from 'typescript-eslint'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const compat = new FlatCompat({
   baseDirectory: __dirname,
-  recommendedConfig: eslint.configs.recommended,
-  allConfig: eslint.configs.all,
+  recommendedConfig: pluginJs.configs.recommended,
+  allConfig: pluginJs.configs.all,
 })
 
-export default tseslint.config(
+export default pluginTs.config(
   {
+    name: 'globaIgnores',
     ignores: [
       // # Unignore dotfiles
       '!**/.*',
@@ -53,8 +54,12 @@ export default tseslint.config(
       'apps/web/postcss.config.mjs',
     ],
   },
-  eslint.configs.recommended,
-  tseslint.configs.recommended,
+  {
+    name: 'defaultFiles',
+    files: ['**/*.js', '**/*.ts', '**/*.tsx', '**/*.cts', '**.*.mts'],
+  },
+  pluginJs.configs.recommended,
+  pluginTs.configs.recommended,
 )
 
 export const prevConfig = [
