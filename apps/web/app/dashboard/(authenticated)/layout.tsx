@@ -21,6 +21,9 @@ function CustomCreateOrganization({clerkUserId}: {clerkUserId?: string}) {
   const [organizationName, setOrganizationName] = useState('')
   // const [referralSource, setReferralSource] = useState('')
 
+  // Move the mutation hook to the top level of the component
+  const createOrgMutation = _trpcReact.createOrganization.useMutation()
+
   if (!createOrganization || !setActive) {
     return null
   }
@@ -32,21 +35,30 @@ function CustomCreateOrganization({clerkUserId}: {clerkUserId?: string}) {
     })
 
     if (newOrg) {
-      const res = await _trpcReact.createOrganization.mutate({
-        id: newOrg.id,
-        name: organizationName,
-        // referrer: 'web', // TODO: add referrer from form
-        clerkUserId: clerkUserId,
-      })
-      if (res.id && res.id == newOrg.id) {
-        await setActive({organization: res.id})
-      } else {
-        console.error(
-          'Failed to create organization, please try again later with a different name',
-        )
-      }
+      // Use the mutation from the top-level hook
+      createOrgMutation.mutate(
+        {
+          id: newOrg.id,
+          name: organizationName,
+          // referrer: 'web', // TODO: add referrer from form
+          clerkUserId: clerkUserId ?? '',
+        },
+        {
+          onSuccess: async (data) => {
+            if (data.id && data.id == newOrg.id) {
+              await setActive({organization: data.id})
+              setTimeout(() => {
+                window.location.href = '/'
+              }, 1000)
+            } else {
+              console.error(
+                'Failed to create organization, please try again later with a different name',
+              )
+            }
+          },
+        },
+      )
     }
-    window.location.href = '/'
   }
 
   return (

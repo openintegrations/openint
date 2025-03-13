@@ -75,9 +75,11 @@ export const protectedRouter = trpc.router({
         clerk_user_id: input.clerkUserId,
       }
       const res = await db.execute<{id: string}>(sql`
-      INSERT INTO ${schema.organization} (id, name, apikey, metadata)
+      INSERT INTO ${schema.organization} (id, name, api_key, slug, metadata)
       VALUES (${sql.param(input.id)}, ${sql.param(input.name)}, ${sql.param(
         apikey,
+      )}, ${sql.param(
+        input.name.toLowerCase().replace(/ /g, '-'),
       )}, ${sql.param(metadata)})
       returning id
     `)
