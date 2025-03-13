@@ -1,24 +1,26 @@
+// @ts-check
+
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {FlatCompat} from '@eslint/eslintrc'
-import js from '@eslint/js'
-import typescriptEslint from '@typescript-eslint/eslint-plugin'
+import eslint from '@eslint/js'
 import codegen from 'eslint-plugin-codegen'
 import eslintComments from 'eslint-plugin-eslint-comments'
 import jest from 'eslint-plugin-jest'
 import * as jestFormatting from 'eslint-plugin-jest-formatting'
 import promise from 'eslint-plugin-promise'
 import unicorn from 'eslint-plugin-unicorn'
+import tseslint from 'typescript-eslint'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const compat = new FlatCompat({
   baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
+  recommendedConfig: eslint.configs.recommended,
+  allConfig: eslint.configs.all,
 })
 
-export default [
+export default tseslint.config(
   {
     ignores: [
       // # Unignore dotfiles
@@ -33,6 +35,7 @@ export default [
       '**/*.generated.*',
       '**/*.gen.*',
       '**/*.oas.*',
+      '**/storybook-static/',
 
       // jest
       '**/*.snap',
@@ -50,6 +53,11 @@ export default [
       'apps/web/postcss.config.mjs',
     ],
   },
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
+)
+
+export const prevConfig = [
   ...compat.extends(
     'next/core-web-vitals',
     'plugin:eslint-comments/recommended',
@@ -159,11 +167,10 @@ export default [
   })),
   {
     files: ['**/*.{ts,tsx}'],
-    plugins: {'@typescript-eslint': typescriptEslint},
+
     languageOptions: {
       ecmaVersion: 5,
       sourceType: 'script',
-
       parserOptions: {
         project: 'tsconfig.json',
       },
