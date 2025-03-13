@@ -23,7 +23,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from './chart'
+} from '../ui/chart'
 
 // Define a wrapper component to use in stories
 const ChartWrapper = ({
