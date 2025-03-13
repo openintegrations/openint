@@ -11,7 +11,7 @@ export type SelectedFile = {
 
 export const OpenIntFrontend = {
   // TODO: import {Event as OpenIntEvent, zEvent} from '@openint/events'
-  listenConnectEvents: (callback: (event: any) => void) => {
+  listen: (callback: (event: any) => void) => {
     // Add a delay before looking for the iframe
     setTimeout(() => {
       // Try to find specific iframe first
@@ -33,7 +33,6 @@ export const OpenIntFrontend = {
     }, 3000) // 3 second delay for it to load. we don't offer initial load events anyways
 
     const messageListener = (event: MessageEvent) => {
-      console.log('messageListener', event) // TODO: remove
       // Check if the event data has the openIntEvent type
       if (typeof event.data === 'object' && event.data !== null) {
         if (event.data.type === 'openIntEvent' && event.data.event) {
