@@ -46,7 +46,7 @@ export default function OrgLayoutClient({
         })
 
       // TODO: this does not seem to be working, parking for now
-      console.log('identify', auth.userId, auth.orgId, auth.isSignedIn)
+      // console.log('identify', auth.userId, auth.orgId, auth.isSignedIn)
       if (auth.isSignedIn) {
         browserAnalytics.identify(auth.userId, {
           email: undefined,
@@ -60,7 +60,7 @@ export default function OrgLayoutClient({
   React.useEffect(() => {
     const listener = clerk.addListener((event) => {
       const newSlug = event.organization?.slug
-      console.log('event', newSlug, event)
+      // console.log('event', newSlug, event)
       if (newSlug && newSlug !== orgSlug) {
         router.push(`/org/${newSlug}`)
       }
