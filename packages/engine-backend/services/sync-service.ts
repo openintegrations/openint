@@ -1,5 +1,3 @@
-// Amadeo Q: how do I make the atsLink part of the openint/cdk? is there some sort of release process? A: We don't. cdk stands for connector development kit and atsLink does not belong
-import {createClerkClient} from '@clerk/nextjs/server'
 import type {Link as FetchLink} from '@opensdks/runtime'
 import type {
   AnyEntityPayload,
@@ -20,7 +18,6 @@ import {
   singleTableLink,
   sync,
 } from '@openint/cdk'
-import {env} from '@openint/env'
 import type {z} from '@openint/util'
 import {rxjs} from '@openint/util'
 import {unifiedAccountingLink} from '../../../unified/unified-accounting/unifiedAccountingLink'
@@ -38,11 +35,6 @@ import type {
 } from './dbService'
 import type {makeMetaLinks} from './makeMetaLinks'
 import type {MetaService} from './metaService'
-
-const clerkClient = createClerkClient({
-  secretKey: env.CLERK_SECRET_KEY,
-  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-})
 
 export function makeSyncService({
   metaLinks,
@@ -344,15 +336,6 @@ export function makeSyncService({
     // TODO: Should we introduce customerId onto the pipeline itself?
     const customerId = src.customerId ?? dest.customerId
     const customer = customerId ? {id: customerId} : null
-
-    // TODO: Maybe not the best place for this? Think where clerkClient should live
-    const org =
-      opts.org ??
-      (await clerkClient.organizations
-        .getOrganization({
-          organizationId: src.connectorConfig.orgId,
-        })
-        .then((r) => r.publicMetadata as {webhook_url?: string | null}))
 
     // console.log('[_syncPipeline] pipe sourceState', pipe.id, pipe.sourceState)
 

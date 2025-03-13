@@ -55,7 +55,7 @@ export function ClientRoot({
 }) {
   const pathname = usePathname()
 
-  console.log('[ClientRoot] rendering initialToken?', accessToken != null)
+  // console.log('[ClientRoot] rendering initialToken?', accessToken != null)
 
   const viewer = React.useMemo(
     () => zViewerFromUnverifiedJwtToken.parse(accessToken),

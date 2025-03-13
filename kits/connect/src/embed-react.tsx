@@ -72,6 +72,8 @@ export const OpenIntConnectEmbed = React.memo(
             </svg>
           </div>
           <iframe
+            // IMPORTANT: ensure to NOT change this as its used by
+            // popup.tsx for listening to events from the iframe
             name="openint-connect-frame"
             id="openint-connect-frame"
             {...iframeProps}

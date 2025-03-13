@@ -22,10 +22,7 @@ export function ConnectionCard({
   }
 }) {
   const [isHovered, setIsHovered] = useState(false)
-  console.log({
-    display: conn.connectorConfig.displayName,
-    integration: conn?.integration?.name,
-  })
+
   let connectionName =
     conn.connectorConfig.displayName ??
     conn?.integration?.name ??

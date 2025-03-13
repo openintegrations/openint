@@ -19,6 +19,7 @@ export const eventRouter = trpc.router({
     )
     .output(zPaginatedResult.extend({items: z.array(zRaw.event)}))
     .query(async ({input: {since, customerId, page_size, name}, ctx}) => {
+      console.log('listEvents', since, customerId, page_size, name)
       const events = (await ctx.services.metaService.tables.event.list({
         since,
         customerId,
