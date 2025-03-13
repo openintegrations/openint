@@ -53,6 +53,8 @@
     "vaul": "^0.9.0"
   },
   "devDependencies": {
-    "@svgr/webpack": "^8.1.0"
+    "@svgr/webpack": "^8.1.0",
+    "@types/react": "*",
+    "@types/uuid": "^8.3.3"
   }
 }

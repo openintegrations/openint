@@ -1842,6 +1842,12 @@ importers:
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0
+      '@types/react':
+        specifier: 19.0.10
+        version: 19.0.10
+      '@types/uuid':
+        specifier: ^8.3.3
+        version: 8.3.4
 
   kits/sdk:
     dependencies:
@@ -8659,6 +8665,9 @@ packages:
 
   '@types/urijs@1.19.25':
     resolution: {integrity: sha512-XOfUup9r3Y06nFAZh3WvO0rBU4OtlfPB/vgxpjg+NRdGU6CN6djdc6OEiH+PcqHCY6eFLo9Ista73uarf4gnBg==}
+
+  '@types/uuid@8.3.4':
+    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
 
   '@types/uuid@9.0.8':
     resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
@@ -24079,6 +24088,8 @@ snapshots:
   '@types/unist@3.0.3': {}
 
   '@types/urijs@1.19.25': {}
+
+  '@types/uuid@8.3.4': {}
 
   '@types/uuid@9.0.8': {}
 
