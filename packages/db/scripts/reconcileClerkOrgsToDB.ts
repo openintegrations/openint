@@ -1,7 +1,6 @@
 import {createClerkClient, Organization} from '@clerk/backend'
 import {eq} from 'drizzle-orm'
 import type {InferInsertModel, InferSelectModel} from 'drizzle-orm'
-import {makeUlid} from '@openint/util'
 import {schema} from '..'
 import {initDbNeon} from '../db.neon'
 
