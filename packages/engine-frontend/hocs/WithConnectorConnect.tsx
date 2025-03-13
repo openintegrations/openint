@@ -173,20 +173,20 @@ export const WithConnectorConnect = ({
       const connInput = ccfg.connector.hasPreConnect
         ? (await preConnect.refetch()).data
         : {}
-      console.log(
-        `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id} connInput`,
-        connInput,
-      )
+      // console.log(
+      //   `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id} connInput`,
+      //   connInput,
+      // )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const connOutput = connectFn
         ? await connectFn?.(connInput, {connectorConfigId: ccfg.id})
         : connInput
-      console.log(
-        `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id}
-        connOutput`,
-        connOutput,
-      )
+      // console.log(
+      //   `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id}
+      //   connOutput`,
+      //   connOutput,
+      // )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const postConnOutput = ccfg.connector.hasPostConnect
@@ -201,7 +201,7 @@ export const WithConnectorConnect = ({
             },
           ])
         : connOutput
-      console.log(`[OpenIntConnect] ${ccfg.id} postConnOutput`, postConnOutput)
+      // console.log(`[OpenIntConnect] ${ccfg.id} postConnOutput`, postConnOutput)
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return postConnOutput
@@ -221,8 +221,11 @@ export const WithConnectorConnect = ({
         if (err === CANCELLATION_TOKEN) {
           return
         }
-        console.log(ccfg.connector.displayName + ' connection error:', err)
-        toast.error(`Failed to connect to ${ccfg.connector.displayName}`)
+        toast({
+          title: `Failed to connect to ${ccfg.connector.displayName}`,
+          // description: `${err}`,
+          variant: 'destructive',
+        })
         onEvent?.({type: 'error'})
       },
     },
@@ -351,8 +354,12 @@ export const WithConnectorConnect = ({
               }
               formData={{}}
               loading={connect.isLoading}
+<<<<<<< HEAD
               onSubmit={({formData}: {formData: any}) => {
                 console.log('connection form submitted', formData)
+=======
+              onSubmit={({formData}) => {
+>>>>>>> 09b4f276 (removing / commenting connect logs)
                 connect.mutate({connectorConfigId: ccfg.id, settings: formData})
               }}
               hideSubmitButton

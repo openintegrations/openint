@@ -159,7 +159,7 @@ export function ConnectorConfigForm({
           // formData should be non-null at this point, we should fix the typing
           loading={upsertConnectorConfig.isLoading}
           onSubmit={({formData}) => {
-            console.log('formData submitted', formData)
+            // console.log('formData submitted', formData)
             upsertConnectorConfig.mutate({
               ...formData,
               ...(ccfg ? {id: ccfg.id} : {connectorName}),

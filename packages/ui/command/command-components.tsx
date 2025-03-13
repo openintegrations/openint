@@ -105,7 +105,6 @@ function CommandItemContainer({
     <CommandItem
       value={R.compact([cmd.title, cmd.subtitle, cmd.shortcut]).join(' ')}
       onSelect={(currentValue) => {
-        console.log('command selected', currentValue)
         void cmd.execute?.({ctx, params: params ?? {}})
         onSelect?.(currentValue)
       }}>
