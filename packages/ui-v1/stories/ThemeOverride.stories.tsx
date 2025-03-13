@@ -22,13 +22,29 @@ const ThemeOverrideDemo: FC<ThemeOverrideProps> = ({
   themeVariables = {},
   // eslint-disable-next-line arrow-body-style
 }) => {
+  // Parse theme variables from URL params
+  const urlParams = new URLSearchParams(window.location.search)
+  const urlThemeVariables: Record<string, string> = {}
+
+  // Extract any theme variables from URL params
+  urlParams.forEach((value, key) => {
+    if (key.startsWith('--')) {
+      urlThemeVariables[key] = value
+    }
+  })
+
+  // Merge explicit theme variables with URL params, giving URL params precedence
+  const mergedThemeVariables = {
+    ...themeVariables,
+    ...urlThemeVariables,
+  }
   return (
     <div className={cn('space-y-8 p-8', className)}>
       <style
         dangerouslySetInnerHTML={{
           __html: `
           :root {
-            ${Object.entries(themeVariables)
+            ${Object.entries(mergedThemeVariables)
               .map(([key, value]) => `${key}: ${value};`)
               .join('\n')}
           }

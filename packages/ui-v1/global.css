@@ -37,6 +37,18 @@ having a global.css file in apps/web and import this file instead.
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+
+TODO: Introduce a way for users to define a simplied set of variables
+that will then be used to generate the full set of variables.
+
+:simplied {
+  --primary: oklch(0.205 0 0);
+  --accent: oklch(0.97 0 0);
+  --background: oklch(1 0 0);
+}
+*/
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
