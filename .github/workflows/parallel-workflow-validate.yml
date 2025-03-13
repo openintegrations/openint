@@ -169,6 +169,10 @@ jobs:
       # Consider using official github action https://www.chromatic.com/docs/github-actions/
       - name: Publish storybook to chromatic
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui-v1 chromatic --only-changed --exit-zero-on-changes
+        env:
+          CHROMATIC_SHA: ${{ github.sha }}
+          CHROMATIC_BRANCH: ${{ github.ref }}
+          CHROMATIC_SLUG: ${{ github.repository }}
 
   # slack-notification:
   #   runs-on: ubuntu-latest
