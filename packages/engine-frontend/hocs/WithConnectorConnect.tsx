@@ -221,11 +221,7 @@ export const WithConnectorConnect = ({
         if (err === CANCELLATION_TOKEN) {
           return
         }
-        toast({
-          title: `Failed to connect to ${ccfg.connector.displayName}`,
-          // description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to connect to ${ccfg.connector.displayName}`)
         onEvent?.({type: 'error'})
       },
     },
