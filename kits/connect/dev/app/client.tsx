@@ -26,6 +26,7 @@ export function OpenIntConnectClient({
     }
   }, []) // Empty dependency array ensures this runs only once on mount
 
+
   return (
     <div className="overflow-hidden rounded-lg border">
       <OpenIntConnectEmbed
