@@ -34,6 +34,8 @@ const config = {
     // Will only work in (v1) directory
     // Generally speaking all stories should be in ui-v1
     '../../../apps/web/app/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../ui/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../ui-v1/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
     getAbsolutePath('@storybook/addon-essentials'),

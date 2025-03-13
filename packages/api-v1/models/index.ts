@@ -91,8 +91,8 @@ export const core = {
       name: z.string(),
       display_name: z.string().optional(),
       logo_url: z.string().optional(),
-      stage: z.string().optional(),
-      platforms: z.array(z.string()).optional(),
+      stage: z.enum(['alpha', 'beta', 'ga']).optional(),
+      platforms: z.array(z.enum(['web', 'mobile', 'desktop'])).optional(),
     })
     .openapi({ref: 'core.connector', title: 'Connector'}),
   integration: z
