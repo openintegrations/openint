@@ -59,7 +59,59 @@ export default pluginTs.config(
     files: ['**/*.js', '**/*.ts', '**/*.tsx', '**/*.cts', '**.*.mts'],
   },
   pluginJs.configs.recommended,
-  pluginTs.configs.recommended,
+  {
+    name: 'typescript',
+    // @ts-expect-error something wrong...
+    plugins: {pluginTs: pluginTs},
+    extends: [pluginTs.configs.strict],
+
+    languageOptions: {
+      ecmaVersion: 5,
+      sourceType: 'script',
+      parserOptions: {
+        project: 'tsconfig.json',
+      },
+    },
+
+    rules: {
+      '@typescript-eslint/array-type': ['warn', {default: 'array-simple'}],
+      '@typescript-eslint/await-thenable': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/ban-tslint-comment': 'off',
+      '@typescript-eslint/ban-types': 'off',
+      '@typescript-eslint/consistent-type-assertions': 'warn',
+
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        {disallowTypeAnnotations: false},
+      ],
+
+      '@typescript-eslint/no-empty-function': 'off',
+      '@typescript-eslint/no-empty-interface': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-extra-semi': 'off',
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-for-in-array': 'warn',
+      'no-implied-eval': 'off',
+      '@typescript-eslint/no-implied-eval': 'warn',
+      '@typescript-eslint/no-invalid-void-type': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
+      '@typescript-eslint/no-unsafe-call': 'warn',
+      '@typescript-eslint/no-unsafe-member-access': 'warn',
+      '@typescript-eslint/no-unsafe-return': 'warn',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      'require-await': 'off',
+      '@typescript-eslint/require-await': 'warn',
+      '@typescript-eslint/restrict-plus-operands': 'warn',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/unbound-method': 'warn',
+    },
+  },
 )
 
 export const prevConfig = [
@@ -172,53 +224,6 @@ export const prevConfig = [
   })),
   {
     files: ['**/*.{ts,tsx}'],
-
-    languageOptions: {
-      ecmaVersion: 5,
-      sourceType: 'script',
-      parserOptions: {
-        project: 'tsconfig.json',
-      },
-    },
-
-    rules: {
-      '@typescript-eslint/array-type': ['warn', {default: 'array-simple'}],
-      '@typescript-eslint/await-thenable': 'warn',
-      '@typescript-eslint/ban-ts-comment': 'off',
-      '@typescript-eslint/ban-tslint-comment': 'off',
-      '@typescript-eslint/ban-types': 'off',
-      '@typescript-eslint/consistent-type-assertions': 'warn',
-
-      '@typescript-eslint/consistent-type-imports': [
-        'warn',
-        {disallowTypeAnnotations: false},
-      ],
-
-      '@typescript-eslint/no-empty-function': 'off',
-      '@typescript-eslint/no-empty-interface': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-extra-semi': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-for-in-array': 'warn',
-      'no-implied-eval': 'off',
-      '@typescript-eslint/no-implied-eval': 'warn',
-      '@typescript-eslint/no-invalid-void-type': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'warn',
-      '@typescript-eslint/no-unnecessary-condition': 'off',
-      '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
-      '@typescript-eslint/no-unsafe-assignment': 'warn',
-      '@typescript-eslint/no-unsafe-call': 'warn',
-      '@typescript-eslint/no-unsafe-member-access': 'warn',
-      '@typescript-eslint/no-unsafe-return': 'warn',
-      '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-var-requires': 'off',
-      'require-await': 'off',
-      '@typescript-eslint/require-await': 'warn',
-      '@typescript-eslint/restrict-plus-operands': 'warn',
-      '@typescript-eslint/restrict-template-expressions': 'off',
-      '@typescript-eslint/unbound-method': 'warn',
-    },
   },
   ...compat
     .extends('plugin:jest/recommended', 'plugin:jest-formatting/recommended')
