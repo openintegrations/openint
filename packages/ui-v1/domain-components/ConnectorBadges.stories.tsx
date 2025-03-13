@@ -18,6 +18,13 @@ type Story = StoryObj<typeof meta>
 
 // Multiple connectors in a list
 export const Default: Story = {
+  args: {
+    connector: {
+      name: 'default',
+      stage: 'ga' as 'ga' | 'beta' | 'alpha',
+      platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
+    },
+  },
   render: () => (
     <div className="flex flex-col gap-4">
       {Object.values(FIXTURES.connectors).map((connector, index) => (
