@@ -19,6 +19,8 @@ export const greenhouseSchema = {
   ]),
   // need better typing...!
   sourceState: z.unknown(),
+  // TODO: @rodri77 - adding config empty object for now, might not be needed
+  connectorConfig: z.object({}),
 } satisfies ConnectorSchemas
 
 export const greenhouseHelpers = connHelpers(greenhouseSchema)
