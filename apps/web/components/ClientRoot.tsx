@@ -21,7 +21,7 @@ export function ClientRootWithClerk(props: {
   initialAccessToken?: string | null
 }) {
   const auth = useAuth()
-  const status: AsyncStatus = auth.isLoaded ? 'loading' : 'success'
+  const status: AsyncStatus = auth.isLoaded ? 'success' : 'loading'
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
   ;(globalThis as any).auth = auth
@@ -54,8 +54,6 @@ export function ClientRoot({
   authStatus: AsyncStatus
 }) {
   const pathname = usePathname()
-
-  console.log('[ClientRoot] rendering initialToken?', accessToken != null)
 
   const viewer = React.useMemo(
     () => zViewerFromUnverifiedJwtToken.parse(accessToken),
