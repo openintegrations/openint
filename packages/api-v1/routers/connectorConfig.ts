@@ -15,7 +15,7 @@ import {
 import {zConnectorName} from './utils/types'
 
 export const zExpandOptions = z
-  .enum(['connector', 'enabled_integrations'])
+  .enum(['connector', 'enabled_integrations', 'connections'])
   .describe(
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
   )
@@ -97,11 +97,27 @@ export function expandIntegrations(
     : undefined
 }
 
+export function expandConnections(
+  connectorConfig: z.infer<typeof core.connector_config>,
+): Record<'connections', number> {
+  return {connections: 0}
+}
+
+const expandLookup: Record<
+  z.infer<typeof zExpandOptions>,
+  (ccfg: z.infer<typeof core.connector_config>) => any
+> = {
+  connector: expandConnector,
+  enabled_integrations: expandIntegrations,
+  connections: expandConnections,
+}
+
 const connectorConfigWithRelations = z.intersection(
   core.connector_config,
   z.object({
     connector: core.connector.optional(),
     integrations: z.record(core.integration).optional(),
+    connections: z.number().optional(),
   }),
 )
 
@@ -126,7 +142,7 @@ export const connectorConfigRouter = router({
                 items.every((item) => zExpandOptions.safeParse(item).success),
               {
                 message:
-                  'Invalid expand option. Valid options are: connector, enabled_integrations',
+                  'Invalid expand option. Valid options are: connector, enabled_integrations, connections',
               },
             )
             .optional(),
@@ -165,7 +181,9 @@ export const connectorConfigRouter = router({
         query,
         'connector_config',
       )
-      const expandOptions = input?.expand || []
+      const expandOptions = (input?.expand || []) as Array<
+        z.infer<typeof zExpandOptions>
+      >
 
       // Process items with proper typing
       const processedItems: z.infer<typeof connectorConfigWithRelations>[] =
@@ -179,7 +197,18 @@ export const connectorConfigRouter = router({
               result.config = null
             }
 
-            if (expandOptions.includes('connector')) {
+            expandOptions.forEach((expandOption) => {
+              const expander = expandLookup[expandOption]
+              if (expander) {
+                if (expandOption !== 'enabled_integrations') {
+                  result[expandOption] = expander(ccfg)
+                } else {
+                  result.integrations = expander(ccfg)
+                }
+              }
+            })
+
+            /*             if (expandOptions.includes('connector')) {
               const connector = expandConnector(ccfg)
               if (connector) {
                 result.connector = connector
@@ -192,7 +221,7 @@ export const connectorConfigRouter = router({
               if (filteredIntegrations && result.config) {
                 result.integrations = filteredIntegrations
               }
-            }
+            } */
 
             return result
           }),
