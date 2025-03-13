@@ -38,7 +38,12 @@ async function getOasSpec() {
 async function main() {
   const oas = await getOasSpec()
 
-  const pathsToFilterOut = ['/health', '/viewer', '/event']
+  const pathsToFilterOut = [
+    '/health',
+    '/viewer',
+    '/event',
+    '/organization/onboarding',
+  ]
 
   const filteredPaths = Object.keys(oas.paths)
     .filter((path) => !pathsToFilterOut.includes(path))

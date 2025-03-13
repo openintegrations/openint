@@ -1,17 +1,16 @@
 import '@openint/ui-v1/global.css'
 import {ClerkProvider} from '@clerk/nextjs'
 // import {TRPCProvider} from '@openint/engine-frontend'
-import React from 'react'
+import React, {Suspense} from 'react'
+import {Spinner} from '@openint/open-file-picker/src/components/Spinner'
 import {ClientRootWithClerk} from '@/components/ClientRoot'
 
 export default function AdminLayout(props: {children: React.ReactNode}) {
-  console.log('[AdminLayout] rendering')
-  // We only get the viewer from cookies to be consistent with how it works
-  // createBrowserSupabaseClient which only uses cookie and does not use header etc.
-
   return (
-    <ClerkProvider>
-      <ClientRootWithClerk>{props.children}</ClientRootWithClerk>
-    </ClerkProvider>
+    <Suspense fallback={<Spinner />}>
+      <ClerkProvider dynamic>
+        <ClientRootWithClerk>{props.children}</ClientRootWithClerk>
+      </ClerkProvider>
+    </Suspense>
   )
 }

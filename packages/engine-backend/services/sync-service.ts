@@ -1,4 +1,3 @@
-// Amadeo Q: how do I make the atsLink part of the openint/cdk? is there some sort of release process? A: We don't. cdk stands for connector development kit and atsLink does not belong
 import type {Link as FetchLink} from '@opensdks/runtime'
 import type {
   AnyEntityPayload,

@@ -63,6 +63,8 @@ export const persistEventsMiddleware = new InngestMiddleware({
                 ...infoByConnId[getConnIdForEvent(payload) ?? ''],
                 ...(payload.user as {} | undefined),
               },
+              // customer_id: payload.user?.cus_id,
+              // user_id: payload.user?.id,
             }))
             pendingEvents = events
             return {payloads: events}
