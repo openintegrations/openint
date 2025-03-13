@@ -18,6 +18,8 @@ export function EventPoller({accessToken}: {accessToken?: string | null}) {
   // Listen for messages from parent window or current window
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      // console.log('[EventPoller] handleMessage', event.data)
+
       // Only accept messages from our parent or ourselves
       if (event.source !== window.parent && event.source !== window) return
 

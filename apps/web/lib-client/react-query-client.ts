@@ -31,7 +31,7 @@ export function createQueryClient() {
     // also we should clear any persisted data if userId ever changes
     // Should check against userId and version
     void persistQueryClient({queryClient, persister, buster: undefined})
-    console.log('Persist query client...')
+    // console.log('Persist query client...')
   }
   return queryClient
 }

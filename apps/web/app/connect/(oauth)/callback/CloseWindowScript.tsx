@@ -5,7 +5,7 @@ import {FullScreenCenter} from '@/components/FullScreenCenter'
 
 export function CloseWindowScript() {
   useEffect(() => {
-    console.log('New OAuthCallback, extracting params and sending to parent')
+    // console.log('New OAuthCallback, extracting params and sending to parent')
 
     // TODO: @pellicceama  either redirect if there is a redirect url
     // or close window. need to sigle-window use cases for connect
@@ -25,7 +25,7 @@ export function CloseWindowScript() {
       // Send message to parent window with all extracted params
       if (window.opener) {
         window.opener.postMessage(paramsObject, '*')
-        console.log('Sent auth data to parent window', paramsObject)
+        // console.log('Sent auth data to parent window', paramsObject)
       } else {
         console.error('No opener window found')
       }
