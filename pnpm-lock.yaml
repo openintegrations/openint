@@ -43,6 +43,12 @@ importers:
         specifier: workspace:*
         version: link:apps/cli
     devDependencies:
+      '@eslint/eslintrc':
+        specifier: ^3.3.0
+        version: 3.3.0
+      '@eslint/js':
+        specifier: ^9.22.0
+        version: 9.22.0
       '@ianvs/prettier-plugin-sort-imports':
         specifier: 4.1.1
         version: 4.1.1(prettier@3.5.3)
@@ -72,7 +78,7 @@ importers:
         version: 8.26.1(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2)
       bun:
         specifier: latest
-        version: 1.2.4
+        version: 1.2.5
       esbuild:
         specifier: 0.17.5
         version: 0.17.5
@@ -642,7 +648,7 @@ importers:
         version: 9.1.2
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.5)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       node-loader:
         specifier: 2.0.0
         version: 2.0.0(webpack@5.74.0(esbuild@0.17.5))
@@ -1323,7 +1329,7 @@ importers:
         version: 0.30.5
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.5)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1610,7 +1616,7 @@ importers:
         version: 0.0.14(@opensdks/runtime@0.0.19)
       mintlify:
         specifier: latest
-        version: 4.0.424(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
+        version: 4.0.431(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
 
   kits/cdk:
     dependencies:
@@ -2062,7 +2068,7 @@ importers:
         version: 0.30.5
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.5)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
@@ -2083,7 +2089,7 @@ importers:
         version: link:../env
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.5)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
@@ -2117,10 +2123,10 @@ importers:
         version: 8.11.11
       bun:
         specifier: latest
-        version: 1.2.4
+        version: 1.2.5
       bun-types:
         specifier: latest
-        version: 1.2.4
+        version: 1.2.5
       drizzle-kit:
         specifier: ^0.30.4
         version: 0.30.5
@@ -2165,7 +2171,7 @@ importers:
         version: 10.40.0
       drizzle-orm:
         specifier: ^0.39.1
-        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.4)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
+        version: 0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.5)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5)
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(express@4.21.1)(h3@1.8.2)(next@15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.8.2)
@@ -4932,8 +4938,8 @@ packages:
   '@mergeapi/react-merge-link@2.0.6':
     resolution: {integrity: sha512-KQJoE72YTd4pRPyVrPslBcfAQyXFbClZ1Ay5LFhAeoJTyq6QFPH49XnR9EDl31WGLTZghnQWFY3Vcz+e3UDzGw==}
 
-  '@mintlify/cli@4.0.424':
-    resolution: {integrity: sha512-97FCOwmY0YuqBNKcZR5hQ9NRiYq509jqZWDQ8QIr0wpaFhOYGvN5aJW7xZoBYSZoGdCberllSU4BARO/zODUpQ==}
+  '@mintlify/cli@4.0.430':
+    resolution: {integrity: sha512-g6wQCM/jpdbJtjGvBIYFYX67uAO3hUrZukL0oWNThnwTj6T/M+b9va0gw1CHJQDj3LUNMdwQ+ZmJEAw3uqnCHg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -4945,11 +4951,11 @@ packages:
   '@mintlify/common@1.0.15':
     resolution: {integrity: sha512-9w5Km3UqdZXxzSgntab9vzuDW1vqWatk1xY2soc5e0fxVl4075JshSKBejm66SW8KABGyT00CLvQ7toNAWjO2Q==}
 
-  '@mintlify/common@1.0.303':
-    resolution: {integrity: sha512-5WVF9NPKpgeIPdZ5BS+O5Ay2v3nce4Vzi2BMb8AOhafrNv9T8GZVIgOCCtNOSN8QNXVe72BUXKtOCY2iqs2tGg==}
+  '@mintlify/common@1.0.305':
+    resolution: {integrity: sha512-jq5F8sCjzKSfjgCr/MHiX6eDcuoc6p2rVk7gaDc//x+NryDxkvU7Q2pFUQACjjJbT5h5QM4p98v03LPZmwpkuw==}
 
-  '@mintlify/link-rot@3.0.401':
-    resolution: {integrity: sha512-Ma9/Ssu5Q0ujXZ7VKA2NtFxTZYaXDF58mcmXLT9VqHrMRt36FfNPhB650BJp+L2vvx5qnb35XB44KijmjR21lg==}
+  '@mintlify/link-rot@3.0.406':
+    resolution: {integrity: sha512-ubZfuIJbrJAQJwyVyRMW+kA4yhzNiofuzi3Kj83xB9LPlyBy/yEVzK57HSjCOlCoG9mYNb87JOL3eSbDLiul/w==}
     engines: {node: '>=18.0.0'}
 
   '@mintlify/link-rot@3.0.81':
@@ -4977,8 +4983,8 @@ packages:
     resolution: {integrity: sha512-3ecbkzPbsnkKVZJypVL0H5pCTR7a4iLv4cP7zbffzAwy+vpH70JmPxNVpPPP62yLrdZlfNcMxu5xKeT7fllgMg==}
     engines: {node: '>=18'}
 
-  '@mintlify/prebuild@1.0.398':
-    resolution: {integrity: sha512-aH8YCcFvF2uK83fN8qq8tJ1z6Lx22UCCWwNKFHNYVTTKUmIbQ2y6SD5i3lFlIJC6AeTu+zjK5buu5pa0RQejTQ==}
+  '@mintlify/prebuild@1.0.403':
+    resolution: {integrity: sha512-71dSdwdlhGDrvTUYsF3JWOk9vEj6jta+iISvc8/jxizqdtrnHExvicUrUfaQFne5E+LXRUGsfbwjyII2HOzJVw==}
 
   '@mintlify/prebuild@1.0.81':
     resolution: {integrity: sha512-v6oXLu3JZvgxgDw65O6OGXyH8lHk20Xa+JS52V+1BC8+U2arQ+ZduHft7GOUSo4gT3lLru6u7/HbdNpuz6ySOQ==}
@@ -4991,8 +4997,8 @@ packages:
       openapi-types: 12.x
       unist-util-visit: ^4.1.1
 
-  '@mintlify/previewing@4.0.416':
-    resolution: {integrity: sha512-WRl0gZ3Iw/pRlNANdK5FDys+XSl85Z98jxcCvnvYfu09b+VVUr02kO3l7cH8trPl7TDU1v9GV8GCw3HXlYQ2iQ==}
+  '@mintlify/previewing@4.0.422':
+    resolution: {integrity: sha512-fWnwQufD5VWp1CUb21xJx8DJAQ3a1IBj4qLGKE4arN71KRSOZeSJJ12hA5TfAJhRO3TL+eDB0evjjQCse9azdQ==}
     engines: {node: '>=18.0.0'}
 
   '@mintlify/previewing@4.0.58':
@@ -5006,8 +5012,8 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  '@mintlify/scraping@4.0.149':
-    resolution: {integrity: sha512-g41pJlo2sBqa05E8srRuUY3bNRWn6JxS4LsnMyolqikJVbNPXS+lP4RUiv242vtnhQojMdyBr5HzEOPGaVHgUA==}
+  '@mintlify/scraping@4.0.154':
+    resolution: {integrity: sha512-l0FYL32ZGc4xfhN1FLDno5zljXMvOFsIJJXQ5iEV7Bb5Ql88ZYS2WM3/ol/RoKdAQo7VsD+ZWmxVpDOIFqkhkg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -5528,8 +5534,18 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
+  '@oven/bun-darwin-aarch64@1.2.5':
+    resolution: {integrity: sha512-ggZfdpgUJ/OiWrfcfTgHeSTHcec5HAjkGrZHL9FJ/R60sydRKPYHgAgexdIoJAGfsCVAL+x7y8NSTRIAX8J4Ng==}
+    cpu: [arm64]
+    os: [darwin]
+
   '@oven/bun-darwin-x64-baseline@1.2.4':
     resolution: {integrity: sha512-stsq8vBiYgfGunBGlf2M7ST7Ymyw3WnwrxEeJ04vkKmMEEE2LpX8Rkol6UPRvZawab9s9/scFIRgFi6hu9H4SQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oven/bun-darwin-x64-baseline@1.2.5':
+    resolution: {integrity: sha512-3W1RO3/D6Z1S79J47F/DLzmK+dgkYq5hS1ShOCSBAYTTA2b1ZuymaN8avGzSb9ed5W0QfxtyeAksfEY2xUBOqA==}
     cpu: [x64]
     os: [darwin]
 
@@ -5538,8 +5554,18 @@ packages:
     cpu: [x64]
     os: [darwin]
 
+  '@oven/bun-darwin-x64@1.2.5':
+    resolution: {integrity: sha512-4zqyQLJB33s99KcTxH6yQqH5EYBmF1qofQTtLsToIFbIZN1NqSp/aegYiGmxO5Kj/BuWsy8Wf8MS6vX2O0o2Lw==}
+    cpu: [x64]
+    os: [darwin]
+
   '@oven/bun-linux-aarch64-musl@1.2.4':
     resolution: {integrity: sha512-+lxWF7up9MuB1ZdGxXCH3AH3XmYtdBC6soQ38+yg3+y3iOPrAlSG+wytHEkypN/UU2mGvCuaEED3cMvejrGdDw==}
+    cpu: [aarch64]
+    os: [linux]
+
+  '@oven/bun-linux-aarch64-musl@1.2.5':
+    resolution: {integrity: sha512-URlISBOE2HQi8qdru691OYywJRwChxMfXFbk26tCgdZ01LgGAKsIjAYylefuSsPuA697imDN3Pel3D7rveusmw==}
     cpu: [aarch64]
     os: [linux]
 
@@ -5548,8 +5574,18 @@ packages:
     cpu: [arm64]
     os: [linux]
 
+  '@oven/bun-linux-aarch64@1.2.5':
+    resolution: {integrity: sha512-NQFtAVyQyJhLYrhFVxKdh6cqrDNc60pBnBGLQSO8PU+oyFyiJ3e3gGXjLzMbxd6cJxNIK5FZ0JIq96WljKAhlg==}
+    cpu: [arm64]
+    os: [linux]
+
   '@oven/bun-linux-x64-baseline@1.2.4':
     resolution: {integrity: sha512-3nmDDZJH73MzhBg2sRYioj4CE8wgaz0w24OieMqj4/c44BbNr3X5RewrldsMD2cU6DtVbi52FuD5WpTw3N8nmw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-linux-x64-baseline@1.2.5':
+    resolution: {integrity: sha512-fCm/qp7e3VYlaoRs6NIEsKubPqyxjzLv8/qZkxeLLOlPd7CS8L26UY4KPOSjA+wrhPT+Nxsyvl/EEJq2R/iauA==}
     cpu: [x64]
     os: [linux]
 
@@ -5558,8 +5594,18 @@ packages:
     cpu: [x64]
     os: [linux]
 
+  '@oven/bun-linux-x64-musl-baseline@1.2.5':
+    resolution: {integrity: sha512-H7tuJz7mZvOTPo4yLbIXIxkiDGWSGd2DbwGl4zNol/FURqGsKQVqpomv86yl9KCXsUUOm5FX2i5Ed+ro8N//Cg==}
+    cpu: [x64]
+    os: [linux]
+
   '@oven/bun-linux-x64-musl@1.2.4':
     resolution: {integrity: sha512-cLdMbK7srNoUbYSG3Tp4GYdPAO0+5mgUhdbU053GZs0DLQmQ8h1JQhALp+ZjrUWstmQe7ddcNu7l7EAu6E76XA==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-linux-x64-musl@1.2.5':
+    resolution: {integrity: sha512-DuU2kQnY48g9tNWjFrZqyG+U2emCBwlhOPxbuY/TMVVNSTMAcQbE/bb3s2pZdhZH5ssjc5SH/ZyWU1TePcYB2A==}
     cpu: [x64]
     os: [linux]
 
@@ -5568,13 +5614,28 @@ packages:
     cpu: [x64]
     os: [linux]
 
+  '@oven/bun-linux-x64@1.2.5':
+    resolution: {integrity: sha512-pa3kQ4cXNV0jk5aM8+Hdmxr+b4QoPVgeAIA454SN5l3hMGfNsHjczKpsz0ksInZ8506iMMTCPEBXpyQJcSme+Q==}
+    cpu: [x64]
+    os: [linux]
+
   '@oven/bun-windows-x64-baseline@1.2.4':
     resolution: {integrity: sha512-j/G4bnfsRAiCvpTADda40m29iSGvueIaF9Kc9hBu4jN8dTS9fEXdNNXuf8c30/z7/npxw2dhzsAn8jbc5QvD1A==}
     cpu: [x64]
     os: [win32]
 
+  '@oven/bun-windows-x64-baseline@1.2.5':
+    resolution: {integrity: sha512-j5FxI8FeKfWI6rEXA+1O3ASBMTp5CFcZ7MR+/aCpiBKrDse32wLaZMVGnvqQqs4y0YHUvR8b7eXHHTboezjL1w==}
+    cpu: [x64]
+    os: [win32]
+
   '@oven/bun-windows-x64@1.2.4':
     resolution: {integrity: sha512-4YRJd4pdaTWEM+uawYmchOeNv874RGAFpIZQubWnN4SBf6HfcDm0OMMZcm0f0I70Wd5gbPg1+rvCRtDZWVmZog==}
+    cpu: [x64]
+    os: [win32]
+
+  '@oven/bun-windows-x64@1.2.5':
+    resolution: {integrity: sha512-oNDdPmzsCyvCATiYgkKWgxOeEx2F7m/i2MGUba+YJAeVXJsJg9iPJrLVBtETvKoSAgkXViwoUEw2U25jRYsp4g==}
     cpu: [x64]
     os: [win32]
 
@@ -9459,11 +9520,21 @@ packages:
   bun-types@1.2.4:
     resolution: {integrity: sha512-nDPymR207ZZEoWD4AavvEaa/KZe/qlrbMSchqpQwovPZCKc7pwMoENjEtHgMKaAjJhy+x6vfqSBA1QU3bJgs0Q==}
 
+  bun-types@1.2.5:
+    resolution: {integrity: sha512-3oO6LVGGRRKI4kHINx5PIdIgnLRb7l/SprhzqXapmoYkFl5m4j6EvALvbDVuuBFaamB46Ap6HCUxIXNLCGy+tg==}
+
   bun-utilities@0.2.1:
     resolution: {integrity: sha512-2e4rMaA50zfUqvc3+Cu8I88nCzvF6WsOnxz4iZSSSQt/pBGgpiwgFCx2y5/s69C9iaCVfyrM6kHxYOgvVx1e8Q==}
 
   bun@1.2.4:
     resolution: {integrity: sha512-ZY0EZ/UKqheaLeAtMsfJA6jWoWvV9HAtfFaOJSmS3LrNpFKs1Sg5fZLSsczN1h3a+Dtheo4O3p3ZYWrf40kRGw==}
+    cpu: [arm64, x64, aarch64]
+    os: [darwin, linux, win32]
+    hasBin: true
+
+  bun@1.2.5:
+    resolution: {integrity: sha512-fbQLt+DPiGUrPKdmsHRRT7cQAlfjdxPVFvLZrsUPmKiTdv+pU50ypdx9yRJluknSbyaZchFVV7Lx2KXikXKX2Q==}
+    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -13587,8 +13658,8 @@ packages:
     resolution: {integrity: sha512-bAxsR8BVfj60DWXHE3u30oHzfl4G7khkSuPW+qvpd7jFRHm7dLxOjUk1EHACJ/hxLY8phGJ0YhYHZo7jil7Qdg==}
     engines: {node: '>= 8'}
 
-  mintlify@4.0.424:
-    resolution: {integrity: sha512-QwZZYvFQxs3olPP7wf0GlRVIMXUJhr4zY0EEWn4t0BbFCaArz2lkEIfsNt1DIKzSFamucGg1JgAElKhw0CdN3w==}
+  mintlify@4.0.431:
+    resolution: {integrity: sha512-IQObA+qejymnHuryQrmPTdtAoxWr7ltlU9EM28cRJrL38U49OW+tu5AUUI+y7rDamj4Vf9m1LlfNcwsb8NAu0g==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -19618,13 +19689,13 @@ snapshots:
       - react
       - react-dom
 
-  '@mintlify/cli@4.0.424(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
+  '@mintlify/cli@4.0.430(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
     dependencies:
-      '@mintlify/common': 1.0.303(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@mintlify/link-rot': 3.0.401(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@mintlify/common': 1.0.305(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@mintlify/link-rot': 3.0.406(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
       '@mintlify/models': 0.0.177
-      '@mintlify/prebuild': 1.0.398(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
-      '@mintlify/previewing': 4.0.416(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@mintlify/prebuild': 1.0.403(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@mintlify/previewing': 4.0.422(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
       '@mintlify/validation': 0.1.320
       chalk: 5.3.0
       detect-port: 1.5.1
@@ -19681,7 +19752,7 @@ snapshots:
       - openapi-types
       - supports-color
 
-  '@mintlify/common@1.0.303(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@mintlify/common@1.0.305(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@asyncapi/parser': 3.4.0
       '@mintlify/mdx': 1.0.1(@types/react@19.0.10)(acorn@8.14.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -19725,10 +19796,10 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@mintlify/link-rot@3.0.401(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
+  '@mintlify/link-rot@3.0.406(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
     dependencies:
-      '@mintlify/common': 1.0.303(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@mintlify/prebuild': 1.0.398(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@mintlify/common': 1.0.305(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@mintlify/prebuild': 1.0.403(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
       fs-extra: 11.3.0
       is-absolute-url: 4.0.1
       unist-util-visit: 4.1.2
@@ -19802,11 +19873,11 @@ snapshots:
       leven: 4.0.0
       yaml: 2.7.0
 
-  '@mintlify/prebuild@1.0.398(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
+  '@mintlify/prebuild@1.0.403(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
     dependencies:
-      '@mintlify/common': 1.0.303(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@mintlify/common': 1.0.305(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@mintlify/openapi-parser': 0.0.7
-      '@mintlify/scraping': 4.0.149(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@mintlify/scraping': 4.0.154(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
       '@mintlify/validation': 0.1.320
       axios: 0.21.1
       chalk: 5.3.0
@@ -19844,10 +19915,10 @@ snapshots:
       - axios
       - supports-color
 
-  '@mintlify/previewing@4.0.416(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
+  '@mintlify/previewing@4.0.422(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
     dependencies:
-      '@mintlify/common': 1.0.303(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@mintlify/prebuild': 1.0.398(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@mintlify/common': 1.0.305(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@mintlify/prebuild': 1.0.403(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
       '@mintlify/validation': 0.1.320
       better-opn: 3.0.2
       chalk: 5.3.0
@@ -19925,9 +19996,9 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@mintlify/scraping@4.0.149(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
+  '@mintlify/scraping@4.0.154(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)':
     dependencies:
-      '@mintlify/common': 1.0.303(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@mintlify/common': 1.0.305(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@mintlify/openapi-parser': 0.0.7
       fs-extra: 11.3.0
       hast-util-to-mdast: 10.1.2
@@ -20540,34 +20611,67 @@ snapshots:
   '@oven/bun-darwin-aarch64@1.2.4':
     optional: true
 
+  '@oven/bun-darwin-aarch64@1.2.5':
+    optional: true
+
   '@oven/bun-darwin-x64-baseline@1.2.4':
+    optional: true
+
+  '@oven/bun-darwin-x64-baseline@1.2.5':
     optional: true
 
   '@oven/bun-darwin-x64@1.2.4':
     optional: true
 
+  '@oven/bun-darwin-x64@1.2.5':
+    optional: true
+
   '@oven/bun-linux-aarch64-musl@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-aarch64-musl@1.2.5':
     optional: true
 
   '@oven/bun-linux-aarch64@1.2.4':
     optional: true
 
+  '@oven/bun-linux-aarch64@1.2.5':
+    optional: true
+
   '@oven/bun-linux-x64-baseline@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-x64-baseline@1.2.5':
     optional: true
 
   '@oven/bun-linux-x64-musl-baseline@1.2.4':
     optional: true
 
+  '@oven/bun-linux-x64-musl-baseline@1.2.5':
+    optional: true
+
   '@oven/bun-linux-x64-musl@1.2.4':
+    optional: true
+
+  '@oven/bun-linux-x64-musl@1.2.5':
     optional: true
 
   '@oven/bun-linux-x64@1.2.4':
     optional: true
 
+  '@oven/bun-linux-x64@1.2.5':
+    optional: true
+
   '@oven/bun-windows-x64-baseline@1.2.4':
     optional: true
 
+  '@oven/bun-windows-x64-baseline@1.2.5':
+    optional: true
+
   '@oven/bun-windows-x64@1.2.4':
+    optional: true
+
+  '@oven/bun-windows-x64@1.2.5':
     optional: true
 
   '@panva/asn1.js@1.0.0': {}
@@ -20707,7 +20811,7 @@ snapshots:
       extract-zip: 2.0.1
       progress: 2.0.3
       proxy-agent: 6.5.0
-      semver: 7.6.3
+      semver: 7.7.1
       tar-fs: 3.0.8
       unbzip2-stream: 1.4.3
       yargs: 17.7.2
@@ -25104,6 +25208,11 @@ snapshots:
       '@types/node': 20.17.16
       '@types/ws': 8.5.14
 
+  bun-types@1.2.5:
+    dependencies:
+      '@types/node': 20.17.16
+      '@types/ws': 8.5.14
+
   bun-utilities@0.2.1: {}
 
   bun@1.2.4:
@@ -25119,6 +25228,20 @@ snapshots:
       '@oven/bun-linux-x64-musl-baseline': 1.2.4
       '@oven/bun-windows-x64': 1.2.4
       '@oven/bun-windows-x64-baseline': 1.2.4
+
+  bun@1.2.5:
+    optionalDependencies:
+      '@oven/bun-darwin-aarch64': 1.2.5
+      '@oven/bun-darwin-x64': 1.2.5
+      '@oven/bun-darwin-x64-baseline': 1.2.5
+      '@oven/bun-linux-aarch64': 1.2.5
+      '@oven/bun-linux-aarch64-musl': 1.2.5
+      '@oven/bun-linux-x64': 1.2.5
+      '@oven/bun-linux-x64-baseline': 1.2.5
+      '@oven/bun-linux-x64-musl': 1.2.5
+      '@oven/bun-linux-x64-musl-baseline': 1.2.5
+      '@oven/bun-windows-x64': 1.2.5
+      '@oven/bun-windows-x64-baseline': 1.2.5
 
   bunx@0.1.0:
     dependencies:
@@ -26087,6 +26210,16 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.11
       bun-types: 1.2.4
+      pg: 8.13.3(pg-native@3.0.1)
+      postgres: 3.4.5
+
+  drizzle-orm@0.39.3(@electric-sql/pglite@0.2.17)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(bun-types@1.2.5)(pg@8.13.3(pg-native@3.0.1))(postgres@3.4.5):
+    optionalDependencies:
+      '@electric-sql/pglite': 0.2.17
+      '@neondatabase/serverless': 0.10.4
+      '@opentelemetry/api': 1.9.0
+      '@types/pg': 8.11.11
+      bun-types: 1.2.5
       pg: 8.13.3(pg-native@3.0.1)
       postgres: 3.4.5
 
@@ -30649,9 +30782,9 @@ snapshots:
       minipass: 3.3.6
       yallist: 4.0.0
 
-  mintlify@4.0.424(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10):
+  mintlify@4.0.431(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10):
     dependencies:
-      '@mintlify/cli': 4.0.424(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@mintlify/cli': 4.0.430(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - '@types/node'
       - '@types/react'
