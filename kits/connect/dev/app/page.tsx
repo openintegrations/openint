@@ -1,7 +1,6 @@
 import {OpenIntConnectClient} from './client'
 
-const BASE_URL = 'https://api.openint.dev/v0'
-
+const BASE_URL = 'https://local.openint.dev/api/v0'
 async function getConnectToken() {
   // Replace SDK initialization and API calls with fetch
   const headers = {
@@ -12,14 +11,11 @@ async function getConnectToken() {
 
   console.log('headers', headers)
 
-  const tokenResponse = await fetch(
-    `https://api.openint.dev/v0/connect/token`,
-    {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({customerId: 'END_USER_ID'}),
-    },
-  )
+  const tokenResponse = await fetch(`${BASE_URL}/connect/token`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({customerId: 'END_USER_ID'}),
+  })
     .then((res) => res.json())
     .catch((error: Error) => {
       console.error('Error fetching token:', error)
@@ -35,7 +31,12 @@ export default async function Home() {
   return (
     <main className="p-8">
       <h1 className="mb-4 text-2xl font-bold">OpenInt Connect Demo</h1>
-      <OpenIntConnectClient token={token} baseUrl={'https://app.openint.dev'} />
+      <OpenIntConnectClient
+        baseUrl={BASE_URL.split('/api/v0')[0] + ''}
+        params={{
+          token,
+        }}
+      />
     </main>
   )
 }
