@@ -17,6 +17,9 @@ interface ThemeOverrideProps {
   }
 }
 
+// URL variables are passed in the URL as ?--primary=hsl(330, 81%, 60%)
+// and will override the default theme variables.
+
 const ThemeOverrideDemo: FC<ThemeOverrideProps> = ({
   className,
   themeVariables = {},
