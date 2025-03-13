@@ -1,6 +1,6 @@
 import {OpenIntConnectClient} from './client'
 
-const BASE_URL = 'https://local.openint.dev/api/v0'
+const BASE_URL = 'https://app.openint.dev/api/v0'
 async function getConnectToken() {
   // Replace SDK initialization and API calls with fetch
   const headers = {

@@ -33,6 +33,10 @@ export const getIFrameUrl = ({
 }: GetIFrameProps) => {
   const placeholder = 'https://placeholder'
   const url = new URL('/connect/portal', baseUrl ?? placeholder)
+  // TODO; move this logic to server to load smartly based on whether the user has connections or not
+  if (!params.view) {
+    url.searchParams.set('view', 'add')
+  }
   Object.entries(params).forEach(([key, value]) => {
     if (value) {
       url.searchParams.set(key, value)
