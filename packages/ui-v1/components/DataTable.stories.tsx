@@ -53,13 +53,43 @@ export const NoData: Story = {
   args: {
     data: [],
     columns: sampleColumns,
+    children: (
+      <div className="w-full">
+        <div className="flex items-center py-4">
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+          <Button className="ml-4">Call to action</Button>,
+        </div>
+        <div className="rounded-md border">
+          <DataTable.Content />
+        </div>
+        <DataTable.FooterControl showRowCount />
+      </div>
+    ),
   },
 }
 
 export const WithCallToAction: Story = {
   args: {
-    data: [],
+    data: sampleData,
     columns: sampleColumns,
-    extraTableControls: <Button className="ml-4">Call to action</Button>,
+    // extraTableControls: <Button className="ml-4">Call to action</Button>,
+    enableSelect: true,
+    // children: <DataTable.SearchInput />,
   },
+  render: (props) => (
+    <DataTable {...props}>
+      <div className="w-full">
+        <div className="flex items-center py-4">
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+          <Button className="ml-4">Call to action</Button>,
+        </div>
+        <div className="rounded-md border">
+          <DataTable.Content />
+        </div>
+        <DataTable.FooterControl showRowCount />
+      </div>
+    </DataTable>
+  ),
 }

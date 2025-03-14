@@ -13,9 +13,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type Table as ReactTable,
 } from '@tanstack/react-table'
 import {ChevronDown, Loader2, Search} from 'lucide-react'
-import React from 'react'
+import React, {createContext, useContext} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Button,
@@ -47,9 +48,27 @@ export interface DataTableProps<TItem, TValue> {
   enableSelect?: boolean
   filter?: (data: TItem) => boolean
   onRowClick?: (data: TItem) => void
+  children?: React.ReactNode
+}
 
-  /** Extra components to be placed in the table controls row */
-  extraTableControls?: React.ReactNode
+type DataTableContextValue<TData, TValue> = {
+  table: ReactTable<TData>
+  columns: Array<ColumnDef<TData, TValue>>
+  isRefetching?: boolean
+  filter: (data: TData) => boolean
+  onRowClick?: (data: TData) => void
+}
+
+const DataTableContext = createContext<
+  DataTableContextValue<any, any> | undefined
+>(undefined)
+
+function useDataTable<TData, TValue>() {
+  const context = useContext(DataTableContext)
+  if (!context) {
+    throw new Error('useDataTable must be used within a DataTableProvider')
+  }
+  return context
 }
 
 // TODO: Create a schemaDataTable that define columns based on zod schema
@@ -61,7 +80,7 @@ export function DataTable<TData, TValue>({
   enableSelect,
   filter = defaultFilter,
   onRowClick,
-  extraTableControls,
+  children,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -71,7 +90,6 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  const [isFocused, setIsFocused] = React.useState(false)
 
   const columns = React.useMemo(
     () =>
@@ -126,138 +144,177 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  const contextValue = React.useMemo(
+    () => ({table, columns, isRefetching, filter, onRowClick}),
+    [table, columns, isRefetching, filter, onRowClick],
+  )
+
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        <div
-          className="relative max-w-lg transition-all duration-300 ease-in-out"
-          style={{width: isFocused ? '600px' : '400px'}}>
-          {isFocused && (
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-500 opacity-100 transition-opacity duration-300 ease-in-out" />
-          )}
-          <Input
-            placeholder={isFocused ? '' : 'Search...'}
-            value={(table.getState().globalFilter as string) ?? ''}
-            onChange={(event) => table.setGlobalFilter(event.target.value)}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            className={`transition-all duration-300 ease-in-out ${
-              isFocused ? 'pl-10' : 'pl-3'
-            }`}
-          />
+    <DataTableContext.Provider value={contextValue}>
+      {children}
+    </DataTableContext.Provider>
+  )
+}
+
+export function DataTableFooterControl(props: {showRowCount?: boolean}) {
+  const {table} = useDataTable()
+
+  return (
+    <div className="flex items-center justify-end space-x-2 py-4">
+      {props.showRowCount && (
+        <div className="text-muted-foreground flex-1 text-sm">
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}>
-                  {typeof column.columnDef.header === 'string'
-                    ? column.columnDef.header
-                    : column.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        {extraTableControls}
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {isRefetching || !table.getRowModel().rows?.length ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center">
-                  {isRefetching ? (
-                    <div className="flex size-full min-h-[300px] items-center justify-center">
-                      <Loader2 className="text-button size-8 animate-spin" />
-                    </div>
-                  ) : (
-                    'No results'
-                  )}
-                </TableCell>
-              </TableRow>
-            ) : (
-              table
-                .getRowModel()
-                .rows.filter((row) => filter(row.original))
-                .map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                    onClick={
-                      onRowClick ? () => onRowClick?.(row.original) : undefined
-                    }
-                    className={cn(
-                      onRowClick && 'hover:bg-muted cursor-pointer',
-                    )}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        {enableSelect && (
-          <div className="text-muted-foreground flex-1 text-sm">
-            {table.getFilteredSelectedRowModel().rows.length} of{' '}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-        )}
-        {(table.getCanPreviousPage() || table.getCanNextPage()) && (
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}>
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}>
-              Next
-            </Button>
-          </div>
-        )}
-      </div>
+      )}
+      {(table.getCanPreviousPage() || table.getCanNextPage()) && (
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
+
+// Add to DataTable composition
+DataTable.FooterControl = DataTableFooterControl
+
+export function DataTableContent() {
+  const {table, columns, isRefetching, filter, onRowClick} = useDataTable()
+
+  return (
+    <Table>
+      <TableHeader>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <TableHead key={header.id}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+              </TableHead>
+            ))}
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {isRefetching || !table.getRowModel().rows?.length ? (
+          <TableRow>
+            <TableCell colSpan={columns.length} className="h-24 text-center">
+              {isRefetching ? (
+                <div className="flex size-full min-h-[300px] items-center justify-center">
+                  <Loader2 className="text-button size-8 animate-spin" />
+                </div>
+              ) : (
+                'No results'
+              )}
+            </TableCell>
+          </TableRow>
+        ) : (
+          table
+            .getRowModel()
+            .rows.filter((row) => filter(row.original))
+            .map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && 'selected'}
+                onClick={
+                  onRowClick ? () => onRowClick?.(row.original) : undefined
+                }
+                className={cn(onRowClick && 'hover:bg-muted cursor-pointer')}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+        )}
+      </TableBody>
+    </Table>
+  )
+}
+
+DataTable.Content = DataTableContent
+
+export function SearchInput() {
+  const {table} = useDataTable()
+  const [isFocused, setIsFocused] = React.useState(false)
+
+  return (
+    <div
+      className="relative max-w-lg transition-all duration-300 ease-in-out"
+      style={{width: isFocused ? '600px' : '400px'}}>
+      {isFocused && (
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-500 opacity-100 transition-opacity duration-300 ease-in-out" />
+      )}
+      <Input
+        placeholder={isFocused ? '' : 'Search...'}
+        value={(table.getState().globalFilter as string) ?? ''}
+        onChange={(event) => table.setGlobalFilter(event.target.value)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        className={`transition-all duration-300 ease-in-out ${
+          isFocused ? 'pl-10' : 'pl-3'
+        }`}
+      />
+    </div>
+  )
+}
+
+export function ColumnVisibilityToggle() {
+  const {table} = useDataTable()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="ml-auto">
+          Columns <ChevronDown className="ml-2 h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {table
+          .getAllColumns()
+          .filter((column) => column.getCanHide())
+          .map((column) => (
+            <DropdownMenuCheckboxItem
+              key={column.id}
+              className="capitalize"
+              checked={column.getIsVisible()}
+              onCheckedChange={(value) => column.toggleVisibility(!!value)}>
+              {typeof column.columnDef.header === 'string'
+                ? column.columnDef.header
+                : column.id}
+            </DropdownMenuCheckboxItem>
+          ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+// Add a convenience component for table controls
+export function DataTableControls({children}: {children: React.ReactNode}) {
+  return <>{children}</>
+}
+
+// Compose DataTable components
+DataTable.Table = DataTableContent
+DataTable.SearchInput = SearchInput
+DataTable.ColumnVisibilityToggle = ColumnVisibilityToggle
+DataTable.Controls = DataTableControls
