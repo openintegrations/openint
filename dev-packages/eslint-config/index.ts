@@ -314,4 +314,4 @@ export const configs = keyAsName({
 export default defineConfig(
   Object.values(configs) as [any],
   // defineConfigs will modify the config names actually
-) as Array<ConfigWithExtends & {name: `${keyof typeof configs}${string}`}>
+) as Array<{name: `${keyof typeof configs}${string}`}>
