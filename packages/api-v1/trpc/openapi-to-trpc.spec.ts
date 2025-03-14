@@ -93,7 +93,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
 
     expect(response.status).toBe(400)
     expect(result.issues[0].message).toEqual(
-      'Invalid expand option. Valid options are: connector, enabled_integrations, connecton_count',
+      'Invalid expand option. Valid options are: connector, enabled_integrations, connection_count',
     )
   })
 })
