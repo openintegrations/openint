@@ -1,7 +1,15 @@
-import configArray from '@openint/eslint-config'
+import configArray, {defineConfig} from '@openint/eslint-config'
+import pkgJson from './package.json'
 
-// const finalConfig = [configs.globaIgnores, configs.defaultFiles]
-const finalConfig = configArray.filter((c) => !c.name.startsWith('unicorn'))
+const finalConfig = defineConfig(
+  ...configArray.filter((c) => !c.name.startsWith('unicorn')),
+  {
+    name: 'reactVersion',
+    settings: {
+      react: {version: pkgJson.pnpm.overrides.react},
+    },
+  },
+)
 
 export default finalConfig
 

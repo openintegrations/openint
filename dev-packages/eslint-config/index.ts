@@ -5,7 +5,6 @@
 // Failing due to https://github.com/eslint/css/issues/56, should be released in few days hopefully
 // import pluginCss from '@eslint/css'
 import pluginJs from '@eslint/js'
-// The problem kids...
 // @ts-expect-error No types available
 import pluginNext from '@next/eslint-plugin-next'
 import configPrettier from 'eslint-config-prettier/flat'
@@ -31,9 +30,19 @@ export type Config = ReturnType<typeof defineConfig>[number]
 
 export {defineConfig}
 
+/**
+ * Utility function to assign object keys as .name property of objects.
+ * Useful for creating named configurations.
+ */
+export function keyAsName<U extends Record<string, object>>(obj: U) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, {...value, name: key}]),
+  ) as {[key in keyof U]: U[key] & {name: key}}
+}
+
 // Add css when ready
 
-export const configs = {
+export const configs = keyAsName({
   globaIgnores: {
     ignores: [
       // # Unignore dotfiles
@@ -250,11 +259,9 @@ export const configs = {
   prettier: {
     extends: [configPrettier],
   },
-} satisfies Record<string, Omit<ConfigWithExtendsArray, 'name'>>
+} satisfies Record<string, Omit<ConfigWithExtendsArray, 'name'>>)
 
 export default defineConfig(
-  ...(Object.entries(configs).map(([name, config]) => ({
-    name,
-    ...config,
-  })) as [ConfigWithExtendsArray]),
+  Object.values(configs) as [ConfigWithExtendsArray],
+  // defineConfigs will modify the config names actually
 ) as Array<ConfigWithExtendsArray & {name: `${keyof typeof configs}${string}`}>
