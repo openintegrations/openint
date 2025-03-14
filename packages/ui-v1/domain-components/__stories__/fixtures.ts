@@ -4,10 +4,16 @@ import type {Core} from '@openint/api-v1/models'
 // Also note Line 111 in ConnectorCard.tsx
 export type ConnectorTemporary = Core['connector'] & {
   stage: 'alpha' | 'beta' | 'ga'
+  /** This belongs on connector config not connector */
   connection_count?: number
   category?: string
   auth_type?: string
   version?: string
+}
+
+export type ConnectorConfigTemporary = Core['connector_config'] & {
+  connection_count?: number
+  connector: ConnectorTemporary
 }
 
 const connectors = {
@@ -116,7 +122,21 @@ const connectorsList = [
   },
 ] satisfies ConnectorTemporary[]
 
+const connectorConfigList = connectorsList.map(
+  (connector): ConnectorConfigTemporary => ({
+    id: `ccfg_${connector.name}_123`,
+    connector,
+    connection_count: Math.floor(Math.random() * 100),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    config: {},
+    org_id: 'org_123',
+    connector_name: connector.name,
+  }),
+)
+
 export const FIXTURES = {
   connectors,
   connectorsList,
+  connectorConfigList,
 }

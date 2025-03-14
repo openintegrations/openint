@@ -36,7 +36,11 @@ import {R, titleCase} from '@openint/util'
 
 const defaultFilter = () => true
 
-interface DataTableProps<TItem, TValue> {
+export {ColumnDef}
+
+export type Columns<TItem, TValue> = Array<ColumnDef<TItem, TValue>>
+
+export interface DataTableProps<TItem, TValue> {
   data: TItem[]
   isRefetching?: boolean
   columns: Array<ColumnDef<TItem, TValue>>
