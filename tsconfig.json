@@ -38,8 +38,12 @@
     "**/*.mtsx",
     "**/*.cts",
     "**/*.ctsx"
-, "dev-packages/eslint-config/tsconfig.json"  ],
+  ],
   // For some reason dev-packages/eslint-config/index.ts gets complaint from ci, not sure why...
-  "exclude": ["node_modules", "./dev-packages/eslint-config/index.ts"],
+  "exclude": [
+    "node_modules",
+    "./dev-packages/eslint-config/index.ts",
+    "./eslint.config.ts"
+  ],
   "plugins": [{"name": "typescript-snapshots-plugin"}]
 }

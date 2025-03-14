@@ -3,7 +3,7 @@ import pkgJson from './package.json'
 
 const {globaIgnores, defaultFiles, javascript, typescript} = configs
 
-export const shortCOnfig = defineConfig(
+export const shortConfig = defineConfig(
   globaIgnores,
   defaultFiles,
   javascript,
