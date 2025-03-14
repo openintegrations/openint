@@ -67,6 +67,7 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
       with: {
         connections: {
           columns: {id: true},
+          limit: 5,
         },
       },
       extras: {
@@ -101,9 +102,16 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
               '[]'::json
             ) as "data"
           from
-            "connection" "connector_config_connections"
-          where
-            "connector_config_connections"."connector_config_id" = "connector_config"."id"
+            (
+              select
+                *
+              from
+                "connection" "connector_config_connections"
+              where
+                "connector_config_connections"."connector_config_id" = "connector_config"."id"
+              limit
+                $1
+            ) "connector_config_connections"
         ) "connector_config_connections" on true
       "
     `)
