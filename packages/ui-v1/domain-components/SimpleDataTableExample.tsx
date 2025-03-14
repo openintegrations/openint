@@ -87,15 +87,6 @@ export default function SimpleDataTableExample() {
     alert(`You clicked on ${person.name}`)
   }
 
-  // Example of custom filter
-  const customFilter = (person: Person) => {
-    // Only show active users
-    // return person.status === 'active'
-
-    // Or show all users (default)
-    return true
-  }
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-2xl font-bold">People Directory</h1>

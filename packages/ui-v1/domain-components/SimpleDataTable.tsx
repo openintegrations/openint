@@ -23,7 +23,7 @@ import {titleCase} from '@openint/util'
 // Remove type declarations and use any types
 const defaultFilter = () => true
 
-interface SimpleDataTableProps<TData, TValue> {
+interface SimpleDataTableProps<TData> {
   data: TData[]
   columns: Array<any>
   enableSelect?: boolean
@@ -33,7 +33,7 @@ interface SimpleDataTableProps<TData, TValue> {
   error?: Error | null
 }
 
-export function SimpleDataTable<TData, TValue>({
+export function SimpleDataTable<TData>({
   columns: _columns,
   data,
   enableSelect,
@@ -41,10 +41,8 @@ export function SimpleDataTable<TData, TValue>({
   onRowClick,
   isLoading = false,
   error = null,
-}: SimpleDataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<any>([])
-  const [columnFilters, setColumnFilters] = useState<any>([])
-  const [columnVisibility, setColumnVisibility] = useState<any>({})
+}: SimpleDataTableProps<TData>) {
+  // Remove unused state variables
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({})
   const [isFocused, setIsFocused] = useState(false)
   const [globalFilter, setGlobalFilterValue] = useState('')
@@ -95,9 +93,6 @@ export function SimpleDataTable<TData, TValue>({
   const table = {
     getState: () => ({
       globalFilter,
-      sorting,
-      columnFilters,
-      columnVisibility,
       rowSelection,
     }),
     setGlobalFilter: (value: string) => {
@@ -108,7 +103,9 @@ export function SimpleDataTable<TData, TValue>({
         id: col.id || col.accessorKey,
         getCanHide: () => true,
         getIsVisible: () => true,
-        toggleVisibility: (value: boolean) => {},
+        toggleVisibility: (_: boolean) => {
+          // No-op function, but using _ to indicate unused parameter
+        },
         columnDef: col,
       })),
     getHeaderGroups: () => [

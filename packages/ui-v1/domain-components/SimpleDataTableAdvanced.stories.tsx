@@ -161,7 +161,7 @@ const AdvancedDataTableDemo = () => {
 }
 
 const meta: Meta = {
-  title: 'UI-V1/SimpleDataTable/Advanced Example',
+  title: 'Domain Components/SimpleDataTable/Advanced Example',
   component: AdvancedDataTableDemo,
   parameters: {
     layout: 'padded',

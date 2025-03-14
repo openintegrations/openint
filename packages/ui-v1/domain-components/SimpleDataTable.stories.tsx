@@ -80,7 +80,7 @@ const columns = [
 ]
 
 const meta: Meta<typeof SimpleDataTable> = {
-  title: 'UI-V1/SimpleDataTable',
+  title: 'Domain Components/SimpleDataTable',
   component: SimpleDataTable,
   parameters: {
     layout: 'padded',
@@ -120,7 +120,7 @@ const meta: Meta<typeof SimpleDataTable> = {
 }
 
 export default meta
-type Story = StoryObj<typeof SimpleDataTable<Person, any>>
+type Story = StoryObj<typeof SimpleDataTable<Person>>
 
 // Basic usage
 export const Basic: Story = {
