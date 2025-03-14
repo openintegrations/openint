@@ -28,12 +28,14 @@ const config = {
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../shadcn/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../shadcn/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../ui/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../ui/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../ui/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     // Will only work in (v1) directory
     // Generally speaking all stories should be in ui-v1
     '../../../apps/web/app/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../ui/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../ui-v1/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
     getAbsolutePath('@storybook/addon-essentials'),
@@ -53,6 +55,17 @@ const config = {
     // Only works in v4 storybook...
     // https://github.com/tailwindlabs/tailwindcss/issues/13216#issuecomment-1992094356
     config.plugins.push((await import('@tailwindcss/vite')).default())
+
+    // Add resolve aliases to match tsconfig paths
+    config.resolve = {
+      ...config.resolve,
+      alias: {
+        ...config.resolve?.alias,
+        '@openint/shadcn': join(process.cwd(), '../../packages/shadcn'),
+        '@openint/shadcn/ui': join(process.cwd(), '../../packages/shadcn/ui'),
+      },
+    }
+
     config.optimizeDeps = {
       ...config.optimizeDeps,
       exclude: [
