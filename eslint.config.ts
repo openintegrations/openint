@@ -4,22 +4,21 @@ import pkgJson from './package.json'
 const {globaIgnores, defaultFiles, javascript, typescript} = configs
 
 export const shortConfig = defineConfig(
-  globaIgnores,
-  defaultFiles,
-  javascript,
+  globaIgnores as any,
+  defaultFiles as any,
+  javascript as any,
   typescript as any,
 )
 
 const finalConfig = defineConfig(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   ...(configArray.filter((c) => !c.name.startsWith('unicorn')) as any[]),
-
   {
     name: 'reactVersion',
     settings: {
       react: {version: pkgJson.pnpm.overrides.react},
     },
-  },
+  } as any,
 )
 
 export default finalConfig
