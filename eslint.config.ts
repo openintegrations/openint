@@ -1,8 +1,10 @@
+// @ts-check
+// @ts-expect-error Types not available
+import {FlatCompat} from '@eslint/eslintrc'
 import pluginJs from '@eslint/js'
 import codegen from 'eslint-plugin-codegen'
 // @ts-expect-error No types available
 import pluginEslintComments from 'eslint-plugin-eslint-comments'
-// @ts-expect-error No types available
 import pluginJest from 'eslint-plugin-jest'
 // @ts-expect-error No types available
 import pluginJestFormatting from 'eslint-plugin-jest-formatting'
@@ -10,6 +12,8 @@ import pluginJestFormatting from 'eslint-plugin-jest-formatting'
 import pluginPromise from 'eslint-plugin-promise'
 import pluginUnicorn from 'eslint-plugin-unicorn'
 import pluginTs from 'typescript-eslint'
+
+const compat = new FlatCompat({baseDirectory: import.meta.dirname})
 
 // TODO: Consider putting eslint config into its own folder, like some other recommended setups!
 
@@ -69,10 +73,16 @@ export default pluginTs.config(
       // 'react-hooks/exhaustive-deps': [
       //   'warn',
       //   {additionalHooks: '(useUpdateEffect)'},
-      // ],
+      // ],q
       // 'import/no-unresolved': 'error',
     },
   },
+  ...compat.config({
+    extends: ['next'],
+    settings: {
+      next: {rootDir: 'apps/web/'},
+    },
+  }),
   {
     name: 'unicorn',
     extends: [pluginUnicorn.configs.recommended],
