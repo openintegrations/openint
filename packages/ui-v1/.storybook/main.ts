@@ -26,6 +26,8 @@ const config = {
     '../stories/**/*.mdx',
     '../components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
@@ -35,7 +37,7 @@ const config = {
     // Generally speaking all stories should be in ui-v1
     '../../../apps/web/app/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../ui/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../ui-v1/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    // '../../ui-v1/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)', // Commented out to avoid duplicate stories
   ],
   addons: [
     getAbsolutePath('@storybook/addon-essentials'),
