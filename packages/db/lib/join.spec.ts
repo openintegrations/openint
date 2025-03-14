@@ -79,7 +79,27 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
       env_name: 'sandbox',
     })
   })
-  test('query with count and group by', async () => {
+
+  test('simple count', async () => {
+    const query = db
+      .select({connection_count: sql`count(*)`})
+      .from(schema.connection)
+      .where(
+        sql`${schema.connection}.connector_config_id = ${'ccfg_greenhouse_222'}`,
+      )
+    expect(await formatSql(query?.toSQL().sql ?? '')).toMatchInlineSnapshot(`
+      "select
+        count(*)
+      from
+        "connection"
+      where
+        "connection".connector_config_id = $1
+      "
+    `)
+    expect(await query).toMatchObject([{connection_count: 1}])
+  })
+
+  test('query with count and join', async () => {
     const query = db.query.connector_config.findMany({
       columns: {id: true},
       with: {
@@ -93,7 +113,7 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
           SELECT COUNT(*)
           FROM ${schema.connection}
           WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
-      )`.as('connection_count'),
+        )`.as('connection_count'),
       },
     })
 
