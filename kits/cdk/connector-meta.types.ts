@@ -20,14 +20,29 @@ export type OpenApiSpec = oas30.OpenAPIObject | oas31.OpenAPIObject
 export interface ConnectorMetadata {
   // TODO: @pellicceama add audience and other fields from SimpleConnectorDef
   logoUrl?: string
+  // TODO: @pellicceama remove this
   logoSvg?: string
   displayName?: string
   /** @deprecated way to indicate an integration outputs raw rather than standardized data */
+  // TODO: @pellicceama remove this
   layer?: 'core' | 'ledger'
+  // TODO: @pellicceama remove this
   platforms?: Array<'cloud' | 'local'>
   stage?: z.infer<typeof zConnectorStage>
   // labels?: Array<'featured' | 'banking' | 'accounting' | 'enrichment'>
   verticals?: VerticalKey[]
+
+  /** Intended user types for this connector */
+  audience?: Array<'consumer' | 'business'>
+
+  /** External links related to the connector */
+  links?: {
+    webUrl?: string
+    apiDocsUrl?: string
+  }
+
+  /** Version of the connector */
+  version?: number
 
   openapiSpec?: {
     proxied?: OpenApiSpec
