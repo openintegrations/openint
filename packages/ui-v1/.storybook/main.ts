@@ -28,9 +28,9 @@ const config = {
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../shadcn/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../shadcn/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../ui/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../ui/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../ui/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     // Will only work in (v1) directory
     // Generally speaking all stories should be in ui-v1
     '../../../apps/web/app/**/*.stories.@(js|jsx|mjs|ts|tsx)',
