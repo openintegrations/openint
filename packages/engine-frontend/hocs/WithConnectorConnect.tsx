@@ -221,11 +221,7 @@ export const WithConnectorConnect = ({
         if (err === CANCELLATION_TOKEN) {
           return
         }
-        toast({
-          title: `Failed to connect to ${ccfg.connector.displayName}`,
-          // description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to connect to ${ccfg.connector.displayName}`)
         onEvent?.({type: 'error'})
       },
     },
@@ -354,12 +350,7 @@ export const WithConnectorConnect = ({
               }
               formData={{}}
               loading={connect.isLoading}
-<<<<<<< HEAD
-              onSubmit={({formData}: {formData: any}) => {
-                console.log('connection form submitted', formData)
-=======
               onSubmit={({formData}) => {
->>>>>>> 09b4f276 (removing / commenting connect logs)
                 connect.mutate({connectorConfigId: ccfg.id, settings: formData})
               }}
               hideSubmitButton
