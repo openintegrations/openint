@@ -3,7 +3,7 @@ import {zOAuthConfig} from './def'
 import {prepareScopes} from './utils'
 
 test('Scope separator should work correctly for different delimiters', () => {
-  let mockOauthConfig = {
+  const mockOauthConfig = {
     type: 'OAUTH2',
     authorization_request_url: 'https://auth.example.com/authorize',
     token_request_url: 'https://auth.example.com/token',

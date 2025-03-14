@@ -216,7 +216,8 @@ export function generateOAuth2Server<
 
     async preConnect(connectorConfig, connectionSettings, input) {
       // Use override if provided, otherwise use default
-      const authorizeHandler = overrides?.authorize || defaultAuthorizeHandler
+      const authorizeHandler =
+        overrides?.oauth2?.authorize || defaultAuthorizeHandler
 
       if (!authorizeHandler) {
         throw new Error(
@@ -250,7 +251,8 @@ export function generateOAuth2Server<
 
     async postConnect(connectOutput, connectorConfig) {
       // Use overrides if provided, otherwise use defaults
-      const tokenHandler = overrides?.exchange || defaultTokenExchangeHandler
+      const tokenHandler =
+        overrides?.oauth2?.exchange || defaultTokenExchangeHandler
 
       if (!tokenHandler) {
         throw new Error('No token handler defined')
@@ -303,7 +305,7 @@ export function generateOAuth2Server<
     async refreshConnection(connectionSettings, connectorConfig) {
       // Use overrides if provided, otherwise use defaults
       const refreshTokenHandler =
-        overrides?.refresh || defaultTokenRefreshHandler
+        overrides?.oauth2?.refresh || defaultTokenRefreshHandler
 
       if (!refreshTokenHandler) {
         throw new Error('No refresh token handler defined')
