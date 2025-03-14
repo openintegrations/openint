@@ -8,6 +8,7 @@ export const CONNECTOR_CONFIG_COLUMNS = [
     header: 'Connector',
     /** Still needed for search */
     accessorKey: 'connector_name',
+    // TODO: Use the tableCell variant of card
     cell: ({row}) => <ConnectorCard connector={row.original.connector} />,
   },
   {

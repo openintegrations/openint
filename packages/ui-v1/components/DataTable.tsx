@@ -47,6 +47,9 @@ export interface DataTableProps<TItem, TValue> {
   enableSelect?: boolean
   filter?: (data: TItem) => boolean
   onRowClick?: (data: TItem) => void
+
+  /** Extra components to be placed in the table controls row */
+  extraTableControls?: React.ReactNode
 }
 
 // TODO: Create a schemaDataTable that define columns based on zod schema
@@ -58,6 +61,7 @@ export function DataTable<TData, TValue>({
   enableSelect,
   filter = defaultFilter,
   onRowClick,
+  extraTableControls,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -165,6 +169,7 @@ export function DataTable<TData, TValue>({
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        {extraTableControls}
       </div>
       <div className="rounded-md border">
         <Table>

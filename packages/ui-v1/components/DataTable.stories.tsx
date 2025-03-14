@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+import {Button} from '@openint/shadcn/ui'
 import {ColumnDef, Columns, DataTable} from './DataTable'
 
 const meta: Meta<typeof DataTable> = {
@@ -52,5 +53,13 @@ export const NoData: Story = {
   args: {
     data: [],
     columns: sampleColumns,
+  },
+}
+
+export const WithCallToAction: Story = {
+  args: {
+    data: [],
+    columns: sampleColumns,
+    extraTableControls: <Button className="ml-4">Call to action</Button>,
   },
 }
