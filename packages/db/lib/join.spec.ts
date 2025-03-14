@@ -61,6 +61,24 @@ test('query with t many joins', async () => {
 })
 
 describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
+  beforeAll(async () => {
+    await db.insert(schema.connector_config).values({
+      id: 'ccfg_apollo_333',
+      org_id: 'org_222',
+      config: {},
+    })
+    await db.insert(schema.connector_config).values({
+      id: 'ccfg_greenhouse_222',
+      org_id: 'org_222',
+      config: {},
+    })
+    await db.insert(schema.connection).values({
+      id: 'conn_greenhouse_222',
+      connector_config_id: 'ccfg_greenhouse_222',
+      display_name: 'Test Connection',
+      env_name: 'sandbox',
+    })
+  })
   test('query with count and group by', async () => {
     const query = db.query.connector_config.findMany({
       columns: {id: true},
@@ -115,10 +133,15 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
         ) "connector_config_connections" on true
       "
     `)
-    // Ensure query runs witout errors
-    // TODO: Setup some fixture data to ensure that we get a valid response with proper count
-    // and maybe including all connector_config even those with connection_count=0
     const res = await query
-    expect(res).toBeDefined()
+
+    expect(res).toMatchObject([
+      {id: 'ccfg_apollo_333', connection_count: 0, connections: []},
+      {
+        id: 'ccfg_greenhouse_222',
+        connection_count: 1,
+        connections: [expect.anything()],
+      },
+    ])
   })
 })
