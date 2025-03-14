@@ -72,7 +72,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run lint
-        run: pnpm run lint
+        run: pnpm run lint --quiet
         env:
           NODE_OPTIONS: --max-old-space-size=8192
 

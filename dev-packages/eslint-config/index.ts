@@ -74,6 +74,7 @@ export const configs = keyAsName({
       // Unsure why this is not part of the "tsconfig" project somehow...
       //Also cannot even add it to the default config
       '**/eslint-config/index.ts',
+      '**/eslint.config.ts',
     ],
   },
   defaultFiles: {
