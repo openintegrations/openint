@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Input, Separator} from '@openint/shadcn/ui'
+import {ConnectorTemporary} from './__stories__/fixtures'
 import {ConnectorCard} from './ConnectorCard'
 
 export interface AddConnectorConfigProps
@@ -107,7 +108,9 @@ export const AddConnectorConfig = ({
           <div
             key={`${connector.name}-${index}`}
             onClick={() => onSelectConnector && onSelectConnector(connector)}>
-            <ConnectorCard connector={connector} />
+            {/* NOTE: casting to any and ConnectorTemporary is a temporary solution to avoid type 
+            errors until we accept connector types from the server on ConnectorCard*/}
+            <ConnectorCard connector={connector as any as ConnectorTemporary} />
           </div>
         ))}
         {filteredConnectors.length === 0 && (

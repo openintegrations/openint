@@ -21,7 +21,7 @@ const ConnectorCard = ({
   connector,
   ...props
 }: ConnectorCardProps) => {
-  const {name, logo_url, display_name, stage} = connector
+  const {name, logo_url, display_name} = connector
 
   return (
     <div
