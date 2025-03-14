@@ -46,6 +46,7 @@ export interface SchemaFormProps<TSchema extends z.ZodTypeAny>
   hideSensitiveFields?: boolean
   /**
    * Optional flag to hide the submit button
+   * Defaults to true
    */
   hideSubmitButton?: boolean
   /**
@@ -107,7 +108,7 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
     loading,
     hideSensitiveFields = true,
     jsonSchemaTransform,
-    hideSubmitButton,
+    hideSubmitButton = true,
     formData: _formData,
     onSubmit,
     ...props
