@@ -43,7 +43,7 @@
   "exclude": [
     "node_modules",
     "./dev-packages/eslint-config/index.ts",
-    "eslint-config.ts"
+    "eslint.config.ts"
   ],
   "plugins": [{"name": "typescript-snapshots-plugin"}]
 }
