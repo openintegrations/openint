@@ -4,7 +4,7 @@ import {ConnectorCard} from './ConnectorCard'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'UI-V1/ConnectorCard',
+  title: 'UI-V1/Connector/Card',
   component: ConnectorCard,
   parameters: {
     layout: 'centered',
