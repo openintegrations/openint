@@ -39,6 +39,6 @@
     "**/*.cts",
     "**/*.ctsx"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "./dev-packages/eslint-config/index.ts"],
   "plugins": [{"name": "typescript-snapshots-plugin"}]
 }
