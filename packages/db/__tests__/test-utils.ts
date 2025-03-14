@@ -147,3 +147,14 @@ export async function getMigrationStatements(
     generateDrizzleJson(imports),
   )
 }
+
+export async function formatSql(sqlString: string) {
+  const prettier = await import('prettier')
+  const prettierSql = await import('prettier-plugin-sql')
+  return prettier.format(sqlString, {
+    parser: 'sql',
+    plugins: [prettierSql.default],
+    // https://github.com/un-ts/prettier/tree/master/packages/sql#sql-in-js-with-prettier-plugin-embed
+    ['language' as 'filepath' /* workaround type error */]: 'postgresql',
+  })
+}
