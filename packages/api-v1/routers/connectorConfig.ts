@@ -114,7 +114,7 @@ const connectorConfigWithRelations = z.intersection(
   z.object({
     connector: core.connector.optional(),
     integrations: z.record(core.integration).optional(),
-    connection_count: z.string().optional(),
+    connection_count: z.number().optional(),
   }),
 )
 
@@ -166,7 +166,7 @@ export const connectorConfigRouter = router({
               ...schema.connector_config,
               ...(includeConnectionCount
                 ? {
-                    connection_count: sql<string>`(
+                    connection_count: sql<number>`(
                       SELECT COUNT(*)
                       FROM ${schema.connection}
                       WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
@@ -210,6 +210,11 @@ export const connectorConfigRouter = router({
 
           if (result.config && Object.keys(result.config).length === 0) {
             result.config = null
+          }
+
+          // Convert connection_count to number if it exists
+          if (includeConnectionCount && 'connection_count' in result) {
+            result.connection_count = Number(result.connection_count || 0)
           }
 
           if (expandOptions.includes('connector')) {

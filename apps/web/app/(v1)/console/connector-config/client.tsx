@@ -1,5 +1,6 @@
 'use client'
 
+import {Plus} from 'lucide-react'
 import Image from 'next/image'
 import {use, useState} from 'react'
 import type {core} from '@openint/api-v1/models'
@@ -44,18 +45,18 @@ export function ConnectorConfigListHeader(props: {
     ),
   )
 
-  const connectorConfigs = res.data.items
-  console.log({connectors})
-
   return (
     <div className="flex justify-between">
       <h1 className="text-2xl font-bold">Connector Configs</h1>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger asChild>
-          <Button variant="default">Add Connector</Button>
+          <Button>
+            <Plus className="size-4" />
+            Add Connector
+          </Button>
         </SheetTrigger>
-        <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+        <SheetContent side="right" className="min-w-1/3">
           <AddConnectorConfig
             connectors={connectors}
             onSuccess={() => {
@@ -94,6 +95,7 @@ export function ConnectorConfigList(props: {
         <TableHeader>
           <TableRow>
             <TableHead>Connector Name</TableHead>
+            <TableHead>Connections</TableHead>
             <TableHead>Created At</TableHead>
             <TableHead>Updated At</TableHead>
             <TableHead>Config</TableHead>
@@ -126,6 +128,7 @@ export function ConnectorConfigList(props: {
                   </span>
                 </div>
               </TableCell>
+              <TableCell>{ccfg.connection_count}</TableCell>
               <TableCell>
                 {new Date(ccfg.created_at).toLocaleString()}
               </TableCell>

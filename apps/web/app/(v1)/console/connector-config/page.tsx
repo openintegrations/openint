@@ -15,13 +15,13 @@ export default async function Page(props: PageProps) {
   const api = createAPICaller(viewer)
 
   return (
-    <div>
+    <div className="p-6">
       <ClientApp token={token}>
         <Suspense fallback={<Fallback />}>
           <ConnectorConfigListHeader initialData={api.listConnectors()} />
           <ConnectorConfigList
             initialData={api.listConnectorConfigs({
-              expand: 'enabled_integrations,connection_count',
+              expand: 'connector,enabled_integrations,connection_count',
             })}
           />
         </Suspense>
