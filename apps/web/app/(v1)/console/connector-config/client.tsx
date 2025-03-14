@@ -3,16 +3,9 @@
 import {Plus} from 'lucide-react'
 import Image from 'next/image'
 import {use, useState} from 'react'
-import type {core} from '@openint/api-v1/models'
+import type {ConnectorConfig, core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@openint/shadcn/ui/sheet'
+import {Sheet, SheetContent, SheetTrigger} from '@openint/shadcn/ui/sheet'
 import {
   Table,
   TableBody,
@@ -72,7 +65,9 @@ export function ConnectorConfigListHeader(props: {
 
 export function ConnectorConfigList(props: {
   initialData?: Promise<{
-    items: Array<z.infer<typeof core.connector_config>>
+    items: Array<
+      ConnectorConfig<'connector' | 'integrations' | 'connection_count'>
+    >
     total: number
     limit: number
     offset: number
