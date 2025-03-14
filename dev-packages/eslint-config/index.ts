@@ -96,10 +96,14 @@ export const configs = keyAsName({
       'no-implied-eval': 'off',
       'no-async-promise-executor': 'warn',
       'no-constant-condition': 'warn',
-      'no-fallthrough': 'warn'
+      'no-fallthrough': 'warn',
+      'no-useless-catch': 'warn',
+      'no-loss-of-precision': 'warn',
+      'no-empty-pattern': 'off',
     },
   },
   typescript: {
+    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
     // extends: [pluginTs.configs.strict as Config[]],
     extends: [pluginTs.configs.strictTypeChecked as Config[]],
 
@@ -201,6 +205,11 @@ export const configs = keyAsName({
     extends: [pluginJsxA11y.flatConfigs.recommended],
     rules: {
       'jsx-a11y/alt-text': 'warn',
+      'jsx-a11y/click-events-have-key-events': 'warn',
+      'jsx-a11y/no-static-element-interactions': 'warn',
+      'jsx-a11y/html-has-lang': 'warn',
+      'jsx-a11y/iframe-has-title': 'warn',
+      'jsx-a11y/anchor-has-content': 'warn',
     },
   },
   next: {
