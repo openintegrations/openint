@@ -47,9 +47,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Setup upterm session
-        if: always()
-        uses: lhotari/action-upterm@v1
+      # - name: Setup upterm session
+      #   if: always()
+      #   uses: lhotari/action-upterm@v1
 
       - name: Run type checks
         run: pnpm run typecheck

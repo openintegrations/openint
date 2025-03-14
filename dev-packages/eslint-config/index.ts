@@ -21,15 +21,11 @@ import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
 import {defineConfig} from 'eslint/config'
-import pluginTs from 'typescript-eslint'
-
-export type ConfigWithExtendsArray = Extract<
-  Parameters<typeof defineConfig>[0],
-  {extends?: unknown}
->
-export type Config = ReturnType<typeof defineConfig>[number]
+import pluginTs, {ConfigArray, ConfigWithExtends} from 'typescript-eslint'
 
 export {defineConfig}
+
+type Config = ConfigArray[number]
 
 /**
  * Utility function to assign object keys as .name property of objects.
@@ -313,9 +309,9 @@ export const configs = keyAsName({
   prettier: {
     extends: [configPrettier],
   },
-} satisfies Record<string, Omit<ConfigWithExtendsArray, 'name'>>)
+} satisfies Record<string, Omit<ConfigWithExtends, 'name'>>)
 
 export default defineConfig(
-  Object.values(configs) as [ConfigWithExtendsArray],
+  Object.values(configs) as [any],
   // defineConfigs will modify the config names actually
-) as Array<ConfigWithExtendsArray & {name: `${keyof typeof configs}${string}`}>
+) as Array<ConfigWithExtends & {name: `${keyof typeof configs}${string}`}>

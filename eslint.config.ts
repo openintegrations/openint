@@ -7,11 +7,12 @@ export const shortConfig = defineConfig(
   globaIgnores,
   defaultFiles,
   javascript,
-  typescript,
+  typescript as any,
 )
 
 const finalConfig = defineConfig(
-  ...configArray.filter((c) => !c.name.startsWith('unicorn')),
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  ...(configArray.filter((c) => !c.name.startsWith('unicorn')) as any[]),
 
   {
     name: 'reactVersion',
