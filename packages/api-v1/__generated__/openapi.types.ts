@@ -2713,6 +2713,9 @@ export interface operations {
                 limit?: number;
                 /** @description Offset the items returned */
                 offset?: number;
+                /** @description Comma separated list of fields to expand.
+                 *
+                 *     Available Options: `connector`, `enabled_integrations` */
                 expand?: string;
                 /** @description The name of the connector */
                 connector_name?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive";

@@ -542,8 +542,10 @@
           {
             "in": "query",
             "name": "expand",
+            "description": "Comma separated list of fields to expand.\n\nAvailable Options: `connector`, `enabled_integrations`",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "Comma separated list of fields to expand.\n\nAvailable Options: `connector`, `enabled_integrations`"
             }
           },
           {
