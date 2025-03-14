@@ -18,7 +18,11 @@ import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
-import pluginTs, {type InfiniteDepthConfigWithExtends} from 'typescript-eslint'
+import pluginTs, {
+  Config,
+  ConfigArray,
+  type InfiniteDepthConfigWithExtends,
+} from 'typescript-eslint'
 
 // Add css when ready
 
@@ -144,6 +148,9 @@ export const configs = {
   unicorn: {
     extends: [pluginUnicorn.configs.recommended],
     rules: {
+      'unicorn/prevent-abbreviations': 'warn',
+      'unicorn/no-null': 'off',
+      'unicorn/no-array-callback-reference': 'off',
       'unicorn/catch-error-name': ['warn', {name: 'err'}],
       'unicorn/escape-case': 'warn',
       'unicorn/no-await-expression-member': 'warn',
@@ -242,4 +249,4 @@ export default pluginTs.config(
     name,
     ...config,
   })),
-)
+) as Array<Config & {name: keyof typeof configs}>
