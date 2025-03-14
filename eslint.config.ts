@@ -1,3 +1,1 @@
-import config from '@openint/eslint-config'
-
-export default config
+export {default} from '@openint/eslint-config'

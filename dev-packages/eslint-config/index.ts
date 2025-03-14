@@ -18,14 +18,12 @@ import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
-import pluginTs from 'typescript-eslint'
+import pluginTs, {type InfiniteDepthConfigWithExtends} from 'typescript-eslint'
 
-// TODO: Consider putting eslint config into its own folder, like some other recommended setups!
+// Add css when ready
 
-// TODO: Add prettier, react, react hooks and next.js, jest, css
-export default pluginTs.config(
-  {
-    name: 'globaIgnores',
+export const configs = {
+  globaIgnores: {
     ignores: [
       // # Unignore dotfiles
       '!**/.*',
@@ -58,12 +56,10 @@ export default pluginTs.config(
       'apps/web/postcss.config.mjs',
     ],
   },
-  {
-    name: 'defaultFiles',
+  defaultFiles: {
     files: ['**/*.js', '**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
   },
-  {
-    name: 'javascript',
+  javascript: {
     extends: [pluginJs.configs.recommended],
     rules: {
       'arrow-body-style': 'warn',
@@ -82,8 +78,7 @@ export default pluginTs.config(
       // 'import/no-unresolved': 'error',
     },
   },
-  {
-    name: 'typescript',
+  typescript: {
     extends: [pluginTs.configs.strict],
     // extends: [pluginTs.configs.strictTypeChecked],
 
@@ -133,24 +128,20 @@ export default pluginTs.config(
       '@typescript-eslint/unbound-method': 'warn',
     },
   },
-  {
-    name: 'react',
+  react: {
     extends: [pluginReact.configs.flat['recommended']!],
   },
-  {
-    name: 'react-hooks',
+  'react-hooks': {
     extends: [pluginReactHooks.configs['recommended-latest']],
   },
-  {
-    name: 'next',
+  next: {
     plugins: {'@next/next': pluginNext},
     rules: {
       ...pluginNext.configs.recommended.rules,
       ...pluginNext.configs['core-web-vitals'].rules,
     },
   },
-  {
-    name: 'unicorn',
+  unicorn: {
     extends: [pluginUnicorn.configs.recommended],
     rules: {
       'unicorn/catch-error-name': ['warn', {name: 'err'}],
@@ -206,20 +197,16 @@ export default pluginTs.config(
       'unicorn/throw-new-error': 'warn',
     },
   },
-  {
-    name: 'promise',
+  promise: {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     extends: [pluginPromise.configs['flat/recommended']],
     rules: {'promise/always-return': 'off'},
   },
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-  {
-    name: 'codegen',
+  codegen: {
     extends: [codegen.flatConfig.recommendedConfig as any],
     rules: {'codegen/codegen': 'warn'},
   },
-  {
-    name: 'eslint-comments',
+  'eslint-comments': {
     plugins: {
       'eslint-comments': pluginEslintComments,
     },
@@ -229,8 +216,7 @@ export default pluginTs.config(
       'eslint-comments/no-unused-disable': 'warn',
     },
   },
-  {
-    name: 'jest',
+  jest: {
     files: [
       '**/__{mocks,tests}__/**/*.{js,ts,tsx}',
       '**/*.{spec,test}.{js,ts,tsx}',
@@ -246,8 +232,14 @@ export default pluginTs.config(
       'jest/expect-expect': 'off',
     },
   },
-  {
-    name: 'prettier',
+  prettier: {
     extends: [configPrettier],
   },
+} satisfies Record<string, InfiniteDepthConfigWithExtends>
+
+export default pluginTs.config(
+  Object.entries(configs).map(([name, config]) => ({
+    name,
+    ...config,
+  })),
 )
