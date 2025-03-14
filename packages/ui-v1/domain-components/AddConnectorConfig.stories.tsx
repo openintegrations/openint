@@ -20,7 +20,6 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    onClose: {action: 'closed'},
     onSelectConnector: {action: 'connector selected'},
     variant: {
       control: 'select',
