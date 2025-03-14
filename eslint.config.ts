@@ -1,8 +1,18 @@
-import configArray, {defineConfig} from '@openint/eslint-config'
+import configArray, {configs, defineConfig} from '@openint/eslint-config'
 import pkgJson from './package.json'
+
+const {globaIgnores, defaultFiles, javascript, typescript} = configs
+
+export const shortCOnfig = defineConfig(
+  globaIgnores,
+  defaultFiles,
+  javascript,
+  typescript,
+)
 
 const finalConfig = defineConfig(
   ...configArray.filter((c) => !c.name.startsWith('unicorn')),
+
   {
     name: 'reactVersion',
     settings: {

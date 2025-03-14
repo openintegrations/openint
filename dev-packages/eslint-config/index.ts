@@ -15,6 +15,8 @@ import pluginJest from 'eslint-plugin-jest'
 // @ts-expect-error No types available
 import pluginJestFormatting from 'eslint-plugin-jest-formatting'
 // @ts-expect-error No types available
+import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
+// @ts-expect-error No types available
 import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
@@ -88,9 +90,13 @@ export const configs = keyAsName({
       quotes: ['warn', 'single', {avoidEscape: true}],
       'require-await': 'off',
       // TODO: Figure this out...
-
-      // Add plugin import again
-      // 'import/no-unresolved': 'error',
+      'no-useless-escape': 'warn',
+      'no-undef': 'warn',
+      'no-empty': 'warn',
+      'no-implied-eval': 'off',
+      'no-async-promise-executor': 'warn',
+      'no-constant-condition': 'warn',
+      'no-fallthrough': 'warn'
     },
   },
   typescript: {
@@ -101,29 +107,28 @@ export const configs = keyAsName({
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
+        allowDefaultProject: true,
       },
     },
 
     rules: {
+      '@typescript-eslint/no-deprecated': 'warn',
       '@typescript-eslint/array-type': ['warn', {default: 'array-simple'}],
       '@typescript-eslint/await-thenable': 'warn',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/ban-tslint-comment': 'off',
       '@typescript-eslint/ban-types': 'off',
       '@typescript-eslint/consistent-type-assertions': 'warn',
-
       '@typescript-eslint/consistent-type-imports': [
         'warn',
         {disallowTypeAnnotations: false},
       ],
-
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-extra-semi': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-for-in-array': 'warn',
-      'no-implied-eval': 'off',
       '@typescript-eslint/no-implied-eval': 'warn',
       '@typescript-eslint/no-invalid-void-type': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
@@ -141,13 +146,46 @@ export const configs = keyAsName({
       '@typescript-eslint/restrict-plus-operands': 'warn',
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/unbound-method': 'warn',
+
+      '@typescript-eslint/no-confusing-void-expression': 'warn',
+      '@typescript-eslint/no-misused-promises': 'warn',
+      '@typescript-eslint/no-empty-object-type': 'warn',
+      '@typescript-eslint/use-unknown-in-catch-callback-variable': 'warn',
+
+      '@typescript-eslint/no-base-to-string': 'warn',
+
+      '@typescript-eslint/no-misused-spread': 'warn',
+      '@typescript-eslint/no-unnecessary-template-expression': 'warn',
+
+      '@typescript-eslint/no-unused-expressions': 'warn',
+      '@typescript-eslint/no-redundant-type-constituents': 'warn',
+      '@typescript-eslint/no-duplicate-type-constituents': 'warn',
+      '@typescript-eslint/no-meaningless-void-operator': 'warn',
+      '@typescript-eslint/no-unnecessary-type-parameters': 'warn',
+      '@typescript-eslint/prefer-reduce-type-parameter': 'warn',
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'warn',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'warn',
+      '@typescript-eslint/return-await': 'warn',
+      '@typescript-eslint/no-unsafe-enum-comparison': 'warn',
+      '@typescript-eslint/only-throw-error': 'warn',
+      '@typescript-eslint/prefer-promise-reject-errors': 'warn',
+      '@typescript-eslint/no-require-imports': 'warn',
+      '@typescript-eslint/no-unsafe-function-type': 'warn',
     },
   },
   react: {
     extends: [pluginReact.configs.flat['recommended'] as Config],
     settings: {react: {version: 'detect'}},
     rules: {
+      'react/no-unknown-property': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
       'react/jsx-curly-brace-presence': 'warn',
+      'react/jsx-no-target-blank': 'off',
+      'react/display-name': 'warn',
+      'react/no-direct-mutation-state': 'warn',
+      'react/require-render-return': 'warn',
+      'react/no-deprecated': 'warn',
     },
   },
   'react-hooks': {
@@ -157,6 +195,12 @@ export const configs = keyAsName({
         'warn',
         {additionalHooks: '(useUpdateEffect)'},
       ],
+    },
+  },
+  a11y: {
+    extends: [pluginJsxA11y.flatConfigs.recommended],
+    rules: {
+      'jsx-a11y/alt-text': 'warn',
     },
   },
   next: {

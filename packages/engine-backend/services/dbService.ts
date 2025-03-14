@@ -83,7 +83,7 @@ export function makeDBService({
     }
     let schema: z.AnyZodObject = zRaw[tableName]
 
-    // eslint-disable-next-line unicorn/prefer-switch
+
     if (tableName === 'connector_config') {
       // The typing here isn't perfect. We want to make sure we are
       // overriding not just extending with arbitary properties
