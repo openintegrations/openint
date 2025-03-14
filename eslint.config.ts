@@ -1,23 +1,26 @@
 // @ts-check
-// @ts-expect-error Types not available
-import {FlatCompat} from '@eslint/eslintrc'
 import pluginJs from '@eslint/js'
+import configPrettier from 'eslint-config-prettier/flat'
 import codegen from 'eslint-plugin-codegen'
-// @ts-expect-error No types available
-import pluginEslintComments from 'eslint-plugin-eslint-comments'
-import pluginJest from 'eslint-plugin-jest'
-// @ts-expect-error No types available
-import pluginJestFormatting from 'eslint-plugin-jest-formatting'
-// @ts-expect-error No types available
-import pluginPromise from 'eslint-plugin-promise'
+import pluginReact from 'eslint-plugin-react'
+import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
 import pluginTs from 'typescript-eslint'
+import pluginJest from 'eslint-plugin-jest'
 
-const compat = new FlatCompat({baseDirectory: import.meta.dirname})
+// The problem kids...
+// @ts-expect-error No types available
+import pluginNext from '@next/eslint-plugin-next'
+// @ts-expect-error No types available
+import pluginPromise from 'eslint-plugin-promise'
+// @ts-expect-error No types available
+import pluginEslintComments from 'eslint-plugin-eslint-comments'
+// @ts-expect-error No types available
+import pluginJestFormatting from 'eslint-plugin-jest-formatting'
 
 // TODO: Consider putting eslint config into its own folder, like some other recommended setups!
 
-// TODO: Add prettier, react, react hooks and next.js, jest
+// TODO: Add prettier, react, react hooks and next.js, jest, css
 export default pluginTs.config(
   {
     name: 'globaIgnores',
@@ -55,7 +58,7 @@ export default pluginTs.config(
   },
   {
     name: 'defaultFiles',
-    files: ['**/*.js', '**/*.ts', '**/*.tsx', '**/*.cts', '**.*.mts'],
+    files: ['**/*.js', '**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
   },
   {
     name: 'javascript',
@@ -77,12 +80,73 @@ export default pluginTs.config(
       // 'import/no-unresolved': 'error',
     },
   },
-  ...compat.config({
-    extends: ['next'],
-    settings: {
-      next: {rootDir: 'apps/web/'},
+  {
+    name: 'typescript',
+    extends: [pluginTs.configs.strict],
+    // extends: [pluginTs.configs.strictTypeChecked],
+
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
-  }),
+
+    rules: {
+      '@typescript-eslint/array-type': ['warn', {default: 'array-simple'}],
+      '@typescript-eslint/await-thenable': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/ban-tslint-comment': 'off',
+      '@typescript-eslint/ban-types': 'off',
+      '@typescript-eslint/consistent-type-assertions': 'warn',
+
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        {disallowTypeAnnotations: false},
+      ],
+
+      '@typescript-eslint/no-empty-function': 'off',
+      '@typescript-eslint/no-empty-interface': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-extra-semi': 'off',
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-for-in-array': 'warn',
+      'no-implied-eval': 'off',
+      '@typescript-eslint/no-implied-eval': 'warn',
+      '@typescript-eslint/no-invalid-void-type': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
+      '@typescript-eslint/no-unsafe-call': 'warn',
+      '@typescript-eslint/no-unsafe-member-access': 'warn',
+      '@typescript-eslint/no-unsafe-return': 'warn',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+
+      '@typescript-eslint/require-await': 'warn',
+      '@typescript-eslint/restrict-plus-operands': 'warn',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/unbound-method': 'warn',
+    },
+  },
+  {
+    name: 'react',
+    extends: [pluginReact.configs.flat['recommended']!],
+  },
+  {
+    name: 'react-hooks',
+    extends: [pluginReactHooks.configs['recommended-latest']],
+  },
+  {
+    name: 'next',
+    plugins: {'@next/next': pluginNext},
+    rules: {
+      ...pluginNext.configs.recommended.rules,
+      ...pluginNext.configs['core-web-vitals'].rules,
+    },
+  },
   {
     name: 'unicorn',
     extends: [pluginUnicorn.configs.recommended],
@@ -140,6 +204,13 @@ export default pluginTs.config(
       'unicorn/throw-new-error': 'warn',
     },
   },
+
+  {
+    name: 'promise',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    extends: [pluginPromise.configs['flat/recommended']],
+    rules: {'promise/always-return': 'off'},
+  },
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
   {
     name: 'codegen',
@@ -147,12 +218,7 @@ export default pluginTs.config(
     rules: {'codegen/codegen': 'warn'},
   },
   {
-    name: 'promise',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-    extends: [pluginPromise.configs['flat/recommended']],
-    rules: {'promise/always-return': 'off'},
-  },
-  {
+    name: 'eslint-comments',
     plugins: {
       'eslint-comments': pluginEslintComments,
     },
@@ -162,8 +228,8 @@ export default pluginTs.config(
       'eslint-comments/no-unused-disable': 'warn',
     },
   },
-
   {
+    name: 'jest',
     files: [
       '**/__{mocks,tests}__/**/*.{js,ts,tsx}',
       '**/*.{spec,test}.{js,ts,tsx}',
@@ -180,54 +246,7 @@ export default pluginTs.config(
     },
   },
   {
-    name: 'typescript',
-    extends: [pluginTs.configs.strict],
-    // extends: [pluginTs.configs.strictTypeChecked],
-
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-
-    rules: {
-      '@typescript-eslint/array-type': ['warn', {default: 'array-simple'}],
-      '@typescript-eslint/await-thenable': 'warn',
-      '@typescript-eslint/ban-ts-comment': 'off',
-      '@typescript-eslint/ban-tslint-comment': 'off',
-      '@typescript-eslint/ban-types': 'off',
-      '@typescript-eslint/consistent-type-assertions': 'warn',
-
-      '@typescript-eslint/consistent-type-imports': [
-        'warn',
-        {disallowTypeAnnotations: false},
-      ],
-
-      '@typescript-eslint/no-empty-function': 'off',
-      '@typescript-eslint/no-empty-interface': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-extra-semi': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-for-in-array': 'warn',
-      'no-implied-eval': 'off',
-      '@typescript-eslint/no-implied-eval': 'warn',
-      '@typescript-eslint/no-invalid-void-type': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'warn',
-      '@typescript-eslint/no-unnecessary-condition': 'off',
-      '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
-      '@typescript-eslint/no-unsafe-assignment': 'warn',
-      '@typescript-eslint/no-unsafe-call': 'warn',
-      '@typescript-eslint/no-unsafe-member-access': 'warn',
-      '@typescript-eslint/no-unsafe-return': 'warn',
-      '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-var-requires': 'off',
-
-      '@typescript-eslint/require-await': 'warn',
-      '@typescript-eslint/restrict-plus-operands': 'warn',
-      '@typescript-eslint/restrict-template-expressions': 'off',
-      '@typescript-eslint/unbound-method': 'warn',
-    },
+    name: 'prettier',
+    extends: [configPrettier],
   },
 )
