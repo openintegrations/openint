@@ -60,7 +60,6 @@ export const plaidClientConnector = {
         return {publicToken: opts.public_token}
       }
       if (plaidLink.error) {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw plaidLink.error
       }
       // TODO: Implement a dialog fallback to tell user to search for the needed

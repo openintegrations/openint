@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/template-indent */
 import {sql} from 'drizzle-orm'
 import {
   boolean,
