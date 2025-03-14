@@ -40,12 +40,13 @@ async function generateCnextIndex() {
         r.isDirectory() &&
         r.name !== 'def' &&
         !r.name.startsWith('.') &&
-        r.name !== 'node_modules',
+        r.name !== 'node_modules' &&
+        !r.name.startsWith('_'),
     )
 
   await writePretty(
     'index.ts',
-    `export type {ConnectorDef} from './def'
+    `export type {JsonConnectorDef} from './def'
     export type {AuthType} from './def'
 
     ${cnextConnectors
@@ -118,7 +119,8 @@ const connectorList = [
         r.isDirectory() &&
         r.name !== 'def' &&
         !r.name.startsWith('.') &&
-        r.name !== 'node_modules',
+        r.name !== 'node_modules' &&
+        !r.name.startsWith('_'),
     )
     .map((d) => ({
       name: d.name,
@@ -223,5 +225,5 @@ async function main() {
   )
 }
 
-// eslint-disable-next-line unicorn/prefer-top-level-await
+
 void main()

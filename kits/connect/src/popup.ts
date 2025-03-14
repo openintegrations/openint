@@ -11,32 +11,43 @@ export type SelectedFile = {
 
 export const OpenIntFrontend = {
   // TODO: import {Event as OpenIntEvent, zEvent} from '@openint/events'
-  listenConnectEvents: (callback: (event: any) => void) => {
-    // Try to find specific iframe first
-    const targetFrame =
-      (window.frames as unknown as Record<string, Window>)[
-        'openint-connect-frame'
-      ] ||
-      // @ts-expect-error
-      window.document.getElementById('openint-connect-frame')?.contentWindow ||
-      window.frames[0] // Fallback to first iframe if specific frame not found
+  listen: (callback: (event: any) => void) => {
+    // Add a delay before looking for the iframe
+    setTimeout(() => {
+      // Try to find specific iframe first
+      const targetFrame =
+        (window.frames as unknown as Record<string, Window>)[
+          'openint-connect-frame'
+        ] ||
+        (window.document.getElementById('openint-connect-frame') as any)
+          ?.contentWindow ||
+        window.frames[0] // Fallback to first iframe if specific frame not found
 
-    if (targetFrame) {
-      // Send to specific iframe if found
-      targetFrame.postMessage('openIntListen', '*')
-    } else {
-      // Fall back to sending to all windows
-      window.postMessage('openIntListen', '*')
+      if (targetFrame) {
+        // Send to specific iframe if found
+        targetFrame.postMessage('openIntListen', '*')
+      } else {
+        // Fall back to sending to all windows
+        window.postMessage('openIntListen', '*')
+      }
+    }, 3000) // 3 second delay for it to load. we don't offer initial load events anyways
+
+    const messageListener = (event: MessageEvent) => {
+      // Check if the event data has the openIntEvent type
+      if (typeof event.data === 'object' && event.data !== null) {
+        if (event.data.type === 'openIntEvent' && event.data.event) {
+          callback(event.data.event)
+          return
+        }
+      }
     }
 
-    window.addEventListener('message', (event) => {
-      if (event.data?.type === 'openIntEvent') {
-        callback(event.data.event)
-        return
-      }
+    window.addEventListener('message', messageListener)
 
-      callback(event.data)
-    })
+    // Return a cleanup function to remove the listener
+    return () => {
+      window.removeEventListener('message', messageListener)
+    }
   },
   openMagicLink: async ({url}: {url: string}) => {
     const features = {

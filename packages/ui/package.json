@@ -9,6 +9,7 @@
     "@calcom/embed-react": "^1.5.2",
     "@glideapps/glide-data-grid": "5.2.1",
     "@monaco-editor/react": "4.4.6",
+    "@openint/shadcn": "workspace:*",
     "@radix-ui/react-alert-dialog": "1.0.3",
     "@radix-ui/react-checkbox": "1.0.1",
     "@radix-ui/react-dialog": "1.0.0",

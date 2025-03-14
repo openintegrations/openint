@@ -155,6 +155,19 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
+  test('list connector config with expand connection_count', async () => {
+    const res = await getClient({
+      role: 'org',
+      orgId: 'org_222',
+    }).listConnectorConfigs.query({
+      expand: 'connection_count',
+    })
+    expect(res.items).toHaveLength(2)
+
+    expect(res.items[0]?.connection_count).toEqual(0)
+    expect(res.items[1]?.connection_count).toEqual(0)
+  })
+
   test('list connector config with expand connector and enabled_integrations', async () => {
     const res = await getClient({
       role: 'org',

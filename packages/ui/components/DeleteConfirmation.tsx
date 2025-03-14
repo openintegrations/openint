@@ -7,7 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../shadcn'
+} from '@openint/shadcn/ui'
 
 export function DeleteConfirmation({
   isDeleting,

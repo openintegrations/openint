@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/template-indent */
 import {sql} from 'drizzle-orm'
 import {
   boolean,
@@ -355,7 +354,10 @@ export const event = pgTable(
      */
     org_id: varchar().generatedAlwaysAs(sql`"user"->>'org_id'`), // organization_id
     user_id: varchar().generatedAlwaysAs(sql`"user"->>'user_id'`), // user_id
-    customer_id: varchar().generatedAlwaysAs(sql`"user"->>'customer_id'`), // customer_id
+    customer_id: varchar().generatedAlwaysAs(
+      // TODO: remove this once we have a migration to fix the data
+      sql`COALESCE("user"->>'cus_id', "user"->>'customer_id')`,
+    ), // customer_id
   },
   (table) => [
     index('event_timestamp').on(table.timestamp),

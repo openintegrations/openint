@@ -7,7 +7,7 @@ import type {z} from '@openint/util'
 import {zodToJsonSchema} from '@openint/util'
 import {cn} from '../utils'
 
-// import {Button} from '../shadcn'
+// import {Button} from '@openint/shadcn/ui'
 
 const theme: ThemeProps = {
   widgets: {},

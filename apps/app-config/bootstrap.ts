@@ -31,6 +31,6 @@ export async function bootstrap() {
 // Can we make this a superuser trpc procedure?
 
 if (require.main === module) {
-  // eslint-disable-next-line unicorn/prefer-top-level-await
+
   void bootstrap()
 }

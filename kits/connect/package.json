@@ -1,20 +1,24 @@
 {
   "name": "@openint/connect",
-  "version": "0.2.23",
+  "version": "0.3.0",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
     "clean": "rm -rf ./dist",
+    "dev": "next dev -p 3333 dev",
     "pub": "pnpm publish --no-git-checks"
   },
   "dependencies": {
+    "@opensdks/sdk-openint": "latest",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@openint/open-file-picker": "workspace:*",
+    "@types/node": "^20.0.0",
     "@types/react": "*",
+    "next": "^14.1.0",
     "typescript": "*"
   },
   "peerDependencies": {

@@ -1,11 +1,8 @@
 import type React from 'react'
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {v4 as uuid} from 'uuid'
-import {Input} from '../..//components/ui/input'
+import {Button, Checkbox, Input, ScrollArea} from '@openint/shadcn/ui'
 import {Spinner} from '../../components/Spinner'
-import {Button} from '../../components/ui/button'
-import {Checkbox} from '../../components/ui/checkbox'
-import {ScrollArea} from '../../components/ui/scroll-area'
 import {persistSelectedFilesOnConnection} from '../../openint'
 import type {
   FilePickerOptions,

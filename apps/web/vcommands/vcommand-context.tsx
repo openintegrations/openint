@@ -13,8 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   Button,
-  useWithToast,
-} from '@openint/ui'
+} from '@openint/shadcn/ui'
+import {useWithToast} from '@openint/ui/hooks'
 import {PipelineSheet} from '@/components/PipelineSheet'
 import {ConnectionSheet} from '@/components/ConnectionSheet'
 import type {ZClient} from '@/lib-common/schemas'

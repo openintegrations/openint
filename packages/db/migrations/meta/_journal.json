@@ -50,6 +50,13 @@
       "when": 1741203925142,
       "tag": "0006_add_org_customer_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1741885818822,
+      "tag": "0007_event_customer_id_fix",
+      "breakpoints": true
     }
   ]
 }

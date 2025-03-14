@@ -10,18 +10,8 @@ import {
   serial,
   varchar,
 } from 'drizzle-orm/pg-core'
+import {formatSql} from '../__tests__/test-utils'
 import {dbUpsert, dbUpsertOne, inferTableForUpsert} from './upsert'
-
-async function formatSql(sqlString: string) {
-  const prettier = await import('prettier')
-  const prettierSql = await import('prettier-plugin-sql')
-  return prettier.format(sqlString, {
-    parser: 'sql',
-    plugins: [prettierSql.default],
-    // https://github.com/un-ts/prettier/tree/master/packages/sql#sql-in-js-with-prettier-plugin-embed
-    ['language' as 'filepath' /* workaround type error */]: 'postgresql',
-  })
-}
 
 const noopDb = drizzle('postgres://noop', {logger: false})
 

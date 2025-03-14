@@ -8,9 +8,9 @@ import {
 } from '@clerk/nextjs'
 import NextTopLoader from 'nextjs-toploader'
 import {FormEventHandler, useState} from 'react'
-import {_trpcReact, LoadingSpinner} from '@openint/engine-frontend'
-import {Button} from '@openint/ui/shadcn/Button'
-import {Input} from '@openint/ui/shadcn/Input'
+import {_trpcReact} from '@openint/engine-frontend'
+import {Button} from '@openint/shadcn/ui/button'
+import {Input} from '@openint/shadcn/ui/input'
 import {NoSSR} from '@/components/NoSSR'
 import {RedirectToNext13} from '@/components/RedirectTo'
 import {VCommandBar} from '@/vcommands/vcommand-components'
@@ -118,11 +118,11 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
       {/* max-h-[calc(100vh-3em)] should normally not be needed, but otherwise
       layout on sql page doesn't work when results are long :( donno how to prevent
       it otherwise without setting overflow hidden prop */}
-      <main className="ml-[240px] mt-12 max-h-[calc(100vh-3em)] grow overflow-x-hidden bg-background">
+      <main className="bg-background ml-[240px] mt-12 max-h-[calc(100vh-3em)] grow overflow-x-hidden">
         {children}
       </main>
-      <Sidebar className="fixed bottom-0 left-0 top-12 w-[240px] border-r bg-sidebar" />
-      <header className="fixed inset-x-0 top-0 flex h-12 items-center gap-2 border-b bg-navbar p-4">
+      <Sidebar className="bg-sidebar fixed bottom-0 left-0 top-12 w-[240px] border-r" />
+      <header className="bg-navbar fixed inset-x-0 top-0 flex h-12 items-center gap-2 border-b p-4">
         {/* Not working because of bug in clerk js that is unclear that results in hydration issue.. */}
         <NoSSR>
           <div className="mb-[-6px]">

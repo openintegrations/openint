@@ -72,3 +72,6 @@ wrangler.toml
 
 # Next.js
 .next/
+
+tailwind.css
+tailwind-v3.css

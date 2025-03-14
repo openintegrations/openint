@@ -197,7 +197,6 @@ export function createHTTPClient({
             .finally(() => (refreshPromise = undefined))
             .catch((err) => {
               console.warn('[http] Failed to refresh auth', err)
-              // eslint-disable-next-line @typescript-eslint/no-throw-literal
               throw new _Axios.Cancel('Failed to refresh auth')
             })
             .then(() => req)

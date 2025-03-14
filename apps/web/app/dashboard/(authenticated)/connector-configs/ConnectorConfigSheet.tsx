@@ -2,9 +2,9 @@
 
 import {AlertCircle, Loader2} from 'lucide-react'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import {_trpcReact} from '@openint/engine-frontend'
-import type {SchemaFormElement} from '@openint/ui'
+import {cn} from '@openint/shadcn/lib/utils'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +17,6 @@ import {
   AlertDialogTrigger,
   Badge,
   Button,
-  LoadingText,
   Separator,
   Sheet,
   SheetContent,
@@ -30,8 +29,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
   useToast,
-} from '@openint/ui'
-import {cn} from '@/lib-client/ui-utils'
+} from '@openint/shadcn/ui'
+import type {SchemaFormElement} from '@openint/ui'
+import {LoadingText} from '@openint/ui/components/LoadingText'
 import {ConnectorConfigForm} from './ConnectorConfigForm'
 import type {ConnectorConfig} from './ConnectorConfigPage'
 
@@ -63,7 +63,7 @@ export function ConnectorConfigSheet({
   const handleSuccess = React.useCallback(() => {
     setIsSubmitting(false)
     setOpen(false)
-    toast({title: 'connector config saved', variant: 'success'})
+    toast.success('connector config saved')
     void trpcUtils.adminListConnectorConfigs.invalidate()
     void trpcUtils.listConnectorConfigInfos.invalidate()
     refetch?.()
@@ -74,28 +74,20 @@ export function ConnectorConfigSheet({
       onSuccess: handleSuccess,
       onError: (err) => {
         setIsSubmitting(false)
-        toast({
-          title: 'Failed to save connector config',
-          description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to save connector config: ${err}`)
       },
     })
   const deleteConnectorConfig =
     _trpcReact.adminDeleteConnectorConfig.useMutation({
       onSuccess: () => {
         setOpen(false)
-        toast({title: 'connector config deleted', variant: 'success'})
+        toast.success('connector config deleted')
         void trpcUtils.adminListConnectorConfigs.invalidate()
         void trpcUtils.listConnectorConfigInfos.invalidate()
         refetch?.()
       },
       onError: (err) => {
-        toast({
-          title: 'Failed to create connector config saved',
-          description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to create connector config: ${err}`)
       },
     })
   const mutating =
@@ -126,13 +118,11 @@ export function ConnectorConfigSheet({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent
-        position="right"
-        size="lg"
-        className="flex flex-col bg-background relative">
-        
+        side="right"
+        className="bg-background flex w-[800px] flex-col sm:max-w-full">
         {isSubmitting && (
-          <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
-            <Loader2 className="h-10 w-10 animate-spin text-button" />
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
+            <Loader2 className="text-button h-10 w-10 animate-spin" />
           </div>
         )}
 
@@ -192,7 +182,7 @@ export function ConnectorConfigSheet({
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <AlertCircle className="size-6 text-destructive" />
+                        <AlertCircle className="text-destructive size-6" />
                       </TooltipTrigger>
                       <TooltipContent>
                         Cannot delete connector config while it has active

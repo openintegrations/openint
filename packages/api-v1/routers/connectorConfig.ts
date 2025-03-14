@@ -4,8 +4,8 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {core} from '../models'
+import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -15,7 +15,7 @@ import {
 import {zConnectorName} from './utils/types'
 
 export const zExpandOptions = z
-  .enum(['connector', 'enabled_integrations'])
+  .enum(['connector', 'enabled_integrations', 'connection_count'])
   .describe(
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
   )
@@ -102,6 +102,7 @@ const connectorConfigWithRelations = z.intersection(
   z.object({
     connector: core.connector.optional(),
     integrations: z.record(core.integration).optional(),
+    connection_count: z.number().optional(),
   }),
 )
 
@@ -126,8 +127,11 @@ export const connectorConfigRouter = router({
                 items.every((item) => zExpandOptions.safeParse(item).success),
               {
                 message:
-                  'Invalid expand option. Valid options are: connector, enabled_integrations',
+                  'Invalid expand option. Valid options are: connector, enabled_integrations, connection_count',
               },
+            )
+            .describe(
+              'Comma separated list of fields to optionally expand.\n\nAvailable Options: `connector`, `enabled_integrations`',
             )
             .optional(),
           connector_name: zConnectorName.optional(),
@@ -140,10 +144,24 @@ export const connectorConfigRouter = router({
       ),
     )
     .query(async ({ctx, input}) => {
+      const includeConnectionCount = (input?.expand || []).includes(
+        'connection_count',
+      )
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
-            connector_config: schema.connector_config,
+            connector_config: {
+              ...schema.connector_config,
+              ...(includeConnectionCount
+                ? {
+                    connection_count: sql<number>`(
+                      SELECT COUNT(*)
+                      FROM ${schema.connection}
+                      WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
+                    )`.as('connection_count'),
+                  }
+                : {}),
+            },
             total: sql`count(*) over ()`,
           })
           .from(schema.connector_config)
@@ -165,34 +183,41 @@ export const connectorConfigRouter = router({
         query,
         'connector_config',
       )
-      const expandOptions = input?.expand || []
+      const expandOptions = (input?.expand || []) as Array<
+        z.infer<typeof zExpandOptions>
+      >
 
       // Process items with proper typing
-      const processedItems: z.infer<typeof connectorConfigWithRelations>[] =
-        await Promise.all(
-          items.map(async (ccfg) => {
-            const result = {...ccfg} as z.infer<
-              typeof connectorConfigWithRelations
-            >
+      const processedItems: Array<
+        z.infer<typeof connectorConfigWithRelations>
+      > = await Promise.all(
+        items.map(async (ccfg) => {
+          const result = {...ccfg} as z.infer<
+            typeof connectorConfigWithRelations
+          >
 
-            if (expandOptions.includes('connector')) {
-              const connector = expandConnector(ccfg)
-              if (connector) {
-                result.connector = connector
-              }
+          if (result.config && Object.keys(result.config).length === 0) {
+            result.config = null
+          }
+
+          if (expandOptions.includes('connector')) {
+            const connector = expandConnector(ccfg)
+            if (connector) {
+              result.connector = connector
             }
+          }
 
-            if (expandOptions.includes('enabled_integrations')) {
-              const filteredIntegrations = expandIntegrations(ccfg)
+          if (expandOptions.includes('enabled_integrations')) {
+            const filteredIntegrations = expandIntegrations(ccfg)
 
-              if (filteredIntegrations && result.config) {
-                result.integrations = filteredIntegrations
-              }
+            if (filteredIntegrations) {
+              result.integrations = filteredIntegrations
             }
+          }
 
-            return result
-          }),
-        )
+          return result
+        }),
+      )
 
       return {
         items: processedItems,

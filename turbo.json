@@ -17,6 +17,7 @@
     "pub": {
       "cache": false,
       "dependsOn": ["build"]
-    }
+    },
+    "lint": {}
   }
 }

@@ -12,7 +12,6 @@ import {
   oauthConnect,
 } from '@openint/cdk'
 import type {RouterInput, RouterOutput} from '@openint/engine-backend'
-import type {SchemaFormElement} from '@openint/ui'
 import {
   Button,
   Dialog,
@@ -21,15 +20,17 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  SchemaForm,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  useToast,
-} from '@openint/ui'
+} from '@openint/shadcn/ui'
+import type {SchemaFormElement} from '@openint/ui'
+import {SchemaForm} from '@openint/ui'
+import {toast} from '@openint/ui-v1/components/toast'
 import {z} from '@openint/util'
-import {useViewerContext} from '@/components/viewer-context'
+// TODO(@snrondina): Fix this, breaks package and dependency boundaries
+import {useViewerContext} from '../../../apps/web/components/viewer-context'
 import {
   useOpenIntConnectContext,
   useOptionalOpenIntConnectContext,
@@ -155,8 +156,6 @@ export const WithConnectorConnect = ({
   const postConnect = _trpcReact.postConnect.useMutation()
   const createConnection = _trpcReact.createConnection.useMutation()
 
-  const {toast} = useToast()
-
   const connect = useMutation(
     // not sure if it's the right idea to have create and connect together in
     // one mutation, starting to feel a bit confusing...
@@ -174,20 +173,20 @@ export const WithConnectorConnect = ({
       const connInput = ccfg.connector.hasPreConnect
         ? (await preConnect.refetch()).data
         : {}
-      console.log(
-        `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id} connInput`,
-        connInput,
-      )
+      // console.log(
+      //   `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id} connInput`,
+      //   connInput,
+      // )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const connOutput = connectFn
         ? await connectFn?.(connInput, {connectorConfigId: ccfg.id})
         : connInput
-      console.log(
-        `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id}
-        connOutput`,
-        connOutput,
-      )
+      // console.log(
+      //   `[OpenIntConnect] ${ccfg.id} reconnection ${connection?.id}
+      //   connOutput`,
+      //   connOutput,
+      // )
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const postConnOutput = ccfg.connector.hasPostConnect
@@ -202,7 +201,7 @@ export const WithConnectorConnect = ({
             },
           ])
         : connOutput
-      console.log(`[OpenIntConnect] ${ccfg.id} postConnOutput`, postConnOutput)
+      // console.log(`[OpenIntConnect] ${ccfg.id} postConnOutput`, postConnOutput)
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return postConnOutput
@@ -210,11 +209,9 @@ export const WithConnectorConnect = ({
     {
       onSuccess(msg) {
         if (msg) {
-          toast({
-            title: `Successfully connected to ${ccfg.connector.displayName}`,
-            // description: `${msg}`,
-            variant: 'success',
-          })
+          toast.success(
+            `Successfully connected to ${ccfg.connector.displayName}`,
+          )
         }
         setOpen(false)
         setIsPreconnecting(false)
@@ -224,12 +221,7 @@ export const WithConnectorConnect = ({
         if (err === CANCELLATION_TOKEN) {
           return
         }
-        console.log(ccfg.connector.displayName + ' connection error:', err)
-        toast({
-          title: `Failed to connect to ${ccfg.connector.displayName}`,
-          // description: `${err}`,
-          variant: 'destructive',
-        })
+        toast.error(`Failed to connect to ${ccfg.connector.displayName}`)
         onEvent?.({type: 'error'})
       },
     },
@@ -256,7 +248,7 @@ export const WithConnectorConnect = ({
 
       <Dialog
         open={open}
-        onOpenChange={(newValue) => {
+        onOpenChange={(newValue: boolean) => {
           setOpen(newValue)
           setIsPreconnecting(newValue)
         }}
@@ -353,13 +345,12 @@ export const WithConnectorConnect = ({
             <SchemaForm
               ref={formRef}
               schema={z.object({})}
-              jsonSchemaTransform={(schema) =>
+              jsonSchemaTransform={(schema: any) =>
                 ccfg.connector.schemas.connectionSettings ?? schema
               }
               formData={{}}
               loading={connect.isLoading}
               onSubmit={({formData}) => {
-                console.log('connection form submitted', formData)
                 connect.mutate({connectorConfigId: ccfg.id, settings: formData})
               }}
               hideSubmitButton
