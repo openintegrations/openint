@@ -3,10 +3,13 @@ import codegen from 'eslint-plugin-codegen'
 // @ts-expect-error No types available
 import pluginEslintComments from 'eslint-plugin-eslint-comments'
 // @ts-expect-error No types available
+import jestFormatting from 'eslint-plugin-jest-formatting'
+// @ts-expect-error No types available
 import pluginPromise from 'eslint-plugin-promise'
 import pluginUnicorn from 'eslint-plugin-unicorn'
 import pluginTs from 'typescript-eslint'
 
+// TODO: Add prettier, react, react hooks and next.js
 export default pluginTs.config(
   {
     name: 'globaIgnores',
@@ -46,23 +49,118 @@ export default pluginTs.config(
     name: 'defaultFiles',
     files: ['**/*.js', '**/*.ts', '**/*.tsx', '**/*.cts', '**.*.mts'],
   },
-  pluginJs.configs.recommended,
-  pluginUnicorn.configs.recommended,
+  {
+    name: 'javascript',
+    extends: [pluginJs.configs.recommended],
+    rules: {
+      'arrow-body-style': 'warn',
+      'object-shorthand': 'warn',
+      'prefer-const': 'warn',
+      quotes: ['warn', 'single', {avoidEscape: true}],
+      // TODO: Figure this out...
+
+      // 'import/no-unresolved': 'error',
+
+      // 'react/jsx-curly-brace-presence': 'warn',
+
+      // 'react-hooks/exhaustive-deps': [
+      //   'warn',
+      //   {additionalHooks: '(useUpdateEffect)'},
+      // ],
+    },
+  },
+  {
+    name: 'unicorn',
+    extends: [pluginUnicorn.configs.recommended],
+    rules: {
+      'unicorn/catch-error-name': ['warn', {name: 'err'}],
+      'unicorn/escape-case': 'warn',
+      'unicorn/no-await-expression-member': 'warn',
+      'unicorn/no-console-spaces': 'warn',
+      'unicorn/no-instanceof-array': 'warn',
+      'unicorn/no-useless-fallback-in-spread': 'warn',
+      'unicorn/no-useless-length-check': 'warn',
+      'unicorn/no-useless-promise-resolve-reject': 'warn',
+      'unicorn/no-useless-spread': 'warn',
+      'unicorn/number-literal-case': 'warn',
+      'unicorn/prefer-add-event-listener': 'warn',
+      'unicorn/prefer-array-find': 'warn',
+      'unicorn/prefer-array-flat-map': 'warn',
+      'unicorn/prefer-array-flat': 'warn',
+      'unicorn/prefer-array-index-of': 'warn',
+      'unicorn/prefer-array-some': 'warn',
+      'unicorn/prefer-code-point': 'warn',
+      'unicorn/prefer-date-now': 'warn',
+      'unicorn/prefer-default-parameters': 'warn',
+      'unicorn/prefer-dom-node-append': 'warn',
+      'unicorn/prefer-dom-node-dataset': 'warn',
+      'unicorn/prefer-dom-node-remove': 'warn',
+      'unicorn/prefer-dom-node-text-content': 'warn',
+      'unicorn/prefer-event-target': 'warn',
+      'unicorn/prefer-includes': 'warn',
+      'unicorn/prefer-keyboard-event-key': 'warn',
+      'unicorn/prefer-math-trunc': 'warn',
+      'unicorn/prefer-modern-dom-apis': 'warn',
+      'unicorn/prefer-modern-math-apis': 'warn',
+      'unicorn/prefer-native-coercion-functions': 'warn',
+      'unicorn/prefer-negative-index': 'warn',
+      'unicorn/prefer-node-protocol': 'warn',
+      'unicorn/prefer-number-properties': 'warn',
+      'unicorn/prefer-object-from-entries': 'warn',
+      'unicorn/prefer-optional-catch-binding': 'warn',
+      'unicorn/prefer-prototype-methods': 'warn',
+      'unicorn/prefer-query-selector': 'warn',
+      'unicorn/prefer-reflect-apply': 'warn',
+      'unicorn/prefer-regexp-test': 'warn',
+      'unicorn/prefer-string-replace-all': 'warn',
+      'unicorn/prefer-string-slice': 'warn',
+      'unicorn/prefer-string-starts-ends-with': 'warn',
+      'unicorn/prefer-string-trim-start-end': 'warn',
+      'unicorn/prefer-switch': 'warn',
+      'unicorn/prefer-top-level-await': 'warn',
+      'unicorn/prefer-type-error': 'warn',
+      'unicorn/relative-url-style': 'warn',
+      'unicorn/require-array-join-separator': 'warn',
+      'unicorn/require-number-to-fixed-digits-argument': 'warn',
+      'unicorn/template-indent': 'warn',
+      'unicorn/throw-new-error': 'warn',
+    },
+  },
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-  codegen.flatConfig.recommendedConfig as any,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-  pluginPromise.configs['flat/recommended'],
-  // {
-  //   plugins: {
-  //     'eslint-comments': pluginEslintComments,
-  //   },
-  //   // extends: [pluginEslintComments.configs.recommended],
-  // },
+  {
+    name: 'codegen',
+    extends: [codegen.flatConfig.recommendedConfig as any],
+    rules: {'codegen/codegen': 'warn'},
+  },
+  {
+    name: 'promise',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    extends: [pluginPromise.configs['flat/recommended']],
+    rules: {'promise/always-return': 'off'},
+  },
+  {
+    plugins: {
+      'eslint-comments': pluginEslintComments,
+    },
+    rules: {
+      'eslint-comments/disable-enable-pair': 'off',
+      'eslint-comments/no-unlimited-disable': 'off',
+      'eslint-comments/no-unused-disable': 'warn',
+    },
+  },
+  {
+    plugins: {
+      'jest-formatting': jestFormatting,
+    },
+    rules: {
+      'jest-formatting/padding-around-describe-blocks': 2,
+      'jest-formatting/padding-around-test-blocks': 2,
+    },
+  },
   {
     name: 'typescript',
-    // @ts-expect-error not matching type but works at runtime, unclear why.
-    plugins: {pluginTs: pluginTs},
-    extends: [pluginTs.configs.strictTypeChecked],
+    extends: [pluginTs.configs.strict],
+    // extends: [pluginTs.configs.strictTypeChecked],
 
     languageOptions: {
       parserOptions: {
