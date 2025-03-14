@@ -1,6 +1,5 @@
 // packages/shadcn/__stories__/skeleton.stories.tsx
 import type {Meta, StoryObj} from '@storybook/react'
-import React from 'react'
 import {Skeleton} from '../ui/skeleton'
 
 const meta = {

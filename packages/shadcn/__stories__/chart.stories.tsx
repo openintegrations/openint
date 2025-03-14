@@ -1,5 +1,5 @@
 import type {Meta, StoryFn} from '@storybook/react'
-import React, {ReactElement} from 'react'
+import {JSX} from 'react'
 import {
   Area,
   AreaChart,
@@ -11,8 +11,6 @@ import {
   LineChart,
   Pie,
   PieChart,
-  ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
@@ -31,7 +29,7 @@ const ChartWrapper = ({
   config,
   className,
 }: {
-  children: ReactElement
+  children: JSX.Element
   config: ChartConfig
   className?: string
 }) => (
@@ -305,7 +303,7 @@ export const CustomTooltipExample: StoryFn = () => {
             <ChartTooltipContent
               indicator="dashed"
               labelFormatter={(value) => `Month: ${value}`}
-              formatter={(value, name, item) => (
+              formatter={(value, name) => (
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-muted-foreground">
                     {name === 'value' ? 'Sales' : 'Conversions'}

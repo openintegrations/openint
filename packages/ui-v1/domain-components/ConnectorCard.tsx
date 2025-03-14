@@ -2,10 +2,11 @@ import React from 'react'
 import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Badge} from '@openint/shadcn/ui'
+import type {ConnectorTemporary} from './__stories__/fixtures'
 
 export interface ConnectorCardProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  connector: Core['connector']
+  connector: ConnectorTemporary
 }
 
 /**

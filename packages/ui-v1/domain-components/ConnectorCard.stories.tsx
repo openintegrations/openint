@@ -1,5 +1,4 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import React from 'react'
 import {FIXTURES} from './__stories__/fixtures'
 import {ConnectorCard} from './ConnectorCard'
 

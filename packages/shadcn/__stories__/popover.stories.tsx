@@ -1,6 +1,5 @@
 // packages/shadcn/__stories__/popover.stories.tsx
 import type {Meta, StoryObj} from '@storybook/react'
-import React from 'react'
 import {Button} from '../ui/button'
 import {Input} from '../ui/input'
 import {Label} from '../ui/label'

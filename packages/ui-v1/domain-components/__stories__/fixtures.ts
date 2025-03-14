@@ -1,5 +1,11 @@
 import type {Core} from '@openint/api-v1/models'
 
+// @rodrigo FIX ME to have server return the same type
+export type ConnectorTemporary = Core['connector'] & {
+  stage: 'alpha' | 'beta' | 'ga'
+  connection_count?: number
+}
+
 const connectors = {
   salesforce: {
     name: 'salesforce',
@@ -46,7 +52,7 @@ const connectors = {
     stage: 'beta' as const,
     platforms: ['web', 'desktop', 'mobile'],
   },
-} satisfies Record<string, Core['connector']>
+} satisfies Record<string, ConnectorTemporary>
 
 export const FIXTURES = {
   connectors,
