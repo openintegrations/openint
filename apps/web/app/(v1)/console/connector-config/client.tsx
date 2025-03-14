@@ -1,8 +1,17 @@
 'use client'
 
 import Image from 'next/image'
-import {use} from 'react'
+import {use, useState} from 'react'
 import type {core} from '@openint/api-v1/models'
+import {Button} from '@openint/shadcn/ui'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@openint/shadcn/ui/sheet'
 import {
   Table,
   TableBody,
@@ -11,9 +20,62 @@ import {
   TableHeader,
   TableRow,
 } from '@openint/shadcn/ui/table'
+import {AddConnectorConfig} from '@openint/ui-v1/domain-components/AddConnectorConfig'
 import {useSuspenseQuery} from '@openint/ui-v1/trpc'
 import type {z} from '@openint/util'
 import {useTRPC} from '../client'
+
+export function ConnectorConfigListHeader(props: {
+  initialData?: Promise<{
+    items: Array<z.infer<typeof core.connector>>
+    total: number
+    limit: number
+    offset: number
+  }>
+}) {
+  const initialData = use(props.initialData ?? Promise.resolve(undefined))
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const connectors = initialData?.items ?? []
+  const trpc = useTRPC()
+  const res = useSuspenseQuery(
+    trpc.listConnectors.queryOptions(
+      {},
+      initialData ? {initialData} : undefined,
+    ),
+  )
+
+  const connectorConfigs = res.data.items
+  console.log({connectors})
+
+  return (
+    <div className="flex justify-between">
+      <h1 className="text-2xl font-bold">Connector Configs</h1>
+
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetTrigger asChild>
+          <Button variant="default">Add Connector</Button>
+        </SheetTrigger>
+        <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+          <SheetHeader>
+            <SheetTitle>Add Connector Configuration</SheetTitle>
+            <SheetDescription>
+              Configure a new connector for your organization.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="py-6">
+            <AddConnectorConfig
+              connectors={connectors}
+              onSuccess={() => {
+                setSheetOpen(false)
+                res.refetch()
+              }}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  )
+}
 
 export function ConnectorConfigList(props: {
   initialData?: Promise<{
@@ -28,7 +90,7 @@ export function ConnectorConfigList(props: {
   const res = useSuspenseQuery(
     trpc.listConnectorConfigs.queryOptions(
       {expand: 'enabled_integrations,connector'},
-      (initialData ? {initialData} : undefined) as never,
+      initialData ? {initialData} : undefined,
     ),
   )
 

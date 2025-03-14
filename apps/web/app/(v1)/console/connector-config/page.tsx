@@ -3,7 +3,7 @@ import type {PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../client'
-import {ConnectorConfigList} from './client'
+import {ConnectorConfigList, ConnectorConfigListHeader} from './client'
 
 function Fallback() {
   return <div>Loading...</div>
@@ -17,11 +17,11 @@ export default async function Page(props: PageProps) {
   return (
     <div>
       <ClientApp token={token}>
-        <h1>Connector Configs</h1>
         <Suspense fallback={<Fallback />}>
+          <ConnectorConfigListHeader initialData={api.listConnectors()} />
           <ConnectorConfigList
             initialData={api.listConnectorConfigs({
-              expand: 'enabled_integrations',
+              expand: 'enabled_integrations,connection_count',
             })}
           />
         </Suspense>
