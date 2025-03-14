@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable unicorn/prefer-top-level-await */
 import '@openint/app-config/register.node'
 import {logLink, sync} from '@openint/cdk'
 import {plaidProvider} from '@openint/connector-plaid'
