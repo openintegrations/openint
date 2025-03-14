@@ -1,22 +1,24 @@
 // @ts-check
+
+// Failing due to https://github.com/eslint/css/issues/56, should be released in few days hopefully
+// import pluginCss from '@eslint/css'
 import pluginJs from '@eslint/js'
+// The problem kids...
+// @ts-expect-error No types available
+import pluginNext from '@next/eslint-plugin-next'
 import configPrettier from 'eslint-config-prettier/flat'
 import codegen from 'eslint-plugin-codegen'
+// @ts-expect-error No types available
+import pluginEslintComments from 'eslint-plugin-eslint-comments'
+import pluginJest from 'eslint-plugin-jest'
+// @ts-expect-error No types available
+import pluginJestFormatting from 'eslint-plugin-jest-formatting'
+// @ts-expect-error No types available
+import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
 import pluginTs from 'typescript-eslint'
-import pluginJest from 'eslint-plugin-jest'
-
-// The problem kids...
-// @ts-expect-error No types available
-import pluginNext from '@next/eslint-plugin-next'
-// @ts-expect-error No types available
-import pluginPromise from 'eslint-plugin-promise'
-// @ts-expect-error No types available
-import pluginEslintComments from 'eslint-plugin-eslint-comments'
-// @ts-expect-error No types available
-import pluginJestFormatting from 'eslint-plugin-jest-formatting'
 
 // TODO: Consider putting eslint config into its own folder, like some other recommended setups!
 
@@ -204,7 +206,6 @@ export default pluginTs.config(
       'unicorn/throw-new-error': 'warn',
     },
   },
-
   {
     name: 'promise',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
