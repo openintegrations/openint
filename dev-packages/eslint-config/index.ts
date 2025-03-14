@@ -1,4 +1,6 @@
 // @ts-check
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 // Failing due to https://github.com/eslint/css/issues/56, should be released in few days hopefully
 // import pluginCss from '@eslint/css'
@@ -18,11 +20,16 @@ import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
-import pluginTs, {
-  Config,
-  ConfigArray,
-  type InfiniteDepthConfigWithExtends,
-} from 'typescript-eslint'
+import {defineConfig} from 'eslint/config'
+import pluginTs from 'typescript-eslint'
+
+export type ConfigWithExtendsArray = Extract<
+  Parameters<typeof defineConfig>[0],
+  {extends?: unknown}
+>
+export type Config = ReturnType<typeof defineConfig>[number]
+
+export {defineConfig}
 
 // Add css when ready
 
@@ -73,18 +80,13 @@ export const configs = {
       'require-await': 'off',
       // TODO: Figure this out...
 
-      // 'react/jsx-curly-brace-presence': 'warn',
-
-      // 'react-hooks/exhaustive-deps': [
-      //   'warn',
-      //   {additionalHooks: '(useUpdateEffect)'},
-      // ],q
+      // Add plugin import again
       // 'import/no-unresolved': 'error',
     },
   },
   typescript: {
-    extends: [pluginTs.configs.strict],
-    // extends: [pluginTs.configs.strictTypeChecked],
+    // extends: [pluginTs.configs.strict as Config[]],
+    extends: [pluginTs.configs.strictTypeChecked as Config[]],
 
     languageOptions: {
       parserOptions: {
@@ -133,10 +135,20 @@ export const configs = {
     },
   },
   react: {
-    extends: [pluginReact.configs.flat['recommended']!],
+    extends: [pluginReact.configs.flat['recommended'] as Config],
+    settings: {react: {version: 'detect'}},
+    rules: {
+      'react/jsx-curly-brace-presence': 'warn',
+    },
   },
   'react-hooks': {
     extends: [pluginReactHooks.configs['recommended-latest']],
+    rules: {
+      'react-hooks/exhaustive-deps': [
+        'warn',
+        {additionalHooks: '(useUpdateEffect)'},
+      ],
+    },
   },
   next: {
     plugins: {'@next/next': pluginNext},
@@ -205,12 +217,11 @@ export const configs = {
     },
   },
   promise: {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     extends: [pluginPromise.configs['flat/recommended']],
     rules: {'promise/always-return': 'off'},
   },
   codegen: {
-    extends: [codegen.flatConfig.recommendedConfig as any],
+    extends: [codegen.flatConfig.recommendedConfig as Config],
     rules: {'codegen/codegen': 'warn'},
   },
   'eslint-comments': {
@@ -228,13 +239,10 @@ export const configs = {
       '**/__{mocks,tests}__/**/*.{js,ts,tsx}',
       '**/*.{spec,test}.{js,ts,tsx}',
     ],
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     plugins: {'jest-formatting': pluginJestFormatting},
     extends: [pluginJest.configs['flat/recommended']],
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     rules: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       ...pluginJestFormatting.configs.recommended.overrides.rules,
       'jest/expect-expect': 'off',
     },
@@ -242,11 +250,11 @@ export const configs = {
   prettier: {
     extends: [configPrettier],
   },
-} satisfies Record<string, InfiniteDepthConfigWithExtends>
+} satisfies Record<string, Omit<ConfigWithExtendsArray, 'name'>>
 
-export default pluginTs.config(
-  Object.entries(configs).map(([name, config]) => ({
+export default defineConfig(
+  ...(Object.entries(configs).map(([name, config]) => ({
     name,
     ...config,
-  })),
-) as Array<Config & {name: keyof typeof configs}>
+  })) as [ConfigWithExtendsArray]),
+) as Array<ConfigWithExtendsArray & {name: `${keyof typeof configs}${string}`}>
