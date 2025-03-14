@@ -39,6 +39,6 @@
     "**/*.cts",
     "**/*.ctsx"
   ],
-  "exclude": ["node_modules", "gateway"],
+  "exclude": ["node_modules"],
   "plugins": [{"name": "typescript-snapshots-plugin"}]
 }

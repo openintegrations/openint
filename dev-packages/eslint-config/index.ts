@@ -1,4 +1,3 @@
-// @ts-check
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
@@ -76,6 +75,9 @@ export const configs = keyAsName({
       '**/.storybook',
       // For now until we upgrade to new lint
       'apps/web/postcss.config.mjs',
+      // Unsure why this is not part of the "tsconfig" project somehow...
+      //Also cannot even add it to the default config
+      '**/eslint-config/index.ts',
     ],
   },
   defaultFiles: {
@@ -111,7 +113,6 @@ export const configs = keyAsName({
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
-        allowDefaultProject: true,
       },
     },
 
