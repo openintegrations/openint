@@ -4,8 +4,8 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {core} from '../models'
+import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -128,6 +128,9 @@ export const connectorConfigRouter = router({
                 message:
                   'Invalid expand option. Valid options are: connector, enabled_integrations',
               },
+            )
+            .describe(
+              'Comma separated list of fields to optionally expand.\n\nAvailable Options: `connector`, `enabled_integrations`',
             )
             .optional(),
           connector_name: zConnectorName.optional(),
