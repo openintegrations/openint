@@ -3,13 +3,17 @@ import codegen from 'eslint-plugin-codegen'
 // @ts-expect-error No types available
 import pluginEslintComments from 'eslint-plugin-eslint-comments'
 // @ts-expect-error No types available
-import jestFormatting from 'eslint-plugin-jest-formatting'
+import pluginJest from 'eslint-plugin-jest'
+// @ts-expect-error No types available
+import pluginJestFormatting from 'eslint-plugin-jest-formatting'
 // @ts-expect-error No types available
 import pluginPromise from 'eslint-plugin-promise'
 import pluginUnicorn from 'eslint-plugin-unicorn'
 import pluginTs from 'typescript-eslint'
 
-// TODO: Add prettier, react, react hooks and next.js
+// TODO: Consider putting eslint config into its own folder, like some other recommended setups!
+
+// TODO: Add prettier, react, react hooks and next.js, jest
 export default pluginTs.config(
   {
     name: 'globaIgnores',
@@ -57,9 +61,8 @@ export default pluginTs.config(
       'object-shorthand': 'warn',
       'prefer-const': 'warn',
       quotes: ['warn', 'single', {avoidEscape: true}],
+      'require-await': 'off',
       // TODO: Figure this out...
-
-      // 'import/no-unresolved': 'error',
 
       // 'react/jsx-curly-brace-presence': 'warn',
 
@@ -67,6 +70,7 @@ export default pluginTs.config(
       //   'warn',
       //   {additionalHooks: '(useUpdateEffect)'},
       // ],
+      // 'import/no-unresolved': 'error',
     },
   },
   {
@@ -148,13 +152,21 @@ export default pluginTs.config(
       'eslint-comments/no-unused-disable': 'warn',
     },
   },
+
   {
-    plugins: {
-      'jest-formatting': jestFormatting,
-    },
+    files: [
+      '**/__{mocks,tests}__/**/*.{js,ts,tsx}',
+      '**/*.{spec,test}.{js,ts,tsx}',
+    ],
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    plugins: {'jest-formatting': pluginJestFormatting},
+    extends: [pluginJest.configs['flat/recommended']],
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     rules: {
-      'jest-formatting/padding-around-describe-blocks': 2,
-      'jest-formatting/padding-around-test-blocks': 2,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      ...pluginJestFormatting.configs.recommended.overrides.rules,
+      'jest/expect-expect': 'off',
     },
   },
   {
@@ -201,7 +213,7 @@ export default pluginTs.config(
       '@typescript-eslint/no-unsafe-return': 'warn',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-var-requires': 'off',
-      'require-await': 'off',
+
       '@typescript-eslint/require-await': 'warn',
       '@typescript-eslint/restrict-plus-operands': 'warn',
       '@typescript-eslint/restrict-template-expressions': 'off',
