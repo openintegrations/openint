@@ -160,15 +160,6 @@ export const connectorConfigRouter = router({
                 : {}),
             },
             total: sql`count(*) over ()`,
-            ...(includeConnectionCount
-              ? {
-                  connection_count: sql<number>`(
-                    SELECT COUNT(*)
-                    FROM ${schema.connection}
-                    WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
-                  )`.as('connection_count'),
-                }
-              : {}),
           })
           .from(schema.connector_config)
           .where(
