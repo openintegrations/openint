@@ -1,4 +1,6 @@
 import {TRPCError} from '@trpc/server'
+// TODO (@rodri77): Fix this import
+import type {PgSelect} from 'drizzle-orm'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
@@ -106,6 +108,21 @@ const connectorConfigWithRelations = z.intersection(
   }),
 )
 
+function withConnectionCount<T extends PgSelect>(
+  qb: T,
+  includeCount: boolean = false,
+) {
+  if (!includeCount) return qb
+
+  return qb.select({
+    connection_count: sql<number>`(
+      SELECT COUNT(*) 
+      FROM ${schema.connection} 
+      WHERE ${schema.connection.connector_config_id} = ${schema.connector_config.id}
+    )`.as('connection_count'),
+  })
+}
+
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
     .meta({
@@ -141,29 +158,39 @@ export const connectorConfigRouter = router({
       ),
     )
     .query(async ({ctx, input}) => {
-      const {query, limit, offset} = applyPaginationAndOrder(
-        ctx.db
-          .select({
-            connector_config: schema.connector_config,
-            total: sql`count(*) over ()`,
-          })
-          .from(schema.connector_config)
-          .where(
-            and(
-              input?.connector_name
-                ? eq(
-                    schema.connector_config.connector_name,
-                    input.connector_name,
-                  )
-                : undefined,
-            ),
+      const includeConnectionCount = (input?.expand || []).includes(
+        'connection_count',
+      )
+
+      let query = ctx.db
+        .select({
+          connector_config: schema.connector_config,
+          total: sql`count(*) over ()`,
+        })
+        .from(schema.connector_config)
+        .where(
+          and(
+            input?.connector_name
+              ? eq(schema.connector_config.connector_name, input.connector_name)
+              : undefined,
           ),
+        )
+        .$dynamic()
+
+      query = withConnectionCount(query, includeConnectionCount)
+
+      const {
+        query: finalQuery,
+        limit,
+        offset,
+      } = applyPaginationAndOrder(
+        query,
         schema.connector_config.created_at,
         input,
       )
 
       const {items, total} = await processPaginatedResponse(
-        query,
+        finalQuery,
         'connector_config',
       )
       const expandOptions = (input?.expand || []) as Array<
