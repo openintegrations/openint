@@ -93,34 +93,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.getConnection('conn_');
-
-              console.log(response);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.get_connection(
-                id="conn_",
-            )
-            print(response)
   /connection:
     get:
       operationId: listConnections
@@ -298,34 +270,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              // Automatically fetches more pages as needed.
-              for await (const listConnectionsResponse of client.listConnections()) {
-                console.log(listConnectionsResponse);
-              }
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            page = client.list_connections()
-            page = page.items[0]
-            print(page)
   /connection/{id}/check:
     post:
       operationId: checkConnection
@@ -399,34 +343,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.checkConnection('conn_');
-
-              console.log(response.id);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.check_connection(
-                "conn_",
-            )
-            print(response.id)
   /connector-config:
     get:
       operationId: listConnectorConfigs
@@ -455,8 +371,16 @@ paths:
             description: Offset the items returned
         - in: query
           name: expand
+          description: |-
+            Comma separated list of fields to expand.
+
+            Available Options: `connector`, `enabled_integrations`
           schema:
             type: string
+            description: |-
+              Comma separated list of fields to expand.
+
+              Available Options: `connector`, `enabled_integrations`
         - in: query
           name: connector_name
           description: The name of the connector
@@ -700,34 +624,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              // Automatically fetches more pages as needed.
-              for await (const listConnectionConfigsResponse of client.listConnectionConfigs()) {
-                console.log(listConnectionConfigsResponse);
-              }
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            page = client.list_connection_configs()
-            page = page.items[0]
-            print(page)
   /connector:
     get:
       operationId: listConnectors
@@ -934,34 +830,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.createMagicLink('customer_id');
-
-              console.log(response.magic_link_url);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.create_magic_link(
-                customer_id="customer_id",
-            )
-            print(response.magic_link_url)
   /customer/{customer_id}/token:
     post:
       operationId: createToken
@@ -1027,34 +895,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.createToken('customer_id');
-
-              console.log(response.token);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.create_token(
-                customer_id="customer_id",
-            )
-            print(response.token)
 components:
   securitySchemes:
     ApiKey:
