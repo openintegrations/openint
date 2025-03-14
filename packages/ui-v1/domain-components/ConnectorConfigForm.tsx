@@ -12,6 +12,13 @@ export interface ConnectorConfigFormProps<
    * The name of the connector to display the config form for
    */
   connectorName: T
+
+  /**
+   * The connector config data to display the config form for. Initial state of the form.
+   * If data is passed in, it is expected to come in the schema for the connectorConfig.config
+   **/
+  connectorConfig: any
+
   /**
    * Optional class name for styling the form container
    */
@@ -39,6 +46,7 @@ export interface ConnectorConfigFormProps<
  */
 export function ConnectorConfigForm<T extends keyof typeof defConnectors>({
   connectorName,
+  connectorConfig,
   className,
   loading = false,
   onSubmit,
@@ -57,6 +65,8 @@ export function ConnectorConfigForm<T extends keyof typeof defConnectors>({
   }
 
   const handleSubmit = (data: any) => {
+    // NOTE: this may be unnecessary if the rjsf/core already handles it. We also validate on the server.
+    // TODO: check if validation is occurring already client side already and if so remove this.
     const parsed = ccfgSchema.safeParse(data)
     if (!parsed.success) {
       console.error(parsed.error)
@@ -78,6 +88,7 @@ export function ConnectorConfigForm<T extends keyof typeof defConnectors>({
       <SchemaForm
         ref={ref}
         schema={ccfgSchema}
+        formData={connectorConfig}
         className={className}
         loading={loading}
         onSubmit={handleSubmit}
