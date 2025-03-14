@@ -35,7 +35,7 @@ export function ConnectorConfigListHeader(props: {
 }) {
   const initialData = use(props.initialData ?? Promise.resolve(undefined))
   const [sheetOpen, setSheetOpen] = useState(false)
-  const connectors = initialData?.items ?? []
+  const connectors = initialData ?? []
   const trpc = useTRPC()
   const res = useSuspenseQuery(
     trpc.listConnectors.queryOptions(
@@ -56,21 +56,13 @@ export function ConnectorConfigListHeader(props: {
           <Button variant="default">Add Connector</Button>
         </SheetTrigger>
         <SheetContent side="right" className="w-[400px] sm:w-[540px]">
-          <SheetHeader>
-            <SheetTitle>Add Connector Configuration</SheetTitle>
-            <SheetDescription>
-              Configure a new connector for your organization.
-            </SheetDescription>
-          </SheetHeader>
-          <div className="py-6">
-            <AddConnectorConfig
-              connectors={connectors}
-              onSuccess={() => {
-                setSheetOpen(false)
-                res.refetch()
-              }}
-            />
-          </div>
+          <AddConnectorConfig
+            connectors={connectors}
+            onSuccess={() => {
+              setSheetOpen(false)
+              res.refetch()
+            }}
+          />
         </SheetContent>
       </Sheet>
     </div>
