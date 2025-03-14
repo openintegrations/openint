@@ -1,3 +1,4 @@
+/* eslint-disable codegen/codegen */
 // import {zodInsecureDebug} from '@openint/util'
 
 // Make error message more understandable. But security risk... so turn me off unless debugging

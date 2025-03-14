@@ -46,8 +46,14 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+
+      # - name: Setup upterm session
+      #   if: always()
+      #   uses: lhotari/action-upterm@v1
+
       - name: Run type checks
         run: pnpm run typecheck
+
 
   lint:
     runs-on: ubuntu-latest
@@ -66,7 +72,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run lint
-        run: pnpm run lint
+        run: pnpm run lint --quiet
         env:
           NODE_OPTIONS: --max-old-space-size=8192
 
@@ -169,6 +175,8 @@ jobs:
       # Consider using official github action https://www.chromatic.com/docs/github-actions/
       - name: Publish storybook to chromatic
         run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui-v1 chromatic --only-changed --exit-zero-on-changes
+        env:
+          CHROMATIC_SHA: ${{ github.sha }}
 
   # slack-notification:
   #   runs-on: ubuntu-latest

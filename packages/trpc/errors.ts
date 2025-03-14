@@ -129,7 +129,7 @@ export async function parseErrorInfo(err: unknown): Promise<
   // Anything else non-null would be considered internal error.
   if (err != null) {
     // node:util causes problem with webpack. What we need is a replacement for node:util.format
-    // eslint-disable-next-line unicorn/prefer-node-protocol
+
     const util = await import('util')
     return {
       error_type: 'INTERNAL_ERROR',
