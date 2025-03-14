@@ -4,7 +4,7 @@ import {z} from '@openint/util'
 import {SchemaForm} from '../SchemaForm'
 
 const meta: Meta<typeof SchemaForm> = {
-  title: 'Components/SchemaForm',
+  title: 'ui-v1/components/SchemaForm',
   component: SchemaForm,
   parameters: {
     layout: 'centered',

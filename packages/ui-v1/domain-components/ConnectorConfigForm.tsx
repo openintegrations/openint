@@ -20,14 +20,6 @@ export interface ConnectorConfigFormProps<
   connectorConfig: any
 
   /**
-   * Optional class name for styling the form container
-   */
-  className?: string
-  /**
-   * Flag to indicate if the form is in a loading state
-   */
-  loading?: boolean
-  /**
    * Callback for form submission
    */
   onSubmit: (data: any) => void
@@ -39,6 +31,15 @@ export interface ConnectorConfigFormProps<
    * onSubmit is then called with the form data
    */
   ref: ForwardedRef<Form<any, RJSFSchema, any>>
+
+  /**
+   * Optional class name for styling the form container
+   */
+  className?: string
+  /**
+   * Flag to indicate if the form is in a loading state
+   */
+  loading?: boolean
 }
 
 /**
