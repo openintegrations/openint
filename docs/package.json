@@ -1,7 +1,7 @@
 {
   "name": "@openint/docs",
   "scripts": {
-    "dev": "NODE_ENV=development pnpm run gen:docs-oas && mintlify dev",
+    "dev": "NODE_ENV=development cd ../packages/api-v1 && pnpm run gen && cd ../../docs && pnpm run gen:docs-oas && mintlify dev",
     "gen:docs-oas": "node generateDocsOas.bin.cjs"
   },
   "dependencies": {
