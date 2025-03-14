@@ -147,7 +147,18 @@ export const connectorConfigRouter = router({
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
-            connector_config: schema.connector_config,
+            connector_config: {
+              ...schema.connector_config,
+              ...(includeConnectionCount
+                ? {
+                    connection_count: sql<number>`(
+                      SELECT COUNT(*)
+                      FROM ${schema.connection}
+                      WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
+                    )`.as('connection_count'),
+                  }
+                : {}),
+            },
             total: sql`count(*) over ()`,
             ...(includeConnectionCount
               ? {
