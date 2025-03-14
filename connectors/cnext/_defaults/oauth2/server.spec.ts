@@ -12,7 +12,7 @@ jest.mock('node-fetch')
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   let mockConnectorDef: ConnectorDef
-  let mockOauthConfig = {
+  const mockOauthConfig = {
     type: 'OAUTH2',
     authorization_request_url: 'https://auth.example.com/authorize',
     token_request_url: 'https://auth.example.com/token',
