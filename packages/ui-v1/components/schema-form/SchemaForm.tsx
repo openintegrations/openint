@@ -5,16 +5,12 @@ import type {
   ThemeProps,
 } from '@rjsf/core'
 import {withTheme} from '@rjsf/core'
-import {
-  type RJSFSchema,
-  type StrictRJSFSchema,
-  type UiSchema,
-} from '@rjsf/utils'
+import {type RJSFSchema} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import type {z} from '@openint/util'
-import {zodToOas31Schema} from './utils'
+import {generateUiSchema, transformJsonSchema, zodToOas31Schema} from './utils'
 
 // Define the theme (copied from original SchemaForm)
 const theme: ThemeProps = {
@@ -153,93 +149,4 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   ) : (
     form
   )
-}
-
-// MARK: - Utils
-
-// Helper functions from original SchemaForm
-function titleCase(str: string) {
-  const words = str.split(/(?=[A-Z])|_/)
-  return words
-    .map((word) => word.charAt(0).toUpperCase() + word.toLowerCase().slice(1))
-    .join(' ')
-}
-
-function isTypeObject(schema: RJSFSchema): boolean {
-  return (
-    schema.type === 'object' ||
-    (Array.isArray(schema.type) && schema.type.includes('object'))
-  )
-}
-
-export function transformJsonSchema(
-  schema: RJSFSchema,
-  options: {
-    jsonSchemaTransform?: (schema: RJSFSchema) => RJSFSchema
-    hideSensitiveFields?: boolean
-  } = {},
-): RJSFSchema {
-  const {jsonSchemaTransform, hideSensitiveFields = true} = options
-  let transformedSchema = {...schema}
-
-  // Apply user-provided transform first
-  if (jsonSchemaTransform) {
-    transformedSchema = jsonSchemaTransform(transformedSchema)
-  }
-
-  // Handle sensitive fields if needed
-  if (hideSensitiveFields && transformedSchema.properties) {
-    const sensitiveFieldPatterns = [
-      /password/i,
-      /token/i,
-      /secret/i,
-      /api/i,
-      /credential/i,
-    ]
-
-    // Modify properties that match sensitive patterns
-    Object.entries(transformedSchema.properties).forEach(([key, prop]) => {
-      if (
-        typeof prop === 'object' &&
-        sensitiveFieldPatterns.some((pattern) => pattern.test(key))
-      ) {
-        // Mark as password type for UI
-        if (prop.type === 'string') {
-          transformedSchema.properties![key] = {
-            ...prop,
-            format: 'password',
-          }
-        }
-      }
-    })
-  }
-
-  return transformedSchema
-}
-
-export function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
-  const uiSchema: UiSchema = {}
-
-  if (isTypeObject(jsonSchema) && jsonSchema.properties) {
-    for (const [key, _value] of Object.entries(jsonSchema.properties)) {
-      const value = _value as StrictRJSFSchema
-      const friendlyLabel = value.title ?? titleCase(key)
-      uiSchema[key] = {
-        'ui:title': friendlyLabel,
-        'ui:classNames': 'pt-2',
-      }
-
-      if (typeof value === 'object') {
-        if (isTypeObject(value)) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          uiSchema[key] = {
-            ...uiSchema[key],
-            ...generateUiSchema(value as RJSFSchema),
-          }
-        }
-      }
-    }
-  }
-
-  return uiSchema
 }
