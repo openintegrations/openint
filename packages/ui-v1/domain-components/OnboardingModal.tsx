@@ -254,8 +254,8 @@ export function OnboardingModal({
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              You haven't finished setting up your first connector. Are you sure
-              you want to quit the setup process?
+              You haven&apos;t finished setting up your first connector. Are you
+              sure you want to quit the setup process?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
