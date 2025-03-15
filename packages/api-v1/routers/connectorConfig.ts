@@ -258,11 +258,19 @@ export const connectorConfigRouter = router({
     .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
       const {id, config} = input
-      const [ccfg] = await ctx.db
+      const res = await ctx.db
         .update(schema.connector_config)
         .set({config, updated_at: new Date().toISOString()})
         .where(eq(schema.connector_config.id, id))
         .returning()
+
+      if (!res.length) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config with ID "${id}" not found`,
+        })
+      }
+      const [ccfg] = res
 
       return ccfg!
     }),
@@ -278,10 +286,19 @@ export const connectorConfigRouter = router({
     .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
       const {id} = input
-      const [ccfg] = await ctx.db
+      const res = await ctx.db
         .delete(schema.connector_config)
         .where(eq(schema.connector_config.id, id))
         .returning()
+
+      if (!res.length) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config with ID "${id}" not found`,
+        })
+      }
+
+      const [ccfg] = res
 
       return ccfg!
     }),

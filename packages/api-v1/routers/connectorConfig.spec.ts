@@ -208,6 +208,18 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(updateRes.updated_at).not.toEqual(createRes.updated_at)
   })
 
+  test('update connector config with invalid id returns error', async () => {
+    await expect(
+      asOrg.updateConnectorConfig({
+        id: 'ccfg_invalid',
+        config: {
+          oauth: {client_id: 'client_333', client_secret: 'yyy'},
+          envName: 'production',
+        },
+      }),
+    ).rejects.toThrow('not found')
+  })
+
   test('delete connector config', async () => {
     const createRes = await asOrg.createConnectorConfig({
       connector_name: 'qbo',
@@ -224,5 +236,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
     expect(res).toBeDefined()
     expect(res.connector_name).toEqual('qbo')
+  })
+
+  test('delete connector with invalid id returns error', async () => {
+    await expect(
+      asOrg.deleteConnectorConfig({
+        id: 'ccfg_invalid',
+      }),
+    ).rejects.toThrow('not found')
   })
 })
