@@ -183,4 +183,39 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(googleConnector?.integrations).toBeDefined()
     expect(googleConnector?.connector).toBeDefined()
   })
+
+  test('delete connector config', async () => {
+    const res = await getClient({
+      role: 'org',
+      orgId: 'org_222',
+    }).listConnectorConfigs.query({
+      expand: 'connector,enabled_integrations',
+    })
+
+    const id = res.items[0]?.id
+
+    const res = await asOrg.deleteConnectorConfig({
+      id,
+    })
+    expect(res).toEqual({
+      id: expect.any(String),
+      org_id: 'org_222',
+      connector_name: 'google',
+      created_at: expect.any(String),
+      updated_at: expect.any(String),
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        integrations: {
+          drive: {
+            enabled: true,
+            scopes: 'https://www.googleapis.com/auth/drive',
+          },
+          gmail: {
+            enabled: false,
+            scopes: 'https://www.googleapis.com/auth/gmail',
+          },
+        },
+      },
+    })
+  })
 })

@@ -250,4 +250,23 @@ export const connectorConfigRouter = router({
         .returning()
       return ccfg!
     }),
+  deleteConnectorConfig: orgProcedure
+    .meta({
+      openapi: {
+        method: 'DELETE',
+        path: '/connector-config/{id}',
+        enabled: false,
+      },
+    })
+    .input(z.object({id: z.string()}))
+    .output(core.connector_config)
+    .mutation(async ({ctx, input}) => {
+      const {id} = input
+      const [ccfg] = await ctx.db
+        .delete(schema.connector_config)
+        .where(eq(schema.connector_config.id, id))
+        .returning()
+
+      return ccfg!
+    }),
 })
