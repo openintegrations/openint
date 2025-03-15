@@ -65,6 +65,22 @@ export const WithUISchema: Story = {
   ),
 }
 
+export const Union: Story = {
+  args: {
+    debugMode: true,
+    schema: z.object({
+      oauth: z.union([
+        z.null().openapi({
+          title: 'Use OpenInt platform credentials',
+        }),
+        zOauth.openapi({
+          title: 'Use my own credentials',
+        }),
+      ]),
+    }),
+  },
+}
+
 // Simple example with email and password fields
 export const ZodSchema: Story = {
   args: {

@@ -11,8 +11,10 @@ import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import type {z} from '@openint/util'
-import {fields, generateUiSchema, widgets} from './ui'
+import {fields} from './fields'
+import {generateUiSchema} from './generateUiSchema'
 import {transformJsonSchema, zodToOas31Schema} from './utils'
+import {widgets} from './widgets'
 
 // Define the theme (copied from original SchemaForm)
 const theme: ThemeProps = {
