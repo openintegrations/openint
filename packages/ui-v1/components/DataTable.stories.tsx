@@ -1,5 +1,11 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {Button} from '@openint/shadcn/ui'
+import {
+  ConnectorTemporary,
+  FIXTURES,
+} from '../domain-components/__stories__/fixtures'
+import {ConnectorTableCell} from '../domain-components/ConnectorCard'
+import {CONNECTOR_CONFIG_COLUMNS} from '../domain-components/ConnectorConfigTable'
 import {ColumnDef, Columns, DataTable} from './DataTable'
 
 const meta: Meta<typeof DataTable> = {
@@ -94,4 +100,35 @@ export const WithCallToAction: Story = {
       </DataTable.Footer>
     </DataTable>
   ),
+}
+
+// Create a separate component for the connector table to avoid TypeScript errors
+const ConnectorConfigTableExample = () => {
+  // Use the connectorsList from fixtures
+  const connectorData = FIXTURES.connectorsList
+
+  // Define columns for connector data
+
+  return (
+    <DataTable<ConnectorTemporary, string | number | string[]>
+      data={connectorData}
+      columns={CONNECTOR_CONFIG_COLUMNS}>
+      <div className="w-full">
+        <div className="flex items-center py-4">
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+          <Button className="ml-4">Add Connector</Button>
+        </div>
+        <div className="rounded-md border">
+          <DataTable.Content />
+        </div>
+        <DataTable.FooterControl showRowCount />
+      </div>
+    </DataTable>
+  )
+}
+
+// Add a new story variant for connectors
+export const ConnectorConfigTable: Story = {
+  render: () => <ConnectorConfigTableExample />,
 }

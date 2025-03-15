@@ -2,7 +2,7 @@
 
 - [ ] Extract `SearchInput` into its own ui-v1/components
 - [x] Add a connector config story to the SimpleTable component
-- [/] `ConnectorTableCell` component, and `ui-v1/Connector/TableCell` (or maybe this is just a card variant)
+- [x] `ConnectorTableCell` component, and `ui-v1/Connector/TableCell` (or maybe this is just a card variant)
 - [/] `ConnectorConfigTableColumns` centralizing how to display each column for a connector and `ui-v1/Connector/TableColumns` stories that shows it off.
 
 - [x] `SimpleDataTable` should use latest `@tanstack/react-table` , need to install dependency
