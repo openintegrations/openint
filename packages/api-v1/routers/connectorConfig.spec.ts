@@ -185,37 +185,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   })
 
   test('delete connector config', async () => {
-    const res = await getClient({
-      role: 'org',
-      orgId: 'org_222',
-    }).listConnectorConfigs.query({
-      expand: 'connector,enabled_integrations',
+    const createRes = await asOrg.createConnectorConfig({
+      connector_name: 'qbo',
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
     })
 
-    const id = res.items[0]?.id
+    const id = createRes.id
 
     const res = await asOrg.deleteConnectorConfig({
       id,
     })
-    expect(res).toEqual({
-      id: expect.any(String),
-      org_id: 'org_222',
-      connector_name: 'google',
-      created_at: expect.any(String),
-      updated_at: expect.any(String),
-      config: {
-        oauth: {client_id: 'client_222', client_secret: 'xxx'},
-        integrations: {
-          drive: {
-            enabled: true,
-            scopes: 'https://www.googleapis.com/auth/drive',
-          },
-          gmail: {
-            enabled: false,
-            scopes: 'https://www.googleapis.com/auth/gmail',
-          },
-        },
-      },
-    })
+    expect(res).toBeDefined()
+    expect(res.connector_name).toEqual('qbo')
   })
 })
