@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 'use client'
 
 import type {
@@ -16,7 +17,7 @@ import {
   type Table as ReactTable,
 } from '@tanstack/react-table'
 import {ChevronDown, Loader2, Search} from 'lucide-react'
-import React, {createContext, useContext} from 'react'
+import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Button,
@@ -49,6 +50,7 @@ export interface DataTableProps<TItem, TValue> {
   filter?: (data: TItem) => boolean
   onRowClick?: (data: TItem) => void
   children?: React.ReactNode
+  className?: string
 }
 
 type DataTableContextValue<TData, TValue> = {
@@ -59,20 +61,19 @@ type DataTableContextValue<TData, TValue> = {
   onRowClick?: (data: TData) => void
 }
 
-const DataTableContext = createContext<
+const DataTableContext = React.createContext<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DataTableContextValue<any, any> | undefined
 >(undefined)
 
-function useDataTable<TData, TValue>() {
-  const context = useContext(DataTableContext)
+function useDataTableContext() {
+  const context = React.useContext(DataTableContext)
   if (!context) {
     throw new Error('useDataTable must be used within a DataTableProvider')
   }
   return context
 }
 
-// TODO: Create a schemaDataTable that define columns based on zod schema
-// For example displaying relativeDate, etc.
 export function DataTable<TData, TValue>({
   columns: _columns,
   data,
@@ -81,6 +82,7 @@ export function DataTable<TData, TValue>({
   filter = defaultFilter,
   onRowClick,
   children,
+  ...props
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -143,120 +145,95 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   })
-
-  const contextValue = React.useMemo(
-    () => ({table, columns, isRefetching, filter, onRowClick}),
-    [table, columns, isRefetching, filter, onRowClick],
-  )
-
   return (
-    <DataTableContext.Provider value={contextValue}>
-      {children}
+    <DataTableContext.Provider
+      // This optimization breaks the inner components because as updates to dataTable.state
+      // would not trigger a re-render for context consumers. We'll need a better mechanism for it
+      // value={React.useMemo(
+      //   () => ({table, columns, isRefetching, filter, onRowClick}),
+      //   [table, columns, isRefetching, filter, onRowClick],
+      // )}>
+      value={{table, columns, isRefetching, filter, onRowClick}}>
+      <div className={cn('w-full', props.className)}>{children}</div>
     </DataTableContext.Provider>
   )
 }
 
-export function DataTableFooterControl(props: {showRowCount?: boolean}) {
-  const {table} = useDataTable()
+export function DataTableTable(props: {className?: string}) {
+  const {table, columns, isRefetching, filter, onRowClick} =
+    useDataTableContext()
 
   return (
-    <div className="flex items-center justify-end space-x-2 py-4">
-      {props.showRowCount && (
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-      )}
-      {(table.getCanPreviousPage() || table.getCanNextPage()) && (
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}>
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
-        </div>
-      )}
+    <div className={cn('w-full rounded-md border', props.className)}>
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {isRefetching || !table.getRowModel().rows?.length ? (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                {isRefetching ? (
+                  <div className="flex size-full min-h-[300px] items-center justify-center">
+                    <Loader2 className="text-button size-8 animate-spin" />
+                  </div>
+                ) : (
+                  'No results'
+                )}
+              </TableCell>
+            </TableRow>
+          ) : (
+            table
+              .getRowModel()
+              .rows.filter((row) => filter(row.original))
+              .map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  onClick={
+                    onRowClick ? () => onRowClick?.(row.original) : undefined
+                  }
+                  className={cn(onRowClick && 'hover:bg-muted cursor-pointer')}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+          )}
+        </TableBody>
+      </Table>
     </div>
   )
 }
 
-// Add to DataTable composition
-DataTable.FooterControl = DataTableFooterControl
-
-export function DataTableContent() {
-  const {table, columns, isRefetching, filter, onRowClick} = useDataTable()
-
-  return (
-    <Table>
-      <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <TableHead key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-              </TableHead>
-            ))}
-          </TableRow>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {isRefetching || !table.getRowModel().rows?.length ? (
-          <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              {isRefetching ? (
-                <div className="flex size-full min-h-[300px] items-center justify-center">
-                  <Loader2 className="text-button size-8 animate-spin" />
-                </div>
-              ) : (
-                'No results'
-              )}
-            </TableCell>
-          </TableRow>
-        ) : (
-          table
-            .getRowModel()
-            .rows.filter((row) => filter(row.original))
-            .map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-                onClick={
-                  onRowClick ? () => onRowClick?.(row.original) : undefined
-                }
-                className={cn(onRowClick && 'hover:bg-muted cursor-pointer')}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-        )}
-      </TableBody>
-    </Table>
-  )
+// Add a convenience component for table controls
+export function DataTableHeader({children}: {children: React.ReactNode}) {
+  return <div className="flex items-center py-4">{children}</div>
 }
 
-DataTable.Content = DataTableContent
-
 export function SearchInput() {
-  const {table} = useDataTable()
+  const {table} = useDataTableContext()
   const [isFocused, setIsFocused] = React.useState(false)
 
+  console.log('table.getState().globalFilter', table.getState().globalFilter)
   return (
     <div
       className="relative max-w-lg transition-all duration-300 ease-in-out"
@@ -279,7 +256,7 @@ export function SearchInput() {
 }
 
 export function ColumnVisibilityToggle() {
-  const {table} = useDataTable()
+  const {table} = useDataTableContext()
 
   return (
     <DropdownMenu>
@@ -308,13 +285,50 @@ export function ColumnVisibilityToggle() {
   )
 }
 
-// Add a convenience component for table controls
-export function DataTableControls({children}: {children: React.ReactNode}) {
-  return <>{children}</>
+export function DataTableFooter({children}: {children: React.ReactNode}) {
+  return (
+    <div className="flex items-center justify-end space-x-2 py-4">
+      {children}
+    </div>
+  )
 }
 
-// Compose DataTable components
-DataTable.Table = DataTableContent
+export function Pagination() {
+  const {table} = useDataTableContext()
+
+  return (
+    <>
+      <div className="text-muted-foreground flex-1 text-sm">
+        {table.getFilteredSelectedRowModel().rows.length} of{' '}
+        {table.getFilteredRowModel().rows.length} row(s) selected.
+      </div>
+      {(table.getCanPreviousPage() || table.getCanNextPage()) && (
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
+            Next
+          </Button>
+        </div>
+      )}
+    </>
+  )
+}
+
+// Add to DataTable composition
+
+DataTable.Table = DataTableTable
+DataTable.Header = DataTableHeader
 DataTable.SearchInput = SearchInput
 DataTable.ColumnVisibilityToggle = ColumnVisibilityToggle
-DataTable.Controls = DataTableControls
+DataTable.Footer = DataTableFooter
+DataTable.Pagination = Pagination

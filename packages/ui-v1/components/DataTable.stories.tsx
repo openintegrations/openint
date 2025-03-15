@@ -54,17 +54,19 @@ export const NoData: Story = {
     data: [],
     columns: sampleColumns,
     children: (
-      <div className="w-full">
-        <div className="flex items-center py-4">
+      <>
+        <DataTable.Header>
           <DataTable.SearchInput />
           <DataTable.ColumnVisibilityToggle />
           <Button className="ml-4">Call to action</Button>,
-        </div>
-        <div className="rounded-md border">
-          <DataTable.Content />
-        </div>
-        <DataTable.FooterControl showRowCount />
-      </div>
+        </DataTable.Header>
+
+        <DataTable.Table />
+
+        <DataTable.Footer>
+          <DataTable.Pagination />
+        </DataTable.Footer>
+      </>
     ),
   },
 }
@@ -79,17 +81,17 @@ export const WithCallToAction: Story = {
   },
   render: (props) => (
     <DataTable {...props}>
-      <div className="w-full">
-        <div className="flex items-center py-4">
-          <DataTable.SearchInput />
-          <DataTable.ColumnVisibilityToggle />
-          <Button className="ml-4">Call to action</Button>,
-        </div>
-        <div className="rounded-md border">
-          <DataTable.Content />
-        </div>
-        <DataTable.FooterControl showRowCount />
-      </div>
+      <DataTable.Header>
+        <DataTable.SearchInput />
+        <DataTable.ColumnVisibilityToggle />
+        <Button className="ml-4">Call to action</Button>,
+      </DataTable.Header>
+
+      <DataTable.Table />
+
+      <DataTable.Footer>
+        <DataTable.Pagination />
+      </DataTable.Footer>
     </DataTable>
   ),
 }
