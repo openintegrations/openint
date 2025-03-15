@@ -38,20 +38,24 @@ export const JsonSchema: Story = {
   ),
 }
 
+const zOauth = z
+  .object({
+    client_id: z.string(),
+    client_secret: z.string(),
+  })
+  .openapi({
+    'ui:field': 'OAuthField',
+    'ui:classNames': 'bg-red-50 p-2',
+  })
+
 export const WithUISchema: Story = {
   render: () => (
     <JSONSchemaForm
       debugMode
       jsonSchema={zodToOas31Schema(
         z.object({
-          oauth: z
-            .object({
-              client_id: z.string(),
-              client_secret: z.string(),
-            })
-            .openapi({
-              'ui:field': 'OAuthField',
-            }),
+          name: z.string().openapi({title: 'Name'}),
+          oauth: zOauth,
           scopes: z.array(z.string()).openapi({
             'ui:widget': 'MultiSelectWidget',
           }),

@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type {RJSFSchema, StrictRJSFSchema, UiSchema} from '@rjsf/utils'
+import type {RJSFSchema} from '@rjsf/utils'
 import type z from 'zod'
 import type {oas30, oas31} from 'zod-openapi'
 import {createDocument} from 'zod-openapi'

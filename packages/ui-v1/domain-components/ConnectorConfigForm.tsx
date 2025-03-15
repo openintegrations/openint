@@ -3,7 +3,7 @@ import {RJSFSchema} from '@rjsf/utils'
 import {ForwardedRef} from 'react'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {cn} from '@openint/shadcn/lib/utils'
-import {ZodSchemaForm} from '../components/SchemaForm'
+import {ZodSchemaForm} from '../components/schema-form'
 
 export interface ConnectorConfigFormProps<
   T extends keyof typeof defConnectors,

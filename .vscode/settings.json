@@ -84,5 +84,13 @@
   },
   "files.watcherExclude": {
     "**/target": true
-  }
+  },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    "class:list",
+    "classNames",
+    "ui:classNames"
+  ]
 }
