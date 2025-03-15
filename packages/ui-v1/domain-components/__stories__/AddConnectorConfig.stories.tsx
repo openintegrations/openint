@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {Badge} from '@openint/shadcn/ui'
-import {AddConnectorConfig} from './AddConnectorConfig'
+import {AddConnectorConfig} from '../AddConnectorConfig'
 
 // Enhanced connector card with category and auth badges
 const ConnectorCardWithBadges = ({connector}: {connector: any}) => {

@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {FIXTURES} from './__stories__/fixtures'
-import {ConnectorBadges} from './ConnectorCard'
+import {ConnectorBadges} from '../ConnectorCard'
+import {FIXTURES} from './fixtures'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {

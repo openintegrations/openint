@@ -18,6 +18,7 @@
     "@tanstack/react-query": "^5.67.2",
     "@trpc/client": "next",
     "@trpc/tanstack-react-query": "next",
+    "lucide-react": "^0.482.0",
     "next": "15.2.1",
     "react": "^19.0.0",
     "sonner": "^1.4.0"
