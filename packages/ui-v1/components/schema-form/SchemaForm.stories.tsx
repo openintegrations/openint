@@ -1,8 +1,8 @@
 import type {Meta, StoryObj} from '@storybook/react'
+import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {z} from '@openint/util'
-import {zodToOas31Schema} from '../../../../kits/vdk'
-import {JSONSchemaForm, ZodSchemaForm} from '../SchemaForm'
+import {JSONSchemaForm, ZodSchemaForm} from './SchemaForm'
+import {zodToOas31Schema} from './utils'
 
 const meta: Meta<typeof ZodSchemaForm> = {
   title: 'ui-v1/components/SchemaForm',
@@ -34,8 +34,28 @@ export const JsonSchema: Story = {
   ),
 }
 
+export const CustomField: Story = {
+  render: () => (
+    <JSONSchemaForm
+      debugMode
+      jsonSchema={zodToOas31Schema(
+        z
+          .object({
+            client_id: z.string(),
+            client_secret: z.string().openapi({
+              ref: 'secret',
+            }),
+          })
+          .openapi({
+            ref: 'oauthCredentials',
+          }),
+      )}
+    />
+  ),
+}
+
 // Simple example with email and password fields
-export const StaticSchemaForm: Story = {
+export const ZodSchema: Story = {
   args: {
     schema: z.object({
       email: z.string().email(),

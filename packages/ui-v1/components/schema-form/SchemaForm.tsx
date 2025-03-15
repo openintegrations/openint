@@ -1,4 +1,3 @@
-import {zodToOas31Schema} from '@opensdks/util-zod'
 import type {
   default as Form,
   FormProps,
@@ -15,6 +14,7 @@ import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import type {z} from '@openint/util'
+import {zodToOas31Schema} from './utils'
 
 // Define the theme (copied from original SchemaForm)
 const theme: ThemeProps = {
