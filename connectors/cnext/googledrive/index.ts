@@ -3,18 +3,18 @@ import type {JsonConnectorDef} from '../def'
 import {generateConnectorDef} from '../schema'
 
 const jsonDef = {
-  audience: ['consumer', 'business'],
+  audience: ['consumer', 'business'] as const,
   connector_name: 'googledrive' as const,
-  verticals: ['file-storage'],
-  display_name: 'Google Drive',
-  stage: 'ga',
-  version: 1,
+  verticals: ['file-storage'] as const,
+  display_name: 'Google Drive' as const,
+  stage: 'ga' as const,
+  version: 1 as const,
   links: {
     web_url: 'https://drive.google.com',
     api_docs_url: 'https://developers.google.com/drive',
   },
   auth: {
-    type: 'OAUTH2',
+    type: 'OAUTH2' as const,
     authorization_request_url: 'https://accounts.google.com/o/oauth2/v2/auth',
     token_request_url: 'https://oauth2.googleapis.com/token',
     scope_separator: ' ',
@@ -38,7 +38,7 @@ const jsonDef = {
         description: 'Full access to files and folders in your Google Drive',
       },
     ],
-    openint_scopes: ['https://www.googleapis.com/auth/drive.file'],
+    default_scopes: ['https://www.googleapis.com/auth/drive.file'],
   },
   // TODO (@pellicceama)
   // - [ ] change openint_scope to default scope
@@ -55,7 +55,7 @@ const jsonDef = {
 
   /*
   Next: 
-    - Move keys of json connector def to as const in the def file
+    - xx Move keys of json connector def to as const in the def file
     - Manually test 
     - Point 4 above 
     - review generics and schemas, return types, ts-ignores and <any> casts
