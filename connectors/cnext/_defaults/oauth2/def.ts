@@ -39,7 +39,7 @@ export const zOAuthConfig = z.object({
     .string()
     .url()
     .describe('URL to obtain an access token from the provider'),
-  openint_scopes: z
+  default_scopes: z
     .array(z.string())
     .optional()
     .describe('Default scopes for the OpenInt platform connector app'),
@@ -85,42 +85,3 @@ export const zOAuthConfig = z.object({
     ),
   params_config: zAuthParamsConfig.optional().default({}),
 })
-
-export const zAuthorizeHandlerArgs = z.object({
-  oauth_config: zOAuthConfig,
-  redirect_uri: z.string(),
-  connection_id: z.string(),
-})
-
-export const zTokenExchangeHandlerArgs = z.object({
-  oauth_config: zOAuthConfig,
-  code: z.string(),
-  state: z.string(),
-  redirect_uri: z.string(),
-})
-
-export const zTokenRefreshHandlerArgs = z.object({
-  oauth_config: zOAuthConfig,
-  refresh_token: z.string(),
-})
-
-export const zTokenResponse = z.object({
-  access_token: z.string(),
-  refresh_token: z.string().optional(),
-  expires_in: z.number().optional(),
-})
-export type AuthorizeHandler = (
-  args: z.infer<typeof zAuthorizeHandlerArgs>,
-) => Promise<{authorization_url: string}>
-export type ExchangeTokenHandler = (
-  args: z.infer<typeof zTokenExchangeHandlerArgs>,
-) => Promise<z.infer<typeof zTokenResponse>>
-export type RefreshTokenHandler = (
-  args: z.infer<typeof zTokenRefreshHandlerArgs>,
-) => Promise<z.infer<typeof zTokenResponse>>
-
-export type OAuth2ServerOverrides = {
-  authorize: AuthorizeHandler
-  exchange: ExchangeTokenHandler
-  refresh: RefreshTokenHandler
-}
