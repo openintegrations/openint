@@ -16,11 +16,12 @@ import {zConnectorName} from './utils/types'
 
 const validateResponse = (
   res: Array<z.infer<typeof core.connector_config>>,
+  id: string,
 ) => {
   if (!res.length) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'Connector config not found',
+      message: `Connector config with ID "${id}" not found`,
     })
   }
 }
@@ -275,7 +276,7 @@ export const connectorConfigRouter = router({
         .where(eq(schema.connector_config.id, id))
         .returning()
 
-      validateResponse(res)
+      validateResponse(res, id)
       const [ccfg] = res
 
       return ccfg!
@@ -297,7 +298,7 @@ export const connectorConfigRouter = router({
         .where(eq(schema.connector_config.id, id))
         .returning()
 
-      validateResponse(res)
+      validateResponse(res, id)
 
       const [ccfg] = res
 
