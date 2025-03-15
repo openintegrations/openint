@@ -88,7 +88,7 @@ function getOrganizationName(
       return `${organizationName.charAt(0).toUpperCase() + organizationName.slice(1)}`
     }
     if (userFirstName && userFirstName.length > 1) {
-      return `${userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1).toLowerCase()}'s Acme Org`
+      return `${userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1).toLowerCase()}&apos;s Acme Org`
     }
   } catch (error) {
     console.error(
