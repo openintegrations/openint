@@ -48,12 +48,12 @@ const mockCreateOrganization = async (name: string) => {
 
 const mockNavigateTo = (
   option: 'listConnectors' | 'setupConnector' | 'dashboard',
-  connectorType?: 'github' | 'calendar' | 'slack',
+  connectorName?: string,
 ) => {
   console.log(
     'Navigating to:',
     option,
-    connectorType ? `with connector: ${connectorType}` : '',
+    connectorName ? `with connector: ${connectorName}` : '',
   )
 }
 
