@@ -183,4 +183,66 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(googleConnector?.integrations).toBeDefined()
     expect(googleConnector?.connector).toBeDefined()
   })
+
+  test('update connector config', async () => {
+    const createRes = await asOrg.createConnectorConfig({
+      connector_name: 'qbo',
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
+    })
+
+    const updateRes = await asOrg.updateConnectorConfig({
+      id: createRes.id,
+      config: {
+        oauth: {client_id: 'client_333', client_secret: 'yyy'},
+        envName: 'production',
+      },
+    })
+
+    expect(updateRes.config).toEqual({
+      oauth: {client_id: 'client_333', client_secret: 'yyy'},
+      envName: 'production',
+    })
+    expect(updateRes.updated_at).not.toEqual(createRes.updated_at)
+  })
+
+  test('update connector config with invalid id returns error', async () => {
+    await expect(
+      asOrg.updateConnectorConfig({
+        id: 'ccfg_invalid',
+        config: {
+          oauth: {client_id: 'client_333', client_secret: 'yyy'},
+          envName: 'production',
+        },
+      }),
+    ).rejects.toThrow('not found')
+  })
+
+  test('delete connector config', async () => {
+    const createRes = await asOrg.createConnectorConfig({
+      connector_name: 'qbo',
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
+    })
+
+    const id = createRes.id
+
+    const res = await asOrg.deleteConnectorConfig({
+      id,
+    })
+    expect(res).toBeDefined()
+    expect(res.connector_name).toEqual('qbo')
+  })
+
+  test('delete connector with invalid id returns error', async () => {
+    await expect(
+      asOrg.deleteConnectorConfig({
+        id: 'ccfg_invalid',
+      }),
+    ).rejects.toThrow('not found')
+  })
 })
