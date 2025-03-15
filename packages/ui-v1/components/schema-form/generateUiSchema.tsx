@@ -18,7 +18,7 @@ declare module 'zod-openapi/dist/extendZodTypes' {
 }
 
 /** TODO: Need to handle $ref's also */
-export function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
+export function generateUISchema(jsonSchema: RJSFSchema): UiSchema {
   const uiSchema: UiSchema = {
     ...Object.fromEntries(
       Object.entries(jsonSchema).filter(([k]) => k.startsWith('ui:')),
@@ -38,9 +38,9 @@ export function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           uiSchema[key] = {
             ...uiSchema[key],
-            ...generateUiSchema(value as RJSFSchema),
+            ...generateUISchema(value as RJSFSchema),
           }
-          Object.assign(uiSchema[key], generateUiSchema(value as RJSFSchema))
+          Object.assign(uiSchema[key], generateUISchema(value as RJSFSchema))
         }
       }
       Object.assign(uiSchema[key], {
@@ -52,6 +52,8 @@ export function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
       })
     }
   }
+
+  // TODO: Handle #/components/schemas also
 
   return uiSchema
 }

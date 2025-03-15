@@ -52,7 +52,7 @@ export function zodToOas31Schema(
   }
 }
 
-export function transformJsonSchema(
+export function transformJSONSchema(
   schema: RJSFSchema,
   options: {
     jsonSchemaTransform?: (schema: RJSFSchema) => RJSFSchema

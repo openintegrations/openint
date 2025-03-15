@@ -2,8 +2,8 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
+import {zodToOas31Schema} from './generateJSONSchema'
 import {JSONSchemaForm, ZodSchemaForm} from './SchemaForm'
-import {zodToOas31Schema} from './utils'
 
 const meta: Meta<typeof ZodSchemaForm> = {
   title: 'ui-v1/components/SchemaForm',
@@ -75,6 +75,9 @@ export const Union: Story = {
         }),
         zOauth.openapi({
           title: 'Use my own credentials',
+          // Would be nice to not have re-specify and have it inherit previous values by defalut of possible
+          // Maybe an explicit .openapi(prev => ({...prev, newProp: 'newValue'}))?
+          'ui:field': 'OAuthField',
         }),
       ]),
     }),

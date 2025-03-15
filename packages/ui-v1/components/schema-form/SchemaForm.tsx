@@ -12,8 +12,8 @@ import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import type {z} from '@openint/util'
 import {fields} from './fields'
-import {generateUiSchema} from './generateUiSchema'
-import {transformJsonSchema, zodToOas31Schema} from './utils'
+import {transformJSONSchema, zodToOas31Schema} from './generateJSONSchema'
+import {generateUISchema} from './generateUISchema'
 import {widgets} from './widgets'
 
 // Define the theme (copied from original SchemaForm)
@@ -94,7 +94,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   debugMode: debugMode,
   ...props
 }: JSONSchemaFormProps<TData>) => {
-  const jsonSchema = transformJsonSchema(_jsonSchema, {
+  const jsonSchema = transformJSONSchema(_jsonSchema, {
     jsonSchemaTransform,
     hideSensitiveFields,
   })
@@ -110,7 +110,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
     setFormData(data.formData)
   }, [])
 
-  const uiSchema = generateUiSchema(jsonSchema)
+  const uiSchema = generateUISchema(jsonSchema)
 
   const form = (
     <RJSFForm<TData>
