@@ -8,107 +8,12 @@ import {extractId, makeId} from '@openint/cdk'
 import {makeUlid} from '@openint/util'
 // TODO: Fix me as this is technically a cyclical dep
 import {getServerUrl} from '../../../../apps/app-config/constants'
+import {zOAuthConfig} from './def'
 import {
-  AuthorizeHandler,
-  ExchangeTokenHandler,
-  OAuth2ServerOverrides,
-  RefreshTokenHandler,
-  zOAuthConfig,
-} from './def'
-import {
-  fillOutStringTemplateVariables,
-  makeTokenRequest,
-  prepareScopes,
-} from './utils'
-
-const defaultAuthorizeHandler: AuthorizeHandler = async ({
-  oauth_config,
-  redirect_uri,
-  connection_id,
-}) => {
-  if (!connection_id) {
-    throw new Error('No connection_id provided')
-  }
-  const url = new URL(
-    fillOutStringTemplateVariables(
-      oauth_config.authorization_request_url,
-      oauth_config.connector_config,
-      oauth_config.connection_settings,
-    ),
-  )
-  const params = mapOauthParams(
-    {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      redirect_uri,
-      response_type: 'code',
-      // decoding it as url.toString() encodes it alredy
-      scope: decodeURIComponent(prepareScopes(oauth_config)),
-      state: Buffer.from(connection_id).toString('base64'),
-      ...(oauth_config.params_config.authorize ?? {}),
-    },
-    oauth_config.params_config.param_names ?? {},
-  )
-
-  Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.set(key, value as string)
-  })
-
-  // putting it as %20 for spaces instead of the default encoding of url.toString() which is +
-  return {authorization_url: url.toString().replace(/\+/g, '%20')}
-}
-
-const defaultTokenExchangeHandler: ExchangeTokenHandler = async ({
-  oauth_config,
-  redirect_uri,
-  code,
-  state,
-}) => {
-  // TODO (@pellicceama): For every value in params apply template literal substitution
-  const params = mapOauthParams(
-    {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      redirect_uri,
-      scope: prepareScopes(oauth_config),
-      state,
-      grant_type: 'authorization_code',
-      code,
-      ...(oauth_config.params_config.token ?? {}),
-    },
-    oauth_config.params_config.param_names ?? {},
-  )
-
-  const url = fillOutStringTemplateVariables(
-    oauth_config.token_request_url,
-    oauth_config.connector_config,
-    oauth_config.connection_settings,
-  )
-  return makeTokenRequest(url, params, 'exchange')
-}
-
-const defaultTokenRefreshHandler: RefreshTokenHandler = async ({
-  oauth_config,
-  refresh_token,
-}) => {
-  const params = mapOauthParams(
-    {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      refresh_token,
-      grant_type: 'refresh_token',
-      ...(oauth_config.params_config.token ?? {}),
-    },
-    oauth_config.params_config.param_names ?? {},
-  )
-
-  const url = fillOutStringTemplateVariables(
-    oauth_config.token_request_url,
-    oauth_config.connector_config,
-    oauth_config.connection_settings,
-  )
-  return makeTokenRequest(url, params, 'refresh')
-}
+  authorizeHandler,
+  tokenExchangeHandler,
+  tokenRefreshHandler,
+} from './handlers'
 
 function addCcfgDefaultCredentials(
   config: any,
@@ -172,10 +77,7 @@ export function generateOAuth2Server<
 >(
   connectorDef: D,
   oauthConfig: z.infer<typeof zOAuthConfig>,
-  overrides?: {
-    server?: Partial<ConnectorServer<T>>
-    oauth2?: Partial<OAuth2ServerOverrides>
-  },
+  overrides?: Partial<ConnectorServer<T>>,
 ): ConnectorServer<T> {
   // Only use this for OAuth2 connectors
   if (
@@ -215,19 +117,10 @@ export function generateOAuth2Server<
     },
 
     async preConnect(connectorConfig, connectionSettings, input) {
-      // Use override if provided, otherwise use default
-      const authorizeHandler =
-        overrides?.oauth2?.authorize || defaultAuthorizeHandler
-
-      if (!authorizeHandler) {
-        throw new Error(
-          'No authorize handler defined. Has connectionSettings =' +
-            !!connectionSettings,
-        )
-      }
-
       if (!isOAuth2ConnectorDef(oauthConfig)) {
-        console.log(`Oauth2 Preconnect issue with oauthConfig`)
+        console.log(
+          `Oauth2 Preconnect issue with oauthConfig connectionSettings: ${!!connectionSettings}`,
+        )
         return zOAuthConfig.parse(oauthConfig)
       }
 
@@ -250,14 +143,6 @@ export function generateOAuth2Server<
     },
 
     async postConnect(connectOutput, connectorConfig) {
-      // Use overrides if provided, otherwise use defaults
-      const tokenHandler =
-        overrides?.oauth2?.exchange || defaultTokenExchangeHandler
-
-      if (!tokenHandler) {
-        throw new Error('No token handler defined')
-      }
-
       if (!isOAuth2ConnectorDef(oauthConfig)) {
         return zOAuthConfig.parse(oauthConfig)
       }
@@ -266,7 +151,7 @@ export function generateOAuth2Server<
       // const redirect_uri =
       //   'https://f887-38-9-28-71.ngrok-free.app/connect/callback'
       console.log(`Oauth2 Postconnect called`)
-      const result = await tokenHandler({
+      const result = await tokenExchangeHandler({
         oauth_config: {
           ...oauthConfig,
           connector_config: connectorConfig,
@@ -303,14 +188,6 @@ export function generateOAuth2Server<
     },
 
     async refreshConnection(connectionSettings, connectorConfig) {
-      // Use overrides if provided, otherwise use defaults
-      const refreshTokenHandler =
-        overrides?.oauth2?.refresh || defaultTokenRefreshHandler
-
-      if (!refreshTokenHandler) {
-        throw new Error('No refresh token handler defined')
-      }
-
       if (!isOAuth2ConnectorDef(oauthConfig)) {
         return zOAuthConfig.parse(oauthConfig)
       }
@@ -322,7 +199,7 @@ export function generateOAuth2Server<
 
       console.log(`Oauth2 Refresh connection called`)
 
-      const result = await refreshTokenHandler({
+      const result = await tokenRefreshHandler({
         oauth_config: {
           ...oauthConfig,
           connector_config: connectorConfig,
