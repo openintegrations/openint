@@ -26,9 +26,10 @@ export const JsonSchema: Story = {
         z
           .object({
             email: z.string().email(),
-            password: z.string().min(8).openapi({
+            pw: z.string().min(8).openapi({
               description: 'Password must be at least 8 characters',
               title: 'Secure Password',
+              format: 'password',
             }),
           })
           .openapi({ref: 'oauthCredentials'}),
@@ -37,19 +38,23 @@ export const JsonSchema: Story = {
   ),
 }
 
-export const CustomField: Story = {
+export const WithUISchema: Story = {
   render: () => (
     <JSONSchemaForm
       debugMode
       jsonSchema={zodToOas31Schema(
         z.object({
-          oauth: z.object({
-            client_id: z.string(),
-            client_secret: z.string().openapi({
-              ref: 'secret',
+          oauth: z
+            .object({
+              client_id: z.string(),
+              client_secret: z.string(),
+            })
+            .openapi({
+              'ui:field': 'OAuthField',
             }),
+          scopes: z.array(z.string()).openapi({
+            'ui:widget': 'MultiSelectWidget',
           }),
-          scopes: z.array(z.string()),
         }),
       )}
     />

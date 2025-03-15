@@ -3,12 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type {
-  RJSFSchema,
-  StrictRJSFSchema,
-  UiSchema,
-  WidgetProps,
-} from '@rjsf/utils'
+import type {RJSFSchema, StrictRJSFSchema, UiSchema} from '@rjsf/utils'
 import type z from 'zod'
 import type {oas30, oas31} from 'zod-openapi'
 import {createDocument} from 'zod-openapi'
@@ -57,23 +52,6 @@ export function zodToOas31Schema(
   }
 }
 
-// MARK: - Utils
-
-// Helper functions from original SchemaForm
-function titleCase(str: string) {
-  const words = str.split(/(?=[A-Z])|_/)
-  return words
-    .map((word) => word.charAt(0).toUpperCase() + word.toLowerCase().slice(1))
-    .join(' ')
-}
-
-function isTypeObject(schema: RJSFSchema): boolean {
-  return (
-    schema.type === 'object' ||
-    (Array.isArray(schema.type) && schema.type.includes('object'))
-  )
-}
-
 export function transformJsonSchema(
   schema: RJSFSchema,
   options: {
@@ -90,6 +68,7 @@ export function transformJsonSchema(
   }
 
   // Handle sensitive fields if needed
+  // TODO: Make it so that formats are specified explicitly...
   if (hideSensitiveFields && transformedSchema.properties) {
     const sensitiveFieldPatterns = [
       /password/i,
@@ -117,44 +96,4 @@ export function transformJsonSchema(
   }
 
   return transformedSchema
-}
-
-/** TODO: Need to handle $ref's also */
-export function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
-  const uiSchema: UiSchema = {}
-
-  if (isTypeObject(jsonSchema) && jsonSchema.properties) {
-    for (const [key, _value] of Object.entries(jsonSchema.properties)) {
-      const value = _value as StrictRJSFSchema
-      const friendlyLabel = value.title ?? titleCase(key)
-      console.log(key, value)
-      uiSchema[key] = {
-        // Bit less nesting...
-        'ui:title': friendlyLabel,
-        'ui:classNames': 'pt-2',
-        // 'ui:options': {
-        //   title: friendlyLabel,
-        //   classNames: 'pt-2',
-        // },
-        ...(key === 'scopes' && {
-          'ui:widget': 'MultiSelect',
-        }),
-        ...(key === 'oauth' && {
-          'ui:field': 'oauth',
-        }),
-      }
-
-      if (typeof value === 'object') {
-        if (isTypeObject(value)) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          uiSchema[key] = {
-            ...uiSchema[key],
-            ...generateUiSchema(value as RJSFSchema),
-          }
-        }
-      }
-    }
-  }
-
-  return uiSchema
 }

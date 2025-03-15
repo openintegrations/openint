@@ -5,19 +5,14 @@ import type {
   ThemeProps,
 } from '@rjsf/core'
 import {withTheme} from '@rjsf/core'
-import {
-  FieldProps,
-  RegistryFieldsType,
-  RegistryWidgetsType,
-  WidgetProps,
-  type RJSFSchema,
-} from '@rjsf/utils'
+import type {RegistryWidgetsType} from '@rjsf/utils'
+import {type RJSFSchema} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Checkbox} from '@openint/shadcn/ui'
 import type {z} from '@openint/util'
-import {generateUiSchema, transformJsonSchema, zodToOas31Schema} from './utils'
+import {fields, generateUiSchema, widgets} from './ui'
+import {transformJsonSchema, zodToOas31Schema} from './utils'
 
 // Define the theme (copied from original SchemaForm)
 const theme: ThemeProps = {
@@ -141,7 +136,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
         onSubmit?.({formData: data.formData})
       }}
       validator={validator}
-      widgets={widgets}
+      widgets={widgets as RegistryWidgetsType}
       fields={fields}
     />
   )
@@ -158,20 +153,4 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   ) : (
     form
   )
-}
-
-// Custom widgets
-
-function MultiSelect(props: WidgetProps<boolean>) {
-  return 'this is a multi selet component, will probably be used to render scope selector'
-}
-
-const widgets: RegistryWidgetsType = {
-  MultiSelect: MultiSelect,
-}
-
-const fields: RegistryFieldsType = {
-  oauth: (props: FieldProps) => {
-    return 'custom oauth field'
-  },
 }
