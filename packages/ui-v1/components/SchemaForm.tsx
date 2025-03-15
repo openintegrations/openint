@@ -1,11 +1,20 @@
-import type {default as Form, FormProps, ThemeProps} from '@rjsf/core'
+import {zodToOas31Schema} from '@opensdks/util-zod'
+import type {
+  default as Form,
+  FormProps,
+  IChangeEvent,
+  ThemeProps,
+} from '@rjsf/core'
 import {withTheme} from '@rjsf/core'
-import {type RJSFSchema, type UiSchema} from '@rjsf/utils'
+import {
+  type RJSFSchema,
+  type StrictRJSFSchema,
+  type UiSchema,
+} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import type {z} from '@openint/util'
-import {zodToJsonSchema} from '@openint/util'
 
 // Define the theme (copied from original SchemaForm)
 const theme: ThemeProps = {
@@ -13,20 +22,36 @@ const theme: ThemeProps = {
 }
 
 /** Customized form with our theme */
-export const JsonSchemaForm = withTheme(theme) as typeof Form
+export const RJSFForm = withTheme(theme) as typeof Form
 
 /** For use with createRef... */
 export type SchemaFormElement = Form
 
-export interface SchemaFormProps<TSchema extends z.ZodTypeAny>
-  extends Omit<
-    FormProps<z.infer<TSchema>>,
-    'schema' | 'validator' | 'onSubmit'
-  > {
+export interface ZodSchemaFormProps<TSchema extends z.ZodTypeAny>
+  extends Omit<JSONSchemaFormProps<z.infer<TSchema>>, 'jsonSchema'> {
   /**
    * The Zod schema to use for the form
    */
   schema: TSchema
+}
+
+/**
+ * SchemaForm component for handling forms with proper styling and security features.
+ * This component includes functionality for hiding sensitive fields like passwords and tokens.
+ */
+export const ZodSchemaForm = <TSchema extends z.ZodTypeAny>({
+  schema,
+  ...props
+}: ZodSchemaFormProps<TSchema>) => {
+  ;(globalThis as any).formSchema = schema
+  // Convert Zod schema to JSON schema
+  const jsonSchema = zodToOas31Schema(schema) as RJSFSchema
+  return <JSONSchemaForm jsonSchema={jsonSchema} {...props} />
+}
+
+export interface JSONSchemaFormProps<TData extends Record<string, unknown>>
+  extends Omit<FormProps<TData>, 'schema' | 'validator' | 'onSubmit'> {
+  jsonSchema: RJSFSchema
   /**
    * Optional class name for styling the form container
    */
@@ -52,138 +77,46 @@ export interface SchemaFormProps<TSchema extends z.ZodTypeAny>
   /**
    * Callback for form submission
    */
-  onSubmit?: (data: {formData: z.infer<TSchema>}) => void
+  onSubmit?: (data: {formData: TData}) => void
+
+  debugMode?: boolean
 }
 
-// Helper functions from original SchemaForm
-function titleCase(str: string) {
-  const words = str.split(/(?=[A-Z])|_/)
-  return words
-    .map((word) => word.charAt(0).toUpperCase() + word.toLowerCase().slice(1))
-    .join(' ')
-}
-
-function isTypeObject(schema: RJSFSchema): boolean {
-  return (
-    schema.type === 'object' ||
-    (Array.isArray(schema.type) && schema.type.includes('object'))
-  )
-}
-
-function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
-  const uiSchema: UiSchema = {}
-
-  if (isTypeObject(jsonSchema) && jsonSchema.properties) {
-    for (const [key, value] of Object.entries(jsonSchema.properties)) {
-      const friendlyLabel = titleCase(key)
-      uiSchema[key] = {
-        'ui:title': friendlyLabel,
-        'ui:classNames': 'pt-2',
-      }
-
-      if (typeof value === 'object') {
-        if (isTypeObject(value)) {
-          uiSchema[key] = {
-            ...uiSchema[key],
-            ...generateUiSchema(value as RJSFSchema),
-          }
-        }
-      }
-    }
-  }
-
-  return uiSchema
-}
-
-/**
- * SchemaForm component for handling forms with proper styling and security features.
- * This component includes functionality for hiding sensitive fields like passwords and tokens.
- */
-export const SchemaForm = React.forwardRef(function SchemaForm<
-  TSchema extends z.ZodTypeAny,
->(
-  {
-    schema,
-    className,
-    loading,
-    hideSensitiveFields = true,
+export const JSONSchemaForm = <TData extends Record<string, unknown>>({
+  jsonSchema: _jsonSchema,
+  className,
+  loading,
+  hideSensitiveFields = true,
+  jsonSchemaTransform,
+  hideSubmitButton = true,
+  formData: initialFormData,
+  onSubmit,
+  debugMode: debugMode,
+  ...props
+}: JSONSchemaFormProps<TData>) => {
+  const jsonSchema = transformJsonSchema(_jsonSchema, {
     jsonSchemaTransform,
-    hideSubmitButton = true,
-    formData: _formData,
-    onSubmit,
-    ...props
-  }: SchemaFormProps<TSchema>,
-  forwardedRef: React.ForwardedRef<Form<z.infer<TSchema>>>,
-) {
-  // Convert Zod schema to JSON schema
-  const _jsonSchema = zodToJsonSchema(schema) as RJSFSchema
-
-  // Custom transform function that handles sensitive fields
-  const handleJsonSchemaTransform = React.useCallback(
-    (schema: RJSFSchema): RJSFSchema => {
-      let transformedSchema = {...schema}
-
-      // Apply user-provided transform first
-      if (jsonSchemaTransform) {
-        transformedSchema = jsonSchemaTransform(transformedSchema)
-      }
-
-      // Handle sensitive fields if needed
-      if (hideSensitiveFields && transformedSchema.properties) {
-        const sensitiveFieldPatterns = [
-          /password/i,
-          /token/i,
-          /secret/i,
-          /api/i,
-          /credential/i,
-        ]
-
-        // Modify properties that match sensitive patterns
-        Object.entries(transformedSchema.properties).forEach(([key, prop]) => {
-          if (
-            typeof prop === 'object' &&
-            sensitiveFieldPatterns.some((pattern) => pattern.test(key))
-          ) {
-            // Mark as password type for UI
-            if (prop.type === 'string') {
-              transformedSchema.properties![key] = {
-                ...prop,
-                format: 'password',
-              }
-            }
-          }
-        })
-      }
-
-      return transformedSchema
-    },
-    [jsonSchemaTransform, hideSensitiveFields],
-  )
-
-  const jsonSchema = handleJsonSchemaTransform(_jsonSchema)
+    hideSensitiveFields,
+  })
 
   // For debugging
-  ;(globalThis as any).formSchema = schema
   ;(globalThis as any).formJsonSchema = jsonSchema
 
-  const formDataRef = React.useRef(_formData)
-  const [localFormData, setLocalFormData] = React.useState(
-    () => formDataRef.current,
-  )
+  const formDataRef = React.useRef(initialFormData)
+  const [formData, setFormData] = React.useState(() => formDataRef.current)
 
-  const handleFormChange = React.useCallback((data: any) => {
+  const handleFormChange = React.useCallback((data: IChangeEvent<TData>) => {
     formDataRef.current = data.formData
-    setLocalFormData(data.formData)
+    setFormData(data.formData)
   }, [])
 
   const uiSchema = generateUiSchema(jsonSchema)
 
-  return (
-    <JsonSchemaForm<z.infer<TSchema>>
+  const form = (
+    <RJSFForm<TData>
       disabled={loading}
       {...props}
-      ref={forwardedRef}
-      formData={localFormData}
+      formData={formData}
       className={cn(
         'schema-form',
         'credentials-schema-form',
@@ -207,20 +140,106 @@ export const SchemaForm = React.forwardRef(function SchemaForm<
       }}
     />
   )
-})
-
-/**
- * New approach https://www.kripod.dev/blog/fixing-generics-in-react/
- * Original does not work no more https://fettblog.eu/typescript-react-generic-forward-refs/
- */
-declare module 'react' {
-  function forwardRef<T, P = NonNullable<unknown>>(
-    render: (props: P, ref: ForwardedRef<T>) => ReturnType<FunctionComponent>,
-  ): ((
-    props: PropsWithoutRef<P> & RefAttributes<T>,
-  ) => ReturnType<FunctionComponent>) & {
-    displayName?: string
-  }
+  return debugMode ? (
+    <>
+      {form}
+      <h3>JSON Schema</h3>
+      <pre>{JSON.stringify(jsonSchema, null, 2)}</pre>
+      <h3>UI Schema</h3>
+      <pre>{JSON.stringify(uiSchema, null, 2)}</pre>
+      <h3>FormData</h3>
+      <pre>{JSON.stringify(formData, null, 2)}</pre>
+    </>
+  ) : (
+    form
+  )
 }
 
-export default SchemaForm
+// MARK: - Utils
+
+// Helper functions from original SchemaForm
+function titleCase(str: string) {
+  const words = str.split(/(?=[A-Z])|_/)
+  return words
+    .map((word) => word.charAt(0).toUpperCase() + word.toLowerCase().slice(1))
+    .join(' ')
+}
+
+function isTypeObject(schema: RJSFSchema): boolean {
+  return (
+    schema.type === 'object' ||
+    (Array.isArray(schema.type) && schema.type.includes('object'))
+  )
+}
+
+export function transformJsonSchema(
+  schema: RJSFSchema,
+  options: {
+    jsonSchemaTransform?: (schema: RJSFSchema) => RJSFSchema
+    hideSensitiveFields?: boolean
+  } = {},
+): RJSFSchema {
+  const {jsonSchemaTransform, hideSensitiveFields = true} = options
+  let transformedSchema = {...schema}
+
+  // Apply user-provided transform first
+  if (jsonSchemaTransform) {
+    transformedSchema = jsonSchemaTransform(transformedSchema)
+  }
+
+  // Handle sensitive fields if needed
+  if (hideSensitiveFields && transformedSchema.properties) {
+    const sensitiveFieldPatterns = [
+      /password/i,
+      /token/i,
+      /secret/i,
+      /api/i,
+      /credential/i,
+    ]
+
+    // Modify properties that match sensitive patterns
+    Object.entries(transformedSchema.properties).forEach(([key, prop]) => {
+      if (
+        typeof prop === 'object' &&
+        sensitiveFieldPatterns.some((pattern) => pattern.test(key))
+      ) {
+        // Mark as password type for UI
+        if (prop.type === 'string') {
+          transformedSchema.properties![key] = {
+            ...prop,
+            format: 'password',
+          }
+        }
+      }
+    })
+  }
+
+  return transformedSchema
+}
+
+export function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
+  const uiSchema: UiSchema = {}
+
+  if (isTypeObject(jsonSchema) && jsonSchema.properties) {
+    for (const [key, _value] of Object.entries(jsonSchema.properties)) {
+      const value = _value as StrictRJSFSchema
+      const friendlyLabel = value.title ?? titleCase(key)
+      uiSchema[key] = {
+        'ui:title': friendlyLabel,
+        'ui:classNames': 'pt-2',
+      }
+
+      if (typeof value === 'object') {
+        if (isTypeObject(value)) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          uiSchema[key] = {
+            ...uiSchema[key],
+            ...generateUiSchema(value as RJSFSchema),
+          }
+        }
+      }
+    }
+  }
+
+  return uiSchema
+}
