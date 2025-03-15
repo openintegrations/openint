@@ -14,6 +14,18 @@ import {
 } from './utils/pagination'
 import {zConnectorName} from './utils/types'
 
+const validateResponse = (
+  res: Array<z.infer<typeof core.connector_config>>,
+  id: string,
+) => {
+  if (!res.length) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: `Connector config with ID "${id}" not found`,
+    })
+  }
+}
+
 export const zExpandOptions = z
   .enum(['connector', 'enabled_integrations', 'connection_count'])
   .describe(
@@ -248,6 +260,48 @@ export const connectorConfigRouter = router({
           config: input.config,
         })
         .returning()
+      return ccfg!
+    }),
+  updateConnectorConfig: orgProcedure
+    .meta({
+      openapi: {method: 'PUT', path: '/connector-config/{id}', enabled: false},
+    })
+    .input(z.object({id: z.string(), config: z.record(z.unknown())}))
+    .output(core.connector_config)
+    .mutation(async ({ctx, input}) => {
+      const {id, config} = input
+      const res = await ctx.db
+        .update(schema.connector_config)
+        .set({config, updated_at: new Date().toISOString()})
+        .where(eq(schema.connector_config.id, id))
+        .returning()
+
+      validateResponse(res, id)
+      const [ccfg] = res
+
+      return ccfg!
+    }),
+  deleteConnectorConfig: orgProcedure
+    .meta({
+      openapi: {
+        method: 'DELETE',
+        path: '/connector-config/{id}',
+        enabled: false,
+      },
+    })
+    .input(z.object({id: z.string()}))
+    .output(core.connector_config)
+    .mutation(async ({ctx, input}) => {
+      const {id} = input
+      const res = await ctx.db
+        .delete(schema.connector_config)
+        .where(eq(schema.connector_config.id, id))
+        .returning()
+
+      validateResponse(res, id)
+
+      const [ccfg] = res
+
       return ccfg!
     }),
 })
