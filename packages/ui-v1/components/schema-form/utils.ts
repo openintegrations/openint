@@ -3,7 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type {RJSFSchema, StrictRJSFSchema, UiSchema} from '@rjsf/utils'
+import type {
+  RJSFSchema,
+  StrictRJSFSchema,
+  UiSchema,
+  WidgetProps,
+} from '@rjsf/utils'
 import type z from 'zod'
 import type {oas30, oas31} from 'zod-openapi'
 import {createDocument} from 'zod-openapi'
@@ -114,6 +119,7 @@ export function transformJsonSchema(
   return transformedSchema
 }
 
+/** TODO: Need to handle $ref's also */
 export function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
   const uiSchema: UiSchema = {}
 
@@ -121,9 +127,21 @@ export function generateUiSchema(jsonSchema: RJSFSchema): UiSchema {
     for (const [key, _value] of Object.entries(jsonSchema.properties)) {
       const value = _value as StrictRJSFSchema
       const friendlyLabel = value.title ?? titleCase(key)
+      console.log(key, value)
       uiSchema[key] = {
+        // Bit less nesting...
         'ui:title': friendlyLabel,
         'ui:classNames': 'pt-2',
+        // 'ui:options': {
+        //   title: friendlyLabel,
+        //   classNames: 'pt-2',
+        // },
+        ...(key === 'scopes' && {
+          'ui:widget': 'MultiSelect',
+        }),
+        ...(key === 'oauth' && {
+          'ui:field': 'oauth',
+        }),
       }
 
       if (typeof value === 'object') {

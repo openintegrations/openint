@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {Meta, StoryObj} from '@storybook/react'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
@@ -22,13 +23,15 @@ export const JsonSchema: Story = {
     <JSONSchemaForm
       debugMode
       jsonSchema={zodToOas31Schema(
-        z.object({
-          email: z.string().email(),
-          password: z.string().min(8).openapi({
-            description: 'Password must be at least 8 characters',
-            title: 'Secure Password',
-          }),
-        }),
+        z
+          .object({
+            email: z.string().email(),
+            password: z.string().min(8).openapi({
+              description: 'Password must be at least 8 characters',
+              title: 'Secure Password',
+            }),
+          })
+          .openapi({ref: 'oauthCredentials'}),
       )}
     />
   ),
@@ -39,16 +42,15 @@ export const CustomField: Story = {
     <JSONSchemaForm
       debugMode
       jsonSchema={zodToOas31Schema(
-        z
-          .object({
+        z.object({
+          oauth: z.object({
             client_id: z.string(),
             client_secret: z.string().openapi({
               ref: 'secret',
             }),
-          })
-          .openapi({
-            ref: 'oauthCredentials',
           }),
+          scopes: z.array(z.string()),
+        }),
       )}
     />
   ),
