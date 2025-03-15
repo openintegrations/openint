@@ -14,6 +14,17 @@ import {
 } from './utils/pagination'
 import {zConnectorName} from './utils/types'
 
+const validateResponse = (
+  res: Array<z.infer<typeof core.connector_config>>,
+) => {
+  if (!res.length) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: 'Connector config not found',
+    })
+  }
+}
+
 export const zExpandOptions = z
   .enum(['connector', 'enabled_integrations', 'connection_count'])
   .describe(
@@ -264,12 +275,7 @@ export const connectorConfigRouter = router({
         .where(eq(schema.connector_config.id, id))
         .returning()
 
-      if (!res.length) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Connector config with ID "${id}" not found`,
-        })
-      }
+      validateResponse(res)
       const [ccfg] = res
 
       return ccfg!
@@ -291,12 +297,7 @@ export const connectorConfigRouter = router({
         .where(eq(schema.connector_config.id, id))
         .returning()
 
-      if (!res.length) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Connector config with ID "${id}" not found`,
-        })
-      }
+      validateResponse(res)
 
       const [ccfg] = res
 
