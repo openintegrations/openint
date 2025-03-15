@@ -29,13 +29,12 @@ import {
 } from '@openint/shadcn/ui/dialog'
 import {Input} from '@openint/shadcn/ui/input'
 import {Label} from '@openint/shadcn/ui/label'
-import {cn} from '@/lib-client/ui-utils'
 
 type OnboardingStep = 'organization' | 'connector'
-type ConnectorType = 'github' | 'calendar' | 'slack'
+type ConnectorName = 'github' | 'calendar' | 'slack'
 
 interface ConnectorOption {
-  id: ConnectorType
+  id: ConnectorName
   title: string
   description: string
 }
@@ -117,7 +116,7 @@ export function OnboardingModal({
   createOrganization: (name: string) => Promise<void>
   navigateTo: (
     option: 'listConnectors' | 'setupConnector' | 'dashboard',
-    connectorType?: ConnectorType,
+    connectorName?: string,
   ) => void
   initialStep?: OnboardingStep
   className?: string
@@ -126,7 +125,7 @@ export function OnboardingModal({
   const [showExitDialog, setShowExitDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [loadingConnector, setLoadingConnector] =
-    useState<ConnectorType | null>(null)
+    useState<ConnectorName | null>(null)
   const [orgName, setOrgName] = useState(
     getOrganizationName(email, userFirstName),
   )
@@ -162,7 +161,7 @@ export function OnboardingModal({
     }
   }
 
-  const handleConnectorSelect = async (connectorType: ConnectorType) => {
+  const handleConnectorSelect = async (connectorType: ConnectorName) => {
     setLoadingConnector(connectorType)
     navigateTo('setupConnector', connectorType)
   }
@@ -174,7 +173,7 @@ export function OnboardingModal({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={() => handleClose()}>
-        <DialogContent className={cn('sm:max-w-[500px]', className)}>
+        <DialogContent className={`sm:max-w-[500px] ${className}`}>
           <DialogHeader>
             <div className="flex items-center justify-between">
               <DialogTitle>Welcome aboard!</DialogTitle>

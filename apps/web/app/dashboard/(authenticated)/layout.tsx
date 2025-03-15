@@ -122,13 +122,18 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
               },
             })
           }
-          navigateTo={(action, connectorType) => {
+          navigateTo={(action, connectorName) => {
             switch (action) {
-              case 'listConnectors':
-              case 'dashboard':
               case 'setupConnector':
+                // this in case the user selects a connector from the top 3 list. Hence a connectorType is provided
+                console.log('TODO: handle', action, connectorName)
+                break
+              case 'listConnectors':
+              // this is in case the user selects they want to add a connector that's not in the top 3 list.
+              case 'dashboard':
+              // This is in case the user closes the modal, same as default case
               default: {
-                console.log('TODO: handle', action, connectorType)
+                console.log('TODO: handle', action, connectorName)
                 // TODO: handle
                 router.push('/dashboard')
               }
