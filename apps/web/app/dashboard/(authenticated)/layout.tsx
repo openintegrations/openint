@@ -106,8 +106,9 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
 
   if (!auth.orgId && user) {
     return (
-      <div className="flex h-screen w-screen flex-col">
+      <div className="flex h-screen w-screen items-center justify-center">
         <OnboardingModal
+          className="w-[500px] max-w-[90%]"
           createOrganization={(name: string) =>
             createOrganizationMutationWrapper({
               name,

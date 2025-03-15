@@ -29,6 +29,7 @@ import {
 } from '@openint/shadcn/ui/dialog'
 import {Input} from '@openint/shadcn/ui/input'
 import {Label} from '@openint/shadcn/ui/label'
+import {cn} from '@/lib-client/ui-utils'
 
 type OnboardingStep = 'organization' | 'connector'
 type ConnectorType = 'github' | 'calendar' | 'slack'
@@ -80,14 +81,14 @@ function getOrganizationName(
       ) {
         const orgPart = parts[parts.length - 3]
         if (orgPart) {
-          return `${orgPart.charAt(0).toUpperCase() + orgPart.slice(1)} Organization`
+          return `${orgPart.charAt(0).toUpperCase() + orgPart.slice(1)}`
         }
       }
 
-      return `${organizationName.charAt(0).toUpperCase() + organizationName.slice(1)} Organization`
+      return `${organizationName.charAt(0).toUpperCase() + organizationName.slice(1)}`
     }
     if (userFirstName && userFirstName.length > 1) {
-      return `${userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1).toLowerCase()}'s Acme Org Name`
+      return `${userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1).toLowerCase()}'s Acme Org`
     }
   } catch (error) {
     console.error(
@@ -96,7 +97,9 @@ function getOrganizationName(
     )
   }
 
-  return `Acme Corp Organization`
+  return `Acme Corp ${Math.floor(Math.random() * 16 ** 4)
+    .toString(16)
+    .padStart(4, '0')}`
 }
 
 export function OnboardingModal({
@@ -106,6 +109,7 @@ export function OnboardingModal({
   createOrganization,
   navigateTo,
   initialStep = 'organization',
+  className,
 }: {
   email?: string
   userFirstName?: string
@@ -116,6 +120,7 @@ export function OnboardingModal({
     connectorType?: ConnectorType,
   ) => void
   initialStep?: OnboardingStep
+  className?: string
 }) {
   const [step, setStep] = useState<OnboardingStep>(initialStep)
   const [showExitDialog, setShowExitDialog] = useState(false)
@@ -169,7 +174,7 @@ export function OnboardingModal({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={() => handleClose()}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className={cn('sm:max-w-[500px]', className)}>
           <DialogHeader>
             <div className="flex items-center justify-between">
               <DialogTitle>Welcome aboard!</DialogTitle>
