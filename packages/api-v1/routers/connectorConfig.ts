@@ -250,6 +250,22 @@ export const connectorConfigRouter = router({
         .returning()
       return ccfg!
     }),
+  updateConnectorConfig: orgProcedure
+    .meta({
+      openapi: {method: 'PUT', path: '/connector-config/{id}', enabled: false},
+    })
+    .input(z.object({id: z.string(), config: z.record(z.unknown())}))
+    .output(core.connector_config)
+    .mutation(async ({ctx, input}) => {
+      const {id, config} = input
+      const [ccfg] = await ctx.db
+        .update(schema.connector_config)
+        .set({config, updated_at: new Date().toISOString()})
+        .where(eq(schema.connector_config.id, id))
+        .returning()
+
+      return ccfg!
+    }),
   deleteConnectorConfig: orgProcedure
     .meta({
       openapi: {

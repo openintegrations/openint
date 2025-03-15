@@ -184,6 +184,30 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(googleConnector?.connector).toBeDefined()
   })
 
+  test('update connector config', async () => {
+    const createRes = await asOrg.createConnectorConfig({
+      connector_name: 'qbo',
+      config: {
+        oauth: {client_id: 'client_222', client_secret: 'xxx'},
+        envName: 'sandbox',
+      },
+    })
+
+    const updateRes = await asOrg.updateConnectorConfig({
+      id: createRes.id,
+      config: {
+        oauth: {client_id: 'client_333', client_secret: 'yyy'},
+        envName: 'production',
+      },
+    })
+
+    expect(updateRes.config).toEqual({
+      oauth: {client_id: 'client_333', client_secret: 'yyy'},
+      envName: 'production',
+    })
+    expect(updateRes.updated_at).not.toEqual(createRes.updated_at)
+  })
+
   test('delete connector config', async () => {
     const createRes = await asOrg.createConnectorConfig({
       connector_name: 'qbo',
