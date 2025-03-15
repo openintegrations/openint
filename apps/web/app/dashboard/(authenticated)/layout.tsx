@@ -5,91 +5,93 @@ import {
   useAuth,
   useOrganizationList,
   UserButton,
+  useUser,
 } from '@clerk/nextjs'
+import {UseMutateFunction} from '@tanstack/react-query'
+import router from 'next/router'
 import NextTopLoader from 'nextjs-toploader'
-import {FormEventHandler, useState} from 'react'
-import {_trpcReact} from '@openint/engine-frontend'
-import {Button} from '@openint/shadcn/ui/button'
-import {Input} from '@openint/shadcn/ui/input'
+import {_trpcReact, LoadingSpinner} from '@openint/engine-frontend'
+import {OnboardingModal} from '@openint/ui-v1'
 import {NoSSR} from '@/components/NoSSR'
 import {RedirectToNext13} from '@/components/RedirectTo'
 import {VCommandBar} from '@/vcommands/vcommand-components'
 import {Sidebar} from './Sidebar'
 
-function CustomCreateOrganization({clerkUserId}: {clerkUserId?: string}) {
-  const {createOrganization, setActive} = useOrganizationList()
-  const [organizationName, setOrganizationName] = useState('')
-  // const [referralSource, setReferralSource] = useState('')
-
-  // Move the mutation hook to the top level of the component
-  const createOrgMutation = _trpcReact.createOrganization.useMutation()
-
-  if (!createOrganization || !setActive) {
-    return null
-  }
-
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault()
-    const newOrg = await createOrganization({
-      name: organizationName,
-    })
-
-    if (newOrg) {
-      // Use the mutation from the top-level hook
-      createOrgMutation.mutate(
-        {
-          id: newOrg.id,
-          name: organizationName,
-          // referrer: 'web', // TODO: add referrer from form
-          clerkUserId: clerkUserId ?? '',
-        },
-        {
-          onSuccess: async (data) => {
-            if (data.id && data.id == newOrg.id) {
-              await setActive({organization: data.id})
-              setTimeout(() => {
-                window.location.href = '/'
-              }, 1000)
-            } else {
-              console.error(
-                'Failed to create organization, please try again later with a different name',
-              )
-            }
-          },
-        },
-      )
+async function createOrganizationMutationWrapper({
+  name,
+  clerkUserId,
+  createOrgBackendMutation,
+  createOrgClerkMutation,
+  setActiveClerkOrganization,
+}: {
+  name: string
+  clerkUserId: string
+  createOrgBackendMutation: UseMutateFunction<
+    {
+      clerkUserId: string
+      name: string
+      id: string
+      referrer?: string | null | undefined
+    },
+    Error,
+    {
+      clerkUserId: string
+      name: string
+      id: string
+      referrer?: string | null | undefined
+    },
+    unknown
+  >
+  createOrgClerkMutation: () => Promise<{id: string}>
+  setActiveClerkOrganization: (organizationId: string) => void
+}) {
+  return new Promise<void>(async (resolve, reject) => {
+    const newOrg = await createOrgClerkMutation()
+    if (!newOrg) {
+      reject(new Error('Failed to create organization'))
+      return
     }
-  }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <p className="text-md mt-2">What is your organization name?</p>
-      <Input
-        type="text"
-        name="organizationName"
-        value={organizationName}
-        placeholder="e.g. Acme Corp"
-        onChange={(e) => setOrganizationName(e.currentTarget.value)}
-      />
-      {/* <p className="text-md mt-2">How did you hear about us?</p>
-      <Input
-        type="text"
-        name="referralSource"
-        value={referralSource}
-        placeholder="e.g. Twitter"
-        onChange={(e) => setReferralSource(e.currentTarget.value)}
-      /> */}
-      <Button type="submit" className="mt-4">
-        Create organization
-      </Button>
-    </form>
-  )
+    await createOrgBackendMutation(
+      {
+        id: newOrg.id,
+        name,
+        // referrer: 'web', // TODO: add referrer from form
+        clerkUserId: clerkUserId ?? '',
+      },
+      {
+        onSuccess: async (data) => {
+          if (data.id && data.id == newOrg.id) {
+            await setActiveClerkOrganization(data.id)
+            resolve()
+            // setTimeout(() => {
+            //   window.location.href = '/'
+            // }, 1000)
+          } else {
+            reject(
+              new Error(
+                'Failed to create organization, please try again later with a different name',
+              ),
+            )
+          }
+        },
+      },
+    )
+  })
 }
 
 export default function AuthedLayout({children}: {children: React.ReactNode}) {
   // Clerk react cannot be trusted... Add our own clerk listener instead...
   // auth works for initial request but then subsequently breaks...
   const auth = useAuth()
+  const user = useUser()
+  const {mutate: createOrgBackendMutation} =
+    _trpcReact.createOrganization.useMutation()
+  const {
+    createOrganization: createOrgClerkMutation,
+    setActive: setActiveClerkOrganization,
+  } = useOrganizationList()
+
   if (!auth.isLoaded) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
@@ -102,11 +104,38 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
     return <RedirectToNext13 url="/dashboard/sign-in" />
   }
 
-  if (!auth.orgId) {
+  if (!auth.orgId && user) {
     return (
       <div className="flex h-screen w-screen flex-col">
-        <h1>Welcome to OpenInt!</h1>
-        <CustomCreateOrganization clerkUserId={auth.userId} />
+        <OnboardingModal
+          createOrganization={(name: string) =>
+            createOrganizationMutationWrapper({
+              name,
+              clerkUserId: auth.userId,
+              createOrgBackendMutation: createOrgBackendMutation as any,
+              createOrgClerkMutation: createOrgClerkMutation as any,
+              setActiveClerkOrganization: (organizationId: string) => {
+                setActiveClerkOrganization?.({
+                  organization: organizationId,
+                })
+              },
+            })
+          }
+          navigateTo={(action, connectorType) => {
+            switch (action) {
+              case 'listConnectors':
+              case 'dashboard':
+              case 'setupConnector':
+              default: {
+                console.log('TODO: handle', action, connectorType)
+                // TODO: handle
+                router.push('/dashboard')
+              }
+            }
+          }}
+          userFirstName={user?.user?.firstName ?? undefined}
+          email={user?.user?.emailAddresses?.[0]?.emailAddress}
+        />
       </div>
     )
   }
