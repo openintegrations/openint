@@ -2,9 +2,9 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {ConnectorMetadata} from '@openint/cdk'
-import {publicProcedure, router} from '../trpc/_base'
+import type {ConnectorMetadata} from '@openint/cdk'
 import {core} from '../models'
+import {publicProcedure, router} from '../trpc/_base'
 
 interface IntegrationsResponse {
   items: Array<Record<string, unknown>>
@@ -27,6 +27,11 @@ const connectorOutput = core.connector.extend({
 export const zExpandOptions = z
   .enum(['integrations'])
   .describe('Fields to expand connector with its integrations')
+
+// Added the casting to guarantee that the array is not empty
+const zConnectorName = z.enum(
+  Object.keys(defConnectors) as [string, ...string[]],
+)
 
 export const connectorRouter = router({
   listConnectors: publicProcedure
@@ -96,5 +101,46 @@ export const connectorRouter = router({
         },
       )
       return Promise.all(promises)
+    }),
+  getSchemaByName: publicProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/connector/schema/{name}',
+        description: 'Get the schema for a connector by name',
+      },
+    })
+    .input(
+      z.object({
+        name: z
+          .string()
+          .refine((name) => zConnectorName.safeParse(name).success, {
+            message: `Invalid connector name. Valid options are: ${Object.keys(
+              defConnectors,
+            ).join(', ')}`,
+          })
+          .describe(
+            `String connector name.\n\nAvailable Options: ${Object.keys(
+              defConnectors,
+            )
+              .map((name) => `\`${name}\``)
+              .join(', ')}`,
+          ),
+      }),
+    )
+    .output(z.record(z.unknown()))
+    .query(({input}) => {
+      const {name} = input
+      const connector = defConnectors[name as keyof typeof defConnectors]
+
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector with name "${name}" not found`,
+        })
+      }
+
+      // TODO: @rodri77 - Still need to update to convert to json schema
+      return connector.schemas
     }),
 })

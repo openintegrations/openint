@@ -25,4 +25,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     expect(res[mergeIndex]?.integrations?.length).toBeGreaterThan(1)
   })
+
+  test('get schema by with invalid name returns error', async () => {
+    await expect(asOrg.getSchemaByName({name: 'foo'})).rejects.toThrow(
+      /Invalid connector name/,
+    )
+  })
+
+  // TODO: @rodri77 - Add a positive test for getting the schema by name
 })
