@@ -13,7 +13,7 @@ import {cn} from '@openint/shadcn/lib/utils'
 import type {z} from '@openint/util'
 import {fields} from './fields'
 import {transformJSONSchema, zodToOas31Schema} from './generateJSONSchema'
-import {generateUISchema} from './generateUiSchema'
+import {generateUISchema} from './generateUISchema'
 import {widgets} from './widgets'
 
 // Define the theme (copied from original SchemaForm)
