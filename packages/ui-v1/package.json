@@ -20,7 +20,9 @@
     "@trpc/tanstack-react-query": "next",
     "next": "15.2.1",
     "react": "^19.0.0",
-    "sonner": "^1.4.0"
+    "sonner": "^1.4.0",
+    "zod": "^3.24.2",
+    "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",
