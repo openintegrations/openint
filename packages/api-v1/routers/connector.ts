@@ -3,6 +3,8 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorMetadata} from '@openint/cdk'
+import {zodToOas31Schema} from '@openint/ui-v1/components/schema-form/generateJSONSchema'
+import type {Oas31Schema} from '@openint/ui-v1/components/schema-form/generateJSONSchema'
 import {core} from '../models'
 import {publicProcedure, router} from '../trpc/_base'
 
@@ -112,20 +114,13 @@ export const connectorRouter = router({
     })
     .input(
       z.object({
-        name: z
-          .string()
-          .refine((name) => zConnectorName.safeParse(name).success, {
-            message: `Invalid connector name. Valid options are: ${Object.keys(
-              defConnectors,
-            ).join(', ')}`,
-          })
-          .describe(
-            `String connector name.\n\nAvailable Options: ${Object.keys(
-              defConnectors,
-            )
-              .map((name) => `\`${name}\``)
-              .join(', ')}`,
-          ),
+        name: zConnectorName.describe(
+          `String connector name.\n\nAvailable Options: ${Object.keys(
+            defConnectors,
+          )
+            .map((name) => `\`${name}\``)
+            .join(', ')}`,
+        ),
       }),
     )
     .output(z.record(z.unknown()))
@@ -140,7 +135,22 @@ export const connectorRouter = router({
         })
       }
 
-      // TODO: @rodri77 - Still need to update to convert to json schema
-      return connector.schemas
+      const result: Record<string, Oas31Schema> = {}
+
+      // Handle the case where connector.schemas is a single schema
+      if (connector.schemas instanceof z.ZodType) {
+        return zodToOas31Schema(connector.schemas)
+      }
+
+      // Handle the case where connector.schemas is a record of schemas
+      if (typeof connector.schemas === 'object') {
+        for (const [key, schema] of Object.entries(connector.schemas)) {
+          if (schema instanceof z.ZodType) {
+            result[key] = zodToOas31Schema(schema)
+          }
+        }
+      }
+
+      return result
     }),
 })
