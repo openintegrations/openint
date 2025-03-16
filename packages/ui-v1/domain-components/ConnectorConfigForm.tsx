@@ -3,7 +3,7 @@ import {RJSFSchema} from '@rjsf/utils'
 import {ForwardedRef} from 'react'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {cn} from '@openint/shadcn/lib/utils'
-import {SchemaForm} from '../components/SchemaForm'
+import {ZodSchemaForm} from '../components/schema-form'
 
 export interface ConnectorConfigFormProps<
   T extends keyof typeof defConnectors,
@@ -86,7 +86,7 @@ export function ConnectorConfigForm<T extends keyof typeof defConnectors>({
           <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
         </div>
       )}
-      <SchemaForm
+      <ZodSchemaForm
         ref={ref}
         schema={ccfgSchema}
         formData={connectorConfig}
