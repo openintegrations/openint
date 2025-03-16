@@ -106,6 +106,7 @@ export const connectorRouter = router({
     }),
   getSchemaByName: publicProcedure
     .meta({
+      internal: true,
       openapi: {
         method: 'GET',
         path: '/connector/schema/{name}',
