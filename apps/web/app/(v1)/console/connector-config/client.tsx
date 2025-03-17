@@ -25,7 +25,7 @@ export function ConnectorConfigListHeader(props: {
   const res = useSuspenseQuery(
     trpc.listConnectors.queryOptions(
       {},
-      initialData ? {initialData: initialData.items} : undefined,
+      initialData ? {initialData} : undefined,
     ),
   )
 
@@ -42,7 +42,7 @@ export function ConnectorConfigListHeader(props: {
         </SheetTrigger>
         <SheetContent side="right" className="min-w-1/3">
           <AddConnectorConfig
-            connectors={res.data}
+            connectors={res.data.items}
             onSelectConnector={() => {
               setSheetOpen(false)
               res.refetch()

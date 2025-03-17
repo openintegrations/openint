@@ -1,4 +1,5 @@
 import {Suspense} from 'react'
+import type {ConnectorConfig} from '@openint/api-v1/models'
 import type {PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
@@ -20,9 +21,20 @@ export default async function Page(props: PageProps) {
         <Suspense fallback={<Fallback />}>
           <ConnectorConfigListHeader initialData={api.listConnectors()} />
           <ConnectorConfigList
-            initialData={api.listConnectorConfigs({
-              expand: 'connector,enabled_integrations,connection_count',
-            })}
+            initialData={
+              api.listConnectorConfigs({
+                expand: 'connector,enabled_integrations,connection_count',
+              }) as Promise<{
+                items: Array<
+                  ConnectorConfig<
+                    'connector' | 'integrations' | 'connection_count'
+                  >
+                >
+                total: number
+                limit: number
+                offset: number
+              }>
+            }
           />
         </Suspense>
       </ClientApp>
