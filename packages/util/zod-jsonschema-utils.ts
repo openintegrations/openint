@@ -1,7 +1,7 @@
 import type {z} from '@opensdks/util-zod'
-import {zodToOas31Schema} from '@opensdks/util-zod'
 import * as R from 'remeda'
 import {jsonSchemaWalkNodes} from './jsonschema-nodewalker'
+import {zodToOas31Schema} from './schema'
 
 /** Warning will modify input */
 export function defaultTitleAsJsonPath<T = unknown>(jsonSchema: T) {
