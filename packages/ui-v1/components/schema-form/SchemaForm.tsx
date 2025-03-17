@@ -9,11 +9,15 @@ import type {RegistryWidgetsType} from '@rjsf/utils'
 import {type RJSFSchema} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
+import type {z} from 'zod'
 import {cn} from '@openint/shadcn/lib/utils'
-import type {z} from '@openint/util'
-import {transformJSONSchema, zodToOas31Schema} from '@openint/util/schema'
+import {
+  transformJSONSchema,
+  zodToOas31Schema,
+  type Oas31Schema,
+} from '@openint/util/schema'
 import {fields} from './fields'
-import {generateUISchema} from './generateUISchema2'
+import {jsonSchemaToUiSchema} from './jsonSchemaToUiSchema'
 import {widgets} from './widgets'
 
 // Define the theme (copied from original SchemaForm)
@@ -61,10 +65,6 @@ export interface JSONSchemaFormProps<TData extends Record<string, unknown>>
    */
   loading?: boolean
   /**
-   * Optional function to transform the JSON schema before rendering
-   */
-  jsonSchemaTransform?: (schema: RJSFSchema) => RJSFSchema
-  /**
    * Optional flag to hide sensitive fields (like passwords, tokens, etc.)
    * Defaults to true for security
    */
@@ -87,17 +87,15 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   className,
   loading,
   hideSensitiveFields = true,
-  jsonSchemaTransform,
   hideSubmitButton = true,
   formData: initialFormData,
   onSubmit,
   debugMode: debugMode,
   ...props
 }: JSONSchemaFormProps<TData>) => {
-  const jsonSchema = transformJSONSchema(_jsonSchema, {
-    jsonSchemaTransform,
+  const jsonSchema = transformJSONSchema(_jsonSchema as Oas31Schema, {
     hideSensitiveFields,
-  })
+  }) as RJSFSchema
 
   // For debugging
   ;(globalThis as any).formJsonSchema = jsonSchema
@@ -110,7 +108,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
     setFormData(data.formData)
   }, [])
 
-  const uiSchema = generateUISchema(jsonSchema)
+  const uiSchema = jsonSchemaToUiSchema(jsonSchema)
 
   const form = (
     <RJSFForm<TData>
