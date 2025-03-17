@@ -41,7 +41,7 @@ const jsonDef = {
     default_scopes: ['https://www.googleapis.com/auth/drive.file'],
   },
   // TODO (@pellicceama)
-  // - [ ] change openint_scope to default scope
+  // - [ x] change openint_scope to default scope
   // - [ ] Handle local urls dynmaically
   // - [ ] reembmer to fix logoUrl in metadata
   // - [ ] Remember to fix template literal in values
@@ -65,9 +65,5 @@ const jsonDef = {
 } satisfies JsonConnectorDef
 
 export const def = generateConnectorDef(jsonDef)
-export const server = generateOAuth2Server(def, jsonDef.auth, {
-  // oauth2: {
-  // },
-  // server: {
-  // }
-})
+
+export const server = generateOAuth2Server(def, jsonDef.auth)
