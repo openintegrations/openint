@@ -2,9 +2,10 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {ConnectorMetadata} from '@openint/cdk'
-import {publicProcedure, router} from '../trpc/_base'
+import type {ConnectorDef} from '@openint/cdk'
 import {core} from '../models'
+import {getConnectorModel} from '../models/connectorSchemas'
+import {publicProcedure, router} from '../trpc/_base'
 
 interface IntegrationsResponse {
   items: Array<Record<string, unknown>>
@@ -27,6 +28,10 @@ const connectorOutput = core.connector.extend({
 export const zExpandOptions = z
   .enum(['integrations'])
   .describe('Fields to expand connector with its integrations')
+
+const zConnectorName = z.enum(
+  Object.keys(defConnectors) as [string, ...string[]],
+)
 
 export const connectorRouter = router({
   listConnectors: publicProcedure
@@ -52,15 +57,13 @@ export const connectorRouter = router({
     )
     .query(async ({input}) => {
       const promises = Object.entries(defConnectors).map(
-        async ([name, connector]) => {
-          const metadata = connector.metadata as ConnectorMetadata
-          const result = {
-            name,
-            display_name: metadata?.displayName,
-            logo_url: metadata?.logoUrl,
-            stage: metadata?.stage,
-            platforms: metadata?.platforms,
-          } as z.infer<typeof connectorOutput>
+        async ([name, def]) => {
+          const result: z.infer<typeof connectorOutput> = getConnectorModel(
+            def as ConnectorDef,
+            {
+              includeSchemas: true,
+            },
+          )
 
           const server = serverConnectors[name as keyof typeof serverConnectors]
           if (
@@ -96,5 +99,39 @@ export const connectorRouter = router({
         },
       )
       return Promise.all(promises)
+    }),
+  getConnectorByName: publicProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/connector/{name}',
+        description: 'Get a connector by name',
+      },
+    })
+    .input(
+      z.object({
+        name: zConnectorName.describe(
+          `String connector name.\n\nAvailable Options: ${Object.keys(
+            defConnectors,
+          )
+            .map((name) => `\`${name}\``)
+            .join(', ')}`,
+        ),
+      }),
+    )
+    .output(connectorOutput)
+    .query(async ({input}) => {
+      const connector = defConnectors[input.name as keyof typeof defConnectors]
+
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector with name "${input.name}" not found`,
+        })
+      }
+
+      return getConnectorModel(connector as ConnectorDef, {
+        includeSchemas: true,
+      })
     }),
 })
