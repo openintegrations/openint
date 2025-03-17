@@ -82,18 +82,6 @@ export const Default: Story = {
   },
 }
 
-export const WithValue: Story = {
-  render: () => (
-    <Command className="rounded-lg border shadow-md">
-      <CommandInput
-        placeholder="Type a command or search..."
-        value="Hello"
-        onValueChange={() => {}}
-      />
-    </Command>
-  ),
-}
-
 export const Disabled: Story = {
   render: () => (
     <Command className="rounded-lg border shadow-md">
