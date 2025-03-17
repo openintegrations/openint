@@ -18,7 +18,7 @@
     "drizzle-orm": "^0.39.1",
     "inngest": "^3.22.13",
     "rxjs": "7.5.6",
-    "zod-openapi": "2.14.0"
+    "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
     "@clerk/nextjs": "^6.12.4",
