@@ -6,6 +6,7 @@ import type {ConnectorDef} from '@openint/cdk'
 import {core} from '../models'
 import {getConnectorModel} from '../models/connectorSchemas'
 import {publicProcedure, router} from '../trpc/_base'
+import {zListParams, zListResponse} from './utils/pagination'
 
 interface IntegrationsResponse {
   items: Array<Record<string, unknown>>
@@ -44,61 +45,65 @@ export const connectorRouter = router({
       },
     })
     .input(
-      z
-        .object({
+      zListParams
+        .extend({
           expand: z.array(zExpandOptions).optional().default([]),
         })
         .optional(),
     )
-    .output(
-      z
-        .array(connectorOutput)
-        .describe('List of connectors with selected fields'),
-    )
+    .output(zListResponse(connectorOutput).describe('List of connectors'))
     .query(async ({input}) => {
-      const promises = Object.entries(defConnectors).map(
-        async ([name, def]) => {
-          const result: z.infer<typeof connectorOutput> = getConnectorModel(
-            def as ConnectorDef,
-            {
-              includeSchemas: true,
-            },
-          )
-
-          const server = serverConnectors[name as keyof typeof serverConnectors]
-          if (
-            input?.expand.includes('integrations') &&
-            server &&
-            'listIntegrations' in server
-          ) {
-            if (isListIntegrationsFunction(server.listIntegrations)) {
-              try {
-                const integrations = await server.listIntegrations({})
-
-                if (
-                  integrations &&
-                  'items' in integrations &&
-                  Array.isArray(integrations.items)
-                ) {
-                  result.integrations = integrations.items
-                } else {
-                  result.integrations = []
-                }
-              } catch (error) {
-                throw new TRPCError({
-                  code: 'INTERNAL_SERVER_ERROR',
-                  message: `Error listing integrations for connector: ${name}`,
-                })
-              }
-            } else {
-              result.integrations = []
-            }
-          }
-
-          return result
-        },
+      const {limit, offset} = input ?? {}
+      const connectors = Object.entries(defConnectors).slice(
+        offset ?? 0,
+        (offset ?? 0) + (limit ?? 50),
       )
-      return Promise.all(promises)
+      const promises = connectors.map(async ([name, def]) => {
+        const result: z.infer<typeof connectorOutput> = getConnectorModel(
+          def as ConnectorDef,
+          {
+            includeSchemas: true,
+          },
+        )
+
+        const server = serverConnectors[name as keyof typeof serverConnectors]
+        if (
+          input?.expand.includes('integrations') &&
+          server &&
+          'listIntegrations' in server
+        ) {
+          if (isListIntegrationsFunction(server.listIntegrations)) {
+            try {
+              const integrations = await server.listIntegrations()
+
+              if (
+                integrations &&
+                'items' in integrations &&
+                Array.isArray(integrations.items)
+              ) {
+                result.integrations = integrations.items
+              } else {
+                result.integrations = []
+              }
+            } catch (error) {
+              throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+                message: `Error listing integrations for connector: ${name}`,
+              })
+            }
+          } else {
+            result.integrations = []
+          }
+        }
+
+        return result
+      })
+      return {
+        total: Object.keys(defConnectors).length,
+        items: await Promise.all(promises),
+        offset,
+        limit,
+      }
     }),
   getConnectorByName: publicProcedure
     .meta({
