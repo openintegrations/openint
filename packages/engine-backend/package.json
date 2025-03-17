@@ -17,8 +17,7 @@
     "@trpc/server": "10.40.0",
     "drizzle-orm": "^0.39.1",
     "inngest": "^3.22.13",
-    "rxjs": "7.5.6",
-    "zod-openapi": "^4.2.3"
+    "rxjs": "7.5.6"
   },
   "devDependencies": {
     "@clerk/nextjs": "^6.12.4",
