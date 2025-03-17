@@ -1,15 +1,14 @@
 import React, {useState} from 'react'
-import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Input, Separator} from '@openint/shadcn/ui'
-import {ConnectorTemporary} from './__stories__/fixtures'
+import {Input} from '@openint/shadcn/ui'
+import type {ConnectorTemporary} from './__stories__/fixtures'
 import {ConnectorCard} from './ConnectorCard'
 
 export interface AddConnectorConfigProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  connectors: Core['connector'][]
-  onClose?: () => void
-  onSelectConnector?: (connector: Core['connector']) => void
+  connectors: ConnectorTemporary[]
+  onSelectConnector?: (connector: ConnectorTemporary) => void
+  initialSearchQuery?: string
   variant?: 'default' | 'modal'
 }
 
@@ -22,12 +21,12 @@ export interface AddConnectorConfigProps
 export const AddConnectorConfig = ({
   className,
   connectors,
-  onClose,
   onSelectConnector,
+  initialSearchQuery,
   variant = 'default',
   ...props
 }: AddConnectorConfigProps) => {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery ?? '')
 
   const filteredConnectors = connectors.filter(
     (connector) =>
@@ -39,36 +38,9 @@ export const AddConnectorConfig = ({
   )
 
   return (
-    <div
-      className={cn(
-        'flex w-full flex-col',
-        variant === 'modal' && 'max-w-4xl rounded-lg bg-white shadow-lg',
-        className,
-      )}
-      {...props}>
-      {/* Header */}
-      <div
-        className={cn(
-          'flex items-center justify-between p-6',
-          variant === 'modal' && 'border-b',
-        )}>
-        <h2 className="text-2xl font-bold">Add Connector Config</h2>
-        {/* Only show close button in modal variant */}
-        {onClose && variant === 'modal' && (
-          <button
-            onClick={onClose}
-            className="rounded-full p-2 hover:bg-gray-100"
-            aria-label="Close">
-            <span className="relative block h-5 w-5">
-              <span className="absolute top-1/2 block h-0.5 w-5 -translate-y-1/2 rotate-45 transform bg-gray-600"></span>
-              <span className="absolute top-1/2 block h-0.5 w-5 -translate-y-1/2 -rotate-45 transform bg-gray-600"></span>
-            </span>
-          </button>
-        )}
-      </div>
-
+    <div className={cn('flex w-full flex-col', className)} {...props}>
       {/* Search bar */}
-      <div className={cn('p-6', variant === 'modal' && 'border-b')}>
+      <div className={cn('p-6')}>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-400">
             <svg
@@ -95,20 +67,13 @@ export const AddConnectorConfig = ({
         </div>
       </div>
 
-      {/* Divider - always show in default view, only show in modal if not already using border-b */}
-      {variant === 'default' && <Separator className="w-full" />}
-
       {/* Connector list */}
-      <div
-        className={cn(
-          'grid grid-cols-1 gap-4 p-6 md:grid-cols-2',
-          variant === 'modal' && 'max-h-[60vh] overflow-y-auto',
-        )}>
+      <div className={cn('grid grid-cols-1 gap-4 p-6 md:grid-cols-2')}>
         {filteredConnectors.map((connector, index) => (
           <div
             key={`${connector.name}-${index}`}
             onClick={() => onSelectConnector && onSelectConnector(connector)}>
-            {/* NOTE: casting to any and ConnectorTemporary is a temporary solution to avoid type 
+            {/* NOTE: casting to any and ConnectorTemporary is a temporary solution to avoid type
             errors until we accept connector types from the server on ConnectorCard*/}
             <ConnectorCard connector={connector as any as ConnectorTemporary} />
           </div>

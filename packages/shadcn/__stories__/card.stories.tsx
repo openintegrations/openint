@@ -1,5 +1,6 @@
 // packages/shadcn/__stories__/card.stories.tsx
 import type {Meta, StoryObj} from '@storybook/react'
+import {Input, Label} from '../ui'
 import {Button} from '../ui/button'
 import {
   Card,
@@ -54,13 +55,13 @@ export const WithForm: Story = {
       <CardContent>
         <form>
           <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <label htmlFor="name">Name</label>
-              <input id="name" placeholder="Your name" />
+            <div className="flex flex-col gap-4">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" placeholder="Your name" />
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <label htmlFor="email">Email</label>
-              <input id="email" placeholder="Your email" />
+            <div className="flex flex-col gap-4">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" placeholder="Your email" />
             </div>
           </div>
         </form>
