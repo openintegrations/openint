@@ -4,7 +4,8 @@ import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import type {JsonConnectorDef} from '../../def'
 import {generateConnectorDef} from '../../schema'
 import {zOAuthConfig} from './def'
-import {generateOAuth2Server, mapOauthParams} from './server'
+import {generateOAuth2Server} from './server'
+import {mapOauthParams} from './utils'
 
 const logger = false
 
@@ -51,7 +52,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('newInstance should throw error if client credentials are missing', () => {
-    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
+    const server = generateOAuth2Server(
+      mockConnectorDef as any,
+      mockOauthConfig,
+    )
 
     expect(server.newInstance).toBeDefined()
     expect(() => {
@@ -59,8 +63,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         throw new Error('newInstance is not defined')
       }
       return server.newInstance({
-        config: {},
-        settings: {},
+        config: {} as any,
+        settings: {} as any,
         fetchLinks: [],
         onSettingsChange: () => Promise.resolve(),
       })
@@ -68,7 +72,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('newInstance should initialize successfully with valid credentials', () => {
-    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
+    const server = generateOAuth2Server(
+      mockConnectorDef as any,
+      mockOauthConfig,
+    )
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
@@ -77,8 +84,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         throw new Error('newInstance is not defined')
       }
       return server.newInstance({
-        config: {},
-        settings: {},
+        config: {} as any,
+        settings: {} as any,
         fetchLinks: [],
         onSettingsChange: () => Promise.resolve(),
       })
@@ -86,7 +93,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('preConnect should generate correct authorization URL', async () => {
-    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
+    const server = generateOAuth2Server(
+      mockConnectorDef as any,
+      mockOauthConfig,
+    )
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 

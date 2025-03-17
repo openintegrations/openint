@@ -1,4 +1,5 @@
 import {z} from 'zod'
+import {ConnectorSchemas, zId} from '@openint/cdk'
 
 export const zOauthConnectorConfig = z
   .object({
@@ -7,6 +8,27 @@ export const zOauthConnectorConfig = z
     scopes: z.array(z.string()).nullish(),
   })
   .describe('Base oauth configuration for the connector')
+
+export const zOAuthConnectionSettings = z.object({
+  oauth: z.object({
+    credentials: z
+      .object({
+        access_token: z.string(),
+        refresh_token: z.string(),
+        expires_at: z.number(),
+        client_id: z.string(),
+        token_type: z.string(),
+        connection_id: z.string(),
+        created_at: z.string(),
+        updated_at: z.string(),
+        last_fetched_at: z.string(),
+        provider_config_key: z.string(),
+        metadata: z.record(z.unknown()).nullable(),
+      })
+      .optional()
+      .describe('Output of the postConnect hook for oauth2 connectors'),
+  }),
+})
 
 export const zAuthParamsConfig = z.object({
   authorize: z.record(z.string(), z.string()).optional(),
@@ -48,25 +70,9 @@ export const zOAuthConfig = z.object({
     .default(' ')
     .optional()
     .describe('Separator used to join multiple scopes. Defaults to space.'),
-  // TODO: review that it extends the schema of the json connector
-  connector_config: z.union([zOauthConnectorConfig, z.any()]).default({}),
-  // TODO: review that it extends the schema of the json connector
-  connection_settings: z
-    .object({
-      access_token: z.string(),
-      refresh_token: z.string(),
-      expires_at: z.number(),
-      client_id: z.string(),
-      token_type: z.string(),
-      connection_id: z.string(),
-      created_at: z.string(),
-      updated_at: z.string(),
-      last_fetched_at: z.string(),
-      provider_config_key: z.string(),
-      metadata: z.record(z.unknown()).nullable(),
-    })
-    .optional()
-    .describe('Output of the postConnect hook'),
+
+  connector_config: zOauthConnectorConfig.optional(),
+  connection_settings: zOAuthConnectionSettings.optional(),
   scopes: z
     .array(
       z.object({
@@ -85,3 +91,18 @@ export const zOAuthConfig = z.object({
     ),
   params_config: zAuthParamsConfig.optional().default({}),
 })
+
+export const oauth2Schemas = {
+  connectorConfig: zOauthConnectorConfig,
+  connectionSettings: zOAuthConnectionSettings,
+  // No pre connect input is necessary for oauth2
+  // preConnectInput: z.any(),
+  connectInput: z.object({
+    authorization_url: z.string(),
+  }),
+  connectOutput: z.object({
+    code: z.string(),
+    connectionId: zId['conn'],
+    state: z.string(),
+  }),
+} satisfies Omit<ConnectorSchemas, 'name'>

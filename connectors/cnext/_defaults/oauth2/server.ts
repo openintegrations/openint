@@ -1,21 +1,17 @@
 import {z} from 'zod'
-import type {
-  ConnectorDef,
-  ConnectorSchemas,
-  ConnectorServer,
-} from '@openint/cdk'
+import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
 import {makeUlid} from '@openint/util'
 // TODO: Fix me as this is technically a cyclical dep
 import {getServerUrl} from '../../../../apps/app-config/constants'
-import {zOAuthConfig} from './def'
+import {oauth2Schemas, zOAuthConfig} from './def'
 import {
   authorizeHandler,
-  tokenExchangeHandler,
+  defaultTokenExchangeHandler,
   tokenRefreshHandler,
 } from './handlers'
 
-function addCcfgDefaultCredentials(
+function injectCcfgDefaultCredentials(
   config: any,
   connectorName: string,
 ): {
@@ -34,36 +30,6 @@ function addCcfgDefaultCredentials(
   }
 }
 
-export function isOAuth2ConnectorDef(
-  auth: any,
-): auth is z.infer<typeof zOAuthConfig> {
-  return zOAuthConfig.safeParse(auth).success
-}
-
-/*
- * This function takes the paramNames map where a user can map were fields like client_id and client_secret are named in particular oauth connector.
- * For example salesforce may call client_id clientKey. In this case, the paramNames would have client_id: clientKey.
- * Following the SF example, this function will return a new object with the client_id field renamed to clientKey.
- * Write tests for this function to in different scenarios ensure that the clientKey is returned with the value initially set for client_id
- */
-export function mapOauthParams(
-  params: Record<string, string>,
-  paramNames: Record<string, string>,
-) {
-  const result: Record<string, string> = {}
-
-  // Process each parameter in the input
-  Object.entries(params).forEach(([key, value]) => {
-    if (key && paramNames && key in paramNames && paramNames[key]) {
-      result[paramNames[key]] = value
-    } else {
-      result[key] = value
-    }
-  })
-
-  return result
-}
-
 /*
  * This function generates a server implementation for an OAuth2 connector.
  * It takes a connector definition and overrides for the server implementation.
@@ -72,7 +38,8 @@ export function mapOauthParams(
  *
  */
 export function generateOAuth2Server<
-  T extends ConnectorSchemas,
+  TName extends string,
+  T extends typeof oauth2Schemas & {name: z.ZodLiteral<TName>},
   D extends ConnectorDef<T>,
 >(
   connectorDef: D,
@@ -82,8 +49,7 @@ export function generateOAuth2Server<
   // Only use this for OAuth2 connectors
   if (
     // TODO: connectorDef.auth.type !== 'OAUTH2CC'?
-    connectorDef.metadata?.authType !== 'OAUTH2' &&
-    !isOAuth2ConnectorDef(oauthConfig)
+    connectorDef.metadata?.authType !== 'OAUTH2'
   ) {
     throw new Error('This server can only be used with OAuth2 connectors')
   }
@@ -96,7 +62,7 @@ export function generateOAuth2Server<
   const baseServer: ConnectorServer<T> = {
     newInstance: ({config, settings}) => {
       // Use the same helper function to get credentials
-      const credentials = addCcfgDefaultCredentials(config, connectorName)
+      const credentials = injectCcfgDefaultCredentials(config, connectorName)
       clientId = credentials.client_id
       clientSecret = credentials.client_secret
 
@@ -117,41 +83,28 @@ export function generateOAuth2Server<
     },
 
     async preConnect(connectorConfig, connectionSettings, input) {
-      if (!isOAuth2ConnectorDef(oauthConfig)) {
-        console.log(
-          `Oauth2 Preconnect issue with oauthConfig connectionSettings: ${!!connectionSettings}`,
-        )
-        return zOAuthConfig.parse(oauthConfig)
-      }
-
       const connectionId =
         input.connectionId ?? makeId('conn', connectorDef.name, makeUlid())
 
-      console.log(`Oauth2 Preconnect called`)
+      console.log(
+        `Oauth2 Preconnect called with connectionSettings ${!!connectionSettings}`,
+      )
 
       return authorizeHandler({
-        oauth_config: {
+        oauthConfig: {
           ...oauthConfig,
           connector_config: connectorConfig,
-        } satisfies z.infer<typeof zOAuthConfig>,
-        redirect_uri: getServerUrl(null) + '/connect/callback',
-        connection_id: connectionId,
-        // this is currently returning T['_types']['connectInput']
-        // which is defined as {authorization_url} in cnext/schema.ts
-        // but TS doesn't seem to be picking it up so we're using any
+        },
+        redirectUri: getServerUrl(null) + '/connect/callback',
+        connectionId: connectionId,
+        //  QQ: fix issue with Type '{ authorization_url: string; }' is not assignable to type 'T["_types"]["connectInput"]
       }) as any
     },
 
     async postConnect(connectOutput, connectorConfig) {
-      if (!isOAuth2ConnectorDef(oauthConfig)) {
-        return zOAuthConfig.parse(oauthConfig)
-      }
-
       const redirect_uri = getServerUrl(null) + '/connect/callback'
-      // const redirect_uri =
-      //   'https://f887-38-9-28-71.ngrok-free.app/connect/callback'
       console.log(`Oauth2 Postconnect called`)
-      const result = await tokenExchangeHandler({
+      const result = await defaultTokenExchangeHandler({
         oauth_config: {
           ...oauthConfig,
           connector_config: connectorConfig,
@@ -164,8 +117,10 @@ export function generateOAuth2Server<
       console.log(`Oauth2 Postconnect completed`)
 
       return {
-        // NOTE: is this the right thing to do here?
-        connectionExternalId: extractId(connectOutput.connectionId)[2],
+        // QQ: is this the right thing to do here?
+        connectionExternalId: connectOutput.connectionId
+          ? extractId(connectOutput.connectionId)[2]
+          : undefined,
         settings: {
           oauth: {
             credentials: {
@@ -175,11 +130,13 @@ export function generateOAuth2Server<
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
               last_fetched_at: new Date().toISOString(),
-              provider_config_key: connectorConfig.id,
+
+              // QQ: What to do for these?
+              provider_config_key: undefined,
               metadata: null,
             },
           },
-          metadata: {}, // QQ: do we need this?
+          metadata: {},
         },
         // NOTE: this is currently returning T['_types']['connectionSettings']
         // which is defined as {authorization_url} in cnext/schema.ts
@@ -188,10 +145,6 @@ export function generateOAuth2Server<
     },
 
     async refreshConnection(connectionSettings, connectorConfig) {
-      if (!isOAuth2ConnectorDef(oauthConfig)) {
-        return zOAuthConfig.parse(oauthConfig)
-      }
-
       const refreshToken = connectionSettings?.oauth?.credentials?.refresh_token
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
@@ -217,9 +170,9 @@ export function generateOAuth2Server<
             created_at: connectionSettings.oauth?.credentials?.created_at,
             updated_at: new Date().toISOString(),
             last_fetched_at: new Date().toISOString(),
+            // QQ: What to do for these?
             provider_config_key:
-              connectionSettings.oauth?.credentials?.provider_config_key ||
-              connectorConfig.id,
+              connectionSettings.oauth?.credentials?.provider_config_key,
             metadata: connectionSettings.oauth?.credentials?.metadata || null,
           },
         },
@@ -227,7 +180,7 @@ export function generateOAuth2Server<
       } as any
     },
 
-    // @ts-expect-error: review
+    // @ts-expect-error: QQ
     async checkConnection({settings, config}) {
       // If there's no access token, throw an error
       if (!settings?.oauth?.credentials?.access_token) {
@@ -246,9 +199,12 @@ export function generateOAuth2Server<
 
         try {
           // Attempt to refresh the token
-          const {connectionExternalId, settings: newSettings} =
-            await this.refreshConnection(settings, config)
-          return {connectionExternalId, settings: newSettings, config} // Successfully refreshed
+          const newSettings = await this.refreshConnection(settings, config)
+          return {
+            connectionExternalId: settings.oauth?.credentials?.connection_id,
+            settings: newSettings,
+            config,
+          }
         } catch (error: any) {
           throw new Error(`Failed to refresh token: ${error.message}`)
         }
