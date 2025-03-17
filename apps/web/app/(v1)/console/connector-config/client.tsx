@@ -2,19 +2,18 @@
 
 import {Plus} from 'lucide-react'
 import {use, useState} from 'react'
-import type {ConnectorConfig, core} from '@openint/api-v1/models'
+import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTrigger} from '@openint/shadcn/ui/sheet'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {AddConnectorConfig} from '@openint/ui-v1/domain-components/AddConnectorConfig'
 import {ConnectorTableCell} from '@openint/ui-v1/domain-components/ConnectorTableCell'
 import {useSuspenseQuery} from '@openint/ui-v1/trpc'
-import type {z} from '@openint/util'
 import {useTRPC} from '../client'
 
 export function ConnectorConfigListHeader(props: {
   initialData?: Promise<{
-    items: Array<z.infer<typeof core.connector>>
+    items: Array<Core['connector']>
     total: number
     limit: number
     offset: number
@@ -22,12 +21,11 @@ export function ConnectorConfigListHeader(props: {
 }) {
   const initialData = use(props.initialData ?? Promise.resolve(undefined))
   const [sheetOpen, setSheetOpen] = useState(false)
-  const connectors = initialData ?? []
   const trpc = useTRPC()
   const res = useSuspenseQuery(
     trpc.listConnectors.queryOptions(
       {},
-      initialData ? {initialData} : undefined,
+      initialData ? {initialData: initialData.items} : undefined,
     ),
   )
 
@@ -44,8 +42,8 @@ export function ConnectorConfigListHeader(props: {
         </SheetTrigger>
         <SheetContent side="right" className="min-w-1/3">
           <AddConnectorConfig
-            connectors={connectors}
-            onSuccess={() => {
+            connectors={res.data}
+            onSelectConnector={() => {
               setSheetOpen(false)
               res.refetch()
             }}
@@ -121,7 +119,9 @@ export function ConnectorConfigList(props: {
 
   return (
     <div>
-      <DataTable<Core['connector_config'], string | number | string[]>
+      <DataTable<
+        ConnectorConfig<'connector' | 'integrations' | 'connection_count'>
+      >
         data={connectorConfigs}
         columns={connectorColumns}>
         <DataTable.Header>
