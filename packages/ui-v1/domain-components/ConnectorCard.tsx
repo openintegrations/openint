@@ -22,7 +22,6 @@ const ConnectorCard = ({
   ...props
 }: ConnectorCardProps) => {
   const {name, logo_url, display_name} = connector
-
   return (
     <div
       className={cn(

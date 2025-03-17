@@ -3,7 +3,7 @@ import {z} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
 import {schema} from '@openint/db'
 import type {NonEmptyArray} from './connectorSchemas'
-import {connectorSchemas} from './connectorSchemas'
+import {connectorSchemas, zConnector} from './connectorSchemas'
 
 extendZodWithOpenApi(z)
 
@@ -86,18 +86,7 @@ export const core = {
       ref: 'core.connector_config',
       title: 'Connector Config',
     }),
-  connector: z
-    .object({
-      name: z.string(),
-      display_name: z.string().optional(),
-      logo_url: z.string().optional(),
-      stage: z.enum(['alpha', 'beta', 'ga']).optional(),
-      platforms: z
-        // TODO: Fix me to be the right ones
-        .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
-        .optional(),
-    })
-    .openapi({ref: 'core.connector', title: 'Connector'}),
+  connector: zConnector.openapi({ref: 'core.connector', title: 'Connector'}),
   integration: z
     .object({})
     .passthrough()
