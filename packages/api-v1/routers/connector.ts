@@ -73,7 +73,7 @@ export const connectorRouter = router({
           ) {
             if (isListIntegrationsFunction(server.listIntegrations)) {
               try {
-                const integrations = await server.listIntegrations({})
+                const integrations = await server.listIntegrations()
 
                 if (
                   integrations &&
