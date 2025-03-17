@@ -12,6 +12,10 @@
   },
   "dependencies": {
     "@openint/shadcn": "workspace:*",
+    "@openint/util": "workspace:*",
+    "@rjsf/core": "5.6.2",
+    "@rjsf/utils": "5.6.2",
+    "@rjsf/validator-ajv8": "5.6.2",
     "@tanstack/react-query": "^5.67.2",
     "@tanstack/react-table": "^8.21.2",
     "@trpc/client": "next",
@@ -19,10 +23,13 @@
     "lucide-react": "^0.479.0",
     "next": "15.2.1",
     "react": "^19.0.0",
-    "sonner": "^1.4.0"
+    "sonner": "^1.4.0",
+    "zod": "^3.24.2",
+    "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",
+    "@openint/all-connectors": "workspace:*",
     "@openint/api-v1": "workspace:*",
     "@openint/cdk": "workspace:*",
     "@openint/db": "workspace:*",

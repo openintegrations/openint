@@ -1,6 +1,5 @@
 import {createClerkClient} from '@clerk/nextjs/server'
-import type {LinkFactory} from '@openint/cdk'
-import {logLink, renameAccountLink} from '@openint/cdk'
+import {logLink} from '@openint/cdk'
 import type {PipelineInput} from '@openint/engine-backend'
 import {getContextFactory} from '@openint/engine-backend'
 import {makePostgresMetaService} from '@openint/meta-service-postgres'
@@ -41,7 +40,7 @@ export type OpenIntInput = PipelineInput<
 >
 
 export const contextFactory = getContextFactory({
-  // @ts-expect-error QQ check qbo _opState
+  // @ts-expect-error QQ check qbo _opState and all-connectors cnext
   connectors: Object.values(mergedConnectors),
   // routerUrl: 'http://localhost:3010/api', // apiUrl?
   // TODO: Rename to just serverUrl as we will need it for redirects and everything else
@@ -60,7 +59,6 @@ export const contextFactory = getContextFactory({
   // because of the need to support integration metadata specifying their desired links
   // aka transfomrations
   linkMap: {
-    renameAccount: renameAccountLink as LinkFactory,
     log: logLink,
   },
   clerk: clerkClient,
