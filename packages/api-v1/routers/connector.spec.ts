@@ -14,9 +14,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   const asOrg = getCaller({role: 'org', orgId: 'org_222'})
 
-  test.only('list connectors', async () => {
+  test('list connectors', async () => {
     const res = await asOrg.listConnectors()
-    console.log(JSON.stringify(res, null, 2))
 
     expect(res.length).toBeGreaterThan(1)
   })
@@ -26,5 +25,28 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     const mergeIndex = res.findIndex((c) => c.name === 'merge')
 
     expect(res[mergeIndex]?.integrations?.length).toBeGreaterThan(1)
+  })
+
+  test('get connector by with invalid name returns error', async () => {
+    await expect(asOrg.getConnectorByName({name: 'foo'})).rejects.toThrow(
+      /Invalid enum value/,
+    )
+  })
+
+  test('get connector by name', async () => {
+    const res = await asOrg.getConnectorByName({name: 'googledrive'})
+
+    expect(res).toMatchObject({
+      name: 'googledrive',
+      display_name: 'Google Drive',
+      logo_url: expect.any(String),
+      schemas: {
+        connector_config: expect.any(Object),
+        connection_settings: expect.any(Object),
+        pre_connect_input: expect.any(Object),
+        connect_input: expect.any(Object),
+        connect_output: expect.any(Object),
+      },
+    })
   })
 })
