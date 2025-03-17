@@ -3,8 +3,9 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {ConnectorMetadata} from '@openint/cdk'
-import {publicProcedure, router} from '../trpc/_base'
 import {core} from '../models'
+import {getConnectorModel} from '../models/connectorSchemas'
+import {publicProcedure, router} from '../trpc/_base'
 
 interface IntegrationsResponse {
   items: Array<Record<string, unknown>>
@@ -52,15 +53,10 @@ export const connectorRouter = router({
     )
     .query(async ({input}) => {
       const promises = Object.entries(defConnectors).map(
-        async ([name, connector]) => {
-          const metadata = connector.metadata as ConnectorMetadata
-          const result = {
-            name,
-            display_name: metadata?.displayName,
-            logo_url: metadata?.logoUrl,
-            stage: metadata?.stage,
-            platforms: metadata?.platforms,
-          } as z.infer<typeof connectorOutput>
+        async ([name, def]) => {
+          const result = getConnectorModel(def as ConnectorDef, {
+            includeSchemas: true,
+          })
 
           const server = serverConnectors[name as keyof typeof serverConnectors]
           if (

@@ -28,7 +28,6 @@ export function zodToOas31Schema(
       schemas: {...zodDefinitions, schema: zodSchema},
     },
   })
-  console.log(oas, zodSchema)
   const roofMeta =
     // Due to the fact that we still have multiple zod-openapi versions due to util/zod
     // Should upgrade at one point at once.

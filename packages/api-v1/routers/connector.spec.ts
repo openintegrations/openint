@@ -1,4 +1,4 @@
-import {Viewer} from '@openint/cdk'
+import type {Viewer} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {routerContextFromViewer} from '../trpc/context'
 import {connectorRouter} from './connector'
@@ -14,8 +14,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   const asOrg = getCaller({role: 'org', orgId: 'org_222'})
 
-  test('list connectors', async () => {
+  test.only('list connectors', async () => {
     const res = await asOrg.listConnectors()
+    console.log(JSON.stringify(res, null, 2))
+
     expect(res.length).toBeGreaterThan(1)
   })
 
