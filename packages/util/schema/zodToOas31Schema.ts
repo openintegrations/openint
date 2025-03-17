@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type z from 'zod'
+import type {ZodTypeDef} from 'zod'
 import type {oas30, oas31} from 'zod-openapi'
 import {createDocument} from 'zod-openapi'
 import type {ZodOpenApiMetadataDef} from 'zod-openapi/dist/extendZodTypes'
@@ -28,7 +29,11 @@ export function zodToOas31Schema(
     },
   })
   console.log(oas, zodSchema)
-  const roofMeta = (zodSchema._def as ZodOpenApiMetadataDef).openapi
+  const roofMeta =
+    // Due to the fact that we still have multiple zod-openapi versions due to util/zod
+    // Should upgrade at one point at once.
+    (zodSchema._def as ZodOpenApiMetadataDef).openapi ??
+    (zodSchema._def as ZodTypeDef).zodOpenApi?.openapi
 
   const {
     schema = {$ref: `#/components/schemas/${roofMeta?.ref}`},
