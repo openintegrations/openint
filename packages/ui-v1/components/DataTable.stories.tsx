@@ -4,8 +4,7 @@ import {
   ConnectorTemporary,
   FIXTURES,
 } from '../domain-components/__stories__/fixtures'
-import {ConnectorTableCell} from '../domain-components/ConnectorCard'
-import {CONNECTOR_CONFIG_COLUMNS} from '../domain-components/ConnectorConfigTable'
+import {ConnectorTableCell} from '../domain-components/ConnectorTableCell'
 import {ColumnDef, Columns, DataTable} from './DataTable'
 
 const meta: Meta<typeof DataTable> = {
@@ -108,22 +107,63 @@ const ConnectorConfigTableExample = () => {
   const connectorData = FIXTURES.connectorsList
 
   // Define columns for connector data
+  const connectorColumns: Array<
+    ColumnDef<ConnectorTemporary, string | number | string[]>
+  > = [
+    {
+      id: 'connector',
+      header: 'Connector',
+      accessorKey: 'display_name',
+      cell: ({row}) => {
+        const connector = row.original
+        // Show the complete ConnectorTableCell with all badges in this column only
+        return <ConnectorTableCell connector={connector} />
+      },
+    },
+    {
+      id: 'connections',
+      header: 'Connections',
+      cell: () => {
+        // Random number for demo purposes
+        const count = Math.floor(Math.random() * 100)
+        return count
+      },
+    },
+    {
+      id: 'status',
+      header: 'Status',
+      cell: () => {
+        // Empty placeholder
+        return <span className="text-gray-400">--</span>
+      },
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: () => {
+        // Empty placeholder
+        return (
+          <Button variant="ghost" size="sm">
+            View
+          </Button>
+        )
+      },
+    },
+  ]
 
   return (
     <DataTable<ConnectorTemporary, string | number | string[]>
       data={connectorData}
-      columns={CONNECTOR_CONFIG_COLUMNS}>
-      <div className="w-full">
-        <div className="flex items-center py-4">
-          <DataTable.SearchInput />
-          <DataTable.ColumnVisibilityToggle />
-          <Button className="ml-4">Add Connector</Button>
-        </div>
-        <div className="rounded-md border">
-          <DataTable.Content />
-        </div>
-        <DataTable.FooterControl showRowCount />
-      </div>
+      columns={connectorColumns}>
+      <DataTable.Header>
+        <DataTable.SearchInput />
+        <DataTable.ColumnVisibilityToggle />
+        <Button className="ml-4">Add Connector</Button>
+      </DataTable.Header>
+      <DataTable.Table />
+      <DataTable.Footer>
+        <DataTable.Pagination />
+      </DataTable.Footer>
     </DataTable>
   )
 }

@@ -9,6 +9,7 @@ export interface AddConnectorConfigProps
   connectors: ConnectorTemporary[]
   onSelectConnector?: (connector: ConnectorTemporary) => void
   initialSearchQuery?: string
+  variant?: 'default' | 'modal'
 }
 
 /**
@@ -22,6 +23,7 @@ export const AddConnectorConfig = ({
   connectors,
   onSelectConnector,
   initialSearchQuery,
+  variant = 'default',
   ...props
 }: AddConnectorConfigProps) => {
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery ?? '')

@@ -5,7 +5,7 @@ import type {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-  VisibilityState,  
+  VisibilityState,
 } from '@tanstack/react-table'
 import {
   flexRender,
@@ -17,7 +17,6 @@ import {
 } from '@tanstack/react-table'
 import {ChevronDown, Loader2, Search} from 'lucide-react'
 import React from 'react'
-import {R, titleCase} from '@openint/util'
 import {
   Button,
   Checkbox,
@@ -33,6 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from '@openint/shadcn/ui'
+import {R, titleCase} from '@openint/util'
 import {cn} from '../utils'
 
 const defaultFilter = () => true
@@ -189,7 +189,7 @@ export function DataTable<TData, TValue>({
                   className="h-24 text-center">
                   {query.isLoading || query.isRefetching ? (
                     <div className="flex size-full min-h-[300px] items-center justify-center">
-                      <Loader2 className="size-8 animate-spin text-button" />
+                      <Loader2 className="text-button size-8 animate-spin" />
                     </div>
                   ) : query.isError ? (
                     `Error: ${query.error}`
@@ -210,7 +210,7 @@ export function DataTable<TData, TValue>({
                       onRowClick ? () => onRowClick?.(row.original) : undefined
                     }
                     className={cn(
-                      onRowClick && 'cursor-pointer hover:bg-muted',
+                      onRowClick && 'hover:bg-muted cursor-pointer',
                     )}>
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
@@ -228,7 +228,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         {enableSelect && (
-          <div className="flex-1 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex-1 text-sm">
             {table.getFilteredSelectedRowModel().rows.length} of{' '}
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>

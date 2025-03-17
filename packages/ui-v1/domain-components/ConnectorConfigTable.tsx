@@ -1,45 +1,76 @@
+import type {ColumnDef} from '@tanstack/react-table'
 import {Button} from '@openint/shadcn/ui'
 import type {Columns} from '../components/DataTable'
 import type {ConnectorConfigTemporary} from './__stories__/fixtures'
-import {ConnectorCard, ConnectorTableCell} from './ConnectorCard'
+import {ConnectorTableCell} from './ConnectorTableCell'
 
-export const CONNECTOR_CONFIG_COLUMNS = [
+// Debug component to see what's in the data
+const DebugData = ({data}: {data: any}) => (
+  <div style={{display: 'none'}}>{JSON.stringify(data)}</div>
+)
+
+export const CONNECTOR_CONFIG_COLUMNS: Array<
+  ColumnDef<ConnectorConfigTemporary, string>
+> = [
   {
     id: 'connector',
     header: 'Connector',
-    accessorKey: 'display_name',
+    accessorKey: 'connector.display_name',
     cell: ({row}) => {
-      const connector = row.original
+      const connectorConfig = row.original
+
+      // For debugging
+      console.log('Row data:', connectorConfig)
+
+      // Add null check for connector
+      if (!connectorConfig || !connectorConfig.connector) {
+        console.error('Missing connector data:', connectorConfig)
+        return (
+          <>
+            <DebugData data={connectorConfig} />
+            <span className="text-gray-400">--</span>
+          </>
+        )
+      }
+
       // Show the complete ConnectorTableCell with all badges in this column only
-      return <ConnectorTableCell connector={connector} />
+      return (
+        <>
+          <DebugData data={connectorConfig.connector} />
+          <ConnectorTableCell connector={connectorConfig.connector} />
+        </>
+      )
     },
   },
   {
     id: 'connections',
     header: 'Connections',
-    cell: () => {
-      // Empty placeholder
-      return <span className="text-gray-400">--</span>
+    accessorKey: 'connection_count',
+    cell: ({row}) => {
+      const count = row.original.connection_count
+      return count !== undefined ? (
+        count
+      ) : (
+        <span className="text-gray-400">--</span>
+      )
     },
   },
   {
     id: 'status',
     header: 'Status',
-    cell: () => {
+    cell: () => (
       // Empty placeholder
-      return <span className="text-gray-400">--</span>
-    },
+      <span className="text-gray-400">--</span>
+    ),
   },
   {
     id: 'actions',
     header: 'Actions',
-    cell: () => {
+    cell: () => (
       // Empty placeholder
-      return (
-        <Button variant="ghost" size="sm">
-          View
-        </Button>
-      )
-    },
+      <Button variant="ghost" size="sm">
+        View
+      </Button>
+    ),
   },
 ] satisfies Columns<ConnectorConfigTemporary, string>
