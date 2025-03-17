@@ -17596,8 +17596,8 @@ packages:
     peerDependencies:
       zod: ^3.21.4
 
-  zod@3.22.4:
-    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+  zod@3.22.5:
+    resolution: {integrity: sha512-HqnGsCdVZ2xc0qWPLdO25WnseXThh0kEYKIdV5F/hTHO75hNZFp8thxSeHhiPrHZKrFTo1SOgkAj9po5bexZlw==}
 
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
@@ -29057,7 +29057,7 @@ snapshots:
       ms: 2.1.3
       serialize-error-cjs: 0.1.3
       strip-ansi: 5.2.0
-      zod: 3.22.4
+      zod: 3.22.5
     optionalDependencies:
       '@vercel/node': 5.1.13(rollup@4.34.9)
       express: 4.21.1
@@ -36107,7 +36107,7 @@ snapshots:
     dependencies:
       zod: 3.24.2
 
-  zod@3.22.4: {}
+  zod@3.22.5: {}
 
   zod@3.23.8: {}
 
