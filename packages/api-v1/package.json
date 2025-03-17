@@ -19,6 +19,7 @@
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",
     "@openint/sdk": "0.1.0-alpha.20",
+    "@openint/util": "workspace:*",
     "@trpc/server": "next",
     "drizzle-zod": "^0.7.0",
     "elysia": "^1.2.12",
