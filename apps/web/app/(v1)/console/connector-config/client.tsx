@@ -120,7 +120,8 @@ export function ConnectorConfigList(props: {
   return (
     <div>
       <DataTable<
-        ConnectorConfig<'connector' | 'integrations' | 'connection_count'>
+        ConnectorConfig<'connector' | 'integrations' | 'connection_count'>,
+        string | number | string[]
       >
         data={connectorConfigs}
         columns={connectorColumns}>
