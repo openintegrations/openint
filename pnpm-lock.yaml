@@ -2037,6 +2037,9 @@ importers:
       '@openint/sdk':
         specifier: 0.1.0-alpha.20
         version: 0.1.0-alpha.20
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../util
       '@trpc/server':
         specifier: next
         version: 11.0.0-rc.828(typescript@5.8.2)
@@ -2217,9 +2220,6 @@ importers:
       rxjs:
         specifier: 7.5.6
         version: 7.5.6
-      zod-openapi:
-        specifier: 2.14.0
-        version: 2.14.0(zod@3.24.2)
     devDependencies:
       '@clerk/nextjs':
         specifier: ^6.12.4
@@ -2680,6 +2680,9 @@ importers:
       '@openint/shadcn':
         specifier: workspace:*
         version: link:../shadcn
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../util
       '@rjsf/core':
         specifier: 5.6.2
         version: 5.6.2(@rjsf/utils@5.6.2(react@19.0.0))(react@19.0.0)
@@ -2898,8 +2901,8 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
       zod-openapi:
-        specifier: 2.14.0
-        version: 2.14.0(zod@3.24.2)
+        specifier: ^4.2.3
+        version: 4.2.3(zod@3.24.2)
     devDependencies:
       '@types/accounting':
         specifier: 0.4.2

@@ -2,7 +2,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {zodToOas31Schema} from './generateJSONSchema'
+import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm, ZodSchemaForm} from './SchemaForm'
 
 const meta: Meta<typeof ZodSchemaForm> = {

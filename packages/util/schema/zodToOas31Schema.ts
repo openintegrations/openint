@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type {RJSFSchema} from '@rjsf/utils'
 import type z from 'zod'
+import type {ZodTypeDef} from 'zod'
 import type {oas30, oas31} from 'zod-openapi'
 import {createDocument} from 'zod-openapi'
 import type {ZodOpenApiMetadataDef} from 'zod-openapi/dist/extendZodTypes'
@@ -29,7 +29,11 @@ export function zodToOas31Schema(
     },
   })
   console.log(oas, zodSchema)
-  const roofMeta = (zodSchema._def as ZodOpenApiMetadataDef).openapi
+  const roofMeta =
+    // Due to the fact that we still have multiple zod-openapi versions due to util/zod
+    // Should upgrade at one point at once.
+    (zodSchema._def as ZodOpenApiMetadataDef).openapi ??
+    (zodSchema._def as ZodTypeDef).zodOpenApi?.openapi
 
   const {
     schema = {$ref: `#/components/schemas/${roofMeta?.ref}`},
@@ -50,50 +54,4 @@ export function zodToOas31Schema(
     // $schema: 'https://json-schema.org/draft/2020-12/schema,'
     // $schema: 'https://spec.openapis.org/oas/3.1/dialect/base',
   }
-}
-
-export function transformJSONSchema(
-  schema: RJSFSchema,
-  options: {
-    jsonSchemaTransform?: (schema: RJSFSchema) => RJSFSchema
-    hideSensitiveFields?: boolean
-  } = {},
-): RJSFSchema {
-  const {jsonSchemaTransform, hideSensitiveFields = true} = options
-  let transformedSchema = {...schema}
-
-  // Apply user-provided transform first
-  if (jsonSchemaTransform) {
-    transformedSchema = jsonSchemaTransform(transformedSchema)
-  }
-
-  // Handle sensitive fields if needed
-  // TODO: Make it so that formats are specified explicitly...
-  if (hideSensitiveFields && transformedSchema.properties) {
-    const sensitiveFieldPatterns = [
-      /password/i,
-      /token/i,
-      /secret/i,
-      /api/i,
-      /credential/i,
-    ]
-
-    // Modify properties that match sensitive patterns
-    Object.entries(transformedSchema.properties).forEach(([key, prop]) => {
-      if (
-        typeof prop === 'object' &&
-        sensitiveFieldPatterns.some((pattern) => pattern.test(key))
-      ) {
-        // Mark as password type for UI
-        if (prop.type === 'string') {
-          transformedSchema.properties![key] = {
-            ...prop,
-            format: 'password',
-          }
-        }
-      }
-    })
-  }
-
-  return transformedSchema
 }
