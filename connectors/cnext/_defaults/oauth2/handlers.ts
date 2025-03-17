@@ -1,7 +1,10 @@
 import {z} from 'zod'
 import {zOAuthConfig} from './def'
-import {mapOauthParams} from './server'
-import {fillOutStringTemplateVariables, prepareScopes} from './utils'
+import {
+  fillOutStringTemplateVariables,
+  mapOauthParams,
+  prepareScopes,
+} from './utils'
 
 export const zTokenResponse = z.object({
   access_token: z.string(),
@@ -44,40 +47,43 @@ async function makeTokenRequest(
 }
 
 export const zAuthorizeHandlerArgs = z.object({
-  oauth_config: zOAuthConfig,
-  redirect_uri: z.string(),
-  connection_id: z.string(),
+  oauthConfig: zOAuthConfig,
+  redirectUri: z.string(),
+  connectionId: z.string(),
 })
 
 export async function authorizeHandler({
-  oauth_config,
-  redirect_uri,
-  connection_id,
+  oauthConfig,
+  redirectUri,
+  connectionId,
 }: z.infer<typeof zAuthorizeHandlerArgs>): Promise<{
   authorization_url: string
 }> {
-  if (!connection_id) {
+  if (!connectionId) {
     throw new Error('No connection_id provided')
+  }
+  if (!oauthConfig.connector_config) {
+    throw new Error('No connector_config provided')
   }
   const url = new URL(
     fillOutStringTemplateVariables(
-      oauth_config.authorization_request_url,
-      oauth_config.connector_config,
-      oauth_config.connection_settings,
+      oauthConfig.authorization_request_url,
+      oauthConfig.connector_config,
+      oauthConfig.connection_settings,
     ),
   )
   const params = mapOauthParams(
     {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      redirect_uri,
+      client_id: oauthConfig.connector_config.client_id,
+      client_secret: oauthConfig.connector_config.client_secret,
+      redirect_uri: redirectUri,
       response_type: 'code',
       // decoding it as url.toString() encodes it alredy
-      scope: decodeURIComponent(prepareScopes(oauth_config)),
-      state: Buffer.from(connection_id).toString('base64'),
-      ...(oauth_config.params_config.authorize ?? {}),
+      scope: decodeURIComponent(prepareScopes(oauthConfig)),
+      state: Buffer.from(connectionId).toString('base64'),
+      ...(oauthConfig.params_config.authorize ?? {}),
     },
-    oauth_config.params_config.param_names ?? {},
+    oauthConfig.params_config.param_names ?? {},
   )
 
   Object.entries(params).forEach(([key, value]) => {
@@ -95,7 +101,7 @@ export const zTokenExchangeHandlerArgs = z.object({
   redirect_uri: z.string(),
 })
 
-export async function tokenExchangeHandler({
+export async function defaultTokenExchangeHandler({
   oauth_config,
   redirect_uri,
   code,
@@ -103,6 +109,9 @@ export async function tokenExchangeHandler({
 }: z.infer<typeof zTokenExchangeHandlerArgs>): Promise<
   z.infer<typeof zTokenResponse>
 > {
+  if (!oauth_config.connector_config) {
+    throw new Error('No connector_config provided')
+  }
   // TODO (@pellicceama): For every value in params apply template literal substitution
   const params = mapOauthParams(
     {
@@ -137,6 +146,9 @@ export async function tokenRefreshHandler({
 }: z.infer<typeof zTokenRefreshHandlerArgs>): Promise<
   z.infer<typeof zTokenResponse>
 > {
+  if (!oauth_config.connector_config) {
+    throw new Error('No connector_config provided')
+  }
   const params = mapOauthParams(
     {
       client_id: oauth_config.connector_config.client_id,
