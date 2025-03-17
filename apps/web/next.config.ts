@@ -40,6 +40,9 @@ const nextConfig = {
       // Proxy metrics requests to Posthog.
       // TODO: Where is this used? and rename to _posthog to be consistent with _sentry
       {source: '/_posthog/:p*', destination: 'https://app.posthog.com/:p*'},
+      {source: '/api/v0/:p*', destination: 'https://openint-git-production-openint-dev.vercel.app/api/v0/:p*'},
+      {source: '/dashboard/:p*', destination: 'https://openint-git-production-openint-dev.vercel.app/dashboard/:p*'},
+      {source: '/connect/:p*', destination: 'https://openint-git-production-openint-dev.vercel.app/connect/:p*'},
     ],
     afterFiles: [],
     fallback: [],
