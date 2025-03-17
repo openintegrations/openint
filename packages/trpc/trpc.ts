@@ -1,5 +1,5 @@
-import type {OpenApiMeta} from '@lilyrose2798/trpc-openapi'
 import {initTRPC, TRPCError} from '@trpc/server'
+import type {OpenApiMeta} from 'trpc-to-openapi'
 // FIXME: We should not be hacking imports like this.
 import type {ExtCustomerId, Viewer, ViewerRole} from '../../kits/cdk/viewer'
 import type {RouterContext} from '../engine-backend/context'

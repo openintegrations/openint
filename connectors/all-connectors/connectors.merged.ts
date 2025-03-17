@@ -97,6 +97,7 @@ import {default as connectorYodlee_def} from '@openint/connector-yodlee/def'
 import {default as connectorYodlee_server} from '@openint/connector-yodlee/server'
 import {default as connectorZohodesk_def} from '@openint/connector-zohodesk/def'
 import {default as connectorZohodesk_server} from '@openint/connector-zohodesk/server'
+// import {metaForConnector} from '../../kits/cdk'
 
 const connectorAircall = {
   ...connectorAircall_def,
@@ -392,3 +393,5 @@ export const mergedConnectors = {
   zohodesk: connectorZohodesk,
   googledrive: connectorGoogledrive,
 }
+
+// console.log('ggooog drive ', metaForConnector(connectorGoogledrive))

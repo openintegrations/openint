@@ -1,6 +1,6 @@
 import type {RequestLike} from '@clerk/nextjs/dist/types/server/types'
 import {createClerkClient, getAuth} from '@clerk/nextjs/server'
-import {createOpenApiFetchHandler} from '@lilyrose2798/trpc-openapi'
+import {createOpenApiFetchHandler} from 'trpc-to-openapi'
 import {applyLinks, corsLink} from '@opensdks/fetch-links'
 import {pickBy} from 'remeda'
 import {contextFactory} from '@openint/app-config/backendConfig'

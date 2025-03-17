@@ -11,14 +11,12 @@ overrides:
   esbuild: 0.17.5
   react: 19.0.0
   react-dom: 19.0.0
+  zod-openapi: 4.2.3
 
 patchedDependencies:
   '@jsonurl/jsonurl@1.1.7':
     hash: 2048c2869df98564de76ebdd8cdf655260560d85e1c74568aeb503efa2c312b0
     path: patches/@jsonurl__jsonurl@1.1.7.patch
-  '@lilyrose2798/trpc-openapi@1.3.10':
-    hash: d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927
-    path: patches/@lilyrose2798__trpc-openapi@1.3.10.patch
   '@nangohq/frontend@0.33.8':
     hash: f3ed58a71194043d05262c1bfef4d07e30ef42fc0e81c4bdd0e6af766c79f2e5
     path: patches/@nangohq__frontend@0.33.8.patch
@@ -465,9 +463,6 @@ importers:
       '@clerk/nextjs':
         specifier: ^6.12.4
         version: 6.12.4(next@15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@lilyrose2798/trpc-openapi':
-        specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)
       '@openint/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -1687,9 +1682,6 @@ importers:
         specifier: 1.6.1
         version: 1.6.1
     devDependencies:
-      '@lilyrose2798/trpc-openapi':
-        specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)
       '@nangohq/frontend':
         specifier: 0.33.8
         version: 0.33.8(patch_hash=f3ed58a71194043d05262c1bfef4d07e30ef42fc0e81c4bdd0e6af766c79f2e5)
@@ -1946,9 +1938,6 @@ importers:
       '@clerk/nextjs':
         specifier: ^6.12.4
         version: 6.12.4(next@15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@lilyrose2798/trpc-openapi':
-        specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(zod@3.24.2)
       '@openint/app-config':
         specifier: workspace:*
         version: link:../../apps/app-config
@@ -2003,6 +1992,9 @@ importers:
       remeda:
         specifier: 1.6.1
         version: 1.6.1
+      trpc-to-openapi:
+        specifier: 1.0.1
+        version: 1.0.1(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(@types/node@22.13.10)(zod@3.24.2)
     devDependencies:
       '@opensdks/runtime':
         specifier: 0.0.20
@@ -2059,7 +2051,7 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
       zod-openapi:
-        specifier: ^4.2.3
+        specifier: 4.2.3
         version: 4.2.3(zod@3.24.2)
     devDependencies:
       '@openint/loopback-link':
@@ -2224,9 +2216,6 @@ importers:
       '@clerk/nextjs':
         specifier: ^6.12.4
         version: 6.12.4(next@15.2.1(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@lilyrose2798/trpc-openapi':
-        specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
@@ -2517,9 +2506,6 @@ importers:
 
   packages/trpc:
     dependencies:
-      '@lilyrose2798/trpc-openapi':
-        specifier: 1.3.10
-        version: 1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)
       '@openint/env':
         specifier: workspace:*
         version: link:../env
@@ -2532,6 +2518,9 @@ importers:
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
+      trpc-to-openapi:
+        specifier: 1.0.1
+        version: 1.0.1(@trpc/server@10.40.0)(@types/node@22.13.10)(zod@3.24.2)
 
   packages/ui:
     dependencies:
@@ -2720,7 +2709,7 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
       zod-openapi:
-        specifier: ^4.2.3
+        specifier: 4.2.3
         version: 4.2.3(zod@3.24.2)
     devDependencies:
       '@chromatic-com/storybook':
@@ -2907,7 +2896,7 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
       zod-openapi:
-        specifier: ^4.2.3
+        specifier: 4.2.3
         version: 4.2.3(zod@3.24.2)
     devDependencies:
       '@types/accounting':
@@ -5046,12 +5035,6 @@ packages:
 
   '@leichtgewicht/ip-codec@2.0.4':
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
-
-  '@lilyrose2798/trpc-openapi@1.3.10':
-    resolution: {integrity: sha512-2wyKbcke8IlWF1Gn8sTogKHA5Vg22p8xHGCh71rh2Vw5ntUrGM5k8l8+Fgh1q3r0CrXKA1NBGYgfOVBbRS45KQ==}
-    peerDependencies:
-      '@trpc/server': ^10.0.0
-      zod: ^3.14.4
 
   '@mapbox/node-pre-gyp@2.0.0':
     resolution: {integrity: sha512-llMXd39jtP0HpQLVI37Bf1m2ADlEb35GYSh1SDSLsBhR+5iCxiNGlT31yqbNtVHygHAtMy6dWFERpU2JgufhPg==}
@@ -14314,9 +14297,17 @@ packages:
     peerDependencies:
       webpack: ^5.0.0
 
-  node-mocks-http@1.13.0:
-    resolution: {integrity: sha512-lArD6sJMPJ53WF50GX0nJ89B1nkV1TdMvNwq8WXXFrUXF80ujSyye1T30mgiHh4h2It0/svpF3C4kZ2OAONVlg==}
+  node-mocks-http@1.16.2:
+    resolution: {integrity: sha512-2Sh6YItRp1oqewZNlck3LaFp5vbyW2u51HX2p1VLxQ9U/bG90XV8JY9O7Nk+HDd6OOn/oV3nA5Tx5k4Rki0qlg==}
     engines: {node: '>=14'}
+    peerDependencies:
+      '@types/express': ^4.17.21 || ^5.0.0
+      '@types/node': '*'
+    peerDependenciesMeta:
+      '@types/express':
+        optional: true
+      '@types/node':
+        optional: true
 
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
@@ -14492,6 +14483,9 @@ packages:
 
   openapi3-ts@4.1.2:
     resolution: {integrity: sha512-B7gOkwsYMZO7BZXwJzXCuVagym2xhqsrilVvV0dnq2Di4+iLUXKVX9gOK23ZqaAHZOwABXN0QTdW8QnkUTX6DA==}
+
+  openapi3-ts@4.3.3:
+    resolution: {integrity: sha512-LKkzBGJcZ6wdvkKGMoSvpK+0cbN5Xc3XuYkJskO+vjEQWJgs1kgtyUk0pjf8KwPuysv323Er62F5P17XQl96Qg==}
 
   openapi3-ts@4.4.0:
     resolution: {integrity: sha512-9asTNB9IkKEzWMcHmVZE7Ts3kC9G7AFHfs8i7caD8HbI76gEjdkId4z/AkP83xdZsH7PLAnnbl47qZkXuxpArw==}
@@ -16607,12 +16601,18 @@ packages:
       '@trpc/server': ^10.0.0
       zod: ^3.19.1
 
+  trpc-to-openapi@1.0.1:
+    resolution: {integrity: sha512-fpKvNqPUxy4FDVASoiwAcTmPdtu3JxfOArBTI92o0vb8h6Oyqne4tE6Hzz1JjApKTKxAGlcDwMszvAprYLaPiw==}
+    peerDependencies:
+      '@trpc/server': ^10.0.0
+      zod: ^3.21.4
+
   trpc-to-openapi@2.1.3:
     resolution: {integrity: sha512-W5wKRHMVVBvq2zD4F8QU4enCLu/pWX54O2lvMvzQWjOXaY70C1GT9Kl6y1I+TBkIpuz1E1mdXbLM3esXQsLspQ==}
     peerDependencies:
       '@trpc/server': ^11.0.0-rc.648
       zod: ^3.23.8
-      zod-openapi: ^4.1.0
+      zod-openapi: 4.2.3
 
   ts-api-utils@1.3.0:
     resolution: {integrity: sha512-UQMIo7pb8WRomKR1/+MFVLTroIvDVtMX3K6OUir8ynLyzB8Jeriont2bTAtmNPa1ekAgN7YPDyf6V+ygrdU+eQ==}
@@ -17578,12 +17578,6 @@ packages:
 
   zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
-
-  zod-openapi@2.11.0:
-    resolution: {integrity: sha512-nG/l7AzEguGnnWrLmVLZfk80c6G79LQFlIVG3oby203DLcQ1X8lged82pkxPZoD6ytdutoKTyKLles760+mZUw==}
-    engines: {node: '>=16.11'}
-    peerDependencies:
-      zod: ^3.21.4
 
   zod-openapi@4.2.3:
     resolution: {integrity: sha512-i0SqpcdXfsvVWTIY1Jl3Tk421s9fBIkpXvaA86zDas+8FjfZjm+GX6ot6SPB2SyuHwUNTN02gE5uIVlYXlyrDQ==}
@@ -20260,28 +20254,6 @@ snapshots:
   '@jsonurl/jsonurl@1.1.7(patch_hash=2048c2869df98564de76ebdd8cdf655260560d85e1c74568aeb503efa2c312b0)': {}
 
   '@leichtgewicht/ip-codec@2.0.4': {}
-
-  '@lilyrose2798/trpc-openapi@1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@10.40.0)(zod@3.24.2)':
-    dependencies:
-      '@trpc/server': 10.40.0
-      co-body: 6.1.0
-      h3: 1.8.2
-      lodash.clonedeep: 4.5.0
-      node-mocks-http: 1.13.0
-      openapi3-ts: 4.1.2
-      zod: 3.24.2
-      zod-openapi: 2.11.0(zod@3.24.2)
-
-  '@lilyrose2798/trpc-openapi@1.3.10(patch_hash=d49a671c07c520a31be3b2bb45267f8022ad0b489d7f3a153e334d4198a8b927)(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(zod@3.24.2)':
-    dependencies:
-      '@trpc/server': 11.0.0-rc.828(typescript@5.8.2)
-      co-body: 6.1.0
-      h3: 1.8.2
-      lodash.clonedeep: 4.5.0
-      node-mocks-http: 1.13.0
-      openapi3-ts: 4.1.2
-      zod: 3.24.2
-      zod-openapi: 2.11.0(zod@3.24.2)
 
   '@mapbox/node-pre-gyp@2.0.0':
     dependencies:
@@ -26457,7 +26429,7 @@ snapshots:
     dependencies:
       inflation: 2.1.0
       qs: 6.11.1
-      raw-body: 2.5.1
+      raw-body: 2.5.2
       type-is: 1.6.18
 
   co@4.6.0: {}
@@ -32201,18 +32173,20 @@ snapshots:
       loader-utils: 2.0.2
       webpack: 5.74.0(esbuild@0.17.5)
 
-  node-mocks-http@1.13.0:
+  node-mocks-http@1.16.2(@types/node@22.13.10):
     dependencies:
       accepts: 1.3.8
       content-disposition: 0.5.4
       depd: 1.1.2
       fresh: 0.5.2
-      merge-descriptors: 1.0.1
+      merge-descriptors: 1.0.3
       methods: 1.1.2
       mime: 1.6.0
       parseurl: 1.3.3
       range-parser: 1.2.1
       type-is: 1.6.18
+    optionalDependencies:
+      '@types/node': 22.13.10
 
   node-releases@2.0.19: {}
 
@@ -32412,6 +32386,10 @@ snapshots:
   openapi3-ts@4.1.2:
     dependencies:
       yaml: 2.3.4
+
+  openapi3-ts@4.3.3:
+    dependencies:
+      yaml: 2.7.0
 
   openapi3-ts@4.4.0:
     dependencies:
@@ -34974,6 +34952,34 @@ snapshots:
       zod: 3.24.2
       zod-to-json-schema: 3.21.1(zod@3.24.2)
 
+  trpc-to-openapi@1.0.1(@trpc/server@10.40.0)(@types/node@22.13.10)(zod@3.24.2):
+    dependencies:
+      '@trpc/server': 10.40.0
+      co-body: 6.1.0
+      h3: 1.8.2
+      lodash.clonedeep: 4.5.0
+      node-mocks-http: 1.16.2(@types/node@22.13.10)
+      openapi3-ts: 4.3.3
+      zod: 3.24.2
+      zod-openapi: 4.2.3(zod@3.24.2)
+    transitivePeerDependencies:
+      - '@types/express'
+      - '@types/node'
+
+  trpc-to-openapi@1.0.1(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(@types/node@22.13.10)(zod@3.24.2):
+    dependencies:
+      '@trpc/server': 11.0.0-rc.828(typescript@5.8.2)
+      co-body: 6.1.0
+      h3: 1.8.2
+      lodash.clonedeep: 4.5.0
+      node-mocks-http: 1.16.2(@types/node@22.13.10)
+      openapi3-ts: 4.3.3
+      zod: 3.24.2
+      zod-openapi: 4.2.3(zod@3.24.2)
+    transitivePeerDependencies:
+      - '@types/express'
+      - '@types/node'
+
   trpc-to-openapi@2.1.3(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(zod-openapi@4.2.3(zod@3.24.2))(zod@3.24.2):
     dependencies:
       '@trpc/server': 11.0.0-rc.828(typescript@5.8.2)
@@ -36094,10 +36100,6 @@ snapshots:
   yoctocolors-cjs@2.1.2: {}
 
   zhead@2.2.4: {}
-
-  zod-openapi@2.11.0(zod@3.24.2):
-    dependencies:
-      zod: 3.24.2
 
   zod-openapi@4.2.3(zod@3.24.2):
     dependencies:
