@@ -930,8 +930,8 @@ importers:
         specifier: ^0.0.4
         version: 0.0.4
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -1468,8 +1468,8 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
 
   connectors/connector-venmo:
     dependencies:
@@ -1504,8 +1504,8 @@ importers:
         specifier: ^0.0.7
         version: 0.0.7
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
 
   connectors/connector-yodlee:
     dependencies:
@@ -1669,8 +1669,8 @@ importers:
         specifier: 0.0.6
         version: 0.0.6
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -1907,8 +1907,8 @@ importers:
   kits/sync:
     dependencies:
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
 
   kits/vdk:
     dependencies:
@@ -1925,8 +1925,8 @@ importers:
         specifier: ^0.0.22
         version: 0.0.22
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
       remeda:
         specifier: 1.6.1
         version: 1.6.1
@@ -1998,8 +1998,8 @@ importers:
         specifier: ^0.0.22
         version: 0.0.22
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
       remeda:
         specifier: 1.6.1
         version: 1.6.1
@@ -2206,8 +2206,8 @@ importers:
         specifier: workspace:*
         version: link:../../kits/vdk
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -2286,7 +2286,7 @@ importers:
   packages/env:
     dependencies:
       '@opensdks/util-zod':
-        specifier: 0.0.16
+        specifier: ^0.0.16
         version: 0.0.16
       '@t3-oss/env-nextjs':
         specifier: 0.7.3
@@ -2298,8 +2298,8 @@ importers:
         specifier: workspace:*
         version: link:../../kits/cdk
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
     devDependencies:
       inngest:
         specifier: ^3.22.13
@@ -2527,8 +2527,8 @@ importers:
         specifier: 0.0.19
         version: 0.0.19
       '@opensdks/util-zod':
-        specifier: 0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -2811,8 +2811,8 @@ importers:
   packages/util:
     dependencies:
       '@opensdks/util-zod':
-        specifier: ^0.0.15
-        version: 0.0.15
+        specifier: ^0.0.16
+        version: 0.0.16
       '@trpc/server':
         specifier: 10.40.0
         version: 10.40.0
@@ -5522,9 +5522,6 @@ packages:
 
   '@opensdks/sdk-yodlee@0.0.0':
     resolution: {integrity: sha512-cAt5HuzC5UJbXMZ1BATMz7FlVMMXG6kvWHIu34nZt4YKCIsdZbVR4qCThnqQEk1OA+gl7kCuOWOkcRBOiDg9EA==}
-
-  '@opensdks/util-zod@0.0.15':
-    resolution: {integrity: sha512-CHyk/ay5yKNFBZKDfGcJQGZ4ZhScfNhGe6xon6XjqbhP+AYv4tYJl1GTbTqJdN2N15KnG3vuXjbi6SX0SGwbhw==}
 
   '@opensdks/util-zod@0.0.16':
     resolution: {integrity: sha512-Khgn6Wra02ikZgN9tAV/xAoCN/Oz+3ntuC103RVXR+d1rFD4jziArUHxJWYSkZQ6a+5HKcApIWOl7C2U2CWRZQ==}
@@ -17588,12 +17585,6 @@ packages:
     peerDependencies:
       zod: ^3.21.4
 
-  zod-openapi@2.14.0:
-    resolution: {integrity: sha512-TywDpZKfbNSMspWtT152DaO+/cK0xqK/bv7Kt4ZMHhzEZS1rCFYxxFwDZdQd4Nrq5g4kX/R1SKI+FkYg4QkBlw==}
-    engines: {node: '>=16.11'}
-    peerDependencies:
-      zod: ^3.21.4
-
   zod-openapi@4.2.3:
     resolution: {integrity: sha512-i0SqpcdXfsvVWTIY1Jl3Tk421s9fBIkpXvaA86zDas+8FjfZjm+GX6ot6SPB2SyuHwUNTN02gE5uIVlYXlyrDQ==}
     engines: {node: '>=18'}
@@ -21038,11 +21029,6 @@ snapshots:
       '@opensdks/runtime': 0.0.19
 
   '@opensdks/sdk-yodlee@0.0.0': {}
-
-  '@opensdks/util-zod@0.0.15':
-    dependencies:
-      zod: 3.24.2
-      zod-openapi: 2.14.0(zod@3.24.2)
 
   '@opensdks/util-zod@0.0.16':
     dependencies:
@@ -36110,10 +36096,6 @@ snapshots:
   zhead@2.2.4: {}
 
   zod-openapi@2.11.0(zod@3.24.2):
-    dependencies:
-      zod: 3.24.2
-
-  zod-openapi@2.14.0(zod@3.24.2):
     dependencies:
       zod: 3.24.2
 
