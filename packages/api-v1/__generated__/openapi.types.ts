@@ -848,7 +848,7 @@ export interface components {
              * @enum {string}
              */
             connector_name: "googledrive";
-            config: {
+            config: null | {
                 client_id: string;
                 client_secret: string;
                 scopes?: string[] | null;
@@ -2293,8 +2293,18 @@ export interface components {
             name: string;
             display_name?: string;
             logo_url?: string;
-            stage?: string;
-            platforms?: string[];
+            /** @enum {string} */
+            stage?: "alpha" | "beta" | "ga";
+            platforms?: ("web" | "mobile" | "desktop" | "local" | "cloud")[];
+            schemas?: {
+                connector_config?: unknown;
+                connection_settings?: unknown;
+                integration_data?: unknown;
+                webhook_input?: unknown;
+                pre_connect_input?: unknown;
+                connect_input?: unknown;
+                connect_output?: unknown;
+            };
         };
         /** event */
         "core.event": {
@@ -2472,7 +2482,7 @@ export interface operations {
                 include_secrets?: "none" | "basic" | "all";
                 /** @description Controls credential refresh: none (never), force (always), or auto (when expired, default) */
                 refresh_policy?: "none" | "force" | "auto";
-                expand?: ("connector" | "enabled_integrations")[];
+                expand?: ("connector" | "enabled_integrations" | "connection_count")[];
             };
             header?: never;
             path: {
@@ -2554,7 +2564,7 @@ export interface operations {
                 connector_config_id?: string;
                 /** @description Controls secret inclusion: none (default), basic (auth only), or all secrets */
                 include_secrets?: "none" | "basic" | "all";
-                expand?: ("connector" | "enabled_integrations")[];
+                expand?: ("connector" | "enabled_integrations" | "connection_count")[];
             };
             header?: never;
             path?: never;
@@ -2713,7 +2723,7 @@ export interface operations {
                 limit?: number;
                 /** @description Offset the items returned */
                 offset?: number;
-                /** @description Comma separated list of fields to expand.
+                /** @description Comma separated list of fields to optionally expand.
                  *
                  *     Available Options: `connector`, `enabled_integrations` */
                 expand?: string;
@@ -2743,6 +2753,7 @@ export interface operations {
                             integrations?: {
                                 [key: string]: components["schemas"]["core.integration"];
                             };
+                            connection_count?: number;
                         })[];
                         /** @description Total number of items in the database for the organization */
                         total: number;
