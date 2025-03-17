@@ -74,7 +74,8 @@
                 "type": "string",
                 "enum": [
                   "connector",
-                  "enabled_integrations"
+                  "enabled_integrations",
+                  "connection_count"
                 ],
                 "description": "Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)"
               },
@@ -284,7 +285,8 @@
                 "type": "string",
                 "enum": [
                   "connector",
-                  "enabled_integrations"
+                  "enabled_integrations",
+                  "connection_count"
                 ],
                 "description": "Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)"
               },
@@ -542,10 +544,10 @@
           {
             "in": "query",
             "name": "expand",
-            "description": "Comma separated list of fields to expand.\n\nAvailable Options: `connector`, `enabled_integrations`",
+            "description": "Comma separated list of fields to optionally expand.\n\nAvailable Options: `connector`, `enabled_integrations`",
             "schema": {
               "type": "string",
-              "description": "Comma separated list of fields to expand.\n\nAvailable Options: `connector`, `enabled_integrations`"
+              "description": "Comma separated list of fields to optionally expand.\n\nAvailable Options: `connector`, `enabled_integrations`"
             }
           },
           {
@@ -859,6 +861,9 @@
                                 "additionalProperties": {
                                   "$ref": "#/components/schemas/core.integration"
                                 }
+                              },
+                              "connection_count": {
+                                "type": "number"
                               }
                             }
                           }
@@ -3670,27 +3675,36 @@
             "const": "googledrive"
           },
           "config": {
-            "type": "object",
-            "properties": {
-              "client_id": {
-                "type": "string"
+            "anyOf": [
+              {
+                "type": "null",
+                "title": "Use OpenInt platform credentials"
               },
-              "client_secret": {
-                "type": "string"
-              },
-              "scopes": {
-                "type": [
-                  "array",
-                  "null"
+              {
+                "type": "object",
+                "properties": {
+                  "client_id": {
+                    "type": "string"
+                  },
+                  "client_secret": {
+                    "type": "string"
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "client_id",
+                  "client_secret"
                 ],
-                "items": {
-                  "type": "string"
-                }
+                "title": "Use my own"
               }
-            },
-            "required": [
-              "client_id",
-              "client_secret"
             ]
           }
         },
@@ -8350,13 +8364,38 @@
             "type": "string"
           },
           "stage": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "alpha",
+              "beta",
+              "ga"
+            ]
           },
           "platforms": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "web",
+                "mobile",
+                "desktop",
+                "local",
+                "cloud"
+              ]
             }
+          },
+          "schemas": {
+            "type": "object",
+            "properties": {
+              "connector_config": {},
+              "connection_settings": {},
+              "integration_data": {},
+              "webhook_input": {},
+              "pre_connect_input": {},
+              "connect_input": {},
+              "connect_output": {}
+            },
+            "additionalProperties": false
           }
         },
         "required": [

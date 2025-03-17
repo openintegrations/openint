@@ -17,6 +17,21 @@ export const schemaKeys = [
   'connectOutput',
 ] as const
 
+type SchemaKey = (typeof schemaKeys)[number]
+
+/** TODO: Remove this abstraction by refactoring ConnectorDef itself to use snake_case keys */
+export const schemaKeyToSnakeCase = {
+  connectorConfig: 'connector_config',
+  connectionSettings: 'connection_settings',
+  integrationData: 'integration_data',
+  webhookInput: 'webhook_input',
+  preConnectInput: 'pre_connect_input',
+  connectInput: 'connect_input',
+  connectOutput: 'connect_output',
+} as const satisfies Record<SchemaKey, string>
+
+type SchemaKeySnakecased = (typeof schemaKeyToSnakeCase)[SchemaKey]
+
 // Maybe this belongs in the all-connectors package?
 /* schemaKey -> Array<{$schemaKey: schema}>  */
 export const connectorSchemas = Object.fromEntries(
@@ -35,7 +50,7 @@ export const connectorSchemas = Object.fromEntries(
     }),
   ]),
 ) as {
-  [Key in (typeof schemaKeys)[number]]: NonEmptyArray<
+  [Key in SchemaKey]: NonEmptyArray<
     z.ZodObject<
       {connector_name: z.ZodLiteral<string>} & {
         [k in Key]: z.ZodTypeAny
@@ -62,7 +77,12 @@ export const zConnector = z.object({
     // TODO: Fix me to be the right ones
     .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
     .optional(),
-  schemas: z.record(z.enum(schemaKeys), zJSONSchema).optional(),
+  schemas: z
+    .record(
+      z.enum(Object.values(schemaKeyToSnakeCase) as [SchemaKeySnakecased]),
+      zJSONSchema,
+    )
+    .optional(),
 })
 
 export const getConnectorModel = (
@@ -91,14 +111,14 @@ export const getConnectorModel = (
 
 export function jsonSchemasForConnectorSchemas<T extends ConnectorSchemas>(
   schemas: T,
-): Record<keyof T, JSONSchema> {
+) {
   return Object.fromEntries(
     Object.entries(schemas)
-      .filter(([k]) => schemaKeys.includes(k as (typeof schemaKeys)[number]))
-      .map(([type, schema]) => {
+      .filter(([k]) => schemaKeys.includes(k as SchemaKey))
+      .map(([schemaKey, schema]) => {
         try {
           return [
-            type,
+            schemaKeyToSnakeCase[schemaKey as SchemaKey],
             schema instanceof z.ZodSchema
               ? // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                 zodToOas31Schema(schema)
@@ -106,9 +126,9 @@ export function jsonSchemasForConnectorSchemas<T extends ConnectorSchemas>(
           ]
         } catch (err) {
           throw new Error(
-            `Failed to convert schema for ${type.toString()}: ${err}`,
+            `Failed to convert schema for ${schemaKey.toString()}: ${err}`,
           )
         }
       }),
-  ) as Record<keyof T, JSONSchema>
+  ) as Record<SchemaKeySnakecased, JSONSchema>
 }
