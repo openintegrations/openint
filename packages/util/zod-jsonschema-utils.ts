@@ -1,7 +1,7 @@
+import type {z} from '@opensdks/util-zod'
+import {zodToOas31Schema} from '@opensdks/util-zod'
 import * as R from 'remeda'
-import type {z} from 'zod'
 import {jsonSchemaWalkNodes} from './jsonschema-nodewalker'
-import {zodToOas31Schema} from './schema'
 
 /** Warning will modify input */
 export function defaultTitleAsJsonPath<T = unknown>(jsonSchema: T) {
@@ -55,7 +55,7 @@ export function ensureEnumType<T = unknown>(jsonSchema: T) {
   return jsonSchema
 }
 
-/** @deprecated use `zodtooas31schema` instead. */
+/** @deprecated use the zodtooas31schema instead. */
 export function zodToJsonSchema(schema: z.ZodTypeAny) {
   return ensureEnumType(zodToOas31Schema(schema))
   // Defaulting title should occur last, this way we don't end up with extraneous one
