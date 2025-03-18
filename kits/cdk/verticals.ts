@@ -44,6 +44,7 @@ const _VERTICAL_BY_KEY = {
   'personal-finance': {},
   'sales-enablement': {},
   'sales-engagement': {},
+  'social-media': {},
   streaming: {},
   ticketing: {},
   wiki: {},
