@@ -8,6 +8,7 @@ import type {ZodTypeDef} from 'zod'
 import type {oas30, oas31} from 'zod-openapi'
 import {createDocument} from 'zod-openapi'
 import type {ZodOpenApiMetadataDef} from 'zod-openapi/dist/extendZodTypes'
+import {OpenAPIObject} from 'zod-openapi/dist/openapi3-ts/dist/oas31'
 
 export type Oas31Schema = oas31.SchemaObject & {$schema?: string}
 export type Oas30Schema = oas30.SchemaObject & {$schema?: string}
@@ -21,13 +22,24 @@ export function zodToOas31Schema(
   zodSchema: z.ZodTypeAny,
   zodDefinitions?: Record<string, z.ZodTypeAny>,
 ): Oas31Schema {
-  const oas = createDocument({
+  let oas: OpenAPIObject = {
     openapi: '3.1.0', // Only 3.1 is basically fully compatible with JSON-schema
     info: {title: '', version: ''},
     components: {
-      schemas: {...zodDefinitions, schema: zodSchema},
+      schemas: {},
     },
-  })
+  }
+  try {
+    oas = createDocument({
+      openapi: '3.1.0', // Only 3.1 is basically fully compatible with JSON-schema
+      info: {title: '', version: ''},
+      components: {
+        schemas: {...zodDefinitions, schema: zodSchema},
+      },
+    })
+  } catch (err) {
+    console.error('Failed to convert zodSchema to oas31Schema', err, zodSchema)
+  }
   const roofMeta =
     // Due to the fact that we still have multiple zod-openapi versions due to util/zod
     // Should upgrade at one point at once.
