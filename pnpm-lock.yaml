@@ -184,6 +184,9 @@ importers:
       '@openint/connector-discord':
         specifier: workspace:*
         version: link:../../connectors/connector-discord
+      '@openint/connector-facebook':
+        specifier: workspace:*
+        version: link:../../connectors/connector-facebook
       '@openint/connector-finch':
         specifier: workspace:*
         version: link:../../connectors/connector-finch
@@ -211,6 +214,9 @@ importers:
       '@openint/connector-hubspot':
         specifier: workspace:*
         version: link:../../connectors/connector-hubspot
+      '@openint/connector-instagram':
+        specifier: workspace:*
+        version: link:../../connectors/connector-instagram
       '@openint/connector-intercom':
         specifier: workspace:*
         version: link:../../connectors/connector-intercom
@@ -226,6 +232,9 @@ importers:
       '@openint/connector-linear':
         specifier: workspace:*
         version: link:../../connectors/connector-linear
+      '@openint/connector-linkedin':
+        specifier: workspace:*
+        version: link:../../connectors/connector-linkedin
       '@openint/connector-lunchmoney':
         specifier: workspace:*
         version: link:../../connectors/connector-lunchmoney
@@ -262,6 +271,9 @@ importers:
       '@openint/connector-ramp':
         specifier: workspace:*
         version: link:../../connectors/connector-ramp
+      '@openint/connector-reddit':
+        specifier: workspace:*
+        version: link:../../connectors/connector-reddit
       '@openint/connector-salesforce':
         specifier: workspace:*
         version: link:../../connectors/connector-salesforce
@@ -289,6 +301,9 @@ importers:
       '@openint/connector-twenty':
         specifier: workspace:*
         version: link:../../connectors/connector-twenty
+      '@openint/connector-twitter':
+        specifier: workspace:*
+        version: link:../../connectors/connector-twitter
       '@openint/connector-venmo':
         specifier: workspace:*
         version: link:../../connectors/connector-venmo
@@ -664,6 +679,9 @@ importers:
       '@openint/connector-discord':
         specifier: workspace:*
         version: link:../connector-discord
+      '@openint/connector-facebook':
+        specifier: workspace:*
+        version: link:../connector-facebook
       '@openint/connector-finch':
         specifier: workspace:*
         version: link:../connector-finch
@@ -691,6 +709,9 @@ importers:
       '@openint/connector-hubspot':
         specifier: workspace:*
         version: link:../connector-hubspot
+      '@openint/connector-instagram':
+        specifier: workspace:*
+        version: link:../connector-instagram
       '@openint/connector-intercom':
         specifier: workspace:*
         version: link:../connector-intercom
@@ -706,6 +727,9 @@ importers:
       '@openint/connector-linear':
         specifier: workspace:*
         version: link:../connector-linear
+      '@openint/connector-linkedin':
+        specifier: workspace:*
+        version: link:../connector-linkedin
       '@openint/connector-lunchmoney':
         specifier: workspace:*
         version: link:../connector-lunchmoney
@@ -742,6 +766,9 @@ importers:
       '@openint/connector-ramp':
         specifier: workspace:*
         version: link:../connector-ramp
+      '@openint/connector-reddit':
+        specifier: workspace:*
+        version: link:../connector-reddit
       '@openint/connector-salesforce':
         specifier: workspace:*
         version: link:../connector-salesforce
@@ -769,6 +796,9 @@ importers:
       '@openint/connector-twenty':
         specifier: workspace:*
         version: link:../connector-twenty
+      '@openint/connector-twitter':
+        specifier: workspace:*
+        version: link:../connector-twitter
       '@openint/connector-venmo':
         specifier: workspace:*
         version: link:../connector-venmo
@@ -784,9 +814,6 @@ importers:
       '@openint/connector-zohodesk':
         specifier: workspace:*
         version: link:../connector-zohodesk
-      '@openint/engine-backend':
-        specifier: workspace:*
-        version: link:../../packages/engine-backend
     devDependencies:
       prettier:
         specifier: ^3.5.3
@@ -917,6 +944,18 @@ importers:
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
+
+  connectors/connector-facebook:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
   connectors/connector-finch:
     dependencies:
@@ -1070,6 +1109,18 @@ importers:
         specifier: 0.0.6
         version: 0.0.6
 
+  connectors/connector-instagram:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+
   connectors/connector-intercom:
     dependencies:
       '@openint/cdk':
@@ -1122,6 +1173,18 @@ importers:
         version: 0.0.10
 
   connectors/connector-linear:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+
+  connectors/connector-linkedin:
     dependencies:
       '@openint/cdk':
         specifier: workspace:*
@@ -1350,6 +1413,18 @@ importers:
         specifier: workspace:*
         version: link:../../packages/util
 
+  connectors/connector-reddit:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
+
   connectors/connector-salesforce:
     dependencies:
       '@openint/cdk':
@@ -1470,6 +1545,18 @@ importers:
       '@opensdks/util-zod':
         specifier: ^0.0.16
         version: 0.0.16
+
+  connectors/connector-twitter:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
   connectors/connector-venmo:
     dependencies:
