@@ -78,13 +78,12 @@ async function setupAgFixtures() {
   `)
   await db.execute(sql`
     INSERT INTO "public"."client" ("id", "slug", "createdAt", "updatedAt", "deletedAt", "legalName", "clerkCreatedAt", "clerkCreatedBy", "clerkOrgId")
-    VALUES ('7521C934-772D-478E-8A00-9E29DBEE3644', 'openint-test', '2024-01-21 18:52:42.712', '2024-11-21 18:54:42.712', NULL, 'OpenInt-test', '2024-11-21 18:54:40.589', 'clzrhbt7900005', 'org_2qzodSa');
+    VALUES ('7521c934-772d-478e-8a00-9e29dbee3644', 'openint-test', '2024-01-21 18:52:42.712', '2024-11-21 18:54:42.712', NULL, 'OpenInt-test', '2024-11-21 18:54:40.589', 'clzrhbt7900005', 'org_2qzodSa');
   `)
 }
 
 test('destinationSync', async () => {
   await setupAgFixtures()
-  return
   const src = rxjs
     .from([
       {
@@ -117,49 +116,48 @@ test('destinationSync', async () => {
         source: {
           id: 'conn_123' as Id['conn'],
           connectorConfig: {connectorName: 'greenhouse'},
-          customerId: 'cm3roaf0007',
+          customerId: '7521c934-772d-478e-8a00-9e29dbee3644',
         },
       }),
     )
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
   await toCompletion(destLink(src as any))
-  const connections = await db.execute('SELECT * FROM "IntegrationConnection"')
+  const connections = await db.execute('SELECT * FROM "sourceConnection"')
   expect(connections[0]).toMatchObject({
     id: 'conn_123',
-    clientId: 'cm3roaf0007',
+    clientId: '7521c934-772d-478e-8a00-9e29dbee3644',
     provider: 'greenhouse',
     label: 'greenhouse',
     profile: 'Ats',
     source: 'OpenInt',
   })
-  const candidates = await db.execute('SELECT * FROM "IntegrationATSCandidate"')
+
+  const candidates = await db.execute(
+    `SELECT * FROM "syncedData"
+     WHERE starts_with("sourceId", 'cadi_')`,
+  )
   expect(candidates[0]).toMatchObject({
-    connectionId: 'conn_123',
-    id: 'cadi_123',
-    clientId: 'cm3roaf0007',
-    raw: {first_name: 'John', last_name: 'Doe', id: '123'},
-    unified: {name: 'tbd'},
-    isOpenInt: true,
+    sourceConnectionId: 'conn_123',
+    sourceId: 'cadi_123',
+    clientId: '7521c934-772d-478e-8a00-9e29dbee3644',
+    rawData: {first_name: 'John', last_name: 'Doe', id: '123'},
     // Should be any ISODate
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     createdAt: expect.any(String),
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    updatedAt: expect.any(String),
   })
-  const jobs = await db.execute('SELECT * FROM "IntegrationATSJob"')
+  const jobs = await db.execute(`
+    SELECT * FROM "syncedData"
+    WHERE starts_with("sourceId", 'job_')
+    `)
   expect(jobs[0]).toMatchObject({
-    connectionId: 'conn_123',
-    id: 'job_123',
-    clientId: 'cm3roaf0007',
-    raw: {_Name_c: 'new job'},
-    unified: {name: 'New job', id: '123'},
-    isOpenInt: true,
+    sourceConnectionId: 'conn_123',
+    sourceId: 'job_123',
+    clientId: '7521c934-772d-478e-8a00-9e29dbee3644',
+    rawData: {_Name_c: 'new job'},
     // Should be any ISODate
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     createdAt: expect.any(String),
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    updatedAt: expect.any(String),
   })
 })
 
