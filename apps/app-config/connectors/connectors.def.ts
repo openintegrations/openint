@@ -8,6 +8,7 @@ import {default as connectorBrex} from '@openint/connector-brex/def'
 import {default as connectorCoda} from '@openint/connector-coda/def'
 import {default as connectorConfluence} from '@openint/connector-confluence/def'
 import {default as connectorDiscord} from '@openint/connector-discord/def'
+import {default as connectorFacebook} from '@openint/connector-facebook/def'
 import {default as connectorFinch} from '@openint/connector-finch/def'
 import {default as connectorFirebase} from '@openint/connector-firebase/def'
 import {default as connectorForeceipt} from '@openint/connector-foreceipt/def'
@@ -17,11 +18,13 @@ import {default as connectorGoogle} from '@openint/connector-google/def'
 import {default as connectorGreenhouse} from '@openint/connector-greenhouse/def'
 import {default as connectorHeron} from '@openint/connector-heron/def'
 import {default as connectorHubspot} from '@openint/connector-hubspot/def'
+import {default as connectorInstagram} from '@openint/connector-instagram/def'
 import {default as connectorIntercom} from '@openint/connector-intercom/def'
 import {default as connectorJira} from '@openint/connector-jira/def'
 import {default as connectorKustomer} from '@openint/connector-kustomer/def'
 import {default as connectorLever} from '@openint/connector-lever/def'
 import {default as connectorLinear} from '@openint/connector-linear/def'
+import {default as connectorLinkedin} from '@openint/connector-linkedin/def'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/def'
 import {default as connectorMercury} from '@openint/connector-mercury/def'
 import {default as connectorMerge} from '@openint/connector-merge/def'
@@ -34,6 +37,7 @@ import {default as connectorPlaid} from '@openint/connector-plaid/def'
 import {default as connectorPostgres} from '@openint/connector-postgres/def'
 import {default as connectorQbo} from '@openint/connector-qbo/def'
 import {default as connectorRamp} from '@openint/connector-ramp/def'
+import {default as connectorReddit} from '@openint/connector-reddit/def'
 import {default as connectorSalesforce} from '@openint/connector-salesforce/def'
 import {default as connectorSalesloft} from '@openint/connector-salesloft/def'
 import {default as connectorSaltedge} from '@openint/connector-saltedge/def'
@@ -43,6 +47,7 @@ import {default as connectorStripe} from '@openint/connector-stripe/def'
 import {default as connectorTeller} from '@openint/connector-teller/def'
 import {default as connectorToggl} from '@openint/connector-toggl/def'
 import {default as connectorTwenty} from '@openint/connector-twenty/def'
+import {default as connectorTwitter} from '@openint/connector-twitter/def'
 import {default as connectorVenmo} from '@openint/connector-venmo/def'
 import {default as connectorWise} from '@openint/connector-wise/def'
 import {default as connectorXero} from '@openint/connector-xero/def'
@@ -58,6 +63,7 @@ export const defConnectors = {
   coda: connectorCoda,
   confluence: connectorConfluence,
   discord: connectorDiscord,
+  facebook: connectorFacebook,
   finch: connectorFinch,
   firebase: connectorFirebase,
   foreceipt: connectorForeceipt,
@@ -67,11 +73,13 @@ export const defConnectors = {
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   hubspot: connectorHubspot,
+  instagram: connectorInstagram,
   intercom: connectorIntercom,
   jira: connectorJira,
   kustomer: connectorKustomer,
   lever: connectorLever,
   linear: connectorLinear,
+  linkedin: connectorLinkedin,
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
   merge: connectorMerge,
@@ -84,6 +92,7 @@ export const defConnectors = {
   postgres: connectorPostgres,
   qbo: connectorQbo,
   ramp: connectorRamp,
+  reddit: connectorReddit,
   salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
@@ -93,6 +102,7 @@ export const defConnectors = {
   teller: connectorTeller,
   toggl: connectorToggl,
   twenty: connectorTwenty,
+  twitter: connectorTwitter,
   venmo: connectorVenmo,
   wise: connectorWise,
   xero: connectorXero,

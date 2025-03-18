@@ -8,6 +8,7 @@ import {default as connectorBrex} from '@openint/connector-brex/server'
 import {default as connectorCoda} from '@openint/connector-coda/server'
 import {default as connectorConfluence} from '@openint/connector-confluence/server'
 import {default as connectorDiscord} from '@openint/connector-discord/server'
+import {default as connectorFacebook} from '@openint/connector-facebook/server'
 import {default as connectorFinch} from '@openint/connector-finch/server'
 import {default as connectorFirebase} from '@openint/connector-firebase/server'
 import {default as connectorForeceipt} from '@openint/connector-foreceipt/server'
@@ -17,11 +18,13 @@ import {default as connectorGoogle} from '@openint/connector-google/server'
 import {default as connectorGreenhouse} from '@openint/connector-greenhouse/server'
 import {default as connectorHeron} from '@openint/connector-heron/server'
 import {default as connectorHubspot} from '@openint/connector-hubspot/server'
+import {default as connectorInstagram} from '@openint/connector-instagram/server'
 import {default as connectorIntercom} from '@openint/connector-intercom/server'
 import {default as connectorJira} from '@openint/connector-jira/server'
 import {default as connectorKustomer} from '@openint/connector-kustomer/server'
 import {default as connectorLever} from '@openint/connector-lever/server'
 import {default as connectorLinear} from '@openint/connector-linear/server'
+import {default as connectorLinkedin} from '@openint/connector-linkedin/server'
 import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/server'
 import {default as connectorMerge} from '@openint/connector-merge/server'
 import {default as connectorMicrosoft} from '@openint/connector-microsoft/server'
@@ -33,6 +36,7 @@ import {default as connectorPlaid} from '@openint/connector-plaid/server'
 import {default as connectorPostgres} from '@openint/connector-postgres/server'
 import {default as connectorQbo} from '@openint/connector-qbo/server'
 import {default as connectorRamp} from '@openint/connector-ramp/server'
+import {default as connectorReddit} from '@openint/connector-reddit/server'
 import {default as connectorSalesforce} from '@openint/connector-salesforce/server'
 import {default as connectorSalesloft} from '@openint/connector-salesloft/server'
 import {default as connectorSaltedge} from '@openint/connector-saltedge/server'
@@ -42,6 +46,7 @@ import {default as connectorStripe} from '@openint/connector-stripe/server'
 import {default as connectorTeller} from '@openint/connector-teller/server'
 import {default as connectorToggl} from '@openint/connector-toggl/server'
 import {default as connectorTwenty} from '@openint/connector-twenty/server'
+import {default as connectorTwitter} from '@openint/connector-twitter/server'
 import {default as connectorWise} from '@openint/connector-wise/server'
 import {default as connectorXero} from '@openint/connector-xero/server'
 import {default as connectorYodlee} from '@openint/connector-yodlee/server'
@@ -56,6 +61,7 @@ export const serverConnectors = {
   coda: connectorCoda,
   confluence: connectorConfluence,
   discord: connectorDiscord,
+  facebook: connectorFacebook,
   finch: connectorFinch,
   firebase: connectorFirebase,
   foreceipt: connectorForeceipt,
@@ -65,11 +71,13 @@ export const serverConnectors = {
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   hubspot: connectorHubspot,
+  instagram: connectorInstagram,
   intercom: connectorIntercom,
   jira: connectorJira,
   kustomer: connectorKustomer,
   lever: connectorLever,
   linear: connectorLinear,
+  linkedin: connectorLinkedin,
   lunchmoney: connectorLunchmoney,
   merge: connectorMerge,
   microsoft: connectorMicrosoft,
@@ -81,6 +89,7 @@ export const serverConnectors = {
   postgres: connectorPostgres,
   qbo: connectorQbo,
   ramp: connectorRamp,
+  reddit: connectorReddit,
   salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
@@ -90,6 +99,7 @@ export const serverConnectors = {
   teller: connectorTeller,
   toggl: connectorToggl,
   twenty: connectorTwenty,
+  twitter: connectorTwitter,
   wise: connectorWise,
   xero: connectorXero,
   yodlee: connectorYodlee,
