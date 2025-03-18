@@ -76,6 +76,15 @@ module.exports = [
   },
   {dirName: 'connector-expensify', varName: 'connectorExpensify', imports: {}},
   {
+    name: 'facebook',
+    dirName: 'connector-facebook',
+    varName: 'connectorFacebook',
+    imports: {
+      def: '@openint/connector-facebook/def',
+      server: '@openint/connector-facebook/server',
+    },
+  },
+  {
     name: 'finch',
     dirName: 'connector-finch',
     varName: 'connectorFinch',
@@ -158,6 +167,15 @@ module.exports = [
     },
   },
   {
+    name: 'instagram',
+    dirName: 'connector-instagram',
+    varName: 'connectorInstagram',
+    imports: {
+      def: '@openint/connector-instagram/def',
+      server: '@openint/connector-instagram/server',
+    },
+  },
+  {
     name: 'intercom',
     dirName: 'connector-intercom',
     varName: 'connectorIntercom',
@@ -200,6 +218,15 @@ module.exports = [
     imports: {
       def: '@openint/connector-linear/def',
       server: '@openint/connector-linear/server',
+    },
+  },
+  {
+    name: 'linkedin',
+    dirName: 'connector-linkedin',
+    varName: 'connectorLinkedin',
+    imports: {
+      def: '@openint/connector-linkedin/def',
+      server: '@openint/connector-linkedin/server',
     },
   },
   {
@@ -312,6 +339,15 @@ module.exports = [
     },
   },
   {
+    name: 'reddit',
+    dirName: 'connector-reddit',
+    varName: 'connectorReddit',
+    imports: {
+      def: '@openint/connector-reddit/def',
+      server: '@openint/connector-reddit/server',
+    },
+  },
+  {
     name: 'salesforce',
     dirName: 'connector-salesforce',
     varName: 'connectorSalesforce',
@@ -394,6 +430,15 @@ module.exports = [
     },
   },
   {
+    name: 'twitter',
+    dirName: 'connector-twitter',
+    varName: 'connectorTwitter',
+    imports: {
+      def: '@openint/connector-twitter/def',
+      server: '@openint/connector-twitter/server',
+    },
+  },
+  {
     name: 'venmo',
     dirName: 'connector-venmo',
     varName: 'connectorVenmo',
@@ -435,6 +480,12 @@ module.exports = [
       def: '@openint/connector-zohodesk/def',
       server: '@openint/connector-zohodesk/server',
     },
+  },
+  {
+    name: '_defaults',
+    dirName: 'cnext-_defaults',
+    varName: 'connector_defaults',
+    imports: {def: '@openint/cnext', server: '@openint/cnext'},
   },
   {
     name: 'googledrive',

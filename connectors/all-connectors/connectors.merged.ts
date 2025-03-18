@@ -19,6 +19,8 @@ import {default as connectorConfluence_def} from '@openint/connector-confluence/
 import {default as connectorConfluence_server} from '@openint/connector-confluence/server'
 import {default as connectorDiscord_def} from '@openint/connector-discord/def'
 import {default as connectorDiscord_server} from '@openint/connector-discord/server'
+import {default as connectorFacebook_def} from '@openint/connector-facebook/def'
+import {default as connectorFacebook_server} from '@openint/connector-facebook/server'
 import {default as connectorFinch_def} from '@openint/connector-finch/def'
 import {default as connectorFinch_server} from '@openint/connector-finch/server'
 import {default as connectorFirebase_def} from '@openint/connector-firebase/def'
@@ -37,6 +39,8 @@ import {default as connectorHeron_def} from '@openint/connector-heron/def'
 import {default as connectorHeron_server} from '@openint/connector-heron/server'
 import {default as connectorHubspot_def} from '@openint/connector-hubspot/def'
 import {default as connectorHubspot_server} from '@openint/connector-hubspot/server'
+import {default as connectorInstagram_def} from '@openint/connector-instagram/def'
+import {default as connectorInstagram_server} from '@openint/connector-instagram/server'
 import {default as connectorIntercom_def} from '@openint/connector-intercom/def'
 import {default as connectorIntercom_server} from '@openint/connector-intercom/server'
 import {default as connectorJira_def} from '@openint/connector-jira/def'
@@ -47,6 +51,8 @@ import {default as connectorLever_def} from '@openint/connector-lever/def'
 import {default as connectorLever_server} from '@openint/connector-lever/server'
 import {default as connectorLinear_def} from '@openint/connector-linear/def'
 import {default as connectorLinear_server} from '@openint/connector-linear/server'
+import {default as connectorLinkedin_def} from '@openint/connector-linkedin/def'
+import {default as connectorLinkedin_server} from '@openint/connector-linkedin/server'
 import {default as connectorLunchmoney_def} from '@openint/connector-lunchmoney/def'
 import {default as connectorLunchmoney_server} from '@openint/connector-lunchmoney/server'
 import {default as connectorMercury_def} from '@openint/connector-mercury/def'
@@ -70,6 +76,8 @@ import {default as connectorQbo_def} from '@openint/connector-qbo/def'
 import {default as connectorQbo_server} from '@openint/connector-qbo/server'
 import {default as connectorRamp_def} from '@openint/connector-ramp/def'
 import {default as connectorRamp_server} from '@openint/connector-ramp/server'
+import {default as connectorReddit_def} from '@openint/connector-reddit/def'
+import {default as connectorReddit_server} from '@openint/connector-reddit/server'
 import {default as connectorSalesforce_def} from '@openint/connector-salesforce/def'
 import {default as connectorSalesforce_server} from '@openint/connector-salesforce/server'
 import {default as connectorSalesloft_def} from '@openint/connector-salesloft/def'
@@ -88,6 +96,8 @@ import {default as connectorToggl_def} from '@openint/connector-toggl/def'
 import {default as connectorToggl_server} from '@openint/connector-toggl/server'
 import {default as connectorTwenty_def} from '@openint/connector-twenty/def'
 import {default as connectorTwenty_server} from '@openint/connector-twenty/server'
+import {default as connectorTwitter_def} from '@openint/connector-twitter/def'
+import {default as connectorTwitter_server} from '@openint/connector-twitter/server'
 import {default as connectorVenmo_def} from '@openint/connector-venmo/def'
 import {default as connectorWise_def} from '@openint/connector-wise/def'
 import {default as connectorWise_server} from '@openint/connector-wise/server'
@@ -138,6 +148,11 @@ const connectorDiscord = {
   ...connectorDiscord_server,
 }
 
+const connectorFacebook = {
+  ...connectorFacebook_def,
+  ...connectorFacebook_server,
+}
+
 const connectorFinch = {
   ...connectorFinch_def,
   ...connectorFinch_server,
@@ -183,6 +198,11 @@ const connectorHubspot = {
   ...connectorHubspot_server,
 }
 
+const connectorInstagram = {
+  ...connectorInstagram_def,
+  ...connectorInstagram_server,
+}
+
 const connectorIntercom = {
   ...connectorIntercom_def,
   ...connectorIntercom_server,
@@ -206,6 +226,11 @@ const connectorLever = {
 const connectorLinear = {
   ...connectorLinear_def,
   ...connectorLinear_server,
+}
+
+const connectorLinkedin = {
+  ...connectorLinkedin_def,
+  ...connectorLinkedin_server,
 }
 
 const connectorLunchmoney = {
@@ -267,6 +292,11 @@ const connectorRamp = {
   ...connectorRamp_server,
 }
 
+const connectorReddit = {
+  ...connectorReddit_def,
+  ...connectorReddit_server,
+}
+
 const connectorSalesforce = {
   ...connectorSalesforce_def,
   ...connectorSalesforce_server,
@@ -312,6 +342,11 @@ const connectorTwenty = {
   ...connectorTwenty_server,
 }
 
+const connectorTwitter = {
+  ...connectorTwitter_def,
+  ...connectorTwitter_server,
+}
+
 const connectorVenmo = {
   ...connectorVenmo_def,
 }
@@ -350,6 +385,7 @@ export const mergedConnectors = {
   coda: connectorCoda,
   confluence: connectorConfluence,
   discord: connectorDiscord,
+  facebook: connectorFacebook,
   finch: connectorFinch,
   firebase: connectorFirebase,
   foreceipt: connectorForeceipt,
@@ -359,11 +395,13 @@ export const mergedConnectors = {
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
   hubspot: connectorHubspot,
+  instagram: connectorInstagram,
   intercom: connectorIntercom,
   jira: connectorJira,
   kustomer: connectorKustomer,
   lever: connectorLever,
   linear: connectorLinear,
+  linkedin: connectorLinkedin,
   lunchmoney: connectorLunchmoney,
   mercury: connectorMercury,
   merge: connectorMerge,
@@ -376,6 +414,7 @@ export const mergedConnectors = {
   postgres: connectorPostgres,
   qbo: connectorQbo,
   ramp: connectorRamp,
+  reddit: connectorReddit,
   salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
@@ -385,6 +424,7 @@ export const mergedConnectors = {
   teller: connectorTeller,
   toggl: connectorToggl,
   twenty: connectorTwenty,
+  twitter: connectorTwitter,
   venmo: connectorVenmo,
   wise: connectorWise,
   xero: connectorXero,
