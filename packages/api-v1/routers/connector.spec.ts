@@ -43,7 +43,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       schemas: {
         connector_config: expect.any(Object),
         connection_settings: expect.any(Object),
-        pre_connect_input: expect.any(Object),
         connect_input: expect.any(Object),
         connect_output: expect.any(Object),
       },
