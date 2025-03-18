@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import {zOAuthConfig, zTokenResponse} from './def'
+import {zOAuthConfig} from './def'
 
 export function prepareScopes(jsonConfig: z.infer<typeof zOAuthConfig>) {
   const scopes = jsonConfig.scopes
@@ -71,36 +71,27 @@ export function fillOutStringTemplateVariables(
 
   return filledUrl
 }
-export async function makeTokenRequest(
-  url: string,
+
+/*
+ * This function takes the paramNames map where a user can map were fields like client_id and client_secret are named in particular oauth connector.
+ * For example salesforce may call client_id clientKey. In this case, the paramNames would have client_id: clientKey.
+ * Following the SF example, this function will return a new object with the client_id field renamed to clientKey.
+ * Write tests for this function to in different scenarios ensure that the clientKey is returned with the value initially set for client_id
+ */
+export function mapOauthParams(
   params: Record<string, string>,
-  flowType: 'exchange' | 'refresh',
-  // note: we may want to add bodyFormat: form or json
-): Promise<z.infer<typeof zTokenResponse>> {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
-    },
-    body: new URLSearchParams(params),
+  paramNames: Record<string, string>,
+) {
+  const result: Record<string, string> = {}
+
+  // Process each parameter in the input
+  Object.entries(params).forEach(([key, value]) => {
+    if (key && paramNames && key in paramNames && paramNames[key]) {
+      result[paramNames[key]] = value
+    } else {
+      result[key] = value
+    }
   })
 
-  if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(
-      `Token ${flowType} failed: ${response.status} ${response.statusText} - ${errorText}`,
-    )
-  }
-
-  try {
-    return zTokenResponse.parse(await response.json())
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      throw new Error(
-        `Invalid oauth2 ${flowType} token response format: ${error.message}`,
-      )
-    }
-    throw error
-  }
+  return result
 }

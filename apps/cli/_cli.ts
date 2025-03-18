@@ -1,7 +1,7 @@
 import '@openint/app-config/register.node'
+import type {defConnectors} from '@openint/all-connectors/connectors.def'
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {parseConnectorConfigsFromRawEnv} from '@openint/app-config/connector-envs'
-import type {defConnectors} from '@openint/app-config/connectors/connectors.def'
 import {makeJwtClient} from '@openint/cdk'
 import {makeLunchmoneyClient} from '@openint/connector-lunchmoney'
 import {makeMootaClient} from '@openint/connector-moota'

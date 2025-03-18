@@ -1,18 +1,26 @@
 import type {ConnectorDef} from '@openint/cdk'
 import {z} from '@openint/util'
-import {zOauthConnectorConfig} from './_defaults/oauth2'
+import {
+  oauth2Schemas,
+  zOAuthConnectionSettings,
+  zOauthConnectorConfig,
+} from './_defaults/oauth2'
 import {JsonConnectorDef} from './def'
 
+/**
+ * Generates a connector definition based on the Json simplified connector def.
+ * Currently only handles Oauth2 ccfgs and connection settings but in future we can switch and generate
+ * depending on the def.auth.type
+ * @returns
+ */
 export function generateConnectorDef<T extends JsonConnectorDef>(def: T) {
   const connectorConfig = () => {
     let schema = zOauthConnectorConfig
-    if (['OAUTH1', 'OAUTH2'].includes(def.auth.type)) {
-      // QQ: is this the right way to do this?
-      // this needs to extend the schema of the json connector
+    if (['OAUTH2', 'OAUTH2CC'].includes(def.auth.type as string)) {
       schema = z.object({
         ...schema.shape,
-        ...(def.auth.connector_config as Record<string, z.ZodTypeAny>),
-      })
+        ...(def.auth.connector_config as z.AnyZodObject)?.shape,
+      }) as typeof schema
     }
 
     return z.union([
@@ -21,40 +29,27 @@ export function generateConnectorDef<T extends JsonConnectorDef>(def: T) {
     ])
   }
 
+  const connectionSettings = () => {
+    let schema = zOAuthConnectionSettings
+    if (['OAUTH2', 'OAUTH2CC'].includes(def.auth.type as string)) {
+      schema = z.object({
+        ...schema.shape,
+        ...(def.auth.connection_settings as z.AnyZodObject)?.shape,
+      }) as typeof schema
+    }
+    return schema
+  }
+
   return {
     name: def.connector_name as T['connector_name'],
     schemas: {
       name: z.literal(def.connector_name as T['connector_name']),
-      connectorConfig: connectorConfig(),
+      ...oauth2Schemas,
+      // given that this is a union of z.null and z.object, we need to cast it to any
+      // and then in runtime we need to inject the
+      connectorConfig: connectorConfig() as any as typeof zOauthConnectorConfig,
       connectionSettings:
-        // TODO: consider generalizing this
-        ['OAUTH1', 'OAUTH2', 'OAUTH2CC'].includes(def.auth.type)
-          ? z.object({
-              oauth: z.object({
-                credentials: def.auth.connection_settings
-                  ? z.any().parse(def.auth.connection_settings)
-                  : // note: this needs to extend the schema of the json connector
-                    // we need to do this in a way that works for oauth
-                    z.object({}),
-              }),
-              metadata: z.record(z.unknown()).optional(),
-            })
-          : def.auth.connection_settings &&
-              Object.keys(def.auth.connection_settings).length > 0
-            ? z.any().parse(def.auth.connection_settings)
-            : undefined,
-      // TODO: review these 3
-      preConnectInput: z.object({
-        scopes: z.array(z.string()).optional(),
-      }),
-      connectInput: z.object({
-        // important for oauth2 but we may need a more generic way to handle this
-        authorization_url: z.string(),
-      }),
-      connectOutput: z.object({
-        code: z.string(),
-        connectionId: z.string(),
-      }),
+        connectionSettings() as any as typeof zOAuthConnectionSettings,
     },
     metadata: {
       displayName: def.display_name,
@@ -62,7 +57,9 @@ export function generateConnectorDef<T extends JsonConnectorDef>(def: T) {
       verticals: def.verticals,
       // TODO: Make this dynamic
       logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-drive.svg`,
-      authType: def.auth.type,
+      authType: def.auth.type as 'OAUTH2' | 'OAUTH2CC',
     },
-  } satisfies ConnectorDef
+  } satisfies ConnectorDef<
+    typeof oauth2Schemas & {name: z.ZodLiteral<T['connector_name']>}
+  >
 }
