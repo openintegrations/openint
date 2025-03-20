@@ -274,6 +274,9 @@ importers:
       '@openint/connector-moota':
         specifier: workspace:*
         version: link:../../connectors/connector-moota
+      '@openint/connector-notion':
+        specifier: workspace:*
+        version: link:../../connectors/connector-notion
       '@openint/connector-onebrick':
         specifier: workspace:*
         version: link:../../connectors/connector-onebrick
@@ -778,6 +781,9 @@ importers:
       '@openint/connector-moota':
         specifier: workspace:*
         version: link:../connector-moota
+      '@openint/connector-notion':
+        specifier: workspace:*
+        version: link:../connector-notion
       '@openint/connector-onebrick':
         specifier: workspace:*
         version: link:../connector-onebrick
@@ -1289,6 +1295,18 @@ importers:
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
+
+  connectors/connector-notion:
+    dependencies:
+      '@openint/cdk':
+        specifier: workspace:*
+        version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
+      '@openint/vdk':
+        specifier: workspace:*
+        version: link:../../kits/vdk
 
   connectors/connector-onebrick:
     dependencies:
