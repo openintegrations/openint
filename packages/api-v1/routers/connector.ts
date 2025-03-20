@@ -3,13 +3,13 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorDef} from '@openint/cdk'
-import {core} from '../models'
+import {core, type Core} from '../models'
 import {getConnectorModel} from '../models/connectorSchemas'
 import {publicProcedure, router} from '../trpc/_base'
 import {zListParams, zListResponse} from './utils/pagination'
 
 interface IntegrationsResponse {
-  items: Array<Record<string, unknown>>
+  items: Array<Core['integration']>
 }
 
 interface ListIntegrationsFunction {
