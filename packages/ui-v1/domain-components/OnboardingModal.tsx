@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import type React from 'react'
 import {useState} from 'react'
 import {toast} from 'sonner'
@@ -21,12 +22,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@openint/shadcn/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@openint/shadcn/ui/dialog'
+import {Dialog, DialogContent} from '@openint/shadcn/ui/dialog'
 import {Input} from '@openint/shadcn/ui/input'
 import {Label} from '@openint/shadcn/ui/label'
 
@@ -37,6 +33,7 @@ interface ConnectorOption {
   id: ConnectorName
   title: string
   description: string
+  logoUrl: string
 }
 
 const connectorOptions: ConnectorOption[] = [
@@ -44,16 +41,21 @@ const connectorOptions: ConnectorOption[] = [
     id: 'calendar',
     title: 'Google Calendar',
     description: 'Connect your calendar to sync events and meetings',
+    logoUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/1200px-Google_Calendar_icon_%282020%29.svg.png',
   },
   {
     id: 'github',
     title: 'GitHub',
     description: 'Sync your repositories and track development workflow',
+    logoUrl: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
   },
   {
     id: 'slack',
     title: 'Slack',
     description: "Integrate with your team's communication hub",
+    logoUrl:
+      'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/306_Slack_logo-512.png',
   },
 ]
 
@@ -80,11 +82,13 @@ function getOrganizationName(
       ) {
         const orgPart = parts[parts.length - 3]
         if (orgPart) {
-          return `${orgPart.charAt(0).toUpperCase() + orgPart.slice(1)}`
+          return orgPart.charAt(0).toUpperCase() + orgPart.slice(1)
         }
       }
 
-      return `${organizationName.charAt(0).toUpperCase() + organizationName.slice(1)}`
+      return (
+        organizationName.charAt(0).toUpperCase() + organizationName.slice(1)
+      )
     }
     if (userFirstName && userFirstName.length > 1) {
       return `${userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1).toLowerCase()}&apos;s Acme Org`
@@ -172,59 +176,200 @@ export function OnboardingModal({
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={() => handleClose()}>
-        <DialogContent className={`sm:max-w-[500px] ${className}`}>
-          <DialogHeader>
-            <div className="flex items-center justify-between">
-              <DialogTitle>Welcome aboard!</DialogTitle>
-            </div>
-          </DialogHeader>
-
+      <Dialog
+        open={isOpen}
+        onOpenChange={() => {
+          handleClose()
+        }}>
+        <DialogContent
+          className={`sm:max-w-[750px] ${className}`}
+          style={{height: 'auto', maxHeight: '90vh'}}>
           {step === 'organization' ? (
-            <form onSubmit={handleOrgSubmit} className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="orgName">Organization name</Label>
-                  <Input
-                    id="orgName"
-                    value={orgName}
-                    onChange={(e) => setOrgName(e.target.value)}
-                    placeholder="e.g. Acme Corp"
-                    disabled={isSubmitting}
-                    required
-                  />
+            <div className="flex h-[550px] flex-col justify-center">
+              <div className="mb-4 flex justify-center">
+                <div className="flex items-center space-x-2">
+                  <div className="bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-full text-xs">
+                    1
+                  </div>
+                  <div className="bg-muted-foreground/30 h-0.5 w-6"></div>
+                  <div className="border-muted-foreground/30 text-muted-foreground flex h-5 w-5 items-center justify-center rounded-full border text-xs">
+                    2
+                  </div>
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? 'Setting up...' : 'Create organization'}
-              </Button>
-            </form>
+
+              <div className="mb-4 text-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="flex h-20 w-20 items-center justify-center">
+                    <svg
+                      viewBox="0 0 100 100"
+                      className="h-full w-full"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        d="M30,50 L70,50"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        d="M50,30 L50,70"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="20"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold">Create your workspace</h3>
+                <p className="text-muted-foreground mt-2 text-sm">
+                  Let&apos;s set up your organization to get started with
+                  OpenInt
+                </p>
+              </div>
+
+              <div className="flex-1">
+                <div className="bg-muted/30 mb-4 rounded-lg border p-6">
+                  <form onSubmit={handleOrgSubmit} className="space-y-6">
+                    <div>
+                      <Label htmlFor="orgName" className="text-base">
+                        Organization name
+                      </Label>
+                      <p className="text-muted-foreground mb-2 text-xs">
+                        This will be the name of your workspace
+                      </p>
+                      <Input
+                        id="orgName"
+                        value={orgName}
+                        onChange={(e) => {
+                          setOrgName(e.target.value)
+                        }}
+                        placeholder="e.g. Acme Corp"
+                        disabled={isSubmitting}
+                        required
+                        className="h-10"
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={isSubmitting}
+                      size="lg">
+                      {isSubmitting
+                        ? 'Setting up...'
+                        : 'Continue to integrations'}
+                    </Button>
+                  </form>
+                </div>
+
+                <div className="text-muted-foreground text-center text-sm">
+                  <p>You&apos;ll be able to add team members after setup</p>
+                </div>
+              </div>
+            </div>
           ) : (
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <h3 className="text-lg font-medium">Welcome to OpenInt!</h3>
+            <div className="flex h-[550px] flex-col">
+              <div className="mb-4 flex justify-center">
+                <div className="flex items-center space-x-2">
+                  <div className="bg-primary/20 text-primary flex h-5 w-5 items-center justify-center rounded-full text-xs">
+                    ✓
+                  </div>
+                  <div className="bg-primary h-0.5 w-6"></div>
+                  <div className="bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-full text-xs">
+                    2
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-4 text-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="flex h-20 w-20 items-center justify-center">
+                    <svg
+                      viewBox="0 0 100 100"
+                      className="h-full w-full"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        d="M30,50 L70,50"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        d="M50,30 L50,70"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="20"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className="mb-1 text-lg font-semibold">
+                  Welcome to OpenInt!
+                </h3>
                 <p className="text-muted-foreground text-sm">
                   Sexy Integrations for Developers
                 </p>
               </div>
-              <div className="space-y-4">
-                <p className="text-sm">Select your first to start:</p>
-                <div className="grid gap-4 sm:grid-cols-3">
+              <div className="flex flex-1 flex-col">
+                <p className="mb-3 text-center text-sm font-medium">
+                  Select your first to start:
+                </p>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   {connectorOptions.map((connector) => (
-                    <Card key={connector.id} className="relative">
-                      <CardHeader>
-                        <CardTitle className="text-base">
+                    <Card key={connector.id} className="h-auto p-0">
+                      <CardHeader className="space-y-0 px-4 pb-0 pt-4">
+                        <div className="mb-3 flex justify-center">
+                          <div className="relative h-14 w-14">
+                            <Image
+                              src={connector.logoUrl}
+                              alt={`${connector.title} logo`}
+                              fill
+                              className="object-contain"
+                              unoptimized
+                            />
+                          </div>
+                        </div>
+                        <CardTitle className="mb-1 text-center text-base">
                           {connector.title}
                         </CardTitle>
-                        <CardDescription className="text-xs">
+                        <CardDescription className="text-center text-xs">
                           {connector.description}
                         </CardDescription>
                       </CardHeader>
-                      <CardFooter>
+                      <CardFooter className="flex justify-center px-4 pb-4 pt-2">
                         <Button
-                          variant="secondary"
-                          size="sm"
+                          variant="default"
                           className="w-full"
+                          size="default"
                           disabled={loadingConnector !== null}
                           onClick={() => handleConnectorSelect(connector.id)}>
                           {loadingConnector === connector.id
@@ -235,7 +380,8 @@ export function OnboardingModal({
                     </Card>
                   ))}
                 </div>
-                <div className="text-center">
+
+                <div className="mt-auto pt-2 text-center">
                   <Button
                     variant="link"
                     onClick={handleFindMore}
