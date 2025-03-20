@@ -29,6 +29,7 @@ import {default as connectorLunchmoney} from '@openint/connector-lunchmoney/serv
 import {default as connectorMerge} from '@openint/connector-merge/server'
 import {default as connectorMicrosoft} from '@openint/connector-microsoft/server'
 import {default as connectorMoota} from '@openint/connector-moota/server'
+import {default as connectorNotion} from '@openint/connector-notion/server'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/server'
 import {default as connectorOutreach} from '@openint/connector-outreach/server'
 import {default as connectorPipedrive} from '@openint/connector-pipedrive/server'
@@ -82,6 +83,7 @@ export const serverConnectors = {
   merge: connectorMerge,
   microsoft: connectorMicrosoft,
   moota: connectorMoota,
+  notion: connectorNotion,
   onebrick: connectorOnebrick,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,

@@ -62,6 +62,8 @@ import {default as connectorMicrosoft_def} from '@openint/connector-microsoft/de
 import {default as connectorMicrosoft_server} from '@openint/connector-microsoft/server'
 import {default as connectorMoota_def} from '@openint/connector-moota/def'
 import {default as connectorMoota_server} from '@openint/connector-moota/server'
+import {default as connectorNotion_def} from '@openint/connector-notion/def'
+import {default as connectorNotion_server} from '@openint/connector-notion/server'
 import {default as connectorOnebrick_def} from '@openint/connector-onebrick/def'
 import {default as connectorOnebrick_server} from '@openint/connector-onebrick/server'
 import {default as connectorOutreach_def} from '@openint/connector-outreach/def'
@@ -257,6 +259,11 @@ const connectorMoota = {
   ...connectorMoota_server,
 }
 
+const connectorNotion = {
+  ...connectorNotion_def,
+  ...connectorNotion_server,
+}
+
 const connectorOnebrick = {
   ...connectorOnebrick_def,
   ...connectorOnebrick_server,
@@ -407,6 +414,7 @@ export const mergedConnectors = {
   merge: connectorMerge,
   microsoft: connectorMicrosoft,
   moota: connectorMoota,
+  notion: connectorNotion,
   onebrick: connectorOnebrick,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
