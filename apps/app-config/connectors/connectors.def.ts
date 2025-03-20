@@ -30,6 +30,7 @@ import {default as connectorMercury} from '@openint/connector-mercury/def'
 import {default as connectorMerge} from '@openint/connector-merge/def'
 import {default as connectorMicrosoft} from '@openint/connector-microsoft/def'
 import {default as connectorMoota} from '@openint/connector-moota/def'
+import {default as connectorNotion} from '@openint/connector-notion/def'
 import {default as connectorOnebrick} from '@openint/connector-onebrick/def'
 import {default as connectorOutreach} from '@openint/connector-outreach/def'
 import {default as connectorPipedrive} from '@openint/connector-pipedrive/def'
@@ -85,6 +86,7 @@ export const defConnectors = {
   merge: connectorMerge,
   microsoft: connectorMicrosoft,
   moota: connectorMoota,
+  notion: connectorNotion,
   onebrick: connectorOnebrick,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
