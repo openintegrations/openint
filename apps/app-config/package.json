@@ -42,6 +42,7 @@
     "@openint/connector-merge": "workspace:*",
     "@openint/connector-microsoft": "workspace:*",
     "@openint/connector-moota": "workspace:*",
+    "@openint/connector-notion": "workspace:*",
     "@openint/connector-onebrick": "workspace:*",
     "@openint/connector-outreach": "workspace:*",
     "@openint/connector-pipedrive": "workspace:*",

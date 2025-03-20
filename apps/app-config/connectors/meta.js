@@ -273,6 +273,15 @@ module.exports = [
     },
   },
   {
+    name: 'notion',
+    dirName: 'connector-notion',
+    varName: 'connectorNotion',
+    imports: {
+      def: '@openint/connector-notion/def',
+      server: '@openint/connector-notion/server',
+    },
+  },
+  {
     name: 'onebrick',
     dirName: 'connector-onebrick',
     varName: 'connectorOnebrick',
