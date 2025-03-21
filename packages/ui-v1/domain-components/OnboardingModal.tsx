@@ -183,16 +183,16 @@ export function OnboardingModal({
         }}>
         <DialogContent
           className={`sm:max-w-[750px] ${className}`}
-          style={{height: 'auto', maxHeight: '90vh'}}>
+          style={{height: 'auto', maxHeight: '90vh', overflow: 'hidden'}}>
           {step === 'organization' ? (
-            <div className="flex h-[550px] flex-col justify-center">
+            <div className="flex h-[500px] flex-col justify-center">
               <div className="mb-4 flex justify-center">
                 <div className="flex items-center space-x-2">
-                  <div className="bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-full text-xs">
+                  <div className="bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-full text-xs transition-all duration-300">
                     1
                   </div>
-                  <div className="bg-muted-foreground/30 h-0.5 w-6"></div>
-                  <div className="border-muted-foreground/30 text-muted-foreground flex h-5 w-5 items-center justify-center rounded-full border text-xs">
+                  <div className="bg-muted-foreground/30 h-0.5 w-6 transition-all duration-500"></div>
+                  <div className="border-muted-foreground/30 text-muted-foreground flex h-5 w-5 items-center justify-center rounded-full border text-xs transition-all duration-300">
                     2
                   </div>
                 </div>
@@ -282,14 +282,24 @@ export function OnboardingModal({
               </div>
             </div>
           ) : (
-            <div className="flex h-[550px] flex-col">
+            <div className="flex h-[500px] flex-col">
               <div className="mb-4 flex justify-center">
                 <div className="flex items-center space-x-2">
-                  <div className="bg-primary/20 text-primary flex h-5 w-5 items-center justify-center rounded-full text-xs">
-                    ✓
+                  <div className="bg-primary/20 text-primary flex h-5 w-5 items-center justify-center rounded-full text-xs transition-all duration-300">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-3 w-3 animate-[checkmark_0.5s_ease-in-out_0.2s_forwards]">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
                   </div>
-                  <div className="bg-primary h-0.5 w-6"></div>
-                  <div className="bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-full text-xs">
+                  <div className="bg-primary h-0.5 w-6 animate-[progressBar_0.5s_ease-in-out_forwards] transition-all duration-500"></div>
+                  <div className="bg-primary text-primary-foreground flex h-5 w-5 animate-[pulse_0.5s_ease-in-out] items-center justify-center rounded-full text-xs transition-all duration-300">
                     2
                   </div>
                 </div>
@@ -338,12 +348,14 @@ export function OnboardingModal({
                   Sexy Integrations for Developers
                 </p>
               </div>
-              <div className="flex flex-1 flex-col">
+              <div
+                className="flex flex-col"
+                style={{height: 'calc(100% - 140px)'}}>
                 <p className="mb-3 text-center text-sm font-medium">
                   Select your first to start:
                 </p>
 
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
                   {connectorOptions.map((connector) => (
                     <Card key={connector.id} className="h-auto p-0">
                       <CardHeader className="space-y-0 px-4 pb-0 pt-4">
@@ -381,7 +393,7 @@ export function OnboardingModal({
                   ))}
                 </div>
 
-                <div className="mt-auto pt-2 text-center">
+                <div className="text-center">
                   <Button
                     variant="link"
                     onClick={handleFindMore}
@@ -412,6 +424,21 @@ export function OnboardingModal({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <style>{`
+        @keyframes progressBar {
+          from { transform: scaleX(0); transform-origin: left; }
+          to { transform: scaleX(1); transform-origin: left; }
+        }
+        @keyframes pulse {
+          0% { transform: scale(0.8); }
+          50% { transform: scale(1.2); }
+          100% { transform: scale(1); }
+        }
+        @keyframes checkmark {
+          0% { opacity: 0; transform: scale(0); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
     </>
   )
 }
