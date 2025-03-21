@@ -12,44 +12,6 @@ import {ConnectorTableCell} from '@openint/ui-v1/domain-components/ConnectorTabl
 import {useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 
-export function ConnectorConfigListHeader(props: {
-  initialData?: Promise<AppRouterOutput['listConnectors']>
-}) {
-  const initialData = use(props.initialData ?? Promise.resolve(undefined))
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const trpc = useTRPC()
-  const res = useSuspenseQuery(
-    trpc.listConnectors.queryOptions(
-      {},
-      initialData ? {initialData} : undefined,
-    ),
-  )
-
-  return (
-    <div className="flex justify-between">
-      <h1 className="text-2xl font-bold">Connector Configs</h1>
-
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetTrigger asChild>
-          <Button>
-            <Plus className="size-4" />
-            Add Connector
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="right" className="min-w-1/3">
-          <AddConnectorConfig
-            connectors={res.data}
-            onSelectConnector={() => {
-              setSheetOpen(false)
-              res.refetch()
-            }}
-          />
-        </SheetContent>
-      </Sheet>
-    </div>
-  )
-}
-
 export function ConnectorConfigList(props: {
   initialData?: Promise<{
     items: Array<
@@ -59,13 +21,25 @@ export function ConnectorConfigList(props: {
     limit: number
     offset: number
   }>
+  initialConnectorData?: Promise<AppRouterOutput['listConnectors']>
 }) {
+  const [sheetOpen, setSheetOpen] = useState(false)
+
   const initialData = use(props.initialData ?? Promise.resolve(undefined))
+  const connectorData = use(
+    props.initialConnectorData ?? Promise.resolve(undefined),
+  )
   const trpc = useTRPC()
   const res = useSuspenseQuery(
     trpc.listConnectorConfigs.queryOptions(
       {expand: 'enabled_integrations,connector'},
       initialData ? {initialData} : undefined,
+    ),
+  )
+  const connectorRes = useSuspenseQuery(
+    trpc.listConnectors.queryOptions(
+      {},
+      connectorData ? {initialData: connectorData} : undefined,
     ),
   )
 
@@ -124,7 +98,23 @@ export function ConnectorConfigList(props: {
         <DataTable.Header>
           <DataTable.SearchInput />
           <DataTable.ColumnVisibilityToggle />
-          <Button className="ml-4">Add Connector</Button>
+          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+            <SheetTrigger asChild>
+              <Button>
+                <Plus className="size-4" />
+                Add Connector
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="min-w-1/3">
+              <AddConnectorConfig
+                connectors={connectorRes.data}
+                onSelectConnector={() => {
+                  setSheetOpen(false)
+                  res.refetch()
+                }}
+              />
+            </SheetContent>
+          </Sheet>
         </DataTable.Header>
         <DataTable.Table />
         <DataTable.Footer>
