@@ -12,7 +12,7 @@ export function prepareScopes(jsonConfig: z.infer<typeof zOAuthConfig>) {
 /**
  * Fills out variables in a URL string template with values from connector config and connection settings
  *
- * @param url - URL string containing variables in ${variable} format
+ * @param string - URL string containing variables in ${variable} format
  * @param connectorConfig - Connector configuration object containing values to substitute
  * @param connectionSettings - Connection settings object containing values to substitute
  * @returns URL string with variables replaced with actual values
@@ -27,12 +27,12 @@ export function prepareScopes(jsonConfig: z.infer<typeof zOAuthConfig>) {
  */
 
 export function fillOutStringTemplateVariables(
-  url: string,
+  string: string,
   connectorConfig: any,
   connectionSettings: any,
 ) {
-  if (!url) return url
-  let filledUrl = url
+  if (!string) return string
+  let filledUrl = string
 
   // Ensure connectorConfig and connectionSettings are objects
   connectorConfig = connectorConfig || {}
@@ -40,7 +40,7 @@ export function fillOutStringTemplateVariables(
 
   // Match ${variable} pattern
   const variableRegex = /\${([^}]+)}/g
-  const matches = url.match(variableRegex)
+  const matches = string.match(variableRegex)
 
   if (!matches) {
     return filledUrl
@@ -70,6 +70,38 @@ export function fillOutStringTemplateVariables(
   })
 
   return filledUrl
+}
+
+export function fillOutStringTemplateVariablesInObjectKeys(
+  obj: any,
+  connectorConfig: any,
+  connectionSettings: any,
+) {
+  if (!obj || typeof obj !== 'object') {
+    return obj
+  }
+
+  const clone = {...obj}
+
+  for (const key of Object.keys(clone)) {
+    const value = clone[key]
+
+    if (typeof value === 'string') {
+      clone[key] = fillOutStringTemplateVariables(
+        value,
+        connectorConfig,
+        connectionSettings,
+      )
+    } else if (value !== null && typeof value === 'object') {
+      clone[key] = fillOutStringTemplateVariablesInObjectKeys(
+        value,
+        connectorConfig,
+        connectionSettings,
+      )
+    }
+  }
+
+  return clone
 }
 
 /*

@@ -10,6 +10,7 @@ import {
   defaultTokenExchangeHandler,
   tokenRefreshHandler,
 } from './handlers'
+import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
 function injectCcfgDefaultCredentials(
   config: any,
@@ -92,7 +93,11 @@ export function generateOAuth2Server<
 
       return authorizeHandler({
         oauthConfig: {
-          ...oauthConfig,
+          ...fillOutStringTemplateVariablesInObjectKeys(
+            oauthConfig,
+            connectorConfig,
+            connectionSettings,
+          ),
           connector_config: connectorConfig,
         },
         redirectUri: getServerUrl(null) + '/connect/callback',
@@ -101,12 +106,16 @@ export function generateOAuth2Server<
       }) as any
     },
 
-    async postConnect(connectOutput, connectorConfig) {
+    async postConnect(connectOutput, connectorConfig, connectionSettings) {
       const redirect_uri = getServerUrl(null) + '/connect/callback'
       console.log(`Oauth2 Postconnect called`)
       const result = await defaultTokenExchangeHandler({
         oauth_config: {
-          ...oauthConfig,
+          ...fillOutStringTemplateVariablesInObjectKeys(
+            oauthConfig,
+            connectorConfig,
+            connectionSettings,
+          ),
           connector_config: connectorConfig,
         } satisfies z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
@@ -154,7 +163,11 @@ export function generateOAuth2Server<
 
       const result = await tokenRefreshHandler({
         oauth_config: {
-          ...oauthConfig,
+          ...fillOutStringTemplateVariablesInObjectKeys(
+            oauthConfig,
+            connectorConfig,
+            connectionSettings,
+          ),
           connector_config: connectorConfig,
           connection_settings: connectionSettings,
         } as any as z.infer<typeof zOAuthConfig>, // TODO: fix this

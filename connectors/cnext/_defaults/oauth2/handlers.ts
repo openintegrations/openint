@@ -1,10 +1,6 @@
 import {z} from 'zod'
 import {zOAuthConfig} from './def'
-import {
-  fillOutStringTemplateVariables,
-  mapOauthParams,
-  prepareScopes,
-} from './utils'
+import {mapOauthParams, prepareScopes} from './utils'
 
 export const zTokenResponse = z.object({
   access_token: z.string(),
@@ -65,13 +61,7 @@ export async function authorizeHandler({
   if (!oauthConfig.connector_config) {
     throw new Error('No connector_config provided')
   }
-  const url = new URL(
-    fillOutStringTemplateVariables(
-      oauthConfig.authorization_request_url,
-      oauthConfig.connector_config,
-      oauthConfig.connection_settings,
-    ),
-  )
+  const url = new URL(oauthConfig.authorization_request_url)
   const params = mapOauthParams(
     {
       client_id: oauthConfig.connector_config.client_id,
@@ -112,7 +102,6 @@ export async function defaultTokenExchangeHandler({
   if (!oauth_config.connector_config) {
     throw new Error('No connector_config provided')
   }
-  // TODO (@pellicceama): For every value in params apply template literal substitution
   const params = mapOauthParams(
     {
       client_id: oauth_config.connector_config.client_id,
@@ -127,12 +116,7 @@ export async function defaultTokenExchangeHandler({
     oauth_config.params_config.param_names ?? {},
   )
 
-  const url = fillOutStringTemplateVariables(
-    oauth_config.token_request_url,
-    oauth_config.connector_config,
-    oauth_config.connection_settings,
-  )
-  return makeTokenRequest(url, params, 'exchange')
+  return makeTokenRequest(oauth_config.token_request_url, params, 'exchange')
 }
 
 export const zTokenRefreshHandlerArgs = z.object({
@@ -160,10 +144,5 @@ export async function tokenRefreshHandler({
     oauth_config.params_config.param_names ?? {},
   )
 
-  const url = fillOutStringTemplateVariables(
-    oauth_config.token_request_url,
-    oauth_config.connector_config,
-    oauth_config.connection_settings,
-  )
-  return makeTokenRequest(url, params, 'refresh')
+  return makeTokenRequest(oauth_config.token_request_url, params, 'refresh')
 }

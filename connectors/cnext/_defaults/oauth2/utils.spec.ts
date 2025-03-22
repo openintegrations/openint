@@ -115,3 +115,145 @@ describe('fillOutStringTemplateVariables', () => {
     ).not.toThrow()
   })
 })
+
+describe('fillOutStringTemplateVariablesInObjectKeys', () => {
+  const {fillOutStringTemplateVariablesInObjectKeys} = require('./utils')
+
+  test('should replace variables in nested object properties', () => {
+    const obj = {
+      baseUrl: 'https://${connector_config.domain}/api',
+      endpoints: {
+        users:
+          '${connector_config.baseUrl}/users/${connection_settings.user_id}',
+        posts: '${connector_config.baseUrl}/posts',
+        nested: {
+          comments:
+            '${connector_config.baseUrl}/posts/${connection_settings.post_id}/comments',
+          deepNested: {
+            likes:
+              '${connector_config.baseUrl}/posts/${connection_settings.post_id}/likes',
+          },
+        },
+      },
+      headers: {
+        Authorization: 'Bearer ${connection_settings.token}',
+      },
+    }
+
+    const connectorConfig = {
+      domain: 'example.com',
+      baseUrl: 'https://example.com/api/v2',
+    }
+
+    const connectionSettings = {
+      user_id: '12345',
+      post_id: '67890',
+      token: 'abc123',
+    }
+
+    const result = fillOutStringTemplateVariablesInObjectKeys(
+      obj,
+      connectorConfig,
+      connectionSettings,
+    )
+
+    expect(result).toEqual({
+      baseUrl: 'https://example.com/api',
+      endpoints: {
+        users: 'https://example.com/api/v2/users/12345',
+        posts: 'https://example.com/api/v2/posts',
+        nested: {
+          comments: 'https://example.com/api/v2/posts/67890/comments',
+          deepNested: {
+            likes: 'https://example.com/api/v2/posts/67890/likes',
+          },
+        },
+      },
+      headers: {
+        Authorization: 'Bearer abc123',
+      },
+    })
+  })
+
+  test('should handle null and undefined values', () => {
+    const obj = {
+      validUrl: '${connector_config.baseUrl}/resource',
+      nullValue: null,
+      undefinedValue: undefined,
+      emptyObject: {},
+      nestedWithNull: {
+        nullProperty: null,
+        validProperty: '${connector_config.version}',
+      },
+    }
+
+    const connectorConfig = {
+      baseUrl: 'https://api.example.com',
+      version: 'v2',
+    }
+
+    const connectionSettings = {}
+
+    const result = fillOutStringTemplateVariablesInObjectKeys(
+      obj,
+      connectorConfig,
+      connectionSettings,
+    )
+
+    expect(result).toEqual({
+      validUrl: 'https://api.example.com/resource',
+      nullValue: null,
+      undefinedValue: undefined,
+      emptyObject: {},
+      nestedWithNull: {
+        nullProperty: null,
+        validProperty: 'v2',
+      },
+    })
+  })
+
+  test('should return non-object inputs unchanged', () => {
+    const stringInput = 'just a string'
+    const numberInput = 42
+    const booleanInput = true
+
+    const connectorConfig = {test: 'value'}
+    const connectionSettings = {}
+
+    expect(
+      fillOutStringTemplateVariablesInObjectKeys(
+        stringInput,
+        connectorConfig,
+        connectionSettings,
+      ),
+    ).toBe(stringInput)
+    expect(
+      fillOutStringTemplateVariablesInObjectKeys(
+        numberInput,
+        connectorConfig,
+        connectionSettings,
+      ),
+    ).toBe(numberInput)
+    expect(
+      fillOutStringTemplateVariablesInObjectKeys(
+        booleanInput,
+        connectorConfig,
+        connectionSettings,
+      ),
+    ).toBe(booleanInput)
+    expect(
+      fillOutStringTemplateVariablesInObjectKeys(
+        null,
+        connectorConfig,
+        connectionSettings,
+      ),
+    ).toBe(null)
+    expect(
+      fillOutStringTemplateVariablesInObjectKeys(
+        undefined,
+        connectorConfig,
+        connectionSettings,
+      ),
+    ).toBe(undefined)
+  })
+})
