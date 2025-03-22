@@ -55,9 +55,8 @@ export function generateConnectorDef<T extends JsonConnectorDef>(def: T) {
       displayName: def.display_name,
       stage: def.stage,
       verticals: def.verticals,
-      // TODO: Make this dynamic
-      logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-drive.svg`,
-      authType: def.auth.type as 'OAUTH2' | 'OAUTH2CC',
+      logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-${def.connector_name}.svg`,
+      authType: def.auth.type,
     },
   } satisfies ConnectorDef<
     typeof oauth2Schemas & {name: z.ZodLiteral<T['connector_name']>}
