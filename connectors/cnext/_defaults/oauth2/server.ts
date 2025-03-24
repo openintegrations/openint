@@ -1,9 +1,8 @@
 import {z} from 'zod'
 import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
+import {getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util'
-// TODO: Fix me as this is technically a cyclical dep
-import {getServerUrl} from '../../../../apps/app-config/constants'
 import {oauth2Schemas, zOAuthConfig} from './def'
 import {
   authorizeHandler,

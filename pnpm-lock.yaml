@@ -677,6 +677,9 @@ importers:
       '@openint/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@openint/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
