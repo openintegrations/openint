@@ -11,6 +11,7 @@ import {
 import {getConnectorDefaultCredentials} from '@openint/env'
 import {TRPCError} from '@openint/trpc'
 import {makeUlid, z} from '@openint/util'
+import {injectDefaultCredentials} from '../../api-v1/routers/utils/defaultCredentialsInjection'
 import {adminProcedure, protectedProcedure, trpc} from './_base'
 
 export {type inferProcedureInput} from '@openint/trpc'
@@ -79,41 +80,14 @@ export const connectorConfigRouter = trpc.router({
       }
 
       // upsert, injecting default credentials if required
-      const defaultCredentials = getConnectorDefaultCredentials(connector.name)
       if (connector.metadata?.authType) {
-        if (
-          connector.metadata.authType === 'OAUTH2' ||
-          connector.metadata.authType === 'OAUTH2CC'
-          // NOTE: the schema should be the same once we add oauth1 support
-          // connector.metadata.authType === 'OAUTH1'
-        ) {
-          // attempt to validate it against the oauth preexisting previous provider schema
-          const parsedConfig = oauthBaseSchema.connectorConfig.safeParse({
-            ...input.config,
-            oauth: {
-              ...(input.config as any)?.['oauth'],
-              ...defaultCredentials,
-            },
-          })
-          if (!parsedConfig.success) {
-            console.warn(
-              'invalid connector config with merged default credentials',
-              parsedConfig.error,
-            )
-            throw new TRPCError({
-              code: 'BAD_REQUEST',
-              message: `Invalid connector config for ${connector.name}`,
-            })
-          }
-          input.config = parsedConfig.data
-        }
-      } else {
-        // else just inject the default credentials without validating
-        // TODO: generalize for non oauth and have strong validation for things like api keys
-        input.config = {
-          ...input.config,
-          ...defaultCredentials,
-        }
+        // NOTE; casting to any to keep this API forwards compatible with api-v1 where
+        // we may not want to have it strictly require the api v0 upsert connector config input
+        input = injectDefaultCredentials(
+          connector,
+          input as any,
+          getConnectorDefaultCredentials(connector.name),
+        ) as any
       }
 
       return ctx.services.patchReturning('connector_config', id, input)
