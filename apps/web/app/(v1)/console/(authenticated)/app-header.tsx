@@ -8,6 +8,7 @@ import {
 } from '@openint/shadcn/ui/breadcrumb'
 import {Separator} from '@openint/shadcn/ui/separator'
 import {SidebarTrigger} from '@openint/shadcn/ui/sidebar'
+import {UserButton} from '@/lib-server/auth.client'
 
 export function AppHeader() {
   return (
@@ -25,6 +26,9 @@ export function AppHeader() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+      <div className="ml-auto">
+        <UserButton showName />
+      </div>
     </header>
   )
 }

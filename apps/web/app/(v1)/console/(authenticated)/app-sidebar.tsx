@@ -1,3 +1,6 @@
+'use client'
+
+import Link from 'next/link'
 import * as React from 'react'
 import {
   Sidebar,
@@ -11,165 +14,96 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@openint/shadcn/ui/sidebar'
-import {SearchForm} from './search-form'
-import {VersionSwitcher} from './version-switcher'
+import {OrganizationSwitcher} from '@/lib-server/auth.client'
 
-// This is sample data.
-const data = {
-  versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
-  navMain: [
-    {
-      title: 'Getting Started',
-      url: '#',
-      items: [
-        {
-          title: 'Installation',
-          url: '#',
-        },
-        {
-          title: 'Project Structure',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Building Your Application',
-      url: '#',
-      items: [
-        {
-          title: 'Routing',
-          url: '#',
-        },
-        {
-          title: 'Data Fetching',
-          url: '#',
-          isActive: true,
-        },
-        {
-          title: 'Rendering',
-          url: '#',
-        },
-        {
-          title: 'Caching',
-          url: '#',
-        },
-        {
-          title: 'Styling',
-          url: '#',
-        },
-        {
-          title: 'Optimizing',
-          url: '#',
-        },
-        {
-          title: 'Configuring',
-          url: '#',
-        },
-        {
-          title: 'Testing',
-          url: '#',
-        },
-        {
-          title: 'Authentication',
-          url: '#',
-        },
-        {
-          title: 'Deploying',
-          url: '#',
-        },
-        {
-          title: 'Upgrading',
-          url: '#',
-        },
-        {
-          title: 'Examples',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'API Reference',
-      url: '#',
-      items: [
-        {
-          title: 'Components',
-          url: '#',
-        },
-        {
-          title: 'File Conventions',
-          url: '#',
-        },
-        {
-          title: 'Functions',
-          url: '#',
-        },
-        {
-          title: 'next.config.js Options',
-          url: '#',
-        },
-        {
-          title: 'CLI',
-          url: '#',
-        },
-        {
-          title: 'Edge Runtime',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Architecture',
-      url: '#',
-      items: [
-        {
-          title: 'Accessibility',
-          url: '#',
-        },
-        {
-          title: 'Fast Refresh',
-          url: '#',
-        },
-        {
-          title: 'Next.js Compiler',
-          url: '#',
-        },
-        {
-          title: 'Supported Browsers',
-          url: '#',
-        },
-        {
-          title: 'Turbopack',
-          url: '#',
-        },
-      ],
-    },
-  ],
-}
+const navMain = [
+  {
+    title: 'Getting Started',
+    items: [
+      {
+        title: 'Installation',
+        url: '/console/',
+      },
+      {
+        title: 'Project Structure',
+        url: '/console/project-structure',
+      },
+    ],
+  },
+  {
+    title: 'Building Your Application',
+    items: [
+      {
+        title: 'Magic Link',
+        url: '/console/magic-link',
+      },
+      {
+        title: 'Connections',
+        url: '/console/connections',
+        isActive: true,
+      },
+      {
+        title: 'Connector Configs',
+        url: '/console/connector-configs',
+      },
+      {
+        title: 'Connectors',
+        url: '/console/connectors',
+      },
+    ],
+  },
+  {
+    title: 'Docs',
+    items: [
+      {
+        title: 'Settings',
+        url: '/console/settings',
+      },
+      {
+        title: 'Guides',
+        url: '/console/guides',
+      },
+      {
+        title: 'API Reference',
+        url: '/console/api-reference',
+      },
+    ],
+  },
+] satisfies Array<{
+  title: string
+  items: Array<{
+    title: string
+    // TODO: Figure out how to type this to be the statically generated list of URLs from next.js
+    url: `/console${string}`
+    isActive?: boolean
+  }>
+}>
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <VersionSwitcher
-          versions={data.versions}
-          defaultVersion={data.versions[0]!}
-        />
-        <SearchForm />
+        <OrganizationSwitcher />
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
+        {navMain.map((item) => (
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {item.items.map((item) => {
+                  const isActive =
+                    window.location.pathname.replace(/\/*$/, '') ===
+                    item.url.replace(/\/*$/, '')
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild isActive={isActive}>
+                        <Link href={item.url}>{item.title}</Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
