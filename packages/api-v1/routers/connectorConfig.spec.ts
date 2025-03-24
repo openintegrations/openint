@@ -235,7 +235,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       id,
     })
     expect(res).toBeDefined()
-    expect(res.connector_name).toEqual('qbo')
+    expect(res).toEqual(id)
   })
 
   test('delete connector with invalid id returns error', async () => {

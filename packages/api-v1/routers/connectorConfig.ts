@@ -292,18 +292,27 @@ export const connectorConfigRouter = router({
       },
     })
     .input(z.object({id: z.string()}))
-    .output(core.connector_config)
+    .output(z.string())
     .mutation(async ({ctx, input}) => {
       const {id} = input
-      const res = await ctx.db
+
+      const existingConfig = await ctx.db
+        .select({id: schema.connector_config.id})
+        .from(schema.connector_config)
+        .where(eq(schema.connector_config.id, id))
+        .limit(1)
+
+      if (!existingConfig.length) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config with ID "${id}" not found`,
+        })
+      }
+
+      await ctx.db
         .delete(schema.connector_config)
         .where(eq(schema.connector_config.id, id))
-        .returning()
 
-      validateResponse(res, id)
-
-      const [ccfg] = res
-
-      return ccfg!
+      return id
     }),
 })
