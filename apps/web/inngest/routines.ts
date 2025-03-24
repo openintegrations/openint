@@ -5,7 +5,7 @@ import {createClerkClient} from '@clerk/nextjs/server'
 import type {SendEventPayload} from 'inngest/helpers/types'
 import {flatRouter} from '@openint/engine-backend'
 import type {Events, OrgProperties} from '@openint/events'
-import {makeSentryClient} from '../lib-server/sentry-client'
+import {makeSentryClient} from '../lib-client/sentry-client'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const sentry = makeSentryClient({dsn: env.NEXT_PUBLIC_SENTRY_DSN!})

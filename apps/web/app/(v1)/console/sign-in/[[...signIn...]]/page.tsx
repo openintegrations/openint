@@ -1,6 +1,6 @@
 import {redirect} from 'next/navigation'
 import {FullScreenCenter} from '@/components/FullScreenCenter'
-import {SignIn} from '@/lib-server/auth.client'
+import {SignIn} from '@/lib-client/auth.client'
 import {currentViewer} from '@/lib-server/auth.server'
 
 export default async function SignInScreen() {
