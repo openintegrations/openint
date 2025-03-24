@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import {usePathname} from 'next/navigation'
 import * as React from 'react'
 import {
   Sidebar,
@@ -84,6 +85,8 @@ export function AppSidebar({
 }: React.ComponentProps<typeof Sidebar> & {
   organizationSwitcher: React.ReactNode
 }) {
+  // In storybook, pathname would be undefined
+  const pathname: string | undefined = usePathname()
   return (
     <Sidebar {...props}>
       <SidebarHeader>{organizationSwitcher}</SidebarHeader>
@@ -96,7 +99,7 @@ export function AppSidebar({
               <SidebarMenu>
                 {item.items.map((item) => {
                   const isActive =
-                    window.location.pathname.replace(/\/*$/, '') ===
+                    pathname?.replace(/\/*$/, '') ===
                     item.url.replace(/\/*$/, '')
                   return (
                     <SidebarMenuItem key={item.title}>
