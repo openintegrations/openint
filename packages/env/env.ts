@@ -134,3 +134,18 @@ export function getServerUrl(req: GetServerSidePropsContext['req'] | null) {
     }`
   )
 }
+
+export function getConnectorDefaultCredentials(
+  connectorName: string,
+): Record<string, string> | undefined {
+  const credentials: Record<string, string> = {}
+  for (const key in process.env) {
+    if (key.startsWith(`ccfg_${connectorName}__`)) {
+      const credentialKey = key
+        .replace(`ccfg_${connectorName}__`, '')
+        .toLowerCase()
+      credentials[credentialKey] = process.env[key] as string
+    }
+  }
+  return Object.keys(credentials).length > 0 ? credentials : undefined
+}
