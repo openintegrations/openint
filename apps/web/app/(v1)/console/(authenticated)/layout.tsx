@@ -1,6 +1,6 @@
 import React from 'react'
 import {AppLayout} from '@openint/ui-v1'
-import {OrganizationSwitcher, UserButton} from '@/lib-server/auth.client'
+import {OrganizationSwitcher, UserButton} from '@/lib-client/auth.client'
 
 export default function AuthenticatedLayout({
   children,

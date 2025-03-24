@@ -3,7 +3,6 @@
 import {useClerk} from '@clerk/nextjs'
 import React from 'react'
 
-// TODO: Move me to lib-client
 export {
   ClerkProvider as AuthProvider,
   SignIn,

@@ -2,7 +2,7 @@
 
 import {useRouter} from 'next/navigation'
 import React from 'react'
-import {useSession} from '@/lib-server/auth.client'
+import {useSession} from '@/lib-client/auth.client'
 
 export default function SignOutScreen() {
   const session = useSession()
