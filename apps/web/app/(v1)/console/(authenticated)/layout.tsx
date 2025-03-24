@@ -1,7 +1,6 @@
 import React from 'react'
-import {SidebarInset, SidebarProvider} from '@openint/shadcn/ui/sidebar'
-import {AppHeader} from './app-header'
-import {AppSidebar} from './app-sidebar'
+import {AppLayout} from '@openint/ui-v1'
+import {OrganizationSwitcher, UserButton} from '@/lib-server/auth.client'
 
 export default function AuthenticatedLayout({
   children,
@@ -9,12 +8,10 @@ export default function AuthenticatedLayout({
   children: React.ReactNode
 }) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <AppHeader />
-        <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
-      </SidebarInset>
-    </SidebarProvider>
+    <AppLayout
+      organizationSwitcher={<OrganizationSwitcher />}
+      userButton={<UserButton showName />}>
+      {children}
+    </AppLayout>
   )
 }

@@ -14,7 +14,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@openint/shadcn/ui/sidebar'
-import {OrganizationSwitcher} from '@/lib-server/auth.client'
 
 const navMain = [
   {
@@ -79,12 +78,15 @@ const navMain = [
   }>
 }>
 
-export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  organizationSwitcher,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & {
+  organizationSwitcher: React.ReactNode
+}) {
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
-        <OrganizationSwitcher />
-      </SidebarHeader>
+      <SidebarHeader>{organizationSwitcher}</SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
         {navMain.map((item) => (

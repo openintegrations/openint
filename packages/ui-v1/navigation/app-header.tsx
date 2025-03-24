@@ -8,9 +8,8 @@ import {
 } from '@openint/shadcn/ui/breadcrumb'
 import {Separator} from '@openint/shadcn/ui/separator'
 import {SidebarTrigger} from '@openint/shadcn/ui/sidebar'
-import {UserButton} from '@/lib-server/auth.client'
 
-export function AppHeader() {
+export function AppHeader(props: {userButton: React.ReactNode}) {
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
       <SidebarTrigger className="-ml-1" />
@@ -26,9 +25,7 @@ export function AppHeader() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="ml-auto">
-        <UserButton showName />
-      </div>
+      <div className="ml-auto">{props.userButton}</div>
     </header>
   )
 }
