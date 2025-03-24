@@ -119,10 +119,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     expect(result.authorization_url).toContain(
       'https://auth.example.com/authorize',
     )
-    const scopes = mockOauthConfig.scopes
-      .map((s) => s.scope)
-      .join(encodeURIComponent(' '))
-    expect(result.authorization_url).toContain('scope=' + scopes)
+    const scopeParam = mockOauthConfig.scopes.map((s) => s.scope).join(' ')
+    expect(result.authorization_url).toContain(
+      `scope=${encodeURIComponent(scopeParam)}`,
+    )
     expect(result.authorization_url).toContain(
       'client_id=' + encodeURIComponent('test_client_id'),
     )

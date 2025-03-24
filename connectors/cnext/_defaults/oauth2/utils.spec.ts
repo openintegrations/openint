@@ -212,6 +212,21 @@ describe('fillOutStringTemplateVariablesInObjectKeys', () => {
     })
   })
 
+  test('it should handle scopes array correctly', () => {
+    const scopes = [
+      {scope: 'read', description: 'Read access'},
+      {scope: 'write', description: 'Write access'},
+    ]
+    const connectorConfig = {domain: 'example.com', version: 'v2'}
+    const connectionSettings = {user_id: '12345'}
+    const result = fillOutStringTemplateVariablesInObjectKeys(
+      {scopes},
+      connectorConfig,
+      connectionSettings,
+    )
+    expect(result).toEqual({scopes})
+  })
+
   test('should return non-object inputs unchanged', () => {
     const stringInput = 'just a string'
     const numberInput = 42

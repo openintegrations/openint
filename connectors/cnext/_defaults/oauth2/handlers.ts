@@ -68,7 +68,7 @@ export async function authorizeHandler({
       client_secret: oauthConfig.connector_config.client_secret,
       redirect_uri: redirectUri,
       response_type: 'code',
-      // decoding it as url.toString() encodes it alredy
+      // decoding it as url.toString() encodes it already
       scope: decodeURIComponent(prepareScopes(oauthConfig)),
       state: Buffer.from(connectionId).toString('base64'),
       ...(oauthConfig.params_config.authorize ?? {}),

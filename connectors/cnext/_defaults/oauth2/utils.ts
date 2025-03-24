@@ -3,10 +3,13 @@ import {zOAuthConfig} from './def'
 
 export function prepareScopes(jsonConfig: z.infer<typeof zOAuthConfig>) {
   const scopes = jsonConfig.scopes
-  const scopeSeparator = jsonConfig.scope_separator
-  return encodeURIComponent(
-    scopes.map((s) => s.scope).join(scopeSeparator ?? ' '),
-  )
+  const scopeSeparator = jsonConfig.scope_separator ?? ' '
+
+  console.warn('scopes', {scopes, scopeSeparator, jsonConfig})
+  if (!scopes || !Array.isArray(scopes) || scopes.length === 0) {
+    return ''
+  }
+  return encodeURIComponent(scopes.map((s) => s.scope).join(scopeSeparator))
 }
 
 /**
@@ -76,9 +79,20 @@ export function fillOutStringTemplateVariablesInObjectKeys(
   obj: any,
   connectorConfig: any,
   connectionSettings: any,
-) {
+): any {
   if (!obj || typeof obj !== 'object') {
     return obj
+  }
+
+  // Handle arrays properly
+  if (Array.isArray(obj)) {
+    return obj.map((item: any) =>
+      fillOutStringTemplateVariablesInObjectKeys(
+        item,
+        connectorConfig,
+        connectionSettings,
+      ),
+    )
   }
 
   const clone = {...obj}
