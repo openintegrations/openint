@@ -2,6 +2,7 @@
 
 import {useRouter} from 'next/navigation'
 import React from 'react'
+import {FullScreenCenter} from '@/components/FullScreenCenter'
 import {useSession} from '@/lib-client/auth.client'
 
 export default function SignOutScreen() {
@@ -14,5 +15,5 @@ export default function SignOutScreen() {
     })
   }, [router, session])
 
-  return <p>Signing out...</p>
+  return <FullScreenCenter>Signing out...</FullScreenCenter>
 }
