@@ -21,7 +21,7 @@
     "@trpc/client": "next",
     "@trpc/tanstack-react-query": "next",
     "lucide-react": "^0.479.0",
-    "next": "15.2.1",
+    "next": "15.2.3",
     "react": "^19.0.0",
     "sonner": "^1.4.0",
     "zod": "^3.24.2",
