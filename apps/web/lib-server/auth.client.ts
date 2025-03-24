@@ -1,3 +1,5 @@
+// 'use client'
+
 import {useClerk} from '@clerk/nextjs'
 import React from 'react'
 
