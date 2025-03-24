@@ -1,4 +1,5 @@
 import type {ConnectorDef} from '@openint/cdk'
+import {getConnectorDefaultCredentials} from '@openint/env'
 import {z} from '@openint/util'
 import {
   oauth2Schemas,
@@ -23,10 +24,18 @@ export function generateConnectorDef<T extends JsonConnectorDef>(def: T) {
       }) as typeof schema
     }
 
-    return z.union([
-      z.null().openapi({title: 'Use OpenInt platform credentials'}),
-      schema.openapi({title: 'Use my own'}),
-    ])
+    const defaultCredentialsConfigured = getConnectorDefaultCredentials(
+      def.connector_name,
+    )
+
+    if (defaultCredentialsConfigured) {
+      return z.union([
+        z.null().openapi({title: 'Use OpenInt platform credentials'}),
+        schema.openapi({title: 'Use my own'}),
+      ])
+    }
+
+    return schema
   }
 
   const connectionSettings = () => {
