@@ -4,7 +4,7 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {core} from '../models'
+import {Core, core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
@@ -14,10 +14,7 @@ import {
 } from './utils/pagination'
 import {zConnectorName} from './utils/types'
 
-const validateResponse = (
-  res: Array<z.infer<typeof core.connector_config>>,
-  id: string,
-) => {
+const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
   if (!res.length) {
     throw new TRPCError({
       code: 'NOT_FOUND',
@@ -33,9 +30,9 @@ export const zExpandOptions = z
   )
 
 export function expandConnector(
-  connectorConfig: z.infer<typeof core.connector_config>,
+  connectorConfig: Core['connector_config'],
 ): Pick<
-  z.infer<typeof core.connector>,
+  Core['connector'],
   'name' | 'display_name' | 'logo_url' | 'stage' | 'platforms'
 > & {
   created_at: string
@@ -81,7 +78,7 @@ interface IntegrationConfig {
 }
 
 export function expandIntegrations(
-  connectorConfig: z.infer<typeof core.connector_config>,
+  connectorConfig: Core['connector_config'],
 ): Record<string, IntegrationConfig> | undefined {
   if (
     !connectorConfig ||
@@ -210,6 +207,11 @@ export const connectorConfigRouter = router({
 
           if (result.config && Object.keys(result.config).length === 0) {
             result.config = null
+          }
+
+          // Convert connection_count to number if it exists
+          if (includeConnectionCount && 'connection_count' in result) {
+            result.connection_count = Number(result.connection_count || 0)
           }
 
           if (expandOptions.includes('connector')) {

@@ -1,9 +1,10 @@
 import {Suspense} from 'react'
+import type {ConnectorConfig} from '@openint/api-v1/models'
 import type {PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../client'
-import {ConnectorConfigList} from './client'
+import {ConnectorConfigList, ConnectorConfigListHeader} from './client'
 
 function Fallback() {
   return <div>Loading...</div>
@@ -15,14 +16,25 @@ export default async function Page(props: PageProps) {
   const api = createAPICaller(viewer)
 
   return (
-    <div>
+    <div className="p-6">
       <ClientApp token={token}>
-        <h1>Connector Configs</h1>
         <Suspense fallback={<Fallback />}>
+          <ConnectorConfigListHeader initialData={api.listConnectors()} />
           <ConnectorConfigList
-            initialData={api.listConnectorConfigs({
-              expand: 'enabled_integrations',
-            })}
+            initialData={
+              api.listConnectorConfigs({
+                expand: 'connector,enabled_integrations,connection_count',
+              }) as Promise<{
+                items: Array<
+                  ConnectorConfig<
+                    'connector' | 'integrations' | 'connection_count'
+                  >
+                >
+                total: number
+                limit: number
+                offset: number
+              }>
+            }
           />
         </Suspense>
       </ClientApp>

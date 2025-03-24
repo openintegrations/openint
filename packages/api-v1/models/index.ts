@@ -96,3 +96,12 @@ export const core = {
 export type Core = {
   [k in keyof typeof core]: z.infer<(typeof core)[k]>
 }
+
+export type ConnectorConfigExtended = Core['connector_config'] & {
+  connector: Core['connector']
+  integrations: Record<string, Core['integration']>
+  connection_count: number
+}
+
+export type ConnectorConfig<T extends keyof ConnectorConfigExtended> =
+  ConnectorConfigExtended & Pick<ConnectorConfigExtended, T>
