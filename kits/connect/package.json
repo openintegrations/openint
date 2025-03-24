@@ -18,7 +18,7 @@
     "@openint/open-file-picker": "workspace:*",
     "@types/node": "^20.0.0",
     "@types/react": "*",
-    "next": "^14.1.0",
+    "next": "15.2.3",
     "typescript": "*"
   },
   "peerDependencies": {
