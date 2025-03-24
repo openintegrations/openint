@@ -4,8 +4,6 @@ import {Slot} from '@radix-ui/react-slot'
 import {cva, VariantProps} from 'class-variance-authority'
 import {PanelLeftIcon} from 'lucide-react'
 import * as React from 'react'
-import {useIsMobile} from '../hooks/use-mobile'
-import {cn} from '../lib/utils'
 import {Button} from './button'
 import {Input} from './input'
 import {Separator} from './separator'
@@ -23,6 +21,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from './tooltip'
+import {useIsMobile} from '../hooks/use-mobile'
+import {cn} from '../lib/utils'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -168,7 +168,7 @@ function Sidebar({
       <div
         data-slot="sidebar"
         className={cn(
-          'text-sidebar-foreground w-(--sidebar-width) bg-sidebar flex h-full flex-col',
+          'text-sidebar-foreground w-(--sidebar-width) flex h-full flex-col bg-sidebar',
           className,
         )}
         {...props}>
@@ -235,7 +235,7 @@ function Sidebar({
         {...props}>
         <div
           data-sidebar="sidebar"
-          className="group-data-[variant=floating]:border-sidebar-border bg-sidebar flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm">
+          className="group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm">
           {children}
         </div>
       </div>
@@ -283,7 +283,7 @@ function SidebarRail({className, ...props}: React.ComponentProps<'button'>) {
         'hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex',
         'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',
         '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
-        'hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full',
+        'group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar',
         '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2',
         '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
         className,
@@ -298,7 +298,7 @@ function SidebarInset({className, ...props}: React.ComponentProps<'main'>) {
     <main
       data-slot="sidebar-inset"
       className={cn(
-        'bg-background relative flex w-full flex-1 flex-col',
+        'relative flex w-full flex-1 flex-col bg-background',
         'md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm',
         className,
       )}
@@ -315,7 +315,7 @@ function SidebarInput({
     <Input
       data-slot="sidebar-input"
       data-sidebar="input"
-      className={cn('bg-background h-8 w-full shadow-none', className)}
+      className={cn('h-8 w-full bg-background shadow-none', className)}
       {...props}
     />
   )
