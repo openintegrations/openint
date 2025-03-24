@@ -1,11 +1,11 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "default",
-  "rsc": false,
+  "rsc": true,
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "./global.css",
+    "css": "../ui-v1/global.css",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
@@ -17,5 +17,6 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "iconLibrary": "lucide"
+  "iconLibrary": "lucide",
+  "//": "shadcn cli no longer works, and adds new component to web/ui for some reason. TODO: fix config for cli"
 }

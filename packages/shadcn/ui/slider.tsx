@@ -1,3 +1,5 @@
+'use client'
+
 import * as SliderPrimitive from '@radix-ui/react-slider'
 import * as React from 'react'
 import {cn} from '../lib/utils'
@@ -35,12 +37,12 @@ function Slider({
       <SliderPrimitive.Track
         data-slot="slider-track"
         className={cn(
-          'relative grow overflow-hidden rounded-full bg-muted data-[orientation=horizontal]:h-1.5 data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-1.5',
+          'bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-1.5',
         )}>
         <SliderPrimitive.Range
           data-slot="slider-range"
           className={cn(
-            'absolute bg-primary data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
+            'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
           )}
         />
       </SliderPrimitive.Track>
@@ -48,7 +50,7 @@ function Slider({
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
-          className="ring-ring/50 focus-visible:outline-hidden block size-4 shrink-0 rounded-full border border-primary bg-background shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50"
+          className="ring-ring/50 focus-visible:outline-hidden border-primary bg-background block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50"
         />
       ))}
     </SliderPrimitive.Root>
