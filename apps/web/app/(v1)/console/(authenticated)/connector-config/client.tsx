@@ -57,6 +57,10 @@ export function ConnectorConfigList(props: {
   )
 
   const connectorConfigs = res.data.items
+  const formSchema = {
+    ...selectedConnector?.schemas?.connector_config,
+    additionalProperties: true,
+  }
   console.log({connectorConfigs})
 
   const connectorColumns: Array<
@@ -223,10 +227,10 @@ export function ConnectorConfigList(props: {
                     : 'Add Connector'}
                 </span>
               </SheetTitle>
-              {selectedConnector?.schemas?.connection_settings ? (
+              {selectedConnector?.schemas?.connector_config ? (
                 <>
                   <JSONSchemaForm
-                    jsonSchema={selectedConnector.schemas.connection_settings}
+                    jsonSchema={formSchema}
                     onSubmit={handleSubmitConfig}
                     hideSubmitButton={true}
                     formData={
