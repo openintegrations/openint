@@ -28,6 +28,7 @@ import {AppSidebar} from './app-sidebar'
 const meta = {
   title: 'UI-V1/Navigation/AppSidebar',
   component: AppSidebar,
+  parameters: {layout: 'fullscreen'},
   decorators: [
     (Story) => (
       <SidebarProvider>

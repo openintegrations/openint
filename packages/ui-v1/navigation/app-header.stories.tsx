@@ -6,6 +6,7 @@ const meta = {
   // TODO: Setup title to be inferred
   title: 'UI-V1/Navigation/AppHeader',
   component: AppHeader,
+  parameters: {layout: 'fullscreen'},
   decorators: [
     (Story) => (
       <SidebarProvider>
