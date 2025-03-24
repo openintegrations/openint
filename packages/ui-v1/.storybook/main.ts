@@ -23,11 +23,11 @@ function getAbsolutePath(value) {
 const config = {
   stories: [
     // Should be kept in sync with global.css files
-    '../stories/**/*.mdx',
-    '../components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../__stories__/**/*.mdx',
     '../__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../navigation/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',

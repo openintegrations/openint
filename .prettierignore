@@ -25,3 +25,6 @@ pnpm-lock.yaml
 .obsidian/
 
 docs/openint.oas.json
+
+
+/packages/shadcn/ui
