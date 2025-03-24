@@ -1,7 +1,7 @@
 import {z} from 'zod'
 import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
-import {getServerUrl} from '@openint/env'
+import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util'
 import {oauth2Schemas, zOAuthConfig} from './def'
 import {
@@ -19,13 +19,12 @@ function injectCcfgDefaultCredentials(
   client_secret: string
   scopes?: string[] | null | undefined
 } {
+  const defaultCredentials = getConnectorDefaultCredentials(connectorName)
   return {
     ...config,
-    client_id:
-      config.client_id ?? process.env[`ccfg_${connectorName}__CLIENT_ID`],
+    client_id: config['client_id'] ?? defaultCredentials?.['client_id'],
     client_secret:
-      config.client_secret ??
-      process.env[`ccfg_${connectorName}__CLIENT_SECRET`],
+      config['client_secret'] ?? defaultCredentials?.['client_secret'],
     scopes: config.scopes,
   }
 }
