@@ -1,7 +1,7 @@
 'use client'
 
 import {ArrowLeft, Plus} from 'lucide-react'
-import {use, useState} from 'react'
+import {use, useRef, useState} from 'react'
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {AppRouterOutput} from '@openint/api-v1/routers'
 import {Button} from '@openint/shadcn/ui'
@@ -12,7 +12,10 @@ import {
   SheetTitle,
 } from '@openint/shadcn/ui/sheet'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
-import {JSONSchemaForm} from '@openint/ui-v1/components/schema-form/SchemaForm'
+import {
+  JSONSchemaForm,
+  SchemaFormElement,
+} from '@openint/ui-v1/components/schema-form/SchemaForm'
 import {AddConnectorConfig} from '@openint/ui-v1/domain-components/AddConnectorConfig'
 import {ConnectorTableCell} from '@openint/ui-v1/domain-components/ConnectorTableCell'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
@@ -36,6 +39,7 @@ export function ConnectorConfigList(props: {
   const [selectedCcfg, setSelectedCcfg] = useState<ConnectorConfig<
     'connector' | 'integrations' | 'connection_count'
   > | null>(null)
+  const formRef = useRef<SchemaFormElement>(null)
 
   const initialData = use(props.initialData ?? Promise.resolve(undefined))
   const connectorData = use(
@@ -144,10 +148,20 @@ export function ConnectorConfigList(props: {
   const updateConfig = useMutation(trpc.updateConnectorConfig.mutationOptions())
   const deleteConfig = useMutation(trpc.deleteConnectorConfig.mutationOptions())
 
-  const handleSave = async (config: Record<string, unknown>) => {
+  const handleSave = async (data: {
+    formData: {
+      displayName: string
+      disabled: boolean
+      config?: Record<string, unknown>
+    }
+  }) => {
     if (!selectedConnector) {
       return
     }
+
+    const {
+      formData: {config},
+    } = data
 
     try {
       if (selectedCcfg) {
@@ -174,6 +188,12 @@ export function ConnectorConfigList(props: {
       await res.refetch()
     } catch (error) {
       console.error('Error saving configuration:', error)
+    }
+  }
+
+  const handleFormSubmit = () => {
+    if (formRef.current) {
+      formRef.current.submit()
     }
   }
 
@@ -250,9 +270,10 @@ export function ConnectorConfigList(props: {
           {selectedConnector ? (
             <>
               <JSONSchemaForm
+                ref={formRef}
                 jsonSchema={formSchema}
                 onSubmit={handleSave}
-                hideSubmitButton={true}
+                hideSubmitButton
                 formData={
                   selectedCcfg
                     ? {...selectedCcfg.config, id: selectedCcfg.id}
@@ -267,7 +288,7 @@ export function ConnectorConfigList(props: {
                   {deleteConfig.isPending ? 'Deleting...' : 'Delete'}
                 </Button>
                 <Button
-                  type="submit"
+                  onClick={handleFormSubmit}
                   disabled={createConfig.isPending || updateConfig.isPending}>
                   {createConfig.isPending || updateConfig.isPending
                     ? 'Saving...'
