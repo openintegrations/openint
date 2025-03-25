@@ -59,13 +59,18 @@ export async function authorizeHandler({
     throw new Error('No connection_id provided')
   }
   if (!oauthConfig.connector_config) {
+    console.warn(
+      `AuthorizeHandler called with oauthConfig ${JSON.stringify(oauthConfig)}`,
+    )
     throw new Error('No connector_config provided')
   }
   const url = new URL(oauthConfig.authorization_request_url)
+  console.warn(
+    `AuthorizeHandler called with oauthConfig ${JSON.stringify(oauthConfig)}`,
+  )
   const params = mapOauthParams(
     {
       client_id: oauthConfig.connector_config.client_id,
-      client_secret: oauthConfig.connector_config.client_secret,
       redirect_uri: redirectUri,
       response_type: 'code',
       // decoding it as url.toString() encodes it already

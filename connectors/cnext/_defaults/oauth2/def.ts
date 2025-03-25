@@ -1,7 +1,7 @@
 import {z} from 'zod'
 import {ConnectorSchemas, zId} from '@openint/cdk'
 
-export const zOauthConnectorConfig = z
+const zOauthConnectorConfig = z
   .object({
     client_id: z.string(),
     client_secret: z.string(),
@@ -9,25 +9,23 @@ export const zOauthConnectorConfig = z
   })
   .describe('Base oauth configuration for the connector')
 
-export const zOAuthConnectionSettings = z.object({
-  oauth: z.object({
-    credentials: z
-      .object({
-        access_token: z.string(),
-        refresh_token: z.string(),
-        expires_at: z.number(),
-        client_id: z.string(),
-        token_type: z.string(),
-        connection_id: z.string(),
-        created_at: z.string(),
-        updated_at: z.string(),
-        last_fetched_at: z.string(),
-        provider_config_key: z.string(),
-        metadata: z.record(z.unknown()).nullable(),
-      })
-      .optional()
-      .describe('Output of the postConnect hook for oauth2 connectors'),
-  }),
+const zOAuthConnectionSettings = z.object({
+  credentials: z
+    .object({
+      access_token: z.string(),
+      refresh_token: z.string(),
+      expires_at: z.number(),
+      client_id: z.string(),
+      token_type: z.string(),
+      connection_id: z.string(),
+      created_at: z.string(),
+      updated_at: z.string(),
+      last_fetched_at: z.string(),
+      provider_config_key: z.string(),
+      metadata: z.record(z.unknown()).nullable(),
+    })
+    .optional()
+    .describe('Output of the postConnect hook for oauth2 connectors'),
 })
 
 export const zAuthParamsConfig = z.object({
@@ -93,8 +91,12 @@ export const zOAuthConfig = z.object({
 })
 
 export const oauth2Schemas = {
-  connectorConfig: zOauthConnectorConfig,
-  connectionSettings: zOAuthConnectionSettings,
+  connectorConfig: z.object({
+    oauth: zOauthConnectorConfig.nullable(),
+  }),
+  connectionSettings: z.object({
+    oauth: zOAuthConnectionSettings,
+  }),
   // No pre connect input is necessary for oauth2
   // preConnectInput: z.any(),
   connectInput: z.object({
@@ -102,7 +104,7 @@ export const oauth2Schemas = {
   }),
   connectOutput: z.object({
     code: z.string(),
-    connectionId: zId['conn'],
+    connectionId: z.string(),
     state: z.string(),
   }),
 } satisfies Omit<ConnectorSchemas, 'name'>

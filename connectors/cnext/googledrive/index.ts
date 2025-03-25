@@ -1,6 +1,6 @@
 import {generateOAuth2Server} from '../_defaults'
+import {generateOauthConnectorDef} from '../_defaults/oauth2/schema'
 import type {JsonConnectorDef} from '../def'
-import {generateOauthConnectorDef} from '../schema'
 
 const jsonDef = {
   audience: ['consumer', 'business'] as const,

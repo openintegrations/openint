@@ -2,8 +2,8 @@ import {z} from 'zod'
 import {ConnectorDef} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import type {JsonConnectorDef} from '../../def'
-import {generateOauthConnectorDef} from '../../schema'
 import {zOAuthConfig} from './def'
+import {generateOauthConnectorDef} from './schema'
 import {generateOAuth2Server} from './server'
 import {mapOauthParams} from './utils'
 
@@ -106,8 +106,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
 
     const result = await server.preConnect(
       {
-        client_id: 'test_client_id',
-        client_secret: 'test_client_secret',
+        oauth: {
+          client_id: 'test_client_id',
+          client_secret: 'test_client_secret',
+        },
       },
       {
         extCustomerId: `cust_123` as any,
@@ -126,6 +128,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     expect(result.authorization_url).toContain(
       'client_id=' + encodeURIComponent('test_client_id'),
     )
+    expect(result.authorization_url).not.toContain('client_secret=')
     expect(result.authorization_url).toContain('response_type=code')
     expect(result.authorization_url).toContain('custom_param=custom_value')
     expect(result.authorization_url).toContain('state=')

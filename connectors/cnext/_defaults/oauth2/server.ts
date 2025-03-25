@@ -12,21 +12,24 @@ import {
 import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
 function injectCcfgDefaultCredentials(
-  config: any,
+  config: z.infer<typeof oauth2Schemas.connectorConfig>,
   connectorName: string,
-): {
-  client_id: string
-  client_secret: string
-  scopes?: string[] | null | undefined
-} {
+): z.infer<typeof oauth2Schemas.connectorConfig> {
   const defaultCredentials = getConnectorDefaultCredentials(connectorName)
-  return {
-    ...config,
-    client_id: config['client_id'] ?? defaultCredentials?.['client_id'],
-    client_secret:
-      config['client_secret'] ?? defaultCredentials?.['client_secret'],
-    scopes: config.scopes,
+  if (
+    !config.oauth &&
+    defaultCredentials?.['client_id'] &&
+    defaultCredentials?.['client_secret']
+  ) {
+    return {
+      ...config,
+      oauth: {
+        client_id: defaultCredentials?.['client_id'],
+        client_secret: defaultCredentials?.['client_secret'],
+      },
+    }
   }
+  return config
 }
 
 /*
@@ -45,7 +48,6 @@ export function generateOAuth2Server<
   oauthConfig: z.infer<typeof zOAuthConfig>,
   overrides?: Partial<ConnectorServer<T>>,
 ): ConnectorServer<T> {
-  // Only use this for OAuth2 connectors
   if (
     // TODO: connectorDef.auth.type !== 'OAUTH2CC'?
     connectorDef.metadata?.authType !== 'OAUTH2'
@@ -53,30 +55,20 @@ export function generateOAuth2Server<
     throw new Error('This server can only be used with OAuth2 connectors')
   }
 
-  const connectorName = connectorDef.name
-  let clientId: string | undefined
-  let clientSecret: string | undefined
-
   // Create the base server implementation
   const baseServer: ConnectorServer<T> = {
-    newInstance: ({config, settings}) => {
+    newInstance: ({config}) => {
       // Use the same helper function to get credentials
-      const credentials = injectCcfgDefaultCredentials(config, connectorName)
-      clientId = credentials.client_id
-      clientSecret = credentials.client_secret
+      const credentials = injectCcfgDefaultCredentials(
+        config,
+        connectorDef.name,
+      )
+      const clientId = credentials.oauth?.client_id
+      const clientSecret = credentials.oauth?.client_secret
 
       if (!clientId || !clientSecret) {
         throw new Error(
-          `Missing client_id or client_secret for ${connectorName}`,
-        )
-      }
-
-      if (
-        settings?.oauth?.credentials?.client_id &&
-        settings?.oauth?.credentials?.client_id !== clientId
-      ) {
-        throw new Error(
-          `Client ID mismatch for ${connectorName}. Expected ${clientId}, got ${settings?.oauth?.credentials?.client_id}`,
+          `Missing client_id or client_secret for ${connectorDef.name}`,
         )
       }
     },
@@ -89,14 +81,26 @@ export function generateOAuth2Server<
         `Oauth2 Preconnect called with connectionSettings ${!!connectionSettings}`,
       )
 
+      // console.warn(
+      //   `Oauth2 Preconnect called with oauthConfig ${JSON.stringify(
+      //     oauthConfig,
+      //   )} and connectorConfig ${JSON.stringify(
+      //     connectorConfig,
+      //   )} and connectionSettings ${JSON.stringify(connectionSettings)}`,
+      // )
+
       return authorizeHandler({
         oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            connectorConfig,
-            connectionSettings,
+            connectorConfig.oauth,
+            // @ts-expect-error: QQ: fix this
+            connectionSettings.oauth,
           ),
-          connector_config: connectorConfig,
+          connector_config: injectCcfgDefaultCredentials(
+            connectorConfig,
+            connectorDef.name,
+          ).oauth,
         },
         redirectUri: getServerUrl(null) + '/connect/callback',
         connectionId: connectionId,
@@ -111,10 +115,14 @@ export function generateOAuth2Server<
         oauth_config: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            connectorConfig,
-            connectionSettings,
+            injectCcfgDefaultCredentials(connectorConfig, connectorDef.name),
+            // @ts-expect-error: QQ: fix this
+            connectionSettings.oauth,
           ),
-          connector_config: connectorConfig,
+          connector_config: injectCcfgDefaultCredentials(
+            connectorConfig,
+            connectorDef.name,
+          ).oauth,
         } satisfies z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
         state: connectOutput.state,
@@ -132,7 +140,10 @@ export function generateOAuth2Server<
           oauth: {
             credentials: {
               ...result,
-              client_id: clientId,
+              client_id: injectCcfgDefaultCredentials(
+                connectorConfig,
+                connectorDef.name,
+              ).oauth?.client_id,
               connection_id: connectOutput.connectionId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
@@ -163,10 +174,13 @@ export function generateOAuth2Server<
         oauth_config: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            connectorConfig,
-            connectionSettings,
+            injectCcfgDefaultCredentials(connectorConfig, connectorDef.name),
+            connectionSettings.oauth,
           ),
-          connector_config: connectorConfig,
+          connector_config: injectCcfgDefaultCredentials(
+            connectorConfig,
+            connectorDef.name,
+          ).oauth,
           connection_settings: connectionSettings,
         } as any as z.infer<typeof zOAuthConfig>, // TODO: fix this
         refresh_token: refreshToken,
@@ -176,7 +190,10 @@ export function generateOAuth2Server<
         oauth: {
           credentials: {
             ...result,
-            client_id: clientId,
+            client_id: injectCcfgDefaultCredentials(
+              connectorConfig,
+              connectorDef.name,
+            ).oauth?.client_id,
             connection_id: connectionSettings.oauth?.credentials?.connection_id,
             created_at: connectionSettings.oauth?.credentials?.created_at,
             updated_at: new Date().toISOString(),

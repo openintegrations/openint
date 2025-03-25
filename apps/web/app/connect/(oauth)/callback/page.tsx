@@ -9,7 +9,7 @@ import {CloseWindowScript} from './CloseWindowScript'
 export const dynamic = 'force-dynamic'
 
 /** https://beta.nextjs.org/docs/api-reference/file-conventions/page#searchparams-optional */
-export default function OAuthCallback({
+export default async function OAuthCallback({
   searchParams,
 }: {
   searchParams: {[key: string]: string | string[] | undefined}

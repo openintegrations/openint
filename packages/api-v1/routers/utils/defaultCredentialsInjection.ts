@@ -31,7 +31,11 @@ export function injectDefaultCredentials(
       if (!parsedConfig.success) {
         console.warn(
           'invalid connector config with merged default credentials',
-          parsedConfig.error,
+          {
+            error: parsedConfig.error,
+            config: inputClone.config,
+            defaultCredentials,
+          },
         )
         throw new TRPCError({
           code: 'BAD_REQUEST',
@@ -54,6 +58,20 @@ export function injectDefaultCredentials(
       ...inputClone.config,
       ...defaultCredentials,
     }
+  }
+
+  const connectorParsedConfig = connector.schemas.connectorConfig?.safeParse(
+    inputClone.config,
+  )
+  if (connectorParsedConfig && !connectorParsedConfig.success) {
+    console.warn(
+      'invalid connector config with merged default credentials',
+      connectorParsedConfig.error,
+    )
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: `Connector config schema validation failed for ${connector.name}`,
+    })
   }
 
   return inputClone

@@ -8,10 +8,8 @@ import {
   zRaw,
   zVerticalKey,
 } from '@openint/cdk'
-import {getConnectorDefaultCredentials} from '@openint/env'
 import {TRPCError} from '@openint/trpc'
 import {makeUlid, z} from '@openint/util'
-import {injectDefaultCredentials} from '../../api-v1/routers/utils/defaultCredentialsInjection'
 import {adminProcedure, protectedProcedure, trpc} from './_base'
 
 export {type inferProcedureInput} from '@openint/trpc'
@@ -77,17 +75,6 @@ export const connectorConfigRouter = trpc.router({
         }).upsertConnectorConfig(
           oauthBaseSchema.connectorConfig.parse(input.config),
         )
-      }
-
-      // upsert, injecting default credentials if required
-      if (connector.metadata?.authType) {
-        // NOTE; casting to any to keep this API forwards compatible with api-v1 where
-        // we may not want to have it strictly require the api v0 upsert connector config input
-        input = injectDefaultCredentials(
-          connector,
-          input as any,
-          getConnectorDefaultCredentials(connector.name),
-        ) as any
       }
 
       return ctx.services.patchReturning('connector_config', id, input)
