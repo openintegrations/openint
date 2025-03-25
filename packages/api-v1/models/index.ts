@@ -91,6 +91,15 @@ export const core = {
     .object({})
     .passthrough()
     .openapi({ref: 'core.integration', title: 'Integration'}),
+  customer: z
+    .object({
+      id: z.string(),
+      org_id: z.string(),
+      created_at: z.string(),
+      updated_at: z.string(),
+      metadata: z.record(z.unknown()).optional().default({}),
+    })
+    .openapi({ref: 'core.customer', title: 'Customer'}),
 }
 
 export type Core = {
@@ -105,3 +114,7 @@ export type ConnectorConfigExtended = Core['connector_config'] & {
 
 export type ConnectorConfig<T extends keyof ConnectorConfigExtended> =
   ConnectorConfigExtended & Pick<ConnectorConfigExtended, T>
+
+export type Customer = Core['customer'] & {
+  connection_count: number
+}
