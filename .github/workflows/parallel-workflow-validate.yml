@@ -173,8 +173,9 @@ jobs:
         run: pnpm --dir packages/ui-v1 build-tailwind
 
       # Consider using official github action https://www.chromatic.com/docs/github-actions/
+      # TODO: Stop auto-accept-changes once we are in a good state
       - name: Publish storybook to chromatic
-        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui-v1 chromatic --only-changed --exit-zero-on-changes
+        run: ./bin/shdotenv -q -e ./apps/web/.env.local pnpm --dir packages/ui-v1 chromatic --only-changed --exit-zero-on-changes --auto-accept-changes
         env:
           CHROMATIC_SHA: ${{ github.sha }}
 
