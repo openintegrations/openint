@@ -2,7 +2,7 @@ import {z} from 'zod'
 import {ConnectorDef} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import type {JsonConnectorDef} from '../../def'
-import {generateConnectorDef} from '../../schema'
+import {generateOauthConnectorDef} from '../../schema'
 import {zOAuthConfig} from './def'
 import {generateOAuth2Server} from './server'
 import {mapOauthParams} from './utils'
@@ -37,7 +37,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     mockFetch = jest.fn()
     global.fetch = mockFetch
 
-    mockConnectorDef = generateConnectorDef({
+    mockConnectorDef = generateOauthConnectorDef({
       connector_name: 'test_connector',
       display_name: 'Test Connector',
       stage: 'alpha',
