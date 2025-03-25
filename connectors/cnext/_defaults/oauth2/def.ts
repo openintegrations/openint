@@ -17,15 +17,13 @@ const zOAuthConnectionSettings = z.object({
       expires_at: z.number(),
       client_id: z.string(),
       token_type: z.string(),
-      connection_id: z.string(),
-      created_at: z.string(),
-      updated_at: z.string(),
-      last_fetched_at: z.string(),
-      provider_config_key: z.string(),
-      metadata: z.record(z.unknown()).nullable(),
     })
     .optional()
     .describe('Output of the postConnect hook for oauth2 connectors'),
+  created_at: z.string(),
+  updated_at: z.string(),
+  last_fetched_at: z.string(),
+  metadata: z.record(z.unknown()).nullable(),
 })
 
 export const zAuthParamsConfig = z.object({

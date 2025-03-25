@@ -71,6 +71,7 @@ export default async function createNativeOauthConnect(
         try {
           if (!activePopup) {
             clearInterval(popupCheck)
+            console.warn('popup_closed')
             reject(createOAuthError('popup_closed', 'Popup was closed'))
             return
           }

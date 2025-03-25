@@ -166,22 +166,18 @@ export function generateOAuth2Server<
             credentials: {
               ...result,
               client_id: ccfg.oauth?.client_id,
-              connection_id: connectOutput.connectionId,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-              last_fetched_at: new Date().toISOString(),
-
-              // QQ: What to do for these?
-              provider_config_key: undefined,
-              metadata: null,
             },
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            last_fetched_at: new Date().toISOString(),
+            metadata: null,
           },
           metadata: {},
         },
         // NOTE: this is currently returning T['_types']['connectionSettings']
         // which is defined as {authorization_url} in cnext/schema.ts
         // but TS doesn't seem to be picking it up so we're using any
-      } as any // TODO: review
+      } as any // TODO: QQ review
     },
 
     async refreshConnection(connectionSettings, connectorConfig) {
@@ -215,15 +211,11 @@ export function generateOAuth2Server<
           credentials: {
             ...result,
             client_id: ccfg.oauth?.client_id,
-            connection_id: connectionSettings.oauth?.credentials?.connection_id,
-            created_at: connectionSettings.oauth?.credentials?.created_at,
-            updated_at: new Date().toISOString(),
-            last_fetched_at: new Date().toISOString(),
-            // QQ: What to do for these?
-            provider_config_key:
-              connectionSettings.oauth?.credentials?.provider_config_key,
-            metadata: connectionSettings.oauth?.credentials?.metadata || null,
           },
+          created_at: connectionSettings.oauth?.created_at,
+          updated_at: new Date().toISOString(),
+          last_fetched_at: new Date().toISOString(),
+          metadata: connectionSettings.oauth?.metadata || null,
         },
         metadata: {}, // QQ: do we need this?
       } as any
