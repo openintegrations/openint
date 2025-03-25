@@ -56,7 +56,7 @@ export const orgProcedure = publicProcedure.use(({next, ctx}) => {
 })
 
 export const adminProcedure = publicProcedure.use(({next, ctx}) => {
-  if (!hasRole(ctx.viewer, ['system'])) {
+  if (!hasRole(ctx.viewer, ['user', 'org', 'system'])) {
     throw new TRPCError({
       code: ctx.viewer.role === 'anon' ? 'UNAUTHORIZED' : 'FORBIDDEN',
     })
