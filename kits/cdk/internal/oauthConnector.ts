@@ -43,7 +43,7 @@ const zOauthCredentials = z.object({
     /** Refresh token (Only returned if the REFRESH_TOKEN boolean parameter is set to true and the refresh token is available) */
     refresh_token: z.string().nullish(),
     refresh_token_expires_in: z.number().nullish(),
-    token_type: z.string(), //'bearer',
+    token_type: z.string().nullish(), //'bearer',
     scope: z.string().optional(),
   }),
 })
