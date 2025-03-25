@@ -3,9 +3,11 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
+import {getConnectorDefaultCredentials} from '@openint/env'
 import {makeUlid} from '@openint/util'
 import {Core, core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
+import {injectDefaultCredentials} from './utils/defaultCredentialsInjection'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -254,12 +256,17 @@ export const connectorConfigRouter = router({
     .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
       const {connector_name} = input
+      const config = injectDefaultCredentials(
+        defConnectors[connector_name as keyof typeof defConnectors] as any,
+        input,
+        getConnectorDefaultCredentials(connector_name),
+      )
       const [ccfg] = await ctx.db
         .insert(schema.connector_config)
         .values({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
-          config: input.config,
+          config: config,
         })
         .returning()
       return ccfg!
@@ -271,7 +278,12 @@ export const connectorConfigRouter = router({
     .input(z.object({id: z.string(), config: z.record(z.unknown())}))
     .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
-      const {id, config} = input
+      const {id} = input
+      const config = injectDefaultCredentials(
+        defConnectors[connector_name as keyof typeof defConnectors] as any,
+        input,
+        getConnectorDefaultCredentials(connector_name),
+      )
       const res = await ctx.db
         .update(schema.connector_config)
         .set({config, updated_at: new Date().toISOString()})

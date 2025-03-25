@@ -3,7 +3,7 @@ import {AnyConnectorImpl, oauthBaseSchema} from '@openint/cdk'
 
 export function injectDefaultCredentials(
   connector: AnyConnectorImpl,
-  input: {config?: Record<string, unknown>},
+  input: {config?: Record<string, unknown> | null},
   defaultCredentials?: Record<string, string>,
 ) {
   const inputClone = Object.assign({}, input)
