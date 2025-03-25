@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {makeId} from '@openint/cdk'
+import {extractConnectorName, makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {getConnectorDefaultCredentials} from '@openint/env'
 import {makeUlid} from '@openint/util'
@@ -279,10 +279,14 @@ export const connectorConfigRouter = router({
     .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
       const {id} = input
+      const connectorName = extractConnectorName(
+        id as `ccfg_${string}`,
+      ) as keyof typeof defConnectors
+
       const config = injectDefaultCredentials(
-        defConnectors[connector_name as keyof typeof defConnectors] as any,
+        defConnectors[connectorName] as any,
         input,
-        getConnectorDefaultCredentials(connector_name),
+        getConnectorDefaultCredentials(connectorName),
       )
       const res = await ctx.db
         .update(schema.connector_config)
