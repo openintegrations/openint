@@ -44,7 +44,7 @@ const navMain = [
       },
       {
         title: 'Connector Configs',
-        url: '/console/connector-configs',
+        url: '/console/connector-config',
       },
       {
         title: 'Connectors',
