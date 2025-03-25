@@ -62,6 +62,11 @@ const nextConfig = {
       permanent: false,
     },
     {
+      source: '/preview/:branch*',
+      destination: 'https://openint-git-:branch*-openint-dev.vercel.app',
+      permanent: false,
+    },
+    {
       source: '/api/v0/verticals/:p*',
       destination: '/api/v0/unified/:p*',
       permanent: false,
