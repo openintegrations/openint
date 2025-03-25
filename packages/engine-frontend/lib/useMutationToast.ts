@@ -1,5 +1,5 @@
 import type {TRPCClientErrorLike} from '@trpc/react-query'
-import type {UseTRPCMutationOptions} from '@trpc/react-query/dist/shared'
+import type {UseTRPCMutationOptions} from '@trpc/react-query/shared'
 import {toast} from '@openint/ui-v1/components/toast'
 
 /** Workaround for https://share.cleanshot.com/Yr1CMhLD */

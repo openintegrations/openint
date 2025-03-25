@@ -1,22 +1,18 @@
-// TODO: Get all the tsconfigs to extend this one
-// in particular the root /tsconfig.json and /apps/web/tsconfig.json
-
 {
   "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["DOM", "DOM.Iterable", "ES2021"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": true,
     "checkJs": false,
     "exactOptionalPropertyTypes": false,
     "importsNotUsedAsValues": "remove",
     "esModuleInterop": true,
-    "module": "CommonJS",
-    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "outDir": "./dist",
     "sourceMap": true,
     "declaration": true,
     // This is what allows vscode etc. to automatically jump to /src files
