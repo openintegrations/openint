@@ -10,6 +10,7 @@ export default async function AuthenticatedLayout({
   children: React.ReactNode
 }) {
   const {viewer} = await currentViewer()
+  console.log('AuthenticatedLayout viewer', viewer)
   if (viewer.role !== 'user') {
     return redirect('/console/sign-in')
   }
