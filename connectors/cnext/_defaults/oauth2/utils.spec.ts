@@ -23,16 +23,22 @@ test('Scope separator should work correctly for different delimiters', () => {
   const scopesWithDefaultSpaceSeparator = mockOauthConfig.scopes
     .map((s) => s.scope)
     .join(' ')
-  expect(prepareScopes(mockOauthConfig)).toBe(
-    encodeURIComponent(scopesWithDefaultSpaceSeparator),
-  )
+  expect(
+    prepareScopes(
+      mockOauthConfig.scopes.map((s) => s.scope),
+      mockOauthConfig,
+    ),
+  ).toBe(encodeURIComponent(scopesWithDefaultSpaceSeparator))
 
   const scopesWithCommaSeparator = mockOauthConfig.scopes
     .map((s) => s.scope)
     .join(',')
-  expect(prepareScopes({...mockOauthConfig, scope_separator: ','})).toBe(
-    encodeURIComponent(scopesWithCommaSeparator),
-  )
+  expect(
+    prepareScopes(
+      mockOauthConfig.scopes.map((s) => s.scope),
+      {...mockOauthConfig, scope_separator: ','},
+    ),
+  ).toBe(encodeURIComponent(scopesWithCommaSeparator))
 })
 
 describe('fillOutStringTemplateVariables', () => {

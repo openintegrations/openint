@@ -1,15 +1,16 @@
 import {z} from 'zod'
 import {zOAuthConfig} from './def'
 
-export function prepareScopes(jsonConfig: z.infer<typeof zOAuthConfig>) {
-  const scopes = jsonConfig.scopes
+export function prepareScopes(
+  scopes: string[],
+  jsonConfig: z.infer<typeof zOAuthConfig>,
+) {
   const scopeSeparator = jsonConfig.scope_separator ?? ' '
 
-  console.warn('scopes', {scopes, scopeSeparator, jsonConfig})
   if (!scopes || !Array.isArray(scopes) || scopes.length === 0) {
     return ''
   }
-  return encodeURIComponent(scopes.map((s) => s.scope).join(scopeSeparator))
+  return encodeURIComponent(scopes.join(scopeSeparator))
 }
 
 /**

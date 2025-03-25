@@ -12,24 +12,45 @@ import {
 import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
 function injectCcfgDefaultCredentials(
-  config: z.infer<typeof oauth2Schemas.connectorConfig>,
+  connectorConfig: z.infer<typeof oauth2Schemas.connectorConfig>,
   connectorName: string,
+  oauthConfig: z.infer<typeof zOAuthConfig>,
 ): z.infer<typeof oauth2Schemas.connectorConfig> {
   const defaultCredentials = getConnectorDefaultCredentials(connectorName)
   if (
-    !config.oauth &&
+    !connectorConfig.oauth?.client_id &&
+    !connectorConfig.oauth?.client_secret &&
     defaultCredentials?.['client_id'] &&
     defaultCredentials?.['client_secret']
   ) {
+    let configuredScopes = connectorConfig.oauth?.scopes ?? []
+
+    if (
+      oauthConfig.default_scopes &&
+      configuredScopes.length > 0 &&
+      !configuredScopes.every((scope) =>
+        oauthConfig.default_scopes?.includes(scope),
+      )
+    ) {
+      const invalidScopes = configuredScopes.filter(
+        (scope) => !oauthConfig.default_scopes?.includes(scope),
+      )
+      throw new Error(
+        `Invalid scopes configured: ${invalidScopes.join(', ')}. ` +
+          `Valid default scopes are: ${oauthConfig.default_scopes.join(', ')}`,
+      )
+    }
+
     return {
-      ...config,
+      ...connectorConfig,
       oauth: {
         client_id: defaultCredentials?.['client_id'],
         client_secret: defaultCredentials?.['client_secret'],
+        scopes: configuredScopes ?? [],
       },
     }
   }
-  return config
+  return connectorConfig
 }
 
 /*
@@ -62,6 +83,7 @@ export function generateOAuth2Server<
       const credentials = injectCcfgDefaultCredentials(
         config,
         connectorDef.name,
+        oauthConfig,
       )
       const clientId = credentials.oauth?.client_id
       const clientSecret = credentials.oauth?.client_secret
@@ -89,6 +111,11 @@ export function generateOAuth2Server<
       //   )} and connectionSettings ${JSON.stringify(connectionSettings)}`,
       // )
 
+      const ccfg = injectCcfgDefaultCredentials(
+        connectorConfig,
+        connectorDef.name,
+        oauthConfig,
+      )
       return authorizeHandler({
         oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
@@ -97,10 +124,7 @@ export function generateOAuth2Server<
             // @ts-expect-error: QQ: fix this
             connectionSettings.oauth,
           ),
-          connector_config: injectCcfgDefaultCredentials(
-            connectorConfig,
-            connectorDef.name,
-          ).oauth,
+          connector_config: ccfg.oauth,
         },
         redirectUri: getServerUrl(null) + '/connect/callback',
         connectionId: connectionId,
@@ -109,24 +133,25 @@ export function generateOAuth2Server<
     },
 
     async postConnect(connectOutput, connectorConfig, connectionSettings) {
-      const redirect_uri = getServerUrl(null) + '/connect/callback'
       console.log(`Oauth2 Postconnect called`)
+      const ccfg = injectCcfgDefaultCredentials(
+        connectorConfig,
+        connectorDef.name,
+        oauthConfig,
+      )
       const result = await defaultTokenExchangeHandler({
-        oauth_config: {
+        oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            injectCcfgDefaultCredentials(connectorConfig, connectorDef.name),
+            ccfg,
             // @ts-expect-error: QQ: fix this
             connectionSettings.oauth,
           ),
-          connector_config: injectCcfgDefaultCredentials(
-            connectorConfig,
-            connectorDef.name,
-          ).oauth,
+          connector_config: ccfg.oauth,
         } satisfies z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
         state: connectOutput.state,
-        redirect_uri,
+        redirectUri: getServerUrl(null) + '/connect/callback',
       })
 
       console.log(`Oauth2 Postconnect completed`)
@@ -140,10 +165,7 @@ export function generateOAuth2Server<
           oauth: {
             credentials: {
               ...result,
-              client_id: injectCcfgDefaultCredentials(
-                connectorConfig,
-                connectorDef.name,
-              ).oauth?.client_id,
+              client_id: ccfg.oauth?.client_id,
               connection_id: connectOutput.connectionId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
@@ -169,31 +191,30 @@ export function generateOAuth2Server<
       }
 
       console.log(`Oauth2 Refresh connection called`)
+      const ccfg = injectCcfgDefaultCredentials(
+        connectorConfig,
+        connectorDef.name,
+        oauthConfig,
+      )
 
       const result = await tokenRefreshHandler({
-        oauth_config: {
+        oAuthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            injectCcfgDefaultCredentials(connectorConfig, connectorDef.name),
+            ccfg,
             connectionSettings.oauth,
           ),
-          connector_config: injectCcfgDefaultCredentials(
-            connectorConfig,
-            connectorDef.name,
-          ).oauth,
+          connector_config: ccfg.oauth,
           connection_settings: connectionSettings,
         } as any as z.infer<typeof zOAuthConfig>, // TODO: fix this
-        refresh_token: refreshToken,
+        refreshToken: refreshToken,
       })
 
       return {
         oauth: {
           credentials: {
             ...result,
-            client_id: injectCcfgDefaultCredentials(
-              connectorConfig,
-              connectorDef.name,
-            ).oauth?.client_id,
+            client_id: ccfg.oauth?.client_id,
             connection_id: connectionSettings.oauth?.credentials?.connection_id,
             created_at: connectionSettings.oauth?.credentials?.created_at,
             updated_at: new Date().toISOString(),

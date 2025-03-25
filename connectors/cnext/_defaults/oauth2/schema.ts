@@ -28,10 +28,23 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
     // if there are default credentials configured, we need to add a choice between using the default credentials and the user's own
     // in future only paid customers will get this option
     if (defaultCredentialsConfigured) {
+      // Only use default_scopes if they exist, otherwise use an empty array
+      const defaultScopes =
+        def.auth.type === 'OAUTH2' ? (def.auth.default_scopes ?? []) : []
+      const zDefaultScopes = z.array(
+        z.enum(defaultScopes as [string, ...string[]]),
+      )
       return z.object({
         // nest under oauth to keep the schema the same as with previous provider
         oauth: z.union([
-          z.null().openapi({title: 'Use OpenInt platform credentials'}),
+          z
+            .object({
+              scopes: zDefaultScopes.openapi({
+                title: 'Scopes',
+                description: 'Scopes for OpenInt Platform Credentials',
+              }),
+            })
+            .openapi({title: 'Use OpenInt platform credentials'}),
           schema.openapi({title: 'Use my own'}),
         ]),
       })

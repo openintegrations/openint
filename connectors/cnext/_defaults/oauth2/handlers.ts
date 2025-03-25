@@ -58,6 +58,9 @@ export async function authorizeHandler({
   if (!connectionId) {
     throw new Error('No connection_id provided')
   }
+  if (!oauthConfig.connector_config?.client_id) {
+    throw new Error('No client_id provided')
+  }
   if (!oauthConfig.connector_config) {
     console.warn(
       `AuthorizeHandler called with oauthConfig ${JSON.stringify(oauthConfig)}`,
@@ -74,7 +77,9 @@ export async function authorizeHandler({
       redirect_uri: redirectUri,
       response_type: 'code',
       // decoding it as url.toString() encodes it already
-      scope: decodeURIComponent(prepareScopes(oauthConfig)),
+      scope: decodeURIComponent(
+        prepareScopes(oauthConfig.connector_config.scopes ?? [], oauthConfig),
+      ),
       state: Buffer.from(connectionId).toString('base64'),
       ...(oauthConfig.params_config.authorize ?? {}),
     },
@@ -90,64 +95,80 @@ export async function authorizeHandler({
 }
 
 export const zTokenExchangeHandlerArgs = z.object({
-  oauth_config: zOAuthConfig,
+  oauthConfig: zOAuthConfig,
   code: z.string(),
   state: z.string(),
-  redirect_uri: z.string(),
+  redirectUri: z.string(),
 })
 
 export async function defaultTokenExchangeHandler({
-  oauth_config,
-  redirect_uri,
+  oauthConfig,
+  redirectUri,
   code,
   state,
 }: z.infer<typeof zTokenExchangeHandlerArgs>): Promise<
   z.infer<typeof zTokenResponse>
 > {
-  if (!oauth_config.connector_config) {
+  if (!oauthConfig.connector_config) {
     throw new Error('No connector_config provided')
   }
+  if (!oauthConfig.connector_config?.client_id) {
+    throw new Error('No client_id provided')
+  }
+  if (!oauthConfig.connector_config?.client_secret) {
+    throw new Error('No client_secret provided')
+  }
+
   const params = mapOauthParams(
     {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      redirect_uri,
-      scope: prepareScopes(oauth_config),
+      client_id: oauthConfig.connector_config.client_id,
+      client_secret: oauthConfig.connector_config.client_secret,
+      redirectUri,
+      scope: prepareScopes(
+        oauthConfig.connector_config.scopes ?? [],
+        oauthConfig,
+      ),
       state,
       grant_type: 'authorization_code',
       code,
-      ...(oauth_config.params_config.token ?? {}),
+      ...(oauthConfig.params_config.token ?? {}),
     },
-    oauth_config.params_config.param_names ?? {},
+    oauthConfig.params_config.param_names ?? {},
   )
 
-  return makeTokenRequest(oauth_config.token_request_url, params, 'exchange')
+  return makeTokenRequest(oauthConfig.token_request_url, params, 'exchange')
 }
 
 export const zTokenRefreshHandlerArgs = z.object({
-  oauth_config: zOAuthConfig,
-  refresh_token: z.string(),
+  oAuthConfig: zOAuthConfig,
+  refreshToken: z.string(),
 })
 
 export async function tokenRefreshHandler({
-  oauth_config,
-  refresh_token,
+  oAuthConfig,
+  refreshToken,
 }: z.infer<typeof zTokenRefreshHandlerArgs>): Promise<
   z.infer<typeof zTokenResponse>
 > {
-  if (!oauth_config.connector_config) {
+  if (!oAuthConfig.connector_config) {
     throw new Error('No connector_config provided')
+  }
+  if (!oAuthConfig.connector_config?.client_id) {
+    throw new Error('No client_id provided')
+  }
+  if (!oAuthConfig.connector_config?.client_secret) {
+    throw new Error('No client_secret provided')
   }
   const params = mapOauthParams(
     {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      refresh_token,
+      client_id: oAuthConfig.connector_config.client_id,
+      client_secret: oAuthConfig.connector_config.client_secret,
+      refresh_token: refreshToken,
       grant_type: 'refresh_token',
-      ...(oauth_config.params_config.token ?? {}),
+      ...(oAuthConfig.params_config.token ?? {}),
     },
-    oauth_config.params_config.param_names ?? {},
+    oAuthConfig.params_config.param_names ?? {},
   )
 
-  return makeTokenRequest(oauth_config.token_request_url, params, 'refresh')
+  return makeTokenRequest(oAuthConfig.token_request_url, params, 'refresh')
 }

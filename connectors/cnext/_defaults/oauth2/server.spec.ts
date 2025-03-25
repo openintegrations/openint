@@ -109,6 +109,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         oauth: {
           client_id: 'test_client_id',
           client_secret: 'test_client_secret',
+          scopes: ['read', 'write'],
         },
       },
       {
@@ -132,6 +133,63 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     expect(result.authorization_url).toContain('response_type=code')
     expect(result.authorization_url).toContain('custom_param=custom_value')
     expect(result.authorization_url).toContain('state=')
+  })
+
+  test('preConnect scope validation works', async () => {
+    const serverOauthConfig = {
+      ...mockOauthConfig,
+      default_scopes: ['read', 'write'], // Only these scopes are allowed
+    }
+
+    const server = generateOAuth2Server(
+      mockConnectorDef as any,
+      serverOauthConfig,
+    )
+
+    process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
+    process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+
+    if (!server.preConnect) {
+      throw new Error('preConnect is not defined')
+    }
+
+    // Try to use an invalid scope
+    await expect(
+      server.preConnect(
+        {
+          oauth: {
+            // 'invalid_scope' is not in default_scopes. Since we're relying on default credentials,
+            // we should not be able to use non default scope.
+            scopes: ['read', 'non_default_scope'],
+          },
+        },
+        {
+          extCustomerId: `cust_123` as any,
+          webhookBaseUrl: 'https://example.com/webhook',
+        },
+        {connectionId: 'test_connection_id'},
+      ),
+    ).rejects.toThrow(
+      'Invalid scopes configured: non_default_scope. Valid default scopes are: read, write',
+    )
+
+    // we're not relying on default credentials here, so we should be able to use an invalid scope
+    await expect(
+      server.preConnect(
+        {
+          oauth: {
+            client_id: 'xxx',
+            client_secret: 'yyy',
+            scopes: ['read', 'non_default_scope'],
+          },
+        },
+        {
+          extCustomerId: `cust_123` as any,
+          webhookBaseUrl: 'https://example.com/webhook',
+        },
+        {connectionId: 'test_connection_id'},
+      ),
+    ).toBeTruthy()
   })
 
   // test('postConnect should exchange code for tokens successfully', async () => {

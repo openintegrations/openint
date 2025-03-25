@@ -3,8 +3,8 @@ import {ConnectorSchemas} from '@openint/cdk'
 
 const zOauthConnectorConfig = z
   .object({
-    client_id: z.string(),
-    client_secret: z.string(),
+    client_id: z.string().nullish(),
+    client_secret: z.string().nullish(),
     scopes: z.array(z.string()).nullish(),
   })
   .describe('Base oauth configuration for the connector')
