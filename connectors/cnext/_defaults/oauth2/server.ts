@@ -134,7 +134,7 @@ export function generateOAuth2Server<
       return {
         // QQ: is this the right thing to do here?
         connectionExternalId: connectOutput.connectionId
-          ? extractId(connectOutput.connectionId)[2]
+          ? extractId(connectOutput.connectionId as any)
           : undefined,
         settings: {
           oauth: {

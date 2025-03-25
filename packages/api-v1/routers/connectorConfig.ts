@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {extractConnectorName, makeId} from '@openint/cdk'
+import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {Core, core} from '../models'
