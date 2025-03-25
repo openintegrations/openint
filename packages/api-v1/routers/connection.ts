@@ -363,4 +363,30 @@ export const connectionRouter = router({
         status: 'healthy',
       }
     }),
+
+  deleteConnection: publicProcedure
+    .meta({
+      openapi: {
+        method: 'DELETE',
+        path: '/connection/{id}',
+      },
+    })
+    .input(z.object({id: zConnectionId}))
+    .output(zConnectionId)
+    .mutation(async ({ctx, input}) => {
+      const connection = await ctx.db.query.connection.findFirst({
+        where: eq(schema.connection.id, input.id),
+      })
+      if (!connection) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Connection not found',
+        })
+      }
+
+      await ctx.db
+        .delete(schema.connection)
+        .where(eq(schema.connection.id, input.id))
+      return input.id
+    }),
 })
