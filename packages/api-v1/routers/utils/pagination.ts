@@ -84,3 +84,21 @@ export async function processPaginatedResponse<T extends keyof typeof schema>(
     total,
   }
 }
+
+export async function processTypedPaginatedResponse<T>(query: any): Promise<{
+  items: Array<T extends {$inferSelect: infer U} ? U : never>
+  total: number
+}> {
+  // note in future we can add db specific error handling here
+  const result = await query
+  const total = result.length > 0 ? Number(result[0]?.total ?? 0) : 0
+
+  const items = result.map(
+    (r: any) => r as T extends {$inferSelect: infer U} ? U : never,
+  )
+
+  return {
+    items,
+    total,
+  }
+}
