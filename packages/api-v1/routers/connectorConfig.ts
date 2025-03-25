@@ -266,7 +266,7 @@ export const connectorConfigRouter = router({
         .values({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
-          config: config,
+          config: config.config,
         })
         .returning()
       return ccfg!
@@ -290,7 +290,7 @@ export const connectorConfigRouter = router({
       )
       const res = await ctx.db
         .update(schema.connector_config)
-        .set({config, updated_at: new Date().toISOString()})
+        .set({config: config.config, updated_at: new Date().toISOString()})
         .where(eq(schema.connector_config.id, id))
         .returning()
 

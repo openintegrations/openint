@@ -5,11 +5,11 @@ describe('getConnectorDefaultCredentials', () => {
 
   beforeEach(() => {
     // Clear any test environment variables before each test
-    for (const key in process.env) {
+    Object.keys(process.env).forEach((key) => {
       if (key.startsWith('ccfg_')) {
-        delete process.env[key]
+        process.env[key] = undefined
       }
-    }
+    })
   })
 
   afterEach(() => {
