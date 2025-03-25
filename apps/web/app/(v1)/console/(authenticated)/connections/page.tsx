@@ -18,7 +18,7 @@ export default async function Page(props: PageProps) {
     <div>
       <ClientApp token={token}>
         <Suspense fallback={<Fallback />}>
-          <ConnectionList initialData={api.listConnections()} />
+          <ConnectionList initialData={await api.listConnections()} />
         </Suspense>
       </ClientApp>
     </div>

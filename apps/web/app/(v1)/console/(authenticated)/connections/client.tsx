@@ -1,7 +1,7 @@
 'use client'
 
-import {Trash} from 'lucide-react'
-import {use, useMemo} from 'react'
+import {Loader2, Trash} from 'lucide-react'
+import {useMemo} from 'react'
 import {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {
@@ -48,22 +48,14 @@ const columns: ColumnDef<Core['connection']>[] = [
 ]
 
 export function ConnectionList(props: {
-  initialData?: Promise<{
+  initialData?: {
     items: Array<Core['connection']>
     total: number
     limit: number
     offset: number
-  }>
+  }
 }) {
-  const initialData = use(
-    props.initialData ??
-      Promise.resolve({
-        items: [],
-        total: 0,
-        limit: 0,
-        offset: 0,
-      }),
-  )
+  const {initialData} = props
   const trpc = useTRPC()
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions(
@@ -76,6 +68,10 @@ export function ConnectionList(props: {
     trpc.deleteConnection.mutationOptions({
       onSuccess: () => {
         connectionData.refetch()
+      },
+      onError: (error) => {
+        // TODO: @rodri77 - Add a toast to the UI.
+        console.error(error)
       },
     }),
   )
@@ -103,12 +99,27 @@ export function ConnectionList(props: {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel disabled={deleteConn.isPending}>
+                    Cancel
+                  </AlertDialogCancel>
                   <AlertDialogAction
+                    disabled={deleteConn.isPending}
                     onClick={() => deleteConn.mutate({id: row.original.id})}>
-                    Delete
+                    {deleteConn.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 size-4 animate-spin" />
+                        Deleting...
+                      </>
+                    ) : (
+                      'Delete'
+                    )}
                   </AlertDialogAction>
                 </AlertDialogFooter>
+                {deleteConn.isPending && (
+                  <div className="bg-background/80 absolute inset-0 flex items-center justify-center">
+                    <Loader2 className="size-8 animate-spin" />
+                  </div>
+                )}
               </AlertDialogContent>
             </AlertDialog>
           )
