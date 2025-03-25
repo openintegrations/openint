@@ -2,6 +2,8 @@
 
 import dynamic from 'next/dynamic'
 import React from 'react'
+import {extractId} from '@openint/cdk'
+import {Button} from '@openint/shadcn/ui'
 import {R} from '@openint/util'
 
 function wrapModule(options: {useConnectorLogic: () => [string, unknown]}) {
@@ -63,47 +65,54 @@ export const Dummy = React.memo(function Dummy() {
   return 'Dummy'
 })
 
-export function AddConnection(props: {connector_names: Promise<string[]>}) {
+export function AddConnection(props: {connectorConfigIds: Promise<string[]>}) {
   console.log('AddConnection rendering')
-  const connector_names = R.uniq(React.use(props.connector_names))
+  const connectorConfigIds = R.uniq(React.use(props.connectorConfigIds))
   const ref = React.useRef<{[k: string]: {state: string}}>({})
 
-  const [readyConnectors, setReadyConnectors] = React.useState<string[]>([])
-  const allReady = readyConnectors.length === connector_names.length
+  const [readyCcfgs, setReadyConnectors] = React.useState<string[]>([])
+  const allReady = readyCcfgs.length === connectorConfigIds.length
 
   const cb = React.useCallback(
     (ctx: {state: string}, name: string) => {
       ref.current[name] = ctx
       setReadyConnectors((cs) => R.uniq([...cs, name]))
-      if (Object.keys(ref.current).length === connector_names.length) {
+      if (Object.keys(ref.current).length === connectorConfigIds.length) {
         console.log('all ready', ref.current)
       }
     },
-    [connector_names.length, ref, setReadyConnectors],
+    [connectorConfigIds.length, ref, setReadyConnectors],
   )
 
   return (
     <>
-      {connector_names.map((name) => (
-        <AddConnectionInner key={name} connector_name={name} onReady={cb} />
+      {connectorConfigIds.map((ccfgId) => (
+        <div key={ccfgId} className="p-4">
+          <h1 className="text-3xl">Add {ccfgId} connection</h1>
+          <AddConnectionInner
+            key={ccfgId}
+            connectorConfigId={ccfgId}
+            onReady={cb}
+          />
+        </div>
       ))}
       <hr />
-      <hr />
-      <hr />
       {allReady
-        ? `${readyConnectors.length} everything ready`
-        : `${readyConnectors.length} ${readyConnectors.join(',')} ready`}
+        ? `${readyCcfgs.length} everything ready`
+        : `${readyCcfgs.length} ${readyCcfgs.join(',')} ready`}
     </>
   )
 }
 
 function AddConnectionInner({
-  connector_name: name,
+  connectorConfigId,
   onReady,
 }: {
-  connector_name: string
+  connectorConfigId: string
   onReady: (ctx: {state: string}, name: string) => void
 }) {
+  const name = extractId(connectorConfigId as `ccfg_${string}`)[1]
+
   console.log('AddConnectionInner rendering', name)
   const ref = React.useRef<{state: string} | undefined>(undefined)
 
@@ -135,9 +144,12 @@ function AddConnectionInner({
           [name, onReady],
         )}
       />
-      <button onClick={() => console.log('ref.current', ref.current)}>
+      <Button
+        onClick={() => {
+          console.log('ref.current', ref.current)
+        }}>
         Connect with {name} {state?.state ? 'ready' : 'not ready'}
-      </button>
+      </Button>
     </>
   )
 }
