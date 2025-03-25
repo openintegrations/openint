@@ -10,7 +10,7 @@ export function prepareScopes(
   if (!scopes || !Array.isArray(scopes) || scopes.length === 0) {
     return ''
   }
-  return encodeURIComponent(scopes.join(scopeSeparator))
+  return scopes.join(encodeURIComponent(scopeSeparator))
 }
 
 /**
