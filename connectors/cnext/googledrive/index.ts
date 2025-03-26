@@ -38,7 +38,7 @@ const jsonDef = {
         description: 'Full access to files and folders in your Google Drive',
       },
     ],
-    default_scopes: ['https://www.googleapis.com/auth/drive.file'],
+    openint_scopes: ['https://www.googleapis.com/auth/drive.file'],
   },
 } satisfies JsonConnectorDef
 

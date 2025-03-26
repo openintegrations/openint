@@ -58,7 +58,7 @@ export const zOAuthConfig = z.object({
     .string()
     .url()
     .describe('URL to obtain an access token from the provider'),
-  default_scopes: z
+  openint_scopes: z
     .array(z.string())
     .optional()
     .describe('Default scopes for the OpenInt platform connector app'),

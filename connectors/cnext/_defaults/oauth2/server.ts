@@ -26,18 +26,18 @@ function injectCcfgDefaultCredentials(
     let configuredScopes = connectorConfig.oauth?.scopes ?? []
 
     if (
-      oauthConfig.default_scopes &&
+      oauthConfig.openint_scopes &&
       configuredScopes.length > 0 &&
       !configuredScopes.every((scope) =>
-        oauthConfig.default_scopes?.includes(scope),
+        oauthConfig.openint_scopes?.includes(scope),
       )
     ) {
       const invalidScopes = configuredScopes.filter(
-        (scope) => !oauthConfig.default_scopes?.includes(scope),
+        (scope) => !oauthConfig.openint_scopes?.includes(scope),
       )
       throw new Error(
         `Invalid scopes configured: ${invalidScopes.join(', ')}. ` +
-          `Valid default scopes are: ${oauthConfig.default_scopes.join(', ')}`,
+          `Valid default scopes are: ${oauthConfig.openint_scopes?.join(', ')}`,
       )
     }
 
