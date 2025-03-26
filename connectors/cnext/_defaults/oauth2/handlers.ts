@@ -5,7 +5,10 @@ import {mapOauthParams, prepareScopes} from './utils'
 export const zTokenResponse = z.object({
   access_token: z.string(),
   refresh_token: z.string().optional(),
-  expires_in: z.number().optional(),
+  expires_in: z.number(),
+  scope: z.string(),
+  token_type: z.string(),
+  expires_at: z.string(), // not in the protocol, we calculate this separately
 })
 
 async function makeTokenRequest(
@@ -31,7 +34,13 @@ async function makeTokenRequest(
   }
 
   try {
-    return zTokenResponse.parse(await response.json())
+    const json = await response.json()
+    return zTokenResponse.parse({
+      ...json,
+      token_type: json.token_type?.toLowerCase() ?? 'bearer',
+      scope: json.scope ?? params['scope'],
+      expires_at: new Date(Date.now() + json.expires_in * 1000).toISOString(),
+    })
   } catch (error) {
     if (error instanceof z.ZodError) {
       throw new Error(
