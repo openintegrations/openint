@@ -31,7 +31,7 @@ export const adminRouter = router({
       const baseQuery = ctx.db
         .select({
           id: schema.connection.customer_id,
-          connection_count: sql<number>`count(*)`,
+          connection_count: sql<number>`cast(count(*) as integer)`,
           created_at: sql<Date>`min(${schema.connection.created_at})`,
           updated_at: sql<Date>`max(${schema.connection.updated_at})`,
         })

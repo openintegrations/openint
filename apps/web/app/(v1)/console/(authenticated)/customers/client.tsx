@@ -1,18 +1,15 @@
+'use client'
+
 import {type Customer} from '@openint/api-v1/models'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 
-const columns: ColumnDef<Customer>[] = [
+const columns: Array<ColumnDef<Customer>> = [
   {
     id: 'id',
-    header: 'ID',
+    header: 'Id',
     accessorKey: 'id',
-  },
-  {
-    id: 'org_id',
-    header: 'Org ID',
-    accessorKey: 'org_id',
   },
   {
     id: 'connection_count',
@@ -33,7 +30,7 @@ const columns: ColumnDef<Customer>[] = [
 
 export function CustomerList(props: {
   initialData?: {
-    items: Array<Customer>
+    items: Customer[]
     total: number
     limit: number
     offset: number
