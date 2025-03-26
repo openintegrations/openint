@@ -7,7 +7,9 @@ async function makeTokenRequest(
   params: Record<string, string>,
   flowType: 'exchange' | 'refresh',
   // note: we may want to add bodyFormat: form or json as an option
-): Promise<z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth>> {
+): Promise<
+  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
+> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -26,12 +28,15 @@ async function makeTokenRequest(
 
   try {
     const json = await response.json()
-    return oauth2Schemas.connectionSettings.shape.oauth.parse({
-      ...json,
-      token_type: json.token_type?.toLowerCase() ?? 'bearer',
-      scope: json.scope ?? params['scope'],
-      expires_at: new Date(Date.now() + json.expires_in * 1000).toISOString(),
-    })
+    return oauth2Schemas.connectionSettings.shape.oauth.shape.credentials.parse(
+      {
+        ...json,
+        client_id: params['client_id'],
+        token_type: json.token_type?.toLowerCase() ?? 'bearer',
+        scope: json.scope ?? params['scope'],
+        expires_at: new Date(Date.now() + json.expires_in * 1000).toISOString(),
+      },
+    )
   } catch (error) {
     if (error instanceof z.ZodError) {
       throw new Error(
@@ -107,7 +112,7 @@ export async function defaultTokenExchangeHandler({
   code,
   state,
 }: z.infer<typeof zTokenExchangeHandlerArgs>): Promise<
-  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth>
+  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
   if (!oauthConfig.connector_config) {
     throw new Error('No connector_config provided')
@@ -148,7 +153,7 @@ export async function tokenRefreshHandler({
   oAuthConfig,
   refreshToken,
 }: z.infer<typeof zTokenRefreshHandlerArgs>): Promise<
-  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth>
+  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
   if (!oAuthConfig.connector_config) {
     throw new Error('No connector_config provided')

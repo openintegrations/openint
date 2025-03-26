@@ -55,16 +55,14 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
   }
 
   const connectionSettings = () => {
-    return z.object({
-      oauth: z.object({
-        credentials: def.auth.connection_settings
-          ? z.any().parse(def.auth.connection_settings)
-          : // note: this needs to extend the schema of the json connector
-            // we need to do this in a way that works for oauth
-            z.object({}),
-      }),
-      metadata: z.record(z.unknown()).optional(),
-    })
+    let schema = oauth2Schemas.connectionSettings
+    if (def.auth.connection_settings) {
+      schema = z.object({
+        ...schema.shape,
+        ...(def.auth.connection_settings as Record<string, z.ZodTypeAny>),
+      })
+    }
+    return schema
   }
 
   return {

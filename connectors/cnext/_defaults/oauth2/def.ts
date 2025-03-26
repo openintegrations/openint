@@ -15,7 +15,7 @@ const zOAuthConnectionSettings = z.object({
       access_token: z.string(),
       refresh_token: z.string().optional(),
       expires_in: z.number(),
-      expires_at: z.number(),
+      expires_at: z.string(),
       client_id: z.string(),
       token_type: z.string(),
     })
