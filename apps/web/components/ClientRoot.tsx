@@ -8,7 +8,7 @@ import React, {useEffect} from 'react'
 import {getViewerId, zViewerFromUnverifiedJwtToken} from '@openint/cdk'
 import {TRPCProvider} from '@openint/engine-frontend'
 import {Toaster} from '@openint/shadcn/ui/sonner'
-import {__DEBUG__} from '@/../app-config/constants'
+import {__DEBUG__, isProd} from '@/../app-config/constants'
 import {browserAnalytics} from '@/lib-client/analytics-browser'
 import {createQueryClient} from '../lib-client/react-query-client'
 import {EventPoller} from './EventPoller'
@@ -77,13 +77,13 @@ export function ClientRoot({
   ;(globalThis as any).queryClient = queryClient
 
   useEffect(() => {
-    if (process.env['NEXT_PUBLIC_POSTHOG_WRITEKEY']) {
+    if (process.env['NEXT_PUBLIC_POSTHOG_WRITEKEY'] && isProd) {
       browserAnalytics.init(process.env['NEXT_PUBLIC_POSTHOG_WRITEKEY']!)
     }
   }, [])
 
   useEffect(() => {
-    if (pathname) {
+    if (pathname && isProd) {
       browserAnalytics.track({
         name: 'pageview',
         data: {
