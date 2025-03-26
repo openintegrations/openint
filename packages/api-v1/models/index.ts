@@ -94,10 +94,9 @@ export const core = {
   customer: z
     .object({
       id: z.string(),
-      org_id: z.string(),
       created_at: z.string(),
       updated_at: z.string(),
-      metadata: z.record(z.unknown()).optional().default({}),
+      connection_count: z.number(),
     })
     .openapi({ref: 'core.customer', title: 'Customer'}),
 }
@@ -115,6 +114,4 @@ export type ConnectorConfigExtended = Core['connector_config'] & {
 export type ConnectorConfig<T extends keyof ConnectorConfigExtended> =
   ConnectorConfigExtended & Pick<ConnectorConfigExtended, T>
 
-export type Customer = Core['customer'] & {
-  connection_count: number
-}
+export type Customer = Core['customer']

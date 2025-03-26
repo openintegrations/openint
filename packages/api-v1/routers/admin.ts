@@ -1,6 +1,6 @@
 import {z} from 'zod'
 import {schema, sql} from '@openint/db'
-import {core, Customer} from '../models'
+import {core, type Customer} from '../models'
 import {adminProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
@@ -8,10 +8,6 @@ import {
   zListParams,
   zListResponse,
 } from './utils/pagination'
-
-const customerWithConnectionCount = core.customer.extend({
-  connection_count: z.number(),
-})
 
 export const adminRouter = router({
   listCustomers: adminProcedure
@@ -30,25 +26,26 @@ export const adminRouter = router({
         })
         .optional(),
     )
-    .output(zListResponse(customerWithConnectionCount))
+    .output(zListResponse(core.customer))
     .query(async ({ctx, input}) => {
+      const baseQuery = ctx.db
+        .select({
+          id: schema.connection.customer_id,
+          connection_count: sql<number>`count(*)`,
+          created_at: sql<Date>`min(${schema.connection.created_at})`,
+          updated_at: sql<Date>`max(${schema.connection.updated_at})`,
+        })
+        .from(schema.connection)
+        .where(
+          input?.keywords
+            ? sql`${schema.connection.customer_id} ILIKE ${`%${input.keywords}%`}`
+            : undefined,
+        )
+        .groupBy(schema.connection.customer_id, schema.connection.created_at)
+
       const {query, limit, offset} = applyPaginationAndOrder(
-        ctx.db
-          .select({
-            id: schema.customer.id,
-            org_id: schema.customer.org_id,
-            created_at: schema.customer.created_at,
-            updated_at: schema.customer.updated_at,
-            metadata: schema.customer.metadata,
-            connection_count: sql<number>`(
-              SELECT COUNT(*) 
-              FROM ${schema.connection} 
-              WHERE ${schema.connection}.customer_id = ${schema.customer.id}
-            )`,
-            total: sql`count(*) over()`,
-          })
-          .from(schema.customer),
-        schema.customer.created_at,
+        baseQuery,
+        schema.connection.created_at,
         input,
       )
 
