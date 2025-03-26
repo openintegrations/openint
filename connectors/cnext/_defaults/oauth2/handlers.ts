@@ -1,22 +1,13 @@
 import {z} from 'zod'
-import {zOAuthConfig} from './def'
+import {oauth2Schemas, zOAuthConfig} from './def'
 import {mapOauthParams, prepareScopes} from './utils'
-
-export const zTokenResponse = z.object({
-  access_token: z.string(),
-  refresh_token: z.string().optional(),
-  expires_in: z.number(),
-  scope: z.string(),
-  token_type: z.string(),
-  expires_at: z.string(), // not in the protocol, we calculate this separately
-})
 
 async function makeTokenRequest(
   url: string,
   params: Record<string, string>,
   flowType: 'exchange' | 'refresh',
-  // note: we may want to add bodyFormat: form or json
-): Promise<z.infer<typeof zTokenResponse>> {
+  // note: we may want to add bodyFormat: form or json as an option
+): Promise<z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth>> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -35,7 +26,7 @@ async function makeTokenRequest(
 
   try {
     const json = await response.json()
-    return zTokenResponse.parse({
+    return oauth2Schemas.connectionSettings.shape.oauth.parse({
       ...json,
       token_type: json.token_type?.toLowerCase() ?? 'bearer',
       scope: json.scope ?? params['scope'],
@@ -116,7 +107,7 @@ export async function defaultTokenExchangeHandler({
   code,
   state,
 }: z.infer<typeof zTokenExchangeHandlerArgs>): Promise<
-  z.infer<typeof zTokenResponse>
+  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth>
 > {
   if (!oauthConfig.connector_config) {
     throw new Error('No connector_config provided')
@@ -157,7 +148,7 @@ export async function tokenRefreshHandler({
   oAuthConfig,
   refreshToken,
 }: z.infer<typeof zTokenRefreshHandlerArgs>): Promise<
-  z.infer<typeof zTokenResponse>
+  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth>
 > {
   if (!oAuthConfig.connector_config) {
     throw new Error('No connector_config provided')

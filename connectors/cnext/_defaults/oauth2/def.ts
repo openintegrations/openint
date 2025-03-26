@@ -13,7 +13,8 @@ const zOAuthConnectionSettings = z.object({
   credentials: z
     .object({
       access_token: z.string(),
-      refresh_token: z.string(),
+      refresh_token: z.string().optional(),
+      expires_in: z.number(),
       expires_at: z.number(),
       client_id: z.string(),
       token_type: z.string(),
@@ -92,6 +93,7 @@ export const oauth2Schemas = {
   connectorConfig: z.object({
     oauth: zOauthConnectorConfig.nullable(),
   }),
+
   connectionSettings: z.object({
     oauth: zOAuthConnectionSettings,
   }),
