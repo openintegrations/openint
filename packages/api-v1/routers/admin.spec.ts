@@ -48,4 +48,16 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items).toHaveLength(1)
     expect(res.items[0]?.connection_count).toEqual(1)
   })
+
+  test('list customers with existing keywords', async () => {
+    const res = await asAdmin.listCustomers({keywords: 'cus_222'})
+
+    expect(res.items).toHaveLength(1)
+  })
+
+  test('list customers with non existing keywords', async () => {
+    const res = await asAdmin.listCustomers({keywords: 'cus_333'})
+
+    expect(res.items).toHaveLength(0)
+  })
 })
