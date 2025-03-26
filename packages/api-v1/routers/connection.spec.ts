@@ -130,4 +130,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       customer_id: asOtherCustomer.viewer.customerId,
     })
   })
+
+  test('delete connection', async () => {
+    const res = await asOrg.caller.deleteConnection({
+      id: connIdRef.current,
+    })
+
+    expect(res).toEqual(connIdRef.current)
+  })
+
+  test('delete connection with invalid id returns error', async () => {
+    await expect(
+      asOrg.caller.deleteConnection({
+        id: 'conn_invalid',
+      }),
+    ).rejects.toThrow('not found')
+  })
 })

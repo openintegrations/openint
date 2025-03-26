@@ -1,5 +1,6 @@
 import {z} from 'zod'
-import {Column, desc, schema} from '@openint/db'
+import type {Column, PgSelectBase} from '@openint/db'
+import {desc, schema} from '@openint/db'
 
 export const zListParams = z.object({
   limit: z
@@ -78,6 +79,26 @@ export async function processPaginatedResponse<T extends keyof typeof schema>(
   const total = result.length > 0 ? Number(result[0]?.total ?? 0) : 0
 
   const items = result.map((r: any) => r[entityKey])
+
+  return {
+    items,
+    total,
+  }
+}
+
+export type Query = Omit<
+  PgSelectBase<string, Record<string, string | null>, 'partial'>,
+  'where' | 'groupBy'
+>
+
+export async function processTypedPaginatedResponse<T>(query: Query): Promise<{
+  items: T[]
+  total: number
+}> {
+  const result = await query
+  const total = result.length > 0 ? Number(result[0]?.['total'] ?? 0) : 0
+
+  const items = result.map((r) => r as T)
 
   return {
     items,
