@@ -100,7 +100,7 @@ export function generateOAuth2Server<
         input.connectionId ?? makeId('conn', connectorDef.name, makeUlid())
 
       console.log(
-        `Oauth2 Preconnect called with connectionSettings ${!!connectionSettings}`,
+        `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!connectionSettings}`,
       )
 
       // console.warn(
@@ -133,7 +133,9 @@ export function generateOAuth2Server<
     },
 
     async postConnect(connectOutput, connectorConfig, connectionSettings) {
-      console.log(`Oauth2 Postconnect called`)
+      console.log(
+        `Oauth2 Postconnect called for connectionId ${connectOutput.connectionId}`,
+      )
       const ccfg = injectCcfgDefaultCredentials(
         connectorConfig,
         connectorDef.name,
@@ -154,12 +156,10 @@ export function generateOAuth2Server<
         redirectUri: getServerUrl(null) + '/connect/callback',
       })
 
-      console.log(`Oauth2 Postconnect completed`)
-
       return {
         // QQ: is this the right thing to do here?
         connectionExternalId: connectOutput.connectionId
-          ? extractId(connectOutput.connectionId as any)
+          ? extractId(connectOutput.connectionId as any)[2]
           : undefined,
         settings: {
           oauth: {

@@ -85,6 +85,7 @@ export async function authorizeHandler({
       scope: decodeURIComponent(
         prepareScopes(oauthConfig.connector_config.scopes ?? [], oauthConfig),
       ),
+      // TODO: create a separate state ID in the database instead of using connectionId
       state: Buffer.from(connectionId).toString('base64'),
       ...(oauthConfig.params_config.authorize ?? {}),
     },
