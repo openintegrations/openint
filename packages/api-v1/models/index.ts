@@ -91,11 +91,8 @@ export const core = {
     .object({})
     .passthrough()
     .openapi({ref: 'core.integration', title: 'Integration'}),
-  customer: z
-    .object({
-      id: z.string(),
-      created_at: z.string(),
-      updated_at: z.string(),
+  customer: coreBase
+    .extend({
       connection_count: z.number(),
     })
     .openapi({ref: 'core.customer', title: 'Customer'}),
