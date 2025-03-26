@@ -10,6 +10,8 @@
 
 /* Current components */
 @source "./components/**/*.tsx";
+@source "./domain-components/**/*.tsx";
+@source "./navigation/**/*.tsx";
 
 /* Downstream components */
 /*
