@@ -7,6 +7,7 @@ import {
   processTypedPaginatedResponse,
   zListParams,
   zListResponse,
+  type Query,
 } from './utils/pagination'
 
 export const adminRouter = router({
@@ -49,8 +50,9 @@ export const adminRouter = router({
         input,
       )
 
-      const {items, total} =
-        await processTypedPaginatedResponse<Customer>(query)
+      const {items, total} = await processTypedPaginatedResponse<Customer>(
+        query as unknown as Query,
+      )
 
       return {
         items,
