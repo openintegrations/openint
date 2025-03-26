@@ -46,6 +46,7 @@ export const def = generateOauthConnectorDef(jsonDef)
 
 export const server = generateOAuth2Server(def, jsonDef.auth)
 
+// console.log(def.schemas.connectionSettings.shape)
 /*
   Next: 
     - xx Move keys of json connector def to as const in the def file

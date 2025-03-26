@@ -17,7 +17,7 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
       // TODO: does this need to do a deep merge of connectorConfig.oauth keys?
       schema = z.object({
         ...schema.shape,
-        ...(def.auth.connector_config as Record<string, z.ZodTypeAny>),
+        ...(def.auth.connector_config.shape as Record<string, z.ZodTypeAny>),
       })
     }
 
@@ -59,7 +59,7 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
     if (def.auth.connection_settings) {
       schema = z.object({
         ...schema.shape,
-        ...(def.auth.connection_settings as Record<string, z.ZodTypeAny>),
+        ...(def.auth.connection_settings.shape as Record<string, z.ZodTypeAny>),
       })
     }
     return schema

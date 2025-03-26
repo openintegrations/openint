@@ -68,8 +68,8 @@ export const zOAuthConfig = z.object({
     .optional()
     .describe('Separator used to join multiple scopes. Defaults to space.'),
 
-  connector_config: zOauthConnectorConfig.optional(),
-  connection_settings: zOAuthConnectionSettings.optional(),
+  connector_config: z.union([zOauthConnectorConfig, z.any()]).optional(),
+  connection_settings: z.union([zOAuthConnectionSettings, z.any()]).optional(),
   scopes: z
     .array(
       z.object({
