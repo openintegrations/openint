@@ -38,6 +38,10 @@ const navMain = [
         url: '/console/magic-link',
       },
       {
+        title: 'Customers',
+        url: '/console/customers',
+      },
+      {
         title: 'Connections',
         url: '/console/connections',
         isActive: true,
