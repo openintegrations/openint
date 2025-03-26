@@ -105,3 +105,10 @@ export type ConnectorConfigExtended = Core['connector_config'] & {
 
 export type ConnectorConfig<T extends keyof ConnectorConfigExtended> =
   ConnectorConfigExtended & Pick<ConnectorConfigExtended, T>
+
+interface ConnectorRelations {
+  integrations: Array<Core['integration']>
+}
+
+export type ConnectorExpanded<K extends keyof ConnectorRelations> =
+  Core['connector'] & Partial<Pick<ConnectorRelations, K>>
