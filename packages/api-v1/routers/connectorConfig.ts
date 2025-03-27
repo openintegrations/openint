@@ -251,41 +251,82 @@ export const connectorConfigRouter = router({
         connector_name: z.string(),
         display_name: z.string().optional(),
         disabled: z.boolean().optional(),
-        // TODO: why is this unknown / any?
         config: z.record(z.unknown()).nullish(),
       }),
     )
-    .output(core.connector_config)
+    .output(
+      z.intersection(
+        core.connector_config,
+        z.object({
+          config: z.record(z.unknown()).nullable(),
+        }),
+      ),
+    )
     .mutation(async ({ctx, input}) => {
-      const {connector_name, config} = input
+      const {connector_name, display_name, disabled, config} = input
       const [ccfg] = await ctx.db
         .insert(schema.connector_config)
         .values({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
-          config,
-          display_name: input.display_name,
-          disabled: input.disabled,
+          display_name,
+          disabled,
+          config: config ?? {},
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
         .returning()
+
+      // Ensure config is null if it's an empty object
+      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
+        ccfg.config = null
+      }
+
       return ccfg!
     }),
   updateConnectorConfig: orgProcedure
     .meta({
       openapi: {method: 'PUT', path: '/connector-config/{id}', enabled: false},
     })
-    .input(z.object({id: z.string(), config: z.record(z.unknown())}))
-    .output(core.connector_config)
+    .input(
+      z.object({
+        id: z.string(),
+        display_name: z.string().optional(),
+        disabled: z.boolean().optional(),
+        config: z.record(z.unknown()).nullish(),
+      }),
+    )
+    .output(
+      z.intersection(
+        core.connector_config,
+        z.object({
+          config: z.record(z.unknown()).nullable(),
+        }),
+      ),
+    )
     .mutation(async ({ctx, input}) => {
-      const {id, config} = input
+      const {id, config, display_name, disabled} = input
+      console.log({input})
       const res = await ctx.db
         .update(schema.connector_config)
-        .set({config, updated_at: new Date().toISOString()})
+        .set({
+          display_name,
+          disabled,
+          ...(config !== undefined ? {config} : {}),
+          updated_at: new Date().toISOString(),
+        })
         .where(eq(schema.connector_config.id, id))
         .returning()
 
+      console.log('updated ccfg', res)
+
       validateResponse(res, id)
       const [ccfg] = res
+
+      // Ensure config is null if it's an empty object
+      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
+        ccfg.config = null
+      }
 
       return ccfg!
     }),
