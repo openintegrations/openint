@@ -5,7 +5,7 @@ import {currentViewer} from '@/lib-server/auth.server'
 import type {APICaller} from '@/lib-server/globals'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
-import {AddConnectionInner, Dummy} from './client'
+import {AddConnectionInner} from './client'
 
 function Fallback() {
   return <div>Loading...</div>
@@ -19,7 +19,7 @@ export default async function Page(props: PageProps) {
       <pre className="bg-pink-400">
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
-      <Dummy />
+
       <ClientApp token={token!}>
         <Suspense fallback={<Fallback />}>
           <AddConnections api={api} />

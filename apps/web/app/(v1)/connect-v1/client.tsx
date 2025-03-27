@@ -51,11 +51,6 @@ const ConnectorClientComponents = Object.fromEntries(
   ]),
 )
 
-export const Dummy = React.memo(function Dummy() {
-  console.log('dummy rendering at least twice guaranteed')
-  return 'Dummy'
-})
-
 export function AddConnection(props: {connectorConfigIds: Promise<string[]>}) {
   console.log('AddConnection rendering')
   const connectorConfigIds = R.uniq(React.use(props.connectorConfigIds))
