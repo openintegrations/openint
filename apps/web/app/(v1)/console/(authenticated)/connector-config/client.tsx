@@ -14,7 +14,7 @@ import {
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {
   JSONSchemaForm,
-  SchemaFormElement,
+  type SchemaFormElement,
 } from '@openint/ui-v1/components/schema-form/SchemaForm'
 import {AddConnectorConfig} from '@openint/ui-v1/domain-components/AddConnectorConfig'
 import {ConnectorTableCell} from '@openint/ui-v1/domain-components/ConnectorTableCell'
@@ -107,7 +107,11 @@ export function ConnectorConfigList(props: {
     {
       id: 'status',
       header: 'Status',
-      cell: () => <span className="text-gray-400">--</span>,
+      cell: ({row}) => (
+        <span className="flex items-center gap-2">
+          {row.original.disabled ? 'Disabled' : 'Enabled'}
+        </span>
+      ),
     },
     {
       id: 'actions',
@@ -165,7 +169,6 @@ export function ConnectorConfigList(props: {
 
     try {
       if (selectedCcfg) {
-        // Update existing configuration
         await updateConfig.mutateAsync({
           id: selectedCcfg.id,
           config: {
@@ -174,14 +177,12 @@ export function ConnectorConfigList(props: {
           },
         })
       } else {
-        // Create new configuration
         await createConfig.mutateAsync({
           connector_name: selectedConnector.name,
           config,
         })
       }
 
-      // Handle post-save actions (e.g., refresh list, reset form, etc.)
       setSheetOpen(false)
       setSelectedConnector(null)
       setSelectedCcfg(null)
@@ -274,11 +275,7 @@ export function ConnectorConfigList(props: {
                 jsonSchema={formSchema}
                 onSubmit={handleSave}
                 hideSubmitButton
-                formData={
-                  selectedCcfg
-                    ? {...selectedCcfg.config, id: selectedCcfg.id}
-                    : {}
-                }
+                formData={selectedCcfg ? selectedCcfg.config : {}}
               />
               <SheetFooter className="mt-auto flex flex-row justify-between border-t pt-4">
                 <Button
