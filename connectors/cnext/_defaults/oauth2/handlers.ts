@@ -35,6 +35,7 @@ async function makeTokenRequest(
         token_type: json.token_type?.toLowerCase() ?? 'bearer',
         scope: json.scope ?? params['scope'],
         expires_at: new Date(Date.now() + json.expires_in * 1000).toISOString(),
+        raw: json,
       },
     )
   } catch (error) {
