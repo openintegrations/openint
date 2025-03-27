@@ -138,7 +138,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   test('preConnect scope validation works', async () => {
     const serverOauthConfig = {
       ...mockOauthConfig,
-      default_scopes: ['read', 'write'], // Only these scopes are allowed
+      openint_scopes: ['read', 'write'], // Only these scopes are allowed
     }
 
     const server = generateOAuth2Server(
@@ -158,7 +158,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       server.preConnect(
         {
           oauth: {
-            // 'invalid_scope' is not in default_scopes. Since we're relying on default credentials,
+            // 'non_default_scope' is not in openint_scopes. Since we're relying on default credentials,
             // we should not be able to use non default scope.
             scopes: ['read', 'non_default_scope'],
           },
