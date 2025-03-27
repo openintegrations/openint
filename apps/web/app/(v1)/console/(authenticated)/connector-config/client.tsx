@@ -2,7 +2,8 @@
 
 import {Plus} from 'lucide-react'
 import {use, useState} from 'react'
-import type {ConnectorConfig, Core} from '@openint/api-v1/models'
+import type {ConnectorConfig} from '@openint/api-v1/models'
+import type {AppRouterOutput} from '@openint/api-v1/routers'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTrigger} from '@openint/shadcn/ui/sheet'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
@@ -12,12 +13,7 @@ import {useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 
 export function ConnectorConfigListHeader(props: {
-  initialData?: Promise<{
-    items: Array<Core['connector']>
-    total: number
-    limit: number
-    offset: number
-  }>
+  initialData?: Promise<AppRouterOutput['listConnectors']>
 }) {
   const initialData = use(props.initialData ?? Promise.resolve(undefined))
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -42,7 +38,7 @@ export function ConnectorConfigListHeader(props: {
         </SheetTrigger>
         <SheetContent side="right" className="min-w-1/3">
           <AddConnectorConfig
-            connectors={res.data.items}
+            connectors={res.data}
             onSelectConnector={() => {
               setSheetOpen(false)
               res.refetch()

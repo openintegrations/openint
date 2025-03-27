@@ -296,6 +296,7 @@ export const customerRouter = trpc.router({
         input: [ccfgId, {connectionExternalId, ...connCtxInput}, preConnInput],
         ctx,
       }) => {
+        console.log('preConnect00', ccfgId, connCtxInput, preConnInput)
         const int = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
         if (!int.connector.preConnect) {
           return null
@@ -382,6 +383,14 @@ export const customerRouter = trpc.router({
           ) {
             // setting the integrationId so that the connection can be associated with the integration
             conn.integrationId = connCtxInput.integrationId
+          }
+
+          console.warn('postConnect input a', input)
+          const parsedInput =
+            int.connector.schemas.connectOutput.safeParse(input)
+          if (!parsedInput.success) {
+            console.warn('postConnect input b', input)
+            console.warn('postConnect input c', parsedInput.error)
           }
 
           return await int.connector.postConnect(

@@ -1,18 +1,22 @@
 import {z} from 'zod'
-import {zOAuthConfig, zTokenResponse} from './def'
+import {zOAuthConfig} from './def'
 
-export function prepareScopes(jsonConfig: z.infer<typeof zOAuthConfig>) {
-  const scopes = jsonConfig.scopes
-  const scopeSeparator = jsonConfig.scope_separator
-  return encodeURIComponent(
-    scopes.map((s) => s.scope).join(scopeSeparator ?? ' '),
-  )
+export function prepareScopes(
+  scopes: string[],
+  jsonConfig: z.infer<typeof zOAuthConfig>,
+) {
+  const scopeSeparator = jsonConfig.scope_separator ?? ' '
+
+  if (!scopes || !Array.isArray(scopes) || scopes.length === 0) {
+    return ''
+  }
+  return scopes.join(encodeURIComponent(scopeSeparator))
 }
 
 /**
  * Fills out variables in a URL string template with values from connector config and connection settings
  *
- * @param url - URL string containing variables in ${variable} format
+ * @param string - URL string containing variables in ${variable} format
  * @param connectorConfig - Connector configuration object containing values to substitute
  * @param connectionSettings - Connection settings object containing values to substitute
  * @returns URL string with variables replaced with actual values
@@ -27,12 +31,12 @@ export function prepareScopes(jsonConfig: z.infer<typeof zOAuthConfig>) {
  */
 
 export function fillOutStringTemplateVariables(
-  url: string,
+  string: string,
   connectorConfig: any,
   connectionSettings: any,
 ) {
-  if (!url) return url
-  let filledUrl = url
+  if (!string) return string
+  let filledUrl = string
 
   // Ensure connectorConfig and connectionSettings are objects
   connectorConfig = connectorConfig || {}
@@ -40,7 +44,7 @@ export function fillOutStringTemplateVariables(
 
   // Match ${variable} pattern
   const variableRegex = /\${([^}]+)}/g
-  const matches = url.match(variableRegex)
+  const matches = string.match(variableRegex)
 
   if (!matches) {
     return filledUrl
@@ -71,36 +75,70 @@ export function fillOutStringTemplateVariables(
 
   return filledUrl
 }
-export async function makeTokenRequest(
-  url: string,
-  params: Record<string, string>,
-  flowType: 'exchange' | 'refresh',
-  // note: we may want to add bodyFormat: form or json
-): Promise<z.infer<typeof zTokenResponse>> {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
-    },
-    body: new URLSearchParams(params),
-  })
 
-  if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(
-      `Token ${flowType} failed: ${response.status} ${response.statusText} - ${errorText}`,
+export function fillOutStringTemplateVariablesInObjectKeys(
+  obj: any,
+  connectorConfig: any,
+  connectionSettings: any,
+): any {
+  if (!obj || typeof obj !== 'object') {
+    return obj
+  }
+
+  // Handle arrays properly
+  if (Array.isArray(obj)) {
+    return obj.map((item: any) =>
+      fillOutStringTemplateVariablesInObjectKeys(
+        item,
+        connectorConfig,
+        connectionSettings,
+      ),
     )
   }
 
-  try {
-    return zTokenResponse.parse(await response.json())
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      throw new Error(
-        `Invalid oauth2 ${flowType} token response format: ${error.message}`,
+  const clone = {...obj}
+
+  for (const key of Object.keys(clone)) {
+    const value = clone[key]
+
+    if (typeof value === 'string') {
+      clone[key] = fillOutStringTemplateVariables(
+        value,
+        connectorConfig,
+        connectionSettings,
+      )
+    } else if (value !== null && typeof value === 'object') {
+      clone[key] = fillOutStringTemplateVariablesInObjectKeys(
+        value,
+        connectorConfig,
+        connectionSettings,
       )
     }
-    throw error
   }
+
+  return clone
+}
+
+/*
+ * This function takes the paramNames map where a user can map were fields like client_id and client_secret are named in particular oauth connector.
+ * For example salesforce may call client_id clientKey. In this case, the paramNames would have client_id: clientKey.
+ * Following the SF example, this function will return a new object with the client_id field renamed to clientKey.
+ * Write tests for this function to in different scenarios ensure that the clientKey is returned with the value initially set for client_id
+ */
+export function mapOauthParams(
+  params: Record<string, string>,
+  paramNames: Record<string, string>,
+) {
+  const result: Record<string, string> = {}
+
+  // Process each parameter in the input
+  Object.entries(params).forEach(([key, value]) => {
+    if (key && paramNames && key in paramNames && paramNames[key]) {
+      result[paramNames[key]] = value
+    } else {
+      result[key] = value
+    }
+  })
+
+  return result
 }

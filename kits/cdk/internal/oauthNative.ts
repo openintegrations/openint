@@ -55,11 +55,7 @@ export default async function createNativeOauthConnect(
           `location=no,copyhistory=no,menubar=no,directories=no`,
       )
 
-      if (
-        !activePopup ||
-        activePopup.closed ||
-        typeof activePopup.closed === 'undefined'
-      ) {
+      if (!activePopup) {
         throw createOAuthError(
           'popup_closed',
           'Pop-up was blocked by browser. Please enable pop-ups for this site to use OAuth.',
@@ -67,51 +63,32 @@ export default async function createNativeOauthConnect(
       }
 
       // Handle popup being closed
-      const popupCheck = setInterval(() => {
+      const popupTimer = setInterval(() => {
+        if (activePopup === null) {
+          clearInterval(popupTimer)
+          return
+        }
+
         try {
-          if (!activePopup) {
-            clearInterval(popupCheck)
+          if (activePopup.opener === null) {
+            clearInterval(popupTimer)
             reject(createOAuthError('popup_closed', 'Popup was closed'))
+            closePopup()
             return
           }
-
-          // Try to read the URL params from the popup
-          const popupUrl = new URL(activePopup.location.href)
-          const code = popupUrl.searchParams.get('code')
-          const state = popupUrl.searchParams.get('state')
-
-          console.log('popupUrl', {popupUrl, code, state})
-          if (code && state) {
-            clearInterval(popupCheck)
-            closePopup()
-
-            const parsedConnectionId = Buffer.from(state, 'base64').toString(
-              'utf8',
-            )
-            if (!parsedConnectionId.startsWith('conn_')) {
-              throw createOAuthError('auth_error', 'Invalid connection id')
-            }
-
-            resolve({
-              code,
-              state,
-              connectionId: parsedConnectionId,
-            })
-          }
         } catch (e) {
-          // Ignore CORS errors when trying to access popup location
-          // This will happen until we reach the final callback URL
+          // If even this fails due to COOP, we'll rely solely on the message event
         }
       }, 100)
 
       // Listen for messages from popup
       activeListener = async (event: MessageEvent) => {
         try {
-          console.log('received message', {
-            data: event.data,
-            origin: event.origin,
-            source: event.source === activePopup ? 'popup' : 'other',
-          })
+          // console.log('received message', {
+          //   data: event.data,
+          //   origin: event.origin,
+          //   source: event.source === activePopup ? 'popup' : 'other',
+          // })
           // Verify message is from our popup window
           if (event.source !== activePopup) {
             return
@@ -134,7 +111,7 @@ export default async function createNativeOauthConnect(
           }
 
           // Clear interval and cleanup
-          clearInterval(popupCheck)
+          clearInterval(popupTimer)
           closePopup()
 
           const parsedConnectionId = decodeURIComponent(
@@ -152,11 +129,11 @@ export default async function createNativeOauthConnect(
             )
           }
 
-          console.log('resolving oauth promise', {
-            code: response.code,
-            state: response.state,
-            connectionId: parsedConnectionId,
-          })
+          // console.log('resolving oauth promise', {
+          //   code: response.code,
+          //   state: response.state,
+          //   connectionId: parsedConnectionId,
+          // })
           // Return the authorization response
           resolve({
             code: response.code,
@@ -164,7 +141,7 @@ export default async function createNativeOauthConnect(
             connectionId: parsedConnectionId,
           })
         } catch (err) {
-          clearInterval(popupCheck)
+          clearInterval(popupTimer)
           closePopup()
           reject(err)
         }

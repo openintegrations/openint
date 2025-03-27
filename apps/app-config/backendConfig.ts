@@ -1,7 +1,9 @@
 import {createClerkClient} from '@clerk/nextjs/server'
+import {mergedConnectors} from '@openint/all-connectors/connectors.merged'
 import {logLink} from '@openint/cdk'
 import type {PipelineInput} from '@openint/engine-backend'
 import {getContextFactory} from '@openint/engine-backend'
+import {env, envRequired, getServerUrl} from '@openint/env'
 import {makePostgresMetaService} from '@openint/meta-service-postgres'
 import {joinPath} from '@openint/util'
 // TODO: This is a mess. We need to clarify the dependency graph again
@@ -9,9 +11,6 @@ import {
   getOrganizationOmitPrivateMeta,
   getUserOmitPrivateMeta,
 } from '../../packages/api/authRouter'
-import {mergedConnectors} from './connectors/connectors.merged'
-import {getServerUrl} from './constants'
-import {env, envRequired} from './env'
 
 export const backendEnv = env
 

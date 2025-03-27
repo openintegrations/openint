@@ -1,8 +1,8 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
-import {getServerUrl} from '@openint/app-config/constants'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
+import {getServerUrl} from '@openint/env'
 import {publicProcedure, router} from '../trpc/_base'
 import {zConnectionId, zConnectorName, zCustomerId} from './utils/types'
 

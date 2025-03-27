@@ -19,7 +19,7 @@ const integrations = [
     raw_data: {} as any,
     verticals: ['file-storage'],
     updated_at: new Date().toISOString(),
-    logo_url: '/_assets/logo-google-drive.svg',
+    logo_url: '/_assets/logo-googledrive.svg',
   },
   {
     id: 'gmail',

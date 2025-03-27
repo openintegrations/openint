@@ -2,9 +2,10 @@ import {z} from 'zod'
 import {ConnectorDef} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import type {JsonConnectorDef} from '../../def'
-import {generateConnectorDef} from '../../schema'
 import {zOAuthConfig} from './def'
-import {generateOAuth2Server, mapOauthParams} from './server'
+import {generateOauthConnectorDef} from './schema'
+import {generateOAuth2Server} from './server'
+import {mapOauthParams} from './utils'
 
 const logger = false
 
@@ -36,7 +37,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     mockFetch = jest.fn()
     global.fetch = mockFetch
 
-    mockConnectorDef = generateConnectorDef({
+    mockConnectorDef = generateOauthConnectorDef({
       connector_name: 'test_connector',
       display_name: 'Test Connector',
       stage: 'alpha',
@@ -51,7 +52,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('newInstance should throw error if client credentials are missing', () => {
-    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
+    const server = generateOAuth2Server(
+      mockConnectorDef as any,
+      mockOauthConfig,
+    )
 
     expect(server.newInstance).toBeDefined()
     expect(() => {
@@ -59,8 +63,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         throw new Error('newInstance is not defined')
       }
       return server.newInstance({
-        config: {},
-        settings: {},
+        config: {} as any,
+        settings: {} as any,
         fetchLinks: [],
         onSettingsChange: () => Promise.resolve(),
       })
@@ -68,7 +72,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('newInstance should initialize successfully with valid credentials', () => {
-    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
+    const server = generateOAuth2Server(
+      mockConnectorDef as any,
+      mockOauthConfig,
+    )
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
@@ -77,8 +84,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         throw new Error('newInstance is not defined')
       }
       return server.newInstance({
-        config: {},
-        settings: {},
+        config: {} as any,
+        settings: {} as any,
         fetchLinks: [],
         onSettingsChange: () => Promise.resolve(),
       })
@@ -86,7 +93,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('preConnect should generate correct authorization URL', async () => {
-    const server = generateOAuth2Server(mockConnectorDef, mockOauthConfig)
+    const server = generateOAuth2Server(
+      mockConnectorDef as any,
+      mockOauthConfig,
+    )
     process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
     process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
 
@@ -96,8 +106,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
 
     const result = await server.preConnect(
       {
-        client_id: 'test_client_id',
-        client_secret: 'test_client_secret',
+        oauth: {
+          client_id: 'test_client_id',
+          client_secret: 'test_client_secret',
+          scopes: ['read', 'write'],
+        },
       },
       {
         extCustomerId: `cust_123` as any,
@@ -109,16 +122,74 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     expect(result.authorization_url).toContain(
       'https://auth.example.com/authorize',
     )
-    const scopes = mockOauthConfig.scopes
-      .map((s) => s.scope)
-      .join(encodeURIComponent(' '))
-    expect(result.authorization_url).toContain('scope=' + scopes)
+    const scopeParam = mockOauthConfig.scopes.map((s) => s.scope).join(' ')
+    expect(result.authorization_url).toContain(
+      `scope=${encodeURIComponent(scopeParam)}`,
+    )
     expect(result.authorization_url).toContain(
       'client_id=' + encodeURIComponent('test_client_id'),
     )
+    expect(result.authorization_url).not.toContain('client_secret=')
     expect(result.authorization_url).toContain('response_type=code')
     expect(result.authorization_url).toContain('custom_param=custom_value')
     expect(result.authorization_url).toContain('state=')
+  })
+
+  test('preConnect scope validation works', async () => {
+    const serverOauthConfig = {
+      ...mockOauthConfig,
+      default_scopes: ['read', 'write'], // Only these scopes are allowed
+    }
+
+    const server = generateOAuth2Server(
+      mockConnectorDef as any,
+      serverOauthConfig,
+    )
+
+    process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
+    process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+
+    if (!server.preConnect) {
+      throw new Error('preConnect is not defined')
+    }
+
+    // Try to use an invalid scope
+    await expect(
+      server.preConnect(
+        {
+          oauth: {
+            // 'invalid_scope' is not in default_scopes. Since we're relying on default credentials,
+            // we should not be able to use non default scope.
+            scopes: ['read', 'non_default_scope'],
+          },
+        },
+        {
+          extCustomerId: `cust_123` as any,
+          webhookBaseUrl: 'https://example.com/webhook',
+        },
+        {connectionId: 'test_connection_id'},
+      ),
+    ).rejects.toThrow(
+      'Invalid scopes configured: non_default_scope. Valid default scopes are: read, write',
+    )
+
+    // we're not relying on default credentials here, so we should be able to use an invalid scope
+    await expect(
+      server.preConnect(
+        {
+          oauth: {
+            client_id: 'xxx',
+            client_secret: 'yyy',
+            scopes: ['read', 'non_default_scope'],
+          },
+        },
+        {
+          extCustomerId: `cust_123` as any,
+          webhookBaseUrl: 'https://example.com/webhook',
+        },
+        {connectionId: 'test_connection_id'},
+      ),
+    ).toBeTruthy()
   })
 
   // test('postConnect should exchange code for tokens successfully', async () => {

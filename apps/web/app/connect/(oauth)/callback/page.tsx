@@ -9,18 +9,17 @@ import {CloseWindowScript} from './CloseWindowScript'
 export const dynamic = 'force-dynamic'
 
 /** https://beta.nextjs.org/docs/api-reference/file-conventions/page#searchparams-optional */
-export default function OAuthCallback({
+export default async function OAuthCallback({
   searchParams,
 }: {
-  searchParams: {[key: string]: string | string[] | undefined}
+  searchParams: Promise<{[key: string]: string | string[] | undefined}>
 }) {
-  const code = searchParams['code'] as string | null
-  const state = searchParams['state'] as string | null
+  const {code, state} = await searchParams
 
   if (code && state) {
     // Just close the window - parent that opens this in a popup after redirect will read params directly
     // state in connection new is the base64 of the connection ID. In the future, this will change to a more secure string
-    const isNewState = Buffer.from(state, 'base64')
+    const isNewState = Buffer.from(state as string, 'base64')
       .toString('utf8')
       .startsWith('conn_')
 
