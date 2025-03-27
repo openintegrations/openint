@@ -1,3 +1,4 @@
+import {z} from 'zod'
 import {injectDefaultCredentials} from './defaultCredentialsInjection'
 
 function getMockConnectorDefaultCredentials(
@@ -28,8 +29,9 @@ describe('injectDefaultCredentials', () => {
     const connector = {
       name: 'test-oauth2-connector',
       metadata: {
-        authType: 'OAUTH2',
+        authType: 'OAUTH2' as const,
       },
+      schemas: {name: z.literal('test-oauth2-connector')},
     }
     const input = {
       config: {
@@ -42,7 +44,7 @@ describe('injectDefaultCredentials', () => {
 
     // Act
     const result = injectDefaultCredentials(
-      connector as any,
+      connector,
       input,
       getMockConnectorDefaultCredentials(connector.name),
     )
@@ -65,6 +67,7 @@ describe('injectDefaultCredentials', () => {
       metadata: {
         authType: 'OAUTH2',
       },
+      schemas: {name: z.literal('test-oauth2-connector')},
     }
     const input = {
       config: {
@@ -88,6 +91,7 @@ describe('injectDefaultCredentials', () => {
     const connector = {
       name: 'test-api-key-connector',
       metadata: {},
+      schemas: {name: z.literal('test-api-key-connector')},
     }
     const input = {
       config: {
@@ -97,7 +101,7 @@ describe('injectDefaultCredentials', () => {
 
     // Act
     const result = injectDefaultCredentials(
-      connector as any,
+      connector,
       input,
       getMockConnectorDefaultCredentials(connector.name),
     )
