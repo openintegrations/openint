@@ -2,7 +2,7 @@ import {z} from 'zod'
 import {oauth2Schemas, zOAuthConfig} from './def'
 import {mapOauthParams, prepareScopes} from './utils'
 
-async function makeTokenRequest(
+export async function makeTokenRequest(
   url: string,
   params: Record<string, string>,
   flowType: 'exchange' | 'refresh',
@@ -32,9 +32,12 @@ async function makeTokenRequest(
       {
         ...json,
         client_id: params['client_id'],
-        token_type: json.token_type?.toLowerCase() ?? 'bearer',
         scope: json.scope ?? params['scope'],
-        expires_at: new Date(Date.now() + json.expires_in * 1000).toISOString(),
+        token_type: json.token_type?.toLowerCase(),
+        expires_at:
+          json.expires_in && json.expires_in > 0
+            ? new Date(Date.now() + json.expires_in * 1000).toISOString()
+            : undefined,
         raw: json,
       },
     )

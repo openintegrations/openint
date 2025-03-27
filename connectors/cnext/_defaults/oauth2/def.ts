@@ -13,11 +13,12 @@ const zOAuthConnectionSettings = z.object({
   credentials: z
     .object({
       access_token: z.string(),
-      refresh_token: z.string().optional(),
-      expires_in: z.number(),
-      expires_at: z.string(),
       client_id: z.string(),
-      token_type: z.string(),
+      scope: z.string(),
+      refresh_token: z.string().optional(),
+      expires_in: z.number().optional(),
+      expires_at: z.string().optional(),
+      token_type: z.string().optional(),
       // the data returned by the oauth provider in its raw form, currently used to parse the credentials object
       // useful to access domain specific fields such as authed_user in slack https://api.slack.com/methods/oauth.v2.access#examples
       raw: z.record(z.unknown()),
