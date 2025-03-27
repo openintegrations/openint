@@ -2,61 +2,49 @@
 
 import dynamic from 'next/dynamic'
 import React from 'react'
+import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
 import {R} from '@openint/util'
 
-function wrapModule(options: {useConnectorLogic: () => [string, unknown]}) {
-  return React.memo(function ModuleWrapper(props: {
-    connector_name?: string
-    onReady: (ctx: {state: string}) => void
-  }) {
-    console.log('ModuleWrapper rendering', props.connector_name)
-    const [state] = options.useConnectorLogic()
-    const {onReady} = props
-
-    React.useEffect(() => {
-      onReady({state})
-    }, [onReady, state])
-    return (
-      <pre>
-        {state}
-        ---
-        {JSON.stringify(props)}
-      </pre>
-    )
-  })
-}
-
 const connectorImports = {
   plaid: () => import('@openint/connector-plaid/client'),
-  greenhouse: () =>
-    Promise.resolve({
-      useConnectorLogic: () => React.useState('greenhouse'),
-    }),
+  greenhouse: () => Promise.resolve({}),
   finch: () => import('@openint/connector-finch/client'),
 }
 
-const ConnectorComponents = Object.fromEntries(
-  Object.entries(connectorImports).map(([name, mod]) => [
+type ConnectFn = ReturnType<NonNullable<ConnectorClient['useConnectHook']>>
+
+function wrapConnectorClientModule(
+  mod: ConnectorClient | {default: ConnectorClient},
+) {
+  const client: ConnectorClient =
+    'useConnectHook' in mod ? mod : 'default' in mod ? mod.default : mod
+
+  return React.memo(function ModuleWrapper(props: {
+    connector_name?: string
+    onConnectFn: (fn?: ConnectFn) => void
+  }) {
+    console.log('ModuleWrapper rendering', props.connector_name, client)
+    const connectFn = client.useConnectHook?.({openDialog: () => {}})
+    const {onConnectFn} = props
+
+    React.useEffect(() => {
+      if (connectFn) {
+        onConnectFn(connectFn)
+      }
+    }, [onConnectFn, connectFn])
+
+    return null
+  })
+}
+
+const ConnectorClientComponents = Object.fromEntries(
+  Object.entries(connectorImports).map(([name, importModule]) => [
     name,
-    dynamic(
-      () =>
-        mod()
-          .then((r) => {
-            // Add a random delay for testing/development purposes
-            const randomDelay = Math.floor(Math.random() * 2000) // Random delay up to 2000ms (2 seconds)
-            return new Promise<typeof r>((resolve) => {
-              setTimeout(() => {
-                resolve(r)
-              }, randomDelay)
-            })
-          })
-          .then((m) => wrapModule(m)),
-      {
-        loading: () => <div>...Loading {name}...</div>,
-      },
-    ),
+    dynamic(() => importModule().then((m) => wrapConnectorClientModule(m)), {
+      loading: () => <div>...Loading {name}...</div>,
+    }),
   ]),
 )
 
@@ -114,14 +102,10 @@ function AddConnectionInner({
   const name = extractId(connectorConfigId as `ccfg_${string}`)[1]
 
   console.log('AddConnectionInner rendering', name)
-  const ref = React.useRef<{state: string} | undefined>(undefined)
-
-  const [state, setState] = React.useState<{state: string} | undefined>(
-    undefined,
-  )
+  const ref = React.useRef<ConnectFn | undefined>(undefined)
 
   const Component =
-    ConnectorComponents[name as keyof typeof ConnectorComponents]
+    ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
   if (!Component) {
     throw new Error(`Unknown connector: ${name}`)
   }
@@ -135,20 +119,17 @@ function AddConnectionInner({
       <Component
         key={name}
         connector_name={name}
-        onReady={React.useCallback(
-          (c) => {
-            ref.current = c
-            onReady(c, name)
-            setState(c)
-          },
-          [name, onReady],
-        )}
+        onConnectFn={React.useCallback((fn) => {
+          ref.current = fn
+          // onReady(c, name)
+          // setFn(c)
+        }, [])}
       />
       <Button
         onClick={() => {
           console.log('ref.current', ref.current)
         }}>
-        Connect with {name} {state?.state ? 'ready' : 'not ready'}
+        Connect with {name}
       </Button>
     </>
   )
