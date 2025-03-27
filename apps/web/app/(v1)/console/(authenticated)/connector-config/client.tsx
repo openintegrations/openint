@@ -1,7 +1,7 @@
 'use client'
 
 import {ArrowLeft, Plus} from 'lucide-react'
-import {use, useRef, useState} from 'react'
+import {useRef, useState} from 'react'
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {AppRouterOutput} from '@openint/api-v1/routers'
 import {Button} from '@openint/shadcn/ui'
@@ -22,15 +22,15 @@ import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 
 export function ConnectorConfigList(props: {
-  initialData?: Promise<{
+  initialData?: {
     items: Array<
       ConnectorConfig<'connector' | 'integrations' | 'connection_count'>
     >
     total: number
     limit: number
     offset: number
-  }>
-  initialConnectorData?: Promise<AppRouterOutput['listConnectors']>
+  }
+  initialConnectorData?: AppRouterOutput['listConnectors']
 }) {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedConnector, setSelectedConnector] = useState<
@@ -41,10 +41,8 @@ export function ConnectorConfigList(props: {
   > | null>(null)
   const formRef = useRef<SchemaFormElement>(null)
 
-  const initialData = use(props.initialData ?? Promise.resolve(undefined))
-  const connectorData = use(
-    props.initialConnectorData ?? Promise.resolve(undefined),
-  )
+  const {initialData, initialConnectorData} = props
+
   const trpc = useTRPC()
   const res = useSuspenseQuery(
     trpc.listConnectorConfigs.queryOptions(
@@ -55,7 +53,7 @@ export function ConnectorConfigList(props: {
   const connectorRes = useSuspenseQuery(
     trpc.listConnectors.queryOptions(
       {},
-      connectorData ? {initialData: connectorData} : undefined,
+      initialConnectorData ? {initialData: initialConnectorData} : undefined,
     ),
   )
 

@@ -21,9 +21,9 @@ export default async function Page(props: PageProps) {
         <Suspense fallback={<Fallback />}>
           <ConnectorConfigList
             initialData={
-              api.listConnectorConfigs({
+              (await api.listConnectorConfigs({
                 expand: 'connector,enabled_integrations,connection_count',
-              }) as Promise<{
+              })) as {
                 items: Array<
                   ConnectorConfig<
                     'connector' | 'integrations' | 'connection_count'
@@ -32,9 +32,9 @@ export default async function Page(props: PageProps) {
                 total: number
                 limit: number
                 offset: number
-              }>
+              }
             }
-            initialConnectorData={api.listConnectors()}
+            initialConnectorData={await api.listConnectors()}
           />
         </Suspense>
       </ClientApp>
