@@ -5,7 +5,7 @@ import React from 'react'
 import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
-import {useMutation, useQuery, useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {R} from '@openint/util'
 import {useTRPC} from '../console/(authenticated)/client'
 
@@ -96,7 +96,6 @@ export function AddConnection(props: {connectorConfigIds: Promise<string[]>}) {
 
 function AddConnectionInner({
   connectorConfigId,
-  onReady,
 }: {
   connectorConfigId: string
   onReady: (ctx: {state: string}, name: string) => void
