@@ -23,7 +23,7 @@ function injectCcfgDefaultCredentials(
     defaultCredentials?.['client_id'] &&
     defaultCredentials?.['client_secret']
   ) {
-    let configuredScopes = connectorConfig.oauth?.scopes ?? []
+    const configuredScopes = connectorConfig.oauth?.scopes ?? []
 
     if (
       oauthConfig.openint_scopes &&
