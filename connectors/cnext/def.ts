@@ -45,7 +45,7 @@ export const zJsonConnectorDef = z.object({
   verticals: z
     .array(zVerticalKey)
     .describe('The industry verticals this provider belongs to'),
-  links: zlinks,
+  links: zlinks.optional(),
   auth: z.discriminatedUnion('type', [zOAuthConfig, zAPIKeyConnectorDef]),
 })
 
