@@ -164,21 +164,22 @@ export function ConnectorConfigList(props: {
     }
 
     const {
-      formData: {config},
+      formData: {displayName, disabled, config},
     } = data
 
     try {
       if (selectedCcfg) {
         await updateConfig.mutateAsync({
           id: selectedCcfg.id,
-          config: {
-            name: selectedConnector.display_name,
-            config,
-          },
+          display_name: displayName,
+          disabled,
+          config,
         })
       } else {
         await createConfig.mutateAsync({
           connector_name: selectedConnector.name,
+          display_name: displayName,
+          disabled,
           config,
         })
       }
@@ -275,7 +276,15 @@ export function ConnectorConfigList(props: {
                 jsonSchema={formSchema}
                 onSubmit={handleSave}
                 hideSubmitButton
-                formData={selectedCcfg ? selectedCcfg.config : {}}
+                formData={
+                  selectedCcfg
+                    ? {
+                        ...selectedCcfg.config,
+                        displayName: selectedCcfg.display_name ?? '',
+                        disabled: selectedCcfg.disabled ?? false,
+                      }
+                    : {}
+                }
               />
               <SheetFooter className="mt-auto flex flex-row justify-between border-t pt-4">
                 <Button
