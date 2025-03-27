@@ -291,7 +291,6 @@ module.exports = [
       server: '@openint/connector-onebrick/server',
     },
   },
-  {dirName: 'connector-outlook', varName: 'connectorOutlook', imports: {}},
   {
     name: 'outreach',
     dirName: 'connector-outreach',
@@ -491,15 +490,15 @@ module.exports = [
     },
   },
   {
-    name: '_defaults',
-    dirName: 'cnext-_defaults',
-    varName: 'connector_defaults',
-    imports: {def: '@openint/cnext', server: '@openint/cnext'},
-  },
-  {
     name: 'googledrive',
     dirName: 'cnext-googledrive',
     varName: 'connectorGoogledrive',
+    imports: {def: '@openint/cnext', server: '@openint/cnext'},
+  },
+  {
+    name: 'googlesheet',
+    dirName: 'cnext-googlesheet',
+    varName: 'connectorGooglesheet',
     imports: {def: '@openint/cnext', server: '@openint/cnext'},
   },
 ]
