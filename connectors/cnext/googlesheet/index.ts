@@ -5,7 +5,7 @@ import type {JsonConnectorDef} from '../def'
 const jsonDef = {
   audience: ['business'],
   connector_name: 'googlesheet',
-  verticals: ['other'],
+  verticals: ['flat-files-and-spreadsheets'],
   display_name: 'Google Sheet',
   stage: 'ga',
   version: 1,
