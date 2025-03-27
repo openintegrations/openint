@@ -65,7 +65,8 @@ async function formatConnection(
   }
 
   // Handle different levels of secret inclusion
-  let settingsToInclude = {}
+  // the default is 'none' at which point settings should be an empty object
+  let settingsToInclude = {settings: {}}
   if (include_secrets === 'basic' && connection.settings.oauth) {
     settingsToInclude = {
       settings: {
@@ -144,13 +145,13 @@ export const connectionRouter = router({
     )
     .output(connectionWithRelations)
     .query(async ({ctx, input}) => {
-      console.log(
-        'getConnection',
-        input.id,
-        input.include_secrets,
-        input.refresh_policy,
-        input.expand,
-      )
+      // console.log(
+      //   'getConnection',
+      //   input.id,
+      //   input.include_secrets,
+      //   input.refresh_policy,
+      //   input.expand,
+      // )
       let connection = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
       })
