@@ -131,7 +131,7 @@ export interface ConnectorClient<
 }
 
 export interface ConnectorServer<
-  TDef extends ConnectorSchemas,
+  TDef extends ConnectorSchemas = ConnectorSchemas,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TInstance = any,
   T extends ConnHelpers<TDef> = ConnHelpers<TDef>,

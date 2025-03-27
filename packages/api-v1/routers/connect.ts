@@ -1,5 +1,9 @@
+import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
+import {serverConnectors} from '@openint/all-connectors/connectors.server'
+import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
+import {eq, schema} from '@openint/db'
 import {core, parseNonEmpty} from '../models'
 import {connectorSchemas} from '../models/connectorSchemas'
 import {customerProcedure, router} from '../trpc/_base'
@@ -63,9 +67,41 @@ export const connectRouter = router({
         )
         .describe('Connector specific data'),
     )
-    .mutation(async ({ctx, input}) => {
-      console.log('preConnect', input, ctx)
-      throw new Error('Not implemented')
+    .query(async ({ctx, input}) => {
+      const connectors = serverConnectors as Record<string, ConnectorServer>
+      const connector = connectors[input.data.connector_name]
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector ${input.data.connector_name} not found`,
+        })
+      }
+      const ccfg = await ctx.db.query.connector_config.findFirst({
+        where: eq(schema.connector_config.id, input.id),
+      })
+      if (!ccfg) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config ${input.id} not found`,
+        })
+      }
+
+      console.log('preConnect', input, ctx, ccfg)
+      const res = await connector.preConnect?.(
+        ccfg.config,
+        {
+          webhookBaseUrl:
+            'https://webhook.site/ce79fc9e-8f86-45f2-8701-749b770e5cdb',
+          extCustomerId: (ctx.viewer.role === 'customer'
+            ? ctx.viewer.customerId
+            : ctx.viewer.userId) as ExtCustomerId,
+        },
+        input.data.input,
+      )
+      return {
+        connector_name: input.data.connector_name,
+        output: res,
+      }
     }),
   postConnect: customerProcedure
     .meta({

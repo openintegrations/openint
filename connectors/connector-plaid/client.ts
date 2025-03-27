@@ -43,9 +43,9 @@ export const plaidClientConnector = {
     const {open, ready} = plaidLink
 
     React.useEffect(() => {
-      // console.log('[plaid] useEffect may open', {ready, state})
+      console.log('[plaid] useEffect may open', {ready, state})
       if (ready && state) {
-        // console.log('[plaid] Will open')
+        console.log('[plaid] Will open')
         open() // Unfortunately open gets called multiple times due to unmounting.
         // It is a bit of a no-op though, so we should be fine...
       }

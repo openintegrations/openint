@@ -30,7 +30,8 @@ export const authenticatedProcedure = publicProcedure.use(({next, ctx}) => {
 
 export const customerProcedure = publicProcedure.use(({next, ctx}) => {
   const viewer = ctx.viewer
-  if (!hasRole(viewer, ['customer'])) {
+  if (!hasRole(viewer, ['customer', 'user'])) {
+    // TODO: Figure out how to user impersonating as customer
     throw new TRPCError({code: 'FORBIDDEN', message: 'Customer only'})
   }
   return next({ctx: {...ctx, viewer}})

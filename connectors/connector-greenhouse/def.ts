@@ -13,6 +13,8 @@ export const GREENHOUSE_ENTITY_NAMES = [
 export const greenhouseSchema = {
   name: z.literal('greenhouse'),
   connectionSettings: z.object({apiKey: z.string()}),
+  preConnectInput: z.unknown(),
+  connectInput: z.unknown(),
   sourceOutputEntities: R.mapToObj(GREENHOUSE_ENTITY_NAMES, (e) => [
     e,
     z.unknown().optional(),

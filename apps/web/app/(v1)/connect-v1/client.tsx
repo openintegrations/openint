@@ -1,11 +1,14 @@
 'use client'
 
+import {useQuery} from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import React from 'react'
 import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
+import {useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {R} from '@openint/util'
+import {useTRPC} from '../console/(authenticated)/client'
 
 const connectorImports = {
   plaid: () => import('@openint/connector-plaid/client'),
@@ -102,7 +105,32 @@ function AddConnectionInner({
   const name = extractId(connectorConfigId as `ccfg_${string}`)[1]
 
   console.log('AddConnectionInner rendering', name)
+
   const ref = React.useRef<ConnectFn | undefined>(undefined)
+
+  const trpc = useTRPC()
+  // Should load script immediately (via useConnectHook) rather than waiting for suspense query?
+  const preConnectRes = useSuspenseQuery(
+    trpc.preConnect.queryOptions({
+      id: connectorConfigId,
+      data: {
+        connector_name: name,
+        input: {},
+      },
+      options: {},
+    }),
+  )
+  console.log('preConnectRes', preConnectRes)
+
+  const handleConnect = React.useCallback(async () => {
+    console.log('ref.current', ref.current)
+    const connectRes = await ref.current?.(preConnectRes.data.output, {
+      connectorConfigId: connectorConfigId as `ccfg_${string}`,
+      connectionExternalId: undefined,
+      integrationExternalId: undefined,
+    })
+    console.log('connectRes', connectRes)
+  }, [connectorConfigId, preConnectRes])
 
   const Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
@@ -121,16 +149,12 @@ function AddConnectionInner({
         connector_name={name}
         onConnectFn={React.useCallback((fn) => {
           ref.current = fn
+
           // onReady(c, name)
           // setFn(c)
         }, [])}
       />
-      <Button
-        onClick={() => {
-          console.log('ref.current', ref.current)
-        }}>
-        Connect with {name}
-      </Button>
+      <Button onClick={handleConnect}>Connect with {name}</Button>
     </>
   )
 }
