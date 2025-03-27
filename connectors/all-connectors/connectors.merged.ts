@@ -2,6 +2,8 @@
 import {
   connectorGoogledrive_def,
   connectorGoogledrive_server,
+  connectorGooglesheet_def,
+  connectorGooglesheet_server,
 } from '@openint/cnext'
 import {default as connectorAircall_def} from '@openint/connector-aircall/def'
 import {default as connectorAircall_server} from '@openint/connector-aircall/server'
@@ -383,6 +385,11 @@ const connectorGoogledrive = {
   ...connectorGoogledrive_server,
 }
 
+const connectorGooglesheet = {
+  ...connectorGooglesheet_def,
+  ...connectorGooglesheet_server,
+}
+
 export const mergedConnectors = {
   aircall: connectorAircall,
   airtable: connectorAirtable,
@@ -439,4 +446,5 @@ export const mergedConnectors = {
   yodlee: connectorYodlee,
   zohodesk: connectorZohodesk,
   googledrive: connectorGoogledrive,
+  googlesheet: connectorGooglesheet,
 }
