@@ -2,8 +2,9 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
-import {zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
-import {eq, schema} from '@openint/db'
+import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
+import {dbUpsertOne, eq, schema} from '@openint/db'
+import {makeUlid} from '@openint/util'
 import {core, parseNonEmpty} from '../models'
 import {connectorSchemas} from '../models/connectorSchemas'
 import {customerProcedure, router} from '../trpc/_base'
@@ -112,12 +113,16 @@ export const connectRouter = router({
       },
     })
     .input(
-      z.tuple([
-        zId('ccfg'),
-        zPostConnectOptions,
+      z.object({
+        id: zId('ccfg').describe(md`
+          Must correspond to data.connector_name.
+          Technically id should imply connector_name already but there is no way to
+          specify a discriminated union with id alone.
+        `),
+        options: zPostConnectOptions,
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
-        z
+        data: z
           .discriminatedUnion(
             'connector_name',
             parseNonEmpty(
@@ -134,11 +139,55 @@ export const connectRouter = router({
             ),
           )
           .describe('Connector specific data'),
-      ]),
+      }),
     )
     .output(core.connection)
     .mutation(async ({ctx, input}) => {
       console.log('postConnect', input, ctx)
-      throw new Error('Not implemented')
+      const connectors = serverConnectors as Record<string, ConnectorServer>
+      const connector = connectors[input.data.connector_name]
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector ${input.data.connector_name} not found`,
+        })
+      }
+      const ccfg = await ctx.db.query.connector_config.findFirst({
+        where: eq(schema.connector_config.id, input.id),
+      })
+      if (!ccfg) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config ${input.id} not found`,
+        })
+      }
+
+      console.log('preConnect', input, ctx, ccfg)
+      const connUpdate = await connector.postConnect?.(
+        input.data.input,
+        ccfg.config,
+        {
+          webhookBaseUrl:
+            'https://webhook.site/ce79fc9e-8f86-45f2-8701-749b770e5cdb',
+          extCustomerId: (ctx.viewer.role === 'customer'
+            ? ctx.viewer.customerId
+            : ctx.viewer.userId) as ExtCustomerId,
+        },
+      )
+      const id = makeId('conn', input.data.connector_name, makeUlid())
+      const [conn] = await dbUpsertOne(
+        ctx.db,
+        schema.connection,
+        {
+          id,
+          settings: connUpdate?.settings,
+          connector_config_id: input.id,
+          customer_id: ctx.viewer.customerId ?? ctx.viewer.userId,
+          // add integration id
+        },
+        {keyColumns: ['id']},
+      ).returning()
+
+      return conn!
     }),
 })

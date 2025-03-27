@@ -1,12 +1,11 @@
 'use client'
 
-import {useQuery} from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import React from 'react'
 import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
-import {useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {useMutation, useQuery, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {R} from '@openint/util'
 import {useTRPC} from '../console/(authenticated)/client'
 
@@ -122,6 +121,8 @@ function AddConnectionInner({
   )
   console.log('preConnectRes', preConnectRes)
 
+  const postConnect = useMutation(trpc.postConnect.mutationOptions({}))
+
   const handleConnect = React.useCallback(async () => {
     console.log('ref.current', ref.current)
     const connectRes = await ref.current?.(preConnectRes.data.output, {
@@ -130,6 +131,15 @@ function AddConnectionInner({
       integrationExternalId: undefined,
     })
     console.log('connectRes', connectRes)
+    const postConnectRes = await postConnect.mutateAsync({
+      id: connectorConfigId,
+      data: {
+        connector_name: name,
+        input: connectRes,
+      },
+      options: {},
+    })
+    console.log('postConnectRes', postConnectRes)
   }, [connectorConfigId, preConnectRes])
 
   const Component =
