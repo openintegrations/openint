@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@openint/all-connectors": "workspace:*",
     "@openint/app-config": "workspace:*",
     "@openint/cdk": "workspace:*",
     "@openint/connector-beancount": "workspace:*",

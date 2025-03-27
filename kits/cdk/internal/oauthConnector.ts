@@ -53,7 +53,7 @@ export const oauthBaseSchema = {
     oauth: z.object({
       client_id: z.string(),
       client_secret: z.string(),
-      /** comma deliminated scopes with no spaces in between */
+      /** comma delimited scopes with no spaces in between */
       scopes: z.string().optional(),
     }),
   }),

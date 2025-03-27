@@ -3,7 +3,7 @@
 import type {ReadonlyURLSearchParams} from 'next/navigation'
 // import {useSearchParams} from 'next/navigation'
 import React, {Suspense} from 'react'
-import {clientConnectors} from '@openint/app-config/connectors/connectors.client'
+import {clientConnectors} from '@openint/all-connectors/connectors.client'
 import {OpenIntConnectProvider} from '@openint/engine-frontend'
 
 /** https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout */

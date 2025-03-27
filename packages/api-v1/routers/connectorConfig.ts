@@ -253,13 +253,13 @@ export const connectorConfigRouter = router({
     )
     .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
-      const {connector_name} = input
+      const {connector_name, config} = input
       const [ccfg] = await ctx.db
         .insert(schema.connector_config)
         .values({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
-          config: input.config,
+          config,
         })
         .returning()
       return ccfg!

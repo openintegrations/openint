@@ -1,3 +1,4 @@
+import type {inferRouterInputs, inferRouterOutputs} from '@trpc/server'
 import {trpc} from '../trpc/_base'
 import {adminRouter} from './admin'
 import {connectRouter} from './connect'
@@ -20,3 +21,6 @@ export const appRouter = trpc.mergeRouters(
 )
 
 export type AppRouter = typeof appRouter
+
+export type AppRouterInput = inferRouterInputs<AppRouter>
+export type AppRouterOutput = inferRouterOutputs<AppRouter>

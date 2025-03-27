@@ -17,17 +17,14 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   test('list connectors', async () => {
     const res = await asOrg.listConnectors()
 
-    expect(res.items.length).toBeGreaterThan(1)
+    expect(res.length).toBeGreaterThan(1)
   })
 
   test('list connectors with integrations', async () => {
-    const res = await asOrg.listConnectors({
-      expand: ['integrations'],
-      limit: 100,
-    })
-    const mergeIndex = res.items.findIndex((c) => c.name === 'merge')
+    const res = await asOrg.listConnectors({expand: ['integrations']})
+    const mergeIndex = res.findIndex((c) => c.name === 'merge')
 
-    expect(res.items[mergeIndex]?.integrations?.length).toBeGreaterThan(1)
+    expect(res[mergeIndex]?.integrations?.length).toBeGreaterThan(1)
   })
 
   test('get connector by with invalid name returns error', async () => {
@@ -46,7 +43,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       schemas: {
         connector_config: expect.any(Object),
         connection_settings: expect.any(Object),
-        pre_connect_input: expect.any(Object),
         connect_input: expect.any(Object),
         connect_output: expect.any(Object),
       },

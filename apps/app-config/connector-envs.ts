@@ -1,8 +1,8 @@
 /** @deprecated. We no longer initialize integration from ENVs, but maybe in clis still? */
+import {defConnectors} from '@openint/all-connectors/connectors.def'
 import type {ConnectorSchemas, ConnHelpers} from '@openint/cdk'
 import {makeId} from '@openint/cdk'
 import {R, z, zEnvVars, zFlattenForEnv} from '@openint/util'
-import {defConnectors} from './connectors/connectors.def'
 
 /** We would prefer to use `.` but vercel env var name can only be number, letter and underscore... */
 const separator = '__'

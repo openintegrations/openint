@@ -93,7 +93,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items).toHaveLength(0)
   })
 
-  test('create connector config with integrations', async () => {
+  test('connector config create with integrations', async () => {
     const res = await asOrg.createConnectorConfig({
       connector_name: 'google',
       config: {
