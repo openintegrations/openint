@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import React from 'react'
+import type {AppRouterOutput} from '@openint/api-v1/routers'
 import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
@@ -94,12 +95,16 @@ export function AddConnection(props: {connectorConfigIds: Promise<string[]>}) {
   )
 }
 
-function AddConnectionInner({
+export function AddConnectionInner({
   connectorConfigId,
+  ...props
 }: {
   connectorConfigId: string
-  onReady: (ctx: {state: string}, name: string) => void
+  onReady?: (ctx: {state: string}, name: string) => void
+  initialData?: Promise<AppRouterOutput['preConnect']>
 }) {
+  const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
+
   const name = extractId(connectorConfigId as `ccfg_${string}`)[1]
 
   console.log('AddConnectionInner rendering', name)
@@ -109,14 +114,17 @@ function AddConnectionInner({
   const trpc = useTRPC()
   // Should load script immediately (via useConnectHook) rather than waiting for suspense query?
   const preConnectRes = useSuspenseQuery(
-    trpc.preConnect.queryOptions({
-      id: connectorConfigId,
-      data: {
-        connector_name: name,
-        input: {},
+    trpc.preConnect.queryOptions(
+      {
+        id: connectorConfigId,
+        data: {
+          connector_name: name,
+          input: {},
+        },
+        options: {},
       },
-      options: {},
-    }),
+      initialData ? {initialData} : undefined,
+    ),
   )
   console.log('preConnectRes', preConnectRes)
 
