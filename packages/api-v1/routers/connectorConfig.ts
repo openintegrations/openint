@@ -37,6 +37,7 @@ export function expandConnector(
 > & {
   created_at: string
   updated_at: string
+  disabled: boolean
 } {
   const connectorName = connectorConfig.connector_name
 
@@ -62,7 +63,8 @@ export function expandConnector(
     // TODO: add more fields?
     name: connectorName,
     // TODO: add display_name?
-    // display_name: connectorConfig.display_name,
+    display_name: connectorConfig.display_name ?? undefined,
+    disabled: connectorConfig.disabled ?? false,
     // TODO: add enabled?
     // enabled: connectorConfig.enabled,
     created_at: connectorConfig.created_at,
@@ -247,6 +249,8 @@ export const connectorConfigRouter = router({
     .input(
       z.object({
         connector_name: z.string(),
+        display_name: z.string().optional(),
+        disabled: z.boolean().optional(),
         // TODO: why is this unknown / any?
         config: z.record(z.unknown()).nullish(),
       }),
@@ -260,6 +264,8 @@ export const connectorConfigRouter = router({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
           config,
+          display_name: input.display_name,
+          disabled: input.disabled,
         })
         .returning()
       return ccfg!
