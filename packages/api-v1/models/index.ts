@@ -91,6 +91,11 @@ export const core = {
     .object({})
     .passthrough()
     .openapi({ref: 'core.integration', title: 'Integration'}),
+  customer: coreBase
+    .extend({
+      connection_count: z.number(),
+    })
+    .openapi({ref: 'core.customer', title: 'Customer'}),
 }
 
 export type Core = {
@@ -112,3 +117,4 @@ interface ConnectorRelations {
 
 export type ConnectorExpanded<K extends keyof ConnectorRelations> =
   Core['connector'] & Partial<Pick<ConnectorRelations, K>>
+export type Customer = Core['customer']

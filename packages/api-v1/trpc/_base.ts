@@ -55,6 +55,15 @@ export const orgProcedure = publicProcedure.use(({next, ctx}) => {
   })
 })
 
+export const adminProcedure = publicProcedure.use(({next, ctx}) => {
+  if (!hasRole(ctx.viewer, ['user', 'org', 'system'])) {
+    throw new TRPCError({
+      code: ctx.viewer.role === 'anon' ? 'UNAUTHORIZED' : 'FORBIDDEN',
+    })
+  }
+  return next({ctx: {...ctx, viewer: ctx.viewer}})
+})
+
 type WithRequiredNonNull<T, K extends keyof T> = T & {
   [P in K]-?: NonNullable<T[P]>
 }
