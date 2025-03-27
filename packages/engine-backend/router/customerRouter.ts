@@ -450,6 +450,8 @@ export const customerRouter = trpc.router({
             connectionId,
             user: {
               org_id: ctx.viewer.orgId,
+              customer_id:
+                ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
             },
           },
         })
@@ -461,6 +463,8 @@ export const customerRouter = trpc.router({
               connectionId,
               user: {
                 org_id: ctx.viewer.orgId,
+                customer_id:
+                  ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
               },
             },
           })
