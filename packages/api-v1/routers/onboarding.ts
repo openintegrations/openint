@@ -3,7 +3,6 @@ import {z} from 'zod'
 import {encodeApiKey} from '@openint/cdk'
 import {eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {getOrCreateApikey} from '@/lib-server'
 import {publicProcedure, router} from '../trpc/_base'
 
 const zOnboardingState = z.object({
