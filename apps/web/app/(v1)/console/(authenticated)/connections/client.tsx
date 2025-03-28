@@ -2,7 +2,7 @@
 
 import {Loader2, Trash} from 'lucide-react'
 import {useMemo} from 'react'
-import {Core} from '@openint/api-v1/models'
+import type {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {
   AlertDialog,
@@ -19,7 +19,7 @@ import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 
-const columns: ColumnDef<Core['connection']>[] = [
+const columns: Array<ColumnDef<Core['connection']>> = [
   {
     id: 'id',
     header: 'id',
@@ -66,8 +66,8 @@ export function ConnectionList(props: {
 
   const deleteConn = useMutation(
     trpc.deleteConnection.mutationOptions({
-      onSuccess: () => {
-        connectionData.refetch()
+      onSuccess: async () => {
+        await connectionData.refetch()
       },
       onError: (error) => {
         // TODO: @rodri77 - Add a toast to the UI.
@@ -82,51 +82,51 @@ export function ConnectionList(props: {
       {
         id: 'actions',
         header: 'Actions',
-        cell: ({row}) => {
-          return (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Trash className="size-6 text-red-500" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Connection</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete this connection? This action
-                    cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel disabled={deleteConn.isPending}>
-                    Cancel
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    disabled={deleteConn.isPending}
-                    onClick={() => deleteConn.mutate({id: row.original.id})}>
-                    {deleteConn.isPending ? (
-                      <>
-                        <Loader2 className="mr-2 size-4 animate-spin" />
-                        Deleting...
-                      </>
-                    ) : (
-                      'Delete'
-                    )}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-                {deleteConn.isPending && (
-                  <div className="bg-background/80 absolute inset-0 flex items-center justify-center">
-                    <Loader2 className="size-8 animate-spin" />
-                  </div>
-                )}
-              </AlertDialogContent>
-            </AlertDialog>
-          )
-        },
+        cell: ({row}) => (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Trash className="size-6 text-red-500" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Connection</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete this connection? This action
+                  cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={deleteConn.isPending}>
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={deleteConn.isPending}
+                  onClick={() => {
+                    deleteConn.mutate({id: row.original.id})
+                  }}>
+                  {deleteConn.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                      Deleting...
+                    </>
+                  ) : (
+                    'Delete'
+                  )}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+              {deleteConn.isPending && (
+                <div className="bg-background/80 absolute inset-0 flex items-center justify-center">
+                  <Loader2 className="size-8 animate-spin" />
+                </div>
+              )}
+            </AlertDialogContent>
+          </AlertDialog>
+        ),
       } as ColumnDef<Core['connection']>,
     ],
-    [columns, deleteConn],
+    [deleteConn],
   )
 
   return (
