@@ -33,11 +33,11 @@ export default async function Page(props: PageProps<never, {tab?: string}>) {
               <MyConnectionsClient initialData={api.listConnections()} />
             </Suspense>
           </TabsContent>
-          <TabsContent value="add-connection" className="p-4">
+          {/* <TabsContent value="add-connection" className="p-4">
             <Suspense fallback={<Fallback />}>
               <AddConnections viewer={viewer} />
             </Suspense>
-          </TabsContent>
+          </TabsContent> */}
         </TabsClient>
       </ClientApp>
     </div>
