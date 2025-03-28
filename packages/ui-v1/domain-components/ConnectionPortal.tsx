@@ -3,7 +3,13 @@
 import {AlertTriangle, Loader2, Search} from 'lucide-react'
 import {useEffect, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Button, Card, Checkbox, Input} from '@openint/shadcn/ui'
+import {Button, Card, Input} from '@openint/shadcn/ui'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@openint/shadcn/ui/dialog'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import {CheckboxFilter} from '../components/CheckboxFilter'
 import {MultiSelectActionBar} from '../components/MultiSelectActionBar'
@@ -29,40 +35,23 @@ type Connection = {
 // Simple connector card component
 function ConnectorCard({
   connector,
-  onClick,
-  showCheckbox,
   isSelected,
   onSelect,
   isDeleting,
 }: {
   connector: ConnectorConfig
-  onClick?: () => void
-  showCheckbox?: boolean
   isSelected?: boolean
   onSelect?: (e: React.MouseEvent) => void
   isDeleting?: boolean
 }) {
-  const [isHovered, setIsHovered] = useState(false)
-
   return (
     <Card
       className={cn(
-        'relative flex aspect-square cursor-pointer flex-col items-center justify-center p-1.5 hover:bg-gray-50',
+        'relative flex aspect-square cursor-pointer flex-col items-center justify-center p-1.5 transition-all hover:bg-gray-50',
         isDeleting && 'pointer-events-none opacity-50',
+        isSelected && 'ring-primary ring-2',
       )}
-      onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}>
-      {showCheckbox && (isHovered || isSelected) && (
-        <div
-          className="absolute left-1 top-1 z-10"
-          onClick={(e) => {
-            e.stopPropagation()
-            onSelect?.(e)
-          }}>
-          <Checkbox checked={isSelected} />
-        </div>
-      )}
+      onClick={onSelect}>
       {isDeleting && (
         <div className="bg-background/50 absolute inset-0 flex items-center justify-center">
           <Loader2 className="h-4 w-4 animate-spin" />
@@ -96,7 +85,10 @@ export function ConnectionPortal({
   const [isLoading, setIsLoading] = useState(true)
   const [isDeletingConnections, setIsDeletingConnections] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [checkedCategories, setCheckedCategories] = useState<
+  const [tempCheckedCategories, setTempCheckedCategories] = useState<
+    Record<string, boolean>
+  >({})
+  const [appliedCategories, setAppliedCategories] = useState<
     Record<string, boolean>
   >({})
   const [selectedConnections, setSelectedConnections] = useState<Set<string>>(
@@ -105,13 +97,19 @@ export function ConnectionPortal({
   const [connections, setConnections] = useState<Connection[]>(
     initialMockConnections,
   )
+  const [selectedConnector, setSelectedConnector] =
+    useState<ConnectorConfig | null>(null)
+  const [apiKey, setApiKey] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Simple loading effect
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
     }, 1000)
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+    }
   }, [])
 
   // Initialize checked categories on load
@@ -123,7 +121,8 @@ export function ConnectionPortal({
     categories.forEach((category) => {
       initialCheckedState[category] = false
     })
-    setCheckedCategories(initialCheckedState)
+    setTempCheckedCategories(initialCheckedState)
+    setAppliedCategories(initialCheckedState)
   }, [mockConnectorConfigs])
 
   // Get unique categories
@@ -133,7 +132,7 @@ export function ConnectionPortal({
 
   // Filter handlers for CheckboxFilter
   const handleCategoryCheckboxChange = (id: string) => {
-    setCheckedCategories((prev) => ({
+    setTempCheckedCategories((prev) => ({
       ...prev,
       [id]: !prev[id],
     }))
@@ -141,14 +140,19 @@ export function ConnectionPortal({
 
   const handleClearFilter = () => {
     const resetState: Record<string, boolean> = {}
-    Object.keys(checkedCategories).forEach((key) => {
+    Object.keys(tempCheckedCategories).forEach((key) => {
       resetState[key] = false
     })
-    setCheckedCategories(resetState)
+    setTempCheckedCategories(resetState)
+    setAppliedCategories(resetState)
   }
 
-  const handleApplyFilter = (_selected: string[]) => {
-    // This is handled by the CheckboxFilter component directly
+  const handleApplyFilter = (selected: string[]) => {
+    const newState: Record<string, boolean> = {}
+    Object.keys(tempCheckedCategories).forEach((key) => {
+      newState[key] = selected.includes(key)
+    })
+    setAppliedCategories(newState)
   }
 
   // Filter connectors based on search and selected categories
@@ -162,10 +166,10 @@ export function ConnectionPortal({
       : true
 
     // Category filter - if no categories are checked, show all
-    const anyChecked = Object.values(checkedCategories).some((value) => value)
+    const anyChecked = Object.values(appliedCategories).some((value) => value)
     const matchesCategory =
       !anyChecked ||
-      (connector.category && checkedCategories[connector.category])
+      (connector.category && appliedCategories[connector.category])
 
     return matchesSearch && matchesCategory
   })
@@ -207,8 +211,41 @@ export function ConnectionPortal({
     setIsDeletingConnections(false)
   }
 
+  const handleAddConnection = (connector: ConnectorConfig) => {
+    setSelectedConnector(connector)
+    setIsModalOpen(true)
+  }
+
+  const handleSubmitApiKey = () => {
+    // Here you would handle the API key submission
+    console.log('Submitting API key:', apiKey)
+    setApiKey('')
+    setIsModalOpen(false)
+    setSelectedConnector(null)
+  }
+
   return (
     <div className={cn('flex flex-col', className)}>
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Enter API Key for {selectedConnector?.display_name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Input
+              placeholder="Enter your API key"
+              value={apiKey}
+              onChange={(e) => {
+                setApiKey(e.target.value)
+              }}
+            />
+            <Button onClick={handleSubmitApiKey}>Submit</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Tabs defaultValue={initialView} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="manage">
@@ -233,7 +270,9 @@ export function ConnectionPortal({
                       placeholder="Search or pick a connector for your setup"
                       className="pl-9"
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value)
+                      }}
                     />
                   </div>
                 </div>
@@ -241,7 +280,7 @@ export function ConnectionPortal({
                 {categories.length > 0 && (
                   <CheckboxFilter
                     options={categories}
-                    checkedState={checkedCategories}
+                    checkedState={tempCheckedCategories}
                     onCheckboxChange={handleCategoryCheckboxChange}
                     onClearFilter={handleClearFilter}
                     onApply={handleApplyFilter}
@@ -259,6 +298,9 @@ export function ConnectionPortal({
                           <ConnectorCard
                             key={connector.id}
                             connector={connector}
+                            onSelect={() => {
+                              handleAddConnection(connector)
+                            }}
                           />
                         ))}
                       </div>
@@ -309,9 +351,10 @@ export function ConnectionPortal({
                   <ConnectorCard
                     key={connection.id}
                     connector={connection.connectorConfig!}
-                    showCheckbox
                     isSelected={selectedConnections.has(connection.id)}
-                    onSelect={() => handleConnectionSelect(connection.id)}
+                    onSelect={() => {
+                      handleConnectionSelect(connection.id)
+                    }}
                     isDeleting={
                       isDeletingConnections &&
                       selectedConnections.has(connection.id)
@@ -323,7 +366,9 @@ export function ConnectionPortal({
                 <MultiSelectActionBar
                   selectedCount={selectedConnections.size}
                   onDelete={handleDeleteSelected}
-                  onClear={() => setSelectedConnections(new Set())}
+                  onClear={() => {
+                    setSelectedConnections(new Set())
+                  }}
                 />
               )}
             </>
