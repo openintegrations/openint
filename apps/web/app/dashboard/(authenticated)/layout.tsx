@@ -8,7 +8,7 @@ import {
   useUser,
 } from '@clerk/nextjs'
 import {UseMutateFunction} from '@tanstack/react-query'
-import router from 'next/router'
+import {useRouter} from 'next/navigation'
 import NextTopLoader from 'nextjs-toploader'
 import {_trpcReact, LoadingSpinner} from '@openint/engine-frontend'
 import {OnboardingModal} from '@openint/ui-v1'
@@ -42,11 +42,15 @@ async function createOrganizationMutationWrapper({
     },
     unknown
   >
-  createOrgClerkMutation: () => Promise<{id: string}>
+  createOrgClerkMutation: (
+    options: Parameters<typeof createOrgClerkMutation>[0],
+  ) => Promise<{id: string}>
   setActiveClerkOrganization: (organizationId: string) => void
 }) {
   return new Promise<void>(async (resolve, reject) => {
-    const newOrg = await createOrgClerkMutation()
+    const newOrg = await createOrgClerkMutation({
+      name,
+    })
     if (!newOrg) {
       reject(new Error('Failed to create organization'))
       return
@@ -62,7 +66,8 @@ async function createOrganizationMutationWrapper({
       {
         onSuccess: async (data) => {
           if (data.id && data.id == newOrg.id) {
-            await setActiveClerkOrganization(data.id)
+            console.log('Organization created:', data)
+            // await setActiveClerkOrganization(data.id)
             resolve()
             // setTimeout(() => {
             //   window.location.href = '/'
@@ -75,6 +80,10 @@ async function createOrganizationMutationWrapper({
             )
           }
         },
+        onError: (error) => {
+          console.error('Error creating organization:', error)
+          reject(error)
+        },
       },
     )
   })
@@ -85,6 +94,7 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
   // auth works for initial request but then subsequently breaks...
   const auth = useAuth()
   const user = useUser()
+  const router = useRouter()
   const {mutate: createOrgBackendMutation} =
     _trpcReact.createOrganization.useMutation()
   const {
@@ -109,25 +119,21 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
       <div className="flex h-screen w-screen items-center justify-center">
         <OnboardingModal
           className="w-[500px] max-w-[90%]"
-          createOrganization={(name: string) =>
-            createOrganizationMutationWrapper({
-              name,
-              clerkUserId: auth.userId,
-              createOrgBackendMutation: createOrgBackendMutation as any,
-              createOrgClerkMutation: createOrgClerkMutation as any,
-              setActiveClerkOrganization: (organizationId: string) => {
-                setActiveClerkOrganization?.({
-                  organization: organizationId,
-                })
-              },
-            })
-          }
+          createOrganization={createOrganizationMutationWrapper({
+            name,
+            clerkUserId: auth.userId,
+            createOrgBackendMutation: createOrgBackendMutation as any,
+            createOrgClerkMutation,
+            setActiveClerkOrganization: (organizationId: string) => {
+              setActiveClerkOrganization?.({
+                organization: organizationId,
+              })
+            },
+          })}
           navigateTo={(action, connectorName) => {
             switch (action) {
               case 'setupConnector':
-                // this in case the user selects a connector from the top 3 list. Hence a connectorType is provided
-                console.log('TODO: handle', action, connectorName)
-                break
+              // this in case the user selects a connector from the top 3 list. Hence a connectorType is provided
               case 'listConnectors':
               // this is in case the user selects they want to add a connector that's not in the top 3 list.
               case 'dashboard':
@@ -135,7 +141,8 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
               default: {
                 console.log('TODO: handle', action, connectorName)
                 // TODO: handle
-                router.push('/dashboard')
+                router.push('/')
+                break
               }
             }
           }}
