@@ -159,6 +159,8 @@ const connectorConfigList = connectorsList.map(
     config: {},
     org_id: 'org_123',
     connector_name: connector.name,
+    display_name: null,
+    disabled: null,
   }),
 )
 

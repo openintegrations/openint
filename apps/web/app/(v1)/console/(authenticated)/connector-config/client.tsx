@@ -1,66 +1,48 @@
 'use client'
 
-import {Plus} from 'lucide-react'
-import {use, useState} from 'react'
-import type {ConnectorConfig} from '@openint/api-v1/models'
+import {ArrowLeft, Plus} from 'lucide-react'
+import {useRef, useState} from 'react'
+import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {AppRouterOutput} from '@openint/api-v1/routers'
 import {Button} from '@openint/shadcn/ui'
-import {Sheet, SheetContent, SheetTrigger} from '@openint/shadcn/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetTitle,
+} from '@openint/shadcn/ui/sheet'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
+import {
+  JSONSchemaForm,
+  type SchemaFormElement,
+} from '@openint/ui-v1/components/schema-form/SchemaForm'
 import {AddConnectorConfig} from '@openint/ui-v1/domain-components/AddConnectorConfig'
 import {ConnectorTableCell} from '@openint/ui-v1/domain-components/ConnectorTableCell'
-import {useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 
-export function ConnectorConfigListHeader(props: {
-  initialData?: Promise<AppRouterOutput['listConnectors']>
-}) {
-  const initialData = use(props.initialData ?? Promise.resolve(undefined))
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const trpc = useTRPC()
-  const res = useSuspenseQuery(
-    trpc.listConnectors.queryOptions(
-      {},
-      initialData ? {initialData} : undefined,
-    ),
-  )
-
-  return (
-    <div className="flex justify-between">
-      <h1 className="text-2xl font-bold">Connector Configs</h1>
-
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetTrigger asChild>
-          <Button>
-            <Plus className="size-4" />
-            Add Connector
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="right" className="min-w-1/3">
-          <AddConnectorConfig
-            connectors={res.data}
-            onSelectConnector={() => {
-              setSheetOpen(false)
-              res.refetch()
-            }}
-          />
-        </SheetContent>
-      </Sheet>
-    </div>
-  )
-}
-
 export function ConnectorConfigList(props: {
-  initialData?: Promise<{
+  initialData?: {
     items: Array<
       ConnectorConfig<'connector' | 'integrations' | 'connection_count'>
     >
     total: number
     limit: number
     offset: number
-  }>
+  }
+  initialConnectorData?: AppRouterOutput['listConnectors']
 }) {
-  const initialData = use(props.initialData ?? Promise.resolve(undefined))
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const [selectedConnector, setSelectedConnector] = useState<
+    Core['connector'] | null
+  >(null)
+  const [selectedCcfg, setSelectedCcfg] = useState<ConnectorConfig<
+    'connector' | 'integrations' | 'connection_count'
+  > | null>(null)
+  const formRef = useRef<SchemaFormElement>(null)
+
+  const {initialData, initialConnectorData} = props
+
   const trpc = useTRPC()
   const res = useSuspenseQuery(
     trpc.listConnectorConfigs.queryOptions(
@@ -68,8 +50,34 @@ export function ConnectorConfigList(props: {
       initialData ? {initialData} : undefined,
     ),
   )
+  const connectorRes = useSuspenseQuery(
+    trpc.listConnectors.queryOptions(
+      {},
+      initialConnectorData ? {initialData: initialConnectorData} : undefined,
+    ),
+  )
 
   const connectorConfigs = res.data.items
+  const formSchema = {
+    type: 'object' as const,
+    properties: {
+      displayName: {
+        type: 'string' as const,
+        title: 'Display Name',
+        description: 'A friendly name for this connector configuration',
+      },
+      disabled: {
+        type: 'boolean' as const,
+        title: 'Disabled',
+        description:
+          'When disabled it will not be used for connection portal. Essentially a reversible soft-delete',
+      },
+      ...((
+        selectedConnector?.schemas?.connector_config as Record<string, unknown>
+      )?.['properties'] || {}),
+    },
+    additionalProperties: true,
+  }
 
   const connectorColumns: Array<
     ColumnDef<
@@ -97,21 +105,115 @@ export function ConnectorConfigList(props: {
     {
       id: 'status',
       header: 'Status',
-      cell: () => <span className="text-gray-400">--</span>,
+      cell: ({row}) => (
+        <span className="flex items-center gap-2">
+          {row.original.disabled ? 'Disabled' : 'Enabled'}
+        </span>
+      ),
     },
     {
       id: 'actions',
       header: 'Actions',
-      cell: () => {
-        // Empty placeholder
-        return (
-          <Button variant="ghost" size="sm">
-            View
-          </Button>
-        )
-      },
+      cell: () => (
+        <Button variant="ghost" size="sm">
+          View
+        </Button>
+      ),
     },
   ]
+
+  const handleRowClick = (
+    ccfg: ConnectorConfig<'connector' | 'integrations' | 'connection_count'>,
+  ) => {
+    // Find the full connector data from the connectors list
+    const fullConnector = connectorRes.data.find(
+      (c) => c.name === ccfg.connector.name,
+    )
+
+    setSelectedCcfg(ccfg)
+    // Use the full connector data if available, otherwise use the one from ccfg
+    setSelectedConnector(fullConnector || ccfg.connector)
+    setSheetOpen(true)
+  }
+
+  const handleSelectConnector = async (connector: Core['connector']) => {
+    setSelectedConnector(connector)
+    setSelectedCcfg(null)
+  }
+
+  const handleBackToConnectors = () => {
+    setSelectedConnector(null)
+    setSelectedCcfg(null)
+  }
+
+  const createConfig = useMutation(trpc.createConnectorConfig.mutationOptions())
+  const updateConfig = useMutation(trpc.updateConnectorConfig.mutationOptions())
+  const deleteConfig = useMutation(trpc.deleteConnectorConfig.mutationOptions())
+
+  const handleSave = async (data: {
+    formData: {
+      displayName: string
+      disabled: boolean
+      config?: Record<string, unknown>
+    }
+  }) => {
+    if (!selectedConnector) {
+      return
+    }
+
+    const {
+      formData: {displayName, disabled, config},
+    } = data
+
+    try {
+      if (selectedCcfg) {
+        await updateConfig.mutateAsync({
+          id: selectedCcfg.id,
+          display_name: displayName,
+          disabled,
+          config,
+        })
+      } else {
+        await createConfig.mutateAsync({
+          connector_name: selectedConnector.name,
+          display_name: displayName,
+          disabled,
+          config,
+        })
+      }
+
+      setSheetOpen(false)
+      setSelectedConnector(null)
+      setSelectedCcfg(null)
+      await res.refetch()
+    } catch (error) {
+      console.error('Error saving configuration:', error)
+    }
+  }
+
+  const handleFormSubmit = () => {
+    if (formRef.current) {
+      formRef.current.submit()
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!selectedCcfg) return
+
+    try {
+      await deleteConfig.mutateAsync({
+        id: selectedCcfg.id,
+      })
+
+      setSheetOpen(false)
+      setSelectedConnector(null)
+      setSelectedCcfg(null)
+      res.refetch()
+    } catch (error) {
+      console.error('Failed to delete connector config:', error)
+      // TODO: We need to show a toast here
+    }
+  }
 
   return (
     <div>
@@ -120,17 +222,92 @@ export function ConnectorConfigList(props: {
         string | number | string[]
       >
         data={connectorConfigs}
-        columns={connectorColumns}>
+        columns={connectorColumns}
+        onRowClick={handleRowClick}>
         <DataTable.Header>
           <DataTable.SearchInput />
           <DataTable.ColumnVisibilityToggle />
-          <Button className="ml-4">Add Connector</Button>
+          <Button
+            onClick={() => {
+              setSheetOpen(true)
+            }}>
+            <Plus className="size-4" />
+            Add Connector
+          </Button>
         </DataTable.Header>
         <DataTable.Table />
         <DataTable.Footer>
           <DataTable.Pagination />
         </DataTable.Footer>
       </DataTable>
+
+      <Sheet
+        open={sheetOpen}
+        onOpenChange={(open) => {
+          setSheetOpen(open)
+          if (!open) {
+            setSelectedConnector(null)
+            setSelectedCcfg(null)
+          }
+        }}>
+        <SheetContent side="right" className="min-w-1/3 p-4 pb-0">
+          <SheetTitle className="flex items-center gap-2">
+            {selectedConnector && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={handleBackToConnectors}>
+                <ArrowLeft className="size-4" />
+              </Button>
+            )}
+            <span className="text-xl font-semibold">
+              {selectedConnector
+                ? `Configure ${selectedConnector.display_name}`
+                : 'Add Connector'}
+            </span>
+          </SheetTitle>
+          {selectedConnector ? (
+            <>
+              <JSONSchemaForm
+                ref={formRef}
+                jsonSchema={formSchema}
+                onSubmit={handleSave}
+                hideSubmitButton
+                formData={
+                  selectedCcfg
+                    ? {
+                        ...selectedCcfg.config,
+                        displayName: selectedCcfg.display_name ?? '',
+                        disabled: selectedCcfg.disabled ?? false,
+                      }
+                    : {}
+                }
+              />
+              <SheetFooter className="mt-auto flex flex-row justify-between border-t pt-4">
+                <Button
+                  variant="destructive"
+                  onClick={handleDelete}
+                  disabled={!selectedCcfg || deleteConfig.isPending}>
+                  {deleteConfig.isPending ? 'Deleting...' : 'Delete'}
+                </Button>
+                <Button
+                  onClick={handleFormSubmit}
+                  disabled={createConfig.isPending || updateConfig.isPending}>
+                  {createConfig.isPending || updateConfig.isPending
+                    ? 'Saving...'
+                    : 'Save'}
+                </Button>
+              </SheetFooter>
+            </>
+          ) : (
+            <AddConnectorConfig
+              connectors={connectorRes.data}
+              onSelectConnector={handleSelectConnector}
+            />
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }

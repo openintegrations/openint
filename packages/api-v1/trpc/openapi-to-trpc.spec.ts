@@ -76,6 +76,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       logo_url:
         'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public//_assets/logo-google.svg',
     })
+    expect(items[0].display_name).toEqual('Test Google Connection')
+    expect(items[0].disabled).toEqual(false)
   })
 
   test('GET /connector-config with invalid expand options', async () => {
