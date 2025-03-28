@@ -45,12 +45,12 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
               }),
             })
             .openapi({title: 'Use OpenInt platform credentials'}),
-          schema.openapi({title: 'Use my own'}),
+          schema.shape.oauth.openapi({title: 'Use my own'}),
         ]),
       })
     }
     return z.object({
-      oauth: schema,
+      oauth: schema.shape.oauth,
     })
   }
 
