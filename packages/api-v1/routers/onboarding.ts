@@ -3,7 +3,8 @@ import {z} from 'zod'
 import {encodeApiKey} from '@openint/cdk'
 import {eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {authenticatedProcedure, router} from '../trpc/_base'
+import {core} from '../models'
+import {orgProcedure, router} from '../trpc/_base'
 
 const zOnboardingState = z.object({
   first_connector_configured: z.boolean(),
@@ -13,7 +14,36 @@ const zOnboardingState = z.object({
 })
 
 export const onboardingRouter = router({
-  createOrganization: authenticatedProcedure
+  getOrganization: orgProcedure
+    .meta({
+      openapi: {method: 'GET', path: '/organization', enabled: false},
+    })
+    .input(z.void())
+    .output(core.organization.omit({metadata: true}))
+    .query(async ({ctx}) => {
+      const org = await ctx
+        .as({role: 'system'})
+        .db.query.organization.findFirst({
+          where: eq(schema.organization.id, ctx.viewer.orgId),
+        })
+
+      if (!org) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Organization not found',
+        })
+      }
+
+      return org
+    }),
+  createOrganization: orgProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/organization/onboarding',
+        enabled: false,
+      },
+    })
     .input(
       z.object({
         id: z.string(),
@@ -41,9 +71,13 @@ export const onboardingRouter = router({
 
       return {id: input.id}
     }),
-  getOnboarding: authenticatedProcedure
+  getOnboarding: orgProcedure
     .meta({
-      openapi: {method: 'GET', path: '/organization/onboarding'},
+      openapi: {
+        method: 'GET',
+        path: '/organization/onboarding',
+        enabled: false,
+      },
     })
     .input(z.void())
     .output(zOnboardingState)
@@ -94,9 +128,13 @@ export const onboardingRouter = router({
       }
     }),
 
-  setOnboardingComplete: authenticatedProcedure
+  setOnboardingComplete: orgProcedure
     .meta({
-      openapi: {method: 'PUT', path: '/organization/onboarding'},
+      openapi: {
+        method: 'PUT',
+        path: '/organization/onboarding',
+        enabled: false,
+      },
     })
     .input(z.void())
     .output(z.void())
