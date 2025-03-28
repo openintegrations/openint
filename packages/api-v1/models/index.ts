@@ -14,6 +14,10 @@ const event_insert = createInsertSchema(schema.event).openapi({
   ref: 'core.event_insert',
 })
 
+const organization = createSelectSchema(schema.organization).openapi({
+  ref: 'core.organization',
+})
+
 export function parseNonEmpty<T>(arr: T[]) {
   if (arr.length === 0) {
     throw new Error('Array is empty')
@@ -30,6 +34,7 @@ const coreBase = z.object({
 export const core = {
   event,
   event_insert,
+  organization,
   connection: z
     .intersection(
       coreBase

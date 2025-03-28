@@ -25,7 +25,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       .values({
         id: orgId,
         name: 'Test Organization',
-        metadata: {},
+        api_key: 'test_api_key',
+        slug: 'test-organization',
+        metadata: {foo: 'bar'},
       })
       .onConflictDoNothing()
   })
@@ -50,6 +52,34 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         first_connection_created: false,
         api_key_used: false,
         onboarding_marked_complete: false,
+      })
+    })
+  })
+
+  describe('getOrganization', () => {
+    test('returns organization details', async () => {
+      const org = await asOrg.getOrganization()
+
+      expect(org).toEqual({
+        id: orgId,
+        name: 'Test Organization',
+        slug: 'test-organization',
+        api_key: 'test_api_key',
+        created_at: expect.any(String),
+        updated_at: expect.any(String),
+      })
+    })
+
+    test('user can access organization details', async () => {
+      const org = await asUser.getOrganization()
+
+      expect(org).toEqual({
+        id: orgId,
+        name: 'Test Organization',
+        slug: 'test-organization',
+        api_key: 'test_api_key',
+        created_at: expect.any(String),
+        updated_at: expect.any(String),
       })
     })
   })
