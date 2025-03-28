@@ -1,0 +1,16 @@
+{
+  "name": "@openint/commands",
+  "version": "0.0.0",
+  "private": true,
+  "module": "./index.ts",
+  "scripts": {},
+  "dependencies": {
+    "@openint/cdk": "workspace:*",
+    "@openint/util": "workspace:*",
+    "@opensdks/util-zod": "^0.0.16"
+  },
+  "devDependencies": {
+    "@openint/ui-v1": "workspace:*",
+    "inngest": "^3.22.13"
+  }
+}
