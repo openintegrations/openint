@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type {Meta, StoryObj} from '@storybook/react'
+import {useState} from 'react'
 import {
   Button,
   Sheet,
@@ -60,7 +61,7 @@ export const ModalVariant: Story = {
   },
   render: (props) => {
     // Add state for sheet open/close
-    const [open, setOpen] = React.useState(true)
+    const [open, setOpen] = useState(true)
     // In a real implementation, we would handle onClose to set open=false
     return (
       <>

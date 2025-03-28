@@ -1,12 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
-<<<<<<< HEAD:packages/ui-v1/domain-components/__stories__/ConnectorCard.stories.tsx
+import {Badge} from '@openint/shadcn/ui'
 import {ConnectorCard} from '../ConnectorCard'
 import {FIXTURES} from './fixtures'
-=======
-import {Badge} from '@openint/shadcn/ui'
-import {FIXTURES} from './__stories__/fixtures'
-import {ConnectorCard} from './ConnectorCard'
->>>>>>> 0e008a9e66dcba0673f89da3ff4787f794d10de5:packages/ui-v1/domain-components/ConnectorCard.stories.tsx
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
