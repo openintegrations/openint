@@ -1,9 +1,9 @@
 import {Suspense} from 'react'
+import type {Viewer} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import type {PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
-import type {APICaller} from '@/lib-server/globals'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {AddConnectionInner, MyConnectionsClient} from './client'
@@ -12,7 +12,7 @@ function Fallback() {
   return <div>Loading...</div>
 }
 
-export default async function Page(props: PageProps) {
+export default async function Page(props: PageProps<never, {tab?: string}>) {
   const {viewer, token} = await currentViewer(props)
   const api = createAPICaller(viewer)
   return (
@@ -21,7 +21,7 @@ export default async function Page(props: PageProps) {
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
       <ClientApp token={token!}>
-        <Tabs defaultValue="my-connections">
+        <Tabs defaultValue={(await props.searchParams).tab ?? 'my-connections'}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="my-connections">My connections</TabsTrigger>
             <TabsTrigger value="add-connection">Add connection</TabsTrigger>
@@ -33,7 +33,7 @@ export default async function Page(props: PageProps) {
           </TabsContent>
           <TabsContent value="add-connection" className="p-4">
             <Suspense fallback={<Fallback />}>
-              <AddConnections api={api} />
+              <AddConnections viewer={viewer} />
             </Suspense>
           </TabsContent>
         </Tabs>
@@ -43,7 +43,9 @@ export default async function Page(props: PageProps) {
 }
 
 /** This needs to happen server side for preConnect to work */
-async function AddConnections({api}: {api: APICaller}) {
+async function AddConnections({viewer}: {viewer: Viewer}) {
+  const api = createAPICaller(viewer)
+
   const res = await api.listConnectorConfigs()
 
   return (
@@ -52,7 +54,7 @@ async function AddConnections({api}: {api: APICaller}) {
         <Suspense key={ccfg.id} fallback={<Fallback />}>
           <div key={ccfg.id} className="p-4">
             <h1 className="text-3xl">Add {ccfg.id} connection</h1>
-            <AddConnectionServer connectorConfigId={ccfg.id} api={api} />
+            <AddConnectionServer connectorConfigId={ccfg.id} viewer={viewer} />
           </div>
         </Suspense>
       ))}
@@ -61,12 +63,13 @@ async function AddConnections({api}: {api: APICaller}) {
 }
 
 function AddConnectionServer({
-  api,
+  viewer,
   connectorConfigId,
 }: {
-  api: APICaller
+  viewer: Viewer
   connectorConfigId: string
 }) {
+  const api = createAPICaller(viewer)
   const name = extractId(connectorConfigId as `ccfg_${string}`)[1]
   const res = api.preConnect({
     id: connectorConfigId,
