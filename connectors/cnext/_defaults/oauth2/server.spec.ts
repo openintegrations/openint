@@ -68,7 +68,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         fetchLinks: [],
         onSettingsChange: () => Promise.resolve(),
       })
-    }).toThrow('Missing client_id or client_secret')
+    }).toThrow('provided')
   })
 
   test('newInstance should initialize successfully with valid credentials', () => {

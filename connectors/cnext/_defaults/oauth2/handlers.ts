@@ -89,9 +89,7 @@ export async function authorizeHandler({
   validateOAuthCredentials(oauthConfig)
 
   const url = new URL(oauthConfig.authorization_request_url)
-  console.warn(
-    `AuthorizeHandler called with oauthConfig ${JSON.stringify(oauthConfig)}`,
-  )
+
   const params = mapOauthParams(
     {
       client_id: oauthConfig.connector_config.oauth.client_id,
