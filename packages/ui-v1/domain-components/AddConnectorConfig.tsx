@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import * as React from 'react'
+import type {HTMLAttributes} from 'react'
 import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Input} from '@openint/shadcn/ui'
@@ -6,7 +7,7 @@ import type {ConnectorTemporary} from './__stories__/fixtures'
 import {ConnectorCard} from './ConnectorCard'
 
 export interface AddConnectorConfigProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+  extends HTMLAttributes<HTMLDivElement> {
   connectors: Array<Core['connector']>
   onSelectConnector?: (connector: Core['connector']) => void
   initialSearchQuery?: string
@@ -27,7 +28,7 @@ export const AddConnectorConfig = ({
   variant = 'default',
   ...props
 }: AddConnectorConfigProps) => {
-  const [searchQuery, setSearchQuery] = useState(initialSearchQuery ?? '')
+  const [searchQuery, setSearchQuery] = React.useState(initialSearchQuery ?? '')
 
   const filteredConnectors = connectors.filter(
     (connector) =>
