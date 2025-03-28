@@ -50,7 +50,7 @@ export const connectorRouter = router({
         .object({
           expand: z
             .string()
-            .transform((val) => val.split(','))
+            .transform((val) => val.split(',').map(s => s.trim()))
             .refine(
               (items) =>
                 items.every((item) => zExpandOptions.safeParse(item).success),
