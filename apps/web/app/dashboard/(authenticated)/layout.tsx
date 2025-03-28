@@ -18,13 +18,13 @@ import {VCommandBar} from '@/vcommands/vcommand-components'
 import {Sidebar} from './Sidebar'
 
 async function createOrganizationMutationWrapper({
-  name,
+  organizationName,
   clerkUserId,
   createOrgBackendMutation,
   createOrgClerkMutation,
   setActiveClerkOrganization,
 }: {
-  name: string
+  organizationName: string
   clerkUserId: string
   createOrgBackendMutation: UseMutateFunction<
     {
@@ -42,14 +42,12 @@ async function createOrganizationMutationWrapper({
     },
     unknown
   >
-  createOrgClerkMutation: (
-    options: Parameters<typeof createOrgClerkMutation>[0],
-  ) => Promise<{id: string}>
+  createOrgClerkMutation: (options: any) => Promise<{id: string}>
   setActiveClerkOrganization: (organizationId: string) => void
 }) {
   return new Promise<void>(async (resolve, reject) => {
     const newOrg = await createOrgClerkMutation({
-      name,
+      name: organizationName,
     })
     if (!newOrg) {
       reject(new Error('Failed to create organization'))
@@ -59,7 +57,7 @@ async function createOrganizationMutationWrapper({
     await createOrgBackendMutation(
       {
         id: newOrg.id,
-        name,
+        name: organizationName,
         // referrer: 'web', // TODO: add referrer from form
         clerkUserId: clerkUserId ?? '',
       },
@@ -67,7 +65,7 @@ async function createOrganizationMutationWrapper({
         onSuccess: async (data) => {
           if (data.id && data.id == newOrg.id) {
             console.log('Organization created:', data)
-            // await setActiveClerkOrganization(data.id)
+            await setActiveClerkOrganization(data.id)
             resolve()
             // setTimeout(() => {
             //   window.location.href = '/'
@@ -119,17 +117,19 @@ export default function AuthedLayout({children}: {children: React.ReactNode}) {
       <div className="flex h-screen w-screen items-center justify-center">
         <OnboardingModal
           className="w-[500px] max-w-[90%]"
-          createOrganization={createOrganizationMutationWrapper({
-            name,
-            clerkUserId: auth.userId,
-            createOrgBackendMutation: createOrgBackendMutation as any,
-            createOrgClerkMutation,
-            setActiveClerkOrganization: (organizationId: string) => {
-              setActiveClerkOrganization?.({
-                organization: organizationId,
-              })
-            },
-          })}
+          createOrganization={(organizationName) =>
+            createOrganizationMutationWrapper({
+              organizationName,
+              clerkUserId: auth.userId,
+              createOrgBackendMutation: createOrgBackendMutation as any,
+              createOrgClerkMutation: createOrgClerkMutation as any,
+              setActiveClerkOrganization: (organizationId: string) => {
+                setActiveClerkOrganization?.({
+                  organization: organizationId,
+                })
+              },
+            })
+          }
           navigateTo={(action, connectorName) => {
             switch (action) {
               case 'setupConnector':
