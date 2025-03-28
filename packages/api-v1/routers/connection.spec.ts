@@ -113,7 +113,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
 
     // Via trpc
-    const conns = await asCustomer.caller.listConnections()
+
+    const conns = await asCustomer.caller.listConnections({
+      // TODO: @openint-bot, add tests for include_secrets cases
+      include_secrets: 'all',
+    })
     expect(conns.items).toHaveLength(1)
     expect(conns.items[0]).toMatchObject({
       id: connIdRef.current,
