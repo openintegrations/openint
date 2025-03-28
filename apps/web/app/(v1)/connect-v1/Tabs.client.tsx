@@ -16,30 +16,54 @@ export function TabsClient({
 }: Omit<React.ComponentProps<typeof Tabs>, 'value' | 'onValueChange'> & {
   paramKey: string
 }) {
-  const [value, setValue] = useStateFromHash(
-    paramKey,
-    props.defaultValue,
-  )
+  const [value, setValue] = useStateFromSearchParams(paramKey, {
+    defaultValue: props.defaultValue,
+    shallow: true,
+  })
 
   return <Tabs {...props} value={value} onValueChange={setValue} />
 }
 
 export function useStateFromSearchParams<T extends string>(
   key: string,
-  defaultValue?: T,
+  options?: {
+    defaultValue?: T
+    shallow?: boolean
+  },
 ): [T | undefined, (value: T) => void] {
   const searchParams = useSearchParams()
   const router = useRouter()
   const value = searchParams.get(key) as T | null
+  const {defaultValue, shallow = false} = options || {}
 
-  const setValue = useCallback(
+  const setValue = React.useCallback(
     (newValue: T) => {
       const params = new URLSearchParams(searchParams)
-      params.set(key, newValue)
-      router.push(`?${params.toString()}`)
+
+      if (newValue === defaultValue) {
+        // Remove the parameter if it equals the default value
+        params.delete(key)
+      } else {
+        // Otherwise set it as normal
+        params.set(key, newValue)
+      }
+
+      // we need the ? regardless otherwise the URL will not be updated
+      // in case all params got deleted
+      const queryString = `?${params.toString()}`
+
+      if (shallow) {
+        // Use window.history to avoid full page reload
+
+        window.history.pushState(null, '', queryString)
+      } else {
+        // Use router for normal navigation
+        router.push(queryString)
+      }
     },
-    [key, router, searchParams],
+    [key, router, searchParams, shallow, defaultValue],
   )
+  // console.log('useStateFromSearchParams', key, value, defaultValue)
 
   return [value || defaultValue, setValue]
 }
@@ -56,41 +80,44 @@ export function useStateFromHash<T extends string>(
   const [hash, setHash] = React.useState(() => {
     // Only access window on client side
     if (typeof window !== 'undefined') {
-      return window.location.hash.slice(1); // Remove the # character
+      return window.location.hash.slice(1) // Remove the # character
     }
-    return '';
-  });
+    return ''
+  })
 
   // Update hash state when browser's hash changes
   React.useEffect(() => {
     const handleHashChange = () => {
-      setHash(window.location.hash.slice(1));
-    };
+      setHash(window.location.hash.slice(1))
+    }
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
 
   // Parse the hash string to get the value
   const value = React.useMemo(() => {
-    if (!hash) return undefined;
+    if (!hash) return undefined
 
     try {
-      const params = new URLSearchParams(hash);
-      return params.get(key) as T | null || undefined;
+      const params = new URLSearchParams(hash)
+      return (params.get(key) as T | null) || undefined
     } catch (e) {
-      return undefined;
+      return undefined
     }
-  }, [hash, key]);
+  }, [hash, key])
 
-  const setValue = useCallback((newValue: T) => {
-    const params = new URLSearchParams(hash || '');
-    params.set(key, newValue);
+  const setValue = useCallback(
+    (newValue: T) => {
+      const params = new URLSearchParams(hash || '')
+      params.set(key, newValue)
 
-    // Update the hash without causing navigation
-    window.history.pushState(null, '', `#${params.toString()}`);
-    setHash(params.toString());
-  }, [hash, key]);
+      // Update the hash without causing navigation
+      window.history.pushState(null, '', `#${params.toString()}`)
+      setHash(params.toString())
+    },
+    [hash, key],
+  )
 
-  return [value || defaultValue, setValue];
+  return [value || defaultValue, setValue]
 }
