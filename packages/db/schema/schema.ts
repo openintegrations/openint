@@ -31,7 +31,7 @@ export const connection = pgTable(
       .notNull()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
     customer_id: varchar(),
-    connector_config_id: varchar(),
+    connector_config_id: varchar().notNull(),
     integration_id: varchar(),
     env_name: varchar(),
     settings: jsonb().default({}).notNull().$type<any>(),

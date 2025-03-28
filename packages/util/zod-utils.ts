@@ -4,7 +4,7 @@ import {extendZodWithOpenApi} from 'zod-openapi'
 
 extendZodWithOpenApi(z)
 
-export {z}
+export {z, extendZodWithOpenApi}
 
 export function parseIf<T>(value: unknown, typeguard: (v: unknown) => v is T) {
   return typeguard(value) ? value : undefined
