@@ -322,7 +322,7 @@ importers:
   apps/web:
     dependencies:
       '@clerk/nextjs':
-        specifier: ^6.12.10
+        specifier: ^6.12.5
         version: 6.12.10(next@15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@lilyrose2798/trpc-openapi':
         specifier: 1.3.10
@@ -2657,8 +2657,8 @@ importers:
         specifier: next
         version: 11.0.0-rc.828(@tanstack/react-query@5.67.2(react@19.0.0))(@trpc/client@11.0.0-rc.828(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)
       lucide-react:
-        specifier: ^0.479.0
-        version: 0.479.0(react@19.0.0)
+        specifier: ^0.482.0
+        version: 0.482.0(react@19.0.0)
       next:
         specifier: 15.2.3
         version: 15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -13379,6 +13379,11 @@ packages:
 
   lucide-react@0.479.0:
     resolution: {integrity: sha512-aBhNnveRhorBOK7uA4gDjgaf+YlHMdMhQ/3cupk6exM10hWlEU+2QtWYOfhXhjAsmdb6LeKR+NZnow4UxRRiTQ==}
+    peerDependencies:
+      react: 19.0.0
+
+  lucide-react@0.482.0:
+    resolution: {integrity: sha512-XM8PzHzSrg8ATmmO+fzf+JyYlVVdQnJjuyLDj2p4V2zEtcKeBNAqAoJIGFv1x2HSBa7kT8gpYUxwdQ0g7nypfw==}
     peerDependencies:
       react: 19.0.0
 
@@ -30647,6 +30652,10 @@ snapshots:
       lru-cache: 4.0.2
 
   lucide-react@0.479.0(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+
+  lucide-react@0.482.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 
