@@ -105,6 +105,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
         ...(hideSubmitButton && {'ui:submitButtonOptions': {norender: true}}),
         ...uiSchema,
         ...props.uiSchema,
+        scopes: {'ui:widget': 'ScopesWidget'},
       }}
       onChange={handleFormChange}
       onSubmit={(data) => {

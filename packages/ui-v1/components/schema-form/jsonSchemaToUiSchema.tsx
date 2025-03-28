@@ -28,7 +28,6 @@ export function jsonSchemaToUiSchema(jsonSchema: RJSFSchema): UiSchema {
     for (const [key, _value] of Object.entries(jsonSchema.properties)) {
       const value = _value as StrictRJSFSchema
       const friendlyLabel = value.title ?? titleCase(key)
-      console.log(key, value)
 
       uiSchema[key] = {}
 
@@ -48,6 +47,7 @@ export function jsonSchemaToUiSchema(jsonSchema: RJSFSchema): UiSchema {
       Object.assign(uiSchema[key], {
         'ui:title': friendlyLabel,
         'ui:classNames': 'pt-2',
+        ...(key === 'scopes' ? {'ui:widget': 'ScopesWidget'} : {}),
         ...Object.fromEntries(
           Object.entries(value).filter(([k]) => k.startsWith('ui:')),
         ),
