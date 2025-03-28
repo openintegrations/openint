@@ -5,7 +5,7 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorDef} from '@openint/cdk'
 import {core, type Core} from '../models'
 import {getConnectorModel} from '../models/connectorSchemas'
-import {publicProcedure, router} from '../trpc/_base'
+import {orgProcedure, router} from '../trpc/_base'
 
 interface IntegrationsResponse {
   items: Array<Core['integration']>
@@ -34,7 +34,7 @@ const zConnectorName = z.enum(
 )
 
 export const connectorRouter = router({
-  listConnectors: publicProcedure
+  listConnectors: orgProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -100,7 +100,7 @@ export const connectorRouter = router({
       )
       return Promise.all(promises)
     }),
-  getConnectorByName: publicProcedure
+  getConnectorByName: orgProcedure
     .meta({
       openapi: {
         method: 'GET',

@@ -2,8 +2,17 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
+import {schema, sql} from '@openint/db'
 import {getServerUrl} from '@openint/env'
-import {publicProcedure, router} from '../trpc/_base'
+import {core, Customer} from '../models'
+import {orgProcedure, router} from '../trpc/_base'
+import {
+  applyPaginationAndOrder,
+  processTypedPaginatedResponse,
+  Query,
+  zListParams,
+  zListResponse,
+} from './utils/pagination'
 import {zConnectionId, zConnectorName, zCustomerId} from './utils/types'
 
 function asCustomer(
@@ -39,7 +48,7 @@ function asCustomer(
 }
 
 export const customerRouter = router({
-  createMagicLink: publicProcedure
+  createMagicLink: orgProcedure
     .meta({
       openapi: {
         method: 'POST',
@@ -133,7 +142,7 @@ export const customerRouter = router({
         magic_link_url: url.toString(),
       }
     }),
-  createToken: publicProcedure
+  createToken: orgProcedure
     .meta({
       openapi: {
         method: 'POST',
@@ -178,6 +187,56 @@ export const customerRouter = router({
 
       return {
         token: token,
+      }
+    }),
+  listCustomers: orgProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/customers',
+        description: 'List all customers',
+        summary: 'List Customers',
+      },
+    })
+    .input(
+      zListParams
+        .extend({
+          keywords: z.string().trim().nullish(),
+        })
+        .optional(),
+    )
+    .output(zListResponse(core.customer))
+    .query(async ({ctx, input}) => {
+      const baseQuery = ctx.db
+        .select({
+          id: schema.connection.customer_id,
+          connection_count: sql<number>`cast(count(*) as integer)`,
+          created_at: sql<Date>`min(${schema.connection.created_at})`,
+          updated_at: sql<Date>`max(${schema.connection.updated_at})`,
+        })
+        .from(schema.connection)
+        .where(
+          input?.keywords
+            ? sql`${schema.connection.customer_id} ILIKE ${`%${input.keywords}%`}`
+            : undefined,
+        )
+        .groupBy(schema.connection.customer_id, schema.connection.created_at)
+
+      const {query, limit, offset} = applyPaginationAndOrder(
+        baseQuery,
+        schema.connection.created_at,
+        input,
+      )
+
+      const {items, total} = await processTypedPaginatedResponse<Customer>(
+        query as unknown as Query,
+      )
+
+      return {
+        items,
+        total,
+        limit,
+        offset,
       }
     }),
 })
