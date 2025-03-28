@@ -301,7 +301,7 @@ export const connectionRouter = router({
             formatConnection(
               ctx,
               conn as any,
-              input?.include_secrets ?? 'none',
+              input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
               input?.expand ?? [],
             ),
           ),

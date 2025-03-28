@@ -8,6 +8,7 @@ import {
   authorizeHandler,
   defaultTokenExchangeHandler,
   tokenRefreshHandler,
+  validateOAuthCredentials,
 } from './handlers'
 import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
@@ -85,14 +86,8 @@ export function generateOAuth2Server<
         connectorDef.name,
         oauthConfig,
       )
-      const clientId = credentials.oauth?.client_id
-      const clientSecret = credentials.oauth?.client_secret
-
-      if (!clientId || !clientSecret) {
-        throw new Error(
-          `Missing client_id or client_secret for ${connectorDef.name}`,
-        )
-      }
+      // reusing validation logic from handlers.ts
+      validateOAuthCredentials({connector_config: credentials} as any)
     },
 
     async preConnect(connectorConfig, connectionSettings, input) {
@@ -124,7 +119,7 @@ export function generateOAuth2Server<
             // @ts-expect-error: QQ: fix this
             connectionSettings.oauth,
           ),
-          connector_config: ccfg.oauth,
+          connector_config: ccfg,
         },
         redirectUri: getServerUrl(null) + '/connect/callback',
         connectionId: connectionId,
@@ -145,11 +140,11 @@ export function generateOAuth2Server<
         oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            ccfg,
+            ccfg.oauth,
             // @ts-expect-error: QQ: fix this
             connectionSettings.oauth,
           ),
-          connector_config: ccfg.oauth,
+          connector_config: ccfg,
         } satisfies z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
         state: connectOutput.state,
@@ -194,13 +189,13 @@ export function generateOAuth2Server<
       )
 
       const result = await tokenRefreshHandler({
-        oAuthConfig: {
+        oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            ccfg,
+            ccfg.oauth,
             connectionSettings.oauth,
           ),
-          connector_config: ccfg.oauth,
+          connector_config: ccfg,
           connection_settings: connectionSettings,
         } as any as z.infer<typeof zOAuthConfig>, // TODO: fix this
         refreshToken: refreshToken,

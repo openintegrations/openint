@@ -68,7 +68,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         fetchLinks: [],
         onSettingsChange: () => Promise.resolve(),
       })
-    }).toThrow('Missing client_id or client_secret')
+    }).toThrow('provided')
   })
 
   test('newInstance should initialize successfully with valid credentials', () => {
@@ -76,8 +76,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       mockConnectorDef as any,
       mockOauthConfig,
     )
-    process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-    process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+    process.env['ccfg_test_connector_CLIENT_ID'] = 'test_client_id'
+    process.env['ccfg_test_connector_CLIENT_SECRET'] = 'test_client_secret'
 
     expect(() => {
       if (!server.newInstance) {
@@ -97,8 +97,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       mockConnectorDef as any,
       mockOauthConfig,
     )
-    process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-    process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+    process.env['ccfg_test_connector_CLIENT_ID'] = 'test_client_id'
+    process.env['ccfg_test_connector_CLIENT_SECRET'] = 'test_client_secret'
 
     if (!server.preConnect) {
       throw new Error('preConnect is not defined')
@@ -146,8 +146,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       serverOauthConfig,
     )
 
-    process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-    process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+    process.env['ccfg_test_connector_CLIENT_ID'] = 'test_client_id'
+    process.env['ccfg_test_connector_CLIENT_SECRET'] = 'test_client_secret'
 
     if (!server.preConnect) {
       throw new Error('preConnect is not defined')
@@ -194,8 +194,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
 
   // test('postConnect should exchange code for tokens successfully', async () => {
   //   const server = generateOAuth2Server(mockConnectorDef)
-  //   process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-  //   process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+  //   process.env['ccfg_test_connector_CLIENT_ID'] = 'test_client_id'
+  //   process.env['ccfg_test_connector_CLIENT_SECRET'] = 'test_client_secret'
 
   //   // Mock isOAuth2ConnectorDef to return true
   //   jest
@@ -252,8 +252,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
 
   // test('refreshConnection should refresh tokens successfully', async () => {
   //   const server = generateOAuth2Server(mockConnectorDef)
-  //   process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-  //   process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+  //   process.env['ccfg_test_connector_CLIENT_ID'] = 'test_client_id'
+  //   process.env['ccfg_test_connector_CLIENT_SECRET'] = 'test_client_secret'
 
   //   // Mock isOAuth2ConnectorDef to return true
   //   jest
@@ -311,8 +311,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
 
   // test('refreshConnection should throw error when refresh token is missing', async () => {
   //   const server = generateOAuth2Server(mockConnectorDef)
-  //   process.env['ccfg_test_connector__CLIENT_ID'] = 'test_client_id'
-  //   process.env['ccfg_test_connector__CLIENT_SECRET'] = 'test_client_secret'
+  //   process.env['ccfg_test_connector_CLIENT_ID'] = 'test_client_id'
+  //   process.env['ccfg_test_connector_CLIENT_SECRET'] = 'test_client_secret'
 
   //   // Mock isOAuth2ConnectorDef to return true - using the correct import
   //   jest

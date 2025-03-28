@@ -51,6 +51,27 @@ export async function makeTokenRequest(
   }
 }
 
+export function validateOAuthCredentials(
+  oauthConfig: z.infer<typeof zOAuthConfig>,
+  requiredFields: Array<'client_id' | 'client_secret'> = [
+    'client_id',
+    'client_secret',
+  ],
+): void {
+  if (!oauthConfig.connector_config) {
+    throw new Error('No connector_config provided')
+  }
+
+  for (const field of requiredFields) {
+    if (!oauthConfig.connector_config?.oauth?.[field]) {
+      console.error(
+        `No ${field} provided in connector_config.oauth for ${oauthConfig.connector_config.name}`,
+      )
+      throw new Error(`No ${field} provided`)
+    }
+  }
+}
+
 export const zAuthorizeHandlerArgs = z.object({
   oauthConfig: zOAuthConfig,
   redirectUri: z.string(),
@@ -67,27 +88,22 @@ export async function authorizeHandler({
   if (!connectionId) {
     throw new Error('No connection_id provided')
   }
-  if (!oauthConfig.connector_config?.client_id) {
-    throw new Error('No client_id provided')
-  }
-  if (!oauthConfig.connector_config) {
-    console.warn(
-      `AuthorizeHandler called with oauthConfig ${JSON.stringify(oauthConfig)}`,
-    )
-    throw new Error('No connector_config provided')
-  }
+
+  validateOAuthCredentials(oauthConfig)
+
   const url = new URL(oauthConfig.authorization_request_url)
-  console.warn(
-    `AuthorizeHandler called with oauthConfig ${JSON.stringify(oauthConfig)}`,
-  )
+
   const params = mapOauthParams(
     {
-      client_id: oauthConfig.connector_config.client_id,
+      client_id: oauthConfig.connector_config.oauth.client_id,
       redirect_uri: redirectUri,
       response_type: 'code',
       // decoding it as url.toString() encodes it already
       scope: decodeURIComponent(
-        prepareScopes(oauthConfig.connector_config.scopes ?? [], oauthConfig),
+        prepareScopes(
+          oauthConfig.connector_config.oauth.scopes ?? [],
+          oauthConfig,
+        ),
       ),
       // TODO: create a separate state ID in the database instead of using connectionId
       state: Buffer.from(connectionId).toString('base64'),
@@ -119,23 +135,15 @@ export async function defaultTokenExchangeHandler({
 }: z.infer<typeof zTokenExchangeHandlerArgs>): Promise<
   z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
-  if (!oauthConfig.connector_config) {
-    throw new Error('No connector_config provided')
-  }
-  if (!oauthConfig.connector_config?.client_id) {
-    throw new Error('No client_id provided')
-  }
-  if (!oauthConfig.connector_config?.client_secret) {
-    throw new Error('No client_secret provided')
-  }
+  validateOAuthCredentials(oauthConfig)
 
   const params = mapOauthParams(
     {
-      client_id: oauthConfig.connector_config.client_id,
-      client_secret: oauthConfig.connector_config.client_secret,
+      client_id: oauthConfig.connector_config.oauth.client_id,
+      client_secret: oauthConfig.connector_config.oauth.client_secret,
       redirectUri,
       scope: prepareScopes(
-        oauthConfig.connector_config.scopes ?? [],
+        oauthConfig.connector_config.oauth.scopes ?? [],
         oauthConfig,
       ),
       state,
@@ -150,35 +158,28 @@ export async function defaultTokenExchangeHandler({
 }
 
 export const zTokenRefreshHandlerArgs = z.object({
-  oAuthConfig: zOAuthConfig,
+  oauthConfig: zOAuthConfig,
   refreshToken: z.string(),
 })
 
 export async function tokenRefreshHandler({
-  oAuthConfig,
+  oauthConfig,
   refreshToken,
 }: z.infer<typeof zTokenRefreshHandlerArgs>): Promise<
   z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
-  if (!oAuthConfig.connector_config) {
-    throw new Error('No connector_config provided')
-  }
-  if (!oAuthConfig.connector_config?.client_id) {
-    throw new Error('No client_id provided')
-  }
-  if (!oAuthConfig.connector_config?.client_secret) {
-    throw new Error('No client_secret provided')
-  }
+  validateOAuthCredentials(oauthConfig)
+
   const params = mapOauthParams(
     {
-      client_id: oAuthConfig.connector_config.client_id,
-      client_secret: oAuthConfig.connector_config.client_secret,
+      client_id: oauthConfig.connector_config.oauth.client_id,
+      client_secret: oauthConfig.connector_config.oauth.client_secret,
       refresh_token: refreshToken,
       grant_type: 'refresh_token',
-      ...(oAuthConfig.params_config.token ?? {}),
+      ...(oauthConfig.params_config.token ?? {}),
     },
-    oAuthConfig.params_config.param_names ?? {},
+    oauthConfig.params_config.param_names ?? {},
   )
 
-  return makeTokenRequest(oAuthConfig.token_request_url, params, 'refresh')
+  return makeTokenRequest(oauthConfig.token_request_url, params, 'refresh')
 }

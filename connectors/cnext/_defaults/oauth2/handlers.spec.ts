@@ -1,4 +1,4 @@
-import {makeTokenRequest} from './handlers'
+import {makeTokenRequest, validateOAuthCredentials} from './handlers'
 
 // Mock fetch
 const mockFetch = jest.fn()
@@ -176,6 +176,53 @@ describe('OAuth2 handlers', () => {
       await expect(
         makeTokenRequest('https://example.com/oauth/token', params, 'exchange'),
       ).rejects.toThrow('Invalid oauth2 exchange token response format')
+    })
+  })
+
+  describe('validateOAuthCredentials', () => {
+    test('should not throw when all required fields are present', () => {
+      const config: any = {
+        connector_config: {
+          oauth: {
+            client_id: 'test-id',
+            client_secret: 'test-secret',
+          },
+        },
+      }
+      expect(() => validateOAuthCredentials(config)).not.toThrow()
+    })
+
+    test('should throw appropriate errors for missing fields', () => {
+      expect(() => validateOAuthCredentials({} as any)).toThrow(
+        'No connector_config provided',
+      )
+
+      expect(() =>
+        validateOAuthCredentials({connector_config: {}} as any),
+      ).toThrow('No client_id provided')
+
+      expect(() =>
+        validateOAuthCredentials({
+          connector_config: {oauth: {client_secret: 'secret'}},
+        } as any),
+      ).toThrow('No client_id provided')
+
+      expect(() =>
+        validateOAuthCredentials({
+          connector_config: {oauth: {client_id: 'id'}},
+        } as any),
+      ).toThrow('No client_secret provided')
+    })
+
+    test('should validate only specified required fields', () => {
+      const config: any = {
+        connector_config: {
+          oauth: {client_id: 'test-id'},
+        },
+      }
+      expect(() =>
+        validateOAuthCredentials(config, ['client_id']),
+      ).not.toThrow()
     })
   })
 })
