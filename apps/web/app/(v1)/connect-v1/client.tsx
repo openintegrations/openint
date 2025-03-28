@@ -6,7 +6,11 @@ import type {AppRouterOutput} from '@openint/api-v1/routers'
 import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
-import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../console/(authenticated)/client'
 
 const connectorImports = {
@@ -138,12 +142,27 @@ export function MyConnectionsClient(props: {
   initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
-  const api = useTRPC()
+  const trpc = useTRPC()
   const res = useSuspenseQuery(
-    api.listConnections.queryOptions(
+    trpc.listConnections.queryOptions(
       {connector_name: props.connector_name},
       initialData ? {initialData} : undefined,
     ),
+  )
+
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation(
+    trpc.deleteConnection.mutationOptions({
+      onSettled: () => {
+        // Refetch the connections after deletion
+        queryClient.invalidateQueries({
+          queryKey: trpc.listConnections.queryKey({
+            connector_name: props.connector_name,
+          }),
+        })
+      },
+    }),
   )
 
   return (
@@ -152,6 +171,14 @@ export function MyConnectionsClient(props: {
       {res.data.items.map((conn) => (
         <div key={conn.id} className="p-4">
           <h2 className="text-2xl"> {conn.id}</h2>
+          <Button
+            onClick={() => {
+              console.log('Delete connection', conn.id)
+              mutation.mutate({id: conn.id})
+            }}
+            className="mt-2 rounded bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600">
+            Delete Connection
+          </Button>
         </div>
       ))}
     </>
