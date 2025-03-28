@@ -184,7 +184,7 @@ export function OnboardingModal({
           className={`sm:max-w-[750px] ${className}`}
           style={{height: 'auto', maxHeight: '50vh', overflow: 'hidden'}}
           aria-description="Step by step onboarding process to set up your organization and integrations">
-          <DialogTitle className="sr-only">Onboarding Setup</DialogTitle>=
+          <DialogTitle className="sr-only">Onboarding Setup</DialogTitle>
           {step === 'organization' ? (
             <div className="flex h-[500px] flex-col justify-center">
               <div className="mb-4 flex justify-center">
