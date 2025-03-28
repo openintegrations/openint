@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type {Meta, StoryObj} from '@storybook/react'
-import React from 'react'
+import {useState} from 'react'
 import {
   Button,
   Sheet,
@@ -8,8 +8,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@openint/shadcn/ui'
-import {FIXTURES} from './__stories__/fixtures'
-import {AddConnectorConfig} from './AddConnectorConfig'
+import {AddConnectorConfig} from '../AddConnectorConfig'
+import {FIXTURES} from './fixtures'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -61,7 +61,7 @@ export const ModalVariant: Story = {
   },
   render: (props) => {
     // Add state for sheet open/close
-    const [open, setOpen] = React.useState(true)
+    const [open, setOpen] = useState(true)
     // In a real implementation, we would handle onClose to set open=false
     return (
       <>
