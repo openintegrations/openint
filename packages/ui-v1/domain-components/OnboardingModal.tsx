@@ -22,7 +22,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@openint/shadcn/ui/card'
-import {Dialog, DialogContent} from '@openint/shadcn/ui/dialog'
+import {Dialog, DialogContent, DialogTitle} from '@openint/shadcn/ui/dialog'
 import {Input} from '@openint/shadcn/ui/input'
 import {Label} from '@openint/shadcn/ui/label'
 
@@ -33,29 +33,27 @@ interface ConnectorOption {
   id: ConnectorName
   title: string
   description: string
-  logoUrl: string
+  logo: string
 }
 
 const connectorOptions: ConnectorOption[] = [
   {
     id: 'calendar',
-    title: 'Google Calendar',
-    description: 'Connect your calendar to sync events and meetings',
-    logoUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/1200px-Google_Calendar_icon_%282020%29.svg.png',
+    title: 'Calendar',
+    description: 'Connect your Google Calendar',
+    logo: '/_assets/logo-google-calendar.svg',
   },
   {
     id: 'github',
     title: 'GitHub',
-    description: 'Sync your repositories and track development workflow',
-    logoUrl: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
+    description: 'Connect your Github',
+    logo: '/_assets/logo-github.svg',
   },
   {
     id: 'slack',
     title: 'Slack',
-    description: "Integrate with your team's communication hub",
-    logoUrl:
-      'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/306_Slack_logo-512.png',
+    description: 'Connect your Slack',
+    logo: '/_assets/logo-slack.svg',
   },
 ]
 
@@ -125,7 +123,7 @@ export function OnboardingModal({
   initialStep?: OnboardingStep
   className?: string
 }) {
-  const [step, setStep] = useState<OnboardingStep>(initialStep)
+  const [step] = useState<OnboardingStep>(initialStep)
   const [showExitDialog, setShowExitDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [loadingConnector, setLoadingConnector] =
@@ -151,7 +149,8 @@ export function OnboardingModal({
 
     try {
       await createOrganization(orgName)
-      setStep('connector')
+      navigateTo('dashboard')
+      // setStep('connector')
     } catch (error) {
       toast.error('Failed to create organization', {
         description:
@@ -183,7 +182,9 @@ export function OnboardingModal({
         }}>
         <DialogContent
           className={`sm:max-w-[750px] ${className}`}
-          style={{height: 'auto', maxHeight: '90vh', overflow: 'hidden'}}>
+          style={{height: 'auto', maxHeight: '50vh', overflow: 'hidden'}}
+          aria-description="Step by step onboarding process to set up your organization and integrations">
+          <DialogTitle className="sr-only">Onboarding Setup</DialogTitle>=
           {step === 'organization' ? (
             <div className="flex h-[500px] flex-col justify-center">
               <div className="mb-4 flex justify-center">
@@ -200,39 +201,13 @@ export function OnboardingModal({
 
               <div className="mb-4 text-center">
                 <div className="mb-4 flex justify-center">
-                  <div className="flex h-20 w-20 items-center justify-center">
-                    <svg
-                      viewBox="0 0 100 100"
-                      className="h-full w-full"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        d="M30,50 L70,50"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        d="M50,30 L50,70"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="20"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                    </svg>
-                  </div>
+                  <Image
+                    width={147}
+                    height={41}
+                    src="/openint-logo.svg"
+                    alt="OpenInt Logo"
+                    priority
+                  />
                 </div>
                 <h3 className="text-lg font-semibold">Create your workspace</h3>
                 <p className="text-muted-foreground mt-2 text-sm">
@@ -277,7 +252,7 @@ export function OnboardingModal({
                 </div>
 
                 <div className="text-muted-foreground text-center text-sm">
-                  <p>You&apos;ll be able to add team members after setup</p>
+                  <p>You&apos;ll be able to add team members after</p>
                 </div>
               </div>
             </div>
@@ -307,54 +282,21 @@ export function OnboardingModal({
 
               <div className="mb-4 text-center">
                 <div className="mb-4 flex justify-center">
-                  <div className="flex h-20 w-20 items-center justify-center">
-                    <svg
-                      viewBox="0 0 100 100"
-                      className="h-full w-full"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        d="M30,50 L70,50"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        d="M50,30 L50,70"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="20"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                    </svg>
-                  </div>
+                  <Image
+                    width={147}
+                    height={41}
+                    src="/openint-logo.svg"
+                    alt="OpenInt Logo"
+                    priority
+                  />
                 </div>
-                <h3 className="mb-1 text-lg font-semibold">
-                  Welcome to OpenInt!
-                </h3>
                 <p className="text-muted-foreground text-sm">
-                  Sexy Integrations for Developers
+                  Demo your first integration to get started:
                 </p>
               </div>
               <div
                 className="flex flex-col"
                 style={{height: 'calc(100% - 140px)'}}>
-                <p className="mb-3 text-center text-sm font-medium">
-                  Select your first to start:
-                </p>
-
                 <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
                   {connectorOptions.map((connector) => (
                     <Card key={connector.id} className="h-auto p-0">
@@ -362,7 +304,7 @@ export function OnboardingModal({
                         <div className="mb-3 flex justify-center">
                           <div className="relative h-14 w-14">
                             <Image
-                              src={connector.logoUrl}
+                              src={connector.logo}
                               alt={`${connector.title} logo`}
                               fill
                               className="object-contain"
@@ -398,7 +340,7 @@ export function OnboardingModal({
                     variant="link"
                     onClick={handleFindMore}
                     className="text-muted-foreground text-sm">
-                    or find more
+                    or choose another one
                   </Button>
                 </div>
               </div>
