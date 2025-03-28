@@ -4,7 +4,7 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {Core, core} from '../models'
+import {core, type Core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
@@ -12,7 +12,7 @@ import {
   zListParams,
   zListResponse,
 } from './utils/pagination'
-import {zConnectorName} from './utils/types'
+import {zConnectorConfigId, zConnectorName} from './utils/types'
 
 const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
   if (!res.length) {
@@ -286,7 +286,7 @@ export const connectorConfigRouter = router({
     })
     .input(
       z.object({
-        id: z.string(),
+        id: zConnectorConfigId,
         display_name: z.string().optional(),
         disabled: z.boolean().optional(),
         config: z.record(z.unknown()).nullish(),
@@ -334,8 +334,8 @@ export const connectorConfigRouter = router({
         enabled: false,
       },
     })
-    .input(z.object({id: z.string()}))
-    .output(z.string())
+    .input(z.object({id: zConnectorConfigId}))
+    .output(z.object({id: zConnectorConfigId}))
     .mutation(async ({ctx, input}) => {
       const {id} = input
 
@@ -356,6 +356,6 @@ export const connectorConfigRouter = router({
         .delete(schema.connector_config)
         .where(eq(schema.connector_config.id, id))
 
-      return id
+      return {id}
     }),
 })
