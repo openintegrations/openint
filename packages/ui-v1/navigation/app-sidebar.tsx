@@ -1,86 +1,62 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import * as React from 'react'
+import {Button} from '@openint/shadcn/ui'
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from '@openint/shadcn/ui/sidebar'
+import {Icon, IconName} from '../components'
 
-const navMain = [
+// Flattened navigation items
+const navItems = [
   {
-    title: 'Getting Started',
-    items: [
-      {
-        title: 'Installation',
-        url: '/console/',
-      },
-      {
-        title: 'Project Structure',
-        url: '/console/project-structure',
-      },
-    ],
+    title: 'Dashboard',
+    url: '/console',
+    icon: 'Box',
   },
   {
-    title: 'Building Your Application',
-    items: [
-      {
-        title: 'Magic Link',
-        url: '/console/magic-link',
-      },
-      {
-        title: 'Customers',
-        url: '/console/customers',
-      },
-      {
-        title: 'Connections',
-        url: '/console/connections',
-        isActive: true,
-      },
-      {
-        title: 'Connector Configs',
-        url: '/console/connector-config',
-      },
-      {
-        title: 'Connectors',
-        url: '/console/connectors',
-      },
-    ],
+    title: 'Connect',
+    url: '/console/connect',
+    icon: 'Wand',
   },
   {
-    title: 'Docs',
-    items: [
-      {
-        title: 'Settings',
-        url: '/console/settings',
-      },
-      {
-        title: 'Guides',
-        url: '/console/guides',
-      },
-      {
-        title: 'API Reference',
-        url: '/console/api-reference',
-      },
-    ],
+    title: 'Customers',
+    url: '/console/customers',
+    icon: 'Users',
+  },
+  {
+    title: 'Connections',
+    url: '/console/connections',
+    icon: 'Box',
+  },
+  {
+    title: 'Connector Configs',
+    url: '/console/connector-config',
+    icon: 'Layers',
+  },
+  {
+    title: 'Settings',
+    url: '/console/settings',
+    icon: 'Settings',
+  },
+  {
+    title: 'API Docs',
+    url: 'https://docs.openint.dev',
+    icon: 'ExternalLink',
   },
 ] satisfies Array<{
   title: string
-  items: Array<{
-    title: string
-    // TODO: Figure out how to type this to be the statically generated list of URLs from next.js
-    url: `/console${string}`
-    isActive?: boolean
-  }>
+  url: `${string}`
+  icon: IconName
 }>
 
 export function AppSidebar({
@@ -95,29 +71,46 @@ export function AppSidebar({
     <Sidebar {...props}>
       <SidebarHeader>{organizationSwitcher}</SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
-        {navMain.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {item.items.map((item) => {
-                  const isActive =
-                    pathname?.replace(/\/*$/, '') ===
-                    item.url.replace(/\/*$/, '')
-                  return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <Link href={item.url}>{item.title}</Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  )
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+        <SidebarMenu className="mt-5">
+          {navItems.map((item) => {
+            const isActive =
+              pathname?.replace(/\/*$/, '') === item.url.replace(/\/*$/, '')
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive}
+                  className="w-full">
+                  <Link
+                    href={item.url}
+                    className="flex w-full items-center px-4 py-2"
+                    target={item.url.startsWith('http') ? '_blank' : undefined}>
+                    {item.icon && (
+                      <Icon name={item.icon} className="mr-3 h-5 w-5" />
+                    )}
+                    {item.title}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )
+          })}
+        </SidebarMenu>
       </SidebarContent>
+
+      <div className="mb-10 mt-auto flex flex-col items-center justify-center space-y-4">
+        <Button
+          variant="default"
+          size="sm"
+          className="mb-4 justify-center"
+          style={{width: '146px'}}
+          onClick={() =>
+            window.open('https://cal.com/ap-openint/discovery', '_blank')
+          }>
+          Book A Demo
+          <Icon name="ExternalLink" className="mr-2 h-4 w-4" />
+        </Button>
+        <Image width={146} height={40} src="/openint-logo.svg" alt="OpenInt" />
+      </div>
       <SidebarRail />
     </Sidebar>
   )
