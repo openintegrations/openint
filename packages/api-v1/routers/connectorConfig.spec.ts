@@ -50,6 +50,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       connector_name: 'qbo',
       created_at: expect.any(String),
       updated_at: expect.any(String),
+      disabled: false,
+      display_name: null,
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
         envName: 'sandbox',
@@ -96,6 +98,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   test('connector config create with integrations', async () => {
     const res = await asOrg.createConnectorConfig({
       connector_name: 'google',
+      display_name: 'Test',
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
         integrations: {
@@ -115,6 +118,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       id: expect.any(String),
       org_id: 'org_222',
       connector_name: 'google',
+      display_name: 'Test',
+      disabled: false,
       created_at: expect.any(String),
       updated_at: expect.any(String),
       config: {
@@ -235,7 +240,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       id,
     })
     expect(res).toBeDefined()
-    expect(res.connector_name).toEqual('qbo')
+    expect(res).toEqual(id)
   })
 
   test('delete connector with invalid id returns error', async () => {

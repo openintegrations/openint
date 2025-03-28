@@ -62,6 +62,8 @@ export const core = {
       coreBase
         .extend({
           org_id: z.string(),
+          display_name: z.string().nullable(),
+          disabled: z.boolean().nullable(),
         })
         .describe('Connector Config Base'),
       z

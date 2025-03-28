@@ -61,8 +61,6 @@ export function expandConnector(
   return {
     // TODO: add more fields?
     name: connectorName,
-    // TODO: add display_name?
-    // display_name: connectorConfig.display_name,
     // TODO: add enabled?
     // enabled: connectorConfig.enabled,
     created_at: connectorConfig.created_at,
@@ -247,39 +245,84 @@ export const connectorConfigRouter = router({
     .input(
       z.object({
         connector_name: z.string(),
-        // TODO: why is this unknown / any?
+        display_name: z.string().optional(),
+        disabled: z.boolean().optional(),
         config: z.record(z.unknown()).nullish(),
       }),
     )
-    .output(core.connector_config)
+    .output(
+      z.intersection(
+        core.connector_config,
+        z.object({
+          config: z.record(z.unknown()).nullable(),
+        }),
+      ),
+    )
     .mutation(async ({ctx, input}) => {
-      const {connector_name, config} = input
+      const {connector_name, display_name, disabled, config} = input
       const [ccfg] = await ctx.db
         .insert(schema.connector_config)
         .values({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
-          config,
+          display_name,
+          disabled,
+          config: config ?? {},
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
         .returning()
+
+      // Ensure config is null if it's an empty object
+      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
+        ccfg.config = null
+      }
+
       return ccfg!
     }),
   updateConnectorConfig: orgProcedure
     .meta({
       openapi: {method: 'PUT', path: '/connector-config/{id}', enabled: false},
     })
-    .input(z.object({id: z.string(), config: z.record(z.unknown())}))
-    .output(core.connector_config)
+    .input(
+      z.object({
+        id: z.string(),
+        display_name: z.string().optional(),
+        disabled: z.boolean().optional(),
+        config: z.record(z.unknown()).nullish(),
+      }),
+    )
+    .output(
+      z.intersection(
+        core.connector_config,
+        z.object({
+          config: z.record(z.unknown()).nullable(),
+        }),
+      ),
+    )
     .mutation(async ({ctx, input}) => {
-      const {id, config} = input
+      const {id, config, display_name, disabled} = input
+      console.log({input})
       const res = await ctx.db
         .update(schema.connector_config)
-        .set({config, updated_at: new Date().toISOString()})
+        .set({
+          display_name,
+          disabled,
+          ...(config !== undefined ? {config} : {}),
+          updated_at: new Date().toISOString(),
+        })
         .where(eq(schema.connector_config.id, id))
         .returning()
 
+      console.log('updated ccfg', res)
+
       validateResponse(res, id)
       const [ccfg] = res
+
+      // Ensure config is null if it's an empty object
+      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
+        ccfg.config = null
+      }
 
       return ccfg!
     }),
@@ -292,18 +335,27 @@ export const connectorConfigRouter = router({
       },
     })
     .input(z.object({id: z.string()}))
-    .output(core.connector_config)
+    .output(z.string())
     .mutation(async ({ctx, input}) => {
       const {id} = input
-      const res = await ctx.db
+
+      const existingConfig = await ctx.db
+        .select({id: schema.connector_config.id})
+        .from(schema.connector_config)
+        .where(eq(schema.connector_config.id, id))
+        .limit(1)
+
+      if (!existingConfig.length) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config with ID "${id}" not found`,
+        })
+      }
+
+      await ctx.db
         .delete(schema.connector_config)
         .where(eq(schema.connector_config.id, id))
-        .returning()
 
-      validateResponse(res, id)
-
-      const [ccfg] = res
-
-      return ccfg!
+      return id
     }),
 })
