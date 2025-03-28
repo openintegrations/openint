@@ -405,7 +405,7 @@ export const connectionRouter = router({
       },
     })
     .input(z.object({id: zConnectionId}))
-    .output(zConnectionId)
+    .output(z.object({id: zConnectionId}))
     .mutation(async ({ctx, input}) => {
       const connection = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
@@ -420,6 +420,6 @@ export const connectionRouter = router({
       await ctx.db
         .delete(schema.connection)
         .where(eq(schema.connection.id, input.id))
-      return input.id
+      return {id: connection.id}
     }),
 })
