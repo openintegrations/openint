@@ -35,16 +35,16 @@ function ConnectorCard({
 }) {
   return (
     <Card
-      className="flex cursor-pointer flex-col items-center justify-center p-6 hover:bg-gray-50"
+      className="flex aspect-square cursor-pointer flex-col items-center justify-center p-1.5 hover:bg-gray-50"
       onClick={onClick}>
-      <div className="mb-4 h-16 w-16 overflow-hidden rounded-md">
+      <div className="mb-1 h-12 w-12 overflow-hidden">
         <img
           src={connector.logo_url}
           alt={connector.display_name}
           className="h-full w-full object-contain"
         />
       </div>
-      <span className="font-medium">{connector.display_name}</span>
+      <span className="text-xs font-medium">{connector.display_name}</span>
     </Card>
   )
 }
@@ -189,7 +189,7 @@ export function ConnectionPortal({
                   ([category, connectors]) => (
                     <div key={category}>
                       <h2 className="mb-4 text-xl font-semibold">{category}</h2>
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                         {connectors.map((connector) => (
                           <ConnectorCard
                             key={connector.id}
@@ -231,32 +231,21 @@ export function ConnectionPortal({
               </Button>
             </Card>
           ) : (
-            <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {mockConnections.map((connection) => (
                 <Card
                   key={connection.id}
-                  className="flex items-center justify-between p-4">
-                  <div className="flex items-center gap-3">
-                    {connection.connectorConfig?.logo_url && (
-                      <div className="h-10 w-10 overflow-hidden rounded-md">
-                        <img
-                          src={connection.connectorConfig.logo_url}
-                          alt={connection.connectorConfig.display_name || ''}
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="font-medium">{connection.name}</h3>
-                      <p className="text-sm text-gray-600">
-                        Connected on{' '}
-                        {new Date(connection.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
+                  className="flex aspect-square cursor-pointer flex-col items-center justify-center p-1.5 hover:bg-gray-50">
+                  <div className="mb-1 h-12 w-12 overflow-hidden">
+                    <img
+                      src={connection.connectorConfig?.logo_url}
+                      alt={connection.connectorConfig?.display_name || ''}
+                      className="h-full w-full object-contain"
+                    />
                   </div>
-                  <Button variant="destructive" size="sm">
-                    Delete
-                  </Button>
+                  <span className="text-xs font-medium">
+                    {connection.connectorConfig?.display_name || ''}
+                  </span>
                 </Card>
               ))}
             </div>
