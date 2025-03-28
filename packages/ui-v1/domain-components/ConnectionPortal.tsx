@@ -231,21 +231,32 @@ export function ConnectionPortal({
               </Button>
             </Card>
           ) : (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div className="space-y-4">
               {mockConnections.map((connection) => (
                 <Card
                   key={connection.id}
-                  className="flex aspect-square cursor-pointer flex-col items-center justify-center p-1.5 hover:bg-gray-50">
-                  <div className="mb-1 h-12 w-12 overflow-hidden">
-                    <img
-                      src={connection.connectorConfig?.logo_url}
-                      alt={connection.connectorConfig?.display_name || ''}
-                      className="h-full w-full object-contain"
-                    />
+                  className="flex items-center justify-between p-4">
+                  <div className="flex items-center gap-3">
+                    {connection.connectorConfig?.logo_url && (
+                      <div className="h-10 w-10 overflow-hidden rounded-md">
+                        <img
+                          src={connection.connectorConfig.logo_url}
+                          alt={connection.connectorConfig.display_name || ''}
+                          className="h-full w-full object-contain"
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="font-medium">{connection.name}</h3>
+                      <p className="text-sm text-gray-600">
+                        Connected on{' '}
+                        {new Date(connection.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-xs font-medium">
-                    {connection.connectorConfig?.display_name || ''}
-                  </span>
+                  <Button variant="destructive" size="sm">
+                    Delete
+                  </Button>
                 </Card>
               ))}
             </div>
