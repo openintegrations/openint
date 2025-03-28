@@ -28,6 +28,11 @@ const zConnectV1SearchParams = z.object({
     description:
       'The default tab to show when the magic link is opened. Defaults to "my-connections"',
   }),
+  '--primary': z.string().optional(),
+  '--background': z.string().optional(),
+  '--foreground': z.string().optional(),
+  '--card': z.string().optional(),
+  '--card-foreground': z.string().optional(),
 })
 
 export default async function Page(
@@ -39,10 +44,29 @@ export default async function Page(
     searchParams: zConnectV1SearchParams,
   })
 
+  const themeVariables = Object.fromEntries(
+    Object.entries(searchParams)
+      .filter(([key]) => key.startsWith('--')) // Only include theme variables
+      .map(([key, value]) => [key, value]),
+  )
+
   const api = createAPICaller(viewer)
+
   return (
     <div>
-      <pre className="bg-pink-400">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          :root {
+            ${Object.entries(themeVariables)
+              .map(([key, value]) => `${key}: ${value};`)
+              .join('\n')}
+          }
+        `,
+        }}
+      />
+
+      <pre className="bg-background">
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
       <ClientApp token={token!}>

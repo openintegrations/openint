@@ -18,20 +18,28 @@ export default function MagicLinkPage() {
 
   return (
     <div className="flex h-full flex-col">
-      <h1>Magic Link</h1>
-      <ZodSchemaForm
-        schema={zConnectV1SearchParams}
-        onChange={(change) => {
-          // console.log('change', change)
-          setData(change.formData ?? {})
-        }}
-      />
-
-      <iframe
-        title="connect embed"
-        src={iframeUrl.toString()}
-        className="flex-1"
-      />
+      <h1 className="text-3xl mb-4">Magic Link</h1>
+      <div className="flex flex-1 gap-4">
+        <div>
+          <h2 className="text-2xl">Configure</h2>
+          <ZodSchemaForm
+            className="w-sm"
+            schema={zConnectV1SearchParams}
+            onChange={(change) => {
+              // console.log('change', change)
+              setData(change.formData ?? {})
+            }}
+          />
+        </div>
+        <div className="flex flex-1 flex-col">
+          <h2 className="text-2xl">Preview</h2>
+          <iframe
+            title="connect embed"
+            src={iframeUrl.toString()}
+            className="flex-1 border p-4"
+          />
+        </div>
+      </div>
     </div>
   )
 }
