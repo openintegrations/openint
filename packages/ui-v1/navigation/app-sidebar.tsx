@@ -16,7 +16,6 @@ import {
 } from '@openint/shadcn/ui/sidebar'
 import {Icon, IconName} from '../components'
 
-// Flattened navigation items
 const navItems = [
   {
     title: 'Dashboard',
