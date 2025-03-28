@@ -21,7 +21,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   })
 
   test('list connectors with integrations', async () => {
-    const res = await asOrg.listConnectors({expand: ['integrations']})
+    const res = await asOrg.listConnectors({expand: 'integrations'})
     const mergeIndex = res.findIndex((c) => c.name === 'merge')
 
     expect(res[mergeIndex]?.integrations?.length).toBeGreaterThan(1)

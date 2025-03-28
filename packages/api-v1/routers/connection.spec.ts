@@ -140,7 +140,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       id: connIdRef.current,
     })
 
-    expect(res).toEqual(connIdRef.current)
+    expect(res).toEqual({id: connIdRef.current})
   })
 
   test('delete connection with invalid id returns error', async () => {

@@ -29,6 +29,8 @@ export const zExpandOptions = z
   .enum(['integrations'])
   .describe('Fields to expand connector with its integrations')
 
+type ExpandEnum = z.infer<typeof zExpandOptions>
+
 const zConnectorName = z.enum(
   Object.keys(defConnectors) as [string, ...string[]],
 )
@@ -46,7 +48,21 @@ export const connectorRouter = router({
     .input(
       z
         .object({
-          expand: z.array(zExpandOptions).optional().default([]),
+          expand: z
+            .string()
+            .transform((val) => val.split(',').map(s => s.trim()))
+            .refine(
+              (items) =>
+                items.every((item) => zExpandOptions.safeParse(item).success),
+              {
+                message:
+                  'Invalid expand option. Valid options are: integrations',
+              },
+            )
+            .describe(
+              'Comma separated list of fields to optionally expand.\n\nAvailable Options: `integrations`',
+            )
+            .optional(),
         })
         .optional(),
     )
@@ -65,9 +81,11 @@ export const connectorRouter = router({
             },
           )
 
+          const expand = (input?.expand || []) as ExpandEnum[]
+
           const server = serverConnectors[name as keyof typeof serverConnectors]
           if (
-            input?.expand.includes('integrations') &&
+            expand.includes('integrations') &&
             server &&
             'listIntegrations' in server
           ) {
