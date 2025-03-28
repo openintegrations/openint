@@ -23,7 +23,7 @@ const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
   }
 }
 
-export const zExpandOptions = z
+const zExpandOptions = z
   .enum(['connector', 'enabled_integrations', 'connection_count'])
   .describe(
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
