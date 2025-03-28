@@ -5,7 +5,7 @@ import {currentViewer} from '@/lib-server/auth.server'
 import type {APICaller} from '@/lib-server/globals'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
-import {AddConnectionInner} from './client'
+import {AddConnectionInner, MyConnectionsClient} from './client'
 
 function Fallback() {
   return <div>Loading...</div>
@@ -19,8 +19,10 @@ export default async function Page(props: PageProps) {
       <pre className="bg-pink-400">
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
-
       <ClientApp token={token!}>
+        <Suspense fallback={<Fallback />}>
+          <MyConnectionsClient initialData={api.listConnections()} />
+        </Suspense>
         <Suspense fallback={<Fallback />}>
           <AddConnections api={api} />
         </Suspense>
@@ -29,6 +31,7 @@ export default async function Page(props: PageProps) {
   )
 }
 
+/** This needs to happen server side for preConnect to work */
 async function AddConnections({api}: {api: APICaller}) {
   const res = await api.listConnectorConfigs()
 

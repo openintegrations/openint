@@ -7,7 +7,6 @@ import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
-import {R} from '@openint/util'
 import {useTRPC} from '../console/(authenticated)/client'
 
 const connectorImports = {
@@ -50,45 +49,6 @@ const ConnectorClientComponents = Object.fromEntries(
     }),
   ]),
 )
-
-export function AddConnection(props: {connectorConfigIds: Promise<string[]>}) {
-  console.log('AddConnection rendering')
-  const connectorConfigIds = R.uniq(React.use(props.connectorConfigIds))
-  const ref = React.useRef<{[k: string]: {state: string}}>({})
-
-  const [readyCcfgs, setReadyConnectors] = React.useState<string[]>([])
-  const allReady = readyCcfgs.length === connectorConfigIds.length
-
-  const cb = React.useCallback(
-    (ctx: {state: string}, name: string) => {
-      ref.current[name] = ctx
-      setReadyConnectors((cs) => R.uniq([...cs, name]))
-      if (Object.keys(ref.current).length === connectorConfigIds.length) {
-        console.log('all ready', ref.current)
-      }
-    },
-    [connectorConfigIds.length, ref, setReadyConnectors],
-  )
-
-  return (
-    <>
-      {connectorConfigIds.map((ccfgId) => (
-        <div key={ccfgId} className="p-4">
-          <h1 className="text-3xl">Add {ccfgId} connection</h1>
-          <AddConnectionInner
-            key={ccfgId}
-            connectorConfigId={ccfgId}
-            onReady={cb}
-          />
-        </div>
-      ))}
-      <hr />
-      {allReady
-        ? `${readyCcfgs.length} everything ready`
-        : `${readyCcfgs.length} ${readyCcfgs.join(',')} ready`}
-    </>
-  )
-}
 
 export function AddConnectionInner({
   connectorConfigId,
@@ -167,6 +127,30 @@ export function AddConnectionInner({
         }, [])}
       />
       <Button onClick={handleConnect}>Connect with {name}</Button>
+    </>
+  )
+}
+
+export function MyConnectionsClient(props: {
+  initialData?: Promise<AppRouterOutput['listConnections']>
+}) {
+  const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
+  const api = useTRPC()
+  const res = useSuspenseQuery(
+    api.listConnections.queryOptions(
+      {},
+      initialData ? {initialData} : undefined,
+    ),
+  )
+
+  return (
+    <>
+      <h1 className="text-3xl">My connections</h1>
+      {res.data.items.map((conn) => (
+        <div key={conn.id} className="p-4">
+          <h2 className="text-2xl"> {conn.id}</h2>
+        </div>
+      ))}
     </>
   )
 }
