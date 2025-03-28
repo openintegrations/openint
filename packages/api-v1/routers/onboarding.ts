@@ -1,6 +1,8 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
+import {encodeApiKey} from '@openint/cdk'
 import {eq, inArray, schema} from '@openint/db'
+import {makeUlid} from '@openint/util'
 import {getOrCreateApikey} from '@/lib-server'
 import {publicProcedure, router} from '../trpc/_base'
 
@@ -23,7 +25,7 @@ export const onboardingRouter = router({
     )
     .output(z.object({id: z.string()}))
     .mutation(async ({input, ctx}) => {
-      const apikey = await getOrCreateApikey(ctx.viewer)
+      const apikey = encodeApiKey(input.id, `key_${makeUlid()}`)
       const metadata = {
         referrer: input.referrer,
         clerk_user_id: input.clerkUserId,
