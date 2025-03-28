@@ -3,14 +3,14 @@ import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {makeUlid} from '@openint/util'
 import {routerContextFromViewer} from '../trpc/context'
-import {adminRouter} from './admin'
 import {connectorConfigRouter} from './connectorConfig'
+import {customerRouter} from './customer'
 
 const logger = false
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
-  function getCaller(viewer: Viewer) {
-    return adminRouter.createCaller(routerContextFromViewer({db, viewer}))
+  function getCustomerCaller(viewer: Viewer) {
+    return customerRouter.createCaller(routerContextFromViewer({db, viewer}))
   }
 
   function getCcfgCaller(viewer: Viewer) {
@@ -19,15 +19,18 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     )
   }
 
-  const asOrg = getCcfgCaller({role: 'org', orgId: 'org_222'})
-  const asAdmin = getCaller({role: 'system'})
+  const asOrgCcfgCaller = getCcfgCaller({role: 'org', orgId: 'org_222'})
+  const asOrgConnectionsCaller = getCustomerCaller({
+    role: 'org',
+    orgId: 'org_222',
+  })
 
   beforeAll(async () => {
     await db.insert(schema.organization).values({
       id: 'org_222',
       name: 'Test Org',
     })
-    const ccfg = await asOrg.createConnectorConfig({
+    const ccfg = await asOrgCcfgCaller.createConnectorConfig({
       connector_name: 'qbo',
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
@@ -43,20 +46,24 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   })
 
   test('list customers', async () => {
-    const res = await asAdmin.listCustomers()
+    const res = await asOrgConnectionsCaller.listCustomers()
 
     expect(res.items).toHaveLength(1)
     expect(res.items[0]?.connection_count).toEqual(1)
   })
 
   test('list customers with existing keywords', async () => {
-    const res = await asAdmin.listCustomers({keywords: 'cus_222'})
+    const res = await asOrgConnectionsCaller.listCustomers({
+      keywords: 'cus_222',
+    })
 
     expect(res.items).toHaveLength(1)
   })
 
   test('list customers with non existing keywords', async () => {
-    const res = await asAdmin.listCustomers({keywords: 'cus_333'})
+    const res = await asOrgConnectionsCaller.listCustomers({
+      keywords: 'cus_333',
+    })
 
     expect(res.items).toHaveLength(0)
   })

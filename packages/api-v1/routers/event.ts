@@ -1,6 +1,6 @@
 import {schema, sql} from '@openint/db'
 import {core} from '../models'
-import {publicProcedure, router} from '../trpc/_base'
+import {orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -23,7 +23,7 @@ export const eventRouter = router({
   //       .returning()
   //     return event!
   //   }),
-  listEvents: publicProcedure
+  listEvents: orgProcedure
     .meta({
       openapi: {
         method: 'GET',

@@ -4,7 +4,7 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, eq, schema, sql} from '@openint/db'
 import {core} from '../models'
-import {orgProcedure, publicProcedure, router} from '../trpc/_base'
+import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
 import {expandConnector} from './connectorConfig'
 import {
@@ -125,7 +125,7 @@ const zExpandOptions = z
   .describe('Fields to expand: connector (includes connector details)')
 
 export const connectionRouter = router({
-  getConnection: publicProcedure
+  getConnection: orgProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -239,7 +239,7 @@ export const connectionRouter = router({
         input.expand,
       )
     }),
-  listConnections: publicProcedure
+  listConnections: authenticatedProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -311,7 +311,7 @@ export const connectionRouter = router({
         offset,
       }
     }),
-  checkConnection: publicProcedure
+  checkConnection: orgProcedure
     .meta({
       openapi: {
         method: 'POST',
@@ -397,7 +397,7 @@ export const connectionRouter = router({
       }
     }),
 
-  deleteConnection: orgProcedure
+  deleteConnection: authenticatedProcedure
     .meta({
       openapi: {
         method: 'DELETE',

@@ -3,7 +3,7 @@ import {z} from 'zod'
 import {encodeApiKey} from '@openint/cdk'
 import {eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {publicProcedure, router} from '../trpc/_base'
+import {authenticatedProcedure, router} from '../trpc/_base'
 
 const zOnboardingState = z.object({
   first_connector_configured: z.boolean(),
@@ -13,7 +13,7 @@ const zOnboardingState = z.object({
 })
 
 export const onboardingRouter = router({
-  createOrganization: publicProcedure
+  createOrganization: authenticatedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -41,7 +41,7 @@ export const onboardingRouter = router({
 
       return {id: input.id}
     }),
-  getOnboarding: publicProcedure
+  getOnboarding: authenticatedProcedure
     .meta({
       openapi: {method: 'GET', path: '/organization/onboarding'},
     })
@@ -94,7 +94,7 @@ export const onboardingRouter = router({
       }
     }),
 
-  setOnboardingComplete: publicProcedure
+  setOnboardingComplete: authenticatedProcedure
     .meta({
       openapi: {method: 'PUT', path: '/organization/onboarding'},
     })
