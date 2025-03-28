@@ -194,7 +194,7 @@ export function generateOAuth2Server<
       )
 
       const result = await tokenRefreshHandler({
-        oAuthConfig: {
+        oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
             ccfg,
