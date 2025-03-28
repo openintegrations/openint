@@ -23,9 +23,11 @@ function getAbsolutePath(value) {
 const config = {
   stories: [
     // Should be kept in sync with global.css files
-    '../stories/**/*.mdx',
+    '../__stories__/**/*.mdx',
+    '../__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../navigation/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
@@ -35,7 +37,7 @@ const config = {
     // Generally speaking all stories should be in ui-v1
     '../../../apps/web/app/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../ui/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../ui-v1/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    // '../../ui-v1/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)', // Commented out to avoid duplicate stories
   ],
   addons: [
     getAbsolutePath('@storybook/addon-essentials'),
@@ -55,16 +57,6 @@ const config = {
     // Only works in v4 storybook...
     // https://github.com/tailwindlabs/tailwindcss/issues/13216#issuecomment-1992094356
     config.plugins.push((await import('@tailwindcss/vite')).default())
-
-    // Add resolve aliases to match tsconfig paths
-    config.resolve = {
-      ...config.resolve,
-      alias: {
-        ...config.resolve?.alias,
-        '@openint/shadcn': join(process.cwd(), '../../packages/shadcn'),
-        '@openint/shadcn/ui': join(process.cwd(), '../../packages/shadcn/ui'),
-      },
-    }
 
     config.optimizeDeps = {
       ...config.optimizeDeps,

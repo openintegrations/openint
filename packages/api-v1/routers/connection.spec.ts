@@ -113,7 +113,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
 
     // Via trpc
-    const conns = await asCustomer.caller.listConnections()
+
+    const conns = await asCustomer.caller.listConnections({
+      // TODO: @openint-bot, add tests for include_secrets cases
+      include_secrets: 'all',
+    })
     expect(conns.items).toHaveLength(1)
     expect(conns.items[0]).toMatchObject({
       id: connIdRef.current,
@@ -129,5 +133,21 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       connector_config_id: connConfigIdRef.current,
       customer_id: asOtherCustomer.viewer.customerId,
     })
+  })
+
+  test('delete connection', async () => {
+    const res = await asOrg.caller.deleteConnection({
+      id: connIdRef.current,
+    })
+
+    expect(res).toEqual(connIdRef.current)
+  })
+
+  test('delete connection with invalid id returns error', async () => {
+    await expect(
+      asOrg.caller.deleteConnection({
+        id: 'conn_invalid',
+      }),
+    ).rejects.toThrow('not found')
   })
 })

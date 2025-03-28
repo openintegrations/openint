@@ -2,7 +2,6 @@ import path from 'node:path'
 import {withSentryConfig} from '@sentry/nextjs'
 import type {NextConfig} from 'next'
 import webpack from 'webpack'
-import connectorInfos from '../app-config/connectors/meta'
 
 const isDevOrStaging =
   process.env.NODE_ENV !== 'production' ||
@@ -22,9 +21,9 @@ const nextConfig = {
     path.resolve(__dirname, '../../packages/ui-v1'),
     path.resolve(__dirname, '../../packages/shadcn'),
     path.resolve(__dirname, '../../packages/util'),
-    ...connectorInfos.map(({dirName}) =>
-      path.resolve(__dirname, `../../connectors/${dirName}`),
-    ),
+    // ...connectorInfos.map(({dirName}) =>
+    //   path.resolve(__dirname, `../../connectors/${dirName}`),
+    // ),
   ],
   env: {
     NEXT_PUBLIC_PORT: process.env['PORT'] ?? '',
@@ -59,6 +58,11 @@ const nextConfig = {
       source: '/chromatic/:branch*',
       destination:
         'https://www.chromatic.com/library?appId=67cafc438c6d3b09671849dd&branch=:branch*',
+      permanent: false,
+    },
+    {
+      source: '/preview/:branch*',
+      destination: 'https://openint-git-:branch*-openint-dev.vercel.app',
       permanent: false,
     },
     {

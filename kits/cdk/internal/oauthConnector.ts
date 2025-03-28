@@ -35,17 +35,19 @@ const zOauthCredentials = z.object({
   refresh_token: z.string().optional(),
   // sometimes this is missing from the response
   expires_at: z.string().datetime().optional(),
-  raw: z.object({
-    access_token: z.string(),
-    // sometimes this is missing from the response
-    expires_in: z.number().optional(),
-    expires_at: z.string().datetime().optional(),
-    /** Refresh token (Only returned if the REFRESH_TOKEN boolean parameter is set to true and the refresh token is available) */
-    refresh_token: z.string().nullish(),
-    refresh_token_expires_in: z.number().nullish(),
-    token_type: z.string(), //'bearer',
-    scope: z.string().optional(),
-  }),
+  raw: z
+    .object({
+      access_token: z.string(),
+      // sometimes this is missing from the response
+      expires_in: z.number().optional(),
+      expires_at: z.string().datetime().optional(),
+      /** Refresh token (Only returned if the REFRESH_TOKEN boolean parameter is set to true and the refresh token is available) */
+      refresh_token: z.string().nullish(),
+      refresh_token_expires_in: z.number().nullish(),
+      token_type: z.string().nullish(), //'bearer',
+      scope: z.string().optional(),
+    })
+    .passthrough(), // This allows additional properties,
 })
 export const oauthBaseSchema = {
   name: z.literal('__oauth__'), // TODO: This is a noop
@@ -53,7 +55,7 @@ export const oauthBaseSchema = {
     oauth: z.object({
       client_id: z.string(),
       client_secret: z.string(),
-      /** comma deliminated scopes with no spaces in between */
+      /** comma delimited scopes with no spaces in between */
       scopes: z.string().optional(),
     }),
   }),

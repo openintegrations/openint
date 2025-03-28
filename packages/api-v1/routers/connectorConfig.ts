@@ -4,7 +4,7 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {core} from '../models'
+import {Core, core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
@@ -14,10 +14,7 @@ import {
 } from './utils/pagination'
 import {zConnectorName} from './utils/types'
 
-const validateResponse = (
-  res: Array<z.infer<typeof core.connector_config>>,
-  id: string,
-) => {
+const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
   if (!res.length) {
     throw new TRPCError({
       code: 'NOT_FOUND',
@@ -26,16 +23,16 @@ const validateResponse = (
   }
 }
 
-export const zExpandOptions = z
+const zExpandOptions = z
   .enum(['connector', 'enabled_integrations', 'connection_count'])
   .describe(
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
   )
 
 export function expandConnector(
-  connectorConfig: z.infer<typeof core.connector_config>,
+  connectorConfig: Core['connector_config'],
 ): Pick<
-  z.infer<typeof core.connector>,
+  Core['connector'],
   'name' | 'display_name' | 'logo_url' | 'stage' | 'platforms'
 > & {
   created_at: string
@@ -64,8 +61,6 @@ export function expandConnector(
   return {
     // TODO: add more fields?
     name: connectorName,
-    // TODO: add display_name?
-    // display_name: connectorConfig.display_name,
     // TODO: add enabled?
     // enabled: connectorConfig.enabled,
     created_at: connectorConfig.created_at,
@@ -81,7 +76,7 @@ interface IntegrationConfig {
 }
 
 export function expandIntegrations(
-  connectorConfig: z.infer<typeof core.connector_config>,
+  connectorConfig: Core['connector_config'],
 ): Record<string, IntegrationConfig> | undefined {
   if (
     !connectorConfig ||
@@ -212,6 +207,11 @@ export const connectorConfigRouter = router({
             result.config = null
           }
 
+          // Convert connection_count to number if it exists
+          if (includeConnectionCount && 'connection_count' in result) {
+            result.connection_count = Number(result.connection_count || 0)
+          }
+
           if (expandOptions.includes('connector')) {
             const connector = expandConnector(ccfg)
             if (connector) {
@@ -245,39 +245,84 @@ export const connectorConfigRouter = router({
     .input(
       z.object({
         connector_name: z.string(),
-        // TODO: why is this unknown / any?
+        display_name: z.string().optional(),
+        disabled: z.boolean().optional(),
         config: z.record(z.unknown()).nullish(),
       }),
     )
-    .output(core.connector_config)
+    .output(
+      z.intersection(
+        core.connector_config,
+        z.object({
+          config: z.record(z.unknown()).nullable(),
+        }),
+      ),
+    )
     .mutation(async ({ctx, input}) => {
-      const {connector_name} = input
+      const {connector_name, display_name, disabled, config} = input
       const [ccfg] = await ctx.db
         .insert(schema.connector_config)
         .values({
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
-          config: input.config,
+          display_name,
+          disabled,
+          config: config ?? {},
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
         .returning()
+
+      // Ensure config is null if it's an empty object
+      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
+        ccfg.config = null
+      }
+
       return ccfg!
     }),
   updateConnectorConfig: orgProcedure
     .meta({
       openapi: {method: 'PUT', path: '/connector-config/{id}', enabled: false},
     })
-    .input(z.object({id: z.string(), config: z.record(z.unknown())}))
-    .output(core.connector_config)
+    .input(
+      z.object({
+        id: z.string(),
+        display_name: z.string().optional(),
+        disabled: z.boolean().optional(),
+        config: z.record(z.unknown()).nullish(),
+      }),
+    )
+    .output(
+      z.intersection(
+        core.connector_config,
+        z.object({
+          config: z.record(z.unknown()).nullable(),
+        }),
+      ),
+    )
     .mutation(async ({ctx, input}) => {
-      const {id, config} = input
+      const {id, config, display_name, disabled} = input
+      console.log({input})
       const res = await ctx.db
         .update(schema.connector_config)
-        .set({config, updated_at: new Date().toISOString()})
+        .set({
+          display_name,
+          disabled,
+          ...(config !== undefined ? {config} : {}),
+          updated_at: new Date().toISOString(),
+        })
         .where(eq(schema.connector_config.id, id))
         .returning()
 
+      console.log('updated ccfg', res)
+
       validateResponse(res, id)
       const [ccfg] = res
+
+      // Ensure config is null if it's an empty object
+      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
+        ccfg.config = null
+      }
 
       return ccfg!
     }),
@@ -290,18 +335,27 @@ export const connectorConfigRouter = router({
       },
     })
     .input(z.object({id: z.string()}))
-    .output(core.connector_config)
+    .output(z.string())
     .mutation(async ({ctx, input}) => {
       const {id} = input
-      const res = await ctx.db
+
+      const existingConfig = await ctx.db
+        .select({id: schema.connector_config.id})
+        .from(schema.connector_config)
+        .where(eq(schema.connector_config.id, id))
+        .limit(1)
+
+      if (!existingConfig.length) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config with ID "${id}" not found`,
+        })
+      }
+
+      await ctx.db
         .delete(schema.connector_config)
         .where(eq(schema.connector_config.id, id))
-        .returning()
 
-      validateResponse(res, id)
-
-      const [ccfg] = res
-
-      return ccfg!
+      return id
     }),
 })

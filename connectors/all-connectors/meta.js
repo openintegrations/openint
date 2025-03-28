@@ -76,6 +76,15 @@ module.exports = [
   },
   {dirName: 'connector-expensify', varName: 'connectorExpensify', imports: {}},
   {
+    name: 'facebook',
+    dirName: 'connector-facebook',
+    varName: 'connectorFacebook',
+    imports: {
+      def: '@openint/connector-facebook/def',
+      server: '@openint/connector-facebook/server',
+    },
+  },
+  {
     name: 'finch',
     dirName: 'connector-finch',
     varName: 'connectorFinch',
@@ -158,6 +167,15 @@ module.exports = [
     },
   },
   {
+    name: 'instagram',
+    dirName: 'connector-instagram',
+    varName: 'connectorInstagram',
+    imports: {
+      def: '@openint/connector-instagram/def',
+      server: '@openint/connector-instagram/server',
+    },
+  },
+  {
     name: 'intercom',
     dirName: 'connector-intercom',
     varName: 'connectorIntercom',
@@ -200,6 +218,15 @@ module.exports = [
     imports: {
       def: '@openint/connector-linear/def',
       server: '@openint/connector-linear/server',
+    },
+  },
+  {
+    name: 'linkedin',
+    dirName: 'connector-linkedin',
+    varName: 'connectorLinkedin',
+    imports: {
+      def: '@openint/connector-linkedin/def',
+      server: '@openint/connector-linkedin/server',
     },
   },
   {
@@ -246,6 +273,15 @@ module.exports = [
     },
   },
   {
+    name: 'notion',
+    dirName: 'connector-notion',
+    varName: 'connectorNotion',
+    imports: {
+      def: '@openint/connector-notion/def',
+      server: '@openint/connector-notion/server',
+    },
+  },
+  {
     name: 'onebrick',
     dirName: 'connector-onebrick',
     varName: 'connectorOnebrick',
@@ -255,7 +291,6 @@ module.exports = [
       server: '@openint/connector-onebrick/server',
     },
   },
-  {dirName: 'connector-outlook', varName: 'connectorOutlook', imports: {}},
   {
     name: 'outreach',
     dirName: 'connector-outreach',
@@ -309,6 +344,15 @@ module.exports = [
     imports: {
       def: '@openint/connector-ramp/def',
       server: '@openint/connector-ramp/server',
+    },
+  },
+  {
+    name: 'reddit',
+    dirName: 'connector-reddit',
+    varName: 'connectorReddit',
+    imports: {
+      def: '@openint/connector-reddit/def',
+      server: '@openint/connector-reddit/server',
     },
   },
   {
@@ -394,6 +438,15 @@ module.exports = [
     },
   },
   {
+    name: 'twitter',
+    dirName: 'connector-twitter',
+    varName: 'connectorTwitter',
+    imports: {
+      def: '@openint/connector-twitter/def',
+      server: '@openint/connector-twitter/server',
+    },
+  },
+  {
     name: 'venmo',
     dirName: 'connector-venmo',
     varName: 'connectorVenmo',
@@ -440,6 +493,12 @@ module.exports = [
     name: 'googledrive',
     dirName: 'cnext-googledrive',
     varName: 'connectorGoogledrive',
+    imports: {def: '@openint/cnext', server: '@openint/cnext'},
+  },
+  {
+    name: 'googlesheet',
+    dirName: 'cnext-googlesheet',
+    varName: 'connectorGooglesheet',
     imports: {def: '@openint/cnext', server: '@openint/cnext'},
   },
 ]

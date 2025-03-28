@@ -1,162 +1,56 @@
 import {z} from 'zod'
-import type {
-  ConnectorDef,
-  ConnectorSchemas,
-  ConnectorServer,
-} from '@openint/cdk'
+import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
+import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util'
-// TODO: Fix me as this is technically a cyclical dep
-import {getServerUrl} from '../../../../apps/app-config/constants'
+import {oauth2Schemas, zOAuthConfig} from './def'
 import {
-  AuthorizeHandler,
-  ExchangeTokenHandler,
-  OAuth2ServerOverrides,
-  RefreshTokenHandler,
-  zOAuthConfig,
-} from './def'
-import {
-  fillOutStringTemplateVariables,
-  makeTokenRequest,
-  prepareScopes,
-} from './utils'
+  authorizeHandler,
+  defaultTokenExchangeHandler,
+  tokenRefreshHandler,
+} from './handlers'
+import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
-const defaultAuthorizeHandler: AuthorizeHandler = async ({
-  oauth_config,
-  redirect_uri,
-  connection_id,
-}) => {
-  if (!connection_id) {
-    throw new Error('No connection_id provided')
-  }
-  const url = new URL(
-    fillOutStringTemplateVariables(
-      oauth_config.authorization_request_url,
-      oauth_config.connector_config,
-      oauth_config.connection_settings,
-    ),
-  )
-  const params = mapOauthParams(
-    {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      redirect_uri,
-      response_type: 'code',
-      // decoding it as url.toString() encodes it alredy
-      scope: decodeURIComponent(prepareScopes(oauth_config)),
-      state: Buffer.from(connection_id).toString('base64'),
-      ...(oauth_config.params_config.authorize ?? {}),
-    },
-    oauth_config.params_config.param_names ?? {},
-  )
-
-  Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.set(key, value as string)
-  })
-
-  // putting it as %20 for spaces instead of the default encoding of url.toString() which is +
-  return {authorization_url: url.toString().replace(/\+/g, '%20')}
-}
-
-const defaultTokenExchangeHandler: ExchangeTokenHandler = async ({
-  oauth_config,
-  redirect_uri,
-  code,
-  state,
-}) => {
-  // TODO (@pellicceama): For every value in params apply template literal substitution
-  const params = mapOauthParams(
-    {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      redirect_uri,
-      scope: prepareScopes(oauth_config),
-      state,
-      grant_type: 'authorization_code',
-      code,
-      ...(oauth_config.params_config.token ?? {}),
-    },
-    oauth_config.params_config.param_names ?? {},
-  )
-
-  const url = fillOutStringTemplateVariables(
-    oauth_config.token_request_url,
-    oauth_config.connector_config,
-    oauth_config.connection_settings,
-  )
-  return makeTokenRequest(url, params, 'exchange')
-}
-
-const defaultTokenRefreshHandler: RefreshTokenHandler = async ({
-  oauth_config,
-  refresh_token,
-}) => {
-  const params = mapOauthParams(
-    {
-      client_id: oauth_config.connector_config.client_id,
-      client_secret: oauth_config.connector_config.client_secret,
-      refresh_token,
-      grant_type: 'refresh_token',
-      ...(oauth_config.params_config.token ?? {}),
-    },
-    oauth_config.params_config.param_names ?? {},
-  )
-
-  const url = fillOutStringTemplateVariables(
-    oauth_config.token_request_url,
-    oauth_config.connector_config,
-    oauth_config.connection_settings,
-  )
-  return makeTokenRequest(url, params, 'refresh')
-}
-
-function addCcfgDefaultCredentials(
-  config: any,
+function injectCcfgDefaultCredentials(
+  connectorConfig: z.infer<typeof oauth2Schemas.connectorConfig>,
   connectorName: string,
-): {
-  client_id: string
-  client_secret: string
-  scopes?: string[] | null | undefined
-} {
-  return {
-    ...config,
-    client_id:
-      config.client_id ?? process.env[`ccfg_${connectorName}__CLIENT_ID`],
-    client_secret:
-      config.client_secret ??
-      process.env[`ccfg_${connectorName}__CLIENT_SECRET`],
-    scopes: config.scopes,
-  }
-}
+  oauthConfig: z.infer<typeof zOAuthConfig>,
+): z.infer<typeof oauth2Schemas.connectorConfig> {
+  const defaultCredentials = getConnectorDefaultCredentials(connectorName)
+  if (
+    !connectorConfig.oauth?.client_id &&
+    !connectorConfig.oauth?.client_secret &&
+    defaultCredentials?.['client_id'] &&
+    defaultCredentials?.['client_secret']
+  ) {
+    const configuredScopes = connectorConfig.oauth?.scopes ?? []
 
-export function isOAuth2ConnectorDef(
-  auth: any,
-): auth is z.infer<typeof zOAuthConfig> {
-  return zOAuthConfig.safeParse(auth).success
-}
-
-/*
- * This function takes the paramNames map where a user can map were fields like client_id and client_secret are named in particular oauth connector.
- * For example salesforce may call client_id clientKey. In this case, the paramNames would have client_id: clientKey.
- * Following the SF example, this function will return a new object with the client_id field renamed to clientKey.
- * Write tests for this function to in different scenarios ensure that the clientKey is returned with the value initially set for client_id
- */
-export function mapOauthParams(
-  params: Record<string, string>,
-  paramNames: Record<string, string>,
-) {
-  const result: Record<string, string> = {}
-
-  // Process each parameter in the input
-  Object.entries(params).forEach(([key, value]) => {
-    if (key && paramNames && key in paramNames && paramNames[key]) {
-      result[paramNames[key]] = value
-    } else {
-      result[key] = value
+    if (
+      oauthConfig.openint_scopes &&
+      configuredScopes.length > 0 &&
+      !configuredScopes.every((scope) =>
+        oauthConfig.openint_scopes?.includes(scope),
+      )
+    ) {
+      const invalidScopes = configuredScopes.filter(
+        (scope) => !oauthConfig.openint_scopes?.includes(scope),
+      )
+      throw new Error(
+        `Invalid scopes configured: ${invalidScopes.join(', ')}. ` +
+          `Valid default scopes are: ${oauthConfig.openint_scopes?.join(', ')}`,
+      )
     }
-  })
 
-  return result
+    return {
+      ...connectorConfig,
+      oauth: {
+        client_id: defaultCredentials?.['client_id'],
+        client_secret: defaultCredentials?.['client_secret'],
+        scopes: configuredScopes ?? [],
+      },
+    }
+  }
+  return connectorConfig
 }
 
 /*
@@ -167,190 +61,167 @@ export function mapOauthParams(
  *
  */
 export function generateOAuth2Server<
-  T extends ConnectorSchemas,
+  TName extends string,
+  T extends typeof oauth2Schemas & {name: z.ZodLiteral<TName>},
   D extends ConnectorDef<T>,
 >(
   connectorDef: D,
   oauthConfig: z.infer<typeof zOAuthConfig>,
-  overrides?: {
-    server?: Partial<ConnectorServer<T>>
-    oauth2?: Partial<OAuth2ServerOverrides>
-  },
+  overrides?: Partial<ConnectorServer<T>>,
 ): ConnectorServer<T> {
-  // Only use this for OAuth2 connectors
   if (
     // TODO: connectorDef.auth.type !== 'OAUTH2CC'?
-    connectorDef.metadata?.authType !== 'OAUTH2' &&
-    !isOAuth2ConnectorDef(oauthConfig)
+    connectorDef.metadata?.authType !== 'OAUTH2'
   ) {
     throw new Error('This server can only be used with OAuth2 connectors')
   }
 
-  const connectorName = connectorDef.name
-  let clientId: string | undefined
-  let clientSecret: string | undefined
-
   // Create the base server implementation
   const baseServer: ConnectorServer<T> = {
-    newInstance: ({config, settings}) => {
+    newInstance: ({config}) => {
       // Use the same helper function to get credentials
-      const credentials = addCcfgDefaultCredentials(config, connectorName)
-      clientId = credentials.client_id
-      clientSecret = credentials.client_secret
+      const credentials = injectCcfgDefaultCredentials(
+        config,
+        connectorDef.name,
+        oauthConfig,
+      )
+      const clientId = credentials.oauth?.client_id
+      const clientSecret = credentials.oauth?.client_secret
 
       if (!clientId || !clientSecret) {
         throw new Error(
-          `Missing client_id or client_secret for ${connectorName}`,
-        )
-      }
-
-      if (
-        settings?.oauth?.credentials?.client_id &&
-        settings?.oauth?.credentials?.client_id !== clientId
-      ) {
-        throw new Error(
-          `Client ID mismatch for ${connectorName}. Expected ${clientId}, got ${settings?.oauth?.credentials?.client_id}`,
+          `Missing client_id or client_secret for ${connectorDef.name}`,
         )
       }
     },
 
     async preConnect(connectorConfig, connectionSettings, input) {
-      // Use override if provided, otherwise use default
-      const authorizeHandler =
-        overrides?.oauth2?.authorize || defaultAuthorizeHandler
-
-      if (!authorizeHandler) {
-        throw new Error(
-          'No authorize handler defined. Has connectionSettings =' +
-            !!connectionSettings,
-        )
-      }
-
-      if (!isOAuth2ConnectorDef(oauthConfig)) {
-        console.log(`Oauth2 Preconnect issue with oauthConfig`)
-        return zOAuthConfig.parse(oauthConfig)
-      }
-
       const connectionId =
         input.connectionId ?? makeId('conn', connectorDef.name, makeUlid())
 
-      console.log(`Oauth2 Preconnect called`)
+      console.log(
+        `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!connectionSettings}`,
+      )
 
+      // console.warn(
+      //   `Oauth2 Preconnect called with oauthConfig ${JSON.stringify(
+      //     oauthConfig,
+      //   )} and connectorConfig ${JSON.stringify(
+      //     connectorConfig,
+      //   )} and connectionSettings ${JSON.stringify(connectionSettings)}`,
+      // )
+
+      const ccfg = injectCcfgDefaultCredentials(
+        connectorConfig,
+        connectorDef.name,
+        oauthConfig,
+      )
       return authorizeHandler({
-        oauth_config: {
-          ...oauthConfig,
-          connector_config: connectorConfig,
-        } satisfies z.infer<typeof zOAuthConfig>,
-        redirect_uri: getServerUrl(null) + '/connect/callback',
-        connection_id: connectionId,
-        // this is currently returning T['_types']['connectInput']
-        // which is defined as {authorization_url} in cnext/schema.ts
-        // but TS doesn't seem to be picking it up so we're using any
+        oauthConfig: {
+          ...fillOutStringTemplateVariablesInObjectKeys(
+            oauthConfig,
+            connectorConfig.oauth,
+            // @ts-expect-error: QQ: fix this
+            connectionSettings.oauth,
+          ),
+          connector_config: ccfg.oauth,
+        },
+        redirectUri: getServerUrl(null) + '/connect/callback',
+        connectionId: connectionId,
+        //  QQ: fix issue with Type '{ authorization_url: string; }' is not assignable to type 'T["_types"]["connectInput"]
       }) as any
     },
 
-    async postConnect(connectOutput, connectorConfig) {
-      // Use overrides if provided, otherwise use defaults
-      const tokenHandler =
-        overrides?.oauth2?.exchange || defaultTokenExchangeHandler
-
-      if (!tokenHandler) {
-        throw new Error('No token handler defined')
-      }
-
-      if (!isOAuth2ConnectorDef(oauthConfig)) {
-        return zOAuthConfig.parse(oauthConfig)
-      }
-
-      const redirect_uri = getServerUrl(null) + '/connect/callback'
-      // const redirect_uri =
-      //   'https://f887-38-9-28-71.ngrok-free.app/connect/callback'
-      console.log(`Oauth2 Postconnect called`)
-      const result = await tokenHandler({
-        oauth_config: {
-          ...oauthConfig,
-          connector_config: connectorConfig,
+    async postConnect(connectOutput, connectorConfig, connectionSettings) {
+      console.log(
+        `Oauth2 Postconnect called for connectionId ${connectOutput.connectionId}`,
+      )
+      const ccfg = injectCcfgDefaultCredentials(
+        connectorConfig,
+        connectorDef.name,
+        oauthConfig,
+      )
+      const result = await defaultTokenExchangeHandler({
+        oauthConfig: {
+          ...fillOutStringTemplateVariablesInObjectKeys(
+            oauthConfig,
+            ccfg,
+            // @ts-expect-error: QQ: fix this
+            connectionSettings.oauth,
+          ),
+          connector_config: ccfg.oauth,
         } satisfies z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
         state: connectOutput.state,
-        redirect_uri,
+        redirectUri: getServerUrl(null) + '/connect/callback',
       })
 
-      console.log(`Oauth2 Postconnect completed`)
-
       return {
-        // NOTE: is this the right thing to do here?
-        connectionExternalId: extractId(connectOutput.connectionId)[2],
+        // QQ: is this the right thing to do here?
+        connectionExternalId: connectOutput.connectionId
+          ? extractId(connectOutput.connectionId as any)[2]
+          : undefined,
         settings: {
           oauth: {
             credentials: {
               ...result,
-              client_id: clientId,
-              connection_id: connectOutput.connectionId,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-              last_fetched_at: new Date().toISOString(),
-              provider_config_key: connectorConfig.id,
-              metadata: null,
+              client_id: ccfg.oauth?.client_id,
             },
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            last_fetched_at: new Date().toISOString(),
+            metadata: null,
           },
-          metadata: {}, // QQ: do we need this?
+          metadata: {},
         },
         // NOTE: this is currently returning T['_types']['connectionSettings']
         // which is defined as {authorization_url} in cnext/schema.ts
         // but TS doesn't seem to be picking it up so we're using any
-      } as any // TODO: review
+      } as any // TODO: QQ review
     },
 
     async refreshConnection(connectionSettings, connectorConfig) {
-      // Use overrides if provided, otherwise use defaults
-      const refreshTokenHandler =
-        overrides?.oauth2?.refresh || defaultTokenRefreshHandler
-
-      if (!refreshTokenHandler) {
-        throw new Error('No refresh token handler defined')
-      }
-
-      if (!isOAuth2ConnectorDef(oauthConfig)) {
-        return zOAuthConfig.parse(oauthConfig)
-      }
-
       const refreshToken = connectionSettings?.oauth?.credentials?.refresh_token
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
       }
 
       console.log(`Oauth2 Refresh connection called`)
+      const ccfg = injectCcfgDefaultCredentials(
+        connectorConfig,
+        connectorDef.name,
+        oauthConfig,
+      )
 
-      const result = await refreshTokenHandler({
-        oauth_config: {
-          ...oauthConfig,
-          connector_config: connectorConfig,
+      const result = await tokenRefreshHandler({
+        oAuthConfig: {
+          ...fillOutStringTemplateVariablesInObjectKeys(
+            oauthConfig,
+            ccfg,
+            connectionSettings.oauth,
+          ),
+          connector_config: ccfg.oauth,
           connection_settings: connectionSettings,
         } as any as z.infer<typeof zOAuthConfig>, // TODO: fix this
-        refresh_token: refreshToken,
+        refreshToken: refreshToken,
       })
 
       return {
         oauth: {
           credentials: {
             ...result,
-            client_id: clientId,
-            connection_id: connectionSettings.oauth?.credentials?.connection_id,
-            created_at: connectionSettings.oauth?.credentials?.created_at,
-            updated_at: new Date().toISOString(),
-            last_fetched_at: new Date().toISOString(),
-            provider_config_key:
-              connectionSettings.oauth?.credentials?.provider_config_key ||
-              connectorConfig.id,
-            metadata: connectionSettings.oauth?.credentials?.metadata || null,
+            client_id: ccfg.oauth?.client_id,
           },
+          created_at: connectionSettings.oauth?.created_at,
+          updated_at: new Date().toISOString(),
+          last_fetched_at: new Date().toISOString(),
+          metadata: connectionSettings.oauth?.metadata || null,
         },
         metadata: {}, // QQ: do we need this?
       } as any
     },
 
-    // @ts-expect-error: review
+    // @ts-expect-error: QQ
     async checkConnection({settings, config}) {
       // If there's no access token, throw an error
       if (!settings?.oauth?.credentials?.access_token) {
@@ -369,9 +240,12 @@ export function generateOAuth2Server<
 
         try {
           // Attempt to refresh the token
-          const {connectionExternalId, settings: newSettings} =
-            await this.refreshConnection(settings, config)
-          return {connectionExternalId, settings: newSettings, config} // Successfully refreshed
+          const newSettings = await this.refreshConnection(settings, config)
+          return {
+            connectionExternalId: settings.oauth?.credentials?.connection_id,
+            settings: newSettings,
+            config,
+          }
         } catch (error: any) {
           throw new Error(`Failed to refresh token: ${error.message}`)
         }

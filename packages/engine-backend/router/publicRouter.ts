@@ -1,7 +1,7 @@
-import {zodToOas31Schema} from '@opensdks/util-zod'
 import {TRPCError} from '@trpc/server'
 import {zRaw} from '@openint/cdk'
 import {R, z} from '@openint/util'
+import {zodToOas31Schema} from '@openint/util/schema'
 import {publicProcedure, trpc} from './_base'
 
 export const publicRouter = trpc.router({

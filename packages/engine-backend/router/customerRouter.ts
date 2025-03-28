@@ -296,6 +296,7 @@ export const customerRouter = trpc.router({
         input: [ccfgId, {connectionExternalId, ...connCtxInput}, preConnInput],
         ctx,
       }) => {
+        console.log('preConnect00', ccfgId, connCtxInput, preConnInput)
         const int = await ctx.asOrgIfNeeded.getConnectorConfigOrFail(ccfgId)
         if (!int.connector.preConnect) {
           return null
@@ -384,6 +385,14 @@ export const customerRouter = trpc.router({
             conn.integrationId = connCtxInput.integrationId
           }
 
+          console.warn('postConnect input a', input)
+          const parsedInput =
+            int.connector.schemas.connectOutput.safeParse(input)
+          if (!parsedInput.success) {
+            console.warn('postConnect input b', input)
+            console.warn('postConnect input c', parsedInput.error)
+          }
+
           return await int.connector.postConnect(
             int.connector.schemas.connectOutput.parse(input),
             {
@@ -450,6 +459,8 @@ export const customerRouter = trpc.router({
             connectionId,
             user: {
               org_id: ctx.viewer.orgId,
+              customer_id:
+                ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
             },
           },
         })
@@ -461,6 +472,8 @@ export const customerRouter = trpc.router({
               connectionId,
               user: {
                 org_id: ctx.viewer.orgId,
+                customer_id:
+                  ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
               },
             },
           })

@@ -43,6 +43,7 @@ async function main() {
     '/viewer',
     '/event',
     '/organization/onboarding',
+    '/connector/{name}',
   ]
 
   const filteredPaths = Object.keys(oas.paths)

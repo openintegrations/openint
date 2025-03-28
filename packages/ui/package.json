@@ -34,7 +34,7 @@
     "cmdk": "0.2.0",
     "date-fns": "^2.29.3",
     "lucide-react": "^0.479.0",
-    "next": "15.2.1",
+    "next": "15.2.3",
     "re-resizable": "6.9.9",
     "react-hook-form": "7.43.1",
     "sql-formatter": "12.2.1",

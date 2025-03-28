@@ -2,11 +2,10 @@ import React from 'react'
 import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Badge} from '@openint/shadcn/ui'
-import type {ConnectorTemporary} from './__stories__/fixtures'
 
 export interface ConnectorCardProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  connector: ConnectorTemporary
+  connector: Core['connector']
 }
 
 /**
@@ -22,7 +21,6 @@ const ConnectorCard = ({
   ...props
 }: ConnectorCardProps) => {
   const {name, logo_url, display_name} = connector
-
   return (
     <div
       className={cn(

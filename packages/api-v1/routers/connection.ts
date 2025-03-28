@@ -3,9 +3,10 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, eq, schema, sql} from '@openint/db'
-import {publicProcedure, router} from '../trpc/_base'
-import {type RouterContext} from '../trpc/context'
 import {core} from '../models'
+import {orgProcedure, publicProcedure, router} from '../trpc/_base'
+import {type RouterContext} from '../trpc/context'
+import {expandConnector} from './connectorConfig'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -18,7 +19,6 @@ import {
   zConnectorName,
   zCustomerId,
 } from './utils/types'
-import {expandConnector, zExpandOptions} from './connectorConfig'
 
 const zIncludeSecrets = z
   .enum(['none', 'basic', 'all'])
@@ -41,6 +41,14 @@ const zConnectionError = z
   .enum(['refresh_failed', 'unknown_external_error'])
   .describe('Error types: refresh_failed and unknown_external_error')
 
+function stripSensitiveOauthCredentials(credentials: any) {
+  return {
+    ...credentials,
+    refresh_token: undefined,
+    raw: undefined,
+  }
+}
+
 async function formatConnection(
   ctx: RouterContext,
   connection: z.infer<typeof core.connection>,
@@ -57,14 +65,22 @@ async function formatConnection(
   }
 
   // Handle different levels of secret inclusion
-  let settingsToInclude = {}
+  // the default is 'none' at which point settings should be an empty object
+  let settingsToInclude = {settings: {}}
   if (include_secrets === 'basic' && connection.settings.oauth) {
     settingsToInclude = {
       settings: {
         ...connection.settings,
-        oauth: {
-          credentials: connection.settings.oauth.credentials,
-        },
+        // NOTE: in future we should add other settings sensitive value
+        // stripping for things like api key here and abstract it
+        oauth: connection.settings?.oauth?.credentials
+          ? {
+              ...connection.settings.oauth,
+              credentials: stripSensitiveOauthCredentials(
+                connection.settings.oauth.credentials,
+              ),
+            }
+          : undefined,
       },
     }
   } else if (include_secrets === 'all') {
@@ -95,6 +111,19 @@ async function formatConnection(
   }
 }
 
+const connectionWithRelations = z
+  .intersection(
+    core.connection,
+    z.object({
+      connector: core.connector.optional(),
+    }),
+  )
+  .describe('The connection details')
+
+const zExpandOptions = z
+  .enum(['connector'])
+  .describe('Fields to expand: connector (includes connector details)')
+
 export const connectionRouter = router({
   getConnection: publicProcedure
     .meta({
@@ -114,15 +143,15 @@ export const connectionRouter = router({
         expand: z.array(zExpandOptions).optional().default([]),
       }),
     )
-    .output(core.connection.describe('The connection details'))
+    .output(connectionWithRelations)
     .query(async ({ctx, input}) => {
-      console.log(
-        'getConnection',
-        input.id,
-        input.include_secrets,
-        input.refresh_policy,
-        input.expand,
-      )
+      // console.log(
+      //   'getConnection',
+      //   input.id,
+      //   input.include_secrets,
+      //   input.refresh_policy,
+      //   input.expand,
+      // )
       let connection = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
       })
@@ -230,7 +259,11 @@ export const connectionRouter = router({
         })
         .optional(),
     )
-    .output(zListResponse(core.connection).describe('The list of connections'))
+    .output(
+      zListResponse(connectionWithRelations).describe(
+        'The list of connections',
+      ),
+    )
     .query(async ({ctx, input}) => {
       // Create a query that selects all fields from connection and adds a window function for the count
       const {query, limit, offset} = applyPaginationAndOrder(
@@ -362,5 +395,31 @@ export const connectionRouter = router({
         id: connection.id as `conn_${string}`,
         status: 'healthy',
       }
+    }),
+
+  deleteConnection: orgProcedure
+    .meta({
+      openapi: {
+        method: 'DELETE',
+        path: '/connection/{id}',
+      },
+    })
+    .input(z.object({id: zConnectionId}))
+    .output(zConnectionId)
+    .mutation(async ({ctx, input}) => {
+      const connection = await ctx.db.query.connection.findFirst({
+        where: eq(schema.connection.id, input.id),
+      })
+      if (!connection) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Connection not found',
+        })
+      }
+
+      await ctx.db
+        .delete(schema.connection)
+        .where(eq(schema.connection.id, input.id))
+      return input.id
     }),
 })

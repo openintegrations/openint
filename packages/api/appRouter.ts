@@ -4,9 +4,8 @@ import type {
   ZodOpenApiPathsObject,
 } from '@lilyrose2798/trpc-openapi/dist/generator'
 import {generateOpenApiDocument} from '@lilyrose2798/trpc-openapi/dist/generator'
-import {getServerUrl} from '@openint/app-config/constants'
 import {flatRouter} from '@openint/engine-backend'
-import {env} from '@openint/env'
+import {env, getServerUrl} from '@openint/env'
 import {eventMapForInngest} from '@openint/events'
 import accountingRouter from '@openint/unified-accounting'
 import atsRouter from '@openint/unified-ats'
@@ -187,15 +186,13 @@ function removeInternalPaths(oas: any): any {
       })
 
       // Keep paths that have whitelisted tags
-      const hasWhitelistedTag = operationValues.some(
-        (operation: any) =>
-          operation.tags?.some((tag: string) => whitelistedTags.includes(tag)),
+      const hasWhitelistedTag = operationValues.some((operation: any) =>
+        operation.tags?.some((tag: string) => whitelistedTags.includes(tag)),
       )
 
       // Filter out internal paths unless they have a whitelisted tag
-      const hasInternalTag = operationValues.some(
-        (operation: any) =>
-          operation.tags?.some((tag: string) => internalTags.includes(tag)),
+      const hasInternalTag = operationValues.some((operation: any) =>
+        operation.tags?.some((tag: string) => internalTags.includes(tag)),
       )
 
       return hasWhitelistedTag || !hasInternalTag

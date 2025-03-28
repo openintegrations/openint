@@ -1,10 +1,16 @@
 import type {Meta, StoryObj} from '@storybook/react'
+<<<<<<< HEAD:packages/ui-v1/domain-components/__stories__/ConnectorCard.stories.tsx
 import {ConnectorCard} from '../ConnectorCard'
 import {FIXTURES} from './fixtures'
+=======
+import {Badge} from '@openint/shadcn/ui'
+import {FIXTURES} from './__stories__/fixtures'
+import {ConnectorCard} from './ConnectorCard'
+>>>>>>> 0e008a9e66dcba0673f89da3ff4787f794d10de5:packages/ui-v1/domain-components/ConnectorCard.stories.tsx
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'UI-V1/ConnectorCard',
+  title: 'UI-V1/Connector/Card',
   component: ConnectorCard,
   parameters: {
     layout: 'centered',
@@ -159,4 +165,53 @@ export const ResponsiveGrid: Story = {
       </div>
     </div>
   ),
+}
+
+// Table Cell variant - horizontal layout for tables
+export const TableCell: Story = {
+  args: {
+    connector: {
+      name: 'salesforce',
+      display_name: 'Salesforce',
+      logo_url:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
+      stage: 'ga',
+      platforms: ['web', 'mobile', 'desktop'],
+    },
+  },
+  render: (args) => {
+    const connector = args.connector
+
+    return (
+      <div className="w-full max-w-md">
+        {/* Simple horizontal cell format */}
+        <div className="flex items-center gap-3 p-3">
+          <img
+            src={connector.logo_url}
+            alt={`${connector.display_name} logo`}
+            className="h-8 w-8 flex-shrink-0 rounded-xl object-contain"
+          />
+          <div className="font-medium">{connector.display_name}</div>
+          <div className="ml-auto flex gap-2">
+            <Badge
+              variant="outline"
+              className={
+                connector.stage === 'ga'
+                  ? 'bg-green-50 text-green-700'
+                  : connector.stage === 'beta'
+                    ? 'bg-blue-50 text-blue-700'
+                    : 'bg-pink-50 text-pink-700'
+              }>
+              {connector.stage}
+            </Badge>
+            {connector.platforms?.map((platform, i) => (
+              <Badge key={i} variant="secondary" className="bg-gray-100">
+                {platform}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  },
 }

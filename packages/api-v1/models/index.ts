@@ -3,7 +3,7 @@ import {z} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
 import {schema} from '@openint/db'
 import type {NonEmptyArray} from './connectorSchemas'
-import {connectorSchemas} from './connectorSchemas'
+import {connectorSchemas, zConnector} from './connectorSchemas'
 
 extendZodWithOpenApi(z)
 
@@ -14,7 +14,7 @@ const event_insert = createInsertSchema(schema.event).openapi({
   ref: 'core.event_insert',
 })
 
-function parseNonEmpty<T>(arr: T[]) {
+export function parseNonEmpty<T>(arr: T[]) {
   if (arr.length === 0) {
     throw new Error('Array is empty')
   }
@@ -62,6 +62,8 @@ export const core = {
       coreBase
         .extend({
           org_id: z.string(),
+          display_name: z.string().nullable(),
+          disabled: z.boolean().nullable(),
         })
         .describe('Connector Config Base'),
       z
@@ -86,24 +88,35 @@ export const core = {
       ref: 'core.connector_config',
       title: 'Connector Config',
     }),
-  connector: z
-    .object({
-      name: z.string(),
-      display_name: z.string().optional(),
-      logo_url: z.string().optional(),
-      stage: z.enum(['alpha', 'beta', 'ga']).optional(),
-      platforms: z
-        // TODO: Fix me to be the right ones
-        .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
-        .optional(),
-    })
-    .openapi({ref: 'core.connector', title: 'Connector'}),
+  connector: zConnector.openapi({ref: 'core.connector', title: 'Connector'}),
   integration: z
     .object({})
     .passthrough()
     .openapi({ref: 'core.integration', title: 'Integration'}),
+  customer: coreBase
+    .extend({
+      connection_count: z.number(),
+    })
+    .openapi({ref: 'core.customer', title: 'Customer'}),
 }
 
 export type Core = {
   [k in keyof typeof core]: z.infer<(typeof core)[k]>
 }
+
+export type ConnectorConfigExtended = Core['connector_config'] & {
+  connector: Core['connector']
+  integrations: Record<string, Core['integration']>
+  connection_count: number
+}
+
+export type ConnectorConfig<T extends keyof ConnectorConfigExtended> =
+  ConnectorConfigExtended & Pick<ConnectorConfigExtended, T>
+
+interface ConnectorRelations {
+  integrations: Array<Core['integration']>
+}
+
+export type ConnectorExpanded<K extends keyof ConnectorRelations> =
+  Core['connector'] & Partial<Pick<ConnectorRelations, K>>
+export type Customer = Core['customer']

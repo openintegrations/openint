@@ -1,0 +1,77 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+**/node_modules
+**/.pnp
+**/.pnp.js
+
+# testing
+/coverage
+/apps/tests
+
+# next.js
+/apps/web/.next/
+/apps/web/out/
+
+# production
+/apps/web/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files except example
+.env*
+!.env.example
+
+# symlinked for working with openintFS
+/data
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+
+# eslint
+.eslintcache
+
+# tailwind
+/apps/web/__generated__/tailwind.css
+
+*.secret.json
+
+temp/
+# We version control json files instead of the yaml ones
+*.oas.yaml
+.turbo
+dist/
+
+*.play.*
+
+*storybook.log
+
+## Gateway files
+/gateway/.wrangler
+/gateway/dist
+/gateway/node_modules
+/gateway/config.json
+/gateway/wrangler.toml
+
+.dev.vars
+wrangler.toml
+
+# CI Artifacts
+/artifacts
+
+# Next.js
+.next/
+
+tailwind.css
+tailwind-v3.css

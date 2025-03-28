@@ -76,7 +76,6 @@ export const connectorConfigRouter = trpc.router({
           oauthBaseSchema.connectorConfig.parse(input.config),
         )
       }
-      // console.log('saving connector config', id, input)
 
       return ctx.services.patchReturning('connector_config', id, input)
     }),
