@@ -2,28 +2,42 @@ import {Suspense} from 'react'
 import type {Viewer} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
+import {z} from '@openint/util'
 import {parsePageProps, type PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {AddConnectionInner, MyConnectionsClient} from './client'
 import {TabsClient} from './Tabs.client'
-import {zConnectV1SearchParams} from './types'
 
 function Fallback() {
   return <div>Loading...</div>
 }
+
+// TODO: Figure out why zod schema is not working when we have it in a separate file...
+
+const zConnectV1SearchParams = z.object({
+  connector_name: z
+    .enum(['plaid', 'greenhouse'])
+    .optional()
+    .describe(
+      'The name of the connector configuration to use. Default to all otherwise',
+    ),
+  tab: z.enum(['my-connections', 'add-connection']).optional().openapi({
+    title: 'Default Tab',
+    description:
+      'The default tab to show when the magic link is opened. Defaults to "my-connections"',
+  }),
+})
 
 export default async function Page(
   pageProps: PageProps<never, {tab?: string; connector_name?: string}>,
 ) {
   const {viewer, token} = await currentViewer(pageProps)
 
-  // Not working...
-  // const {searchParams} = await parsePageProps(pageProps, {
-  //   searchParams: zConnectV1SearchParams,
-  // })
-  const searchParams = await pageProps.searchParams
+  const {searchParams} = await parsePageProps(pageProps, {
+    searchParams: zConnectV1SearchParams,
+  })
 
   const api = createAPICaller(viewer)
   return (

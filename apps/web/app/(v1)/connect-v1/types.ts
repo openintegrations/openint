@@ -2,6 +2,7 @@
 
 import {extendZodWithOpenApi, z} from '@openint/util'
 
+// TODO: Figure out why this is needed... something is really weird.
 extendZodWithOpenApi(z)
 
 export const zConnectV1SearchParams = z.object({
