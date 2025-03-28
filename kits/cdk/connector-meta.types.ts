@@ -7,7 +7,7 @@ import type {
   Source,
 } from '@openint/sync'
 import {castIs} from '@openint/util'
-import {AuthType} from '../../connectors/cnext'
+import {AuthType, JsonConnectorDef} from '../../connectors/cnext'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
 import {zExternalId, zId} from './id.types'
@@ -54,6 +54,9 @@ export interface ConnectorMetadata {
 
   /* Native oauth type */
   authType?: AuthType
+
+  /** The new json connector def for this connector */
+  jsonDef?: JsonConnectorDef
 }
 
 // MARK: - Shared connect types
