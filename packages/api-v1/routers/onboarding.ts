@@ -1,6 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {eq, inArray, schema} from '@openint/db'
+import {getOrCreateApikey} from '@/lib-server'
 import {publicProcedure, router} from '../trpc/_base'
 
 const zOnboardingState = z.object({
@@ -11,6 +12,34 @@ const zOnboardingState = z.object({
 })
 
 export const onboardingRouter = router({
+  createOrganization: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        referrer: z.string().nullish(),
+        clerkUserId: z.string(),
+      }),
+    )
+    .output(z.object({id: z.string()}))
+    .mutation(async ({input, ctx}) => {
+      const apikey = await getOrCreateApikey(ctx.viewer)
+      const metadata = {
+        referrer: input.referrer,
+        clerk_user_id: input.clerkUserId,
+      }
+      const newOrg = {
+        id: input.id,
+        name: input.name,
+        slug: input.name.toLowerCase().replace(/ /g, '-'),
+        api_key: apikey as string,
+        metadata,
+      }
+
+      await ctx.db.insert(schema.organization).values(newOrg)
+
+      return {id: input.id}
+    }),
   getOnboarding: publicProcedure
     .meta({
       openapi: {method: 'GET', path: '/organization/onboarding'},
