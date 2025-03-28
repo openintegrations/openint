@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import {RegistryWidgetsType} from '@rjsf/utils'
 import type {Meta, StoryObj} from '@storybook/react'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm, ZodSchemaForm} from './SchemaForm'
+import {widgets} from './widgets'
 
 const meta: Meta<typeof ZodSchemaForm> = {
   title: 'ui-v1/components/SchemaForm',
@@ -57,10 +59,11 @@ export const WithUISchema: Story = {
           name: z.string().openapi({title: 'Name'}),
           oauth: zOauth,
           scopes: z.array(z.string()).openapi({
-            'ui:widget': 'MultiSelectWidget',
+            'ui:widget': 'ScopesWidget',
           }),
         }),
       )}
+      widgets={widgets as RegistryWidgetsType}
     />
   ),
 }
