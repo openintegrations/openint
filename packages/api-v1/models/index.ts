@@ -34,7 +34,9 @@ export const core = {
     .intersection(
       coreBase
         .extend({
-          connector_config_id: z.string(),
+          // We have some older connections that don't have a connector_config_id
+          // and only connector_name, assuming pure default connector_config_id
+          connector_config_id: z.string().nullable(),
         })
         .describe('Connection Base'),
       z

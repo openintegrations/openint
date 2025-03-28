@@ -90,6 +90,7 @@ async function formatConnection(
   let expandedFields = {}
   if (expand.includes('connector')) {
     const connectorConfig = await ctx.db.query.connector_config.findFirst({
+      // @ts-expect-error @openint-bot fix me as connector_config_id is optional in db
       where: eq(schema.connector_config.id, connection.connector_config_id),
     })
     if (!connectorConfig) {
@@ -164,7 +165,6 @@ export const connectionRouter = router({
       }
 
       const connector_config = await ctx.db.query.connector_config.findFirst({
-        // @ts-expect-error connector_config_id pack
         where: eq(schema.connector_config.id, connection.connector_config_id),
         columns: {
           id: true,
