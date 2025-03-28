@@ -64,6 +64,9 @@ export function validateOAuthCredentials(
 
   for (const field of requiredFields) {
     if (!oauthConfig.connector_config?.oauth?.[field]) {
+      console.error(
+        `No ${field} provided in connector_config.oauth for ${oauthConfig.connector_config.name}`,
+      )
       throw new Error(`No ${field} provided`)
     }
   }

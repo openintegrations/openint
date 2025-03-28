@@ -140,7 +140,7 @@ export function generateOAuth2Server<
         oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            ccfg,
+            ccfg.oauth,
             // @ts-expect-error: QQ: fix this
             connectionSettings.oauth,
           ),
@@ -192,7 +192,7 @@ export function generateOAuth2Server<
         oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            ccfg,
+            ccfg.oauth,
             connectionSettings.oauth,
           ),
           connector_config: ccfg,
