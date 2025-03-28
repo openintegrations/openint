@@ -7,6 +7,7 @@ import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {AddConnectionInner, MyConnectionsClient} from './client'
+import {TabsClient} from './Tabs.client'
 
 function Fallback() {
   return <div>Loading...</div>
@@ -21,7 +22,8 @@ export default async function Page(props: PageProps<never, {tab?: string}>) {
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
       <ClientApp token={token!}>
-        <Tabs defaultValue={(await props.searchParams).tab ?? 'my-connections'}>
+        {/* <TabsClient defaultValue={(await props.searchParams).tab ?? 'my-connections'}> */}
+        <TabsClient defaultValue="my-connections" paramKey="tab">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="my-connections">My connections</TabsTrigger>
             <TabsTrigger value="add-connection">Add connection</TabsTrigger>
@@ -36,7 +38,7 @@ export default async function Page(props: PageProps<never, {tab?: string}>) {
               <AddConnections viewer={viewer} />
             </Suspense>
           </TabsContent>
-        </Tabs>
+        </TabsClient>
       </ClientApp>
     </div>
   )
