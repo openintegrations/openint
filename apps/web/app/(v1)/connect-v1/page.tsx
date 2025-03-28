@@ -1,5 +1,6 @@
 import {Suspense} from 'react'
 import {extractId} from '@openint/cdk'
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import type {PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import type {APICaller} from '@/lib-server/globals'
@@ -20,12 +21,22 @@ export default async function Page(props: PageProps) {
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
       <ClientApp token={token!}>
-        <Suspense fallback={<Fallback />}>
-          <MyConnectionsClient initialData={api.listConnections()} />
-        </Suspense>
-        <Suspense fallback={<Fallback />}>
-          <AddConnections api={api} />
-        </Suspense>
+        <Tabs defaultValue="my-connections">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="my-connections">My connections</TabsTrigger>
+            <TabsTrigger value="add-connection">Add connection</TabsTrigger>
+          </TabsList>
+          <TabsContent value="my-connections" className="p-4">
+            <Suspense fallback={<Fallback />}>
+              <MyConnectionsClient initialData={api.listConnections()} />
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="add-connection" className="p-4">
+            <Suspense fallback={<Fallback />}>
+              <AddConnections api={api} />
+            </Suspense>
+          </TabsContent>
+        </Tabs>
       </ClientApp>
     </div>
   )
