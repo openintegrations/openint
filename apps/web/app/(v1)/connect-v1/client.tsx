@@ -132,13 +132,16 @@ export function AddConnectionInner({
 }
 
 export function MyConnectionsClient(props: {
+  // TODO: Figure out how to type this without duplication
+
+  connector_name?: string
   initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
   const api = useTRPC()
   const res = useSuspenseQuery(
     api.listConnections.queryOptions(
-      {},
+      {connector_name: props.connector_name},
       initialData ? {initialData} : undefined,
     ),
   )

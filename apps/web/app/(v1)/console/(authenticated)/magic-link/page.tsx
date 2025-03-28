@@ -2,26 +2,11 @@
 
 import React from 'react'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form/SchemaForm'
-import {extendZodWithOpenApi, z} from '@openint/util'
-
-
-extendZodWithOpenApi(z)
+import type {ConnectV1SearchParams} from '@/app/(v1)/connect-v1/types'
+import {zConnectV1SearchParams} from '@/app/(v1)/connect-v1/types'
 
 export default function MagicLinkPage() {
-  const schema = z.object({
-    connector_name: z
-      .string()
-      .optional()
-      .describe(
-        'The name of the connector configuration to use. Default to all otherwise',
-      ),
-    tab: z.enum(['my-connections', 'add-connection']).optional().openapi({
-      title: 'Default Tab',
-      description:
-        'The default tab to show when the magic link is opened. Defaults to "my-connections"',
-    }),
-  })
-  const [data, setData] = React.useState<z.infer<typeof schema>>({})
+  const [data, setData] = React.useState<ConnectV1SearchParams>({})
 
   const iframeUrl = new URL('/connect-v1', window.location.origin)
   for (const [key, value] of Object.entries(data)) {
@@ -35,7 +20,7 @@ export default function MagicLinkPage() {
     <div className="flex h-full flex-col">
       <h1>Magic Link</h1>
       <ZodSchemaForm
-        schema={schema}
+        schema={zConnectV1SearchParams}
         onChange={(change) => {
           // console.log('change', change)
           setData(change.formData ?? {})

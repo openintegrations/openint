@@ -2,19 +2,29 @@ import {Suspense} from 'react'
 import type {Viewer} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
-import type {PageProps} from '@/lib-common/next-utils'
+import {parsePageProps, type PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {AddConnectionInner, MyConnectionsClient} from './client'
 import {TabsClient} from './Tabs.client'
+import {zConnectV1SearchParams} from './types'
 
 function Fallback() {
   return <div>Loading...</div>
 }
 
-export default async function Page(props: PageProps<never, {tab?: string}>) {
-  const {viewer, token} = await currentViewer(props)
+export default async function Page(
+  pageProps: PageProps<never, {tab?: string; connector_name?: string}>,
+) {
+  const {viewer, token} = await currentViewer(pageProps)
+
+  // Not working...
+  // const {searchParams} = await parsePageProps(pageProps, {
+  //   searchParams: zConnectV1SearchParams,
+  // })
+  const searchParams = await pageProps.searchParams
+
   const api = createAPICaller(viewer)
   return (
     <div>
@@ -23,6 +33,7 @@ export default async function Page(props: PageProps<never, {tab?: string}>) {
       </pre>
       <ClientApp token={token!}>
         {/* <TabsClient defaultValue={(await props.searchParams).tab ?? 'my-connections'}> */}
+
         <TabsClient defaultValue="my-connections" paramKey="tab">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="my-connections">My connections</TabsTrigger>
@@ -30,12 +41,21 @@ export default async function Page(props: PageProps<never, {tab?: string}>) {
           </TabsList>
           <TabsContent value="my-connections" className="p-4">
             <Suspense fallback={<Fallback />}>
-              <MyConnectionsClient initialData={api.listConnections()} />
+              <MyConnectionsClient
+                // TODO: How to avoid the duplicate construction of input parameters?
+                connector_name={searchParams.connector_name}
+                initialData={api.listConnections({
+                  connector_name: searchParams.connector_name,
+                })}
+              />
             </Suspense>
           </TabsContent>
           <TabsContent value="add-connection" className="p-4">
             <Suspense fallback={<Fallback />}>
-              <AddConnections viewer={viewer} />
+              <AddConnections
+                viewer={viewer}
+                connector_name={searchParams.connector_name}
+              />
             </Suspense>
           </TabsContent>
         </TabsClient>
@@ -45,10 +65,18 @@ export default async function Page(props: PageProps<never, {tab?: string}>) {
 }
 
 /** This needs to happen server side for preConnect to work */
-async function AddConnections({viewer}: {viewer: Viewer}) {
+async function AddConnections({
+  viewer,
+  connector_name,
+}: {
+  viewer: Viewer
+  connector_name?: string
+}) {
   const api = createAPICaller(viewer)
 
-  const res = await api.listConnectorConfigs()
+  const res = await api.listConnectorConfigs({
+    connector_name,
+  })
 
   return (
     <>
