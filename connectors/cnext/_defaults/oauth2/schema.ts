@@ -79,6 +79,7 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
       verticals: def.verticals,
       logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-${def.connector_name}.svg`,
       authType: def.auth.type,
+      jsonDef: def,
     },
   } satisfies ConnectorDef<
     typeof oauth2Schemas & {name: z.ZodLiteral<T['connector_name']>}

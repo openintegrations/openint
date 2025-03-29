@@ -3,16 +3,18 @@
 import {Check, Copy, Eye, EyeOff} from 'lucide-react'
 import {useState} from 'react'
 import {
-  useToast,
   Button,
   Input,
   Label,
-  type InputProps
+  useToast,
+  type InputProps,
 } from '@openint/shadcn/ui'
 
 interface SecureInputProps extends Omit<InputProps, 'type'> {
   label?: string
   placeholder?: string
+  showValue?: boolean
+  readOnly?: boolean
 }
 
 export default function SecureInput({
@@ -20,14 +22,16 @@ export default function SecureInput({
   placeholder = 'Enter secure text',
   value,
   onChange,
+  showValue = false,
+  readOnly = false,
   ...props
 }: SecureInputProps) {
-  const [showValue, setShowValue] = useState(false)
+  const [showingValue, setShowValue] = useState(showValue)
   const [copied, setCopied] = useState(false)
   const {toast} = useToast()
 
   const toggleValueVisibility = () => {
-    if (showValue) {
+    if (showingValue) {
       setShowValue(false)
       toast.info('Value hidden')
     } else {
@@ -56,26 +60,29 @@ export default function SecureInput({
         <div className="relative flex-grow">
           <Input
             {...props}
-            type={showValue ? 'text' : 'password'}
+            type={showingValue ? 'text' : 'password'}
             id="secureInput"
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className="pr-20"
+            className="pr-10 font-light"
+            readOnly={readOnly}
           />
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-            onClick={toggleValueVisibility}
-            aria-label={showValue ? 'Hide value' : 'Show value'}>
-            {showValue ? (
-              <EyeOff className="h-4 w-4" />
-            ) : (
-              <Eye className="h-4 w-4" />
-            )}
-          </Button>
+          {!showValue && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+              onClick={toggleValueVisibility}
+              aria-label={showingValue ? 'Hide value' : 'Show value'}>
+              {showingValue ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </Button>
+          )}
         </div>
         <Button
           type="button"

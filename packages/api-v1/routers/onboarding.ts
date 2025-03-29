@@ -3,7 +3,8 @@ import {z} from 'zod'
 import {encodeApiKey} from '@openint/cdk'
 import {eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {authenticatedProcedure, router} from '../trpc/_base'
+import {core} from '../models'
+import {orgProcedure, router} from '../trpc/_base'
 
 const zOnboardingState = z.object({
   first_connector_configured: z.boolean(),
@@ -13,7 +14,45 @@ const zOnboardingState = z.object({
 })
 
 export const onboardingRouter = router({
-  createOrganization: authenticatedProcedure
+  getOrganization: orgProcedure
+    .meta({
+      openapi: {method: 'GET', path: '/organization', enabled: false},
+    })
+    .input(z.void())
+    .output(
+      core.organization.extend({
+        metadata: z.object({webhook_url: z.string().nullish()}),
+      }),
+    )
+    .query(async ({ctx}) => {
+      const org = await ctx
+        .as({role: 'system'})
+        .db.query.organization.findFirst({
+          where: eq(schema.organization.id, ctx.viewer.orgId),
+        })
+
+      if (!org) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Organization not found',
+        })
+      }
+
+      return {
+        ...org,
+        metadata: {
+          webhook_url: org.metadata?.webhook_url ?? '',
+        },
+      }
+    }),
+  createOrganization: orgProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/organization/onboarding',
+        enabled: false,
+      },
+    })
     .input(
       z.object({
         id: z.string(),
@@ -41,9 +80,13 @@ export const onboardingRouter = router({
 
       return {id: input.id}
     }),
-  getOnboarding: authenticatedProcedure
+  getOnboarding: orgProcedure
     .meta({
-      openapi: {method: 'GET', path: '/organization/onboarding'},
+      openapi: {
+        method: 'GET',
+        path: '/organization/onboarding',
+        enabled: false,
+      },
     })
     .input(z.void())
     .output(zOnboardingState)
@@ -94,9 +137,13 @@ export const onboardingRouter = router({
       }
     }),
 
-  setOnboardingComplete: authenticatedProcedure
+  setOnboardingComplete: orgProcedure
     .meta({
-      openapi: {method: 'PUT', path: '/organization/onboarding'},
+      openapi: {
+        method: 'PUT',
+        path: '/organization/onboarding',
+        enabled: false,
+      },
     })
     .input(z.void())
     .output(z.void())
@@ -139,5 +186,75 @@ export const onboardingRouter = router({
           updated_at: new Date().toISOString(),
         })
         .where(eq(schema.organization.id, org.id))
+    }),
+  setWebhookUrl: orgProcedure
+    .meta({
+      openapi: {
+        method: 'PUT',
+        path: '/organization/webhook-url',
+        enabled: false,
+      },
+    })
+    .input(z.object({webhookUrl: z.string()}))
+    .output(z.void())
+    .mutation(async ({input, ctx}) => {
+      const org = await ctx
+        .as({role: 'system'})
+        .db.query.organization.findFirst({
+          where: eq(schema.organization.id, ctx.viewer.orgId),
+        })
+
+      if (!org) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Organization not found',
+        })
+      }
+
+      if (org.metadata?.webhook_url === input.webhookUrl) {
+        return
+      }
+
+      if (!input.webhookUrl.startsWith('https://')) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Invalid webhook URL. It must start with "https://".',
+        })
+      }
+
+      // Consider doing this
+      // const response = await fetch('/api/v1/organization/webhook-url', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({test: true, webhookUrl: input.webhookUrl}),
+      // })
+
+      // if (!response.ok) {
+      //   throw new TRPCError({
+      //     code: 'INTERNAL_SERVER_ERROR',
+      //     message: 'Failed to send test POST request to the webhook URL.',
+      //   })
+      // }
+
+      try {
+        await ctx
+          .as({role: 'system'})
+          .db.update(schema.organization)
+          .set({
+            metadata: {
+              ...org.metadata,
+              webhook_url: input.webhookUrl,
+            },
+            updated_at: new Date().toISOString(),
+          })
+          .where(eq(schema.organization.id, org.id))
+      } catch (error) {
+        console.error('Error updating webhook URL:', error); throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to update webhook URL, please try again later',
+        })
+      }
     }),
 })

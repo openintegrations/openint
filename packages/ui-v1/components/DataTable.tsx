@@ -233,7 +233,6 @@ export function SearchInput() {
   const {table} = useDataTableContext()
   const [isFocused, setIsFocused] = React.useState(false)
 
-  console.log('table.getState().globalFilter', table.getState().globalFilter)
   return (
     <div
       className="relative max-w-lg transition-all duration-300 ease-in-out"

@@ -1,6 +1,7 @@
 import type {Id} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
+import {getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util'
 import {createApp} from '../app'
 
@@ -104,7 +105,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     headers.set('authorization', `Bearer ${testApiKey}`)
     headers.set('accept', 'application/json')
 
-    const url = new URL('http://localhost/api/v1/connector')
+    const url = new URL(getServerUrl(null) + '/api/v1/connector')
     url.searchParams.set('expand', 'integrations')
 
     const req = new Request(url, {headers})
@@ -126,7 +127,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     headers.set('authorization', `Bearer ${testApiKey}`)
     headers.set('accept', 'application/json')
 
-    const url = new URL('http://localhost/api/v1/connector')
+    const url = new URL(getServerUrl(null) + '/api/v1/connector')
     url.searchParams.set('expand', 'foo')
 
     const req = new Request(url, {headers})

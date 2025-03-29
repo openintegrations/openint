@@ -25,7 +25,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       .values({
         id: orgId,
         name: 'Test Organization',
-        metadata: {},
+        api_key: 'test_api_key',
+        slug: 'test-organization',
+        metadata: {webhook_url: 'https://webhook.site/webhook-url'},
       })
       .onConflictDoNothing()
   })
@@ -54,6 +56,36 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
+  describe('getOrganization', () => {
+    test('returns organization details', async () => {
+      const org = await asOrg.getOrganization()
+
+      expect(org).toEqual({
+        id: orgId,
+        name: 'Test Organization',
+        slug: 'test-organization',
+        api_key: 'test_api_key',
+        created_at: expect.any(String),
+        updated_at: expect.any(String),
+        metadata: {webhook_url: 'https://webhook.site/webhook-url'},
+      })
+    })
+
+    test('user can access organization details', async () => {
+      const org = await asUser.getOrganization()
+
+      expect(org).toEqual({
+        id: orgId,
+        name: 'Test Organization',
+        slug: 'test-organization',
+        api_key: 'test_api_key',
+        created_at: expect.any(String),
+        updated_at: expect.any(String),
+        metadata: {webhook_url: 'https://webhook.site/webhook-url'},
+      })
+    })
+  })
+
   describe('setOnboardingComplete', () => {
     test('marks onboarding as complete', async () => {
       // Set onboarding complete
@@ -66,6 +98,17 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       await expect(asOrg.setOnboardingComplete()).rejects.toThrow(
         'Onboarding already marked complete',
       )
+    })
+  })
+
+  describe('setWebhookUrl', () => {
+    test('updates webhook URL', async () => {
+      await asOrg.setWebhookUrl({
+        webhookUrl: 'https://webhook.site/xxx',
+      })
+
+      const org = await asOrg.getOrganization()
+      expect(org.metadata.webhook_url).toBe('https://webhook.site/xxx')
     })
   })
 })

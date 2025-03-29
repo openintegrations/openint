@@ -8,4 +8,5 @@ export * from './MultiSelectActionBar'
 export * from './schema-form/index'
 export * from './tabs/index'
 export * from './toast'
+export * from './WebhookInput'
 // codegen:end

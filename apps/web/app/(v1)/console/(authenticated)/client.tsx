@@ -3,6 +3,7 @@
 import {useAuth, useUser} from '@clerk/nextjs'
 import React from 'react'
 import type {AppRouter} from '@openint/api-v1'
+import {getServerUrl} from '@openint/env'
 import {
   createTRPCClient,
   createTRPCContext,
@@ -63,7 +64,7 @@ export function ClientApp({
         httpLink({
           // url: '/api/v1/trpc',
           // TODO: if server rendering, bypass http link completely
-          url: 'http://localhost:4000/api/v1/trpc',
+          url: getServerUrl(null) + '/api/v1/trpc',
           headers: {authorization: `Bearer ${token}`},
         }),
       ],
