@@ -66,7 +66,7 @@ const DataTableContext = React.createContext<
   DataTableContextValue<any, any> | undefined
 >(undefined)
 
-export function useDataTableContext() {
+function useDataTableContext() {
   const context = React.useContext(DataTableContext)
   if (!context) {
     throw new Error('useDataTable must be used within a DataTableProvider')
@@ -164,13 +164,13 @@ export function DataTableTable(props: {className?: string}) {
     useDataTableContext()
 
   return (
-    <div className={cn('rounded-md border', props.className)}>
-      <Table className="w-full">
+    <div className={cn('w-full rounded-md border', props.className)}>
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="px-3 py-3">
+                <TableHead key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -208,7 +208,7 @@ export function DataTableTable(props: {className?: string}) {
                   }
                   className={cn(onRowClick && 'hover:bg-muted cursor-pointer')}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-3 py-3">
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
