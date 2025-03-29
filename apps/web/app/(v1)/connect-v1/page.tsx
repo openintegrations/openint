@@ -7,6 +7,7 @@ import {parsePageProps, type PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
+import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
 import {AddConnectionInner, MyConnectionsClient} from './client'
 import {TabsClient} from './Tabs.client'
 
@@ -70,33 +71,35 @@ export default async function Page(
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
       <ClientApp token={token!}>
-        {/* <TabsClient defaultValue={(await props.searchParams).tab ?? 'my-connections'}> */}
+        <GlobalCommandBarProvider>
+          {/* <TabsClient defaultValue={(await props.searchParams).tab ?? 'my-connections'}> */}
 
-        <TabsClient defaultValue="my-connections" paramKey="tab">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="my-connections">My connections</TabsTrigger>
-            <TabsTrigger value="add-connection">Add connection</TabsTrigger>
-          </TabsList>
-          <TabsContent value="my-connections" className="p-4">
-            <Suspense fallback={<Fallback />}>
-              <MyConnectionsClient
-                // TODO: How to avoid the duplicate construction of input parameters?
-                connector_name={searchParams.connector_name}
-                initialData={api.listConnections({
-                  connector_name: searchParams.connector_name,
-                })}
-              />
-            </Suspense>
-          </TabsContent>
-          <TabsContent value="add-connection" className="p-4">
-            <Suspense fallback={<Fallback />}>
-              <AddConnections
-                viewer={viewer}
-                connector_name={searchParams.connector_name}
-              />
-            </Suspense>
-          </TabsContent>
-        </TabsClient>
+          <TabsClient defaultValue="my-connections" paramKey="tab">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="my-connections">My connections</TabsTrigger>
+              <TabsTrigger value="add-connection">Add connection</TabsTrigger>
+            </TabsList>
+            <TabsContent value="my-connections" className="p-4">
+              <Suspense fallback={<Fallback />}>
+                <MyConnectionsClient
+                  // TODO: How to avoid the duplicate construction of input parameters?
+                  connector_name={searchParams.connector_name}
+                  initialData={api.listConnections({
+                    connector_name: searchParams.connector_name,
+                  })}
+                />
+              </Suspense>
+            </TabsContent>
+            <TabsContent value="add-connection" className="p-4">
+              <Suspense fallback={<Fallback />}>
+                <AddConnections
+                  viewer={viewer}
+                  connector_name={searchParams.connector_name}
+                />
+              </Suspense>
+            </TabsContent>
+          </TabsClient>
+        </GlobalCommandBarProvider>
       </ClientApp>
     </div>
   )

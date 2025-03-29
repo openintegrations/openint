@@ -296,16 +296,17 @@ export const connectionRouter = router({
       const {items, total} = await processPaginatedResponse(query, 'connection')
 
       return {
-        items: await Promise.all(
-          items.map((conn) =>
-            formatConnection(
-              ctx,
-              conn as any,
-              input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
-              input?.expand ?? [],
-            ),
-          ),
-        ),
+        // items: await Promise.all(
+        //   items.map((conn) =>
+        //     formatConnection(
+        //       ctx,
+        //       conn as any,
+        //       input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
+        //       input?.expand ?? [],
+        //     ),
+        //   ),
+        // ),
+        items,
         total,
         limit,
         offset,

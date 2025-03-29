@@ -132,6 +132,7 @@ export function CommandButton<
   command: CommandDraft<TDef, TKey, TCtx>
   ctx: TCtx
 } & ButtonProps) {
+
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const _cmd = prepareCommand([key as string, definitions[key]!])
   const cmd = {..._cmd, ..._cmd.useCommand?.(params ?? {})}

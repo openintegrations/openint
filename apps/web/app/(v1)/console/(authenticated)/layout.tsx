@@ -3,7 +3,7 @@ import React from 'react'
 import {AppLayout} from '@openint/ui-v1'
 import {OrganizationSwitcher, UserButton} from '@/lib-client/auth.client'
 import {currentViewer} from '@/lib-server/auth.server'
-import {GlobalCommandBarProvider} from './GlobalCommandBarProvider'
+import {GlobalCommandBarProvider} from '../../GlobalCommandBarProvider'
 
 export default async function AuthenticatedLayout({
   children,
