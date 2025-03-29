@@ -11,11 +11,11 @@ import {Separator} from '@openint/shadcn/ui/separator'
 import {SidebarTrigger} from '@openint/shadcn/ui/sidebar'
 
 export function AppHeader(props: {userButton: React.ReactNode}) {
-  const path = usePathname()
+  const path = usePathname() ?? '/'
 
   // Extract title from path
   let title = 'Dashboard'
-  const consoleMatch = path.match(/\/console(?:\/(.+))?/)
+  const consoleMatch = path?.match(/\/console(?:\/(.+))?/)
 
   if (consoleMatch && consoleMatch[1]) {
     // Extract the last segment after /console/
