@@ -16,7 +16,7 @@ import {
 } from '@openint/shadcn/ui/sidebar'
 import {Icon, IconName} from '../components'
 
-const navItems = [
+export const SIDEBAR_NAV_ITEMS = [
   {
     title: 'Dashboard',
     url: '/console',
@@ -71,7 +71,7 @@ export function AppSidebar({
       <SidebarHeader>{organizationSwitcher}</SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="mt-5">
-          {navItems.map((item) => {
+          {SIDEBAR_NAV_ITEMS.map((item) => {
             const isActive =
               pathname?.replace(/\/*$/, '') === item.url.replace(/\/*$/, '')
             return (

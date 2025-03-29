@@ -6,6 +6,8 @@ import {
   useOrganizationList,
   useUser,
 } from '@clerk/nextjs'
+import {Command} from 'commandbar/build/internal/src/middleware/command'
+import {useRouter} from 'next/navigation'
 import React from 'react'
 import type {AppRouter} from '@openint/api-v1'
 import type {
@@ -13,6 +15,7 @@ import type {
   CommandDefinitionMap,
 } from '@openint/commands'
 import {CommandBar, toast} from '@openint/ui-v1'
+import {SIDEBAR_NAV_ITEMS} from '@openint/ui-v1/navigation/app-sidebar'
 import {
   createTRPCClient,
   createTRPCContext,
@@ -172,7 +175,7 @@ export function GlobalCommandBar() {
     (orgList.userMemberships.data ?? [])
       .filter((mem) => mem.organization.id !== org.organization?.id)
       .map((mem): [string, CommandDefinitionInput] => [
-        `switch_to_org_${mem.organization.id}`,
+        `switch_organization:${mem.organization.slug}`,
         {
           group: 'Switch Organization',
           icon: 'OctagonAlert',
@@ -184,32 +187,25 @@ export function GlobalCommandBar() {
       ]),
   )
 
-  return <CommandBar ctx={{}} definitions={orgCommands} />
-}
+  const router = useRouter()
+  const navCommands = Object.fromEntries(
+    SIDEBAR_NAV_ITEMS.map((item): [string, CommandDefinitionInput] => [
+      `navigate:${item.url.replace(/^\//, '')}`,
+      {
+        group: 'Navigation',
+        title: `Go to ${item.title}`,
+        icon: item.icon,
+        execute: () => {
+          router.push(item.url)
+        },
+      },
+    ]),
+  )
+  const allCommands: CommandDefinitionMap = {
+    ...navCommands,
+    ...orgCommands,
+    // Add any other global commands here
+  }
 
-const navCommands = {
-  go_to_connect: {
-    icon: 'Wand',
-    title: 'Go to Connect',
-    execute: () => toast('go_to_connect'),
-  },
-  go_to_connections: {
-    icon: 'Box',
-    title: 'Go to Connections',
-    execute: () => toast('go_to_connections'),
-  },
-  go_to_connector_configs: {
-    icon: 'Boxes',
-    title: 'Go to Connector Configs',
-    execute: () => toast('go_to_connector_configs'),
-  },
-  go_to_settings: {
-    icon: 'Settings',
-    execute: () => toast('go_to_settings'),
-  },
-  go_to_api_docs: {
-    icon: 'FileText',
-    title: 'Go to API Docs',
-    execute: () => toast('go_to_api_docs'),
-  },
-} satisfies CommandDefinitionMap
+  return <CommandBar ctx={{}} definitions={allCommands} />
+}
