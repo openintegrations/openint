@@ -1,3 +1,5 @@
+'use client'
+
 import {Check, Copy, Loader2} from 'lucide-react'
 import {useState} from 'react'
 import {Button, Input, Label, toast} from '@openint/shadcn/ui'
