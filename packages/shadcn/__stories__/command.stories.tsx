@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/no-autofocus */
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable react-hooks/rules-of-hooks */
 import type {Meta, StoryObj} from '@storybook/react'
 import {
@@ -11,13 +11,7 @@ import {
   User,
 } from 'lucide-react'
 import React from 'react'
-import {
-  Button,
-  Popover,
-  PopoverAnchor,
-  PopoverContent,
-  PopoverTrigger,
-} from '../ui'
+import {Button, Popover, PopoverContent, PopoverTrigger} from '../ui'
 import {
   Command,
   CommandDialog,
@@ -99,14 +93,26 @@ export const Inline = () => (
 export const AsDialog: Story = {
   render: () => {
     const [open, setOpen] = React.useState(false)
+    React.useEffect(() => {
+      const down = (e: KeyboardEvent) => {
+        if (e.key === 'i' && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault()
+          setOpen((open) => !open)
+        }
+      }
+      document.addEventListener('keydown', down)
+      return () => document.removeEventListener('keydown', down)
+    }, [])
 
     return (
       <>
         <Button
-          variant="outline"
+          variant="ghost"
           onClick={() => setOpen(true)}
-          className="mb-4">
-          Open Command Dialog
+          className="mb-4 flex items-center gap-2">
+          <kbd className="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-xs font-medium">
+            <span className="text-xs">⌘</span>I
+          </kbd>
         </Button>
         <CommandDialog open={open} onOpenChange={setOpen}>
           <InnerContent />
@@ -118,13 +124,26 @@ export const AsDialog: Story = {
 
 export const AsPopover: Story = {
   render: () => {
-    const [open, setOpen] = React.useState(true)
+    const [open, setOpen] = React.useState(false)
+    React.useEffect(() => {
+      const down = (e: KeyboardEvent) => {
+        if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault()
+          setOpen((open) => !open)
+        }
+      }
+      document.addEventListener('keydown', down)
+      return () => document.removeEventListener('keydown', down)
+    }, [])
 
     return (
       <>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="default">
+              <kbd className="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-xs font-medium">
+                <span className="text-xs">⌘</span>P
+              </kbd>
               <MoreVertical className="h-4 w-4" />
               <span className="sr-only">More options</span>
             </Button>
