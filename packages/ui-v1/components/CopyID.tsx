@@ -1,3 +1,5 @@
+'use client'
+
 import {useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
