@@ -1,9 +1,11 @@
-import type {
-  CommandComponentProps,
-  CommandDraft,
-} from '@openint/ui'
-import type { ButtonProps } from '@openint/shadcn/ui/button'
-import {CommandBar, CommandButton, CommandPopover} from '@openint/ui'
+import type {CommandDraft} from '@openint/commands'
+import type {ButtonProps} from '@openint/shadcn/ui/button'
+import type {CommandComponentProps} from '@openint/ui-v1/components/command/command-components'
+import {
+  CommandBar,
+  CommandButton,
+  CommandPopover,
+} from '@openint/ui-v1/components/command/command-components'
 import type {CommandContext} from './vcommand-context'
 import {WithCommandContext} from './vcommand-context'
 import {vDefinitions} from './vcommand-definitions'

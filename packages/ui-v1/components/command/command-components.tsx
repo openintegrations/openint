@@ -26,7 +26,7 @@ import {R} from '@openint/util'
 import {Icon} from '../Icon'
 
 export interface CommandComponentProps<
-  TCtx = unknown,
+  TCtx = any,
   TDefs extends CommandDefinitionMap<TCtx> = CommandDefinitionMap<TCtx>,
 > {
   ctx: TCtx

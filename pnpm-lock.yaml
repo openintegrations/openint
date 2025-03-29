@@ -342,6 +342,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/commands':
+        specifier: workspace:*
+        version: link:../../packages/commands
       '@openint/connect':
         specifier: workspace:*
         version: link:../../kits/connect

@@ -17,6 +17,7 @@
     "@openint/api-v1": "workspace:*",
     "@openint/app-config": "workspace:*",
     "@openint/cdk": "workspace:*",
+    "@openint/commands": "workspace:*",
     "@openint/connect": "workspace:*",
     "@openint/connector-postgres": "workspace:*",
     "@openint/db": "workspace:*",
