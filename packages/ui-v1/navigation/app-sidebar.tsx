@@ -28,6 +28,16 @@ const navItems = [
     icon: 'Wand',
   },
   {
+    title: 'Connectors',
+    url: '/console/connector-config',
+    icon: 'Layers',
+  },
+  {
+    title: 'Events',
+    url: '/console/events',
+    icon: 'Database',
+  },
+  {
     title: 'Customers',
     url: '/console/customers',
     icon: 'Users',
@@ -36,11 +46,6 @@ const navItems = [
     title: 'Connections',
     url: '/console/connections',
     icon: 'Box',
-  },
-  {
-    title: 'Connector Configs',
-    url: '/console/connector-config',
-    icon: 'Layers',
   },
   {
     title: 'Settings',

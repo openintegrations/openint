@@ -127,3 +127,4 @@ interface ConnectorRelations {
 export type ConnectorExpanded<K extends keyof ConnectorRelations> =
   Core['connector'] & Partial<Pick<ConnectorRelations, K>>
 export type Customer = Core['customer']
+export type Event = Core['event']
