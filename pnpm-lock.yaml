@@ -2054,9 +2054,6 @@ importers:
         specifier: ^0.0.16
         version: 0.0.16
     devDependencies:
-      '@openint/ui-v1':
-        specifier: workspace:*
-        version: link:../ui-v1
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(@vercel/node@5.1.13(rollup@4.34.9))(express@4.21.1)(h3@1.8.2)(next@15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.8.2)

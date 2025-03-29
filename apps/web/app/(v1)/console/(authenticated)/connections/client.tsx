@@ -1,25 +1,13 @@
 'use client'
 
-import {Loader2, Trash} from 'lucide-react'
-import {useMemo, useState} from 'react'
+import {useCommandDefinitionMap} from '@/app/(v1)/GlobalCommandBarProvider'
 import type {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@openint/shadcn/ui/alert-dialog'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CommandPopover} from '@openint/ui-v1'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
-import {useCommandDefinitionMap} from '@/app/(v1)/GlobalCommandBarProvider'
+import {useMemo, useState} from 'react'
 import {useTRPC} from '../client'
 
 const columns: Array<ColumnDef<Core['connection']>> = [

@@ -10,7 +10,6 @@
     "@opensdks/util-zod": "^0.0.16"
   },
   "devDependencies": {
-    "@openint/ui-v1": "workspace:*",
     "inngest": "^3.22.13"
   }
 }

@@ -1,5 +1,6 @@
-import type {IconName} from '@openint/ui-v1/components/Icon'
 import type {z} from '@openint/util'
+// Hack alert. Figure out how to straighten the dependencies out
+import type {IconName} from '../ui-v1/components/Icon'
 
 export type _infer<T, TDefault = unknown> = T extends z.ZodTypeAny
   ? z.infer<T>

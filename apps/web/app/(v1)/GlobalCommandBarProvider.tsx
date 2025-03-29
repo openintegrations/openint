@@ -148,7 +148,7 @@ function useConnectionCommands() {
       params: z.object({
         connection_id: z.string().describe('The ID of the connection to check'),
       }),
-      execute: async ({params}) => {
+      execute: () => {
         try {
           // await trpc.checkConnection.mutate({id: params.connection_id})
           alert('Connection check successful!')
@@ -168,7 +168,7 @@ function useConnectionCommands() {
           .string()
           .describe('The ID of the connection to refresh'),
       }),
-      execute: async ({params}) => {
+      execute: () => {
         try {
           // await trpc.refreshConnection.mutate({id: params.connection_id})
           alert('Connection refreshed successfully!')
