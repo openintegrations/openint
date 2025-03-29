@@ -3,6 +3,7 @@ import React from 'react'
 import {AppLayout} from '@openint/ui-v1'
 import {OrganizationSwitcher, UserButton} from '@/lib-client/auth.client'
 import {currentViewer} from '@/lib-server/auth.server'
+import {GlobalCommandBar} from './client'
 
 export default async function AuthenticatedLayout({
   children,
@@ -19,6 +20,7 @@ export default async function AuthenticatedLayout({
     <AppLayout
       organizationSwitcher={<OrganizationSwitcher />}
       userButton={<UserButton showName />}>
+      <GlobalCommandBar />
       {children}
     </AppLayout>
   )
