@@ -84,7 +84,6 @@ export function ConnectionList(props: {
 
   const handleRowClick = (connection: Core['connection']) => {
     setSelectedConnection(connection)
-    console.log('connection', connection)
     setSheetOpen(true)
   }
 
