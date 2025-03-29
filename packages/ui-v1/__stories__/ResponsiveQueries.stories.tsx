@@ -95,7 +95,7 @@ const ContainerQueryDemo: FC<MediaQueryDemoProps> = ({className}) => {
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'ui-v1/Responsive Queries',
+  title: 'Components/ResponsiveQueries',
   component: () => null,
 } satisfies Meta
 

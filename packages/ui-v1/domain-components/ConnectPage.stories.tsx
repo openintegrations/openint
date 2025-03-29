@@ -68,7 +68,7 @@ const mockCustomerRouterSchema = {
 }
 
 const meta = {
-  title: 'UI-V1/ConnectPage',
+  title: 'DOMAIN COMPONENTS/ConnectPage',
   component: ConnectPage,
   parameters: {
     layout: 'fullscreen',

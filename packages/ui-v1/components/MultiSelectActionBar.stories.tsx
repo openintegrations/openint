@@ -3,7 +3,7 @@ import {useState} from 'react'
 import {MultiSelectActionBar} from './MultiSelectActionBar'
 
 const meta: Meta<typeof MultiSelectActionBar> = {
-  title: 'UI-V1/Components/MultiSelectActionBar',
+  title: 'Components/MultiSelectActionBar',
   component: MultiSelectActionBar,
   parameters: {
     layout: 'centered',
