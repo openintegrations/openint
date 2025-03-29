@@ -59,7 +59,7 @@ function WebhookInput({defaultValue, onSave, isSaving}: WebhookInputProps) {
               placeholder="https://webhook.site/webhook-url"
               value={webhookValue}
               onChange={(e) => setWebhookValue(e.target.value)}
-              className={`pr-3 ${showError ? 'border-red-500' : ''}`}
+              className={`pr-3 font-light ${showError ? 'border-red-500' : ''}`}
             />
           </div>
           <Button

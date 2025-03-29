@@ -65,7 +65,7 @@ export default function SecureInput({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className="pr-10"
+            className="pr-10 font-light"
             readOnly={readOnly}
           />
           {!showValue && (
