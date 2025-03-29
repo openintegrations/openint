@@ -27,7 +27,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         name: 'Test Organization',
         api_key: 'test_api_key',
         slug: 'test-organization',
-        metadata: {foo: 'bar'},
+        metadata: {webhook_url: 'https://webhook.site/webhook-url'},
       })
       .onConflictDoNothing()
   })
@@ -67,6 +67,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         api_key: 'test_api_key',
         created_at: expect.any(String),
         updated_at: expect.any(String),
+        metadata: {webhook_url: 'https://webhook.site/webhook-url'},
       })
     })
 
@@ -80,6 +81,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         api_key: 'test_api_key',
         created_at: expect.any(String),
         updated_at: expect.any(String),
+        metadata: {webhook_url: 'https://webhook.site/webhook-url'},
       })
     })
   })
@@ -96,6 +98,17 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       await expect(asOrg.setOnboardingComplete()).rejects.toThrow(
         'Onboarding already marked complete',
       )
+    })
+  })
+
+  describe('setWebhookUrl', () => {
+    test('updates webhook URL', async () => {
+      await asOrg.setWebhookUrl({
+        webhookUrl: 'https://webhook.site/xxx',
+      })
+
+      const org = await asOrg.getOrganization()
+      expect(org.metadata.webhook_url).toBe('https://webhook.site/xxx')
     })
   })
 })

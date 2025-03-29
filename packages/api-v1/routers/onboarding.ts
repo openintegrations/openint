@@ -19,7 +19,11 @@ export const onboardingRouter = router({
       openapi: {method: 'GET', path: '/organization', enabled: false},
     })
     .input(z.void())
-    .output(core.organization.omit({metadata: true}))
+    .output(
+      core.organization.extend({
+        metadata: z.object({webhook_url: z.string().nullish()}),
+      }),
+    )
     .query(async ({ctx}) => {
       const org = await ctx
         .as({role: 'system'})
@@ -34,7 +38,12 @@ export const onboardingRouter = router({
         })
       }
 
-      return org
+      return {
+        ...org,
+        metadata: {
+          webhook_url: org.metadata?.webhook_url ?? '',
+        },
+      }
     }),
   createOrganization: orgProcedure
     .meta({
@@ -177,5 +186,75 @@ export const onboardingRouter = router({
           updated_at: new Date().toISOString(),
         })
         .where(eq(schema.organization.id, org.id))
+    }),
+  setWebhookUrl: orgProcedure
+    .meta({
+      openapi: {
+        method: 'PUT',
+        path: '/organization/webhook-url',
+        enabled: false,
+      },
+    })
+    .input(z.object({webhookUrl: z.string()}))
+    .output(z.void())
+    .mutation(async ({input, ctx}) => {
+      const org = await ctx
+        .as({role: 'system'})
+        .db.query.organization.findFirst({
+          where: eq(schema.organization.id, ctx.viewer.orgId),
+        })
+
+      if (!org) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Organization not found',
+        })
+      }
+
+      if (org.metadata?.webhook_url === input.webhookUrl) {
+        return
+      }
+
+      if (!input.webhookUrl.startsWith('https://')) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Invalid webhook URL. It must start with "https://".',
+        })
+      }
+
+      // Consider doing this
+      // const response = await fetch('/api/v1/organization/webhook-url', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({test: true, webhookUrl: input.webhookUrl}),
+      // })
+
+      // if (!response.ok) {
+      //   throw new TRPCError({
+      //     code: 'INTERNAL_SERVER_ERROR',
+      //     message: 'Failed to send test POST request to the webhook URL.',
+      //   })
+      // }
+
+      try {
+        await ctx
+          .as({role: 'system'})
+          .db.update(schema.organization)
+          .set({
+            metadata: {
+              ...org.metadata,
+              webhook_url: input.webhookUrl,
+            },
+            updated_at: new Date().toISOString(),
+          })
+          .where(eq(schema.organization.id, org.id))
+      } catch (error) {
+        console.error('Error updating webhook URL:', error); throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to update webhook URL, please try again later',
+        })
+      }
     }),
 })
