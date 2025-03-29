@@ -251,7 +251,7 @@ export const onboardingRouter = router({
           })
           .where(eq(schema.organization.id, org.id))
       } catch (error) {
-        throw new TRPCError({
+        console.error('Error updating webhook URL:', error); throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to update webhook URL, please try again later',
         })
