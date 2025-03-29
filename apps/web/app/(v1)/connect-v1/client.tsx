@@ -6,12 +6,10 @@ import type {AppRouterOutput} from '@openint/api-v1/routers'
 import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@openint/ui-v1/trpc'
+import {CommandPopover} from '@openint/ui-v1'
+import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../console/(authenticated)/client'
+import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
 
 const connectorImports = {
   plaid: () => import('@openint/connector-plaid/client'),
@@ -150,35 +148,21 @@ export function MyConnectionsClient(props: {
     ),
   )
 
-  const queryClient = useQueryClient()
-
-  const mutation = useMutation(
-    trpc.deleteConnection.mutationOptions({
-      onSettled: () => {
-        // Refetch the connections after deletion
-        queryClient.invalidateQueries({
-          queryKey: trpc.listConnections.queryKey({
-            connector_name: props.connector_name,
-          }),
-        })
-      },
-    }),
-  )
-
+  const definitions = useCommandDefinitionMap()
   return (
     <>
       <h1 className="text-3xl">My connections</h1>
       {res.data.items.map((conn) => (
         <div key={conn.id} className="p-4">
           <h2 className="text-2xl"> {conn.id}</h2>
-          <Button
-            onClick={() => {
-              console.log('Delete connection', conn.id)
-              mutation.mutate({id: conn.id})
+          <CommandPopover
+            hideGroupHeadings
+            initialParams={{
+              connection_id: conn.id,
             }}
-            className="mt-2 rounded bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600">
-            Delete Connection
-          </Button>
+            ctx={{}}
+            definitions={definitions}
+          />
         </div>
       ))}
     </>
