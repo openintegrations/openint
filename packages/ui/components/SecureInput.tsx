@@ -14,6 +14,7 @@ interface SecureInputProps extends Omit<InputProps, 'type'> {
   label?: string
   placeholder?: string
   showValue?: boolean
+  readOnly?: boolean
 }
 
 export default function SecureInput({
@@ -22,6 +23,7 @@ export default function SecureInput({
   value,
   onChange,
   showValue = false,
+  readOnly = false,
   ...props
 }: SecureInputProps) {
   const [showingValue, setShowValue] = useState(showValue)
@@ -63,8 +65,8 @@ export default function SecureInput({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className="pr-10"
-            readOnly={showValue}
+            className="pr-10 font-light"
+            readOnly={readOnly}
           />
           {!showValue && (
             <Button
