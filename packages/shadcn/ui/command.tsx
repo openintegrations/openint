@@ -161,6 +161,8 @@ function CommandShortcut({className, ...props}: React.ComponentProps<'span'>) {
   )
 }
 
+const CommandLoading = CommandPrimitive.Loading
+
 export {
   Command,
   CommandDialog,
@@ -171,4 +173,5 @@ export {
   CommandItem,
   CommandShortcut,
   CommandSeparator,
+  CommandLoading,
 }

@@ -6,7 +6,7 @@
 /* Upstream components */
 @source "../shadcn/components/**/*.tsx";
 @source "../shadcn/ui/**/*.tsx";
-@source "../shadcn/stories/**/*.tsx";
+@source "../shadcn/__stories__/**/*.tsx";
 
 /* Current components */
 @source "./components/**/*.tsx";
