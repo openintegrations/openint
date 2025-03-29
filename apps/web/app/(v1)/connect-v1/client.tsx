@@ -156,11 +156,11 @@ export function MyConnectionsClient(props: {
         <div key={conn.id} className="p-4">
           <h2 className="text-2xl"> {conn.id}</h2>
           <CommandPopover
-            ctx={{}}
             hideGroupHeadings
             initialParams={{
               connection_id: conn.id,
             }}
+            ctx={{}}
             definitions={definitions}
           />
         </div>

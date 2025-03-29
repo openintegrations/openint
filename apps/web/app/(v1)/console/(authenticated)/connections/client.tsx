@@ -15,8 +15,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@openint/shadcn/ui/alert-dialog'
+import {CommandPopover} from '@openint/ui-v1'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {useCommandDefinitionMap} from '@/app/(v1)/GlobalCommandBarProvider'
 import {useTRPC} from '../client'
 
 const columns: Array<ColumnDef<Core['connection']>> = [
@@ -75,7 +77,7 @@ export function ConnectionList(props: {
       },
     }),
   )
-
+  const definitions = useCommandDefinitionMap()
   const columnsWithActions = useMemo(
     () => [
       ...columns,
@@ -83,46 +85,14 @@ export function ConnectionList(props: {
         id: 'actions',
         header: 'Actions',
         cell: ({row}) => (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Trash className="size-6 text-red-500" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Connection</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete this connection? This action
-                  cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel disabled={deleteConn.isPending}>
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  disabled={deleteConn.isPending}
-                  onClick={() => {
-                    deleteConn.mutate({id: row.original.id})
-                  }}>
-                  {deleteConn.isPending ? (
-                    <>
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                      Deleting...
-                    </>
-                  ) : (
-                    'Delete'
-                  )}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-              {deleteConn.isPending && (
-                <div className="bg-background/80 absolute inset-0 flex items-center justify-center">
-                  <Loader2 className="size-8 animate-spin" />
-                </div>
-              )}
-            </AlertDialogContent>
-          </AlertDialog>
+          <CommandPopover
+            hideGroupHeadings
+            initialParams={{
+              connection_id: row.original.id,
+            }}
+            ctx={{}}
+            definitions={definitions}
+          />
         ),
       } as ColumnDef<Core['connection']>,
     ],

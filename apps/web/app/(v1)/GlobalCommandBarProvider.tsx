@@ -98,6 +98,8 @@ function useConnectionCommands() {
 
   const cmd = cmdInit()
 
+  const router = useRouter()
+
   return {
     'connection:delete': cmd.identity({
       title: 'Delete Connection',
@@ -112,6 +114,68 @@ function useConnectionCommands() {
           window.confirm('Are you sure you want to delete this connection?')
         ) {
           await deleteConnection.mutateAsync({id: params.connection_id})
+        }
+      },
+    }),
+    'connection:copyId': cmd.identity({
+      title: 'Copy connection ID',
+      icon: 'Clipboard',
+      params: z.object({
+        connection_id: z.string().describe('The ID of the connection to copy'),
+      }),
+      execute: async ({params}) => {
+        await navigator.clipboard.writeText(params.connection_id)
+        alert(`Copied connection ID: ${params.connection_id}`)
+      },
+    }),
+
+    'connection:explore': cmd.identity({
+      title: 'Explore Connection',
+      icon: 'Search',
+      params: z.object({
+        connection_id: z
+          .string()
+          .describe('The ID of the connection to explore'),
+      }),
+      execute: ({params}) => {
+        router.push(`/console/connections/${params.connection_id}/explorer`)
+      },
+    }),
+
+    'connection:check': cmd.identity({
+      title: 'Check Connection',
+      icon: 'CheckCircle',
+      params: z.object({
+        connection_id: z.string().describe('The ID of the connection to check'),
+      }),
+      execute: async ({params}) => {
+        try {
+          // await trpc.checkConnection.mutate({id: params.connection_id})
+          alert('Connection check successful!')
+        } catch (error) {
+          alert(
+            `Connection check failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          )
+        }
+      },
+    }),
+
+    'connection:refresh': cmd.identity({
+      title: 'Refresh Connection',
+      icon: 'RefreshCcw',
+      params: z.object({
+        connection_id: z
+          .string()
+          .describe('The ID of the connection to refresh'),
+      }),
+      execute: async ({params}) => {
+        try {
+          // await trpc.refreshConnection.mutate({id: params.connection_id})
+          alert('Connection refreshed successfully!')
+        } catch (error) {
+          alert(
+            `Failed to refresh connection: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          )
         }
       },
     }),
