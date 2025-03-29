@@ -2,7 +2,7 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {ConnectorTableCell} from './ConnectorTableCell'
 
 const meta = {
-  title: 'UI-V1/Connector/TableCell',
+  title: 'DOMAIN COMPONENTS/ConnectorTableCell',
   component: ConnectorTableCell,
   parameters: {
     layout: 'centered',

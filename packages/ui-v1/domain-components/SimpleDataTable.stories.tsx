@@ -80,7 +80,7 @@ const columns = [
 ]
 
 const meta: Meta<typeof SimpleDataTable> = {
-  title: 'Domain Components/SimpleDataTable',
+  title: 'DOMAIN COMPONENTS/SimpleDataTable',
   component: SimpleDataTable,
   parameters: {
     layout: 'padded',

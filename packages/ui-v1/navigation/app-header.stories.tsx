@@ -4,7 +4,7 @@ import {AppHeader} from './app-header'
 
 const meta = {
   // TODO: Setup title to be inferred
-  title: 'UI-V1/Navigation/AppHeader',
+  title: 'Components/Navigation/AppHeader',
   component: AppHeader,
   parameters: {layout: 'fullscreen'},
   decorators: [

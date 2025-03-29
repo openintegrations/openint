@@ -5,7 +5,7 @@ import {FIXTURES} from './fixtures'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'UI-V1/Connector/Card',
+  title: 'DOMAIN COMPONENTS/ConnectorCard',
   component: ConnectorCard,
   parameters: {
     layout: 'centered',
