@@ -14,7 +14,7 @@ import type {
   CommandDefinitionInput,
   CommandDefinitionMap,
 } from '@openint/commands'
-import {CommandBar, toast} from '@openint/ui-v1'
+import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
 import {SIDEBAR_NAV_ITEMS} from '@openint/ui-v1/navigation/app-sidebar'
 import {
   createTRPCClient,
@@ -167,7 +167,8 @@ export function ConnectionList(props: {initialData?: Promise<any>}) {
   )
 }
 
-export function GlobalCommandBar() {
+export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
+  // Switch organization commands
   const orgList = useOrganizationList({userMemberships: true})
   const org = useOrganization()
 
@@ -186,6 +187,8 @@ export function GlobalCommandBar() {
         },
       ]),
   )
+
+  // Navigation commands
 
   const router = useRouter()
   const navCommands = Object.fromEntries(
@@ -207,5 +210,18 @@ export function GlobalCommandBar() {
     // Add any other global commands here
   }
 
-  return <CommandBar ctx={{}} definitions={allCommands} />
+  const [open, setOpen] = React.useState(false)
+  return (
+    <CommandContext.Provider
+      value={{
+        open,
+        setOpen,
+        ctx: {},
+        definitions: allCommands,
+      }}>
+      <CommandBar ctx={{}} definitions={allCommands} />
+
+      {props.children}
+    </CommandContext.Provider>
+  )
 }

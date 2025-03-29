@@ -1,3 +1,5 @@
+'use client'
+
 import {MoreHorizontal} from 'lucide-react'
 import React from 'react'
 import type {CommandDefinitionMap, CommandDraft} from '@openint/commands'
@@ -72,12 +74,26 @@ export function CommandPopover(props: CommandComponentProps) {
   )
 }
 
+export interface CommandContextValue extends CommandComponentProps {
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const CommandContext = React.createContext<CommandContextValue | null>(
+  null,
+)
+
 /**
  * Automatically registers keyboard shortcut and show command in a dialog
  * Meant to be used globally once in the app
  */
 export function CommandBar(props: CommandComponentProps) {
-  const [open, setOpen] = React.useState(false)
+  // Maybe extract this into its own thing...
+  const [_open, _setOpen] = React.useState(false)
+  const ctx = React.useContext(CommandContext)
+  const open = ctx ? ctx.open : _open
+  const setOpen = ctx ? ctx.setOpen : _setOpen
+
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if ((e.key === 'p' || e.key === 'k') && e.metaKey) {
@@ -87,7 +103,7 @@ export function CommandBar(props: CommandComponentProps) {
     }
     document.addEventListener('keydown', down)
     return () => document.removeEventListener('keydown', down)
-  }, [])
+  }, [setOpen])
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>

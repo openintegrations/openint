@@ -14,7 +14,8 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@openint/shadcn/ui/sidebar'
-import {Icon, IconName} from '../components'
+import type {IconName} from '../components'
+import {Icon} from '../components'
 
 export const SIDEBAR_NAV_ITEMS = [
   {
