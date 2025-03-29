@@ -97,11 +97,16 @@ export const core = {
     }),
   connector: zConnector.openapi({ref: 'core.connector', title: 'Connector'}),
   integration: z
-    .object({})
+    .object({
+      connector_name: z.string(),
+      name: z.string(),
+      logo_url: z.string().nullable(),
+    })
     .passthrough()
     .openapi({ref: 'core.integration', title: 'Integration'}),
   customer: coreBase
     .extend({
+      id: z.string(),
       connection_count: z.number(),
     })
     .openapi({ref: 'core.customer', title: 'Customer'}),
@@ -110,6 +115,8 @@ export const core = {
 export type Core = {
   [k in keyof typeof core]: z.infer<(typeof core)[k]>
 }
+
+// MARK: - Connector Configs
 
 export type ConnectorConfigExtended = Core['connector_config'] & {
   connector: Core['connector']
@@ -120,11 +127,28 @@ export type ConnectorConfigExtended = Core['connector_config'] & {
 export type ConnectorConfig<T extends keyof ConnectorConfigExtended> =
   ConnectorConfigExtended & Pick<ConnectorConfigExtended, T>
 
+// MARK: - Connectors
+
 interface ConnectorRelations {
   integrations: Array<Core['integration']>
 }
 
 export type ConnectorExpanded<K extends keyof ConnectorRelations> =
   Core['connector'] & Partial<Pick<ConnectorRelations, K>>
+
+// MARK: - Connections
+interface ConnectionRelations {
+  connector_config: Core['connector_config']
+  customer: Core['customer']
+  connector: Core['connector']
+  integration: Core['integration']
+}
+
+export type ConnectionExpanded<K extends keyof ConnectionRelations> =
+  Core['connection'] & Partial<Pick<ConnectionRelations, K>>
+
+// MARK: - Customer
 export type Customer = Core['customer']
+
+// MARK: - Event
 export type Event = Core['event']
