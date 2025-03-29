@@ -95,7 +95,7 @@ const AsyncDataTableDemo = () => {
 }
 
 const meta: Meta = {
-  title: 'Domain Components/SimpleDataTable/Async Example',
+  title: 'DOMAIN COMPONENTS/SimpleDataTableAsync',
   component: AsyncDataTableDemo,
   parameters: {
     layout: 'padded',

@@ -6,7 +6,7 @@ import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm, ZodSchemaForm} from './SchemaForm'
 
 const meta: Meta<typeof ZodSchemaForm> = {
-  title: 'ui-v1/components/SchemaForm',
+  title: 'Components/SchemaForm',
   component: ZodSchemaForm,
   parameters: {
     layout: 'centered',
