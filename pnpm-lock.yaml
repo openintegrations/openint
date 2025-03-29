@@ -2648,6 +2648,9 @@ importers:
 
   packages/ui-v1:
     dependencies:
+      '@openint/commands':
+        specifier: workspace:*
+        version: link:../commands
       '@openint/shadcn':
         specifier: workspace:*
         version: link:../shadcn
