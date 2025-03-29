@@ -80,22 +80,19 @@ export default async function Page(props: PageProps) {
       <pre>
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
-      <ClientApp token={token}>
-        <h1>AddConnection</h1>
-        <Suspense fallback={<Fallback />}>
-          <AddConnection
-            initialData={withRandomDelay(api.listConnectorConfigs())}
-          />
-        </Suspense>
 
-        <h1>ConnectionList</h1>
+      <h1>AddConnection</h1>
+      <Suspense fallback={<Fallback />}>
+        <AddConnection
+          initialData={withRandomDelay(api.listConnectorConfigs())}
+        />
+      </Suspense>
 
-        <Suspense fallback={<Fallback />}>
-          <ConnectionList
-            initialData={withRandomDelay(api.listConnections())}
-          />
-        </Suspense>
-      </ClientApp>
+      <h1>ConnectionList</h1>
+
+      <Suspense fallback={<Fallback />}>
+        <ConnectionList initialData={withRandomDelay(api.listConnections())} />
+      </Suspense>
 
       <hr />
       <hr />

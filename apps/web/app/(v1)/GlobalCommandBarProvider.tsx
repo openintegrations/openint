@@ -72,7 +72,6 @@ export function useCommandDefinitionMap() {
   const allCommands: CommandDefinitionMap = {
     ...navCommands,
     ...orgCommands,
-    // Add any other global commands here
     ...useConnectionCommands(),
   }
   return allCommands
