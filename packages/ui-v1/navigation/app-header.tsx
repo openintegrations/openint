@@ -1,6 +1,9 @@
 'use client'
 
 import {usePathname} from 'next/navigation'
+import React from 'react'
+import {cn} from '@openint/shadcn/lib/utils'
+import {Button} from '@openint/shadcn/ui'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,6 +12,7 @@ import {
 } from '@openint/shadcn/ui/breadcrumb'
 import {Separator} from '@openint/shadcn/ui/separator'
 import {SidebarTrigger} from '@openint/shadcn/ui/sidebar'
+import {CommandContext} from '../components'
 
 export function AppHeader(props: {userButton: React.ReactNode}) {
   const path = usePathname() ?? '/'
@@ -39,7 +43,26 @@ export function AppHeader(props: {userButton: React.ReactNode}) {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="ml-auto">{props.userButton}</div>
+      <div className="ml-auto flex items-center">
+        <CommandBarShortcut />
+        {props.userButton}
+      </div>
     </header>
+  )
+}
+
+// Command bar keyboard shortcut component
+export function CommandBarShortcut({className}: {className?: string}) {
+  const ctx = React.useContext(CommandContext)
+  return (
+    <Button variant="ghost" onClick={() => ctx?.setOpen((o) => !o)}>
+      <kbd
+        className={cn(
+          'bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-xs font-medium',
+          className,
+        )}>
+        <span className="text-xs">⌘</span>K
+      </kbd>
+    </Button>
   )
 }

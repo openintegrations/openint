@@ -1,5 +1,15 @@
+'use client'
+
 import {MoreHorizontal} from 'lucide-react'
 import React from 'react'
+import type {CommandDefinitionMap, CommandDraft} from '@openint/commands'
+import {
+  filterCommands,
+  prepareCommand,
+  prepareCommands,
+} from '@openint/commands'
+import {cn} from '@openint/shadcn/lib/utils'
+import type {ButtonProps} from '@openint/shadcn/ui'
 import {
   Button,
   Command,
@@ -15,21 +25,7 @@ import {
   PopoverTrigger,
 } from '@openint/shadcn/ui'
 import {R} from '@openint/util'
-import {__DEBUG__} from '../../../apps/app-config/constants'
-import {Icon} from '../components/Icon'
-/* import {
-  Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandShortcut,
-} from '@openint/shadcn/ui/Command' */
-import {cn} from '../utils'
-import {filterCommands, prepareCommand, prepareCommands} from './command-fns'
-import type {_infer, CommandDefinitionMap, CommandDraft} from './command-types'
+import {Icon} from '../Icon'
 
 export interface CommandComponentProps<
   TCtx = any,
@@ -45,6 +41,83 @@ export interface CommandComponentProps<
   hideGroupHeadings?: boolean
 }
 
+export function CommandInline(props: CommandComponentProps) {
+  return (
+    <Command className="rounded-lg border shadow-md">
+      <CommandContent {...props} />
+    </Command>
+  )
+}
+
+export function CommandPopover(props: CommandComponentProps) {
+  const [open, setOpen] = React.useState(false)
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[250px] p-0" align="start">
+        <Command>
+          <CommandContent
+            {...props}
+            onSelect={(key) => {
+              setOpen(false)
+              props.onSelect?.(key)
+            }}
+          />
+        </Command>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+export interface CommandContextValue extends CommandComponentProps {
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const CommandContext = React.createContext<CommandContextValue | null>(
+  null,
+)
+
+/**
+ * Automatically registers keyboard shortcut and show command in a dialog
+ * Meant to be used globally once in the app
+ */
+export function CommandBar(props: CommandComponentProps) {
+  // Maybe extract this into its own thing...
+  const [_open, _setOpen] = React.useState(false)
+  const ctx = React.useContext(CommandContext)
+  const open = ctx ? ctx.open : _open
+  const setOpen = ctx ? ctx.setOpen : _setOpen
+
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if ((e.key === 'p' || e.key === 'k') && e.metaKey) {
+        setOpen((open) => !open)
+        e.preventDefault()
+      }
+    }
+    document.addEventListener('keydown', down)
+    return () => document.removeEventListener('keydown', down)
+  }, [setOpen])
+
+  return (
+    <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandContent
+        {...props}
+        onSelect={(key) => {
+          setOpen(false)
+          props.onSelect?.(key)
+        }}
+      />
+    </CommandDialog>
+  )
+}
+
 export function CommandButton<
   TDef extends CommandDefinitionMap<TCtx>,
   TKey extends keyof TDef,
@@ -58,7 +131,8 @@ export function CommandButton<
   definitions: TDef
   command: CommandDraft<TDef, TKey, TCtx>
   ctx: TCtx
-}) {
+} & ButtonProps) {
+
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const _cmd = prepareCommand([key as string, definitions[key]!])
   const cmd = {..._cmd, ..._cmd.useCommand?.(params ?? {})}
@@ -68,13 +142,24 @@ export function CommandButton<
       {...buttonProps}
       onClick={(e) => {
         void cmd.execute?.({ctx, params: params ?? {}})
-        // @ts-expect-error
+
         buttonProps.onClick?.(e)
       }}>
+      {cmd.icon && (
+        <Icon
+          name={cmd.icon}
+          className={cn(
+            'mr-2 h-4 w-4 shrink-0',
+            cmd.subtitle && 'mt-[2px] self-start',
+          )}
+        />
+      )}
       {cmd.title}
     </Button>
   )
 }
+
+// MARK: - Inner utils
 
 function CommandItemContainer({
   command: _cmd,
@@ -88,18 +173,6 @@ function CommandItemContainer({
   onSelect?: (value: string) => void
 }) {
   const cmd = {..._cmd, ..._cmd.useCommand?.(params ?? {})}
-
-  // Hide "Edit Connection"
-  if (cmd.title === 'Edit Connection' && !__DEBUG__) {
-    return null
-  }
-
-  // Rename titles
-  if (cmd.title === 'Delete Connection') {
-    cmd.title = 'Delete Connection'
-  } else if (cmd.title === 'Sync Connection') {
-    cmd.title = 'Sync Connection' // Adjusted as per your request
-  }
 
   return (
     <CommandItem
@@ -122,7 +195,7 @@ function CommandItemContainer({
         {cmd.subtitle && (
           <pre
             title={cmd.subtitle}
-            className="overflow-hidden text-ellipsis text-muted-foreground">
+            className="text-muted-foreground overflow-hidden text-ellipsis">
             {cmd.subtitle}
           </pre>
         )}
@@ -132,7 +205,7 @@ function CommandItemContainer({
   )
 }
 
-export function CommandContent({
+function CommandContent({
   ctx,
   definitions,
   emptyMessage = 'No commands found.',
@@ -151,7 +224,7 @@ export function CommandContent({
   }, [definitions, initialParams])
 
   return (
-    <Command>
+    <>
       <CommandInput placeholder={placeholder} />
       <CommandEmpty>{emptyMessage}</CommandEmpty>
       <CommandList>
@@ -171,64 +244,6 @@ export function CommandContent({
           </CommandGroup>
         ))}
       </CommandList>
-    </Command>
-  )
-}
-
-export function CommandInline(props: CommandComponentProps) {
-  return (
-    <Command>
-      <CommandContent {...props} />
-    </Command>
-  )
-}
-
-export function CommandPopover(props: CommandComponentProps) {
-  const [open, setOpen] = React.useState(false)
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <CommandInline
-          {...props}
-          onSelect={(key) => {
-            setOpen(false)
-            props.onSelect?.(key)
-          }}
-        />
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-/** Automatically registers keyboard shortcut and show command in a dialog */
-export function CommandBar(props: CommandComponentProps) {
-  const [open, setOpen] = React.useState(false)
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if ((e.key === 'p' || e.key === 'k') && e.metaKey) {
-        setOpen((open) => !open)
-        e.preventDefault()
-      }
-    }
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [])
-
-  return (
-    <CommandDialog open={open} onOpenChange={setOpen} className="sm:top-32">
-      <CommandContent
-        {...props}
-        onSelect={(key) => {
-          setOpen(false)
-          props.onSelect?.(key)
-        }}
-      />
-    </CommandDialog>
+    </>
   )
 }

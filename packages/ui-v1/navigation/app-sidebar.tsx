@@ -14,9 +14,10 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@openint/shadcn/ui/sidebar'
-import {Icon, IconName} from '../components'
+import type {IconName} from '../components'
+import {Icon} from '../components'
 
-const navItems = [
+export const SIDEBAR_NAV_ITEMS = [
   {
     title: 'Dashboard',
     url: '/console',
@@ -24,7 +25,7 @@ const navItems = [
   },
   {
     title: 'Connect',
-    url: '/console/connect',
+    url: '/connect-v1',
     icon: 'Wand',
   },
   {
@@ -76,7 +77,7 @@ export function AppSidebar({
       <SidebarHeader>{organizationSwitcher}</SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="mt-5">
-          {navItems.map((item) => {
+          {SIDEBAR_NAV_ITEMS.map((item) => {
             const isActive =
               pathname?.replace(/\/*$/, '') === item.url.replace(/\/*$/, '')
             return (

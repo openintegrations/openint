@@ -1,6 +1,9 @@
 // import {useTheme} from 'next-themes';
-import type {CommandDefinitionInput, CommandDefinitionMap} from '@openint/ui'
-import {cmdInit} from '@openint/ui'
+import type {
+  CommandDefinitionInput,
+  CommandDefinitionMap,
+} from '@openint/commands'
+import {cmdInit} from '@openint/commands'
 import {z} from '@openint/util'
 // import {delay} from '@openint/util';
 import {__DEBUG__} from '@/../app-config/constants'

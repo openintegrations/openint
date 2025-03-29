@@ -1,3 +1,5 @@
+'use client'
+
 import {Component} from 'lucide-react'
 import {useState} from 'react'
 import {Button} from '@openint/shadcn/ui/button'

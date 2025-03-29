@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 'use client'
 
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 import type {
   ColumnDef,
   ColumnFiltersState,

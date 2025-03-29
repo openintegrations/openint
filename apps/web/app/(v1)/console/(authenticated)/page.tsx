@@ -4,7 +4,7 @@ import type {PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import type {APICaller} from '@/lib-server/globals'
 import {createAPICaller} from '@/lib-server/globals'
-import {AddConnection, ClientApp, ConnectionList} from './client'
+import {AddConnection, ConnectionList} from './client'
 
 async function AddConnectionServer({
   viewer,
@@ -71,7 +71,7 @@ function Fallback() {
 }
 
 export default async function Page(props: PageProps) {
-  const {viewer, token = ''} = await currentViewer(props)
+  const {viewer} = await currentViewer(props)
 
   const api = createAPICaller(viewer)
 
@@ -80,22 +80,19 @@ export default async function Page(props: PageProps) {
       <pre>
         <code>{JSON.stringify(viewer, null, 2)}</code>
       </pre>
-      <ClientApp token={token}>
-        <h1>AddConnection</h1>
-        <Suspense fallback={<Fallback />}>
-          <AddConnection
-            initialData={withRandomDelay(api.listConnectorConfigs())}
-          />
-        </Suspense>
 
-        <h1>ConnectionList</h1>
+      <h1>AddConnection</h1>
+      <Suspense fallback={<Fallback />}>
+        <AddConnection
+          initialData={withRandomDelay(api.listConnectorConfigs())}
+        />
+      </Suspense>
 
-        <Suspense fallback={<Fallback />}>
-          <ConnectionList
-            initialData={withRandomDelay(api.listConnections())}
-          />
-        </Suspense>
-      </ClientApp>
+      <h1>ConnectionList</h1>
+
+      <Suspense fallback={<Fallback />}>
+        <ConnectionList initialData={withRandomDelay(api.listConnections())} />
+      </Suspense>
 
       <hr />
       <hr />
