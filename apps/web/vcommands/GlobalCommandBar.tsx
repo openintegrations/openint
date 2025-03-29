@@ -3,7 +3,7 @@ import {useTheme} from 'next-themes'
 import {useRouter} from 'next/navigation'
 import React from 'react'
 import {env} from '@openint/app-config/env'
-import {prepareCommands} from '@openint/ui/command/command-fns'
+import {prepareCommands} from '@openint/commands'
 import {vDefinitions} from '@/vcommands/vcommand-definitions'
 import {useViewerContext} from '../components/viewer-context'
 

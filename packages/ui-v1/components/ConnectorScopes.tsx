@@ -1,3 +1,5 @@
+'use client'
+
 import {Check, Info, X} from 'lucide-react'
 import React, {createContext, useContext, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
