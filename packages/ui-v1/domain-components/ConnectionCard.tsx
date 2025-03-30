@@ -5,17 +5,20 @@ import {useState} from 'react'
 import type {ConnectionExpanded} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Card, CardContent} from '@openint/shadcn/ui'
+import {titleCase} from '@openint/util'
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded<'integration' | 'connector'>
   onPress?: () => void
   className?: string
+  variant?: 'default' | 'developer'
 }
 
 export function ConnectionCard({
   connection,
   onPress,
   className,
+  variant = 'default',
 }: ConnectionCardProps) {
   const [isHovered, setIsHovered] = useState(false)
 
@@ -23,7 +26,9 @@ export function ConnectionCard({
     connection.integration?.logo_url || connection.connector?.logo_url
 
   const displayName =
-    connection.integration?.name || connection.connector?.display_name
+    connection.integration?.name ||
+    connection.connector?.display_name ||
+    titleCase(connection.connector_name)
 
   return (
     <Card
@@ -55,19 +60,16 @@ export function ConnectionCard({
                   className="rounded-lg"
                 />
               )}
-              <p className="m-0 max-w-[100px] truncate text-center text-sm font-semibold">
+              <p className="m-0 w-full break-words text-center text-sm font-semibold">
                 {displayName}
               </p>
-              {/*
-
-              {conn.status !== 'healthy' && (
-                <p
-                  className={`text-center text-sm ${
-                    reconnectId ? 'text-button' : 'text-red-500'
-                  }`}>
-                  {reconnectId ? 'Processing...' : 'Reconnect Required'}
-                </p>
-              )} */}
+              {variant === 'developer' && (
+                <pre
+                  className="text-muted-foreground w-full truncate text-center text-xs"
+                  title={connection.id}>
+                  {connection.id}
+                </pre>
+              )}
             </>
           )}
         </div>

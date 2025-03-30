@@ -128,7 +128,7 @@ const integrations = {
 
 const connections = {
   'salesforce-basic': {
-    id: 'conn_salesforce_123',
+    id: 'conn_salesforce_01HN4QZXG7YPBR8MXQT4KBWQ5N',
     connector_config_id: 'ccfg_salesforce_123',
     connector: connectors.salesforce,
     connector_name: 'salesforce',
@@ -236,6 +236,13 @@ const connections = {
       logo_url: undefined,
     },
     connector_name: 'google-drive',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  'no-integration-no-connector': {
+    id: 'conn_custom_connector_123',
+    connector_config_id: 'ccfg_custom_connector_123',
+    connector_name: 'custom_connector',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
