@@ -1,20 +1,12 @@
+import {modifyRequest} from '@opensdks/fetch-links'
 import {createApp} from '@openint/api-v1'
 import {db} from '@/lib-server/globals'
 
 const app = createApp({db})
-const handler = (req: Request) => {
-  if (req.url.includes('/v1') && !req.url.includes('/api/v1')) {
-    const cleanUrl = req.url.replace('/v1', '/api/v1')
-    return app.handle(
-      new Request(cleanUrl, {
-        method: req.method,
-        headers: req.headers,
-        body: req.body,
-      }),
-    )
-  }
-  return app.handle(req)
-}
+
+/** Elysia will assume that it is the root route, so we need to modify the url to correspond to it */
+const handler = (req: Request) =>
+  app.handle(modifyRequest(req, {url: req.url.replace(/^\/api/i, '')}))
 
 export {
   handler as DELETE,
