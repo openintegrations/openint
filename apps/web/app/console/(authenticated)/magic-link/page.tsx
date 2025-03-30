@@ -5,13 +5,13 @@ import React from 'react'
 import {Button} from '@openint/shadcn/ui/button'
 import {Input} from '@openint/shadcn/ui/input'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form/SchemaForm'
-import type {ConnectV1SearchParams} from '@/app/(v1)/connect-v1/types'
-import {zConnectV1SearchParams} from '@/app/(v1)/connect-v1/types'
+import type {ConnectV1SearchParams} from '@/app/connect/types'
+import {zConnectV1SearchParams} from '@/app/connect/types'
 
 export default function MagicLinkPage() {
   const [data, setData] = React.useState<ConnectV1SearchParams>({})
 
-  const iframeUrl = new URL('/connect-v1', window.location.origin)
+  const iframeUrl = new URL('/connect', window.location.origin)
   for (const [key, value] of Object.entries(data)) {
     if (value !== undefined) {
       iframeUrl.searchParams.append(key, String(value))
