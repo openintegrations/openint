@@ -87,7 +87,8 @@ const nextConfig = {
         ],
         destination:
           // NOTE: may not work with clerk
-          'https://openint-git-production-openint-dev.vercel.app/:path*',
+          // latest v0 branch on vercel openint project production environment
+          'https://openint-git-v0-openint-dev.vercel.app/:path*',
       },
 
       // doubleo.openint.dev/* -> old vercel doubleo environment
@@ -100,8 +101,9 @@ const nextConfig = {
           },
         ],
         // NOTE: may not work with clerk
-        // this points to 7b5c28c - making raw oauth object passthrough
-        destination: 'https://openint-l90rd1v0t-openint-dev.vercel.app//:path*',
+        // v0 branch on vercel openint project double0 environment
+        // Pinned at https://github.com/openintegrations/openint/commit/7df4e32a5ef2ae87d185947e0bca9bde549529fb
+        destination: 'https://openint-me9swzkzo-openint-dev.vercel.app/:path*',
       },
     ],
     afterFiles: [],
@@ -129,7 +131,7 @@ const nextConfig = {
       destination: '/api/v0/unified/:p*',
       permanent: false,
     },
-    {source: '/', destination: '/console', permanent: false},
+    // {source: '/', destination: '/console', permanent: false},
     // clerk expects these routes to be present in their UI and we have them inside the dashboard
     {source: '/sign-in', destination: '/console/sign-in', permanent: false},
     {source: '/sign-up', destination: '/console/sign-up', permanent: false},
