@@ -39,16 +39,75 @@ const nextConfig = {
       // Proxy metrics requests to Posthog.
       // TODO: Where is this used? and rename to _posthog to be consistent with _sentry
       {source: '/_posthog/:p*', destination: 'https://app.posthog.com/:p*'},
+
+      // api.openint.dev/v0/* -> app.openint.dev/api/v0/*
+      {
+        source: '/v0/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'api.openint.dev',
+          },
+        ],
+        destination: 'https://app.openint.dev/api/v0/:path*',
+      },
+
+      // api.openint.dev/v1/* -> /api/v1/* (same app)
+      {
+        source: '/v1/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'api.openint.dev',
+          },
+        ],
+        destination: '/api/v1/:path*',
+      },
+
+      // connect.openint.dev/* -> /connect/*
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'connect.openint.dev',
+          },
+        ],
+        destination: '/connect/:path*',
+      },
+
+      // app.openint.dev/* -> old vercel project
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'app.openint.dev',
+          },
+        ],
+        destination:
+          // NOTE: may not work with clerk
+          'https://openint-git-production-openint-dev.vercel.app/:path*',
+      },
+
+      // doubleo.openint.dev/* -> old vercel doubleo environment
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'doubleo.openint.dev',
+          },
+        ],
+        // NOTE: may not work with clerk
+        // this points to 7b5c28c - making raw oauth object passthrough
+        destination: 'https://openint-l90rd1v0t-openint-dev.vercel.app//:path*',
+      },
     ],
     afterFiles: [],
     fallback: [],
   }),
   redirects: async () => [
-    {
-      source: '/docs/:p*',
-      destination: 'https://openint.docs.buildwithfern.com/:p*',
-      permanent: false,
-    },
     {
       source: '/storybook/:branch*',
       destination: 'https://:branch*--67cafc438c6d3b09671849dd.chromatic.com',
