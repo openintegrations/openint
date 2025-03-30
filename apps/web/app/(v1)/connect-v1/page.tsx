@@ -1,4 +1,5 @@
 import {Suspense} from 'react'
+import {ConnectorConfig} from '@openint/api-v1/models'
 import type {Viewer} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
@@ -75,7 +76,7 @@ export default async function Page(
               <TabsTrigger value="my-connections">My connections</TabsTrigger>
               <TabsTrigger value="add-connection">Add connection</TabsTrigger>
             </TabsList>
-            <TabsContent value="my-connections" className="p-4">
+            <TabsContent value="my-connections" className="pt-2">
               <Suspense fallback={<Fallback />}>
                 <MyConnectionsClient
                   // TODO: How to avoid the duplicate construction of input parameters?
@@ -87,7 +88,7 @@ export default async function Page(
                 />
               </Suspense>
             </TabsContent>
-            <TabsContent value="add-connection" className="p-4">
+            <TabsContent value="add-connection" className="pt-2">
               <Suspense fallback={<Fallback />}>
                 <AddConnections
                   viewer={viewer}
@@ -114,41 +115,40 @@ async function AddConnections({
 
   const res = await api.listConnectorConfigs({
     connector_name,
+    expand: 'connector',
   })
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {res.items.map((ccfg) => (
         <Suspense key={ccfg.id} fallback={<Fallback />}>
-          <div key={ccfg.id} className="p-4">
-            <h1 className="text-3xl">Add {ccfg.id} connection</h1>
-            <AddConnectionServer connectorConfigId={ccfg.id} viewer={viewer} />
-          </div>
+          <AddConnectionServer
+            key={ccfg.id}
+            connectorConfig={ccfg}
+            viewer={viewer}
+          />
         </Suspense>
       ))}
-    </>
+    </div>
   )
 }
 
 function AddConnectionServer({
   viewer,
-  connectorConfigId,
+  connectorConfig,
 }: {
   viewer: Viewer
-  connectorConfigId: string
+  connectorConfig: ConnectorConfig<'connector'>
 }) {
   const api = createAPICaller(viewer)
-  const name = extractId(connectorConfigId as `ccfg_${string}`)[1]
+  const name = connectorConfig.connector_name
   const res = api.preConnect({
-    id: connectorConfigId,
+    id: connectorConfig.id,
     data: {connector_name: name, input: {}},
     options: {},
   })
 
   return (
-    <AddConnectionInner
-      connectorConfigId={connectorConfigId}
-      initialData={res}
-    />
+    <AddConnectionInner connectorConfig={connectorConfig} initialData={res} />
   )
 }

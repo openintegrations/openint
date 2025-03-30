@@ -2,9 +2,11 @@
 
 import dynamic from 'next/dynamic'
 import React from 'react'
-import type {AppRouterOutput} from '@openint/api-v1/routers'
+import {AppRouterOutput} from '@openint/api-v1'
+import {ConnectorConfig} from '@openint/api-v1/models'
 import type {ConnectorClient} from '@openint/cdk'
-import {extractId} from '@openint/cdk'
+import {Label} from '@openint/shadcn/ui'
+import {Button} from '@openint/shadcn/ui/button'
 import {CommandPopover, DataTileView} from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
@@ -54,16 +56,16 @@ const ConnectorClientComponents = Object.fromEntries(
 )
 
 export function AddConnectionInner({
-  connectorConfigId,
+  connectorConfig,
   ...props
 }: {
-  connectorConfigId: string
+  connectorConfig: ConnectorConfig<'connector'>
   onReady?: (ctx: {state: string}, name: string) => void
   initialData?: Promise<AppRouterOutput['preConnect']>
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
 
-  const name = extractId(connectorConfigId as `ccfg_${string}`)[1]
+  const name = connectorConfig.connector_name
 
   console.log('AddConnectionInner rendering', name)
 
@@ -74,7 +76,7 @@ export function AddConnectionInner({
   const preConnectRes = useSuspenseQuery(
     trpc.preConnect.queryOptions(
       {
-        id: connectorConfigId,
+        id: connectorConfig.id,
         data: {
           connector_name: name,
           input: {},
@@ -91,13 +93,13 @@ export function AddConnectionInner({
   const handleConnect = React.useCallback(async () => {
     console.log('ref.current', ref.current)
     const connectRes = await ref.current?.(preConnectRes.data.output, {
-      connectorConfigId: connectorConfigId as `ccfg_${string}`,
+      connectorConfigId: connectorConfig.id as `ccfg_${string}`,
       connectionExternalId: undefined,
       integrationExternalId: undefined,
     })
     console.log('connectRes', connectRes)
     const postConnectRes = await postConnect.mutateAsync({
-      id: connectorConfigId,
+      id: connectorConfig.id,
       data: {
         connector_name: name,
         input: connectRes,
@@ -105,7 +107,7 @@ export function AddConnectionInner({
       options: {},
     })
     console.log('postConnectRes', postConnectRes)
-  }, [connectorConfigId, preConnectRes])
+  }, [connectorConfig, preConnectRes])
 
   const Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
@@ -114,11 +116,30 @@ export function AddConnectionInner({
   }
   return (
     <>
-      <h1 className="text-3xl">Add connection</h1>
-      <ConnectorConfigCard
-        connectorConfig={connectorConfig}
-        onPress={() => handleConnect(connectorConfig.connector.name)}
+      {/*
+       Very careful to not cause infinite loop here during rendering
+       need to make ourselves a pure component
+       */}
+
+      <Component
+        key={name}
+        connector_name={name}
+        onConnectFn={React.useCallback((fn) => {
+          ref.current = fn
+
+          // onReady(c, name)
+          // setFn(c)
+        }, [])}
       />
+
+      <ConnectorConfigCard
+        displayNameLocation="right"
+        connectorConfig={connectorConfig}
+        onPress={() => handleConnect()}>
+        <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
+          Connect
+        </Label>
+      </ConnectorConfigCard>
     </>
   )
 }

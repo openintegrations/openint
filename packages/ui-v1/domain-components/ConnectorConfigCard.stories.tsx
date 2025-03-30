@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+import {Button} from '@openint/shadcn/ui'
 import {FIXTURES} from './__stories__/fixtures'
 import {ConnectorConfigCard} from './ConnectorConfigCard'
 
@@ -40,9 +41,7 @@ export const WithChildren: Story = {
   args: {
     connectorConfig: FIXTURES.connectorConfigs['salesforce'],
     children: (
-      <div className="text-xs text-muted-foreground">
-        5 connections
-      </div>
+      <div className="text-muted-foreground text-xs">5 connections</div>
     ),
   },
 }
@@ -51,10 +50,6 @@ export const DisplayNameRightWithChildren: Story = {
   args: {
     connectorConfig: FIXTURES.connectorConfigs['salesforce'],
     displayNameLocation: 'right',
-    children: (
-      <div className="text-xs text-muted-foreground">
-        5 connections
-      </div>
-    ),
+    children: <Button variant="default">Connect</Button>,
   },
 }
