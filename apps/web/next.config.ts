@@ -39,16 +39,77 @@ const nextConfig = {
       // Proxy metrics requests to Posthog.
       // TODO: Where is this used? and rename to _posthog to be consistent with _sentry
       {source: '/_posthog/:p*', destination: 'https://app.posthog.com/:p*'},
+
+      // api.openint.dev/v0/* -> app.openint.dev/api/v0/*
+      {
+        source: '/v0/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'api.openint.dev',
+          },
+        ],
+        destination: 'https://app.openint.dev/api/v0/:path*',
+      },
+
+      // api.openint.dev/v1/* -> /api/v1/* (same app)
+      {
+        source: '/v1/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'api.openint.dev',
+          },
+        ],
+        destination: '/api/v1/:path*',
+      },
+
+      // connect.openint.dev/* -> /connect/*
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'connect.openint.dev',
+          },
+        ],
+        destination: '/connect/:path*',
+      },
+
+      // app.openint.dev/* -> old vercel project
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'app.openint.dev',
+          },
+        ],
+        destination:
+          // NOTE: may not work with clerk
+          // latest v0 branch on vercel openint project production environment
+          'https://openint-git-v0-openint-dev.vercel.app/:path*',
+      },
+
+      // doubleo.openint.dev/* -> old vercel doubleo environment
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'doubleo.openint.dev',
+          },
+        ],
+        // NOTE: may not work with clerk
+        // v0 branch on vercel openint project double0 environment
+        // Pinned at https://github.com/openintegrations/openint/commit/7df4e32a5ef2ae87d185947e0bca9bde549529fb
+        destination: 'https://openint-me9swzkzo-openint-dev.vercel.app/:path*',
+      },
     ],
     afterFiles: [],
     fallback: [],
   }),
   redirects: async () => [
-    {
-      source: '/docs/:p*',
-      destination: 'https://openint.docs.buildwithfern.com/:p*',
-      permanent: false,
-    },
     {
       source: '/storybook/:branch*',
       destination: 'https://:branch*--67cafc438c6d3b09671849dd.chromatic.com',
@@ -70,10 +131,10 @@ const nextConfig = {
       destination: '/api/v0/unified/:p*',
       permanent: false,
     },
-    {source: '/', destination: '/dashboard', permanent: false},
+    // {source: '/', destination: '/console', permanent: false},
     // clerk expects these routes to be present in their UI and we have them inside the dashboard
-    {source: '/sign-in', destination: '/dashboard/sign-in', permanent: false},
-    {source: '/sign-up', destination: '/dashboard/sign-up', permanent: false},
+    {source: '/sign-in', destination: '/console/sign-in', permanent: false},
+    {source: '/sign-up', destination: '/console/sign-up', permanent: false},
   ],
   typescript: {ignoreBuildErrors: true},
   eslint: {ignoreDuringBuilds: true},
