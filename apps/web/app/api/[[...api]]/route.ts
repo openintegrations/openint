@@ -5,7 +5,13 @@ const app = createApp({db})
 const handler = (req: Request) => {
   if (req.url.includes('/v1') && !req.url.includes('/api/v1')) {
     const cleanUrl = req.url.replace('/v1', '/api/v1')
-    return app.handle(new Request(cleanUrl, req))
+    return app.handle(
+      new Request(cleanUrl, {
+        method: req.method,
+        headers: req.headers,
+        body: req.body,
+      }),
+    )
   }
   return app.handle(req)
 }
