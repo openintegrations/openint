@@ -1,17 +1,12 @@
-import type {
-  ConnectorDef,
-  ConnectorSchemas,
-  EntityPayloadWithRaw,
-} from '@openint/cdk'
+import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
+import {z} from '@openint/util'
 
 export const twentySchemas = {
   name: z.literal('twenty'),
   connectionSettings: z.object({
     access_token: z.string(),
   }),
-  destinationInputEntity: zCast<EntityPayloadWithRaw>(),
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(twentySchemas)

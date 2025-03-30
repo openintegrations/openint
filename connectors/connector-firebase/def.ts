@@ -1,12 +1,6 @@
-import type {
-  AnyEntityPayload,
-  ConnectorDef,
-  ConnectorSchemas,
-} from '@openint/cdk'
+import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
-import type {AnyQuery} from './firebase-types'
-import type {WrappedFirebase} from './server'
+import {z} from '@openint/util'
 
 export const zFirebaseConfig = z.object({
   projectId: z.string(),
@@ -59,26 +53,6 @@ export const zSettings = z.discriminatedUnion('role', [
 export const firebaseSchemas = {
   name: z.literal('firebase'),
   connectionSettings: zSettings,
-  sourceState: z.object({
-    /**
-     * Only used for sourceSync, not destSync. Though these are not technically states...
-     * And they are not safe to just erase if fullSync = true.
-     * TODO: Introduce a separate sourceOptions / destinationOptions type later when it becomes an
-     * actual problem... for now this issue only impacts FirebaseProvider and FSProvider
-     * which are not actually being used as top level providers
-     */
-    collectionPaths: z.array(z.string()).nullish(),
-    /**
-     * NEXT: We should use a JSON representation of query so that it can be transfered over the network
-     * However firestore doesn't expose serialize / deserialize, therefore using Query type directly as a short
-     * term hack...
-     * @see https://firebase.google.com/docs/firestore/reference/rest/v1/StructuredQuery
-     */
-    _queries: zCast<AnyQuery[] | undefined>(),
-    _fb: zCast<WrappedFirebase | undefined>(),
-  }),
-  sourceOutputEntity: zCast<AnyEntityPayload>(),
-  destinationInputEntity: zCast<AnyEntityPayload>(),
 } satisfies ConnectorSchemas
 
 export const firebaseHelpers = connHelpers(firebaseSchemas)

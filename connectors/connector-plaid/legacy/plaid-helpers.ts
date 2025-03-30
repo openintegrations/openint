@@ -1,6 +1,5 @@
 import type plaid from 'plaid'
 import type {PlaidAccount as PlaidLinkAccount} from 'react-plaid-link'
-import type {Pta} from '@openint/cdk'
 import {A, normalizeError} from '@openint/util'
 
 // This should be consolidated except two different plaid versions are used
@@ -15,7 +14,7 @@ export type PlaidEnvName = 'sandbox' | 'development' | 'production'
 // TODO: Make me even better
 export function getPlaidAccountType(
   a: Nullish<Pick<plaid.AccountBase | PlaidLinkAccount, 'subtype' | 'type'>>,
-): Pta.AccountType {
+): string {
   switch (a.subtype as plaid.AccountSubtype | null | undefined) {
     case 'credit card':
       return 'liability/credit_card'
@@ -123,7 +122,7 @@ export function plaidUnitForCurrency(input: {
 
 export function plaidMapHolding(
   h: plaid.Holding & {security?: plaid.Security},
-): Pta.Holding | null {
+) {
   if (h.quantity == null || !h.security) {
     return null
   }

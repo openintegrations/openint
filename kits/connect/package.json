@@ -15,7 +15,6 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@openint/open-file-picker": "workspace:*",
     "@types/node": "^20.0.0",
     "@types/react": "*",
     "next": "15.2.3",

@@ -14,12 +14,6 @@ export const outreachServer = {
     })
     return sdk
   },
-  passthrough: (instance, input) =>
-    instance.request(input.method, input.path, {
-      headers: input.headers as Record<string, string>,
-      params: {query: input.query},
-      body: JSON.stringify(input.body),
-    }),
 } satisfies ConnectorServer<typeof outreachSchemas, OutreachSDK>
 
 export default outreachServer

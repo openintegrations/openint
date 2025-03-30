@@ -10,14 +10,9 @@ const isDevOrStaging =
 const nextConfig = {
   // TODO: Figure out why this is still needed. Does not appear to be needed in byos anymore...
   transpilePackages: [
-    path.resolve(__dirname, '../app-config'),
     // Should we generate this list from fs also?
     path.resolve(__dirname, '../../kits/cdk'),
     path.resolve(__dirname, '../../kits/connect'),
-    path.resolve(__dirname, '../../kits/file-picker'),
-    path.resolve(__dirname, '../../packages/engine-backend'),
-    path.resolve(__dirname, '../../packages/engine-frontend'),
-    path.resolve(__dirname, '../../packages/ui'),
     path.resolve(__dirname, '../../packages/ui-v1'),
     path.resolve(__dirname, '../../packages/shadcn'),
     path.resolve(__dirname, '../../packages/util'),

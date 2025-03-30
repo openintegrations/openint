@@ -1,7 +1,7 @@
 import type {components} from '@opensdks/sdk-xero/xero_accounting.oas.types'
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
-import {connHelpers, oauthBaseSchema, zEntityPayload} from '@openint/cdk'
-import {R, z} from '@openint/util'
+import {connHelpers, oauthBaseSchema} from '@openint/cdk'
+import {z} from '@openint/util'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
@@ -22,8 +22,6 @@ export const xeroSchemas = {
   connectorConfig: zConfig,
   connectionSettings: zSettings,
   connectOutput: oauthBaseSchema.connectOutput,
-  sourceOutputEntity: zEntityPayload,
-  sourceOutputEntities: R.mapValues(XERO_ENTITY_NAME, () => z.unknown()),
 } satisfies ConnectorSchemas
 
 export const xeroHelpers = connHelpers(xeroSchemas)

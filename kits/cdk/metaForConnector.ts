@@ -17,11 +17,6 @@ export const metaForConnector = (
   stage: connector.metadata?.stage ?? 'alpha',
   platforms: connector.metadata?.platforms ?? ['cloud', 'local'],
   verticals: connector.metadata?.verticals ?? ['other'],
-  sourceStreams: Object.keys(connector.schemas.sourceOutputEntities ?? {}),
-  supportedModes: R.compact([
-    connector.sourceSync ? ('source' as const) : null,
-    connector.destinationSync ? ('destination' as const) : null,
-  ]),
   hasPreConnect: connector.preConnect != null,
   hasUseConnectHook: connector.useConnectHook != null,
   // TODO: Maybe nangoProvider be more explicit as a base provider?
