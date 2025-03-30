@@ -64,7 +64,7 @@ export function ConnectionCard({
                   className="rounded-lg"
                 />
               )}
-              <p className="m-0 w-full break-words text-center text-sm font-semibold">
+              <p className="mt-2 w-full break-words text-center text-sm font-semibold">
                 {displayName}
               </p>
               {variant === 'developer' && (

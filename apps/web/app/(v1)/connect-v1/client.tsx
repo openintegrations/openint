@@ -149,26 +149,23 @@ export function MyConnectionsClient(props: {
 
   const definitions = useCommandDefinitionMap()
   return (
-    <>
-      <h1 className="text-3xl">My connections</h1>
-      <DataTileView
-        data={res.data.items}
-        columns={[]}
-        getItemId={(conn) => conn.id}
-        renderItem={(conn) => (
-          <ConnectionCard connection={conn} className="relative">
-            <CommandPopover
-              className="absolute right-2 top-2"
-              hideGroupHeadings
-              initialParams={{
-                connection_id: conn.id,
-              }}
-              ctx={{}}
-              definitions={definitions}
-            />
-          </ConnectionCard>
-        )}
-      />
-    </>
+    <DataTileView
+      data={res.data.items}
+      columns={[]}
+      getItemId={(conn) => conn.id}
+      renderItem={(conn) => (
+        <ConnectionCard connection={conn} className="relative">
+          <CommandPopover
+            className="absolute right-2 top-2"
+            hideGroupHeadings
+            initialParams={{
+              connection_id: conn.id,
+            }}
+            ctx={{}}
+            definitions={definitions}
+          />
+        </ConnectionCard>
+      )}
+    />
   )
 }

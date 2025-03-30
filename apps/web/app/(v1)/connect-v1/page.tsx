@@ -54,7 +54,7 @@ export default async function Page(
   const api = createAPICaller(viewer)
 
   return (
-    <div>
+    <div className="p-4">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -66,10 +66,6 @@ export default async function Page(
         `,
         }}
       />
-
-      <pre className="bg-background">
-        <code>{JSON.stringify(viewer, null, 2)}</code>
-      </pre>
       <ClientApp token={token!}>
         <GlobalCommandBarProvider>
           {/* <TabsClient defaultValue={(await props.searchParams).tab ?? 'my-connections'}> */}
