@@ -35,16 +35,18 @@ export function ConnectionCard({
   return (
     <Card
       className={cn(
-        'border-card-border bg-card hover:border-button hover:bg-button-light relative h-[150px] w-[150px] cursor-pointer rounded-lg border p-0 transition-colors duration-300 ease-in-out',
+        'border-card-border bg-card relative h-[150px] w-[150px] rounded-lg border p-0',
+        onPress &&
+          'hover:border-button hover:bg-button-light cursor-pointer transition-colors duration-300 ease-in-out',
         className,
       )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}>
+      onMouseEnter={() => onPress && setIsHovered(true)}
+      onMouseLeave={() => onPress && setIsHovered(false)}>
       <CardContent
         className="flex h-full flex-col items-center justify-center p-4 py-2"
         onClick={onPress}>
         <div className="relative flex size-full flex-col items-center justify-center gap-1">
-          {isHovered ? (
+          {isHovered && onPress ? (
             <div className="flex h-full flex-col items-center justify-center">
               <Settings className="text-button" size={24} />
               <span className="text-button mt-2 font-sans text-[14px] font-semibold">

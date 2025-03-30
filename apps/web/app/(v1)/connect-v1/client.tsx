@@ -6,7 +6,7 @@ import type {AppRouterOutput} from '@openint/api-v1/routers'
 import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
-import {CommandPopover} from '@openint/ui-v1'
+import {CommandPopover, DataTileView} from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../console/(authenticated)/client'
@@ -135,8 +135,6 @@ export function AddConnectionInner({
 }
 
 export function MyConnectionsClient(props: {
-  // TODO: Figure out how to type this without duplication
-
   connector_name?: string
   initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
@@ -144,7 +142,7 @@ export function MyConnectionsClient(props: {
   const trpc = useTRPC()
   const res = useSuspenseQuery(
     trpc.listConnections.queryOptions(
-      {connector_name: props.connector_name},
+      {connector_name: props.connector_name, expand: ['connector']},
       initialData ? {initialData} : undefined,
     ),
   )
@@ -153,23 +151,24 @@ export function MyConnectionsClient(props: {
   return (
     <>
       <h1 className="text-3xl">My connections</h1>
-      {res.data.items.map((conn) => (
-        <ConnectionCard
-          key={conn.id}
-          connection={conn}
-          variant="developer"
-          className="relative">
-          <CommandPopover
-            className="absolute right-2 top-2"
-            hideGroupHeadings
-            initialParams={{
-              connection_id: conn.id,
-            }}
-            ctx={{}}
-            definitions={definitions}
-          />
-        </ConnectionCard>
-      ))}
+      <DataTileView
+        data={res.data.items}
+        columns={[]}
+        getItemId={(conn) => conn.id}
+        renderItem={(conn) => (
+          <ConnectionCard connection={conn} className="relative">
+            <CommandPopover
+              className="absolute right-2 top-2"
+              hideGroupHeadings
+              initialParams={{
+                connection_id: conn.id,
+              }}
+              ctx={{}}
+              definitions={definitions}
+            />
+          </ConnectionCard>
+        )}
+      />
     </>
   )
 }

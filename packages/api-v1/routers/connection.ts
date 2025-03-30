@@ -3,7 +3,7 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, eq, schema, sql} from '@openint/db'
-import {core} from '../models'
+import {Core, core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
 import {expandConnector} from './connectorConfig'
@@ -51,7 +51,7 @@ function stripSensitiveOauthCredentials(credentials: any) {
 
 async function formatConnection(
   ctx: RouterContext,
-  connection: z.infer<typeof core.connection>,
+  connection: Core['connection'],
   include_secrets: z.infer<typeof zIncludeSecrets> = 'none',
   expand: z.infer<typeof zExpandOptions>[] = [],
 ) {
@@ -107,7 +107,7 @@ async function formatConnection(
 
   return {
     ...connection,
-    ...settingsToInclude,
+    // ...settingsToInclude, // buggy, fix me
     ...expandedFields,
   }
 }
@@ -296,17 +296,16 @@ export const connectionRouter = router({
       const {items, total} = await processPaginatedResponse(query, 'connection')
 
       return {
-        // items: await Promise.all(
-        //   items.map((conn) =>
-        //     formatConnection(
-        //       ctx,
-        //       conn as any,
-        //       input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
-        //       input?.expand ?? [],
-        //     ),
-        //   ),
-        // ),
-        items,
+        items: await Promise.all(
+          items.map((conn) =>
+            formatConnection(
+              ctx,
+              conn as any,
+              input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
+              input?.expand ?? [],
+            ),
+          ),
+        ),
         total,
         limit,
         offset,

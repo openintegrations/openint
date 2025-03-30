@@ -86,6 +86,7 @@ export default async function Page(
                   connector_name={searchParams.connector_name}
                   initialData={api.listConnections({
                     connector_name: searchParams.connector_name,
+                    expand: ['connector'],
                   })}
                 />
               </Suspense>
