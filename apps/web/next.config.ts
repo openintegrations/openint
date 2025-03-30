@@ -49,7 +49,8 @@ const nextConfig = {
             value: 'api.openint.dev',
           },
         ],
-        destination: 'https://app.openint.dev/api/v0/:path*',
+        destination:
+          'https://openint-git-v0-openint-dev.vercel.app/api/v0/:path*',
       },
 
       // api.openint.dev/v1/* -> /api/v1/* (same app)
