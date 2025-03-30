@@ -54,7 +54,6 @@ jobs:
       - name: Run type checks
         run: pnpm run typecheck
 
-
   lint:
     runs-on: ubuntu-latest
     needs: install-dependencies
@@ -120,7 +119,7 @@ jobs:
       - name: Download environment variables
         run: |
           npm install --global vercel@latest
-          vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
+          vercel link --token $VERCEL_TOKEN --scope openint-dev --project v1 --yes
           vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
           cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
       - name: Run migrations
@@ -165,7 +164,7 @@ jobs:
       - name: Download environment variables
         run: |
           npm install --global vercel@latest
-          vercel link --token $VERCEL_TOKEN --scope openint-dev --yes
+          vercel link --token $VERCEL_TOKEN --scope openint-dev --project v1 --yes
           vercel env pull --token $VERCEL_TOKEN ./apps/web/.env.local.orig
           cat ./apps/web/.env.local.orig | pnpm --silent bun scripts/escape-env.ts > ./apps/web/.env.local
 
