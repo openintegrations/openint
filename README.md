@@ -2,7 +2,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://makeapullrequest.com)
 ![TypeScript](https://img.shields.io/badge/language-TypeScript-blue)
 
-# Open Integrations
+# Open Integrations (V0 App)
 
 OpenInt is an open-source integration platform as a service (iPaaS) that helps you ship product integrations in hours, not weeks.
 
