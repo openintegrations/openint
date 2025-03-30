@@ -77,20 +77,21 @@ const nextConfig = {
       //   destination: '/connect/:path*',
       // },
 
-      // // app.openint.dev/* -> old vercel project
-      // {
-      //   source: '/:path*',
-      //   has: [
-      //     {
-      //       type: 'host',
-      //       value: 'app.openint.dev',
-      //     },
-      //   ],
-      //   destination:
-      //     // NOTE: may not work with clerk
-      //     // latest v0 branch on vercel openint project production environment
-      //     'https://openint-git-v0-openint-dev.vercel.app/:path*',
-      // },
+      // app.openint.dev/* -> old vercel project
+      // THIS IS NOT CURRENTLY IN USE AS WE HAVEN'T MIGRATED IT TO THE V1 VERCEL PROJECT
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'app.openint.dev',
+          },
+        ],
+        destination:
+          // NOTE: may not work with clerk
+          // latest v0 branch on vercel openint project production environment
+          'https://openint-git-v0-openint-dev.vercel.app/:path*',
+      },
 
       // // doubleo.openint.dev/* -> old vercel doubleo environment
       // {
