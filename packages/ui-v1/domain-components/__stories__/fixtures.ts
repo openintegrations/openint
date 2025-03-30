@@ -91,79 +91,6 @@ const connectors = {
   },
 } satisfies Record<string, ConnectorTemporary>
 
-/** @deprecated. Should use connectors list above */
-const connectorsList = [
-  {
-    name: 'salesforce',
-    display_name: 'Salesforce',
-    logo_url:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
-    stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'CRM',
-    auth_type: 'oauth2',
-    version: 'V2',
-  },
-  {
-    name: 'google-drive',
-    display_name: 'Google Drive',
-    logo_url:
-      'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
-    stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'File Storage',
-    auth_type: 'oauth2',
-    version: 'V3',
-  },
-  {
-    name: 'google-drive-beta',
-    display_name: 'Google Drive',
-    logo_url:
-      'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
-    stage: 'beta' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'File Storage',
-    auth_type: 'oauth2',
-    version: 'V2',
-  },
-  {
-    name: 'plaid',
-    display_name: 'Plaid',
-    logo_url:
-      'https://cdn.icon-icons.com/icons2/2699/PNG/512/plaid_logo_icon_168102.png',
-    stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'Banking',
-    auth_type: 'aggregator',
-    version: 'V2',
-  },
-  {
-    name: 'cal-com',
-    display_name: 'Cal.com',
-    logo_url: 'https://cal.com/android-chrome-512x512.png',
-    stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'Scheduling',
-    auth_type: 'apikey',
-    version: 'V1',
-  },
-] satisfies ConnectorTemporary[]
-
-const connectorConfigList = connectorsList.map(
-  (connector): ConnectorConfigTemporary => ({
-    id: `ccfg_${connector.name}_123`,
-    connector,
-    connection_count: Math.floor(Math.random() * 100),
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    config: {},
-    org_id: 'org_123',
-    connector_name: connector.name,
-    display_name: null,
-    disabled: null,
-  }),
-)
-
 const integrations = {
   salesforce: {
     id: 'int_salesforce_123',
@@ -199,69 +126,146 @@ const integrations = {
   },
 } satisfies Record<string, Core['integration']>
 
-const connectionsList: ConnectionExpanded[] = [
-  {
+const connections = {
+  'salesforce-basic': {
     id: 'conn_salesforce_123',
     connector_config_id: 'ccfg_salesforce_123',
-    connector: connectorsList[0], // Salesforce
-    // status: 'healthy',
+    connector: connectors.salesforce,
+    connector_name: 'salesforce',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    // org_id: 'org_123',
-    // metadata: {},
-    // credentials: {},
-    // display_name: null,
+  },
+  'salesforce-with-integration': {
+    id: 'conn_salesforce_123',
+    connector_config_id: 'ccfg_salesforce_123',
+    connector: connectors.salesforce,
     connector_name: 'salesforce',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     integration: integrations.salesforce,
   },
-  {
+  'salesforce-without-logo': {
+    id: 'conn_salesforce_123',
+    connector_config_id: 'ccfg_salesforce_123',
+    connector: {
+      ...connectors.salesforce,
+      logo_url: undefined,
+    },
+    connector_name: 'salesforce',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  'hubspot-basic': {
     id: 'conn_hubspot_123',
     connector_config_id: 'ccfg_hubspot_123',
-    connector: connectorsList[1], // Hubspot
-    // status: 'unhealthy',
+    connector: connectors.hubspot,
+    connector_name: 'hubspot',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    // org_id: 'org_123',
-    // metadata: {},
-    // credentials: {},
-    // display_name: null,
+  },
+  'hubspot-with-integration': {
+    id: 'conn_hubspot_123',
+    connector_config_id: 'ccfg_hubspot_123',
+    connector: connectors.hubspot,
     connector_name: 'hubspot',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     integration: integrations.hubspot,
   },
-  {
+  'hubspot-without-logo': {
+    id: 'conn_hubspot_123',
+    connector_config_id: 'ccfg_hubspot_123',
+    connector: {
+      ...connectors.hubspot,
+      logo_url: undefined,
+    },
+    connector_name: 'hubspot',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  'notion-basic': {
     id: 'conn_notion_123',
     connector_config_id: 'ccfg_notion_123',
-    connector: connectorsList[2], // Notion
-    // status: 'healthy',
+    connector: connectors.notion,
+    connector_name: 'notion',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    // org_id: 'org_123',
-    // metadata: {},
-    // credentials: {},
-    // display_name: null,
+  },
+  'notion-with-integration': {
+    id: 'conn_notion_123',
+    connector_config_id: 'ccfg_notion_123',
+    connector: connectors.notion,
     connector_name: 'notion',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     integration: integrations.notion,
   },
-  {
-    id: 'conn_gdrive_123',
-    connector_config_id: 'ccfg_google-drive-beta_123',
-    connector: connectorsList[3], // Google Drive
-    // status: 'healthy',
+  'notion-without-logo': {
+    id: 'conn_notion_123',
+    connector_config_id: 'ccfg_notion_123',
+    connector: {
+      ...connectors.notion,
+      logo_url: undefined,
+    },
+    connector_name: 'notion',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    // org_id: 'org_123',
-    // metadata: {},
-    // credentials: {},
-    // display_name: null,
+  },
+  'google-drive-basic': {
+    id: 'conn_gdrive_123',
+    connector_config_id: 'ccfg_google-drive-beta_123',
+    connector: connectors['google-drive'],
     connector_name: 'google-drive',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  'google-drive-with-integration': {
+    id: 'conn_gdrive_123',
+    connector_config_id: 'ccfg_google-drive-beta_123',
+    connector: connectors['google-drive'],
+    connector_name: 'google-drive',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     integration: integrations['google-drive'],
   },
-]
+  'google-drive-without-logo': {
+    id: 'conn_gdrive_123',
+    connector_config_id: 'ccfg_google-drive-beta_123',
+    connector: {
+      ...connectors['google-drive'],
+      logo_url: undefined,
+    },
+    connector_name: 'google-drive',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+} satisfies Record<string, ConnectionExpanded>
+
+const connectorConfigs = Object.fromEntries(
+  Object.entries(connectors).map(
+    ([name, connector]): [string, ConnectorConfigTemporary] => [
+      name,
+      {
+        id: `ccfg_${name}_123`,
+        connector,
+        connection_count: Math.floor(Math.random() * 100),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        config: {},
+        org_id: 'org_123',
+        connector_name: name,
+        display_name: null,
+        disabled: null,
+      },
+    ],
+  ),
+) satisfies Record<string, ConnectorConfigTemporary>
 
 export const FIXTURES = {
   connectors,
-  connectorsList,
-  connectorConfigList,
+  connectorConfigs,
   integrations,
-  connections: connectionsList,
+  connections,
+  connectorsList: Object.values(connectors),
+  connectorConfigList: Object.values(connectorConfigs),
 }

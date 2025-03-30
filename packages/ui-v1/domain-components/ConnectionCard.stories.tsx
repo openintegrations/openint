@@ -16,12 +16,12 @@ type Story = StoryObj<typeof ConnectionCard>
 
 export const Default: Story = {
   args: {
-    connection: FIXTURES.connections[0],
+    connection: FIXTURES.connections['salesforce-basic'],
   },
 }
 
 export const NoLogo: Story = {
   args: {
-    connection: FIXTURES.connections[1],
+    connection: FIXTURES.connections['salesforce-without-logo'],
   },
 }
