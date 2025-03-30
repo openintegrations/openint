@@ -45,7 +45,6 @@ export const NoIntegrationNoConnector: Story = {
   },
 }
 
-
 export const Grid: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
