@@ -90,11 +90,7 @@ export function ConnectorConfigList(props: {
       accessorKey: 'display_name',
       cell: ({row}) => {
         const connector = row.original.connector
-        return (
-          <ConnectorTableCell
-            connector={{...connector, stage: connector.stage || 'alpha'}}
-          />
-        )
+        return connector ? <ConnectorTableCell connector={connector} /> : null
       },
     },
     {
@@ -127,12 +123,12 @@ export function ConnectorConfigList(props: {
   ) => {
     // Find the full connector data from the connectors list
     const fullConnector = connectorRes.data.find(
-      (c) => c.name === ccfg.connector.name,
+      (c) => c.name === ccfg.connector?.name,
     )
 
     setSelectedCcfg(ccfg)
     // Use the full connector data if available, otherwise use the one from ccfg
-    setSelectedConnector(fullConnector || ccfg.connector)
+    setSelectedConnector(fullConnector || ccfg.connector || null)
     setSheetOpen(true)
   }
 

@@ -2,11 +2,13 @@
 
 import dynamic from 'next/dynamic'
 import React from 'react'
-import type {AppRouterOutput} from '@openint/api-v1/routers'
+import {AppRouterOutput} from '@openint/api-v1'
+import {ConnectorConfig} from '@openint/api-v1/models'
 import type {ConnectorClient} from '@openint/cdk'
-import {extractId} from '@openint/cdk'
-import {Button} from '@openint/shadcn/ui'
-import {CommandPopover} from '@openint/ui-v1'
+import {Label} from '@openint/shadcn/ui'
+import {CommandPopover, DataTileView} from '@openint/ui-v1'
+import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
+import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
@@ -53,16 +55,16 @@ const ConnectorClientComponents = Object.fromEntries(
 )
 
 export function AddConnectionInner({
-  connectorConfigId,
+  connectorConfig,
   ...props
 }: {
-  connectorConfigId: string
+  connectorConfig: ConnectorConfig<'connector'>
   onReady?: (ctx: {state: string}, name: string) => void
   initialData?: Promise<AppRouterOutput['preConnect']>
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
 
-  const name = extractId(connectorConfigId as `ccfg_${string}`)[1]
+  const name = connectorConfig.connector_name
 
   console.log('AddConnectionInner rendering', name)
 
@@ -73,7 +75,7 @@ export function AddConnectionInner({
   const preConnectRes = useSuspenseQuery(
     trpc.preConnect.queryOptions(
       {
-        id: connectorConfigId,
+        id: connectorConfig.id,
         data: {
           connector_name: name,
           input: {},
@@ -90,13 +92,13 @@ export function AddConnectionInner({
   const handleConnect = React.useCallback(async () => {
     console.log('ref.current', ref.current)
     const connectRes = await ref.current?.(preConnectRes.data.output, {
-      connectorConfigId: connectorConfigId as `ccfg_${string}`,
+      connectorConfigId: connectorConfig.id as `ccfg_${string}`,
       connectionExternalId: undefined,
       integrationExternalId: undefined,
     })
     console.log('connectRes', connectRes)
     const postConnectRes = await postConnect.mutateAsync({
-      id: connectorConfigId,
+      id: connectorConfig.id,
       data: {
         connector_name: name,
         input: connectRes,
@@ -104,7 +106,7 @@ export function AddConnectionInner({
       options: {},
     })
     console.log('postConnectRes', postConnectRes)
-  }, [connectorConfigId, preConnectRes])
+  }, [connectorConfig, preConnectRes])
 
   const Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
@@ -128,14 +130,20 @@ export function AddConnectionInner({
           // setFn(c)
         }, [])}
       />
-      <Button onClick={handleConnect}>Connect with {name}</Button>
+
+      <ConnectorConfigCard
+        displayNameLocation="right"
+        connectorConfig={connectorConfig}
+        onPress={() => handleConnect()}>
+        <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
+          Connect
+        </Label>
+      </ConnectorConfigCard>
     </>
   )
 }
 
 export function MyConnectionsClient(props: {
-  // TODO: Figure out how to type this without duplication
-
   connector_name?: string
   initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
@@ -143,19 +151,21 @@ export function MyConnectionsClient(props: {
   const trpc = useTRPC()
   const res = useSuspenseQuery(
     trpc.listConnections.queryOptions(
-      {connector_name: props.connector_name},
+      {connector_name: props.connector_name, expand: ['connector']},
       initialData ? {initialData} : undefined,
     ),
   )
 
   const definitions = useCommandDefinitionMap()
   return (
-    <>
-      <h1 className="text-3xl">My connections</h1>
-      {res.data.items.map((conn) => (
-        <div key={conn.id} className="p-4">
-          <h2 className="text-2xl"> {conn.id}</h2>
+    <DataTileView
+      data={res.data.items}
+      columns={[]}
+      getItemId={(conn) => conn.id}
+      renderItem={(conn) => (
+        <ConnectionCard connection={conn} className="relative">
           <CommandPopover
+            className="absolute right-2 top-2"
             hideGroupHeadings
             initialParams={{
               connection_id: conn.id,
@@ -163,8 +173,8 @@ export function MyConnectionsClient(props: {
             ctx={{}}
             definitions={definitions}
           />
-        </div>
-      ))}
-    </>
+        </ConnectionCard>
+      )}
+    />
   )
 }
