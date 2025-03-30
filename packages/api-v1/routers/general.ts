@@ -35,7 +35,6 @@ export const generalRouter = router({
     .output(z.object({role: z.enum(['customer', 'org', 'anon', 'user'])}))
     // @ts-expect-error
     .query(({ctx}) => {
-      console.log('ctx', ctx)
       return {role: ctx.viewer.role}
     }),
 })
