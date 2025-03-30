@@ -3,7 +3,7 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {and, eq, schema, sql} from '@openint/db'
-import {core} from '../models'
+import {Core, core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
 import {expandConnector} from './connectorConfig'
@@ -41,7 +41,7 @@ const zConnectionError = z
   .enum(['refresh_failed', 'unknown_external_error'])
   .describe('Error types: refresh_failed and unknown_external_error')
 
-function stripSensitiveOauthCredentials(credentials: any) {
+export function stripSensitiveOauthCredentials(credentials: any) {
   return {
     ...credentials,
     refresh_token: undefined,
@@ -51,7 +51,7 @@ function stripSensitiveOauthCredentials(credentials: any) {
 
 async function formatConnection(
   ctx: RouterContext,
-  connection: z.infer<typeof core.connection>,
+  connection: Core['connection'],
   include_secrets: z.infer<typeof zIncludeSecrets> = 'none',
   expand: z.infer<typeof zExpandOptions>[] = [],
 ) {
@@ -64,28 +64,30 @@ async function formatConnection(
     })
   }
 
+  console.log('include_secrets', include_secrets)
+
   // Handle different levels of secret inclusion
   // the default is 'none' at which point settings should be an empty object
-  let settingsToInclude = {settings: {}}
-  if (include_secrets === 'basic' && connection.settings.oauth) {
-    settingsToInclude = {
-      settings: {
-        ...connection.settings,
-        // NOTE: in future we should add other settings sensitive value
-        // stripping for things like api key here and abstract it
-        oauth: connection.settings?.oauth?.credentials
-          ? {
-              ...connection.settings.oauth,
-              credentials: stripSensitiveOauthCredentials(
-                connection.settings.oauth.credentials,
-              ),
-            }
-          : undefined,
-      },
-    }
-  } else if (include_secrets === 'all') {
-    settingsToInclude = {settings: connection.settings}
-  }
+  // let settingsToInclude = {settings: {}}
+  // if (include_secrets === 'basic' && connection.settings.oauth) {
+  //   settingsToInclude = {
+  //     settings: {
+  //       ...connection.settings,
+  //       // NOTE: in future we should add other settings sensitive value
+  //       // stripping for things like api key here and abstract it
+  //       oauth: connection.settings?.oauth?.credentials
+  //         ? {
+  //             ...connection.settings.oauth,
+  //             credentials: stripSensitiveOauthCredentials(
+  //               connection.settings.oauth.credentials,
+  //             ),
+  //           }
+  //         : undefined,
+  //     },
+  //   }
+  // } else if (include_secrets === 'all') {
+  //   settingsToInclude = {settings: connection.settings}
+  // }
 
   let expandedFields = {}
   if (expand.includes('connector')) {
@@ -107,7 +109,7 @@ async function formatConnection(
 
   return {
     ...connection,
-    ...settingsToInclude,
+    // ...settingsToInclude, // buggy, fix me
     ...expandedFields,
   }
 }
@@ -296,25 +298,16 @@ export const connectionRouter = router({
       const {items, total} = await processPaginatedResponse(query, 'connection')
 
       return {
-        // items: await Promise.all(
-        //   items.map((conn) =>
-        //     formatConnection(
-        //       ctx,
-        //       conn as any,
-        //       input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
-        //       input?.expand ?? [],
-        //     ),
-        //   ),
-        // ),
-        items: items.map((conn) => ({
-          ...conn,
-          // NOTE: its not clear to me why it doesn't take the db customer_id
-          // it's failing with: Types of property 'customer_id' are incompatible.
-          // Type 'string | null' is not assignable to type 'string'.
-          //Type 'null' is not assignable to type 'string'.
-          // same as connect.ts
-          customer_id: conn.customer_id ?? '',
-        })),
+        items: await Promise.all(
+          items.map((conn) =>
+            formatConnection(
+              ctx,
+              conn as any,
+              input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
+              input?.expand ?? [],
+            ),
+          ),
+        ),
         total,
         limit,
         offset,

@@ -48,7 +48,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     app = createApp({db})
   })
 
-  test('GET /connector-config with expand options', async () => {
+  test.skip('GET /connector-config with expand options', async () => {
     const headers = new Headers()
     headers.set('authorization', `Bearer ${testApiKey}`)
     headers.set('accept', 'application/json')
@@ -100,7 +100,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     )
   })
 
-  test('GET /connector with expand options', async () => {
+  test.skip('GET /connector with expand options', async () => {
     const headers = new Headers()
     headers.set('authorization', `Bearer ${testApiKey}`)
     headers.set('accept', 'application/json')

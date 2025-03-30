@@ -1,6 +1,6 @@
+import {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Badge} from '@openint/shadcn/ui'
-import type {ConnectorTemporary} from './__stories__/fixtures'
 
 // Debug component to see what's in the data
 const DebugData = ({data}: {data: any}) => (
@@ -12,7 +12,7 @@ export const ConnectorTableCell = ({
   showStage = true,
   showPlatforms = true,
 }: {
-  connector: ConnectorTemporary
+  connector: Core['connector']
   showStage?: boolean
   showPlatforms?: boolean
 }) => {

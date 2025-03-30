@@ -1,20 +1,16 @@
-import type {Core} from '@openint/api-v1/models'
+import type {
+  ConnectionExpanded,
+  ConnectorConfig,
+  Core,
+} from '@openint/api-v1/models'
 
 // @rodrigo FIX ME to have server return the same type
 // Also note Line 111 in ConnectorCard.tsx
-export type ConnectorTemporary = Core['connector'] & {
-  stage: 'alpha' | 'beta' | 'ga'
-  /** This belongs on connector config not connector */
-  connection_count?: number
-  category?: string
-  auth_type?: string
-  version?: string
-}
+export type ConnectorTemporary = Core['connector']
 
-export type ConnectorConfigTemporary = Core['connector_config'] & {
-  connection_count?: number
-  connector: ConnectorTemporary
-}
+export type ConnectorConfigTemporary = ConnectorConfig<
+  'connector' | 'connection_count'
+>
 
 const connectors = {
   salesforce: {
@@ -91,81 +87,258 @@ const connectors = {
   },
 } satisfies Record<string, ConnectorTemporary>
 
-/** @deprecated. Should use connectors list above */
-const connectorsList = [
-  {
+const integrations = {
+  salesforce: {
+    id: 'int_salesforce_123',
     name: 'salesforce',
     display_name: 'Salesforce',
+    connector_name: 'salesforce',
     logo_url:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
-    stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'CRM',
-    auth_type: 'oauth2',
-    version: 'V2',
   },
-  {
+  hubspot: {
+    id: 'int_hubspot_123',
+    name: 'hubspot',
+    display_name: 'Hubspot',
+    connector_name: 'hubspot',
+    logo_url:
+      'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/168_Hubspot_logo_logos-512.png',
+  },
+  notion: {
+    id: 'int_notion_123',
+    name: 'notion',
+    display_name: 'Notion',
+    connector_name: 'notion',
+    logo_url:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Notion-logo.svg/2048px-Notion-logo.svg.png',
+  },
+  'google-drive': {
+    id: 'int_google-drive_123',
     name: 'google-drive',
     display_name: 'Google Drive',
+    connector_name: 'google-drive',
     logo_url:
       'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
-    stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'File Storage',
-    auth_type: 'oauth2',
-    version: 'V3',
   },
-  {
-    name: 'google-drive-beta',
-    display_name: 'Google Drive',
-    logo_url:
-      'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
-    stage: 'beta' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'File Storage',
-    auth_type: 'oauth2',
-    version: 'V2',
-  },
-  {
-    name: 'plaid',
-    display_name: 'Plaid',
-    logo_url:
-      'https://cdn.icon-icons.com/icons2/2699/PNG/512/plaid_logo_icon_168102.png',
-    stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'Banking',
-    auth_type: 'aggregator',
-    version: 'V2',
-  },
-  {
-    name: 'cal-com',
-    display_name: 'Cal.com',
-    logo_url: 'https://cal.com/android-chrome-512x512.png',
-    stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
-    category: 'Scheduling',
-    auth_type: 'apikey',
-    version: 'V1',
-  },
-] satisfies ConnectorTemporary[]
+} satisfies Record<string, Core['integration']>
 
-const connectorConfigList = connectorsList.map(
-  (connector): ConnectorConfigTemporary => ({
-    id: `ccfg_${connector.name}_123`,
-    connector,
-    connection_count: Math.floor(Math.random() * 100),
+const connections = {
+  'salesforce-basic': {
+    id: 'conn_salesforce_01HN4QZXG7YPBR8MXQT4KBWQ5N',
+    connector_config_id: 'ccfg_salesforce_123',
+    connector: connectors.salesforce,
+    connector_name: 'salesforce',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+  'salesforce-with-integration': {
+    id: 'conn_salesforce_123',
+    connector_config_id: 'ccfg_salesforce_123',
+    connector: connectors.salesforce,
+    connector_name: 'salesforce',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    integration: integrations.salesforce,
+    customer_id: 'cust_123',
+    integration_id: 'int_salesforce_123',
+    metadata: null,
+  },
+  'salesforce-without-logo': {
+    id: 'conn_salesforce_123',
+    connector_config_id: 'ccfg_salesforce_123',
+    connector: {
+      ...connectors.salesforce,
+      logo_url: undefined,
+    },
+    connector_name: 'salesforce',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+  'hubspot-basic': {
+    id: 'conn_hubspot_123',
+    connector_config_id: 'ccfg_hubspot_123',
+    connector: connectors.hubspot,
+    connector_name: 'hubspot',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+  'hubspot-with-integration': {
+    id: 'conn_hubspot_123',
+    connector_config_id: 'ccfg_hubspot_123',
+    connector: connectors.hubspot,
+    connector_name: 'hubspot',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    integration: integrations.hubspot,
+    customer_id: 'cust_123',
+    integration_id: 'int_hubspot_123',
+    metadata: null,
+  },
+  'hubspot-without-logo': {
+    id: 'conn_hubspot_123',
+    connector_config_id: 'ccfg_hubspot_123',
+    connector: {
+      ...connectors.hubspot,
+      logo_url: undefined,
+    },
+    connector_name: 'hubspot',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+  'notion-basic': {
+    id: 'conn_notion_123',
+    connector_config_id: 'ccfg_notion_123',
+    connector: connectors.notion,
+    connector_name: 'notion',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+  'notion-with-integration': {
+    id: 'conn_notion_123',
+    connector_config_id: 'ccfg_notion_123',
+    connector: connectors.notion,
+    connector_name: 'notion',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    integration: integrations.notion,
+    customer_id: 'cust_123',
+    integration_id: 'int_notion_123',
+    metadata: null,
+  },
+  'notion-without-logo': {
+    id: 'conn_notion_123',
+    connector_config_id: 'ccfg_notion_123',
+    connector: {
+      ...connectors.notion,
+      logo_url: undefined,
+    },
+    connector_name: 'notion',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+  'google-drive-basic': {
+    id: 'conn_gdrive_123',
+    connector_config_id: 'ccfg_google-drive-beta_123',
+    connector: connectors['google-drive'],
+    connector_name: 'google-drive',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+  'google-drive-with-integration': {
+    id: 'conn_gdrive_123',
+    connector_config_id: 'ccfg_google-drive-beta_123',
+    connector: connectors['google-drive'],
+    connector_name: 'google-drive',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    integration: integrations['google-drive'],
+    customer_id: 'cust_123',
+    integration_id: 'int_google-drive_123',
+    metadata: null,
+  },
+  'google-drive-without-logo': {
+    id: 'conn_gdrive_123',
+    connector_config_id: 'ccfg_google-drive-beta_123',
+    connector: {
+      ...connectors['google-drive'],
+      logo_url: undefined,
+    },
+    connector_name: 'google-drive',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+  'no-integration-no-connector': {
+    id: 'conn_custom_connector_123',
+    connector_config_id: 'ccfg_custom_connector_123',
+    connector_name: 'custom_connector',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
+  },
+} satisfies Record<string, ConnectionExpanded>
+
+const connectorConfigs = {
+  salesforce: {
+    id: 'ccfg_salesforce_123',
+    connector: connectors.salesforce,
+    connection_count: 5,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     config: {},
     org_id: 'org_123',
-    connector_name: connector.name,
-    display_name: null,
-    disabled: null,
-  }),
-)
+    connector_name: 'salesforce',
+    display_name: 'Salesforce Connector',
+    disabled: false,
+  },
+  hubspot: {
+    id: 'ccfg_hubspot_123',
+    connector: connectors.hubspot,
+    connection_count: 3,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    config: {},
+    org_id: 'org_123',
+    connector_name: 'hubspot',
+    display_name: 'HubSpot Connector',
+    disabled: false,
+  },
+  notion: {
+    id: 'ccfg_notion_123',
+    connector: connectors.notion,
+    connection_count: 1,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    config: {},
+    org_id: 'org_123',
+    connector_name: 'notion',
+    display_name: 'Notion Connector',
+    disabled: false,
+  },
+  'google-drive': {
+    id: 'ccfg_google-drive_123',
+    connector: connectors['google-drive'],
+    connection_count: 2,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    config: {},
+    org_id: 'org_123',
+    connector_name: 'google-drive',
+    display_name: 'Google Drive Connector',
+    disabled: false,
+  },
+} satisfies Record<string, ConnectorConfig<'connector' | 'connection_count'>>
 
 export const FIXTURES = {
   connectors,
-  connectorsList,
-  connectorConfigList,
+  connectorConfigs,
+  integrations,
+  connections,
+  connectorsList: Object.values(connectors),
+  connectorConfigList: Object.values(connectorConfigs),
 }

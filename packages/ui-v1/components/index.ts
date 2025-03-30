@@ -9,4 +9,5 @@ export * from './schema-form/index'
 export * from './tabs/index'
 export * from './toast'
 export * from './WebhookInput'
+export * from './DataTileView'
 // codegen:end
