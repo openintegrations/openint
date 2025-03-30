@@ -44,3 +44,14 @@ export const NoIntegrationNoConnector: Story = {
     connection: FIXTURES.connections['no-integration-no-connector'],
   },
 }
+
+
+export const Grid: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-4">
+      {Object.values(FIXTURES.connections).map((connection) => (
+        <ConnectionCard key={connection.id} connection={connection} />
+      ))}
+    </div>
+  ),
+}
