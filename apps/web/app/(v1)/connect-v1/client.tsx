@@ -7,6 +7,7 @@ import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
 import {Button} from '@openint/shadcn/ui'
 import {CommandPopover} from '@openint/ui-v1'
+import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
@@ -153,9 +154,13 @@ export function MyConnectionsClient(props: {
     <>
       <h1 className="text-3xl">My connections</h1>
       {res.data.items.map((conn) => (
-        <div key={conn.id} className="p-4">
-          <h2 className="text-2xl"> {conn.id}</h2>
+        <ConnectionCard
+          key={conn.id}
+          connection={conn}
+          variant="developer"
+          className="relative">
           <CommandPopover
+            className="absolute right-2 top-2"
             hideGroupHeadings
             initialParams={{
               connection_id: conn.id,
@@ -163,7 +168,7 @@ export function MyConnectionsClient(props: {
             ctx={{}}
             definitions={definitions}
           />
-        </div>
+        </ConnectionCard>
       ))}
     </>
   )

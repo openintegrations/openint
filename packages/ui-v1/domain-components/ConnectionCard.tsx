@@ -12,6 +12,7 @@ export interface ConnectionCardProps {
   onPress?: () => void
   className?: string
   variant?: 'default' | 'developer'
+  children?: React.ReactNode
 }
 
 export function ConnectionCard({
@@ -19,6 +20,7 @@ export function ConnectionCard({
   onPress,
   className,
   variant = 'default',
+  children,
 }: ConnectionCardProps) {
   const [isHovered, setIsHovered] = useState(false)
 
@@ -73,6 +75,7 @@ export function ConnectionCard({
             </>
           )}
         </div>
+        {children}
       </CardContent>
     </Card>
   )
