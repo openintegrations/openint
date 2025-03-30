@@ -248,25 +248,56 @@ const connections = {
   },
 } satisfies Record<string, ConnectionExpanded>
 
-const connectorConfigs = Object.fromEntries(
-  Object.entries(connectors).map(
-    ([name, connector]): [string, ConnectorConfigTemporary] => [
-      name,
-      {
-        id: `ccfg_${name}_123`,
-        connector,
-        connection_count: Math.floor(Math.random() * 100),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        config: {},
-        org_id: 'org_123',
-        connector_name: name,
-        display_name: null,
-        disabled: null,
-      },
-    ],
-  ),
-) satisfies Record<string, ConnectorConfigTemporary>
+const connectorConfigs = {
+  salesforce: {
+    id: 'ccfg_salesforce_123',
+    connector: connectors.salesforce,
+    connection_count: 5,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    config: {},
+    org_id: 'org_123',
+    connector_name: 'salesforce',
+    display_name: 'Salesforce Connector',
+    disabled: false,
+  },
+  hubspot: {
+    id: 'ccfg_hubspot_123',
+    connector: connectors.hubspot,
+    connection_count: 3,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    config: {},
+    org_id: 'org_123',
+    connector_name: 'hubspot',
+    display_name: 'HubSpot Connector',
+    disabled: false,
+  },
+  notion: {
+    id: 'ccfg_notion_123',
+    connector: connectors.notion,
+    connection_count: 1,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    config: {},
+    org_id: 'org_123',
+    connector_name: 'notion',
+    display_name: 'Notion Connector',
+    disabled: false,
+  },
+  'google-drive': {
+    id: 'ccfg_google-drive_123',
+    connector: connectors['google-drive'],
+    connection_count: 2,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    config: {},
+    org_id: 'org_123',
+    connector_name: 'google-drive',
+    display_name: 'Google Drive Connector',
+    disabled: false,
+  },
+} satisfies Record<string, ConnectorConfigTemporary>
 
 export const FIXTURES = {
   connectors,

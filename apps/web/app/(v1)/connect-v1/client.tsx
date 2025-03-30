@@ -5,9 +5,9 @@ import React from 'react'
 import type {AppRouterOutput} from '@openint/api-v1/routers'
 import type {ConnectorClient} from '@openint/cdk'
 import {extractId} from '@openint/cdk'
-import {Button} from '@openint/shadcn/ui'
 import {CommandPopover, DataTileView} from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
+import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
@@ -114,22 +114,11 @@ export function AddConnectionInner({
   }
   return (
     <>
-      {/*
-       Very careful to not cause infinite loop here during rendering
-       need to make ourselves a pure component
-       */}
-
-      <Component
-        key={name}
-        connector_name={name}
-        onConnectFn={React.useCallback((fn) => {
-          ref.current = fn
-
-          // onReady(c, name)
-          // setFn(c)
-        }, [])}
+      <h1 className="text-3xl">Add connection</h1>
+      <ConnectorConfigCard
+        connectorConfig={connectorConfig}
+        onPress={() => handleConnect(connectorConfig.connector.name)}
       />
-      <Button onClick={handleConnect}>Connect with {name}</Button>
     </>
   )
 }

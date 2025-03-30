@@ -118,14 +118,15 @@ export type Core = {
 
 // MARK: - Connector Configs
 
-export type ConnectorConfigExtended = Core['connector_config'] & {
+type ConnectorConfigExtended = {
   connector: Core['connector']
   integrations: Record<string, Core['integration']>
   connection_count: number
 }
 
-export type ConnectorConfig<T extends keyof ConnectorConfigExtended> =
-  ConnectorConfigExtended & Pick<ConnectorConfigExtended, T>
+export type ConnectorConfig<
+  T extends keyof ConnectorConfigExtended = keyof ConnectorConfigExtended,
+> = Core['connector_config'] & Partial<Pick<ConnectorConfigExtended, T>>
 
 // MARK: - Connectors
 
@@ -137,6 +138,7 @@ export type ConnectorExpanded<K extends keyof ConnectorRelations> =
   Core['connector'] & Partial<Pick<ConnectorRelations, K>>
 
 // MARK: - Connections
+
 interface ConnectionRelations {
   connector_config: Core['connector_config']
   customer: Core['customer']
