@@ -306,6 +306,12 @@ export const customerRouter = trpc.router({
               makeId('conn', int.connector.name, connectionExternalId),
             )
           : undefined
+        if (!ctx.viewer.orgId) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'OrgId is required',
+          })
+        }
         return int.connector.preConnect?.(
           int.config,
           {
@@ -323,6 +329,7 @@ export const customerRouter = trpc.router({
               customerId:
                 ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
             }),
+            orgId: ctx.viewer.orgId,
           },
           preConnInput,
         )
@@ -393,6 +400,12 @@ export const customerRouter = trpc.router({
             console.warn('postConnect input c', parsedInput.error)
           }
 
+          if (!ctx.viewer.orgId) {
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message: 'OrgId is required',
+            })
+          }
           return await int.connector.postConnect(
             int.connector.schemas.connectOutput.parse(input),
             {
@@ -414,6 +427,7 @@ export const customerRouter = trpc.router({
                 customerId:
                   ctx.viewer.role === 'customer' ? ctx.viewer.customerId : null,
               }),
+              orgId: ctx.viewer.orgId,
             },
           )
         })()
