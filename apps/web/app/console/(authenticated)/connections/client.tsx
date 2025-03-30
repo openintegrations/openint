@@ -1,6 +1,6 @@
 'use client'
 
-import {useCommandDefinitionMap} from '@/app/(v1)/GlobalCommandBarProvider'
+import {useCommandDefinitionMap} from '@/app/GlobalCommandBarProvider'
 import type {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
