@@ -130,6 +130,9 @@ const connections = {
     connector_name: 'salesforce',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
   'salesforce-with-integration': {
     id: 'conn_salesforce_123',
@@ -139,6 +142,9 @@ const connections = {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     integration: integrations.salesforce,
+    customer_id: 'cust_123',
+    integration_id: 'int_salesforce_123',
+    metadata: null,
   },
   'salesforce-without-logo': {
     id: 'conn_salesforce_123',
@@ -150,6 +156,9 @@ const connections = {
     connector_name: 'salesforce',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
   'hubspot-basic': {
     id: 'conn_hubspot_123',
@@ -158,6 +167,9 @@ const connections = {
     connector_name: 'hubspot',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
   'hubspot-with-integration': {
     id: 'conn_hubspot_123',
@@ -167,6 +179,9 @@ const connections = {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     integration: integrations.hubspot,
+    customer_id: 'cust_123',
+    integration_id: 'int_hubspot_123',
+    metadata: null,
   },
   'hubspot-without-logo': {
     id: 'conn_hubspot_123',
@@ -178,6 +193,9 @@ const connections = {
     connector_name: 'hubspot',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
   'notion-basic': {
     id: 'conn_notion_123',
@@ -186,6 +204,9 @@ const connections = {
     connector_name: 'notion',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
   'notion-with-integration': {
     id: 'conn_notion_123',
@@ -195,6 +216,9 @@ const connections = {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     integration: integrations.notion,
+    customer_id: 'cust_123',
+    integration_id: 'int_notion_123',
+    metadata: null,
   },
   'notion-without-logo': {
     id: 'conn_notion_123',
@@ -206,6 +230,9 @@ const connections = {
     connector_name: 'notion',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
   'google-drive-basic': {
     id: 'conn_gdrive_123',
@@ -214,6 +241,9 @@ const connections = {
     connector_name: 'google-drive',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
   'google-drive-with-integration': {
     id: 'conn_gdrive_123',
@@ -223,6 +253,9 @@ const connections = {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     integration: integrations['google-drive'],
+    customer_id: 'cust_123',
+    integration_id: 'int_google-drive_123',
+    metadata: null,
   },
   'google-drive-without-logo': {
     id: 'conn_gdrive_123',
@@ -234,6 +267,9 @@ const connections = {
     connector_name: 'google-drive',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
   'no-integration-no-connector': {
     id: 'conn_custom_connector_123',
@@ -241,6 +277,9 @@ const connections = {
     connector_name: 'custom_connector',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    customer_id: 'cust_123',
+    integration_id: null,
+    metadata: null,
   },
 } satisfies Record<string, ConnectionExpanded>
 
@@ -293,7 +332,7 @@ const connectorConfigs = {
     display_name: 'Google Drive Connector',
     disabled: false,
   },
-} satisfies Record<string, ConnectorConfigTemporary>
+} satisfies Record<string, ConnectorConfig<'connector' | 'connection_count'>>
 
 export const FIXTURES = {
   connectors,

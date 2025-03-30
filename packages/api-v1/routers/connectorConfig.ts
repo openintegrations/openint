@@ -314,8 +314,6 @@ export const connectorConfigRouter = router({
         .where(eq(schema.connector_config.id, id))
         .returning()
 
-      console.log('updated ccfg', res)
-
       validateResponse(res, id)
       const [ccfg] = res
 
