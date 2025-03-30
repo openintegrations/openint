@@ -41,7 +41,7 @@ const zConnectionError = z
   .enum(['refresh_failed', 'unknown_external_error'])
   .describe('Error types: refresh_failed and unknown_external_error')
 
-function stripSensitiveOauthCredentials(credentials: any) {
+export function stripSensitiveOauthCredentials(credentials: any) {
   return {
     ...credentials,
     refresh_token: undefined,
@@ -64,28 +64,30 @@ async function formatConnection(
     })
   }
 
+  console.log('include_secrets', include_secrets)
+
   // Handle different levels of secret inclusion
   // the default is 'none' at which point settings should be an empty object
-  let settingsToInclude = {settings: {}}
-  if (include_secrets === 'basic' && connection.settings.oauth) {
-    settingsToInclude = {
-      settings: {
-        ...connection.settings,
-        // NOTE: in future we should add other settings sensitive value
-        // stripping for things like api key here and abstract it
-        oauth: connection.settings?.oauth?.credentials
-          ? {
-              ...connection.settings.oauth,
-              credentials: stripSensitiveOauthCredentials(
-                connection.settings.oauth.credentials,
-              ),
-            }
-          : undefined,
-      },
-    }
-  } else if (include_secrets === 'all') {
-    settingsToInclude = {settings: connection.settings}
-  }
+  // let settingsToInclude = {settings: {}}
+  // if (include_secrets === 'basic' && connection.settings.oauth) {
+  //   settingsToInclude = {
+  //     settings: {
+  //       ...connection.settings,
+  //       // NOTE: in future we should add other settings sensitive value
+  //       // stripping for things like api key here and abstract it
+  //       oauth: connection.settings?.oauth?.credentials
+  //         ? {
+  //             ...connection.settings.oauth,
+  //             credentials: stripSensitiveOauthCredentials(
+  //               connection.settings.oauth.credentials,
+  //             ),
+  //           }
+  //         : undefined,
+  //     },
+  //   }
+  // } else if (include_secrets === 'all') {
+  //   settingsToInclude = {settings: connection.settings}
+  // }
 
   let expandedFields = {}
   if (expand.includes('connector')) {

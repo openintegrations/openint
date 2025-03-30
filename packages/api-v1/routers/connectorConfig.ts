@@ -220,11 +220,11 @@ export const connectorConfigRouter = router({
           }
 
           if (expandOptions.includes('enabled_integrations')) {
-            const filteredIntegrations = expandIntegrations(ccfg)
-
-            if (filteredIntegrations) {
-              result.integrations = filteredIntegrations
-            }
+            // const filteredIntegrations = expandIntegrations(ccfg)
+            // TODO: fix this
+            // if (filteredIntegrations) {
+            //   result.integrations = filteredIntegrations
+            // }
           }
 
           return result

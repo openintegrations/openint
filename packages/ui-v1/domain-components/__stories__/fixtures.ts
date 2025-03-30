@@ -1,20 +1,16 @@
-import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
+import type {
+  ConnectionExpanded,
+  ConnectorConfig,
+  Core,
+} from '@openint/api-v1/models'
 
 // @rodrigo FIX ME to have server return the same type
 // Also note Line 111 in ConnectorCard.tsx
-export type ConnectorTemporary = Core['connector'] & {
-  stage: 'alpha' | 'beta' | 'ga'
-  /** This belongs on connector config not connector */
-  connection_count?: number
-  category?: string
-  auth_type?: string
-  version?: string
-}
+export type ConnectorTemporary = Core['connector']
 
-export type ConnectorConfigTemporary = Core['connector_config'] & {
-  connection_count?: number
-  connector: ConnectorTemporary
-}
+export type ConnectorConfigTemporary = ConnectorConfig<
+  'connector' | 'connection_count'
+>
 
 const connectors = {
   salesforce: {

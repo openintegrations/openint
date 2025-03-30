@@ -103,7 +103,12 @@ export const core = {
     .object({
       connector_name: z.string(),
       name: z.string(),
-      logo_url: z.string().nullable(),
+      logo_url: z.string().nullish(),
+      stage: z.enum(['alpha', 'beta', 'ga']).nullish(),
+      platforms: z.array(z.enum(['web', 'mobile', 'desktop'])).nullish(),
+      category: z.string().nullish(),
+      auth_type: z.string().nullish(),
+      version: z.string().nullish(),
     })
     .passthrough()
     .openapi({ref: 'core.integration', title: 'Integration'}),

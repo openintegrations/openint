@@ -1,7 +1,6 @@
 import {Suspense} from 'react'
 import {ConnectorConfig} from '@openint/api-v1/models'
 import type {Viewer} from '@openint/cdk'
-import {extractId} from '@openint/cdk'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import {z} from '@openint/util'
 import {parsePageProps, type PageProps} from '@/lib-common/next-utils'

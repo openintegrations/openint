@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+import {ColumnDef} from '@tanstack/react-table'
 import {useState} from 'react'
 import {FIXTURES} from '../domain-components/__stories__/fixtures'
 import {ConnectionCard} from '../domain-components/ConnectionCard'
