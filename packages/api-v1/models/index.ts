@@ -42,6 +42,9 @@ export const core = {
           // We have some older connections that don't have a connector_config_id
           // and only connector_name, assuming pure default connector_config_id
           connector_config_id: z.string().nullable(),
+          customer_id: z.string(),
+          integration_id: z.string().nullable(),
+          metadata: z.record(z.string(), z.any()).nullable(),
         })
         .describe('Connection Base'),
       z
