@@ -1,4 +1,4 @@
-import type {Core} from '@openint/api-v1/models'
+import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 
 // @rodrigo FIX ME to have server return the same type
 // Also note Line 111 in ConnectorCard.tsx
@@ -164,8 +164,104 @@ const connectorConfigList = connectorsList.map(
   }),
 )
 
+const integrations = {
+  salesforce: {
+    id: 'int_salesforce_123',
+    name: 'salesforce',
+    display_name: 'Salesforce',
+    connector_name: 'salesforce',
+    logo_url:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
+  },
+  hubspot: {
+    id: 'int_hubspot_123',
+    name: 'hubspot',
+    display_name: 'Hubspot',
+    connector_name: 'hubspot',
+    logo_url:
+      'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/168_Hubspot_logo_logos-512.png',
+  },
+  notion: {
+    id: 'int_notion_123',
+    name: 'notion',
+    display_name: 'Notion',
+    connector_name: 'notion',
+    logo_url:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Notion-logo.svg/2048px-Notion-logo.svg.png',
+  },
+  'google-drive': {
+    id: 'int_google-drive_123',
+    name: 'google-drive',
+    display_name: 'Google Drive',
+    connector_name: 'google-drive',
+    logo_url:
+      'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
+  },
+} satisfies Record<string, Core['integration']>
+
+const connectionsList: ConnectionExpanded[] = [
+  {
+    id: 'conn_salesforce_123',
+    connector_config_id: 'ccfg_salesforce_123',
+    connector: connectorsList[0], // Salesforce
+    // status: 'healthy',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    // org_id: 'org_123',
+    // metadata: {},
+    // credentials: {},
+    // display_name: null,
+    connector_name: 'salesforce',
+    integration: integrations.salesforce,
+  },
+  {
+    id: 'conn_hubspot_123',
+    connector_config_id: 'ccfg_hubspot_123',
+    connector: connectorsList[1], // Hubspot
+    // status: 'unhealthy',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    // org_id: 'org_123',
+    // metadata: {},
+    // credentials: {},
+    // display_name: null,
+    connector_name: 'hubspot',
+    integration: integrations.hubspot,
+  },
+  {
+    id: 'conn_notion_123',
+    connector_config_id: 'ccfg_notion_123',
+    connector: connectorsList[2], // Notion
+    // status: 'healthy',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    // org_id: 'org_123',
+    // metadata: {},
+    // credentials: {},
+    // display_name: null,
+    connector_name: 'notion',
+    integration: integrations.notion,
+  },
+  {
+    id: 'conn_gdrive_123',
+    connector_config_id: 'ccfg_google-drive-beta_123',
+    connector: connectorsList[3], // Google Drive
+    // status: 'healthy',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    // org_id: 'org_123',
+    // metadata: {},
+    // credentials: {},
+    // display_name: null,
+    connector_name: 'google-drive',
+    integration: integrations['google-drive'],
+  },
+]
+
 export const FIXTURES = {
   connectors,
   connectorsList,
   connectorConfigList,
+  integrations,
+  connections: connectionsList,
 }

@@ -22,6 +22,9 @@ export function ConnectionCard({
   const logoUrl =
     connection.integration?.logo_url || connection.connector?.logo_url
 
+  const displayName =
+    connection.integration?.name || connection.connector?.display_name
+
   return (
     <Card
       className={cn(
@@ -52,14 +55,10 @@ export function ConnectionCard({
                   className="rounded-lg"
                 />
               )}
-              {/* <p
-                className={`m-0 max-w-[100px] text-center text-sm font-semibold ${
-                  conn.connectorConfig.connector.displayName.length > 15
-                    ? 'truncate'
-                    : ''
-                }`}>
-                {connectionName}
+              <p className="m-0 max-w-[100px] truncate text-center text-sm font-semibold">
+                {displayName}
               </p>
+              {/*
 
               {conn.status !== 'healthy' && (
                 <p

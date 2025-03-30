@@ -144,8 +144,9 @@ interface ConnectionRelations {
   integration: Core['integration']
 }
 
-export type ConnectionExpanded<K extends keyof ConnectionRelations> =
-  Core['connection'] & Partial<Pick<ConnectionRelations, K>>
+export type ConnectionExpanded<
+  K extends keyof ConnectionRelations = keyof ConnectionRelations,
+> = Core['connection'] & Partial<Pick<ConnectionRelations, K>>
 
 // MARK: - Customer
 export type Customer = Core['customer']
