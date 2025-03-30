@@ -65,17 +65,17 @@ const nextConfig = {
         destination: '/api/v1/:path*',
       },
 
-      // // connect.openint.dev/* -> /connect/*
-      // {
-      //   source: '/:path*',
-      //   has: [
-      //     {
-      //       type: 'host',
-      //       value: 'connect.openint.dev',
-      //     },
-      //   ],
-      //   destination: '/connect/:path*',
-      // },
+      // connect.openint.dev/* -> /connect/*
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'connect.openint.dev',
+          },
+        ],
+        destination: '/connect/:path*',
+      },
 
       // app.openint.dev/* -> old vercel project
       // THIS IS NOT CURRENTLY IN USE AS WE HAVEN'T MIGRATED IT TO THE V1 VERCEL PROJECT
@@ -93,20 +93,20 @@ const nextConfig = {
           'https://openint-git-v0-openint-dev.vercel.app/:path*',
       },
 
-      // // doubleo.openint.dev/* -> old vercel doubleo environment
-      // {
-      //   source: '/:path*',
-      //   has: [
-      //     {
-      //       type: 'host',
-      //       value: 'doubleo.openint.dev',
-      //     },
-      //   ],
-      //   // NOTE: may not work with clerk
-      //   // v0 branch on vercel openint project double0 environment
-      //   // Pinned at https://github.com/openintegrations/openint/commit/7df4e32a5ef2ae87d185947e0bca9bde549529fb
-      //   destination: 'https://openint-me9swzkzo-openint-dev.vercel.app/:path*',
-      // },
+      // doubleo.openint.dev/* -> old vercel doubleo environment
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'doubleo.openint.dev',
+          },
+        ],
+        // NOTE: may not work with clerk
+        // v0 branch on vercel openint project double0 environment
+        // Pinned at https://github.com/openintegrations/openint/commit/7df4e32a5ef2ae87d185947e0bca9bde549529fb
+        destination: 'https://openint-me9swzkzo-openint-dev.vercel.app/:path*',
+      },
     ],
     afterFiles: [],
     fallback: [],
