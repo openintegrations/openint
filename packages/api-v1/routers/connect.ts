@@ -188,6 +188,14 @@ export const connectRouter = router({
         {keyColumns: ['id']},
       ).returning()
 
-      return conn!
+      return {
+        ...conn!,
+        // NOTE: its not clear to me why it doesn't take the dbUpsertOne customer_id
+        // it's failing with: Types of property 'customer_id' are incompatible.
+        // Type 'string | null' is not assignable to type 'string'.
+        //Type 'null' is not assignable to type 'string'.
+        // same as connection.ts
+        customer_id: ctx.viewer.customerId ?? ctx.viewer.userId ?? '',
+      }
     }),
 })
