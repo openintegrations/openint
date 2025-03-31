@@ -1,17 +1,11 @@
-import {auth, createClerkClient} from '@clerk/nextjs/server'
-import type {Id, Viewer} from '@openint/cdk'
-import {env} from '@openint/env'
+import {auth} from '@clerk/nextjs/server'
+import {type Id, type Viewer} from '@openint/cdk'
+import {dbUpsertOne, eq, schema} from '@openint/db'
 import type {MaybePromise, NonEmptyArray} from '@openint/util'
-import {z} from '@openint/util'
+import {makeUlid, z} from '@openint/util'
 import type {PageProps} from '@/lib-common/next-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
-import {jwt} from './globals'
-
-export const getClerkClient = () =>
-  createClerkClient({
-    secretKey: env.CLERK_SECRET_KEY,
-    publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-  })
+import {db, jwt} from './globals'
 
 // TODO: Put this into serverSession
 // export async function revokeSession() {
@@ -57,12 +51,32 @@ export async function currentViewerFromPageProps(props: PageProps) {
 }
 
 export async function currentViewer(props?: PageProps) {
-  return firstNonAnonViewerOrFirst([
+  const {viewer, token} = await firstNonAnonViewerOrFirst([
     props
       ? currentViewerFromPageProps(props)
       : Promise.resolve({viewer: {role: 'anon'}, token: ''}),
     currentViewerFromCookie(),
   ])
+  // Ensure the org exists in the database if not already
+  // TODO: How do we add a test for this?
+  if (viewer.orgId) {
+    const org = await db.query.organization.findFirst({
+      where: eq(schema.organization.id, viewer.orgId),
+    })
+    if (!org) {
+      console.log('Org not found, lazily creating...', viewer.orgId)
+      await dbUpsertOne(
+        db,
+        schema.organization,
+        {
+          id: viewer.orgId,
+          api_key: `key_${makeUlid()}`,
+        },
+        {insertOnlyColumns: ['api_key']},
+      )
+    }
+  }
+  return {viewer, token}
 }
 
 async function firstNonAnonViewerOrFirst(
