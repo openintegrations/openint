@@ -150,4 +150,146 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       }),
     ).rejects.toThrow('not found')
   })
+
+  describe('create connection', () => {
+    test('with valid settings', async () => {
+      const connectorConfigId = makeId('ccfg', 'greenhouse', makeUlid())
+
+      // First create the connector config
+      await asOrg.db
+        .insert(schema.connector_config)
+        .values({
+          id: connectorConfigId,
+          org_id: asOrg.viewer.orgId,
+        })
+        .returning()
+
+      const connection = await asOrg.caller.createConnection({
+        connector_config_id: connectorConfigId,
+        customer_id: asOrg.viewer.orgId,
+        data: {
+          connector_name: 'greenhouse',
+          settings: {
+            apiKey: 'test_api_key',
+          },
+        },
+      })
+
+      expect(connection).toMatchObject({
+        connector_name: 'greenhouse',
+        connector_config_id: connectorConfigId,
+        customer_id: asOrg.viewer.orgId,
+        settings: {
+          apiKey: 'test_api_key',
+        },
+      })
+    })
+
+    test('fails with non-existent connector config', async () => {
+      const nonExistentConfigId = makeId('ccfg', 'greenhouse', makeUlid())
+
+      await expect(
+        asOrg.caller.createConnection({
+          connector_config_id: nonExistentConfigId,
+          customer_id: asOrg.viewer.orgId,
+          data: {
+            connector_name: 'greenhouse',
+            settings: {
+              apiKey: 'test_api_key',
+            },
+          },
+        }),
+      ).rejects.toThrow('not found')
+    })
+
+    test('fails with mismatched connector names', async () => {
+      const connectorConfigId = makeId('ccfg', 'greenhouse', makeUlid())
+
+      // Create connector config for greenhouse
+      await asOrg.db
+        .insert(schema.connector_config)
+        .values({
+          id: connectorConfigId,
+          org_id: asOrg.viewer.orgId,
+        })
+        .returning()
+
+      // Try to create connection with different connector name
+      await expect(
+        asOrg.caller.createConnection({
+          connector_config_id: connectorConfigId,
+          customer_id: asOrg.viewer.orgId,
+          data: {
+            connector_name: 'hubspot', // Different from connector_config
+            settings: {
+              apiKey: 'test_api_key',
+            },
+          },
+        }),
+      ).rejects.toThrow('invalid_type')
+    })
+
+    test('with metadata', async () => {
+      const connectorConfigId = makeId('ccfg', 'greenhouse', makeUlid())
+
+      await asOrg.db
+        .insert(schema.connector_config)
+        .values({
+          id: connectorConfigId,
+          org_id: asOrg.viewer.orgId,
+        })
+        .returning()
+
+      const metadata = {
+        companyName: 'Test Corp',
+        region: 'US',
+      }
+
+      const connection = await asOrg.caller.createConnection({
+        connector_config_id: connectorConfigId,
+        metadata,
+        data: {
+          connector_name: 'greenhouse',
+          settings: {
+            apiKey: 'test_api_key',
+          },
+        },
+        customer_id: asOrg.viewer.orgId,
+      })
+
+      expect(connection).toMatchObject({
+        connector_name: 'greenhouse',
+        connector_config_id: connectorConfigId,
+        metadata,
+        customer_id: asOrg.viewer.orgId,
+      })
+    })
+
+    test('with invalid settings fails', async () => {
+      const connectorConfigId = makeId('ccfg', 'greenhouse', makeUlid())
+
+      await asOrg.db
+        .insert(schema.connector_config)
+        .values({
+          id: connectorConfigId,
+          org_id: asOrg.viewer.orgId,
+        })
+        .returning()
+
+      // Try to create connection with invalid settings
+      await expect(
+        asOrg.caller.createConnection({
+          connector_config_id: connectorConfigId,
+          data: {
+            connector_name: 'greenhouse',
+            settings: {
+              // Missing required apiKey
+              environment: 'sandbox',
+            },
+          },
+          customer_id: asOrg.viewer.orgId,
+        }),
+      ).rejects.toThrow()
+    })
+  })
 })
