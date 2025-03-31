@@ -47,7 +47,17 @@ export function jsonSchemaToUiSchema(jsonSchema: RJSFSchema): UiSchema {
       Object.assign(uiSchema[key], {
         'ui:title': friendlyLabel,
         'ui:classNames': 'pt-2',
-        ...(key === 'scopes' ? {'ui:widget': 'ScopesWidget'} : {}),
+        ...(key === 'scopes'
+          ? {
+              'ui:widget': 'ScopesWidget',
+              'ui:options': {
+                availableScopes: [
+                  {id: 'read', name: 'Read'},
+                  {id: 'write', name: 'Write'},
+                ], //value.enum
+              },
+            }
+          : {}),
         ...Object.fromEntries(
           Object.entries(value).filter(([k]) => k.startsWith('ui:')),
         ),

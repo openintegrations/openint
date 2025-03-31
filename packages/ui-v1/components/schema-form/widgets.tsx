@@ -24,7 +24,7 @@ export function MultiSelect(_props: WidgetProps<boolean>) {
 
 // TODO: @rodrigo - We need to provide the correct availableScopes for each connector
 export function ScopesWidget(props: WidgetProps<Scope[]>) {
-  const {value = '', onChange, availableScopes = []} = props
+  const {value = '', onChange, options} = props
 
   // TODO: @rodrigo - We need to decide the datatype that scopes is going to have
   // right now it's a string but the component expects an array of scopes (object with id and name)
@@ -40,7 +40,7 @@ export function ScopesWidget(props: WidgetProps<Scope[]>) {
   return (
     <ConnectorScopes
       scopes={scopes}
-      availableScopes={availableScopes}
+      availableScopes={options?.['availableScopes'] as Scope[]}
       editable
       onAddScope={(newValue) => {
         onChange([...scopes, newValue])
