@@ -1,40 +1,54 @@
 import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
-import {initDbPGLite} from '@openint/db/db.pglite'
+import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import type {paths} from '../__generated__/openapi.types'
 import {createApp} from '../app'
+import {createTestOrganization} from './test-utils'
 
-const db = initDbPGLite()
-const app = createApp({db})
+describeEachDatabase({drivers: ['pglite'], migrate: true}, async (db) => {
+  const app = createApp({db})
 
-const clients = {
-  inMemory: wrapAsPathBasedClient(
-    createClient<paths>({
-      baseUrl: 'http://localhost/v1',
-      fetch: app.handle,
-    }),
-  ),
-  localhost: wrapAsPathBasedClient(
-    createClient<paths>({
-      baseUrl: 'http://localhost:4000/api/v1',
-      headers: {
-        Authorization: `Bearer ${process.env['OPENINT_API_KEY']}`,
+  const _inMemoryClient = createClient<paths>({
+    baseUrl: 'http://localhost/v1',
+    fetch: app.handle,
+  })
+
+  const clients = {
+    inMemory: wrapAsPathBasedClient(_inMemoryClient),
+
+    localhost: wrapAsPathBasedClient(
+      createClient<paths>({
+        baseUrl: 'http://localhost:4000/api/v1',
+        headers: {
+          Authorization: `Bearer ${process.env['OPENINT_API_KEY']}`,
+        },
+      }),
+    ),
+  }
+
+  const client = process.env['OPENINT_API_KEY']
+    ? clients.localhost
+    : clients.inMemory
+
+  let testOrgApiKey: string
+
+  beforeAll(async () => {
+    testOrgApiKey = await createTestOrganization(db).then((org) => org.api_key!)
+    _inMemoryClient.use({
+      onRequest: ({request}) => {
+        request.headers.set('Authorization', `Bearer ${testOrgApiKey}`)
       },
-    }),
-  ),
-}
+    })
+  })
 
-const client = process.env['OPENINT_API_KEY']
-  ? clients.localhost
-  : clients.inMemory
+  test('health check', async () => {
+    const res2 = await client['/health'].GET()
+    expect(res2.data).toBeTruthy()
+  })
 
-test('health check', async () => {
-  const res2 = await client['/health'].GET()
-  expect(res2.data).toBeTruthy()
-})
-
-test('list connections', async () => {
-  const res = await client['/connection'].GET()
-  expect(res.data).toBeTruthy()
-  
-  console.log('res.data', res.data)
+  test('list connections', async () => {
+    const res = await client['/connection'].GET()
+    // console.log('error', res.error)
+    expect(res.data).toBeTruthy()
+    // console.log('res.data', res.data)
+  })
 })
