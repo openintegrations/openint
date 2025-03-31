@@ -3,6 +3,7 @@ import {z} from 'zod'
 import {encodeApiKey} from '@openint/cdk'
 import {eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util'
+import {getOauthRedirectUri} from '../../../connectors/cnext/_defaults/oauth2/utils'
 import {core} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
 
@@ -13,7 +14,7 @@ const zOnboardingState = z.object({
   onboarding_marked_complete: z.boolean(),
 })
 
-export const onboardingRouter = router({
+export const organizationRouter = router({
   getOrganization: orgProcedure
     .meta({
       openapi: {method: 'GET', path: '/organization', enabled: false},
@@ -21,7 +22,10 @@ export const onboardingRouter = router({
     .input(z.void())
     .output(
       core.organization.extend({
-        metadata: z.object({webhook_url: z.string().nullish()}),
+        metadata: z.object({
+          webhook_url: z.string().nullish(),
+          oauth_redirect_url: z.string().nullish(),
+        }),
       }),
     )
     .query(async ({ctx}) => {
@@ -42,6 +46,9 @@ export const onboardingRouter = router({
         ...org,
         metadata: {
           webhook_url: org.metadata?.webhook_url ?? '',
+          oauth_redirect_url:
+            org.metadata?.oauth_redirect_url ??
+            await getOauthRedirectUri(ctx.viewer.orgId, org),
         },
       }
     }),
@@ -187,15 +194,20 @@ export const onboardingRouter = router({
         })
         .where(eq(schema.organization.id, org.id))
     }),
-  setWebhookUrl: orgProcedure
+  setMetadataUrl: orgProcedure
     .meta({
       openapi: {
         method: 'PUT',
-        path: '/organization/webhook-url',
+        path: '/organization/metadata-url',
         enabled: false,
       },
     })
-    .input(z.object({webhookUrl: z.string()}))
+    .input(
+      z.object({
+        urlType: z.enum(['webhook_url', 'oauth_redirect_url']),
+        url: z.string(),
+      }),
+    )
     .output(z.void())
     .mutation(async ({input, ctx}) => {
       const org = await ctx
@@ -211,32 +223,33 @@ export const onboardingRouter = router({
         })
       }
 
-      if (org.metadata?.webhook_url === input.webhookUrl) {
+      // Check if the URL is already set to the same value
+      if (org.metadata?.[input.urlType] === input.url) {
         return
       }
 
-      if (!input.webhookUrl.startsWith('https://')) {
+      // Validate URL based on type
+      if (
+        input.urlType === 'webhook_url' &&
+        !input.url.startsWith('https://')
+      ) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Invalid webhook URL. It must start with "https://".',
         })
       }
 
-      // Consider doing this
-      // const response = await fetch('/api/v1/organization/webhook-url', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({test: true, webhookUrl: input.webhookUrl}),
-      // })
-
-      // if (!response.ok) {
-      //   throw new TRPCError({
-      //     code: 'INTERNAL_SERVER_ERROR',
-      //     message: 'Failed to send test POST request to the webhook URL.',
-      //   })
-      // }
+      // For OAuth redirect URLs, ensure they are valid URLs
+      if (input.urlType === 'oauth_redirect_url') {
+        try {
+          new URL(input.url)
+        } catch (error) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Invalid OAuth redirect URL. Please provide a valid URL.',
+          })
+        }
+      }
 
       try {
         await ctx
@@ -245,15 +258,16 @@ export const onboardingRouter = router({
           .set({
             metadata: {
               ...org.metadata,
-              webhook_url: input.webhookUrl,
+              [input.urlType]: input.url,
             },
             updated_at: new Date().toISOString(),
           })
           .where(eq(schema.organization.id, org.id))
       } catch (error) {
-        console.error('Error updating webhook URL:', error); throw new TRPCError({
+        console.error(`Error updating ${input.urlType}:`, error)
+        throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to update webhook URL, please try again later',
+          message: `Failed to update ${input.urlType.replace(/_/g, ' ')}, please try again later`,
         })
       }
     }),
