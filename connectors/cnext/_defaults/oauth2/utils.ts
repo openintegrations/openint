@@ -165,5 +165,5 @@ export async function getOauthRedirectUri(
   if (!org) {
     throw new Error(`Organization not found: ${orgId}`)
   }
-  return org.metadata?.redirect_uri ?? getServerUrl(null) + '/connect/callback'
+  return org.metadata?.oauth_redirect_url ?? getServerUrl(null) + '/connect/callback'
 }
