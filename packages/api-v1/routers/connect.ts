@@ -94,7 +94,7 @@ export const connectRouter = router({
         })
       }
 
-      console.log('preConnect', input, ctx, ccfg)
+      console.log('preConnect input', input)
       const res = await connector.preConnect?.(
         ccfg.config,
         {
@@ -107,6 +107,7 @@ export const connectRouter = router({
         },
         input.data.input,
       )
+      console.log('preConnect output', res)
       return {
         connector_name: input.data.connector_name,
         output: res,

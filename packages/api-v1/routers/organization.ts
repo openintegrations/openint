@@ -1,7 +1,6 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
-import {encodeApiKey} from '@openint/cdk'
-import {eq, inArray, schema} from '@openint/db'
+import {dbUpsertOne, eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {getOauthRedirectUri} from '../../../connectors/cnext/_defaults/oauth2/utils'
 import {core} from '../models'
@@ -42,13 +41,25 @@ export const organizationRouter = router({
         })
       }
 
+      // create api key if not already
+      if (!org.api_key) {
+        console.log('Lazily creating api key for org', org.id)
+        org.api_key = `key_${makeUlid()}`
+        await dbUpsertOne(
+          ctx.as({role: 'system'}).db, // TODO: Allow orgs to update their own api key
+          schema.organization,
+          {id: org.id, api_key: org.api_key},
+          {insertOnlyColumns: ['api_key']},
+        )
+      }
+
       return {
         ...org,
         metadata: {
           webhook_url: org.metadata?.webhook_url ?? '',
           oauth_redirect_url:
             org.metadata?.oauth_redirect_url ??
-            await getOauthRedirectUri(ctx.viewer.orgId, org),
+            (await getOauthRedirectUri(ctx.viewer.orgId, org)),
         },
       }
     }),
@@ -70,7 +81,7 @@ export const organizationRouter = router({
     )
     .output(z.object({id: z.string()}))
     .mutation(async ({input, ctx}) => {
-      const apikey = encodeApiKey(input.id, `key_${makeUlid()}`)
+      const apikey = `key_${makeUlid()}`
       const metadata = {
         referrer: input.referrer,
         clerk_user_id: input.clerkUserId,
