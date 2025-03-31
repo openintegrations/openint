@@ -146,7 +146,18 @@ export function mapOauthParams(
   return result
 }
 
-export async function getOauthRedirectUri(orgId: string): Promise<string> {
+export async function getOauthRedirectUri(
+  orgId: string,
+  organization?: {metadata: {oauth_redirect_url?: string}},
+): Promise<string> {
+  // if organization is provided, use the oauth_redirect_url from the organization
+  if (organization) {
+    return (
+      organization.metadata?.oauth_redirect_url ??
+      getServerUrl(null) + '/connect/callback'
+    )
+  }
+  // if no organization is provided, get the organization from the database
   const db = initDbNeon(envRequired.DATABASE_URL)
   const org = await db.query.organization.findFirst({
     where: eq(schema.organization.id, orgId),

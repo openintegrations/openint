@@ -15,6 +15,7 @@ export default async function SettingsPage(props: PageProps) {
         orgId={viewer.orgId ?? ''}
         apiKey={org.api_key ?? ''}
         webhookUrl={org.metadata?.webhook_url ?? ''}
+        oauthRedirectUrl={org.metadata?.oauth_redirect_url ?? ''}
       />
     </ClientApp>
   )

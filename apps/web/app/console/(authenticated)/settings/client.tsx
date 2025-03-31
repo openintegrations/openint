@@ -10,18 +10,20 @@ interface SettingsContentProps {
   orgId: string
   apiKey: string
   webhookUrl: string
+  oauthRedirectUrl: string
 }
 
 export function SettingsContent({
   orgId,
   apiKey,
   webhookUrl,
+  oauthRedirectUrl,
 }: SettingsContentProps) {
   const trpc = useTRPC()
-  const setWebhook = useMutation(
-    trpc.setWebhookUrl.mutationOptions({
+  const setMetadataUrl = useMutation(
+    trpc.setMetadataUrl.mutationOptions({
       onSuccess: () => {
-        toast.success('Webhook URL saved')
+        toast.success('URL saved successfully')
       },
       onError: (error) => {
         toast.error(`Error: ${error.message}`)
@@ -29,8 +31,18 @@ export function SettingsContent({
     }),
   )
 
-  const handleSave = (value: string) => {
-    setWebhook.mutate({webhookUrl: value})
+  const handleWebhookSave = (value: string) => {
+    setMetadataUrl.mutate({
+      urlType: 'webhook_url',
+      url: value,
+    })
+  }
+
+  const handleOauthRedirectSave = (value: string) => {
+    setMetadataUrl.mutate({
+      urlType: 'oauth_redirect_url',
+      url: value,
+    })
   }
 
   return (
@@ -53,16 +65,16 @@ export function SettingsContent({
         inputName="Webhook URL"
         defaultValue={webhookUrl}
         placeholder="https://webhook.site/webhook-url"
-        onSave={handleSave}
-        isSaving={setWebhook.isPending}
+        onSave={handleWebhookSave}
+        isSaving={setMetadataUrl.isPending}
         className="mt-4 flex items-center"
       />
       <UrlInputForm
-        inputName="Oauth Redirect URL"
-        defaultValue={webhookUrl}
-        placeholder="https://webhook.site/webhook-url"
-        onSave={handleSave}
-        isSaving={setWebhook.isPending}
+        inputName="OAuth Redirect URL"
+        defaultValue={oauthRedirectUrl}
+        placeholder="https://app.example.com/oauth/callback"
+        onSave={handleOauthRedirectSave}
+        isSaving={setMetadataUrl.isPending}
         className="mt-4 flex items-center"
       />
     </div>
