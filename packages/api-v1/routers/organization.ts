@@ -48,7 +48,7 @@ export const organizationRouter = router({
           webhook_url: org.metadata?.webhook_url ?? '',
           oauth_redirect_url:
             org.metadata?.oauth_redirect_url ??
-            getOauthRedirectUri(ctx.viewer.orgId, org),
+            await getOauthRedirectUri(ctx.viewer.orgId, org),
         },
       }
     }),
