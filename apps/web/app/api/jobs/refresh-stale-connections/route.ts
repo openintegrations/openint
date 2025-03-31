@@ -34,13 +34,13 @@ export async function GET(request: NextRequest) {
     .where(
       and(
         isNotNull(
-          sql`schema.connection.settings->'oauth'->'credentials'->>'refresh_token'`,
+          sql`connection.settings->'oauth'->'credentials'->>'refresh_token'`,
         ),
         isNotNull(
-          sql`schema.connection.settings->'oauth'->'credentials'->>'expires_at'`,
+          sql`connection.settings->'oauth'->'credentials'->>'expires_at'`,
         ),
         lt(
-          sql`schema.connection.settings->'oauth'->'credentials'->>'expires_at'`,
+          sql`connection.settings->'oauth'->'credentials'->>'expires_at'`,
           new Date(Date.now() + 1000 * 60 * 30),
         ),
       ),
