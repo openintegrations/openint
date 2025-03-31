@@ -4,14 +4,8 @@ import type {PlaidError} from 'plaid'
 import {CountryCode, Products} from 'plaid'
 import type {PlaidLinkOnSuccessMetadata} from 'react-plaid-link'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
-import {connHelpers, makePostingsMap, zWebhookInput} from '@openint/cdk'
-import {A, R, z, zCast} from '@openint/util'
-import {
-  getPlaidAccountBalance,
-  getPlaidAccountFullName,
-  getPlaidAccountType,
-  plaidUnitForCurrency,
-} from './legacy/plaid-helpers'
+import {connHelpers, zWebhookInput} from '@openint/cdk'
+import {z, zCast} from '@openint/util'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {ErrorShape} from './plaid.types'
 import {zCountryCode, zLanguage, zPlaidEnvName, zProducts} from './PlaidClient'
@@ -84,53 +78,7 @@ export const plaidSchemas = {
     publicToken: z.string(),
     meta: zCast<PlaidLinkOnSuccessMetadata>().optional(),
   }),
-  /** "Manually" extending for now, this will get better / safer */
-  sourceState: z
-    .object({
-      /**
-       * Account ids to sync. Should this live in the stream config somehow?
-       * We should keep state to only incremental sync state for future
-       */
-      accountIds: z.array(z.string()).nullish(),
-      /** Date to sync since */
-      sinceDate: z.string().nullish() /** ISO8601 */,
-      transactionSyncCursor: z.string().nullish(),
-      /** ISO8601 */
-      investmentTransactionEndDate: z.string().nullish(),
-    })
-    .default({}),
-  sourceOutputEntities: R.mapToObj(
-    [
-      'transaction',
-      'account',
-      'investment_transaction',
-      'holding',
-      'merchant',
-    ] as const,
-    (e) => [e, z.unknown()],
-  ),
-  sourceOutputEntity: z.discriminatedUnion('entityName', [
-    z.object({
-      id: z.string(),
-      entityName: z.literal('account'),
-      entity: zCast<plaid.AccountBase>(),
-    }),
-    z.object({
-      id: z.string(),
-      entityName: z.literal('transaction'),
-      entity: zCast<plaid.Transaction | plaid.InvestmentTransaction>(),
-    }),
-    z.object({
-      id: z.string(),
-      entityName: z.literal('merchant'),
-      entity: zCast<{merchant_entity_id: string; name: string}>(),
-    }),
-  ]),
   webhookInput: zWebhookInput,
-
-  // Temp hack... As unkonwn causes type error during sourceSync, also need .type object
-  // otherwise zod-openapi does not like it https://github.com/asteasolutions/zod-to-openapi/issues/196
-  destinationState: z.undefined().openapi({type: 'object'}),
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(plaidSchemas)
@@ -149,61 +97,6 @@ export const plaidDef = {
     },
   },
   standardMappers: {
-    entity: {
-      account: ({entity: a}, extConn) => ({
-        id: a.account_id,
-        entityName: 'account',
-        entity: {
-          name: getPlaidAccountFullName(a, extConn.institution),
-          lastFour: a.mask,
-          // TODO: Map Plaid account type properly
-          type: getPlaidAccountType(a),
-          integrationName: extConn.institution?.name,
-          informationalBalances: {
-            current: getPlaidAccountBalance(a, 'current'),
-            available: getPlaidAccountBalance(a, 'available'),
-            limit: getPlaidAccountBalance(a, 'limit'),
-          },
-          defaultUnit: (('balances' in a && a.balances.iso_currency_code) ??
-            undefined) as Unit | undefined,
-        },
-      }),
-      transaction: ({entity: t}) => {
-        const curr = plaidUnitForCurrency(t)
-        const currencyAmount = A(-1 * (t.amount ?? 0), curr)
-        const accountExternalId = t.account_id as ExternalId
-        if (isInvestmentTransaction(t)) {
-          return {
-            id: t.investment_transaction_id,
-            entityName: 'transaction',
-            // TODO: Finish the mapper
-            entity: {date: t.date, description: t.name},
-          }
-        }
-
-        const externalCategory = t.category?.join('/')
-        return {
-          id: t.transaction_id,
-          entityName: 'transaction',
-          entity: {
-            date: t.date,
-            pendingTransactionExternalId:
-              t.pending_transaction_id as ExternalId | null,
-            description: t.name || '',
-            payee: t.merchant_name ?? undefined,
-            postingsMap: makePostingsMap({
-              main: {
-                accountExternalId,
-                amount: currencyAmount,
-              },
-              // Are there any uncategorized at all for Plaid?
-            }),
-            externalCategory,
-            externalStatus: t.pending ? 'pending' : undefined,
-          },
-        }
-      },
-    },
     // Should this run at runtime rather than sync time? That way we don't have to
     // keep resyncing the 10k institutions from Plaid to make this happen...
     integration: (ins) => ({
@@ -233,11 +126,5 @@ export const plaidDef = {
     },
   },
 } satisfies ConnectorDef<typeof plaidSchemas>
-
-function isInvestmentTransaction(
-  txn: plaid.Transaction | plaid.InvestmentTransaction,
-): txn is plaid.InvestmentTransaction {
-  return 'investment_transaction_id' in txn
-}
 
 export default plaidDef

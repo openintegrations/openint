@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {R, z} from '@openint/util'
+import {z} from '@openint/util'
 
 export const GREENHOUSE_ENTITY_NAMES = [
   'job', // Opening is on the job itself
@@ -15,12 +15,6 @@ export const greenhouseSchema = {
   connectionSettings: z.object({apiKey: z.string()}),
   preConnectInput: z.unknown(),
   connectInput: z.unknown(),
-  sourceOutputEntities: R.mapToObj(GREENHOUSE_ENTITY_NAMES, (e) => [
-    e,
-    z.unknown().optional(),
-  ]),
-  // need better typing...!
-  sourceState: z.unknown(),
 } satisfies ConnectorSchemas
 
 export const greenhouseHelpers = connHelpers(greenhouseSchema)

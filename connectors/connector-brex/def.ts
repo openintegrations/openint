@@ -1,9 +1,6 @@
-import type {Oas_transactions} from '@opensdks/sdk-brex'
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, zCcfgAuth} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
-
-type components = Oas_transactions['components']
+import {z} from '@openint/util'
 
 export const brexSchemas = {
   name: z.literal('brex'),
@@ -12,24 +9,6 @@ export const brexSchemas = {
   connectionSettings: z.object({
     accessToken: z.string(),
   }),
-  sourceOutputEntity: z.discriminatedUnion('entityName', [
-    z.object({
-      id: z.string(),
-      entityName: z.literal('account'),
-      entity: zCast<
-        | components['schemas']['CardAccount']
-        | components['schemas']['CashAccount']
-      >(),
-    }),
-    z.object({
-      id: z.string(),
-      entityName: z.literal('transaction'),
-      entity: zCast<
-        | components['schemas']['CardTransaction']
-        | components['schemas']['CashTransaction']
-      >(),
-    }),
-  ]),
 } satisfies ConnectorSchemas
 
 export const brexDef = {
@@ -57,20 +36,6 @@ export const brexDef = {
         // status: healthy vs. disconnected...
         // labels: test vs. production
       }
-    },
-    entity: {
-      account: (entity) => ({
-        id: entity.id,
-        entityName: 'account',
-        entity: {
-          name: 'name' in entity.entity ? entity.entity.name : 'Brex Card',
-        },
-      }),
-      // transaction: (entity) => ({
-      //   id: entity.id,
-      //   entityName: 'transaction',
-      //   entity: {date: entity.entity.transaction_date},
-      // }),
     },
   },
 } satisfies ConnectorDef<typeof brexSchemas>

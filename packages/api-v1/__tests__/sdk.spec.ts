@@ -17,7 +17,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
 
   const apiKeyClient = new Openint({
     apiKey: apiKey,
-    baseURL: 'http://localhost/api/v1',
+    baseURL: 'http://localhost/v1',
     fetch: appFetch,
   })
 
@@ -45,7 +45,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       const wrongApiKey = `key_${makeUlid()}`
       const wrongApiKeyClient = new Openint({
         apiKey: wrongApiKey,
-        baseURL: 'http://localhost/api/v1',
+        baseURL: 'http://localhost/v1',
         fetch: appFetch,
       })
 
@@ -56,7 +56,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       const tokenResponse = await apiKeyClient.createToken(customerId, {})
       const tokenClient = new Openint({
         customerToken: tokenResponse.token,
-        baseURL: 'http://localhost/api/v1',
+        baseURL: 'http://localhost/v1',
         fetch: appFetch,
       })
       const response = await tokenClient.getCurrentUser()
@@ -67,7 +67,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       const wrongToken = `token_${makeUlid()}`
       const wrongTokenClient = new Openint({
         customerToken: wrongToken,
-        baseURL: 'http://localhost/api/v1',
+        baseURL: 'http://localhost/v1',
         fetch: appFetch,
       })
 

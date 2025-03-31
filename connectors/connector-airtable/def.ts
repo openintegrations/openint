@@ -1,16 +1,11 @@
-import type {
-  ConnectorDef,
-  ConnectorSchemas,
-  EntityPayloadWithRaw,
-} from '@openint/cdk'
+import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
+import {z} from '@openint/util'
 import {zAirtableResourceSettings} from './AirtableClient'
 
 export const airtableSchemas = {
   name: z.literal('airtable'),
   connectionSettings: zAirtableResourceSettings,
-  destinationInputEntity: zCast<EntityPayloadWithRaw>(),
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(airtableSchemas)

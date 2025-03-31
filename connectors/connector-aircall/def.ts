@@ -1,16 +1,10 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, zId} from '@openint/cdk'
-import {R, z} from '@openint/util'
-
-export const AIRCALL_ENTITY_NAMES = ['call', 'contact'] as const
+import {z} from '@openint/util'
 
 export const aircallSchema = {
   name: z.literal('aircall'),
   connectionSettings: z.object({apiId: z.string(), apiToken: z.string()}),
-  sourceOutputEntities: R.mapToObj(AIRCALL_ENTITY_NAMES, (e) => [
-    e,
-    z.unknown().optional(),
-  ]),
   connectOutput: z.object({
     providerConfigKey: zId('ccfg'),
     connectionId: zId('conn'),

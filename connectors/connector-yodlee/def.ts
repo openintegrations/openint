@@ -1,19 +1,11 @@
-import type {ConnectorDef, ConnectorSchemas, Pta} from '@openint/cdk'
-import {connHelpers, makePostingsMap} from '@openint/cdk'
-import type {Brand} from '@openint/util'
-import {A, objectFromObject, parseDateTime, z, zCast} from '@openint/util'
-import {
-  getYodleeAccountBalance,
-  getYodleeAccountName,
-  getYodleeAccountType,
-} from './yodlee-utils'
+import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
+import {connHelpers} from '@openint/cdk'
+import {z} from '@openint/util'
 import {
   zProviderAccount,
   zUser,
   zYodleeInstitution,
   zYodleeProvider,
-  type YodleeAccount,
-  type YodleeTransaction,
 } from './yodlee.types'
 import {
   zAccessToken,
@@ -50,25 +42,6 @@ export const yodleeSchemas = {
       providerId: zYodleeId, // Technically optional
     })
     .openapi({refType: 'input'}),
-  sourceOutputEntity: z.discriminatedUnion('entityName', [
-    z.object({
-      id: z.string(),
-      entityName: z.literal('account'),
-      entity: zCast<YodleeAccount>(),
-    }),
-    z.object({
-      id: z.string(),
-      entityName: z.literal('transaction'),
-      entity: zCast<YodleeTransaction>(),
-    }),
-    z.object({
-      id: z.string(),
-      entityName: z.literal('commodity'),
-      entity: zCast<Yodlee.HoldingWithSecurity>(),
-    }),
-  ]),
-
-  // Should the mappers be in here instead? Or a separate function?
 } satisfies ConnectorSchemas
 export const helpers = connHelpers(yodleeSchemas)
 
@@ -77,110 +50,6 @@ export const yodleeDef = {
   schemas: yodleeSchemas,
   metadata: {verticals: ['banking'], logoUrl: '/_assets/logo-yodlee.svg'},
   standardMappers: {
-    entity: {
-      account: ({entity: a}, extConn) => ({
-        id: `${a.id}`,
-        entityName: 'account',
-        entity: {
-          name: getYodleeAccountName(a),
-          lastFour: a.accountNumber?.slice(-4) ?? null,
-          type: getYodleeAccountType(a),
-          integrationName: extConn.provider?.name,
-          removed: a.isDeleted ?? false,
-          informationalBalances: {
-            available: getYodleeAccountBalance(a, 'availableBalance'),
-            current: getYodleeAccountBalance(a, 'balance'),
-          },
-          defaultUnit: a.currentBalance?.currency as Unit,
-          balancesMap: objectFromObject(
-            a._balancesMap ?? {},
-            (_, val): Pta.Balance => {
-              if (val.holdings.length > 0) {
-                return {
-                  autoShiftPaddingDate: true,
-                  holdings: [
-                    // Not all holdings come back with a symbol
-                    ...val.holdings.map((h): Pta.Holding | null =>
-                      h.symbol
-                        ? {
-                            unit: h.symbol as Unit,
-                            quantity: h.quantity,
-                            costBasis: h.costBasis
-                              ? A(h.costBasis.amount, h.costBasis.currency)
-                              : null,
-                            lastQuote: h.price
-                              ? A(h.price.amount, h.price.currency)
-                              : null,
-                            lastQuoteDate:
-                              parseDateTime(h.lastUpdated)?.toISODate() ?? null,
-                          }
-                        : null,
-                    ),
-                    // Must add cash value which is not included in holdings.
-                    val.balances.cash?.amount
-                      ? A(val.balances.cash.amount, val.balances.cash.currency)
-                      : null,
-                  ].filter((h): h is NonNullable<typeof h> => !!h),
-                }
-              }
-              const current = getYodleeAccountBalance(
-                {
-                  accountType: a.accountType,
-                  CONTAINER: a.CONTAINER,
-                  ...val.balances,
-                },
-                'balance',
-              )
-              return {
-                holdings: current ? [current] : [],
-                autoShiftPaddingDate: true,
-                disabled: true,
-              }
-            },
-          ),
-        },
-      }),
-      transaction: ({entity: t}) => {
-        const accountExternalId = `${t.accountId}` as ExternalId
-        const sign = t.baseType === 'DEBIT' ? -1 : 1
-        const currAmount = A(t.amount.amount * sign, t.amount.currency)
-
-        const isStockTrade =
-          t.CONTAINER === 'investment' &&
-          (t.type === 'BUY' || t.type === 'SELL') &&
-          t.quantity &&
-          t.symbol
-
-        const stockSign = t.type === 'SELL' ? -1 : 1
-
-        const stockAmount = isStockTrade
-          ? A((t.quantity ?? 0) * stockSign, t.symbol ?? '')
-          : undefined
-        return {
-          id: `${t.id}`,
-          entityName: 'transaction',
-          entity: {
-            date: t.date,
-            description: t.description.simple || t.description.original || '',
-            payee: t.merchant?.name,
-
-            labelsMap: {},
-            externalCategory: t.category,
-            externalStatus: t.status.toLowerCase() as Brand<
-              string,
-              'externalStatus'
-            >,
-            postingsMap: makePostingsMap(
-              {main: {accountExternalId, amount: currAmount}},
-              // https://stackoverflow.com/questions/38578339/no-way-to-get-per-transaction-commission-fee-in-new-yodlee-api-ysl-restserver
-              // How do we get fees from yodlee transaction?
-              {trade: stockAmount && {amount: stockAmount, accountExternalId}},
-            ),
-            removed: t.isDeleted,
-          },
-        }
-      },
-    },
     // is the `id` actually externalId?
     integration: (int) => ({
       logoUrl: int.logo,

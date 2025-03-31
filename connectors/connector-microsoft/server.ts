@@ -1,11 +1,5 @@
 import type {MsgraphSDK} from '@opensdks/sdk-msgraph'
-import {initMsgraphSDK} from '@opensdks/sdk-msgraph'
-import {
-  extractId,
-  initNangoSDK,
-  nangoProxyLink,
-  type ConnectorServer,
-} from '@openint/cdk'
+import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
 import type {microsoftSchemas} from './def'
 
 function mergeScopes(
@@ -48,27 +42,6 @@ const integrations = [
 ]
 
 export const microsoftServer = {
-  newInstance: ({settings, fetchLinks}) => {
-    const msGraph = initMsgraphSDK({
-      headers: {
-        authorization: `Bearer ${settings.oauth.credentials.access_token}`,
-      },
-      links: (defaultLinks) => [
-        (req, next) => {
-          if (msGraph.clientOptions.baseUrl) {
-            req.headers.set(
-              nangoProxyLink.kBaseUrlOverride,
-              msGraph.clientOptions.baseUrl,
-            )
-          }
-          return next(req)
-        },
-        ...fetchLinks,
-        ...defaultLinks,
-      ],
-    })
-    return msGraph
-  },
   async preConnect(_, context) {
     // This returns auth options for Nango connect because it is an oauth integration
     // this behavior is not type checked though and could use some improvement
