@@ -29,6 +29,10 @@ export const envConfig = {
     VERCEL_URL: z.string().optional(),
     VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
     INTEGRATION_TEST_SECRET: z.string().optional(),
+
+    // Secret for cron jobs
+    CRON_SECRET: z.string(),
+    REFRESH_CONNECTION_CONCURRENCY: z.number().optional().default(3),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -77,6 +81,9 @@ export const envConfig = {
     VERCEL_URL: process.env['VERCEL_URL'],
     INTEGRATION_TEST_SECRET: process.env['INTEGRATION_TEST_SECRET'],
     PGLITE: process.env['PGLITE'],
+    CRON_SECRET: process.env['CRON_SECRET'],
+    REFRESH_CONNECTION_CONCURRENCY:
+      process.env['REFRESH_CONNECTION_CONCURRENCY'],
     // JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
   }),
@@ -89,6 +96,10 @@ export const envRequired = proxyRequired(env, {
     return new Error(`Missing required env var: ${key}`)
   },
 })
+
+export const isProduction =
+  envRequired.VERCEL_ENV === 'production' ||
+  process.env['NODE_ENV'] === 'production'
 
 export type Env = typeof env
 
