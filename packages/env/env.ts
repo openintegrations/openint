@@ -32,7 +32,7 @@ export const envConfig = {
 
     // Secret for cron jobs
     CRON_SECRET: z.string(),
-    REFRESH_CONNECTION_CONCURRENCY: z.number().optional().default(3),
+    REFRESH_CONNECTION_CONCURRENCY: z.coerce.number().optional().default(3),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
