@@ -12,7 +12,7 @@ export interface RouterMeta extends OpenApiMeta {
 }
 
 export const trpc = initTRPC
-  .meta<OpenApiMeta>()
+  .meta<RouterMeta>()
   .context<RouterContext>()
   .create({allowOutsideOfServer: true})
 

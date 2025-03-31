@@ -30,15 +30,6 @@ module.exports = [
     },
   },
   {
-    name: 'beancount',
-    dirName: 'connector-beancount',
-    varName: 'connectorBeancount',
-    imports: {
-      def: '@openint/connector-beancount/def',
-      server: '@openint/connector-beancount/server',
-    },
-  },
-  {
     name: 'brex',
     dirName: 'connector-brex',
     varName: 'connectorBrex',

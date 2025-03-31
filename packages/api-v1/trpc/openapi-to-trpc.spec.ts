@@ -1,143 +1,77 @@
-import type {Id} from '@openint/cdk'
-import {schema} from '@openint/db'
-import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {getServerUrl} from '@openint/env'
-import {makeUlid} from '@openint/util'
-import {createApp} from '../app'
+import {initTRPC} from '@trpc/server'
+import {
+  createOpenApiFetchHandler,
+  generateOpenApiDocument,
+  type OpenApiMeta,
+} from 'trpc-to-openapi'
+import {z} from '@openint/util'
 
-const testApiKey = `apikey_${makeUlid()}`
-const testOrgId = `org_${makeUlid()}` as Id['org']
+const trpc = initTRPC.meta<OpenApiMeta>().create()
 
-describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
-  let app: ReturnType<typeof createApp>
+const zExpand = z.enum([
+  'integration',
+  'connector_config',
+  'connector_config.connector',
+  'integration.connector',
+])
+const router = trpc.router({
+  arrayParams: trpc.procedure
+    .meta({openapi: {method: 'GET', path: '/array-params'}})
+    .input(z.object({expand: z.array(zExpand)}))
+    .output(z.object({expand: z.array(zExpand)}))
+    .query(({input}) => {
+      return input
+    }),
+})
 
-  beforeAll(async () => {
-    await db.insert(schema.organization).values({
-      id: testOrgId,
-      api_key: testApiKey,
-    })
+const handler = (req: Request) =>
+  createOpenApiFetchHandler({endpoint: '/', req, router})
 
-    await db.insert(schema.connector_config).values({
-      id: `ccfg_google_${makeUlid()}`,
-      org_id: testOrgId,
-      config: {
-        oauth: {
-          client_id: 'client_222',
-          client_secret: 'xxx',
-          scopes:
-            'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/gmail.readonly',
-        },
-        integrations: {
-          drive: {
-            enabled: true,
-            scopes: 'https://www.googleapis.com/auth/drive',
+test('handle single value', async () => {
+  const res = await handler(
+    new Request('http://localhost:3000/array-params?expand=integration'),
+  )
+  expect(res.status).toBe(200)
+  expect(await res.json()).toEqual({expand: ['integration']})
+})
+
+test('handle multiple values', async () => {
+  const res = await handler(
+    new Request(
+      'http://localhost:3000/array-params?expand=integration&expand=connector_config',
+    ),
+  )
+  expect(res.status).toBe(200)
+  expect(await res.json()).toEqual({
+    expand: ['integration', 'connector_config'],
+  })
+})
+
+test('oas spec', async () => {
+  const oas = generateOpenApiDocument(router, {
+    title: 'test',
+    version: '0.0.0',
+    baseUrl: 'http://localhost:3000',
+  })
+  expect(oas.paths?.['/array-params']?.get?.parameters).toMatchInlineSnapshot(`
+    [
+      {
+        "in": "query",
+        "name": "expand",
+        "required": true,
+        "schema": {
+          "items": {
+            "enum": [
+              "integration",
+              "connector_config",
+              "connector_config.connector",
+              "integration.connector",
+            ],
+            "type": "string",
           },
-          gmail: {
-            enabled: false,
-            scopes: 'https://www.googleapis.com/auth/gmail.readonly',
-          },
+          "type": "array",
         },
       },
-      display_name: 'Test Google Connection',
-      disabled: false,
-      metadata: {
-        createdBy: 'test-suite',
-        version: '1.0',
-      },
-    })
-    app = createApp({db})
-  })
-
-  test('GET /connector-config with expand options', async () => {
-    const headers = new Headers()
-    headers.set('authorization', `Bearer ${testApiKey}`)
-    headers.set('accept', 'application/json')
-
-    const url = new URL('http://localhost/api/v1/connector-config')
-    url.searchParams.set('expand', 'enabled_integrations,connector')
-
-    const req = new Request(url, {headers})
-
-    const response = await app.handle(req)
-    const result = await response.json()
-
-    expect(response.status).toBe(200)
-    expect(result).toBeTruthy()
-
-    const items = result.items || []
-
-    expect(items[0].integrations).toEqual({
-      drive: {
-        enabled: true,
-        scopes: 'https://www.googleapis.com/auth/drive',
-      },
-    })
-    expect(items[0].connector).toEqual({
-      name: 'google',
-      logo_url:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public//_assets/logo-google.svg',
-    })
-    expect(items[0].display_name).toEqual('Test Google Connection')
-    expect(items[0].disabled).toEqual(false)
-  })
-
-  test('GET /connector-config with invalid expand options', async () => {
-    const headers = new Headers()
-    headers.set('authorization', `Bearer ${testApiKey}`)
-    headers.set('accept', 'application/json')
-
-    const url = new URL('http://localhost/api/v1/connector-config')
-    url.searchParams.set('expand', 'foo')
-
-    const req = new Request(url, {headers})
-
-    const response = await app.handle(req)
-    const result = await response.json()
-
-    expect(response.status).toBe(400)
-    expect(result.issues[0].message).toEqual(
-      'Invalid expand option. Valid options are: connector, enabled_integrations, connection_count',
-    )
-  })
-
-  test('GET /connector with expand options', async () => {
-    const headers = new Headers()
-    headers.set('authorization', `Bearer ${testApiKey}`)
-    headers.set('accept', 'application/json')
-
-    const url = new URL(getServerUrl(null) + '/api/v1/connector')
-    url.searchParams.set('expand', 'integrations')
-
-    const req = new Request(url, {headers})
-
-    const response = await app.handle(req)
-    const result = await response.json()
-
-    expect(response.status).toBe(200)
-    expect(result).toBeTruthy()
-    expect(result.length).toBeGreaterThan(0)
-
-    const googleConnector = result.find((item: any) => item.name === 'google')
-    expect(googleConnector).toBeDefined()
-    expect(googleConnector.integrations).toBeDefined()
-  })
-
-  test('GET /connector with invalid expand options', async () => {
-    const headers = new Headers()
-    headers.set('authorization', `Bearer ${testApiKey}`)
-    headers.set('accept', 'application/json')
-
-    const url = new URL(getServerUrl(null) + '/api/v1/connector')
-    url.searchParams.set('expand', 'foo')
-
-    const req = new Request(url, {headers})
-
-    const response = await app.handle(req)
-    const result = await response.json()
-
-    expect(response.status).toBe(400)
-    expect(result.issues[0].message).toEqual(
-      'Invalid expand option. Valid options are: integrations',
-    )
-  })
+    ]
+  `)
 })

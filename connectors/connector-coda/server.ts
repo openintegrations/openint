@@ -18,16 +18,6 @@ export const codaServer = {
       })
       .then((r) => r.response.clone())
   },
-
-  passthrough(instance, input) {
-    const headers = new Headers(input.headers as Record<string, string>)
-    headers.delete('authorization') // Do not allow this to be overwritten
-    return instance.request(input.method, input.path, {
-      headers,
-      params: {query: input.query},
-      body: JSON.stringify(input.body),
-    })
-  },
 } satisfies ConnectorServer<typeof codaSchemas, CodaSDK>
 
 export default codaServer

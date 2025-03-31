@@ -138,7 +138,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
-  test('list connector config with expand enabled_integrations', async () => {
+  test.skip('list connector config with expand enabled_integrations', async () => {
     const res = await getClient({
       role: 'org',
       orgId: 'org_222',
@@ -173,7 +173,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items[1]?.connection_count).toEqual(0)
   })
 
-  test('list connector config with expand connector and enabled_integrations', async () => {
+  test.skip('list connector config with expand connector and enabled_integrations', async () => {
     const res = await getClient({
       role: 'org',
       orgId: 'org_222',

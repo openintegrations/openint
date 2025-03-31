@@ -49,12 +49,18 @@ export function CommandInline(props: CommandComponentProps) {
   )
 }
 
-export function CommandPopover(props: CommandComponentProps) {
+/** Rename to CommandMenuButton or CommandPopoverButton */
+export function CommandPopover({
+  className,
+  ...props
+}: CommandComponentProps & {
+  className?: string
+}) {
   const [open, setOpen] = React.useState(false)
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
+        <Button variant="ghost" className={cn('h-8 w-8 p-0', className)}>
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />
         </Button>
@@ -132,7 +138,6 @@ export function CommandButton<
   command: CommandDraft<TDef, TKey, TCtx>
   ctx: TCtx
 } & ButtonProps) {
-
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const _cmd = prepareCommand([key as string, definitions[key]!])
   const cmd = {..._cmd, ..._cmd.useCommand?.(params ?? {})}

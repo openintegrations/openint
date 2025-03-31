@@ -20,13 +20,13 @@ export function getTestTRPCClient(
   viewerOrKey: Viewer | {api_key: string},
 ) {
   const handler = router
-    ? createFetchHandlerTRPC({...opts, router, endpoint: '/api/v1/trpc'})
+    ? createFetchHandlerTRPC({...opts, router, endpoint: '/v1/trpc'})
     : createApp(opts).handle
 
   return createTRPCClient<AppRouter>({
     links: [
       httpLink({
-        url: 'http://localhost/api/v1/trpc',
+        url: 'http://localhost/v1/trpc',
         fetch: (input, init) => handler(new Request(input, init)),
         headers:
           'api_key' in viewerOrKey

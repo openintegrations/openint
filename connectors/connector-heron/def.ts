@@ -1,21 +1,12 @@
-import type {HeronSDKTypes} from '@opensdks/sdk-heron'
-import type {ConnectorDef, ConnectorSchemas, EntityPayload} from '@openint/cdk'
+import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
-
-type components = HeronSDKTypes['oas']['components']
+import {z} from '@openint/util'
 
 export const heronSchemas = {
   name: z.literal('heron'),
   connectorConfig: z.object({apiKey: z.string()}),
   // is customerId actually needed here?
   // How do we create default connections for integrations that are basically single connection?
-  destinationInputEntity: zCast<EntityPayload>(),
-  sourceOutputEntity: z.object({
-    id: z.string(),
-    entityName: z.literal('transaction'),
-    entity: zCast<components['schemas']['TransactionEnriched']>(),
-  }),
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(heronSchemas)
@@ -40,16 +31,6 @@ export const heronDef = {
         // status: healthy vs. disconnected...
         // labels: test vs. production
       }
-    },
-    entity: {
-      transaction: (entity) => ({
-        id: entity.id,
-        entityName: 'transaction',
-        entity: {
-          date: entity.entity.date ?? '',
-          description: entity.entity.description ?? '',
-        },
-      }),
     },
   },
 } satisfies ConnectorDef<typeof heronSchemas>

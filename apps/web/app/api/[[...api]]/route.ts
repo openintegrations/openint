@@ -1,9 +1,15 @@
+import {modifyRequest} from '@opensdks/fetch-links'
 import {createApp} from '@openint/api-v1'
 import {db} from '@/lib-server/globals'
 
 const app = createApp({db})
 
-const handler = app.handle
+/** Elysia will assume that it is the root route, so we need to modify the url to correspond to it */
+const handler = (req: Request) => {
+  const url = new URL(req.url)
+  url.pathname = url.pathname.replace(/^\/api/i, '')
+  return app.handle(modifyRequest(req, {url: url.toString()}))
+}
 
 export {
   handler as DELETE,

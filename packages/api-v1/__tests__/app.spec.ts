@@ -21,20 +21,20 @@ afterAll(async () => {
 
 describe('elysia', () => {
   test('GET /health', async () => {
-    const res = await app.handle(new Request('http://localhost/api/health'))
+    const res = await app.handle(new Request('http://localhost/health'))
     expect(await res.json()).toBeTruthy()
   })
 
   test('GET /health with loopback link', async () => {
     const handler = (req: Request) =>
       applyLinks(req, [loopbackLink(), app.handle])
-    const res = await handler(new Request('http://localhost/api/health'))
+    const res = await handler(new Request('http://localhost/health'))
     expect(await res.json()).toBeTruthy()
   })
 
   test('POST /health', async () => {
     const res = await app.handle(
-      new Request('http://localhost/api/health', {
+      new Request('http://localhost/health', {
         method: 'POST',
         body: JSON.stringify({foo: 'bar'}),
         headers: {'Content-Type': 'application/json'},
@@ -47,13 +47,13 @@ describe('elysia', () => {
 
 describe('openapi route', () => {
   test('GET /health', async () => {
-    const res = await app.handle(new Request('http://localhost/api/v1/health'))
+    const res = await app.handle(new Request('http://localhost/v1/health'))
     expect(await res.json()).toMatchObject({ok: true})
   })
 
   test('POST /health', async () => {
     const res = await app.handle(
-      new Request('http://localhost/api/v1/health', {
+      new Request('http://localhost/v1/health', {
         method: 'POST',
         body: JSON.stringify({foo: 'bar'}),
         headers: {'Content-Type': 'application/json'},
@@ -64,15 +64,15 @@ describe('openapi route', () => {
   })
 
   test('healthcheck bypass elysia', async () => {
-    const handler = createFetchHandlerOpenAPI({endpoint: '/api/v1', db})
-    const res = await handler(new Request('http://localhost/api/v1/health'))
+    const handler = createFetchHandlerOpenAPI({endpoint: '/v1', db})
+    const res = await handler(new Request('http://localhost/v1/health'))
     expect(await res.json()).toMatchObject({ok: true})
   })
 
   test('POST healthcheck bypass elysia', async () => {
-    const handler = createFetchHandlerOpenAPI({endpoint: '/api/v1', db})
+    const handler = createFetchHandlerOpenAPI({endpoint: '/v1', db})
     const res = await handler(
-      new Request('http://localhost/api/v1/health', {
+      new Request('http://localhost/v1/health', {
         method: 'POST',
         body: JSON.stringify({foo: 'bar'}),
         headers: {'Content-Type': 'application/json'},
@@ -85,7 +85,7 @@ describe('openapi route', () => {
   // openapi.json to avoid confusion in the documentation
   test('with OpenAPI client', async () => {
     const openapiClient = createClient<paths>({
-      baseUrl: 'http://localhost/api/v1',
+      baseUrl: 'http://localhost/v1',
       fetch: app.handle,
     })
 
@@ -99,7 +99,7 @@ describe('openapi route', () => {
 
   test('with OpenAPI client with links', async () => {
     const openapiClient = createClient<paths>({
-      baseUrl: 'http://localhost/api/v1',
+      baseUrl: 'http://localhost/v1',
       fetch: (req) => applyLinks(req, [logLink(), app.handle]),
     })
     const res = await openapiClient.GET('/health')
@@ -110,14 +110,14 @@ describe('openapi route', () => {
 describe('trpc route', () => {
   test('query health', async () => {
     const res = await app.handle(
-      new Request('http://localhost/api/v1/trpc/health'),
+      new Request('http://localhost/v1/trpc/health'),
     )
     expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
   })
 
   test('mutation health', async () => {
     const res = await app.handle(
-      new Request('http://localhost/api/v1/trpc/healthEcho', {
+      new Request('http://localhost/v1/trpc/healthEcho', {
         method: 'POST',
         body: JSON.stringify({foo: 'bar'}),
         headers: {'Content-Type': 'application/json'},
@@ -129,9 +129,9 @@ describe('trpc route', () => {
   })
 
   test('query health bypass elysia', async () => {
-    const handler = createFetchHandlerTRPC({endpoint: '/api/v1/trpc', db})
+    const handler = createFetchHandlerTRPC({endpoint: '/v1/trpc', db})
     const res = await handler(
-      new Request('http://localhost/api/v1/trpc/health'),
+      new Request('http://localhost/v1/trpc/health'),
     )
     expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
   })
@@ -140,7 +140,7 @@ describe('trpc route', () => {
     const client = createTRPCClient<AppRouter>({
       links: [
         httpLink({
-          url: 'http://localhost/api/v1/trpc',
+          url: 'http://localhost/v1/trpc',
           fetch: (input, init) => app.handle(new Request(input, init)),
         }),
       ],

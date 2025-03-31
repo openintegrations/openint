@@ -10,14 +10,9 @@ const isDevOrStaging =
 const nextConfig = {
   // TODO: Figure out why this is still needed. Does not appear to be needed in byos anymore...
   transpilePackages: [
-    path.resolve(__dirname, '../app-config'),
     // Should we generate this list from fs also?
     path.resolve(__dirname, '../../kits/cdk'),
     path.resolve(__dirname, '../../kits/connect'),
-    path.resolve(__dirname, '../../kits/file-picker'),
-    path.resolve(__dirname, '../../packages/engine-backend'),
-    path.resolve(__dirname, '../../packages/engine-frontend'),
-    path.resolve(__dirname, '../../packages/ui'),
     path.resolve(__dirname, '../../packages/ui-v1'),
     path.resolve(__dirname, '../../packages/shadcn'),
     path.resolve(__dirname, '../../packages/util'),
@@ -65,47 +60,48 @@ const nextConfig = {
         destination: '/api/v1/:path*',
       },
 
-      // // connect.openint.dev/* -> /connect/*
-      // {
-      //   source: '/:path*',
-      //   has: [
-      //     {
-      //       type: 'host',
-      //       value: 'connect.openint.dev',
-      //     },
-      //   ],
-      //   destination: '/connect/:path*',
-      // },
+      // connect.openint.dev/* -> /connect/*
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'connect.openint.dev',
+          },
+        ],
+        destination: '/connect/:path*',
+      },
 
-      // // app.openint.dev/* -> old vercel project
-      // {
-      //   source: '/:path*',
-      //   has: [
-      //     {
-      //       type: 'host',
-      //       value: 'app.openint.dev',
-      //     },
-      //   ],
-      //   destination:
-      //     // NOTE: may not work with clerk
-      //     // latest v0 branch on vercel openint project production environment
-      //     'https://openint-git-v0-openint-dev.vercel.app/:path*',
-      // },
+      // app.openint.dev/* -> old vercel project
+      // THIS IS NOT CURRENTLY IN USE AS WE HAVEN'T MIGRATED IT TO THE V1 VERCEL PROJECT
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'app.openint.dev',
+          },
+        ],
+        destination:
+          // NOTE: may not work with clerk
+          // latest v0 branch on vercel openint project production environment
+          'https://openint-git-v0-openint-dev.vercel.app/:path*',
+      },
 
-      // // doubleo.openint.dev/* -> old vercel doubleo environment
-      // {
-      //   source: '/:path*',
-      //   has: [
-      //     {
-      //       type: 'host',
-      //       value: 'doubleo.openint.dev',
-      //     },
-      //   ],
-      //   // NOTE: may not work with clerk
-      //   // v0 branch on vercel openint project double0 environment
-      //   // Pinned at https://github.com/openintegrations/openint/commit/7df4e32a5ef2ae87d185947e0bca9bde549529fb
-      //   destination: 'https://openint-me9swzkzo-openint-dev.vercel.app/:path*',
-      // },
+      // doubleo.openint.dev/* -> old vercel doubleo environment
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'doubleo.openint.dev',
+          },
+        ],
+        // NOTE: may not work with clerk
+        // v0 branch on vercel openint project double0 environment
+        // Pinned at https://github.com/openintegrations/openint/commit/7df4e32a5ef2ae87d185947e0bca9bde549529fb
+        destination: 'https://openint-me9swzkzo-openint-dev.vercel.app/:path*',
+      },
     ],
     afterFiles: [],
     fallback: [],

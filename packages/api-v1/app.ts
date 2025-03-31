@@ -14,12 +14,13 @@ export interface CreateAppOptions
 
 // It's annoying how elysia does not really allow for dependency injection like TRPC, so we do ourselves
 export function createApp({db}: CreateAppOptions) {
-  const app = new Elysia({prefix: '/api'})
+  const app = new Elysia()
     .get('/health', () => ({healthy: true}))
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}))
     .use(
       swagger({
-        // For some reason spec.content doesn't work. so we are forced tos specify url instead
+        // TODO: Figure out why spec.content doesn't work. so we are forced tos specify url instead
+        // and we need the /api prefix to work with next.js. This is really not ideal though.
         scalarConfig: {spec: {url: '/api/v1/openapi.json'}},
         path: '/v1',
       }),
@@ -30,10 +31,10 @@ export function createApp({db}: CreateAppOptions) {
     // no other settings seems to work when mounted inside next.js. Direct elysia listen works
     // in a more consistent way and we should probably add some test specifically for next.js mounted behavior
     .all('/v1/trpc/*', ({request}) =>
-      createFetchHandlerTRPC({endpoint: '/api/v1/trpc', db})(request),
+      createFetchHandlerTRPC({endpoint: '/v1/trpc', db})(request),
     )
     .all('/v1/*', ({request}) =>
-      createFetchHandlerOpenAPI({endpoint: '/api/v1', db})(request),
+      createFetchHandlerOpenAPI({endpoint: '/v1', db})(request),
     )
   return app
 }

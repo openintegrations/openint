@@ -100,11 +100,21 @@ export const core = {
     }),
   connector: zConnector.openapi({ref: 'core.connector', title: 'Connector'}),
   integration: z
-    .object({})
+    .object({
+      connector_name: z.string(),
+      name: z.string(),
+      logo_url: z.string().nullish(),
+      stage: z.enum(['alpha', 'beta', 'ga']).nullish(),
+      platforms: z.array(z.enum(['web', 'mobile', 'desktop'])).nullish(),
+      category: z.string().nullish(),
+      auth_type: z.string().nullish(),
+      version: z.string().nullish(),
+    })
     .passthrough()
     .openapi({ref: 'core.integration', title: 'Integration'}),
   customer: coreBase
     .extend({
+      id: z.string(),
       connection_count: z.number(),
     })
     .openapi({ref: 'core.customer', title: 'Customer'}),
@@ -114,14 +124,19 @@ export type Core = {
   [k in keyof typeof core]: z.infer<(typeof core)[k]>
 }
 
-export type ConnectorConfigExtended = Core['connector_config'] & {
+// MARK: - Connector Configs
+
+type ConnectorConfigExtended = {
   connector: Core['connector']
   integrations: Record<string, Core['integration']>
   connection_count: number
 }
 
-export type ConnectorConfig<T extends keyof ConnectorConfigExtended> =
-  ConnectorConfigExtended & Pick<ConnectorConfigExtended, T>
+export type ConnectorConfig<
+  T extends keyof ConnectorConfigExtended = keyof ConnectorConfigExtended,
+> = Core['connector_config'] & Partial<Pick<ConnectorConfigExtended, T>>
+
+// MARK: - Connectors
 
 interface ConnectorRelations {
   integrations: Array<Core['integration']>
@@ -129,5 +144,22 @@ interface ConnectorRelations {
 
 export type ConnectorExpanded<K extends keyof ConnectorRelations> =
   Core['connector'] & Partial<Pick<ConnectorRelations, K>>
+
+// MARK: - Connections
+
+interface ConnectionRelations {
+  connector_config: Core['connector_config']
+  customer: Core['customer']
+  connector: Core['connector']
+  integration: Core['integration']
+}
+
+export type ConnectionExpanded<
+  K extends keyof ConnectionRelations = keyof ConnectionRelations,
+> = Core['connection'] & Partial<Pick<ConnectionRelations, K>>
+
+// MARK: - Customer
 export type Customer = Core['customer']
+
+// MARK: - Event
 export type Event = Core['event']
