@@ -170,12 +170,3 @@ export interface WebhookReturnType<TEntity, TSettings> {
     body: Record<string, unknown>
   }
 }
-
-export const zPassthroughInput = z.object({
-  method: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']),
-  path: z.string(),
-  query: z.record(z.unknown()).optional(),
-  headers: z.record(z.unknown()).optional(),
-  body: z.record(z.unknown()).optional(),
-})
-export type PassthroughInput = z.infer<typeof zPassthroughInput>

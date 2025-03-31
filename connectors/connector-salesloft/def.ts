@@ -1,7 +1,7 @@
-import oas from '@opensdks/sdk-salesloft/salesloft.oas.json'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
 import {z} from '@openint/util'
+import oas from '@opensdks/sdk-salesloft/salesloft.oas.json'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 

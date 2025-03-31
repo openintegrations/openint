@@ -1,4 +1,3 @@
-import type {Pta} from '@openint/cdk'
 import {A, DateTime, R} from '@openint/util'
 import type {YodleeAccount, YodleeBalances} from './yodlee.types'
 
@@ -19,7 +18,7 @@ export function getYodleeAccountName(account: YodleeAccount) {
     .join(' - ')}`
 }
 
-export function getYodleeAccountType(acct: YodleeAccount): Pta.AccountType {
+export function getYodleeAccountType(acct: YodleeAccount) {
   switch (acct.CONTAINER) {
     case 'bank':
       return 'asset/bank'

@@ -1,7 +1,7 @@
 import oas from '@opensdks/sdk-apollo/apollo.oas.json'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
-import {R, z} from '@openint/util'
+import {z} from '@openint/util'
 
 export const APOLLO_ENTITY_NAME = ['contact', 'account'] as const
 
@@ -13,7 +13,6 @@ export const apolloSchemas = {
   // }),
   // TODO: Migrate away from nango...
   connectionSettings: oauthBaseSchema.connectionSettings,
-  sourceOutputEntities: R.mapToObj(APOLLO_ENTITY_NAME, (k) => [k, z.unknown()]),
 } satisfies ConnectorSchemas
 
 export const apolloHelpers = connHelpers(apolloSchemas)

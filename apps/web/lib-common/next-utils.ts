@@ -1,5 +1,5 @@
 /* eslint-disable promise/no-nesting */
-import {TRPCError} from '@trpc/server'
+import {TRPCError} from '@openint/api-v1'
 import type {z} from '@openint/util'
 
 /** Maybe there is a next.js type for this? */

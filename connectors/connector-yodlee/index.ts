@@ -1,11 +1,9 @@
 import yodleeClientConnector from './client'
 import yodleeDef from './def'
-import {yodleeServerConnector} from './server'
 
 export const yodleeProvider = {
   ...yodleeDef,
   ...yodleeClientConnector,
-  ...yodleeServerConnector,
 }
 
 // codegen:start {preset: barrel, include: "./{*.{ts,tsx},*/index.{ts,tsx}}", exclude: "{./**/*.{d,spec,test,fixture,gen,node}.{ts,tsx},./*.generated/*}"}

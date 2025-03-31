@@ -1,11 +1,8 @@
 import type {Link as FetchLink} from '@opensdks/runtime'
 import type {z} from '@opensdks/util-zod'
 import type {
+  AnyEntityPayload,
   ConnectionUpdateData,
-  Destination,
-  EntityPayload,
-  Source,
-  StateUpdateData,
   SyncOperation,
 } from '@openint/sync'
 import type {MaybePromise} from '@openint/util'
@@ -19,9 +16,8 @@ import type {
   ConnectorMetadata,
   OpenDialogFn,
   WebhookReturnType,
-  zPassthroughInput,
 } from './connector-meta.types'
-import type {CustomerId, Id} from './id.types'
+import type {Id} from './id.types'
 import {makeId} from './id.types'
 import type {ZStandard} from './models'
 import type {VerticalKey} from './verticals'
@@ -42,20 +38,6 @@ export interface ConnectorSchemas {
   /** aka postConnectInput... Should we rename? */
   connectOutput?: z.ZodTypeAny
   /** Maybe can be derived from webhookInput | postConnOutput | inlineInput? */
-
-  // MARK: @deprecated. Use the etl vertical instead
-
-  /** Will soon be deprecated @deprecated. Use the etl vertical instead */
-  sourceState?: z.ZodTypeAny
-
-  /** @deprecated. Use sourceOutputEntities */
-  sourceOutputEntity?: z.ZodTypeAny
-  /** Will soon be deprecated @deprecated. Use the etl vertical instead */
-  sourceOutputEntities?: Record<string, z.ZodTypeAny>
-  /** Will soon be deprecated @deprecated. Use the etl vertical instead */
-  destinationState?: z.ZodTypeAny
-  /** Will soon be deprecated @deprecated. Use the etl vertical instead */
-  destinationInputEntity?: z.ZodTypeAny
 }
 
 export type AnyConnectorHelpers = ConnHelpers
@@ -86,31 +68,6 @@ export interface ConnectorDef<
     connection?: (
       settings: T['_types']['connectionSettings'],
     ) => Omit<ZStandard['connection'], 'id'>
-
-    // TODO: Migrate to vertical format, as only verticals deal with mapping entities
-    entity?:
-      | Partial<{
-          // Simpler
-          [k in T['_types']['sourceOutputEntity']['entityName']]: (
-            entity: Extract<T['_types']['sourceOutputEntity'], {entityName: k}>,
-            settings: T['_types']['connectionSettings'],
-          ) => EntityPayload | null
-        }>
-      // More powerful
-      | ((
-          entity: T['_types']['sourceOutputEntity'],
-          settings: T['_types']['connectionSettings'],
-        ) => EntityPayload | null)
-  }
-
-  streams?: {
-    $defaults: {
-      /** Only singular primary key supported for the moment */
-      // TODO: Fix me up.
-      primaryKey: string // PathsOf<T['_remoteEntity']>
-      /** Used for incremental sync. Should only be string entities */
-      cursorField?: string // PathsOf<T['_remoteEntity']>
-    }
   }
 }
 
@@ -166,10 +123,7 @@ export interface ConnectorServer<
     context: ConnectContext<T['_types']['connectionSettings']>,
   ) => MaybePromise<
     Omit<
-      ConnectionUpdate<
-        T['_types']['sourceOutputEntity'],
-        T['_types']['connectionSettings']
-      >,
+      ConnectionUpdate<AnyEntityPayload, T['_types']['connectionSettings']>,
       'customerId'
     >
   >
@@ -184,10 +138,7 @@ export interface ConnectorServer<
     }>,
   ) => MaybePromise<
     Omit<
-      ConnectionUpdate<
-        T['_types']['sourceOutputEntity'],
-        T['_types']['connectionSettings']
-      >,
+      ConnectionUpdate<AnyEntityPayload, T['_types']['connectionSettings']>,
       'customerId'
     >
   >
@@ -222,46 +173,6 @@ export interface ConnectorServer<
     config: T['_types']['connectorConfig'],
   ) => Promise<T['_types']['connectionSettings']>
 
-  /** @deprecated */
-  sourceSync?: (
-    input: OmitNever<{
-      instance: TInstance
-      customer: {id: CustomerId} | null | undefined
-      /* Enabled streams */
-      streams: {
-        [k in T['_streamName']]?:
-          | boolean
-          | null
-          | {disabled?: boolean; fields?: string[]}
-      }
-      state: T['_types']['sourceState']
-      /** @deprecated, use `instance` instead */
-      config: T['_types']['connectorConfig']
-      /** @deprecated, use `instance` instead */
-      settings: T['_types']['connectionSettings']
-    }>,
-  ) => Source<T['_types']['sourceOutputEntity']>
-
-  /** @deprecated */
-  destinationSync?: (
-    input: OmitNever<{
-      /** Needed for namespacing when syncing multiple source into same destination */
-      source: {id: Id['conn']; connectorName: string} | undefined
-      customer: {id: CustomerId; orgId: string} | null | undefined
-      config: T['_types']['connectorConfig']
-      settings: T['_types']['connectionSettings']
-      state: T['_types']['destinationState']
-    }>,
-  ) => Destination<T['_types']['destinationInputEntity']>
-
-  /** @deprecated */
-  metaSync?: (
-    input: OmitNever<{
-      config: T['_types']['connectorConfig']
-      // options: T['_types']['sourceState']
-    }>,
-  ) => Source<T['_intOpType']['data']>
-
   // MARK - Webhook
   // Need to add a input schema for each provider to verify the shape of the received
   // webhook requests...
@@ -271,21 +182,12 @@ export interface ConnectorServer<
     webhookInput: T['_types']['webhookInput'],
     config: T['_types']['connectorConfig'],
   ) => MaybePromise<
-    WebhookReturnType<
-      T['_types']['sourceOutputEntity'],
-      T['_types']['connectionSettings']
-    >
+    WebhookReturnType<AnyEntityPayload, T['_types']['connectionSettings']>
   >
 
   /** Passthrough request proxy */
   /** @deprecated */
   proxy?: (instance: TInstance, req: Request) => Promise<Response>
-
-  /** @deprecated */
-  passthrough?: (
-    instance: TInstance,
-    input: z.infer<typeof zPassthroughInput>,
-  ) => unknown
 }
 
 export interface ConnectorImpl<TSchemas extends ConnectorSchemas>
@@ -305,16 +207,10 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
   schemas: TSchemas,
 ) {
   type _types = {
-    [k in keyof TSchemas as k extends 'verticals' | 'sourceOutputEntities'
-      ? never
-      : k]: _infer<TSchemas[k]>
-  }
-  type _streams = {
-    [k in keyof TSchemas['sourceOutputEntities']]: _infer<
-      TSchemas['sourceOutputEntities'][k]
+    [k in keyof TSchemas as k extends 'verticals' ? never : k]: _infer<
+      TSchemas[k]
     >
   }
-  type _streamName = keyof _streams
 
   type IntOpData = Extract<
     SyncOperation<{
@@ -328,41 +224,23 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
     _types['connectionSettings'],
     _types['integrationData']
   >
-  type stateUpdate = StateUpdateData<
-    _types['sourceState'],
-    _types['destinationState']
-  >
-  type Src = Source<_types['sourceOutputEntity'], connUpdate, stateUpdate>
 
-  type Op = SyncOperation<_types['sourceOutputEntity'], connUpdate, stateUpdate>
-  type InputOp = SyncOperation<
-    _types['destinationInputEntity'],
-    connUpdate,
-    stateUpdate
-  >
+  type Op = SyncOperation<any, connUpdate>
 
   type OpData = Extract<Op, {type: 'data'}>
   type OpRes = Extract<Op, {type: 'connUpdate'}>
   type OpState = Extract<Op, {type: 'stateUpdate'}>
   type _connectionUpdateType = ConnectionUpdate<
-    _types['sourceOutputEntity'],
+    any,
     _types['connectionSettings']
   >
-  type _webhookReturnType = WebhookReturnType<
-    _types['sourceOutputEntity'],
-    _types['connectionSettings']
-  >
+  type _webhookReturnType = WebhookReturnType<any, _types['connectionSettings']>
   return {
     ...schemas,
     _types: {} as _types,
-    _streams: {} as _streams,
-    _streamName: {} as _streamName,
     _resUpdateType: {} as connUpdate,
-    _stateUpdateType: {} as stateUpdate,
     _opType: {} as Op,
     _intOpType: {} as IntOpData,
-    _sourceType: {} as Src,
-    _inputOpType: {} as InputOp,
     _connectionUpdateType: {} as _connectionUpdateType,
     _webhookReturnType: {} as _webhookReturnType,
 

@@ -17,6 +17,7 @@
     "@electric-sql/pglite": "^0.2.16",
     "@neondatabase/serverless": "^0.10.4",
     "@openint/env": "workspace:*",
+    "@openint/util": "workspace:*",
     "drizzle-orm": "^0.39.1",
     "json-stable-stringify": "^1.1.1",
     "pg": "^8.13.3",
@@ -27,7 +28,6 @@
   "devDependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/loopback-link": "workspace:*",
-    "@openint/vdk": "workspace:*",
     "@types/json-stable-stringify": "^1.1.0",
     "@types/pg": "^8.11.11",
     "bun": "latest",

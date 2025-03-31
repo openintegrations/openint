@@ -1,10 +1,8 @@
 import type {ConnectorServer} from '@openint/cdk'
-import {Rx, rxjs} from '@openint/util'
 import type {yodleeSchemas} from './def'
-import {helpers} from './def'
 import {makeYodleeClient} from './YodleeClient'
 
-export const yodleeServerConnector = {
+export const yodleeServer = {
   // TODO: handle reconnecting scenario
   preConnect: async (config, {extCustomerId: userId}) => {
     const loginName =
@@ -53,55 +51,6 @@ export const yodleeServerConnector = {
         : undefined,
     }
   },
-
-  sourceSync: ({config, settings: {providerAccountId, ...settings}}) => {
-    const yodlee = makeYodleeClient(config, {role: 'user', ...settings})
-    async function* iterateEntities() {
-      const [accounts, holdings] = await Promise.all([
-        yodlee.getAccounts({providerAccountId}),
-        SHOULD_SYNC_HOLDINGS
-          ? yodlee.getHoldingsWithSecurity({providerAccountId})
-          : Promise.resolve([]),
-      ])
-
-      yield [
-        ...accounts.map((a) => helpers._opData('account', `${a.id}`, a)),
-        ...holdings.map(
-          // Need to check on if to use h.id or h.security.id
-          (h) => helpers._opData('commodity', `${h.id}`, h),
-        ),
-      ]
-      // TODO(P2): How does yodlee handle pending transactions
-      // TODO: Implement incremental sync
-      for await (const transactions of yodlee.iterateAllTransactions({
-        skipInvestmentTransactions: !SHOULD_SYNC_INVESTMENT_TRANSACTIONS,
-        accountId: accounts.map((a) => a.id).join(','),
-      })) {
-        yield transactions.map((t) =>
-          helpers._opData('transaction', `${t.id}`, t),
-        )
-      }
-    }
-    return rxjs
-      .from(iterateEntities())
-      .pipe(Rx.mergeMap((ops) => rxjs.from([...ops, helpers._op('commit')])))
-  },
-
-  metaSync: ({config}) => {
-    // console.log('[yodlee.metaSync]', config)
-    // TODO: Should environment name be part of the yodlee institution id itself?
-    const yodlee = makeYodleeClient(config, {role: 'admin'})
-    return rxjs.from(yodlee.iterateInstitutions()).pipe(
-      Rx.mergeMap((institutions) => rxjs.from(institutions)),
-      Rx.map((ins) =>
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        helpers._intOpData(`${ins.id!}` as ExternalId, {...ins}),
-      ),
-    )
-  },
 } satisfies ConnectorServer<typeof yodleeSchemas>
 
-const SHOULD_SYNC_HOLDINGS = false
-const SHOULD_SYNC_INVESTMENT_TRANSACTIONS = true
-
-export default yodleeServerConnector
+export default yodleeServer

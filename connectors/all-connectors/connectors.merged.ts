@@ -11,8 +11,6 @@ import {default as connectorAirtable_def} from '@openint/connector-airtable/def'
 import {default as connectorAirtable_server} from '@openint/connector-airtable/server'
 import {default as connectorApollo_def} from '@openint/connector-apollo/def'
 import {default as connectorApollo_server} from '@openint/connector-apollo/server'
-import {default as connectorBeancount_def} from '@openint/connector-beancount/def'
-import {default as connectorBeancount_server} from '@openint/connector-beancount/server'
 import {default as connectorBrex_def} from '@openint/connector-brex/def'
 import {default as connectorBrex_server} from '@openint/connector-brex/server'
 import {default as connectorCoda_def} from '@openint/connector-coda/def'
@@ -125,11 +123,6 @@ const connectorAirtable = {
 const connectorApollo = {
   ...connectorApollo_def,
   ...connectorApollo_server,
-}
-
-const connectorBeancount = {
-  ...connectorBeancount_def,
-  ...connectorBeancount_server,
 }
 
 const connectorBrex = {
@@ -394,7 +387,6 @@ export const mergedConnectors = {
   aircall: connectorAircall,
   airtable: connectorAirtable,
   apollo: connectorApollo,
-  beancount: connectorBeancount,
   brex: connectorBrex,
   coda: connectorCoda,
   confluence: connectorConfluence,

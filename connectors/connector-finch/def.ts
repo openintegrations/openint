@@ -1,10 +1,7 @@
-import type {FinchSDKTypes} from '@opensdks/sdk-finch'
 import finchOas from '@opensdks/sdk-finch/finch.oas.json'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
-
-type components = FinchSDKTypes['oas']['components']
+import {z} from '@openint/util'
 
 const zProduct = z.enum([
   'company',
@@ -49,12 +46,6 @@ export const finchSchemas = {
     state: z.string().optional(),
     code: z.string(),
   }),
-  //
-  sourceOutputEntities: {
-    company: zCast<components['schemas']['Company']>(),
-    // contact: zCast<components['schemas']['commonContact']>(),
-    // deal: zCast<components['schemas']['commonDeal']>(),
-  },
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(finchSchemas)

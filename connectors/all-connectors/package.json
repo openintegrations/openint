@@ -10,7 +10,6 @@
     "@openint/connector-aircall": "workspace:*",
     "@openint/connector-airtable": "workspace:*",
     "@openint/connector-apollo": "workspace:*",
-    "@openint/connector-beancount": "workspace:*",
     "@openint/connector-brex": "workspace:*",
     "@openint/connector-coda": "workspace:*",
     "@openint/connector-confluence": "workspace:*",

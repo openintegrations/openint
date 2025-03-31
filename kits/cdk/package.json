@@ -7,9 +7,8 @@
   "module": "./index.ts",
   "dependencies": {
     "@jsonurl/jsonurl": "^1.1.7",
-    "@openint/sync": "workspace:*",
-    "@openint/trpc": "workspace:*",
     "@openint/util": "workspace:*",
+    "@openint/sync": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@opensdks/runtime": "^0.0.19",
     "@opensdks/sdk-nango": "0.0.6",
@@ -20,8 +19,6 @@
     "remeda": "1.6.1"
   },
   "devDependencies": {
-    "@lilyrose2798/trpc-openapi": "1.3.10",
-    "@nangohq/frontend": "0.33.8",
     "@openint/env": "workspace:*",
     "@opensdks/sdk-apollo": "0.0.21",
     "@opensdks/sdk-outreach": "0.0.16",

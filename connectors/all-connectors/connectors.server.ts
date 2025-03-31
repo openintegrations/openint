@@ -6,7 +6,6 @@ import {
 import {default as connectorAircall} from '@openint/connector-aircall/server'
 import {default as connectorAirtable} from '@openint/connector-airtable/server'
 import {default as connectorApollo} from '@openint/connector-apollo/server'
-import {default as connectorBeancount} from '@openint/connector-beancount/server'
 import {default as connectorBrex} from '@openint/connector-brex/server'
 import {default as connectorCoda} from '@openint/connector-coda/server'
 import {default as connectorConfluence} from '@openint/connector-confluence/server'
@@ -60,7 +59,6 @@ export const serverConnectors = {
   aircall: connectorAircall,
   airtable: connectorAirtable,
   apollo: connectorApollo,
-  beancount: connectorBeancount,
   brex: connectorBrex,
   coda: connectorCoda,
   confluence: connectorConfluence,
