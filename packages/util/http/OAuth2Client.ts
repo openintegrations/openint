@@ -1,7 +1,4 @@
 import {pickBy} from 'lodash'
-
-import type {HTTPClient, HTTPError} from './http-utils'
-import {createHTTPClient} from './http-utils'
 import {stringifyQueryParams} from '../url-utils'
 
 export interface OAuth2ClientConfig<TError = unknown> {
@@ -24,49 +21,55 @@ export class OAuth2Client<
   TError = unknown,
   TToken extends TokenResponse = TokenResponse,
 > {
-  private http: HTTPClient
+  constructor(private readonly config: OAuth2ClientConfig<TError>) {}
 
-  constructor(private readonly config: OAuth2ClientConfig<TError>) {
-    this.http = createHTTPClient({
-      errorTransformer: (err) => {
-        if (err.response?.data) {
-          const error = err.response.data as TError
-          return new OAuth2Error<TError>(
-            config.errorToString?.(error) ?? JSON.stringify(error),
-            error,
-            err,
-          )
-        }
-        return err
-      },
-    })
-  }
-
-  private post<T>(url: string, params: Record<string, unknown>) {
+  private async post<T>(
+    url: string,
+    params: Record<string, unknown>,
+  ): Promise<T> {
     const {clientAuthLocation = 'body'} = this.config
-    return this.http
-      .post<T>(
-        url,
-        stringifyQueryParams({
-          ...params,
-          ...(clientAuthLocation !== 'header'
-            ? {
-                client_id: this.config.clientId,
-                client_secret: this.config.clientSecret,
-              }
-            : {}),
-        }),
+    const body = stringifyQueryParams({
+      ...params,
+      ...(clientAuthLocation !== 'header'
+        ? {
+            client_id: this.config.clientId,
+            client_secret: this.config.clientSecret,
+          }
+        : {}),
+    })
+
+    const headers: HeadersInit = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }
+
+    if (clientAuthLocation === 'header') {
+      headers['Authorization'] = `Basic ${Buffer.from(
+        `${this.config.clientId}:${this.config.clientSecret}`,
+      ).toString('base64')}`
+    }
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body,
+    })
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => null)
+      throw new OAuth2Error<TError>(
+        this.config.errorToString?.(error as TError) ?? JSON.stringify(error),
+        error as TError,
         {
-          auth:
-            clientAuthLocation === 'header'
-              ? {
-                  username: this.config.clientId,
-                  password: this.config.clientSecret,
-                }
-              : undefined,
+          status: response.status,
+          statusText: response.statusText,
+          url,
+          method: 'POST',
+          headers: Object.fromEntries(response.headers.entries()),
         },
       )
-      .then((r) => r.data)
+    }
+
+    return response.json()
   }
 
   // TODO: Use an actual oauth library
@@ -127,7 +130,13 @@ export class OAuth2Error<T = unknown> extends Error {
     // prettier-ignore
     public override readonly message: string,
     public readonly data: T,
-    public readonly originalError: HTTPError,
+    public readonly request: {
+      status: number
+      statusText: string
+      url: string
+      method: string
+      headers: Record<string, string>
+    },
   ) {
     super(message)
     Object.setPrototypeOf(this, OAuth2Error.prototype)

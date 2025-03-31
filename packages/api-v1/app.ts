@@ -19,8 +19,9 @@ export function createApp({db}: CreateAppOptions) {
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}))
     .use(
       swagger({
-        // For some reason spec.content doesn't work. so we are forced tos specify url instead
-        scalarConfig: {spec: {url: '/v1/openapi.json'}},
+        // TODO: Figure out why spec.content doesn't work. so we are forced tos specify url instead
+        // and we need the /api prefix to work with next.js. This is really not ideal though.
+        scalarConfig: {spec: {url: '/api/v1/openapi.json'}},
         path: '/v1',
       }),
     )
