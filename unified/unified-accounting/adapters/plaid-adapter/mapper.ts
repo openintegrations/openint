@@ -1,8 +1,21 @@
 import {type PlaidSDKTypes} from '@openint/connector-plaid'
+import {md5Hash} from '@openint/util'
 import {mapper, zCast} from '@openint/vdk'
 import * as unified from '../../unifiedModels'
 
 type Plaid = PlaidSDKTypes['oas']['components']['schemas']
+
+/**
+ * Derive a merchant entity ID from a name.
+ * This is a synthetic ID that is not actually a real merchant entity ID.
+ * It is a hash of the name to avoid collisions with real merchant entity IDs.
+ * It is prefixed with "synthetic_" to indicate that it is a synthetic ID.
+ * @param name - The name of the merchant.
+ * @returns The merchant entity ID.
+ */
+export function deriveMerchantEntityId(name: string): string {
+  return `synthetic_${md5Hash(name.toLowerCase().trim())}`
+}
 
 export const mappers = {
   account: mapper(zCast<Plaid['AccountBase']>(), unified.account, {
@@ -42,7 +55,9 @@ export const mappers = {
     id: 'transaction_id',
     date: 'date',
     // for some reason `null` causes vendor_id to be quoted, probably encoded as json, does not add up but...
-    vendor_id: (t) => t.merchant_entity_id ?? '',
+    vendor_id: (t) =>
+      t.merchant_entity_id ??
+      (t.merchant_name ? deriveMerchantEntityId(t.merchant_name) : ''),
     account_id: 'account_id',
     amount: 'amount',
     currency: 'iso_currency_code',
@@ -68,11 +83,12 @@ export const mappers = {
     // updated_at: (t) => t.datetime ?? new Date().toISOString(),
   }),
   merchant: mapper(
-    zCast<{merchant_entity_id: string; name: string}>(),
+    zCast<{merchant_entity_id?: string; name?: string}>(),
     unified.vendor,
     {
-      id: 'merchant_entity_id',
-      name: 'name',
+      id: (m) =>
+        m.merchant_entity_id ?? (m.name ? deriveMerchantEntityId(m.name) : ''),
+      name: (m) => m.name ?? '',
       url: () => null,
     },
   ),

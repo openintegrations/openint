@@ -7,6 +7,7 @@ import {CountryCode, Products} from 'plaid'
 import type {ConnectorServer} from '@openint/cdk'
 import type {DurationObjectUnits, IAxiosError} from '@openint/util'
 import {DateTime, R, RateLimit, Rx, rxjs} from '@openint/util'
+import {deriveMerchantEntityId} from '../../unified/unified-accounting/adapters/plaid-adapter/mapper'
 import type {plaidSchemas} from './def'
 import {helpers as def} from './def'
 import {inferPlaidEnvFromToken} from './plaid-utils'
@@ -324,10 +325,12 @@ export const plaidServerConnector = {
           const merchantNameById = Object.fromEntries(
             filteredTxns
               .map((t) =>
-                'merchant_entity_id' in t && t.merchant_entity_id
+                ('merchant_entity_id' in t && t.merchant_entity_id) ||
+                ('merchant_name' in t && t.merchant_name)
                   ? ([
-                      t.merchant_entity_id as string,
-                      t.merchant_name!,
+                      (t as {merchant_entity_id?: string}).merchant_entity_id ??
+                        deriveMerchantEntityId(t.merchant_name!),
+                      t.merchant_name ?? '',
                     ] as const)
                   : null,
               )
