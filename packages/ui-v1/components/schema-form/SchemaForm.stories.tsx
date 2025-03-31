@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {Meta, StoryObj} from '@storybook/react'
 import {z} from 'zod'
-import {defConnectors} from '@openint/all-connectors/connectors.def'
+import {extendZodWithOpenApi} from 'zod-openapi'
+// TODO: Fix cnext to put def and server in separate files...
+// import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm, ZodSchemaForm} from './SchemaForm'
 
@@ -16,6 +18,8 @@ const meta: Meta<typeof ZodSchemaForm> = {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+extendZodWithOpenApi(z)
 
 // Simple example with email and password fields
 export const JsonSchema: Story = {
@@ -102,24 +106,24 @@ export const ZodSchema: Story = {
   },
 }
 
-// Salesforce connector configuration example using actual schema
-export const SalesforceConnectorConfig: Story = {
-  args: {
-    schema: defConnectors.salesforce.schemas.connectorConfig,
-    onSubmit: (data) => {
-      console.log('Salesforce Connector Config submitted:', data)
-      alert('Salesforce Connector Config submitted! Check console for details.')
-    },
-  },
-}
+// // Salesforce connector configuration example using actual schema
+// export const SalesforceConnectorConfig: Story = {
+//   args: {
+//     schema: defConnectors.salesforce.schemas.connectorConfig,
+//     onSubmit: (data) => {
+//       console.log('Salesforce Connector Config submitted:', data)
+//       alert('Salesforce Connector Config submitted! Check console for details.')
+//     },
+//   },
+// }
 
-// Plaid connector configuration example using actual schema
-export const PlaidConnectorConfig: Story = {
-  args: {
-    schema: defConnectors.plaid.schemas.connectorConfig,
-    onSubmit: (data) => {
-      console.log('Plaid Connector Config submitted:', data)
-      alert('Plaid Connector Config submitted! Check console for details.')
-    },
-  },
-}
+// // Plaid connector configuration example using actual schema
+// export const PlaidConnectorConfig: Story = {
+//   args: {
+//     schema: defConnectors.plaid.schemas.connectorConfig,
+//     onSubmit: (data) => {
+//       console.log('Plaid Connector Config submitted:', data)
+//       alert('Plaid Connector Config submitted! Check console for details.')
+//     },
+//   },
+// }

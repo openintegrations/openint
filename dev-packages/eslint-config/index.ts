@@ -10,6 +10,7 @@ import configPrettier from 'eslint-config-prettier/flat'
 import codegen from 'eslint-plugin-codegen'
 // @ts-expect-error No types available
 import pluginEslintComments from 'eslint-plugin-eslint-comments'
+import pluginImport from 'eslint-plugin-import'
 import pluginJest from 'eslint-plugin-jest'
 // @ts-expect-error No types available
 import pluginJestFormatting from 'eslint-plugin-jest-formatting'
@@ -101,6 +102,21 @@ export const configs = keyAsName({
       'no-empty-pattern': 'off',
     },
   },
+  // import: {
+  //   // extends: [pluginImport.flatConfigs.recommended],
+  //   plugins: {import: pluginImport},
+  //   rules: {
+  //     // TODO: This rule is not working for some reason. Fix me.... 
+  //     'import/no-extraneous-dependencies': [
+  //       'error',
+  //       {
+  //         devDependencies: false,
+  //         optionalDependencies: false,
+  //         peerDependencies: false,
+  //       },
+  //     ],
+  //   },
+  // },
   typescript: {
     files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
     // extends: [pluginTs.configs.strict as Config[]],
