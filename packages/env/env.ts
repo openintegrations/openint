@@ -31,7 +31,7 @@ export const envConfig = {
     INTEGRATION_TEST_SECRET: z.string().optional(),
 
     // Secret for cron jobs
-    CRON_SECRET: z.string(),
+    CRON_SECRET: z.string().optional(),
     REFRESH_CONNECTION_CONCURRENCY: z.coerce.number().optional().default(3),
   },
   client: {
@@ -98,8 +98,8 @@ export const envRequired = proxyRequired(env, {
 })
 
 export const isProduction =
-  envRequired.VERCEL_ENV === 'production' ||
-  process.env['NODE_ENV'] === 'production'
+  process.env['NODE_ENV'] === 'production' ||
+  process.env['VERCEL_ENV'] === 'production'
 
 export type Env = typeof env
 
