@@ -57,14 +57,14 @@ export function SettingsContent({
         isSaving={setWebhook.isPending}
         className="mt-4 flex items-center"
       />
-      {/* <UrlInputForm
+      <UrlInputForm
         inputName="Oauth Redirect URL"
         defaultValue={webhookUrl}
         placeholder="https://webhook.site/webhook-url"
         onSave={handleSave}
         isSaving={setWebhook.isPending}
         className="mt-4 flex items-center"
-      /> */}
+      />
     </div>
   )
 }
