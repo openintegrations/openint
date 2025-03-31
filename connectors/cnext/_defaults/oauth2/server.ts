@@ -1,7 +1,7 @@
 import {z} from 'zod'
 import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
-import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
+import {getConnectorDefaultCredentials} from '@openint/env'
 import {makeUlid} from '@openint/util'
 import {oauth2Schemas, zOAuthConfig} from './def'
 import {
@@ -10,7 +10,10 @@ import {
   tokenRefreshHandler,
   validateOAuthCredentials,
 } from './handlers'
-import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
+import {
+  fillOutStringTemplateVariablesInObjectKeys,
+  getOauthRedirectUri,
+} from './utils'
 
 function injectCcfgDefaultCredentials(
   connectorConfig: z.infer<typeof oauth2Schemas.connectorConfig>,
@@ -121,7 +124,7 @@ export function generateOAuth2Server<
           ),
           connector_config: ccfg,
         },
-        redirectUri: getServerUrl(null) + '/connect/callback',
+        redirectUri: await getOauthRedirectUri(connectionSettings.orgId),
         connectionId: connectionId,
         //  QQ: fix issue with Type '{ authorization_url: string; }' is not assignable to type 'T["_types"]["connectInput"]
       }) as any
@@ -148,7 +151,7 @@ export function generateOAuth2Server<
         } satisfies z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
         state: connectOutput.state,
-        redirectUri: getServerUrl(null) + '/connect/callback',
+        redirectUri: await getOauthRedirectUri(connectionSettings.orgId),
       })
 
       return {

@@ -2,6 +2,7 @@
 
 import {Check, Copy, Eye, EyeOff} from 'lucide-react'
 import {useState} from 'react'
+import {cn} from '@openint/shadcn/lib/utils'
 import {
   Button,
   Input,
@@ -15,6 +16,7 @@ interface SecureInputProps extends Omit<InputProps, 'type'> {
   placeholder?: string
   showValue?: boolean
   readOnly?: boolean
+  className?: string
 }
 
 export default function SecureInput({
@@ -24,6 +26,7 @@ export default function SecureInput({
   onChange,
   showValue = false,
   readOnly = false,
+  className,
   ...props
 }: SecureInputProps) {
   const [showingValue, setShowValue] = useState(showValue)
@@ -52,7 +55,7 @@ export default function SecureInput({
   }
 
   return (
-    <div className="w-full max-w-sm space-y-2">
+    <div className={cn('w-full max-w-sm space-y-2', className)}>
       <Label className="text-md font-bold" htmlFor="secureInput">
         {label}
       </Label>

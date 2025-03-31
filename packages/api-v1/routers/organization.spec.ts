@@ -1,14 +1,16 @@
 import type {Viewer} from '@openint/cdk'
-import {schema} from '@openint/db'
+import {eq, schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {routerContextFromViewer} from '../trpc/context'
-import {onboardingRouter} from './onboarding'
+import {organizationRouter} from './organization'
 
 const logger = false
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   function getCaller(viewer: Viewer) {
-    return onboardingRouter.createCaller(routerContextFromViewer({db, viewer}))
+    return organizationRouter.createCaller(
+      routerContextFromViewer({db, viewer}),
+    )
   }
 
   const orgId = 'org_222'
@@ -101,14 +103,69 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
-  describe('setWebhookUrl', () => {
+  describe('setMetadataUrl', () => {
     test('updates webhook URL', async () => {
-      await asOrg.setWebhookUrl({
-        webhookUrl: 'https://webhook.site/xxx',
+      await asOrg.setMetadataUrl({
+        urlType: 'webhook_url',
+        url: 'https://webhook.site/webhook-url',
       })
 
       const org = await asOrg.getOrganization()
-      expect(org.metadata.webhook_url).toBe('https://webhook.site/xxx')
+      expect(org.metadata.webhook_url).toBe('https://webhook.site/webhook-url')
+    })
+
+    test('updates OAuth redirect URL', async () => {
+      await asOrg.setMetadataUrl({
+        urlType: 'oauth_redirect_url',
+        url: 'https://app.example.com/oauth/callback',
+      })
+
+      const org = await db.query.organization.findFirst({
+        where: eq(schema.organization.id, orgId),
+      })
+      expect(org?.metadata?.oauth_redirect_url).toBe(
+        'https://app.example.com/oauth/callback',
+      )
+    })
+
+    test('rejects invalid webhook URL', async () => {
+      await expect(
+        asOrg.setMetadataUrl({
+          urlType: 'webhook_url',
+          url: 'http://insecure-webhook.com',
+        }),
+      ).rejects.toThrow('Invalid webhook URL. It must start with "https://".')
+    })
+
+    test('rejects invalid OAuth redirect URL', async () => {
+      await expect(
+        asOrg.setMetadataUrl({
+          urlType: 'oauth_redirect_url',
+          url: 'not-a-valid-url',
+        }),
+      ).rejects.toThrow(
+        'Invalid OAuth redirect URL. Please provide a valid URL.',
+      )
+    })
+
+    test('does not update if URL is unchanged', async () => {
+      const initialOrg = await db.query.organization.findFirst({
+        where: eq(schema.organization.id, orgId),
+      })
+
+      // Wait a bit to ensure timestamp would be different if updated
+      await new Promise((resolve) => setTimeout(resolve, 5))
+
+      await asOrg.setMetadataUrl({
+        urlType: 'webhook_url',
+        url: 'https://webhook.site/webhook-url',
+      })
+
+      const updatedOrg = await db.query.organization.findFirst({
+        where: eq(schema.organization.id, orgId),
+      })
+
+      expect(updatedOrg?.metadata).toEqual(initialOrg?.metadata)
     })
   })
 })
