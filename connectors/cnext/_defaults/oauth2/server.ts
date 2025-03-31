@@ -239,11 +239,7 @@ export function generateOAuth2Server<
         try {
           // Attempt to refresh the token
           const newSettings = await this.refreshConnection(settings, config)
-          return {
-            connectionExternalId: settings.oauth?.credentials?.connection_id,
-            settings: newSettings,
-            config,
-          }
+          return newSettings
         } catch (error: any) {
           throw new Error(`Failed to refresh token: ${error.message}`)
         }
@@ -255,11 +251,7 @@ export function generateOAuth2Server<
       // for now we're just going to check if the token is expired and try to refresh it
       // 2) We could also support the token introspection endpoint https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
 
-      return {
-        connectionExternalId: settings.oauth?.credentials?.connection_id,
-        settings,
-        config,
-      } // TODO: review
+      return settings
     },
   }
 
