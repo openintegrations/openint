@@ -3,56 +3,55 @@ import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 import {CopyID} from './CopyID'
 
 const meta: Meta<typeof ConnectorConfigTableCell> = {
-  title: 'Components/ConnectorConfigTableCell',
+  title: 'Tables/ConnectorConfigTableCell',
   component: ConnectorConfigTableCell,
+  tags: ['autodocs'],
   argTypes: {
-    name: {
-      control: 'text',
-      description: 'Name of the connector config',
+    compact: {
+      type: 'boolean',
+      description: 'Whether to show the compact variant (just logo and ID)',
+      control: {type: 'boolean'},
     },
-    id: {
-      control: 'text',
-      description: 'ID of the connector config',
+    simple: {
+      type: 'boolean',
+      description: 'Whether to show the simple variant (logo and name only)',
+      control: {type: 'boolean'},
     },
     status: {
-      control: 'select',
-      options: ['healthy', 'warning', 'offline', 'destructive'],
+      options: ['healthy', 'warning', 'destructive', 'offline'],
+      control: {type: 'select'},
       description: 'Status of the connector config',
     },
     backgroundColor: {
       control: 'color',
-      description: 'Background color for the logo container',
+      description: 'Brand color for the logo background',
     },
     textColor: {
       control: 'color',
-      description: 'Text color for the initials',
-    },
-    simple: {
-      control: 'boolean',
-      description: 'Whether to show the simple variant',
-    },
-    compact: {
-      control: 'boolean',
-      description:
-        'Whether to show the compact variant (just logo and ID, no name)',
-    },
-    useIcon: {
-      control: 'boolean',
-      description: 'Whether to use a settings icon instead of initials',
+      description: 'Text color for the logo text',
     },
   },
-}
+} satisfies Meta<typeof ConnectorConfigTableCell>
 
 export default meta
 type Story = StoryObj<typeof ConnectorConfigTableCell>
 
 export const Default: Story = {
   args: {
-    name: 'Salesforce Connector Config',
-    id: '12345678',
-    status: 'healthy',
-    backgroundColor: '#e0f2fe',
-    textColor: '#0ea5e9',
+    connectorConfig: {
+      id: '123456',
+      display_name: 'HubSpot CRM Config',
+      connector_name: 'hubspot',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      disabled: false,
+      org_id: 'org-123',
+    },
+    status: 'warning',
+    simple: false,
+    compact: false,
+    backgroundColor: '#f1f5f9',
+    textColor: '#666666',
   },
 }
 
@@ -74,7 +73,6 @@ export const WithIcon: Story = {
     status: 'healthy',
     backgroundColor: '#e0f2fe',
     textColor: '#0ea5e9',
-    useIcon: true,
   },
 }
 
@@ -86,7 +84,6 @@ export const Compact: Story = {
     backgroundColor: '#e0f2fe',
     textColor: '#0ea5e9',
     compact: true,
-    useIcon: true,
   },
 }
 
@@ -106,7 +103,6 @@ export const WithDifferentVariants: Story = {
         status="warning"
         backgroundColor="#dbeafe"
         textColor="#3b82f6"
-        useIcon={true}
       />
       <ConnectorConfigTableCell
         name="Zendesk Connector Config"
@@ -131,7 +127,6 @@ export const WithDifferentVariants: Story = {
         backgroundColor="#e0f2fe"
         textColor="#0ea5e9"
         compact={true}
-        useIcon={true}
       />
     </div>
   ),
@@ -143,4 +138,61 @@ export const CopyIDOnly: Story = {
       <CopyID value="CCFGID_12345678" width={300} size="medium" />
     </div>
   ),
+}
+
+export const WithCompactVariant: Story = {
+  args: {
+    connectorConfig: {
+      id: '123456',
+      display_name: 'HubSpot CRM Config',
+      connector_name: 'hubspot',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      disabled: false,
+      org_id: 'org-123',
+    },
+    status: 'healthy',
+    simple: false,
+    compact: true,
+    backgroundColor: '#f1f5f9',
+    textColor: '#666666',
+  },
+}
+
+export const WithSimpleVariant: Story = {
+  args: {
+    connectorConfig: {
+      id: '123456',
+      display_name: 'HubSpot CRM Config',
+      connector_name: 'hubspot',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      disabled: false,
+      org_id: 'org-123',
+    },
+    status: 'offline',
+    simple: true,
+    compact: false,
+    backgroundColor: '#f1f5f9',
+    textColor: '#666666',
+  },
+}
+
+export const WithWarningStatus: Story = {
+  args: {
+    connectorConfig: {
+      id: '123456',
+      display_name: 'HubSpot CRM Config',
+      connector_name: 'hubspot',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      disabled: false,
+      org_id: 'org-123',
+    },
+    status: 'warning',
+    simple: false,
+    compact: false,
+    backgroundColor: '#f1f5f9',
+    textColor: '#666666',
+  },
 }

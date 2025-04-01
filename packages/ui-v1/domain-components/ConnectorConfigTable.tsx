@@ -19,7 +19,7 @@ export const columns: Array<ColumnDef<Core['connector_config']>> = [
   {
     id: 'status',
     header: 'Status',
-    cell: ({row}) => {
+    cell: () => {
       // This should be calculated based on the connector config's actual status
       const isEnabled = true // Simplified for example
       return (
@@ -56,11 +56,15 @@ export const columns: Array<ColumnDef<Core['connector_config']>> = [
   {
     id: 'action',
     header: '',
-    cell: () => (
-      <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-        <MoreHorizontal className="h-4 w-4" />
-      </Button>
-    ),
+    cell: () => {
+      return (
+        <div>
+          <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </div>
+      )
+    },
   },
 ]
 

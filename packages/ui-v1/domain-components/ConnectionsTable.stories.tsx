@@ -1,7 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {MoreHorizontal} from 'lucide-react'
 import {Button} from '@openint/shadcn/ui'
-import {BaseTableCell} from '../components/BaseTableCell'
 import {ConnectionTableCell} from '../components/ConnectionTableCell'
 import {ConnectorConfigTableCell} from '../components/ConnectorConfigTableCell'
 import {CustomerTableCell} from '../components/CustomerTableCell'
@@ -13,8 +12,6 @@ import {
 } from '../components/MultiSelectActionBar'
 import {StatusCell} from '../components/StatusCell'
 import type {StatusType} from '../components/StatusDot'
-import {StatusDot} from '../components/StatusDot'
-import {ConnectionsCardView} from './ConnectionsCardView'
 
 // Define the Connection data structure based on the image
 interface Connection {
@@ -27,7 +24,15 @@ interface Connection {
   connectorConfigName: string
   firstCreated: string
   lastUpdated: string
-  metadata?: Record<string, any> // Add metadata field for compatibility
+  metadata: Record<string, any> | null
+  // Add required Core connection properties
+  customer_id: string
+  connector_config_id: string
+  integration_id: string | null
+  created_at: string
+  updated_at: string
+  connector_name: string
+  settings: Record<string, any>
 }
 
 // Sample data for the connections table
@@ -43,6 +48,14 @@ const connections: Connection[] = [
     firstCreated: 'May 12, 2025',
     lastUpdated: '1m ago',
     metadata: {name: 'AWS S3 Connection'},
+    // Add required Core connection properties
+    customer_id: '101',
+    connector_config_id: '201',
+    integration_id: null,
+    created_at: '2025-05-12T00:00:00Z',
+    updated_at: '2025-05-12T00:00:00Z',
+    connector_name: 'AWS S3 Config',
+    settings: {},
   },
   {
     id: '2',
@@ -55,6 +68,14 @@ const connections: Connection[] = [
     firstCreated: 'May 12, 2025',
     lastUpdated: '14h ago',
     metadata: {name: 'HubSpot Integration'},
+    // Add required Core connection properties
+    customer_id: '102',
+    connector_config_id: '202',
+    integration_id: null,
+    created_at: '2025-05-12T00:00:00Z',
+    updated_at: '2025-05-12T00:00:00Z',
+    connector_name: 'HubSpot CRM Config',
+    settings: {},
   },
   {
     id: '3',
@@ -67,6 +88,14 @@ const connections: Connection[] = [
     firstCreated: 'May 12, 2025',
     lastUpdated: '1 week ago',
     metadata: {name: 'Salesforce Connection'},
+    // Add required Core connection properties
+    customer_id: '103',
+    connector_config_id: '203',
+    integration_id: null,
+    created_at: '2025-05-12T00:00:00Z',
+    updated_at: '2025-05-12T00:00:00Z',
+    connector_name: 'Salesforce Enterprise',
+    settings: {},
   },
   {
     id: '4',
@@ -79,6 +108,14 @@ const connections: Connection[] = [
     firstCreated: 'May 12, 2025',
     lastUpdated: 'Jun 4, 2025',
     metadata: {name: 'Zendesk Support'},
+    // Add required Core connection properties
+    customer_id: '104',
+    connector_config_id: '204',
+    integration_id: null,
+    created_at: '2025-05-12T00:00:00Z',
+    updated_at: '2025-06-04T00:00:00Z',
+    connector_name: 'Zendesk Enterprise',
+    settings: {},
   },
   {
     id: '5',
@@ -91,171 +128,58 @@ const connections: Connection[] = [
     firstCreated: 'May 12, 2025',
     lastUpdated: 'Jun 4, 2025',
     metadata: {name: 'Google Drive Storage'},
+    // Add required Core connection properties
+    customer_id: '105',
+    connector_config_id: '205',
+    integration_id: null,
+    created_at: '2025-05-12T00:00:00Z',
+    updated_at: '2025-06-04T00:00:00Z',
+    connector_name: 'Google Workspace',
+    settings: {},
   },
 ]
 
-// Define a custom renderer for the connector cell to use the right initials
-const getConnectionLogo = (name: string) => {
-  // Map for specific initials
-  const initialsMap: Record<string, string> = {
-    'AWS S3 Connection': 'AW',
-    'HubSpot Integration': 'HU',
-    'Salesforce Connection': 'SA',
-    'Zendesk Support': 'ZE',
-    'Google Drive Storage': 'GO',
-  }
+// These logo getter functions are not used
+// const getConnectionLogo = (name: string) => {
+//   // Map for specific initials
+//   const initialsMap: Record<string, string> = {
+//     'AWS S3 Connection': 'AW',
+//     'HubSpot Integration': 'HU',
+//     'Salesforce Connection': 'SA',
+//     'Zendesk Support': 'ZE',
+//     'Google Drive Storage': 'GO',
+//   }
 
-  return initialsMap[name] || name.substring(0, 2).toUpperCase()
-}
+//   return initialsMap[name] || name.substring(0, 2).toUpperCase()
+// }
 
-// Define a custom renderer for the connector config cell to use the right initials
-const getConfigLogo = (name: string) => {
-  // Map for specific initials
-  const initialsMap: Record<string, string> = {
-    'AWS S3 Config': 'AW',
-    'HubSpot CRM Config': 'HU',
-    'Salesforce Enterprise': 'SA',
-    'Zendesk Enterprise': 'ZE',
-    'Google Workspace': 'GO',
-  }
+// // Define a custom renderer for the connector config cell to use the right initials
+// const getConfigLogo = (name: string) => {
+//   // Map for specific initials
+//   const initialsMap: Record<string, string> = {
+//     'AWS S3 Config': 'AW',
+//     'HubSpot CRM Config': 'HU',
+//     'Salesforce Enterprise': 'SA',
+//     'Zendesk Enterprise': 'ZE',
+//     'Google Workspace': 'GO',
+//   }
 
-  return initialsMap[name] || name.substring(0, 2).toUpperCase()
-}
+//   return initialsMap[name] || name.substring(0, 2).toUpperCase()
+// }
 
-// Define a custom renderer for the customer cell to use the right initials
-const getCustomerLogo = (name: string) => {
-  // Map for specific initials
-  const initialsMap: Record<string, string> = {
-    'Acme Corporation': 'A',
-    'Globex Industries': 'G',
-    'Initech Solutions': 'I',
-    'Umbrella Corp Ltd': 'U',
-    'Wayne Enterprises': 'W',
-  }
+// // Define a custom renderer for the customer cell to use the right initials
+// const getCustomerLogo = (name: string) => {
+//   // Map for specific initials
+//   const initialsMap: Record<string, string> = {
+//     'Acme Corporation': 'A',
+//     'Globex Industries': 'G',
+//     'Initech Solutions': 'I',
+//     'Umbrella Corp Ltd': 'U',
+//     'Wayne Enterprises': 'W',
+//   }
 
-  return initialsMap[name] || name.charAt(0).toUpperCase()
-}
-
-// Define a custom logo renderer for ConnectionTableCell
-// @ts-ignore
-const CustomConnectionTableCell = ({
-  name,
-  id,
-  status,
-  backgroundColor,
-  textColor,
-}: {
-  name: string
-  id: string
-  status: StatusType
-  backgroundColor: string
-  textColor: string
-}) => {
-  // This is a wrapper component that overrides the default initials
-  const logo = (
-    <div
-      className="relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded"
-      style={{backgroundColor}}>
-      <span className="text-base font-medium" style={{color: textColor}}>
-        {getConnectionLogo(name)}
-      </span>
-      {status && (
-        <div className="absolute right-1 top-1">
-          <StatusDot status={status} />
-        </div>
-      )}
-    </div>
-  )
-
-  return (
-    <BaseTableCell
-      name={name}
-      logo={logo}
-      id={id ? `CONNID_${id}` : undefined}
-      status={status}
-    />
-  )
-}
-
-// Define a custom logo renderer for CustomerTableCell
-const CustomCustomerTableCell = ({
-  name,
-  id,
-  status,
-  backgroundColor,
-  textColor,
-}: {
-  name: string
-  id: string
-  status: StatusType
-  backgroundColor: string
-  textColor: string
-}) => {
-  // This is a wrapper component that overrides the default initials
-  const logo = (
-    <div
-      className="relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded"
-      style={{backgroundColor}}>
-      <span className="text-base font-semibold" style={{color: textColor}}>
-        {getCustomerLogo(name)}
-      </span>
-      {status && (
-        <div className="absolute right-1 top-1">
-          <StatusDot status={status} />
-        </div>
-      )}
-    </div>
-  )
-
-  return (
-    <BaseTableCell
-      name={name}
-      logo={logo}
-      id={id ? `CUSID_${id}` : undefined}
-      status={status}
-    />
-  )
-}
-
-// Define a custom logo renderer for ConnectorConfigTableCell
-const CustomConnectorConfigTableCell = ({
-  name,
-  id,
-  status,
-  backgroundColor,
-  textColor,
-}: {
-  name: string
-  id: string
-  status: StatusType
-  backgroundColor: string
-  textColor: string
-}) => {
-  // This is a wrapper component that overrides the default initials
-  const logo = (
-    <div
-      className="relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded"
-      style={{backgroundColor}}>
-      <span className="text-base font-semibold" style={{color: textColor}}>
-        {getConfigLogo(name)}
-      </span>
-      {status && (
-        <div className="absolute right-1 top-1">
-          <StatusDot status={status} />
-        </div>
-      )}
-    </div>
-  )
-
-  return (
-    <BaseTableCell
-      name={name}
-      logo={logo}
-      id={id ? `CCFGID_${id}` : undefined}
-      status={status}
-    />
-  )
-}
+//   return initialsMap[name] || name.charAt(0).toUpperCase()
+// }
 
 // Define the columns for the connections table
 const columns: Array<ColumnDef<Connection>> = [
@@ -263,9 +187,22 @@ const columns: Array<ColumnDef<Connection>> = [
     id: 'connection',
     header: 'Connection',
     cell: ({row}) => {
+      // Create a connection object that matches the Core type
+      const connection = {
+        id: row.original.id,
+        customer_id: row.original.customer_id,
+        connector_config_id: row.original.connector_config_id,
+        integration_id: row.original.integration_id,
+        created_at: row.original.created_at,
+        updated_at: row.original.updated_at,
+        metadata: row.original.metadata,
+        connector_name: row.original.connector_name,
+        settings: row.original.settings,
+      }
+
       return (
         <ConnectionTableCell
-          connection={row.original}
+          connection={connection}
           simple={false}
           compact={true}
           useIcon={true}
@@ -285,7 +222,9 @@ const columns: Array<ColumnDef<Connection>> = [
       <CustomerTableCell
         customer={{
           id: row.original.customerId,
-          // No name property in the Core customer type
+          created_at: row.original.created_at,
+          updated_at: row.original.updated_at,
+          connection_count: 5,
         }}
         simple={false}
         compact={true}
@@ -303,6 +242,10 @@ const columns: Array<ColumnDef<Connection>> = [
             id: row.original.connectorConfigId,
             display_name: row.original.connectorConfigName,
             connector_name: row.original.connectorConfigName,
+            created_at: row.original.created_at,
+            updated_at: row.original.updated_at,
+            disabled: false,
+            org_id: 'org-123',
           }}
           status={row.original.status}
           simple={false}
@@ -344,9 +287,22 @@ const compactColumns: Array<ColumnDef<Connection>> = [
     id: 'connection',
     header: 'Connection',
     cell: ({row}) => {
+      // Create a connection object that matches the Core type
+      const connection = {
+        id: row.original.id,
+        customer_id: row.original.customer_id,
+        connector_config_id: row.original.connector_config_id,
+        integration_id: row.original.integration_id,
+        created_at: row.original.created_at,
+        updated_at: row.original.updated_at,
+        metadata: row.original.metadata,
+        connector_name: row.original.connector_name,
+        settings: row.original.settings,
+      }
+
       return (
         <ConnectionTableCell
-          connection={row.original}
+          connection={connection}
           simple={false}
           compact={true}
           useIcon={true}
@@ -366,7 +322,9 @@ const compactColumns: Array<ColumnDef<Connection>> = [
       <CustomerTableCell
         customer={{
           id: row.original.customerId,
-          // No name property in the Core customer type
+          created_at: row.original.created_at,
+          updated_at: row.original.updated_at,
+          connection_count: 5,
         }}
         simple={false}
         compact={true}
@@ -384,6 +342,10 @@ const compactColumns: Array<ColumnDef<Connection>> = [
             id: row.original.connectorConfigId,
             display_name: row.original.connectorConfigName,
             connector_name: row.original.connectorConfigName,
+            created_at: row.original.created_at,
+            updated_at: row.original.updated_at,
+            disabled: false,
+            org_id: 'org-123',
           }}
           status={row.original.status}
           simple={false}

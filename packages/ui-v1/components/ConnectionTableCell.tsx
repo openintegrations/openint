@@ -130,7 +130,6 @@ export function ConnectionTableCell(props: ConnectionTableCellProps) {
     ...restProps
   } = props as any
 
-  const connectionName = `Connection ${connection?.id?.substring(0, 6) || 'Unknown'}`
   const logoText = 'CN'
 
   const logo = (
