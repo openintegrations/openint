@@ -76,7 +76,22 @@ export function ConnectorConfigList(props: {
         selectedConnector?.schemas?.connector_config as Record<string, unknown>
       )?.['properties'] || {}),
     },
-    additionalProperties: true,
+  }
+
+  const formData = selectedCcfg
+    ? {
+        ...selectedCcfg.config,
+        displayName: selectedCcfg.display_name ?? '',
+        disabled: selectedCcfg.disabled ?? false,
+      }
+    : {}
+
+  const formContext = {
+    connectorName: selectedConnector?.display_name ?? '',
+    openint_scopes:
+      selectedConnector?.jsonDef?.auth?.type === 'OAUTH2'
+        ? (selectedConnector?.jsonDef?.auth?.openint_scopes ?? [])
+        : [],
   }
 
   const connectorColumns: Array<
@@ -270,15 +285,8 @@ export function ConnectorConfigList(props: {
                 jsonSchema={formSchema}
                 onSubmit={handleSave}
                 hideSubmitButton
-                formData={
-                  selectedCcfg
-                    ? {
-                        ...selectedCcfg.config,
-                        displayName: selectedCcfg.display_name ?? '',
-                        disabled: selectedCcfg.disabled ?? false,
-                      }
-                    : {}
-                }
+                formData={formData}
+                formContext={formContext}
               />
               <SheetFooter className="mt-auto flex flex-row justify-between border-t pt-4">
                 <Button

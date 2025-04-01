@@ -47,18 +47,7 @@ export function jsonSchemaToUiSchema(jsonSchema: RJSFSchema): UiSchema {
       Object.assign(uiSchema[key], {
         'ui:title': friendlyLabel,
         'ui:classNames': 'pt-2',
-        ...(key === 'scopes'
-          ? {
-              'ui:widget': 'ScopesWidget',
-              'ui:options': {
-                // TODO: @rodrigo - Get available scopes from the connector
-                availableScopes: ['read', 'write'],
-              },
-            }
-          : {}),
-        ...Object.fromEntries(
-          Object.entries(value).filter(([k]) => k.startsWith('ui:')),
-        ),
+        ...Object.fromEntries(Object.entries(value)),
       })
     }
   }

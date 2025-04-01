@@ -39,13 +39,22 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
         oauth: z.union([
           z
             .object({
-              scopes: zOpenIntDefaultScopes.openapi({
-                title: 'Scopes',
-                description: 'Scopes for OpenInt Platform Credentials',
-              }),
+              scopes: zOpenIntDefaultScopes
+                .openapi({
+                  title: 'Scopes',
+                  description: 'Scopes for OpenInt Platform Credentials',
+                })
+                .openapi({
+                  'ui:widget': 'ScopesWidget',
+                }),
             })
-            .openapi({title: 'Use OpenInt platform credentials'}),
-          schema.shape.oauth.openapi({title: 'Use my own'}),
+            .openapi({
+              title: 'Use OpenInt platform credentials',
+            }),
+          schema.shape.oauth.openapi({
+            title: 'Use my own',
+            'ui:field': 'OAuthField',
+          }),
         ]),
       })
     }
