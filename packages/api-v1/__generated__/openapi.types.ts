@@ -24,23 +24,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/connector/{name}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Get a connector by name */
-        get: operations["getConnectorByName"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/connector-config": {
         parameters: {
             query?: never;
@@ -132,26 +115,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["preConnect"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/event": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Organization Events
-         * @description List all events for an organization
-         */
-        get: operations["listEvents"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -3918,22 +3881,6 @@ export interface components {
             created_at: string;
             connection_count: number;
         };
-        /** event */
-        "core.event": {
-            id: string;
-            name: string;
-            data: (string | number | boolean | null) | {
-                [key: string]: unknown;
-            } | unknown[];
-            timestamp: string;
-            user: (string | number | boolean | null) | {
-                [key: string]: unknown;
-            } | unknown[] | null;
-            v: string | null;
-            org_id: string | null;
-            user_id: string | null;
-            customer_id: string | null;
-        };
         /** Integration */
         "core.integration": {
             connector_name: string;
@@ -4120,78 +4067,6 @@ export interface operations {
                     "application/json": ({
                         integrations?: components["schemas"]["core.integration"][];
                     } & components["schemas"]["core.connector"])[];
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    getConnectorByName: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description String connector name.
-                 *
-                 *     Available Options: `aircall`, `airtable`, `apollo`, `brex`, `coda`, `confluence`, `discord`, `facebook`, `finch`, `firebase`, `foreceipt`, `github`, `gong`, `googlecalendar`, `googledocs`, `googledrive`, `googlemail`, `googlesheet`, `greenhouse`, `heron`, `hubspot`, `instagram`, `intercom`, `jira`, `kustomer`, `lever`, `linear`, `linkedin`, `lunchmoney`, `mercury`, `merge`, `microsoft`, `moota`, `notion`, `onebrick`, `outreach`, `pipedrive`, `plaid`, `postgres`, `quickbooks`, `ramp`, `reddit`, `salesforce`, `salesloft`, `saltedge`, `sharepointonline`, `slack`, `splitwise`, `stripe`, `teller`, `toggl`, `twenty`, `twitter`, `venmo`, `wise`, `xero`, `yodlee`, `zohodesk` */
-                name: "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "mercury" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "postgres" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "venmo" | "wise" | "xero" | "yodlee" | "zohodesk";
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        integrations?: components["schemas"]["core.integration"][];
-                    } & components["schemas"]["core.connector"];
                 };
             };
             /** @description Invalid input data */
@@ -4808,90 +4683,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    listEvents: {
-        parameters: {
-            query?: {
-                /** @description Limit the number of items returned */
-                limit?: number;
-                /** @description Offset the items returned */
-                offset?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["core.event"][];
-                        /** @description Total number of items in the database for the organization */
-                        total: number;
-                        /**
-                         * @description Limit the number of items returned
-                         * @default 50
-                         */
-                        limit: number;
-                        /**
-                         * @description Offset the items returned
-                         * @default 0
-                         */
-                        offset: number;
-                    };
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
             /** @description Internal server error */
