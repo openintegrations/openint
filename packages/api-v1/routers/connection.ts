@@ -2,8 +2,10 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {and, eq, schema, sql} from '@openint/db'
-import {Core, core} from '../models'
+import {makeId} from '@openint/cdk'
+import {and, dbUpsertOne, eq, schema, sql} from '@openint/db'
+import {makeUlid} from '@openint/util'
+import {Core, core, zConnectionSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
 import {expandConnector} from './connectorConfig'
@@ -379,6 +381,8 @@ export const connectionRouter = router({
         try {
           await connector.checkConnection(connection.settings as any)
           // QQ: should this parse the results of checkConnection somehow?
+
+          // TODO: persist the result of checkConnection for settings
           return {
             id: connection.id as `conn_${string}`,
             status: 'healthy',
@@ -423,5 +427,98 @@ export const connectionRouter = router({
         .delete(schema.connection)
         .where(eq(schema.connection.id, input.id))
       return {id: connection.id}
+    }),
+
+  createConnection: orgProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/connection',
+        description: 'Import an existing connection after validation',
+      },
+    })
+    .input(
+      z.object({
+        connector_config_id: zConnectorConfigId,
+        metadata: z.record(z.unknown()).optional(),
+        customer_id: zCustomerId,
+        data: zConnectionSettings,
+      }),
+    )
+    .output(core.connection)
+    .mutation(async ({ctx, input}) => {
+      // Verify connector config exists
+      const ccfg = await ctx.db.query.connector_config.findFirst({
+        where: eq(schema.connector_config.id, input.connector_config_id),
+      })
+      if (!ccfg) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config ${input.connector_config_id} not found`,
+        })
+      }
+
+      // Verify connector names match
+      if (ccfg.connector_name !== input.data.connector_name) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: `Connector name mismatch: config is ${ccfg.connector_name} but input is ${input.data.connector_name}`,
+        })
+      }
+
+      // Get connector implementation
+      const connector =
+        serverConnectors[
+          input.data.connector_name as keyof typeof serverConnectors
+        ]
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector ${input.data.connector_name} not found`,
+        })
+      }
+
+      let settings = input.data.settings
+      // Check if connection is valid
+      if (
+        'checkConnection' in connector &&
+        typeof connector.checkConnection === 'function'
+      ) {
+        try {
+          settings = await connector.checkConnection(input.data.settings)
+        } catch (error) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: `Connection check failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          })
+        }
+      }
+
+      // Create connection record
+      const id = makeId('conn', input.data.connector_name, makeUlid())
+      const [conn] = await dbUpsertOne(
+        ctx.db,
+        schema.connection,
+        {
+          id,
+          settings,
+          connector_config_id: input.connector_config_id,
+          customer_id: input.customer_id,
+          metadata: input.metadata,
+        },
+        {keyColumns: ['id']},
+      ).returning()
+
+      if (!conn) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create connection',
+        })
+      }
+
+      return {
+        ...conn,
+        customer_id: input.customer_id,
+      }
     }),
 })
