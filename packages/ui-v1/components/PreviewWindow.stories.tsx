@@ -1,100 +1,72 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {BrowserWindow, MobileScreen, TabletScreen} from './PreviewWindow'
+import {PreviewWindow} from './PreviewWindow'
 
 const meta = {
-  title: 'Components/PreviewWindow',
+  title: 'UI/PreviewWindow',
+  component: PreviewWindow,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
-  tags: ['autodocs'],
-} satisfies Meta
+  argTypes: {
+    isLoading: {
+      control: 'boolean',
+      description: 'Shows loading spinner in URL bar',
+      defaultValue: false,
+    },
+  },
+} satisfies Meta<typeof PreviewWindow>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-const ExampleContent = () => (
-  <div className="p-8">
-    <h1 className="mb-4 text-2xl font-bold">Welcome to Device Preview</h1>
-    <p className="text-muted-foreground mb-4">
-      This is an example of how content looks in different device previews.
-    </p>
-    <div className="grid gap-4">
-      <div className="rounded-lg border p-4">
-        <h2 className="mb-2 text-lg font-semibold">Section 1</h2>
-        <p className="text-muted-foreground">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </p>
-      </div>
-      <div className="rounded-lg border p-4">
-        <h2 className="mb-2 text-lg font-semibold">Section 2</h2>
-        <p className="text-muted-foreground">
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
+const content = (
+  <div className="bg-muted/50 flex h-full items-center justify-center">
+    <div className="text-center">
+      <h1 className="text-2xl font-bold">Preview Window</h1>
+      <p className="text-muted-foreground mt-2">
+        This content adapts to different device views
+      </p>
     </div>
   </div>
 )
 
-export const Desktop: Story = {
-  render: () => (
-    <BrowserWindow>
-      <ExampleContent />
-    </BrowserWindow>
-  ),
+export const Default: Story = {
+  args: {
+    children: content,
+  },
 }
 
-export const DesktopLoading: Story = {
-  render: () => (
-    <BrowserWindow isLoading url="https://openint.dev">
-      <ExampleContent />
-    </BrowserWindow>
-  ),
+export const CustomHeight: Story = {
+  args: {
+    children: content,
+    className: 'h-[600px]',
+  },
 }
 
-export const Mobile: Story = {
-  render: () => (
-    <MobileScreen>
-      <ExampleContent />
-    </MobileScreen>
-  ),
+export const Loading: Story = {
+  args: {
+    children: content,
+    isLoading: true,
+  },
 }
 
-export const MobileLoading: Story = {
-  render: () => (
-    <MobileScreen isLoading url="https://openint.dev/docs">
-      <ExampleContent />
-    </MobileScreen>
-  ),
+export const MobileDefault: Story = {
+  args: {
+    children: content,
+    defaultView: 'mobile',
+  },
 }
 
-export const Tablet: Story = {
-  render: () => (
-    <TabletScreen>
-      <ExampleContent />
-    </TabletScreen>
-  ),
+export const TabletDefault: Story = {
+  args: {
+    children: content,
+    defaultView: 'tablet',
+  },
 }
 
-export const TabletLoading: Story = {
-  render: () => (
-    <TabletScreen isLoading url="https://openint.dev/dashboard">
-      <ExampleContent />
-    </TabletScreen>
-  ),
-}
-
-export const AllDevices: Story = {
-  render: () => (
-    <div className="flex items-start gap-8 p-8">
-      <BrowserWindow className="w-[800px]">
-        <ExampleContent />
-      </BrowserWindow>
-      <TabletScreen>
-        <ExampleContent />
-      </TabletScreen>
-      <MobileScreen>
-        <ExampleContent />
-      </MobileScreen>
-    </div>
-  ),
+export const BrowserDefault: Story = {
+  args: {
+    children: content,
+    defaultView: 'browser',
+  },
 }

@@ -1,7 +1,8 @@
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui'
 
-interface DeviceProps {
+interface PreviewProps {
   children: React.ReactNode
   className?: string
   url?: string
@@ -11,10 +12,9 @@ interface DeviceProps {
 export function BrowserWindow({
   children,
   className,
-
   url = 'https://example.com',
   isLoading = false,
-}: DeviceProps) {
+}: PreviewProps) {
   return (
     <div
       className={cn(
@@ -125,11 +125,11 @@ export function MobileScreen({
   className,
   url = 'https://example.com',
   isLoading = false,
-}: DeviceProps) {
+}: PreviewProps) {
   return (
     <div
       className={cn(
-        'bg-background overflow-hidden rounded-[3rem] border-8 border-gray-900 shadow-lg relative',
+        'bg-background relative overflow-hidden rounded-[3rem] border-8 border-gray-900 shadow-lg',
         'h-[852px] w-[393px]', // iPhone 14 Pro dimensions
         className,
       )}>
@@ -220,7 +220,7 @@ export function TabletScreen({
   className,
   url = 'https://example.com',
   isLoading = false,
-}: DeviceProps) {
+}: PreviewProps) {
   return (
     <div
       className={cn(
@@ -228,11 +228,6 @@ export function TabletScreen({
         'h-[1180px] w-[820px]', // iPad Air dimensions
         className,
       )}>
-      {/* Camera */}
-      <div className="absolute left-1/2 top-4 -translate-x-1/2">
-        <div className="h-3 w-3 rounded-full bg-gray-900" />
-      </div>
-
       {/* Status Bar */}
       <div className="bg-background flex h-8 items-center justify-between px-6">
         <div className="text-sm font-medium">9:41</div>
@@ -332,3 +327,59 @@ export function TabletScreen({
     </div>
   )
 }
+
+interface PreviewWindowProps extends PreviewProps {
+  defaultView?: 'browser' | 'tablet' | 'mobile'
+}
+
+export function PreviewWindow({
+  children,
+  className,
+  url = 'https://example.com',
+  isLoading = false,
+  defaultView = 'browser',
+}: PreviewWindowProps) {
+  const [view, setView] = React.useState<'browser' | 'tablet' | 'mobile'>(
+    defaultView,
+  )
+
+  return (
+    <Tabs
+      value={view}
+      className={className}
+      onValueChange={(value) =>
+        setView(value as 'browser' | 'tablet' | 'mobile')
+      }>
+      <div className="flex justify-center">
+        <TabsList>
+          <TabsTrigger value="browser">Browser</TabsTrigger>
+          <TabsTrigger value="tablet">Tablet</TabsTrigger>
+          <TabsTrigger value="mobile">Mobile</TabsTrigger>
+        </TabsList>
+      </div>
+
+      {/* Preview Container */}
+
+      <TabsContent value="browser" className="mt-0 flex justify-center">
+        <BrowserWindow url={url} isLoading={isLoading}>
+          {children}
+        </BrowserWindow>
+      </TabsContent>
+      <TabsContent value="mobile" className="mt-0 flex justify-center">
+        <MobileScreen url={url} isLoading={isLoading}>
+          {children}
+        </MobileScreen>
+      </TabsContent>
+      <TabsContent value="tablet" className="mt-0 flex justify-center">
+        <TabletScreen url={url} isLoading={isLoading}>
+          {children}
+        </TabletScreen>
+      </TabsContent>
+    </Tabs>
+  )
+}
+
+// Export individual components for backward compatibility
+PreviewWindow.BrowserWindow = BrowserWindow
+PreviewWindow.MobileScreen = MobileScreen
+PreviewWindow.TabletScreen = TabletScreen
