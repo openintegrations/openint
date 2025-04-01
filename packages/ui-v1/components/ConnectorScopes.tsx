@@ -9,6 +9,10 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from '@openint/shadcn/ui'
 
 // Context for sharing state between compound components
@@ -253,38 +257,49 @@ interface ScopesListProps {
 const ScopesList: React.FC<ScopesListProps> = ({className}) => {
   const {scopes, editable, handleRemoveScope} = useConnectorScopes()
 
+  const BadgeContent = (scope: string) => (
+    <Badge
+      key={scope}
+      variant="secondary"
+      className="inline-flex items-center gap-1">
+      <span className="max-w-[120px] truncate">{scope}</span>
+      {editable && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            handleRemoveScope(scope)
+          }}
+          className="ml-1 flex-shrink-0 rounded-full p-0.5 hover:bg-gray-200">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      )}
+    </Badge>
+  )
+
   return (
     <div className={cn('w-full', className)}>
       <div className="flex flex-wrap gap-2">
         {scopes.map((scope) => (
-          <Badge
-            key={scope}
-            variant="secondary"
-            className="inline-flex items-center gap-1">
-            <span className="max-w-[120px] truncate">{scope}</span>
-            {editable && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleRemoveScope(scope)
-                }}
-                className="ml-1 flex-shrink-0 rounded-full p-0.5 hover:bg-gray-200">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round">
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-              </button>
-            )}
-          </Badge>
+          <TooltipProvider key={scope}>
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger asChild>{BadgeContent(scope)}</TooltipTrigger>
+              <TooltipContent>
+                <p>{scope}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         ))}
       </div>
     </div>
