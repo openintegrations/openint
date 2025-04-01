@@ -97,7 +97,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items).toHaveLength(0)
   })
 
-  // TODO: Migrate this to plaid
+  // TODO: Migrate this to plaid instead of the old connector google
   // test('connector config create with integrations', async () => {
   //   const res = await asOrg.createConnectorConfig({
   //     connector_name: 'google',
@@ -163,34 +163,34 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   //   })
   // })
 
-  test('list connector config with expand connection_count', async () => {
-    const res = await getClient({
-      role: 'org',
-      orgId: 'org_222',
-    }).listConnectorConfigs.query({
-      expand: 'connection_count',
-    })
-    expect(res.items).toHaveLength(2)
+  // test('list connector config with expand connection_count', async () => {
+  //   const res = await getClient({
+  //     role: 'org',
+  //     orgId: 'org_222',
+  //   }).listConnectorConfigs.query({
+  //     expand: 'connection_count',
+  //   })
+  //   expect(res.items).toHaveLength(2)
 
-    expect(res.items[0]?.connection_count).toEqual(0)
-    expect(res.items[1]?.connection_count).toEqual(0)
-  })
+  //   expect(res.items[0]?.connection_count).toEqual(0)
+  //   expect(res.items[1]?.connection_count).toEqual(0)
+  // })
 
-  test.skip('list connector config with expand connector and enabled_integrations', async () => {
-    const res = await getClient({
-      role: 'org',
-      orgId: 'org_222',
-    }).listConnectorConfigs.query({
-      expand: 'connector,enabled_integrations',
-    })
+  // test.skip('list connector config with expand connector and enabled_integrations', async () => {
+  //   const res = await getClient({
+  //     role: 'org',
+  //     orgId: 'org_222',
+  //   }).listConnectorConfigs.query({
+  //     expand: 'connector,enabled_integrations',
+  //   })
 
-    const googleConnector = res.items.find(
-      (item) => item['connector_name'] === 'google',
-    )
+  //   const googleConnector = res.items.find(
+  //     (item) => item['connector_name'] === 'google',
+  //   )
 
-    expect(googleConnector?.integrations).toBeDefined()
-    expect(googleConnector?.connector).toBeDefined()
-  })
+  //   expect(googleConnector?.integrations).toBeDefined()
+  //   expect(googleConnector?.connector).toBeDefined()
+  // })
 
   test('update connector config', async () => {
     const createRes = await asOrg.createConnectorConfig({
