@@ -1,3 +1,5 @@
+import {server as connectorAircall_server} from './aircall'
+import {def as connectorAircall_def} from './aircall/def'
 import {server as connectorGooglecalendar_server} from './googlecalendar'
 import {def as connectorGooglecalendar_def} from './googlecalendar/def'
 import {server as connectorGoogledocs_server} from './googledocs'
@@ -14,6 +16,8 @@ export type {JsonConnectorDef} from './def'
 export type {AuthType} from './def'
 
 export {
+  connectorAircall_server,
+  connectorAircall_def,
   connectorGooglecalendar_server,
   connectorGooglecalendar_def,
   connectorGoogledocs_server,

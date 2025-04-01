@@ -3,15 +3,6 @@
 module.exports = [
   {dirName: 'all-connectors', varName: 'allConnectors', imports: {}},
   {
-    name: 'aircall',
-    dirName: 'connector-aircall',
-    varName: 'connectorAircall',
-    imports: {
-      def: '@openint/connector-aircall/def',
-      server: '@openint/connector-aircall/server',
-    },
-  },
-  {
     name: 'airtable',
     dirName: 'connector-airtable',
     varName: 'connectorAirtable',
@@ -470,6 +461,19 @@ module.exports = [
     imports: {
       def: '@openint/connector-zohodesk/def',
       server: '@openint/connector-zohodesk/server',
+    },
+  },
+  {
+    name: 'aircall',
+    dirName: 'cnext-aircall',
+    varName: 'connectorAircall',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorAircall_def',
+        server: 'connectorAircall_server',
+      },
     },
   },
   {
