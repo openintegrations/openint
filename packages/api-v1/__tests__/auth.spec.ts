@@ -57,7 +57,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       api_key: apiKey,
     })
     await client.createConnectorConfig.mutate({
-      connector_name: 'qbo',
+      connector_name: 'quickbooks',
       config: {
         oauth: {client_id: 'client_123', client_secret: 'xxx'},
         envName: 'sandbox',
@@ -89,12 +89,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
     const client = getClient({role: 'org', orgId: 'org_123'})
     const res = await client.listConnectorConfigs.query()
     expect(res.items).toHaveLength(1)
-    expect(res.items[0]?.id).toMatch(/^ccfg_qbo_/)
+    expect(res.items[0]?.id).toMatch(/^ccfg_quickbooks_/)
 
     const caller = getCaller({role: 'org', orgId: 'org_123'})
     const res2 = await caller.listConnectorConfigs()
     expect(res2.items).toHaveLength(1)
-    expect(res2.items[0]?.id).toMatch(/^ccfg_qbo_/)
+    expect(res2.items[0]?.id).toMatch(/^ccfg_quickbooks_/)
   })
 
   test('org has no access to other orgs connector config', async () => {

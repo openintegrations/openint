@@ -35,14 +35,14 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       name: 'Test Org',
     })
     const ccfg = await asOrgCcfgCaller.createConnectorConfig({
-      connector_name: 'qbo',
+      connector_name: 'quickbooks',
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
         envName: 'sandbox',
       },
     })
     await db.insert(schema.connection).values({
-      id: makeId('conn', 'qbo', makeUlid()),
+      id: makeId('conn', 'quickbooks', makeUlid()),
       customer_id: 'cus_222',
       connector_config_id: ccfg.id,
       metadata: {},

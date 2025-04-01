@@ -40,7 +40,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('create connector config', async () => {
     const res = await asOrg.createConnectorConfig({
-      connector_name: 'qbo',
+      connector_name: 'quickbooks',
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
         envName: 'sandbox',
@@ -49,7 +49,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res).toEqual({
       id: expect.any(String),
       org_id: 'org_222',
-      connector_name: 'qbo',
+      connector_name: 'quickbooks',
       created_at: expect.any(String),
       updated_at: expect.any(String),
       disabled: false,
@@ -194,7 +194,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('update connector config', async () => {
     const createRes = await asOrg.createConnectorConfig({
-      connector_name: 'qbo',
+      connector_name: 'quickbooks',
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
         envName: 'sandbox',
@@ -230,7 +230,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('delete connector config', async () => {
     const createRes = await asOrg.createConnectorConfig({
-      connector_name: 'qbo',
+      connector_name: 'quickbooks',
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
         envName: 'sandbox',
