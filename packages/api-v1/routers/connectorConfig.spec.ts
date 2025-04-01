@@ -2,6 +2,7 @@ import type {CustomerId, Viewer} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {getTestTRPCClient} from '../__tests__/test-utils'
 import {routerContextFromViewer} from '../trpc/context'
+import {onError} from '../trpc/error-handling'
 import {connectorConfigRouter} from './connectorConfig'
 
 const logger = false
@@ -11,6 +12,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   function getCaller(viewer: Viewer) {
     return connectorConfigRouter.createCaller(
       routerContextFromViewer({db, viewer}),
+      {onError},
     )
   }
   /** Also possible */

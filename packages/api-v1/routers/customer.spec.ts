@@ -3,6 +3,7 @@ import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {makeUlid} from '@openint/util'
 import {routerContextFromViewer} from '../trpc/context'
+import {onError} from '../trpc/error-handling'
 import {connectorConfigRouter} from './connectorConfig'
 import {customerRouter} from './customer'
 
@@ -10,12 +11,15 @@ const logger = false
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   function getCustomerCaller(viewer: Viewer) {
-    return customerRouter.createCaller(routerContextFromViewer({db, viewer}))
+    return customerRouter.createCaller(routerContextFromViewer({db, viewer}), {
+      onError,
+    })
   }
 
   function getCcfgCaller(viewer: Viewer) {
     return connectorConfigRouter.createCaller(
       routerContextFromViewer({db, viewer}),
+      {onError},
     )
   }
 
