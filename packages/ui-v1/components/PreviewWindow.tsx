@@ -1,3 +1,4 @@
+import {MonitorIcon, SmartphoneIcon, TabletIcon} from 'lucide-react'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui'
@@ -352,9 +353,18 @@ export function PreviewWindow({
       }>
       <div className="flex justify-center">
         <TabsList>
-          <TabsTrigger value="browser">Browser</TabsTrigger>
-          <TabsTrigger value="tablet">Tablet</TabsTrigger>
-          <TabsTrigger value="mobile">Mobile</TabsTrigger>
+          <TabsTrigger value="browser" className="flex items-center gap-2">
+            <MonitorIcon className="h-4 w-4" />
+            Browser
+          </TabsTrigger>
+          <TabsTrigger value="tablet" className="flex items-center gap-2">
+            <TabletIcon className="h-4 w-4" />
+            Tablet
+          </TabsTrigger>
+          <TabsTrigger value="mobile" className="flex items-center gap-2">
+            <SmartphoneIcon className="h-4 w-4" />
+            Mobile
+          </TabsTrigger>
         </TabsList>
       </div>
 
