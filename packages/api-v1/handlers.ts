@@ -6,6 +6,7 @@ import type {Database} from '@openint/db'
 // Technically doesn't belong here as it introduces circular dependencies
 import {appRouter} from './routers'
 import {routerContextFromRequest, routerContextFromViewer} from './trpc/context'
+import {onError} from './trpc/error-handling'
 
 export interface CreateFetchHandlerOptions {
   endpoint: `/${string}`

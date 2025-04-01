@@ -10,7 +10,6 @@ import {
 } from '@trpc/server/unstable-core-do-not-import'
 import type {ZodError} from 'zod'
 import {safeJSONParse, z} from '@openint/util'
-import {RouterContext} from './context'
 
 export const zErrorCode = z
   .enum(
