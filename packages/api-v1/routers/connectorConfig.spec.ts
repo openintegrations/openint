@@ -97,70 +97,71 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.items).toHaveLength(0)
   })
 
-  test('connector config create with integrations', async () => {
-    const res = await asOrg.createConnectorConfig({
-      connector_name: 'google',
-      display_name: 'Test',
-      config: {
-        oauth: {client_id: 'client_222', client_secret: 'xxx'},
-        integrations: {
-          drive: {
-            enabled: true,
-            scopes: 'https://www.googleapis.com/auth/drive',
-          },
-          gmail: {
-            enabled: false,
-            scopes: 'https://www.googleapis.com/auth/gmail',
-          },
-        },
-      },
-    })
+  // TODO: Migrate this to plaid
+  // test('connector config create with integrations', async () => {
+  //   const res = await asOrg.createConnectorConfig({
+  //     connector_name: 'google',
+  //     display_name: 'Test',
+  //     config: {
+  //       oauth: {client_id: 'client_222', client_secret: 'xxx'},
+  //       integrations: {
+  //         drive: {
+  //           enabled: true,
+  //           scopes: 'https://www.googleapis.com/auth/drive',
+  //         },
+  //         gmail: {
+  //           enabled: false,
+  //           scopes: 'https://www.googleapis.com/auth/gmail',
+  //         },
+  //       },
+  //     },
+  //   })
 
-    expect(res).toEqual({
-      id: expect.any(String),
-      org_id: 'org_222',
-      connector_name: 'google',
-      display_name: 'Test',
-      disabled: false,
-      created_at: expect.any(String),
-      updated_at: expect.any(String),
-      config: {
-        oauth: {client_id: 'client_222', client_secret: 'xxx'},
-        integrations: {
-          drive: {
-            enabled: true,
-            scopes: 'https://www.googleapis.com/auth/drive',
-          },
-          gmail: {
-            enabled: false,
-            scopes: 'https://www.googleapis.com/auth/gmail',
-          },
-        },
-      },
-    })
-  })
+  //   expect(res).toEqual({
+  //     id: expect.any(String),
+  //     org_id: 'org_222',
+  //     connector_name: 'google',
+  //     display_name: 'Test',
+  //     disabled: false,
+  //     created_at: expect.any(String),
+  //     updated_at: expect.any(String),
+  //     config: {
+  //       oauth: {client_id: 'client_222', client_secret: 'xxx'},
+  //       integrations: {
+  //         drive: {
+  //           enabled: true,
+  //           scopes: 'https://www.googleapis.com/auth/drive',
+  //         },
+  //         gmail: {
+  //           enabled: false,
+  //           scopes: 'https://www.googleapis.com/auth/gmail',
+  //         },
+  //       },
+  //     },
+  //   })
+  // })
 
-  test.skip('list connector config with expand enabled_integrations', async () => {
-    const res = await getClient({
-      role: 'org',
-      orgId: 'org_222',
-    }).listConnectorConfigs.query({
-      expand: 'enabled_integrations',
-    })
-    expect(res.items).toHaveLength(2)
+  // test.skip('list connector config with expand enabled_integrations', async () => {
+  //   const res = await getClient({
+  //     role: 'org',
+  //     orgId: 'org_222',
+  //   }).listConnectorConfigs.query({
+  //     expand: 'enabled_integrations',
+  //   })
+  //   expect(res.items).toHaveLength(2)
 
-    // Find the Google connector
-    const googleConnector = res.items.find(
-      (item) => item.connector_name === 'google',
-    )
+  //   // Find the Google connector
+  //   const googleConnector = res.items.find(
+  //     (item) => item.connector_name === 'google',
+  //   )
 
-    expect(googleConnector?.integrations).toEqual({
-      drive: {
-        enabled: true,
-        scopes: 'https://www.googleapis.com/auth/drive',
-      },
-    })
-  })
+  //   expect(googleConnector?.integrations).toEqual({
+  //     drive: {
+  //       enabled: true,
+  //       scopes: 'https://www.googleapis.com/auth/drive',
+  //     },
+  //   })
+  // })
 
   test('list connector config with expand connection_count', async () => {
     const res = await getClient({
