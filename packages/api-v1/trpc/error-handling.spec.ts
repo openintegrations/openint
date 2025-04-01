@@ -5,6 +5,7 @@ import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {createOpenApiFetchHandler, type OpenApiMeta} from 'trpc-to-openapi'
 import {ZodError} from 'zod'
 import {z} from '@openint/util'
+import {parseAPIError, zAPIError} from './error-handling'
 
 const trpc = initTRPC.meta<OpenApiMeta>().create()
 
@@ -60,7 +61,8 @@ describe('OpenAPI endpoints', () => {
     )
     expect(res.status).toBe(404)
 
-    expect(await res.json()).toMatchObject({
+    const json = await res.json()
+    expect(json).toMatchObject({
       code: 'NOT_FOUND',
       message: 'Resource not found',
       data: {
@@ -71,6 +73,7 @@ describe('OpenAPI endpoints', () => {
         // TODO: Test that stack does not show during prod
       },
     })
+    expect(parseAPIError(json)).toEqual(json)
   })
 
   test('handle bad request', async () => {
@@ -78,7 +81,8 @@ describe('OpenAPI endpoints', () => {
       new Request('http://localhost:3000/error-test?code=BAD_REQUEST'),
     )
     expect(res.status).toBe(400)
-    expect(await res.json()).toMatchObject({
+    const json = await res.json()
+    expect(json).toMatchObject({
       code: 'BAD_REQUEST',
       message: 'Invalid request parameters',
       data: {
@@ -88,6 +92,7 @@ describe('OpenAPI endpoints', () => {
         stack: expect.any(String),
       },
     })
+    expect(parseAPIError(json)).toEqual(json)
   })
 
   test('handle 500', async () => {
@@ -95,7 +100,8 @@ describe('OpenAPI endpoints', () => {
       new Request('http://localhost:3000/err500'),
     )
     expect(res.status).toBe(500)
-    expect(await res.json()).toMatchObject({
+    const json = await res.json()
+    expect(json).toMatchObject({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'custom error',
       data: {
@@ -105,6 +111,7 @@ describe('OpenAPI endpoints', () => {
         stack: expect.any(String),
       },
     })
+    expect(parseAPIError(json)).toEqual(json)
   })
 
   test('input validation failure', async () => {
@@ -112,7 +119,8 @@ describe('OpenAPI endpoints', () => {
       new Request('http://localhost:3000/error-test'),
     )
     expect(res.status).toBe(400)
-    expect(await res.json()).toMatchObject({
+    const json = await res.json()
+    expect(json).toMatchObject({
       code: 'BAD_REQUEST',
       message: 'Input validation failed',
       data: {
@@ -131,6 +139,7 @@ describe('OpenAPI endpoints', () => {
         },
       ],
     })
+    expect(parseAPIError(json)).toEqual(json)
   })
 
   test('handle output validation failure', async () => {
@@ -139,7 +148,8 @@ describe('OpenAPI endpoints', () => {
     )
 
     expect(res.status).toBe(500)
-    expect(await res.json()).toMatchObject({
+    const json = await res.json()
+    expect(json).toMatchObject({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'Output validation failed',
       data: {
@@ -159,6 +169,7 @@ describe('OpenAPI endpoints', () => {
       //   },
       // ],
     })
+    expect(parseAPIError(json)).toEqual(json)
   })
 })
 
@@ -189,6 +200,16 @@ describe('TRPC over http', () => {
       path: 'errorTest',
       stack: expect.any(String),
     })
+    expect(parseAPIError(err)).toMatchObject({
+      code: 'NOT_FOUND',
+      message: 'Resource not found',
+      data: {
+        code: 'NOT_FOUND',
+        httpStatus: 404,
+        path: 'errorTest',
+        stack: expect.any(String),
+      },
+    })
   })
 
   test('handle 500 error', async () => {
@@ -203,6 +224,16 @@ describe('TRPC over http', () => {
       httpStatus: 500,
       path: 'err500',
       stack: expect.any(String),
+    })
+    expect(parseAPIError(err)).toMatchObject({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'custom error',
+      data: {
+        code: 'INTERNAL_SERVER_ERROR',
+        httpStatus: 500,
+        path: 'err500',
+        stack: expect.any(String),
+      },
     })
   })
 
@@ -237,9 +268,30 @@ describe('TRPC over http', () => {
       path: 'errorTest',
       stack: expect.any(String),
     })
+    expect(parseAPIError(err)).toMatchObject({
+      code: 'BAD_REQUEST',
+      // No way to get the message from the TRPCError unfortunately
+      // message: 'Input validation failed',
+      // TODO: Implement custom message similar to
+      // https://github.com/mcampa/trpc-to-openapi/blob/af44cc54d1d719b1bc77d05067cdd4a3b4f882aa/src/adapters/node-http/core.ts#L197-L210
+      data: {
+        code: 'BAD_REQUEST',
+        httpStatus: 400,
+        path: 'errorTest',
+        stack: expect.any(String),
+      },
+      issues: [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'undefined',
+          path: ['code'],
+          message: 'Required',
+        },
+      ],
+    })
 
     const json = err.meta?.['responseJSON']
-
     expect(json).toEqual({
       error: {
         message: JSON.stringify(
@@ -279,6 +331,7 @@ describe('TRPC over http', () => {
     expect(removeStack(await res.json())).toEqual(
       removeStack(err.meta?.['responseJSON']),
     )
+    // console.log(err.meta?.['responseJSON'])
   })
 
   test('handle output validation failure', async () => {
@@ -294,7 +347,16 @@ describe('TRPC over http', () => {
       path: 'errOutputValidation',
       stack: expect.any(String),
     })
-    // console.log(err)
+    expect(parseAPIError(err)).toMatchObject({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Output validation failed',
+      data: {
+        code: 'INTERNAL_SERVER_ERROR',
+        httpStatus: 500,
+        path: 'errOutputValidation',
+        stack: expect.any(String),
+      },
+    })
   })
 })
 
@@ -307,6 +369,20 @@ describe('TRPC caller', () => {
     expect(err.code).toEqual('NOT_FOUND')
     expect(err.message).toEqual('Resource not found')
     expect(err.stack).toEqual(expect.any(String))
+
+    // console.dir(err)
+    // we need the path and httpStatus, how to get?
+
+    // expect(parseAPIError(err)).toMatchObject({
+    //   code: 'NOT_FOUND',
+    //   message: 'Resource not found',
+    //   data: {
+    //     code: 'NOT_FOUND',
+    //     httpStatus: 404,
+    //     path: 'errorTest',
+    //     stack: expect.any(String),
+    //   },
+    // })
   })
 
   test('handle 500 error', async () => {
