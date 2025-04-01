@@ -29,7 +29,7 @@ export const SIDEBAR_NAV_ITEMS = [
     icon: 'Wand',
   },
   {
-    title: 'Connectors',
+    title: 'Connector Configs',
     url: '/console/connector-config',
     icon: 'Layers',
   },
