@@ -16,9 +16,13 @@ export interface CreateAppOptions
 // It's annoying how elysia does not really allow for dependency injection like TRPC, so we do ourselves
 export function createApp({db}: CreateAppOptions) {
   const app = new Elysia()
-    .get('/health', () => ({healthy: true}))
-    .post('/health', (ctx) => ({healthy: true, body: ctx.body}))
-    .get('/jobs/refresh-stale-connections', handleRefreshStaleConnections)
+    .get('/health', () => ({healthy: true}), {detail: {hide: true}})
+    .post('/health', (ctx) => ({healthy: true, body: ctx.body}), {
+      detail: {hide: true},
+    })
+    .get('/jobs/refresh-stale-connections', handleRefreshStaleConnections, {
+      detail: {hide: true},
+    })
     .use(
       swagger({
         // TODO: Figure out why spec.content doesn't work. so we are forced tos specify url instead
