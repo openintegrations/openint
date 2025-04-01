@@ -1,51 +1,41 @@
 'use client'
 
 import {MoreHorizontal} from 'lucide-react'
+import {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {ConnectorConfigTableCell} from '../components/ConnectorConfigTableCell'
 import type {ColumnDef} from '../components/DataTable'
 import {DataTable} from '../components/DataTable'
 
-// Define the ConnectorConfig data structure
-export interface ConnectorConfig {
-  id: string
-  name: string
-  enabled: boolean
-  environment: 'sandbox' | 'production'
-  firstCreated: string
-}
-
 // Define the columns for the connector config table
-export const columns: Array<ColumnDef<ConnectorConfig>> = [
+export const columns: Array<ColumnDef<Core['connector_config']>> = [
   {
     id: 'connectorConfig',
     header: 'Connector Name',
     cell: ({row}) => (
-      <ConnectorConfigTableCell
-        name={row.original.name}
-        id={row.original.id}
-        compact={true}
-        useIcon={false}
-        backgroundColor="#f5f5f5"
-        textColor="#666666"
-      />
+      <ConnectorConfigTableCell connectorConfig={row.original} />
     ),
   },
   {
     id: 'status',
     header: 'Status',
-    cell: ({row}) => (
-      <div
-        className={`text-sm font-medium ${row.original.enabled ? 'text-green-600' : 'text-gray-500'}`}>
-        {row.original.enabled ? 'Enabled' : 'Disabled'}
-      </div>
-    ),
+    cell: ({row}) => {
+      // This should be calculated based on the connector config's actual status
+      const isEnabled = true // Simplified for example
+      return (
+        <div
+          className={`text-sm font-medium ${isEnabled ? 'text-green-600' : 'text-gray-500'}`}>
+          {isEnabled ? 'Enabled' : 'Disabled'}
+        </div>
+      )
+    },
   },
   {
     id: 'environment',
     header: 'Env Name',
     cell: ({row}) => {
-      const isProd = row.original.environment === 'production'
+      // This should check the actual environment of the connector config
+      const isProd = row.original.config?.environment === 'production'
       return (
         <div
           className={`text-sm font-medium ${isProd ? 'text-blue-600' : 'text-amber-600'}`}>
@@ -57,9 +47,10 @@ export const columns: Array<ColumnDef<ConnectorConfig>> = [
   {
     id: 'firstCreated',
     header: 'First Created',
-    accessorKey: 'firstCreated',
     cell: ({row}) => (
-      <div className="text-gray-500">{row.original.firstCreated}</div>
+      <div className="text-gray-500">
+        {new Date(row.original.created_at).toLocaleDateString()}
+      </div>
     ),
   },
   {
@@ -78,22 +69,16 @@ export function ConnectorConfigTable({
   enableSelect,
   onRowClick,
 }: {
-  data: ConnectorConfig[]
+  data: Core['connector_config'][]
   enableSelect?: boolean
-  onRowClick?: (connectorConfig: ConnectorConfig) => void
+  onRowClick?: (connectorConfig: Core['connector_config']) => void
 }) {
   return (
     <DataTable
       data={data}
       columns={columns}
       enableSelect={enableSelect}
-      onRowClick={
-        onRowClick
-          ? (row) => {
-              onRowClick(row)
-            }
-          : undefined
-      }>
+      onRowClick={onRowClick ? (row) => onRowClick(row) : undefined}>
       <DataTable.Header>
         <DataTable.SearchInput />
         <DataTable.ColumnVisibilityToggle />

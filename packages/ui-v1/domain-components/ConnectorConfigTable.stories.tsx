@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+import {Core} from '@openint/api-v1/models'
 import {ConnectorConfigTableCell} from '../components/ConnectorConfigTableCell'
 import {
   ColumnDef,
@@ -9,76 +10,69 @@ import {
   MultiSelectActionBar,
   useTableRowSelection,
 } from '../components/MultiSelectActionBar'
-import {
-  columns,
-  ConnectorConfig,
-  ConnectorConfigTable,
-} from './ConnectorConfigTable'
+import {columns, ConnectorConfigTable} from './ConnectorConfigTable'
 
 // Sample data for the connector config table
-const connectorConfigs: ConnectorConfig[] = [
+const connectorConfigs: Core['connector_config'][] = [
   {
     id: '101',
-    name: 'Salesforce',
-    enabled: true,
-    environment: 'production',
-    firstCreated: 'May 12, 2025',
+    display_name: 'Salesforce',
+    connector_name: 'salesforce',
+    disabled: false,
+    config: {
+      environment: 'production',
+    },
+    created_at: '2025-05-12T12:00:00Z',
+    updated_at: '2025-05-12T12:00:00Z',
+    org_id: 'org-123',
   },
   {
     id: '102',
-    name: 'HubSpot',
-    enabled: true,
-    environment: 'sandbox',
-    firstCreated: 'May 10, 2025',
+    display_name: 'HubSpot',
+    connector_name: 'hubspot',
+    disabled: false,
+    config: {
+      environment: 'sandbox',
+    },
+    created_at: '2025-05-10T12:00:00Z',
+    updated_at: '2025-05-10T12:00:00Z',
+    org_id: 'org-123',
   },
   {
     id: '103',
-    name: 'Stripe',
-    enabled: false,
-    environment: 'production',
-    firstCreated: 'May 8, 2025',
+    display_name: 'Stripe',
+    connector_name: 'stripe',
+    disabled: true,
+    config: {
+      environment: 'production',
+    },
+    created_at: '2025-05-08T12:00:00Z',
+    updated_at: '2025-05-08T12:00:00Z',
+    org_id: 'org-123',
   },
   {
     id: '104',
-    name: 'Google Drive',
-    enabled: true,
-    environment: 'sandbox',
-    firstCreated: 'May 6, 2025',
+    display_name: 'Google Drive',
+    connector_name: 'google-drive',
+    disabled: false,
+    config: {
+      environment: 'sandbox',
+    },
+    created_at: '2025-05-06T12:00:00Z',
+    updated_at: '2025-05-06T12:00:00Z',
+    org_id: 'org-123',
   },
   {
     id: '105',
-    name: 'Microsoft OneDrive',
-    enabled: false,
-    environment: 'production',
-    firstCreated: 'May 4, 2025',
-  },
-  {
-    id: '106',
-    name: 'Shopify',
-    enabled: true,
-    environment: 'sandbox',
-    firstCreated: 'May 2, 2025',
-  },
-  {
-    id: '107',
-    name: 'Zendesk',
-    enabled: true,
-    environment: 'production',
-    firstCreated: 'April 30, 2025',
-  },
-  {
-    id: '108',
-    name: 'Slack',
-    enabled: false,
-    environment: 'sandbox',
-    firstCreated: 'April 28, 2025',
-  },
-  {
-    id: '109',
-    name: 'Amazon S3',
-    enabled: true,
-    environment: 'production',
-    firstCreated: 'April 26, 2025',
+    display_name: 'Microsoft OneDrive',
+    connector_name: 'onedrive',
+    disabled: true,
+    config: {
+      environment: 'production',
+    },
+    created_at: '2025-05-04T12:00:00Z',
+    updated_at: '2025-05-04T12:00:00Z',
+    org_id: 'org-123',
   },
 ]
 
@@ -92,12 +86,13 @@ const meta = {
 
 export default meta
 type Story = StoryObj<
-  typeof DataTable<ConnectorConfig, unknown> | typeof ConnectorConfigTable
+  | typeof DataTable<Core['connector_config'], unknown>
+  | typeof ConnectorConfigTable
 >
 
 type StoryArgs = {
-  data: ConnectorConfig[]
-  columns: ColumnDef<ConnectorConfig, unknown>[]
+  data: Core['connector_config'][]
+  columns: ColumnDef<Core['connector_config'], unknown>[]
   enableSelect?: boolean
 }
 
@@ -129,19 +124,20 @@ const SelectionActionsBar = () => {
   // Handle row deletion (would be connected to API in real application)
   const handleDeleteRows = (
     _selectedRows: Record<string, boolean>,
-    selectedItems: ConnectorConfig[],
+    selectedItems: Core['connector_config'][],
   ) => {
     console.log('Deleting connector configs:', selectedItems)
     alert(
       `Deleting ${selectedItems.length} connector config(s): ${selectedItems
-        .map((item) => item.name)
+        .map((item) => item.display_name || item.connector_name)
         .join(', ')}`,
     )
   }
 
   // Use the hook to get selection state and handlers
-  const {selectedCount, handleClear, handleDelete} =
-    useTableRowSelection<ConnectorConfig>(table, handleDeleteRows)
+  const {selectedCount, handleClear, handleDelete} = useTableRowSelection<
+    Core['connector_config']
+  >(table, handleDeleteRows)
 
   return selectedCount > 0 ? (
     <MultiSelectActionBar
@@ -176,71 +172,107 @@ export const WithRowSelection: Story = {
   ),
 }
 
-// Add a story to demonstrate the difference between compact and regular variants
-export const CompactVsRegularVariant: Story = {
-  args: {
-    data: connectorConfigs.slice(0, 3),
+// Define compact cell columns for the connector config table
+const compactColumns: Array<ColumnDef<Core['connector_config'], unknown>> = [
+  {
+    id: 'connectorConfig',
+    header: 'Connector Config',
+    cell: ({row}) => {
+      return (
+        <ConnectorConfigTableCell
+          connectorConfig={row.original}
+          compact={true}
+        />
+      )
+    },
   },
-  render: (args: StoryArgs) => {
-    // Create custom columns for this story
-    const customColumns: Array<ColumnDef<ConnectorConfig, unknown>> = [
-      {
-        id: 'compact',
-        header: 'Compact Variant (Just Logo & ID)',
-        cell: ({row}) => {
-          return (
-            <ConnectorConfigTableCell
-              name={row.original.name}
-              id={row.original.id}
-              compact={true}
-              backgroundColor="#f5f5f5"
-              textColor="#666666"
-            />
-          )
-        },
-      },
-      {
-        id: 'regular',
-        header: 'Regular Variant (With Name)',
-        cell: ({row}) => {
-          return (
-            <ConnectorConfigTableCell
-              name={row.original.name}
-              id={row.original.id}
-              compact={false}
-              backgroundColor="#f5f5f5"
-              textColor="#666666"
-            />
-          )
-        },
-      },
-      {
-        id: 'status',
-        header: 'Status',
-        cell: ({row}) => {
-          return (
-            <div
-              className={`text-sm font-medium ${row.original.enabled ? 'text-green-600' : 'text-gray-500'}`}>
-              {row.original.enabled ? 'Enabled' : 'Disabled'}
-            </div>
-          )
-        },
-      },
-    ]
+  {
+    id: 'status',
+    header: 'Status',
+    cell: ({row}) => {
+      return (
+        <div
+          className={`text-sm font-medium ${row.original.disabled ? 'text-gray-500' : 'text-green-600'}`}>
+          {row.original.disabled ? 'Disabled' : 'Enabled'}
+        </div>
+      )
+    },
+  },
+  {
+    id: 'environment',
+    header: 'Environment',
+    cell: ({row}) => {
+      return (
+        <div className="text-sm text-gray-500">
+          {row.original.config?.environment || 'N/A'}
+        </div>
+      )
+    },
+  },
+  {
+    id: 'created_at',
+    header: 'Created At',
+    cell: ({row}) => {
+      const date = new Date(row.original.created_at)
+      return (
+        <div className="text-sm text-gray-500">{date.toLocaleDateString()}</div>
+      )
+    },
+  },
+  {
+    id: 'updated_at',
+    header: 'Updated At',
+    cell: ({row}) => {
+      const date = new Date(row.original.updated_at)
+      return (
+        <div className="text-sm text-gray-500">{date.toLocaleDateString()}</div>
+      )
+    },
+  },
+]
 
-    return (
-      <div className="overflow-hidden rounded-lg border shadow-sm">
-        <DataTable {...args} columns={customColumns}>
-          <DataTable.Header>
-            <DataTable.SearchInput />
-            <DataTable.ColumnVisibilityToggle />
-          </DataTable.Header>
-          <DataTable.Table />
-          <DataTable.Footer>
-            <DataTable.Pagination />
-          </DataTable.Footer>
-        </DataTable>
-      </div>
-    )
+// Add a story that shows compact cells
+export const WithCompactCells: Story = {
+  args: {
+    data: connectorConfigs,
+    columns: compactColumns,
   },
+  render: (args: StoryArgs) => (
+    <div className="overflow-hidden rounded-lg border shadow-sm">
+      <DataTable {...args}>
+        <DataTable.Header>
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+        </DataTable.Header>
+        <DataTable.Table />
+        <DataTable.Footer>
+          <DataTable.Pagination />
+        </DataTable.Footer>
+      </DataTable>
+    </div>
+  ),
+}
+
+// Add a story that shows compact cells with row selection
+export const WithCompactCellsAndRowSelection: Story = {
+  args: {
+    data: connectorConfigs,
+    columns: compactColumns,
+    enableSelect: true,
+  },
+  render: (args: StoryArgs) => (
+    <div className="relative overflow-hidden rounded-lg border shadow-sm">
+      <DataTable {...args}>
+        <DataTable.Header>
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+        </DataTable.Header>
+        <DataTable.Table />
+        <DataTable.Footer>
+          <DataTable.Pagination />
+        </DataTable.Footer>
+        <SelectionActionsBar />
+      </DataTable>
+    </div>
+  ),
 }

@@ -49,11 +49,11 @@ export function BaseTableCell({
       <div className="relative flex-shrink-0">{logo}</div>
       {simple ? (
         <div className="flex items-center">
-          <div className="text-sm font-medium">{name}</div>
+          <div className="text-sm font-medium">{name || 'Unknown'}</div>
         </div>
       ) : (
         <div className="flex h-[55px] flex-col justify-between">
-          <div className="text-sm font-medium">{name}</div>
+          <div className="text-sm font-medium">{name || 'Unknown'}</div>
           {id && <CopyID value={id} width={280} size="medium" />}
         </div>
       )}

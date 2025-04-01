@@ -27,6 +27,7 @@ interface Connection {
   connectorConfigName: string
   firstCreated: string
   lastUpdated: string
+  metadata?: Record<string, any> // Add metadata field for compatibility
 }
 
 // Sample data for the connections table
@@ -41,6 +42,7 @@ const connections: Connection[] = [
     connectorConfigName: 'AWS S3 Config',
     firstCreated: 'May 12, 2025',
     lastUpdated: '1m ago',
+    metadata: {name: 'AWS S3 Connection'},
   },
   {
     id: '2',
@@ -52,6 +54,7 @@ const connections: Connection[] = [
     connectorConfigName: 'HubSpot CRM Config',
     firstCreated: 'May 12, 2025',
     lastUpdated: '14h ago',
+    metadata: {name: 'HubSpot Integration'},
   },
   {
     id: '3',
@@ -63,6 +66,7 @@ const connections: Connection[] = [
     connectorConfigName: 'Salesforce Enterprise',
     firstCreated: 'May 12, 2025',
     lastUpdated: '1 week ago',
+    metadata: {name: 'Salesforce Connection'},
   },
   {
     id: '4',
@@ -74,6 +78,7 @@ const connections: Connection[] = [
     connectorConfigName: 'Zendesk Enterprise',
     firstCreated: 'May 12, 2025',
     lastUpdated: 'Jun 4, 2025',
+    metadata: {name: 'Zendesk Support'},
   },
   {
     id: '5',
@@ -85,6 +90,7 @@ const connections: Connection[] = [
     connectorConfigName: 'Google Workspace',
     firstCreated: 'May 12, 2025',
     lastUpdated: 'Jun 4, 2025',
+    metadata: {name: 'Google Drive Storage'},
   },
 ]
 
@@ -257,34 +263,12 @@ const columns: Array<ColumnDef<Connection>> = [
     id: 'connection',
     header: 'Connection',
     cell: ({row}) => {
-      // Map connector names to specific background colors
-      const bgColors: Record<string, {bg: string; text: string}> = {
-        'AWS S3 Connection': {bg: '#EEF3FB', text: '#3366CC'},
-        'HubSpot Integration': {bg: '#F5F5F5', text: '#FF7A59'},
-        'Salesforce Connection': {bg: '#F5F5F5', text: '#00A1E0'},
-        'Zendesk Support': {bg: '#F5F5F5', text: '#03363D'},
-        'Google Drive Storage': {bg: '#F5F5F5', text: '#4285F4'},
-      }
-
-      const colors = bgColors[row.original.name] || {
-        bg: '#F5F5F5',
-        text: '#666666',
-      }
-
-      // Use ConnectionsCardView instead of just the cell to show popover on click
       return (
-        <ConnectionsCardView
-          name={row.original.name}
-          id={row.original.id}
-          status={row.original.status}
-          category="CRM" // In a real implementation, these would come from the connection data
-          platform="Desktop"
-          authMethod="oauth"
-          version="V2"
-          customerId={row.original.customerId}
-          connectorConfigId={row.original.connectorConfigId}
-          backgroundColor={colors.bg}
-          textColor={colors.text}
+        <ConnectionTableCell
+          connection={row.original}
+          simple={false}
+          compact={true}
+          useIcon={true}
         />
       )
     },
@@ -298,13 +282,14 @@ const columns: Array<ColumnDef<Connection>> = [
     id: 'customer',
     header: 'Customer',
     cell: ({row}) => (
-      // Use light orange background for customer cells - matching the image
-      <CustomCustomerTableCell
-        name={row.original.customerName}
-        id={row.original.customerId}
-        status={row.original.status}
-        backgroundColor="#FFF8ED"
-        textColor="#F97316"
+      <CustomerTableCell
+        customer={{
+          id: row.original.customerId,
+          // No name property in the Core customer type
+        }}
+        simple={false}
+        compact={true}
+        useIcon={true}
       />
     ),
   },
@@ -312,27 +297,16 @@ const columns: Array<ColumnDef<Connection>> = [
     id: 'connectorConfig',
     header: 'Connector Config',
     cell: ({row}) => {
-      // Map connector config names to specific background colors
-      const bgColors: Record<string, {bg: string; text: string}> = {
-        'AWS S3 Config': {bg: '#EEF3FB', text: '#3366CC'},
-        'HubSpot CRM Config': {bg: '#F5F5F5', text: '#FF7A59'},
-        'Salesforce Enterprise': {bg: '#F5F5F5', text: '#00A1E0'},
-        'Zendesk Enterprise': {bg: '#F5F5F5', text: '#03363D'},
-        'Google Workspace': {bg: '#F5F5F5', text: '#4285F4'},
-      }
-
-      const colors = bgColors[row.original.connectorConfigName] || {
-        bg: '#F5F5F5',
-        text: '#666666',
-      }
-
       return (
-        <CustomConnectorConfigTableCell
-          name={row.original.connectorConfigName}
-          id={row.original.connectorConfigId}
+        <ConnectorConfigTableCell
+          connectorConfig={{
+            id: row.original.connectorConfigId,
+            display_name: row.original.connectorConfigName,
+            connector_name: row.original.connectorConfigName,
+          }}
           status={row.original.status}
-          backgroundColor={colors.bg}
-          textColor={colors.text}
+          simple={false}
+          compact={true}
         />
       )
     },
@@ -370,27 +344,10 @@ const compactColumns: Array<ColumnDef<Connection>> = [
     id: 'connection',
     header: 'Connection',
     cell: ({row}) => {
-      // Map connector names to specific background colors
-      const bgColors: Record<string, {bg: string; text: string}> = {
-        'AWS S3 Connection': {bg: '#EEF3FB', text: '#3366CC'},
-        'HubSpot Integration': {bg: '#F5F5F5', text: '#FF7A59'},
-        'Salesforce Connection': {bg: '#F5F5F5', text: '#00A1E0'},
-        'Zendesk Support': {bg: '#F5F5F5', text: '#03363D'},
-        'Google Drive Storage': {bg: '#F5F5F5', text: '#4285F4'},
-      }
-
-      const colors = bgColors[row.original.name] || {
-        bg: '#F5F5F5',
-        text: '#666666',
-      }
-
       return (
         <ConnectionTableCell
-          name={row.original.name}
-          id={row.original.id}
-          status={row.original.status}
-          backgroundColor={colors.bg}
-          textColor={colors.text}
+          connection={row.original}
+          simple={false}
           compact={true}
           useIcon={true}
         />
@@ -407,10 +364,11 @@ const compactColumns: Array<ColumnDef<Connection>> = [
     header: 'Customer',
     cell: ({row}) => (
       <CustomerTableCell
-        name={row.original.customerName}
-        id={row.original.customerId}
-        backgroundColor="#f3e8ff"
-        textColor="#9333ea"
+        customer={{
+          id: row.original.customerId,
+          // No name property in the Core customer type
+        }}
+        simple={false}
         compact={true}
         useIcon={true}
       />
@@ -420,29 +378,16 @@ const compactColumns: Array<ColumnDef<Connection>> = [
     id: 'connectorConfig',
     header: 'Connector Config',
     cell: ({row}) => {
-      // Map connector config names to specific background colors
-      const bgColors: Record<string, {bg: string; text: string}> = {
-        'AWS S3 Config': {bg: '#EEF3FB', text: '#3366CC'},
-        'HubSpot CRM Config': {bg: '#F5F5F5', text: '#FF7A59'},
-        'Salesforce Enterprise': {bg: '#F5F5F5', text: '#00A1E0'},
-        'Zendesk Enterprise': {bg: '#F5F5F5', text: '#03363D'},
-        'Google Workspace': {bg: '#F5F5F5', text: '#4285F4'},
-      }
-
-      const colors = bgColors[row.original.connectorConfigName] || {
-        bg: '#F5F5F5',
-        text: '#666666',
-      }
-
       return (
         <ConnectorConfigTableCell
-          name={row.original.connectorConfigName}
-          id={row.original.connectorConfigId}
+          connectorConfig={{
+            id: row.original.connectorConfigId,
+            display_name: row.original.connectorConfigName,
+            connector_name: row.original.connectorConfigName,
+          }}
           status={row.original.status}
-          backgroundColor={colors.bg}
-          textColor={colors.text}
+          simple={false}
           compact={true}
-          useIcon={true}
         />
       )
     },
@@ -575,6 +520,30 @@ export const WithCompactCells: Story = {
         <DataTable.Footer>
           <DataTable.Pagination />
         </DataTable.Footer>
+      </DataTable>
+    </div>
+  ),
+}
+
+// Add a story that shows compact cells with row selection
+export const WithCompactCellsAndRowSelection: Story = {
+  args: {
+    data: connections,
+    columns: compactColumns,
+    enableSelect: true,
+  },
+  render: (args) => (
+    <div className="relative overflow-hidden rounded-lg border shadow-sm">
+      <DataTable {...args}>
+        <DataTable.Header>
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+        </DataTable.Header>
+        <DataTable.Table />
+        <DataTable.Footer>
+          <DataTable.Pagination />
+        </DataTable.Footer>
+        <SelectionActionsBar />
       </DataTable>
     </div>
   ),

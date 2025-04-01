@@ -170,12 +170,15 @@ export const WithConnectionsAction: Story = {
         cell: ({row}) => {
           return (
             <CustomerTableCell
-              name={row.original.name}
-              id={row.original.id}
+              customer={{
+                id: row.original.id,
+                created_at: row.original.firstCreated,
+                updated_at: row.original.firstCreated,
+                connection_count: row.original.connectionsCount,
+              }}
+              simple={false}
               compact={true}
               useIcon={true}
-              backgroundColor="#f3e8ff"
-              textColor="#9333ea"
             />
           )
         },
@@ -245,4 +248,106 @@ export const WithConnectionsAction: Story = {
       </div>
     )
   },
+}
+
+// Define compact cell columns for the customers table
+const compactColumns: Array<ColumnDef<Customer, unknown>> = [
+  {
+    id: 'customer',
+    header: 'Customer',
+    cell: ({row}) => {
+      return (
+        <CustomerTableCell
+          customer={{
+            id: row.original.id,
+            created_at: row.original.firstCreated,
+            updated_at: row.original.firstCreated,
+            connection_count: row.original.connectionsCount,
+          }}
+          simple={false}
+          compact={true}
+          useIcon={true}
+        />
+      )
+    },
+  },
+  {
+    id: 'connections',
+    header: 'Connections',
+    cell: ({row}) => {
+      const connectionsCount = row.original.connectionsCount
+
+      return (
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <Icon name="Network" className="text-purple-600" size={16} />
+          <span className="font-medium">{connectionsCount}</span>
+        </div>
+      )
+    },
+  },
+  {
+    id: 'firstCreated',
+    header: 'First Created',
+    accessorKey: 'firstCreated',
+    cell: ({row}) => {
+      return <div className="text-gray-500">{row.original.firstCreated}</div>
+    },
+  },
+  {
+    id: 'action',
+    header: '',
+    cell: () => {
+      return (
+        <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+]
+
+// Add a story that shows compact cells
+export const WithCompactCells: Story = {
+  args: {
+    data: customers,
+    columns: compactColumns,
+  },
+  render: (args) => (
+    <div className="overflow-hidden rounded-lg border shadow-sm">
+      <DataTable {...args}>
+        <DataTable.Header>
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+        </DataTable.Header>
+        <DataTable.Table />
+        <DataTable.Footer>
+          <DataTable.Pagination />
+        </DataTable.Footer>
+      </DataTable>
+    </div>
+  ),
+}
+
+// Add a story that shows compact cells with row selection
+export const WithCompactCellsAndRowSelection: Story = {
+  args: {
+    data: customers,
+    columns: compactColumns,
+    enableSelect: true,
+  },
+  render: (args) => (
+    <div className="relative overflow-hidden rounded-lg border shadow-sm">
+      <DataTable {...args}>
+        <DataTable.Header>
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+        </DataTable.Header>
+        <DataTable.Table />
+        <DataTable.Footer>
+          <DataTable.Pagination />
+        </DataTable.Footer>
+        <SelectionActionsBar />
+      </DataTable>
+    </div>
+  ),
 }
