@@ -1,7 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {useState} from 'react'
 import {Skeleton, Switch} from '@openint/shadcn/ui'
-import type {Scope} from './ConnectorScopes'
 import {ConnectorScopes} from './ConnectorScopes'
 
 const meta: Meta<typeof ConnectorScopes> = {
@@ -16,20 +15,20 @@ export default meta
 type Story = StoryObj<typeof ConnectorScopes>
 
 // Sample scopes
-const initialScopes: Scope[] = [
-  {id: 'read:users', name: 'read:users'},
-  {id: 'read:documents', name: 'read:documents'},
-  {id: 'read:profiles', name: 'read:profiles'},
-  {id: 'read:settings', name: 'read:settings'},
+const initialScopes: string[] = [
+  'read:users',
+  'read:documents',
+  'read:profiles',
+  'read:settings',
 ]
 
-const availableScopes: Scope[] = [
-  {id: 'write:users', name: 'write:users'},
-  {id: 'write:documents', name: 'write:documents'},
-  {id: 'write:profiles', name: 'write:profiles'},
-  {id: 'write:settings', name: 'write:settings'},
-  {id: 'admin:access', name: 'admin:access'},
-  {id: 'admin:users', name: 'admin:users'},
+const availableScopes: string[] = [
+  'write:users',
+  'write:documents',
+  'write:profiles',
+  'write:settings',
+  'admin:access',
+  'admin:users',
 ]
 
 // Default view (read-only)
@@ -47,15 +46,15 @@ export const Default: Story = {
 
 // Interactive story with state management
 const EditableExample = () => {
-  const [scopes, setScopes] = useState<Scope[]>([...initialScopes])
+  const [scopes, setScopes] = useState<string[]>(initialScopes)
 
-  const handleRemoveScope = (scopeToRemove: Scope) => {
-    setScopes(scopes.filter((scope) => scope.id !== scopeToRemove.id))
+  const handleRemoveScope = (scopeToRemove: string) => {
+    setScopes(scopes.filter((scope) => scope !== scopeToRemove))
   }
 
-  const handleAddScope = (scopeToAdd: Scope) => {
+  const handleAddScope = (scopeToAdd: string) => {
     // Check if scope already exists
-    if (!scopes.some((scope) => scope.id === scopeToAdd.id)) {
+    if (!scopes.some((scope) => scope === scopeToAdd)) {
       setScopes([...scopes, scopeToAdd])
     }
   }
@@ -79,16 +78,16 @@ export const Editable: Story = {
 
 // Constrained width example simulating a sheet
 const ConstrainedWidthExample = () => {
-  const [scopes, setScopes] = useState<Scope[]>([...initialScopes])
+  const [scopes, setScopes] = useState<string[]>(initialScopes)
   const [enabled, setEnabled] = useState(true)
 
-  const handleRemoveScope = (scopeToRemove: Scope) => {
-    setScopes(scopes.filter((scope) => scope.id !== scopeToRemove.id))
+  const handleRemoveScope = (scopeToRemove: string) => {
+    setScopes(scopes.filter((scope) => scope !== scopeToRemove))
   }
 
-  const handleAddScope = (scopeToAdd: Scope) => {
+  const handleAddScope = (scopeToAdd: string) => {
     // Check if scope already exists
-    if (!scopes.some((scope) => scope.id === scopeToAdd.id)) {
+    if (!scopes.some((scope) => scope === scopeToAdd)) {
       setScopes([...scopes, scopeToAdd])
     }
   }

@@ -11,25 +11,20 @@ import {
   PopoverTrigger,
 } from '@openint/shadcn/ui'
 
-export interface Scope {
-  id: string
-  name: string
-}
-
 // Context for sharing state between compound components
 interface ConnectorScopesContextValue {
-  scopes: Scope[]
-  availableScopes: Scope[]
+  scopes: string[]
+  availableScopes: string[]
   editable: boolean
-  onRemoveScope?: (scope: Scope) => void
-  onAddScope?: (scope: Scope) => void
+  onRemoveScope?: (scope: string) => void
+  onAddScope?: (scope: string) => void
   isPopoverOpen: boolean
   setIsPopoverOpen: React.Dispatch<React.SetStateAction<boolean>>
   customScope: string
   setCustomScope: React.Dispatch<React.SetStateAction<string>>
-  handleRemoveScope: (scope: Scope) => void
-  handleAddScope: (scope: Scope) => void
-  handleToggleScope: (scope: Scope) => void
+  handleRemoveScope: (scope: string) => void
+  handleAddScope: (scope: string) => void
+  handleToggleScope: (scope: string) => void
   handleAddCustomScope: () => void
   isScopeAdded: (scopeId: string) => boolean
 }
@@ -51,10 +46,10 @@ const useConnectorScopes = () => {
 
 // Root component props
 export interface ConnectorScopesProps {
-  scopes: Scope[]
-  onRemoveScope?: (scope: Scope) => void
-  onAddScope?: (scope: Scope) => void
-  availableScopes?: Scope[]
+  scopes: string[]
+  onRemoveScope?: (scope: string) => void
+  onAddScope?: (scope: string) => void
+  availableScopes?: string[]
   editable?: boolean
   className?: string
   children?: React.ReactNode
@@ -73,20 +68,20 @@ const ConnectorScopesRoot: React.FC<ConnectorScopesProps> = ({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [customScope, setCustomScope] = useState('')
 
-  const handleRemoveScope = (scope: Scope) => {
+  const handleRemoveScope = (scope: string) => {
     if (onRemoveScope) {
       onRemoveScope(scope)
     }
   }
 
-  const handleAddScope = (scope: Scope) => {
+  const handleAddScope = (scope: string) => {
     if (onAddScope) {
       onAddScope(scope)
     }
   }
 
-  const handleToggleScope = (scope: Scope) => {
-    const isAdded = isScopeAdded(scope.id)
+  const handleToggleScope = (scope: string) => {
+    const isAdded = isScopeAdded(scope)
     if (isAdded) {
       handleRemoveScope(scope)
     } else {
@@ -96,14 +91,13 @@ const ConnectorScopesRoot: React.FC<ConnectorScopesProps> = ({
 
   const handleAddCustomScope = () => {
     if (customScope && onAddScope) {
-      onAddScope({id: customScope, name: customScope})
+      onAddScope(customScope)
       setCustomScope('')
     }
   }
 
   // Check if a scope is already added
-  const isScopeAdded = (scopeId: string) =>
-    scopes.some((scope) => scope.id === scopeId)
+  const isScopeAdded = (scope: string) => scopes.includes(scope)
 
   const contextValue: ConnectorScopesContextValue = {
     scopes,
@@ -191,10 +185,10 @@ const AddScopeButton: React.FC<AddScopeButtonProps> = ({className}) => {
             </div>
             <div className="mb-4 grid grid-cols-2 gap-x-4 gap-y-1">
               {leftColumnScopes.map((scope) => {
-                const isAdded = isScopeAdded(scope.id)
+                const isAdded = isScopeAdded(scope)
                 return (
                   <div
-                    key={scope.id}
+                    key={scope}
                     className={cn(
                       'flex cursor-pointer items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100',
                       isAdded && 'bg-gray-50',
@@ -202,7 +196,7 @@ const AddScopeButton: React.FC<AddScopeButtonProps> = ({className}) => {
                     onClick={() => {
                       handleToggleScope(scope)
                     }}>
-                    <span className="mr-2 truncate text-sm">{scope.name}</span>
+                    <span className="mr-2 truncate text-sm">{scope}</span>
                     {isAdded ? (
                       <X className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
                     ) : (
@@ -212,10 +206,10 @@ const AddScopeButton: React.FC<AddScopeButtonProps> = ({className}) => {
                 )
               })}
               {rightColumnScopes.map((scope) => {
-                const isAdded = isScopeAdded(scope.id)
+                const isAdded = isScopeAdded(scope)
                 return (
                   <div
-                    key={scope.id}
+                    key={scope}
                     className={cn(
                       'flex cursor-pointer items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100',
                       isAdded && 'bg-gray-50',
@@ -223,7 +217,7 @@ const AddScopeButton: React.FC<AddScopeButtonProps> = ({className}) => {
                     onClick={() => {
                       handleToggleScope(scope)
                     }}>
-                    <span className="mr-2 truncate text-sm">{scope.name}</span>
+                    <span className="mr-2 truncate text-sm">{scope}</span>
                     {isAdded ? (
                       <X className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
                     ) : (
@@ -264,10 +258,10 @@ const ScopesList: React.FC<ScopesListProps> = ({className}) => {
       <div className="flex flex-wrap gap-2">
         {scopes.map((scope) => (
           <Badge
-            key={scope.id}
+            key={scope}
             variant="secondary"
             className="inline-flex items-center gap-1">
-            <span className="max-w-[120px] truncate">{scope.name}</span>
+            <span className="max-w-[120px] truncate">{scope}</span>
             {editable && (
               <button
                 onClick={(e) => {

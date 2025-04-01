@@ -51,10 +51,8 @@ export function jsonSchemaToUiSchema(jsonSchema: RJSFSchema): UiSchema {
           ? {
               'ui:widget': 'ScopesWidget',
               'ui:options': {
-                availableScopes: [
-                  {id: 'read', name: 'Read'},
-                  {id: 'write', name: 'Write'},
-                ], //value.enum
+                // TODO: @rodrigo - Get available scopes from the connector
+                availableScopes: ['read', 'write'],
               },
             }
           : {}),

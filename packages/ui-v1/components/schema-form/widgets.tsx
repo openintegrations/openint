@@ -1,5 +1,5 @@
 import type {RegistryWidgetsType, WidgetProps} from '@rjsf/utils'
-import {ConnectorScopes, type Scope} from '../ConnectorScopes'
+import {ConnectorScopes} from '../ConnectorScopes'
 
 // MARK: - Widgets
 
@@ -23,30 +23,23 @@ export function MultiSelect(_props: WidgetProps<boolean>) {
 }
 
 // TODO: @rodrigo - We need to provide the correct availableScopes for each connector
-export function ScopesWidget(props: WidgetProps<Scope[]>) {
-  const {value = '', onChange, options} = props
+export function ScopesWidget(props: WidgetProps<string[]>) {
+  const {value, onChange, options} = props
 
   // TODO: @rodrigo - We need to decide the datatype that scopes is going to have
   // right now it's a string but the component expects an array of scopes (object with id and name)
-  const scopes =
-    typeof value === 'string'
-      ? value.length === 0
-        ? []
-        : value.split(',').map((scope) => ({id: scope, name: scope}))
-      : Array.isArray(value)
-        ? value
-        : []
+  const scopes = value as string[]
 
   return (
     <ConnectorScopes
       scopes={scopes}
-      availableScopes={options?.['availableScopes'] as Scope[]}
+      availableScopes={options?.['availableScopes'] as string[]}
       editable
       onAddScope={(newValue) => {
         onChange([...scopes, newValue])
       }}
       onRemoveScope={(scope) => {
-        onChange(scopes.filter((v) => v.id !== scope.id))
+        onChange(scopes.filter((v) => v !== scope))
       }}
     />
   )
