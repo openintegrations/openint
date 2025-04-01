@@ -1,5 +1,11 @@
+import {server as connectorGooglecalendar_server} from './googlecalendar'
+import {def as connectorGooglecalendar_def} from './googlecalendar/def'
+import {server as connectorGoogledocs_server} from './googledocs'
+import {def as connectorGoogledocs_def} from './googledocs/def'
 import {server as connectorGoogledrive_server} from './googledrive'
 import {def as connectorGoogledrive_def} from './googledrive/def'
+import {server as connectorGooglemail_server} from './googlemail'
+import {def as connectorGooglemail_def} from './googlemail/def'
 import {server as connectorGooglesheet_server} from './googlesheet'
 import {def as connectorGooglesheet_def} from './googlesheet/def'
 
@@ -8,8 +14,14 @@ export type {JsonConnectorDef} from './def'
 export type {AuthType} from './def'
 
 export {
+  connectorGooglecalendar_server,
+  connectorGooglecalendar_def,
+  connectorGoogledocs_server,
+  connectorGoogledocs_def,
   connectorGoogledrive_server,
   connectorGoogledrive_def,
+  connectorGooglemail_server,
+  connectorGooglemail_def,
   connectorGooglesheet_server,
   connectorGooglesheet_def,
 }

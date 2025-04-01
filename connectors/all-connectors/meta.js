@@ -21,11 +21,6 @@ module.exports = [
     },
   },
   {
-    dirName: 'connector-alphavantage',
-    varName: 'connectorAlphavantage',
-    imports: {},
-  },
-  {
     name: 'apollo',
     dirName: 'connector-apollo',
     varName: 'connectorApollo',
@@ -62,7 +57,6 @@ module.exports = [
       server: '@openint/connector-confluence/server',
     },
   },
-  {dirName: 'connector-debug', varName: 'connectorDebug', imports: {}},
   {
     name: 'discord',
     dirName: 'connector-discord',
@@ -110,7 +104,6 @@ module.exports = [
       server: '@openint/connector-foreceipt/server',
     },
   },
-  {dirName: 'connector-fs', varName: 'connectorFs', imports: {}},
   {
     name: 'github',
     dirName: 'connector-github',
@@ -127,15 +120,6 @@ module.exports = [
     imports: {
       def: '@openint/connector-gong/def',
       server: '@openint/connector-gong/server',
-    },
-  },
-  {
-    name: 'google',
-    dirName: 'connector-google',
-    varName: 'connectorGoogle',
-    imports: {
-      def: '@openint/connector-google/def',
-      server: '@openint/connector-google/server',
     },
   },
   {
@@ -290,7 +274,6 @@ module.exports = [
       server: '@openint/connector-onebrick/server',
     },
   },
-  {dirName: 'connector-outlook', varName: 'connectorOutlook', imports: {}},
   {
     name: 'outreach',
     dirName: 'connector-outreach',
@@ -355,7 +338,6 @@ module.exports = [
       server: '@openint/connector-reddit/server',
     },
   },
-  {dirName: 'connector-revert', varName: 'connectorRevert', imports: {}},
   {
     name: 'salesforce',
     dirName: 'connector-salesforce',
@@ -400,11 +382,6 @@ module.exports = [
       def: '@openint/connector-splitwise/def',
       server: '@openint/connector-splitwise/server',
     },
-  },
-  {
-    dirName: 'connector-spreadsheet',
-    varName: 'connectorSpreadsheet',
-    imports: {},
   },
   {
     name: 'stripe',
@@ -458,7 +435,6 @@ module.exports = [
     varName: 'connectorVenmo',
     imports: {def: '@openint/connector-venmo/def'},
   },
-  {dirName: 'connector-webhook', varName: 'connectorWebhook', imports: {}},
   {
     name: 'wise',
     dirName: 'connector-wise',
@@ -497,6 +473,32 @@ module.exports = [
     },
   },
   {
+    name: 'googlecalendar',
+    dirName: 'cnext-googlecalendar',
+    varName: 'connectorGooglecalendar',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGooglecalendar_def',
+        server: 'connectorGooglecalendar_server',
+      },
+    },
+  },
+  {
+    name: 'googledocs',
+    dirName: 'cnext-googledocs',
+    varName: 'connectorGoogledocs',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGoogledocs_def',
+        server: 'connectorGoogledocs_server',
+      },
+    },
+  },
+  {
     name: 'googledrive',
     dirName: 'cnext-googledrive',
     varName: 'connectorGoogledrive',
@@ -506,6 +508,19 @@ module.exports = [
       importPath: {
         def: 'connectorGoogledrive_def',
         server: 'connectorGoogledrive_server',
+      },
+    },
+  },
+  {
+    name: 'googlemail',
+    dirName: 'cnext-googlemail',
+    varName: 'connectorGooglemail',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGooglemail_def',
+        server: 'connectorGooglemail_server',
       },
     },
   },
