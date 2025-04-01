@@ -2,55 +2,60 @@
 
 import {MoreHorizontal} from 'lucide-react'
 import {Button} from '@openint/shadcn/ui'
-import {ConnectorConfigTableCell} from '../components/ConnectorConfigTableCell'
+import {CustomerTableCell} from '../components/CustomerTableCell'
 import type {ColumnDef} from '../components/DataTable'
 import {DataTable} from '../components/DataTable'
+import {Icon} from '../components/Icon'
 
-// Define the ConnectorConfig data structure
-export interface ConnectorConfig {
+// Define the Customer data structure based on the image
+export interface Customer {
   id: string
   name: string
-  enabled: boolean
-  environment: 'sandbox' | 'production'
+  connectionsCount: number
   firstCreated: string
 }
 
-// Define the columns for the connector config table
-export const columns: Array<ColumnDef<ConnectorConfig>> = [
+// Define the columns for the customers table
+export const columns: Array<ColumnDef<Customer>> = [
   {
-    id: 'connectorConfig',
-    header: 'Connector Name',
+    id: 'customer',
+    header: 'Customer',
     cell: ({row}) => (
-      <ConnectorConfigTableCell
+      <CustomerTableCell
         name={row.original.name}
         id={row.original.id}
         compact={true}
-        useIcon={false}
-        backgroundColor="#f5f5f5"
-        textColor="#666666"
+        useIcon={true}
+        backgroundColor="#f3e8ff"
+        textColor="#9333ea"
       />
     ),
   },
   {
-    id: 'status',
-    header: 'Status',
-    cell: ({row}) => (
-      <div
-        className={`text-sm font-medium ${row.original.enabled ? 'text-green-600' : 'text-gray-500'}`}>
-        {row.original.enabled ? 'Enabled' : 'Disabled'}
-      </div>
-    ),
-  },
-  {
-    id: 'environment',
-    header: 'Env Name',
+    id: 'connections',
+    header: 'Connections',
     cell: ({row}) => {
-      const isProd = row.original.environment === 'production'
+      const connectionsCount = row.original.connectionsCount
+
       return (
-        <div
-          className={`text-sm font-medium ${isProd ? 'text-blue-600' : 'text-amber-600'}`}>
-          {isProd ? 'Production' : 'Sandbox'}
-        </div>
+        <button
+          className="group flex items-center gap-1.5 text-gray-600 transition-colors hover:text-purple-700"
+          onClick={(e) => {
+            // Stop propagation to prevent row click handler from firing
+            e.stopPropagation()
+            console.log(
+              `View ${connectionsCount} connections for ${row.original.name}`,
+            )
+          }}>
+          <Icon
+            name="Network"
+            className="text-purple-600 group-hover:text-purple-700"
+            size={16}
+          />
+          <span className="font-medium group-hover:underline">
+            {connectionsCount}
+          </span>
+        </button>
       )
     },
   },
@@ -73,14 +78,14 @@ export const columns: Array<ColumnDef<ConnectorConfig>> = [
   },
 ]
 
-export function ConnectorConfigTable({
+export function CustomersTable({
   data,
   enableSelect,
   onRowClick,
 }: {
-  data: ConnectorConfig[]
+  data: Customer[]
   enableSelect?: boolean
-  onRowClick?: (connectorConfig: ConnectorConfig) => void
+  onRowClick?: (customer: Customer) => void
 }) {
   return (
     <DataTable

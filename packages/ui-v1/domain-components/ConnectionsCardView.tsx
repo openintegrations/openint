@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Popover,
@@ -9,10 +9,11 @@ import {
   Separator,
 } from '@openint/shadcn/ui'
 import {ConnectionTableCell} from '../components/ConnectionTableCell'
-import {CopyID} from '../components/CopyID'
+import type {CopyID} from '../components/CopyID'
 import {Icon} from '../components/Icon'
-import {PropertyItem, PropertyListView} from '../components/PropertyListView'
-import {StatusType} from '../components/StatusDot'
+import type {PropertyItem} from '../components/PropertyListView'
+import {PropertyListView} from '../components/PropertyListView'
+import type {StatusType} from '../components/StatusDot'
 
 // Create a wrapper component for CopyID to prevent tooltip from showing prematurely
 function SafeCopyID(props: React.ComponentProps<typeof CopyID>) {
@@ -27,7 +28,9 @@ function SafeCopyID(props: React.ComponentProps<typeof CopyID>) {
       setMounted(true)
     }, 100)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+    }
   }, [])
 
   // Handle copy functionality for our custom implementation
@@ -208,7 +211,7 @@ export function ConnectionCardContent({
   textColor = '#666666',
 }: ConnectionCardProps) {
   // Build the properties for the PropertyListView
-  const properties = React.useMemo(() => {
+  const properties = useMemo(() => {
     const props: PropertyItem[] = [
       {title: 'Category', value: category},
       {title: 'Platform', value: platform},

@@ -14,22 +14,26 @@ const meta: Meta<typeof CustomerTableCell> = {
       control: 'text',
       description: 'ID of the customer',
     },
-    status: {
-      control: 'select',
-      options: ['healthy', 'warning', 'offline', 'destructive'],
-      description: 'Status of the customer',
-    },
     backgroundColor: {
       control: 'color',
       description: 'Background color for the logo container',
     },
     textColor: {
       control: 'color',
-      description: 'Text color for the initials',
+      description: 'Text color for the initials or icon',
     },
     simple: {
       control: 'boolean',
       description: 'Whether to show the simple variant',
+    },
+    compact: {
+      control: 'boolean',
+      description:
+        'Whether to show the compact variant (just logo and ID, no name)',
+    },
+    useIcon: {
+      control: 'boolean',
+      description: 'Whether to use a person icon instead of initials',
     },
   },
 }
@@ -41,52 +45,79 @@ export const Default: Story = {
   args: {
     name: 'Acme Corporation',
     id: '12345678',
-    status: 'healthy',
-    backgroundColor: '#ffedd5',
-    textColor: '#ea580c',
+    backgroundColor: '#f3e8ff',
+    textColor: '#9333ea',
   },
 }
 
 export const Simple: Story = {
   args: {
     name: 'Acme Corporation',
-    status: 'healthy',
-    backgroundColor: '#ffedd5',
-    textColor: '#ea580c',
+    id: '12345678',
+    backgroundColor: '#f3e8ff',
+    textColor: '#9333ea',
     simple: true,
   },
 }
 
-export const WithDifferentStatuses: Story = {
+export const WithPersonIcon: Story = {
+  args: {
+    name: 'Acme Corporation',
+    id: '12345678',
+    backgroundColor: '#f3e8ff',
+    textColor: '#9333ea',
+    useIcon: true,
+  },
+}
+
+export const Compact: Story = {
+  args: {
+    name: 'Acme Corporation',
+    id: '12345678',
+    backgroundColor: '#f3e8ff',
+    textColor: '#9333ea',
+    compact: true,
+    useIcon: true,
+  },
+}
+
+export const WithDifferentVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <CustomerTableCell
         name="Acme Corporation"
         id="12345678"
-        status="healthy"
-        backgroundColor="#ffedd5"
-        textColor="#ea580c"
+        backgroundColor="#f3e8ff"
+        textColor="#9333ea"
       />
       <CustomerTableCell
         name="Globex Corporation"
         id="87654321"
-        status="warning"
-        backgroundColor="#ffedd5"
-        textColor="#ea580c"
+        backgroundColor="#f3e8ff"
+        textColor="#9333ea"
+        useIcon={true}
       />
       <CustomerTableCell
         name="Initech"
         id="24681357"
-        status="offline"
-        backgroundColor="#ffedd5"
-        textColor="#ea580c"
+        backgroundColor="#f3e8ff"
+        textColor="#9333ea"
+        simple={true}
       />
       <CustomerTableCell
         name="Umbrella Corporation"
         id="13572468"
-        status="destructive"
-        backgroundColor="#ffedd5"
-        textColor="#ea580c"
+        backgroundColor="#f3e8ff"
+        textColor="#9333ea"
+        compact={true}
+      />
+      <CustomerTableCell
+        name="Wayne Enterprises"
+        id="56789012"
+        backgroundColor="#f3e8ff"
+        textColor="#9333ea"
+        compact={true}
+        useIcon={true}
       />
     </div>
   ),

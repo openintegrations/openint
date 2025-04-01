@@ -2,17 +2,18 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {MoreHorizontal} from 'lucide-react'
 import {Button} from '@openint/shadcn/ui'
 import {BaseTableCell} from '../components/BaseTableCell'
-import {
-  ColumnDef,
-  DataTable,
-  useDataTableContext,
-} from '../components/DataTable'
+import {ConnectionTableCell} from '../components/ConnectionTableCell'
+import {ConnectorConfigTableCell} from '../components/ConnectorConfigTableCell'
+import {CustomerTableCell} from '../components/CustomerTableCell'
+import type {ColumnDef} from '../components/DataTable'
+import {DataTable, useDataTableContext} from '../components/DataTable'
 import {
   MultiSelectActionBar,
   useTableRowSelection,
 } from '../components/MultiSelectActionBar'
 import {StatusCell} from '../components/StatusCell'
-import {StatusDot, StatusType} from '../components/StatusDot'
+import type {StatusType} from '../components/StatusDot'
+import {StatusDot} from '../components/StatusDot'
 import {ConnectionsCardView} from './ConnectionsCardView'
 
 // Define the Connection data structure based on the image
@@ -251,7 +252,7 @@ const CustomConnectorConfigTableCell = ({
 }
 
 // Define the columns for the connections table
-const columns: Array<ColumnDef<Connection, any>> = [
+const columns: Array<ColumnDef<Connection>> = [
   {
     id: 'connection',
     header: 'Connection',
@@ -291,25 +292,21 @@ const columns: Array<ColumnDef<Connection, any>> = [
   {
     id: 'status',
     header: 'Status',
-    cell: ({row}) => {
-      return <StatusCell status={row.original.status} />
-    },
+    cell: ({row}) => <StatusCell status={row.original.status} />,
   },
   {
     id: 'customer',
     header: 'Customer',
-    cell: ({row}) => {
+    cell: ({row}) => (
       // Use light orange background for customer cells - matching the image
-      return (
-        <CustomCustomerTableCell
-          name={row.original.customerName}
-          id={row.original.customerId}
-          status={row.original.status}
-          backgroundColor="#FFF8ED"
-          textColor="#F97316"
-        />
-      )
-    },
+      <CustomCustomerTableCell
+        name={row.original.customerName}
+        id={row.original.customerId}
+        status={row.original.status}
+        backgroundColor="#FFF8ED"
+        textColor="#F97316"
+      />
+    ),
   },
   {
     id: 'connectorConfig',
@@ -344,28 +341,136 @@ const columns: Array<ColumnDef<Connection, any>> = [
     id: 'firstCreated',
     header: 'First Created',
     accessorKey: 'firstCreated',
-    cell: ({row}) => {
-      return <div className="text-gray-500">{row.original.firstCreated}</div>
-    },
+    cell: ({row}) => (
+      <div className="text-gray-500">{row.original.firstCreated}</div>
+    ),
   },
   {
     id: 'lastUpdated',
     header: 'Last Updated',
     accessorKey: 'lastUpdated',
-    cell: ({row}) => {
-      return <div className="text-gray-500">{row.original.lastUpdated}</div>
-    },
+    cell: ({row}) => (
+      <div className="text-gray-500">{row.original.lastUpdated}</div>
+    ),
   },
   {
     id: 'action',
     header: 'Action',
-    cell: () => {
+    cell: () => (
+      <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+        <MoreHorizontal className="h-4 w-4" />
+      </Button>
+    ),
+  },
+]
+
+// Define compact cell columns for the connections table
+const compactColumns: Array<ColumnDef<Connection>> = [
+  {
+    id: 'connection',
+    header: 'Connection',
+    cell: ({row}) => {
+      // Map connector names to specific background colors
+      const bgColors: Record<string, {bg: string; text: string}> = {
+        'AWS S3 Connection': {bg: '#EEF3FB', text: '#3366CC'},
+        'HubSpot Integration': {bg: '#F5F5F5', text: '#FF7A59'},
+        'Salesforce Connection': {bg: '#F5F5F5', text: '#00A1E0'},
+        'Zendesk Support': {bg: '#F5F5F5', text: '#03363D'},
+        'Google Drive Storage': {bg: '#F5F5F5', text: '#4285F4'},
+      }
+
+      const colors = bgColors[row.original.name] || {
+        bg: '#F5F5F5',
+        text: '#666666',
+      }
+
       return (
-        <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
+        <ConnectionTableCell
+          name={row.original.name}
+          id={row.original.id}
+          status={row.original.status}
+          backgroundColor={colors.bg}
+          textColor={colors.text}
+          compact={true}
+          useIcon={true}
+        />
       )
     },
+  },
+  {
+    id: 'status',
+    header: 'Status',
+    cell: ({row}) => <StatusCell status={row.original.status} />,
+  },
+  {
+    id: 'customer',
+    header: 'Customer',
+    cell: ({row}) => (
+      <CustomerTableCell
+        name={row.original.customerName}
+        id={row.original.customerId}
+        backgroundColor="#f3e8ff"
+        textColor="#9333ea"
+        compact={true}
+        useIcon={true}
+      />
+    ),
+  },
+  {
+    id: 'connectorConfig',
+    header: 'Connector Config',
+    cell: ({row}) => {
+      // Map connector config names to specific background colors
+      const bgColors: Record<string, {bg: string; text: string}> = {
+        'AWS S3 Config': {bg: '#EEF3FB', text: '#3366CC'},
+        'HubSpot CRM Config': {bg: '#F5F5F5', text: '#FF7A59'},
+        'Salesforce Enterprise': {bg: '#F5F5F5', text: '#00A1E0'},
+        'Zendesk Enterprise': {bg: '#F5F5F5', text: '#03363D'},
+        'Google Workspace': {bg: '#F5F5F5', text: '#4285F4'},
+      }
+
+      const colors = bgColors[row.original.connectorConfigName] || {
+        bg: '#F5F5F5',
+        text: '#666666',
+      }
+
+      return (
+        <ConnectorConfigTableCell
+          name={row.original.connectorConfigName}
+          id={row.original.connectorConfigId}
+          status={row.original.status}
+          backgroundColor={colors.bg}
+          textColor={colors.text}
+          compact={true}
+          useIcon={true}
+        />
+      )
+    },
+  },
+  {
+    id: 'firstCreated',
+    header: 'First Created',
+    accessorKey: 'firstCreated',
+    cell: ({row}) => (
+      <div className="text-gray-500">{row.original.firstCreated}</div>
+    ),
+  },
+  {
+    id: 'lastUpdated',
+    header: 'Last Updated',
+    accessorKey: 'lastUpdated',
+    cell: ({row}) => (
+      <div className="text-gray-500">{row.original.lastUpdated}</div>
+    ),
+  },
+  {
+    id: 'action',
+    header: 'Action',
+    cell: () => (
+      <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+        <MoreHorizontal className="h-4 w-4" />
+      </Button>
+    ),
   },
 ]
 
@@ -378,12 +483,12 @@ const meta: Meta<typeof DataTable> = {
 }
 
 export default meta
-type Story = StoryObj<typeof DataTable<Connection, any>>
+type Story = StoryObj<typeof DataTable<Connection, unknown>>
 
 export const Default: Story = {
   args: {
     data: connections,
-    columns: columns,
+    columns,
   },
   render: (args) => (
     <div className="overflow-hidden rounded-lg border shadow-sm">
@@ -406,7 +511,6 @@ const SelectionActionsBar = () => {
   const {table} = useDataTableContext()
 
   // Handle row deletion (would be connected to API in real application)
-  // @ts-ignore
   const handleDeleteRows = (
     _selectedRows: Record<string, boolean>,
     selectedItems: Connection[],
@@ -434,7 +538,7 @@ const SelectionActionsBar = () => {
 export const WithRowSelection: Story = {
   args: {
     data: connections,
-    columns: columns,
+    columns,
     enableSelect: true,
   },
   render: (args) => (
@@ -449,6 +553,28 @@ export const WithRowSelection: Story = {
           <DataTable.Pagination />
         </DataTable.Footer>
         <SelectionActionsBar />
+      </DataTable>
+    </div>
+  ),
+}
+
+// Add a story that shows compact cells
+export const WithCompactCells: Story = {
+  args: {
+    data: connections,
+    columns: compactColumns,
+  },
+  render: (args) => (
+    <div className="overflow-hidden rounded-lg border shadow-sm">
+      <DataTable {...args}>
+        <DataTable.Header>
+          <DataTable.SearchInput />
+          <DataTable.ColumnVisibilityToggle />
+        </DataTable.Header>
+        <DataTable.Table />
+        <DataTable.Footer>
+          <DataTable.Pagination />
+        </DataTable.Footer>
       </DataTable>
     </div>
   ),

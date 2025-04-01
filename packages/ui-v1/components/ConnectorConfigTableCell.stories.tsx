@@ -31,6 +31,15 @@ const meta: Meta<typeof ConnectorConfigTableCell> = {
       control: 'boolean',
       description: 'Whether to show the simple variant',
     },
+    compact: {
+      control: 'boolean',
+      description:
+        'Whether to show the compact variant (just logo and ID, no name)',
+    },
+    useIcon: {
+      control: 'boolean',
+      description: 'Whether to use a settings icon instead of initials',
+    },
   },
 }
 
@@ -50,6 +59,7 @@ export const Default: Story = {
 export const Simple: Story = {
   args: {
     name: 'Salesforce Connector Config',
+    id: '12345678',
     status: 'healthy',
     backgroundColor: '#e0f2fe',
     textColor: '#0ea5e9',
@@ -57,36 +67,71 @@ export const Simple: Story = {
   },
 }
 
-export const WithDifferentStatuses: Story = {
+export const WithIcon: Story = {
+  args: {
+    name: 'Salesforce Connector Config',
+    id: '12345678',
+    status: 'healthy',
+    backgroundColor: '#e0f2fe',
+    textColor: '#0ea5e9',
+    useIcon: true,
+  },
+}
+
+export const Compact: Story = {
+  args: {
+    name: 'Salesforce Connector Config',
+    id: '12345678',
+    status: 'healthy',
+    backgroundColor: '#e0f2fe',
+    textColor: '#0ea5e9',
+    compact: true,
+    useIcon: true,
+  },
+}
+
+export const WithDifferentVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <ConnectorConfigTableCell
-        name="Salesforce Config"
+        name="Salesforce Connector Config"
         id="12345678"
         status="healthy"
         backgroundColor="#e0f2fe"
         textColor="#0ea5e9"
       />
       <ConnectorConfigTableCell
-        name="HubSpot Config"
+        name="HubSpot Connector Config"
         id="87654321"
         status="warning"
         backgroundColor="#dbeafe"
         textColor="#3b82f6"
+        useIcon={true}
       />
       <ConnectorConfigTableCell
-        name="Stripe Config"
+        name="Zendesk Connector Config"
         id="24681357"
         status="offline"
-        backgroundColor="#f0f9ff"
-        textColor="#0369a1"
+        backgroundColor="#e0e7ff"
+        textColor="#6366f1"
+        simple={true}
       />
       <ConnectorConfigTableCell
-        name="Zendesk Config"
+        name="Stripe Connector Config"
         id="13572468"
         status="destructive"
+        backgroundColor="#dbeafe"
+        textColor="#3b82f6"
+        compact={true}
+      />
+      <ConnectorConfigTableCell
+        name="GitHub Connector Config"
+        id="56789012"
+        status="healthy"
         backgroundColor="#e0f2fe"
         textColor="#0ea5e9"
+        compact={true}
+        useIcon={true}
       />
     </div>
   ),
