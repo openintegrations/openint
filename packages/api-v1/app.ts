@@ -7,6 +7,7 @@ import {
   createFetchHandlerTRPC,
   type CreateFetchHandlerOptions,
 } from './handlers'
+import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 
 export interface CreateAppOptions
@@ -17,6 +18,7 @@ export function createApp({db}: CreateAppOptions) {
   const app = new Elysia()
     .get('/health', () => ({healthy: true}))
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}))
+    .get('/jobs/refresh-stale-connections', handleRefreshStaleConnections)
     .use(
       swagger({
         // TODO: Figure out why spec.content doesn't work. so we are forced tos specify url instead
