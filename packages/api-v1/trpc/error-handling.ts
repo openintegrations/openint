@@ -4,8 +4,13 @@ import {
   TRPC_ERROR_CODES_BY_KEY,
   TRPC_ERROR_CODES_BY_NUMBER,
 } from '@trpc/server/rpc'
+import {
+  JSONRPC2_TO_HTTP_CODE,
+  RouterCallerErrorHandler,
+} from '@trpc/server/unstable-core-do-not-import'
 import type {ZodError} from 'zod'
 import {safeJSONParse, z} from '@openint/util'
+import {RouterContext} from './context'
 
 export const zErrorCode = z
   .enum(
@@ -58,22 +63,32 @@ export function parseAPIError(error: unknown): APIError | undefined {
   // Handle TRPCError (from caller)
   if (error instanceof TRPCError) {
     const cause = error.cause as ZodError | undefined
-    return zAPIError.parse({
-      code: error.code,
-      message: error.message,
-      data: {
+    return zAPIError.parse(
+      {
         code: error.code,
-        // httpStatus: error.data?.httpStatus,
-        // path: error.data?.path,
-        stack: error.stack,
+        message: error.message,
+        data: {
+          code: error.code,
+          httpStatus: JSONRPC2_TO_HTTP_CODE[error.code],
+          path: (error as any).path,
+          stack: error.stack,
+        },
+        issues: cause?.errors,
       },
-      issues: cause?.errors,
-    })
+      {
+        errorMap: (issue, ctx) => {
+          console.warn(
+            'Did you forget to add custom onError handler when using trpcRouter?',
+          )
+          return {message: issue.message || ctx.defaultError}
+        },
+      },
+    )
   }
 
   // Handle TRPCClientError
   if (error instanceof TRPCClientError) {
-    return zAPIError.safeParse({
+    return zAPIError.parse({
       code: error.data?.code,
       message: error.message,
       data: {
@@ -83,8 +98,20 @@ export function parseAPIError(error: unknown): APIError | undefined {
         stack: error.data?.stack,
       },
       issues: safeJSONParse(error.message) ?? undefined,
-    }).data
+    })
   }
 
   return zAPIError.safeParse(error).data
+}
+
+/**
+ * TRPCError does not have path, so we need to add it in order to normalize it
+ * properly for parseAPIError
+ */
+export const onError: RouterCallerErrorHandler<unknown> = ({
+  error,
+  path /* input, ctx, type */,
+}) => {
+  // Consider adding input and context to make error even more accurate
+  Object.assign(error, {path})
 }

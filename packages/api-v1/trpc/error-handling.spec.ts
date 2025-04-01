@@ -5,7 +5,7 @@ import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {createOpenApiFetchHandler, type OpenApiMeta} from 'trpc-to-openapi'
 import {ZodError} from 'zod'
 import {z} from '@openint/util'
-import {parseAPIError, zAPIError} from './error-handling'
+import {onError, parseAPIError} from './error-handling'
 
 const trpc = initTRPC.meta<OpenApiMeta>().create()
 
@@ -361,7 +361,7 @@ describe('TRPC over http', () => {
 })
 
 describe('TRPC caller', () => {
-  const caller = router.createCaller({})
+  const caller = router.createCaller({}, {onError})
 
   test('handle not found', async () => {
     const err = await caller.errorTest({code: 'NOT_FOUND'}).catch((e) => e)
@@ -370,19 +370,16 @@ describe('TRPC caller', () => {
     expect(err.message).toEqual('Resource not found')
     expect(err.stack).toEqual(expect.any(String))
 
-    // console.dir(err)
-    // we need the path and httpStatus, how to get?
-
-    // expect(parseAPIError(err)).toMatchObject({
-    //   code: 'NOT_FOUND',
-    //   message: 'Resource not found',
-    //   data: {
-    //     code: 'NOT_FOUND',
-    //     httpStatus: 404,
-    //     path: 'errorTest',
-    //     stack: expect.any(String),
-    //   },
-    // })
+    expect(parseAPIError(err)).toMatchObject({
+      code: 'NOT_FOUND',
+      message: 'Resource not found',
+      data: {
+        code: 'NOT_FOUND',
+        httpStatus: 404,
+        path: 'errorTest',
+        stack: expect.any(String),
+      },
+    })
   })
 
   test('handle 500 error', async () => {
@@ -391,6 +388,14 @@ describe('TRPC caller', () => {
     expect(err.code).toEqual('INTERNAL_SERVER_ERROR')
     expect(err.message).toEqual('custom error')
     expect(err.stack).toEqual(expect.any(String))
+
+    expect(parseAPIError(err)).toMatchObject({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'custom error',
+      data: {
+        code: 'INTERNAL_SERVER_ERROR',
+      },
+    })
   })
 
   test('handle input validation failure', async () => {
@@ -428,6 +433,22 @@ describe('TRPC caller', () => {
       },
     ])
     expect(cause.message).toEqual(JSON.stringify(cause.errors, null, 2))
+    expect(parseAPIError(err)).toMatchObject({
+      code: 'BAD_REQUEST',
+      // message: 'Input validation failed',
+      // TODO: Implement custom message similar to
+      // https://github.com/mcampa/trpc-to-openapi/blob/af44cc54d1d719b1bc77d05067cdd4a3b4f882aa/src/adapters/node-http/core.ts#L197-L210
+      data: {
+        code: 'BAD_REQUEST',
+      },
+      issues: [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'undefined',
+        },
+      ],
+    })
   })
 
   test('handle output validation failure', async () => {
@@ -449,5 +470,12 @@ describe('TRPC caller', () => {
       },
     ])
     expect(cause.message).toEqual(JSON.stringify(cause.errors, null, 2))
+    expect(parseAPIError(err)).toMatchObject({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Output validation failed',
+      data: {
+        code: 'INTERNAL_SERVER_ERROR',
+      },
+    })
   })
 })
