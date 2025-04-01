@@ -3,9 +3,9 @@ import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
 import type {Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
-import {routerContextFromRequest, routerContextFromViewer} from './trpc/context'
 // Technically doesn't belong here as it introduces circular dependencies
 import {appRouter} from './routers'
+import {routerContextFromRequest, routerContextFromViewer} from './trpc/context'
 
 export interface CreateFetchHandlerOptions {
   endpoint: `/${string}`
@@ -45,5 +45,7 @@ export function createTRPCCaller(
   ctx: Omit<CreateFetchHandlerOptions, 'endpoint' | 'router'>,
   viewer: Viewer,
 ) {
-  return appRouter.createCaller(routerContextFromViewer({...ctx, viewer}))
+  return appRouter.createCaller(routerContextFromViewer({...ctx, viewer}), {
+    onError,
+  })
 }

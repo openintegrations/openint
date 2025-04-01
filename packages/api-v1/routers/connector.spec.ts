@@ -1,6 +1,7 @@
 import type {Viewer} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {routerContextFromViewer} from '../trpc/context'
+import {onError} from '../trpc/error-handling'
 import {connectorRouter} from './connector'
 
 const logger = false
@@ -9,7 +10,9 @@ jest.setTimeout(1000 * 60 * 15)
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   function getCaller(viewer: Viewer) {
-    return connectorRouter.createCaller(routerContextFromViewer({db, viewer}))
+    return connectorRouter.createCaller(routerContextFromViewer({db, viewer}), {
+      onError,
+    })
   }
 
   const asOrg = getCaller({role: 'org', orgId: 'org_222'})

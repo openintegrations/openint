@@ -6,6 +6,7 @@ import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {makeUlid} from '@openint/util'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {routerContextFromViewer} from '../trpc/context'
+import {onError} from '../trpc/error-handling'
 import {connectionRouter} from './connection'
 
 const logger = false
@@ -13,7 +14,7 @@ const logger = false
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   function getTestContext<T extends Viewer>(viewer: T) {
     const ctx = routerContextFromViewer<T>({db, viewer})
-    const caller = connectionRouter.createCaller(ctx)
+    const caller = connectionRouter.createCaller(ctx, {onError})
     return {...ctx, caller}
   }
 
