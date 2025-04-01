@@ -48,7 +48,7 @@
       {
         "version": "v1 (preview)",
         "label": "Version 1",
-        "openapi": "mintlify.oas.yml",
+        "openapi": "./mintlify.oas.yml",
         "groups": [
           {
             "group": "Getting Started",

@@ -2,7 +2,8 @@
   "name": "@openint/docs",
   "scripts": {
     "dev": "cd ../packages/api-v1 && pnpm run gen && cd ../../docs && NODE_ENV=development pnpm run gen:docs-oas && mintlify dev",
-    "gen:docs-oas": "node generateDocsOas.bin.cjs"
+    "gen:docs-oas": "node generateDocsOas.bin.cjs",
+    "mintlify": "mintlify dev"
   },
   "dependencies": {
     "@octokit/graphql": "^8.1.1",

@@ -1,6 +1,0 @@
-- [ ] How do we think about connections that give access to MANY apis?
-    - Single google oauth gives access to So many things
-      - Gmail
-      - Google Drive
-    - Are these by nature different from the differnt APIs from hubspot?
-    - Different scopes are needed though
