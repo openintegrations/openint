@@ -5,8 +5,7 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {Core, core, parseNonEmpty} from '../models'
-import {connectorSchemas} from '../models/connectorSchemas'
+import {Core, core, zConnectionSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
 import {expandConnector} from './connectorConfig'
@@ -443,23 +442,7 @@ export const connectionRouter = router({
         connector_config_id: zConnectorConfigId,
         metadata: z.record(z.unknown()).optional(),
         customer_id: zCustomerId,
-        data: z
-          .discriminatedUnion(
-            'connector_name',
-            parseNonEmpty(
-              connectorSchemas.connectionSettings.map((s) =>
-                z
-                  .object({
-                    connector_name: s.shape.connector_name,
-                    settings: s.shape.connectionSettings,
-                  })
-                  .openapi({
-                    ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
-                  }),
-              ),
-            ),
-          )
-          .describe('Connection settings to import'),
+        data: zConnectionSettings,
       }),
     )
     .output(core.connection)
