@@ -124,6 +124,7 @@ export const connectorRouter = router({
         method: 'GET',
         path: '/connector/{name}',
         description: 'Get a connector by name',
+        enabled: false,
       },
     })
     .input(

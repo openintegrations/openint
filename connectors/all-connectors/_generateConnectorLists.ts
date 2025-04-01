@@ -201,6 +201,7 @@ async function main() {
         })
         .join('\n')}
     export const ${entry}Connectors = {${list
+      .sort((a, b) => a.name?.localeCompare(b.name || '') || 0)
       .map(({name, varName}) => `'${name}': ${varName},`)
       .join('\n')}}
   `,

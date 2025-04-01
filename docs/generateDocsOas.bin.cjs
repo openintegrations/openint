@@ -4,9 +4,25 @@ const yaml = require('js-yaml')
 
 async function getOasSpec() {
   if (process.env.NODE_ENV === 'development') {
-    return JSON.parse(
-      fs.readFileSync('../packages/api-v1/__generated__/openapi.json', 'utf8'),
-    )
+    const {exec} = require('child_process')
+
+    // Run the pnpm gen command in the api-v1 package
+    exec('pnpm gen', {cwd: '../packages/api-v1'}, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing pnpm gen: ${error.message}`)
+        return
+      }
+      if (stderr) {
+        console.error(`pnpm gen stderr: ${stderr}`)
+        return
+      }
+      return JSON.parse(
+        fs.readFileSync(
+          '../packages/api-v1/__generated__/openapi.json',
+          'utf8',
+        ),
+      )
+    })
   }
 
   return new Promise((resolve, reject) => {
@@ -38,13 +54,8 @@ async function getOasSpec() {
 async function main() {
   const oas = await getOasSpec()
 
-  const pathsToFilterOut = [
-    '/health',
-    '/viewer',
-    '/event',
-    '/organization/onboarding',
-    '/connector/{name}',
-  ]
+  // no longer in use
+  const pathsToFilterOut = []
 
   const filteredPaths = Object.keys(oas.paths)
     .filter((path) => !pathsToFilterOut.includes(path))
