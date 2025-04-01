@@ -39,15 +39,6 @@ module.exports = [
       server: '@openint/connector-coda/server',
     },
   },
-  {
-    name: 'discord',
-    dirName: 'connector-discord',
-    varName: 'connectorDiscord',
-    imports: {
-      def: '@openint/connector-discord/def',
-      server: '@openint/connector-discord/server',
-    },
-  },
   {dirName: 'connector-expensify', varName: 'connectorExpensify', imports: {}},
   {
     name: 'facebook',
@@ -477,6 +468,19 @@ module.exports = [
       importPath: {
         def: 'connectorConfluence_def',
         server: 'connectorConfluence_server',
+      },
+    },
+  },
+  {
+    name: 'discord',
+    dirName: 'cnext-discord',
+    varName: 'connectorDiscord',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorDiscord_def',
+        server: 'connectorDiscord_server',
       },
     },
   },

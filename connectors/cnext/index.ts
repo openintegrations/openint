@@ -2,6 +2,8 @@ import {server as connectorAircall_server} from './aircall'
 import {def as connectorAircall_def} from './aircall/def'
 import {server as connectorConfluence_server} from './confluence'
 import {def as connectorConfluence_def} from './confluence/def'
+import {server as connectorDiscord_server} from './discord'
+import {def as connectorDiscord_def} from './discord/def'
 import {server as connectorGooglecalendar_server} from './googlecalendar'
 import {def as connectorGooglecalendar_def} from './googlecalendar/def'
 import {server as connectorGoogledocs_server} from './googledocs'
@@ -22,6 +24,8 @@ export {
   connectorAircall_def,
   connectorConfluence_server,
   connectorConfluence_def,
+  connectorDiscord_server,
+  connectorDiscord_def,
   connectorGooglecalendar_server,
   connectorGooglecalendar_def,
   connectorGoogledocs_server,

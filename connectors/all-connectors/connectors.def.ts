@@ -2,6 +2,7 @@
 import {
   connectorAircall_def as connectorAircall,
   connectorConfluence_def as connectorConfluence,
+  connectorDiscord_def as connectorDiscord,
   connectorGooglecalendar_def as connectorGooglecalendar,
   connectorGoogledocs_def as connectorGoogledocs,
   connectorGoogledrive_def as connectorGoogledrive,
@@ -12,7 +13,6 @@ import {default as connectorAirtable} from '@openint/connector-airtable/def'
 import {default as connectorApollo} from '@openint/connector-apollo/def'
 import {default as connectorBrex} from '@openint/connector-brex/def'
 import {default as connectorCoda} from '@openint/connector-coda/def'
-import {default as connectorDiscord} from '@openint/connector-discord/def'
 import {default as connectorFacebook} from '@openint/connector-facebook/def'
 import {default as connectorFinch} from '@openint/connector-finch/def'
 import {default as connectorFirebase} from '@openint/connector-firebase/def'
@@ -64,7 +64,6 @@ export const defConnectors = {
   apollo: connectorApollo,
   brex: connectorBrex,
   coda: connectorCoda,
-  discord: connectorDiscord,
   facebook: connectorFacebook,
   finch: connectorFinch,
   firebase: connectorFirebase,
@@ -112,6 +111,7 @@ export const defConnectors = {
   zohodesk: connectorZohodesk,
   aircall: connectorAircall,
   confluence: connectorConfluence,
+  discord: connectorDiscord,
   googlecalendar: connectorGooglecalendar,
   googledocs: connectorGoogledocs,
   googledrive: connectorGoogledrive,
