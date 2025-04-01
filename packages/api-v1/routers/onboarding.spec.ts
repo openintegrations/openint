@@ -2,13 +2,17 @@ import type {Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {routerContextFromViewer} from '../trpc/context'
+import {onError} from '../trpc/error-handling'
 import {onboardingRouter} from './onboarding'
 
 const logger = false
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   function getCaller(viewer: Viewer) {
-    return onboardingRouter.createCaller(routerContextFromViewer({db, viewer}))
+    return onboardingRouter.createCaller(
+      routerContextFromViewer({db, viewer}),
+      {onError},
+    )
   }
 
   const orgId = 'org_222'
