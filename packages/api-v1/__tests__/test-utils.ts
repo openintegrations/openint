@@ -1,7 +1,9 @@
 import {createTRPCClient, httpLink} from '@trpc/client'
 import type {Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
+import {schema, type Database} from '@openint/db'
 import {envRequired} from '@openint/env'
+import {makeUlid} from '@openint/util'
 import {createApp} from '../app'
 import type {CreateFetchHandlerOptions} from '../handlers'
 import {createFetchHandlerTRPC} from '../handlers'
@@ -35,4 +37,24 @@ export function getTestTRPCClient(
       }),
     ],
   })
+}
+
+export async function createTestOrganization(db: Database) {
+  const orgId = `org_${makeUlid()}`
+  const apiKey = `key_${makeUlid()}`
+
+  const org = await db
+    .insert(schema.organization)
+    .values({
+      id: orgId,
+      name: 'Test Organization',
+      slug: 'test-org',
+      api_key: apiKey,
+      metadata: {
+        test: true,
+      },
+    })
+    .returning()
+
+  return org[0]!
 }

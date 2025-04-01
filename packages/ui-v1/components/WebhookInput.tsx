@@ -1,39 +1,28 @@
 'use client'
 
 import {Check, Copy, Loader2} from 'lucide-react'
-import React from 'react'
-import {cn} from '@openint/shadcn/lib/utils'
+import {useState} from 'react'
 import {Button, Input, Label, toast} from '@openint/shadcn/ui'
 
-interface UrlInputFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  inputName: string
-  placeholder?: string
+interface WebhookInputProps {
   defaultValue: string
   onSave: (value: string) => void
   isSaving: boolean
 }
 
-function UrlInputForm({
-  inputName,
-  placeholder = 'https://',
-  defaultValue,
-  onSave,
-  isSaving,
-  className,
-  ...props
-}: UrlInputFormProps) {
-  const [urlValue, setUrlValue] = React.useState(defaultValue)
-  const [lastSavedValue, setLastSavedValue] = React.useState(defaultValue)
-  const [copied, setCopied] = React.useState(false)
+function WebhookInput({defaultValue, onSave, isSaving}: WebhookInputProps) {
+  const [webhookValue, setWebhookValue] = useState(defaultValue)
+  const [lastSavedValue, setLastSavedValue] = useState(defaultValue)
+  const [copied, setCopied] = useState(false)
 
-  const hasChanges = urlValue !== lastSavedValue
-  const isValidUrl = urlValue.startsWith('https://')
+  const hasChanges = webhookValue !== lastSavedValue
+  const isValidUrl = webhookValue.startsWith('https://')
   const showError = hasChanges && !isValidUrl
 
   const handleCopy = async () => {
     try {
       setCopied(true)
-      await navigator.clipboard.writeText(urlValue)
+      await navigator.clipboard.writeText(webhookValue)
       toast.success('Copied to clipboard')
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
@@ -43,37 +32,35 @@ function UrlInputForm({
 
   const handleSave = async () => {
     if (!isValidUrl) {
-      toast.error(`${inputName} must start with https://`)
+      toast.error('Webhook URL must start with https://')
       return
     }
 
     try {
-      await onSave(urlValue)
-      setLastSavedValue(urlValue)
-      toast.success(`${inputName} saved`)
+      await onSave(webhookValue)
+      setLastSavedValue(webhookValue)
+      toast.success('Webhook URL saved')
     } catch (err) {
       toast.error(
-        `Error: ${err instanceof Error ? err.message : `Failed to save ${inputName}`}`,
+        `Error: ${err instanceof Error ? err.message : 'Failed to save webhook URL'}`,
       )
     }
   }
 
-  const inputId = `${inputName.toLowerCase().replace(/\s+/g, '-')}-input`
-
   return (
-    <div className={cn('w-full max-w-sm space-y-2', className)} {...props}>
-      <Label className="text-md font-bold" htmlFor={inputId}>
-        {inputName}
+    <div className="w-full max-w-sm space-y-2">
+      <Label className="text-md font-bold" htmlFor="webhookInput">
+        Webhook URL
       </Label>
       <div className="flex flex-col gap-1">
         <div className="flex">
           <div className="relative flex-grow">
             <Input
               type="text"
-              id={inputId}
-              placeholder={placeholder}
-              value={urlValue}
-              onChange={(e) => setUrlValue(e.target.value)}
+              id="webhookInput"
+              placeholder="https://webhook.site/webhook-url"
+              value={webhookValue}
+              onChange={(e) => setWebhookValue(e.target.value)}
               className={`pr-3 font-light ${showError ? 'border-red-500' : ''}`}
             />
           </div>
@@ -95,7 +82,7 @@ function UrlInputForm({
             className="ml-2"
             onClick={handleSave}
             disabled={isSaving || !hasChanges || !isValidUrl}
-            aria-label={`Save ${inputName}`}>
+            aria-label="Save webhook URL">
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -108,7 +95,7 @@ function UrlInputForm({
         </div>
         {showError && (
           <p className="text-sm text-red-500">
-            {inputName} must start with https://
+            Webhook URL must start with https://
           </p>
         )}
       </div>
@@ -116,4 +103,4 @@ function UrlInputForm({
   )
 }
 
-export default UrlInputForm
+export default WebhookInput

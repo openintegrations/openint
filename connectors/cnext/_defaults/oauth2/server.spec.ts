@@ -115,7 +115,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       {
         extCustomerId: `cust_123` as any,
         webhookBaseUrl: 'https://example.com/webhook',
-        orgId: `org_123` as any,
       },
       {connectionId: 'test_connection_id'},
     )
@@ -167,7 +166,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         {
           extCustomerId: `cust_123` as any,
           webhookBaseUrl: 'https://example.com/webhook',
-          orgId: `org_123` as any,
         },
         {connectionId: 'test_connection_id'},
       ),
@@ -188,7 +186,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
         {
           extCustomerId: `cust_123` as any,
           webhookBaseUrl: 'https://example.com/webhook',
-          orgId: `org_123` as any,
         },
         {connectionId: 'test_connection_id'},
       ),
