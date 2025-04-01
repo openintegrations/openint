@@ -40,15 +40,6 @@ module.exports = [
     },
   },
   {
-    name: 'confluence',
-    dirName: 'connector-confluence',
-    varName: 'connectorConfluence',
-    imports: {
-      def: '@openint/connector-confluence/def',
-      server: '@openint/connector-confluence/server',
-    },
-  },
-  {
     name: 'discord',
     dirName: 'connector-discord',
     varName: 'connectorDiscord',
@@ -473,6 +464,19 @@ module.exports = [
       importPath: {
         def: 'connectorAircall_def',
         server: 'connectorAircall_server',
+      },
+    },
+  },
+  {
+    name: 'confluence',
+    dirName: 'cnext-confluence',
+    varName: 'connectorConfluence',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorConfluence_def',
+        server: 'connectorConfluence_server',
       },
     },
   },
