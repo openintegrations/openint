@@ -94,7 +94,7 @@ export const connectRouter = router({
         })
       }
 
-      console.log('preConnect', input, ctx, ccfg)
+      console.log('preConnect input', input)
       const res = await connector.preConnect?.(
         ccfg.config,
         {
@@ -103,10 +103,10 @@ export const connectRouter = router({
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
-          orgId: ctx.viewer.orgId,
         },
         input.data.input,
       )
+      console.log('preConnect output', res)
       return {
         connector_name: input.data.connector_name,
         output: res,
@@ -170,12 +170,6 @@ export const connectRouter = router({
         })
       }
 
-      if (!ctx.viewer.orgId) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'OrgId is required',
-        })
-      }
       console.log('preConnect', input, ctx, ccfg)
       const connUpdate = await connector.postConnect?.(
         input.data.input,
@@ -186,7 +180,6 @@ export const connectRouter = router({
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
-          orgId: ctx.viewer.orgId,
         },
       )
       const id = makeId('conn', input.data.connector_name, makeUlid())

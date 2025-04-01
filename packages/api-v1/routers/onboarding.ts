@@ -1,9 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
-import {encodeApiKey} from '@openint/cdk'
-import {eq, inArray, schema} from '@openint/db'
+import {dbUpsertOne, eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util'
-import {getOauthRedirectUri} from '../../../connectors/cnext/_defaults/oauth2/utils'
 import {core} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
 
@@ -14,7 +12,7 @@ const zOnboardingState = z.object({
   onboarding_marked_complete: z.boolean(),
 })
 
-export const organizationRouter = router({
+export const onboardingRouter = router({
   getOrganization: orgProcedure
     .meta({
       openapi: {method: 'GET', path: '/organization', enabled: false},
@@ -22,10 +20,7 @@ export const organizationRouter = router({
     .input(z.void())
     .output(
       core.organization.extend({
-        metadata: z.object({
-          webhook_url: z.string().nullish(),
-          oauth_redirect_url: z.string().nullish(),
-        }),
+        metadata: z.object({webhook_url: z.string().nullish()}),
       }),
     )
     .query(async ({ctx}) => {
@@ -42,13 +37,22 @@ export const organizationRouter = router({
         })
       }
 
+      // create api key if not already
+      if (!org.api_key) {
+        console.log('Lazily creating api key for org', org.id)
+        org.api_key = `key_${makeUlid()}`
+        await dbUpsertOne(
+          ctx.as({role: 'system'}).db, // TODO: Allow orgs to update their own api key
+          schema.organization,
+          {id: org.id, api_key: org.api_key},
+          {insertOnlyColumns: ['api_key']},
+        )
+      }
+
       return {
         ...org,
         metadata: {
           webhook_url: org.metadata?.webhook_url ?? '',
-          oauth_redirect_url:
-            org.metadata?.oauth_redirect_url ??
-            await getOauthRedirectUri(ctx.viewer.orgId, org),
         },
       }
     }),
@@ -70,7 +74,7 @@ export const organizationRouter = router({
     )
     .output(z.object({id: z.string()}))
     .mutation(async ({input, ctx}) => {
-      const apikey = encodeApiKey(input.id, `key_${makeUlid()}`)
+      const apikey = `key_${makeUlid()}`
       const metadata = {
         referrer: input.referrer,
         clerk_user_id: input.clerkUserId,
@@ -194,20 +198,15 @@ export const organizationRouter = router({
         })
         .where(eq(schema.organization.id, org.id))
     }),
-  setMetadataUrl: orgProcedure
+  setWebhookUrl: orgProcedure
     .meta({
       openapi: {
         method: 'PUT',
-        path: '/organization/metadata-url',
+        path: '/organization/webhook-url',
         enabled: false,
       },
     })
-    .input(
-      z.object({
-        urlType: z.enum(['webhook_url', 'oauth_redirect_url']),
-        url: z.string(),
-      }),
-    )
+    .input(z.object({webhookUrl: z.string()}))
     .output(z.void())
     .mutation(async ({input, ctx}) => {
       const org = await ctx
@@ -223,33 +222,32 @@ export const organizationRouter = router({
         })
       }
 
-      // Check if the URL is already set to the same value
-      if (org.metadata?.[input.urlType] === input.url) {
+      if (org.metadata?.webhook_url === input.webhookUrl) {
         return
       }
 
-      // Validate URL based on type
-      if (
-        input.urlType === 'webhook_url' &&
-        !input.url.startsWith('https://')
-      ) {
+      if (!input.webhookUrl.startsWith('https://')) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Invalid webhook URL. It must start with "https://".',
         })
       }
 
-      // For OAuth redirect URLs, ensure they are valid URLs
-      if (input.urlType === 'oauth_redirect_url') {
-        try {
-          new URL(input.url)
-        } catch (error) {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'Invalid OAuth redirect URL. Please provide a valid URL.',
-          })
-        }
-      }
+      // Consider doing this
+      // const response = await fetch('/api/v1/organization/webhook-url', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({test: true, webhookUrl: input.webhookUrl}),
+      // })
+
+      // if (!response.ok) {
+      //   throw new TRPCError({
+      //     code: 'INTERNAL_SERVER_ERROR',
+      //     message: 'Failed to send test POST request to the webhook URL.',
+      //   })
+      // }
 
       try {
         await ctx
@@ -258,16 +256,15 @@ export const organizationRouter = router({
           .set({
             metadata: {
               ...org.metadata,
-              [input.urlType]: input.url,
+              webhook_url: input.webhookUrl,
             },
             updated_at: new Date().toISOString(),
           })
           .where(eq(schema.organization.id, org.id))
       } catch (error) {
-        console.error(`Error updating ${input.urlType}:`, error)
-        throw new TRPCError({
+        console.error('Error updating webhook URL:', error); throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: `Failed to update ${input.urlType.replace(/_/g, ' ')}, please try again later`,
+          message: 'Failed to update webhook URL, please try again later',
         })
       }
     }),

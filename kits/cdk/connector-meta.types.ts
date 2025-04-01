@@ -113,7 +113,6 @@ export interface ConnectContext<TSettings>
     externalId: ExternalId
     settings: TSettings
   } | null
-  orgId: `org_${string}`
 }
 
 // TODO: We should rename `provider` to `integration` given that they are both
