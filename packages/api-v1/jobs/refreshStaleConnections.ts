@@ -1,25 +1,34 @@
-import type {NextRequest} from 'next/server'
+import type {Handler} from 'elysia'
+import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {ConnectorServer} from '@openint/cdk'
-import {and, desc, eq, isNotNull, lt, schema, sql} from '@openint/db'
+import {
+  and,
+  desc,
+  eq,
+  isNotNull,
+  lt,
+  schema,
+  sql,
+  type Database,
+} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired, isProduction} from '@openint/env'
-import {serverConnectors} from '../../../../../../connectors/all-connectors/connectors.server'
 
-export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${envRequired.CRON_SECRET}`) {
-    return new Response('Unauthorized', {
-      status: 401,
-    })
-  }
-  if (!isProduction) {
-    console.warn('Refreshing stale connections in non-production environment')
-    return Response.json({
-      totalConnections: 0,
-      totalConnectionsRefreshed: 0,
-    })
-  }
-  const db = initDbNeon(envRequired.DATABASE_URL)
+interface RefreshResult {
+  totalConnections: number
+  totalConnectionsRefreshed: number
+}
+
+export async function refreshStaleConnections(
+  db: Database,
+  options: {
+    concurrencyLimit: number
+    expiryWindowMs?: number // Time window in ms to consider a token as expiring
+    connectors?: Record<string, ConnectorServer> // For testing purposes
+  },
+): Promise<RefreshResult> {
+  const expiryWindow = options.expiryWindowMs ?? 1000 * 60 * 30 // Default 30 minutes
+  const connectors = options.connectors ?? serverConnectors
 
   const expiringConnections = await db
     .select({
@@ -40,8 +49,8 @@ export async function GET(request: NextRequest) {
           sql`connection.settings->'oauth'->'credentials'->>'expires_at'`,
         ),
         lt(
-          sql`connection.settings->'oauth'->'credentials'->>'expires_at'`,
-          new Date(Date.now() + 1000 * 60 * 30),
+          sql`(connection.settings->'oauth'->'credentials'->>'expires_at')::timestamp`,
+          new Date(Date.now() + expiryWindow),
         ),
       ),
     )
@@ -60,40 +69,27 @@ export async function GET(request: NextRequest) {
     {} as Record<string, typeof expiringConnections>,
   )
 
+  let successfulRefreshes = 0
+
   // Process each connector group with concurrency limit
   const processConnectorGroup = async (
     connections: typeof expiringConnections,
   ) => {
     const chunks = []
-    for (
-      let i = 0;
-      i < connections.length;
-      i += envRequired.REFRESH_CONNECTION_CONCURRENCY
-    ) {
-      chunks.push(
-        connections.slice(i, i + envRequired.REFRESH_CONNECTION_CONCURRENCY),
-      )
+    for (let i = 0; i < connections.length; i += options.concurrencyLimit) {
+      chunks.push(connections.slice(i, i + options.concurrencyLimit))
     }
 
     for (const chunk of chunks) {
       await Promise.all(
         chunk.map(async (connection) => {
-          const connector = serverConnectors[
-            connection.connection
-              .connector_name as keyof typeof serverConnectors
+          const connector = connectors[
+            connection.connection.connector_name as keyof typeof connectors
           ] as ConnectorServer
-          if (!connector) {
-            console.warn(
-              `Connector ${connection.connection.connector_name} not found for connection id ${connection.connection.id}, skipping refresh connection`,
-            )
+          if (!connector?.refreshConnection) {
             return
           }
-          if (!connector.refreshConnection) {
-            console.warn(
-              `Connector ${connection.connection.connector_name} does not support refreshConnection, skipping refresh connection`,
-            )
-            return
-          }
+
           try {
             const refreshedSettings = await connector.refreshConnection(
               connection.connection.settings,
@@ -106,6 +102,8 @@ export async function GET(request: NextRequest) {
                 updated_at: new Date().toISOString(),
               })
               .where(eq(schema.connection.id, connection.connection.id))
+
+            successfulRefreshes++
           } catch (error) {
             console.error(
               `Failed to refresh connection ${connection.connection.id}:`,
@@ -117,18 +115,39 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // Process all connector groups in parallel
   await Promise.all(
     Object.entries(connectionsByConnector).map(([_, connections]) =>
       processConnectorGroup(connections),
     ),
   )
 
-  return Response.json({
+  return {
     totalConnections: expiringConnections.length,
-    totalConnectionsRefreshed: Object.values(connectionsByConnector).reduce(
-      (acc, connections) => acc + connections.length,
-      0,
-    ),
+    totalConnectionsRefreshed: successfulRefreshes,
+  }
+}
+
+export const handleRefreshStaleConnections: Handler = async ({request}) => {
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${envRequired.CRON_SECRET}`) {
+    return new Response('Unauthorized', {
+      status: 401,
+    })
+  }
+
+  if (!isProduction) {
+    console.warn('Refreshing stale connections in non-production environment')
+    return Response.json({
+      totalConnections: 0,
+      totalConnectionsRefreshed: 0,
+    })
+  }
+
+  const db = initDbNeon(envRequired.DATABASE_URL)
+
+  const result = await refreshStaleConnections(db, {
+    concurrencyLimit: Number(envRequired.REFRESH_CONNECTION_CONCURRENCY) || 3,
   })
+
+  return Response.json(result)
 }
