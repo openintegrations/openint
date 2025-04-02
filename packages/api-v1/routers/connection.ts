@@ -1,14 +1,14 @@
 import {TRPCError} from '@trpc/server'
-import {z} from '@openint/util/zod-utils'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
+import {makeUlid} from '@openint/util/id-utils'
+import {z} from '@openint/util/zod-utils'
 import {Core, core, zConnectionSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
 import {expandConnector} from './connectorConfig'
-import {makeUlid} from '@openint/util/id-utils'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -137,7 +137,7 @@ export const connectionRouter = router({
         path: '/connection/{id}',
         description:
           'Get details of a specific connection, including credentials',
-        summary: 'Get Connection & Credentials',
+        summary: 'Get Connection',
       },
     })
     .input(
@@ -248,7 +248,8 @@ export const connectionRouter = router({
       openapi: {
         method: 'GET',
         path: '/connection',
-        description: 'List all connections with optional filtering',
+        description:
+          'List all connections with optional filtering. Does not retrieve secrets or perform any connection healthcheck. For that use `getConnection` or `checkConnectionHealth`.',
         summary: 'List Connections',
       },
     })
