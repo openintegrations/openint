@@ -2,7 +2,7 @@ import {TRPCError} from '@trpc/server'
 import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
-import {and, eq, schema, sql} from '@openint/db'
+import {and, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {core, type Core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
@@ -154,6 +154,7 @@ export const connectorConfigRouter = router({
       const includeConnectionCount = (input?.expand || []).includes(
         'connection_count',
       )
+      const connectorNames = Object.keys(defConnectors)
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
@@ -180,6 +181,8 @@ export const connectorConfigRouter = router({
                     input.connector_name,
                   )
                 : undefined,
+              // excluding data from old connectors that are no longer supported
+              inArray(schema.connector_config.connector_name, connectorNames),
             ),
           ),
         schema.connector_config.created_at,
@@ -193,7 +196,6 @@ export const connectorConfigRouter = router({
       const expandOptions = (input?.expand || []) as Array<
         z.infer<typeof zExpandOptions>
       >
-
       // Process items with proper typing
       const processedItems: Array<
         z.infer<typeof connectorConfigWithRelations>
@@ -302,7 +304,6 @@ export const connectorConfigRouter = router({
     )
     .mutation(async ({ctx, input}) => {
       const {id, config, display_name, disabled} = input
-      console.log({input})
       const res = await ctx.db
         .update(schema.connector_config)
         .set({
