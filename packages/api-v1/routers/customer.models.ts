@@ -1,6 +1,29 @@
 import {zCustomerId} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
-import {zConnectionId, zConnectorName} from './utils/types'
+
+export const connectClientOptions = z
+  .object({
+    connector_name: z
+      .enum(['plaid', 'greenhouse'])
+      .optional()
+      .describe(
+        'The name of the connector to limit connection to. Default to all otherwise',
+      ),
+    tab: z.enum(['my-connections', 'add-connection']).optional().openapi({
+      title: 'Default Tab',
+      description:
+        'The default tab to show when the magic link is opened. Defaults to "my-connections"',
+    }),
+    '--primary': z.string().optional(),
+    '--background': z.string().optional(),
+    '--foreground': z.string().optional(),
+    '--card': z.string().optional(),
+    '--card-foreground': z.string().optional(),
+  })
+  .openapi({
+    description:
+      'Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client',
+  })
 
 export const customerRouterModels = {
   createMagicLinkInput: z.object({
@@ -14,29 +37,6 @@ export const customerRouterModels = {
       .describe(
         'How long the magic link will be valid for (in seconds) before it expires',
       ),
-    redirect_url: z
-      .string()
-      .optional()
-      .describe(
-        'Where to send user to after connect / if they press back button',
-      ),
-    connector_names: z
-      .array(zConnectorName.describe(''))
-      .optional()
-      .default([])
-      .describe('Filter integrations by connector names'),
-    connection_id: zConnectionId
-      .optional()
-      .describe('The specific connection id to load'),
-    theme: z
-      .enum(['light', 'dark'])
-      .optional()
-      .default('light')
-      .describe('Magic Link display theme'),
-    view: z
-      .enum(['manage', 'manage-deeplink', 'add', 'add-deeplink'])
-      .default('add')
-      .optional()
-      .describe('Magic Link tab view to load in the connect magic link'),
+    client_options: connectClientOptions.optional(),
   }),
 }

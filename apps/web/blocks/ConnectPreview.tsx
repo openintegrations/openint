@@ -16,14 +16,11 @@ export function ConnectPreview() {
   const [formData, setFormData] = React.useState<CreateMagicLinkInput>({
     customer_id: 'cust_123' as any, // Using type assertion for the branded type
     validity_in_seconds: 2592000,
-    connector_names: [],
-    theme: 'light',
-    view: 'add',
   })
 
   const previewUrl = React.useMemo(() => {
     const url = new URL('/connect', window.location.origin)
-    for (const [key, value] of Object.entries(formData)) {
+    for (const [key, value] of Object.entries(formData.client_options ?? {})) {
       if (value !== undefined) {
         url.searchParams.set(key, value.toString())
       }
