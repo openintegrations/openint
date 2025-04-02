@@ -3,7 +3,7 @@ import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
-import {and, dbUpsertOne, eq, schema, sql} from '@openint/db'
+import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {Core, core, zConnectionSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
@@ -269,7 +269,7 @@ export const connectionRouter = router({
       ),
     )
     .query(async ({ctx, input}) => {
-      // Create a query that selects all fields from connection and adds a window function for the count
+      const connectorNames = Object.keys(defConnectors)
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
@@ -291,6 +291,8 @@ export const connectionRouter = router({
               input?.['connector_name']
                 ? eq(schema.connection.connector_name, input['connector_name'])
                 : undefined,
+              // excluding data from old connectors that are no longer supported
+              inArray(schema.connection.connector_name, connectorNames),
             ),
           ),
         schema.connection.created_at,
