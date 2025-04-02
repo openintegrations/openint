@@ -77,7 +77,14 @@ export const Editable: Story = {
 }
 
 // Constrained width example simulating a sheet
-const ConstrainedWidthExample = () => {
+const ConstrainedWidthExample = ({
+  scopesLookup,
+}: {
+  scopesLookup?: Record<
+    string,
+    {scope: string; display_name: string; description: string}
+  >
+}) => {
   const [scopes, setScopes] = useState<string[]>(initialScopes)
   const [enabled, setEnabled] = useState(true)
 
@@ -171,7 +178,10 @@ const ConstrainedWidthExample = () => {
           Scopes
         </h3>
         {enabled ? (
-          <ConnectorScopes scopes={scopes} editable={false}>
+          <ConnectorScopes
+            scopes={scopes}
+            editable={false}
+            scopeLookup={scopesLookup}>
             <ConnectorScopes.List />
           </ConnectorScopes>
         ) : (
@@ -180,7 +190,8 @@ const ConstrainedWidthExample = () => {
             onRemoveScope={handleRemoveScope}
             onAddScope={handleAddScope}
             availableScopes={availableScopes}
-            editable={true}>
+            editable={true}
+            scopeLookup={scopesLookup}>
             <ConnectorScopes.AddButton />
             <ConnectorScopes.List />
           </ConnectorScopes>
@@ -192,4 +203,61 @@ const ConstrainedWidthExample = () => {
 
 export const ConstrainedWidth: Story = {
   render: () => <ConstrainedWidthExample />,
+}
+
+const scopesLookup = {
+  'read:users': {
+    scope: 'read:users',
+    display_name: 'Read Users',
+    description: 'Access to view user information',
+  },
+  'read:documents': {
+    scope: 'read:documents',
+    display_name: 'Read Documents',
+    description: 'Access to view documents and their metadata',
+  },
+  'read:profiles': {
+    scope: 'read:profiles',
+    display_name: 'Read Profiles',
+    description: 'Access to view user profiles and preferences',
+  },
+  'read:settings': {
+    scope: 'read:settings',
+    display_name: 'Read Settings',
+    description: 'Access to view system and application settings',
+  },
+  'write:users': {
+    scope: 'write:users',
+    display_name: 'Write Users',
+    description: 'Permission to create and modify user information',
+  },
+  'write:documents': {
+    scope: 'write:documents',
+    display_name: 'Write Documents',
+    description: 'Permission to create, update, and delete documents',
+  },
+  'write:profiles': {
+    scope: 'write:profiles',
+    display_name: 'Write Profiles',
+    description: 'Permission to update user profiles and preferences',
+  },
+  'write:settings': {
+    scope: 'write:settings',
+    display_name: 'Write Settings',
+    description: 'Permission to modify system and application settings',
+  },
+  'admin:access': {
+    scope: 'admin:access',
+    display_name: 'Admin Access',
+    description: 'Full administrative access to the system',
+  },
+  'admin:users': {
+    scope: 'admin:users',
+    display_name: 'Admin Users',
+    description: 'Administrative control over user accounts and permissions',
+  },
+}
+
+export const WithScopeLookup: Story = {
+  render: () => <ConstrainedWidthExample scopesLookup={scopesLookup} />,
 }

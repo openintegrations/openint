@@ -15,8 +15,15 @@ import {
   TooltipTrigger,
 } from '@openint/shadcn/ui'
 
+interface ScopeLookup {
+  scope: string
+  display_name: string
+  description: string
+}
+
 // Context for sharing state between compound components
 interface ConnectorScopesContextValue {
+  scopeLookup?: Record<string, ScopeLookup>
   scopes: string[]
   availableScopes: string[]
   editable: boolean
@@ -50,6 +57,7 @@ const useConnectorScopes = () => {
 
 // Root component props
 export interface ConnectorScopesProps {
+  scopeLookup?: Record<string, ScopeLookup>
   scopes: string[]
   onRemoveScope?: (scope: string) => void
   onAddScope?: (scope: string) => void
@@ -61,6 +69,7 @@ export interface ConnectorScopesProps {
 
 // Root component
 const ConnectorScopesRoot: React.FC<ConnectorScopesProps> = ({
+  scopeLookup,
   scopes,
   onRemoveScope,
   onAddScope,
@@ -105,6 +114,7 @@ const ConnectorScopesRoot: React.FC<ConnectorScopesProps> = ({
 
   const contextValue: ConnectorScopesContextValue = {
     scopes,
+    scopeLookup,
     availableScopes,
     editable,
     onRemoveScope,
@@ -122,17 +132,42 @@ const ConnectorScopesRoot: React.FC<ConnectorScopesProps> = ({
 
   return (
     <ConnectorScopesContext.Provider value={contextValue}>
-      <div className={cn('w-full space-y-4', className)}>
-        {children || (
-          <>
-            {editable && <AddScopeButton />}
-            <ScopesList />
-          </>
-        )}
-      </div>
+      <TooltipProvider>
+        <div className={cn('w-full space-y-4', className)}>
+          {children || (
+            <>
+              {editable && <AddScopeButton />}
+              <ScopesList />
+            </>
+          )}
+        </div>
+      </TooltipProvider>
     </ConnectorScopesContext.Provider>
   )
 }
+
+const ScopeTooltipContent = ({
+  scope,
+  scopeLookup,
+}: {
+  scope: string
+  scopeLookup?: Record<string, ScopeLookup>
+}) => (
+  <TooltipContent>
+    <p>
+      {scopeLookup && scopeLookup[scope] ? (
+        <>
+          <span className="block font-medium">
+            {scopeLookup[scope].display_name || scopeLookup[scope].scope}
+          </span>
+          {scopeLookup[scope].description}
+        </>
+      ) : (
+        scope
+      )}
+    </p>
+  </TooltipContent>
+)
 
 // Add Scope Button component
 interface AddScopeButtonProps {
@@ -149,16 +184,8 @@ const AddScopeButton: React.FC<AddScopeButtonProps> = ({className}) => {
     handleToggleScope,
     handleAddCustomScope,
     isScopeAdded,
+    scopeLookup,
   } = useConnectorScopes()
-
-  // Split available scopes into two columns
-  const leftColumnScopes = availableScopes.slice(
-    0,
-    Math.ceil(availableScopes.length / 2),
-  )
-  const rightColumnScopes = availableScopes.slice(
-    Math.ceil(availableScopes.length / 2),
-  )
 
   return (
     <div className={cn('flex items-center', className)}>
@@ -188,46 +215,32 @@ const AddScopeButton: React.FC<AddScopeButtonProps> = ({className}) => {
               />
             </div>
             <div className="mb-4 grid grid-cols-2 gap-x-4 gap-y-1">
-              {leftColumnScopes.map((scope) => {
+              {availableScopes.map((scope) => {
                 const isAdded = isScopeAdded(scope)
                 return (
-                  <div
-                    key={scope}
-                    className={cn(
-                      'flex cursor-pointer items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100',
-                      isAdded && 'bg-gray-50',
-                    )}
-                    onClick={() => {
-                      handleToggleScope(scope)
-                    }}>
-                    <span className="mr-2 truncate text-sm">{scope}</span>
-                    {isAdded ? (
-                      <X className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
-                    ) : (
-                      <Check className="h-3.5 w-3.5 flex-shrink-0 text-gray-500 opacity-0 group-hover:opacity-100" />
-                    )}
-                  </div>
-                )
-              })}
-              {rightColumnScopes.map((scope) => {
-                const isAdded = isScopeAdded(scope)
-                return (
-                  <div
-                    key={scope}
-                    className={cn(
-                      'flex cursor-pointer items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100',
-                      isAdded && 'bg-gray-50',
-                    )}
-                    onClick={() => {
-                      handleToggleScope(scope)
-                    }}>
-                    <span className="mr-2 truncate text-sm">{scope}</span>
-                    {isAdded ? (
-                      <X className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
-                    ) : (
-                      <Check className="h-3.5 w-3.5 flex-shrink-0 text-gray-500 opacity-0 group-hover:opacity-100" />
-                    )}
-                  </div>
+                  <Tooltip key={scope} delayDuration={300}>
+                    <TooltipTrigger asChild>
+                      <div
+                        className={cn(
+                          'flex cursor-pointer items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100',
+                          isAdded && 'bg-gray-50',
+                        )}
+                        onClick={() => {
+                          handleToggleScope(scope)
+                        }}>
+                        <span className="mr-2 truncate text-sm">{scope}</span>
+                        {isAdded ? (
+                          <X className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
+                        ) : (
+                          <Check className="h-3.5 w-3.5 flex-shrink-0 text-gray-500 opacity-0 group-hover:opacity-100" />
+                        )}
+                      </div>
+                    </TooltipTrigger>
+                    <ScopeTooltipContent
+                      scope={scope}
+                      scopeLookup={scopeLookup}
+                    />
+                  </Tooltip>
                 )
               })}
             </div>
@@ -255,7 +268,8 @@ interface ScopesListProps {
 }
 
 const ScopesList: React.FC<ScopesListProps> = ({className}) => {
-  const {scopes, editable, handleRemoveScope} = useConnectorScopes()
+  const {scopes, editable, handleRemoveScope, scopeLookup} =
+    useConnectorScopes()
 
   const BadgeContent = (scope: string) => (
     <Badge
@@ -292,14 +306,10 @@ const ScopesList: React.FC<ScopesListProps> = ({className}) => {
     <div className={cn('w-full', className)}>
       <div className="flex flex-wrap gap-2">
         {scopes.map((scope) => (
-          <TooltipProvider key={scope}>
-            <Tooltip delayDuration={300}>
-              <TooltipTrigger asChild>{BadgeContent(scope)}</TooltipTrigger>
-              <TooltipContent>
-                <p>{scope}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Tooltip key={scope} delayDuration={300}>
+            <TooltipTrigger asChild>{BadgeContent(scope)}</TooltipTrigger>
+            <ScopeTooltipContent scope={scope} scopeLookup={scopeLookup} />
+          </Tooltip>
         ))}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import type {FieldProps, RegistryFieldsType} from '@rjsf/utils'
-import React from 'react'
+import {useState} from 'react'
 import {Input, Switch} from '@openint/shadcn/ui'
 import {ConnectorScopes} from '../ConnectorScopes'
 
@@ -9,14 +9,37 @@ interface OAuthFormData {
   scopes?: string[]
 }
 
+interface Scope {
+  scope: string
+  display_name: string
+  description: string
+}
+
+interface OAuthFormContext {
+  openint_scopes: string[]
+  scopes: Scope[]
+  connectorName: string
+}
+
 export function OAuthField<T extends OAuthFormData = OAuthFormData>(
   props: FieldProps<T>,
 ) {
   const {formData, onChange, uiSchema, formContext} = props
+  const {openint_scopes, scopes, connectorName} =
+    formContext as OAuthFormContext
+
+  const scopeLookup = scopes.reduce<Record<string, Scope>>((acc, scope) => {
+    acc[scope.scope] = scope
+    return acc
+  }, {})
+
   console.log({formData, uiSchema})
 
-  const [useOpenIntCredentials, setUseOpenIntCredentials] =
-    React.useState(false)
+  const [useOpenIntCredentials, setUseOpenIntCredentials] = useState(false)
+
+  const availableScopes: string[] = useOpenIntCredentials
+    ? openint_scopes
+    : scopes.map((s) => s.scope)
 
   const handleChange = (field: string, value: string | string[]) => {
     onChange({
@@ -31,7 +54,7 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
         <label
           htmlFor="use-openint-credentials"
           className="text-sm font-medium text-gray-700">
-          Use OpenInt {formContext?.connectorName ?? ''} credentials
+          Use OpenInt {connectorName} credentials
         </label>
         <Switch
           id="use-openint-credentials"
@@ -73,8 +96,9 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
         </div>
       )}
       <ConnectorScopes
+        scopeLookup={scopeLookup}
         scopes={formData?.scopes || []}
-        availableScopes={(formContext?.openint_scopes || []) as string[]}
+        availableScopes={availableScopes}
         editable={!useOpenIntCredentials}
         onAddScope={(scope) => {
           handleChange('scopes', [...(formData?.scopes || []), scope])
