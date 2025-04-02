@@ -3,10 +3,8 @@ import {appRouter} from '../routers'
 
 export function generateOpenAPISpec({
   baseUrl = 'https://api.openint.dev/v1',
-  removePrivateEndpoints = false,
 }: {
   baseUrl?: string
-  removePrivateEndpoints?: boolean
 }) {
   const oas = generateOpenApiDocument(appRouter, {
     title: 'OpenInt',
@@ -29,13 +27,6 @@ export function generateOpenAPISpec({
       },
     },
   })
-
-  // Remove the event endpoint which is a draft one that will be changed and not ready for public use
-  // TODO: Use router meta.internal to filter for endpoint that should be removed, hard-code
-  // rather than hard-coding here
-  if (removePrivateEndpoints && oas.paths) {
-    delete oas.paths['/event']
-  }
 
   if (oas.components?.schemas) {
     // sort schemas object based on key name and add titles
