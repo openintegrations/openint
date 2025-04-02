@@ -1,6 +1,8 @@
-import type {HTTPError} from '@openint/util'
-import {createHTTPClient, stringifyQueryParams, zFunction} from '@openint/util'
+import type {HTTPError} from '@openint/util/http/index'
 import {z} from '@openint/util/zod-utils'
+import {createHTTPClient} from '@openint/util/http/index'
+import {stringifyQueryParams} from '@openint/util/url-utils'
+import {zFunction} from '@openint/util/zod-function-utils'
 
 export const zConfig = z.object({
   authToken: z.string().nullish(),

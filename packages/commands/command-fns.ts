@@ -1,4 +1,5 @@
-import {R, titleCase} from '@openint/util'
+import {R} from '@openint/util/remeda'
+import {titleCase} from '@openint/util/string-utils'
 import {z} from '@openint/util/zod-utils'
 import type {
   CommandDefinitionInput,

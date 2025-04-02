@@ -24,7 +24,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@openint/shadcn/ui'
-import {R} from '@openint/util'
+import {R} from '@openint/util/remeda'
 import {Icon} from '../Icon'
 
 export interface CommandComponentProps<

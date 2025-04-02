@@ -1,6 +1,6 @@
 import type {ConnectorClient} from '@openint/cdk'
 import {CANCELLATION_TOKEN, DivContainer, useScript} from '@openint/cdk'
-import type {NonDiscriminatedUnion} from '@openint/util'
+import type {NonDiscriminatedUnion} from '@openint/util/type-utils'
 import type {yodleeSchemas} from './def'
 import type {FastLinkOpenOptions} from './fastlink'
 

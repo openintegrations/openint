@@ -5,8 +5,8 @@ import {makeJwtClient} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {envRequired} from '@openint/env'
-import {makeUlid} from '@openint/util'
 import {viewerFromRequest} from './authentication'
+import {makeUlid} from '@openint/util/id-utils'
 
 describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   // Setup real database

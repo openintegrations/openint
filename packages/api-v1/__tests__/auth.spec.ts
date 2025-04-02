@@ -2,9 +2,9 @@ import type {CustomerId, Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {initDbPGLite} from '@openint/db/db.pglite'
-import {makeUlid} from '@openint/util'
 import {createTRPCCaller} from '../handlers'
 import {getTestTRPCClient} from './test-utils'
+import {makeUlid} from '@openint/util/id-utils'
 
 const viewers = {
   anon: {role: 'anon'},

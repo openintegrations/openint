@@ -1,6 +1,7 @@
 import type plaid from 'plaid'
 import type {PlaidAccount as PlaidLinkAccount} from 'react-plaid-link'
-import {A, normalizeError} from '@openint/util'
+import {A} from '@openint/util/amount-utils'
+import {normalizeError} from '@openint/util/error-utils'
 
 // This should be consolidated except two different plaid versions are used
 // So we should copy for now until we are ready...

@@ -1,4 +1,6 @@
-import {createHTTPClient, memoize, OAuth2Client, zFunction} from '@openint/util'
+import {memoize} from '@openint/util/function-utils'
+import {createHTTPClient, OAuth2Client} from '@openint/util/http/index'
+import {zFunction} from '@openint/util/zod-function-utils'
 import {z} from '@openint/util/zod-utils'
 
 export type EnvName = z.infer<typeof zEnvName>
