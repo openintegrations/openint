@@ -487,7 +487,16 @@ export const connectionRouter = router({
         typeof connector.checkConnection === 'function'
       ) {
         try {
-          settings = await connector.checkConnection(input.data.settings)
+          settings = await connector.checkConnection({
+            settings: input.data.settings,
+            config: ccfg.config,
+            options: {
+              updateWebhook: false,
+            },
+            context: {
+              webhookBaseUrl: '',
+            },
+          })
         } catch (error) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
