@@ -24,9 +24,7 @@
     "lucide-react": "^0.482.0",
     "next": "15.2.3",
     "react": "^19.0.0",
-    "sonner": "^1.4.0",
-    "zod": "^3.24.2",
-    "zod-openapi": "^4.2.3"
+    "sonner": "^1.4.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",
