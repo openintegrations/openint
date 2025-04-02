@@ -1,10 +1,10 @@
 import type admin from 'firebase-admin'
 import type firebase from 'firebase/compat'
-import type {InjectionToken} from '@openint/util'
-import type {
+import type {InjectionToken} from '@openint/util/di-utils'
 import {objectKeys} from '@openint/util/object-utils'
 import {resolveDependency} from '@openint/util/di-utils'
 import {rxjs} from '@openint/util/observable-utils'
+import type {
   AnyDocumentReference,
   AnyDocumentSnapshot,
   AnyFieldPathClass,

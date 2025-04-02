@@ -3,8 +3,8 @@ import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
 import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
 import {oauth2Schemas, zOAuthConfig} from './def'
-import {
 import {makeUlid} from '@openint/util/id-utils'
+import {
   authorizeHandler,
   defaultTokenExchangeHandler,
   tokenRefreshHandler,

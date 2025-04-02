@@ -69,7 +69,13 @@ function processFile(filePath) {
     if (match) {
       modified = true;
       if (match[1]) {
-        const symbols = match[1].split(',').map(s => s.trim());
+        // Handle multi-line imports by joining lines and cleaning up
+        const symbols = match[1]
+          .replace(/\n/g, '')
+          .replace(/\s+/g, ' ')
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean);
         for (const symbol of symbols) {
           // Handle type imports specifically
           const isTypeImport = symbol.startsWith('type ');

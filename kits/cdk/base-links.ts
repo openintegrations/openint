@@ -1,12 +1,14 @@
-import type {
 import {Rx, rxjs} from '@openint/util/observable-utils'
+import type {
   AnyEntityPayload,
   ConnectionUpdateData,
   Link,
   StateUpdateData,
   SyncOperation,
 } from '@openint/sync'
-import type {WritableDraft} from '@openint/util'
+import type {WritableDraft} from '@openint/util/immutable-utils'
+import {produce} from '@openint/util/immutable-utils'
+import {R} from '@openint/util/remeda'
 import type {Id} from './id.types'
 
 type OperationType = SyncOperation['type']
