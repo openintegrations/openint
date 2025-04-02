@@ -14,16 +14,16 @@ overrides:
 
 patchedDependencies:
   '@jsonurl/jsonurl@1.1.7':
-    hash: 2048c2869df98564de76ebdd8cdf655260560d85e1c74568aeb503efa2c312b0
+    hash: wymar43eprx3gdqsv4laq3u2ei
     path: patches/@jsonurl__jsonurl@1.1.7.patch
   esbuild-jest@0.5.0:
-    hash: 54316c22069cdfc2d0cfebdada2732e067b911bd46d3618e30561bbc74958319
+    hash: qbdhvjs7sktehqpuch2x3qhd4y
     path: patches/esbuild-jest@0.5.0.patch
   firebase@9.8.1:
-    hash: 001aa3ff5a667f94ba5d586f63ac2661c4f0a2ff96c24a0f037b8fe5a20c015a
+    hash: xv6drfi56cgifjvxlrcjb2s3qe
     path: patches/firebase@9.8.1.patch
   micro-memoize@4.0.10:
-    hash: 54bd10a1bb0f4f060489e77f161babfeee293b9c2fc2059063f9e639f2a3dd59
+    hash: hko3q5jvea7ey3trpjtkqgcale
     path: patches/micro-memoize@4.0.10.patch
 
 importers:
@@ -283,9 +283,6 @@ importers:
       '@openint/cnext':
         specifier: workspace:*
         version: link:../cnext
-      '@openint/connector-aircall':
-        specifier: workspace:*
-        version: link:../connector-aircall
       '@openint/connector-airtable':
         specifier: workspace:*
         version: link:../connector-airtable
@@ -298,12 +295,6 @@ importers:
       '@openint/connector-coda':
         specifier: workspace:*
         version: link:../connector-coda
-      '@openint/connector-confluence':
-        specifier: workspace:*
-        version: link:../connector-confluence
-      '@openint/connector-discord':
-        specifier: workspace:*
-        version: link:../connector-discord
       '@openint/connector-facebook':
         specifier: workspace:*
         version: link:../connector-facebook
@@ -316,24 +307,15 @@ importers:
       '@openint/connector-foreceipt':
         specifier: workspace:*
         version: link:../connector-foreceipt
-      '@openint/connector-github':
-        specifier: workspace:*
-        version: link:../connector-github
       '@openint/connector-gong':
         specifier: workspace:*
         version: link:../connector-gong
-      '@openint/connector-google':
-        specifier: workspace:*
-        version: link:../connector-google
       '@openint/connector-greenhouse':
         specifier: workspace:*
         version: link:../connector-greenhouse
       '@openint/connector-heron':
         specifier: workspace:*
         version: link:../connector-heron
-      '@openint/connector-hubspot':
-        specifier: workspace:*
-        version: link:../connector-hubspot
       '@openint/connector-instagram':
         specifier: workspace:*
         version: link:../connector-instagram
@@ -349,12 +331,6 @@ importers:
       '@openint/connector-lever':
         specifier: workspace:*
         version: link:../connector-lever
-      '@openint/connector-linear':
-        specifier: workspace:*
-        version: link:../connector-linear
-      '@openint/connector-linkedin':
-        specifier: workspace:*
-        version: link:../connector-linkedin
       '@openint/connector-lunchmoney':
         specifier: workspace:*
         version: link:../connector-lunchmoney
@@ -370,9 +346,6 @@ importers:
       '@openint/connector-moota':
         specifier: workspace:*
         version: link:../connector-moota
-      '@openint/connector-notion':
-        specifier: workspace:*
-        version: link:../connector-notion
       '@openint/connector-onebrick':
         specifier: workspace:*
         version: link:../connector-onebrick
@@ -388,27 +361,18 @@ importers:
       '@openint/connector-postgres':
         specifier: workspace:*
         version: link:../connector-postgres
-      '@openint/connector-qbo':
-        specifier: workspace:*
-        version: link:../connector-qbo
       '@openint/connector-ramp':
         specifier: workspace:*
         version: link:../connector-ramp
       '@openint/connector-reddit':
         specifier: workspace:*
         version: link:../connector-reddit
-      '@openint/connector-salesforce':
-        specifier: workspace:*
-        version: link:../connector-salesforce
       '@openint/connector-salesloft':
         specifier: workspace:*
         version: link:../connector-salesloft
       '@openint/connector-saltedge':
         specifier: workspace:*
         version: link:../connector-saltedge
-      '@openint/connector-slack':
-        specifier: workspace:*
-        version: link:../connector-slack
       '@openint/connector-splitwise':
         specifier: workspace:*
         version: link:../connector-splitwise
@@ -468,21 +432,6 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
 
-  connectors/connector-aircall:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      '@opensdks/runtime':
-        specifier: ^0.0.19
-        version: 0.0.19
-      '@opensdks/sdk-greenhouse':
-        specifier: ^0.0.8
-        version: 0.0.8
-
   connectors/connector-airtable:
     dependencies:
       '@openint/cdk':
@@ -533,27 +482,6 @@ importers:
       '@opensdks/sdk-coda':
         specifier: ^0.0.1
         version: 0.0.1
-
-  connectors/connector-confluence:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-
-  connectors/connector-discord:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      '@opensdks/sdk-discord':
-        specifier: ^0.0.14
-        version: 0.0.14
 
   connectors/connector-expensify:
     dependencies:
@@ -658,18 +586,6 @@ importers:
         specifier: workspace:*
         version: link:../../packages/util
 
-  connectors/connector-google:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      '@opensdks/runtime':
-        specifier: ^0.0.19
-        version: 0.0.19
-
   connectors/connector-greenhouse:
     dependencies:
       '@openint/cdk':
@@ -703,21 +619,6 @@ importers:
       '@opensdks/sdk-heron':
         specifier: ^0.0.1
         version: 0.0.1
-
-  connectors/connector-hubspot:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      '@opensdks/runtime':
-        specifier: ^0.0.19
-        version: 0.0.19
-      '@opensdks/sdk-hubspot':
-        specifier: 0.0.6
-        version: 0.0.6
 
   connectors/connector-instagram:
     dependencies:
@@ -769,24 +670,6 @@ importers:
       '@opensdks/sdk-lever':
         specifier: 0.0.10
         version: 0.0.10
-
-  connectors/connector-linear:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-
-  connectors/connector-linkedin:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
 
   connectors/connector-lunchmoney:
     dependencies:
@@ -844,15 +727,6 @@ importers:
         version: 0.0.1
 
   connectors/connector-moota:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-
-  connectors/connector-notion:
     dependencies:
       '@openint/cdk':
         specifier: workspace:*
@@ -990,21 +864,6 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
 
-  connectors/connector-qbo:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      '@opensdks/runtime':
-        specifier: ^0.0.19
-        version: 0.0.19
-      '@opensdks/sdk-qbo':
-        specifier: ^0.0.23
-        version: 0.0.23
-
   connectors/connector-ramp:
     dependencies:
       '@openint/cdk':
@@ -1022,21 +881,6 @@ importers:
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
-
-  connectors/connector-salesforce:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      '@opensdks/runtime':
-        specifier: ^0.0.19
-        version: 0.0.19
-      '@opensdks/sdk-salesforce':
-        specifier: 0.0.2
-        version: 0.0.2
 
   connectors/connector-salesloft:
     dependencies:
@@ -1061,18 +905,6 @@ importers:
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
-
-  connectors/connector-slack:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-      '@opensdks/runtime':
-        specifier: ^0.0.19
-        version: 0.0.19
 
   connectors/connector-splitwise:
     dependencies:
@@ -3746,9 +3578,6 @@ packages:
   '@opensdks/sdk-heron@0.0.1':
     resolution: {integrity: sha512-7DOFFlq5C8u060L9GJ6euwE/g8aqIClyZysio4jqYQ1W9rcYX/pZUsZ7NNPt6LQTX+coAz+8nieEi35ejiKbdg==}
 
-  '@opensdks/sdk-hubspot@0.0.6':
-    resolution: {integrity: sha512-UivI44M/g4XwoQvDq57b9PVdlGeiCYS+6zcFJq5HhEJLzYejg21oSJ+R3LC49TINfde88fZvV+wx/ism62C65A==}
-
   '@opensdks/sdk-lever@0.0.10':
     resolution: {integrity: sha512-0TqPeVgoffPaDNLgeovvPH+Rq3W6L9Xw9rNKUJpuM/3HVKnmaX3KVGpepv33lURf29/N9O/P12yXDLB0iazWKA==}
 
@@ -3789,9 +3618,6 @@ packages:
 
   '@opensdks/sdk-revert@0.0.1':
     resolution: {integrity: sha512-r19UD+xs4w+7ezofeYEbuPPuILLnSleVKHpw2KZ7AChtB4X6mR5KGV2LggqBHzY4bdOjp07SheS9zIY+rgar7A==}
-
-  '@opensdks/sdk-salesforce@0.0.2':
-    resolution: {integrity: sha512-gjHwKwfAwtqMgCFrFlWkYfYWlwRm0mYx2Wv3efhgryvpaKGboVZ3519vQlkC1cPGUD1g+WqAzbhb0crlhPSMow==}
 
   '@opensdks/sdk-salesloft@0.0.16':
     resolution: {integrity: sha512-G59x1L+XdFyw4SNJP2hQFYd6Iw6lSHskCl3ZPpFmTzCahFS48a3HwNpOsl3lk+c29Cr7ZXVEiq8pmpLzHR7CHQ==}
@@ -17450,8 +17276,6 @@ snapshots:
 
   '@opensdks/sdk-heron@0.0.1': {}
 
-  '@opensdks/sdk-hubspot@0.0.6': {}
-
   '@opensdks/sdk-lever@0.0.10':
     dependencies:
       '@opensdks/runtime': 0.0.20
@@ -17483,8 +17307,6 @@ snapshots:
   '@opensdks/sdk-qbo@0.0.23': {}
 
   '@opensdks/sdk-revert@0.0.1': {}
-
-  '@opensdks/sdk-salesforce@0.0.2': {}
 
   '@opensdks/sdk-salesloft@0.0.16': {}
 
