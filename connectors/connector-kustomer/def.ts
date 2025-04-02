@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
@@ -26,8 +26,6 @@ export const kustomerDef = {
     stage: 'beta',
     verticals: ['communication'],
     logoUrl: '/_assets/logo-kustomer.svg',
-    // TODO: Update opensdks NangoProvider type to include kustomer
-    // @ts-expect-error
     nangoProvider: 'kustomer',
   },
 } satisfies ConnectorDef<typeof kustomerSchemas>

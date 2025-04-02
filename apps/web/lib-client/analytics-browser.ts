@@ -1,7 +1,8 @@
 import posthog from 'posthog-js'
 import {zUserId} from '@openint/cdk'
 import {zEvent, zUserTraits} from '@openint/events'
-import {z, zFunction} from '@openint/util'
+import {zFunction} from '@openint/util/zod-function-utils'
+import {z} from '@openint/util/zod-utils'
 import {getSentryEnvironment, Sentry} from '../sentry.client.config'
 
 let initialized = false

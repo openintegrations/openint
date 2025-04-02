@@ -1,4 +1,4 @@
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 const zImage = z.object({
   original: z.string().nullish(),

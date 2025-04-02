@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../trpc/_base'
 
 export const generalRouter = router({

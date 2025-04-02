@@ -1,6 +1,6 @@
 import type {ConnectorDef} from '@openint/cdk'
 import {getConnectorDefaultCredentials} from '@openint/env'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 import {oauth2Schemas} from '.'
 import type {JsonConnectorDef} from '../../def'
 

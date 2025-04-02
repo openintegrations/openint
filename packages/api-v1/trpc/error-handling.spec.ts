@@ -3,8 +3,8 @@ import {initTRPC, TRPCError} from '@trpc/server'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {createOpenApiFetchHandler, type OpenApiMeta} from 'trpc-to-openapi'
-import {ZodError} from 'zod'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
+import {ZodError} from '@openint/util/zod-utils'
 import {onError, parseAPIError} from './error-handling'
 
 const trpc = initTRPC.meta<OpenApiMeta>().create()

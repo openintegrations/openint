@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 
 export const zFrameMessage = z.discriminatedUnion('type', [
   z.object({

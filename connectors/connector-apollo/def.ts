@@ -1,7 +1,7 @@
 import oas from '@opensdks/sdk-apollo/apollo.oas.json'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 export const APOLLO_ENTITY_NAME = ['contact', 'account'] as const
 

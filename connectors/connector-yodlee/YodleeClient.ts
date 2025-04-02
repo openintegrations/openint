@@ -11,10 +11,10 @@ import {
   getDefaultProxyAgent,
   parseDateTime,
   R,
-  z,
   zFunction,
   type HTTPError,
 } from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 import type {YodleeAccount, YodleeTransaction} from './yodlee.types'
 
 export type YodleeEnvName = z.infer<typeof zYodleeEnvName>
@@ -187,11 +187,9 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
     async registerUser(user: {loginName: string; email: string}) {
       const token = await generateAccessToken(cfg.adminLoginName)
       return http
-        .post<{user: Yodlee.User}>(
-          '/user/register',
-          {user},
-          {headers: {Authorization: `Bearer ${token.accessToken}`}},
-        )
+        .post<{
+          user: Yodlee.User
+        }>('/user/register', {user}, {headers: {Authorization: `Bearer ${token.accessToken}`}})
         .then((r) => r.data.user)
     },
 
@@ -227,10 +225,9 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
 
     async getProviderAccount(providerAccountId: number | string) {
       return http
-        .get<{providerAccount: Yodlee.ProviderAccount[]}>(
-          `/providerAccounts/${providerAccountId}`,
-          {params: {include: 'preferences'}},
-        )
+        .get<{
+          providerAccount: Yodlee.ProviderAccount[]
+        }>(`/providerAccounts/${providerAccountId}`, {params: {include: 'preferences'}})
         .then((r) => r.data.providerAccount[0])
     },
 
@@ -281,11 +278,9 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
       datasetName: string[]
     }) {
       return http
-        .put<{providerAccount: Yodlee.ProviderAccount[]}>(
-          '/providerAccounts',
-          data,
-          {params: {providerAccountIds: providerAccountIds.join(',')}},
-        )
+        .put<{
+          providerAccount: Yodlee.ProviderAccount[]
+        }>('/providerAccounts', data, {params: {providerAccountIds: providerAccountIds.join(',')}})
         .then((r) => r.data.providerAccount)
     },
 

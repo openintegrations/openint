@@ -1,7 +1,7 @@
 import {sort} from 'fast-sort'
 import * as R from 'remeda'
 import type {JsonValue} from 'type-fest'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 
 import {
   javascriptStringify,

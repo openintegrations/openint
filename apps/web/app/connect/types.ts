@@ -1,9 +1,6 @@
 'use client'
 
-import {extendZodWithOpenApi, z} from '@openint/util'
-
-// TODO: Figure out why this is needed... something is really weird.
-extendZodWithOpenApi(z)
+import {z} from '@openint/util/zod-utils'
 
 export const zConnectV1SearchParams = z.object({
   connector_name: z

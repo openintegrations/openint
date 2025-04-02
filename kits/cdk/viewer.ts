@@ -1,4 +1,4 @@
-import {z} from '@opensdks/util-zod'
+import {z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import * as jose from 'jose'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util'

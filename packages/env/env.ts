@@ -1,4 +1,4 @@
-import {z} from '@opensdks/util-zod'
+import {z} from '@openint/util/zod-utils'
 import {createEnv} from '@t3-oss/env-nextjs'
 import {proxyRequired} from './proxyRequired'
 

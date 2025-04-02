@@ -1,11 +1,8 @@
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
-import {z} from 'zod'
-import {extendZodWithOpenApi} from 'zod-openapi'
 import {schema} from '@openint/db'
+import {z} from '@openint/util/zod-utils'
 import type {NonEmptyArray} from './connectorSchemas'
 import {connectorSchemas, zConnector} from './connectorSchemas'
-
-extendZodWithOpenApi(z)
 
 const event = createSelectSchema(schema.event).openapi({
   ref: 'core.event',

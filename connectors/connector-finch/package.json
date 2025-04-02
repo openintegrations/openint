@@ -7,8 +7,7 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
-    "@opensdks/sdk-finch": "^0.0.4",
-    "@opensdks/util-zod": "^0.0.16"
+    "@opensdks/sdk-finch": "^0.0.4"
   },
   "devDependencies": {
     "@tryfinch/react-connect": "^3.11.0",

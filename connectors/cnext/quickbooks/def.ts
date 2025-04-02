@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {generateOauthConnectorDef} from '../_defaults/oauth2/schema'
 import type {JsonConnectorDef} from '../def'
 

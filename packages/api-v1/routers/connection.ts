@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'

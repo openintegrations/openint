@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {dbUpsertOne, eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util'
 import {core} from '../models'

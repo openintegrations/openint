@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, zWebhookInput} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 import {zOneBrickConfig} from './OneBrickClient'
 
 const connectInputSchema = z.object({

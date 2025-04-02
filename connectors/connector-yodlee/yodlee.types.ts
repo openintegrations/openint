@@ -1,5 +1,5 @@
 import type {YodleeSDKTypes} from '@opensdks/sdk-yodlee'
-import {z, zCast} from '@openint/util'
+import {z, zCast} from '@openint/util/zod-utils'
 
 type components = YodleeSDKTypes['oas']['components']
 

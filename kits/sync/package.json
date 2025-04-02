@@ -6,7 +6,6 @@
   "sideEffects": false,
   "module": "./index.ts",
   "dependencies": {
-    "@opensdks/util-zod": "^0.0.16"
   },
   "devDependencies": {}
 }

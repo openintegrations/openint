@@ -1,4 +1,5 @@
-import {createHTTPClient, z, zCast, zFunction} from '@openint/util'
+import {createHTTPClient, zFunction} from '@openint/util'
+import {z, zCast} from '@openint/util/zod-utils'
 
 export const zConfig = z.object({
   token: z.string(),
