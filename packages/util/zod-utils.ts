@@ -6,7 +6,7 @@ import {R} from './remeda'
 extendZodWithOpenApi(z)
 
 export {z}
-export {ZodError, ZodTypeDef} from 'zod'
+export {ZodError, type ZodTypeDef} from 'zod'
 
 export function parseIf<T>(value: unknown, typeguard: (v: unknown) => v is T) {
   return typeguard(value) ? value : undefined
