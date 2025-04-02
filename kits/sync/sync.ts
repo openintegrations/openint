@@ -1,4 +1,5 @@
-import {R, Rx, toCompletion} from '@openint/util'
+import {Rx, toCompletion} from '@openint/util/observable-utils'
+import {R} from '@openint/util/remeda'
 import type {
   AnyEntityPayload,
   ConnectionUpdateData,

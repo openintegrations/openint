@@ -1,8 +1,8 @@
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import Openint from '@openint/sdk'
-import {makeUlid} from '@openint/util'
 import {createApp} from '../app'
+import {makeUlid} from '@openint/util/id-utils'
 
 describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   const app = createApp({db})

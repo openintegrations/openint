@@ -4,11 +4,11 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
-import {makeUlid} from '@openint/util'
 import {Core, core, zConnectionSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
 import {expandConnector} from './connectorConfig'
+import {makeUlid} from '@openint/util/id-utils'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,

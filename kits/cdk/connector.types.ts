@@ -5,8 +5,7 @@ import type {
   ConnectionUpdateData,
   SyncOperation,
 } from '@openint/sync'
-import type {MaybePromise} from '@openint/util'
-import {R} from '@openint/util'
+import type {MaybePromise} from '@openint/util/type-utils'
 import type {
   CheckConnectionContext,
   CheckConnectionOptions,
@@ -21,6 +20,7 @@ import type {Id} from './id.types'
 import {makeId} from './id.types'
 import type {ZStandard} from './models'
 import type {VerticalKey} from './verticals'
+import {R} from '@openint/util/remeda'
 
 /**
  * Equivalent to to airbyte's low code connector spec,

@@ -1,5 +1,7 @@
-import type {HTTPError} from '@openint/util'
-import {createHTTPClient, startCase, zFunction} from '@openint/util'
+import {createHTTPClient} from '@openint/util/http/index'
+import type {HTTPError} from '@openint/util/http/index'
+import {startCase} from '@openint/util/string-utils'
+import {zFunction} from '@openint/util/zod-function-utils'
 import {z, zCast} from '@openint/util/zod-utils'
 
 export const zConfig = z.object({

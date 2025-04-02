@@ -1,3 +1,4 @@
+import {isPlainObject} from '@openint/util/object-utils'
 import {and, or, sql} from 'drizzle-orm'
 import type {PgInsertBase} from 'drizzle-orm/pg-core'
 import {
@@ -9,7 +10,6 @@ import {
   type PgTable,
   type PgUpdateSetSource,
 } from 'drizzle-orm/pg-core'
-import {isPlainObject} from '@openint/util'
 
 type ColumnKeyOf<T extends PgTable> = Extract<keyof T['_']['columns'], string>
 

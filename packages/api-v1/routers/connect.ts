@@ -4,11 +4,11 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
-import {makeUlid} from '@openint/util'
 import {core, parseNonEmpty} from '../models'
 import {connectorSchemas} from '../models/connectorSchemas'
 import {customerProcedure, router} from '../trpc/_base'
 import {md} from './utils/md'
+import {makeUlid} from '@openint/util/id-utils'
 
 export const connectRouter = router({
   preConnect: customerProcedure
