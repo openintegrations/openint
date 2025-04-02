@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'

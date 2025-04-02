@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {Meta, StoryObj} from '@storybook/react'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {extendZodWithOpenApi} from 'zod-openapi'
 // TODO: Fix cnext to put def and server in separate files...
 // import {defConnectors} from '@openint/all-connectors/connectors.def'

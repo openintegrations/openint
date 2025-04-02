@@ -2,7 +2,7 @@
 import * as R from 'remeda'
 import type {AnyProcedure, AnyRouter, inferProcedureParams} from '@trpc/server'
 import {initTRPC} from '@trpc/server'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 
 import type {AnyZFunction, ZFunction} from './zod-function-utils'
 

@@ -3,12 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type z from 'zod'
-import type {ZodTypeDef} from 'zod'
 import type {oas30, oas31} from 'zod-openapi'
 import {createDocument} from 'zod-openapi'
 import type {ZodOpenApiMetadataDef} from 'zod-openapi/dist/extendZodTypes'
 import {OpenAPIObject} from 'zod-openapi/dist/openapi3-ts/dist/oas31'
+import type {z, ZodTypeDef} from '../zod-utils'
 
 export type Oas31Schema = oas31.SchemaObject & {$schema?: string}
 export type Oas30Schema = oas30.SchemaObject & {$schema?: string}

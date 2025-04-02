@@ -1,10 +1,11 @@
 import * as R from 'remeda'
-import * as z from 'zod'
+import z from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
 
 extendZodWithOpenApi(z)
 
 export {z, extendZodWithOpenApi}
+export {ZodError, ZodTypeDef} from 'zod'
 
 export function parseIf<T>(value: unknown, typeguard: (v: unknown) => v is T) {
   return typeguard(value) ? value : undefined

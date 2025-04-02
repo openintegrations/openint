@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {zOAuthConfig} from './def'
 
 export function prepareScopes(

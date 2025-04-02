@@ -1,5 +1,5 @@
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {extendZodWithOpenApi} from 'zod-openapi'
 import {schema} from '@openint/db'
 import type {NonEmptyArray} from './connectorSchemas'
