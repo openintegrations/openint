@@ -36,26 +36,26 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
       )
       return z.object({
         // nest under oauth to keep the schema the same as with previous provider
-        oauth: z.union([
-          z
-            .object({
-              scopes: zOpenIntDefaultScopes
-                .openapi({
+        oauth: z
+          .union([
+            z
+              .object({
+                scopes: zOpenIntDefaultScopes.openapi({
                   title: 'Scopes',
                   description: 'Scopes for OpenInt Platform Credentials',
-                })
-                .openapi({
-                  'ui:widget': 'ScopesWidget',
                 }),
-            })
-            .openapi({
-              title: 'Use OpenInt platform credentials',
+              })
+              .openapi({
+                title: 'Use OpenInt platform credentials',
+              }),
+            schema.shape.oauth.openapi({
+              title: 'Use my own',
             }),
-          schema.shape.oauth.openapi({
-            title: 'Use my own',
+          ])
+          .openapi({
             'ui:field': 'OAuthField',
+            'ui:fieldReplacesAnyOrOneOf': true,
           }),
-        ]),
       })
     }
     return z.object({
