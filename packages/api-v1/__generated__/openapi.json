@@ -10493,7 +10493,8 @@
             "enum": [
               "alpha",
               "beta",
-              "ga"
+              "ga",
+              null
             ]
           },
           "platforms": {
