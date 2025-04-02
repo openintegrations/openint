@@ -410,6 +410,8 @@ export const connectionRouter = router({
       openapi: {
         method: 'DELETE',
         path: '/connection/{id}',
+        description: 'Delete a connection',
+        summary: 'Delete Connection',
       },
     })
     .input(z.object({id: zConnectionId}))
@@ -436,6 +438,7 @@ export const connectionRouter = router({
       openapi: {
         method: 'POST',
         path: '/connection',
+        summary: 'Create Connection',
         description: 'Import an existing connection after validation',
       },
     })

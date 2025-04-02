@@ -9,6 +9,7 @@ export const generalRouter = router({
         path: '/health',
         description: 'Check if the API is operational',
         summary: 'Health Check',
+        enabled: false,
       },
     })
     .input(z.void())
@@ -16,7 +17,7 @@ export const generalRouter = router({
     .query(() => ({ok: true})),
 
   healthEcho: publicProcedure
-    .meta({openapi: {method: 'POST', path: '/health'}})
+    .meta({openapi: {method: 'POST', path: '/health', enabled: false}})
     .input(z.object({}).passthrough())
     .output(z.object({}).passthrough())
     .mutation(({input}) => ({input})),
@@ -28,6 +29,7 @@ export const generalRouter = router({
         path: '/viewer',
         description: 'Get information about the current authenticated user',
         summary: 'Get Current User',
+        enabled: false,
       },
     })
     .input(z.void())

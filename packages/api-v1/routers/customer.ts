@@ -196,6 +196,7 @@ export const customerRouter = router({
         path: '/customers',
         description: 'List all customers',
         summary: 'List Customers',
+        enabled: false,
       },
     })
     .input(
