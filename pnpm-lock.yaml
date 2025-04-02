@@ -832,9 +832,6 @@ importers:
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
-      remeda:
-        specifier: 1.6.1
-        version: 1.6.1
     devDependencies:
       '@openint/env':
         specifier: workspace:*
@@ -1146,9 +1143,6 @@ importers:
       react-script-hook:
         specifier: 1.7.2
         version: 1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      remeda:
-        specifier: 1.6.1
-        version: 1.6.1
     devDependencies:
       '@openint/env':
         specifier: workspace:*
@@ -1231,9 +1225,6 @@ importers:
       elysia:
         specifier: ^1.2.12
         version: 1.2.12(@sinclair/typebox@0.34.20)(openapi-types@12.1.3)(typescript@5.8.2)
-      remeda:
-        specifier: ^2.20.1
-        version: 2.20.1
       trpc-to-openapi:
         specifier: ^2.1.3
         version: 2.1.3(@trpc/server@11.0.1(typescript@5.8.2))(zod-openapi@4.2.4(zod@3.24.2))(zod@3.24.2)
@@ -1305,9 +1296,6 @@ importers:
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
-      remeda:
-        specifier: 1.6.1
-        version: 1.6.1
     devDependencies:
       '@openint/cdk':
         specifier: workspace:*
@@ -1691,8 +1679,8 @@ importers:
         specifier: 7.1.1
         version: 7.1.1
       remeda:
-        specifier: 1.6.1
-        version: 1.6.1
+        specifier: ^2.21.2
+        version: 2.21.2
       rxjs:
         specifier: 7.5.6
         version: 7.5.6
@@ -12574,11 +12562,8 @@ packages:
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
 
-  remeda@1.6.1:
-    resolution: {integrity: sha512-ywn4Tv2cPBj6hk0TEYMHusWVXu72yJNCaWUdMK7kc7x/PjQPBSvtMbmBWP4PQH791kpl3rPBe3ZVkJyPj3c+0g==}
-
-  remeda@2.20.1:
-    resolution: {integrity: sha512-gsEsSmjE0CHkNp6xEsWsU/6JVNWq7rqw+ZfzNMbVV4YFIPtTj/i0FfxurTRI6Z9sAnQufU9de2Cb3xHsUTFTMA==}
+  remeda@2.21.2:
+    resolution: {integrity: sha512-wdhkMDou8HRpD7RnxKJ/FHJWEGXRH7jV/pb0NsdLLSoBo+G9RjtxcY41hVhogLfEMkThk6aySKjs+Yd6PnpzBA==}
 
   remove-file-safe@1.0.1:
     resolution: {integrity: sha512-YzBF0IfrPG9PMGCZsQjMNeIyi9+PPYLDHTcU+bDhgZhfaO6WFpA75+kB5eEkg9C3Puomo6Y50Ll8sCem2TiBdA==}
@@ -13746,6 +13731,10 @@ packages:
 
   type-fest@4.34.1:
     resolution: {integrity: sha512-6kSc32kT0rbwxD6QL1CYe8IqdzN/J/ILMrNK+HMQCKH3insCDRY/3ITb0vcBss0a3t72fzh2YSzj8ko1HgwT3g==}
+    engines: {node: '>=16'}
+
+  type-fest@4.39.0:
+    resolution: {integrity: sha512-w2IGJU1tIgcrepg9ZJ82d8UmItNQtOFJG0HCUE3SzMokKkTsruVDALl2fAdiEzJlfduoU+VyXJWIIUZ+6jV+nw==}
     engines: {node: '>=16'}
 
   type-is@1.6.18:
@@ -28546,11 +28535,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  remeda@1.6.1: {}
-
-  remeda@2.20.1:
+  remeda@2.21.2:
     dependencies:
-      type-fest: 4.34.1
+      type-fest: 4.39.0
 
   remove-file-safe@1.0.1: {}
 
@@ -29948,6 +29935,8 @@ snapshots:
   type-fest@3.8.0: {}
 
   type-fest@4.34.1: {}
+
+  type-fest@4.39.0: {}
 
   type-is@1.6.18:
     dependencies:

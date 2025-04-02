@@ -35,3 +35,12 @@ export function arrayEquals<T>(
 export function fromMaybeArray<T>(maybeArray: MaybeArray<T>) {
   return Array.isArray(maybeArray) ? maybeArray : [maybeArray]
 }
+
+/**
+ * Removes all falsy values (false, null, 0, "", undefined, and NaN) from an array
+ */
+export function compact<T>(
+  array: Array<T | false | null | undefined | 0 | '' | 0n>,
+) {
+  return array.filter(Boolean) as T[]
+}

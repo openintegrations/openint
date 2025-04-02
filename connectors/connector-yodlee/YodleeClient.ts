@@ -242,7 +242,7 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
           return pas
         }
         const providers = await Promise.all(
-          R.uniq(pas.map((pa) => pa.providerId)).map((id) =>
+          R.unique(pas.map((pa) => pa.providerId)).map((id) =>
             getProvider(id).catch((err) => {
               // Can happen if provider is removed from yodlee
               console.warn(`Error getting provider id=${id}`, err)

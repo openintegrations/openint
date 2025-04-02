@@ -34,7 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from '@openint/shadcn/ui'
-import {R} from '@openint/util/remeda'
+import {compact} from '@openint/util/array-utils'
 import {titleCase} from '@openint/util/string-utils'
 
 const defaultFilter = () => true
@@ -96,7 +96,7 @@ export function DataTable<TData, TValue>({
 
   const columns = React.useMemo(
     () =>
-      R.compact<ColumnDef<TData, TValue>>([
+      compact<ColumnDef<TData, TValue>>([
         enableSelect && {
           id: 'select',
           header: ({table}) => (
