@@ -8,8 +8,7 @@
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/sdk-revert": "^0.0.1",
-    "@opensdks/sdk-twenty": "^0.0.5",
-    "@opensdks/util-zod": "^0.0.16"
+    "@opensdks/sdk-twenty": "^0.0.5"
   },
   "devDependencies": {}
 }

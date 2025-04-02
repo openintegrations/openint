@@ -12,7 +12,6 @@
     "@opensdks/fetch-links": "^0.0.22",
     "@opensdks/runtime": "^0.0.19",
     "@opensdks/sdk-nango": "0.0.6",
-    "@opensdks/util-zod": "^0.0.16",
     "@trpc/server": "10.40.0",
     "jose": "^5",
     "react-script-hook": "1.7.2",
