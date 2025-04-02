@@ -1,9 +1,9 @@
 import {TRPCError} from '@trpc/server'
-import {z} from '@openint/util/zod-utils'
 import {dbUpsertOne, eq, inArray, schema} from '@openint/db'
-import {core} from '../models'
-import {orgProcedure, router} from '../trpc/_base'
 import {makeUlid} from '@openint/util/id-utils'
+import {z} from '@openint/util/zod-utils'
+import {core} from '../models'
+import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 
 const zOnboardingState = z.object({
   first_connector_configured: z.boolean(),
@@ -56,7 +56,7 @@ export const onboardingRouter = router({
         },
       }
     }),
-  createOrganization: orgProcedure
+  createOrganization: authenticatedProcedure
     .meta({
       openapi: {
         method: 'POST',
@@ -87,7 +87,10 @@ export const onboardingRouter = router({
         metadata,
       }
 
-      await ctx.db.insert(schema.organization).values(newOrg)
+      await ctx
+        .as({role: 'system'})
+        .db.insert(schema.organization)
+        .values(newOrg)
 
       return {id: input.id}
     }),
@@ -262,7 +265,8 @@ export const onboardingRouter = router({
           })
           .where(eq(schema.organization.id, org.id))
       } catch (error) {
-        console.error('Error updating webhook URL:', error); throw new TRPCError({
+        console.error('Error updating webhook URL:', error)
+        throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to update webhook URL, please try again later',
         })
