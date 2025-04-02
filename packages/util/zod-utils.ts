@@ -4,7 +4,7 @@ import {extendZodWithOpenApi} from 'zod-openapi'
 
 extendZodWithOpenApi(z)
 
-export {z, extendZodWithOpenApi}
+export {z}
 export {ZodError, ZodTypeDef} from 'zod'
 
 export function parseIf<T>(value: unknown, typeguard: (v: unknown) => v is T) {
