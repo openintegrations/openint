@@ -1,7 +1,7 @@
 import {memoize} from '@openint/util/function-utils'
 import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import institutionsWsResponse from './institutionWsResponse.json'
 
 export const zEnvName = z.enum(['sandbox', 'development', 'production'])
@@ -130,7 +130,7 @@ export const zTellerConfig = z.object({
   token: z.string().nullish(),
 })
 
-type EnvName = z.infer<typeof zEnvName>
+type EnvName = Z.infer<typeof zEnvName>
 // Reference: https://teller.io/docs/api/2020-10-12
 export const makeTellerClient = zFunction(zTellerConfig, (cfg) => {
   const fromEnv = memoize((envName: EnvName | undefined) => {

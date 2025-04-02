@@ -1,9 +1,9 @@
-import {z} from '@openint/util/zod-utils'
+import {type Z} from '@openint/util/zod-utils'
 import {zOAuthConfig} from './def'
 
 export function prepareScopes(
   scopes: string[],
-  jsonConfig: z.infer<typeof zOAuthConfig>,
+  jsonConfig: Z.infer<typeof zOAuthConfig>,
 ) {
   const scopeSeparator = jsonConfig.scope_separator ?? ' '
 

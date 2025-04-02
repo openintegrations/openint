@@ -17,7 +17,7 @@ import {
   zodToOas31Schema,
   type Oas31Schema,
 } from '@openint/util/schema'
-import type {z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
 import {fields} from './fields'
 import {jsonSchemaToUiSchema} from './jsonSchemaToUiSchema'
 import {widgets} from './widgets'
@@ -33,8 +33,8 @@ export const RJSFForm = withTheme(theme) as typeof Form
 /** For use with createRef... */
 export type SchemaFormElement = Form
 
-export interface ZodSchemaFormProps<TSchema extends z.ZodTypeAny>
-  extends Omit<JSONSchemaFormProps<z.infer<TSchema>>, 'jsonSchema'> {
+export interface ZodSchemaFormProps<TSchema extends Z.ZodTypeAny>
+  extends Omit<JSONSchemaFormProps<Z.infer<TSchema>>, 'jsonSchema'> {
   /**
    * The Zod schema to use for the form
    */
@@ -45,7 +45,7 @@ export interface ZodSchemaFormProps<TSchema extends z.ZodTypeAny>
  * SchemaForm component for handling forms with proper styling and security features.
  * This component includes functionality for hiding sensitive fields like passwords and tokens.
  */
-export const ZodSchemaForm = <TSchema extends z.ZodTypeAny>({
+export const ZodSchemaForm = <TSchema extends Z.ZodTypeAny>({
   schema,
   ...props
 }: ZodSchemaFormProps<TSchema>) => {

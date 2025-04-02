@@ -1,6 +1,6 @@
 'use client'
 
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 
 export const zConnectV1SearchParams = z.object({
   connector_name: z
@@ -26,4 +26,4 @@ export const zConnectV1SearchParams = z.object({
   // '--card-foreground': z.string().optional(),
 })
 
-export type ConnectV1SearchParams = z.infer<typeof zConnectV1SearchParams>
+export type ConnectV1SearchParams = Z.infer<typeof zConnectV1SearchParams>

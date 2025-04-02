@@ -3,7 +3,7 @@ import * as jose from 'jose'
 import {compact} from '@openint/util/array-utils'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import type {CustomerId, ExtCustomerId, Id, UserId} from './id.types'
 import {zCustomerId, zId, zUserId} from './id.types'
 
@@ -33,9 +33,9 @@ export const zViewer = z
   ])
   .openapi({ref: 'Viewer'})
 
-export type ViewerRole = z.infer<typeof zRole>
+export type ViewerRole = Z.infer<typeof zRole>
 
-type _Viewer = DiscriminatedUnionWithAllKeys<z.infer<typeof zViewer>>
+type _Viewer = DiscriminatedUnionWithAllKeys<Z.infer<typeof zViewer>>
 export type Viewer<R extends ViewerRole = ViewerRole> = Extract<
   _Viewer,
   {role: R}
@@ -210,7 +210,7 @@ export const makeJwtClient = zFunction(
           sub: 'system',
         }),
         // Partial is a lie, it should not happen
-      } satisfies Partial<z.input<typeof zViewerFromJwtPayload>>
+      } satisfies Partial<Z.input<typeof zViewerFromJwtPayload>>
       return new jose.SignJWT(payload)
         .setProtectedHeader({alg: 'HS256'})
         .setIssuedAt()

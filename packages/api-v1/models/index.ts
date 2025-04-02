@@ -1,6 +1,6 @@
-import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import {schema} from '@openint/db'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
+import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import type {NonEmptyArray} from './connectorSchemas'
 import {connectorSchemas, zConnector} from './connectorSchemas'
 
@@ -120,7 +120,7 @@ export const core = {
 }
 
 export type Core = {
-  [k in keyof typeof core]: z.infer<(typeof core)[k]>
+  [k in keyof typeof core]: Z.infer<(typeof core)[k]>
 }
 
 // MARK: - Connector Configs

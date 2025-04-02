@@ -1,4 +1,4 @@
-import {z} from '@openint/util/zod-utils'
+import {z, ZodError, type Z} from '@openint/util/zod-utils'
 import {oauth2Schemas, zOAuthConfig} from './def'
 import {mapOauthParams, prepareScopes} from './utils'
 
@@ -8,7 +8,7 @@ export async function makeTokenRequest(
   flowType: 'exchange' | 'refresh',
   // note: we may want to add bodyFormat: form or json as an option
 ): Promise<
-  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
+  Z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
   const response = await fetch(url, {
     method: 'POST',
@@ -42,7 +42,7 @@ export async function makeTokenRequest(
       },
     )
   } catch (error) {
-    if (error instanceof z.ZodError) {
+    if (error instanceof ZodError) {
       throw new Error(
         `Invalid oauth2 ${flowType} token response format: ${error.message}`,
       )
@@ -52,7 +52,7 @@ export async function makeTokenRequest(
 }
 
 export function validateOAuthCredentials(
-  oauthConfig: z.infer<typeof zOAuthConfig>,
+  oauthConfig: Z.infer<typeof zOAuthConfig>,
   requiredFields: Array<'client_id' | 'client_secret'> = [
     'client_id',
     'client_secret',
@@ -82,7 +82,7 @@ export async function authorizeHandler({
   oauthConfig,
   redirectUri,
   connectionId,
-}: z.infer<typeof zAuthorizeHandlerArgs>): Promise<{
+}: Z.infer<typeof zAuthorizeHandlerArgs>): Promise<{
   authorization_url: string
 }> {
   if (!connectionId) {
@@ -132,8 +132,8 @@ export async function defaultTokenExchangeHandler({
   redirectUri,
   code,
   state,
-}: z.infer<typeof zTokenExchangeHandlerArgs>): Promise<
-  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
+}: Z.infer<typeof zTokenExchangeHandlerArgs>): Promise<
+  Z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
   validateOAuthCredentials(oauthConfig)
 
@@ -165,8 +165,8 @@ export const zTokenRefreshHandlerArgs = z.object({
 export async function tokenRefreshHandler({
   oauthConfig,
   refreshToken,
-}: z.infer<typeof zTokenRefreshHandlerArgs>): Promise<
-  z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
+}: Z.infer<typeof zTokenRefreshHandlerArgs>): Promise<
+  Z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
   validateOAuthCredentials(oauthConfig)
 

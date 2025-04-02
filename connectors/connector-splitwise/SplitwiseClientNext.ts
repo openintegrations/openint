@@ -1,7 +1,7 @@
 import type {HTTPError} from '@openint/util/http/index'
 import {createHTTPClient, OAuth2Client} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import type {zCurrentUser, zExpense, zGroup} from './splitwise-schema'
 import {zExpensesParams} from './splitwise-schema'
 
@@ -52,19 +52,19 @@ export const makeSplitwiseClient = zFunction(zSplitwiseConfig, (cfg) => {
 
     getCurrentUser: zFunction(() =>
       createClient()
-        .get<{user: z.infer<typeof zCurrentUser>}>('get_current_user')
+        .get<{user: Z.infer<typeof zCurrentUser>}>('get_current_user')
         .then((r) => r.data.user),
     ),
 
     getGroups: zFunction(() =>
       createClient()
-        .get<{groups: Array<z.infer<typeof zGroup>>}>('get_groups')
+        .get<{groups: Array<Z.infer<typeof zGroup>>}>('get_groups')
         .then((r) => r.data.groups),
     ),
 
     getExpenses: zFunction(zExpensesParams, (params) =>
       createClient()
-        .get<{expenses: Array<z.infer<typeof zExpense>>}>('get_expenses', {
+        .get<{expenses: Array<Z.infer<typeof zExpense>>}>('get_expenses', {
           params,
         })
         .then((r) => r.data.expenses),

@@ -1,6 +1,6 @@
 import type {ConnectorDef} from '@openint/cdk'
 import {getConnectorDefaultCredentials} from '@openint/env'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import {oauth2Schemas} from '.'
 import type {JsonConnectorDef} from '../../def'
 
@@ -17,7 +17,7 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
       // TODO: does this need to do a deep merge of connectorConfig.oauth keys?
       schema = z.object({
         ...schema.shape,
-        ...(def.auth.connector_config.shape as Record<string, z.ZodTypeAny>),
+        ...(def.auth.connector_config.shape as Record<string, Z.ZodTypeAny>),
       })
     }
 
@@ -59,7 +59,7 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
     if (def.auth.connection_settings) {
       schema = z.object({
         ...schema.shape,
-        ...(def.auth.connection_settings.shape as Record<string, z.ZodTypeAny>),
+        ...(def.auth.connection_settings.shape as Record<string, Z.ZodTypeAny>),
       })
     }
     return schema
@@ -82,6 +82,6 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
       jsonDef: def,
     },
   } satisfies ConnectorDef<
-    typeof oauth2Schemas & {name: z.ZodLiteral<T['connector_name']>}
+    typeof oauth2Schemas & {name: Z.ZodLiteral<T['connector_name']>}
   >
 }

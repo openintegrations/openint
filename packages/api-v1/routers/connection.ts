@@ -4,7 +4,7 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import {Core, core, zConnectionSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
@@ -54,8 +54,8 @@ export function stripSensitiveOauthCredentials(credentials: any) {
 async function formatConnection(
   ctx: RouterContext,
   connection: Core['connection'],
-  include_secrets: z.infer<typeof zIncludeSecrets> = 'none',
-  expand: z.infer<typeof zExpandOptions>[] = [],
+  include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
+  expand: Z.infer<typeof zExpandOptions>[] = [],
 ) {
   const connector =
     defConnectors[connection.connector_name as keyof typeof defConnectors]
@@ -238,7 +238,7 @@ export const connectionRouter = router({
       return formatConnection(
         ctx,
         // TODO: fix this any casting
-        connection as any as z.infer<typeof core.connection>,
+        connection as any as Z.infer<typeof core.connection>,
         input.include_secrets,
         input.expand,
       )

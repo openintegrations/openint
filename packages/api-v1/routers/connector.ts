@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorDef} from '@openint/cdk'
@@ -29,7 +29,7 @@ export const zExpandOptions = z
   .enum(['integrations'])
   .describe('Fields to expand connector with its integrations')
 
-type ExpandEnum = z.infer<typeof zExpandOptions>
+type ExpandEnum = Z.infer<typeof zExpandOptions>
 
 const zConnectorName = z.enum(
   Object.keys(defConnectors) as [string, ...string[]],
@@ -75,7 +75,7 @@ export const connectorRouter = router({
     .query(async ({input}) => {
       const promises = Object.entries(defConnectors).map(
         async ([name, def]) => {
-          const result: z.infer<typeof connectorOutput> = getConnectorModel(
+          const result: Z.infer<typeof connectorOutput> = getConnectorModel(
             def as ConnectorDef,
             {
               includeSchemas: true,

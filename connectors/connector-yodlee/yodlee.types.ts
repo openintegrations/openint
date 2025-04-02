@@ -1,5 +1,5 @@
 import type {YodleeSDKTypes} from '@opensdks/sdk-yodlee'
-import {z, zCast} from '@openint/util/zod-utils'
+import {z, type Z, zCast} from '@openint/util/zod-utils'
 
 type components = YodleeSDKTypes['oas']['components']
 
@@ -56,7 +56,7 @@ export const zCategoryType = z.enum([
   'EXPENSE',
 ])
 
-export type YodleeTransaction = z.infer<typeof zYodleeTransaction>
+export type YodleeTransaction = Z.infer<typeof zYodleeTransaction>
 export const zYodleeTransaction = z.object({
   accountId: z.number(),
   amount: zYodleeAmount,
@@ -95,7 +95,7 @@ export const zYodleeTransaction = z.object({
   isDeleted: z.boolean(),
 })
 
-export type YodleeAccount = z.infer<typeof zYodleeAccount> & {
+export type YodleeAccount = Z.infer<typeof zYodleeAccount> & {
   _id: ExternalId
   _balancesMap?: Record<
     ISODate,
@@ -221,7 +221,7 @@ export const zGetTransactionParams = z.object({
   detailCategoryId: z.string().nullish(),
 })
 
-export type YodleeGetTransactionParams = z.infer<typeof zGetTransactionParams>
+export type YodleeGetTransactionParams = Z.infer<typeof zGetTransactionParams>
 
 /**
  * Yodlee sandbox keys

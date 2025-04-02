@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import type {zUser} from './splitwise-schema'
 import {zCurrentUser} from './splitwise-schema'
 
@@ -24,7 +24,7 @@ export const splitwiseDef = {
 } satisfies ConnectorDef<typeof splitwiseSchemas>
 
 // Helpers
-export function formatUser(user?: z.infer<typeof zUser>) {
+export function formatUser(user?: Z.infer<typeof zUser>) {
   return user
     ? `${user.first_name ?? ''} ${user.last_name ?? ''}`.trim()
     : 'Unnamed user'

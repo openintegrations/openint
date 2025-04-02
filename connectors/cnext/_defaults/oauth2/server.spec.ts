@@ -1,6 +1,6 @@
-import {z} from '@openint/util/zod-utils'
 import {ConnectorDef} from '@openint/cdk'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
+import {type Z} from '@openint/util/zod-utils'
 import type {JsonConnectorDef} from '../../def'
 import {zOAuthConfig} from './def'
 import {generateOauthConnectorDef} from './schema'
@@ -28,7 +28,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       token: {},
       refresh: {},
     },
-  } satisfies z.infer<typeof zOAuthConfig>
+  } satisfies Z.infer<typeof zOAuthConfig>
   let mockFetch: jest.Mock
 
   beforeEach(() => {
