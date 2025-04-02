@@ -7,12 +7,12 @@
   "module": "./index.ts",
   "dependencies": {
     "@jsonurl/jsonurl": "^1.1.7",
-    "@openint/util": "workspace:*",
     "@openint/sync": "workspace:*",
+    "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@opensdks/runtime": "^0.0.19",
     "@opensdks/sdk-nango": "0.0.6",
-    "@trpc/server": "10.40.0",
+    "@trpc/server": "^11.0.1",
     "jose": "^5",
     "react-script-hook": "1.7.2",
     "remeda": "1.6.1"

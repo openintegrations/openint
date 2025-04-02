@@ -1,10 +1,7 @@
 export * as R from 'remeda'
 
-
 // TODO: Refactor the codebase to avoid barrel import to reduce the scope of files being imported for performance
 
-
-// codegen:start {preset: barrel, include: "./{*.{ts,tsx},*/index.{ts,tsx}}", exclude: "./**/*.{d,spec,test,fixture,gen,node}.{ts,tsx},./zod-utils.ts"}
 export * from './amount-utils'
 export * from './array-utils'
 export * from './BehaviorObservable'
@@ -37,5 +34,3 @@ export * from './type-utils'
 export * from './url-utils'
 export * from './zod-function-utils'
 export * from './zod-jsonschema-utils'
-export * from './zod-trpc-utils'
-// codegen:end
