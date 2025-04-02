@@ -55,5 +55,8 @@
     "tailwindcss-radix": "^4.0.2",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.0.8"
+  },
+  "peerDependencies": {
+    "zod-openapi": "^4.2.4"
   }
 }
