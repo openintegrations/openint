@@ -5,6 +5,7 @@ import type {
   StateUpdateData,
   SyncOperation,
 } from '@openint/sync'
+import {compact} from '@openint/util/array-utils'
 import type {WritableDraft} from '@openint/util/immutable-utils'
 import {produce} from '@openint/util/immutable-utils'
 import {Rx, rxjs} from '@openint/util/observable-utils'
@@ -71,7 +72,7 @@ export function logLink<T = any>(
         ? (op.data as unknown as AnyEntityPayload)
         : null
     console.log(
-      R.compact([
+      compact([
         `[logLink #${i}]`,
         opts.prefix && `${opts.prefix}:`,
         `type=${op.type}`,

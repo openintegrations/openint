@@ -1,4 +1,4 @@
-import * as R from 'remeda'
+import {R} from '@openint/util/remeda'
 import accounting from 'accounting'
 import {sort} from 'fast-sort'
 import invariant from 'tiny-invariant'

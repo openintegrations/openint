@@ -6,7 +6,7 @@ import {
   isEmpty as _isEmpty,
   isPlainObject as _isPlainObject,
 } from 'lodash'
-import * as R from 'remeda'
+import {R} from '@openint/util/remeda'
 import {math} from './math-utils'
 import type {
   AnyRecord,

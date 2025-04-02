@@ -1,11 +1,12 @@
 import type {Link as FetchLink} from '@opensdks/runtime'
-import type {z} from '@openint/util/zod-utils'
 import type {
   AnyEntityPayload,
   ConnectionUpdateData,
   SyncOperation,
 } from '@openint/sync'
+import {R} from '@openint/util/remeda'
 import type {MaybePromise} from '@openint/util/type-utils'
+import type {z} from '@openint/util/zod-utils'
 import type {
   CheckConnectionContext,
   CheckConnectionOptions,
@@ -20,7 +21,6 @@ import type {Id} from './id.types'
 import {makeId} from './id.types'
 import type {ZStandard} from './models'
 import type {VerticalKey} from './verticals'
-import {R} from '@openint/util/remeda'
 
 /**
  * Equivalent to to airbyte's low code connector spec,
@@ -252,7 +252,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
         : [K, Omit<Extract<Op, {type: K}>, 'type'>]
     ) => ({...args[1], type: args[0]}) as unknown as Extract<Op, {type: K}>,
     _opRes: (id: string, rest: Omit<OpRes, 'id' | 'type'>) =>
-      R.identity<Op>({
+      R.identity()<Op>({
         // We don't prefix in `_opData`, should we actually prefix here?
         ...rest,
         // TODO: ok so this is a sign that we should be prefixing using a link of some kind...
@@ -263,7 +263,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
       sourceState?: OpState['sourceState'],
       destinationState?: OpState['destinationState'],
     ) =>
-      R.identity<Op>({
+      R.identity()<Op>({
         sourceState,
         destinationState,
         type: 'stateUpdate',
