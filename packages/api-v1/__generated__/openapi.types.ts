@@ -12,8 +12,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List all connectors
-         * @description List all connectors with optional filtering
+         * List Connectors
+         * @description List all connectors to understand what integrations are available to configure
          */
         get: operations["listConnectors"];
         put?: never;
@@ -58,6 +58,10 @@ export interface paths {
         get: operations["getConnection"];
         put?: never;
         post?: never;
+        /**
+         * Delete Connection
+         * @description Delete a connection
+         */
         delete: operations["deleteConnection"];
         options?: never;
         head?: never;
@@ -77,7 +81,10 @@ export interface paths {
          */
         get: operations["listConnections"];
         put?: never;
-        /** @description Import an existing connection after validation */
+        /**
+         * Create Connection
+         * @description Import an existing connection after validation
+         */
         post: operations["createConnection"];
         delete?: never;
         options?: never;
@@ -99,22 +106,6 @@ export interface paths {
          * @description Verify that a connection is healthy
          */
         post: operations["checkConnection"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/connect/pre-connect": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["preConnect"];
         delete?: never;
         options?: never;
         head?: never;
@@ -155,26 +146,6 @@ export interface paths {
          * @description Create an authentication token for a customer
          */
         post: operations["createToken"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/customers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Customers
-         * @description List all customers
-         */
-        get: operations["listCustomers"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -231,17 +202,6 @@ export interface components {
          */
         AuthMode: "OAUTH2" | "OAUTH1" | "BASIC" | "API_KEY";
         /** aircall */
-        "connectors.aircall.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "aircall";
-            output: {
-                authorization_url: string;
-            };
-        };
-        /** aircall */
         "connectors.aircall.connectionSettings": {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -288,24 +248,6 @@ export interface components {
                 } | null;
             };
         };
-        /** aircall */
-        "connectors.aircall.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "aircall";
-            input: null;
-        };
-        /** airtable */
-        "connectors.airtable.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "airtable";
-            output: null;
-        };
         /** airtable */
         "connectors.airtable.connectionSettings": {
             /**
@@ -326,24 +268,6 @@ export interface components {
              */
             connector_name: "airtable";
             config: null;
-        };
-        /** airtable */
-        "connectors.airtable.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "airtable";
-            input: null;
-        };
-        /** apollo */
-        "connectors.apollo.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "apollo";
-            output: null;
         };
         /** apollo */
         "connectors.apollo.connectionSettings": {
@@ -399,24 +323,6 @@ export interface components {
             connector_name: "apollo";
             config: null;
         };
-        /** apollo */
-        "connectors.apollo.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "apollo";
-            input: null;
-        };
-        /** brex */
-        "connectors.brex.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "brex";
-            output: null;
-        };
         /** brex */
         "connectors.brex.connectionSettings": {
             /**
@@ -445,24 +351,6 @@ export interface components {
                 apikeyAuth?: boolean;
             };
         };
-        /** brex */
-        "connectors.brex.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "brex";
-            input: null;
-        };
-        /** coda */
-        "connectors.coda.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "coda";
-            output: null;
-        };
         /** coda */
         "connectors.coda.connectionSettings": {
             /**
@@ -482,26 +370,6 @@ export interface components {
              */
             connector_name: "coda";
             config: null;
-        };
-        /** coda */
-        "connectors.coda.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "coda";
-            input: null;
-        };
-        /** confluence */
-        "connectors.confluence.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "confluence";
-            output: {
-                authorization_url: string;
-            };
         };
         /** confluence */
         "connectors.confluence.connectionSettings": {
@@ -550,26 +418,6 @@ export interface components {
                 } | null;
             };
         };
-        /** confluence */
-        "connectors.confluence.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "confluence";
-            input: null;
-        };
-        /** discord */
-        "connectors.discord.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "discord";
-            output: {
-                authorization_url: string;
-            };
-        };
         /** discord */
         "connectors.discord.connectionSettings": {
             /**
@@ -616,24 +464,6 @@ export interface components {
                     scopes?: string[] | null;
                 } | null;
             };
-        };
-        /** discord */
-        "connectors.discord.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "discord";
-            input: null;
-        };
-        /** facebook */
-        "connectors.facebook.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "facebook";
-            output: null;
         };
         /** facebook */
         "connectors.facebook.connectionSettings": {
@@ -695,27 +525,6 @@ export interface components {
                 };
             };
         };
-        /** facebook */
-        "connectors.facebook.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "facebook";
-            input: null;
-        };
-        /** finch */
-        "connectors.finch.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "finch";
-            output: {
-                client_id: string;
-                products: ("company" | "directory" | "individual" | "ssn" | "employment" | "payment" | "pay_statement" | "benefits")[];
-            };
-        };
         /** finch */
         "connectors.finch.connectionSettings": {
             /**
@@ -742,26 +551,6 @@ export interface components {
                 /** @description Finch products to access, @see https://developer.tryfinch.com/api-reference/development-guides/Permissions */
                 products: ("company" | "directory" | "individual" | "ssn" | "employment" | "payment" | "pay_statement" | "benefits")[];
             };
-        };
-        /** finch */
-        "connectors.finch.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "finch";
-            input: {
-                state?: string;
-            };
-        };
-        /** firebase */
-        "connectors.firebase.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "firebase";
-            output: null;
         };
         /** firebase */
         "connectors.firebase.connectionSettings": {
@@ -824,29 +613,6 @@ export interface components {
             connector_name: "firebase";
             config: null;
         };
-        /** firebase */
-        "connectors.firebase.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "firebase";
-            input: null;
-        };
-        /** foreceipt */
-        "connectors.foreceipt.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "foreceipt";
-            output: {
-                credentials?: unknown;
-                _id?: unknown;
-                /** @enum {string} */
-                envName: "staging" | "production";
-            };
-        };
         /** foreceipt */
         "connectors.foreceipt.connectionSettings": {
             /**
@@ -869,26 +635,6 @@ export interface components {
              */
             connector_name: "foreceipt";
             config: null;
-        };
-        /** foreceipt */
-        "connectors.foreceipt.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "foreceipt";
-            input: null;
-        };
-        /** github */
-        "connectors.github.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "github";
-            output: {
-                authorization_url: string;
-            };
         };
         /** github */
         "connectors.github.connectionSettings": {
@@ -936,24 +682,6 @@ export interface components {
                     scopes?: string[] | null;
                 } | null;
             };
-        };
-        /** github */
-        "connectors.github.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "github";
-            input: null;
-        };
-        /** gong */
-        "connectors.gong.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "gong";
-            output: null;
         };
         /** gong */
         "connectors.gong.connectionSettings": {
@@ -1015,26 +743,6 @@ export interface components {
                 };
             };
         };
-        /** gong */
-        "connectors.gong.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "gong";
-            input: null;
-        };
-        /** googlecalendar */
-        "connectors.googlecalendar.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googlecalendar";
-            output: {
-                authorization_url: string;
-            };
-        };
         /** googlecalendar */
         "connectors.googlecalendar.connectionSettings": {
             /**
@@ -1080,26 +788,6 @@ export interface components {
                     client_secret?: string | null;
                     scopes?: string[] | null;
                 } | null;
-            };
-        };
-        /** googlecalendar */
-        "connectors.googlecalendar.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googlecalendar";
-            input: null;
-        };
-        /** googledocs */
-        "connectors.googledocs.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googledocs";
-            output: {
-                authorization_url: string;
             };
         };
         /** googledocs */
@@ -1149,26 +837,6 @@ export interface components {
                 } | null;
             };
         };
-        /** googledocs */
-        "connectors.googledocs.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googledocs";
-            input: null;
-        };
-        /** googledrive */
-        "connectors.googledrive.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googledrive";
-            output: {
-                authorization_url: string;
-            };
-        };
         /** googledrive */
         "connectors.googledrive.connectionSettings": {
             /**
@@ -1214,26 +882,6 @@ export interface components {
                     client_secret?: string | null;
                     scopes?: string[] | null;
                 } | null;
-            };
-        };
-        /** googledrive */
-        "connectors.googledrive.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googledrive";
-            input: null;
-        };
-        /** googlemail */
-        "connectors.googlemail.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googlemail";
-            output: {
-                authorization_url: string;
             };
         };
         /** googlemail */
@@ -1283,26 +931,6 @@ export interface components {
                 } | null;
             };
         };
-        /** googlemail */
-        "connectors.googlemail.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googlemail";
-            input: null;
-        };
-        /** googlesheet */
-        "connectors.googlesheet.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googlesheet";
-            output: {
-                authorization_url: string;
-            };
-        };
         /** googlesheet */
         "connectors.googlesheet.connectionSettings": {
             /**
@@ -1350,24 +978,6 @@ export interface components {
                 } | null;
             };
         };
-        /** googlesheet */
-        "connectors.googlesheet.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "googlesheet";
-            input: null;
-        };
-        /** greenhouse */
-        "connectors.greenhouse.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "greenhouse";
-            output?: unknown;
-        };
         /** greenhouse */
         "connectors.greenhouse.connectionSettings": {
             /**
@@ -1388,24 +998,6 @@ export interface components {
             connector_name: "greenhouse";
             config: null;
         };
-        /** greenhouse */
-        "connectors.greenhouse.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "greenhouse";
-            input?: unknown;
-        };
-        /** heron */
-        "connectors.heron.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "heron";
-            output: null;
-        };
         /** heron */
         "connectors.heron.connectionSettings": {
             /**
@@ -1424,26 +1016,6 @@ export interface components {
             connector_name: "heron";
             config: {
                 apiKey: string;
-            };
-        };
-        /** heron */
-        "connectors.heron.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "heron";
-            input: null;
-        };
-        /** hubspot */
-        "connectors.hubspot.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "hubspot";
-            output: {
-                authorization_url: string;
             };
         };
         /** hubspot */
@@ -1492,24 +1064,6 @@ export interface components {
                     scopes?: string[] | null;
                 } | null;
             };
-        };
-        /** hubspot */
-        "connectors.hubspot.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "hubspot";
-            input: null;
-        };
-        /** instagram */
-        "connectors.instagram.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "instagram";
-            output: null;
         };
         /** instagram */
         "connectors.instagram.connectionSettings": {
@@ -1571,24 +1125,6 @@ export interface components {
                 };
             };
         };
-        /** instagram */
-        "connectors.instagram.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "instagram";
-            input: null;
-        };
-        /** intercom */
-        "connectors.intercom.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "intercom";
-            output: null;
-        };
         /** intercom */
         "connectors.intercom.connectionSettings": {
             /**
@@ -1648,24 +1184,6 @@ export interface components {
                     scopes?: string;
                 };
             };
-        };
-        /** intercom */
-        "connectors.intercom.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "intercom";
-            input: null;
-        };
-        /** jira */
-        "connectors.jira.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "jira";
-            output: null;
         };
         /** jira */
         "connectors.jira.connectionSettings": {
@@ -1727,24 +1245,6 @@ export interface components {
                 };
             };
         };
-        /** jira */
-        "connectors.jira.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "jira";
-            input: null;
-        };
-        /** kustomer */
-        "connectors.kustomer.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "kustomer";
-            output: null;
-        };
         /** kustomer */
         "connectors.kustomer.connectionSettings": {
             /**
@@ -1804,24 +1304,6 @@ export interface components {
                     scopes?: string;
                 };
             };
-        };
-        /** kustomer */
-        "connectors.kustomer.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "kustomer";
-            input: null;
-        };
-        /** lever */
-        "connectors.lever.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "lever";
-            output: null;
         };
         /** lever */
         "connectors.lever.connectionSettings": {
@@ -1885,26 +1367,6 @@ export interface components {
                 envName: "sandbox" | "production";
             };
         };
-        /** lever */
-        "connectors.lever.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "lever";
-            input: null;
-        };
-        /** linear */
-        "connectors.linear.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "linear";
-            output: {
-                authorization_url: string;
-            };
-        };
         /** linear */
         "connectors.linear.connectionSettings": {
             /**
@@ -1950,26 +1412,6 @@ export interface components {
                     client_secret?: string | null;
                     scopes?: string[] | null;
                 } | null;
-            };
-        };
-        /** linear */
-        "connectors.linear.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "linear";
-            input: null;
-        };
-        /** linkedin */
-        "connectors.linkedin.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "linkedin";
-            output: {
-                authorization_url: string;
             };
         };
         /** linkedin */
@@ -2019,24 +1461,6 @@ export interface components {
                 } | null;
             };
         };
-        /** linkedin */
-        "connectors.linkedin.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "linkedin";
-            input: null;
-        };
-        /** lunchmoney */
-        "connectors.lunchmoney.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "lunchmoney";
-            output: null;
-        };
         /** lunchmoney */
         "connectors.lunchmoney.connectionSettings": {
             /**
@@ -2056,24 +1480,6 @@ export interface components {
             config: {
                 accessToken: string;
             };
-        };
-        /** lunchmoney */
-        "connectors.lunchmoney.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "lunchmoney";
-            input: null;
-        };
-        /** mercury */
-        "connectors.mercury.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "mercury";
-            output: null;
         };
         /** mercury */
         "connectors.mercury.connectionSettings": {
@@ -2101,26 +1507,6 @@ export interface components {
                 apikeyAuth?: boolean;
             };
         };
-        /** mercury */
-        "connectors.mercury.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "mercury";
-            input: null;
-        };
-        /** merge */
-        "connectors.merge.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "merge";
-            output: {
-                link_token: string;
-            };
-        };
         /** merge */
         "connectors.merge.connectionSettings": {
             /**
@@ -2143,28 +1529,6 @@ export interface components {
             config: {
                 apiKey: string;
             };
-        };
-        /** merge */
-        "connectors.merge.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "merge";
-            input: {
-                categories: unknown[];
-                customer_email_address?: string;
-                customer_organization_name?: string;
-            };
-        };
-        /** microsoft */
-        "connectors.microsoft.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "microsoft";
-            output: null;
         };
         /** microsoft */
         "connectors.microsoft.connectionSettings": {
@@ -2245,24 +1609,6 @@ export interface components {
                 };
             };
         };
-        /** microsoft */
-        "connectors.microsoft.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "microsoft";
-            input: null;
-        };
-        /** moota */
-        "connectors.moota.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "moota";
-            output: null;
-        };
         /** moota */
         "connectors.moota.connectionSettings": {
             /**
@@ -2281,26 +1627,6 @@ export interface components {
             connector_name: "moota";
             config: {
                 token: string;
-            };
-        };
-        /** moota */
-        "connectors.moota.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "moota";
-            input: null;
-        };
-        /** notion */
-        "connectors.notion.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "notion";
-            output: {
-                authorization_url: string;
             };
         };
         /** notion */
@@ -2350,27 +1676,6 @@ export interface components {
                 } | null;
             };
         };
-        /** notion */
-        "connectors.notion.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "notion";
-            input: null;
-        };
-        /** onebrick */
-        "connectors.onebrick.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "onebrick";
-            output: {
-                publicToken?: string | null;
-                redirect_url?: string | null;
-            };
-        };
         /** onebrick */
         "connectors.onebrick.connectionSettings": {
             /**
@@ -2398,24 +1703,6 @@ export interface components {
                 accessToken?: string | null;
                 redirectUrl?: string | null;
             };
-        };
-        /** onebrick */
-        "connectors.onebrick.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "onebrick";
-            input: null;
-        };
-        /** outreach */
-        "connectors.outreach.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "outreach";
-            output: null;
         };
         /** outreach */
         "connectors.outreach.connectionSettings": {
@@ -2477,24 +1764,6 @@ export interface components {
                 };
             };
         };
-        /** outreach */
-        "connectors.outreach.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "outreach";
-            input: null;
-        };
-        /** pipedrive */
-        "connectors.pipedrive.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "pipedrive";
-            output: null;
-        };
         /** pipedrive */
         "connectors.pipedrive.connectionSettings": {
             /**
@@ -2555,28 +1824,6 @@ export interface components {
                 };
             };
         };
-        /** pipedrive */
-        "connectors.pipedrive.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "pipedrive";
-            input: null;
-        };
-        /** plaid */
-        "connectors.plaid.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "plaid";
-            output: {
-                link_token: string;
-            } | {
-                public_token: string;
-            };
-        };
         /** plaid */
         "connectors.plaid.connectionSettings": {
             /**
@@ -2630,28 +1877,6 @@ export interface components {
                 language: "en" | "fr" | "es" | "nl" | "de";
             };
         };
-        /** plaid */
-        "connectors.plaid.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "plaid";
-            input: {
-                sandboxPublicTokenCreate?: boolean;
-                /** @enum {string} */
-                language?: "en" | "fr" | "es" | "nl" | "de";
-            };
-        };
-        /** postgres */
-        "connectors.postgres.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "postgres";
-            output: null;
-        };
         /** postgres */
         "connectors.postgres.connectionSettings": {
             /**
@@ -2675,26 +1900,6 @@ export interface components {
              */
             connector_name: "postgres";
             config: null;
-        };
-        /** postgres */
-        "connectors.postgres.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "postgres";
-            input: null;
-        };
-        /** quickbooks */
-        "connectors.quickbooks.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "quickbooks";
-            output: {
-                authorization_url: string;
-            };
         };
         /** quickbooks */
         "connectors.quickbooks.connectionSettings": {
@@ -2745,26 +1950,6 @@ export interface components {
                 } | null;
             };
         };
-        /** quickbooks */
-        "connectors.quickbooks.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "quickbooks";
-            input: null;
-        };
-        /** ramp */
-        "connectors.ramp.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "ramp";
-            output: {
-                accessToken?: string | null;
-            };
-        };
         /** ramp */
         "connectors.ramp.connectionSettings": {
             /**
@@ -2790,24 +1975,6 @@ export interface components {
                     clientSecret: string;
                 };
             };
-        };
-        /** ramp */
-        "connectors.ramp.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "ramp";
-            input: null;
-        };
-        /** reddit */
-        "connectors.reddit.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "reddit";
-            output: null;
         };
         /** reddit */
         "connectors.reddit.connectionSettings": {
@@ -2869,26 +2036,6 @@ export interface components {
                 };
             };
         };
-        /** reddit */
-        "connectors.reddit.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "reddit";
-            input: null;
-        };
-        /** salesforce */
-        "connectors.salesforce.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "salesforce";
-            output: {
-                authorization_url: string;
-            };
-        };
         /** salesforce */
         "connectors.salesforce.connectionSettings": {
             /**
@@ -2937,24 +2084,6 @@ export interface components {
                     scopes?: string[] | null;
                 } | null;
             };
-        };
-        /** salesforce */
-        "connectors.salesforce.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "salesforce";
-            input: null;
-        };
-        /** salesloft */
-        "connectors.salesloft.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "salesloft";
-            output: null;
         };
         /** salesloft */
         "connectors.salesloft.connectionSettings": {
@@ -3016,24 +2145,6 @@ export interface components {
                 };
             };
         };
-        /** salesloft */
-        "connectors.salesloft.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "salesloft";
-            input: null;
-        };
-        /** saltedge */
-        "connectors.saltedge.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "saltedge";
-            output: null;
-        };
         /** saltedge */
         "connectors.saltedge.connectionSettings": {
             /**
@@ -3054,26 +2165,6 @@ export interface components {
                 appId: string;
                 secret: string;
                 url?: string | null;
-            };
-        };
-        /** saltedge */
-        "connectors.saltedge.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "saltedge";
-            input: null;
-        };
-        /** sharepointonline */
-        "connectors.sharepointonline.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "sharepointonline";
-            output: {
-                authorization_url: string;
             };
         };
         /** sharepointonline */
@@ -3123,26 +2214,6 @@ export interface components {
                 } | null;
             };
         };
-        /** sharepointonline */
-        "connectors.sharepointonline.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "sharepointonline";
-            input: null;
-        };
-        /** slack */
-        "connectors.slack.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "slack";
-            output: {
-                authorization_url: string;
-            };
-        };
         /** slack */
         "connectors.slack.connectionSettings": {
             /**
@@ -3189,24 +2260,6 @@ export interface components {
                     scopes?: string[] | null;
                 } | null;
             };
-        };
-        /** slack */
-        "connectors.slack.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "slack";
-            input: null;
-        };
-        /** splitwise */
-        "connectors.splitwise.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "splitwise";
-            output: null;
         };
         /** splitwise */
         "connectors.splitwise.connectionSettings": {
@@ -3262,24 +2315,6 @@ export interface components {
             connector_name: "splitwise";
             config: null;
         };
-        /** splitwise */
-        "connectors.splitwise.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "splitwise";
-            input: null;
-        };
-        /** stripe */
-        "connectors.stripe.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "stripe";
-            output: null;
-        };
         /** stripe */
         "connectors.stripe.connectionSettings": {
             /**
@@ -3308,27 +2343,6 @@ export interface components {
                 apikeyAuth?: boolean;
             };
         };
-        /** stripe */
-        "connectors.stripe.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "stripe";
-            input: null;
-        };
-        /** teller */
-        "connectors.teller.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "teller";
-            output: {
-                applicationId: string;
-                userToken?: string | null;
-            };
-        };
         /** teller */
         "connectors.teller.connectionSettings": {
             /**
@@ -3350,26 +2364,6 @@ export interface components {
             config: {
                 applicationId: string;
                 token?: string | null;
-            };
-        };
-        /** teller */
-        "connectors.teller.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "teller";
-            input: null;
-        };
-        /** toggl */
-        "connectors.toggl.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "toggl";
-            output: {
-                apiToken: string;
             };
         };
         /** toggl */
@@ -3394,24 +2388,6 @@ export interface components {
             connector_name: "toggl";
             config: null;
         };
-        /** toggl */
-        "connectors.toggl.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "toggl";
-            input: null;
-        };
-        /** twenty */
-        "connectors.twenty.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "twenty";
-            output: null;
-        };
         /** twenty */
         "connectors.twenty.connectionSettings": {
             /**
@@ -3431,24 +2407,6 @@ export interface components {
              */
             connector_name: "twenty";
             config: null;
-        };
-        /** twenty */
-        "connectors.twenty.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "twenty";
-            input: null;
-        };
-        /** twitter */
-        "connectors.twitter.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "twitter";
-            output: null;
         };
         /** twitter */
         "connectors.twitter.connectionSettings": {
@@ -3510,24 +2468,6 @@ export interface components {
                 };
             };
         };
-        /** twitter */
-        "connectors.twitter.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "twitter";
-            input: null;
-        };
-        /** venmo */
-        "connectors.venmo.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "venmo";
-            output: null;
-        };
         /** venmo */
         "connectors.venmo.connectionSettings": {
             /**
@@ -3556,29 +2496,6 @@ export interface components {
                 } | null;
             };
         };
-        /** venmo */
-        "connectors.venmo.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "venmo";
-            input: null;
-        };
-        /** wise */
-        "connectors.wise.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "wise";
-            output: {
-                redirectUri: string;
-                clientId: string;
-                /** @enum {string} */
-                envName: "sandbox" | "live";
-            };
-        };
         /** wise */
         "connectors.wise.connectionSettings": {
             /**
@@ -3600,24 +2517,6 @@ export interface components {
              */
             connector_name: "wise";
             config: null;
-        };
-        /** wise */
-        "connectors.wise.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "wise";
-            input: null;
-        };
-        /** xero */
-        "connectors.xero.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "xero";
-            output: null;
         };
         /** xero */
         "connectors.xero.connectionSettings": {
@@ -3679,32 +2578,6 @@ export interface components {
                 };
             };
         };
-        /** xero */
-        "connectors.xero.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "xero";
-            input: null;
-        };
-        /** yodlee */
-        "connectors.yodlee.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "yodlee";
-            output: {
-                accessToken: {
-                    accessToken: string;
-                    issuedAt: string;
-                    expiresIn: number;
-                };
-                /** @enum {string} */
-                envName: "sandbox" | "development" | "production";
-            };
-        };
         /** yodlee */
         "connectors.yodlee.connectionSettings": {
             /**
@@ -3754,24 +2627,6 @@ export interface components {
                     cert: string;
                 } | null;
             };
-        };
-        /** yodlee */
-        "connectors.yodlee.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "yodlee";
-            input: null;
-        };
-        /** zohodesk */
-        "connectors.zohodesk.connectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "zohodesk";
-            output: null;
         };
         /** zohodesk */
         "connectors.zohodesk.connectionSettings": {
@@ -3833,15 +2688,6 @@ export interface components {
                 };
             };
         };
-        /** zohodesk */
-        "connectors.zohodesk.preConnectInput": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "zohodesk";
-            input: null;
-        };
         /** Connection */
         "core.connection": {
             connector_name: "core.connection";
@@ -3873,13 +2719,6 @@ export interface components {
                 connect_input?: unknown;
                 connect_output?: unknown;
             };
-        };
-        /** Customer */
-        "core.customer": {
-            id: string;
-            updated_at: string;
-            created_at: string;
-            connection_count: number;
         };
         /** Integration */
         "core.integration": {
@@ -4625,77 +3464,6 @@ export interface operations {
             };
         };
     };
-    preConnect: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description Must correspond to data.connector_name.
-                     *     Technically id should imply connector_name already but there is no way to
-                     *     specify a discriminated union with id alone. */
-                    id: string;
-                    options: {
-                        integrationExternalId?: string | number | null;
-                        connectionExternalId?: string | number | null;
-                    };
-                    /** @description Connector specific data */
-                    data: components["schemas"]["connectors.aircall.preConnectInput"] | components["schemas"]["connectors.airtable.preConnectInput"] | components["schemas"]["connectors.apollo.preConnectInput"] | components["schemas"]["connectors.brex.preConnectInput"] | components["schemas"]["connectors.coda.preConnectInput"] | components["schemas"]["connectors.confluence.preConnectInput"] | components["schemas"]["connectors.discord.preConnectInput"] | components["schemas"]["connectors.facebook.preConnectInput"] | components["schemas"]["connectors.finch.preConnectInput"] | components["schemas"]["connectors.firebase.preConnectInput"] | components["schemas"]["connectors.foreceipt.preConnectInput"] | components["schemas"]["connectors.github.preConnectInput"] | components["schemas"]["connectors.gong.preConnectInput"] | components["schemas"]["connectors.googlecalendar.preConnectInput"] | components["schemas"]["connectors.googledocs.preConnectInput"] | components["schemas"]["connectors.googledrive.preConnectInput"] | components["schemas"]["connectors.googlemail.preConnectInput"] | components["schemas"]["connectors.googlesheet.preConnectInput"] | components["schemas"]["connectors.greenhouse.preConnectInput"] | components["schemas"]["connectors.heron.preConnectInput"] | components["schemas"]["connectors.hubspot.preConnectInput"] | components["schemas"]["connectors.instagram.preConnectInput"] | components["schemas"]["connectors.intercom.preConnectInput"] | components["schemas"]["connectors.jira.preConnectInput"] | components["schemas"]["connectors.kustomer.preConnectInput"] | components["schemas"]["connectors.lever.preConnectInput"] | components["schemas"]["connectors.linear.preConnectInput"] | components["schemas"]["connectors.linkedin.preConnectInput"] | components["schemas"]["connectors.lunchmoney.preConnectInput"] | components["schemas"]["connectors.mercury.preConnectInput"] | components["schemas"]["connectors.merge.preConnectInput"] | components["schemas"]["connectors.microsoft.preConnectInput"] | components["schemas"]["connectors.moota.preConnectInput"] | components["schemas"]["connectors.notion.preConnectInput"] | components["schemas"]["connectors.onebrick.preConnectInput"] | components["schemas"]["connectors.outreach.preConnectInput"] | components["schemas"]["connectors.pipedrive.preConnectInput"] | components["schemas"]["connectors.plaid.preConnectInput"] | components["schemas"]["connectors.postgres.preConnectInput"] | components["schemas"]["connectors.quickbooks.preConnectInput"] | components["schemas"]["connectors.ramp.preConnectInput"] | components["schemas"]["connectors.reddit.preConnectInput"] | components["schemas"]["connectors.salesforce.preConnectInput"] | components["schemas"]["connectors.salesloft.preConnectInput"] | components["schemas"]["connectors.saltedge.preConnectInput"] | components["schemas"]["connectors.sharepointonline.preConnectInput"] | components["schemas"]["connectors.slack.preConnectInput"] | components["schemas"]["connectors.splitwise.preConnectInput"] | components["schemas"]["connectors.stripe.preConnectInput"] | components["schemas"]["connectors.teller.preConnectInput"] | components["schemas"]["connectors.toggl.preConnectInput"] | components["schemas"]["connectors.twenty.preConnectInput"] | components["schemas"]["connectors.twitter.preConnectInput"] | components["schemas"]["connectors.venmo.preConnectInput"] | components["schemas"]["connectors.wise.preConnectInput"] | components["schemas"]["connectors.xero.preConnectInput"] | components["schemas"]["connectors.yodlee.preConnectInput"] | components["schemas"]["connectors.zohodesk.preConnectInput"];
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["connectors.aircall.connectInput"] | components["schemas"]["connectors.airtable.connectInput"] | components["schemas"]["connectors.apollo.connectInput"] | components["schemas"]["connectors.brex.connectInput"] | components["schemas"]["connectors.coda.connectInput"] | components["schemas"]["connectors.confluence.connectInput"] | components["schemas"]["connectors.discord.connectInput"] | components["schemas"]["connectors.facebook.connectInput"] | components["schemas"]["connectors.finch.connectInput"] | components["schemas"]["connectors.firebase.connectInput"] | components["schemas"]["connectors.foreceipt.connectInput"] | components["schemas"]["connectors.github.connectInput"] | components["schemas"]["connectors.gong.connectInput"] | components["schemas"]["connectors.googlecalendar.connectInput"] | components["schemas"]["connectors.googledocs.connectInput"] | components["schemas"]["connectors.googledrive.connectInput"] | components["schemas"]["connectors.googlemail.connectInput"] | components["schemas"]["connectors.googlesheet.connectInput"] | components["schemas"]["connectors.greenhouse.connectInput"] | components["schemas"]["connectors.heron.connectInput"] | components["schemas"]["connectors.hubspot.connectInput"] | components["schemas"]["connectors.instagram.connectInput"] | components["schemas"]["connectors.intercom.connectInput"] | components["schemas"]["connectors.jira.connectInput"] | components["schemas"]["connectors.kustomer.connectInput"] | components["schemas"]["connectors.lever.connectInput"] | components["schemas"]["connectors.linear.connectInput"] | components["schemas"]["connectors.linkedin.connectInput"] | components["schemas"]["connectors.lunchmoney.connectInput"] | components["schemas"]["connectors.mercury.connectInput"] | components["schemas"]["connectors.merge.connectInput"] | components["schemas"]["connectors.microsoft.connectInput"] | components["schemas"]["connectors.moota.connectInput"] | components["schemas"]["connectors.notion.connectInput"] | components["schemas"]["connectors.onebrick.connectInput"] | components["schemas"]["connectors.outreach.connectInput"] | components["schemas"]["connectors.pipedrive.connectInput"] | components["schemas"]["connectors.plaid.connectInput"] | components["schemas"]["connectors.postgres.connectInput"] | components["schemas"]["connectors.quickbooks.connectInput"] | components["schemas"]["connectors.ramp.connectInput"] | components["schemas"]["connectors.reddit.connectInput"] | components["schemas"]["connectors.salesforce.connectInput"] | components["schemas"]["connectors.salesloft.connectInput"] | components["schemas"]["connectors.saltedge.connectInput"] | components["schemas"]["connectors.sharepointonline.connectInput"] | components["schemas"]["connectors.slack.connectInput"] | components["schemas"]["connectors.splitwise.connectInput"] | components["schemas"]["connectors.stripe.connectInput"] | components["schemas"]["connectors.teller.connectInput"] | components["schemas"]["connectors.toggl.connectInput"] | components["schemas"]["connectors.twenty.connectInput"] | components["schemas"]["connectors.twitter.connectInput"] | components["schemas"]["connectors.venmo.connectInput"] | components["schemas"]["connectors.wise.connectInput"] | components["schemas"]["connectors.xero.connectInput"] | components["schemas"]["connectors.yodlee.connectInput"] | components["schemas"]["connectors.zohodesk.connectInput"];
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
     createMagicLink: {
         parameters: {
             query?: never;
@@ -4848,91 +3616,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    listCustomers: {
-        parameters: {
-            query?: {
-                /** @description Limit the number of items returned */
-                limit?: number;
-                /** @description Offset the items returned */
-                offset?: number;
-                keywords?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["core.customer"][];
-                        /** @description Total number of items in the database for the organization */
-                        total: number;
-                        /**
-                         * @description Limit the number of items returned
-                         * @default 50
-                         */
-                        limit: number;
-                        /**
-                         * @description Offset the items returned
-                         * @default 0
-                         */
-                        offset: number;
-                    };
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
             /** @description Internal server error */
