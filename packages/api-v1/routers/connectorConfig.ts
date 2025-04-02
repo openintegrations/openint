@@ -1,11 +1,11 @@
 import {TRPCError} from '@trpc/server'
-import {z} from '@openint/util/zod-utils'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, inArray, schema, sql} from '@openint/db'
+import {makeUlid} from '@openint/util/id-utils'
+import {z} from '@openint/util/zod-utils'
 import {core, type Core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
-import {makeUlid} from '@openint/util/id-utils'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -119,8 +119,9 @@ export const connectorConfigRouter = router({
       openapi: {
         method: 'GET',
         path: '/connector-config',
-        description: 'List all connector configurations',
-        summary: 'List Connector Configurations',
+        description:
+          'List the connectors that are configured in your account and available for your customers',
+        summary: 'List Configured Connectors',
       },
     })
     .input(
