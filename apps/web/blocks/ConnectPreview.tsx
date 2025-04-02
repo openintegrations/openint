@@ -21,11 +21,22 @@ export function ConnectPreview() {
     view: 'add',
   })
 
+  const previewUrl = React.useMemo(() => {
+    const url = new URL('/connect', window.location.origin)
+    for (const [key, value] of Object.entries(formData)) {
+      if (value !== undefined) {
+        url.searchParams.set(key, value.toString())
+      }
+    }
+
+    return url.toString()
+  }, [formData])
+
   return (
     <div className="flex h-full w-full gap-4">
       {/* Schema Form on the left */}
       <div className="w-1/2 overflow-auto p-4">
-        <h2 className="mb-4 text-xl font-semibold">Configuration</h2>
+        <h2 className="mb-4 text-xl font-semibold">Configure</h2>
         <ZodSchemaForm
           schema={customerRouterModels.createMagicLinkInput}
           formData={formData}
@@ -39,10 +50,11 @@ export function ConnectPreview() {
       </div>
 
       {/* Preview Window on the right */}
-      <div className="w-1/2 overflow-auto p-4">
+      <div className="flex w-1/2 flex-col overflow-auto p-4">
         <h2 className="mb-4 text-xl font-semibold">Preview</h2>
-        <PreviewWindow url="https://connect.example.com" className="h-[600px]">
-          <div className="bg-muted/50 flex h-full items-center justify-center">
+        <PreviewWindow url={previewUrl} className="flex-1">
+          <iframe src={previewUrl} className="h-full w-full" />
+          {/* <div className="bg-muted/50 flex h-full items-center justify-center">
             <div className="text-center">
               <h1 className="text-2xl font-bold">Connect Preview</h1>
               <p className="text-muted-foreground mt-2">
@@ -53,7 +65,7 @@ export function ConnectPreview() {
                 {JSON.stringify(formData, null, 2)}
               </pre>
             </div>
-          </div>
+          </div> */}
         </PreviewWindow>
       </div>
     </div>

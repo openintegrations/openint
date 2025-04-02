@@ -19,7 +19,7 @@ export function BrowserWindow({
   return (
     <div
       className={cn(
-        'bg-background w-full overflow-hidden rounded-lg border shadow-lg',
+        'bg-background flex w-full flex-col overflow-hidden rounded-lg border shadow-lg',
         className,
       )}>
       {/* Browser Header */}
@@ -116,7 +116,7 @@ export function BrowserWindow({
       </div>
 
       {/* Browser Content */}
-      <div className="relative">{children}</div>
+      <div className="flex-1">{children}</div>
     </div>
   )
 }
@@ -357,10 +357,11 @@ export function PreviewWindow({
             <MonitorIcon className="h-4 w-4" />
             Browser
           </TabsTrigger>
-          <TabsTrigger value="tablet" className="flex items-center gap-2">
+          {/* Disable tablet view for now until we have a better solution */}
+          {/* <TabsTrigger value="tablet" className="flex items-center gap-2">
             <TabletIcon className="h-4 w-4" />
             Tablet
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger value="mobile" className="flex items-center gap-2">
             <SmartphoneIcon className="h-4 w-4" />
             Mobile
