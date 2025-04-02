@@ -172,7 +172,7 @@ export function ConnectorConfigList(props: {
     }
 
     const {
-      formData: {displayName, disabled, config, ...rest},
+      formData: {displayName, disabled, config = {}, ...rest},
     } = data
 
     try {
