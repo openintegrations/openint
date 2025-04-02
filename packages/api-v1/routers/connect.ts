@@ -119,7 +119,6 @@ export const connectRouter = router({
         enabled: false, // tuple type not supported by openAPI
         method: 'POST',
         path: '/connect/post-connect',
-        enabled: false,
       },
     })
     .input(
