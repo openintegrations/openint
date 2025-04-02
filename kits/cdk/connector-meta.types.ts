@@ -4,7 +4,7 @@ import type {
   ConnectionUpdateData,
   Source,
 } from '@openint/sync'
-import {castIs, z} from '@openint/util/zod-utils'
+import {castIs, z, type Z} from '@openint/util/zod-utils'
 import {AuthType, JsonConnectorDef} from '../../connectors/cnext'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
@@ -26,7 +26,7 @@ export interface ConnectorMetadata {
   layer?: 'core' | 'ledger'
   // TODO: @pellicceama remove this
   platforms?: Array<'cloud' | 'local'>
-  stage?: z.infer<typeof zConnectorStage>
+  stage?: Z.infer<typeof zConnectorStage>
   // labels?: Array<'featured' | 'banking' | 'accounting' | 'enrichment'>
   verticals?: VerticalKey[]
 
@@ -61,7 +61,7 @@ export interface ConnectorMetadata {
 
 /** Useful for establishing the initial pipeline when creating a connection for the first time */
 
-export type ConnectOptions = z.input<typeof zConnectOptions>
+export type ConnectOptions = Z.input<typeof zConnectOptions>
 export const zConnectOptions = z.object({
   // userId: UserId,
   /** Noop if `connectionId` is specified */
@@ -116,7 +116,7 @@ export interface ConnectContext<TSettings>
 // TODO: We should rename `provider` to `integration` given that they are both
 // Sources AND destinations. Provider only makes sense for sources.
 // An integration can have `connect[UI]`, `src[Connector]` and `dest[Connector]`
-export type CheckConnectionOptions = z.infer<typeof zCheckConnectionOptions>
+export type CheckConnectionOptions = Z.infer<typeof zCheckConnectionOptions>
 export const zCheckConnectionOptions = z.object({
   /**
    * Always make a request to the connector. Perhaps should be the default?
@@ -152,7 +152,7 @@ export interface ConnectionUpdate<
   triggerDefaultSync?: boolean
 }
 
-export type WebhookInput = z.infer<typeof zWebhookInput>
+export type WebhookInput = Z.infer<typeof zWebhookInput>
 export const zWebhookInput = z.object({
   headers: z
     .record(z.unknown())

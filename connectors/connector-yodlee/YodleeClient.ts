@@ -10,10 +10,10 @@ import {DateTime, parseDateTime} from '@openint/util/date-utils'
 import {R} from '@openint/util/remeda'
 import {zFunction} from '@openint/util/zod-function-utils'
 import type {HTTPError} from '@openint/util/http/index'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import type {YodleeAccount, YodleeTransaction} from './yodlee.types'
 
-export type YodleeEnvName = z.infer<typeof zYodleeEnvName>
+export type YodleeEnvName = Z.infer<typeof zYodleeEnvName>
 export const zYodleeEnvName = z.enum(['sandbox', 'development', 'production'])
 
 export const zConfig = z.object({
@@ -52,7 +52,7 @@ export const zCreds = z.discriminatedUnion('role', [
 ])
 
 /** Yodlee comma-delimited ids */
-type YodleeIds = z.input<typeof zYodleeIds>
+type YodleeIds = Z.input<typeof zYodleeIds>
 export const zYodleeId = z.union([z.number(), z.string()])
 // cannot use transform for now because .openapi() does not work due to differing zod versions
 // .transform((id) => (typeof id === 'string' ? Number.parseInt(id) : id))

@@ -2,9 +2,9 @@
 import {compact} from '@openint/util/array-utils'
 import {memoize} from '@openint/util/function-utils'
 import {invert} from '@openint/util/object-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 
-export type ExternalId = z.infer<typeof zExternalId>
+export type ExternalId = Z.infer<typeof zExternalId>
 export const zExternalId = z.union([z.string(), z.number()])
 // .brand<'externalId'>()
 
@@ -69,14 +69,14 @@ export const zId = memoize(_zId, {
 
 /** Unfortunately userId is mostly *not* prefixed */
 export const zUserId = zId('user')
-export type UserId = z.infer<typeof zUserId>
+export type UserId = Z.infer<typeof zUserId>
 
 /** trpc-openapi limits us from using .brand https://share.cleanshot.com/Mf4F9xwZ */
 export const zCustomerId = z.string().min(1).brand<'customer'>()
-export type CustomerId = z.infer<typeof zCustomerId>
+export type CustomerId = Z.infer<typeof zCustomerId>
 
 export const zExtCustomerId = z.string().min(1).brand<'ext_customer'>()
-export type ExtCustomerId = z.infer<typeof zExtCustomerId>
+export type ExtCustomerId = Z.infer<typeof zExtCustomerId>
 
 export function makeId<TPrefix extends IdPrefix, TPName extends string>(
   ...args: TPrefix extends INDEPENDENT_ID_PREFIX

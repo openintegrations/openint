@@ -9,7 +9,7 @@ import {
   RouterCallerErrorHandler,
 } from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
-import {z, type ZodError} from '@openint/util/zod-utils'
+import {z, type Z, type ZodError} from '@openint/util/zod-utils'
 
 export const zErrorCode = z
   .enum(
@@ -56,7 +56,7 @@ export const zAPIError = z
   })
   .openapi({ref: 'APIError'})
 
-export type APIError = z.infer<typeof zAPIError>
+export type APIError = Z.infer<typeof zAPIError>
 
 export function parseAPIError(error: unknown): APIError | undefined {
   // Handle TRPCError (from caller)

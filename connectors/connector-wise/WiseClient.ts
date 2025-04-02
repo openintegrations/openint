@@ -1,9 +1,9 @@
 import {memoize} from '@openint/util/function-utils'
 import {createHTTPClient, OAuth2Client} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 
-export type EnvName = z.infer<typeof zEnvName>
+export type EnvName = Z.infer<typeof zEnvName>
 export const zEnvName = z.enum(['sandbox', 'live'])
 export const zWiseConfig = z.object({
   // Will be use if we use the oauth, but cannot get the client Id and clientSecret from sandbox

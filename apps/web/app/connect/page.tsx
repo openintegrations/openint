@@ -114,7 +114,7 @@ async function AddConnections({
 
   const res = await api.listConnectorConfigs({
     connector_name,
-    expand: 'connector',
+    expand: 'connector', // TODO: FIXME to use an array instead of a string
   })
 
   return (

@@ -1,4 +1,4 @@
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import {zCustomerId, zId, zUserId} from './id.types'
 import {zVerticalKey} from './verticals'
 
@@ -9,7 +9,7 @@ import {zVerticalKey} from './verticals'
 // - Normlaized, DB type conforms to input type (not generic, possibly generated)
 // Output type (parsed, generic, nested)
 
-export type EnvName = z.infer<typeof zEnvName>
+export type EnvName = Z.infer<typeof zEnvName>
 export const zEnvName = z.enum(['sandbox', 'development', 'production'])
 
 // MARK: - Standard types
@@ -40,7 +40,7 @@ export const zMetadata = z.unknown().describe(`
 `)
 
 export type ZStandard = {
-  [k in keyof typeof zStandard]: z.infer<(typeof zStandard)[k]>
+  [k in keyof typeof zStandard]: Z.infer<(typeof zStandard)[k]>
 }
 export const zStandard = {
   integration: z.object({
@@ -85,7 +85,7 @@ export const zStandard = {
 // MARK: - Raw types
 
 export type ZRaw = {
-  [k in keyof typeof zRaw]: z.infer<(typeof zRaw)[k]>
+  [k in keyof typeof zRaw]: Z.infer<(typeof zRaw)[k]>
 }
 /** Should this be a factory function so we can use typed config / settings? */
 // TODO: Consider auto-generating this from database, via a tool such as zapetos, pgtyped
@@ -103,10 +103,10 @@ export const zStreamsV2 = z.record(
     fields: z.array(z.string()).optional(),
   }),
 )
-export type StreamsV2 = z.infer<typeof zStreamsV2>
+export type StreamsV2 = Z.infer<typeof zStreamsV2>
 
 export const zStreamsV1 = z.record(z.boolean())
-export type StreamsV1 = z.infer<typeof zStreamsV1>
+export type StreamsV1 = Z.infer<typeof zStreamsV1>
 
 /** TODO: Add other links / gather the schema from various links here */
 export const zLink = z

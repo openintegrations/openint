@@ -7,13 +7,13 @@ import {
   PlaidEnvironments,
   Products,
 } from 'plaid'
-import {z, zCast} from '@openint/util/zod-utils'
+import {z, type Z, zCast} from '@openint/util/zod-utils'
 import {memoize} from '@openint/util/function-utils'
 import {getDefaultProxyAgent} from '@openint/util/http/http-utils'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {WebhookShape} from './plaid.types'
 
-type EnvName = z.infer<typeof zPlaidEnvName>
+type EnvName = Z.infer<typeof zPlaidEnvName>
 export const zPlaidEnvName = z.enum(['sandbox', 'development', 'production'])
 
 // Too bad we cannot use it...

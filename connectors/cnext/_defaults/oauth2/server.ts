@@ -1,9 +1,9 @@
-import {z} from '@openint/util/zod-utils'
 import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
 import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
-import {oauth2Schemas, zOAuthConfig} from './def'
 import {makeUlid} from '@openint/util/id-utils'
+import {type Z} from '@openint/util/zod-utils'
+import {oauth2Schemas, zOAuthConfig} from './def'
 import {
   authorizeHandler,
   defaultTokenExchangeHandler,
@@ -13,10 +13,10 @@ import {
 import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
 function injectCcfgDefaultCredentials(
-  connectorConfig: z.infer<typeof oauth2Schemas.connectorConfig>,
+  connectorConfig: Z.infer<typeof oauth2Schemas.connectorConfig>,
   connectorName: string,
-  oauthConfig: z.infer<typeof zOAuthConfig>,
-): z.infer<typeof oauth2Schemas.connectorConfig> {
+  oauthConfig: Z.infer<typeof zOAuthConfig>,
+): Z.infer<typeof oauth2Schemas.connectorConfig> {
   const defaultCredentials = getConnectorDefaultCredentials(connectorName)
   if (
     !connectorConfig.oauth?.client_id &&
@@ -63,11 +63,11 @@ function injectCcfgDefaultCredentials(
  */
 export function generateOAuth2Server<
   TName extends string,
-  T extends typeof oauth2Schemas & {name: z.ZodLiteral<TName>},
+  T extends typeof oauth2Schemas & {name: Z.ZodLiteral<TName>},
   D extends ConnectorDef<T>,
 >(
   connectorDef: D,
-  oauthConfig: z.infer<typeof zOAuthConfig>,
+  oauthConfig: Z.infer<typeof zOAuthConfig>,
   overrides?: Partial<ConnectorServer<T>>,
 ): ConnectorServer<T> {
   if (
@@ -145,7 +145,7 @@ export function generateOAuth2Server<
             connectionSettings.oauth,
           ),
           connector_config: ccfg,
-        } satisfies z.infer<typeof zOAuthConfig>,
+        } satisfies Z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
         state: connectOutput.state,
         redirectUri: getServerUrl(null) + '/connect/callback',
@@ -197,7 +197,7 @@ export function generateOAuth2Server<
           ),
           connector_config: ccfg,
           connection_settings: connectionSettings,
-        } as any as z.infer<typeof zOAuthConfig>, // TODO: fix this
+        } as any as Z.infer<typeof zOAuthConfig>, // TODO: fix this
         refreshToken: refreshToken,
       })
 

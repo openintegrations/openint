@@ -1,11 +1,11 @@
-import {z} from '@openint/util/zod-utils'
-import {inferOneBrickEnvFromToken} from './onebrick-utils'
-import {createHTTPClient} from '@openint/util/http/index'
 import {DateTime} from '@openint/util/date-utils'
-import {zFunction} from '@openint/util/zod-function-utils'
 import {memoize} from '@openint/util/function-utils'
+import {createHTTPClient} from '@openint/util/http/index'
+import {zFunction} from '@openint/util/zod-function-utils'
+import {z, type Z} from '@openint/util/zod-utils'
+import {inferOneBrickEnvFromToken} from './onebrick-utils'
 
-export type OneBrickEnvName = z.infer<typeof zOneBrickEnvName>
+export type OneBrickEnvName = Z.infer<typeof zOneBrickEnvName>
 export const zOneBrickEnvName = z.enum(['sandbox', 'production'])
 export const inputTokenSchema = {accessToken: z.string().nullish()}
 export const inputAuthOneBrickSchema = z
@@ -175,7 +175,7 @@ export const zOneBrickConfig = z.object({
   redirectUrl: z.string().nullish(),
 })
 
-export function makeOneBrickClient(config: z.infer<typeof zOneBrickConfig>) {
+export function makeOneBrickClient(config: Z.infer<typeof zOneBrickConfig>) {
   return makeOneBrickMultiClient({
     ...config,
     publicTokens: {[config.envName]: config.publicToken},

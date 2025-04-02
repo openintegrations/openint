@@ -3,7 +3,7 @@ import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {titleCase} from '@openint/util/string-utils'
 import {urlFromImage} from '@openint/util/url-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 
 // import {z} from '@openint/util/zod-utils'
 
@@ -48,15 +48,15 @@ export const connectorSchemas = Object.fromEntries(
         // Have to do this due to zod version mismatch
         // Also declaring .openapi on mismatched zod does not work due to
         // differing registration holders in zod-openapi
-          (schemas[key] as unknown as z.ZodTypeAny | undefined) ?? z.null(),
+          (schemas[key] as unknown as Z.ZodTypeAny | undefined) ?? z.null(),
       })
     }),
   ]),
 ) as {
   [Key in SchemaKey]: NonEmptyArray<
-    z.ZodObject<
-      {connector_name: z.ZodLiteral<string>} & {
-        [k in Key]: z.ZodTypeAny
+    Z.ZodObject<
+      {connector_name: Z.ZodLiteral<string>} & {
+        [k in Key]: Z.ZodTypeAny
       }
     >
   >
@@ -67,7 +67,7 @@ export type JSONSchema = {}
 
 /** Copied for now since not sure if zod versions are comptabiel */
 const zCast = <T>(...args: Parameters<(typeof z)['unknown']>) =>
-  z.unknown(...args) as z.ZodType<T, z.ZodTypeDef, unknown>
+  z.unknown(...args) as Z.ZodType<T, Z.ZodTypeDef, unknown>
 
 export const zJSONSchema = zCast<JSONSchema>()
 
@@ -91,7 +91,7 @@ export const zConnector = z.object({
 export const getConnectorModel = (
   def: ConnectorDef,
   opts: {includeSchemas?: boolean} = {},
-): z.infer<typeof zConnector> => ({
+): Z.infer<typeof zConnector> => ({
   name: def.name,
   display_name: def.metadata?.displayName ?? titleCase(def.name),
   logo_url: def.metadata?.logoSvg

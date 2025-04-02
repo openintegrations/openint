@@ -92,7 +92,7 @@ export const ZodSchema: Story = {
       email: z.string().email(),
       password: z.string().min(8),
     }),
-    onSubmit: (data) => {
+    onSubmit: (data: any) => {
       console.log('Sample Schema Form submitted:', data)
       alert(
         'Sample Schema Form submitted! Data: ' +

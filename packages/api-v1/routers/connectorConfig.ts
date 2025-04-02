@@ -3,7 +3,7 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import {core, type Core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
@@ -195,14 +195,14 @@ export const connectorConfigRouter = router({
         'connector_config',
       )
       const expandOptions = (input?.expand || []) as Array<
-        z.infer<typeof zExpandOptions>
+        Z.infer<typeof zExpandOptions>
       >
       // Process items with proper typing
       const processedItems: Array<
-        z.infer<typeof connectorConfigWithRelations>
+        Z.infer<typeof connectorConfigWithRelations>
       > = await Promise.all(
         items.map(async (ccfg) => {
-          const result = {...ccfg} as z.infer<
+          const result = {...ccfg} as Z.infer<
             typeof connectorConfigWithRelations
           >
 

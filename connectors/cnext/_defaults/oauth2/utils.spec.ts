@@ -1,4 +1,4 @@
-import {z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
 import {zOAuthConfig} from './def'
 import {prepareScopes} from './utils'
 
@@ -18,7 +18,7 @@ test('Scope separator should work correctly for different delimiters', () => {
       token: {},
       refresh: {},
     },
-  } satisfies z.infer<typeof zOAuthConfig>
+  } satisfies Z.infer<typeof zOAuthConfig>
 
   const scopesWithDefaultSpaceSeparator = mockOauthConfig.scopes
     .map((s) => s.scope)

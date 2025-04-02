@@ -1,6 +1,6 @@
 import {R} from '@openint/util/remeda'
 import {titleCase} from '@openint/util/string-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 import type {
   CommandDefinitionInput,
   CommandDefinitionMap,
@@ -58,7 +58,7 @@ export function filterCommands({
     }
     // Check if every command is valid
     for (const [key, value] of Object.entries(params)) {
-      const shape = cmd.params.shape as Record<string, z.ZodTypeAny>
+      const shape = cmd.params.shape as Record<string, Z.ZodTypeAny>
       const paramSchema = shape[key]
       if (!paramSchema) {
         return false

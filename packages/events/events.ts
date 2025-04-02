@@ -3,7 +3,7 @@ import type {ZodToStandardSchema} from 'inngest/components/EventSchemas'
 import {zId} from '@openint/cdk'
 import {R} from '@openint/util/remeda'
 import type {NonEmptyArray} from '@openint/util/type-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 
 // TODO: Implement webhook as events too
 
@@ -17,7 +17,7 @@ export const zUserTraits = z
   })
   .partial()
 
-export type UserTraits = z.infer<typeof zUserTraits>
+export type UserTraits = Z.infer<typeof zUserTraits>
 
 export const zOrgProperties = z
   .object({
@@ -25,7 +25,7 @@ export const zOrgProperties = z
   })
   .partial()
 
-export type OrgProperties = z.infer<typeof zOrgProperties>
+export type OrgProperties = Z.infer<typeof zOrgProperties>
 
 // TODO: Can we learn from trpc to make all the events here easy to refactor across the codebase?
 export const eventMap = {
@@ -69,7 +69,7 @@ export const eventMap = {
     current_url: z.string(),
     path: z.string(),
   },
-} satisfies Record<string, z.ZodRawShape>
+} satisfies Record<string, Z.ZodRawShape>
 
 type BuiltInEvents = EventsFromOpts<{schemas: EventSchemas; id: never}>
 
@@ -77,7 +77,7 @@ export const eventMapForInngest = R.mapValues(eventMap, (v) => ({
   data: z.object(v),
 })) as unknown as {
   [k in keyof typeof eventMap]: {
-    data: z.ZodObject<(typeof eventMap)[k]>
+    data: Z.ZodObject<(typeof eventMap)[k]>
   }
 }
 
@@ -98,12 +98,12 @@ export const zEvent = z.discriminatedUnion(
     z.object({name: z.literal(name), data: z.object(props)}),
   ) as unknown as NonEmptyArray<
     {
-      [k in keyof typeof eventMap]: z.ZodObject<{
-        name: z.ZodLiteral<k>
-        data: z.ZodObject<(typeof eventMap)[k]>
+      [k in keyof typeof eventMap]: Z.ZodObject<{
+        name: Z.ZodLiteral<k>
+        data: Z.ZodObject<(typeof eventMap)[k]>
       }>
     }[keyof typeof eventMap]
   >,
 )
 
-export type Event = z.infer<typeof zEvent>
+export type Event = Z.infer<typeof zEvent>
