@@ -88,10 +88,8 @@ export function ConnectorConfigList(props: {
 
   const formContext = {
     connectorName: selectedConnector?.display_name ?? '',
-    openint_scopes:
-      selectedConnector?.jsonDef?.auth?.type === 'OAUTH2'
-        ? (selectedConnector?.jsonDef?.auth?.openint_scopes ?? [])
-        : [],
+    openint_scopes: selectedConnector?.openint_scopes ?? [],
+    scopes: selectedConnector?.scopes ?? [],
   }
 
   const connectorColumns: Array<

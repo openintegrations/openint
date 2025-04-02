@@ -86,7 +86,16 @@ export const zConnector = z.object({
       zJSONSchema,
     )
     .optional(),
-  jsonDef: zJsonConnectorDef.optional(),
+  openint_scopes: z.array(z.string()).optional(),
+  scopes: z
+    .array(
+      z.object({
+        scope: z.string(),
+        display_name: z.string().optional(),
+        description: z.string().optional(),
+      }),
+    )
+    .optional(),
 })
 
 export const getConnectorModel = (
@@ -111,7 +120,14 @@ export const getConnectorModel = (
   schemas: opts.includeSchemas
     ? jsonSchemasForConnectorSchemas(def.schemas)
     : undefined,
-  jsonDef: def.metadata?.jsonDef,
+  openint_scopes:
+    def.metadata?.jsonDef?.auth.type === 'OAUTH2'
+      ? def.metadata?.jsonDef?.auth.openint_scopes
+      : undefined,
+  scopes:
+    def.metadata?.jsonDef?.auth.type === 'OAUTH2'
+      ? def.metadata?.jsonDef?.auth.scopes
+      : undefined,
 })
 
 export function jsonSchemasForConnectorSchemas<T extends ConnectorSchemas>(
