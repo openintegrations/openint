@@ -60,7 +60,7 @@ const config = {
       exclude: [
         ...(config.optimizeDeps?.exclude ?? []),
         '@electric-sql/pglite',
-        // 'zod', If we run into errors related to ZodTypeDef not found, uncomment me
+        // 'zod', // If we run into errors related to ZodTypeDef not found, uncomment me
       ],
     }
 

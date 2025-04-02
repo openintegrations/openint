@@ -6,7 +6,6 @@ const meta: Meta<typeof JSONSchemaForm> = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
 }
 
 export default meta

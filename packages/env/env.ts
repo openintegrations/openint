@@ -1,6 +1,8 @@
-import {z} from '@openint/util/zod-utils'
 import {createEnv} from '@t3-oss/env-nextjs'
+import {z} from '@openint/util/zod-utils'
 import {proxyRequired} from './proxyRequired'
+
+// TODO: Remove the dep on @t3-oss as it causes all sorts of issues with zod
 
 export const envConfig = {
   server: {
