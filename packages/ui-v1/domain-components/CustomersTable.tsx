@@ -6,6 +6,7 @@ import {CustomerTableCell} from '../components/CustomerTableCell'
 import type {ColumnDef} from '../components/DataTable'
 import {DataTable} from '../components/DataTable'
 import {Icon} from '../components/Icon'
+import {formatIsoDateString} from '../utils'
 
 // Define the Customer data structure based on the image
 export interface Customer {
@@ -65,7 +66,9 @@ export const columns: Array<ColumnDef<Customer>> = [
     header: 'First Created',
     accessorKey: 'firstCreated',
     cell: ({row}) => (
-      <div className="text-gray-500">{row.original.firstCreated}</div>
+      <div className="text-gray-500">
+        {formatIsoDateString(row.original.firstCreated)}
+      </div>
     ),
   },
   {

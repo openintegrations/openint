@@ -53,6 +53,7 @@ export function EventsList(props: {
       <DataTable<Event, string | number | string[]>
         data={eventData.data.items.map((event) => ({
           ...event,
+          // TODO: move to new EvenTable component and call formatIsoDateString util
           timestamp: new Date(event.timestamp)
             .toLocaleString('en-US', {
               month: 'short',

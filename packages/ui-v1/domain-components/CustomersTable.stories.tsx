@@ -5,49 +5,24 @@ import {columns, Customer, CustomersTable} from './CustomersTable'
 // Sample data for the customers table based on the image
 const customers: Customer[] = [
   {
-    id: '101',
+    id: Math.random().toString(36).substring(2, 10),
     connectionsCount: 472,
-    firstCreated: 'May 12, 2025',
+    firstCreated: new Date('2025-05-12').toISOString(),
   },
   {
-    id: '102',
+    id: Math.random().toString(36).substring(2, 10),
     connectionsCount: 238,
-    firstCreated: 'May 12, 2025',
+    firstCreated: new Date('2025-05-12').toISOString(),
   },
   {
-    id: '103',
+    id: Math.random().toString(36).substring(2, 10),
     connectionsCount: 184,
-    firstCreated: 'May 12, 2025',
+    firstCreated: new Date('2025-05-12').toISOString(),
   },
   {
-    id: '104',
+    id: Math.random().toString(36).substring(2, 10),
     connectionsCount: 95,
-    firstCreated: 'May 12, 2025',
-  },
-  {
-    id: '105',
-    connectionsCount: 312,
-    firstCreated: 'May 12, 2025',
-  },
-  {
-    id: '106',
-    connectionsCount: 156,
-    firstCreated: 'May 12, 2025',
-  },
-  {
-    id: '107',
-    connectionsCount: 67,
-    firstCreated: 'May 12, 2025',
-  },
-  {
-    id: '108',
-    connectionsCount: 43,
-    firstCreated: 'May 12, 2025',
-  },
-  {
-    id: '109',
-    connectionsCount: 128,
-    firstCreated: 'May 12, 2025',
+    firstCreated: new Date('2025-05-12').toISOString(),
   },
 ]
 
