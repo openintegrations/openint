@@ -3,7 +3,7 @@ import {makeId, makeJwtClient, type Id, type Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
-import {makeUlid} from '@openint/util'
+import {makeUlid} from '@openint/util/id-utils'
 
 type Info = Required<typeof values>
 

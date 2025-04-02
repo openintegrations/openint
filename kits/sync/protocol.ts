@@ -3,8 +3,8 @@ import type {
   NoInfer,
   NonDiscriminatedUnion,
   ObjectPartialDeep,
-  rxjs,
-} from '@openint/util'
+} from '@openint/util/type-utils'
+import {rxjs} from '@openint/util/observable-utils'
 // HACK ALERT
 import type {ExternalId, Id} from '../cdk/id.types'
 

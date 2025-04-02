@@ -5,7 +5,7 @@ import {useState} from 'react'
 import type {ConnectionExpanded} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Card, CardContent} from '@openint/shadcn/ui'
-import {titleCase} from '@openint/util'
+import {titleCase} from '@openint/util/string-utils'
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded<'integration' | 'connector'>
