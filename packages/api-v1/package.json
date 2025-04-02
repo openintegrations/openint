@@ -19,18 +19,16 @@
     "@openint/events": "workspace:*",
     "@openint/sdk": "0.1.0-alpha.20",
     "@openint/util": "workspace:*",
-    "@trpc/server": "next",
+    "@trpc/server": "^11.0.1",
     "drizzle-zod": "^0.7.0",
     "elysia": "^1.2.12",
     "remeda": "^2.20.1",
-    "trpc-to-openapi": "^2.1.3",
-    "zod": "^3.24.2",
-    "zod-openapi": "^4.2.3"
+    "trpc-to-openapi": "^2.1.3"
   },
   "devDependencies": {
     "@openint/loopback-link": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
-    "@trpc/client": "next",
+    "@trpc/client": "^11.0.1",
     "bun": "^1.2.4",
     "bun-types": "^1.2.4",
     "bunx": "^0.1.0",

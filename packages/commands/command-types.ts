@@ -1,4 +1,4 @@
-import type {z} from '@openint/util'
+import type {z} from '@openint/util/zod-utils'
 // Hack alert. Figure out how to straighten the dependencies out
 import type {IconName} from '../ui-v1/components/Icon'
 

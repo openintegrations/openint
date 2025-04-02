@@ -11,13 +11,13 @@ import type {RegistryWidgetsType} from '@rjsf/utils'
 import {type RJSFSchema} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
-import type {z} from 'zod'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   transformJSONSchema,
   zodToOas31Schema,
   type Oas31Schema,
 } from '@openint/util/schema'
+import type {z} from '@openint/util/zod-utils'
 import {fields} from './fields'
 import {jsonSchemaToUiSchema} from './jsonSchemaToUiSchema'
 import {widgets} from './widgets'

@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {schema, sql} from '@openint/db'

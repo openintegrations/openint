@@ -19,14 +19,12 @@
     "@rjsf/validator-ajv8": "5.6.2",
     "@tanstack/react-query": "^5.67.2",
     "@tanstack/react-table": "^8.21.2",
-    "@trpc/client": "next",
-    "@trpc/tanstack-react-query": "next",
+    "@trpc/client": "^11.0.1",
+    "@trpc/tanstack-react-query": "^11.0.1",
     "lucide-react": "^0.482.0",
     "next": "15.2.3",
     "react": "^19.0.0",
-    "sonner": "^1.4.0",
-    "zod": "^3.24.2",
-    "zod-openapi": "^4.2.3"
+    "sonner": "^1.4.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",
@@ -57,5 +55,8 @@
     "tailwindcss-radix": "^4.0.2",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.0.8"
+  },
+  "peerDependencies": {
+    "zod-openapi": "^4.2.4"
   }
 }

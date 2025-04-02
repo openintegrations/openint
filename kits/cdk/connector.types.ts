@@ -1,5 +1,5 @@
 import type {Link as FetchLink} from '@opensdks/runtime'
-import type {z} from '@opensdks/util-zod'
+import type {z} from '@openint/util/zod-utils'
 import type {
   AnyEntityPayload,
   ConnectionUpdateData,

@@ -1,4 +1,4 @@
-import {z} from '@opensdks/util-zod'
+import {z} from '@openint/util/zod-utils'
 import type {
   NoInfer,
   NonDiscriminatedUnion,

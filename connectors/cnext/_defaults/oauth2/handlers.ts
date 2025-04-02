@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {oauth2Schemas, zOAuthConfig} from './def'
 import {mapOauthParams, prepareScopes} from './utils'
 

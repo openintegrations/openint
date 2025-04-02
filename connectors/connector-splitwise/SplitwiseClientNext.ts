@@ -1,5 +1,6 @@
 import type {HTTPError} from '@openint/util'
-import {createHTTPClient, OAuth2Client, z, zFunction} from '@openint/util'
+import {createHTTPClient, OAuth2Client, zFunction} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 import type {zCurrentUser, zExpense, zGroup} from './splitwise-schema'
 import {zExpensesParams} from './splitwise-schema'
 

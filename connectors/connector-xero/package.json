@@ -8,8 +8,7 @@
     "@openint/cdk": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/runtime": "^0.0.19",
-    "@opensdks/sdk-xero": "^0.0.7",
-    "@opensdks/util-zod": "^0.0.16"
+    "@opensdks/sdk-xero": "^0.0.7"
   },
   "devDependencies": {}
 }

@@ -1,5 +1,5 @@
 import {zId} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 import {executeCommand, filterCommands, prepareCommands} from './command-fns'
 import type {CommandDefinitionMap} from './command-types'
 

@@ -14,8 +14,7 @@
     "@opensdks/sdk-plaid": "^0.0.19",
     "@t3-oss/env-core": "0.7.3",
     "plaid": "12.3.0",
-    "react-plaid-link": "3.3.2",
-    "zod": "^3.24.2"
+    "react-plaid-link": "3.3.2"
   },
   "devDependencies": {
     "@types/react": "*",

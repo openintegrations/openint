@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 
 import {zEnvVars, zFlattenForEnv} from './env-utils'
 import {zParser} from './zod-utils'

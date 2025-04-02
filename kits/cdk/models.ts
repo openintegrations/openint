@@ -1,4 +1,4 @@
-import {z} from '@opensdks/util-zod'
+import {z} from '@openint/util/zod-utils'
 import {zCustomerId, zId, zUserId} from './id.types'
 import {zVerticalKey} from './verticals'
 

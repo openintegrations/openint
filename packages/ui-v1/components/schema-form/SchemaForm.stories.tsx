@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {Meta, StoryObj} from '@storybook/react'
-import {z} from 'zod'
-import {extendZodWithOpenApi} from 'zod-openapi'
 // TODO: Fix cnext to put def and server in separate files...
 // import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zodToOas31Schema} from '@openint/util/schema'
+import {z} from '@openint/util/zod-utils'
 import {JSONSchemaForm, ZodSchemaForm} from './SchemaForm'
 
 const meta: Meta<typeof ZodSchemaForm> = {
@@ -18,8 +17,6 @@ const meta: Meta<typeof ZodSchemaForm> = {
 
 export default meta
 type Story = StoryObj<typeof meta>
-
-extendZodWithOpenApi(z)
 
 // Simple example with email and password fields
 export const JsonSchema: Story = {

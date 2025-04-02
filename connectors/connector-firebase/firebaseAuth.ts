@@ -4,7 +4,8 @@ import 'firebase/compat/auth'
 import 'firebase/compat/firestore'
 import {UserImpl} from '@firebase/auth/internal'
 import firebase from 'firebase/compat/app'
-import {z, zFunction} from '@openint/util'
+import {zFunction} from '@openint/util/zod-function-utils'
+import {z} from '@openint/util/zod-utils'
 import {zAuthData, zFirebaseConfig} from './def'
 
 export const makeFirebaseAuth = zFunction(zFirebaseConfig, (config) => {

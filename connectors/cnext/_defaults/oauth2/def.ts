@@ -1,5 +1,5 @@
-import {z} from 'zod'
 import {ConnectorSchemas} from '@openint/cdk'
+import {z} from '@openint/util/zod-utils'
 
 const zOauthConnectorConfig = z
   .object({
