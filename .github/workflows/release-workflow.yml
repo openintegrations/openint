@@ -188,10 +188,12 @@ jobs:
           pnpm gen:docs-oas
           cd ..
 
-      - name: Update production branch
+      - name: Update main & production branches
+        env:
+          GH_TOKEN: ${{ secrets.AP_GH_PAT }}
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
+          git config user.name "Amadeo Pellicce (Automated PR)"
+          git config user.email "pellicceama@gmail.com"
           git fetch 
 
           # Add all generated files
@@ -218,7 +220,7 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
-          deployment-url: openint-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
+          deployment-url: v1-git-main-openint-dev.vercel.app # TODO Replace by the domain you want to test
           timeout: 10 # Wait for 10 seconds before failing
           poll-interval: 1 # Wait for 1 second before each retry
 

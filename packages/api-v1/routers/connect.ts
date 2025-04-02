@@ -16,6 +16,7 @@ export const connectRouter = router({
       openapi: {
         method: 'POST',
         path: '/connect/pre-connect',
+        enabled: false,
       },
     })
     .input(

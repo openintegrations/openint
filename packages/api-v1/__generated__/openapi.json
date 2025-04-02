@@ -13,8 +13,8 @@
     "/connector": {
       "get": {
         "operationId": "listConnectors",
-        "summary": "List all connectors",
-        "description": "List all connectors with optional filtering",
+        "summary": "List Connectors",
+        "description": "List all connectors to understand what integrations are available to configure",
         "security": [
           {
             "ApiKey": []
@@ -1056,6 +1056,8 @@
       },
       "delete": {
         "operationId": "deleteConnection",
+        "summary": "Delete Connection",
+        "description": "Delete a connection",
         "security": [
           {
             "ApiKey": []
@@ -1700,6 +1702,7 @@
       },
       "post": {
         "operationId": "createConnection",
+        "summary": "Create Connection",
         "description": "Import an existing connection after validation",
         "security": [
           {
@@ -2148,604 +2151,6 @@
         }
       }
     },
-    "/connect/pre-connect": {
-      "post": {
-        "operationId": "preConnect",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "description": "Must correspond to data.connector_name.\nTechnically id should imply connector_name already but there is no way to\nspecify a discriminated union with id alone."
-                  },
-                  "options": {
-                    "type": "object",
-                    "properties": {
-                      "integrationExternalId": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "number"
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
-                      },
-                      "connectionExternalId": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "number"
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  "data": {
-                    "oneOf": [
-                      {
-                        "$ref": "#/components/schemas/connectors.aircall.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.airtable.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.apollo.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.brex.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.coda.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.confluence.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.discord.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.facebook.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.finch.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.firebase.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.foreceipt.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.github.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.gong.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.googlecalendar.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.googledocs.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.googledrive.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.googlemail.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.googlesheet.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.greenhouse.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.heron.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.hubspot.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.instagram.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.intercom.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.jira.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.kustomer.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.lever.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.linear.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.linkedin.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.lunchmoney.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.mercury.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.merge.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.microsoft.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.moota.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.notion.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.onebrick.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.outreach.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.pipedrive.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.plaid.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.postgres.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.quickbooks.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.ramp.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.reddit.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.salesforce.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.salesloft.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.saltedge.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.sharepointonline.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.slack.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.splitwise.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.stripe.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.teller.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.toggl.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.twenty.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.twitter.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.venmo.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.wise.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.xero.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.yodlee.preConnectInput"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connectors.zohodesk.preConnectInput"
-                      }
-                    ],
-                    "discriminator": {
-                      "propertyName": "connector_name",
-                      "mapping": {
-                        "aircall": "#/components/schemas/connectors.aircall.preConnectInput",
-                        "airtable": "#/components/schemas/connectors.airtable.preConnectInput",
-                        "apollo": "#/components/schemas/connectors.apollo.preConnectInput",
-                        "brex": "#/components/schemas/connectors.brex.preConnectInput",
-                        "coda": "#/components/schemas/connectors.coda.preConnectInput",
-                        "confluence": "#/components/schemas/connectors.confluence.preConnectInput",
-                        "discord": "#/components/schemas/connectors.discord.preConnectInput",
-                        "facebook": "#/components/schemas/connectors.facebook.preConnectInput",
-                        "finch": "#/components/schemas/connectors.finch.preConnectInput",
-                        "firebase": "#/components/schemas/connectors.firebase.preConnectInput",
-                        "foreceipt": "#/components/schemas/connectors.foreceipt.preConnectInput",
-                        "github": "#/components/schemas/connectors.github.preConnectInput",
-                        "gong": "#/components/schemas/connectors.gong.preConnectInput",
-                        "googlecalendar": "#/components/schemas/connectors.googlecalendar.preConnectInput",
-                        "googledocs": "#/components/schemas/connectors.googledocs.preConnectInput",
-                        "googledrive": "#/components/schemas/connectors.googledrive.preConnectInput",
-                        "googlemail": "#/components/schemas/connectors.googlemail.preConnectInput",
-                        "googlesheet": "#/components/schemas/connectors.googlesheet.preConnectInput",
-                        "greenhouse": "#/components/schemas/connectors.greenhouse.preConnectInput",
-                        "heron": "#/components/schemas/connectors.heron.preConnectInput",
-                        "hubspot": "#/components/schemas/connectors.hubspot.preConnectInput",
-                        "instagram": "#/components/schemas/connectors.instagram.preConnectInput",
-                        "intercom": "#/components/schemas/connectors.intercom.preConnectInput",
-                        "jira": "#/components/schemas/connectors.jira.preConnectInput",
-                        "kustomer": "#/components/schemas/connectors.kustomer.preConnectInput",
-                        "lever": "#/components/schemas/connectors.lever.preConnectInput",
-                        "linear": "#/components/schemas/connectors.linear.preConnectInput",
-                        "linkedin": "#/components/schemas/connectors.linkedin.preConnectInput",
-                        "lunchmoney": "#/components/schemas/connectors.lunchmoney.preConnectInput",
-                        "mercury": "#/components/schemas/connectors.mercury.preConnectInput",
-                        "merge": "#/components/schemas/connectors.merge.preConnectInput",
-                        "microsoft": "#/components/schemas/connectors.microsoft.preConnectInput",
-                        "moota": "#/components/schemas/connectors.moota.preConnectInput",
-                        "notion": "#/components/schemas/connectors.notion.preConnectInput",
-                        "onebrick": "#/components/schemas/connectors.onebrick.preConnectInput",
-                        "outreach": "#/components/schemas/connectors.outreach.preConnectInput",
-                        "pipedrive": "#/components/schemas/connectors.pipedrive.preConnectInput",
-                        "plaid": "#/components/schemas/connectors.plaid.preConnectInput",
-                        "postgres": "#/components/schemas/connectors.postgres.preConnectInput",
-                        "quickbooks": "#/components/schemas/connectors.quickbooks.preConnectInput",
-                        "ramp": "#/components/schemas/connectors.ramp.preConnectInput",
-                        "reddit": "#/components/schemas/connectors.reddit.preConnectInput",
-                        "salesforce": "#/components/schemas/connectors.salesforce.preConnectInput",
-                        "salesloft": "#/components/schemas/connectors.salesloft.preConnectInput",
-                        "saltedge": "#/components/schemas/connectors.saltedge.preConnectInput",
-                        "sharepointonline": "#/components/schemas/connectors.sharepointonline.preConnectInput",
-                        "slack": "#/components/schemas/connectors.slack.preConnectInput",
-                        "splitwise": "#/components/schemas/connectors.splitwise.preConnectInput",
-                        "stripe": "#/components/schemas/connectors.stripe.preConnectInput",
-                        "teller": "#/components/schemas/connectors.teller.preConnectInput",
-                        "toggl": "#/components/schemas/connectors.toggl.preConnectInput",
-                        "twenty": "#/components/schemas/connectors.twenty.preConnectInput",
-                        "twitter": "#/components/schemas/connectors.twitter.preConnectInput",
-                        "venmo": "#/components/schemas/connectors.venmo.preConnectInput",
-                        "wise": "#/components/schemas/connectors.wise.preConnectInput",
-                        "xero": "#/components/schemas/connectors.xero.preConnectInput",
-                        "yodlee": "#/components/schemas/connectors.yodlee.preConnectInput",
-                        "zohodesk": "#/components/schemas/connectors.zohodesk.preConnectInput"
-                      }
-                    },
-                    "description": "Connector specific data"
-                  }
-                },
-                "required": [
-                  "id",
-                  "options",
-                  "data"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/connectors.aircall.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.airtable.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.apollo.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.brex.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.coda.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.confluence.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.discord.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.facebook.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.finch.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.firebase.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.foreceipt.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.github.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.gong.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.googlecalendar.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.googledocs.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.googledrive.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.googlemail.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.googlesheet.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.greenhouse.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.heron.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.hubspot.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.instagram.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.intercom.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.jira.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.kustomer.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.lever.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.linear.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.linkedin.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.lunchmoney.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.mercury.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.merge.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.microsoft.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.moota.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.notion.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.onebrick.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.outreach.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.pipedrive.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.plaid.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.postgres.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.quickbooks.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.ramp.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.reddit.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.salesforce.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.salesloft.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.saltedge.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.sharepointonline.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.slack.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.splitwise.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.stripe.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.teller.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.toggl.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.twenty.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.twitter.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.venmo.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.wise.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.xero.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.yodlee.connectInput"
-                    },
-                    {
-                      "$ref": "#/components/schemas/connectors.zohodesk.connectInput"
-                    }
-                  ],
-                  "discriminator": {
-                    "propertyName": "connector_name",
-                    "mapping": {
-                      "aircall": "#/components/schemas/connectors.aircall.connectInput",
-                      "airtable": "#/components/schemas/connectors.airtable.connectInput",
-                      "apollo": "#/components/schemas/connectors.apollo.connectInput",
-                      "brex": "#/components/schemas/connectors.brex.connectInput",
-                      "coda": "#/components/schemas/connectors.coda.connectInput",
-                      "confluence": "#/components/schemas/connectors.confluence.connectInput",
-                      "discord": "#/components/schemas/connectors.discord.connectInput",
-                      "facebook": "#/components/schemas/connectors.facebook.connectInput",
-                      "finch": "#/components/schemas/connectors.finch.connectInput",
-                      "firebase": "#/components/schemas/connectors.firebase.connectInput",
-                      "foreceipt": "#/components/schemas/connectors.foreceipt.connectInput",
-                      "github": "#/components/schemas/connectors.github.connectInput",
-                      "gong": "#/components/schemas/connectors.gong.connectInput",
-                      "googlecalendar": "#/components/schemas/connectors.googlecalendar.connectInput",
-                      "googledocs": "#/components/schemas/connectors.googledocs.connectInput",
-                      "googledrive": "#/components/schemas/connectors.googledrive.connectInput",
-                      "googlemail": "#/components/schemas/connectors.googlemail.connectInput",
-                      "googlesheet": "#/components/schemas/connectors.googlesheet.connectInput",
-                      "greenhouse": "#/components/schemas/connectors.greenhouse.connectInput",
-                      "heron": "#/components/schemas/connectors.heron.connectInput",
-                      "hubspot": "#/components/schemas/connectors.hubspot.connectInput",
-                      "instagram": "#/components/schemas/connectors.instagram.connectInput",
-                      "intercom": "#/components/schemas/connectors.intercom.connectInput",
-                      "jira": "#/components/schemas/connectors.jira.connectInput",
-                      "kustomer": "#/components/schemas/connectors.kustomer.connectInput",
-                      "lever": "#/components/schemas/connectors.lever.connectInput",
-                      "linear": "#/components/schemas/connectors.linear.connectInput",
-                      "linkedin": "#/components/schemas/connectors.linkedin.connectInput",
-                      "lunchmoney": "#/components/schemas/connectors.lunchmoney.connectInput",
-                      "mercury": "#/components/schemas/connectors.mercury.connectInput",
-                      "merge": "#/components/schemas/connectors.merge.connectInput",
-                      "microsoft": "#/components/schemas/connectors.microsoft.connectInput",
-                      "moota": "#/components/schemas/connectors.moota.connectInput",
-                      "notion": "#/components/schemas/connectors.notion.connectInput",
-                      "onebrick": "#/components/schemas/connectors.onebrick.connectInput",
-                      "outreach": "#/components/schemas/connectors.outreach.connectInput",
-                      "pipedrive": "#/components/schemas/connectors.pipedrive.connectInput",
-                      "plaid": "#/components/schemas/connectors.plaid.connectInput",
-                      "postgres": "#/components/schemas/connectors.postgres.connectInput",
-                      "quickbooks": "#/components/schemas/connectors.quickbooks.connectInput",
-                      "ramp": "#/components/schemas/connectors.ramp.connectInput",
-                      "reddit": "#/components/schemas/connectors.reddit.connectInput",
-                      "salesforce": "#/components/schemas/connectors.salesforce.connectInput",
-                      "salesloft": "#/components/schemas/connectors.salesloft.connectInput",
-                      "saltedge": "#/components/schemas/connectors.saltedge.connectInput",
-                      "sharepointonline": "#/components/schemas/connectors.sharepointonline.connectInput",
-                      "slack": "#/components/schemas/connectors.slack.connectInput",
-                      "splitwise": "#/components/schemas/connectors.splitwise.connectInput",
-                      "stripe": "#/components/schemas/connectors.stripe.connectInput",
-                      "teller": "#/components/schemas/connectors.teller.connectInput",
-                      "toggl": "#/components/schemas/connectors.toggl.connectInput",
-                      "twenty": "#/components/schemas/connectors.twenty.connectInput",
-                      "twitter": "#/components/schemas/connectors.twitter.connectInput",
-                      "venmo": "#/components/schemas/connectors.venmo.connectInput",
-                      "wise": "#/components/schemas/connectors.wise.connectInput",
-                      "xero": "#/components/schemas/connectors.xero.connectInput",
-                      "yodlee": "#/components/schemas/connectors.yodlee.connectInput",
-                      "zohodesk": "#/components/schemas/connectors.zohodesk.connectInput"
-                    }
-                  },
-                  "description": "Connector specific data"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/customer/{customer_id}/magic-link": {
       "post": {
         "operationId": "createMagicLink",
@@ -3052,150 +2457,6 @@
         }
       }
     },
-    "/customers": {
-      "get": {
-        "operationId": "listCustomers",
-        "summary": "List Customers",
-        "description": "List all customers",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "limit",
-            "description": "Limit the number of items returned",
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 100,
-              "default": 50,
-              "description": "Limit the number of items returned"
-            }
-          },
-          {
-            "in": "query",
-            "name": "offset",
-            "description": "Offset the items returned",
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "description": "Offset the items returned"
-            }
-          },
-          {
-            "in": "query",
-            "name": "keywords",
-            "schema": {
-              "type": [
-                "string",
-                "null"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/core.customer"
-                      }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "description": "Total number of items in the database for the organization"
-                    },
-                    "limit": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 100,
-                      "default": 50,
-                      "description": "Limit the number of items returned"
-                    },
-                    "offset": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "default": 0,
-                      "description": "Offset the items returned"
-                    }
-                  },
-                  "required": [
-                    "items",
-                    "total",
-                    "limit",
-                    "offset"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/health": {
       "get": {
         "operationId": "health",
@@ -3433,31 +2694,6 @@
         ],
         "title": "AuthMode"
       },
-      "connectors.aircall.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "aircall"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "aircall"
-      },
       "connectors.aircall.connectionSettings": {
         "type": "object",
         "properties": {
@@ -3596,40 +2832,6 @@
         ],
         "title": "aircall"
       },
-      "connectors.aircall.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "aircall"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "aircall"
-      },
-      "connectors.airtable.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "airtable"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "airtable"
-      },
       "connectors.airtable.connectionSettings": {
         "type": "object",
         "properties": {
@@ -3675,40 +2877,6 @@
           "config"
         ],
         "title": "airtable"
-      },
-      "connectors.airtable.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "airtable"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "airtable"
-      },
-      "connectors.apollo.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "apollo"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "apollo"
       },
       "connectors.apollo.connectionSettings": {
         "type": "object",
@@ -3884,40 +3052,6 @@
         ],
         "title": "apollo"
       },
-      "connectors.apollo.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "apollo"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "apollo"
-      },
-      "connectors.brex.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "brex"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "brex"
-      },
       "connectors.brex.connectionSettings": {
         "type": "object",
         "properties": {
@@ -3991,40 +3125,6 @@
         ],
         "title": "brex"
       },
-      "connectors.brex.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "brex"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "brex"
-      },
-      "connectors.coda.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "coda"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "coda"
-      },
       "connectors.coda.connectionSettings": {
         "type": "object",
         "properties": {
@@ -4066,48 +3166,6 @@
           "config"
         ],
         "title": "coda"
-      },
-      "connectors.coda.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "coda"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "coda"
-      },
-      "connectors.confluence.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "confluence"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "confluence"
       },
       "connectors.confluence.connectionSettings": {
         "type": "object",
@@ -4247,48 +3305,6 @@
         ],
         "title": "confluence"
       },
-      "connectors.confluence.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "confluence"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "confluence"
-      },
-      "connectors.discord.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "discord"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "discord"
-      },
       "connectors.discord.connectionSettings": {
         "type": "object",
         "properties": {
@@ -4426,40 +3442,6 @@
           "config"
         ],
         "title": "discord"
-      },
-      "connectors.discord.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "discord"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "discord"
-      },
-      "connectors.facebook.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "facebook"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "facebook"
       },
       "connectors.facebook.connectionSettings": {
         "type": "object",
@@ -4658,65 +3640,6 @@
         ],
         "title": "facebook"
       },
-      "connectors.facebook.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "facebook"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "facebook"
-      },
-      "connectors.finch.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "finch"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "client_id": {
-                "type": "string"
-              },
-              "products": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "enum": [
-                    "company",
-                    "directory",
-                    "individual",
-                    "ssn",
-                    "employment",
-                    "payment",
-                    "pay_statement",
-                    "benefits"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "client_id",
-              "products"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "finch"
-      },
       "connectors.finch.connectionSettings": {
         "type": "object",
         "properties": {
@@ -4792,45 +3715,6 @@
           "config"
         ],
         "title": "finch"
-      },
-      "connectors.finch.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "finch"
-          },
-          "input": {
-            "type": "object",
-            "properties": {
-              "state": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "finch"
-      },
-      "connectors.firebase.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "firebase"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "firebase"
       },
       "connectors.firebase.connectionSettings": {
         "type": "object",
@@ -5016,54 +3900,6 @@
         ],
         "title": "firebase"
       },
-      "connectors.firebase.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "firebase"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "firebase"
-      },
-      "connectors.foreceipt.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "foreceipt"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "credentials": {},
-              "_id": {},
-              "envName": {
-                "type": "string",
-                "enum": [
-                  "staging",
-                  "production"
-                ]
-              }
-            },
-            "required": [
-              "envName"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "foreceipt"
-      },
       "connectors.foreceipt.connectionSettings": {
         "type": "object",
         "properties": {
@@ -5111,48 +3947,6 @@
           "config"
         ],
         "title": "foreceipt"
-      },
-      "connectors.foreceipt.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "foreceipt"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "foreceipt"
-      },
-      "connectors.github.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "github"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "github"
       },
       "connectors.github.connectionSettings": {
         "type": "object",
@@ -5291,40 +4085,6 @@
           "config"
         ],
         "title": "github"
-      },
-      "connectors.github.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "github"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "github"
-      },
-      "connectors.gong.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "gong"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "gong"
       },
       "connectors.gong.connectionSettings": {
         "type": "object",
@@ -5523,48 +4283,6 @@
         ],
         "title": "gong"
       },
-      "connectors.gong.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "gong"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "gong"
-      },
-      "connectors.googlecalendar.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googlecalendar"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "googlecalendar"
-      },
       "connectors.googlecalendar.connectionSettings": {
         "type": "object",
         "properties": {
@@ -5702,48 +4420,6 @@
           "config"
         ],
         "title": "googlecalendar"
-      },
-      "connectors.googlecalendar.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googlecalendar"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "googlecalendar"
-      },
-      "connectors.googledocs.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googledocs"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "googledocs"
       },
       "connectors.googledocs.connectionSettings": {
         "type": "object",
@@ -5883,48 +4559,6 @@
         ],
         "title": "googledocs"
       },
-      "connectors.googledocs.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googledocs"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "googledocs"
-      },
-      "connectors.googledrive.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googledrive"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "googledrive"
-      },
       "connectors.googledrive.connectionSettings": {
         "type": "object",
         "properties": {
@@ -6062,48 +4696,6 @@
           "config"
         ],
         "title": "googledrive"
-      },
-      "connectors.googledrive.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googledrive"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "googledrive"
-      },
-      "connectors.googlemail.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googlemail"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "googlemail"
       },
       "connectors.googlemail.connectionSettings": {
         "type": "object",
@@ -6243,48 +4835,6 @@
         ],
         "title": "googlemail"
       },
-      "connectors.googlemail.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googlemail"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "googlemail"
-      },
-      "connectors.googlesheet.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googlesheet"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "googlesheet"
-      },
       "connectors.googlesheet.connectionSettings": {
         "type": "object",
         "properties": {
@@ -6423,37 +4973,6 @@
         ],
         "title": "googlesheet"
       },
-      "connectors.googlesheet.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "googlesheet"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "googlesheet"
-      },
-      "connectors.greenhouse.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "greenhouse"
-          },
-          "output": {}
-        },
-        "required": [
-          "connector_name"
-        ],
-        "title": "greenhouse"
-      },
       "connectors.greenhouse.connectionSettings": {
         "type": "object",
         "properties": {
@@ -6496,37 +5015,6 @@
         ],
         "title": "greenhouse"
       },
-      "connectors.greenhouse.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "greenhouse"
-          },
-          "input": {}
-        },
-        "required": [
-          "connector_name"
-        ],
-        "title": "greenhouse"
-      },
-      "connectors.heron.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "heron"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "heron"
-      },
       "connectors.heron.connectionSettings": {
         "type": "object",
         "properties": {
@@ -6568,48 +5056,6 @@
           "config"
         ],
         "title": "heron"
-      },
-      "connectors.heron.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "heron"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "heron"
-      },
-      "connectors.hubspot.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "hubspot"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "hubspot"
       },
       "connectors.hubspot.connectionSettings": {
         "type": "object",
@@ -6748,40 +5194,6 @@
           "config"
         ],
         "title": "hubspot"
-      },
-      "connectors.hubspot.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "hubspot"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "hubspot"
-      },
-      "connectors.instagram.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "instagram"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "instagram"
       },
       "connectors.instagram.connectionSettings": {
         "type": "object",
@@ -6980,40 +5392,6 @@
         ],
         "title": "instagram"
       },
-      "connectors.instagram.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "instagram"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "instagram"
-      },
-      "connectors.intercom.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "intercom"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "intercom"
-      },
       "connectors.intercom.connectionSettings": {
         "type": "object",
         "properties": {
@@ -7210,40 +5588,6 @@
           "config"
         ],
         "title": "intercom"
-      },
-      "connectors.intercom.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "intercom"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "intercom"
-      },
-      "connectors.jira.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "jira"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "jira"
       },
       "connectors.jira.connectionSettings": {
         "type": "object",
@@ -7442,40 +5786,6 @@
         ],
         "title": "jira"
       },
-      "connectors.jira.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "jira"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "jira"
-      },
-      "connectors.kustomer.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "kustomer"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "kustomer"
-      },
       "connectors.kustomer.connectionSettings": {
         "type": "object",
         "properties": {
@@ -7672,40 +5982,6 @@
           "config"
         ],
         "title": "kustomer"
-      },
-      "connectors.kustomer.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "kustomer"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "kustomer"
-      },
-      "connectors.lever.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "lever"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "lever"
       },
       "connectors.lever.connectionSettings": {
         "type": "object",
@@ -7912,48 +6188,6 @@
         ],
         "title": "lever"
       },
-      "connectors.lever.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "lever"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "lever"
-      },
-      "connectors.linear.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "linear"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "linear"
-      },
       "connectors.linear.connectionSettings": {
         "type": "object",
         "properties": {
@@ -8091,48 +6325,6 @@
           "config"
         ],
         "title": "linear"
-      },
-      "connectors.linear.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "linear"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "linear"
-      },
-      "connectors.linkedin.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "linkedin"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "linkedin"
       },
       "connectors.linkedin.connectionSettings": {
         "type": "object",
@@ -8272,40 +6464,6 @@
         ],
         "title": "linkedin"
       },
-      "connectors.linkedin.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "linkedin"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "linkedin"
-      },
-      "connectors.lunchmoney.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "lunchmoney"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "lunchmoney"
-      },
       "connectors.lunchmoney.connectionSettings": {
         "type": "object",
         "properties": {
@@ -8347,40 +6505,6 @@
           "config"
         ],
         "title": "lunchmoney"
-      },
-      "connectors.lunchmoney.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "lunchmoney"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "lunchmoney"
-      },
-      "connectors.mercury.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "mercury"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "mercury"
       },
       "connectors.mercury.connectionSettings": {
         "type": "object",
@@ -8447,48 +6571,6 @@
         ],
         "title": "mercury"
       },
-      "connectors.mercury.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "mercury"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "mercury"
-      },
-      "connectors.merge.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "merge"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "link_token": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "link_token"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "merge"
-      },
       "connectors.merge.connectionSettings": {
         "type": "object",
         "properties": {
@@ -8539,55 +6621,6 @@
           "config"
         ],
         "title": "merge"
-      },
-      "connectors.merge.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "merge"
-          },
-          "input": {
-            "type": "object",
-            "properties": {
-              "categories": {
-                "type": "array",
-                "items": {}
-              },
-              "customer_email_address": {
-                "type": "string"
-              },
-              "customer_organization_name": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "categories"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "merge"
-      },
-      "connectors.microsoft.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "microsoft"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "microsoft"
       },
       "connectors.microsoft.connectionSettings": {
         "type": "object",
@@ -8832,40 +6865,6 @@
         ],
         "title": "microsoft"
       },
-      "connectors.microsoft.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "microsoft"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "microsoft"
-      },
-      "connectors.moota.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "moota"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "moota"
-      },
       "connectors.moota.connectionSettings": {
         "type": "object",
         "properties": {
@@ -8907,48 +6906,6 @@
           "config"
         ],
         "title": "moota"
-      },
-      "connectors.moota.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "moota"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "moota"
-      },
-      "connectors.notion.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "notion"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "notion"
       },
       "connectors.notion.connectionSettings": {
         "type": "object",
@@ -9088,54 +7045,6 @@
         ],
         "title": "notion"
       },
-      "connectors.notion.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "notion"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "notion"
-      },
-      "connectors.onebrick.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "onebrick"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "publicToken": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "redirect_url": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              }
-            }
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "onebrick"
-      },
       "connectors.onebrick.connectionSettings": {
         "type": "object",
         "properties": {
@@ -9213,40 +7122,6 @@
           "config"
         ],
         "title": "onebrick"
-      },
-      "connectors.onebrick.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "onebrick"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "onebrick"
-      },
-      "connectors.outreach.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "outreach"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "outreach"
       },
       "connectors.outreach.connectionSettings": {
         "type": "object",
@@ -9445,40 +7320,6 @@
         ],
         "title": "outreach"
       },
-      "connectors.outreach.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "outreach"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "outreach"
-      },
-      "connectors.pipedrive.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "pipedrive"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "pipedrive"
-      },
       "connectors.pipedrive.connectionSettings": {
         "type": "object",
         "properties": {
@@ -9676,63 +7517,6 @@
         ],
         "title": "pipedrive"
       },
-      "connectors.pipedrive.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "pipedrive"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "pipedrive"
-      },
-      "connectors.plaid.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "plaid"
-          },
-          "output": {
-            "anyOf": [
-              {
-                "type": "object",
-                "properties": {
-                  "link_token": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "link_token"
-                ]
-              },
-              {
-                "type": "object",
-                "properties": {
-                  "public_token": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "public_token"
-                ]
-              }
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "plaid"
-      },
       "connectors.plaid.connectionSettings": {
         "type": "object",
         "properties": {
@@ -9901,55 +7685,6 @@
         ],
         "title": "plaid"
       },
-      "connectors.plaid.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "plaid"
-          },
-          "input": {
-            "type": "object",
-            "properties": {
-              "sandboxPublicTokenCreate": {
-                "type": "boolean"
-              },
-              "language": {
-                "type": "string",
-                "enum": [
-                  "en",
-                  "fr",
-                  "es",
-                  "nl",
-                  "de"
-                ]
-              }
-            }
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "plaid"
-      },
-      "connectors.postgres.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "postgres"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "postgres"
-      },
       "connectors.postgres.connectionSettings": {
         "type": "object",
         "properties": {
@@ -10003,48 +7738,6 @@
           "config"
         ],
         "title": "postgres"
-      },
-      "connectors.postgres.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "postgres"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "postgres"
-      },
-      "connectors.quickbooks.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "quickbooks"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "quickbooks"
       },
       "connectors.quickbooks.connectionSettings": {
         "type": "object",
@@ -10190,48 +7883,6 @@
         ],
         "title": "quickbooks"
       },
-      "connectors.quickbooks.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "quickbooks"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "quickbooks"
-      },
-      "connectors.ramp.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "ramp"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "accessToken": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              }
-            }
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "ramp"
-      },
       "connectors.ramp.connectionSettings": {
         "type": "object",
         "properties": {
@@ -10299,40 +7950,6 @@
           "config"
         ],
         "title": "ramp"
-      },
-      "connectors.ramp.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "ramp"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "ramp"
-      },
-      "connectors.reddit.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "reddit"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "reddit"
       },
       "connectors.reddit.connectionSettings": {
         "type": "object",
@@ -10531,48 +8148,6 @@
         ],
         "title": "reddit"
       },
-      "connectors.reddit.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "reddit"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "reddit"
-      },
-      "connectors.salesforce.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "salesforce"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "salesforce"
-      },
       "connectors.salesforce.connectionSettings": {
         "type": "object",
         "properties": {
@@ -10716,40 +8291,6 @@
           "config"
         ],
         "title": "salesforce"
-      },
-      "connectors.salesforce.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "salesforce"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "salesforce"
-      },
-      "connectors.salesloft.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "salesloft"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "salesloft"
       },
       "connectors.salesloft.connectionSettings": {
         "type": "object",
@@ -10948,40 +8489,6 @@
         ],
         "title": "salesloft"
       },
-      "connectors.salesloft.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "salesloft"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "salesloft"
-      },
-      "connectors.saltedge.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "saltedge"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "saltedge"
-      },
       "connectors.saltedge.connectionSettings": {
         "type": "object",
         "properties": {
@@ -11030,48 +8537,6 @@
           "config"
         ],
         "title": "saltedge"
-      },
-      "connectors.saltedge.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "saltedge"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "saltedge"
-      },
-      "connectors.sharepointonline.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "sharepointonline"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "sharepointonline"
       },
       "connectors.sharepointonline.connectionSettings": {
         "type": "object",
@@ -11211,48 +8676,6 @@
         ],
         "title": "sharepointonline"
       },
-      "connectors.sharepointonline.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "sharepointonline"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "sharepointonline"
-      },
-      "connectors.slack.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "slack"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "authorization_url": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "authorization_url"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "slack"
-      },
       "connectors.slack.connectionSettings": {
         "type": "object",
         "properties": {
@@ -11390,40 +8813,6 @@
           "config"
         ],
         "title": "slack"
-      },
-      "connectors.slack.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "slack"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "slack"
-      },
-      "connectors.splitwise.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "splitwise"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "splitwise"
       },
       "connectors.splitwise.connectionSettings": {
         "type": "object",
@@ -11615,40 +9004,6 @@
         ],
         "title": "splitwise"
       },
-      "connectors.splitwise.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "splitwise"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "splitwise"
-      },
-      "connectors.stripe.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "stripe"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "stripe"
-      },
       "connectors.stripe.connectionSettings": {
         "type": "object",
         "properties": {
@@ -11722,54 +9077,6 @@
         ],
         "title": "stripe"
       },
-      "connectors.stripe.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "stripe"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "stripe"
-      },
-      "connectors.teller.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "teller"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "applicationId": {
-                "type": "string"
-              },
-              "userToken": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              }
-            },
-            "required": [
-              "applicationId"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "teller"
-      },
       "connectors.teller.connectionSettings": {
         "type": "object",
         "properties": {
@@ -11826,48 +9133,6 @@
         ],
         "title": "teller"
       },
-      "connectors.teller.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "teller"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "teller"
-      },
-      "connectors.toggl.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "toggl"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "apiToken": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "apiToken"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "toggl"
-      },
       "connectors.toggl.connectionSettings": {
         "type": "object",
         "properties": {
@@ -11922,40 +9187,6 @@
         ],
         "title": "toggl"
       },
-      "connectors.toggl.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "toggl"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "toggl"
-      },
-      "connectors.twenty.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "twenty"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "twenty"
-      },
       "connectors.twenty.connectionSettings": {
         "type": "object",
         "properties": {
@@ -11997,40 +9228,6 @@
           "config"
         ],
         "title": "twenty"
-      },
-      "connectors.twenty.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "twenty"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "twenty"
-      },
-      "connectors.twitter.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "twitter"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "twitter"
       },
       "connectors.twitter.connectionSettings": {
         "type": "object",
@@ -12229,40 +9426,6 @@
         ],
         "title": "twitter"
       },
-      "connectors.twitter.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "twitter"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "twitter"
-      },
-      "connectors.venmo.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "venmo"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "venmo"
-      },
       "connectors.venmo.connectionSettings": {
         "type": "object",
         "properties": {
@@ -12333,60 +9496,6 @@
         ],
         "title": "venmo"
       },
-      "connectors.venmo.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "venmo"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "venmo"
-      },
-      "connectors.wise.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "wise"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "redirectUri": {
-                "type": "string"
-              },
-              "clientId": {
-                "type": "string"
-              },
-              "envName": {
-                "type": "string",
-                "enum": [
-                  "sandbox",
-                  "live"
-                ]
-              }
-            },
-            "required": [
-              "redirectUri",
-              "clientId",
-              "envName"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "wise"
-      },
       "connectors.wise.connectionSettings": {
         "type": "object",
         "properties": {
@@ -12438,40 +9547,6 @@
           "config"
         ],
         "title": "wise"
-      },
-      "connectors.wise.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "wise"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "wise"
-      },
-      "connectors.xero.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "xero"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "xero"
       },
       "connectors.xero.connectionSettings": {
         "type": "object",
@@ -12670,73 +9745,6 @@
         ],
         "title": "xero"
       },
-      "connectors.xero.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "xero"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "xero"
-      },
-      "connectors.yodlee.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "yodlee"
-          },
-          "output": {
-            "type": "object",
-            "properties": {
-              "accessToken": {
-                "type": "object",
-                "properties": {
-                  "accessToken": {
-                    "type": "string"
-                  },
-                  "issuedAt": {
-                    "type": "string"
-                  },
-                  "expiresIn": {
-                    "type": "number"
-                  }
-                },
-                "required": [
-                  "accessToken",
-                  "issuedAt",
-                  "expiresIn"
-                ]
-              },
-              "envName": {
-                "type": "string",
-                "enum": [
-                  "sandbox",
-                  "development",
-                  "production"
-                ]
-              }
-            },
-            "required": [
-              "accessToken",
-              "envName"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "yodlee"
-      },
       "connectors.yodlee.connectionSettings": {
         "type": "object",
         "properties": {
@@ -12919,40 +9927,6 @@
           "config"
         ],
         "title": "yodlee"
-      },
-      "connectors.yodlee.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "yodlee"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
-        ],
-        "title": "yodlee"
-      },
-      "connectors.zohodesk.connectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "zohodesk"
-          },
-          "output": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "output"
-        ],
-        "title": "zohodesk"
       },
       "connectors.zohodesk.connectionSettings": {
         "type": "object",
@@ -13148,23 +10122,6 @@
         "required": [
           "connector_name",
           "config"
-        ],
-        "title": "zohodesk"
-      },
-      "connectors.zohodesk.preConnectInput": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "zohodesk"
-          },
-          "input": {
-            "type": "null"
-          }
-        },
-        "required": [
-          "connector_name",
-          "input"
         ],
         "title": "zohodesk"
       },
@@ -13512,30 +10469,6 @@
           "name"
         ],
         "title": "Connector"
-      },
-      "core.customer": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "updated_at": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": "string"
-          },
-          "connection_count": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "id",
-          "updated_at",
-          "created_at",
-          "connection_count"
-        ],
-        "title": "Customer"
       },
       "core.integration": {
         "type": "object",
