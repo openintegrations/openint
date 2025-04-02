@@ -21,7 +21,7 @@ export default async function AuthenticatedLayout({
     <ClientApp token={token}>
       <GlobalCommandBarProvider>
         <AppLayout
-          organizationSwitcher={<OrganizationSwitcher />}
+          organizationSwitcher={<OrganizationSwitcher hidePersonal={true} />}
           userButton={<UserButton showName />}>
           {children}
         </AppLayout>
