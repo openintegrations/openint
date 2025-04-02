@@ -28,10 +28,12 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
   const {openint_scopes, scopes, connectorName} =
     formContext as OAuthFormContext
 
-  const scopeLookup = scopes.reduce<Record<string, Scope>>((acc, scope) => {
-    acc[scope.scope] = scope
-    return acc
-  }, {})
+  const scopeLookup = scopes
+    ? scopes.reduce<Record<string, Scope>>((acc, scope) => {
+        acc[scope.scope] = scope
+        return acc
+      }, {})
+    : {}
 
   const [useOpenIntCredentials, setUseOpenIntCredentials] = useState(
     !formData?.client_id && !formData?.client_secret,
