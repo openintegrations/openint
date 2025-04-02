@@ -6,7 +6,6 @@ import type {
   SyncOperation,
 } from '@openint/sync'
 import type {MaybePromise} from '@openint/util'
-import {R} from '@openint/util'
 import type {
   CheckConnectionContext,
   CheckConnectionOptions,

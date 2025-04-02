@@ -1,5 +1,5 @@
-import {A, DateTime, R} from '@openint/util'
 import type {YodleeAccount, YodleeBalances} from './yodlee.types'
+import {DateTime} from '@openint/util/date-utils'
 
 export function getYodleeAccountName(account: YodleeAccount) {
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing

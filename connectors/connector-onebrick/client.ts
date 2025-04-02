@@ -1,6 +1,5 @@
 import React from 'react'
 import type {ConnectorClient} from '@openint/cdk'
-import {Deferred} from '@openint/util'
 import type {helpers, onebrickSchemas} from './def'
 
 export const onebrickClientConector = {

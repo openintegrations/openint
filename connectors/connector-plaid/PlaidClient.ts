@@ -1,12 +1,12 @@
 import {createEnv} from '@t3-oss/env-core'
 import {
+import {zFunction} from '@openint/util/zod-function-utils'
   Configuration,
   CountryCode,
   PlaidApi,
   PlaidEnvironments,
   Products,
 } from 'plaid'
-import {getDefaultProxyAgent, memoize, zFunction} from '@openint/util'
 import {z, zCast} from '@openint/util/zod-utils'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {WebhookShape} from './plaid.types'

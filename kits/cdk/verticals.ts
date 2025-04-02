@@ -1,5 +1,5 @@
 import {z} from '@openint/util/zod-utils'
-import {objectKeys, R, titleCase} from '@openint/util'
+import {objectKeys} from '@openint/util/object-utils'
 
 interface VerticalInfo {
   name?: string

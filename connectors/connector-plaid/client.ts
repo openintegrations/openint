@@ -4,7 +4,6 @@ import {usePlaidLink} from 'react-plaid-link'
 import type {ConnectorClient} from '@openint/cdk'
 import {CANCELLATION_TOKEN} from '@openint/cdk'
 import type {RequiredOnly} from '@openint/util'
-import {Deferred} from '@openint/util'
 import type {helpers, plaidSchemas} from './def'
 
 export const plaidClientConnector = {

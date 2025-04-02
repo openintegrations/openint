@@ -2,9 +2,9 @@ import {z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import * as jose from 'jose'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util'
-import {R, zFunction} from '@openint/util'
 import type {CustomerId, ExtCustomerId, Id, UserId} from './id.types'
 import {zCustomerId, zId, zUserId} from './id.types'
+import {zFunction} from '@openint/util/zod-function-utils'
 
 export const zRole = z.enum(['anon', 'customer', 'user', 'org', 'system'])
 export {ExtCustomerId}

@@ -9,7 +9,6 @@ import {
   type PgTable,
   type PgUpdateSetSource,
 } from 'drizzle-orm/pg-core'
-import {isPlainObject} from '@openint/util'
 
 type ColumnKeyOf<T extends PgTable> = Extract<keyof T['_']['columns'], string>
 

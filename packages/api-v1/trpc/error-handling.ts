@@ -8,7 +8,6 @@ import {
   JSONRPC2_TO_HTTP_CODE,
   RouterCallerErrorHandler,
 } from '@trpc/server/unstable-core-do-not-import'
-import {safeJSONParse} from '@openint/util'
 import {z, type ZodError} from '@openint/util/zod-utils'
 
 export const zErrorCode = z

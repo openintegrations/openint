@@ -6,11 +6,11 @@ import * as plaid from 'plaid'
 import {CountryCode, Products} from 'plaid'
 import type {ConnectorServer} from '@openint/cdk'
 import type {IAxiosError} from '@openint/util'
-import {rxjs} from '@openint/util'
 import type {plaidSchemas} from './def'
 import {helpers as def} from './def'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import {getPlatformConfig, makePlaidClient, zWebhook} from './PlaidClient'
+import {rxjs} from '@openint/util/observable-utils'
 
 export function initPlaidSDK(options: PlaidSDKTypes['options']) {
   return initSDK(plaidSdkDef, options)

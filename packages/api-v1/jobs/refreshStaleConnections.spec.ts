@@ -1,8 +1,8 @@
 import {ConnectorServer, makeId} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {makeUlid} from '@openint/util'
 import {refreshStaleConnections} from './refreshStaleConnections'
+import {makeUlid} from '@openint/util/id-utils'
 
 // Create a mock refreshConnection function
 const mockRefreshConnection = jest.fn().mockImplementation((settings) => {
