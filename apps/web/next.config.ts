@@ -132,6 +132,7 @@ const nextConfig = {
     // clerk expects these routes to be present in their UI and we have them inside the dashboard
     {source: '/sign-in', destination: '/console/sign-in', permanent: false},
     {source: '/sign-up', destination: '/console/sign-up', permanent: false},
+    {source: '/sign-out', destination: '/console/sign-out', permanent: false},
   ],
   typescript: {ignoreBuildErrors: true},
   eslint: {ignoreDuringBuilds: true},
