@@ -1,8 +1,8 @@
 // TODO: Maybe this belongs in engine backend?
-import {z} from '@openint/util/zod-utils'
-import {invert} from '@openint/util/object-utils'
+import {compact} from '@openint/util/array-utils'
 import {memoize} from '@openint/util/function-utils'
-import {R} from '@openint/util/remeda'
+import {invert} from '@openint/util/object-utils'
+import {z} from '@openint/util/zod-utils'
 
 export type ExternalId = z.infer<typeof zExternalId>
 export const zExternalId = z.union([z.string(), z.number()])
@@ -83,7 +83,7 @@ export function makeId<TPrefix extends IdPrefix, TPName extends string>(
     ? [TPrefix, ExternalId]
     : [TPrefix, TPName, ExternalId]
 ) {
-  return R.compact(args).join('_') as Id<TPName>[TPrefix]
+  return compact(args).join('_') as Id<TPName>[TPrefix]
 }
 
 export function extractId(id: Id[keyof Id]) {

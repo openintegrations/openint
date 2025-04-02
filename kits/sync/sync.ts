@@ -43,7 +43,7 @@ export async function sync<
       .pipe(input.destination)
       // Progress & flow controlß
       .pipe(
-        !input.watch ? Rx.takeWhile((e) => e.type !== 'ready') : R.identity,
+        !input.watch ? Rx.takeWhile((e) => e.type !== 'ready') : R.identity(),
       ),
     (e) => {
       count++

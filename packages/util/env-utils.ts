@@ -1,8 +1,8 @@
 import {sort} from 'fast-sort'
-import * as R from 'remeda'
+import {compact} from 'lodash'
 import type {JsonValue} from 'type-fest'
+import {R} from '@openint/util/remeda'
 import {z} from '@openint/util/zod-utils'
-
 import {
   javascriptStringify,
   safeJSONParse,
@@ -17,9 +17,9 @@ export function zEnvVars<T extends z.ZodRawShape>(shape: T) {
   // during error formattign :(
   // @see https://github.com/colinhacks/zod/pull/1241
   // At some point we probably want a custom zod.parse type anyways
-  R.forEachObj.indexed(shape, (schema, _key) => {
+  R.forEachObj(shape, (schema, _key) => {
     const key = _key.toString()
-    const def = schema._def as z.ZodTypeDef
+    const def = (schema as any)._def as z.ZodTypeDef
     def.errorMap = (_issue, ctx) => {
       if (_issue.code === 'invalid_type' && ctx.data == null) {
         return {message: `env.${key} is required`}
@@ -117,7 +117,7 @@ function flattenShapeForEnv<T extends z.ZodTypeAny>(
     // console.log('shape', shape)
     return R.pipe(
       shape,
-      R.toPairs,
+      R.entries(),
       R.map(([key, value]) =>
         flattenShapeForEnv(value, {
           stringify,
@@ -140,7 +140,7 @@ function flattenShapeForEnv<T extends z.ZodTypeAny>(
           // Handle things like array etc.
           .transform((str) => safeJSONParse(str) ?? str)
           .describe(
-            R.compact([
+            compact([
               hint && '`',
               hint,
               hint && '`',
@@ -188,7 +188,7 @@ function unflattenEnv(
   const nested = {}
   // Sorting keys such that we set the deepest paths first
   // So plaid="" will always override plaid.client_id="id..."
-  for (const [key, v] of sort(R.toPairs(env)).desc(([k]) => k.length)) {
+  for (const [key, v] of sort(R.entries(env)).desc(([k]) => k.length)) {
     // Remove empty strings...
     setAt(
       nested,
