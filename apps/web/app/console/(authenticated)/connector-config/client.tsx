@@ -164,6 +164,7 @@ export function ConnectorConfigList(props: {
       displayName: string
       disabled: boolean
       config?: Record<string, unknown>
+      [key: string]: unknown
     }
   }) => {
     if (!selectedConnector) {
@@ -171,7 +172,7 @@ export function ConnectorConfigList(props: {
     }
 
     const {
-      formData: {displayName, disabled, config},
+      formData: {displayName, disabled, config, ...rest},
     } = data
 
     try {
@@ -180,14 +181,20 @@ export function ConnectorConfigList(props: {
           id: selectedCcfg.id,
           display_name: displayName,
           disabled,
-          config,
+          config: {
+            ...config,
+            ...rest,
+          },
         })
       } else {
         await createConfig.mutateAsync({
           connector_name: selectedConnector.name,
           display_name: displayName,
           disabled,
-          config,
+          config: {
+            ...config,
+            ...rest,
+          },
         })
       }
 
@@ -217,7 +224,7 @@ export function ConnectorConfigList(props: {
       setSheetOpen(false)
       setSelectedConnector(null)
       setSelectedCcfg(null)
-      res.refetch()
+      await res.refetch()
     } catch (error) {
       console.error('Failed to delete connector config:', error)
       // TODO: We need to show a toast here
