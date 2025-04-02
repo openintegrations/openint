@@ -10,7 +10,6 @@ import {Icon} from '../components/Icon'
 // Define the Customer data structure based on the image
 export interface Customer {
   id: string
-  name: string
   connectionsCount: number
   firstCreated: string
 }
@@ -46,7 +45,7 @@ export const columns: Array<ColumnDef<Customer>> = [
             // Stop propagation to prevent row click handler from firing
             e.stopPropagation()
             console.log(
-              `View ${connectionsCount} connections for ${row.original.name}`,
+              `View ${connectionsCount} connections for ${row.original.id}`,
             )
           }}>
           <Icon
