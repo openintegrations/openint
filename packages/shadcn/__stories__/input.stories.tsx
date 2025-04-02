@@ -2,13 +2,12 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {Input} from '../ui/input'
 
 const meta = {
-  title: 'Shadcn/Input',
   component: Input,
   tags: ['autodocs'],
   argTypes: {
     type: {
       control: 'select',
-      options: ['text', 'password', 'email', 'number', 'search', 'tel', 'url'],
+      options: ['text', 'password', 'email', 'number', 'tel', 'url', 'search'],
     },
     placeholder: {control: 'text'},
     disabled: {control: 'boolean'},

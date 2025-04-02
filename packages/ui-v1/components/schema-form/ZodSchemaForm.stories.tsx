@@ -4,7 +4,6 @@ import {z} from '@openint/util/zod-utils'
 import {ZodSchemaForm} from './ZodSchemaForm'
 
 const meta: Meta<typeof ZodSchemaForm> = {
-  title: 'Components/schema-form/ZodSchemaForm',
   component: ZodSchemaForm,
   parameters: {
     layout: 'centered',

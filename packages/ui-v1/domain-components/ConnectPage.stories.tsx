@@ -68,7 +68,6 @@ const mockCustomerRouterSchema = {
 }
 
 const meta = {
-  title: 'DOMAIN COMPONENTS/ConnectPage',
   component: ConnectPage,
   parameters: {
     layout: 'fullscreen',

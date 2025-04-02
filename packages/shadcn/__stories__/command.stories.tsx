@@ -25,7 +25,6 @@ import {
 } from '../ui/command'
 
 const meta: Meta<typeof CommandInput> = {
-  title: 'Shadcn/Command',
   component: CommandInput,
   parameters: {
     layout: 'centered',

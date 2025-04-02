@@ -37,7 +37,6 @@ const navCommands = {
 } satisfies CommandDefinitionMap
 
 const meta: Meta<typeof CommandBar> = {
-  title: 'UI-V1/Commands',
   component: CommandBar,
   parameters: {
     layout: 'centered',

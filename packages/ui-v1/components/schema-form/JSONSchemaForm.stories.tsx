@@ -2,7 +2,6 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {JSONSchemaForm} from './JSONSchemaForm'
 
 const meta: Meta<typeof JSONSchemaForm> = {
-  title: 'Components/schema-form/JSONSchemaForm',
   component: JSONSchemaForm,
   parameters: {
     layout: 'centered',
