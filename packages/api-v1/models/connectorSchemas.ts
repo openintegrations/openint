@@ -4,8 +4,8 @@ import {zodToOas31Schema} from '@openint/util/schema'
 import {titleCase} from '@openint/util/string-utils'
 import {urlFromImage} from '@openint/util/url-utils'
 import {z, type Z} from '@openint/util/zod-utils'
+
 // import {z} from '@openint/util/zod-utils'
-import {zJsonConnectorDef} from '../../../connectors/cnext/def'
 
 export type NonEmptyArray<T> = [T, ...T[]]
 
