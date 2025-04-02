@@ -1,5 +1,5 @@
 // TODO: Maybe this belongs in engine backend?
-import {extendZodWithOpenApi, z} from '@opensdks/util-zod'
+import {extendZodWithOpenApi, z} from '@openint/util/zod-utils'
 import {invert, memoize, R} from '@openint/util'
 
 export type ExternalId = z.infer<typeof zExternalId>

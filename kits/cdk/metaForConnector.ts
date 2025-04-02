@@ -1,4 +1,4 @@
-import {z} from '@opensdks/util-zod'
+import {z} from '@openint/util/zod-utils'
 import {R, titleCase, urlFromImage, zodToJsonSchema} from '@openint/util'
 import type {AnyConnectorImpl, ConnectorSchemas} from './connector.types'
 

@@ -1,5 +1,5 @@
 import type {NangoProvider} from '@opensdks/sdk-nango/src/nango.oas'
-import {z} from '@opensdks/util-zod'
+import {z} from '@openint/util/zod-utils'
 import type {oas30, oas31} from 'openapi3-ts'
 import type {
   AnyEntityPayload,

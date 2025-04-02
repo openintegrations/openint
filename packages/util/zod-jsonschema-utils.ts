@@ -1,4 +1,4 @@
-import type {z} from '@opensdks/util-zod'
+import type {z} from '@openint/util/zod-utils'
 import * as R from 'remeda'
 import {jsonSchemaWalkNodes} from './jsonschema-nodewalker'
 import {zodToOas31Schema} from './schema'
