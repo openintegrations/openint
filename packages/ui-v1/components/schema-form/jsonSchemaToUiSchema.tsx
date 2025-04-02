@@ -3,7 +3,6 @@
 import type {RJSFSchema, StrictRJSFSchema, UiSchema} from '@rjsf/utils'
 import type {fields} from './fields'
 import type {widgets} from './widgets'
-
 // Mark: - generateUiSchema
 
 // Allow ui schemas to be specified directly in the json schema

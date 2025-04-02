@@ -1,5 +1,8 @@
-import {z} from '@opensdks/util-zod'
-import {R, titleCase, urlFromImage, zodToJsonSchema} from '@openint/util'
+import {R} from '@openint/util/remeda'
+import {titleCase} from '@openint/util/string-utils'
+import {urlFromImage} from '@openint/util/url-utils'
+import {zodToJsonSchema} from '@openint/util/zod-jsonschema-utils'
+import {z} from '@openint/util/zod-utils'
 import type {AnyConnectorImpl, ConnectorSchemas} from './connector.types'
 
 export type JSONSchema = {} // ReturnType<typeof zodToJsonSchema> | JSONSchema7Definition

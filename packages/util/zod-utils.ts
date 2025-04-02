@@ -1,10 +1,12 @@
-import * as R from 'remeda'
-import * as z from 'zod'
+import z from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
+import {compact} from './array-utils'
+import {R} from './remeda'
 
 extendZodWithOpenApi(z)
 
-export {z, extendZodWithOpenApi}
+export {z}
+export {ZodError, type ZodTypeDef} from 'zod'
 
 export function parseIf<T>(value: unknown, typeguard: (v: unknown) => v is T) {
   return typeguard(value) ? value : undefined
@@ -158,7 +160,7 @@ type Rest1<T extends [any, ...any[]]> = T extends [any, ...infer U] ? U : []
 export function catchZodError(err: unknown, opts?: {rootTypeName?: string}) {
   if (err instanceof z.ZodError && err.issues[0]) {
     const issue = err.issues[0]
-    const paths = R.compact([opts?.rootTypeName, ...issue.path])
+    const paths = compact([opts?.rootTypeName, ...issue.path])
     throw new Error(`${issue.code} at ${paths.join('.')}: ${issue.message}`)
   }
   throw err

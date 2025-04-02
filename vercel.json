@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/jobs/refresh-stale-connections",
+      "schedule": "*/30 * * * *"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import type {Column, PgSelectBase} from '@openint/db'
 import {desc, schema} from '@openint/db'
 

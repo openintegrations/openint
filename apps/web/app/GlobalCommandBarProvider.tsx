@@ -11,7 +11,7 @@ import {
 import {CommandBar, CommandContext} from '@openint/ui-v1'
 import {SIDEBAR_NAV_ITEMS} from '@openint/ui-v1/navigation/app-sidebar'
 import {useMutation, useQueryClient} from '@openint/ui-v1/trpc'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 import {useTRPC} from './console/(authenticated)/client'
 
 export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {

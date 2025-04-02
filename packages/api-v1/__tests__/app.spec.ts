@@ -5,10 +5,7 @@ import {initDbPGLite} from '@openint/db/db.pglite'
 import {loopbackLink} from '@openint/loopback-link'
 import type {paths} from '../__generated__/openapi.types'
 import {createApp} from '../app'
-import {
-  createFetchHandlerOpenAPI,
-  createFetchHandlerTRPC,
-} from '../handlers'
+import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from '../handlers'
 import type {AppRouter} from '../routers'
 
 const db = initDbPGLite()
@@ -109,9 +106,7 @@ describe('openapi route', () => {
 
 describe('trpc route', () => {
   test('query health', async () => {
-    const res = await app.handle(
-      new Request('http://localhost/v1/trpc/health'),
-    )
+    const res = await app.handle(new Request('http://localhost/v1/trpc/health'))
     expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
   })
 
@@ -130,9 +125,7 @@ describe('trpc route', () => {
 
   test('query health bypass elysia', async () => {
     const handler = createFetchHandlerTRPC({endpoint: '/v1/trpc', db})
-    const res = await handler(
-      new Request('http://localhost/v1/trpc/health'),
-    )
+    const res = await handler(new Request('http://localhost/v1/trpc/health'))
     expect(await res.json()).toMatchObject({result: {data: {ok: true}}})
   })
 

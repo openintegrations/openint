@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 export const zConfig = oauthBaseSchema.connectorConfig
 
@@ -68,7 +68,6 @@ export const microsoftDef = {
     stage: 'beta',
     verticals: ['file-storage'],
     logoUrl: '/_assets/logo-microsoft.svg',
-    // @ts-expect-error
     nangoProvider: 'microsoft',
   },
 } satisfies ConnectorDef<typeof microsoftSchemas>

@@ -1,7 +1,7 @@
 import finchOas from '@opensdks/sdk-finch/finch.oas.json'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 const zProduct = z.enum([
   'company',

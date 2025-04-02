@@ -1,8 +1,11 @@
-import {z} from 'zod'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
-// import {z} from '@opensdks/util-zod'
-import {titleCase, urlFromImage, zodToOas31Schema} from '@openint/util'
+import {zodToOas31Schema} from '@openint/util/schema'
+import {titleCase} from '@openint/util/string-utils'
+import {urlFromImage} from '@openint/util/url-utils'
+import {z} from '@openint/util/zod-utils'
+
+// import {z} from '@openint/util/zod-utils'
 
 export type NonEmptyArray<T> = [T, ...T[]]
 

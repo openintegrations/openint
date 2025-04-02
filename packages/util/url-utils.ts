@@ -1,4 +1,3 @@
-import * as R from 'remeda'
 import {stringify as _stringify} from 'qs'
 import type {ParsedUrl, ParseOptions} from 'query-string'
 import {
@@ -6,7 +5,7 @@ import {
   parseUrl as _parseUrl,
   stringify as _stringifyQueryParams,
 } from 'query-string'
-
+import {compact} from './array-utils'
 import type {AnyRecord} from './type-utils'
 
 export {stringifyUrl} from 'query-string'
@@ -54,7 +53,7 @@ export function buildUrl(input: {
   path: string
   params?: Record<string, unknown>
 }) {
-  return R.compact([
+  return compact([
     input.path,
     input.params && _stringifyQueryParams(input.params),
   ]).join('?')

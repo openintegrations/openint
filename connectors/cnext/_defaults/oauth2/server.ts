@@ -1,9 +1,9 @@
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import type {ConnectorDef, ConnectorServer} from '@openint/cdk'
 import {extractId, makeId} from '@openint/cdk'
 import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
-import {makeUlid} from '@openint/util'
 import {oauth2Schemas, zOAuthConfig} from './def'
+import {makeUlid} from '@openint/util/id-utils'
 import {
   authorizeHandler,
   defaultTokenExchangeHandler,
@@ -223,24 +223,20 @@ export function generateOAuth2Server<
         throw new Error('No access token available')
       }
 
-      // Check if token is expired based on expires_at
-      const expiresAt = settings?.oauth?.credentials?.expires_at
-      const refreshToken = settings?.oauth?.credentials?.refresh_token
+      const {expires_at: expiresAt, refresh_token: refreshToken} =
+        settings.oauth.credentials
 
-      if ((expiresAt && new Date(expiresAt) < new Date()) || refreshToken) {
-        // Token is expired, try to refresh if possible
+      const isTokenExpired = expiresAt && new Date(expiresAt) < new Date()
+      const shouldRefreshToken = isTokenExpired || refreshToken
+
+      if (shouldRefreshToken) {
         if (!refreshToken || !this.refreshConnection) {
           throw new Error('Token expired and no refresh token available')
         }
 
         try {
           // Attempt to refresh the token
-          const newSettings = await this.refreshConnection(settings, config)
-          return {
-            connectionExternalId: settings.oauth?.credentials?.connection_id,
-            settings: newSettings,
-            config,
-          }
+          return this.refreshConnection(settings, config)
         } catch (error: any) {
           throw new Error(`Failed to refresh token: ${error.message}`)
         }
@@ -252,11 +248,7 @@ export function generateOAuth2Server<
       // for now we're just going to check if the token is expired and try to refresh it
       // 2) We could also support the token introspection endpoint https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
 
-      return {
-        connectionExternalId: settings.oauth?.credentials?.connection_id,
-        settings,
-        config,
-      } // TODO: review
+      return settings
     },
   }
 

@@ -1,10 +1,8 @@
-import {
-  createHTTPClient,
-  memoize,
-  OAuth2Client,
-  z,
-  zFunction,
-} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
+import {createHTTPClient} from '@openint/util/http/index'
+import {zFunction} from '@openint/util/zod-function-utils'
+import {memoize} from '@openint/util/function-utils'
+import {OAuth2Client} from '@openint/util/http/OAuth2Client'
 
 export const zRampConfig = z.object({
   clientId: z.string(),

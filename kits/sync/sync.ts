@@ -1,4 +1,5 @@
-import {R, Rx, toCompletion} from '@openint/util'
+import {Rx, toCompletion} from '@openint/util/observable-utils'
+import {R} from '@openint/util/remeda'
 import type {
   AnyEntityPayload,
   ConnectionUpdateData,
@@ -42,7 +43,7 @@ export async function sync<
       .pipe(input.destination)
       // Progress & flow controlß
       .pipe(
-        !input.watch ? Rx.takeWhile((e) => e.type !== 'ready') : R.identity,
+        !input.watch ? Rx.takeWhile((e) => e.type !== 'ready') : R.identity(),
       ),
     (e) => {
       count++

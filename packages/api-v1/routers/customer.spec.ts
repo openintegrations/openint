@@ -1,21 +1,25 @@
 import {makeId, type Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {makeUlid} from '@openint/util'
 import {routerContextFromViewer} from '../trpc/context'
+import {onError} from '../trpc/error-handling'
 import {connectorConfigRouter} from './connectorConfig'
 import {customerRouter} from './customer'
+import {makeUlid} from '@openint/util/id-utils'
 
 const logger = false
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   function getCustomerCaller(viewer: Viewer) {
-    return customerRouter.createCaller(routerContextFromViewer({db, viewer}))
+    return customerRouter.createCaller(routerContextFromViewer({db, viewer}), {
+      onError,
+    })
   }
 
   function getCcfgCaller(viewer: Viewer) {
     return connectorConfigRouter.createCaller(
       routerContextFromViewer({db, viewer}),
+      {onError},
     )
   }
 
@@ -31,14 +35,14 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       name: 'Test Org',
     })
     const ccfg = await asOrgCcfgCaller.createConnectorConfig({
-      connector_name: 'qbo',
+      connector_name: 'quickbooks',
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
         envName: 'sandbox',
       },
     })
     await db.insert(schema.connection).values({
-      id: makeId('conn', 'qbo', makeUlid()),
+      id: makeId('conn', 'quickbooks', makeUlid()),
       customer_id: 'cus_222',
       connector_config_id: ccfg.id,
       metadata: {},

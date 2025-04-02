@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 import leverOas from '@opensdks/sdk-lever/lever.oas.json'
 
 export const zConfig = oauthBaseSchema.connectorConfig.extend({

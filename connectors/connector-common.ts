@@ -1,6 +1,6 @@
+import {Rx, rxjs} from '@openint/util/observable-utils'
 // MARK: - New way of doing things
 
-import {Rx, rxjs} from '@openint/util'
 
 export interface EtlSource<
   TEntityMap extends Record<string, unknown> = Record<string, unknown>,

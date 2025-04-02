@@ -3,7 +3,7 @@
 import type {Oas, Oas_accounting} from '@opensdks/sdk-merge'
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
+import {z, zCast} from '@openint/util/zod-utils'
 
 type components = Oas_accounting['components']
 

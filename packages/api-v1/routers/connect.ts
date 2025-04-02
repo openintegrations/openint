@@ -1,14 +1,14 @@
 import {TRPCError} from '@trpc/server'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
-import {makeUlid} from '@openint/util'
 import {core, parseNonEmpty} from '../models'
 import {connectorSchemas} from '../models/connectorSchemas'
 import {customerProcedure, router} from '../trpc/_base'
 import {md} from './utils/md'
+import {makeUlid} from '@openint/util/id-utils'
 
 export const connectRouter = router({
   preConnect: customerProcedure
@@ -16,6 +16,7 @@ export const connectRouter = router({
       openapi: {
         method: 'POST',
         path: '/connect/pre-connect',
+        enabled: false,
       },
     })
     .input(
@@ -87,7 +88,14 @@ export const connectRouter = router({
         })
       }
 
-      console.log('preConnect', input, ctx, ccfg)
+      if (!ctx.viewer.orgId) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'OrgId is required',
+        })
+      }
+
+      console.log('preConnect input', input)
       const res = await connector.preConnect?.(
         ccfg.config,
         {
@@ -99,6 +107,7 @@ export const connectRouter = router({
         },
         input.data.input,
       )
+      console.log('preConnect output', res)
       return {
         connector_name: input.data.connector_name,
         output: res,

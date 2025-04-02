@@ -1,5 +1,5 @@
-import type {z} from '@opensdks/util-zod'
-import * as R from 'remeda'
+import type {z} from '@openint/util/zod-utils'
+import {R} from '@openint/util/remeda'
 import {jsonSchemaWalkNodes} from './jsonschema-nodewalker'
 import {zodToOas31Schema} from './schema'
 
@@ -43,7 +43,7 @@ export function ensureNodeTitle<T = unknown>(jsonSchema: T) {
 export function ensureEnumType<T = unknown>(jsonSchema: T) {
   jsonSchemaWalkNodes(jsonSchema, (node) => {
     if (!node.type && node.anyOf && node.anyOf[0]?.type) {
-      const types = R.uniq(node.anyOf.map((x) => x.type))
+      const types = R.unique(node.anyOf.map((x) => x.type))
       // Small hack for react-jsonschema-form
       // without type sometimes nothing renders.... (e.g. enum of string) @see https://share.cleanshot.com/8vjdCZmd
       if (types.length === 1) {

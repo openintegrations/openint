@@ -1,4 +1,5 @@
-import {objectFromArray} from '@openint/util'
+import type {ExternalId} from '@openint/cdk'
+import {objectFromArray} from '@openint/util/object-utils'
 
 export const _parseAccounts = (
   connData: {_id: string},

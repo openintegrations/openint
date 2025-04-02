@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/connection/{id}": {
+    "/connector": {
         parameters: {
             query?: never;
             header?: never;
@@ -12,52 +12,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get Connection & Credentials
-         * @description Get details of a specific connection, including credentials
+         * List Connectors
+         * @description List all connectors to understand what integrations are available to configure
          */
-        get: operations["getConnection"];
+        get: operations["listConnectors"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/connection": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Connections
-         * @description List all connections with optional filtering
-         */
-        get: operations["listConnections"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/connection/{id}/check": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Check Connection Health
-         * @description Verify that a connection is healthy
-         */
-        post: operations["checkConnection"];
         delete?: never;
         options?: never;
         head?: never;
@@ -84,7 +44,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/connector": {
+    "/connection/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -92,19 +52,23 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List all connectors
-         * @description List all connectors with optional filtering
+         * Get Connection & Credentials
+         * @description Get details of a specific connection, including credentials
          */
-        get: operations["listConnectors"];
+        get: operations["getConnection"];
         put?: never;
         post?: never;
-        delete?: never;
+        /**
+         * Delete Connection
+         * @description Delete a connection
+         */
+        delete: operations["deleteConnection"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/event": {
+    "/connection": {
         parameters: {
             query?: never;
             header?: never;
@@ -112,28 +76,36 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List Organization Events
-         * @description List all events for an organization
+         * List Connections
+         * @description List all connections with optional filtering
          */
-        get: operations["listEvents"];
+        get: operations["listConnections"];
         put?: never;
-        post?: never;
+        /**
+         * Create Connection
+         * @description Import an existing connection after validation
+         */
+        post: operations["createConnection"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/organization/onboarding": {
+    "/connection/{id}/check": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getOnboarding"];
-        put: operations["setOnboardingComplete"];
-        post?: never;
+        get?: never;
+        put?: never;
+        /**
+         * Check Connection Health
+         * @description Verify that a connection is healthy
+         */
+        post: operations["checkConnection"];
         delete?: never;
         options?: never;
         head?: never;
@@ -237,8 +209,27 @@ export interface components {
              */
             connector_name: "aircall";
             settings: {
-                apiId: string;
-                apiToken: string;
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
             };
         };
         /** aircall */
@@ -248,7 +239,14 @@ export interface components {
              * @enum {string}
              */
             connector_name: "aircall";
-            config: null;
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
         };
         /** airtable */
         "connectors.airtable.connectionSettings": {
@@ -294,8 +292,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -321,24 +321,6 @@ export interface components {
              * @enum {string}
              */
             connector_name: "apollo";
-            config: null;
-        };
-        /** beancount */
-        "connectors.beancount.connectionSettings": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "beancount";
-            settings: null;
-        };
-        /** beancount */
-        "connectors.beancount.connectorConfig": {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            connector_name: "beancount";
             config: null;
         };
         /** brex */
@@ -398,38 +380,26 @@ export interface components {
             connector_name: "confluence";
             settings: {
                 oauth: {
-                    credentials: {
-                        type: components["schemas"]["AuthMode"];
-                        api_key?: string | null;
-                        access_token?: string;
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
                         refresh_token?: string;
-                        /** Format: date-time */
+                        expires_in?: number;
                         expires_at?: string;
+                        token_type?: string;
                         raw: {
-                            access_token: string;
-                            expires_in?: number;
-                            /** Format: date-time */
-                            expires_at?: string;
-                            refresh_token?: string | null;
-                            refresh_token_expires_in?: number | null;
-                            token_type: string;
-                            scope?: string;
+                            [key: string]: unknown;
                         };
                     };
-                    connection_config?: ({
-                        portalId?: number | null;
-                        instance_url?: string | null;
-                    } & {
-                        [key: string]: unknown;
-                    }) | null;
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
                     metadata: {
                         [key: string]: unknown;
                     } | null;
                 };
-                error?: {
-                    code: "refresh_token_external_error" | string;
-                    message?: string | null;
-                } | null;
             };
         };
         /** confluence */
@@ -440,11 +410,12 @@ export interface components {
              */
             connector_name: "confluence";
             config: {
+                /** @description Base oauth configuration for the connector */
                 oauth: {
-                    client_id: string;
-                    client_secret: string;
-                    scopes?: string;
-                };
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
             };
         };
         /** discord */
@@ -454,6 +425,53 @@ export interface components {
              * @enum {string}
              */
             connector_name: "discord";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** discord */
+        "connectors.discord.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "discord";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
+        };
+        /** facebook */
+        "connectors.facebook.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "facebook";
             settings: {
                 oauth: {
                     credentials: {
@@ -470,8 +488,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -490,13 +510,13 @@ export interface components {
                 } | null;
             };
         };
-        /** discord */
-        "connectors.discord.connectorConfig": {
+        /** facebook */
+        "connectors.facebook.connectorConfig": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "discord";
+            connector_name: "facebook";
             config: {
                 oauth: {
                     client_id: string;
@@ -602,7 +622,6 @@ export interface components {
             connector_name: "foreceipt";
             settings: {
                 credentials?: unknown;
-                options?: unknown;
                 _id?: unknown;
                 /** @enum {string} */
                 envName: "staging" | "production";
@@ -626,38 +645,26 @@ export interface components {
             connector_name: "github";
             settings: {
                 oauth: {
-                    credentials: {
-                        type: components["schemas"]["AuthMode"];
-                        api_key?: string | null;
-                        access_token?: string;
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
                         refresh_token?: string;
-                        /** Format: date-time */
+                        expires_in?: number;
                         expires_at?: string;
+                        token_type?: string;
                         raw: {
-                            access_token: string;
-                            expires_in?: number;
-                            /** Format: date-time */
-                            expires_at?: string;
-                            refresh_token?: string | null;
-                            refresh_token_expires_in?: number | null;
-                            token_type: string;
-                            scope?: string;
+                            [key: string]: unknown;
                         };
                     };
-                    connection_config?: ({
-                        portalId?: number | null;
-                        instance_url?: string | null;
-                    } & {
-                        [key: string]: unknown;
-                    }) | null;
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
                     metadata: {
                         [key: string]: unknown;
                     } | null;
                 };
-                error?: {
-                    code: "refresh_token_external_error" | string;
-                    message?: string | null;
-                } | null;
             };
         };
         /** github */
@@ -668,11 +675,12 @@ export interface components {
              */
             connector_name: "github";
             config: {
+                /** @description Base oauth configuration for the connector */
                 oauth: {
-                    client_id: string;
-                    client_secret: string;
-                    scopes?: string;
-                };
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
             };
         };
         /** gong */
@@ -698,8 +706,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -733,96 +743,98 @@ export interface components {
                 };
             };
         };
-        /** google */
-        "connectors.google.connectionSettings": {
+        /** googlecalendar */
+        "connectors.googlecalendar.connectionSettings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "google";
+            connector_name: "googlecalendar";
             settings: {
                 oauth: {
-                    credentials: {
-                        type: components["schemas"]["AuthMode"];
-                        api_key?: string | null;
-                        access_token?: string;
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
                         refresh_token?: string;
-                        /** Format: date-time */
+                        expires_in?: number;
                         expires_at?: string;
+                        token_type?: string;
                         raw: {
-                            access_token: string;
-                            expires_in?: number;
-                            /** Format: date-time */
-                            expires_at?: string;
-                            refresh_token?: string | null;
-                            refresh_token_expires_in?: number | null;
-                            token_type: string;
-                            scope?: string;
+                            [key: string]: unknown;
                         };
                     };
-                    connection_config?: ({
-                        portalId?: number | null;
-                        instance_url?: string | null;
-                    } & {
-                        [key: string]: unknown;
-                    }) | null;
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
                     metadata: {
                         [key: string]: unknown;
                     } | null;
                 };
-                error?: {
-                    code: "refresh_token_external_error" | string;
-                    message?: string | null;
-                } | null;
-                client_id?: string;
             };
         };
-        /** google */
-        "connectors.google.connectorConfig": {
+        /** googlecalendar */
+        "connectors.googlecalendar.connectorConfig": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "google";
+            connector_name: "googlecalendar";
             config: {
+                /** @description Base oauth configuration for the connector */
                 oauth: {
-                    client_id: string;
-                    client_secret: string;
-                    /** @description global google connector space separated scopes */
-                    scopes?: string;
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
+        };
+        /** googledocs */
+        "connectors.googledocs.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "googledocs";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
                 };
-                integrations: {
-                    drive?: {
-                        enabled?: boolean;
-                        /** @description drive specific space separated scopes */
-                        scopes?: string;
-                    };
-                    gmail?: {
-                        enabled?: boolean;
-                        /** @description gmail specific space separated scopes */
-                        scopes?: string;
-                    };
-                    calendar?: {
-                        enabled?: boolean;
-                        /** @description calendar specific space separated scopes */
-                        scopes?: string;
-                    };
-                    sheets?: {
-                        enabled?: boolean;
-                        /** @description sheets specific space separated scopes */
-                        scopes?: string;
-                    };
-                    docs?: {
-                        enabled?: boolean;
-                        /** @description docs specific space separated scopes */
-                        scopes?: string;
-                    };
-                    slides?: {
-                        enabled?: boolean;
-                        /** @description slides specific space separated scopes */
-                        scopes?: string;
-                    };
-                };
+            };
+        };
+        /** googledocs */
+        "connectors.googledocs.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "googledocs";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
             };
         };
         /** googledrive */
@@ -834,10 +846,25 @@ export interface components {
             connector_name: "googledrive";
             settings: {
                 oauth: {
-                    credentials: Record<string, never>;
-                };
-                metadata?: {
-                    [key: string]: unknown;
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
                 };
             };
         };
@@ -848,10 +875,107 @@ export interface components {
              * @enum {string}
              */
             connector_name: "googledrive";
-            config: null | {
-                client_id: string;
-                client_secret: string;
-                scopes?: string[] | null;
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
+        };
+        /** googlemail */
+        "connectors.googlemail.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "googlemail";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** googlemail */
+        "connectors.googlemail.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "googlemail";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
+        };
+        /** googlesheet */
+        "connectors.googlesheet.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "googlesheet";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** googlesheet */
+        "connectors.googlesheet.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "googlesheet";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
             };
         };
         /** greenhouse */
@@ -903,6 +1027,53 @@ export interface components {
             connector_name: "hubspot";
             settings: {
                 oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** hubspot */
+        "connectors.hubspot.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "hubspot";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
+        };
+        /** instagram */
+        "connectors.instagram.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "instagram";
+            settings: {
+                oauth: {
                     credentials: {
                         type: components["schemas"]["AuthMode"];
                         api_key?: string | null;
@@ -917,8 +1088,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -935,16 +1108,15 @@ export interface components {
                     code: "refresh_token_external_error" | string;
                     message?: string | null;
                 } | null;
-                extra?: unknown;
             };
         };
-        /** hubspot */
-        "connectors.hubspot.connectorConfig": {
+        /** instagram */
+        "connectors.instagram.connectorConfig": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "hubspot";
+            connector_name: "instagram";
             config: {
                 oauth: {
                     client_id: string;
@@ -976,8 +1148,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1034,8 +1208,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1092,8 +1268,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1150,8 +1328,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1196,38 +1376,26 @@ export interface components {
             connector_name: "linear";
             settings: {
                 oauth: {
-                    credentials: {
-                        type: components["schemas"]["AuthMode"];
-                        api_key?: string | null;
-                        access_token?: string;
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
                         refresh_token?: string;
-                        /** Format: date-time */
+                        expires_in?: number;
                         expires_at?: string;
+                        token_type?: string;
                         raw: {
-                            access_token: string;
-                            expires_in?: number;
-                            /** Format: date-time */
-                            expires_at?: string;
-                            refresh_token?: string | null;
-                            refresh_token_expires_in?: number | null;
-                            token_type: string;
-                            scope?: string;
+                            [key: string]: unknown;
                         };
                     };
-                    connection_config?: ({
-                        portalId?: number | null;
-                        instance_url?: string | null;
-                    } & {
-                        [key: string]: unknown;
-                    }) | null;
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
                     metadata: {
                         [key: string]: unknown;
                     } | null;
                 };
-                error?: {
-                    code: "refresh_token_external_error" | string;
-                    message?: string | null;
-                } | null;
             };
         };
         /** linear */
@@ -1238,11 +1406,59 @@ export interface components {
              */
             connector_name: "linear";
             config: {
+                /** @description Base oauth configuration for the connector */
                 oauth: {
-                    client_id: string;
-                    client_secret: string;
-                    scopes?: string;
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
+        };
+        /** linkedin */
+        "connectors.linkedin.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "linkedin";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
                 };
+            };
+        };
+        /** linkedin */
+        "connectors.linkedin.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "linkedin";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
             };
         };
         /** lunchmoney */
@@ -1337,8 +1553,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1411,6 +1629,53 @@ export interface components {
                 token: string;
             };
         };
+        /** notion */
+        "connectors.notion.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "notion";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** notion */
+        "connectors.notion.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "notion";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
+        };
         /** onebrick */
         "connectors.onebrick.connectionSettings": {
             /**
@@ -1462,8 +1727,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1520,8 +1787,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1617,7 +1886,6 @@ export interface components {
             connector_name: "postgres";
             settings: {
                 databaseUrl: string;
-                migrateTables?: boolean;
                 sourceQueries?: {
                     /** @description Should order by lastModifiedAt and id descending */
                     invoice?: string | null;
@@ -1633,65 +1901,53 @@ export interface components {
             connector_name: "postgres";
             config: null;
         };
-        /** qbo */
-        "connectors.qbo.connectionSettings": {
+        /** quickbooks */
+        "connectors.quickbooks.connectionSettings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "qbo";
+            connector_name: "quickbooks";
             settings: {
                 oauth: {
-                    credentials: {
-                        type: components["schemas"]["AuthMode"];
-                        api_key?: string | null;
-                        access_token?: string;
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
                         refresh_token?: string;
-                        /** Format: date-time */
+                        expires_in?: number;
                         expires_at?: string;
+                        token_type?: string;
                         raw: {
-                            access_token: string;
-                            expires_in?: number;
-                            /** Format: date-time */
-                            expires_at?: string;
-                            refresh_token?: string | null;
-                            refresh_token_expires_in?: number | null;
-                            token_type: string;
-                            scope?: string;
+                            [key: string]: unknown;
                         };
                     };
-                    connection_config: {
-                        realmId: string;
-                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
                     metadata: {
                         [key: string]: unknown;
                     } | null;
                 };
-                error?: {
-                    code: "refresh_token_external_error" | string;
-                    message?: string | null;
-                } | null;
+                /** @description The realmId of your quickbooks company (e.g., 9341453474484455) */
+                realmId: string;
             };
         };
-        /** qbo */
-        "connectors.qbo.connectorConfig": {
+        /** quickbooks */
+        "connectors.quickbooks.connectorConfig": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "qbo";
+            connector_name: "quickbooks";
             config: {
+                /** @description Base oauth configuration for the connector */
                 oauth: {
-                    client_id: string;
-                    client_secret: string;
-                    scopes?: string;
-                };
-                /** @enum {string} */
-                envName: "sandbox" | "production";
-                /** @description For proxies, not typically needed */
-                url?: string | null;
-                /** @description For webhooks */
-                verifierToken?: string | null;
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
             };
         };
         /** ramp */
@@ -1720,13 +1976,13 @@ export interface components {
                 };
             };
         };
-        /** salesforce */
-        "connectors.salesforce.connectionSettings": {
+        /** reddit */
+        "connectors.reddit.connectionSettings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "salesforce";
+            connector_name: "reddit";
             settings: {
                 oauth: {
                     credentials: {
@@ -1743,8 +1999,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1763,6 +2021,54 @@ export interface components {
                 } | null;
             };
         };
+        /** reddit */
+        "connectors.reddit.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "reddit";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
+        /** salesforce */
+        "connectors.salesforce.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesforce";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description The instance URL of your Salesforce account (e.g., example) */
+                instance_url: string;
+            };
+        };
         /** salesforce */
         "connectors.salesforce.connectorConfig": {
             /**
@@ -1771,11 +2077,12 @@ export interface components {
              */
             connector_name: "salesforce";
             config: {
+                /** @description Base oauth configuration for the connector */
                 oauth: {
-                    client_id: string;
-                    client_secret: string;
-                    scopes?: string;
-                };
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
             };
         };
         /** salesloft */
@@ -1801,8 +2108,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -1858,6 +2167,53 @@ export interface components {
                 url?: string | null;
             };
         };
+        /** sharepointonline */
+        "connectors.sharepointonline.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "sharepointonline";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** sharepointonline */
+        "connectors.sharepointonline.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "sharepointonline";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
+            };
+        };
         /** slack */
         "connectors.slack.connectionSettings": {
             /**
@@ -1867,38 +2223,26 @@ export interface components {
             connector_name: "slack";
             settings: {
                 oauth: {
-                    credentials: {
-                        type: components["schemas"]["AuthMode"];
-                        api_key?: string | null;
-                        access_token?: string;
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        client_id: string;
+                        scope: string;
                         refresh_token?: string;
-                        /** Format: date-time */
+                        expires_in?: number;
                         expires_at?: string;
+                        token_type?: string;
                         raw: {
-                            access_token: string;
-                            expires_in?: number;
-                            /** Format: date-time */
-                            expires_at?: string;
-                            refresh_token?: string | null;
-                            refresh_token_expires_in?: number | null;
-                            token_type: string;
-                            scope?: string;
+                            [key: string]: unknown;
                         };
                     };
-                    connection_config?: ({
-                        portalId?: number | null;
-                        instance_url?: string | null;
-                    } & {
-                        [key: string]: unknown;
-                    }) | null;
+                    created_at: string;
+                    updated_at: string;
+                    last_fetched_at: string;
                     metadata: {
                         [key: string]: unknown;
                     } | null;
                 };
-                error?: {
-                    code: "refresh_token_external_error" | string;
-                    message?: string | null;
-                } | null;
             };
         };
         /** slack */
@@ -1909,11 +2253,12 @@ export interface components {
              */
             connector_name: "slack";
             config: {
+                /** @description Base oauth configuration for the connector */
                 oauth: {
-                    client_id: string;
-                    client_secret: string;
-                    scopes?: string;
-                };
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                } | null;
             };
         };
         /** splitwise */
@@ -2063,6 +2408,66 @@ export interface components {
             connector_name: "twenty";
             config: null;
         };
+        /** twitter */
+        "connectors.twitter.connectionSettings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twitter";
+            settings: {
+                oauth: {
+                    credentials: {
+                        type: components["schemas"]["AuthMode"];
+                        api_key?: string | null;
+                        access_token?: string;
+                        refresh_token?: string;
+                        /** Format: date-time */
+                        expires_at?: string;
+                        raw: {
+                            access_token: string;
+                            expires_in?: number;
+                            /** Format: date-time */
+                            expires_at?: string;
+                            refresh_token?: string | null;
+                            refresh_token_expires_in?: number | null;
+                            token_type?: string | null;
+                            scope?: string;
+                        } & {
+                            [key: string]: unknown;
+                        };
+                    };
+                    connection_config?: ({
+                        portalId?: number | null;
+                        instance_url?: string | null;
+                    } & {
+                        [key: string]: unknown;
+                    }) | null;
+                    metadata: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                error?: {
+                    code: "refresh_token_external_error" | string;
+                    message?: string | null;
+                } | null;
+            };
+        };
+        /** twitter */
+        "connectors.twitter.connectorConfig": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twitter";
+            config: {
+                oauth: {
+                    client_id: string;
+                    client_secret: string;
+                    scopes?: string;
+                };
+            };
+        };
         /** venmo */
         "connectors.venmo.connectionSettings": {
             /**
@@ -2136,8 +2541,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -2244,8 +2651,10 @@ export interface components {
                             expires_at?: string;
                             refresh_token?: string | null;
                             refresh_token_expires_in?: number | null;
-                            token_type: string;
+                            token_type?: string | null;
                             scope?: string;
+                        } & {
+                            [key: string]: unknown;
                         };
                     };
                     connection_config?: ({
@@ -2286,8 +2695,13 @@ export interface components {
             id: string;
             updated_at: string;
             created_at: string;
-            connector_config_id: string;
-        } & Omit<components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.beancount.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.google.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.qbo.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"], "connector_name">);
+            connector_config_id: string | null;
+            customer_id: string;
+            integration_id: string | null;
+            metadata: {
+                [key: string]: unknown;
+            } | null;
+        } & Omit<components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.facebook.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.googlecalendar.connectionSettings"] | components["schemas"]["connectors.googledocs.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"] | components["schemas"]["connectors.googlemail.connectionSettings"] | components["schemas"]["connectors.googlesheet.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.instagram.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.linkedin.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.notion.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.quickbooks.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.reddit.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.sharepointonline.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.twitter.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"], "connector_name">);
         /** Connector */
         "core.connector": {
             name: string;
@@ -2306,24 +2720,18 @@ export interface components {
                 connect_output?: unknown;
             };
         };
-        /** event */
-        "core.event": {
-            id: string;
-            name: string;
-            data: (string | number | boolean | null) | {
-                [key: string]: unknown;
-            } | unknown[];
-            timestamp: string;
-            user: (string | number | boolean | null) | {
-                [key: string]: unknown;
-            } | unknown[] | null;
-            v: string | null;
-            org_id: string | null;
-            user_id: string | null;
-            customer_id: string | null;
-        };
         /** Integration */
         "core.integration": {
+            connector_name: string;
+            name: string;
+            logo_url?: string | null;
+            /** @enum {string|null} */
+            stage?: "alpha" | "beta" | "ga" | null;
+            platforms?: ("web" | "mobile" | "desktop")[] | null;
+            category?: string | null;
+            auth_type?: string | null;
+            version?: string | null;
+        } & {
             [key: string]: unknown;
         };
         /**
@@ -2475,6 +2883,181 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    listConnectors: {
+        parameters: {
+            query?: {
+                /** @description Comma separated list of fields to optionally expand.
+                 *
+                 *     Available Options: `integrations` */
+                expand?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": ({
+                        integrations?: components["schemas"]["core.integration"][];
+                    } & components["schemas"]["core.connector"])[];
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    listConnectorConfigs: {
+        parameters: {
+            query?: {
+                /** @description Limit the number of items returned */
+                limit?: number;
+                /** @description Offset the items returned */
+                offset?: number;
+                /** @description Comma separated list of fields to optionally expand.
+                 *
+                 *     Available Options: `connector`, `enabled_integrations` */
+                expand?: string;
+                /** @description The name of the connector */
+                connector_name?: "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "wise" | "xero" | "yodlee" | "zohodesk";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: ({
+                            id: string;
+                            updated_at: string;
+                            created_at: string;
+                            org_id: string;
+                            display_name: string | null;
+                            disabled: boolean | null;
+                        } & Omit<components["schemas"]["connectors.aircall.connectorConfig"] | components["schemas"]["connectors.airtable.connectorConfig"] | components["schemas"]["connectors.apollo.connectorConfig"] | components["schemas"]["connectors.brex.connectorConfig"] | components["schemas"]["connectors.coda.connectorConfig"] | components["schemas"]["connectors.confluence.connectorConfig"] | components["schemas"]["connectors.discord.connectorConfig"] | components["schemas"]["connectors.facebook.connectorConfig"] | components["schemas"]["connectors.finch.connectorConfig"] | components["schemas"]["connectors.firebase.connectorConfig"] | components["schemas"]["connectors.foreceipt.connectorConfig"] | components["schemas"]["connectors.github.connectorConfig"] | components["schemas"]["connectors.gong.connectorConfig"] | components["schemas"]["connectors.googlecalendar.connectorConfig"] | components["schemas"]["connectors.googledocs.connectorConfig"] | components["schemas"]["connectors.googledrive.connectorConfig"] | components["schemas"]["connectors.googlemail.connectorConfig"] | components["schemas"]["connectors.googlesheet.connectorConfig"] | components["schemas"]["connectors.greenhouse.connectorConfig"] | components["schemas"]["connectors.heron.connectorConfig"] | components["schemas"]["connectors.hubspot.connectorConfig"] | components["schemas"]["connectors.instagram.connectorConfig"] | components["schemas"]["connectors.intercom.connectorConfig"] | components["schemas"]["connectors.jira.connectorConfig"] | components["schemas"]["connectors.kustomer.connectorConfig"] | components["schemas"]["connectors.lever.connectorConfig"] | components["schemas"]["connectors.linear.connectorConfig"] | components["schemas"]["connectors.linkedin.connectorConfig"] | components["schemas"]["connectors.lunchmoney.connectorConfig"] | components["schemas"]["connectors.mercury.connectorConfig"] | components["schemas"]["connectors.merge.connectorConfig"] | components["schemas"]["connectors.microsoft.connectorConfig"] | components["schemas"]["connectors.moota.connectorConfig"] | components["schemas"]["connectors.notion.connectorConfig"] | components["schemas"]["connectors.onebrick.connectorConfig"] | components["schemas"]["connectors.outreach.connectorConfig"] | components["schemas"]["connectors.pipedrive.connectorConfig"] | components["schemas"]["connectors.plaid.connectorConfig"] | components["schemas"]["connectors.postgres.connectorConfig"] | components["schemas"]["connectors.quickbooks.connectorConfig"] | components["schemas"]["connectors.ramp.connectorConfig"] | components["schemas"]["connectors.reddit.connectorConfig"] | components["schemas"]["connectors.salesforce.connectorConfig"] | components["schemas"]["connectors.salesloft.connectorConfig"] | components["schemas"]["connectors.saltedge.connectorConfig"] | components["schemas"]["connectors.sharepointonline.connectorConfig"] | components["schemas"]["connectors.slack.connectorConfig"] | components["schemas"]["connectors.splitwise.connectorConfig"] | components["schemas"]["connectors.stripe.connectorConfig"] | components["schemas"]["connectors.teller.connectorConfig"] | components["schemas"]["connectors.toggl.connectorConfig"] | components["schemas"]["connectors.twenty.connectorConfig"] | components["schemas"]["connectors.twitter.connectorConfig"] | components["schemas"]["connectors.venmo.connectorConfig"] | components["schemas"]["connectors.wise.connectorConfig"] | components["schemas"]["connectors.xero.connectorConfig"] | components["schemas"]["connectors.yodlee.connectorConfig"] | components["schemas"]["connectors.zohodesk.connectorConfig"], "connector_name"> & {
+                            connector?: components["schemas"]["core.connector"];
+                            integrations?: {
+                                [key: string]: components["schemas"]["core.integration"];
+                            };
+                            connection_count?: number;
+                        })[];
+                        /** @description Total number of items in the database for the organization */
+                        total: number;
+                        /**
+                         * @description Limit the number of items returned
+                         * @default 50
+                         */
+                        limit: number;
+                        /**
+                         * @description Offset the items returned
+                         * @default 0
+                         */
+                        offset: number;
+                    };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
     getConnection: {
         parameters: {
             query?: {
@@ -2482,7 +3065,7 @@ export interface operations {
                 include_secrets?: "none" | "basic" | "all";
                 /** @description Controls credential refresh: none (never), force (always), or auto (when expired, default) */
                 refresh_policy?: "none" | "force" | "auto";
-                expand?: ("connector" | "enabled_integrations" | "connection_count")[];
+                expand?: "connector"[];
             };
             header?: never;
             path: {
@@ -2499,7 +3082,90 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["core.connection"];
+                    "application/json": {
+                        id: string;
+                        updated_at: string;
+                        created_at: string;
+                        connector_config_id: string | null;
+                        customer_id: string;
+                        integration_id: string | null;
+                        metadata: {
+                            [key: string]: unknown;
+                        } | null;
+                    } & Omit<components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.facebook.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.googlecalendar.connectionSettings"] | components["schemas"]["connectors.googledocs.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"] | components["schemas"]["connectors.googlemail.connectionSettings"] | components["schemas"]["connectors.googlesheet.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.instagram.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.linkedin.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.notion.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.quickbooks.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.reddit.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.sharepointonline.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.twitter.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"], "connector_name"> & {
+                        connector?: components["schemas"]["core.connector"];
+                    };
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    deleteConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id of the connection, starts with `conn_` */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description The id of the connection, starts with `conn_` */
+                        id: string;
+                    };
                 };
             };
             /** @description Invalid input data */
@@ -2557,14 +3223,14 @@ export interface operations {
                 /** @description Offset the items returned */
                 offset?: number;
                 /** @description The name of the connector */
-                connector_name?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive";
+                connector_name?: "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "wise" | "xero" | "yodlee" | "zohodesk";
                 /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                 customer_id?: string;
                 /** @description The id of the connector config, starts with `ccfg_` */
                 connector_config_id?: string;
                 /** @description Controls secret inclusion: none (default), basic (auth only), or all secrets */
                 include_secrets?: "none" | "basic" | "all";
-                expand?: ("connector" | "enabled_integrations" | "connection_count")[];
+                expand?: "connector"[];
             };
             header?: never;
             path?: never;
@@ -2579,7 +3245,19 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["core.connection"][];
+                        items: ({
+                            id: string;
+                            updated_at: string;
+                            created_at: string;
+                            connector_config_id: string | null;
+                            customer_id: string;
+                            integration_id: string | null;
+                            metadata: {
+                                [key: string]: unknown;
+                            } | null;
+                        } & Omit<components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.facebook.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.googlecalendar.connectionSettings"] | components["schemas"]["connectors.googledocs.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"] | components["schemas"]["connectors.googlemail.connectionSettings"] | components["schemas"]["connectors.googlesheet.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.instagram.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.linkedin.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.notion.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.quickbooks.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.reddit.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.sharepointonline.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.twitter.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"], "connector_name"> & {
+                            connector?: components["schemas"]["core.connector"];
+                        })[];
                         /** @description Total number of items in the database for the organization */
                         total: number;
                         /**
@@ -2629,6 +3307,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
+                };
+            };
+        };
+    };
+    createConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description The id of the connector config, starts with `ccfg_` */
+                    connector_config_id: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    };
+                    /** @description The id of the customer in your application. Ensure it is unique for that customer. */
+                    customer_id: string;
+                    /** @description Connector specific data */
+                    data: components["schemas"]["connectors.aircall.connectionSettings"] | components["schemas"]["connectors.airtable.connectionSettings"] | components["schemas"]["connectors.apollo.connectionSettings"] | components["schemas"]["connectors.brex.connectionSettings"] | components["schemas"]["connectors.coda.connectionSettings"] | components["schemas"]["connectors.confluence.connectionSettings"] | components["schemas"]["connectors.discord.connectionSettings"] | components["schemas"]["connectors.facebook.connectionSettings"] | components["schemas"]["connectors.finch.connectionSettings"] | components["schemas"]["connectors.firebase.connectionSettings"] | components["schemas"]["connectors.foreceipt.connectionSettings"] | components["schemas"]["connectors.github.connectionSettings"] | components["schemas"]["connectors.gong.connectionSettings"] | components["schemas"]["connectors.googlecalendar.connectionSettings"] | components["schemas"]["connectors.googledocs.connectionSettings"] | components["schemas"]["connectors.googledrive.connectionSettings"] | components["schemas"]["connectors.googlemail.connectionSettings"] | components["schemas"]["connectors.googlesheet.connectionSettings"] | components["schemas"]["connectors.greenhouse.connectionSettings"] | components["schemas"]["connectors.heron.connectionSettings"] | components["schemas"]["connectors.hubspot.connectionSettings"] | components["schemas"]["connectors.instagram.connectionSettings"] | components["schemas"]["connectors.intercom.connectionSettings"] | components["schemas"]["connectors.jira.connectionSettings"] | components["schemas"]["connectors.kustomer.connectionSettings"] | components["schemas"]["connectors.lever.connectionSettings"] | components["schemas"]["connectors.linear.connectionSettings"] | components["schemas"]["connectors.linkedin.connectionSettings"] | components["schemas"]["connectors.lunchmoney.connectionSettings"] | components["schemas"]["connectors.mercury.connectionSettings"] | components["schemas"]["connectors.merge.connectionSettings"] | components["schemas"]["connectors.microsoft.connectionSettings"] | components["schemas"]["connectors.moota.connectionSettings"] | components["schemas"]["connectors.notion.connectionSettings"] | components["schemas"]["connectors.onebrick.connectionSettings"] | components["schemas"]["connectors.outreach.connectionSettings"] | components["schemas"]["connectors.pipedrive.connectionSettings"] | components["schemas"]["connectors.plaid.connectionSettings"] | components["schemas"]["connectors.postgres.connectionSettings"] | components["schemas"]["connectors.quickbooks.connectionSettings"] | components["schemas"]["connectors.ramp.connectionSettings"] | components["schemas"]["connectors.reddit.connectionSettings"] | components["schemas"]["connectors.salesforce.connectionSettings"] | components["schemas"]["connectors.salesloft.connectionSettings"] | components["schemas"]["connectors.saltedge.connectionSettings"] | components["schemas"]["connectors.sharepointonline.connectionSettings"] | components["schemas"]["connectors.slack.connectionSettings"] | components["schemas"]["connectors.splitwise.connectionSettings"] | components["schemas"]["connectors.stripe.connectionSettings"] | components["schemas"]["connectors.teller.connectionSettings"] | components["schemas"]["connectors.toggl.connectionSettings"] | components["schemas"]["connectors.twenty.connectionSettings"] | components["schemas"]["connectors.twitter.connectionSettings"] | components["schemas"]["connectors.venmo.connectionSettings"] | components["schemas"]["connectors.wise.connectionSettings"] | components["schemas"]["connectors.xero.connectionSettings"] | components["schemas"]["connectors.yodlee.connectionSettings"] | components["schemas"]["connectors.zohodesk.connectionSettings"];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["core.connection"];
+                };
+            };
+            /** @description Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** @description Authorization not provided */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** @description Insufficient access */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["error.FORBIDDEN"];
                 };
             };
             /** @description Internal server error */
@@ -2716,359 +3464,6 @@ export interface operations {
             };
         };
     };
-    listConnectorConfigs: {
-        parameters: {
-            query?: {
-                /** @description Limit the number of items returned */
-                limit?: number;
-                /** @description Offset the items returned */
-                offset?: number;
-                /** @description Comma separated list of fields to optionally expand.
-                 *
-                 *     Available Options: `connector`, `enabled_integrations` */
-                expand?: string;
-                /** @description The name of the connector */
-                connector_name?: "aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: ({
-                            id: string;
-                            updated_at: string;
-                            created_at: string;
-                            org_id: string;
-                        } & Omit<components["schemas"]["connectors.aircall.connectorConfig"] | components["schemas"]["connectors.airtable.connectorConfig"] | components["schemas"]["connectors.apollo.connectorConfig"] | components["schemas"]["connectors.beancount.connectorConfig"] | components["schemas"]["connectors.brex.connectorConfig"] | components["schemas"]["connectors.coda.connectorConfig"] | components["schemas"]["connectors.confluence.connectorConfig"] | components["schemas"]["connectors.discord.connectorConfig"] | components["schemas"]["connectors.finch.connectorConfig"] | components["schemas"]["connectors.firebase.connectorConfig"] | components["schemas"]["connectors.foreceipt.connectorConfig"] | components["schemas"]["connectors.github.connectorConfig"] | components["schemas"]["connectors.gong.connectorConfig"] | components["schemas"]["connectors.google.connectorConfig"] | components["schemas"]["connectors.greenhouse.connectorConfig"] | components["schemas"]["connectors.heron.connectorConfig"] | components["schemas"]["connectors.hubspot.connectorConfig"] | components["schemas"]["connectors.intercom.connectorConfig"] | components["schemas"]["connectors.jira.connectorConfig"] | components["schemas"]["connectors.kustomer.connectorConfig"] | components["schemas"]["connectors.lever.connectorConfig"] | components["schemas"]["connectors.linear.connectorConfig"] | components["schemas"]["connectors.lunchmoney.connectorConfig"] | components["schemas"]["connectors.mercury.connectorConfig"] | components["schemas"]["connectors.merge.connectorConfig"] | components["schemas"]["connectors.microsoft.connectorConfig"] | components["schemas"]["connectors.moota.connectorConfig"] | components["schemas"]["connectors.onebrick.connectorConfig"] | components["schemas"]["connectors.outreach.connectorConfig"] | components["schemas"]["connectors.pipedrive.connectorConfig"] | components["schemas"]["connectors.plaid.connectorConfig"] | components["schemas"]["connectors.postgres.connectorConfig"] | components["schemas"]["connectors.qbo.connectorConfig"] | components["schemas"]["connectors.ramp.connectorConfig"] | components["schemas"]["connectors.salesforce.connectorConfig"] | components["schemas"]["connectors.salesloft.connectorConfig"] | components["schemas"]["connectors.saltedge.connectorConfig"] | components["schemas"]["connectors.slack.connectorConfig"] | components["schemas"]["connectors.splitwise.connectorConfig"] | components["schemas"]["connectors.stripe.connectorConfig"] | components["schemas"]["connectors.teller.connectorConfig"] | components["schemas"]["connectors.toggl.connectorConfig"] | components["schemas"]["connectors.twenty.connectorConfig"] | components["schemas"]["connectors.venmo.connectorConfig"] | components["schemas"]["connectors.wise.connectorConfig"] | components["schemas"]["connectors.xero.connectorConfig"] | components["schemas"]["connectors.yodlee.connectorConfig"] | components["schemas"]["connectors.zohodesk.connectorConfig"] | components["schemas"]["connectors.googledrive.connectorConfig"], "connector_name"> & {
-                            connector?: components["schemas"]["core.connector"];
-                            integrations?: {
-                                [key: string]: components["schemas"]["core.integration"];
-                            };
-                            connection_count?: number;
-                        })[];
-                        /** @description Total number of items in the database for the organization */
-                        total: number;
-                        /**
-                         * @description Limit the number of items returned
-                         * @default 50
-                         */
-                        limit: number;
-                        /**
-                         * @description Offset the items returned
-                         * @default 0
-                         */
-                        offset: number;
-                    };
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    listConnectors: {
-        parameters: {
-            query?: {
-                expand?: "integrations"[];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": ({
-                        integrations?: components["schemas"]["core.integration"][];
-                    } & components["schemas"]["core.connector"])[];
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    listEvents: {
-        parameters: {
-            query?: {
-                /** @description Limit the number of items returned */
-                limit?: number;
-                /** @description Offset the items returned */
-                offset?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["core.event"][];
-                        /** @description Total number of items in the database for the organization */
-                        total: number;
-                        /**
-                         * @description Limit the number of items returned
-                         * @default 50
-                         */
-                        limit: number;
-                        /**
-                         * @description Offset the items returned
-                         * @default 0
-                         */
-                        offset: number;
-                    };
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    getOnboarding: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        first_connector_configured: boolean;
-                        first_connection_created: boolean;
-                        api_key_used: boolean;
-                        onboarding_marked_complete: boolean;
-                    };
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
-    setOnboardingComplete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
     createMagicLink: {
         parameters: {
             query?: never;
@@ -3093,7 +3488,7 @@ export interface operations {
                      * @description Filter integrations by connector names
                      * @default []
                      */
-                    connector_names?: ("aircall" | "airtable" | "apollo" | "beancount" | "brex" | "coda" | "confluence" | "discord" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "google" | "greenhouse" | "heron" | "hubspot" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "lunchmoney" | "merge" | "microsoft" | "moota" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "qbo" | "ramp" | "salesforce" | "salesloft" | "saltedge" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "wise" | "xero" | "yodlee" | "zohodesk" | "googledrive")[];
+                    connector_names?: ("aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "wise" | "xero" | "yodlee" | "zohodesk")[];
                     /** @description The specific connection id to load */
                     connection_id?: string;
                     /**

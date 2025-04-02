@@ -1,6 +1,8 @@
 // TODO: Maybe this belongs in engine backend?
-import {extendZodWithOpenApi, z} from '@opensdks/util-zod'
-import {invert, memoize, R} from '@openint/util'
+import {compact} from '@openint/util/array-utils'
+import {memoize} from '@openint/util/function-utils'
+import {invert} from '@openint/util/object-utils'
+import {z} from '@openint/util/zod-utils'
 
 export type ExternalId = z.infer<typeof zExternalId>
 export const zExternalId = z.union([z.string(), z.number()])
@@ -44,7 +46,7 @@ export type Id<TName extends string = string> = {
 function _zId<TPrefix extends IdPrefix>(prefix: TPrefix) {
   // Not sure why this is needed...
   // but if not including it we get a crash...
-  extendZodWithOpenApi(z)
+
   return z
     .string()
     .refine((s): s is Id[TPrefix] => {
@@ -81,7 +83,7 @@ export function makeId<TPrefix extends IdPrefix, TPName extends string>(
     ? [TPrefix, ExternalId]
     : [TPrefix, TPName, ExternalId]
 ) {
-  return R.compact(args).join('_') as Id<TPName>[TPrefix]
+  return compact(args).join('_') as Id<TPName>[TPrefix]
 }
 
 export function extractId(id: Id[keyof Id]) {

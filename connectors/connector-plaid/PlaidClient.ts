@@ -1,4 +1,5 @@
 import {createEnv} from '@t3-oss/env-core'
+import {zFunction} from '@openint/util/zod-function-utils'
 import {
   Configuration,
   CountryCode,
@@ -6,9 +7,9 @@ import {
   PlaidEnvironments,
   Products,
 } from 'plaid'
-// Two separate zod version for now to minimize diff in current PR
-import z2 from 'zod'
-import {getDefaultProxyAgent, memoize, z, zCast, zFunction} from '@openint/util'
+import {z, zCast} from '@openint/util/zod-utils'
+import {memoize} from '@openint/util/function-utils'
+import {getDefaultProxyAgent} from '@openint/util/http/http-utils'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {WebhookShape} from './plaid.types'
 
@@ -93,10 +94,10 @@ export function makePlaidClient(config: {
 export function getPlatformConfig(envName: EnvName) {
   const env = createEnv({
     server: {
-      int_plaid__CLIENT_ID: z2.string(),
-      int_plaid__CLIENT_SECRET_SANDBOX: z2.string(),
-      int_plaid__CLIENT_SECRET_DEVELOPMENT: z2.string(),
-      int_plaid__CLIENT_SECRET_PRODUCTION: z2.string(),
+      int_plaid__CLIENT_ID: z.string(),
+      int_plaid__CLIENT_SECRET_SANDBOX: z.string(),
+      int_plaid__CLIENT_SECRET_DEVELOPMENT: z.string(),
+      int_plaid__CLIENT_SECRET_PRODUCTION: z.string(),
     },
     runtimeEnv: process.env,
   })

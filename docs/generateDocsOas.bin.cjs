@@ -3,48 +3,61 @@ const https = require('https')
 const yaml = require('js-yaml')
 
 async function getOasSpec() {
-  if (process.env.NODE_ENV === 'development') {
-    return JSON.parse(
-      fs.readFileSync('../packages/api-v1/__generated__/openapi.json', 'utf8'),
-    )
-  }
-
   return new Promise((resolve, reject) => {
-    https.get(
-      'https://app.stainless.com/api/spec/documented/openint',
-      (res) => {
-        let data = ''
+    if (process.env.NODE_ENV === 'development') {
+      const {exec} = require('child_process')
 
-        res.on('data', (chunk) => {
-          data += chunk
-        })
+      // Run the pnpm gen command in the api-v1 package
+      exec('pnpm gen', {cwd: '../packages/api-v1'}, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error executing pnpm gen: ${error.message}`)
+          reject(new Error('pnpm gen stderr'))
+        }
+        if (stderr) {
+          console.error(`pnpm gen stderr: ${stderr}`)
+          reject(new Error('pnpm gen stderr'))
+        }
+        resolve(
+          JSON.parse(
+            fs.readFileSync(
+              '../packages/api-v1/__generated__/openapi.json',
+              'utf8',
+            ),
+          ),
+        )
+      })
+    } else {
+      https.get(
+        'https://app.stainless.com/api/spec/documented/openint',
+        (res) => {
+          let data = ''
 
-        res.on('end', () => {
-          try {
-            resolve(yaml.load(data))
-          } catch (e) {
-            reject(e)
-          }
-        })
+          res.on('data', (chunk) => {
+            data += chunk
+          })
 
-        res.on('error', (err) => {
-          reject(err)
-        })
-      },
-    )
+          res.on('end', () => {
+            try {
+              resolve(yaml.load(data))
+            } catch (e) {
+              reject(e)
+            }
+          })
+
+          res.on('error', (err) => {
+            reject(err)
+          })
+        },
+      )
+    }
   })
 }
 
 async function main() {
   const oas = await getOasSpec()
 
-  const pathsToFilterOut = [
-    '/health',
-    '/viewer',
-    '/event',
-    '/organization/onboarding',
-    '/connector/{name}',
-  ]
+  // no longer in use
+  const pathsToFilterOut = ['/health', '/viewer']
 
   const filteredPaths = Object.keys(oas.paths)
     .filter((path) => !pathsToFilterOut.includes(path))

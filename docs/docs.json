@@ -25,7 +25,7 @@
       {
         "version": "v0 (current)",
         "label": "Version 1",
-        "openapi": "https://raw.githubusercontent.com/openintegrations/openint/main/kits/sdk/openapi.json",
+        "openapi": "https://raw.githubusercontent.com/openintegrations/openint/v0/kits/sdk/openapi.json",
         "groups": [
           {
             "group": "Getting Started",
@@ -48,7 +48,7 @@
       {
         "version": "v1 (preview)",
         "label": "Version 1",
-        "openapi": "mintlify.oas.yml",
+        "openapi": "./mintlify.oas.yml",
         "groups": [
           {
             "group": "Getting Started",

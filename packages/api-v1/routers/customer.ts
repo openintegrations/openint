@@ -1,9 +1,9 @@
 import {TRPCError} from '@trpc/server'
-import {z} from 'zod'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {getServerUrl} from '@openint/env'
+import {z} from '@openint/util/zod-utils'
 import {core, Customer} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
 import {
@@ -53,7 +53,8 @@ export const customerRouter = router({
       openapi: {
         method: 'POST',
         path: '/customer/{customer_id}/magic-link',
-        description: 'Create a magic link for connecting integrations',
+        description:
+          'Create a magic link that is ready to be shared with customers who want to use Connect',
         summary: 'Create Magic Link',
       },
     })
@@ -147,7 +148,8 @@ export const customerRouter = router({
       openapi: {
         method: 'POST',
         path: '/customer/{customer_id}/token',
-        description: 'Create an authentication token for a customer',
+        description:
+          'Create a @Connect authentication token for a customer. This token can be used to embed @Connect in your application via the `@openint/connect` npm package.',
         summary: 'Create Customer Authentication Token',
       },
     })
@@ -196,6 +198,7 @@ export const customerRouter = router({
         path: '/customers',
         description: 'List all customers',
         summary: 'List Customers',
+        enabled: false,
       },
     })
     .input(

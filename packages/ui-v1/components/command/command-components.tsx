@@ -24,7 +24,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@openint/shadcn/ui'
-import {R} from '@openint/util'
+import {compact} from '@openint/util/array-utils'
 import {Icon} from '../Icon'
 
 export interface CommandComponentProps<
@@ -181,7 +181,7 @@ function CommandItemContainer({
 
   return (
     <CommandItem
-      value={R.compact([cmd.title, cmd.subtitle, cmd.shortcut]).join(' ')}
+      value={compact([cmd.title, cmd.subtitle, cmd.shortcut]).join(' ')}
       onSelect={(currentValue) => {
         void cmd.execute?.({ctx, params: params ?? {}})
         onSelect?.(currentValue)

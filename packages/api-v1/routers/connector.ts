@@ -1,5 +1,5 @@
 import {TRPCError} from '@trpc/server'
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorDef} from '@openint/cdk'
@@ -41,8 +41,9 @@ export const connectorRouter = router({
       openapi: {
         method: 'GET',
         path: '/connector',
-        description: 'List all connectors with optional filtering',
-        summary: 'List all connectors',
+        description:
+          'List all connectors to understand what integrations are available to configure',
+        summary: 'List Connectors',
       },
     })
     .input(
@@ -50,7 +51,7 @@ export const connectorRouter = router({
         .object({
           expand: z
             .string()
-            .transform((val) => val.split(',').map(s => s.trim()))
+            .transform((val) => val.split(',').map((s) => s.trim()))
             .refine(
               (items) =>
                 items.every((item) => zExpandOptions.safeParse(item).success),
@@ -124,6 +125,7 @@ export const connectorRouter = router({
         method: 'GET',
         path: '/connector/{name}',
         description: 'Get a connector by name',
+        enabled: false,
       },
     })
     .input(

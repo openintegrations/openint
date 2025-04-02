@@ -3,16 +3,8 @@ import {type OpenApiMeta} from 'trpc-to-openapi'
 import {hasRole, type Viewer} from '@openint/cdk'
 import type {RouterContext} from './context'
 
-export interface RouterMeta extends OpenApiMeta {
-  /**
-   * Indicate whether this is an internal API and
-   * should therefore not be generated as part of the OpenAPI spec
-   */
-  internal?: boolean
-}
-
 export const trpc = initTRPC
-  .meta<RouterMeta>()
+  .meta<OpenApiMeta>()
   .context<RouterContext>()
   .create({allowOutsideOfServer: true})
 

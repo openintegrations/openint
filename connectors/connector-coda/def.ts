@@ -1,7 +1,7 @@
 import codaOas from '@opensdks/sdk-coda/coda.oas.json'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 // type components = CodaSDKTypes['oas']['components']
 

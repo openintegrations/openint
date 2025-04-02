@@ -1,11 +1,8 @@
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
-import {z} from 'zod'
-import {extendZodWithOpenApi} from 'zod-openapi'
 import {schema} from '@openint/db'
+import {z} from '@openint/util/zod-utils'
 import type {NonEmptyArray} from './connectorSchemas'
 import {connectorSchemas, zConnector} from './connectorSchemas'
-
-extendZodWithOpenApi(z)
 
 const event = createSelectSchema(schema.event).openapi({
   ref: 'core.event',
@@ -31,6 +28,24 @@ const coreBase = z.object({
   created_at: z.string(), // .datetime(), // TODO: Ensure date time format is respected
 })
 
+export const zConnectionSettings = z
+  .discriminatedUnion(
+    'connector_name',
+    parseNonEmpty(
+      connectorSchemas.connectionSettings.map((s) =>
+        z
+          .object({
+            connector_name: s.shape.connector_name,
+            settings: s.shape.connectionSettings,
+          })
+          .openapi({
+            ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
+          }),
+      ),
+    ),
+  )
+  .describe('Connector specific data')
+
 export const core = {
   event,
   event_insert,
@@ -47,23 +62,7 @@ export const core = {
           metadata: z.record(z.string(), z.any()).nullable(),
         })
         .describe('Connection Base'),
-      z
-        .discriminatedUnion(
-          'connector_name',
-          parseNonEmpty(
-            connectorSchemas.connectionSettings.map((s) =>
-              z
-                .object({
-                  connector_name: s.shape.connector_name,
-                  settings: s.shape.connectionSettings,
-                })
-                .openapi({
-                  ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
-                }),
-            ),
-          ),
-        )
-        .describe('Connector specific data'),
+      zConnectionSettings,
     )
     .openapi({ref: 'core.connection', title: 'Connection'}),
 

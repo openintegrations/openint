@@ -4,7 +4,7 @@ import {
   generateOpenApiDocument,
   type OpenApiMeta,
 } from 'trpc-to-openapi'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 const trpc = initTRPC.meta<OpenApiMeta>().create()
 

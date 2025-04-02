@@ -1,6 +1,6 @@
 import React from 'react'
 import useScriptHook from 'react-script-hook'
-import {Deferred} from '@openint/util'
+import {Deferred} from '@openint/util/promise-utils'
 
 export function useScript(src: string) {
   const [loaded, error] = useScriptHook({src, checkForExisting: true})

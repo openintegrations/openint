@@ -1,8 +1,9 @@
-import {z} from '@opensdks/util-zod'
 import {TRPCError} from '@trpc/server'
 import * as jose from 'jose'
-import type {DiscriminatedUnionWithAllKeys} from '@openint/util'
-import {R, zFunction} from '@openint/util'
+import {compact} from '@openint/util/array-utils'
+import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
+import {zFunction} from '@openint/util/zod-function-utils'
+import {z} from '@openint/util/zod-utils'
 import type {CustomerId, ExtCustomerId, Id, UserId} from './id.types'
 import {zCustomerId, zId, zUserId} from './id.types'
 
@@ -58,7 +59,7 @@ export function getViewerId(viewer: Viewer) {
       return `${viewer.orgId}/cus_${viewer.customerId}`
     case 'user':
       // orgId is actually optional, thus userId first
-      return R.compact([viewer.userId, viewer.orgId]).join('/')
+      return compact([viewer.userId, viewer.orgId]).join('/')
     case 'org':
       return viewer.orgId
     case 'system':

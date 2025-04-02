@@ -3,15 +3,6 @@
 module.exports = [
   {dirName: 'all-connectors', varName: 'allConnectors', imports: {}},
   {
-    name: 'aircall',
-    dirName: 'connector-aircall',
-    varName: 'connectorAircall',
-    imports: {
-      def: '@openint/connector-aircall/def',
-      server: '@openint/connector-aircall/server',
-    },
-  },
-  {
     name: 'airtable',
     dirName: 'connector-airtable',
     varName: 'connectorAirtable',
@@ -29,6 +20,7 @@ module.exports = [
       server: '@openint/connector-apollo/server',
     },
   },
+  {dirName: 'connector-beancount', varName: 'connectorBeancount', imports: {}},
   {
     name: 'brex',
     dirName: 'connector-brex',
@@ -45,24 +37,6 @@ module.exports = [
     imports: {
       def: '@openint/connector-coda/def',
       server: '@openint/connector-coda/server',
-    },
-  },
-  {
-    name: 'confluence',
-    dirName: 'connector-confluence',
-    varName: 'connectorConfluence',
-    imports: {
-      def: '@openint/connector-confluence/def',
-      server: '@openint/connector-confluence/server',
-    },
-  },
-  {
-    name: 'discord',
-    dirName: 'connector-discord',
-    varName: 'connectorDiscord',
-    imports: {
-      def: '@openint/connector-discord/def',
-      server: '@openint/connector-discord/server',
     },
   },
   {dirName: 'connector-expensify', varName: 'connectorExpensify', imports: {}},
@@ -104,30 +78,12 @@ module.exports = [
     },
   },
   {
-    name: 'github',
-    dirName: 'connector-github',
-    varName: 'connectorGithub',
-    imports: {
-      def: '@openint/connector-github/def',
-      server: '@openint/connector-github/server',
-    },
-  },
-  {
     name: 'gong',
     dirName: 'connector-gong',
     varName: 'connectorGong',
     imports: {
       def: '@openint/connector-gong/def',
       server: '@openint/connector-gong/server',
-    },
-  },
-  {
-    name: 'google',
-    dirName: 'connector-google',
-    varName: 'connectorGoogle',
-    imports: {
-      def: '@openint/connector-google/def',
-      server: '@openint/connector-google/server',
     },
   },
   {
@@ -146,15 +102,6 @@ module.exports = [
     imports: {
       def: '@openint/connector-heron/def',
       server: '@openint/connector-heron/server',
-    },
-  },
-  {
-    name: 'hubspot',
-    dirName: 'connector-hubspot',
-    varName: 'connectorHubspot',
-    imports: {
-      def: '@openint/connector-hubspot/def',
-      server: '@openint/connector-hubspot/server',
     },
   },
   {
@@ -203,24 +150,6 @@ module.exports = [
     },
   },
   {
-    name: 'linear',
-    dirName: 'connector-linear',
-    varName: 'connectorLinear',
-    imports: {
-      def: '@openint/connector-linear/def',
-      server: '@openint/connector-linear/server',
-    },
-  },
-  {
-    name: 'linkedin',
-    dirName: 'connector-linkedin',
-    varName: 'connectorLinkedin',
-    imports: {
-      def: '@openint/connector-linkedin/def',
-      server: '@openint/connector-linkedin/server',
-    },
-  },
-  {
     name: 'lunchmoney',
     dirName: 'connector-lunchmoney',
     varName: 'connectorLunchmoney',
@@ -261,15 +190,6 @@ module.exports = [
     imports: {
       def: '@openint/connector-moota/def',
       server: '@openint/connector-moota/server',
-    },
-  },
-  {
-    name: 'notion',
-    dirName: 'connector-notion',
-    varName: 'connectorNotion',
-    imports: {
-      def: '@openint/connector-notion/def',
-      server: '@openint/connector-notion/server',
     },
   },
   {
@@ -320,15 +240,6 @@ module.exports = [
     },
   },
   {
-    name: 'qbo',
-    dirName: 'connector-qbo',
-    varName: 'connectorQbo',
-    imports: {
-      def: '@openint/connector-qbo/def',
-      server: '@openint/connector-qbo/server',
-    },
-  },
-  {
     name: 'ramp',
     dirName: 'connector-ramp',
     varName: 'connectorRamp',
@@ -347,15 +258,6 @@ module.exports = [
     },
   },
   {
-    name: 'salesforce',
-    dirName: 'connector-salesforce',
-    varName: 'connectorSalesforce',
-    imports: {
-      def: '@openint/connector-salesforce/def',
-      server: '@openint/connector-salesforce/server',
-    },
-  },
-  {
     name: 'salesloft',
     dirName: 'connector-salesloft',
     varName: 'connectorSalesloft',
@@ -371,15 +273,6 @@ module.exports = [
     imports: {
       def: '@openint/connector-saltedge/def',
       server: '@openint/connector-saltedge/server',
-    },
-  },
-  {
-    name: 'slack',
-    dirName: 'connector-slack',
-    varName: 'connectorSlack',
-    imports: {
-      def: '@openint/connector-slack/def',
-      server: '@openint/connector-slack/server',
     },
   },
   {
@@ -481,15 +374,221 @@ module.exports = [
     },
   },
   {
+    name: 'aircall',
+    dirName: 'cnext-aircall',
+    varName: 'connectorAircall',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorAircall_def',
+        server: 'connectorAircall_server',
+      },
+    },
+  },
+  {
+    name: 'confluence',
+    dirName: 'cnext-confluence',
+    varName: 'connectorConfluence',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorConfluence_def',
+        server: 'connectorConfluence_server',
+      },
+    },
+  },
+  {
+    name: 'discord',
+    dirName: 'cnext-discord',
+    varName: 'connectorDiscord',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorDiscord_def',
+        server: 'connectorDiscord_server',
+      },
+    },
+  },
+  {
+    name: 'github',
+    dirName: 'cnext-github',
+    varName: 'connectorGithub',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGithub_def',
+        server: 'connectorGithub_server',
+      },
+    },
+  },
+  {
+    name: 'googlecalendar',
+    dirName: 'cnext-googlecalendar',
+    varName: 'connectorGooglecalendar',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGooglecalendar_def',
+        server: 'connectorGooglecalendar_server',
+      },
+    },
+  },
+  {
+    name: 'googledocs',
+    dirName: 'cnext-googledocs',
+    varName: 'connectorGoogledocs',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGoogledocs_def',
+        server: 'connectorGoogledocs_server',
+      },
+    },
+  },
+  {
     name: 'googledrive',
     dirName: 'cnext-googledrive',
     varName: 'connectorGoogledrive',
-    imports: {def: '@openint/cnext', server: '@openint/cnext'},
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGoogledrive_def',
+        server: 'connectorGoogledrive_server',
+      },
+    },
+  },
+  {
+    name: 'googlemail',
+    dirName: 'cnext-googlemail',
+    varName: 'connectorGooglemail',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGooglemail_def',
+        server: 'connectorGooglemail_server',
+      },
+    },
   },
   {
     name: 'googlesheet',
     dirName: 'cnext-googlesheet',
     varName: 'connectorGooglesheet',
-    imports: {def: '@openint/cnext', server: '@openint/cnext'},
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorGooglesheet_def',
+        server: 'connectorGooglesheet_server',
+      },
+    },
+  },
+  {
+    name: 'hubspot',
+    dirName: 'cnext-hubspot',
+    varName: 'connectorHubspot',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorHubspot_def',
+        server: 'connectorHubspot_server',
+      },
+    },
+  },
+  {
+    name: 'linear',
+    dirName: 'cnext-linear',
+    varName: 'connectorLinear',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorLinear_def',
+        server: 'connectorLinear_server',
+      },
+    },
+  },
+  {
+    name: 'linkedin',
+    dirName: 'cnext-linkedin',
+    varName: 'connectorLinkedin',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorLinkedin_def',
+        server: 'connectorLinkedin_server',
+      },
+    },
+  },
+  {
+    name: 'notion',
+    dirName: 'cnext-notion',
+    varName: 'connectorNotion',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorNotion_def',
+        server: 'connectorNotion_server',
+      },
+    },
+  },
+  {
+    name: 'quickbooks',
+    dirName: 'cnext-quickbooks',
+    varName: 'connectorQuickbooks',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorQuickbooks_def',
+        server: 'connectorQuickbooks_server',
+      },
+    },
+  },
+  {
+    name: 'salesforce',
+    dirName: 'cnext-salesforce',
+    varName: 'connectorSalesforce',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorSalesforce_def',
+        server: 'connectorSalesforce_server',
+      },
+    },
+  },
+  {
+    name: 'sharepointonline',
+    dirName: 'cnext-sharepointonline',
+    varName: 'connectorSharepointonline',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {
+        def: 'connectorSharepointonline_def',
+        server: 'connectorSharepointonline_server',
+      },
+    },
+  },
+  {
+    name: 'slack',
+    dirName: 'cnext-slack',
+    varName: 'connectorSlack',
+    imports: {
+      def: '@openint/cnext',
+      server: '@openint/cnext',
+      importPath: {def: 'connectorSlack_def', server: 'connectorSlack_server'},
+    },
   },
 ]

@@ -5,8 +5,6 @@
   "sideEffects": false,
   "module": "./index.ts",
   "dependencies": {
-    "@opensdks/util-zod": "^0.0.16",
-    "@trpc/server": "10.40.0",
     "accounting": "0.4.1",
     "async-sema": "3.1.1",
     "awilix": "7.0.3",
@@ -27,7 +25,7 @@
     "pluralize": "8.0.0",
     "qs": "6.11.1",
     "query-string": "7.1.1",
-    "remeda": "1.6.1",
+    "remeda": "^2.21.2",
     "rxjs": "7.5.6",
     "sentence-case": "3.0.4",
     "shvl": "2.0.3",
@@ -37,7 +35,7 @@
     "type-fest": "3.8.0",
     "ulidx": "0.4.0",
     "zod": "^3.24.2",
-    "zod-openapi": "^4.2.3"
+    "zod-openapi": "^4.2.4"
   },
   "devDependencies": {
     "@types/accounting": "0.4.2",

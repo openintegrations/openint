@@ -1,6 +1,6 @@
 /* eslint-disable promise/no-nesting */
 import {TRPCError} from '@openint/api-v1'
-import type {z} from '@openint/util'
+import type {z} from '@openint/util/zod-utils'
 
 /** Maybe there is a next.js type for this? */
 export type PageProps<
@@ -36,7 +36,6 @@ export async function parsePageProps<
     }),
     props.searchParams.then((searchParams): z.infer<ZSearchParams> => {
       if (schema.searchParams) {
-        console.log('schema.searchParams', schema.searchParams)
         return schema.searchParams.parseAsync(searchParams).catch((err) => {
           throw new TRPCError({
             code: 'BAD_REQUEST',

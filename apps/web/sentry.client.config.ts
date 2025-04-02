@@ -4,7 +4,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 import * as Sentry from '@sentry/nextjs'
 import {posthog} from 'posthog-js'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 const SENTRY_DSN =
   process.env['SENTRY_DSN'] || process.env['NEXT_PUBLIC_SENTRY_DSN']
@@ -39,7 +39,7 @@ if (!SENTRY_DSN) {
     // Note: if you want to override the automatic release value, do not set a
     // `release` value here - use the environment variable `SENTRY_RELEASE`, so
     // that it will also get attached to your source maps
-    // integrations: R.compact([
+    // integrations: compact([
     //   // @see https://share.cleanshot.com/zz9KPwZh
     //   // https://share.cleanshot.com/zz9KPwZh
     //   process.env['NEXT_PUBLIC_SENTRY_ORG'] &&

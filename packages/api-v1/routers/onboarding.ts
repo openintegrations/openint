@@ -1,10 +1,9 @@
 import {TRPCError} from '@trpc/server'
-import {z} from 'zod'
-import {encodeApiKey} from '@openint/cdk'
-import {eq, inArray, schema} from '@openint/db'
-import {makeUlid} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
+import {dbUpsertOne, eq, inArray, schema} from '@openint/db'
 import {core} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
+import {makeUlid} from '@openint/util/id-utils'
 
 const zOnboardingState = z.object({
   first_connector_configured: z.boolean(),
@@ -38,6 +37,18 @@ export const onboardingRouter = router({
         })
       }
 
+      // create api key if not already
+      if (!org.api_key) {
+        console.log('Lazily creating api key for org', org.id)
+        org.api_key = `key_${makeUlid()}`
+        await dbUpsertOne(
+          ctx.as({role: 'system'}).db, // TODO: Allow orgs to update their own api key
+          schema.organization,
+          {id: org.id, api_key: org.api_key},
+          {insertOnlyColumns: ['api_key']},
+        )
+      }
+
       return {
         ...org,
         metadata: {
@@ -63,7 +74,7 @@ export const onboardingRouter = router({
     )
     .output(z.object({id: z.string()}))
     .mutation(async ({input, ctx}) => {
-      const apikey = encodeApiKey(input.id, `key_${makeUlid()}`)
+      const apikey = `key_${makeUlid()}`
       const metadata = {
         referrer: input.referrer,
         clerk_user_id: input.clerkUserId,

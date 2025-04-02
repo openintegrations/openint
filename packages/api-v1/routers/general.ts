@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../trpc/_base'
 
 export const generalRouter = router({
@@ -9,6 +9,10 @@ export const generalRouter = router({
         path: '/health',
         description: 'Check if the API is operational',
         summary: 'Health Check',
+        // Normally these would be disabled as they are internal endpoints but
+        // since we use them for tests of oas generation we leave them on
+        // and then hardcode remove it form docs in generateDocsOas.bin.cjs
+        // enabled: false,
       },
     })
     .input(z.void())
@@ -16,6 +20,10 @@ export const generalRouter = router({
     .query(() => ({ok: true})),
 
   healthEcho: publicProcedure
+    // Normally these would be disabled as they are internal endpoints but
+    // since we use them for tests of oas generation we leave them on
+    // and then hardcode remove it form docs in generateDocsOas.bin.cjs
+    // enabled: false,
     .meta({openapi: {method: 'POST', path: '/health'}})
     .input(z.object({}).passthrough())
     .output(z.object({}).passthrough())
@@ -28,6 +36,10 @@ export const generalRouter = router({
         path: '/viewer',
         description: 'Get information about the current authenticated user',
         summary: 'Get Current User',
+        // Normally these would be disabled as they are internal endpoints but
+        // since we use them for tests of oas generation we leave them on
+        // and then hardcode remove it form docs in generateDocsOas.bin.cjs
+        // enabled: false,
       },
     })
     .input(z.void())

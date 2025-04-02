@@ -4,17 +4,13 @@ import {
   HTTPError as OpenapiHTTPError,
 } from '@opensdks/runtime'
 import {initYodleeSDK} from '@opensdks/sdk-yodlee'
-import {
-  $makeProxyAgent,
-  createHTTPClient,
-  DateTime,
-  getDefaultProxyAgent,
-  parseDateTime,
-  R,
-  z,
-  zFunction,
-  type HTTPError,
-} from '@openint/util'
+import {$makeProxyAgent, getDefaultProxyAgent} from '@openint/util/http/http-utils'
+import {createHTTPClient} from '@openint/util/http/index'
+import {DateTime, parseDateTime} from '@openint/util/date-utils'
+import {R} from '@openint/util/remeda'
+import {zFunction} from '@openint/util/zod-function-utils'
+import type {HTTPError} from '@openint/util/http/index'
+import {z} from '@openint/util/zod-utils'
 import type {YodleeAccount, YodleeTransaction} from './yodlee.types'
 
 export type YodleeEnvName = z.infer<typeof zYodleeEnvName>
@@ -187,11 +183,9 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
     async registerUser(user: {loginName: string; email: string}) {
       const token = await generateAccessToken(cfg.adminLoginName)
       return http
-        .post<{user: Yodlee.User}>(
-          '/user/register',
-          {user},
-          {headers: {Authorization: `Bearer ${token.accessToken}`}},
-        )
+        .post<{
+          user: Yodlee.User
+        }>('/user/register', {user}, {headers: {Authorization: `Bearer ${token.accessToken}`}})
         .then((r) => r.data.user)
     },
 
@@ -227,10 +221,9 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
 
     async getProviderAccount(providerAccountId: number | string) {
       return http
-        .get<{providerAccount: Yodlee.ProviderAccount[]}>(
-          `/providerAccounts/${providerAccountId}`,
-          {params: {include: 'preferences'}},
-        )
+        .get<{
+          providerAccount: Yodlee.ProviderAccount[]
+        }>(`/providerAccounts/${providerAccountId}`, {params: {include: 'preferences'}})
         .then((r) => r.data.providerAccount[0])
     },
 
@@ -249,7 +242,7 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
           return pas
         }
         const providers = await Promise.all(
-          R.uniq(pas.map((pa) => pa.providerId)).map((id) =>
+          R.unique(pas.map((pa) => pa.providerId)).map((id) =>
             getProvider(id).catch((err) => {
               // Can happen if provider is removed from yodlee
               console.warn(`Error getting provider id=${id}`, err)
@@ -281,11 +274,9 @@ export const makeYodleeClient = zFunction([zConfig, zCreds], (cfg, creds) => {
       datasetName: string[]
     }) {
       return http
-        .put<{providerAccount: Yodlee.ProviderAccount[]}>(
-          '/providerAccounts',
-          data,
-          {params: {providerAccountIds: providerAccountIds.join(',')}},
-        )
+        .put<{
+          providerAccount: Yodlee.ProviderAccount[]
+        }>('/providerAccounts', data, {params: {providerAccountIds: providerAccountIds.join(',')}})
         .then((r) => r.data.providerAccount)
     },
 
