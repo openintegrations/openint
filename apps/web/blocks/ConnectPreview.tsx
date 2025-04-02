@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import {customerRouterModels} from '@openint/api-v1/routers/customer.models'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
