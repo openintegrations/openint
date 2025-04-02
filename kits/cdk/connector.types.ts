@@ -5,7 +5,7 @@ import type {
   ConnectionUpdateData,
   SyncOperation,
 } from '@openint/sync'
-import type {MaybePromise} from '@openint/util'
+import type {MaybePromise} from '@openint/util/type-utils'
 import type {
   CheckConnectionContext,
   CheckConnectionOptions,

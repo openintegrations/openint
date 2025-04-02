@@ -4,16 +4,12 @@ import {
   HTTPError as OpenapiHTTPError,
 } from '@opensdks/runtime'
 import {initYodleeSDK} from '@opensdks/sdk-yodlee'
-import {
-  $makeProxyAgent,
-  createHTTPClient,
-  DateTime,
-  getDefaultProxyAgent,
-  parseDateTime,
-  R,
-  zFunction,
-  type HTTPError,
-} from '@openint/util'
+import {$makeProxyAgent, getDefaultProxyAgent} from '@openint/util/http/http-utils'
+import {createHTTPClient} from '@openint/util/http/index'
+import {DateTime, parseDateTime} from '@openint/util/date-utils'
+import {R} from '@openint/util/remeda'
+import {zFunction} from '@openint/util/zod-function-utils'
+import type {HTTPError} from '@openint/util/http/index'
 import {z} from '@openint/util/zod-utils'
 import type {YodleeAccount, YodleeTransaction} from './yodlee.types'
 

@@ -1,4 +1,4 @@
-import type {HTTPError} from '@openint/util'
+import type {HTTPError} from '@openint/util/http/index'
 import {z} from '@openint/util/zod-utils'
 import type {zCurrentUser, zExpense, zGroup} from './splitwise-schema'
 import {zExpensesParams} from './splitwise-schema'
