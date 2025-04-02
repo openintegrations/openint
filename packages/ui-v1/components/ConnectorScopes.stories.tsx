@@ -78,9 +78,9 @@ export const Editable: Story = {
 
 // Constrained width example simulating a sheet
 const ConstrainedWidthExample = ({
-  scopesLookup,
+  scopeLookup,
 }: {
-  scopesLookup?: Record<
+  scopeLookup?: Record<
     string,
     {scope: string; display_name: string; description: string}
   >
@@ -181,7 +181,7 @@ const ConstrainedWidthExample = ({
           <ConnectorScopes
             scopes={scopes}
             editable={false}
-            scopeLookup={scopesLookup}>
+            scopeLookup={scopeLookup}>
             <ConnectorScopes.List />
           </ConnectorScopes>
         ) : (
@@ -191,7 +191,7 @@ const ConstrainedWidthExample = ({
             onAddScope={handleAddScope}
             availableScopes={availableScopes}
             editable={true}
-            scopeLookup={scopesLookup}>
+            scopeLookup={scopeLookup}>
             <ConnectorScopes.AddButton />
             <ConnectorScopes.List />
           </ConnectorScopes>
@@ -205,7 +205,7 @@ export const ConstrainedWidth: Story = {
   render: () => <ConstrainedWidthExample />,
 }
 
-const scopesLookup = {
+const scopeLookup = {
   'read:users': {
     scope: 'read:users',
     display_name: 'Read Users',
@@ -259,5 +259,5 @@ const scopesLookup = {
 }
 
 export const WithScopeLookup: Story = {
-  render: () => <ConstrainedWidthExample scopesLookup={scopesLookup} />,
+  render: () => <ConstrainedWidthExample scopeLookup={scopeLookup} />,
 }

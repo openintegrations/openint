@@ -24,7 +24,7 @@ interface OAuthFormContext {
 export function OAuthField<T extends OAuthFormData = OAuthFormData>(
   props: FieldProps<T>,
 ) {
-  const {formData, onChange, uiSchema, formContext} = props
+  const {formData, onChange, formContext} = props
   const {openint_scopes, scopes, connectorName} =
     formContext as OAuthFormContext
 
@@ -33,9 +33,9 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
     return acc
   }, {})
 
-  console.log({formData, uiSchema})
-
-  const [useOpenIntCredentials, setUseOpenIntCredentials] = useState(false)
+  const [useOpenIntCredentials, setUseOpenIntCredentials] = useState(
+    !formData?.client_id && !formData?.client_secret,
+  )
 
   const availableScopes: string[] = useOpenIntCredentials
     ? openint_scopes
