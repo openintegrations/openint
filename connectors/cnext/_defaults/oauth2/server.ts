@@ -223,20 +223,20 @@ export function generateOAuth2Server<
         throw new Error('No access token available')
       }
 
-      // Check if token is expired based on expires_at
-      const expiresAt = settings?.oauth?.credentials?.expires_at
-      const refreshToken = settings?.oauth?.credentials?.refresh_token
+      const {expires_at: expiresAt, refresh_token: refreshToken} =
+        settings.oauth.credentials
 
-      if ((expiresAt && new Date(expiresAt) < new Date()) || refreshToken) {
-        // Token is expired, try to refresh if possible
+      const isTokenExpired = expiresAt && new Date(expiresAt) < new Date()
+      const shouldRefreshToken = isTokenExpired || refreshToken
+
+      if (shouldRefreshToken) {
         if (!refreshToken || !this.refreshConnection) {
           throw new Error('Token expired and no refresh token available')
         }
 
         try {
           // Attempt to refresh the token
-          const newSettings = await this.refreshConnection(settings, config)
-          return newSettings
+          return this.refreshConnection(settings, config)
         } catch (error: any) {
           throw new Error(`Failed to refresh token: ${error.message}`)
         }
