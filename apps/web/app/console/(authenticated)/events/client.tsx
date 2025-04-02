@@ -10,12 +10,12 @@ import {useTRPC} from '../client'
 const columns: Array<ColumnDef<Event>> = [
   {
     id: 'id',
-    header: 'Id',
+    header: 'Event ID',
     accessorKey: 'id',
   },
   {
     id: 'name',
-    header: 'Name',
+    header: 'Event Name',
     accessorKey: 'name',
   },
   {
@@ -65,7 +65,8 @@ export function EventsList(props: {
             .replace(',', ''),
         }))}
         columns={columns}
-        onRowClick={handleRowClick}>
+        onRowClick={handleRowClick}
+        enableSelect={false}>
         <DataTable.Header>
           <DataTable.SearchInput />
           <DataTable.ColumnVisibilityToggle />

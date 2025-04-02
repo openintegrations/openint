@@ -298,10 +298,12 @@ export function Pagination() {
 
   return (
     <>
-      <div className="text-muted-foreground flex-1 text-sm">
-        {table.getFilteredSelectedRowModel().rows.length} of{' '}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div>
+      {table.getFilteredSelectedRowModel().rows.length > 0 && (
+        <div className="text-muted-foreground flex-1 text-sm">
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+      )}
       {(table.getCanPreviousPage() || table.getCanNextPage()) && (
         <div className="space-x-2">
           <Button
