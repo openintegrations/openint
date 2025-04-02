@@ -1,5 +1,6 @@
 import type {FieldProps, RegistryFieldsType} from '@rjsf/utils'
 import {useState} from 'react'
+import type {ConnectorConfig} from '@openint/api-v1/models'
 import {Input, Switch} from '@openint/shadcn/ui'
 import {ConnectorScopes} from '../ConnectorScopes'
 
@@ -19,13 +20,14 @@ interface OAuthFormContext {
   openint_scopes: string[]
   scopes: Scope[]
   connectorName: string
+  initialData: ConnectorConfig
 }
 
 export function OAuthField<T extends OAuthFormData = OAuthFormData>(
   props: FieldProps<T>,
 ) {
   const {formData, onChange, formContext} = props
-  const {openint_scopes, scopes, connectorName} =
+  const {openint_scopes, scopes, connectorName, initialData} =
     formContext as OAuthFormContext
 
   const scopeLookup =
@@ -42,7 +44,7 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
     ? openint_scopes
     : scopes.map((s) => s.scope)
 
-  const handleChange = (field: string, value: string | string[]) => {
+  const handleChange = (field: string, value?: string | string[]) => {
     onChange({
       ...formData,
       [field]: value,
@@ -60,7 +62,20 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
         <Switch
           id="use-openint-credentials"
           checked={useOpenIntCredentials}
-          onCheckedChange={setUseOpenIntCredentials}
+          onCheckedChange={(newValue) => {
+            onChange({
+              ...formData,
+              client_id:
+                newValue && initialData?.config
+                  ? undefined
+                  : initialData.config.oauth.client_id,
+              client_secret:
+                newValue && initialData?.config
+                  ? undefined
+                  : initialData.config.oauth.client_secret,
+            } as T)
+            setUseOpenIntCredentials(newValue)
+          }}
         />
       </div>
 

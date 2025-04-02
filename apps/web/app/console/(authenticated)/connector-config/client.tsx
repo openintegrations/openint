@@ -90,6 +90,7 @@ export function ConnectorConfigList(props: {
     connectorName: selectedConnector?.display_name ?? '',
     openint_scopes: selectedConnector?.openint_scopes ?? [],
     scopes: selectedConnector?.scopes ?? [],
+    initialData: selectedCcfg,
   }
 
   const connectorColumns: Array<
