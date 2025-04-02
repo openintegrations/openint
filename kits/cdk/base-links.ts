@@ -1,4 +1,3 @@
-import {Rx, rxjs} from '@openint/util/observable-utils'
 import type {
   AnyEntityPayload,
   ConnectionUpdateData,
@@ -8,7 +7,9 @@ import type {
 } from '@openint/sync'
 import type {WritableDraft} from '@openint/util/immutable-utils'
 import {produce} from '@openint/util/immutable-utils'
+import {Rx, rxjs} from '@openint/util/observable-utils'
 import {R} from '@openint/util/remeda'
+import {snakeCase} from '@openint/util/string-utils'
 import type {Id} from './id.types'
 
 type OperationType = SyncOperation['type']
@@ -46,7 +47,7 @@ export function handlersLink<
   return Rx.concatMap((op) =>
     R.pipe(handlers[op.type], (h) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
-      h ? h(op as any) ?? rxjs.EMPTY : rxjs.of(op),
+      h ? (h(op as any) ?? rxjs.EMPTY) : rxjs.of(op),
     ),
   )
 }

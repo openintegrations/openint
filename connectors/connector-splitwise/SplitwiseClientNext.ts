@@ -1,9 +1,9 @@
 import type {HTTPError} from '@openint/util/http/index'
+import {createHTTPClient, OAuth2Client} from '@openint/util/http/index'
+import {zFunction} from '@openint/util/zod-function-utils'
 import {z} from '@openint/util/zod-utils'
 import type {zCurrentUser, zExpense, zGroup} from './splitwise-schema'
 import {zExpensesParams} from './splitwise-schema'
-import {createHTTPClient} from '@openint/util/http/index'
-import {zFunction} from '@openint/util/zod-function-utils'
 
 const zSplitwiseConfig = z.object({
   baseURL: z.string().nullish(),

@@ -35,7 +35,7 @@ import {
   TableRow,
 } from '@openint/shadcn/ui'
 import {R} from '@openint/util/remeda'
-import {titleCase} from '@openint/util/string-utils/remeda'
+import {titleCase} from '@openint/util/string-utils'
 
 const defaultFilter = () => true
 

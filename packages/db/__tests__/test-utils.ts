@@ -8,6 +8,7 @@ import type {AnyDatabase, Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
 import {initDbPg, initDbPgDirect} from '../db.pg'
 import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
+import {snakeCase} from '@openint/util/string-utils'
 
 interface TestDbInitOptions {
   url: string

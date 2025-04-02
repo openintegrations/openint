@@ -1,3 +1,4 @@
+import {isPlainObject} from '@openint/util/object-utils'
 import {and, or, sql} from 'drizzle-orm'
 import type {PgInsertBase} from 'drizzle-orm/pg-core'
 import {
