@@ -4,7 +4,7 @@ import {ArrowLeft, ArrowRight, RefreshCw} from 'lucide-react'
 import React from 'react'
 import {Button} from '@openint/shadcn/ui/button'
 import {Input} from '@openint/shadcn/ui/input'
-import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form/SchemaForm'
+import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form/ZodSchemaForm'
 import type {ConnectV1SearchParams} from '@/app/connect/types'
 import {zConnectV1SearchParams} from '@/app/connect/types'
 

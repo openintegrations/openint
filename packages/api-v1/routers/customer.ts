@@ -14,7 +14,7 @@ import {
   zListParams,
   zListResponse,
 } from './utils/pagination'
-import {zConnectionId, zConnectorName, zCustomerId} from './utils/types'
+import {zCustomerId} from './utils/types'
 
 function asCustomer(
   viewer: Viewer,

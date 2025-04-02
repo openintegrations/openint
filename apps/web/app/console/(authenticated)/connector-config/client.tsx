@@ -15,7 +15,7 @@ import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {
   JSONSchemaForm,
   type SchemaFormElement,
-} from '@openint/ui-v1/components/schema-form/SchemaForm'
+} from '@openint/ui-v1/components/schema-form/JSONSchemaForm'
 import {AddConnectorConfig} from '@openint/ui-v1/domain-components/AddConnectorConfig'
 import {ConnectorTableCell} from '@openint/ui-v1/domain-components/ConnectorTableCell'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'

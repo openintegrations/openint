@@ -1,11 +1,11 @@
 'use client'
 
 import {zodToOas31Schema} from '@openint/util/schema'
-import {z} from '@openint/util/zod-utils'
+import {Z} from '@openint/util/zod-utils'
 import {JSONSchemaForm, type JSONSchemaFormProps} from './JSONSchemaForm'
 
-export interface ZodSchemaFormProps<TSchema extends z.ZodTypeAny>
-  extends Omit<JSONSchemaFormProps<z.infer<TSchema>>, 'jsonSchema'> {
+export interface ZodSchemaFormProps<TSchema extends Z.ZodTypeAny>
+  extends Omit<JSONSchemaFormProps<Z.infer<TSchema>>, 'jsonSchema'> {
   /**
    * The Zod schema to use for the form
    */
@@ -16,7 +16,7 @@ export interface ZodSchemaFormProps<TSchema extends z.ZodTypeAny>
  * SchemaForm component for handling forms with proper styling and security features.
  * This component includes functionality for hiding sensitive fields like passwords and tokens.
  */
-export const ZodSchemaForm = <TSchema extends z.ZodTypeAny>({
+export const ZodSchemaForm = <TSchema extends Z.ZodTypeAny>({
   schema,
   ...props
 }: ZodSchemaFormProps<TSchema>) => {

@@ -1,12 +1,11 @@
 import React from 'react'
 import {customerRouterModels} from '@openint/api-v1/routers/customer.models'
-import {cn} from '@openint/shadcn/lib/utils'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
-import {z} from '@openint/util/zod-utils'
+import {Z} from '@openint/util/zod-utils'
 
 // Define the type for the form data based on the schema
-type CreateMagicLinkInput = z.infer<
+type CreateMagicLinkInput = Z.infer<
   typeof customerRouterModels.createMagicLinkInput
 >
 
