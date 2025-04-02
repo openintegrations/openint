@@ -3,124 +3,193 @@ import {ConnectionTableCell} from './ConnectionTableCell'
 import {CopyID} from './CopyID'
 
 const meta: Meta<typeof ConnectionTableCell> = {
-  title: 'Components/ConnectionTableCell',
+  title: 'Tables/ConnectionTableCell',
   component: ConnectionTableCell,
+  tags: ['autodocs'],
+  // Define argTypes to control the ConnectionTableCell props
   argTypes: {
-    name: {
-      control: 'text',
-      description: 'Name of the connection',
-    },
-    id: {
-      control: 'text',
-      description: 'ID of the connection',
-    },
-    status: {
-      control: 'select',
-      options: ['healthy', 'warning', 'offline', 'destructive'],
-      description: 'Status of the connection',
-    },
-    backgroundColor: {
-      control: 'color',
-      description: 'Background color for the logo container',
-    },
-    textColor: {
-      control: 'color',
-      description: 'Text color for the initials',
+    compact: {
+      type: 'boolean',
+      description: 'Whether to show the compact variant (just logo and ID)',
+      control: {type: 'boolean'},
     },
     simple: {
-      control: 'boolean',
-      description: 'Whether to show the simple variant',
+      type: 'boolean',
+      description: 'Whether to show the simple variant (logo and name only)',
+      control: {type: 'boolean'},
     },
-    compact: {
-      control: 'boolean',
-      description:
-        'Whether to show the compact variant (just logo and ID, no name)',
+    status: {
+      options: ['healthy', 'warning', 'destructive', 'offline'],
+      control: {type: 'select'},
+      description: 'Status of the connection',
     },
     useIcon: {
-      control: 'boolean',
+      type: 'boolean',
       description: 'Whether to use a link icon instead of initials',
+      control: {type: 'boolean'},
     },
   },
-}
+} satisfies Meta<typeof ConnectionTableCell>
 
 export default meta
 type Story = StoryObj<typeof ConnectionTableCell>
 
+// Default story with all props
 export const Default: Story = {
   args: {
-    name: 'AWS S3 Connection',
-    id: '12345678',
+    connection: {
+      id: '1234567890',
+      customer_id: 'cust123',
+      connector_config_id: 'config123',
+      integration_id: null,
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      connector_name: 'salesforce',
+      metadata: {name: 'Salesforce Connection'},
+      settings: {},
+    },
     status: 'healthy',
-    backgroundColor: '#f1f5f9',
+    simple: false,
+    compact: false,
+    useIcon: false,
   },
 }
 
-export const Simple: Story = {
+// Add variations on the component
+export const WithCompactVariant: Story = {
   args: {
-    name: 'AWS S3 Connection',
-    id: '12345678',
+    connection: {
+      id: '1234567890',
+      customer_id: 'cust123',
+      connector_config_id: 'config123',
+      integration_id: null,
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      connector_name: 'salesforce',
+      metadata: {name: 'Salesforce Connection'},
+      settings: {},
+    },
     status: 'healthy',
-    backgroundColor: '#f1f5f9',
+    simple: false,
+    compact: true,
+    useIcon: false,
+  },
+}
+
+export const WithSimpleVariant: Story = {
+  args: {
+    connection: {
+      id: '1234567890',
+      customer_id: 'cust123',
+      connector_config_id: 'config123',
+      integration_id: null,
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      connector_name: 'salesforce',
+      metadata: {name: 'Salesforce Connection'},
+      settings: {},
+    },
+    status: 'offline',
     simple: true,
+    compact: false,
+    useIcon: false,
   },
 }
 
 export const WithIcon: Story = {
   args: {
-    name: 'AWS S3 Connection',
-    id: '12345678',
-    status: 'healthy',
-    backgroundColor: '#f1f5f9',
+    connection: {
+      id: '1234567890',
+      customer_id: 'cust123',
+      connector_config_id: 'config123',
+      integration_id: null,
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      connector_name: 'salesforce',
+      metadata: {name: 'Salesforce Connection'},
+      settings: {},
+    },
+    status: 'warning',
+    simple: false,
+    compact: false,
     useIcon: true,
   },
 }
 
-export const Compact: Story = {
-  args: {
-    name: 'AWS S3 Connection',
-    id: '12345678',
-    status: 'healthy',
-    backgroundColor: '#f1f5f9',
-    compact: true,
-    useIcon: true,
-  },
-}
-
-export const WithVariants: Story = {
+export const WithDifferentVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <ConnectionTableCell
-        name="AWS S3 Connection"
-        id="12345678"
+        connection={{
+          id: '1234567890',
+          customer_id: 'cust123',
+          connector_config_id: 'config123',
+          integration_id: null,
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connector_name: 'salesforce',
+          metadata: {name: 'Salesforce Connection'},
+          settings: {},
+        }}
         status="healthy"
-        backgroundColor="#f1f5f9"
       />
       <ConnectionTableCell
-        name="Google Cloud Storage"
-        id="87654321"
+        connection={{
+          id: '9876543210',
+          customer_id: 'cust456',
+          connector_config_id: 'config456',
+          integration_id: null,
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connector_name: 'hubspot',
+          metadata: {name: 'HubSpot Connection'},
+          settings: {},
+        }}
         status="warning"
-        backgroundColor="#e0f2fe"
-        useIcon={true}
       />
       <ConnectionTableCell
-        name="Azure Blob Storage"
-        id="24681357"
+        connection={{
+          id: '5555555555',
+          customer_id: 'cust789',
+          connector_config_id: 'config789',
+          integration_id: null,
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connector_name: 'zendesk',
+          metadata: {name: 'Zendesk Connection'},
+          settings: {},
+        }}
         status="offline"
-        backgroundColor="#dbeafe"
         simple={true}
       />
       <ConnectionTableCell
-        name="DigitalOcean Spaces"
-        id="13572468"
+        connection={{
+          id: '7777777777',
+          customer_id: 'cust101',
+          connector_config_id: 'config101',
+          integration_id: null,
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connector_name: 'stripe',
+          metadata: {name: 'Stripe Connection'},
+          settings: {},
+        }}
         status="destructive"
-        backgroundColor="#d1e9dd"
         compact={true}
       />
       <ConnectionTableCell
-        name="AWS Lambda"
-        id="56789012"
+        connection={{
+          id: '8888888888',
+          customer_id: 'cust202',
+          connector_config_id: 'config202',
+          integration_id: null,
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connector_name: 'github',
+          metadata: {name: 'GitHub Connection'},
+          settings: {},
+        }}
         status="healthy"
-        backgroundColor="#f1f5f9"
         compact={true}
         useIcon={true}
       />

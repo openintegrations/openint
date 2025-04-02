@@ -7,7 +7,7 @@ import {CopyID} from './CopyID'
 import {Icon} from './Icon'
 import {StatusDot, StatusType} from './StatusDot'
 
-interface ConnectionTableCellPropsObject
+interface ConnectionTableCellProps
   extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Connection object
@@ -30,85 +30,13 @@ interface ConnectionTableCellPropsObject
    */
   status?: StatusType
   /**
-   * @deprecated Use the default theme styling
-   * Optional backgroundColor for the logo
-   */
-  backgroundColor?: string
-  /**
-   * @deprecated Use the default theme styling
-   * Optional textColor for the logo text
-   */
-  textColor?: string
-  /**
    * Optional className for styling
    */
   className?: string
 }
-
-interface ConnectionTableCellPropsProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * @deprecated Use connection.id instead
-   * ID of the connection
-   */
-  id: string
-  /**
-   * @deprecated Use connection.name instead
-   * Name of the connection
-   */
-  name: string
-  /**
-   * Status of the connection
-   */
-  status?: StatusType
-  /**
-   * @deprecated Use the default theme styling
-   * Brand color for the logo background
-   */
-  backgroundColor?: string
-  /**
-   * @deprecated Use the default theme styling
-   * Text color for the initials
-   */
-  textColor?: string
-  /**
-   * Whether to show the simple variant (logo and name only)
-   */
-  simple?: boolean
-  /**
-   * Whether to show the compact variant (just logo and ID, no name)
-   */
-  compact?: boolean
-  /**
-   * Whether to use a link icon instead of initials
-   */
-  useIcon?: boolean
-  /**
-   * Optional className for styling
-   */
-  className?: string
-  /**
-   * Connection object - used if provided instead of individual props
-   */
-  connection?: Core['connection']
-}
-
-export type ConnectionTableCellProps =
-  | ConnectionTableCellPropsObject
-  | ConnectionTableCellPropsProps
 
 export function ConnectionTableCell(props: ConnectionTableCellProps) {
-  // Determine if we're using the object-based or property-based API
-  const usingObjectAPI = 'connection' in props && props.connection !== undefined
-
-  // Get values from the appropriate source
-  const connection = usingObjectAPI ? props.connection : undefined
-  const name = usingObjectAPI
-    ? `Connection ${connection?.id?.substring(0, 6) || 'Unknown'}`
-    : (props as ConnectionTableCellPropsProps).name
-  const id = usingObjectAPI
-    ? connection?.id
-    : (props as ConnectionTableCellPropsProps).id
+  const {connection} = props
   const status = props.status || 'healthy'
   const simple = props.simple || false
   const compact = props.compact || false
@@ -118,18 +46,15 @@ export function ConnectionTableCell(props: ConnectionTableCellProps) {
   // Extract other props
   const {
     connection: _,
-    name: __,
-    id: ___,
-    status: ____,
-    backgroundColor: _____,
-    textColor: ______,
-    simple: _______,
-    compact: ________,
-    useIcon: _________,
-    className: __________,
+    status: __,
+    simple: ___,
+    compact: ____,
+    useIcon: _____,
+    className: ______,
     ...restProps
-  } = props as any
+  } = props
 
+  const displayName = `Connection ${connection?.id?.substring(0, 6) || 'Unknown'}`
   const logoText = 'CN'
 
   const logo = (
@@ -174,16 +99,18 @@ export function ConnectionTableCell(props: ConnectionTableCellProps) {
     return (
       <div className={cn('flex items-center gap-2', className)} {...restProps}>
         {logo}
-        {id && <CopyID value={id} size="compact" width="auto" />}
+        {connection.id && (
+          <CopyID value={connection.id} size="compact" width="auto" />
+        )}
       </div>
     )
   }
 
   return (
     <BaseTableCell
-      name={name}
+      name={displayName}
       logo={logo}
-      id={id}
+      id={connection.id}
       status={status}
       simple={simple}
       className={className}

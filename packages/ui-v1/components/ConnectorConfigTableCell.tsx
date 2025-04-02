@@ -6,7 +6,7 @@ import {BaseTableCell} from './BaseTableCell'
 import {CopyID} from './CopyID'
 import {StatusDot, StatusType} from './StatusDot'
 
-interface ConnectorConfigTableCellPropsObject
+interface ConnectorConfigTableCellProps
   extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Connector config object
@@ -25,109 +25,13 @@ interface ConnectorConfigTableCellPropsObject
    */
   status?: StatusType
   /**
-   * @deprecated Use the default theme styling
-   * Background color for the logo
-   */
-  backgroundColor?: string
-  /**
-   * @deprecated Use the default theme styling
-   * Text color for the logo text
-   */
-  textColor?: string
-  /**
    * Optional className for styling
    */
   className?: string
 }
-
-interface ConnectorConfigTableCellPropsProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * @deprecated Use connectorConfig.display_name or connectorConfig.connector_name instead
-   * Name of the connector config
-   */
-  name: string
-  /**
-   * @deprecated Use connectorConfig.id instead
-   * ID of the connector config
-   */
-  id?: string
-  /**
-   * Status of the connector config
-   */
-  status?: StatusType
-  /**
-   * @deprecated Use the default theme styling
-   * Brand color for the logo background
-   */
-  backgroundColor?: string
-  /**
-   * @deprecated Use the default theme styling
-   * Text color for the initials
-   */
-  textColor?: string
-  /**
-   * Whether to show the simple variant (logo and name only)
-   */
-  simple?: boolean
-  /**
-   * Whether to show the compact variant (just logo and ID, no name)
-   */
-  compact?: boolean
-  /**
-   * Optional className for styling
-   */
-  className?: string
-  /**
-   * Connector config object - used if provided instead of individual props
-   */
-  connectorConfig?: Core['connector_config']
-}
-
-export type ConnectorConfigTableCellProps =
-  | ConnectorConfigTableCellPropsObject
-  | ConnectorConfigTableCellPropsProps
 
 export function ConnectorConfigTableCell(props: ConnectorConfigTableCellProps) {
-  // Determine if we're using the object-based or property-based API
-  const usingObjectAPI =
-    'connectorConfig' in props && props.connectorConfig !== undefined
-
-  // Get values from the appropriate source
-  const connectorConfig = usingObjectAPI ? props.connectorConfig : undefined
-
-  // For object API, extract ID safely
-  let configId = ''
-  if (
-    usingObjectAPI &&
-    connectorConfig &&
-    typeof connectorConfig === 'object' &&
-    'id' in connectorConfig
-  ) {
-    configId = String(connectorConfig.id || '')
-  } else if (!usingObjectAPI && 'id' in props) {
-    configId = String((props as ConnectorConfigTableCellPropsProps).id || '')
-  }
-
-  // For object API, extract name safely
-  let displayName = ''
-  if (usingObjectAPI && connectorConfig) {
-    displayName =
-      connectorConfig.display_name ||
-      connectorConfig.connector_name ||
-      `Config ${configId ? configId.substring(0, 6) : 'Unknown'}`
-  } else if (!usingObjectAPI && 'name' in props) {
-    displayName = (props as ConnectorConfigTableCellPropsProps).name
-  }
-
-  // If we still don't have a name, generate one from the ID
-  if (!displayName) {
-    displayName = configId
-      ? `Config ${configId.substring(0, 6)}`
-      : 'Unknown Config'
-  }
-
-  // Extract other props
+  const {connectorConfig} = props
   const status = props.status || 'healthy'
   const simple = props.simple || false
   const compact = props.compact || false
@@ -136,16 +40,18 @@ export function ConnectorConfigTableCell(props: ConnectorConfigTableCellProps) {
   // Extract other props for rest spread
   const {
     connectorConfig: _,
-    name: __,
-    id: ___,
-    status: ____,
-    backgroundColor: _____,
-    textColor: ______,
-    simple: _______,
-    compact: ________,
-    className: _________,
+    status: __,
+    simple: ___,
+    compact: ____,
+    className: _____,
     ...restProps
-  } = props as any
+  } = props
+
+  // Generate display name from connector config
+  const displayName =
+    connectorConfig.display_name ||
+    connectorConfig.connector_name ||
+    `Config ${connectorConfig.id ? connectorConfig.id.substring(0, 6) : 'Unknown'}`
 
   const logoText = displayName.substring(0, 2).toUpperCase()
 
@@ -181,7 +87,9 @@ export function ConnectorConfigTableCell(props: ConnectorConfigTableCellProps) {
     return (
       <div className={cn('flex items-center gap-2', className)} {...restProps}>
         {logo}
-        {configId && <CopyID value={configId} size="compact" width="auto" />}
+        {connectorConfig.id && (
+          <CopyID value={connectorConfig.id} size="compact" width="auto" />
+        )}
       </div>
     )
   }
@@ -190,7 +98,7 @@ export function ConnectorConfigTableCell(props: ConnectorConfigTableCellProps) {
     <BaseTableCell
       name={displayName}
       logo={logo}
-      id={configId ? `CCFGID_${configId}` : undefined}
+      id={connectorConfig.id ? `CCFGID_${connectorConfig.id}` : undefined}
       status={status}
       simple={simple}
       className={className}

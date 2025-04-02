@@ -56,15 +56,11 @@ export const columns: Array<ColumnDef<Core['connector_config']>> = [
   {
     id: 'action',
     header: '',
-    cell: () => {
-      return (
-        <div>
-          <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </div>
-      )
-    },
+    cell: () => (
+      <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+        <MoreHorizontal className="h-4 w-4" />
+      </Button>
+    ),
   },
 ]
 

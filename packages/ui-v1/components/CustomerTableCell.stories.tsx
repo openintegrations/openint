@@ -1,82 +1,96 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {CopyID} from './CopyID'
 import {CustomerTableCell} from './CustomerTableCell'
 
 const meta: Meta<typeof CustomerTableCell> = {
-  title: 'Components/CustomerTableCell',
+  title: 'Tables/CustomerTableCell',
   component: CustomerTableCell,
+  tags: ['autodocs'],
+  // Define argTypes to control the CustomerTableCell props
   argTypes: {
-    name: {
-      control: 'text',
-      description: 'Name of the customer',
-    },
-    id: {
-      control: 'text',
-      description: 'ID of the customer',
-    },
-    backgroundColor: {
-      control: 'color',
-      description: 'Background color for the logo container',
-    },
-    textColor: {
-      control: 'color',
-      description: 'Text color for the initials or icon',
+    compact: {
+      type: 'boolean',
+      description: 'Whether to show the compact variant (just logo and ID)',
+      control: {type: 'boolean'},
     },
     simple: {
-      control: 'boolean',
-      description: 'Whether to show the simple variant',
+      type: 'boolean',
+      description: 'Whether to show the simple variant (logo and name only)',
+      control: {type: 'boolean'},
     },
-    compact: {
-      control: 'boolean',
-      description:
-        'Whether to show the compact variant (just logo and ID, no name)',
+    status: {
+      options: ['healthy', 'warning', 'destructive', 'offline'],
+      control: {type: 'select'},
+      description: 'Status of the customer',
     },
     useIcon: {
-      control: 'boolean',
+      type: 'boolean',
       description: 'Whether to use a person icon instead of initials',
+      control: {type: 'boolean'},
     },
   },
-}
+} satisfies Meta<typeof CustomerTableCell>
 
 export default meta
 type Story = StoryObj<typeof CustomerTableCell>
 
+// Default story with all props
 export const Default: Story = {
   args: {
-    name: 'Acme Corporation',
-    id: '12345678',
-    backgroundColor: '#f3e8ff',
-    textColor: '#9333ea',
+    customer: {
+      id: '1234567890',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      connection_count: 3,
+    },
+    status: 'healthy',
+    simple: false,
+    compact: false,
+    useIcon: false,
   },
 }
 
-export const Simple: Story = {
+// Add variations on the component
+export const WithCompactVariant: Story = {
   args: {
-    name: 'Acme Corporation',
-    id: '12345678',
-    backgroundColor: '#f3e8ff',
-    textColor: '#9333ea',
-    simple: true,
-  },
-}
-
-export const WithPersonIcon: Story = {
-  args: {
-    name: 'Acme Corporation',
-    id: '12345678',
-    backgroundColor: '#f3e8ff',
-    textColor: '#9333ea',
-    useIcon: true,
-  },
-}
-
-export const Compact: Story = {
-  args: {
-    name: 'Acme Corporation',
-    id: '12345678',
-    backgroundColor: '#f3e8ff',
-    textColor: '#9333ea',
+    customer: {
+      id: '1234567890',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      connection_count: 3,
+    },
+    status: 'healthy',
+    simple: false,
     compact: true,
+    useIcon: false,
+  },
+}
+
+export const WithSimpleVariant: Story = {
+  args: {
+    customer: {
+      id: '1234567890',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      connection_count: 3,
+    },
+    status: 'offline',
+    simple: true,
+    compact: false,
+    useIcon: false,
+  },
+}
+
+export const WithIcon: Story = {
+  args: {
+    customer: {
+      id: '1234567890',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+      connection_count: 3,
+    },
+    status: 'warning',
+    simple: false,
+    compact: false,
     useIcon: true,
   },
 }
@@ -85,48 +99,54 @@ export const WithDifferentVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <CustomerTableCell
-        name="Acme Corporation"
-        id="12345678"
-        backgroundColor="#f3e8ff"
-        textColor="#9333ea"
+        customer={{
+          id: '1234567890',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connection_count: 3,
+        }}
+        status="healthy"
       />
       <CustomerTableCell
-        name="Globex Corporation"
-        id="87654321"
-        backgroundColor="#f3e8ff"
-        textColor="#9333ea"
-        useIcon={true}
+        customer={{
+          id: '9876543210',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connection_count: 5,
+        }}
+        status="warning"
       />
       <CustomerTableCell
-        name="Initech"
-        id="24681357"
-        backgroundColor="#f3e8ff"
-        textColor="#9333ea"
+        customer={{
+          id: '5555555555',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connection_count: 2,
+        }}
+        status="offline"
         simple={true}
       />
       <CustomerTableCell
-        name="Umbrella Corporation"
-        id="13572468"
-        backgroundColor="#f3e8ff"
-        textColor="#9333ea"
+        customer={{
+          id: '7777777777',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connection_count: 0,
+        }}
+        status="destructive"
         compact={true}
       />
       <CustomerTableCell
-        name="Wayne Enterprises"
-        id="56789012"
-        backgroundColor="#f3e8ff"
-        textColor="#9333ea"
+        customer={{
+          id: '8888888888',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          connection_count: 8,
+        }}
+        status="healthy"
         compact={true}
         useIcon={true}
       />
-    </div>
-  ),
-}
-
-export const CopyIDOnly: Story = {
-  render: () => (
-    <div className="p-4">
-      <CopyID value="CUSID_12345678" width={300} size="medium" />
     </div>
   ),
 }

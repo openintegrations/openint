@@ -2,10 +2,12 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 import {CopyID} from './CopyID'
 
-const meta: Meta<typeof ConnectorConfigTableCell> = {
+// Define a meta configurator for the ConnectorConfigTableCell component
+const meta = {
   title: 'Tables/ConnectorConfigTableCell',
   component: ConnectorConfigTableCell,
   tags: ['autodocs'],
+  // Define argTypes to control the ConnectorConfigTableCell props
   argTypes: {
     compact: {
       type: 'boolean',
@@ -22,20 +24,13 @@ const meta: Meta<typeof ConnectorConfigTableCell> = {
       control: {type: 'select'},
       description: 'Status of the connector config',
     },
-    backgroundColor: {
-      control: 'color',
-      description: 'Brand color for the logo background',
-    },
-    textColor: {
-      control: 'color',
-      description: 'Text color for the logo text',
-    },
   },
 } satisfies Meta<typeof ConnectorConfigTableCell>
 
 export default meta
 type Story = StoryObj<typeof ConnectorConfigTableCell>
 
+// Define a default story for the ConnectorConfigTableCell
 export const Default: Story = {
   args: {
     connectorConfig: {
@@ -50,94 +45,7 @@ export const Default: Story = {
     status: 'warning',
     simple: false,
     compact: false,
-    backgroundColor: '#f1f5f9',
-    textColor: '#666666',
   },
-}
-
-export const Simple: Story = {
-  args: {
-    name: 'Salesforce Connector Config',
-    id: '12345678',
-    status: 'healthy',
-    backgroundColor: '#e0f2fe',
-    textColor: '#0ea5e9',
-    simple: true,
-  },
-}
-
-export const WithIcon: Story = {
-  args: {
-    name: 'Salesforce Connector Config',
-    id: '12345678',
-    status: 'healthy',
-    backgroundColor: '#e0f2fe',
-    textColor: '#0ea5e9',
-  },
-}
-
-export const Compact: Story = {
-  args: {
-    name: 'Salesforce Connector Config',
-    id: '12345678',
-    status: 'healthy',
-    backgroundColor: '#e0f2fe',
-    textColor: '#0ea5e9',
-    compact: true,
-  },
-}
-
-export const WithDifferentVariants: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <ConnectorConfigTableCell
-        name="Salesforce Connector Config"
-        id="12345678"
-        status="healthy"
-        backgroundColor="#e0f2fe"
-        textColor="#0ea5e9"
-      />
-      <ConnectorConfigTableCell
-        name="HubSpot Connector Config"
-        id="87654321"
-        status="warning"
-        backgroundColor="#dbeafe"
-        textColor="#3b82f6"
-      />
-      <ConnectorConfigTableCell
-        name="Zendesk Connector Config"
-        id="24681357"
-        status="offline"
-        backgroundColor="#e0e7ff"
-        textColor="#6366f1"
-        simple={true}
-      />
-      <ConnectorConfigTableCell
-        name="Stripe Connector Config"
-        id="13572468"
-        status="destructive"
-        backgroundColor="#dbeafe"
-        textColor="#3b82f6"
-        compact={true}
-      />
-      <ConnectorConfigTableCell
-        name="GitHub Connector Config"
-        id="56789012"
-        status="healthy"
-        backgroundColor="#e0f2fe"
-        textColor="#0ea5e9"
-        compact={true}
-      />
-    </div>
-  ),
-}
-
-export const CopyIDOnly: Story = {
-  render: () => (
-    <div className="p-4">
-      <CopyID value="CCFGID_12345678" width={300} size="medium" />
-    </div>
-  ),
 }
 
 export const WithCompactVariant: Story = {
@@ -154,8 +62,6 @@ export const WithCompactVariant: Story = {
     status: 'healthy',
     simple: false,
     compact: true,
-    backgroundColor: '#f1f5f9',
-    textColor: '#666666',
   },
 }
 
@@ -173,8 +79,6 @@ export const WithSimpleVariant: Story = {
     status: 'offline',
     simple: true,
     compact: false,
-    backgroundColor: '#f1f5f9',
-    textColor: '#666666',
   },
 }
 
@@ -192,7 +96,83 @@ export const WithWarningStatus: Story = {
     status: 'warning',
     simple: false,
     compact: false,
-    backgroundColor: '#f1f5f9',
-    textColor: '#666666',
   },
+}
+
+export const WithDifferentVariants: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <ConnectorConfigTableCell
+        connectorConfig={{
+          id: '123456',
+          display_name: 'Salesforce Connector Config',
+          connector_name: 'salesforce',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          disabled: false,
+          org_id: 'org-123',
+        }}
+        status="healthy"
+      />
+      <ConnectorConfigTableCell
+        connectorConfig={{
+          id: '234567',
+          display_name: 'HubSpot Connector Config',
+          connector_name: 'hubspot',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          disabled: false,
+          org_id: 'org-123',
+        }}
+        status="warning"
+      />
+      <ConnectorConfigTableCell
+        connectorConfig={{
+          id: '345678',
+          display_name: 'Zendesk Connector Config',
+          connector_name: 'zendesk',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          disabled: false,
+          org_id: 'org-123',
+        }}
+        status="offline"
+        simple={true}
+      />
+      <ConnectorConfigTableCell
+        connectorConfig={{
+          id: '456789',
+          display_name: 'Stripe Connector Config',
+          connector_name: 'stripe',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          disabled: false,
+          org_id: 'org-123',
+        }}
+        status="destructive"
+        compact={true}
+      />
+      <ConnectorConfigTableCell
+        connectorConfig={{
+          id: '567890',
+          display_name: 'GitHub Connector Config',
+          connector_name: 'github',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+          disabled: false,
+          org_id: 'org-123',
+        }}
+        status="healthy"
+        compact={true}
+      />
+    </div>
+  ),
+}
+
+export const CopyIDOnly: Story = {
+  render: () => (
+    <div className="p-4">
+      <CopyID value="CCFGID_12345678" width={300} size="medium" />
+    </div>
+  ),
 }

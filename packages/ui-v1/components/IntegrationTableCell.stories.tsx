@@ -3,133 +3,140 @@ import {CopyID} from './CopyID'
 import {IntegrationTableCell} from './IntegrationTableCell'
 
 const meta: Meta<typeof IntegrationTableCell> = {
-  title: 'Components/IntegrationTableCell',
+  title: 'Tables/IntegrationTableCell',
   component: IntegrationTableCell,
+  tags: ['autodocs'],
   argTypes: {
-    name: {
-      control: 'text',
-      description: 'Name of the integration',
-    },
-    id: {
-      control: 'text',
-      description: 'ID of the integration',
-    },
-    status: {
-      control: 'select',
-      options: ['healthy', 'warning', 'offline', 'destructive'],
-      description: 'Status of the integration',
-    },
-    brandColor: {
-      control: 'color',
-      description: 'Brand color for the logo background',
-    },
-    textColor: {
-      control: 'color',
-      description: 'Text color for the initials',
+    compact: {
+      type: 'boolean',
+      description: 'Whether to show the compact variant (just logo and ID)',
+      control: {type: 'boolean'},
     },
     simple: {
-      control: 'boolean',
-      description: 'Whether to show the simple variant',
-    },
-    compact: {
-      control: 'boolean',
-      description:
-        'Whether to show the compact variant (just logo and ID, no name)',
+      type: 'boolean',
+      description: 'Whether to show the simple variant (logo and name only)',
+      control: {type: 'boolean'},
     },
     useIcon: {
-      control: 'boolean',
+      type: 'boolean',
       description: 'Whether to use an app icon instead of initials',
+      control: {type: 'boolean'},
     },
   },
-}
+} satisfies Meta<typeof IntegrationTableCell>
 
 export default meta
 type Story = StoryObj<typeof IntegrationTableCell>
 
 export const Default: Story = {
   args: {
-    name: 'Hubspot',
-    id: '12345678',
-    status: 'healthy',
-    brandColor: '#f97316',
-    textColor: '#ffffff',
+    integration: {
+      id: '1234567890',
+      name: 'Salesforce Integration',
+      connector_name: 'salesforce',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+    },
+    simple: false,
+    compact: false,
+    useIcon: false,
   },
 }
 
-export const Simple: Story = {
+export const WithCompactVariant: Story = {
   args: {
-    name: 'Hubspot',
-    id: '12345678',
-    status: 'healthy',
-    brandColor: '#f97316',
-    textColor: '#ffffff',
+    integration: {
+      id: '1234567890',
+      name: 'Salesforce Integration',
+      connector_name: 'salesforce',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+    },
+    simple: false,
+    compact: true,
+    useIcon: false,
+  },
+}
+
+export const WithSimpleVariant: Story = {
+  args: {
+    integration: {
+      id: '1234567890',
+      name: 'Salesforce Integration',
+      connector_name: 'salesforce',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+    },
     simple: true,
+    compact: false,
+    useIcon: false,
   },
 }
 
 export const WithIcon: Story = {
   args: {
-    name: 'Hubspot',
-    id: '12345678',
-    status: 'healthy',
-    brandColor: '#f97316',
-    textColor: '#ffffff',
+    integration: {
+      id: '1234567890',
+      name: 'Salesforce Integration',
+      connector_name: 'salesforce',
+      created_at: '2023-09-12T12:00:00Z',
+      updated_at: '2023-09-12T12:00:00Z',
+    },
+    simple: false,
+    compact: false,
     useIcon: true,
   },
 }
 
-export const Compact: Story = {
-  args: {
-    name: 'Hubspot',
-    id: '12345678',
-    status: 'healthy',
-    brandColor: '#f97316',
-    textColor: '#ffffff',
-    compact: true,
-    useIcon: true,
-  },
-}
-
-export const WithVariants: Story = {
+export const WithDifferentVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <IntegrationTableCell
-        name="Hubspot"
-        id="12345678"
-        status="healthy"
-        brandColor="#f97316"
-        textColor="#ffffff"
+        integration={{
+          id: '1234567890',
+          name: 'Salesforce Integration',
+          connector_name: 'salesforce',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+        }}
       />
       <IntegrationTableCell
-        name="Salesforce"
-        id="87654321"
-        status="warning"
-        brandColor="#2563eb"
-        textColor="#ffffff"
-        useIcon={true}
+        integration={{
+          id: '9876543210',
+          name: 'HubSpot Integration',
+          connector_name: 'hubspot',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+        }}
       />
       <IntegrationTableCell
-        name="Stripe"
-        id="24681357"
-        status="offline"
-        brandColor="#6366f1"
-        textColor="#ffffff"
+        integration={{
+          id: '5555555555',
+          name: 'Zendesk Integration',
+          connector_name: 'zendesk',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+        }}
         simple={true}
       />
       <IntegrationTableCell
-        name="Mailchimp"
-        id="13572468"
-        status="destructive"
-        brandColor="#8b5cf6"
-        textColor="#ffffff"
+        integration={{
+          id: '7777777777',
+          name: 'Stripe Integration',
+          connector_name: 'stripe',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+        }}
         compact={true}
       />
       <IntegrationTableCell
-        name="GitHub"
-        id="56789012"
-        status="healthy"
-        brandColor="#27272a"
-        textColor="#ffffff"
+        integration={{
+          id: '8888888888',
+          name: 'GitHub Integration',
+          connector_name: 'github',
+          created_at: '2023-09-12T12:00:00Z',
+          updated_at: '2023-09-12T12:00:00Z',
+        }}
         compact={true}
         useIcon={true}
       />

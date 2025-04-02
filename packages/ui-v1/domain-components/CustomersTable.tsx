@@ -22,12 +22,14 @@ export const columns: Array<ColumnDef<Customer>> = [
     header: 'Customer',
     cell: ({row}) => (
       <CustomerTableCell
-        name={row.original.name}
-        id={row.original.id}
+        customer={{
+          id: row.original.id,
+          created_at: row.original.firstCreated,
+          updated_at: row.original.firstCreated,
+          connection_count: row.original.connectionsCount,
+        }}
         compact={true}
         useIcon={true}
-        backgroundColor="#f3e8ff"
-        textColor="#9333ea"
       />
     ),
   },
