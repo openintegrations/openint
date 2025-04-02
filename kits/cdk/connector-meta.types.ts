@@ -6,7 +6,7 @@ import type {
   ConnectionUpdateData,
   Source,
 } from '@openint/sync'
-import {castIs} from '@openint/util'
+import {castIs} from '@openint/util/zod-utils'
 import {AuthType, JsonConnectorDef} from '../../connectors/cnext'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'

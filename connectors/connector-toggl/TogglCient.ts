@@ -1,4 +1,5 @@
-import {createHTTPClient, memoize, z, zFunction} from '@openint/util'
+import {createHTTPClient, memoize, zFunction} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 export const zTogglConfig = z.object({
   email: z.string().nullish(),

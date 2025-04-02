@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z, zCast} from '@openint/util'
+import {z, zCast} from '@openint/util/zod-utils'
 import {zConfig} from './saltedgeClient'
 
 export const saltedgeSchemas = {

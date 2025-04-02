@@ -1,10 +1,5 @@
-import {
-  createHTTPClient,
-  memoize,
-  OAuth2Client,
-  z,
-  zFunction,
-} from '@openint/util'
+import {createHTTPClient, memoize, OAuth2Client, zFunction} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 export type EnvName = z.infer<typeof zEnvName>
 export const zEnvName = z.enum(['sandbox', 'live'])

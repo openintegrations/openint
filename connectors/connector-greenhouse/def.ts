@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 
 export const GREENHOUSE_ENTITY_NAMES = [
   'job', // Opening is on the job itself

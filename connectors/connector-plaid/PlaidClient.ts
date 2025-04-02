@@ -6,7 +6,8 @@ import {
   PlaidEnvironments,
   Products,
 } from 'plaid'
-import {getDefaultProxyAgent, memoize, z, zCast, zFunction} from '@openint/util'
+import {getDefaultProxyAgent, memoize, zFunction} from '@openint/util'
+import {z, zCast} from '@openint/util/zod-utils'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {WebhookShape} from './plaid.types'
 

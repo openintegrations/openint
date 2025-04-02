@@ -1,4 +1,5 @@
-import {createHTTPClient, memoize, z, zFunction} from '@openint/util'
+import {createHTTPClient, memoize, zFunction} from '@openint/util'
+import {z} from '@openint/util/zod-utils'
 import institutionsWsResponse from './institutionWsResponse.json'
 
 export const zEnvName = z.enum(['sandbox', 'development', 'production'])

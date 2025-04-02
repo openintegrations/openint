@@ -1,6 +1,8 @@
 import type {Base, FieldSet, Records} from 'airtable'
 import Airtable from 'airtable'
-import {titleCase, z, zFunction} from '@openint/util'
+import {titleCase} from '@openint/util/string-utils'
+import {zFunction} from '@openint/util/zod-function-utils'
+import {z} from '@openint/util/zod-utils'
 
 export const zAirtableResourceSettings = z.object({
   apiKey: z.string(),
