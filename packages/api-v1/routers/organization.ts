@@ -12,7 +12,7 @@ const zOnboardingState = z.object({
   onboarding_marked_complete: z.boolean(),
 })
 
-export const onboardingRouter = router({
+export const organizationRouter = router({
   getOrganization: orgProcedure
     .meta({
       openapi: {method: 'GET', path: '/organization', enabled: false},
