@@ -26,8 +26,6 @@ export const kustomerDef = {
     stage: 'beta',
     verticals: ['communication'],
     logoUrl: '/_assets/logo-kustomer.svg',
-    // TODO: Update opensdks NangoProvider type to include kustomer
-    // @ts-expect-error
     nangoProvider: 'kustomer',
   },
 } satisfies ConnectorDef<typeof kustomerSchemas>

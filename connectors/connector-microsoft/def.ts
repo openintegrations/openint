@@ -68,7 +68,6 @@ export const microsoftDef = {
     stage: 'beta',
     verticals: ['file-storage'],
     logoUrl: '/_assets/logo-microsoft.svg',
-    // @ts-expect-error
     nangoProvider: 'microsoft',
   },
 } satisfies ConnectorDef<typeof microsoftSchemas>

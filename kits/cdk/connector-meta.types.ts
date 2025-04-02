@@ -1,12 +1,10 @@
-import type {NangoProvider} from '@opensdks/sdk-nango/src/nango.oas'
-import {z} from '@openint/util/zod-utils'
 import type {oas30, oas31} from 'openapi3-ts'
 import type {
   AnyEntityPayload,
   ConnectionUpdateData,
   Source,
 } from '@openint/sync'
-import {castIs} from '@openint/util/zod-utils'
+import {castIs, z} from '@openint/util/zod-utils'
 import {AuthType, JsonConnectorDef} from '../../connectors/cnext'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
@@ -50,7 +48,7 @@ export interface ConnectorMetadata {
   }
 
   /** Whether this is an oauth integration? */
-  nangoProvider?: NangoProvider
+  nangoProvider?: string
 
   /* Native oauth type */
   authType?: AuthType
