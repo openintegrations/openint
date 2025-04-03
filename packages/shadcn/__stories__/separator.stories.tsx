@@ -3,7 +3,6 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {Separator} from '../ui/separator'
 
 const meta = {
-  title: 'Shadcn/Separator',
   component: Separator,
   tags: ['autodocs'],
   argTypes: {

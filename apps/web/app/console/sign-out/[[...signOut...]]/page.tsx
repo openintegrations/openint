@@ -2,7 +2,7 @@
 
 import {useClerk} from '@clerk/nextjs'
 import React from 'react'
-import {FullScreenCenter} from '@/components/FullScreenCenter'
+import {FullScreenCenter} from '@openint/ui-v1/components/FullScreenCenter'
 
 export default function SignOutScreen() {
   const {signOut} = useClerk()

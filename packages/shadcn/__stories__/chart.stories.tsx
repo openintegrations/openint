@@ -39,7 +39,6 @@ const ChartWrapper = ({
 )
 
 const meta = {
-  title: 'Shadcn/Chart',
   component: ChartWrapper,
 } as Meta<typeof ChartWrapper>
 

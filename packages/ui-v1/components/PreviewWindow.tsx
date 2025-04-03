@@ -19,7 +19,7 @@ export function BrowserWindow({
   return (
     <div
       className={cn(
-        'bg-background w-full overflow-hidden rounded-lg border shadow-lg',
+        'bg-background flex w-full flex-col overflow-hidden rounded-lg border shadow-lg',
         className,
       )}>
       {/* Browser Header */}
@@ -116,7 +116,7 @@ export function BrowserWindow({
       </div>
 
       {/* Browser Content */}
-      <div className="relative">{children}</div>
+      <div className="flex-1">{children}</div>
     </div>
   )
 }
@@ -331,6 +331,7 @@ export function TabletScreen({
 
 interface PreviewWindowProps extends PreviewProps {
   defaultView?: 'browser' | 'tablet' | 'mobile'
+  supportedViews?: ('browser' | 'tablet' | 'mobile')[]
 }
 
 export function PreviewWindow({
@@ -339,35 +340,33 @@ export function PreviewWindow({
   url = 'https://example.com',
   isLoading = false,
   defaultView = 'browser',
+  supportedViews = ['browser', 'mobile'],
 }: PreviewWindowProps) {
-  const [view, setView] = React.useState<'browser' | 'tablet' | 'mobile'>(
-    defaultView,
-  )
+  const [view, setView] =
+    React.useState<(typeof supportedViews)[number]>(defaultView)
 
   return (
     <Tabs
       value={view}
       className={className}
       onValueChange={(value) =>
-        setView(value as 'browser' | 'tablet' | 'mobile')
+        setView(value as (typeof supportedViews)[number])
       }>
       <div className="flex justify-center">
         <TabsList>
-          <TabsTrigger value="browser" className="flex items-center gap-2">
-            <MonitorIcon className="h-4 w-4" />
-            Browser
-          </TabsTrigger>
-          <TabsTrigger value="tablet" className="flex items-center gap-2">
-            <TabletIcon className="h-4 w-4" />
-            Tablet
-          </TabsTrigger>
-          <TabsTrigger value="mobile" className="flex items-center gap-2">
-            <SmartphoneIcon className="h-4 w-4" />
-            Mobile
-          </TabsTrigger>
+          {supportedViews.map((view) => (
+            <TabsTrigger
+              key={view}
+              value={view}
+              className="flex items-center gap-2">
+              {view === 'browser' && <MonitorIcon className="h-4 w-4" />}
+              {view === 'tablet' && <TabletIcon className="h-4 w-4" />}
+              {view === 'mobile' && <SmartphoneIcon className="h-4 w-4" />}
+              {view}
+            </TabsTrigger>
+          ))}
         </TabsList>
       </div>
-
       {/* Preview Container */}
 
       <TabsContent value="browser" className="mt-0 flex justify-center">

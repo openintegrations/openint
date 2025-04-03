@@ -1,1 +1,2 @@
-export * from './SchemaForm'
+export * from './ZodSchemaForm'
+export * from './JSONSchemaForm'

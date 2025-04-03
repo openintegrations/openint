@@ -10,7 +10,6 @@ import {
 } from '../ui/navigation-menu'
 
 const meta = {
-  title: 'Shadcn/NavigationMenu',
   component: NavigationMenu,
   parameters: {
     layout: 'centered',

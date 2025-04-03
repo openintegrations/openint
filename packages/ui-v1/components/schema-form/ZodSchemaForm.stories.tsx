@@ -1,42 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {Meta, StoryObj} from '@storybook/react'
-// TODO: Fix cnext to put def and server in separate files...
-// import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {zodToOas31Schema} from '@openint/util/schema'
 import {z} from '@openint/util/zod-utils'
-import {JSONSchemaForm, ZodSchemaForm} from './SchemaForm'
+import {ZodSchemaForm} from './ZodSchemaForm'
 
 const meta: Meta<typeof ZodSchemaForm> = {
-  title: 'Components/SchemaForm',
   component: ZodSchemaForm,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
 }
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 // Simple example with email and password fields
-export const JsonSchema: Story = {
-  render: () => (
-    <JSONSchemaForm
-      debugMode
-      jsonSchema={zodToOas31Schema(
-        z
-          .object({
-            email: z.string().email(),
-            pw: z.string().min(8).openapi({
-              description: 'Password must be at least 8 characters',
-              title: 'Secure Password',
-              format: 'password',
-            }),
-          })
-          .openapi({ref: 'oauthCredentials'}),
-      )}
-    />
-  ),
+export const Simple: Story = {
+  args: {
+    schema: z.object({
+      email: z.string().email(),
+      password: z.string().min(8),
+    }),
+    onSubmit: (data: {formData: Record<string, unknown>}) => {
+      console.log('Sample Schema Form submitted:', data)
+      alert(
+        'Sample Schema Form submitted! Data: ' +
+          JSON.stringify(data) +
+          ' Check console for details.',
+      )
+    },
+  },
 }
 
 const zOauth = z
@@ -48,23 +40,6 @@ const zOauth = z
     'ui:field': 'OAuthField',
     'ui:classNames': 'bg-red-50 p-2',
   })
-
-export const WithUISchema: Story = {
-  render: () => (
-    <JSONSchemaForm
-      debugMode
-      jsonSchema={zodToOas31Schema(
-        z.object({
-          name: z.string().openapi({title: 'Name'}),
-          oauth: zOauth,
-          scopes: z.array(z.string()).openapi({
-            'ui:widget': 'MultiSelectWidget',
-          }),
-        }),
-      )}
-    />
-  ),
-}
 
 export const Union: Story = {
   args: {
@@ -82,24 +57,6 @@ export const Union: Story = {
         }),
       ]),
     }),
-  },
-}
-
-// Simple example with email and password fields
-export const ZodSchema: Story = {
-  args: {
-    schema: z.object({
-      email: z.string().email(),
-      password: z.string().min(8),
-    }),
-    onSubmit: (data: any) => {
-      console.log('Sample Schema Form submitted:', data)
-      alert(
-        'Sample Schema Form submitted! Data: ' +
-          JSON.stringify(data) +
-          ' Check console for details.',
-      )
-    },
   },
 }
 
