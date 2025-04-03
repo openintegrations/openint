@@ -133,50 +133,56 @@ export function ConnectionsPage(props: {
             </div>
 
             {selectedConnection && (
-              <div className="flex-1 overflow-y-auto p-4">
-                <div className="space-y-6">
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="space-y-8">
                   {/* Basic Connection Info */}
-                  <section>
-                    <h3 className="mb-3 text-lg font-semibold">
+                  <section className="bg-card rounded-lg border p-5">
+                    <h3 className="text-card-foreground mb-4 text-lg font-semibold">
                       Connection Information
                     </h3>
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                       <div>
-                        <h4 className="text-muted-foreground text-sm font-medium">
+                        <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                           Connection ID
                         </h4>
-                        <p className="font-mono text-sm">
-                          {selectedConnection.id}
-                        </p>
+                        <CopyID
+                          value={selectedConnection.id}
+                          width="100%"
+                          size="medium"
+                        />
                       </div>
                       <div>
-                        <h4 className="text-muted-foreground text-sm font-medium">
+                        <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                           Connector Name
                         </h4>
-                        <p className="font-mono text-sm">
-                          {selectedConnection.connector_name}
-                        </p>
+                        <div className="bg-muted/40 rounded-md px-3 py-1.5">
+                          <p className="text-sm font-medium">
+                            {selectedConnection.connector_name}
+                          </p>
+                        </div>
                       </div>
                       <div>
-                        <h4 className="text-muted-foreground text-sm font-medium">
+                        <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                           Config ID
                         </h4>
-                        <p className="font-mono text-sm">
-                          {selectedConnection.connector_config_id}
-                        </p>
+                        <CopyID
+                          value={selectedConnection.connector_config_id || ''}
+                          width="100%"
+                          size="medium"
+                        />
                       </div>
                     </div>
                   </section>
 
                   {/* OAuth Credentials */}
                   {selectedConnection.settings?.oauth?.credentials && (
-                    <section>
-                      <h3 className="mb-3 text-lg font-semibold">
+                    <section className="bg-card rounded-lg border p-5">
+                      <h3 className="text-card-foreground mb-4 text-lg font-semibold">
                         Authorization
                       </h3>
-                      <div className="space-y-4">
+                      <div className="space-y-5">
                         <div>
-                          <h4 className="text-muted-foreground text-sm font-medium">
+                          <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                             Access Token
                           </h4>
                           <div className="relative mt-1">
@@ -204,7 +210,7 @@ export function ConnectionsPage(props: {
                         </div>
 
                         <div>
-                          <h4 className="text-muted-foreground text-sm font-medium">
+                          <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                             Refresh Token
                           </h4>
                           <div className="relative mt-1">
@@ -232,22 +238,22 @@ export function ConnectionsPage(props: {
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <h4 className="text-muted-foreground text-sm font-medium">
+                          <div className="bg-muted/40 rounded-md p-3">
+                            <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                               Token Type
                             </h4>
-                            <p className="font-mono text-sm">
+                            <p className="text-sm font-medium">
                               {
                                 selectedConnection.settings.oauth.credentials
                                   .token_type
                               }
                             </p>
                           </div>
-                          <div>
-                            <h4 className="text-muted-foreground text-sm font-medium">
+                          <div className="bg-muted/40 rounded-md p-3">
+                            <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                               Expires In
                             </h4>
-                            <p className="font-mono text-sm">
+                            <p className="text-sm font-medium">
                               {
                                 selectedConnection.settings.oauth.credentials
                                   .expires_in
@@ -257,11 +263,11 @@ export function ConnectionsPage(props: {
                           </div>
                         </div>
 
-                        <div>
-                          <h4 className="text-muted-foreground text-sm font-medium">
+                        <div className="bg-muted/40 rounded-md p-3">
+                          <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                             Scope
                           </h4>
-                          <p className="break-all font-mono text-sm">
+                          <p className="break-all text-sm font-medium">
                             {
                               selectedConnection.settings.oauth.credentials
                                 .scope
@@ -269,11 +275,11 @@ export function ConnectionsPage(props: {
                           </p>
                         </div>
 
-                        <div>
-                          <h4 className="text-muted-foreground text-sm font-medium">
+                        <div className="bg-muted/40 rounded-md p-3">
+                          <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                             Expires At
                           </h4>
-                          <p className="font-mono text-sm">
+                          <p className="text-sm font-medium">
                             {new Date(
                               selectedConnection.settings.oauth.credentials.expires_at,
                             ).toLocaleString()}
@@ -284,31 +290,33 @@ export function ConnectionsPage(props: {
                   )}
 
                   {/* Timestamps */}
-                  <section>
-                    <h3 className="mb-3 text-lg font-semibold">Timestamps</h3>
-                    <div className="space-y-2">
+                  <section className="bg-card rounded-lg border p-5">
+                    <h3 className="text-card-foreground mb-4 text-lg font-semibold">
+                      Timestamps
+                    </h3>
+                    <div className="space-y-4">
                       <div>
-                        <h4 className="text-muted-foreground text-sm font-medium">
+                        <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                           Created
                         </h4>
-                        <p className="font-mono text-sm">
+                        <p className="text-sm font-medium">
                           {formatIsoDateString(selectedConnection.created_at)}
                         </p>
                       </div>
                       <div>
-                        <h4 className="text-muted-foreground text-sm font-medium">
+                        <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                           Last Updated
                         </h4>
-                        <p className="font-mono text-sm">
+                        <p className="text-sm font-medium">
                           {formatIsoDateString(selectedConnection.updated_at)}
                         </p>
                       </div>
                       {selectedConnection.settings?.oauth?.last_fetched_at && (
                         <div>
-                          <h4 className="text-muted-foreground text-sm font-medium">
+                          <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                             Last Fetched
                           </h4>
-                          <p className="font-mono text-sm">
+                          <p className="text-sm font-medium">
                             {formatIsoDateString(
                               selectedConnection.settings.oauth.last_fetched_at,
                             )}
@@ -320,8 +328,8 @@ export function ConnectionsPage(props: {
 
                   {/* Raw Response */}
                   {selectedConnection.settings?.oauth?.credentials?.raw && (
-                    <section>
-                      <h3 className="mb-3 text-lg font-semibold">
+                    <section className="bg-card rounded-lg border p-5">
+                      <h3 className="text-card-foreground mb-4 text-lg font-semibold">
                         Raw Token Response
                       </h3>
                       <div className="relative">
