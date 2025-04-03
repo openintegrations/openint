@@ -67,7 +67,7 @@ const DataTableContext = React.createContext<
   DataTableContextValue<any, any> | undefined
 >(undefined)
 
-function useDataTableContext() {
+export function useDataTableContext() {
   const context = React.useContext(DataTableContext)
   if (!context) {
     throw new Error('useDataTable must be used within a DataTableProvider')
@@ -165,13 +165,13 @@ export function DataTableTable(props: {className?: string}) {
     useDataTableContext()
 
   return (
-    <div className={cn('w-full rounded-md border', props.className)}>
-      <Table>
+    <div className={cn('rounded-md border', props.className)}>
+      <Table className="w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead key={header.id} className="px-3 py-3">
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -209,7 +209,7 @@ export function DataTableTable(props: {className?: string}) {
                   }
                   className={cn(onRowClick && 'hover:bg-muted cursor-pointer')}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="px-3 py-3">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -298,10 +298,12 @@ export function Pagination() {
 
   return (
     <>
-      <div className="text-muted-foreground flex-1 text-sm">
-        {table.getFilteredSelectedRowModel().rows.length} of{' '}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div>
+      {table.getFilteredSelectedRowModel().rows.length > 0 && (
+        <div className="text-muted-foreground flex-1 text-sm">
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+      )}
       {(table.getCanPreviousPage() || table.getCanNextPage()) && (
         <div className="space-x-2">
           <Button

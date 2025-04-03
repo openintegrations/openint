@@ -4,7 +4,7 @@ import {
   ConnectorTemporary,
   FIXTURES,
 } from '../domain-components/__stories__/fixtures'
-import {ConnectorTableCell} from '../domain-components/ConnectorTableCell'
+import {ConnectorTableCell} from '../domain-components/tables/ConnectorTableCell'
 import {ColumnDef, Columns, DataTable} from './DataTable'
 
 const meta: Meta<typeof DataTable> = {

@@ -11,13 +11,13 @@ import {
   SheetFooter,
   SheetTitle,
 } from '@openint/shadcn/ui/sheet'
-import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {
+  AddConnectorConfig,
+  ConnectorTableCell,
   JSONSchemaForm,
   type SchemaFormElement,
-} from '@openint/ui-v1/components/schema-form/JSONSchemaForm'
-import {AddConnectorConfig} from '@openint/ui-v1/domain-components/AddConnectorConfig'
-import {ConnectorTableCell} from '@openint/ui-v1/domain-components/ConnectorTableCell'
+} from '@openint/ui-v1'
+import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 
