@@ -1,30 +1,32 @@
 'use client'
 
-import {useCommandDefinitionMap} from '@/app/GlobalCommandBarProvider'
-import type {Core} from '@openint/api-v1/models'
+import {useMemo, useState} from 'react'
+import {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
-import {CommandPopover} from '@openint/ui-v1'
+import {CommandPopover, ConnectionTableCell, CopyID} from '@openint/ui-v1'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
-import {useMemo, useState} from 'react'
+import {formatIsoDateString} from '@openint/ui-v1/utils'
+import {useCommandDefinitionMap} from '@/app/GlobalCommandBarProvider'
 import {useTRPC} from '../client'
 
 const columns: Array<ColumnDef<Core['connection']>> = [
   {
     id: 'id',
     header: 'id',
-    accessorKey: 'id',
+    cell: ({row}) => <ConnectionTableCell connection={row.original} />,
   },
   {
     id: 'connector_name',
     header: 'Connector',
-    accessorKey: 'connector_name',
   },
   {
-    id: 'connector_config_id',
-    header: 'Connector Config ID',
-    accessorKey: 'connector_config_id',
+    id: 'customer_id',
+    header: 'Customer',
+    cell: ({row}) => (
+      <CopyID value={row.original.customer_id} size="compact" width="auto" />
+    ),
   },
   {
     id: 'created_at',
@@ -38,7 +40,7 @@ const columns: Array<ColumnDef<Core['connection']>> = [
   },
 ]
 
-export function ConnectionList(props: {
+export function ConnectionsPage(props: {
   initialData?: {
     items: Array<Core['connection']>
     total: number
@@ -55,7 +57,7 @@ export function ConnectionList(props: {
 
   const connectionData = useSuspenseQuery(
     trpc.listConnections.queryOptions(
-      {},
+      {expand: ['connector']},
       initialData ? {initialData} : undefined,
     ),
   )
@@ -290,9 +292,7 @@ export function ConnectionList(props: {
                           Created
                         </h4>
                         <p className="font-mono text-sm">
-                          {new Date(
-                            selectedConnection.created_at,
-                          ).toLocaleString()}
+                          {formatIsoDateString(selectedConnection.created_at)}
                         </p>
                       </div>
                       <div>
@@ -300,9 +300,7 @@ export function ConnectionList(props: {
                           Last Updated
                         </h4>
                         <p className="font-mono text-sm">
-                          {new Date(
-                            selectedConnection.updated_at,
-                          ).toLocaleString()}
+                          {formatIsoDateString(selectedConnection.updated_at)}
                         </p>
                       </div>
                       {selectedConnection.settings?.oauth?.last_fetched_at && (
@@ -311,9 +309,9 @@ export function ConnectionList(props: {
                             Last Fetched
                           </h4>
                           <p className="font-mono text-sm">
-                            {new Date(
+                            {formatIsoDateString(
                               selectedConnection.settings.oauth.last_fetched_at,
-                            ).toLocaleString()}
+                            )}
                           </p>
                         </div>
                       )}

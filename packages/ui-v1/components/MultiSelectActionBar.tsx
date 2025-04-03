@@ -1,7 +1,8 @@
 'use client'
 
+import type {Table} from '@tanstack/react-table'
 import {Trash2, X} from 'lucide-react'
-import React from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Button} from '@openint/shadcn/ui'
 
@@ -19,12 +20,12 @@ export function MultiSelectActionBar({
   className,
 }: MultiSelectActionBarProps) {
   // Track visibility state for animation
-  const [isVisible, setIsVisible] = React.useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   // Track if component should be in DOM (for exit animation)
-  const [isInDOM, setIsInDOM] = React.useState(false)
+  const [isInDOM, setIsInDOM] = useState(false)
 
   // Handle animation timing
-  React.useEffect(() => {
+  useEffect(() => {
     let showTimer: NodeJS.Timeout | undefined
     let hideTimer: NodeJS.Timeout | undefined
 
@@ -53,13 +54,13 @@ export function MultiSelectActionBar({
   }, [selectedCount, isVisible])
 
   // Handle clear button with animation
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setIsVisible(false)
     // Wait for animation to complete before calling onClear
     setTimeout(() => {
       onClear()
     }, 300)
-  }
+  }, [onClear])
 
   // Don't render anything when there's nothing selected and not animating
   if (!isInDOM && selectedCount === 0) return null
@@ -100,58 +101,54 @@ export function MultiSelectActionBar({
 }
 
 // Create a hook that can be used with the DataTable to get selected rows
-export function useTableRowSelection<T>(
-  table: any,
-  onDeleteFn: (
+export function useTableRowSelection<TData>(
+  table: Table<TData>,
+  onDelete: (
     selectedRows: Record<string, boolean>,
-    selectedItems: T[],
+    selectedItems: TData[],
   ) => void,
 ) {
-  // Get row selection state
-  const rowSelection = table.getState().rowSelection
-  const selectedCount = Object.keys(rowSelection).length
+  const selectedRows = table.getState().rowSelection
+  const selectedCount = Object.keys(selectedRows).length
 
-  // Get selected items
-  const selectedItems = React.useMemo(() => {
+  const selectedItems = useMemo(() => {
     const rows = table.getFilteredSelectedRowModel().rows
-    return rows.map((row: any) => row.original)
+    return rows.map((row) => row.original)
   }, [table])
 
   // Handler for clearing selection
-  const handleClear = React.useCallback(() => {
+  const handleClear = useCallback(() => {
     // With animation, we need to create a copy of the current selection
     // So we can safely reset it after animation
-    const currentSelection = {...rowSelection}
+    const currentSelection = {...selectedRows}
     if (Object.keys(currentSelection).length > 0) {
       // Let the animation finish before actually clearing
       setTimeout(() => {
         table.resetRowSelection()
       }, 300)
-    } else {
-      table.resetRowSelection()
     }
-  }, [table, rowSelection])
+  }, [table, selectedRows])
 
   // Handler for deletion
-  const handleDelete = React.useCallback(() => {
+  const handleDelete = useCallback(() => {
     // Store the current selection before it gets reset
-    const currentSelection = {...rowSelection}
+    const currentSelection = {...selectedRows}
     const currentItems = [...selectedItems]
 
     // Call the delete function with the stored values
-    onDeleteFn(currentSelection, currentItems)
+    onDelete(currentSelection, currentItems)
 
     // Reset selection after animation completes
     setTimeout(() => {
       table.resetRowSelection()
     }, 300)
-  }, [onDeleteFn, rowSelection, selectedItems, table])
+  }, [onDelete, selectedRows, selectedItems, table])
 
   return {
     selectedCount,
     handleClear,
     handleDelete,
     selectedItems,
-    rowSelection,
+    selectedRows,
   }
 }
