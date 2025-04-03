@@ -4,20 +4,20 @@ import {useAuth, useUser} from '@clerk/nextjs'
 import React from 'react'
 import type {AppRouter} from '@openint/api-v1'
 import {getServerUrl} from '@openint/env'
+import {Toaster} from '@openint/shadcn/ui'
 import {
   createTRPCClient,
-  createTRPCContext,
   httpLink,
   QueryClient,
   QueryClientProvider,
   useSuspenseQuery,
 } from '@openint/ui-v1/trpc'
 import OnboardingHoc from './onboarding'
+import {TRPCProvider, useTRPC, useTRPCClient} from './trpc'
 
 // MARK: - Move me into client common
-
-export const {TRPCProvider, useTRPC, useTRPCClient} =
-  createTRPCContext<AppRouter>()
+// TODO: Remove this
+export {TRPCProvider, useTRPC, useTRPCClient}
 
 function makeQueryClient() {
   return new QueryClient({
@@ -76,6 +76,7 @@ export function ClientApp({
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
         {showOnboarding ? <OnboardingHoc /> : children}
+        <Toaster />
       </TRPCProvider>
     </QueryClientProvider>
   )

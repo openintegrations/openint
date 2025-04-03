@@ -1,5 +1,5 @@
 import {zCustomerId} from '@openint/cdk'
-import {z} from '@openint/util/zod-utils'
+import {z, zCoerceBoolean} from '@openint/util/zod-utils'
 
 export const connectClientOptions = z
   .object({
@@ -14,6 +14,10 @@ export const connectClientOptions = z
       description:
         'The default tab to show when the magic link is opened. Defaults to "my-connections"',
     }),
+    debug: zCoerceBoolean().optional().openapi({
+      title: 'Debug',
+      description: 'Whether to enable debug mode',
+    }),
     '--primary': z.string().optional(),
     '--background': z.string().optional(),
     '--foreground': z.string().optional(),
@@ -26,7 +30,7 @@ export const connectClientOptions = z
   })
 
 export const customerRouterModels = {
-  createMagicLinkInput: z.object({
+  getMagicLinkInput: z.object({
     customer_id: zCustomerId.openapi({
       param: {in: 'path', name: 'customer_id'},
     }),

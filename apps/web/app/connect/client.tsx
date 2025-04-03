@@ -53,12 +53,16 @@ const ConnectorClientComponents = Object.fromEntries(
     }),
   ]),
 )
+export type ConnectorConfigForCustomer = Pick<
+  ConnectorConfig<'connector'>,
+  'id' | 'connector_name' | 'connector'
+>
 
 export function AddConnectionInner({
   connectorConfig,
   ...props
 }: {
-  connectorConfig: ConnectorConfig<'connector'>
+  connectorConfig: ConnectorConfigForCustomer
   onReady?: (ctx: {state: string}, name: string) => void
   initialData?: Promise<AppRouterOutput['preConnect']>
 }) {
@@ -133,7 +137,8 @@ export function AddConnectionInner({
 
       <ConnectorConfigCard
         displayNameLocation="right"
-        connectorConfig={connectorConfig}
+        // TODO: fix this
+        connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
         onPress={() => handleConnect()}>
         <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
           Connect

@@ -1,14 +1,14 @@
 import {TRPCError} from '@trpc/server'
-import {z} from '@openint/util/zod-utils'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
+import {makeUlid} from '@openint/util/id-utils'
+import {z} from '@openint/util/zod-utils'
 import {core, parseNonEmpty} from '../models'
 import {connectorSchemas} from '../models/connectorSchemas'
 import {customerProcedure, router} from '../trpc/_base'
 import {md} from './utils/md'
-import {makeUlid} from '@openint/util/id-utils'
 
 export const connectRouter = router({
   preConnect: customerProcedure
@@ -78,9 +78,10 @@ export const connectRouter = router({
           message: `Connector ${input.data.connector_name} not found`,
         })
       }
-      const ccfg = await ctx.db.query.connector_config.findFirst({
-        where: eq(schema.connector_config.id, input.id),
-      })
+      const ccfg =
+        await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
+          where: eq(schema.connector_config.id, input.id),
+        })
       if (!ccfg) {
         throw new TRPCError({
           code: 'NOT_FOUND',

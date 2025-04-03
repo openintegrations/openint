@@ -84,6 +84,18 @@ export function getExtCustomerId(
   }
 }
 
+/**
+ * Potentially temporary function to elevate the role to org if the viewer is a customer
+ * to allow access to org data
+ * TODO: Consider improving RLS policy to not need this
+ */
+export function asOrgIfCustomer(viewer: Viewer): Viewer {
+  if (viewer.role === 'customer') {
+    return {role: 'org', orgId: viewer.orgId}
+  }
+  return viewer
+}
+
 // MARK: - JWT
 
 /**

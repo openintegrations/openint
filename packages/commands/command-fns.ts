@@ -4,6 +4,7 @@ import {z, type Z} from '@openint/util/zod-utils'
 import type {
   CommandDefinitionInput,
   CommandDefinitionMap,
+  CommandDefinitionMapInput,
   CommandDraft,
 } from './command-types'
 
@@ -34,9 +35,13 @@ export function prepareCommand([key, value]: [
 export function prepareCommands({
   definitions,
 }: {
-  definitions: CommandDefinitionMap<any>
+  definitions: CommandDefinitionMapInput<any>
 }) {
-  const commands = Object.entries(definitions).map(prepareCommand)
+  const commands = Object.entries(definitions)
+    .filter(
+      (entry): entry is [string, CommandDefinitionInput<any>] => !!entry[1],
+    )
+    .map(prepareCommand)
   const commandGroups = R.groupBy(commands, (c) => c.group)
 
   return {commandGroups, commands}

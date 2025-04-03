@@ -6,6 +6,9 @@ export type _infer<T, TDefault = unknown> = T extends Z.ZodTypeAny
   ? Z.infer<T>
   : TDefault
 
+export type FalsyValue = false | undefined | null | 0 | ''
+export type Truthy<T> = T extends FalsyValue ? never : T
+
 export type CommandDraft<
   TDef extends CommandDefinitionMap<TCtx>,
   TKey extends keyof TDef,
@@ -50,6 +53,11 @@ export interface CommandDefinitionInput<
 export type CommandDefinitionMap<TCtx = unknown> = Record<
   string,
   CommandDefinitionInput<TCtx>
+>
+
+export type CommandDefinitionMapInput<TCtx = unknown> = Record<
+  string,
+  CommandDefinitionInput<TCtx> | FalsyValue
 >
 
 /**
