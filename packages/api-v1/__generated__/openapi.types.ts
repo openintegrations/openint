@@ -32,8 +32,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List Connector Configurations
-         * @description List all connector configurations
+         * List Configured Connectors
+         * @description List the connectors that are configured in your account and available for your customers
          */
         get: operations["listConnectorConfigs"];
         put?: never;
@@ -52,7 +52,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get Connection & Credentials
+         * Get Connection
          * @description Get details of a specific connection, including credentials
          */
         get: operations["getConnection"];
@@ -77,7 +77,7 @@ export interface paths {
         };
         /**
          * List Connections
-         * @description List all connections with optional filtering
+         * @description List all connections with optional filtering. Does not retrieve secrets or perform any connection healthcheck. For that use `getConnection` or `checkConnectionHealth`.
          */
         get: operations["listConnections"];
         put?: never;
@@ -123,9 +123,9 @@ export interface paths {
         put?: never;
         /**
          * Create Magic Link
-         * @description Create a magic link for connecting integrations
+         * @description Create a magic link that is ready to be shared with customers who want to use Connect
          */
-        post: operations["createMagicLink"];
+        post: operations["getMagicLink"];
         delete?: never;
         options?: never;
         head?: never;
@@ -143,7 +143,7 @@ export interface paths {
         put?: never;
         /**
          * Create Customer Authentication Token
-         * @description Create an authentication token for a customer
+         * @description Create a @Connect authentication token for a customer. This token can be used to embed @Connect in your application via the `@openint/connect` npm package.
          */
         post: operations["createToken"];
         delete?: never;
@@ -3464,12 +3464,11 @@ export interface operations {
             };
         };
     };
-    createMagicLink: {
+    getMagicLink: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                 customer_id: string;
             };
             cookie?: never;
@@ -3482,27 +3481,30 @@ export interface operations {
                      * @default 2592000
                      */
                     validity_in_seconds?: number;
-                    /** @description Where to send user to after connect / if they press back button */
-                    redirect_url?: string;
-                    /**
-                     * @description Filter integrations by connector names
-                     * @default []
-                     */
-                    connector_names?: ("aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "wise" | "xero" | "yodlee" | "zohodesk")[];
-                    /** @description The specific connection id to load */
-                    connection_id?: string;
-                    /**
-                     * @description Magic Link display theme
-                     * @default light
-                     * @enum {string}
-                     */
-                    theme?: "light" | "dark";
-                    /**
-                     * @description Magic Link tab view to load in the connect magic link
-                     * @default add
-                     * @enum {string}
-                     */
-                    view?: "manage" | "manage-deeplink" | "add" | "add-deeplink";
+                    /** @description Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client */
+                    client_options?: {
+                        /**
+                         * @description The name of the connector to limit connection to. Default to all otherwise
+                         * @enum {string}
+                         */
+                        connector_name?: "plaid" | "greenhouse";
+                        /**
+                         * Default Tab
+                         * @description The default tab to show when the magic link is opened. Defaults to "my-connections"
+                         * @enum {string}
+                         */
+                        tab?: "my-connections" | "add-connection";
+                        /**
+                         * Debug
+                         * @description Whether to enable debug mode
+                         */
+                        debug?: boolean;
+                        "--primary"?: string;
+                        "--background"?: string;
+                        "--foreground"?: string;
+                        "--card"?: string;
+                        "--card-foreground"?: string;
+                    };
                 };
             };
         };

@@ -75,8 +75,8 @@ paths:
   /connector-config:
     get:
       operationId: listConnectorConfigs
-      summary: List Connector Configurations
-      description: List all connector configurations
+      summary: List Configured Connectors
+      description: List the connectors that are configured in your account and available for your customers
       security:
         - ApiKey: []
         - CustomerToken: []
@@ -392,38 +392,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              // Automatically fetches more pages as needed.
-              for await (const listConnectionConfigsResponse of client.listConnectionConfigs()) {
-                console.log(listConnectionConfigsResponse);
-              }
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            page = client.list_connection_configs()
-            page = page.items[0]
-            print(page)
   /connection/{id}:
     get:
       operationId: getConnection
-      summary: Get Connection & Credentials
+      summary: Get Connection
       description: Get details of a specific connection, including credentials
       security:
         - ApiKey: []
@@ -664,34 +636,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.getConnection('conn_');
-
-              console.log(response);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.get_connection(
-                id="conn_",
-            )
-            print(response)
     delete:
       operationId: deleteConnection
       summary: Delete Connection
@@ -752,39 +696,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.deleteConnection('conn_');
-
-              console.log(response.id);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.delete_connection(
-                "conn_",
-            )
-            print(response.id)
   /connection:
     get:
       operationId: listConnections
       summary: List Connections
-      description: List all connections with optional filtering
+      description: List all connections with optional filtering. Does not retrieve secrets or perform any connection healthcheck. For that use `getConnection` or `checkConnectionHealth`.
       security:
         - ApiKey: []
         - CustomerToken: []
@@ -1123,34 +1039,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              // Automatically fetches more pages as needed.
-              for await (const listConnectionsResponse of client.listConnections()) {
-                console.log(listConnectionsResponse);
-              }
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            page = client.list_connections()
-            page = page.items[0]
-            print(page)
     post:
       operationId: createConnection
       summary: Create Connection
@@ -1332,62 +1220,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.createConnection({
-                connector_config_id: 'ccfg_',
-                customer_id: 'customer_id',
-                data: {
-                  connector_name: 'aircall',
-                  settings: {
-                    oauth: {
-                      created_at: 'created_at',
-                      last_fetched_at: 'last_fetched_at',
-                      metadata: { foo: 'bar' },
-                      updated_at: 'updated_at',
-                    },
-                  },
-                },
-              });
-
-              console.log(response);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.create_connection(
-                connector_config_id="ccfg_",
-                customer_id="customer_id",
-                data={
-                    "connector_name": "aircall",
-                    "settings": {
-                        "oauth": {
-                            "created_at": "created_at",
-                            "last_fetched_at": "last_fetched_at",
-                            "metadata": {
-                                "foo": "bar"
-                            },
-                            "updated_at": "updated_at",
-                        }
-                    },
-                },
-            )
-            print(response)
   /connection/{id}/check:
     post:
       operationId: checkConnection
@@ -1461,49 +1293,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.checkConnection('conn_');
-
-              console.log(response.id);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.check_connection(
-                "conn_",
-            )
-            print(response.id)
   /customer/{customer_id}/magic-link:
     post:
-      operationId: createMagicLink
+      operationId: getMagicLink
       summary: Create Magic Link
-      description: Create a magic link for connecting integrations
+      description: Create a magic link that is ready to be shared with customers who want to use Connect
       security:
         - ApiKey: []
         - CustomerToken: []
       parameters:
         - in: path
           name: customer_id
-          description: The id of the customer in your application. Ensure it is unique for that customer.
           schema:
             type: string
-            description: The id of the customer in your application. Ensure it is unique for that customer.
+            minLength: 1
           required: true
       requestBody:
         required: true
@@ -1516,92 +1319,37 @@ paths:
                   type: number
                   default: 2592000
                   description: How long the magic link will be valid for (in seconds) before it expires
-                redirect_url:
-                  type: string
-                  description: Where to send user to after connect / if they press back button
-                connector_names:
-                  type: array
-                  items:
-                    type: string
-                    enum:
-                      - aircall
-                      - airtable
-                      - apollo
-                      - brex
-                      - coda
-                      - confluence
-                      - discord
-                      - facebook
-                      - finch
-                      - firebase
-                      - foreceipt
-                      - github
-                      - gong
-                      - googlecalendar
-                      - googledocs
-                      - googledrive
-                      - googlemail
-                      - googlesheet
-                      - greenhouse
-                      - heron
-                      - hubspot
-                      - instagram
-                      - intercom
-                      - jira
-                      - kustomer
-                      - lever
-                      - linear
-                      - linkedin
-                      - lunchmoney
-                      - merge
-                      - microsoft
-                      - moota
-                      - notion
-                      - onebrick
-                      - outreach
-                      - pipedrive
-                      - plaid
-                      - quickbooks
-                      - ramp
-                      - reddit
-                      - salesforce
-                      - salesloft
-                      - saltedge
-                      - sharepointonline
-                      - slack
-                      - splitwise
-                      - stripe
-                      - teller
-                      - toggl
-                      - twenty
-                      - twitter
-                      - wise
-                      - xero
-                      - yodlee
-                      - zohodesk
-                    description: ''
-                  default: []
-                  description: Filter integrations by connector names
-                connection_id:
-                  type: string
-                  pattern: ^conn_
-                  description: The specific connection id to load
-                theme:
-                  type: string
-                  enum:
-                    - light
-                    - dark
-                  default: light
-                  description: Magic Link display theme
-                view:
-                  type: string
-                  enum:
-                    - manage
-                    - manage-deeplink
-                    - add
-                    - add-deeplink
-                  default: add
-                  description: Magic Link tab view to load in the connect magic link
+                client_options:
+                  type: object
+                  properties:
+                    connector_name:
+                      type: string
+                      enum:
+                        - plaid
+                        - greenhouse
+                      description: The name of the connector to limit connection to. Default to all otherwise
+                    tab:
+                      type: string
+                      enum:
+                        - my-connections
+                        - add-connection
+                      title: Default Tab
+                      description: The default tab to show when the magic link is opened. Defaults to "my-connections"
+                    debug:
+                      type: boolean
+                      title: Debug
+                      description: Whether to enable debug mode
+                    '--primary':
+                      type: string
+                    '--background':
+                      type: string
+                    '--foreground':
+                      type: string
+                    '--card':
+                      type: string
+                    '--card-foreground':
+                      type: string
+                  description: Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client
       responses:
         '200':
           description: Successful response
@@ -1639,39 +1387,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.createMagicLink('customer_id');
-
-              console.log(response.magic_link_url);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.create_magic_link(
-                customer_id="customer_id",
-            )
-            print(response.magic_link_url)
   /customer/{customer_id}/token:
     post:
       operationId: createToken
       summary: Create Customer Authentication Token
-      description: Create an authentication token for a customer
+      description: Create a @Connect authentication token for a customer. This token can be used to embed @Connect in your application via the `@openint/connect` npm package.
       security:
         - ApiKey: []
         - CustomerToken: []
@@ -1732,34 +1452,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-codeSamples:
-        - lang: JavaScript
-          source: |-
-            import Openint from '@openint/sdk';
-
-            const client = new Openint({
-              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
-            });
-
-            async function main() {
-              const response = await client.createToken('customer_id');
-
-              console.log(response.token);
-            }
-
-            main();
-        - lang: Python
-          source: |-
-            import os
-            from openint import Openint
-
-            client = Openint(
-                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
-            )
-            response = client.create_token(
-                customer_id="customer_id",
-            )
-            print(response.token)
 components:
   securitySchemes:
     ApiKey:
