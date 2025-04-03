@@ -84,7 +84,7 @@ export const IntegrationCompact: Story = {
 // Connector Config with simple variant
 export const ConnectorConfigSimple: Story = {
   args: {
-    entityType: 'connector-config',
+    entityType: 'connector_config',
     id: '12312312',
     name: 'Slack Connector',
     simple: true,
@@ -120,7 +120,7 @@ export const AllVariants: Story = {
             status="offline"
           />
           <EntityTableCell
-            entityType="connector-config"
+            entityType="connector_config"
             id="12312312"
             name="Slack Connector"
             status="destructive"
@@ -153,7 +153,7 @@ export const AllVariants: Story = {
             useIcon
           />
           <EntityTableCell
-            entityType="connector-config"
+            entityType="connector_config"
             id="12312312"
             name="Slack Connector"
             status="destructive"
@@ -187,7 +187,7 @@ export const AllVariants: Story = {
             simple
           />
           <EntityTableCell
-            entityType="connector-config"
+            entityType="connector_config"
             id="12312312"
             name="Slack Connector"
             status="destructive"
@@ -221,7 +221,7 @@ export const AllVariants: Story = {
             compact
           />
           <EntityTableCell
-            entityType="connector-config"
+            entityType="connector_config"
             id="12312312"
             name="Slack Connector"
             status="destructive"

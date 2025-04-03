@@ -28,7 +28,6 @@ export interface ConnectionCardProps {
 
 export function ConnectionCardContent({
   connection,
-  status,
   category = 'CRM',
   platform = 'Desktop',
   authMethod = 'oauth',
