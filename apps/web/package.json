@@ -37,6 +37,9 @@
     "react-dom": "19.0.0"
   },
   "devDependencies": {
+    "@openint/connector-finch": "workspace:*",
+    "@openint/connector-greenhouse": "workspace:*",
+    "@openint/connector-plaid": "workspace:*",
     "@sentry/cli": "^2.36.6",
     "@tailwindcss/postcss": "^4.0.13",
     "@types/react": "19.0.10",

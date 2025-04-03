@@ -211,6 +211,15 @@ importers:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
     devDependencies:
+      '@openint/connector-finch':
+        specifier: workspace:*
+        version: link:../../connectors/connector-finch
+      '@openint/connector-greenhouse':
+        specifier: workspace:*
+        version: link:../../connectors/connector-greenhouse
+      '@openint/connector-plaid':
+        specifier: workspace:*
+        version: link:../../connectors/connector-plaid
       '@sentry/cli':
         specifier: ^2.36.6
         version: 2.36.6
