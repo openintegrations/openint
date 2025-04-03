@@ -1,9 +1,22 @@
+import Link from 'next/link'
 import {Suspense} from 'react'
 import {connectClientOptions} from '@openint/api-v1/routers/customer.models'
 import {asOrgIfCustomer, type Viewer} from '@openint/cdk'
+import {isProduction} from '@openint/env'
+import {Button} from '@openint/shadcn/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import {parsePageProps, type PageProps} from '@/lib-common/next-utils'
-import {currentViewer} from '@/lib-server/auth.server'
+import {
+  currentViewer,
+  currentViewerFromPageProps,
+} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
@@ -21,7 +34,36 @@ function Fallback() {
 export default async function Page(
   pageProps: PageProps<never, {view?: string; connector_name?: string}>,
 ) {
-  const {viewer, token} = await currentViewer(pageProps)
+  const {viewer, token} = isProduction
+    ? // in production we only want to take a token parameter
+      await currentViewerFromPageProps(pageProps)
+    : // In dev we can work with Clerk cookies to know the 'viewer'
+      await currentViewer(pageProps)
+
+  if (viewer.role === 'anon') {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle>Authentication Required</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center space-y-4">
+            <p className="text-muted-foreground text-center text-sm">
+              Please use a magic link provided to you to manage your
+              integrations.
+            </p>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+            <Button asChild size="lg">
+              <Link href="https://console.openint.dev">
+                Go to OpenInt Console
+              </Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    )
+  }
 
   const {searchParams} = await parsePageProps(pageProps, {
     searchParams: connectClientOptions,
