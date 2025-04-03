@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import React from 'react'
+import {clientConnectors} from '@openint/all-connectors/connectors.client'
 import {AppRouterOutput} from '@openint/api-v1'
 import {ConnectorConfig} from '@openint/api-v1/models'
 import type {ConnectorClient} from '@openint/cdk'
@@ -12,12 +13,6 @@ import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorCon
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
-
-const connectorImports = {
-  plaid: () => import('@openint/connector-plaid/client'),
-  greenhouse: () => Promise.resolve({}),
-  finch: () => import('@openint/connector-finch/client'),
-}
 
 type ConnectFn = ReturnType<NonNullable<ConnectorClient['useConnectHook']>>
 
@@ -46,7 +41,7 @@ function wrapConnectorClientModule(
 }
 
 const ConnectorClientComponents = Object.fromEntries(
-  Object.entries(connectorImports).map(([name, importModule]) => [
+  Object.entries(clientConnectors).map(([name, importModule]) => [
     name,
     dynamic(() => importModule().then((m) => wrapConnectorClientModule(m)), {
       loading: () => <div>...Loading {name}...</div>,
@@ -114,9 +109,13 @@ export function AddConnectionInner({
 
   const Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
+
   if (!Component) {
-    throw new Error(`Unknown connector: ${name}`)
+    // TODO: handle me, for thigns like oauth connectors
+    console.warn(`Unhandled connector: ${name}`)
+    // throw new Error(`Unhandled connector: ${name}`)
   }
+
   return (
     <>
       {/*
@@ -124,16 +123,18 @@ export function AddConnectionInner({
        need to make ourselves a pure component
        */}
 
-      <Component
-        key={name}
-        connector_name={name}
-        onConnectFn={React.useCallback((fn) => {
-          ref.current = fn
+      {Component && (
+        <Component
+          key={name}
+          connector_name={name}
+          onConnectFn={React.useCallback((fn) => {
+            ref.current = fn
 
-          // onReady(c, name)
-          // setFn(c)
-        }, [])}
-      />
+            // onReady(c, name)
+            // setFn(c)
+          }, [])}
+        />
+      )}
 
       <ConnectorConfigCard
         displayNameLocation="right"
