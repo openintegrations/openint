@@ -3,6 +3,7 @@
 import type {RJSFSchema, StrictRJSFSchema, UiSchema} from '@rjsf/utils'
 import type {fields} from './fields'
 import type {widgets} from './widgets'
+
 // Mark: - generateUiSchema
 
 // Allow ui schemas to be specified directly in the json schema
@@ -47,7 +48,9 @@ export function jsonSchemaToUiSchema(jsonSchema: RJSFSchema): UiSchema {
       Object.assign(uiSchema[key], {
         'ui:title': friendlyLabel,
         'ui:classNames': 'pt-2',
-        ...Object.fromEntries(Object.entries(value)),
+        ...Object.fromEntries(
+          Object.entries(value).filter(([k]) => k.startsWith('ui:')),
+        ),
       })
     }
   }
