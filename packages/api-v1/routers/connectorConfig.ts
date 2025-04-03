@@ -5,6 +5,7 @@ import {and, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
 import {core, type Core} from '../models'
+import {getConnectorModel} from '../models/connectorSchemas'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
@@ -29,12 +30,7 @@ const zExpandOptions = z
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
   )
 
-export function expandConnector(
-  connectorName: string,
-): Pick<
-  Core['connector'],
-  'name' | 'display_name' | 'logo_url' | 'stage' | 'platforms'
-> {
+export function expandConnector(connectorName: string): Core['connector'] {
   const connector = defConnectors[connectorName as keyof typeof defConnectors]
   if (!connector) {
     throw new TRPCError({
@@ -54,12 +50,9 @@ export function expandConnector(
         : undefined
 
   return {
-    // TODO: add more fields?
-    name: connectorName,
-    // TODO: add enabled?
-    // enabled: connectorConfig.enabled,
-    // created_at: connectorConfig.created_at,
-    // updated_at: connectorConfig.updated_at,
+    ...getConnectorModel(connector, {
+      includeSchemas: true,
+    }),
     logo_url: logoUrl,
   }
 }
