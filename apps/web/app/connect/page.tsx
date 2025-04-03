@@ -1,12 +1,8 @@
 import {Suspense} from 'react'
 import {ConnectorConfig} from '@openint/api-v1/models'
-import {
-  connectClientOptions,
-  customerRouterModels,
-} from '@openint/api-v1/routers/customer.models'
+import {connectClientOptions} from '@openint/api-v1/routers/customer.models'
 import type {Viewer} from '@openint/cdk'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
-import {z} from '@openint/util/zod-utils'
 import {parsePageProps, type PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'

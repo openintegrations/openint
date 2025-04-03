@@ -82,25 +82,12 @@ export const customerRouter = router({
       const url = new URL('/connect/portal', getServerUrl(null))
       url.searchParams.set('token', token)
 
-      if (input.redirect_url) {
-        url.searchParams.set('redirectUrl', input.redirect_url)
-      }
-
-      if (input.connector_names) {
-        const connectorNames = input.connector_names.map((name) => name.trim())
-        url.searchParams.set('connectorNames', connectorNames.join(','))
-      }
-
-      if (input.connection_id) {
-        url.searchParams.set('connectionId', input.connection_id)
-      }
-
-      if (input.theme) {
-        url.searchParams.set('theme', input.theme)
-      }
-
-      if (input.view) {
-        url.searchParams.set('view', input.view)
+      if (input.client_options) {
+        for (const [key, value] of Object.entries(input.client_options)) {
+          if (value !== undefined) {
+            url.searchParams.set(key, value.toString())
+          }
+        }
       }
 
       return {
