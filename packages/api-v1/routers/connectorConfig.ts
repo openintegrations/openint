@@ -24,6 +24,7 @@ const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
   }
 }
 
+// TODO: Add connector.schemas
 const zExpandOptions = z
   .enum(['connector', 'enabled_integrations', 'connection_count'])
   .describe(

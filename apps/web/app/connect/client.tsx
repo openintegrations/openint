@@ -5,14 +5,29 @@ import React from 'react'
 import {clientConnectors} from '@openint/all-connectors/connectors.client'
 import {AppRouterOutput} from '@openint/api-v1'
 import {ConnectorConfig} from '@openint/api-v1/models'
-import type {ConnectorClient} from '@openint/cdk'
-import {Label} from '@openint/shadcn/ui'
-import {CommandPopover, DataTileView} from '@openint/ui-v1'
+import type {ConnectorClient, JSONSchema} from '@openint/cdk'
+import {Button, Label, toast} from '@openint/shadcn/ui'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@openint/shadcn/ui/dialog'
+import {
+  CommandPopover,
+  DataTileView,
+  JSONSchemaForm,
+  JSONSchemaFormRef,
+} from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {Deferred} from '@openint/util/promise-utils'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
+
+// MARK: - Connector Client Components
 
 type ConnectFn = ReturnType<NonNullable<ConnectorClient['useConnectHook']>>
 
@@ -48,6 +63,74 @@ const ConnectorClientComponents = Object.fromEntries(
     }),
   ]),
 )
+
+function makeManualConnectorClientComponent(settingsJsonSchema: JSONSchema) {
+  return function ManualConnectorClientComponent({
+    onConnectFn,
+    connector_name,
+  }: {
+    connector_name?: string
+    onConnectFn: (fn?: ConnectFn) => void
+  }) {
+    const [open, setOpen] = React.useState(false)
+    const formRef = React.useRef<JSONSchemaFormRef>(null)
+
+    const deferredRef = React.useRef<Deferred<any> | undefined>(undefined)
+    const connectFn = React.useCallback(
+      (() => {
+        setOpen(true)
+        // wait for user to submit form
+        const deferred = new Deferred<any>()
+        deferredRef.current = deferred
+        return deferred.promise
+      }) satisfies ConnectFn,
+      [],
+    )
+    React.useEffect(() => {
+      onConnectFn(connectFn)
+    }, [onConnectFn, connectFn])
+
+    return (
+      <Dialog
+        open={open}
+        onOpenChange={(newOpen) => {
+          setOpen(newOpen)
+          if (!newOpen && deferredRef.current) {
+            deferredRef.current.reject(new Error('Dialog closed'))
+            deferredRef.current = undefined
+          }
+        }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Configure {connector_name}</DialogTitle>
+          </DialogHeader>
+          <JSONSchemaForm
+            ref={formRef}
+            jsonSchema={settingsJsonSchema}
+            onSubmit={({formData}) => {
+              deferredRef.current?.resolve(formData)
+              deferredRef.current = undefined
+              setOpen(false)
+            }}
+          />
+          <DialogFooter>
+            <Button
+              type="submit"
+              className="w-full sm:w-auto"
+              onClick={() => {
+                formRef.current?.submit()
+              }}>
+              Submit
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    )
+  }
+}
+
+// MARK: -
+
 export type ConnectorConfigForCustomer = Pick<
   ConnectorConfig<'connector'>,
   'id' | 'connector_name' | 'connector'
@@ -65,7 +148,11 @@ export function AddConnectionInner({
 
   const name = connectorConfig.connector_name
 
-  console.log('AddConnectionInner rendering', name)
+  if (!connectorConfig.connector) {
+    throw new Error(`Connector missing in AddConnectionInner`)
+  }
+
+  console.log('AddConnectionInner rendering', name, connectorConfig)
 
   const ref = React.useRef<ConnectFn | undefined>(undefined)
 
@@ -89,31 +176,41 @@ export function AddConnectionInner({
   const postConnect = useMutation(trpc.postConnect.mutationOptions({}))
 
   const handleConnect = React.useCallback(async () => {
-    console.log('ref.current', ref.current)
-    const connectRes = await ref.current?.(preConnectRes.data.output, {
-      connectorConfigId: connectorConfig.id as `ccfg_${string}`,
-      connectionExternalId: undefined,
-      integrationExternalId: undefined,
-    })
-    console.log('connectRes', connectRes)
-    const postConnectRes = await postConnect.mutateAsync({
-      id: connectorConfig.id,
-      data: {
-        connector_name: name,
-        input: connectRes,
-      },
-      options: {},
-    })
-    console.log('postConnectRes', postConnectRes)
+    try {
+      console.log('ref.current', ref.current)
+      const connectRes = await ref.current?.(preConnectRes.data.output, {
+        connectorConfigId: connectorConfig.id as `ccfg_${string}`,
+        connectionExternalId: undefined,
+        integrationExternalId: undefined,
+      })
+      console.log('connectRes', connectRes)
+      const postConnectRes = await postConnect.mutateAsync({
+        id: connectorConfig.id,
+        data: {
+          connector_name: name,
+          input: connectRes,
+        },
+        options: {},
+      })
+      console.log('postConnectRes', postConnectRes)
+    } catch (error) {
+      console.error('Error connecting', error)
+      toast.error('Error connecting', {
+        description: `${error}`,
+      })
+    }
   }, [connectorConfig, preConnectRes])
 
-  const Component =
+  let Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
 
   if (!Component) {
     // TODO: handle me, for thigns like oauth connectors
-    console.warn(`Unhandled connector: ${name}`)
+    // console.warn(`Unhandled connector: ${name}`)
     // throw new Error(`Unhandled connector: ${name}`)
+    Component = makeManualConnectorClientComponent(
+      connectorConfig.connector!.schemas!.connection_settings!,
+    )
   }
 
   return (
