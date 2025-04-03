@@ -1,5 +1,5 @@
 import type {RegistryWidgetsType, WidgetProps} from '@rjsf/utils'
-import {ConnectorScopes} from '../ConnectorScopes'
+import ConnectorScopes from '../ConnectorScopes'
 
 // MARK: - Widgets
 

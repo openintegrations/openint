@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {useState} from 'react'
 import {Skeleton, Switch} from '@openint/shadcn/ui'
-import {ConnectorScopes} from './ConnectorScopes'
+import ConnectorScopes from './ConnectorScopes'
 
 const meta: Meta<typeof ConnectorScopes> = {
   component: ConnectorScopes,
@@ -37,11 +37,7 @@ export const Default: Story = {
     scopes: initialScopes,
     editable: false,
   },
-  render: (args) => (
-    <ConnectorScopes {...args}>
-      <ConnectorScopes.List />
-    </ConnectorScopes>
-  ),
+  render: (args) => <ConnectorScopes {...args} />,
 }
 
 // Interactive story with state management
@@ -66,10 +62,7 @@ const EditableExample = ({hideCustomInput}: {hideCustomInput?: boolean}) => {
       onAddScope={handleAddScope}
       availableScopes={availableScopes}
       editable={true}
-      hideCustomInput={hideCustomInput}>
-      <ConnectorScopes.AddButton />
-      <ConnectorScopes.List />
-    </ConnectorScopes>
+      hideCustomInput={hideCustomInput}></ConnectorScopes>
   )
 }
 
@@ -188,9 +181,8 @@ const ConstrainedWidthExample = ({
             scopes={scopes}
             editable={false}
             scopeLookup={scopeLookup}
-            hideCustomInput={hideCustomInput}>
-            <ConnectorScopes.List />
-          </ConnectorScopes>
+            hideCustomInput={hideCustomInput}
+          />
         ) : (
           <ConnectorScopes
             scopes={scopes}
@@ -199,10 +191,8 @@ const ConstrainedWidthExample = ({
             availableScopes={availableScopes}
             editable={true}
             scopeLookup={scopeLookup}
-            hideCustomInput={hideCustomInput}>
-            <ConnectorScopes.AddButton />
-            <ConnectorScopes.List />
-          </ConnectorScopes>
+            hideCustomInput={hideCustomInput}
+          />
         )}
       </div>
     </div>

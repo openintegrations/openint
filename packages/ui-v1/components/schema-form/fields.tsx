@@ -2,7 +2,7 @@ import type {FieldProps, RegistryFieldsType} from '@rjsf/utils'
 import {useState} from 'react'
 import type {ConnectorConfig} from '@openint/api-v1/models'
 import {Input, Switch} from '@openint/shadcn/ui'
-import {ConnectorScopes} from '../ConnectorScopes'
+import ConnectorScopes from '../ConnectorScopes'
 
 interface OAuthFormData {
   client_id?: string
