@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {z} from '@openint/util/zod-utils'
-
 import {zEnvVars, zFlattenForEnv} from './env-utils'
 import {zParser} from './zod-utils'
-// import zodToJsonSchema from 'zod-to-json-schema'
 
 const env = zEnvVars({
   MY_KEY: z.string(),
@@ -30,9 +28,9 @@ test('z.record means optional vlaues', () => {
 })
 
 test('flatten schema', () => {
-  // console.log('before', JSON.stringify(zodToJsonSchema(schema), null, 2))
+  // console.log('before', JSON.stringify(zodToOas31Schema(schema), null, 2))
   const flat = zFlattenForEnv(schema, {stringify: false})
-  // console.log('after', JSON.stringify(zodToJsonSchema(flat), null, 2))
+  // console.log('after', JSON.stringify(zodToOas31Schema(flat), null, 2))
 
   expect(flat.innerType().shape).toMatchObject({
     'nested.hello': expect.anything(),
@@ -54,9 +52,9 @@ test('flatten schema', () => {
 })
 
 test('flatten schema with array as string', () => {
-  // console.log('before', JSON.stringify(zodToJsonSchema(schema), null, 2))
+  // console.log('before', JSON.stringify(zodToOas31Schema(schema), null, 2))
   const flat = zFlattenForEnv(schema, {stringify: true})
-  // console.log('after', JSON.stringify(zodToJsonSchema(flat), null, 2))
+  // console.log('after', JSON.stringify(zodToOas31Schema(flat), null, 2))
 
   expect(flat.innerType().shape).toMatchObject({
     'nested.hello': expect.anything(),
