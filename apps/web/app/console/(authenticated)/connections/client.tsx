@@ -124,7 +124,7 @@ export function ConnectionsPage(props: {
           setSheetOpen(open)
           if (!open) setSelectedConnection(null)
         }}>
-        <SheetContent side="right" className="w-[600px] p-0">
+        <SheetContent side="right" className="w-full p-0 sm:max-w-[600px]">
           <div className="flex h-full flex-col">
             <div className="border-b p-4">
               <SheetTitle className="text-xl font-semibold">
@@ -133,10 +133,10 @@ export function ConnectionsPage(props: {
             </div>
 
             {selectedConnection && (
-              <div className="flex-1 overflow-y-auto p-6">
-                <div className="space-y-8">
+              <div className="flex-1 overflow-y-auto p-3 sm:p-6">
+                <div className="space-y-6 sm:space-y-8">
                   {/* Basic Connection Info */}
-                  <section className="bg-card rounded-lg border p-5">
+                  <section className="bg-card rounded-lg border p-4 sm:p-5">
                     <h3 className="text-card-foreground mb-4 text-lg font-semibold">
                       Connection Information
                     </h3>
@@ -176,7 +176,7 @@ export function ConnectionsPage(props: {
 
                   {/* OAuth Credentials */}
                   {selectedConnection.settings?.oauth?.credentials && (
-                    <section className="bg-card rounded-lg border p-5">
+                    <section className="bg-card rounded-lg border p-4 sm:p-5">
                       <h3 className="text-card-foreground mb-4 text-lg font-semibold">
                         Authorization
                       </h3>
@@ -186,7 +186,7 @@ export function ConnectionsPage(props: {
                             Access Token
                           </h4>
                           <div className="relative mt-1">
-                            <pre className="overflow-x-auto rounded-md bg-slate-950 p-3 text-sm">
+                            <pre className="overflow-x-auto rounded-md bg-slate-950 p-2 text-sm sm:p-3">
                               <code className="whitespace-pre-wrap break-all text-slate-50">
                                 {
                                   selectedConnection.settings.oauth.credentials
@@ -214,7 +214,7 @@ export function ConnectionsPage(props: {
                             Refresh Token
                           </h4>
                           <div className="relative mt-1">
-                            <pre className="overflow-x-auto rounded-md bg-slate-950 p-3 text-sm">
+                            <pre className="overflow-x-auto rounded-md bg-slate-950 p-2 text-sm sm:p-3">
                               <code className="whitespace-pre-wrap break-all text-slate-50">
                                 {
                                   selectedConnection.settings.oauth.credentials
@@ -237,7 +237,7 @@ export function ConnectionsPage(props: {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                           <div className="bg-muted/40 rounded-md p-3">
                             <h4 className="text-muted-foreground mb-1 text-sm font-medium">
                               Token Type
@@ -290,7 +290,7 @@ export function ConnectionsPage(props: {
                   )}
 
                   {/* Timestamps */}
-                  <section className="bg-card rounded-lg border p-5">
+                  <section className="bg-card rounded-lg border p-4 sm:p-5">
                     <h3 className="text-card-foreground mb-4 text-lg font-semibold">
                       Timestamps
                     </h3>
@@ -328,13 +328,13 @@ export function ConnectionsPage(props: {
 
                   {/* Raw Response */}
                   {selectedConnection.settings?.oauth?.credentials?.raw && (
-                    <section className="bg-card rounded-lg border p-5">
+                    <section className="bg-card rounded-lg border p-4 sm:p-5">
                       <h3 className="text-card-foreground mb-4 text-lg font-semibold">
                         Raw Token Response
                       </h3>
                       <div className="relative">
-                        <pre className="mt-2 overflow-x-auto rounded-lg bg-slate-950 p-4">
-                          <code className="text-sm text-slate-50">
+                        <pre className="mt-2 overflow-x-auto rounded-lg bg-slate-950 p-3 text-xs sm:text-sm">
+                          <code className="text-slate-50">
                             {JSON.stringify(
                               selectedConnection.settings.oauth.credentials.raw,
                               null,
