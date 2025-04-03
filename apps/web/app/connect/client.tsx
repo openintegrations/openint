@@ -137,7 +137,8 @@ export function AddConnectionInner({
 
       <ConnectorConfigCard
         displayNameLocation="right"
-        connectorConfig={connectorConfig}
+        // TODO: fix this
+        connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
         onPress={() => handleConnect()}>
         <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
           Connect
