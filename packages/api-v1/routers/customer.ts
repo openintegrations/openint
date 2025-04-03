@@ -59,7 +59,7 @@ export const customerRouter = router({
         summary: 'Create Magic Link',
       },
     })
-    .input(customerRouterModels.getMagicLinkInput)
+    .input(customerRouterModels.getMagicLinkInput.nullish())
     .output(
       z.object({
         magic_link_url: z
@@ -72,6 +72,13 @@ export const customerRouter = router({
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
+      if (!input || !input.customer_id) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message:
+            'Missing customer_id in path /customer/{customer_id}/magic-link',
+        })
+      }
       const token = await jwt.signViewer(
         asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
         {
@@ -105,19 +112,21 @@ export const customerRouter = router({
       },
     })
     .input(
-      z.object({
-        customer_id: zCustomerId.openapi({
-          param: {in: 'path', name: 'customer_id'},
-        }),
-        validity_in_seconds: z
-          .number()
-          .positive()
-          .optional()
-          .default(2592000)
-          .describe(
-            'How long the token will be valid for (in seconds) before it expires',
-          ),
-      }),
+      z
+        .object({
+          customer_id: zCustomerId.openapi({
+            param: {in: 'path', name: 'customer_id'},
+          }),
+          validity_in_seconds: z
+            .number()
+            .positive()
+            .optional()
+            .default(2592000)
+            .describe(
+              'How long the token will be valid for (in seconds) before it expires',
+            ),
+        })
+        .nullish(),
     )
     .output(
       z.object({
@@ -130,6 +139,13 @@ export const customerRouter = router({
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
+
+      if (!input || !input.customer_id) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Missing customer_id in path /customer/{customer_id}/token',
+        })
+      }
 
       const token = await jwt.signViewer(
         asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
