@@ -1,14 +1,17 @@
 import {Suspense} from 'react'
-import {ConnectorConfig} from '@openint/api-v1/models'
 import {connectClientOptions} from '@openint/api-v1/routers/customer.models'
-import type {Viewer} from '@openint/cdk'
+import {asOrgIfCustomer, type Viewer} from '@openint/cdk'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import {parsePageProps, type PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
-import {AddConnectionInner, MyConnectionsClient} from './client'
+import {
+  AddConnectionInner,
+  ConnectorConfigForCustomer,
+  MyConnectionsClient,
+} from './client'
 import {TabsClient} from './Tabs.client'
 
 function Fallback() {
@@ -101,7 +104,9 @@ async function AddConnections({
   viewer: Viewer
   connector_name?: string
 }) {
-  const api = createAPICaller(viewer)
+  // We need to elevate the role to org  to list connector config here
+  // Alternative we'd have to modify RLS rules to allow this
+  const api = createAPICaller(asOrgIfCustomer(viewer))
 
   const res = await api.listConnectorConfigs({
     connector_name,
@@ -114,7 +119,13 @@ async function AddConnections({
         <Suspense key={ccfg.id} fallback={<Fallback />}>
           <AddConnectionServer
             key={ccfg.id}
-            connectorConfig={ccfg}
+            connectorConfig={{
+              // NOTE: Be extremely careful that sensitive data is not exposed here
+              // TODO: Consider using row level security make asOrgIfCustomer unnecessary
+              id: ccfg.id,
+              connector_name: ccfg.connector_name,
+              connector: ccfg.connector,
+            }}
             viewer={viewer}
           />
         </Suspense>
@@ -128,7 +139,7 @@ function AddConnectionServer({
   connectorConfig,
 }: {
   viewer: Viewer
-  connectorConfig: ConnectorConfig<'connector'>
+  connectorConfig: ConnectorConfigForCustomer
 }) {
   const api = createAPICaller(viewer)
   const name = connectorConfig.connector_name

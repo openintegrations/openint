@@ -53,12 +53,16 @@ const ConnectorClientComponents = Object.fromEntries(
     }),
   ]),
 )
+export type ConnectorConfigForCustomer = Pick<
+  ConnectorConfig<'connector'>,
+  'id' | 'connector_name' | 'connector'
+>
 
 export function AddConnectionInner({
   connectorConfig,
   ...props
 }: {
-  connectorConfig: ConnectorConfig<'connector'>
+  connectorConfig: ConnectorConfigForCustomer
   onReady?: (ctx: {state: string}, name: string) => void
   initialData?: Promise<AppRouterOutput['preConnect']>
 }) {

@@ -1,4 +1,4 @@
-import type {Viewer} from '@openint/cdk'
+import {asOrgIfCustomer, type Viewer} from '@openint/cdk'
 import type {AnyDatabase, AnyDrizzle} from '@openint/db/db'
 import {viewerFromRequest} from './authentication'
 
@@ -10,6 +10,8 @@ export interface ViewerContext<T extends Viewer = Viewer> {
 export interface RouterContext<T extends Viewer = Viewer>
   extends ViewerContext<T> {
   as: (viewer: Viewer) => ViewerContext
+  /** Elevates the role to org if the viewer is a customer to allow access to org data */
+  asOrgIfCustomer: ViewerContext
 }
 
 export async function routerContextFromRequest({
@@ -44,5 +46,6 @@ export function routerContextFromViewer<T extends Viewer>({
   return {
     ...createViewerContext(currentViewer),
     as: createViewerContext,
+    asOrgIfCustomer: createViewerContext(asOrgIfCustomer(currentViewer)),
   }
 }
