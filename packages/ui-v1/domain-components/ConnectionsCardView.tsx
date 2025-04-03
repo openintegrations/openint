@@ -9,48 +9,23 @@ import {
   PopoverTrigger,
   Separator,
 } from '@openint/shadcn/ui'
-import {ConnectionTableCell} from '../components/ConnectionTableCell'
 import {CopyID} from '../components/CopyID'
 import type {PropertyItem} from '../components/PropertyListView'
 import {PropertyListView} from '../components/PropertyListView'
 import type {StatusType} from '../components/StatusDot'
+import {ConnectionTableCell} from './tables/ConnectionTableCell'
 
 export interface ConnectionCardProps {
-  /**
-   * Connection object containing all connection details
-   */
   connection: Core['connection']
-  /**
-   * The connection status
-   */
   status: StatusType
-  /**
-   * Category of the connection (e.g. CRM, Storage)
-   */
   category?: string
-  /**
-   * Platform of the connection (e.g. Desktop, Mobile)
-   */
   platform?: string
-  /**
-   * Authentication method used (e.g. oauth, apikey)
-   */
   authMethod?: string
-  /**
-   * Version of the API or connector
-   */
   version?: string
-  /**
-   * Optional trigger element. If not provided, a ConnectionTableCell will be used.
-   */
   children?: React.ReactNode
-  /**
-   * Optional className for styling
-   */
   className?: string
 }
 
-// Component for the content inside the popover
 export function ConnectionCardContent({
   connection,
   status,
@@ -59,12 +34,9 @@ export function ConnectionCardContent({
   authMethod = 'oauth',
   version = 'V2',
 }: ConnectionCardProps) {
-  // Extract relevant data from connection
   const customerId = connection.customer_id
   const connectorConfigId = connection.connector_config_id || ''
-  // This value is used in the ConnectionTableCell via connection object, so it doesn't need to be assigned to a variable
 
-  // Build the properties for the PropertyListView
   const properties = useMemo(() => {
     const props: PropertyItem[] = [
       {title: 'Category', value: category},
@@ -73,7 +45,6 @@ export function ConnectionCardContent({
       {title: 'Version', value: version},
     ]
 
-    // Add optional properties if they exist
     if (customerId) {
       props.push({
         title: 'CustomerID',
@@ -112,7 +83,7 @@ export function ConnectionCardContent({
   return (
     <>
       <div className="p-4">
-        <ConnectionTableCell connection={connection} status={status} />
+        <ConnectionTableCell connection={connection} />
       </div>
       <Separator />
       <div className="p-4">
@@ -134,10 +105,9 @@ export function ConnectionsCardView({
 }: ConnectionCardProps) {
   const [open, setOpen] = useState(false)
 
-  // Default trigger is the ConnectionTableCell if no children are provided
   const triggerElement = children || (
     <div className={cn('cursor-pointer', className)}>
-      <ConnectionTableCell connection={connection} status={status} />
+      <ConnectionTableCell connection={connection} />
     </div>
   )
 
@@ -158,5 +128,4 @@ export function ConnectionsCardView({
   )
 }
 
-// Attach the ConnectionCardContent to ConnectionsCardView for easier import
 ConnectionsCardView.Content = ConnectionCardContent

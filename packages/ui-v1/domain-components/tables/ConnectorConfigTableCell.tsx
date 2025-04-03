@@ -2,31 +2,16 @@
 
 import {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
-import {BaseTableCell} from './BaseTableCell'
-import {CopyID} from './CopyID'
-import {StatusDot, StatusType} from './StatusDot'
+import {BaseTableCell} from '../../components/BaseTableCell'
+import {CopyID} from '../../components/CopyID'
+import {StatusDot, StatusType} from '../../components/StatusDot'
 
 interface ConnectorConfigTableCellProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Connector config object
-   */
   connectorConfig: Core['connector_config']
-  /**
-   * Whether to show the simple variant (logo and name only)
-   */
   simple?: boolean
-  /**
-   * Whether to show the compact variant (just logo and ID, no name)
-   */
   compact?: boolean
-  /**
-   * Status of the connector config (overrides automatic status detection)
-   */
   status?: StatusType
-  /**
-   * Optional className for styling
-   */
   className?: string
 }
 

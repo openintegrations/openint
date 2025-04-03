@@ -1,28 +1,32 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {DataTable} from '../components/DataTable'
-import {columns, Customer, CustomersTable} from './CustomersTable'
+import {Customer} from '@openint/api-v1/models'
+import {DataTable} from '../../components/DataTable'
+import {CustomersTable} from './CustomerTable'
 
-// Sample data for the customers table based on the image
 const customers: Customer[] = [
   {
     id: Math.random().toString(36).substring(2, 10),
-    connectionsCount: 472,
-    firstCreated: new Date('2025-05-12').toISOString(),
+    connection_count: 472,
+    created_at: new Date('2025-05-12').toISOString(),
+    updated_at: new Date('2025-05-12').toISOString(),
   },
   {
     id: Math.random().toString(36).substring(2, 10),
-    connectionsCount: 238,
-    firstCreated: new Date('2025-05-12').toISOString(),
+    connection_count: 238,
+    created_at: new Date('2025-05-12').toISOString(),
+    updated_at: new Date('2025-05-12').toISOString(),
   },
   {
     id: Math.random().toString(36).substring(2, 10),
-    connectionsCount: 184,
-    firstCreated: new Date('2025-05-12').toISOString(),
+    connection_count: 184,
+    created_at: new Date('2025-05-12').toISOString(),
+    updated_at: new Date('2025-05-12').toISOString(),
   },
   {
     id: Math.random().toString(36).substring(2, 10),
-    connectionsCount: 95,
-    firstCreated: new Date('2025-05-12').toISOString(),
+    connection_count: 95,
+    created_at: new Date('2025-05-12').toISOString(),
+    updated_at: new Date('2025-05-12').toISOString(),
   },
 ]
 
@@ -40,7 +44,6 @@ type Story = StoryObj<typeof DataTable<Customer, unknown>>
 export const Default: Story = {
   args: {
     data: customers,
-    columns: columns,
   },
   render: (args) => <CustomersTable {...args} />,
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import {type Customer} from '@openint/api-v1/models'
-import {CustomersTable} from '@openint/ui-v1/domain-components/CustomersTable'
+import {CustomersTable} from '@openint/ui-v1/domain-components'
 import {useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 

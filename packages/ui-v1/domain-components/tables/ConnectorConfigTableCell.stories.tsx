@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
+import {CopyID} from '../../components/CopyID'
 import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
-import {CopyID} from './CopyID'
 
 // Define a meta configurator for the ConnectorConfigTableCell component
 const meta = {

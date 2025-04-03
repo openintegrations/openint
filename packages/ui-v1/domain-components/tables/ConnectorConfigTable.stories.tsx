@@ -1,16 +1,16 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {Core} from '@openint/api-v1/models'
-import {ConnectorConfigTableCell} from '../components/ConnectorConfigTableCell'
 import {
   ColumnDef,
   DataTable,
   useDataTableContext,
-} from '../components/DataTable'
+} from '../../components/DataTable'
 import {
   MultiSelectActionBar,
   useTableRowSelection,
-} from '../components/MultiSelectActionBar'
+} from '../../components/MultiSelectActionBar'
 import {columns, ConnectorConfigTable} from './ConnectorConfigTable'
+import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 
 // Sample data for the connector config table
 const connectorConfigs: Core['connector_config'][] = [

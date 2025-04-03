@@ -1,5 +1,5 @@
 import {cn} from '@openint/shadcn/lib/utils'
-import {StatusType} from './StatusDot'
+import {StatusType} from '../../components/StatusDot'
 
 interface StatusCellProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

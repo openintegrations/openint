@@ -3,26 +3,18 @@
 import {MoreHorizontal} from 'lucide-react'
 import {Customer} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
-import {CustomerTableCell} from '../components/CustomerTableCell'
-import type {ColumnDef} from '../components/DataTable'
-import {DataTable} from '../components/DataTable'
-import {Icon} from '../components/Icon'
-import {formatIsoDateString} from '../utils'
+import {CopyID} from '../../components'
+import type {ColumnDef} from '../../components/DataTable'
+import {DataTable} from '../../components/DataTable'
+import {Icon} from '../../components/Icon'
+import {formatIsoDateString} from '../../utils'
 
-export const columns: Array<ColumnDef<Customer>> = [
+const columns: Array<ColumnDef<Customer>> = [
   {
-    id: 'customer',
-    header: 'Customer',
+    id: 'id',
+    header: 'Customer Id',
     cell: ({row}) => (
-      <CustomerTableCell
-        customer={{
-          id: row.original.id,
-          created_at: row.original.created_at,
-          updated_at: row.original.updated_at,
-          connection_count: row.original.connection_count,
-        }}
-        compact={true}
-      />
+      <CopyID value={row.original.id} size="compact" width="auto" />
     ),
   },
   {
@@ -55,8 +47,7 @@ export const columns: Array<ColumnDef<Customer>> = [
   },
   {
     id: 'firstCreated',
-    header: 'First Created',
-    accessorKey: 'firstCreated',
+    header: 'First Connected',
     cell: ({row}) => (
       <div className="text-gray-500">
         {formatIsoDateString(row.original.created_at)}

@@ -3,9 +3,9 @@
 import {MoreHorizontal} from 'lucide-react'
 import {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
-import {ConnectorConfigTableCell} from '../components/ConnectorConfigTableCell'
-import type {ColumnDef} from '../components/DataTable'
-import {DataTable} from '../components/DataTable'
+import type {ColumnDef} from '../../components/DataTable'
+import {DataTable} from '../../components/DataTable'
+import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 
 // Define the columns for the connector config table
 export const columns: Array<ColumnDef<Core['connector_config']>> = [

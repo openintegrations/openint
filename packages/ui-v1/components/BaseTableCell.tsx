@@ -3,29 +3,11 @@ import {CopyID} from './CopyID'
 import {StatusType} from './StatusDot'
 
 interface BaseTableCellProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Name to display
-   */
   name: string
-  /**
-   * Logo/icon component or element
-   */
-  logo: React.ReactNode
-  /**
-   * ID to be displayed and copied (optional for simple variant)
-   */
+  logo?: React.ReactNode
   id?: string
-  /**
-   * Status of the entity
-   */
   status?: StatusType
-  /**
-   * Whether to show the simple variant (logo and name only)
-   */
   simple?: boolean
-  /**
-   * Optional className for styling
-   */
   className?: string
 }
 
@@ -33,7 +15,7 @@ export function BaseTableCell({
   name,
   logo,
   id,
-  status = 'healthy',
+  status,
   simple = false,
   className,
   ...props
