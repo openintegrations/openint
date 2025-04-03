@@ -32,25 +32,23 @@ export function ConnectPreview() {
   return (
     <div className="flex max-h-full flex-1 gap-4">
       {/* Schema Form on the left */}
-      <div className="w-sm flex max-h-full min-h-0 flex-col p-4">
+      <div className="w-sm flex min-h-0 flex-col p-4 pr-2">
         <h2 className="mb-4 text-xl font-semibold">Configure</h2>
-        <div className="overflow-scroll">
-          <ZodSchemaForm
-            schema={customerRouterModels.createMagicLinkInput}
-            formData={formData}
-            onChange={(change) => {
-              if (change.formData) {
-                setFormData(change.formData)
-              }
-            }}
-          />
-        </div>
+        <ZodSchemaForm
+          schema={customerRouterModels.createMagicLinkInput}
+          formData={formData}
+          onChange={(change) => {
+            if (change.formData) {
+              setFormData(change.formData)
+            }
+          }}
+        />
       </div>
 
       {/* Preview Window on the right */}
-      <div className="flex flex-1 flex-col overflow-auto p-4">
+      <div className="flex flex-1 flex-col p-4">
         <h2 className="mb-4 text-xl font-semibold">Preview</h2>
-        <PreviewWindow url={previewUrl} className="flex-1">
+        <PreviewWindow url={previewUrl} className="flex-1 overflow-scroll">
           <iframe src={previewUrl} className="h-full w-full" />
           {/* <div className="bg-muted/50 flex h-full items-center justify-center">
             <div className="text-center">
