@@ -392,6 +392,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              // Automatically fetches more pages as needed.
+              for await (const listConnectionConfigsResponse of client.listConnectionConfigs()) {
+                console.log(listConnectionConfigsResponse);
+              }
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+            )
+            page = client.list_connection_configs()
+            page = page.items[0]
+            print(page)
   /connection/{id}:
     get:
       operationId: getConnection
@@ -636,6 +664,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              const response = await client.getConnection('conn_');
+
+              console.log(response);
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+            )
+            response = client.get_connection(
+                id="conn_",
+            )
+            print(response)
     delete:
       operationId: deleteConnection
       summary: Delete Connection
@@ -696,6 +752,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              const response = await client.deleteConnection('conn_');
+
+              console.log(response.id);
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+            )
+            response = client.delete_connection(
+                "conn_",
+            )
+            print(response.id)
   /connection:
     get:
       operationId: listConnections
@@ -1039,6 +1123,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              // Automatically fetches more pages as needed.
+              for await (const listConnectionsResponse of client.listConnections()) {
+                console.log(listConnectionsResponse);
+              }
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+            )
+            page = client.list_connections()
+            page = page.items[0]
+            print(page)
     post:
       operationId: createConnection
       summary: Create Connection
@@ -1220,6 +1332,62 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              const response = await client.createConnection({
+                connector_config_id: 'ccfg_',
+                customer_id: 'customer_id',
+                data: {
+                  connector_name: 'aircall',
+                  settings: {
+                    oauth: {
+                      created_at: 'created_at',
+                      last_fetched_at: 'last_fetched_at',
+                      metadata: { foo: 'bar' },
+                      updated_at: 'updated_at',
+                    },
+                  },
+                },
+              });
+
+              console.log(response);
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+            )
+            response = client.create_connection(
+                connector_config_id="ccfg_",
+                customer_id="customer_id",
+                data={
+                    "connector_name": "aircall",
+                    "settings": {
+                        "oauth": {
+                            "created_at": "created_at",
+                            "last_fetched_at": "last_fetched_at",
+                            "metadata": {
+                                "foo": "bar"
+                            },
+                            "updated_at": "updated_at",
+                        }
+                    },
+                },
+            )
+            print(response)
   /connection/{id}/check:
     post:
       operationId: checkConnection
@@ -1293,6 +1461,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              const response = await client.checkConnection('conn_');
+
+              console.log(response.id);
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+            )
+            response = client.check_connection(
+                "conn_",
+            )
+            print(response.id)
   /customer/{customer_id}/magic-link:
     post:
       operationId: getMagicLink
@@ -1309,7 +1505,7 @@ paths:
             minLength: 1
           required: true
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
@@ -1387,6 +1583,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              const response = await client.createMagicLink('x');
+
+              console.log(response.magic_link_url);
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+            )
+            response = client.create_magic_link(
+                customer_id="x",
+            )
+            print(response.magic_link_url)
   /customer/{customer_id}/token:
     post:
       operationId: createToken
@@ -1452,6 +1676,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-codeSamples:
+        - lang: JavaScript
+          source: |-
+            import Openint from '@openint/sdk';
+
+            const client = new Openint({
+              apiKey: process.env['OPENINT_API_KEY'], // This is the default and can be omitted
+            });
+
+            async function main() {
+              const response = await client.createToken('customer_id');
+
+              console.log(response.token);
+            }
+
+            main();
+        - lang: Python
+          source: |-
+            import os
+            from openint import Openint
+
+            client = Openint(
+                api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
+            )
+            response = client.create_token(
+                customer_id="customer_id",
+            )
+            print(response.token)
 components:
   securitySchemes:
     ApiKey:
