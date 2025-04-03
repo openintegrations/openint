@@ -117,8 +117,8 @@
     "/connector-config": {
       "get": {
         "operationId": "listConnectorConfigs",
-        "summary": "List Connector Configurations",
-        "description": "List all connector configurations",
+        "summary": "List Configured Connectors",
+        "description": "List the connectors that are configured in your account and available for your customers",
         "security": [
           {
             "ApiKey": []
@@ -625,7 +625,7 @@
     "/connection/{id}": {
       "get": {
         "operationId": "getConnection",
-        "summary": "Get Connection & Credentials",
+        "summary": "Get Connection",
         "description": "Get details of a specific connection, including credentials",
         "security": [
           {
@@ -1157,7 +1157,7 @@
       "get": {
         "operationId": "listConnections",
         "summary": "List Connections",
-        "description": "List all connections with optional filtering",
+        "description": "List all connections with optional filtering. Does not retrieve secrets or perform any connection healthcheck. For that use `getConnection` or `checkConnectionHealth`.",
         "security": [
           {
             "ApiKey": []
@@ -2153,9 +2153,9 @@
     },
     "/customer/{customer_id}/magic-link": {
       "post": {
-        "operationId": "createMagicLink",
+        "operationId": "getMagicLink",
         "summary": "Create Magic Link",
-        "description": "Create a magic link for connecting integrations",
+        "description": "Create a magic link that is ready to be shared with customers who want to use Connect",
         "security": [
           {
             "ApiKey": []
@@ -2168,10 +2168,9 @@
           {
             "in": "path",
             "name": "customer_id",
-            "description": "The id of the customer in your application. Ensure it is unique for that customer.",
             "schema": {
               "type": "string",
-              "description": "The id of the customer in your application. Ensure it is unique for that customer."
+              "minLength": 1
             },
             "required": true
           }
@@ -2188,100 +2187,48 @@
                     "default": 2592000,
                     "description": "How long the magic link will be valid for (in seconds) before it expires"
                   },
-                  "redirect_url": {
-                    "type": "string",
-                    "description": "Where to send user to after connect / if they press back button"
-                  },
-                  "connector_names": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "enum": [
-                        "aircall",
-                        "airtable",
-                        "apollo",
-                        "brex",
-                        "coda",
-                        "confluence",
-                        "discord",
-                        "facebook",
-                        "finch",
-                        "firebase",
-                        "foreceipt",
-                        "github",
-                        "gong",
-                        "googlecalendar",
-                        "googledocs",
-                        "googledrive",
-                        "googlemail",
-                        "googlesheet",
-                        "greenhouse",
-                        "heron",
-                        "hubspot",
-                        "instagram",
-                        "intercom",
-                        "jira",
-                        "kustomer",
-                        "lever",
-                        "linear",
-                        "linkedin",
-                        "lunchmoney",
-                        "merge",
-                        "microsoft",
-                        "moota",
-                        "notion",
-                        "onebrick",
-                        "outreach",
-                        "pipedrive",
-                        "plaid",
-                        "quickbooks",
-                        "ramp",
-                        "reddit",
-                        "salesforce",
-                        "salesloft",
-                        "saltedge",
-                        "sharepointonline",
-                        "slack",
-                        "splitwise",
-                        "stripe",
-                        "teller",
-                        "toggl",
-                        "twenty",
-                        "twitter",
-                        "wise",
-                        "xero",
-                        "yodlee",
-                        "zohodesk"
-                      ],
-                      "description": ""
+                  "client_options": {
+                    "type": "object",
+                    "properties": {
+                      "connector_name": {
+                        "type": "string",
+                        "enum": [
+                          "plaid",
+                          "greenhouse"
+                        ],
+                        "description": "The name of the connector to limit connection to. Default to all otherwise"
+                      },
+                      "tab": {
+                        "type": "string",
+                        "enum": [
+                          "my-connections",
+                          "add-connection"
+                        ],
+                        "title": "Default Tab",
+                        "description": "The default tab to show when the magic link is opened. Defaults to \"my-connections\""
+                      },
+                      "debug": {
+                        "type": "boolean",
+                        "title": "Debug",
+                        "description": "Whether to enable debug mode"
+                      },
+                      "--primary": {
+                        "type": "string"
+                      },
+                      "--background": {
+                        "type": "string"
+                      },
+                      "--foreground": {
+                        "type": "string"
+                      },
+                      "--card": {
+                        "type": "string"
+                      },
+                      "--card-foreground": {
+                        "type": "string"
+                      }
                     },
-                    "default": [],
-                    "description": "Filter integrations by connector names"
-                  },
-                  "connection_id": {
-                    "type": "string",
-                    "pattern": "^conn_",
-                    "description": "The specific connection id to load"
-                  },
-                  "theme": {
-                    "type": "string",
-                    "enum": [
-                      "light",
-                      "dark"
-                    ],
-                    "default": "light",
-                    "description": "Magic Link display theme"
-                  },
-                  "view": {
-                    "type": "string",
-                    "enum": [
-                      "manage",
-                      "manage-deeplink",
-                      "add",
-                      "add-deeplink"
-                    ],
-                    "default": "add",
-                    "description": "Magic Link tab view to load in the connect magic link"
+                    "description": "Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client"
                   }
                 }
               }
@@ -2355,7 +2302,7 @@
       "post": {
         "operationId": "createToken",
         "summary": "Create Customer Authentication Token",
-        "description": "Create an authentication token for a customer",
+        "description": "Create a @Connect authentication token for a customer. This token can be used to embed @Connect in your application via the `@openint/connect` npm package.",
         "security": [
           {
             "ApiKey": []
