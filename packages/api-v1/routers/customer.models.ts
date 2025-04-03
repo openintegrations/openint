@@ -3,12 +3,6 @@ import {z, zCoerceBoolean} from '@openint/util/zod-utils'
 
 export const connectClientOptions = z
   .object({
-    connector_name: z
-      .enum(['plaid', 'greenhouse'])
-      .optional()
-      .describe(
-        'The name of the connector to limit connection to. Default to all otherwise',
-      ),
     view: z
       .enum(['add', 'manage'])
       .optional()
@@ -18,10 +12,22 @@ export const connectClientOptions = z
           'The default view to show when the magic link is opened. Defaults to "add"',
       })
       .default('add'),
+    // NOTE: @openint-bot, shouldn't this be a string array similar to our expand one?
+    // then support filtering like https://coda.io/d/_d6fsw71RNUB/Implementing-a-native-UI-for-Connect-via-Core-APIs-and-Deep-Link_susYw00i
+    connector_name: z
+      .enum(['plaid', 'greenhouse'])
+      .optional()
+      .describe(
+        'The name of the connector to limit connection to. Default to all otherwise',
+      ),
+
     debug: zCoerceBoolean().optional().openapi({
       title: 'Debug',
       description: 'Whether to enable debug mode',
     }),
+
+    // NOTE: @openint-bot, how about we have two theming variables, theme & colors
+    // and these we nest under colors? similar to https://github.com/openintegrations/openint/blob/8aa8ad15b420bc4bb2361b3744af7cced5bd5f07/packages/engine-backend/router/customerRouter.ts#L67
     '--primary': z.string().optional(),
     '--background': z.string().optional(),
     '--foreground': z.string().optional(),
