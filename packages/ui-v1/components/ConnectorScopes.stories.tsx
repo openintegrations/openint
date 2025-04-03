@@ -45,7 +45,7 @@ export const Default: Story = {
 }
 
 // Interactive story with state management
-const EditableExample = () => {
+const EditableExample = ({hideCustomInput}: {hideCustomInput?: boolean}) => {
   const [scopes, setScopes] = useState<string[]>(initialScopes)
 
   const handleRemoveScope = (scopeToRemove: string) => {
@@ -65,7 +65,8 @@ const EditableExample = () => {
       onRemoveScope={handleRemoveScope}
       onAddScope={handleAddScope}
       availableScopes={availableScopes}
-      editable={true}>
+      editable={true}
+      hideCustomInput={hideCustomInput}>
       <ConnectorScopes.AddButton />
       <ConnectorScopes.List />
     </ConnectorScopes>
@@ -75,15 +76,20 @@ const EditableExample = () => {
 export const Editable: Story = {
   render: () => <EditableExample />,
 }
+export const EditableWithHideCustomInput: Story = {
+  render: () => <EditableExample hideCustomInput />,
+}
 
 // Constrained width example simulating a sheet
 const ConstrainedWidthExample = ({
   scopeLookup,
+  hideCustomInput,
 }: {
   scopeLookup?: Record<
     string,
     {scope: string; display_name: string; description: string}
   >
+  hideCustomInput?: boolean
 }) => {
   const [scopes, setScopes] = useState<string[]>(initialScopes)
   const [enabled, setEnabled] = useState(true)
@@ -181,7 +187,8 @@ const ConstrainedWidthExample = ({
           <ConnectorScopes
             scopes={scopes}
             editable={false}
-            scopeLookup={scopeLookup}>
+            scopeLookup={scopeLookup}
+            hideCustomInput={hideCustomInput}>
             <ConnectorScopes.List />
           </ConnectorScopes>
         ) : (
@@ -191,7 +198,8 @@ const ConstrainedWidthExample = ({
             onAddScope={handleAddScope}
             availableScopes={availableScopes}
             editable={true}
-            scopeLookup={scopeLookup}>
+            scopeLookup={scopeLookup}
+            hideCustomInput={hideCustomInput}>
             <ConnectorScopes.AddButton />
             <ConnectorScopes.List />
           </ConnectorScopes>

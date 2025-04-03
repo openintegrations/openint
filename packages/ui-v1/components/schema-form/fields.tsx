@@ -51,6 +51,24 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
     } as T)
   }
 
+  const handleSwitchChange = (newValue: boolean) => {
+    onChange({
+      ...formData,
+      client_id:
+        newValue && initialData?.config
+          ? undefined
+          : initialData.config.oauth.client_id,
+      client_secret:
+        newValue && initialData?.config
+          ? undefined
+          : initialData.config.oauth.client_secret,
+      scopes: newValue
+        ? formData?.scopes?.filter((s) => openint_scopes.includes(s))
+        : formData?.scopes,
+    } as T)
+    setUseOpenIntCredentials(newValue)
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -62,20 +80,7 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
         <Switch
           id="use-openint-credentials"
           checked={useOpenIntCredentials}
-          onCheckedChange={(newValue) => {
-            onChange({
-              ...formData,
-              client_id:
-                newValue && initialData?.config
-                  ? undefined
-                  : initialData.config.oauth.client_id,
-              client_secret:
-                newValue && initialData?.config
-                  ? undefined
-                  : initialData.config.oauth.client_secret,
-            } as T)
-            setUseOpenIntCredentials(newValue)
-          }}
+          onCheckedChange={handleSwitchChange}
         />
       </div>
 
@@ -115,7 +120,8 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
         scopeLookup={scopeLookup}
         scopes={formData?.scopes || []}
         availableScopes={availableScopes}
-        editable={!useOpenIntCredentials}
+        editable
+        hideCustomInput={useOpenIntCredentials}
         onAddScope={(scope) => {
           handleChange('scopes', [...(formData?.scopes || []), scope])
         }}

@@ -27,6 +27,7 @@ interface ConnectorScopesContextValue {
   scopes: string[]
   availableScopes: string[]
   editable: boolean
+  hideCustomInput?: boolean
   onRemoveScope?: (scope: string) => void
   onAddScope?: (scope: string) => void
   isPopoverOpen: boolean
@@ -63,6 +64,7 @@ export interface ConnectorScopesProps {
   onAddScope?: (scope: string) => void
   availableScopes?: string[]
   editable?: boolean
+  hideCustomInput?: boolean
   className?: string
   children?: React.ReactNode
 }
@@ -77,6 +79,7 @@ const ConnectorScopesRoot: React.FC<ConnectorScopesProps> = ({
   editable = false,
   className,
   children,
+  hideCustomInput = false,
 }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [customScope, setCustomScope] = useState('')
@@ -117,6 +120,7 @@ const ConnectorScopesRoot: React.FC<ConnectorScopesProps> = ({
     scopeLookup,
     availableScopes,
     editable,
+    hideCustomInput,
     onRemoveScope,
     onAddScope,
     isPopoverOpen,
@@ -133,7 +137,7 @@ const ConnectorScopesRoot: React.FC<ConnectorScopesProps> = ({
   return (
     <ConnectorScopesContext.Provider value={contextValue}>
       <TooltipProvider>
-        <div className={cn('w-full space-y-4', className)}>
+        <div className={cn('w-full', className)}>
           {children || (
             <>
               {editable && <AddScopeButton />}
@@ -185,35 +189,38 @@ const AddScopeButton: React.FC<AddScopeButtonProps> = ({className}) => {
     handleAddCustomScope,
     isScopeAdded,
     scopeLookup,
+    hideCustomInput,
   } = useConnectorScopes()
 
   return (
     <div className={cn('flex items-center', className)}>
       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
         <PopoverTrigger asChild>
-          <Button variant="default" size="sm">
+          <Button variant="default" size="sm" className="mb-4">
             Add scope
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-96 p-0" align="start" side="right">
           <div className="p-4">
             <h4 className="mb-3 font-medium">Add scopes</h4>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Enter custom scope"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                value={customScope}
-                onChange={(e) => {
-                  setCustomScope(e.target.value)
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleAddCustomScope()
-                  }
-                }}
-              />
-            </div>
+            {!hideCustomInput && (
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Enter custom scope"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  value={customScope}
+                  onChange={(e) => {
+                    setCustomScope(e.target.value)
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddCustomScope()
+                    }
+                  }}
+                />
+              </div>
+            )}
             <div className="mb-4 grid grid-cols-2 gap-x-4 gap-y-1">
               {availableScopes.map((scope) => {
                 const isAdded = isScopeAdded(scope)
@@ -275,15 +282,15 @@ const ScopesList: React.FC<ScopesListProps> = ({className}) => {
     <Badge
       key={scope}
       variant="secondary"
-      className="inline-flex items-center gap-1">
-      <span className="max-w-[120px] truncate">{scope}</span>
+      className="inline-flex items-center gap-4">
+      <span className="flex max-w-[350px] grow truncate p-2">{scope}</span>
       {editable && (
         <button
           onClick={(e) => {
             e.stopPropagation()
             handleRemoveScope(scope)
           }}
-          className="ml-1 flex-shrink-0 rounded-full p-0.5 hover:bg-gray-200">
+          className="ml-auto flex-shrink-0 rounded-full p-0.5 hover:bg-gray-200">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="12"
