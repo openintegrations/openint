@@ -128,12 +128,6 @@ const nextConfig = {
       destination: '/api/v0/unified/:p*',
       permanent: false,
     },
-    {source: '/', destination: '/console', permanent: false},
-    {
-      source: '/console',
-      destination: '/console/connector-config',
-      permanent: false,
-    },
     // clerk expects these routes to be present in their UI and we have them inside the dashboard
     {source: '/sign-in', destination: '/console/sign-in', permanent: false},
     {source: '/sign-up', destination: '/console/sign-up', permanent: false},
