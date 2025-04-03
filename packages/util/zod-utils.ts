@@ -171,3 +171,21 @@ export function catchZodError(err: unknown, opts?: {rootTypeName?: string}) {
   }
   throw err
 }
+
+/**
+ * Default boolean coercion with z.coerce.boolean() may not work how you expect.
+ * Any truthy value is coerced to true, and any falsy value is coerced to false.
+ *
+ * @see https://zod.dev/?id=booleans
+ */
+export function zCoerceBoolean(params?: Z.RawCreateParams) {
+  return z.preprocess((val) => {
+    if (typeof val === 'string') {
+      const v = val.toLowerCase()
+      if (v === 'false' || v === '0') {
+        return false
+      }
+    }
+    return Boolean(val)
+  }, z.boolean(params))
+}

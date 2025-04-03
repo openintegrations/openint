@@ -4,7 +4,7 @@ import {
   generateOpenApiDocument,
   type OpenApiMeta,
 } from 'trpc-to-openapi'
-import {z} from '@openint/util/zod-utils'
+import {z, zCoerceBoolean} from '@openint/util/zod-utils'
 
 const trpc = initTRPC.meta<OpenApiMeta>().create()
 const zExpand = z.enum([
@@ -16,9 +16,7 @@ const zExpand = z.enum([
 const router = trpc.router({
   arrayParams: trpc.procedure
     .meta({openapi: {method: 'GET', path: '/array-params'}})
-    .input(
-      z.object({expand: z.array(zExpand), boolAsString: z.coerce.boolean()}),
-    )
+    .input(z.object({expand: z.array(zExpand), boolAsString: zCoerceBoolean()}))
     .output(z.object({expand: z.array(zExpand)}))
     .query(({input}) => {
       return input

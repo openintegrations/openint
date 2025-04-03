@@ -45,6 +45,18 @@ export default async function Page(
         `,
         }}
       />
+      {searchParams.debug && (
+        <pre>
+          {JSON.stringify(
+            {
+              viewer,
+              searchParams,
+            },
+            null,
+            2,
+          )}
+        </pre>
+      )}
       <ClientApp token={token!}>
         <GlobalCommandBarProvider>
           {/* <TabsClient defaultValue={(await props.searchParams).tab ?? 'my-connections'}> */}
