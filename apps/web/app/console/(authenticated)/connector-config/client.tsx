@@ -61,16 +61,17 @@ export function ConnectorConfigList(props: {
   const formSchema = {
     type: 'object' as const,
     properties: {
-      displayName: {
-        type: 'string' as const,
-        title: 'Display Name',
-        description: 'A friendly name for this connector configuration',
-      },
       disabled: {
         type: 'boolean' as const,
         title: 'Disabled',
         description:
           'When disabled it will not be used for connection portal. Essentially a reversible soft-delete',
+        'ui:field': 'DisabledField',
+      },
+      displayName: {
+        type: 'string' as const,
+        title: 'Display Name',
+        description: 'A friendly name for this connector configuration',
       },
       ...((
         selectedConnector?.schemas?.connector_config as Record<string, unknown>
@@ -268,22 +269,6 @@ export function ConnectorConfigList(props: {
           }
         }}>
         <SheetContent side="right" className="min-w-1/3 p-4 pb-0">
-          <SheetTitle className="flex items-center gap-2">
-            {selectedConnector && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={handleBackToConnectors}>
-                <ArrowLeft className="size-4" />
-              </Button>
-            )}
-            <span className="text-xl font-semibold">
-              {selectedConnector
-                ? `Configure ${selectedConnector.display_name}`
-                : 'Add Connector'}
-            </span>
-          </SheetTitle>
           {selectedConnector ? (
             <>
               <JSONSchemaForm
