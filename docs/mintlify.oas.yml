@@ -1404,7 +1404,7 @@ paths:
             description: The id of the customer in your application. Ensure it is unique for that customer.
           required: true
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
