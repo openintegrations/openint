@@ -1,6 +1,7 @@
 'use client'
 
 import {MoreHorizontal} from 'lucide-react'
+import {Customer} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {CustomerTableCell} from '../components/CustomerTableCell'
 import type {ColumnDef} from '../components/DataTable'
@@ -8,14 +9,6 @@ import {DataTable} from '../components/DataTable'
 import {Icon} from '../components/Icon'
 import {formatIsoDateString} from '../utils'
 
-// Define the Customer data structure based on the image
-export interface Customer {
-  id: string
-  connectionsCount: number
-  firstCreated: string
-}
-
-// Define the columns for the customers table
 export const columns: Array<ColumnDef<Customer>> = [
   {
     id: 'customer',
@@ -24,12 +17,11 @@ export const columns: Array<ColumnDef<Customer>> = [
       <CustomerTableCell
         customer={{
           id: row.original.id,
-          created_at: row.original.firstCreated,
-          updated_at: row.original.firstCreated,
-          connection_count: row.original.connectionsCount,
+          created_at: row.original.created_at,
+          updated_at: row.original.updated_at,
+          connection_count: row.original.connection_count,
         }}
         compact={true}
-        useIcon={true}
       />
     ),
   },
@@ -37,7 +29,7 @@ export const columns: Array<ColumnDef<Customer>> = [
     id: 'connections',
     header: 'Connections',
     cell: ({row}) => {
-      const connectionsCount = row.original.connectionsCount
+      const connectionsCount = row.original.connection_count
 
       return (
         <button
@@ -67,7 +59,7 @@ export const columns: Array<ColumnDef<Customer>> = [
     accessorKey: 'firstCreated',
     cell: ({row}) => (
       <div className="text-gray-500">
-        {formatIsoDateString(row.original.firstCreated)}
+        {formatIsoDateString(row.original.created_at)}
       </div>
     ),
   },
@@ -82,27 +74,9 @@ export const columns: Array<ColumnDef<Customer>> = [
   },
 ]
 
-export function CustomersTable({
-  data,
-  enableSelect,
-  onRowClick,
-}: {
-  data: Customer[]
-  enableSelect?: boolean
-  onRowClick?: (customer: Customer) => void
-}) {
+export function CustomersTable({data}: {data: Customer[]}) {
   return (
-    <DataTable
-      data={data}
-      columns={columns}
-      enableSelect={enableSelect}
-      onRowClick={
-        onRowClick
-          ? (row) => {
-              onRowClick(row)
-            }
-          : undefined
-      }>
+    <DataTable data={data} columns={columns} enableSelect={false}>
       <DataTable.Header>
         <DataTable.SearchInput />
         <DataTable.ColumnVisibilityToggle />
