@@ -1,11 +1,11 @@
 import {R} from '@openint/util/remeda'
+import {zodToOas31Schema} from '@openint/util/schema'
 import {titleCase} from '@openint/util/string-utils'
 import {urlFromImage} from '@openint/util/url-utils'
-import {zodToJsonSchema} from '@openint/util/zod-jsonschema-utils'
 import {z} from '@openint/util/zod-utils'
 import type {AnyConnectorImpl, ConnectorSchemas} from './connector.types'
 
-export type JSONSchema = {} // ReturnType<typeof zodToJsonSchema> | JSONSchema7Definition
+export type JSONSchema = {} // ReturnType<typeof zodToOas31Schema> | JSONSchema7Definition
 export const metaForConnector = (
   connector: AnyConnectorImpl,
   opts: {includeOas?: boolean} = {},
@@ -28,7 +28,9 @@ export const metaForConnector = (
   nangoProvider: connector.metadata?.nangoProvider,
   schemas: R.mapValues(connector.schemas ?? {}, (schema, type) => {
     try {
-      return schema instanceof z.ZodSchema ? zodToJsonSchema(schema) : undefined
+      return schema instanceof z.ZodSchema
+        ? zodToOas31Schema(schema)
+        : undefined
     } catch (err) {
       throw new Error(
         `Failed to convert schema for ${connector.name}.${type}: ${err}`,
