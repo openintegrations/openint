@@ -19,7 +19,7 @@ function Fallback() {
 }
 
 export default async function Page(
-  pageProps: PageProps<never, {tab?: string; connector_name?: string}>,
+  pageProps: PageProps<never, {view?: string; connector_name?: string}>,
 ) {
   const {viewer, token} = await currentViewer(pageProps)
 
@@ -64,12 +64,12 @@ export default async function Page(
         <GlobalCommandBarProvider>
           {/* <TabsClient defaultValue={(await props.searchParams).tab ?? 'my-connections'}> */}
 
-          <TabsClient defaultValue="my-connections" paramKey="tab">
+          <TabsClient defaultValue="add" paramKey="view">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="my-connections">My connections</TabsTrigger>
-              <TabsTrigger value="add-connection">Add connection</TabsTrigger>
+              <TabsTrigger value="manage">Manage connections</TabsTrigger>
+              <TabsTrigger value="add">Add connection</TabsTrigger>
             </TabsList>
-            <TabsContent value="my-connections" className="pt-2">
+            <TabsContent value="manage" className="pt-2">
               <Suspense fallback={<Fallback />}>
                 <MyConnectionsClient
                   // TODO: How to avoid the duplicate construction of input parameters?
@@ -81,7 +81,7 @@ export default async function Page(
                 />
               </Suspense>
             </TabsContent>
-            <TabsContent value="add-connection" className="pt-2">
+            <TabsContent value="add" className="pt-2">
               <Suspense fallback={<Fallback />}>
                 <AddConnections
                   viewer={viewer}

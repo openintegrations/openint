@@ -9,11 +9,15 @@ export const connectClientOptions = z
       .describe(
         'The name of the connector to limit connection to. Default to all otherwise',
       ),
-    tab: z.enum(['my-connections', 'add-connection']).optional().openapi({
-      title: 'Default Tab',
-      description:
-        'The default tab to show when the magic link is opened. Defaults to "my-connections"',
-    }),
+    view: z
+      .enum(['add', 'manage'])
+      .optional()
+      .openapi({
+        title: 'Default View to load',
+        description:
+          'The default view to show when the magic link is opened. Defaults to "add"',
+      })
+      .default('add'),
     debug: zCoerceBoolean().optional().openapi({
       title: 'Debug',
       description: 'Whether to enable debug mode',
