@@ -6,7 +6,6 @@ import {Label} from '../ui/label'
 import {Popover, PopoverContent, PopoverTrigger} from '../ui/popover'
 
 const meta = {
-  title: 'Shadcn/Popover',
   component: Popover,
   tags: ['autodocs'],
 } satisfies Meta<typeof Popover>

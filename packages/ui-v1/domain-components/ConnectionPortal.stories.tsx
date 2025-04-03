@@ -49,7 +49,6 @@ const mockConnections = [
 ]
 
 const meta = {
-  title: 'DOMAIN COMPONENTS/ConnectionPortal',
   component: ConnectionPortal,
   parameters: {
     layout: 'fullscreen',

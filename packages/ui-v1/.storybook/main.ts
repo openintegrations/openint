@@ -31,13 +31,10 @@ const config = {
     '../../shadcn/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../../shadcn/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../ui/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../ui/__stories__/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     // Will only work in (v1) directory
     // Generally speaking all stories should be in ui-v1
     '../../../apps/web/app/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../ui/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    // '../../ui-v1/domain-components/**/*.stories.@(js|jsx|mjs|ts|tsx)', // Commented out to avoid duplicate stories
+    '../../../apps/web/blocks/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
     getAbsolutePath('@storybook/addon-essentials'),
@@ -63,6 +60,7 @@ const config = {
       exclude: [
         ...(config.optimizeDeps?.exclude ?? []),
         '@electric-sql/pglite',
+        // 'zod', // If we run into errors related to ZodTypeDef not found, uncomment me
       ],
     }
 

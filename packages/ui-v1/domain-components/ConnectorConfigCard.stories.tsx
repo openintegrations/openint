@@ -4,7 +4,6 @@ import {FIXTURES} from './__stories__/fixtures'
 import {ConnectorConfigCard} from './ConnectorConfigCard'
 
 const meta: Meta<typeof ConnectorConfigCard> = {
-  title: 'Domain/ConnectorConfigCard',
   component: ConnectorConfigCard,
   parameters: {
     layout: 'centered',

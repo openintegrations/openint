@@ -12,48 +12,19 @@ import {type RJSFSchema} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {
-  transformJSONSchema,
-  zodToOas31Schema,
-  type Oas31Schema,
-} from '@openint/util/schema'
-import type {Z} from '@openint/util/zod-utils'
+import {transformJSONSchema, type Oas31Schema} from '@openint/util/schema'
 import {fields} from './fields'
 import {jsonSchemaToUiSchema} from './jsonSchemaToUiSchema'
 import {widgets} from './widgets'
 
-// Define the theme (copied from original SchemaForm)
-const theme: ThemeProps = {
-  widgets: {},
-}
+const theme: ThemeProps = {}
 
 /** Customized form with our theme */
+
 export const RJSFForm = withTheme(theme) as typeof Form
 
 /** For use with createRef... */
 export type SchemaFormElement = Form
-
-export interface ZodSchemaFormProps<TSchema extends Z.ZodTypeAny>
-  extends Omit<JSONSchemaFormProps<Z.infer<TSchema>>, 'jsonSchema'> {
-  /**
-   * The Zod schema to use for the form
-   */
-  schema: TSchema
-}
-
-/**
- * SchemaForm component for handling forms with proper styling and security features.
- * This component includes functionality for hiding sensitive fields like passwords and tokens.
- */
-export const ZodSchemaForm = <TSchema extends Z.ZodTypeAny>({
-  schema,
-  ...props
-}: ZodSchemaFormProps<TSchema>) => {
-  ;(globalThis as any).formSchema = schema
-  // Convert Zod schema to JSON schema
-  const jsonSchema = zodToOas31Schema(schema) as RJSFSchema
-  return <JSONSchemaForm jsonSchema={jsonSchema} {...props} />
-}
 
 export interface JSONSchemaFormProps<TData extends Record<string, unknown>>
   extends Omit<FormProps<TData>, 'schema' | 'validator' | 'onSubmit'> {

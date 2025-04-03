@@ -2,7 +2,6 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {OnboardingModal} from '../OnboardingModal'
 
 const meta: Meta<typeof OnboardingModal> = {
-  title: 'DOMAIN COMPONENTS/OnboardingModal',
   component: OnboardingModal,
   parameters: {
     layout: 'centered',
@@ -35,7 +34,7 @@ const meta: Meta<typeof OnboardingModal> = {
       description: 'Function called to navigate to different parts of the app',
     },
   },
-}
+} satisfies Meta<typeof OnboardingModal>
 
 export default meta
 type Story = StoryObj<typeof OnboardingModal>

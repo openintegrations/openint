@@ -11,7 +11,6 @@ import {
 } from '../ui/select'
 
 const meta = {
-  title: 'Shadcn/Select',
   component: Select,
   parameters: {
     layout: 'centered',

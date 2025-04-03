@@ -6,6 +6,7 @@ import {getServerUrl} from '@openint/env'
 import {z} from '@openint/util/zod-utils'
 import {core, Customer} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
+import {customerRouterModels} from './customer.models'
 import {
   applyPaginationAndOrder,
   processTypedPaginatedResponse,
@@ -13,7 +14,7 @@ import {
   zListParams,
   zListResponse,
 } from './utils/pagination'
-import {zConnectionId, zConnectorName, zCustomerId} from './utils/types'
+import {zCustomerId} from './utils/types'
 
 function asCustomer(
   viewer: Viewer,
@@ -58,44 +59,7 @@ export const customerRouter = router({
         summary: 'Create Magic Link',
       },
     })
-    .input(
-      z.object({
-        customer_id: zCustomerId.openapi({
-          param: {in: 'path', name: 'customer_id'},
-        }),
-        validity_in_seconds: z
-          .number()
-          .optional()
-          .default(2592000)
-          .describe(
-            'How long the magic link will be valid for (in seconds) before it expires',
-          ),
-        redirect_url: z
-          .string()
-          .optional()
-          .describe(
-            'Where to send user to after connect / if they press back button',
-          ),
-        connector_names: z
-          .array(zConnectorName.describe(''))
-          .optional()
-          .default([])
-          .describe('Filter integrations by connector names'),
-        connection_id: zConnectionId
-          .optional()
-          .describe('The specific connection id to load'),
-        theme: z
-          .enum(['light', 'dark'])
-          .optional()
-          .default('light')
-          .describe('Magic Link display theme'),
-        view: z
-          .enum(['manage', 'manage-deeplink', 'add', 'add-deeplink'])
-          .default('add')
-          .optional()
-          .describe('Magic Link tab view to load in the connect magic link'),
-      }),
-    )
+    .input(customerRouterModels.createMagicLinkInput)
     .output(
       z.object({
         magic_link_url: z
@@ -118,25 +82,12 @@ export const customerRouter = router({
       const url = new URL('/connect/portal', getServerUrl(null))
       url.searchParams.set('token', token)
 
-      if (input.redirect_url) {
-        url.searchParams.set('redirectUrl', input.redirect_url)
-      }
-
-      if (input.connector_names) {
-        const connectorNames = input.connector_names.map((name) => name.trim())
-        url.searchParams.set('connectorNames', connectorNames.join(','))
-      }
-
-      if (input.connection_id) {
-        url.searchParams.set('connectionId', input.connection_id)
-      }
-
-      if (input.theme) {
-        url.searchParams.set('theme', input.theme)
-      }
-
-      if (input.view) {
-        url.searchParams.set('view', input.view)
+      if (input.client_options) {
+        for (const [key, value] of Object.entries(input.client_options)) {
+          if (value !== undefined) {
+            url.searchParams.set(key, value.toString())
+          }
+        }
       }
 
       return {

@@ -4,7 +4,6 @@ import {AppLayout} from './app-layout'
 import {DummyOrganizationSwitcher} from './app-sidebar.stories'
 
 const meta = {
-  title: 'Components/Navigation/AppLayout',
   component: AppLayout,
   parameters: {layout: 'fullscreen'},
 } satisfies Meta<typeof AppLayout>
