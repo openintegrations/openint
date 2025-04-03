@@ -49,7 +49,7 @@ function asCustomer(
 }
 
 export const customerRouter = router({
-  createMagicLink: orgProcedure
+  getMagicLink: orgProcedure
     .meta({
       openapi: {
         method: 'POST',
@@ -59,7 +59,7 @@ export const customerRouter = router({
         summary: 'Create Magic Link',
       },
     })
-    .input(customerRouterModels.createMagicLinkInput)
+    .input(customerRouterModels.getMagicLinkInput)
     .output(
       z.object({
         magic_link_url: z
@@ -67,7 +67,7 @@ export const customerRouter = router({
           .describe('The Connect magic link url to share with the user.'),
       }),
     )
-    .mutation(async ({ctx, input}) => {
+    .query(async ({ctx, input}) => {
       // TODO: replace with new signing and persisting mechanism
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
@@ -79,7 +79,7 @@ export const customerRouter = router({
         },
       )
 
-      const url = new URL('/connect/portal', getServerUrl(null))
+      const url = new URL('/connect', getServerUrl(null))
       url.searchParams.set('token', token)
 
       if (input.client_options) {

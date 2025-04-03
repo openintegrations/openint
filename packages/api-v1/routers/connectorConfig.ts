@@ -30,16 +30,11 @@ const zExpandOptions = z
   )
 
 export function expandConnector(
-  connectorConfig: Core['connector_config'],
+  connectorName: string,
 ): Pick<
   Core['connector'],
   'name' | 'display_name' | 'logo_url' | 'stage' | 'platforms'
-> & {
-  created_at: string
-  updated_at: string
-} {
-  const connectorName = connectorConfig.connector_name
-
+> {
   const connector = defConnectors[connectorName as keyof typeof defConnectors]
   if (!connector) {
     throw new TRPCError({
@@ -63,8 +58,8 @@ export function expandConnector(
     name: connectorName,
     // TODO: add enabled?
     // enabled: connectorConfig.enabled,
-    created_at: connectorConfig.created_at,
-    updated_at: connectorConfig.updated_at,
+    // created_at: connectorConfig.created_at,
+    // updated_at: connectorConfig.updated_at,
     logo_url: logoUrl,
   }
 }
@@ -216,7 +211,7 @@ export const connectorConfigRouter = router({
           }
 
           if (expandOptions.includes('connector')) {
-            const connector = expandConnector(ccfg)
+            const connector = expandConnector(ccfg.connector_name)
             if (connector) {
               result.connector = connector
             }

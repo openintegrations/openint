@@ -52,7 +52,7 @@ export function stripSensitiveOauthCredentials(credentials: any) {
 }
 
 async function formatConnection(
-  ctx: RouterContext,
+  _ctx: RouterContext,
   connection: Core['connection'],
   include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
   expand: Z.infer<typeof zExpandOptions>[] = [],
@@ -93,19 +93,8 @@ async function formatConnection(
 
   let expandedFields = {}
   if (expand.includes('connector')) {
-    const connectorConfig = await ctx.db.query.connector_config.findFirst({
-      // @ts-expect-error @openint-bot fix me as connector_config_id is optional in db
-      where: eq(schema.connector_config.id, connection.connector_config_id),
-    })
-    if (!connectorConfig) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `Connector config not found: ${connection.connector_config_id}`,
-      })
-    }
-
     expandedFields = {
-      connector: expandConnector(connectorConfig),
+      connector: expandConnector(connection.connector_name),
     }
   }
 
@@ -303,6 +292,7 @@ export const connectionRouter = router({
       const {items, total} = await processPaginatedResponse(query, 'connection')
 
       return {
+        // TODO: fix this to respect rls policy... Add corresponding tests also
         items: await Promise.all(
           items.map((conn) =>
             formatConnection(

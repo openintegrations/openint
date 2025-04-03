@@ -5,13 +5,15 @@ import {useRouter} from 'next/navigation'
 import React from 'react'
 import {
   cmdInit,
+  CommandDefinitionMapInput,
   type CommandDefinitionInput,
   type CommandDefinitionMap,
 } from '@openint/commands'
-import {CommandBar, CommandContext} from '@openint/ui-v1'
+import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
 import {SIDEBAR_NAV_ITEMS} from '@openint/ui-v1/navigation/app-sidebar'
 import {useMutation, useQueryClient} from '@openint/ui-v1/trpc'
 import {z} from '@openint/util/zod-utils'
+import {useSession} from '@/lib-client/auth.client'
 import {useTRPC} from './console/(authenticated)/client'
 
 export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
@@ -69,12 +71,39 @@ export function useCommandDefinitionMap() {
       },
     ]),
   )
-  const allCommands: CommandDefinitionMap = {
+  const allCommands: CommandDefinitionMapInput = {
     ...navCommands,
     ...orgCommands,
     ...useConnectionCommands(),
+    ...useCurrentSessionCommands(),
   }
-  return allCommands
+
+  return Object.fromEntries(
+    Object.entries(allCommands).filter(([_, def]) => !!def),
+  ) as CommandDefinitionMap
+}
+
+function useCurrentSessionCommands() {
+  const {userId, orgId} = useSession()
+
+  return {
+    'currentSession:copyUserId': userId && {
+      title: 'Copy current user ID',
+      icon: 'User',
+      execute: async () => {
+        await navigator.clipboard.writeText(userId)
+        toast.success('User ID copied to clipboard')
+      },
+    },
+    'currentSession:copyOrgId': orgId && {
+      title: 'Copy current organization ID',
+      icon: 'Building',
+      execute: async () => {
+        await navigator.clipboard.writeText(orgId)
+        toast.success('Organization ID copied to clipboard')
+      },
+    },
+  } satisfies CommandDefinitionMapInput
 }
 
 function useConnectionCommands() {

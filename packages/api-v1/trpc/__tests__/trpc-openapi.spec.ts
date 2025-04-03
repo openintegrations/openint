@@ -4,10 +4,9 @@ import {
   generateOpenApiDocument,
   type OpenApiMeta,
 } from 'trpc-to-openapi'
-import {z} from '@openint/util/zod-utils'
+import {z, zCoerceBoolean} from '@openint/util/zod-utils'
 
 const trpc = initTRPC.meta<OpenApiMeta>().create()
-
 const zExpand = z.enum([
   'integration',
   'connector_config',
@@ -17,16 +16,14 @@ const zExpand = z.enum([
 const router = trpc.router({
   arrayParams: trpc.procedure
     .meta({openapi: {method: 'GET', path: '/array-params'}})
-    .input(z.object({expand: z.array(zExpand)}))
+    .input(z.object({expand: z.array(zExpand), boolAsString: zCoerceBoolean()}))
     .output(z.object({expand: z.array(zExpand)}))
     .query(({input}) => {
       return input
     }),
 })
-
 const handler = (req: Request) =>
   createOpenApiFetchHandler({endpoint: '/', req, router})
-
 test('handle single value', async () => {
   const res = await handler(
     new Request('http://localhost:3000/array-params?expand=integration'),
@@ -34,7 +31,6 @@ test('handle single value', async () => {
   expect(res.status).toBe(200)
   expect(await res.json()).toEqual({expand: ['integration']})
 })
-
 test('handle multiple values', async () => {
   const res = await handler(
     new Request(
@@ -46,7 +42,6 @@ test('handle multiple values', async () => {
     expand: ['integration', 'connector_config'],
   })
 })
-
 test('oas spec', async () => {
   const oas = generateOpenApiDocument(router, {
     title: 'test',
@@ -70,6 +65,13 @@ test('oas spec', async () => {
             "type": "string",
           },
           "type": "array",
+        },
+      },
+      {
+        "in": "query",
+        "name": "boolAsString",
+        "schema": {
+          "type": "boolean",
         },
       },
     ]
