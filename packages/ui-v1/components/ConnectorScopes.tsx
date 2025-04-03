@@ -92,10 +92,7 @@ const ScopesList: FC<ScopesListProps> = ({
     <div className="flex flex-wrap gap-2">
       {scopes.map((scope) => (
         <ScopeTooltip key={scope} scope={scope} scopeLookup={scopeLookup}>
-          <Badge
-            key={scope}
-            variant="secondary"
-            className="inline-flex items-center gap-4">
+          <Badge variant="secondary" className="inline-flex items-center gap-4">
             <span className="flex max-w-[350px] grow truncate p-2">
               {scope}
             </span>
@@ -169,7 +166,7 @@ export default function ConnectorScopes({
         {children || (
           <>
             {editable && (
-              <div className={cn('flex items-center', className)}>
+              <div className="flex items-center">
                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                   <PopoverTrigger asChild>
                     <Button variant="default" size="sm" className="mb-4">

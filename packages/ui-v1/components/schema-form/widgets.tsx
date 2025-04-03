@@ -22,12 +22,9 @@ export function MultiSelect(_props: WidgetProps<boolean>) {
   )
 }
 
-// TODO: @rodrigo - We need to provide the correct availableScopes for each connector
 export function ScopesWidget(props: WidgetProps<string[]>) {
   const {value, onChange, options} = props
 
-  // TODO: @rodrigo - We need to decide the datatype that scopes is going to have
-  // right now it's a string but the component expects an array of scopes (object with id and name)
   const scopes = value as string[]
 
   return (
@@ -47,7 +44,6 @@ export function ScopesWidget(props: WidgetProps<string[]>) {
 
 export const widgets = {
   MultiSelectWidget: MultiSelect,
-  ScopesWidget,
   // Consider overriding default widgets with custom shadcn ones
   // instead of using pure css for customization
   // Default widgets we can override
