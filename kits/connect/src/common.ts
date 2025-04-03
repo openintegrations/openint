@@ -1,4 +1,4 @@
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from 'zod'
 
 export const zFrameMessage = z.discriminatedUnion('type', [
   z.object({
@@ -10,9 +10,9 @@ export const zFrameMessage = z.discriminatedUnion('type', [
     data: z.object({code: z.string(), message: z.string()}),
   }),
 ])
-export type FrameMessage = Z.infer<typeof zFrameMessage>
+export type FrameMessage = z.infer<typeof zFrameMessage>
 
-export const defaultHost = 'https://app.openint.dev'
+export const defaultHost = 'https://connect.openint.dev'
 
 export interface GetIFrameProps {
   baseUrl?: string | null
@@ -32,7 +32,7 @@ export const getIFrameUrl = ({
   params = {},
 }: GetIFrameProps) => {
   const placeholder = 'https://placeholder'
-  const url = new URL('/connect/portal', baseUrl ?? placeholder)
+  const url = new URL(defaultHost)
   // TODO; move this logic to server to load smartly based on whether the user has connections or not
   if (!params.view) {
     url.searchParams.set('view', 'add')
