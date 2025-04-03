@@ -30,7 +30,7 @@ export const connectClientOptions = z
   })
 
 export const customerRouterModels = {
-  createMagicLinkInput: z.object({
+  getMagicLinkInput: z.object({
     customer_id: zCustomerId.openapi({
       param: {in: 'path', name: 'customer_id'},
     }),

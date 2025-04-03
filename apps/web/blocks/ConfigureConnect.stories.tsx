@@ -1,15 +1,15 @@
 import type {Meta, StoryObj} from '@openint/ui-v1/storybook'
-import {ConnectPreview} from './ConnectPreview'
+import {ConfigureConnect} from './ConfigureConnect'
 
 const meta = {
-  component: ConnectPreview,
+  component: ConfigureConnect,
   parameters: {
     layout: 'fullscreen',
   },
   argTypes: {
     // Add any props that the component accepts
   },
-} satisfies Meta<typeof ConnectPreview>
+} satisfies Meta<typeof ConfigureConnect>
 
 export default meta
 type Story = StoryObj<typeof meta>
