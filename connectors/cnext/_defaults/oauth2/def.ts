@@ -102,7 +102,8 @@ export const oauth2Schemas = {
     oauth: zOAuthConnectionSettings,
   }),
   // No pre connect input is necessary for oauth2
-  // preConnectInput: z.any(),
+  // TODO: Fix to be unnecessary
+  preConnectInput: z.any(),
   connectInput: z.object({
     authorization_url: z.string(),
   }),
