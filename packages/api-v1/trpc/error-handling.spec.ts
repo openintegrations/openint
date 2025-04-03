@@ -3,8 +3,7 @@ import {initTRPC, TRPCError} from '@trpc/server'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {createOpenApiFetchHandler, type OpenApiMeta} from 'trpc-to-openapi'
-import {z} from '@openint/util/zod-utils'
-import {ZodError} from '@openint/util/zod-utils'
+import {z, ZodError} from '@openint/util/zod-utils'
 import {onError, parseAPIError} from './error-handling'
 
 const trpc = initTRPC.meta<OpenApiMeta>().create()
@@ -53,7 +52,7 @@ const router = trpc.router({
 
 describe('OpenAPI endpoints', () => {
   const handleOasRequest = (req: Request) =>
-    createOpenApiFetchHandler({endpoint: '/', req, router})
+    createOpenApiFetchHandler({endpoint: '/', req, router, onError})
 
   test('handle not found', async () => {
     const res = await handleOasRequest(
@@ -175,7 +174,7 @@ describe('OpenAPI endpoints', () => {
 
 describe('TRPC over http', () => {
   const handleTrpcRequest = (req: Request) =>
-    fetchRequestHandler({router, endpoint: '/', req})
+    fetchRequestHandler({router, endpoint: '/', req, onError})
 
   const client = createTRPCClient<typeof router>({
     links: [
@@ -470,12 +469,23 @@ describe('TRPC caller', () => {
       },
     ])
     expect(cause.message).toEqual(JSON.stringify(cause.errors, null, 2))
+    // console.log('parseAPIError(err)', parseAPIError(err))
     expect(parseAPIError(err)).toMatchObject({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'Output validation failed',
       data: {
         code: 'INTERNAL_SERVER_ERROR',
+        httpStatus: 500,
+        path: 'errOutputValidation',
+        stack: expect.any(String),
       },
+      issues: [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'undefined',
+        },
+      ],
     })
   })
 })
