@@ -19,10 +19,15 @@ import {
   DataTileView,
   JSONSchemaForm,
   JSONSchemaFormRef,
+  useMutableSearchParams,
 } from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
-import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@openint/ui-v1/trpc'
 import {Deferred} from '@openint/util/promise-utils'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
@@ -173,7 +178,16 @@ export function AddConnectionInner({
   )
   console.log('preConnectRes', preConnectRes)
 
-  const postConnect = useMutation(trpc.postConnect.mutationOptions({}))
+  const queryClient = useQueryClient()
+
+  const postConnect = useMutation(
+    trpc.postConnect.mutationOptions({
+      onSuccess: (data) => {},
+      onSettled: () => {},
+    }),
+  )
+
+  const [, setSearchParams] = useMutableSearchParams()
 
   const handleConnect = React.useCallback(async () => {
     try {
@@ -193,6 +207,27 @@ export function AddConnectionInner({
         options: {},
       })
       console.log('postConnectRes', postConnectRes)
+
+      // None of this is working, why!!!
+      void queryClient.invalidateQueries({
+        queryKey: trpc.listConnections.queryKey({
+          connector_name: name,
+          expand: ['connector'],
+        }),
+      })
+      void queryClient.invalidateQueries({
+        queryKey: trpc.listConnections.queryKey({
+          expand: ['connector'],
+        }),
+      })
+      void queryClient.invalidateQueries()
+      // Really terrible
+      toast.success('Connection created', {
+        description: `Connection ${postConnectRes.id} created`,
+      })
+      // This is the only way that works for now... 
+      // TODO: Fix this madness
+      setSearchParams({tab: 'my-connections'}, {shallow: false})
     } catch (error) {
       console.error('Error connecting', error)
       toast.error('Error connecting', {
