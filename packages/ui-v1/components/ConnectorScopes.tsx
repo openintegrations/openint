@@ -237,7 +237,7 @@ const AddScopeButton: React.FC<AddScopeButtonProps> = ({className}) => {
                         }}>
                         <span className="mr-2 truncate text-sm">{scope}</span>
                         {isAdded ? (
-                          <X className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
+                          <X className="size-3.5 flex-shrink-0 text-gray-500" />
                         ) : (
                           <Check className="h-3.5 w-3.5 flex-shrink-0 text-gray-500 opacity-0 group-hover:opacity-100" />
                         )}
@@ -291,19 +291,7 @@ const ScopesList: React.FC<ScopesListProps> = ({className}) => {
             handleRemoveScope(scope)
           }}
           className="ml-auto flex-shrink-0 rounded-full p-0.5 hover:bg-gray-200">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round">
-            <path d="M18 6 6 18" />
-            <path d="m6 6 12 12" />
-          </svg>
+          <X className="size-3.5" />
         </button>
       )}
     </Badge>
