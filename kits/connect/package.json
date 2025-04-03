@@ -1,6 +1,6 @@
 {
   "name": "@openint/connect",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -9,9 +9,6 @@
     "clean": "rm -rf ./dist",
     "dev": "next dev -p 3333 dev",
     "pub": "pnpm publish --no-git-checks"
-  },
-  "dependencies": {
-    "@opensdks/sdk-openint": "latest"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
