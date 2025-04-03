@@ -4,6 +4,7 @@ import {useAuth, useUser} from '@clerk/nextjs'
 import React from 'react'
 import type {AppRouter} from '@openint/api-v1'
 import {getServerUrl} from '@openint/env'
+import {Toaster} from '@openint/shadcn/ui'
 import {
   createTRPCClient,
   httpLink,
@@ -75,6 +76,7 @@ export function ClientApp({
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
         {showOnboarding ? <OnboardingHoc /> : children}
+        <Toaster />
       </TRPCProvider>
     </QueryClientProvider>
   )

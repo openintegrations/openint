@@ -12,12 +12,10 @@ export default async function ConnectPage(props: PageProps) {
   const {token = ''} = await currentViewer(props)
 
   return (
-    <div>
-      <ClientApp token={token}>
-        <Suspense fallback={<Fallback />}>
-          <ConfigureConnect />
-        </Suspense>
-      </ClientApp>
-    </div>
+    <ClientApp token={token}>
+      <Suspense fallback={<Fallback />}>
+        <ConfigureConnect />
+      </Suspense>
+    </ClientApp>
   )
 }
