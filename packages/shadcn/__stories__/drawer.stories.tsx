@@ -14,7 +14,6 @@ import {Input} from '../ui/input'
 import {Label} from '../ui/label'
 
 const meta = {
-  title: 'Shadcn/Drawer',
   component: Drawer,
   parameters: {
     layout: 'centered',

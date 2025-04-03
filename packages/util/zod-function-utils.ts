@@ -1,58 +1,56 @@
-import {z} from '@openint/util/zod-utils'
-
-import {isZodType} from './zod-utils'
+import {isZodType, z, type Z} from './zod-utils'
 
 /** Use fn.implementation to access the raw fn without validation */
 export type AnyZFunction = ReturnType<typeof zFunction>
 
 /** Allow for unknown for now */
 
-type _args = [z.ZodTypeAny, ...z.ZodTypeAny[]] | [] | z.ZodTypeAny
-type _wrap<T> = T extends z.ZodTypeAny ? [T] : T
-type _tuple<Args extends _args> = z.ZodTuple<_wrap<Args>, z.ZodUnknown>
+type _args = [Z.ZodTypeAny, ...Z.ZodTypeAny[]] | [] | Z.ZodTypeAny
+type _wrap<T> = T extends Z.ZodTypeAny ? [T] : T
+type _tuple<Args extends _args> = Z.ZodTuple<_wrap<Args>, Z.ZodUnknown>
 
 type _fnInner<
-  Args extends z.ZodTuple<_wrap<_args>, z.ZodUnknown>,
-  Returns extends z.ZodTypeAny,
-> = z.InnerTypeOfFunction<Args, Returns>
+  Args extends Z.ZodTuple<_wrap<_args>, Z.ZodUnknown>,
+  Returns extends Z.ZodTypeAny,
+> = Z.InnerTypeOfFunction<Args, Returns>
 
 type _fnOuter<
-  Args extends z.ZodTuple<_wrap<_args>, z.ZodUnknown>,
-  Returns extends z.ZodTypeAny,
-> = z.OuterTypeOfFunction<Args, Returns>
+  Args extends Z.ZodTuple<_wrap<_args>, Z.ZodUnknown>,
+  Returns extends Z.ZodTypeAny,
+> = Z.OuterTypeOfFunction<Args, Returns>
 
 // Need to think whether this is the right thing, given that zod itself does not
 // implement inference from impl function, though trpc server does.
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AnyFunction = (...args: any) => any
-type zReturnType<F extends AnyFunction> = z.ZodType<ReturnType<F>, any, any>
+type zReturnType<F extends AnyFunction> = Z.ZodType<ReturnType<F>, any, any>
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-// Tried to do the equivalent with inferring params z.ZodTuple<Parameters<F>, z.ZodUnknown>
+// Tried to do the equivalent with inferring params Z.ZodTuple<Parameters<F>, Z.ZodUnknown>
 // but that failed @see https://share.cleanshot.com/49pndY
 
 export type ZFunction<
   Args extends _args = [],
-  Returns extends z.ZodTypeAny = z.ZodUnknown,
+  Returns extends Z.ZodTypeAny = Z.ZodUnknown,
   F extends _fnInner<_tuple<Args>, Returns> = _fnInner<_tuple<Args>, Returns>,
 > = _fnOuter<_tuple<Args>, Returns> & {
-  parameters: z.ZodTuple<_wrap<Args>>
+  parameters: Z.ZodTuple<_wrap<Args>>
   returnType: Returns
-  type: z.ZodFunction<z.ZodTuple<_wrap<Args>>, Returns>
+  type: Z.ZodFunction<Z.ZodTuple<_wrap<Args>>, Returns>
   impl: F
 }
 
-export function zFunction<F extends _fnInner<_tuple<[]>, z.ZodUnknown>>(
+export function zFunction<F extends _fnInner<_tuple<[]>, Z.ZodUnknown>>(
   impl: F,
 ): ZFunction<[], zReturnType<F>, F>
 export function zFunction<
   Args extends _args,
-  F extends _fnInner<_tuple<Args>, z.ZodUnknown>,
+  F extends _fnInner<_tuple<Args>, Z.ZodUnknown>,
 >(args: Args, impl: F): ZFunction<Args, zReturnType<F>, F>
 export function zFunction<
   Args extends _args,
-  Returns extends z.ZodTypeAny,
+  Returns extends Z.ZodTypeAny,
   F extends _fnInner<_tuple<Args>, Returns>,
 >(args: Args, returns: Returns, impl: F): ZFunction<Args, Returns, F>
 
@@ -66,7 +64,7 @@ export function zFunction<
  */
 export function zFunction<
   Args extends _args,
-  Returns extends z.ZodTypeAny,
+  Returns extends Z.ZodTypeAny,
   F extends _fnInner<_tuple<Args>, Returns>,
 >(args: Args | F, returns?: Returns | F, _impl?: F) {
   // Workaround zod limitation @see https://github.com/colinhacks/zod/issues/1264
@@ -75,8 +73,8 @@ export function zFunction<
     args: (Array.isArray(args)
       ? z.tuple(args)
       : isZodType(args)
-      ? z.tuple([args])
-      : z.tuple([])
+        ? z.tuple([args])
+        : z.tuple([])
     ).rest(z.unknown()),
     returns: isZodType(returns) ? returns : z.unknown(),
   })

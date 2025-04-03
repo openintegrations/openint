@@ -3,7 +3,6 @@ import {BoldIcon, ItalicIcon, UnderlineIcon} from 'lucide-react'
 import {Toggle} from '../ui/toggle'
 
 const meta = {
-  title: 'Shadcn/Toggle',
   component: Toggle,
   parameters: {
     layout: 'centered',

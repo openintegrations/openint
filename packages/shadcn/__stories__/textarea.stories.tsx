@@ -4,7 +4,6 @@ import {Label} from '../ui/label'
 import {Textarea} from '../ui/textarea'
 
 const meta = {
-  title: 'Shadcn/Textarea',
   component: Textarea,
   tags: ['autodocs'],
   argTypes: {

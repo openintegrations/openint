@@ -49,7 +49,7 @@
     "chromatic": "^11.27.0",
     "playwright": "^1.51.0",
     "prop-types": "^15.8.1",
-    "storybook": "^8.6.4",
+    "storybook": "^8.6.12",
     "tailwindcss": "^4.0.13",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-radix": "^4.0.2",

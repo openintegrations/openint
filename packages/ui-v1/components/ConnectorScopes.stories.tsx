@@ -5,7 +5,6 @@ import type {Scope} from './ConnectorScopes'
 import {ConnectorScopes} from './ConnectorScopes'
 
 const meta: Meta<typeof ConnectorScopes> = {
-  title: 'Components/ConnectorScopes',
   component: ConnectorScopes,
   parameters: {
     layout: 'centered',

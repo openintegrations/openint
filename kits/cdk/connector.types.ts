@@ -6,7 +6,7 @@ import type {
 } from '@openint/sync'
 import {R} from '@openint/util/remeda'
 import type {MaybePromise} from '@openint/util/type-utils'
-import type {z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
 import type {
   CheckConnectionContext,
   CheckConnectionOptions,
@@ -28,15 +28,15 @@ import type {VerticalKey} from './verticals'
  */
 
 export interface ConnectorSchemas {
-  name: z.ZodLiteral<string>
-  connectorConfig?: z.ZodTypeAny
-  connectionSettings?: z.ZodTypeAny
-  integrationData?: z.ZodTypeAny
-  webhookInput?: z.ZodTypeAny
-  preConnectInput?: z.ZodTypeAny
-  connectInput?: z.ZodTypeAny
+  name: Z.ZodLiteral<string>
+  connectorConfig?: Z.ZodTypeAny
+  connectionSettings?: Z.ZodTypeAny
+  integrationData?: Z.ZodTypeAny
+  webhookInput?: Z.ZodTypeAny
+  preConnectInput?: Z.ZodTypeAny
+  connectInput?: Z.ZodTypeAny
   /** aka postConnectInput... Should we rename? */
-  connectOutput?: z.ZodTypeAny
+  connectOutput?: Z.ZodTypeAny
   /** Maybe can be derived from webhookInput | postConnOutput | inlineInput? */
 }
 
@@ -303,7 +303,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
 
 // MARK: - Generic Helpers, perhaps move to separate file?
 
-type _infer<T> = T extends z.ZodTypeAny ? z.infer<T> : never
+type _infer<T> = T extends Z.ZodTypeAny ? Z.infer<T> : never
 type OmitNever<T> = Omit<T, NeverKeys<T>>
 /** Surprisingly tricky, see. https://www.zhenghao.io/posts/ts-never */
 type NeverKeys<T> = Exclude<

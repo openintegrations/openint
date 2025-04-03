@@ -6,7 +6,6 @@ import {ConnectionCard} from '../domain-components/ConnectionCard'
 import {DataTileView} from './DataTileView'
 
 const meta: Meta<typeof DataTileView> = {
-  title: 'Components/DataTileView',
   component: DataTileView,
   parameters: {
     layout: 'centered',

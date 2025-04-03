@@ -15,7 +15,6 @@ import {Input} from '../ui/input'
 import {Label} from '../ui/label'
 
 const meta = {
-  title: 'Shadcn/Dialog',
   component: Dialog,
   tags: ['autodocs'],
 } satisfies Meta<typeof Dialog>

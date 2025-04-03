@@ -1,4 +1,4 @@
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 
 export const zFrameMessage = z.discriminatedUnion('type', [
   z.object({
@@ -10,7 +10,7 @@ export const zFrameMessage = z.discriminatedUnion('type', [
     data: z.object({code: z.string(), message: z.string()}),
   }),
 ])
-export type FrameMessage = z.infer<typeof zFrameMessage>
+export type FrameMessage = Z.infer<typeof zFrameMessage>
 
 export const defaultHost = 'https://app.openint.dev'
 

@@ -1,11 +1,11 @@
-import {z, zCast} from '@openint/util/zod-utils'
-import {createHTTPClient} from '@openint/util/http/index'
 import {DateTime} from '@openint/util/date-utils'
+import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
+import {z, zCast, type Z} from '@openint/util/zod-utils'
 
-export type Category = z.infer<typeof categorySchema>
-export type Asset = z.infer<typeof assetSchema>
-export type Transaction = z.infer<typeof transactionSchema>
+export type Category = Z.infer<typeof categorySchema>
+export type Asset = Z.infer<typeof assetSchema>
+export type Transaction = Z.infer<typeof transactionSchema>
 export interface GetTransactionsParams {
   start_date?: ISODate
   end_date?: ISODate

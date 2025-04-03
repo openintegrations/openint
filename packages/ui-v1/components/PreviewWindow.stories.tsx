@@ -2,7 +2,6 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {PreviewWindow} from './PreviewWindow'
 
 const meta = {
-  title: 'UI/PreviewWindow',
   component: PreviewWindow,
   parameters: {
     layout: 'padded',

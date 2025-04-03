@@ -8,7 +8,6 @@ import {ConnectorTableCell} from '../domain-components/tables/ConnectorTableCell
 import {ColumnDef, Columns, DataTable} from './DataTable'
 
 const meta: Meta<typeof DataTable> = {
-  title: 'Components/DataTable',
   component: DataTable,
 }
 

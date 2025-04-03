@@ -26,7 +26,7 @@ export let SIDEBAR_NAV_ITEMS = [
   },
   {
     title: 'Connect',
-    url: '/connect',
+    url: '/console/connect',
     icon: 'Wand',
   },
   {

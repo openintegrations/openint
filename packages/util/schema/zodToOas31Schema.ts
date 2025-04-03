@@ -6,8 +6,8 @@
 import type {oas30, oas31} from 'zod-openapi'
 import {createDocument} from 'zod-openapi'
 import type {ZodOpenApiMetadataDef} from 'zod-openapi/dist/extendZodTypes'
-import {OpenAPIObject} from 'zod-openapi/dist/openapi3-ts/dist/oas31'
-import type {z, ZodTypeDef} from '../zod-utils'
+import type {OpenAPIObject} from 'zod-openapi/dist/openapi3-ts/dist/oas31'
+import type {Z} from '../zod-utils'
 
 export type Oas31Schema = oas31.SchemaObject & {$schema?: string}
 export type Oas30Schema = oas30.SchemaObject & {$schema?: string}
@@ -18,8 +18,8 @@ export type Oas30Schema = oas30.SchemaObject & {$schema?: string}
  * and summary to be specified via the `.openapi()` method.
  */
 export function zodToOas31Schema(
-  zodSchema: z.ZodTypeAny,
-  zodDefinitions?: Record<string, z.ZodTypeAny>,
+  zodSchema: Z.ZodTypeAny,
+  zodDefinitions?: Record<string, Z.ZodTypeAny>,
 ): Oas31Schema {
   let oas: OpenAPIObject = {
     openapi: '3.1.0', // Only 3.1 is basically fully compatible with JSON-schema
@@ -43,7 +43,7 @@ export function zodToOas31Schema(
     // Due to the fact that we still have multiple zod-openapi versions due to util/zod
     // Should upgrade at one point at once.
     (zodSchema._def as ZodOpenApiMetadataDef).openapi ??
-    (zodSchema._def as ZodTypeDef).zodOpenApi?.openapi
+    (zodSchema._def as Z.ZodTypeDef).zodOpenApi?.openapi
 
   const {
     schema = {$ref: `#/components/schemas/${roofMeta?.ref}`},

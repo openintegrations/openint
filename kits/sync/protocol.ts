@@ -1,10 +1,10 @@
-import {z} from '@openint/util/zod-utils'
+import {rxjs} from '@openint/util/observable-utils'
 import type {
   NoInfer,
   NonDiscriminatedUnion,
   ObjectPartialDeep,
 } from '@openint/util/type-utils'
-import {rxjs} from '@openint/util/observable-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 // HACK ALERT
 import type {ExternalId, Id} from '../cdk/id.types'
 
@@ -113,7 +113,7 @@ export type Destination<
 // @deprecated?
 
 export type EntityPayload<TEntity = Record<string, unknown>> = Omit<
-  z.infer<typeof zEntityPayload>,
+  Z.infer<typeof zEntityPayload>,
   'entity'
 > & {entity: TEntity}
 
@@ -128,7 +128,7 @@ export const zEntityPayload = z.object({
  * This doesn't fully address the `discriminatedUnion` case...
  * So do we still want to use it? Sometimes entitySchema resolves to unknown too.
  */
-export function entityPayload<EntityType extends z.AnyZodObject>(
+export function entityPayload<EntityType extends Z.AnyZodObject>(
   entitySchema: EntityType,
 ) {
   return z.object({
@@ -138,7 +138,7 @@ export function entityPayload<EntityType extends z.AnyZodObject>(
   })
 }
 
-export type EntityPayloadWithRaw = z.infer<typeof zEntityPayloadWithRaw>
+export type EntityPayloadWithRaw = Z.infer<typeof zEntityPayloadWithRaw>
 export const zEntityPayloadWithRaw = zEntityPayload.extend({
   raw: z.unknown(),
   connectorName: z.string(),

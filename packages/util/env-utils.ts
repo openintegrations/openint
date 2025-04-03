@@ -1,25 +1,24 @@
 import {sort} from 'fast-sort'
 import {compact} from 'lodash'
 import type {JsonValue} from 'type-fest'
-import {R} from '@openint/util/remeda'
-import {z} from '@openint/util/zod-utils'
 import {
   javascriptStringify,
   safeJSONParse,
   safeJSONStringify,
 } from './json-utils'
 import {setAt} from './object-utils'
-import {zGuard} from './zod-utils'
+import {R} from './remeda'
+import {z, zGuard, type Z} from './zod-utils'
 
 /** TODO: Consider making this work beyond envVars? */
-export function zEnvVars<T extends z.ZodRawShape>(shape: T) {
+export function zEnvVars<T extends Z.ZodRawShape>(shape: T) {
   // Zod is super opinionated, therefore we do not have access to description
   // during error formattign :(
   // @see https://github.com/colinhacks/zod/pull/1241
   // At some point we probably want a custom zod.parse type anyways
   R.forEachObj(shape, (schema, _key) => {
     const key = _key.toString()
-    const def = (schema as any)._def as z.ZodTypeDef
+    const def = (schema as any)._def as Z.ZodTypeDef
     def.errorMap = (_issue, ctx) => {
       if (_issue.code === 'invalid_type' && ctx.data == null) {
         return {message: `env.${key} is required`}
@@ -32,7 +31,7 @@ export function zEnvVars<T extends z.ZodRawShape>(shape: T) {
 
 /** Flatten a zod schema for loading from env... */
 // TODO: How do we handle array values?
-export function zFlattenForEnv<T extends z.ZodTypeAny>(
+export function zFlattenForEnv<T extends Z.ZodTypeAny>(
   schema: T,
   {
     prefix,
@@ -65,7 +64,7 @@ export function zFlattenForEnv<T extends z.ZodTypeAny>(
 // TODO: Can we convert to JSON schema and flatten that instead?
 // Maybe there are tools that would help
 /** Get a flat shape suitable for passing into z.object  */
-function flattenShapeForEnv<T extends z.ZodTypeAny>(
+function flattenShapeForEnv<T extends Z.ZodTypeAny>(
   schema: T,
   {
     prefixes,
@@ -76,7 +75,7 @@ function flattenShapeForEnv<T extends z.ZodTypeAny>(
     separator: string
     stringify: boolean
   },
-): z.ZodRawShape {
+): Z.ZodRawShape {
   // console.log('flattenShapeForEnv', schema, prefixes)
   // if (!schema) {
   //   return {}
@@ -91,7 +90,7 @@ function flattenShapeForEnv<T extends z.ZodTypeAny>(
       stringify
     ) {
       return flattenShapeForEnv(
-        (unwrapped as z.ZodTypeAny).describe(
+        (unwrapped as Z.ZodTypeAny).describe(
           // TODO: Get '(required)' working too , right now this is only ever optional...
           `${schema.isOptional() ? '(Optional)' : '(Required)'} ${
             schema.description ?? ''
@@ -102,15 +101,15 @@ function flattenShapeForEnv<T extends z.ZodTypeAny>(
     }
   }
   if (schema instanceof z.ZodObject || schema instanceof z.ZodRecord) {
-    const shape: z.ZodRawShape =
+    const shape: Z.ZodRawShape =
       schema instanceof z.ZodObject
-        ? (schema.shape as z.ZodRawShape)
+        ? (schema.shape as Z.ZodRawShape)
         : R.pipe(
             schema.keySchema,
             (ks) => (ks instanceof z.ZodEnum ? (ks.options as string[]) : []),
             R.mapToObj((key) => [
               key,
-              (schema.valueSchema as z.ZodTypeAny).optional(),
+              (schema.valueSchema as Z.ZodTypeAny).optional(),
             ]),
           )
 
@@ -126,7 +125,7 @@ function flattenShapeForEnv<T extends z.ZodTypeAny>(
         }),
       ),
       R.mergeAll,
-    ) as z.ZodRawShape
+    ) as Z.ZodRawShape
   }
 
   const hint = schemaHint(schema)
@@ -151,7 +150,7 @@ function flattenShapeForEnv<T extends z.ZodTypeAny>(
   }
 }
 
-function schemaHint(schema: z.ZodTypeAny): string {
+function schemaHint(schema: Z.ZodTypeAny): string {
   if (schema instanceof z.ZodEnum) {
     return (schema.options as string[]).join(' | ')
   } else if (schema instanceof z.ZodNativeEnum) {
@@ -163,14 +162,14 @@ function schemaHint(schema: z.ZodTypeAny): string {
   } else if (schema instanceof z.ZodBoolean) {
     return 'boolean'
   } else if (schema instanceof z.ZodOptional) {
-    return schemaHint(schema.unwrap() as z.ZodTypeAny) + ' | undefined'
+    return schemaHint(schema.unwrap() as Z.ZodTypeAny) + ' | undefined'
   } else if (schema instanceof z.ZodNullable) {
-    return schemaHint(schema.unwrap() as z.ZodTypeAny) + ' | null'
+    return schemaHint(schema.unwrap() as Z.ZodTypeAny) + ' | null'
   } else if (schema instanceof z.ZodArray) {
-    return `Array<${schemaHint(schema.element as z.ZodTypeAny)}>`
+    return `Array<${schemaHint(schema.element as Z.ZodTypeAny)}>`
   } else if (schema instanceof z.ZodDefault) {
     return (
-      schemaHint(schema.removeDefault() as z.ZodTypeAny) +
+      schemaHint(schema.removeDefault() as Z.ZodTypeAny) +
       ` = ${
         safeJSONStringify(schema._def.defaultValue()) ??
         javascriptStringify(schema._def.defaultValue())

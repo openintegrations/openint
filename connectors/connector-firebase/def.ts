@@ -1,6 +1,6 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers} from '@openint/cdk'
-import {z} from '@openint/util/zod-utils'
+import {z, type Z} from '@openint/util/zod-utils'
 
 export const zFirebaseConfig = z.object({
   projectId: z.string(),
@@ -17,7 +17,7 @@ export const zFirebaseConfig = z.object({
  * Can be obtained by executing the following in the browser
  * `console.log(JSON.stringify(fba.auth().currentUser.toJSON(), null, 2))`
  */
-export type AuthUserJson = z.infer<typeof zAuthUserJson>
+export type AuthUserJson = Z.infer<typeof zAuthUserJson>
 export const zAuthUserJson = z
   .object({
     uid: z.string(),

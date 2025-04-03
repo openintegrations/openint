@@ -1,9 +1,9 @@
-import type {z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
 // Hack alert. Figure out how to straighten the dependencies out
 import type {IconName} from '../ui-v1/components/Icon'
 
-export type _infer<T, TDefault = unknown> = T extends z.ZodTypeAny
-  ? z.infer<T>
+export type _infer<T, TDefault = unknown> = T extends Z.ZodTypeAny
+  ? Z.infer<T>
   : TDefault
 
 export type CommandDraft<
@@ -14,7 +14,7 @@ export type CommandDraft<
 
 export interface _CommandDefinitionInput<
   TCtx = unknown,
-  TParams extends z.AnyZodObject = z.AnyZodObject,
+  TParams extends Z.AnyZodObject = Z.AnyZodObject,
   TRet = unknown,
 > {
   icon?: IconName
@@ -35,7 +35,7 @@ export interface _CommandDefinitionInput<
 
 export interface CommandDefinitionInput<
   TCtx = unknown,
-  TParams extends z.AnyZodObject = z.AnyZodObject,
+  TParams extends Z.AnyZodObject = Z.AnyZodObject,
   TRet = unknown,
 > extends _CommandDefinitionInput<TCtx, TParams> {
   /** How to allow dynamic command definition modification outside of react components? */
@@ -58,7 +58,7 @@ export type CommandDefinitionMap<TCtx = unknown> = Record<
  */
 export function cmdInit<TCtx = unknown>() {
   return {
-    identity<TParams extends z.AnyZodObject = z.AnyZodObject, TRet = unknown>(
+    identity<TParams extends Z.AnyZodObject = Z.AnyZodObject, TRet = unknown>(
       input: CommandDefinitionInput<TCtx, TParams, TRet>,
     ) {
       return input

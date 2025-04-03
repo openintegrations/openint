@@ -1,5 +1,5 @@
-import {z} from '@openint/util/zod-utils'
 import {zConnectorStage, zVerticalKey} from '@openint/cdk'
+import {z, type Z} from '@openint/util/zod-utils'
 import {zAPIKeyConnectorDef} from './_defaults/apikey'
 import {zOAuthConfig} from './_defaults/oauth2'
 
@@ -27,7 +27,7 @@ export const zAudience = z
   .enum(['consumer', 'business', 'enterprise'])
   .describe('The target audience of the connector')
 
-export type Audience = z.infer<typeof zAudience>
+export type Audience = Z.infer<typeof zAudience>
 
 export const zJsonConnectorDef = z.object({
   audience: z.array(zAudience).describe('The audiences of the connector'),
@@ -49,10 +49,10 @@ export const zJsonConnectorDef = z.object({
   auth: z.discriminatedUnion('type', [zOAuthConfig, zAPIKeyConnectorDef]),
 })
 
-export type JsonConnectorDef = z.infer<typeof zJsonConnectorDef>
+export type JsonConnectorDef = Z.infer<typeof zJsonConnectorDef>
 
 const zAuthType = z
   .union([zOAuthConfig.shape.type, zAPIKeyConnectorDef.shape.type])
   .describe('Union of supported authentication types')
 
-export type AuthType = z.infer<typeof zAuthType>
+export type AuthType = Z.infer<typeof zAuthType>

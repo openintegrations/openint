@@ -9,7 +9,6 @@ import {
 } from '../ui/tooltip'
 
 const meta = {
-  title: 'Shadcn/Tooltip',
   component: Tooltip,
   tags: ['autodocs'],
   decorators: [
