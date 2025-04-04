@@ -34,7 +34,7 @@ interface ConnectorScopesProps {
 }
 
 const RequestLink: FC<{className?: string}> = ({className}) => (
-  <div className={cn('flex items-center p-2 text-sm text-gray-500', className)}>
+  <div className={cn('flex items-center text-sm text-gray-500', className)}>
     <Info className="mr-1 size-4" />
     <span>Need new scopes?</span>
     <button
@@ -42,7 +42,7 @@ const RequestLink: FC<{className?: string}> = ({className}) => (
       onClick={() => {
         // TODO: @rodrigo - Handle request for new scopes
       }}>
-      Request it
+      Request them
     </button>
   </div>
 )
@@ -89,7 +89,7 @@ const ScopesList: FC<ScopesListProps> = ({
   scopeLookup,
 }) => (
   <div className="w-full">
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-4">
       {scopes.map((scope) => (
         <ScopeTooltip key={scope} scope={scope} scopeLookup={scopeLookup}>
           <Badge variant="secondary" className="inline-flex items-center gap-4">
@@ -162,14 +162,21 @@ export default function ConnectorScopes({
 
   return (
     <TooltipProvider>
-      <div className={cn('w-full', className)}>
+      <div className={cn('flex w-full flex-col gap-4', className)}>
+        <span className="text-md font-bold">Scopes</span>
         {children || (
           <>
+            <ScopesList
+              scopes={scopes}
+              editable={editable}
+              handleRemoveScope={handleRemoveScope}
+              scopeLookup={scopeLookup || {}}
+            />
             {editable && (
               <div className="flex items-center">
                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                   <PopoverTrigger asChild>
-                    <Button variant="default" size="sm" className="mb-4">
+                    <Button variant="default" size="sm">
                       Add scope
                     </Button>
                   </PopoverTrigger>
@@ -234,12 +241,6 @@ export default function ConnectorScopes({
                 </Popover>
               </div>
             )}
-            <ScopesList
-              scopes={scopes}
-              editable={editable}
-              handleRemoveScope={handleRemoveScope}
-              scopeLookup={scopeLookup || {}}
-            />
             <RequestLink />
           </>
         )}

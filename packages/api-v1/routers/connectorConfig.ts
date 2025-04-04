@@ -5,6 +5,7 @@ import {and, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
 import {core, type Core} from '../models'
+import {getConnectorModel} from '../models/connectorSchemas'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
@@ -43,6 +44,8 @@ export function expandConnector(
     })
   }
 
+  const connectorModel = getConnectorModel(connector, {includeSchemas: false})
+
   const logoUrl =
     connector.metadata &&
     'logoUrl' in connector.metadata &&
@@ -55,6 +58,7 @@ export function expandConnector(
 
   return {
     // TODO: add more fields?
+    ...connectorModel,
     name: connectorName,
     // TODO: add enabled?
     // enabled: connectorConfig.enabled,
