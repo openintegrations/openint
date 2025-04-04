@@ -27,14 +27,10 @@
           {
             "in": "query",
             "name": "expand",
+            "description": "Comma separated list of fields to optionally expand.\n\nAvailable Options: `integrations`",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "schemas"
-                ]
-              }
+              "type": "string",
+              "description": "Comma separated list of fields to optionally expand.\n\nAvailable Options: `integrations`"
             }
           }
         ],
@@ -44,52 +40,23 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "allOf": [
-                          {
-                            "$ref": "#/components/schemas/core.connector"
-                          }
-                        ],
-                        "properties": {
-                          "integrations": {
-                            "type": "array",
-                            "items": {
-                              "$ref": "#/components/schemas/core.integration"
-                            }
-                          }
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/core.connector"
+                      }
+                    ],
+                    "properties": {
+                      "integrations": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/core.integration"
                         }
                       }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "description": "Total number of items in the database for the organization"
-                    },
-                    "limit": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 100,
-                      "default": 50,
-                      "description": "Limit the number of items returned"
-                    },
-                    "offset": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "default": 0,
-                      "description": "Offset the items returned"
                     }
                   },
-                  "required": [
-                    "items",
-                    "total",
-                    "limit",
-                    "offset"
-                  ],
-                  "description": "List of connectors"
+                  "description": "List of connectors with selected fields"
                 }
               }
             }
@@ -164,41 +131,99 @@
           {
             "in": "query",
             "name": "limit",
+            "description": "Limit the number of items returned",
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "maximum": 100
+              "maximum": 100,
+              "default": 50,
+              "description": "Limit the number of items returned"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "Offset the items returned",
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
             }
           },
           {
             "in": "query",
             "name": "expand",
+            "description": "Comma separated list of fields to optionally expand.\n\nAvailable Options: `connector`, `enabled_integrations`",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "connector",
-                  "connector.schemas",
-                  "connection_count"
-                ],
-                "description": "Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)"
-              }
+              "type": "string",
+              "description": "Comma separated list of fields to optionally expand.\n\nAvailable Options: `connector`, `enabled_integrations`"
             }
           },
           {
             "in": "query",
             "name": "connector_name",
+            "description": "The name of the connector",
             "schema": {
-              "$ref": "#/components/schemas/core.connector.name"
+              "type": "string",
+              "enum": [
+                "aircall",
+                "airtable",
+                "apollo",
+                "brex",
+                "coda",
+                "confluence",
+                "discord",
+                "facebook",
+                "finch",
+                "firebase",
+                "foreceipt",
+                "github",
+                "gong",
+                "googlecalendar",
+                "googledocs",
+                "googledrive",
+                "googlemail",
+                "googlesheet",
+                "greenhouse",
+                "heron",
+                "hubspot",
+                "instagram",
+                "intercom",
+                "jira",
+                "kustomer",
+                "lever",
+                "linear",
+                "linkedin",
+                "lunchmoney",
+                "merge",
+                "microsoft",
+                "moota",
+                "notion",
+                "onebrick",
+                "outreach",
+                "pipedrive",
+                "plaid",
+                "quickbooks",
+                "ramp",
+                "reddit",
+                "salesforce",
+                "salesloft",
+                "saltedge",
+                "sharepointonline",
+                "slack",
+                "splitwise",
+                "stripe",
+                "teller",
+                "toggl",
+                "twenty",
+                "twitter",
+                "wise",
+                "xero",
+                "yodlee",
+                "zohodesk"
+              ],
+              "description": "The name of the connector"
             }
           }
         ],
@@ -240,14 +265,6 @@
                                   "boolean",
                                   "null"
                                 ]
-                              },
-                              "metadata": {
-                                "type": [
-                                  "object",
-                                  "null"
-                                ],
-                                "additionalProperties": {},
-                                "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
                               }
                             },
                             "required": [
@@ -256,8 +273,7 @@
                               "created_at",
                               "org_id",
                               "display_name",
-                              "disabled",
-                              "metadata"
+                              "disabled"
                             ],
                             "description": "Connector Config Base"
                           },
@@ -716,8 +732,7 @@
                             "object",
                             "null"
                           ],
-                          "additionalProperties": {},
-                          "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
+                          "additionalProperties": {}
                         }
                       },
                       "required": [
@@ -1155,25 +1170,90 @@
           {
             "in": "query",
             "name": "limit",
+            "description": "Limit the number of items returned",
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "maximum": 100
+              "maximum": 100,
+              "default": 50,
+              "description": "Limit the number of items returned"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "Offset the items returned",
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "default": 0,
+              "description": "Offset the items returned"
             }
           },
           {
             "in": "query",
             "name": "connector_name",
+            "description": "The name of the connector",
             "schema": {
-              "$ref": "#/components/schemas/core.connector.name"
+              "type": "string",
+              "enum": [
+                "aircall",
+                "airtable",
+                "apollo",
+                "brex",
+                "coda",
+                "confluence",
+                "discord",
+                "facebook",
+                "finch",
+                "firebase",
+                "foreceipt",
+                "github",
+                "gong",
+                "googlecalendar",
+                "googledocs",
+                "googledrive",
+                "googlemail",
+                "googlesheet",
+                "greenhouse",
+                "heron",
+                "hubspot",
+                "instagram",
+                "intercom",
+                "jira",
+                "kustomer",
+                "lever",
+                "linear",
+                "linkedin",
+                "lunchmoney",
+                "merge",
+                "microsoft",
+                "moota",
+                "notion",
+                "onebrick",
+                "outreach",
+                "pipedrive",
+                "plaid",
+                "quickbooks",
+                "ramp",
+                "reddit",
+                "salesforce",
+                "salesloft",
+                "saltedge",
+                "sharepointonline",
+                "slack",
+                "splitwise",
+                "stripe",
+                "teller",
+                "toggl",
+                "twenty",
+                "twitter",
+                "wise",
+                "xero",
+                "yodlee",
+                "zohodesk"
+              ],
+              "description": "The name of the connector"
             }
           },
           {
@@ -1270,8 +1350,7 @@
                                   "object",
                                   "null"
                                 ],
-                                "additionalProperties": {},
-                                "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
+                                "additionalProperties": {}
                               }
                             },
                             "required": [
@@ -2122,7 +2201,11 @@
                         "default": "add"
                       },
                       "connector_name": {
-                        "$ref": "#/components/schemas/core.connector.name",
+                        "type": "string",
+                        "enum": [
+                          "plaid",
+                          "greenhouse"
+                        ],
                         "description": "The name of the connector to limit connection to. Default to all otherwise"
                       },
                       "debug": {
@@ -2683,8 +2766,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -3157,8 +3239,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -3296,8 +3377,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -3940,8 +4020,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -4276,8 +4355,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -4415,8 +4493,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -4554,8 +4631,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -4693,8 +4769,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -4832,8 +4907,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -5055,8 +5129,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -6187,8 +6260,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -6326,8 +6398,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -6908,8 +6979,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -7747,8 +7817,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -8157,8 +8226,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -8542,8 +8610,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -8681,8 +8748,7 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector",
-                "ui:field": "OAuthField"
+                "description": "Base oauth configuration for the connector"
               }
             },
             "required": [
@@ -10041,8 +10107,7 @@
                   "object",
                   "null"
                 ],
-                "additionalProperties": {},
-                "description": "\n  JSON object can can be used to associate arbitrary metadata to\n  avoid needing a separate 1-1 table just for simple key values in your application.\n  During updates this object will be shallowly merged\n"
+                "additionalProperties": {}
               }
             },
             "required": [
@@ -10318,8 +10383,7 @@
             "enum": [
               "alpha",
               "beta",
-              "ga",
-              "hidden"
+              "ga"
             ]
           },
           "platforms": {
@@ -10347,102 +10411,12 @@
               "connect_output": {}
             },
             "additionalProperties": false
-          },
-          "openint_scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "scope": {
-                  "type": "string"
-                },
-                "display_name": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "scope"
-              ]
-            }
           }
         },
         "required": [
           "name"
         ],
         "title": "Connector"
-      },
-      "core.connector.name": {
-        "type": "string",
-        "enum": [
-          "aircall",
-          "airtable",
-          "apollo",
-          "brex",
-          "coda",
-          "confluence",
-          "discord",
-          "facebook",
-          "finch",
-          "firebase",
-          "foreceipt",
-          "github",
-          "gong",
-          "googlecalendar",
-          "googledocs",
-          "googledrive",
-          "googlemail",
-          "googlesheet",
-          "greenhouse",
-          "heron",
-          "hubspot",
-          "instagram",
-          "intercom",
-          "jira",
-          "kustomer",
-          "lever",
-          "linear",
-          "linkedin",
-          "lunchmoney",
-          "mercury",
-          "merge",
-          "microsoft",
-          "moota",
-          "notion",
-          "onebrick",
-          "outreach",
-          "pipedrive",
-          "plaid",
-          "postgres",
-          "quickbooks",
-          "ramp",
-          "reddit",
-          "salesforce",
-          "salesloft",
-          "saltedge",
-          "sharepointonline",
-          "slack",
-          "splitwise",
-          "stripe",
-          "teller",
-          "toggl",
-          "twenty",
-          "twitter",
-          "venmo",
-          "wise",
-          "xero",
-          "yodlee",
-          "zohodesk"
-        ],
-        "title": "connector"
       },
       "core.integration": {
         "type": "object",
