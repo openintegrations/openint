@@ -61,6 +61,7 @@ test('parse: extracts input from zod error', () => {
     schema.parse(invalidInputs)
     expect(false).toBe(true) // Fail
   } catch (error) {
+    // eslint-disable-next-line jest/no-conditional-expect
     expect(getInputData(error)).toEqual(invalidInputs)
   }
 })
@@ -76,6 +77,7 @@ test('parseAsync: extracts input from zod error', async () => {
     await schema.parseAsync(invalidInputs)
     expect(false).toBe(true) // Fail
   } catch (error) {
+    // eslint-disable-next-line jest/no-conditional-expect
     expect(getInputData(error)).toEqual(invalidInputs)
   }
 })
