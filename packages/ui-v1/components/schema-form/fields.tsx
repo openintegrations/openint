@@ -1,11 +1,10 @@
 import type {FieldProps, RegistryFieldsType} from '@rjsf/utils'
-import {Copy} from 'lucide-react'
 import {useState} from 'react'
 import type {ConnectorConfig} from '@openint/api-v1/models'
-import {cn} from '@openint/shadcn/lib/utils'
-import {Badge, Input, Switch} from '@openint/shadcn/ui'
+import {Input, Switch} from '@openint/shadcn/ui'
 import {ConnectorBadges} from '../../domain-components/ConnectorCard'
 import ConnectorScopes from '../ConnectorScopes'
+import {CopyID} from '../CopyID'
 
 interface OAuthFormData {
   client_id?: string
@@ -142,26 +141,10 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
 export function DisabledField(props: FieldProps<boolean>) {
   const {formData, onChange, formContext} = props
   const {initialData, connectorName} = formContext as OAuthFormContext
-  const [copied, setCopied] = useState(false)
-
-  const copyToClipboard = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    if (initialData?.id) {
-      navigator.clipboard
-        .writeText(initialData.id)
-        .then(() => {
-          setCopied(true)
-          setTimeout(() => setCopied(false), 2000)
-        })
-        .catch((err) => console.error('Failed to copy: ', err))
-    }
-  }
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col space-y-1">
+      <div className="flex flex-col gap-2 space-y-1">
         <div className="flex items-center gap-2">
           {initialData?.connector?.logo_url && (
             <img
@@ -172,29 +155,8 @@ export function DisabledField(props: FieldProps<boolean>) {
           )}
           <h3 className="font-medium">{connectorName}</h3>
         </div>
-        <div className="flex items-center text-sm text-gray-500">
-          <Badge variant="secondary">{initialData?.id || ''}</Badge>
-          {initialData?.id && (
-            <button
-              onClick={(e) => {
-                copyToClipboard(e)
-              }}
-              onMouseDown={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-              }}
-              className="ml-1.5 rounded-sm p-0.5 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-gray-200"
-              aria-label="Copy ID to clipboard"
-              title="Copy ID to clipboard">
-              <Copy
-                className={cn(
-                  'h-3.5 w-3.5',
-                  copied ? 'text-green-500' : 'text-gray-400',
-                )}
-              />
-            </button>
-          )}
-        </div>
+        {initialData?.id && <CopyID value={initialData?.id} />}
+
         <div className="flex items-center space-x-2 text-sm">
           <ConnectorBadges
             stage={initialData?.connector?.stage}
