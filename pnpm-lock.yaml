@@ -769,9 +769,6 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
-      '@openint/db':
-        specifier: workspace:*
-        version: link:../../packages/db
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
@@ -784,9 +781,9 @@ importers:
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.5
+      pg:
+        specifier: ^8.13.3
+        version: 8.13.3(pg-native@3.0.1)
     devDependencies:
       '@openint/env':
         specifier: workspace:*
