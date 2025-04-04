@@ -2190,6 +2190,16 @@
                   "client_options": {
                     "type": "object",
                     "properties": {
+                      "view": {
+                        "type": "string",
+                        "enum": [
+                          "add",
+                          "manage"
+                        ],
+                        "title": "Default View to load",
+                        "description": "The default view to show when the magic link is opened. Defaults to \"add\"",
+                        "default": "add"
+                      },
                       "connector_name": {
                         "type": "string",
                         "enum": [
@@ -2197,15 +2207,6 @@
                           "greenhouse"
                         ],
                         "description": "The name of the connector to limit connection to. Default to all otherwise"
-                      },
-                      "tab": {
-                        "type": "string",
-                        "enum": [
-                          "my-connections",
-                          "add-connection"
-                        ],
-                        "title": "Default Tab",
-                        "description": "The default tab to show when the magic link is opened. Defaults to \"my-connections\""
                       },
                       "debug": {
                         "type": "boolean",

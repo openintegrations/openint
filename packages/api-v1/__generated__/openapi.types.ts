@@ -3484,16 +3484,17 @@ export interface operations {
                     /** @description Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client */
                     client_options?: {
                         /**
+                         * Default View to load
+                         * @description The default view to show when the magic link is opened. Defaults to "add"
+                         * @default add
+                         * @enum {string}
+                         */
+                        view?: "add" | "manage";
+                        /**
                          * @description The name of the connector to limit connection to. Default to all otherwise
                          * @enum {string}
                          */
                         connector_name?: "plaid" | "greenhouse";
-                        /**
-                         * Default Tab
-                         * @description The default tab to show when the magic link is opened. Defaults to "my-connections"
-                         * @enum {string}
-                         */
-                        tab?: "my-connections" | "add-connection";
                         /**
                          * Debug
                          * @description Whether to enable debug mode
