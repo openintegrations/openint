@@ -50,6 +50,9 @@ const router = trpc.router({
     }),
 })
 
+// TODO: Refactor test into describe.each for each calling pattern to guarantee 
+// expectation checking
+
 describe('OpenAPI endpoints', () => {
   const handleOasRequest = (req: Request) =>
     createOpenApiFetchHandler({endpoint: '/', req, router, onError})
@@ -252,8 +255,6 @@ describe('TRPC over http', () => {
     expect(parseAPIError(err)).toMatchObject({
       code: 'BAD_REQUEST',
       message: 'Input validation failed',
-      // TODO: Implement custom message similar to
-      // https://github.com/mcampa/trpc-to-openapi/blob/af44cc54d1d719b1bc77d05067cdd4a3b4f882aa/src/adapters/node-http/core.ts#L197-L210
       data: {
         code: 'BAD_REQUEST',
         httpStatus: 400,
@@ -389,21 +390,7 @@ describe('TRPC caller', () => {
       .catch((e) => e)
     expect(err).toBeInstanceOf(TRPCError)
     expect(err.code).toEqual('BAD_REQUEST')
-    expect(err.message).toEqual(
-      JSON.stringify(
-        [
-          {
-            code: 'invalid_type',
-            expected: 'string',
-            received: 'undefined',
-            path: ['code'],
-            message: 'Required',
-          },
-        ],
-        null,
-        2,
-      ),
-    )
+    expect(err.message).toEqual('Input validation failed')
     expect(err.stack).toEqual(expect.any(String))
     const cause = err.cause as ZodError
     expect(cause).toBeInstanceOf(ZodError)
@@ -420,9 +407,7 @@ describe('TRPC caller', () => {
     expect(cause.message).toEqual(JSON.stringify(cause.errors, null, 2))
     expect(parseAPIError(err)).toMatchObject({
       code: 'BAD_REQUEST',
-      // message: 'Input validation failed',
-      // TODO: Implement custom message similar to
-      // https://github.com/mcampa/trpc-to-openapi/blob/af44cc54d1d719b1bc77d05067cdd4a3b4f882aa/src/adapters/node-http/core.ts#L197-L210
+      message: 'Input validation failed',
       data: {
         code: 'BAD_REQUEST',
       },

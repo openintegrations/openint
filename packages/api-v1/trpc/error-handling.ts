@@ -129,19 +129,14 @@ export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
 
   // console.log('errorFormatter', opts)
   // console.log('error', error.message)
-  // TODO: Parse that this is zod json
-  const isInputError = safeJSONParse(error.message) != null
 
   return {
     ...shape,
     ...(zodErr && error.message === 'Output validation failed'
       ? {output_issues: zodErr.errors}
       : {}),
-    ...(isInputError
-      ? {
-          message: 'Input validation failed',
-          issues: zodErr?.errors,
-        }
+    ...(zodErr && error.message === 'Input validation failed'
+      ? {issues: zodErr?.errors}
       : {}),
   }
 }
@@ -162,8 +157,13 @@ export const onError: RouterCallerErrorHandler<unknown> = ({
   // Consider adding input and context to make error even more accurate
   // console.log('onError', {error, path, input, ctx, type})
   // console.log('onError', {error, path})
-
   Object.assign(error, {path})
+
+  // TODO: Better way to check if it's an input error
+  const isInputError = safeJSONParse(error.message) != null
+  if (isInputError) {
+    Object.assign(error, {message: 'Input validation failed'})
+  }
   // if (error instanceof ZodError) {
   //   Object.assign(error, {
   //     issues: error.errors,
