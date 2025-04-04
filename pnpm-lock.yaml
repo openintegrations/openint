@@ -450,15 +450,6 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
 
-  connectors/connector-expensify:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
-
   connectors/connector-facebook:
     dependencies:
       '@openint/cdk':

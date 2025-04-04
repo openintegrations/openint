@@ -98,7 +98,10 @@ const connectorList: Connector[] = [
     .readdirSync(pathJoin(__dirname, '../../connectors'), {
       withFileTypes: true,
     })
-    .filter((r) => r.isDirectory() && r.name !== 'cnext')
+    .filter(
+      (r) =>
+        r.isDirectory() && r.name !== 'cnext' && r.name !== 'all-connectors',
+    )
     .map((d) => {
       const path = pathJoin(__dirname, '../../connectors', d.name)
       const def = fs.existsSync(pathJoin(path, 'def.ts'))
@@ -113,7 +116,7 @@ const connectorList: Connector[] = [
         throw new Error(`Mismatched connector: ${def.name} dir: ${d.name}`)
       }
       if (!def?.name) {
-        console.warn(`Missing def for connector at: ${d}`)
+        console.warn(`Missing def for connector at: ${d.name}`)
         return null
       }
       return {
@@ -131,9 +134,9 @@ const connectorList: Connector[] = [
             ? `@openint/${d.name}/server`
             : undefined,
         },
-      }
+      } satisfies Connector
     })
-    .filter(Boolean),
+    .filter((c): c is NonNullable<typeof c> => !!c),
 
   // Add cnext connectors
   ...fs

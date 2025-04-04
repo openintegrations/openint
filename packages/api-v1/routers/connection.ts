@@ -1,5 +1,4 @@
 import {TRPCError} from '@trpc/server'
-import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
@@ -164,7 +163,7 @@ export const connectionRouter = router({
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input}) => {
-      const connectorNames = Object.keys(defConnectors)
+      const connectorNames = zConnectorName.options
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
