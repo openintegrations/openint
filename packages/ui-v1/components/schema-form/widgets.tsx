@@ -1,4 +1,5 @@
 import type {RegistryWidgetsType, WidgetProps} from '@rjsf/utils'
+import ConnectorScopes from '../ConnectorScopes'
 
 // MARK: - Widgets
 
@@ -18,6 +19,26 @@ export function MultiSelect(_props: WidgetProps<boolean>) {
       <option value="option2">Option 2</option>
       <option value="option3">Option 3</option>
     </select>
+  )
+}
+
+export function ScopesWidget(props: WidgetProps<string[]>) {
+  const {value, onChange, options} = props
+
+  const scopes = value as string[]
+
+  return (
+    <ConnectorScopes
+      scopes={scopes}
+      availableScopes={options?.['availableScopes'] as string[]}
+      editable
+      onAddScope={(newValue) => {
+        onChange([...scopes, newValue])
+      }}
+      onRemoveScope={(scope) => {
+        onChange(scopes.filter((v) => v !== scope))
+      }}
+    />
   )
 }
 

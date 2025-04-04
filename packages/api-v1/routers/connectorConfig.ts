@@ -40,6 +40,8 @@ export function expandConnector(connectorName: string): Core['connector'] {
     })
   }
 
+  const connectorModel = getConnectorModel(connector, {includeSchemas: false})
+
   const logoUrl =
     connector.metadata &&
     'logoUrl' in connector.metadata &&
@@ -51,9 +53,13 @@ export function expandConnector(connectorName: string): Core['connector'] {
         : undefined
 
   return {
-    ...getConnectorModel(connector, {
-      includeSchemas: true,
-    }),
+    // TODO: add more fields?
+    ...connectorModel,
+    name: connectorName,
+    // TODO: add enabled?
+    // enabled: connectorConfig.enabled,
+    // created_at: connectorConfig.created_at,
+    // updated_at: connectorConfig.updated_at,
     logo_url: logoUrl,
   }
 }

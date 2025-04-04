@@ -1,8 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {useState} from 'react'
 import {Skeleton, Switch} from '@openint/shadcn/ui'
-import type {Scope} from './ConnectorScopes'
-import {ConnectorScopes} from './ConnectorScopes'
+import ConnectorScopes from './ConnectorScopes'
 
 const meta: Meta<typeof ConnectorScopes> = {
   component: ConnectorScopes,
@@ -16,20 +15,20 @@ export default meta
 type Story = StoryObj<typeof ConnectorScopes>
 
 // Sample scopes
-const initialScopes: Scope[] = [
-  {id: 'read:users', name: 'read:users'},
-  {id: 'read:documents', name: 'read:documents'},
-  {id: 'read:profiles', name: 'read:profiles'},
-  {id: 'read:settings', name: 'read:settings'},
+const initialScopes: string[] = [
+  'read:users',
+  'read:documents',
+  'read:profiles',
+  'read:settings',
 ]
 
-const availableScopes: Scope[] = [
-  {id: 'write:users', name: 'write:users'},
-  {id: 'write:documents', name: 'write:documents'},
-  {id: 'write:profiles', name: 'write:profiles'},
-  {id: 'write:settings', name: 'write:settings'},
-  {id: 'admin:access', name: 'admin:access'},
-  {id: 'admin:users', name: 'admin:users'},
+const availableScopes: string[] = [
+  'write:users',
+  'write:documents',
+  'write:profiles',
+  'write:settings',
+  'admin:access',
+  'admin:users',
 ]
 
 // Default view (read-only)
@@ -38,24 +37,20 @@ export const Default: Story = {
     scopes: initialScopes,
     editable: false,
   },
-  render: (args) => (
-    <ConnectorScopes {...args}>
-      <ConnectorScopes.List />
-    </ConnectorScopes>
-  ),
+  render: (args) => <ConnectorScopes {...args} />,
 }
 
 // Interactive story with state management
-const EditableExample = () => {
-  const [scopes, setScopes] = useState<Scope[]>([...initialScopes])
+const EditableExample = ({hideCustomInput}: {hideCustomInput?: boolean}) => {
+  const [scopes, setScopes] = useState<string[]>(initialScopes)
 
-  const handleRemoveScope = (scopeToRemove: Scope) => {
-    setScopes(scopes.filter((scope) => scope.id !== scopeToRemove.id))
+  const handleRemoveScope = (scopeToRemove: string) => {
+    setScopes(scopes.filter((scope) => scope !== scopeToRemove))
   }
 
-  const handleAddScope = (scopeToAdd: Scope) => {
+  const handleAddScope = (scopeToAdd: string) => {
     // Check if scope already exists
-    if (!scopes.some((scope) => scope.id === scopeToAdd.id)) {
+    if (!scopes.some((scope) => scope === scopeToAdd)) {
       setScopes([...scopes, scopeToAdd])
     }
   }
@@ -66,29 +61,39 @@ const EditableExample = () => {
       onRemoveScope={handleRemoveScope}
       onAddScope={handleAddScope}
       availableScopes={availableScopes}
-      editable={true}>
-      <ConnectorScopes.AddButton />
-      <ConnectorScopes.List />
-    </ConnectorScopes>
+      editable={true}
+      hideCustomInput={hideCustomInput}></ConnectorScopes>
   )
 }
 
 export const Editable: Story = {
   render: () => <EditableExample />,
 }
+export const EditableWithHideCustomInput: Story = {
+  render: () => <EditableExample hideCustomInput />,
+}
 
 // Constrained width example simulating a sheet
-const ConstrainedWidthExample = () => {
-  const [scopes, setScopes] = useState<Scope[]>([...initialScopes])
+const ConstrainedWidthExample = ({
+  scopeLookup,
+  hideCustomInput,
+}: {
+  scopeLookup?: Record<
+    string,
+    {scope: string; display_name: string; description: string}
+  >
+  hideCustomInput?: boolean
+}) => {
+  const [scopes, setScopes] = useState<string[]>(initialScopes)
   const [enabled, setEnabled] = useState(true)
 
-  const handleRemoveScope = (scopeToRemove: Scope) => {
-    setScopes(scopes.filter((scope) => scope.id !== scopeToRemove.id))
+  const handleRemoveScope = (scopeToRemove: string) => {
+    setScopes(scopes.filter((scope) => scope !== scopeToRemove))
   }
 
-  const handleAddScope = (scopeToAdd: Scope) => {
+  const handleAddScope = (scopeToAdd: string) => {
     // Check if scope already exists
-    if (!scopes.some((scope) => scope.id === scopeToAdd.id)) {
+    if (!scopes.some((scope) => scope === scopeToAdd)) {
       setScopes([...scopes, scopeToAdd])
     }
   }
@@ -172,19 +177,22 @@ const ConstrainedWidthExample = () => {
           Scopes
         </h3>
         {enabled ? (
-          <ConnectorScopes scopes={scopes} editable={false}>
-            <ConnectorScopes.List />
-          </ConnectorScopes>
+          <ConnectorScopes
+            scopes={scopes}
+            editable={false}
+            scopeLookup={scopeLookup}
+            hideCustomInput={hideCustomInput}
+          />
         ) : (
           <ConnectorScopes
             scopes={scopes}
             onRemoveScope={handleRemoveScope}
             onAddScope={handleAddScope}
             availableScopes={availableScopes}
-            editable={true}>
-            <ConnectorScopes.AddButton />
-            <ConnectorScopes.List />
-          </ConnectorScopes>
+            editable={true}
+            scopeLookup={scopeLookup}
+            hideCustomInput={hideCustomInput}
+          />
         )}
       </div>
     </div>
@@ -193,4 +201,61 @@ const ConstrainedWidthExample = () => {
 
 export const ConstrainedWidth: Story = {
   render: () => <ConstrainedWidthExample />,
+}
+
+const scopeLookup = {
+  'read:users': {
+    scope: 'read:users',
+    display_name: 'Read Users',
+    description: 'Access to view user information',
+  },
+  'read:documents': {
+    scope: 'read:documents',
+    display_name: 'Read Documents',
+    description: 'Access to view documents and their metadata',
+  },
+  'read:profiles': {
+    scope: 'read:profiles',
+    display_name: 'Read Profiles',
+    description: 'Access to view user profiles and preferences',
+  },
+  'read:settings': {
+    scope: 'read:settings',
+    display_name: 'Read Settings',
+    description: 'Access to view system and application settings',
+  },
+  'write:users': {
+    scope: 'write:users',
+    display_name: 'Write Users',
+    description: 'Permission to create and modify user information',
+  },
+  'write:documents': {
+    scope: 'write:documents',
+    display_name: 'Write Documents',
+    description: 'Permission to create, update, and delete documents',
+  },
+  'write:profiles': {
+    scope: 'write:profiles',
+    display_name: 'Write Profiles',
+    description: 'Permission to update user profiles and preferences',
+  },
+  'write:settings': {
+    scope: 'write:settings',
+    display_name: 'Write Settings',
+    description: 'Permission to modify system and application settings',
+  },
+  'admin:access': {
+    scope: 'admin:access',
+    display_name: 'Admin Access',
+    description: 'Full administrative access to the system',
+  },
+  'admin:users': {
+    scope: 'admin:users',
+    display_name: 'Admin Users',
+    description: 'Administrative control over user accounts and permissions',
+  },
+}
+
+export const WithScopeLookup: Story = {
+  render: () => <ConstrainedWidthExample scopeLookup={scopeLookup} />,
 }
