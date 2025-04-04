@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "generate:lists": "bun ./_generateConnectorLists.ts"
+    "generate:lists": "bun ./scripts/genConnectorLists.ts",
+    "generate:stories": "bun ./scripts/genConnectorStories.ts"
   },
   "dependencies": {
     "@openint/cnext": "workspace:*",
@@ -47,7 +48,8 @@
     "@openint/connector-wise": "workspace:*",
     "@openint/connector-xero": "workspace:*",
     "@openint/connector-yodlee": "workspace:*",
-    "@openint/connector-zohodesk": "workspace:*"
+    "@openint/connector-zohodesk": "workspace:*",
+    "@openint/util": "workspace:*"
   },
   "devDependencies": {
     "bun": "latest",

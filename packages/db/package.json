@@ -24,6 +24,7 @@
     "postgres": "^3.4.5"
   },
   "devDependencies": {
+    "@openint/all-connectors": "workspace:*",
     "@openint/cdk": "workspace:*",
     "@openint/loopback-link": "workspace:*",
     "@types/json-stable-stringify": "^1.1.0",

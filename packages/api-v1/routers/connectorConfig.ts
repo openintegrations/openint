@@ -1,112 +1,19 @@
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
-import {and, eq, inArray, schema, sql} from '@openint/db'
+import {and, asc, desc, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
-import {z, type Z} from '@openint/util/zod-utils'
-import {core, type Core} from '../models'
-import {getConnectorModel} from '../models/connectorSchemas'
-import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
+import {z} from '@openint/util/zod-utils'
 import {
-  applyPaginationAndOrder,
-  processPaginatedResponse,
-  zListParams,
-  zListResponse,
-} from './utils/pagination'
-import {zConnectorConfigId, zConnectorName} from './utils/types'
-
-const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
-  if (!res.length) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: `Connector config with ID "${id}" not found`,
-    })
-  }
-}
-
-// TODO: Add connector.schemas
-const zExpandOptions = z
-  .enum(['connector', 'enabled_integrations', 'connection_count'])
-  .describe(
-    'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
-  )
-
-export function expandConnector(connectorName: string): Core['connector'] {
-  const connector = defConnectors[connectorName as keyof typeof defConnectors]
-  if (!connector) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: `Connector not found: ${connectorName}`,
-    })
-  }
-
-  const connectorModel = getConnectorModel(connector, {includeSchemas: false})
-
-  const logoUrl =
-    connector.metadata &&
-    'logoUrl' in connector.metadata &&
-    connector.metadata.logoUrl?.startsWith('http')
-      ? connector.metadata.logoUrl
-      : connector.metadata && 'logoUrl' in connector.metadata
-        ? // TODO: replace this with our own custom domain
-          `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/${connector.metadata.logoUrl}`
-        : undefined
-
-  return {
-    // TODO: add more fields?
-    ...connectorModel,
-    name: connectorName,
-    // TODO: add enabled?
-    // enabled: connectorConfig.enabled,
-    // created_at: connectorConfig.created_at,
-    // updated_at: connectorConfig.updated_at,
-    logo_url: logoUrl,
-  }
-}
-
-interface IntegrationConfig {
-  enabled?: boolean
-  scopes?: string | string[]
-  [key: string]: any
-}
-
-export function expandIntegrations(
-  connectorConfig: Core['connector_config'],
-): Record<string, IntegrationConfig> | undefined {
-  if (
-    !connectorConfig ||
-    !connectorConfig.config ||
-    !connectorConfig.config.integrations
-  ) {
-    return undefined
-  }
-
-  const {integrations} = connectorConfig.config
-  const enabledIntegrations = Object.entries(
-    integrations as Record<string, IntegrationConfig>,
-  )
-    .filter(([_, config]) => config && config.enabled === true)
-    .reduce(
-      (acc, [key, config]) => {
-        acc[key] = config
-        return acc
-      },
-      {} as Record<string, IntegrationConfig>,
-    )
-
-  return Object.keys(enabledIntegrations).length > 0
-    ? enabledIntegrations
-    : undefined
-}
-
-const connectorConfigWithRelations = z.intersection(
-  core.connector_config,
-  z.object({
-    connector: core.connector.optional(),
-    integrations: z.record(core.integration).optional(),
-    connection_count: z.number().optional(),
-  }),
-)
+  ConnectorConfig,
+  connectorConfigExtended,
+  core,
+  zConnectorConfigExpandOption,
+} from '../models'
+import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
+import {getConnectorModelByName, zConnectorName} from './connector.models'
+import {zListParams, zListResponse} from './utils/pagination'
+import {zConnectorConfigId} from './utils/types'
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -122,115 +29,76 @@ export const connectorConfigRouter = router({
     .input(
       zListParams
         .extend({
-          expand: z
-            .string()
-            .transform((val) => val.split(','))
-            .refine(
-              (items) =>
-                items.every((item) => zExpandOptions.safeParse(item).success),
-              {
-                message:
-                  'Invalid expand option. Valid options are: connector, enabled_integrations, connection_count',
-              },
-            )
-            .describe(
-              'Comma separated list of fields to optionally expand.\n\nAvailable Options: `connector`, `enabled_integrations`',
-            )
-            .optional(),
-          connector_name: zConnectorName.optional(),
+          expand: z.array(zConnectorConfigExpandOption).optional(),
+          connector_name: zConnectorName
+            .optional()
+            .describe('The name of the connector to filter by'),
         })
         .optional(),
     )
     .output(
-      zListResponse(connectorConfigWithRelations).describe(
+      zListResponse(connectorConfigExtended).describe(
         'The list of connector configurations',
       ),
     )
-    .query(async ({ctx, input}) => {
-      const includeConnectionCount = (input?.expand || []).includes(
-        'connection_count',
-      )
+    .query(async ({ctx, input: {expand, connector_name, ...params} = {}}) => {
+      const includeConnectionCount = expand?.includes('connection_count')
+
       const connectorNames = Object.keys(defConnectors)
-      const {query, limit, offset} = applyPaginationAndOrder(
-        ctx.db
-          .select({
-            connector_config: {
-              ...schema.connector_config,
-              ...(includeConnectionCount
-                ? {
-                    connection_count: sql<number>`(
-                      SELECT COUNT(*)
-                      FROM ${schema.connection}
-                      WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
-                    )`.as('connection_count'),
-                  }
-                : {}),
-            },
-            total: sql`count(*) over ()`,
-          })
-          .from(schema.connector_config)
-          .where(
-            and(
-              input?.connector_name
-                ? eq(
-                    schema.connector_config.connector_name,
-                    input.connector_name,
-                  )
-                : undefined,
-              // excluding data from old connectors that are no longer supported
-              inArray(schema.connector_config.connector_name, connectorNames),
-            ),
+
+      const connectionCountExtra = {
+        connection_count: sql<number>`(
+          SELECT COUNT(*)
+          FROM ${schema.connection}
+          WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
+        )`.as('connection_count'),
+      }
+
+      const items = await ctx.db.query.connector_config.findMany({
+        extras: {
+          total: sql<number>`count(*) over ()`.as('total'),
+          // TODO: Fix typing to make connection_count optional
+          ...((includeConnectionCount &&
+            connectionCountExtra) as typeof connectionCountExtra),
+        },
+        where: and(
+          connector_name
+            ? eq(schema.connector_config.connector_name, connector_name)
+            : undefined,
+          // excluding data from old connectors that are no longer supported
+          eq(
+            schema.connector_config.connector_name,
+            sql`ANY(${sql.param(connectorNames)})`,
           ),
-        schema.connector_config.created_at,
-        input,
-      )
+        ),
+        orderBy: [
+          desc(schema.connector_config.updated_at),
+          asc(schema.connector_config.id),
+        ],
+        limit: params?.limit ?? 50,
+        offset: params?.offset ?? 0,
+      })
 
-      const {items, total} = await processPaginatedResponse(
-        query,
-        'connector_config',
-      )
-      const expandOptions = (input?.expand || []) as Array<
-        Z.infer<typeof zExpandOptions>
-      >
-      // Process items with proper typing
-      const processedItems: Array<
-        Z.infer<typeof connectorConfigWithRelations>
-      > = await Promise.all(
-        items.map(async (ccfg) => {
-          const result = {...ccfg} as Z.infer<
-            typeof connectorConfigWithRelations
-          >
+      const limit = params?.limit ?? 50
+      const offset = params?.offset ?? 0
+      const total = items[0]?.total ?? 0
 
-          if (result.config && Object.keys(result.config).length === 0) {
-            result.config = null
-          }
-
-          // Convert connection_count to number if it exists
-          if (includeConnectionCount && 'connection_count' in result) {
-            result.connection_count = Number(result.connection_count || 0)
-          }
-
-          if (expandOptions.includes('connector')) {
-            const connector = expandConnector(ccfg.connector_name)
-            if (connector) {
-              result.connector = connector
-            }
-          }
-
-          if (expandOptions.includes('enabled_integrations')) {
-            // const filteredIntegrations = expandIntegrations(ccfg)
-            // TODO: fix this
-            // if (filteredIntegrations) {
-            //   result.integrations = filteredIntegrations
-            // }
-          }
-
-          return result
-        }),
-      )
+      // console.log(items)
+      const expandedItems = items.map((item) => {
+        const ccfg: ConnectorConfig = item
+        if (
+          expand?.includes('connector') ||
+          expand?.includes('connector.schemas')
+        ) {
+          ccfg.connector = getConnectorModelByName(item.connector_name, {
+            includeSchemas: expand?.includes('connector.schemas'),
+          })
+        }
+        return ccfg
+      })
 
       return {
-        items: processedItems,
+        items: expandedItems,
         total,
         limit,
         offset,
@@ -265,16 +133,9 @@ export const connectorConfigRouter = router({
           id: makeId('ccfg', connector_name, makeUlid()),
           display_name,
           disabled,
-          config: config ?? {},
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          config,
         })
         .returning()
-
-      // Ensure config is null if it's an empty object
-      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
-        ccfg.config = null
-      }
 
       return ccfg!
     }),
@@ -311,12 +172,12 @@ export const connectorConfigRouter = router({
         .where(eq(schema.connector_config.id, id))
         .returning()
 
-      validateResponse(res, id)
       const [ccfg] = res
-
-      // Ensure config is null if it's an empty object
-      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
-        ccfg.config = null
+      if (!ccfg) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config with ID "${id}" not found`,
+        })
       }
 
       return ccfg!

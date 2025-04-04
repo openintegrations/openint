@@ -85,3 +85,6 @@ const searchParams = await props.searchParams
 - Classname should be combined using the `cn` util from `@openint/shadcn/lib/utils` whenever we create a component
 - Always use with `React.` prefix for things like React.useState and React.useEffect, or whenever referencing built-in hooks.
 - Use Components should reference Core models whwnever possible rather than repeating types. Use consistent mocks from fixtures file
+
+
+- Do not add JSdoc unless explicitly asked for.

@@ -1,7 +1,8 @@
 import {ChevronLeftIcon} from 'lucide-react'
 import Link from 'next/link'
 import {Suspense} from 'react'
-import {connectClientOptions} from '@openint/api-v1/routers/customer.models'
+import {connectClientOptions} from '@openint/api-v1/routers/connect.models'
+import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
 import {asOrgIfCustomer, type Viewer} from '@openint/cdk'
 import {isProduction} from '@openint/env'
 import {Button} from '@openint/shadcn/ui'
@@ -171,7 +172,7 @@ async function AddConnections({
   connector_name,
 }: {
   viewer: Viewer
-  connector_name?: string
+  connector_name?: ConnectorName
 }) {
   // We need to elevate the role to org  to list connector config here
   // Alternative we'd have to modify RLS rules to allow this
@@ -179,7 +180,7 @@ async function AddConnections({
 
   const res = await api.listConnectorConfigs({
     connector_name,
-    expand: 'connector', // TODO: FIXME to use an array instead of a string
+    expand: ['connector.schemas'], // TODO: FIXME to use an array instead of a string
   })
 
   return (

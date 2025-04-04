@@ -6,10 +6,7 @@
   "module": "./index.ts",
   "dependencies": {
     "@openint/cdk": "workspace:*",
-    "@openint/db": "workspace:*",
     "@openint/env": "workspace:*",
-    "@openint/util": "workspace:*",
-    "airtable": "0.11.4"
-  },
-  "devDependencies": {}
+    "@openint/util": "workspace:*"
+  }
 }
