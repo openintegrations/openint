@@ -1,4 +1,5 @@
 import {describe, expect, test} from '@jest/globals'
+import {safeJSONParse} from './json-utils'
 import {getInputData, z, zCoerceBoolean} from './zod-utils'
 
 describe('z.coerce.boolean', () => {
@@ -35,25 +36,18 @@ test('safeParse: extracts input from zod error', () => {
 
   expect(result.success).toBe(false)
   expect(getInputData(result.error)).toEqual(invalidInputs)
-  expect(result.error?.message).toMatchInlineSnapshot(
-    `
-    "{
-      "issues": [
+  expect(safeJSONParse(result.error?.message)).toEqual({
+    issues: [
       {
-        "code": "invalid_type",
-        "expected": "boolean",
-        "received": "string",
-        "path": [
-          0,
-          "foo"
-        ],
-        "message": "Expected boolean, received string"
-      }
+        code: 'invalid_type',
+        expected: 'boolean',
+        received: 'string',
+        path: [0, 'foo'],
+        message: 'Expected boolean, received string',
+      },
     ],
-      "data": [{"foo":"bar"}]
-    }"
-  `,
-  )
+    data: [{foo: 'bar'}],
+  })
 })
 
 test('parse: extracts input from zod error', () => {
