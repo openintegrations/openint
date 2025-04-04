@@ -3,10 +3,21 @@ import Link from 'next/link'
 import {Suspense} from 'react'
 import {connectClientOptions} from '@openint/api-v1/routers/customer.models'
 import {asOrgIfCustomer, type Viewer} from '@openint/cdk'
+import {isProduction} from '@openint/env'
 import {Button} from '@openint/shadcn/ui'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
 import {parsePageProps, type PageProps} from '@/lib-common/next-utils'
-import {currentViewer} from '@/lib-server/auth.server'
+import {
+  currentViewer,
+  currentViewerFromPageProps,
+} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
@@ -22,9 +33,38 @@ function Fallback() {
 }
 
 export default async function Page(
-  pageProps: PageProps<never, {tab?: string; connector_name?: string}>,
+  pageProps: PageProps<never, {view?: string; connector_name?: string}>,
 ) {
-  const {viewer, token} = await currentViewer(pageProps)
+  const {viewer, token} = isProduction
+    ? // in production we only want to take a token parameter
+      await currentViewerFromPageProps(pageProps)
+    : // In dev we can work with Clerk cookies to know the 'viewer'
+      await currentViewer(pageProps)
+
+  if (viewer.role === 'anon') {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle>Authentication Required</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center space-y-4">
+            <p className="text-muted-foreground text-center text-sm">
+              Please use a magic link provided to you to manage your
+              integrations.
+            </p>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+            <Button asChild size="lg">
+              <Link href="https://console.openint.dev">
+                Go to OpenInt Console
+              </Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    )
+  }
 
   const {searchParams} = await parsePageProps(pageProps, {
     searchParams: connectClientOptions,
@@ -82,7 +122,7 @@ export default async function Page(
                   Back to Console
                 </Link>
               </Button>
-              <div className="text-muted-foreground mt-auto flex items-center gap-2 text-sm self-end">
+              <div className="text-muted-foreground mt-auto flex items-center gap-2 self-end text-sm">
                 <span>Powered by</span>
                 <span className="font-semibold">OpenInt</span>
               </div>
@@ -96,10 +136,10 @@ export default async function Page(
             paramKey="tab"
             className="max-w-3xl flex-1 p-4">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="my-connections">My connections</TabsTrigger>
-              <TabsTrigger value="add-connection">Add connection</TabsTrigger>
+              <TabsTrigger value="manage">Manage connections</TabsTrigger>
+              <TabsTrigger value="add">Add connection</TabsTrigger>
             </TabsList>
-            <TabsContent value="my-connections" className="pt-2">
+            <TabsContent value="manage" className="pt-2">
               <Suspense fallback={<Fallback />}>
                 <MyConnectionsClient
                   connector_name={searchParams.connector_name}
@@ -110,7 +150,7 @@ export default async function Page(
                 />
               </Suspense>
             </TabsContent>
-            <TabsContent value="add-connection" className="pt-2">
+            <TabsContent value="add" className="pt-2">
               <Suspense fallback={<Fallback />}>
                 <AddConnections
                   viewer={viewer}
