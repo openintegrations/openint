@@ -25,9 +25,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('list connectors with schemas', async () => {
     const res = await asOrg.listConnectors({expand: ['schemas']})
-    const mergeIndex = res.items.findIndex((c) => c.name === 'merge')
-
-    expect(res.items[mergeIndex]?.schemas?.connector_config).toBeDefined()
+    expect(res.items).toMatchSnapshot()
   })
 
   test('get connector by with invalid name returns error', async () => {
