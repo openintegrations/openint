@@ -203,8 +203,10 @@ export function DisabledField(props: FieldProps<boolean>) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
-        <label htmlFor="disabled" className="text-sm font-medium text-gray-700">
+      <div className="flex items-center">
+        <label
+          htmlFor="disabled"
+          className="w-36 flex-shrink-0 text-sm font-medium text-gray-700">
           Disabled
         </label>
         <Switch
@@ -219,20 +221,20 @@ export function DisabledField(props: FieldProps<boolean>) {
       {initialData?.created_at || initialData?.updated_at ? (
         <div className="flex flex-col space-y-1 text-xs text-gray-500">
           {initialData?.created_at && (
-            <div className="flex items-center justify-between">
-              <span>Created:</span>
+            <div className="flex items-center">
+              <span className="w-36 flex-shrink-0">Created:</span>
               <span>{new Date(initialData.created_at).toLocaleString()}</span>
             </div>
           )}
           {initialData?.updated_at && (
-            <div className="flex items-center justify-between">
-              <span>Updated:</span>
+            <div className="flex items-center">
+              <span className="w-36 flex-shrink-0">Updated:</span>
               <span>{new Date(initialData.updated_at).toLocaleString()}</span>
             </div>
           )}
           {initialData?.connection_count !== undefined && (
-            <div className="flex items-center justify-between">
-              <span>Connections:</span>
+            <div className="flex items-center">
+              <span className="w-36 flex-shrink-0">Connections:</span>
               <span>{initialData.connection_count}</span>
             </div>
           )}

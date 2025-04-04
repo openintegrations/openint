@@ -258,7 +258,7 @@ export function ConnectorConfigList(props: {
             setSelectedCcfg(null)
           }
         }}>
-        <SheetContent side="right" className="min-w-1/3 p-4 pb-0">
+        <SheetContent side="right" className="min-w-1/3 p-8 pb-0">
           {selectedConnector ? (
             <>
               <JSONSchemaForm
