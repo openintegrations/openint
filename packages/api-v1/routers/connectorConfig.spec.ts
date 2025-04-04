@@ -62,14 +62,36 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
+  // TODO: Test this better
+  test('create connector config with default creds', async () => {
+    const res = await asOrg.createConnectorConfig({
+      connector_name: 'quickbooks',
+      config: {oauth: null, envName: 'sandbox'},
+    })
+    expect(res).toEqual({
+      id: expect.any(String),
+      org_id: 'org_222',
+      connector_name: 'quickbooks',
+      created_at: expect.any(String),
+      updated_at: expect.any(String),
+      disabled: false,
+      display_name: null,
+      metadata: null,
+      config: {
+        oauth: null,
+        envName: 'sandbox',
+      },
+    })
+  })
+
   // Add a test for default creds
 
   test('list connector config', async () => {
     const res = await asOrg.listConnectorConfigs()
-    expect(res.items).toHaveLength(1)
+    expect(res.items).toHaveLength(2)
     expect(res.items[0]?.id).toEqual(expect.any(String))
     expect(res.items[0]?.org_id).toEqual('org_222')
-    expect(res.total).toEqual(1)
+    expect(res.total).toEqual(2)
   })
 
   test('list connector config with expanded schemas', async () => {
@@ -85,14 +107,14 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       role: 'org',
       orgId: 'org_222',
     }).listConnectorConfigs.query()
-    expect(res.items).toHaveLength(1)
+    expect(res.items).toHaveLength(2)
     expect(res.items[0]?.id).toEqual(expect.any(String))
     expect(res.items[0]?.org_id).toEqual('org_222')
   })
 
   test('user has access to org connector config', async () => {
     const res = await asUser.listConnectorConfigs()
-    expect(res.items).toHaveLength(1)
+    expect(res.items).toHaveLength(2)
     expect(res.items[0]?.id).toEqual(expect.any(String))
     expect(res.items[0]?.org_id).toEqual('org_222')
   })
