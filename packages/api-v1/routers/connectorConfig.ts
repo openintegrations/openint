@@ -1,10 +1,14 @@
-import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, asc, desc, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {ConnectorConfig, core, type Core} from '../models'
+import {TRPCError} from '@trpc/server'
+import {
+  ConnectorConfig,
+  connectorConfigExtended,
+  core
+} from '../models'
 import {
   getConnectorModelByName,
   zConnectorName,
@@ -13,17 +17,7 @@ import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {zListParams, zListResponse} from './utils/pagination'
 import {zConnectorConfigId} from './utils/types'
 
-const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
-  if (!res.length) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: `Connector config with ID "${id}" not found`,
-    })
-  }
-}
-
-// TODO: Add connector.schemas
-const zExpandOptions = z
+const zExpand = z
   .enum([
     'connector',
     'connector.schemas',
@@ -34,50 +28,6 @@ const zExpandOptions = z
   .describe(
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
   )
-
-interface IntegrationConfig {
-  enabled?: boolean
-  scopes?: string | string[]
-  [key: string]: any
-}
-
-export function expandIntegrations(
-  connectorConfig: Core['connector_config'],
-): Record<string, IntegrationConfig> | undefined {
-  if (
-    !connectorConfig ||
-    !connectorConfig.config ||
-    !connectorConfig.config.integrations
-  ) {
-    return undefined
-  }
-
-  const {integrations} = connectorConfig.config
-  const enabledIntegrations = Object.entries(
-    integrations as Record<string, IntegrationConfig>,
-  )
-    .filter(([_, config]) => config && config.enabled === true)
-    .reduce(
-      (acc, [key, config]) => {
-        acc[key] = config
-        return acc
-      },
-      {} as Record<string, IntegrationConfig>,
-    )
-
-  return Object.keys(enabledIntegrations).length > 0
-    ? enabledIntegrations
-    : undefined
-}
-
-const connectorConfigWithRelations = z.intersection(
-  core.connector_config,
-  z.object({
-    connector: core.connector.optional(),
-    integrations: z.record(core.integration).optional(),
-    connection_count: z.number().optional(),
-  }),
-)
 
 export const connectorConfigRouter = router({
   listConnectorConfigs: authenticatedProcedure
@@ -93,7 +43,7 @@ export const connectorConfigRouter = router({
     .input(
       zListParams
         .extend({
-          expand: z.array(zExpandOptions).optional(),
+          expand: z.array(zExpand).optional(),
           connector_name: zConnectorName
             .optional()
             .describe('The name of the connector to filter by'),
@@ -101,7 +51,7 @@ export const connectorConfigRouter = router({
         .optional(),
     )
     .output(
-      zListResponse(connectorConfigWithRelations).describe(
+      zListResponse(connectorConfigExtended).describe(
         'The list of connector configurations',
       ),
     )
@@ -197,16 +147,9 @@ export const connectorConfigRouter = router({
           id: makeId('ccfg', connector_name, makeUlid()),
           display_name,
           disabled,
-          config: config ?? {},
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          config,
         })
         .returning()
-
-      // Ensure config is null if it's an empty object
-      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
-        ccfg.config = null
-      }
 
       return ccfg!
     }),
@@ -243,12 +186,12 @@ export const connectorConfigRouter = router({
         .where(eq(schema.connector_config.id, id))
         .returning()
 
-      validateResponse(res, id)
       const [ccfg] = res
-
-      // Ensure config is null if it's an empty object
-      if (ccfg && ccfg.config && Object.keys(ccfg.config).length === 0) {
-        ccfg.config = null
+      if (!ccfg) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config with ID "${id}" not found`,
+        })
       }
 
       return ccfg!

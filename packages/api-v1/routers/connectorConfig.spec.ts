@@ -38,7 +38,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   // Tests linearly depend on each other for performance and simplicty
 
-  test.only('create connector config', async () => {
+  test('create connector config', async () => {
     const res = await asOrg.createConnectorConfig({
       connector_name: 'quickbooks',
       config: {
@@ -61,7 +61,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
-  test.only('list connector config', async () => {
+  test('list connector config', async () => {
     const res = await asOrg.listConnectorConfigs()
     expect(res.items).toHaveLength(1)
     expect(res.items[0]?.id).toEqual(expect.any(String))
@@ -69,7 +69,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(res.total).toEqual(1)
   })
 
-  test.only('list connector config with expanded schemas', async () => {
+  test('list connector config with expanded schemas', async () => {
     const res2 = await asOrg.listConnectorConfigs({
       expand: ['connector.schemas'],
     })

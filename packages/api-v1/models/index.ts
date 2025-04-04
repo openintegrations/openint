@@ -1,6 +1,6 @@
+import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import {schema} from '@openint/db'
 import {z, type Z} from '@openint/util/zod-utils'
-import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import type {NonEmptyArray} from './connectorSchemas'
 import {connectorSchemas, zConnector} from './connectorSchemas'
 
@@ -125,15 +125,23 @@ export type Core = {
 
 // MARK: - Connector Configs
 
-type ConnectorConfigExtended = {
-  connector: Core['connector']
-  integrations: Record<string, Core['integration']>
-  connection_count: number
-}
+export const connectorConfigExtensions = z.object({
+  connector: core.connector.optional(),
+  integrations: z.record(core.integration).optional(),
+  connection_count: z.number().optional(),
+})
 
+type ConnectorConfigExtensions = Z.infer<typeof connectorConfigExtensions>
+
+export const connectorConfigExtended = z.intersection(
+  core.connector_config,
+  connectorConfigExtensions,
+)
+
+// TODO: Think about this type a bit more...
 export type ConnectorConfig<
-  T extends keyof ConnectorConfigExtended = keyof ConnectorConfigExtended,
-> = Core['connector_config'] & Partial<Pick<ConnectorConfigExtended, T>>
+  T extends keyof ConnectorConfigExtensions = keyof ConnectorConfigExtensions,
+> = Core['connector_config'] & Partial<Pick<ConnectorConfigExtensions, T>>
 
 // MARK: - Connectors
 
