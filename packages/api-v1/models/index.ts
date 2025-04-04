@@ -4,6 +4,12 @@ import {z, type Z} from '@openint/util/zod-utils'
 import type {NonEmptyArray} from './connectorSchemas'
 import {connectorSchemas, zConnector} from './connectorSchemas'
 
+const zMetadata = z.record(z.string(), z.unknown()).describe(`
+  JSON object can can be used to associate arbitrary metadata to
+  avoid needing a separate 1-1 table just for simple key values in your application.
+  During updates this object will be shallowly merged
+`)
+
 const event = createSelectSchema(schema.event).openapi({
   ref: 'core.event',
 })
@@ -59,7 +65,7 @@ export const core = {
           connector_config_id: z.string().nullable(),
           customer_id: z.string(),
           integration_id: z.string().nullable(),
-          metadata: z.record(z.string(), z.any()).nullable(),
+          metadata: zMetadata.nullable(),
         })
         .describe('Connection Base'),
       zConnectionSettings,
@@ -73,6 +79,7 @@ export const core = {
           org_id: z.string(),
           display_name: z.string().nullable(),
           disabled: z.boolean().nullable(),
+          metadata: zMetadata.nullable(),
         })
         .describe('Connector Config Base'),
       z

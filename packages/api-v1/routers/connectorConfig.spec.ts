@@ -54,12 +54,15 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       updated_at: expect.any(String),
       disabled: false,
       display_name: null,
+      metadata: null,
       config: {
         oauth: {client_id: 'client_222', client_secret: 'xxx'},
         envName: 'sandbox',
       },
     })
   })
+
+  // Add a test for default creds
 
   test('list connector config', async () => {
     const res = await asOrg.listConnectorConfigs()
