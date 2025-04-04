@@ -243,9 +243,13 @@ export function AddConnectionInner({
     // TODO: handle me, for thigns like oauth connectors
     // console.warn(`Unhandled connector: ${name}`)
     // throw new Error(`Unhandled connector: ${name}`)
-    Component = makeManualConnectorClientComponent(
-      connectorConfig.connector!.schemas!.connection_settings!,
-    )
+    const settingsJsonSchema =
+      connectorConfig.connector?.schemas?.connection_settings
+    if (settingsJsonSchema) {
+      Component = makeManualConnectorClientComponent(settingsJsonSchema)
+    } else {
+      console.warn(`No Component for connector: ${name}`)
+    }
   }
 
   return (

@@ -40,7 +40,7 @@ export function expandConnector(connectorName: string): Core['connector'] {
     })
   }
 
-  const connectorModel = getConnectorModel(connector, {includeSchemas: false})
+  const connectorModel = getConnectorModel(connector, {includeSchemas: true})
 
   const logoUrl =
     connector.metadata &&
