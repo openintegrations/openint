@@ -112,6 +112,10 @@ const connectorList: Connector[] = [
       if (def && `connector-${def.name}` !== d.name) {
         throw new Error(`Mismatched connector: ${def.name} dir: ${d.name}`)
       }
+      if (!def?.name) {
+        console.warn(`Missing def for connector at: ${d}`)
+        return null
+      }
       return {
         name: def?.name,
         dirName: d.name,
@@ -128,7 +132,8 @@ const connectorList: Connector[] = [
             : undefined,
         },
       }
-    }),
+    })
+    .filter(Boolean),
 
   // Add cnext connectors
   ...fs
@@ -169,9 +174,11 @@ async function main() {
   await generateCnextIndex()
 
   await writePretty(
-    'meta.js',
+    'meta.ts',
     `
-  module.exports = ${JSON.stringify(connectorList)}
+  export default ${JSON.stringify(
+    Object.fromEntries(connectorList.map((c) => [c.name, c])),
+  )}
   `,
   )
 
