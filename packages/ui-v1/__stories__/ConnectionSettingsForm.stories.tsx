@@ -1,455 +1,252 @@
 // generated file. Do not modify by hand
 
 import type {Meta, StoryObj} from '@storybook/react'
+import type {ConnectorName} from '@openint/all-connectors'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {Card} from '@openint/shadcn/ui'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm} from '../components/schema-form/JSONSchemaForm'
 
-const meta: Meta<typeof JSONSchemaForm> = {
-  title: 'All Connectors/ConnectionSettingsForm',
-  component: JSONSchemaForm,
+function FormWrapper(props: {name: ConnectorName}) {
+  const schemas = defConnectors[props.name].schemas
+  if (!('connectionSettings' in schemas)) {
+    throw new Error(
+      'Connector ' + props.name + ' does not have a connectionSettings',
+    )
+  }
+
+  return (
+    <Card className="w-md p-4">
+      <h1 className="text-lg font-bold">{props.name} connectionSettings</h1>
+      <hr />
+      <JSONSchemaForm
+        jsonSchema={zodToOas31Schema(schemas.connectionSettings)}
+      />
+    </Card>
+  )
+}
+
+const meta: Meta<typeof FormWrapper> = {
+  title: 'All Connectors/connectionSettings',
+  component: FormWrapper,
   parameters: {layout: 'centered'},
-  decorators: [
-    (Story) => (
-      <Card className="max-w-lg p-4">
-        <Story />
-      </Card>
-    ),
-  ],
 }
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const aircallConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['aircall'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'aircall'},
 }
 
 export const airtableConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['airtable'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'airtable'},
 }
 
 export const apolloConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['apollo'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'apollo'},
 }
 
 export const brexConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['brex'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'brex'},
 }
 
 export const codaConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['coda'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'coda'},
 }
 
 export const confluenceConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['confluence'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'confluence'},
 }
 
 export const discordConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['discord'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'discord'},
 }
 
 export const facebookConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['facebook'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'facebook'},
 }
 
 export const finchConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['finch'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'finch'},
 }
 
 export const firebaseConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['firebase'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'firebase'},
 }
 
 export const foreceiptConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['foreceipt'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'foreceipt'},
 }
 
 export const githubConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['github'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'github'},
 }
 
 export const gongConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['gong'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'gong'},
 }
 
 export const googlecalendarConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['googlecalendar'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'googlecalendar'},
 }
 
 export const googledocsConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['googledocs'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'googledocs'},
 }
 
 export const googledriveConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['googledrive'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'googledrive'},
 }
 
 export const googlemailConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['googlemail'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'googlemail'},
 }
 
 export const googlesheetConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['googlesheet'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'googlesheet'},
 }
 
 export const greenhouseConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['greenhouse'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'greenhouse'},
 }
 
 export const hubspotConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['hubspot'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'hubspot'},
 }
 
 export const instagramConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['instagram'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'instagram'},
 }
 
 export const intercomConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['intercom'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'intercom'},
 }
 
 export const jiraConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['jira'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'jira'},
 }
 
 export const kustomerConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['kustomer'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'kustomer'},
 }
 
 export const leverConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['lever'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'lever'},
 }
 
 export const linearConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['linear'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'linear'},
 }
 
 export const linkedinConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['linkedin'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'linkedin'},
 }
 
 export const mergeConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['merge'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'merge'},
 }
 
 export const microsoftConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['microsoft'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'microsoft'},
 }
 
 export const notionConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['notion'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'notion'},
 }
 
 export const onebrickConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['onebrick'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'onebrick'},
 }
 
 export const outreachConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['outreach'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'outreach'},
 }
 
 export const pipedriveConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['pipedrive'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'pipedrive'},
 }
 
 export const plaidConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['plaid'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'plaid'},
 }
 
 export const postgresConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['postgres'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'postgres'},
 }
 
 export const quickbooksConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['quickbooks'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'quickbooks'},
 }
 
 export const rampConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['ramp'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'ramp'},
 }
 
 export const redditConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['reddit'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'reddit'},
 }
 
 export const salesforceConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['salesforce'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'salesforce'},
 }
 
 export const salesloftConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['salesloft'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'salesloft'},
 }
 
 export const saltedgeConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['saltedge'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'saltedge'},
 }
 
 export const sharepointonlineConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['sharepointonline'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'sharepointonline'},
 }
 
 export const slackConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['slack'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'slack'},
 }
 
 export const splitwiseConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['splitwise'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'splitwise'},
 }
 
 export const stripeConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['stripe'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'stripe'},
 }
 
 export const tellerConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['teller'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'teller'},
 }
 
 export const togglConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['toggl'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'toggl'},
 }
 
 export const twentyConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['twenty'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'twenty'},
 }
 
 export const twitterConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['twitter'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'twitter'},
 }
 
 export const venmoConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['venmo'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'venmo'},
 }
 
 export const wiseConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['wise'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'wise'},
 }
 
 export const xeroConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['xero'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'xero'},
 }
 
 export const yodleeConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['yodlee'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'yodlee'},
 }
 
 export const zohodeskConnectionSettings: Story = {
-  args: {
-    jsonSchema: zodToOas31Schema(
-      defConnectors['zohodesk'].schemas.connectionSettings,
-    ),
-  },
+  args: {name: 'zohodesk'},
 }

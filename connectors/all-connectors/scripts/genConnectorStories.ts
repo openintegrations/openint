@@ -4,22 +4,33 @@ import {writePretty} from './writePretty'
 
 const templateMeta = `
 import type {Meta, StoryObj} from '@storybook/react'
+import type {ConnectorName} from '@openint/all-connectors'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
+import {Card} from '@openint/shadcn/ui'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm} from '../components/schema-form/JSONSchemaForm'
-import {Card} from '@openint/shadcn/ui'
 
-const meta: Meta<typeof JSONSchemaForm> = {
-  title: 'All Connectors/$filename',
-  component: JSONSchemaForm,
+function FormWrapper(props: {name: ConnectorName}) {
+  const schemas = defConnectors[props.name].schemas
+  if (!('$key' in schemas)) {
+    throw new Error(
+      'Connector ' + props.name + ' does not have a $key',
+    )
+  }
+
+  return (
+    <Card className="w-md p-4">
+      <h1 className="text-lg font-bold">{props.name} $key</h1>
+      <hr />
+      <JSONSchemaForm jsonSchema={zodToOas31Schema(schemas.$key)} />
+    </Card>
+  )
+}
+
+const meta: Meta<typeof FormWrapper> = {
+  title: 'All Connectors/$key',
+  component: FormWrapper,
   parameters: {layout: 'centered'},
-  decorators: [
-    (Story) => (
-      <Card className="max-w-lg p-4">
-        <Story />
-      </Card>
-    ),
-  ],
 }
 
 export default meta
@@ -32,9 +43,7 @@ async function main() {
     .map(
       ([name]) => `
     export const ${name}ConnectorConfig: Story = {
-      args: {
-        jsonSchema: zodToOas31Schema(defConnectors['${name}'].schemas.connectorConfig),
-      },
+      args: {name: '${name}'},
     }
   `,
     )
@@ -44,9 +53,7 @@ async function main() {
     .map(
       ([name]) => `
     export const ${name}ConnectionSettings: Story = {
-      args: {
-        jsonSchema: zodToOas31Schema(defConnectors['${name}'].schemas.connectionSettings),
-      },
+      args: {name: '${name}'},
     }
   `,
     )
@@ -55,7 +62,7 @@ async function main() {
 
   await writePretty(
     'ConnectorConfigForm.stories.tsx',
-    templateMeta.replace('$filename', 'ConnectorConfigForm') +
+    templateMeta.replaceAll('$key', 'connectorConfig') +
       '\n' +
       connectorConfigStories.join('\n'),
     outputPath,
@@ -63,7 +70,7 @@ async function main() {
 
   await writePretty(
     'ConnectionSettingsForm.stories.tsx',
-    templateMeta.replace('$filename', 'ConnectionSettingsForm') +
+    templateMeta.replaceAll('$key', 'connectionSettings') +
       '\n' +
       connectionSettingsStories.join('\n'),
     outputPath,
