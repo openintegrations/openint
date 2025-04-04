@@ -181,31 +181,44 @@ async function main() {
     const list = connectorList.filter(
       (int) => !!int.imports[entry as keyof typeof int.imports],
     )
-    await writePretty(
-      `connectors.${entry}.ts`,
-      `${list
-        .map((int) => {
-          // Check if this is a cnext connector
-          const isCnext = int.dirName.startsWith('cnext-')
-          if (isCnext) {
-            const importPathSelector =
-              int.importPath?.[entry as keyof typeof int.importPath] ||
-              `${int.varName}_${entry}`
-            return `import {${importPathSelector} as ${int.varName}} from '${
+    if (entry === 'client') {
+      await writePretty(
+        `connectors.${entry}.ts`,
+        `export const clientConnectors = {${list
+          .sort((a, b) => a.name?.localeCompare(b.name || '') || 0)
+          .map(
+            ({name}) =>
+              `'${name}': () => import('@openint/connector-${name}/client'),`,
+          )
+          .join('\n')}}`,
+      )
+    } else {
+      await writePretty(
+        `connectors.${entry}.ts`,
+        `${list
+          .map((int) => {
+            // Check if this is a cnext connector
+            const isCnext = int.dirName.startsWith('cnext-')
+            if (isCnext) {
+              const importPathSelector =
+                int.importPath?.[entry as keyof typeof int.importPath] ||
+                `${int.varName}_${entry}`
+              return `import {${importPathSelector} as ${int.varName}} from '${
+                int.imports[entry as keyof typeof int.imports]
+              }'`
+            }
+            return `import {default as ${int.varName}} from '${
               int.imports[entry as keyof typeof int.imports]
             }'`
-          }
-          return `import {default as ${int.varName}} from '${
-            int.imports[entry as keyof typeof int.imports]
-          }'`
-        })
-        .join('\n')}
-    export const ${entry}Connectors = {${list
-      .sort((a, b) => a.name?.localeCompare(b.name || '') || 0)
-      .map(({name, varName}) => `'${name}': ${varName},`)
-      .join('\n')}}
-  `,
-    )
+          })
+          .join('\n')}
+      export const ${entry}Connectors = {${list
+        .sort((a, b) => a.name?.localeCompare(b.name || '') || 0)
+        .map(({name, varName}) => `'${name}': ${varName},`)
+        .join('\n')}}
+    `,
+      )
+    }
   }
 
   // const mergedlist = connectorList.filter((int) =>

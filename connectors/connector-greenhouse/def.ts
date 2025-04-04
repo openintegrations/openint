@@ -13,8 +13,10 @@ export const GREENHOUSE_ENTITY_NAMES = [
 export const greenhouseSchema = {
   name: z.literal('greenhouse'),
   connectionSettings: z.object({apiKey: z.string()}),
+  // TODO: remove these boilerplates
   preConnectInput: z.unknown(),
   connectInput: z.unknown(),
+  connectOutput: z.unknown(),
 } satisfies ConnectorSchemas
 
 export const greenhouseHelpers = connHelpers(greenhouseSchema)

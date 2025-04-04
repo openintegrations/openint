@@ -1,5 +1,6 @@
 import {zCustomerId} from '@openint/cdk'
 import {z, zCoerceBoolean} from '@openint/util/zod-utils'
+import {zConnectorName} from './utils/types'
 
 export const connectClientOptions = z
   .object({
@@ -14,8 +15,7 @@ export const connectClientOptions = z
       .default('add'),
     // NOTE: @openint-bot, shouldn't this be a string array similar to our expand one?
     // then support filtering like https://coda.io/d/_d6fsw71RNUB/Implementing-a-native-UI-for-Connect-via-Core-APIs-and-Deep-Link_susYw00i
-    connector_name: z
-      .enum(['plaid', 'greenhouse'])
+    connector_name: zConnectorName
       .optional()
       .describe(
         'The name of the connector to limit connection to. Default to all otherwise',

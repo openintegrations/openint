@@ -33,7 +33,7 @@ export const schemaKeyToSnakeCase = {
   connectOutput: 'connect_output',
 } as const satisfies Record<SchemaKey, string>
 
-type SchemaKeySnakecased = (typeof schemaKeyToSnakeCase)[SchemaKey]
+export type SchemaKeySnakecased = (typeof schemaKeyToSnakeCase)[SchemaKey]
 
 // Maybe this belongs in the all-connectors package?
 /* schemaKey -> Array<{$schemaKey: schema}>  */

@@ -1,9 +1,10 @@
+import {ChevronLeftIcon} from 'lucide-react'
 import Link from 'next/link'
 import {Suspense} from 'react'
 import {connectClientOptions} from '@openint/api-v1/routers/customer.models'
 import {asOrgIfCustomer, type Viewer} from '@openint/cdk'
 import {isProduction} from '@openint/env'
-import {Button} from '@openint/shadcn/ui/button'
+import {Button} from '@openint/shadcn/ui'
 import {
   Card,
   CardContent,
@@ -78,35 +79,62 @@ export default async function Page(
   const api = createAPICaller(viewer)
 
   return (
-    <div className="p-4">
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
+    <ClientApp token={token!}>
+      <GlobalCommandBarProvider>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
           :root {
             ${Object.entries(themeVariables)
               .map(([key, value]) => `${key}: ${value};`)
               .join('\n')}
           }
         `,
-        }}
-      />
-      {searchParams.debug && (
-        <pre>
-          {JSON.stringify(
-            {
-              viewer,
-              searchParams,
-            },
-            null,
-            2,
-          )}
-        </pre>
-      )}
-      <ClientApp token={token!}>
-        <GlobalCommandBarProvider>
-          {/* <TabsClient defaultValue={(await props.searchParams).tab ?? 'my-connections'}> */}
+          }}
+        />
+        {searchParams.debug && (
+          <pre>
+            {JSON.stringify(
+              {
+                viewer,
+                searchParams,
+              },
+              null,
+              2,
+            )}
+          </pre>
+        )}
+        <div className="flex h-screen w-full">
+          {/* Left Banner - Hidden on mobile, shown on md+ screens */}
+          <div className="bg-primary/10 hidden md:flex md:w-[320px] lg:w-[550px]">
+            <div className="flex flex-col items-start p-8">
+              {/* TODO: Add organization logo here */}
+              <div className="h-48" />
+              <h1 className="mb-4 text-2xl font-bold">Connect Your Services</h1>
+              <p className="text-muted-foreground">
+                Integrate your favorite tools and services with our platform.
+                Manage all your connections in one place.
+              </p>
+              {/* Add back butt */}
+              <Button asChild variant="ghost" className="mt-8">
+                <Link href="/console" className="flex items-center gap-2">
+                  <ChevronLeftIcon className="h-4 w-4" />
+                  Back to Console
+                </Link>
+              </Button>
+              <div className="text-muted-foreground mt-auto flex items-center gap-2 self-end text-sm">
+                <span>Powered by</span>
+                <span className="font-semibold">OpenInt</span>
+              </div>
+            </div>
+          </div>
 
-          <TabsClient defaultValue="add" paramKey="view">
+          {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
+
+          <TabsClient
+            defaultValue="my-connections"
+            paramKey="tab"
+            className="max-w-3xl flex-1 p-4">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="manage">Manage connections</TabsTrigger>
               <TabsTrigger value="add">Add connection</TabsTrigger>
@@ -114,7 +142,6 @@ export default async function Page(
             <TabsContent value="manage" className="pt-2">
               <Suspense fallback={<Fallback />}>
                 <MyConnectionsClient
-                  // TODO: How to avoid the duplicate construction of input parameters?
                   connector_name={searchParams.connector_name}
                   initialData={api.listConnections({
                     connector_name: searchParams.connector_name,
@@ -132,9 +159,9 @@ export default async function Page(
               </Suspense>
             </TabsContent>
           </TabsClient>
-        </GlobalCommandBarProvider>
-      </ClientApp>
-    </div>
+        </div>
+      </GlobalCommandBarProvider>
+    </ClientApp>
   )
 }
 
