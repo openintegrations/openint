@@ -19,7 +19,10 @@ function FormWrapper(props: {name: ConnectorName}) {
     <Card className="w-md p-4">
       <h1 className="text-lg font-bold">{props.name} connectorConfig</h1>
       <hr />
-      <JSONSchemaForm jsonSchema={zodToOas31Schema(schemas.connectorConfig)} />
+      <JSONSchemaForm
+        debugMode
+        jsonSchema={zodToOas31Schema(schemas.connectorConfig)}
+      />
     </Card>
   )
 }
