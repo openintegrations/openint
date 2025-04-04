@@ -171,6 +171,7 @@ paths:
               - linear
               - linkedin
               - lunchmoney
+              - mercury
               - merge
               - microsoft
               - moota
@@ -179,6 +180,7 @@ paths:
               - outreach
               - pipedrive
               - plaid
+              - postgres
               - quickbooks
               - ramp
               - reddit
@@ -193,6 +195,7 @@ paths:
               - toggl
               - twenty
               - twitter
+              - venmo
               - wise
               - xero
               - yodlee
@@ -867,6 +870,7 @@ paths:
               - linear
               - linkedin
               - lunchmoney
+              - mercury
               - merge
               - microsoft
               - moota
@@ -875,6 +879,7 @@ paths:
               - outreach
               - pipedrive
               - plaid
+              - postgres
               - quickbooks
               - ramp
               - reddit
@@ -889,6 +894,7 @@ paths:
               - toggl
               - twenty
               - twitter
+              - venmo
               - wise
               - xero
               - yodlee
@@ -1555,8 +1561,64 @@ paths:
                     connector_name:
                       type: string
                       enum:
-                        - plaid
+                        - aircall
+                        - airtable
+                        - apollo
+                        - brex
+                        - coda
+                        - confluence
+                        - discord
+                        - facebook
+                        - finch
+                        - firebase
+                        - foreceipt
+                        - github
+                        - gong
+                        - googlecalendar
+                        - googledocs
+                        - googledrive
+                        - googlemail
+                        - googlesheet
                         - greenhouse
+                        - heron
+                        - hubspot
+                        - instagram
+                        - intercom
+                        - jira
+                        - kustomer
+                        - lever
+                        - linear
+                        - linkedin
+                        - lunchmoney
+                        - mercury
+                        - merge
+                        - microsoft
+                        - moota
+                        - notion
+                        - onebrick
+                        - outreach
+                        - pipedrive
+                        - plaid
+                        - postgres
+                        - quickbooks
+                        - ramp
+                        - reddit
+                        - salesforce
+                        - salesloft
+                        - saltedge
+                        - sharepointonline
+                        - slack
+                        - splitwise
+                        - stripe
+                        - teller
+                        - toggl
+                        - twenty
+                        - twitter
+                        - venmo
+                        - wise
+                        - xero
+                        - yodlee
+                        - zohodesk
                       description: The name of the connector to limit connection to. Default to all otherwise
                     debug:
                       type: boolean
@@ -1840,6 +1902,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -2159,6 +2222,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -2254,6 +2318,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -2690,6 +2755,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -2915,6 +2981,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -3010,6 +3077,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -3105,6 +3173,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -3200,6 +3269,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -3295,6 +3365,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -3448,6 +3519,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -4199,6 +4271,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -4294,6 +4367,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -4686,6 +4760,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -5267,6 +5342,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -5543,6 +5619,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -5802,6 +5879,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -5897,6 +5975,7 @@ components:
                   items:
                     type: string
               description: Base oauth configuration for the connector
+              ui:field: OAuthField
           required:
             - oauth
       required:
@@ -6960,6 +7039,7 @@ components:
             - alpha
             - beta
             - ga
+            - hidden
         platforms:
           type: array
           items:
@@ -6981,6 +7061,23 @@ components:
             connect_input: {}
             connect_output: {}
           additionalProperties: false
+        openint_scopes:
+          type: array
+          items:
+            type: string
+        scopes:
+          type: array
+          items:
+            type: object
+            properties:
+              scope:
+                type: string
+              display_name:
+                type: string
+              description:
+                type: string
+            required:
+              - scope
       required:
         - name
       title: Connector
