@@ -5,8 +5,10 @@ import {
   TRPC_ERROR_CODES_BY_NUMBER,
 } from '@trpc/server/rpc'
 import {
+  ErrorFormatter,
   JSONRPC2_TO_HTTP_CODE,
-  RouterCallerErrorHandler,
+  type DefaultErrorShape,
+  type RouterCallerErrorHandler,
 } from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {z, ZodError, type Z} from '@openint/util/zod-utils'
@@ -29,7 +31,7 @@ export const zHTTPStatus = z
   .refine((n) => n >= 100 && n < 600, 'Invalid HTTP status')
   .openapi({ref: 'HTTPStatus'})
 
-const zIssue = z
+export const zZodIssue = z
   .object({
     code: z.string().describe('Zod issue code'),
     expected: z.string().optional().describe('Expected type'),
@@ -52,12 +54,14 @@ export const zAPIError = z
       })
       .optional(),
     /** Input issues */
-    issues: z.array(zIssue).optional(),
-    output_issues: z.array(zIssue).optional(),
+    issues: z.array(zZodIssue).optional(),
+    output_issues: z.array(zZodIssue).optional(),
   })
   .openapi({ref: 'APIError'})
 
 export type APIError = Z.infer<typeof zAPIError>
+
+// MARK: - Caller / client side
 
 export function parseAPIError(error: unknown): APIError | undefined {
   // Handle TRPCError (from caller)
@@ -105,6 +109,41 @@ export function parseAPIError(error: unknown): APIError | undefined {
   }
 
   return zAPIError.safeParse(error).data
+}
+
+// MARK: - Router / server side
+
+type ZodIssue = Z.infer<typeof zZodIssue>
+export interface ErrorShape extends DefaultErrorShape {
+  issues?: ZodIssue[]
+  output_issues?: ZodIssue[]
+}
+
+// Not quite default error shape, but we can live with it for now
+export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
+  opts,
+) => {
+  const {shape, error} = opts
+  const trpcErr = error instanceof TRPCError ? error : undefined
+  const zodErr = trpcErr?.cause instanceof ZodError ? trpcErr.cause : undefined
+
+  // console.log('errorFormatter', opts)
+  // console.log('error', error.message)
+  // TODO: Parse that this is zod json
+  const isInputError = safeJSONParse(error.message) != null
+
+  return {
+    ...shape,
+    ...(zodErr && error.message === 'Output validation failed'
+      ? {output_issues: zodErr.errors}
+      : {}),
+    ...(isInputError
+      ? {
+          message: 'Input validation failed',
+          issues: zodErr?.errors,
+        }
+      : {}),
+  }
 }
 
 /**

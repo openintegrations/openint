@@ -3,36 +3,10 @@ import {initTRPC, TRPCError} from '@trpc/server'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {createOpenApiFetchHandler, type OpenApiMeta} from 'trpc-to-openapi'
-import {safeJSONParse} from '@openint/util/json-utils'
 import {z, ZodError} from '@openint/util/zod-utils'
-import {onError, parseAPIError} from './error-handling'
+import {errorFormatter, onError, parseAPIError} from './error-handling'
 
-const trpc = initTRPC.meta<OpenApiMeta>().create({
-  errorFormatter: (opts) => {
-    const {shape, error} = opts
-    const trpcErr = error instanceof TRPCError ? error : undefined
-    const zodErr =
-      trpcErr?.cause instanceof ZodError ? trpcErr.cause : undefined
-
-    // console.log('errorFormatter', opts)
-    // console.log('error', error.message)
-    // TODO: Parse that this is zod json
-    const isInputError = safeJSONParse(error.message) != null
-
-    return {
-      ...shape,
-      ...(zodErr && error.message === 'Output validation failed'
-        ? {output_issues: zodErr.errors}
-        : {}),
-      ...(isInputError
-        ? {
-            message: 'Input validation failed',
-            issues: zodErr?.errors,
-          }
-        : {}),
-    }
-  },
-})
+const trpc = initTRPC.meta<OpenApiMeta>().create({errorFormatter})
 
 const router = trpc.router({
   errorTest: trpc.procedure
