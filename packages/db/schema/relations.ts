@@ -32,6 +32,10 @@ export const connector_configRelations = relations(
     connections: many(connection, {
       relationName: 'connection_connector_config_id_connector_config_id',
     }),
+    // TODO: Add integrations based on connector_name
+    // integrations: many(integration, {
+    //   relationName: 'integration_connector_config_id_connector_config_id',
+    // }),
     connection_default_pipe_in_source_id: one(connection, {
       fields: [connector_config.default_pipe_in_source_id],
       references: [connection.id],
@@ -46,8 +50,10 @@ export const connector_configRelations = relations(
   }),
 )
 
-export const integrationRelations = relations(integration, ({many}) => ({
+export const integrationRelations = relations(integration, ({many, one}) => ({
   connections: many(connection),
+  // Connector, but connector is alas not a model
+  // Though integrations could possibly have to do with connector configs
 }))
 
 export const pipelineRelations = relations(pipeline, ({one}) => ({

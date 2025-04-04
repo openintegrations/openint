@@ -10,14 +10,14 @@ export const zListParams = z.object({
     .min(0)
     .max(100)
     .optional()
-    .default(50)
+    // .default(50)
     .describe('Limit the number of items returned'),
   offset: z
     .number()
     .int()
     .min(0)
     .optional()
-    .default(0)
+    // .default(0)
     .describe('Offset the items returned'),
 })
 
