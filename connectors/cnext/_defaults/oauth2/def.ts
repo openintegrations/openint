@@ -8,6 +8,9 @@ const zOauthConnectorConfig = z
     scopes: z.array(z.string()).nullish(),
   })
   .describe('Base oauth configuration for the connector')
+  .openapi({
+    'ui:field': 'OAuthField',
+  })
 
 const zOAuthConnectionSettings = z.object({
   credentials: z
