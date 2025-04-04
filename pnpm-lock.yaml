@@ -370,6 +370,9 @@ importers:
       '@openint/connector-zohodesk':
         specifier: workspace:*
         version: link:../connector-zohodesk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
     devDependencies:
       bun:
         specifier: latest
@@ -1264,6 +1267,9 @@ importers:
         specifier: ^3.4.5
         version: 3.4.5
     devDependencies:
+      '@openint/all-connectors':
+        specifier: workspace:*
+        version: link:../../connectors/all-connectors
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk

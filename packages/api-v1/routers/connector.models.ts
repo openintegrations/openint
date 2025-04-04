@@ -1,3 +1,4 @@
+import {zConnectorName, type ConnectorName} from '@openint/all-connectors'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {zodToOas31Schema} from '@openint/util/schema'
@@ -98,11 +99,7 @@ export const zConnector = z.object({
     .optional(),
 })
 
-export const zConnectorName = z
-  .enum(Object.keys(defConnectors) as [keyof typeof defConnectors])
-  .openapi({ref: 'core.connector.name'})
-
-export type ConnectorName = Z.infer<typeof zConnectorName>
+export {zConnectorName, type ConnectorName}
 
 export function getConnectorModelByName(
   name: ConnectorName | string,
