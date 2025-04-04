@@ -7,7 +7,7 @@ import type {
   ThemeProps,
 } from '@rjsf/core'
 import {withTheme} from '@rjsf/core'
-import type {RegistryWidgetsType} from '@rjsf/utils'
+import type {RegistryFieldsType, RegistryWidgetsType} from '@rjsf/utils'
 import {type RJSFSchema} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
@@ -24,7 +24,7 @@ const theme: ThemeProps = {}
 export const RJSFForm = withTheme(theme) as typeof Form
 
 /** For use with createRef... */
-export type SchemaFormElement = Form
+export type JSONSchemaFormRef = Form
 
 export interface JSONSchemaFormProps<TData extends Record<string, unknown>>
   extends Omit<FormProps<TData>, 'schema' | 'validator' | 'onSubmit'> {
@@ -115,7 +115,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
       }}
       validator={validator}
       widgets={widgets as RegistryWidgetsType}
-      fields={fields}
+      fields={fields as RegistryFieldsType}
     />
   )
   return debugMode ? (

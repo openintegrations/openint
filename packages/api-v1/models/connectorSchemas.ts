@@ -33,7 +33,7 @@ export const schemaKeyToSnakeCase = {
   connectOutput: 'connect_output',
 } as const satisfies Record<SchemaKey, string>
 
-type SchemaKeySnakecased = (typeof schemaKeyToSnakeCase)[SchemaKey]
+export type SchemaKeySnakecased = (typeof schemaKeyToSnakeCase)[SchemaKey]
 
 // Maybe this belongs in the all-connectors package?
 /* schemaKey -> Array<{$schemaKey: schema}>  */
@@ -75,7 +75,7 @@ export const zConnector = z.object({
   name: z.string(),
   display_name: z.string().optional(),
   logo_url: z.string().optional(),
-  stage: z.enum(['alpha', 'beta', 'ga']).optional(),
+  stage: z.enum(['alpha', 'beta', 'ga', 'hidden']).optional(),
   platforms: z
     // TODO: Fix me to be the right ones
     .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
@@ -84,6 +84,16 @@ export const zConnector = z.object({
     .record(
       z.enum(Object.values(schemaKeyToSnakeCase) as [SchemaKeySnakecased]),
       zJSONSchema,
+    )
+    .optional(),
+  openint_scopes: z.array(z.string()).optional(),
+  scopes: z
+    .array(
+      z.object({
+        scope: z.string(),
+        display_name: z.string().optional(),
+        description: z.string().optional(),
+      }),
     )
     .optional(),
 })
@@ -97,8 +107,8 @@ export const getConnectorModel = (
   logo_url: def.metadata?.logoSvg
     ? urlFromImage({type: 'svg', data: def.metadata?.logoSvg})
     : def.metadata?.logoUrl,
-  // stage: def.metadata?.stage ?? 'alpha',
-  // platforms: def.metadata?.platforms ?? ['cloud', 'local'],
+  stage: def.metadata?.stage ?? 'alpha',
+  platforms: def.metadata?.platforms ?? ['cloud', 'local'],
   // verticals: def.metadata?.verticals ?? ['other'],
   // authType: def.metadata?.authType,
 
@@ -110,6 +120,14 @@ export const getConnectorModel = (
   schemas: opts.includeSchemas
     ? jsonSchemasForConnectorSchemas(def.schemas)
     : undefined,
+  openint_scopes:
+    def.metadata?.jsonDef?.auth.type === 'OAUTH2'
+      ? def.metadata?.jsonDef?.auth.openint_scopes
+      : undefined,
+  scopes:
+    def.metadata?.jsonDef?.auth.type === 'OAUTH2'
+      ? def.metadata?.jsonDef?.auth.scopes
+      : undefined,
 })
 
 export function jsonSchemasForConnectorSchemas<T extends ConnectorSchemas>(

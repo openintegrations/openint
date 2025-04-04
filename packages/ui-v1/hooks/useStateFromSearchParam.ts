@@ -10,39 +10,66 @@ export function useStateFromSearchParams<T extends string>(
     shallow?: boolean
   },
 ): [T | undefined, (value: T) => void] {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  const [searchParams, setSearchParams] = useMutableSearchParams()
   const value = searchParams.get(key) as T | null
   const {defaultValue, shallow = false} = options || {}
 
   const setValue = React.useCallback(
     (newValue: T) => {
+      setSearchParams(
+        (params) => {
+          if (newValue === defaultValue) {
+            // Remove the parameter if it equals the default value
+            params.delete(key)
+          } else {
+            // Otherwise set it as normal
+            params.set(key, newValue)
+          }
+        },
+        {shallow},
+      )
+    },
+    [key, setSearchParams, shallow, defaultValue],
+  )
+
+  return [value || defaultValue, setValue]
+}
+
+export function useMutableSearchParams() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  const setSearchParams = React.useCallback(
+    (
+      updater: ((params: URLSearchParams) => void) | Record<string, string>,
+      options?: {
+        shallow?: boolean
+      },
+    ) => {
       const params = new URLSearchParams(searchParams)
 
-      if (newValue === defaultValue) {
-        // Remove the parameter if it equals the default value
-        params.delete(key)
+      if (typeof updater === 'function') {
+        updater(params)
       } else {
-        // Otherwise set it as normal
-        params.set(key, newValue)
+        Object.entries(updater).forEach(([key, value]) => {
+          if (value === undefined || value === null) {
+            params.delete(key)
+          } else {
+            params.set(key, value)
+          }
+        })
       }
 
-      // we need the ? regardless otherwise the URL will not be updated
-      // in case all params got deleted
       const queryString = `?${params.toString()}`
 
-      if (shallow) {
-        // Use window.history to avoid full page reload
-
+      if (options?.shallow) {
         window.history.pushState(null, '', queryString)
       } else {
-        // Use router for normal navigation
         router.push(queryString)
       }
     },
-    [key, router, searchParams, shallow, defaultValue],
+    [router, searchParams],
   )
-  // console.log('useStateFromSearchParams', key, value, defaultValue)
 
-  return [value || defaultValue, setValue]
+  return [searchParams, setSearchParams] as const
 }

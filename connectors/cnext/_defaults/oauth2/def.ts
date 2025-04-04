@@ -8,6 +8,9 @@ const zOauthConnectorConfig = z
     scopes: z.array(z.string()).nullish(),
   })
   .describe('Base oauth configuration for the connector')
+  .openapi({
+    'ui:field': 'OAuthField',
+  })
 
 const zOAuthConnectionSettings = z.object({
   credentials: z
@@ -103,7 +106,8 @@ export const oauth2Schemas = {
     oauth: zOAuthConnectionSettings,
   }),
   // No pre connect input is necessary for oauth2
-  // preConnectInput: z.any(),
+  // TODO: Fix to be unnecessary
+  preConnectInput: z.any(),
   connectInput: z.object({
     authorization_url: z.string(),
   }),

@@ -5,6 +5,7 @@ import {and, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
 import {core, type Core} from '../models'
+import {getConnectorModel} from '../models/connectorSchemas'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   applyPaginationAndOrder,
@@ -23,18 +24,14 @@ const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
   }
 }
 
+// TODO: Add connector.schemas
 const zExpandOptions = z
   .enum(['connector', 'enabled_integrations', 'connection_count'])
   .describe(
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
   )
 
-export function expandConnector(
-  connectorName: string,
-): Pick<
-  Core['connector'],
-  'name' | 'display_name' | 'logo_url' | 'stage' | 'platforms'
-> {
+export function expandConnector(connectorName: string): Core['connector'] {
   const connector = defConnectors[connectorName as keyof typeof defConnectors]
   if (!connector) {
     throw new TRPCError({
@@ -42,6 +39,8 @@ export function expandConnector(
       message: `Connector not found: ${connectorName}`,
     })
   }
+
+  const connectorModel = getConnectorModel(connector, {includeSchemas: false})
 
   const logoUrl =
     connector.metadata &&
@@ -55,6 +54,7 @@ export function expandConnector(
 
   return {
     // TODO: add more fields?
+    ...connectorModel,
     name: connectorName,
     // TODO: add enabled?
     // enabled: connectorConfig.enabled,

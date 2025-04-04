@@ -1,21 +1,16 @@
 'use client'
 
-import {ArrowLeft, Plus} from 'lucide-react'
+import {Plus} from 'lucide-react'
 import {useRef, useState} from 'react'
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {AppRouterOutput} from '@openint/api-v1/routers'
 import {Button} from '@openint/shadcn/ui'
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetTitle,
-} from '@openint/shadcn/ui/sheet'
+import {Sheet, SheetContent, SheetFooter} from '@openint/shadcn/ui/sheet'
 import {
   AddConnectorConfig,
   ConnectorTableCell,
   JSONSchemaForm,
-  type SchemaFormElement,
+  type JSONSchemaFormRef,
 } from '@openint/ui-v1'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
@@ -39,7 +34,7 @@ export function ConnectorConfigList(props: {
   const [selectedCcfg, setSelectedCcfg] = useState<ConnectorConfig<
     'connector' | 'integrations' | 'connection_count'
   > | null>(null)
-  const formRef = useRef<SchemaFormElement>(null)
+  const formRef = useRef<JSONSchemaFormRef>(null)
 
   const {initialData, initialConnectorData} = props
 
@@ -61,22 +56,37 @@ export function ConnectorConfigList(props: {
   const formSchema = {
     type: 'object' as const,
     properties: {
-      displayName: {
-        type: 'string' as const,
-        title: 'Display Name',
-        description: 'A friendly name for this connector configuration',
-      },
       disabled: {
         type: 'boolean' as const,
         title: 'Disabled',
         description:
           'When disabled it will not be used for connection portal. Essentially a reversible soft-delete',
+        'ui:field': 'DisabledField',
+      },
+      displayName: {
+        type: 'string' as const,
+        title: 'Display Name',
+        description: 'A friendly name for this connector configuration',
       },
       ...((
         selectedConnector?.schemas?.connector_config as Record<string, unknown>
       )?.['properties'] || {}),
     },
-    additionalProperties: true,
+  }
+
+  const formData = selectedCcfg
+    ? {
+        ...selectedCcfg.config,
+        displayName: selectedCcfg.display_name ?? '',
+        disabled: selectedCcfg.disabled ?? false,
+      }
+    : {}
+
+  const formContext = {
+    connectorName: selectedConnector?.display_name ?? '',
+    openint_scopes: selectedConnector?.openint_scopes ?? [],
+    scopes: selectedConnector?.scopes ?? [],
+    initialData: selectedCcfg,
   }
 
   const connectorColumns: Array<
@@ -137,11 +147,6 @@ export function ConnectorConfigList(props: {
     setSelectedCcfg(null)
   }
 
-  const handleBackToConnectors = () => {
-    setSelectedConnector(null)
-    setSelectedCcfg(null)
-  }
-
   const createConfig = useMutation(trpc.createConnectorConfig.mutationOptions())
   const updateConfig = useMutation(trpc.updateConnectorConfig.mutationOptions())
   const deleteConfig = useMutation(trpc.deleteConnectorConfig.mutationOptions())
@@ -151,6 +156,7 @@ export function ConnectorConfigList(props: {
       displayName: string
       disabled: boolean
       config?: Record<string, unknown>
+      [key: string]: unknown
     }
   }) => {
     if (!selectedConnector) {
@@ -158,7 +164,7 @@ export function ConnectorConfigList(props: {
     }
 
     const {
-      formData: {displayName, disabled, config},
+      formData: {displayName, disabled, config = {}, ...rest},
     } = data
 
     try {
@@ -167,14 +173,20 @@ export function ConnectorConfigList(props: {
           id: selectedCcfg.id,
           display_name: displayName,
           disabled,
-          config,
+          config: {
+            ...config,
+            ...rest,
+          },
         })
       } else {
         await createConfig.mutateAsync({
           connector_name: selectedConnector.name,
           display_name: displayName,
           disabled,
-          config,
+          config: {
+            ...config,
+            ...rest,
+          },
         })
       }
 
@@ -204,7 +216,7 @@ export function ConnectorConfigList(props: {
       setSheetOpen(false)
       setSelectedConnector(null)
       setSelectedCcfg(null)
-      res.refetch()
+      await res.refetch()
     } catch (error) {
       console.error('Failed to delete connector config:', error)
       // TODO: We need to show a toast here
@@ -246,23 +258,7 @@ export function ConnectorConfigList(props: {
             setSelectedCcfg(null)
           }
         }}>
-        <SheetContent side="right" className="min-w-1/3 p-4 pb-0">
-          <SheetTitle className="flex items-center gap-2">
-            {selectedConnector && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={handleBackToConnectors}>
-                <ArrowLeft className="size-4" />
-              </Button>
-            )}
-            <span className="text-xl font-semibold">
-              {selectedConnector
-                ? `Configure ${selectedConnector.display_name}`
-                : 'Add Connector'}
-            </span>
-          </SheetTitle>
+        <SheetContent side="right" className="min-w-1/3 p-8 pb-0">
           {selectedConnector ? (
             <>
               <JSONSchemaForm
@@ -270,15 +266,8 @@ export function ConnectorConfigList(props: {
                 jsonSchema={formSchema}
                 onSubmit={handleSave}
                 hideSubmitButton
-                formData={
-                  selectedCcfg
-                    ? {
-                        ...selectedCcfg.config,
-                        displayName: selectedCcfg.display_name ?? '',
-                        disabled: selectedCcfg.disabled ?? false,
-                      }
-                    : {}
-                }
+                formData={formData}
+                formContext={formContext}
               />
               <SheetFooter className="mt-auto flex flex-row justify-between border-t pt-4">
                 <Button

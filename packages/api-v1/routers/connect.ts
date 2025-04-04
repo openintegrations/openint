@@ -1,6 +1,7 @@
 import {TRPCError} from '@trpc/server'
+import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
+import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
@@ -155,8 +156,10 @@ export const connectRouter = router({
     .mutation(async ({ctx, input}) => {
       console.log('postConnect', input, ctx)
       const connectors = serverConnectors as Record<string, ConnectorServer>
+      const defs = defConnectors as Record<string, ConnectorDef>
       const connector = connectors[input.data.connector_name]
-      if (!connector) {
+      const def = defs[input.data.connector_name]
+      if (!connector || !def) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: `Connector ${input.data.connector_name} not found`,
@@ -185,12 +188,17 @@ export const connectRouter = router({
         },
       )
       const id = makeId('conn', input.data.connector_name, makeUlid())
+
+      const zSettings = def.schemas.connectionSettings ?? z.unknown()
+      // Assume input is the settings
+      const settings = zSettings.parse(connUpdate?.settings ?? input.data.input)
+
       const [conn] = await dbUpsertOne(
         ctx.db,
         schema.connection,
         {
           id,
-          settings: connUpdate?.settings,
+          settings,
           connector_config_id: input.id,
           customer_id: ctx.viewer.customerId ?? ctx.viewer.userId,
           // add integration id
