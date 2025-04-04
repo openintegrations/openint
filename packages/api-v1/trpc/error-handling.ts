@@ -11,7 +11,7 @@ import {
   type RouterCallerErrorHandler,
 } from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
-import {isZodError, z, ZodErrorWithData, type Z} from '@openint/util/zod-utils'
+import {isZodError, z, type Z} from '@openint/util/zod-utils'
 
 export const zErrorCode = z
   .enum(
@@ -54,7 +54,10 @@ export const zAPIError = z
       })
       .optional(),
     /** Input issues */
+    input: z.unknown().optional(),
     issues: z.array(zZodIssue).optional(),
+    /** Output issues */
+    output: z.unknown().optional(),
     output_issues: z.array(zZodIssue).optional(),
   })
   .openapi({ref: 'APIError'})
@@ -66,7 +69,7 @@ export type APIError = Z.infer<typeof zAPIError>
 export function parseAPIError(error: unknown): APIError | undefined {
   // Handle TRPCError (from caller)
   if (error instanceof TRPCError) {
-    const cause = error.cause as ZodErrorWithData | undefined
+    const cause = isZodError(error.cause) ? error.cause : undefined
     const isOutputError = error.message === 'Output validation failed'
     return zAPIError.parse(
       {
@@ -79,7 +82,9 @@ export function parseAPIError(error: unknown): APIError | undefined {
           stack: error.stack,
         },
         issues: isOutputError ? undefined : cause?.errors,
+        input: isOutputError ? undefined : cause?.data,
         output_issues: isOutputError ? cause?.errors : undefined,
+        output: isOutputError ? cause?.data : undefined,
       },
       {
         errorMap: (_, ctx) => {
@@ -95,16 +100,9 @@ export function parseAPIError(error: unknown): APIError | undefined {
   // Handle TRPCClientError
   if (error instanceof TRPCClientError) {
     return zAPIError.parse({
+      ...error.shape,
+      // Error.code is a JSON RPC 2.0 code, not a TRPC error code otherwise
       code: error.data?.code,
-      message: error.message,
-      data: {
-        code: error.data?.code,
-        httpStatus: error.data?.httpStatus,
-        path: error.data?.path,
-        stack: error.data?.stack,
-      },
-      issues: error.shape.issues ?? safeJSONParse(error.message) ?? undefined,
-      output_issues: error.shape.output_issues ?? undefined,
     })
   }
 
@@ -133,10 +131,10 @@ export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
   return {
     ...shape,
     ...(zodErr && error.message === 'Output validation failed'
-      ? {output_issues: zodErr.errors}
+      ? {output_issues: zodErr.errors, output: zodErr.data}
       : {}),
     ...(zodErr && error.message === 'Input validation failed'
-      ? {issues: zodErr?.errors}
+      ? {issues: zodErr?.errors, input: zodErr.data}
       : {}),
   }
 }
@@ -156,17 +154,10 @@ export const onError: RouterCallerErrorHandler<unknown> = ({
 }) => {
   // Consider adding input and context to make error even more accurate
   // console.log('onError', {error, path, input, ctx, type})
-  // console.log('onError', {error, path})
   Object.assign(error, {path})
-
   // TODO: Better way to check if it's an input error
   const isInputError = safeJSONParse(error.message) != null
   if (isInputError) {
     Object.assign(error, {message: 'Input validation failed'})
   }
-  // if (isZodError(error)) {
-  //   Object.assign(error, {
-  //     issues: error.errors,
-  //   })
-  // }
 }

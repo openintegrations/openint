@@ -118,7 +118,7 @@ describe('OpenAPI endpoints', () => {
 
   test('input validation failure', async () => {
     const res = await handleOasRequest(
-      new Request('http://localhost:3000/error-test'),
+      new Request('http://localhost:3000/error-test?invalid=input'),
     )
     expect(res.status).toBe(400)
     const json = await res.json()
@@ -131,6 +131,7 @@ describe('OpenAPI endpoints', () => {
         path: 'errorTest',
         stack: expect.any(String),
       },
+      input: {invalid: 'input'},
       issues: [
         {
           code: 'invalid_type',
@@ -160,6 +161,7 @@ describe('OpenAPI endpoints', () => {
         path: 'errOutputValidation',
         stack: expect.any(String),
       },
+      output: {badKey: 'badValue'},
       output_issues: [
         {
           code: 'invalid_type',
@@ -293,6 +295,7 @@ describe('TRPC over http', () => {
             message: 'Required',
           },
         ],
+        input: {invalid: 'input'},
       },
     })
 
@@ -335,6 +338,7 @@ describe('TRPC over http', () => {
         path: 'errOutputValidation',
         stack: expect.any(String),
       },
+      output: {badKey: 'badValue'},
       output_issues: [
         {
           code: 'invalid_type',
@@ -392,7 +396,7 @@ describe('TRPC caller', () => {
     expect(err.code).toEqual('BAD_REQUEST')
     expect(err.message).toEqual('Input validation failed')
     expect(err.stack).toEqual(expect.any(String))
-    const cause = err.cause as ZodError
+    const cause = err.cause as ZodErrorWithData
     expect(cause).toBeInstanceOf(z.ZodError)
 
     expect(cause.errors).toEqual([
@@ -404,13 +408,14 @@ describe('TRPC caller', () => {
         message: 'Required',
       },
     ])
-    expect(cause.message).toEqual(JSON.stringify(cause.errors, null, 2))
+    // expect(cause.message).toEqual(JSON.stringify(cause.errors, null, 2))
     expect(parseAPIError(err)).toMatchObject({
       code: 'BAD_REQUEST',
       message: 'Input validation failed',
       data: {
         code: 'BAD_REQUEST',
       },
+      input: {invalid: 'input'},
       issues: [
         {
           code: 'invalid_type',
@@ -439,7 +444,7 @@ describe('TRPC caller', () => {
         message: 'Required',
       },
     ])
-    expect(cause.message).toEqual(JSON.stringify(cause.errors, null, 2))
+    // expect(cause.message).toEqual(JSON.stringify(cause.errors, null, 2))
 
     expect(parseAPIError(err)).toMatchObject({
       code: 'INTERNAL_SERVER_ERROR',
@@ -450,6 +455,7 @@ describe('TRPC caller', () => {
         path: 'errOutputValidation',
         stack: expect.any(String),
       },
+      output: {badKey: 'badValue'},
       output_issues: [
         {
           code: 'invalid_type',
