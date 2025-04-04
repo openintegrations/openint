@@ -4,47 +4,53 @@ import {extendZodWithOpenApi} from 'zod-openapi'
 import {compact} from './array-utils'
 import {R} from './remeda'
 
+const DANGEROUSLY_ENABLE_ZOD_INPUT_DEBUG =
+  process.env['DANGEROUSLY_ENABLE_ZOD_INPUT_DEBUG'] === 'true'
+
 function makeZod() {
   // This is the only way to ensure extendZodWithOpenApi is called before we use z
   extendZodWithOpenApi(zod)
 
-  const orgMessage = Object.getOwnPropertyDescriptor(
-    zod.ZodError.prototype,
-    'message',
-  )!.get
-  if (!orgMessage) {
-    throw new Error('Failed to get original ZodError.message getter')
-  }
-  Object.defineProperty(zod.ZodError.prototype, 'message', {
-    get() {
-      const msg = orgMessage.call(this)
-      // We do this to prevent data from being too long to display
-      return `{
-  "issues": ${msg},
-  "data": ${JSON.stringify(this.data)}
-}`
-    },
-    configurable: true,
-    enumerable: true,
-  })
+  if (DANGEROUSLY_ENABLE_ZOD_INPUT_DEBUG) {
+    const orgMessage = Object.getOwnPropertyDescriptor(
+      zod.ZodError.prototype,
+      'message',
+    )!.get
+    if (!orgMessage) {
+      throw new Error('Failed to get original ZodError.message getter')
+    }
+    Object.defineProperty(zod.ZodError.prototype, 'message', {
+      get() {
+        const msg = orgMessage.call(this)
+        // We do this to prevent data from being too long to display
+        return `{
+    "issues": ${msg},
+    "data": ${JSON.stringify(this.data)}
+  }`
+      },
+      configurable: true,
+      enumerable: true,
+    })
 
-  // extend zod to include the data in the error
-  const origSafeParse = zod.ZodType.prototype.safeParse
-  zod.ZodType.prototype.safeParse = function (data, params) {
-    const result = origSafeParse.call(this, data, params)
-    if (!result.success) {
-      Object.assign(result.error, {data})
+    // extend zod to include the data in the error
+    const origSafeParse = zod.ZodType.prototype.safeParse
+    zod.ZodType.prototype.safeParse = function (data, params) {
+      const result = origSafeParse.call(this, data, params)
+      if (!result.success) {
+        Object.assign(result.error, {data})
+      }
+      return result
     }
-    return result
-  }
-  const origSafeParseAsync = zod.ZodType.prototype.safeParseAsync
-  zod.ZodType.prototype.safeParseAsync = async function (data, params) {
-    const result = await origSafeParseAsync.call(this, data, params)
-    if (!result.success) {
-      Object.assign(result.error, {data})
+    const origSafeParseAsync = zod.ZodType.prototype.safeParseAsync
+    zod.ZodType.prototype.safeParseAsync = async function (data, params) {
+      const result = await origSafeParseAsync.call(this, data, params)
+      if (!result.success) {
+        Object.assign(result.error, {data})
+      }
+      return result
     }
-    return result
   }
+
   // Consider adding more specific handling around adding local data failure
   // to the issues object also via z.setErrorMap
 
@@ -58,7 +64,7 @@ export const z = makeZod()
 
 export function isZodError<T>(error: unknown): error is ZodErrorWithData<T> {
   if (error instanceof ZodError) {
-    if (!('data' in error)) {
+    if (DANGEROUSLY_ENABLE_ZOD_INPUT_DEBUG && !('data' in error)) {
       console.error('No data found in ZodError. Did you z from makeZod', error)
       throw new Error('No data found in ZodError. Did you z from makeZod')
     }
