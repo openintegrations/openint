@@ -38,7 +38,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   // Tests linearly depend on each other for performance and simplicty
 
-  test('create connector config', async () => {
+  test.only('create connector config', async () => {
     const res = await asOrg.createConnectorConfig({
       connector_name: 'quickbooks',
       config: {
@@ -61,12 +61,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
   })
 
-  test('list connector config', async () => {
+  test.only('list connector config', async () => {
     const res = await asOrg.listConnectorConfigs()
     expect(res.items).toHaveLength(1)
     expect(res.items[0]?.id).toEqual(expect.any(String))
     expect(res.items[0]?.org_id).toEqual('org_222')
     expect(res.total).toEqual(1)
+  })
+
+  test.only('list connector config with expanded schemas', async () => {
+    const res2 = await asOrg.listConnectorConfigs({
+      expand: ['connector.schemas'],
+    })
+    expect(res2.items[0]?.connector).toBeDefined()
+    expect(res2.items[0]?.connector?.schemas).toBeDefined()
   })
 
   test('list connector config via custom client', async () => {
@@ -248,9 +256,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('delete connector with invalid id returns error', async () => {
     await expect(
-      asOrg.deleteConnectorConfig({
-        id: 'ccfg_invalid',
-      }),
+      asOrg.deleteConnectorConfig({id: 'ccfg_invalid'}),
     ).rejects.toThrow('not found')
   })
 })

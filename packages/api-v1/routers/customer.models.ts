@@ -1,6 +1,6 @@
 import {zCustomerId} from '@openint/cdk'
 import {z, zCoerceBoolean} from '@openint/util/zod-utils'
-import {zConnectorName} from './utils/types'
+import {zConnectorName} from '../models/connectorSchemas'
 
 export const connectClientOptions = z
   .object({

@@ -6,6 +6,7 @@ export const zConnectionId = z
   .string()
   .startsWith('conn_')
   .describe('The id of the connection, starts with `conn_`')
+
 export const zConnectorConfigId = z
   .string()
   .startsWith('ccfg_')
@@ -16,7 +17,3 @@ export const zCustomerId = z
   .describe(
     'The id of the customer in your application. Ensure it is unique for that customer.',
   )
-
-export const zConnectorName = z
-  .enum(Object.keys(defConnectors) as [string, ...string[]])
-  .describe('The name of the connector')
