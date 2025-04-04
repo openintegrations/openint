@@ -4,7 +4,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
 [
   {
     "display_name": "Aircall (OAuth)",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-aircall.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-aircall.svg",
     "name": "aircall",
     "openint_scopes": [
       "contacts.read",
@@ -195,7 +195,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Airtable",
-    "logo_url": "/_assets/logo-airtable.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-airtable.svg",
     "name": "airtable",
     "openint_scopes": undefined,
     "platforms": [
@@ -224,7 +224,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Apollo",
-    "logo_url": "/_assets/logo-apollo.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-apollo.svg",
     "name": "apollo",
     "openint_scopes": undefined,
     "platforms": [
@@ -394,7 +394,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Brex",
-    "logo_url": "/_assets/logo-brex.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-brex.svg",
     "name": "brex",
     "openint_scopes": undefined,
     "platforms": [
@@ -454,7 +454,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Coda",
-    "logo_url": "/_assets/logo-coda.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-coda.svg",
     "name": "coda",
     "openint_scopes": undefined,
     "platforms": [
@@ -479,7 +479,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Confluence",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-confluence.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-confluence.svg",
     "name": "confluence",
     "openint_scopes": [
       "read:confluence-user",
@@ -670,7 +670,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Discord",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-discord.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-discord.svg",
     "name": "discord",
     "openint_scopes": [
       "identify",
@@ -865,7 +865,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Facebook",
-    "logo_url": "/_assets/logo-facebook.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-facebook.svg",
     "name": "facebook",
     "openint_scopes": undefined,
     "platforms": [
@@ -1078,7 +1078,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Finch",
-    "logo_url": "/_assets/logo-finch.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-finch.svg",
     "name": "finch",
     "openint_scopes": undefined,
     "platforms": [
@@ -1190,7 +1190,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Firebase",
-    "logo_url": "/_assets/logo-firebase.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-firebase.svg",
     "name": "firebase",
     "openint_scopes": undefined,
     "platforms": [
@@ -1357,7 +1357,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Foreceipt",
-    "logo_url": "/_assets/logo-foreceipt.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-foreceipt.svg",
     "name": "foreceipt",
     "openint_scopes": undefined,
     "platforms": [
@@ -1422,7 +1422,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "GitHub (User OAuth)",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-github.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-github.svg",
     "name": "github",
     "openint_scopes": [
       "user:email",
@@ -1609,7 +1609,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Gong",
-    "logo_url": "/_assets/logo-gong.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-gong.svg",
     "name": "gong",
     "openint_scopes": undefined,
     "platforms": [
@@ -1822,7 +1822,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Google Calendar",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlecalendar.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlecalendar.svg",
     "name": "googlecalendar",
     "openint_scopes": [
       "https://www.googleapis.com/auth/calendar.readonly",
@@ -2001,7 +2001,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Google Docs",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledocs.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledocs.svg",
     "name": "googledocs",
     "openint_scopes": [
       "https://www.googleapis.com/auth/documents.readonly",
@@ -2180,7 +2180,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Google Drive",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledrive.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledrive.svg",
     "name": "googledrive",
     "openint_scopes": [
       "https://www.googleapis.com/auth/drive.file",
@@ -2351,7 +2351,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Gmail",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlemail.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlemail.svg",
     "name": "googlemail",
     "openint_scopes": [
       "https://www.googleapis.com/auth/gmail.metadata",
@@ -2546,7 +2546,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Google Sheet",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlesheet.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlesheet.svg",
     "name": "googlesheet",
     "openint_scopes": [
       "https://www.googleapis.com/auth/drive.file",
@@ -2729,7 +2729,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Greenhouse",
-    "logo_url": "/_assets/logo-greenhouse.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-greenhouse.svg",
     "name": "greenhouse",
     "openint_scopes": undefined,
     "platforms": [
@@ -2757,7 +2757,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Heron Data",
-    "logo_url": "/_assets/logo-heron.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-heron.svg",
     "name": "heron",
     "openint_scopes": undefined,
     "platforms": [
@@ -2782,7 +2782,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "HubSpot",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-hubspot.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-hubspot.svg",
     "name": "hubspot",
     "openint_scopes": [
       "crm.objects.contacts.read",
@@ -3036,7 +3036,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Instagram",
-    "logo_url": "/_assets/logo-instagram.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-instagram.svg",
     "name": "instagram",
     "openint_scopes": undefined,
     "platforms": [
@@ -3249,7 +3249,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Intercom",
-    "logo_url": "/_assets/logo-intercom.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-intercom.svg",
     "name": "intercom",
     "openint_scopes": undefined,
     "platforms": [
@@ -3462,7 +3462,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Jira",
-    "logo_url": "/_assets/logo-jira.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-jira.svg",
     "name": "jira",
     "openint_scopes": undefined,
     "platforms": [
@@ -3675,7 +3675,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Kustomer",
-    "logo_url": "/_assets/logo-kustomer.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-kustomer.svg",
     "name": "kustomer",
     "openint_scopes": undefined,
     "platforms": [
@@ -3888,7 +3888,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Lever",
-    "logo_url": "/_assets/logo-lever.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lever.svg",
     "name": "lever",
     "openint_scopes": undefined,
     "platforms": [
@@ -4109,7 +4109,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Linear",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linear.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linear.svg",
     "name": "linear",
     "openint_scopes": [
       "user:read",
@@ -4300,7 +4300,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "LinkedIn",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linkedin.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linkedin.svg",
     "name": "linkedin",
     "openint_scopes": [
       "r_liteprofile",
@@ -4491,7 +4491,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Lunchmoney",
-    "logo_url": "/_assets/logo-lunchmoney.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lunchmoney.svg",
     "name": "lunchmoney",
     "openint_scopes": undefined,
     "platforms": [
@@ -4516,7 +4516,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Mercury",
-    "logo_url": "/_assets/logo-mercury.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-mercury.svg",
     "name": "mercury",
     "openint_scopes": undefined,
     "platforms": [
@@ -4564,7 +4564,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "merge.dev",
-    "logo_url": "/_assets/logo-merge.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-merge.svg",
     "name": "merge",
     "openint_scopes": undefined,
     "platforms": [
@@ -4657,7 +4657,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "microsoft",
-    "logo_url": "/_assets/logo-microsoft.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-microsoft.svg",
     "name": "microsoft",
     "openint_scopes": undefined,
     "platforms": [
@@ -4916,7 +4916,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Moota",
-    "logo_url": "/_assets/logo-moota.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-moota.svg",
     "name": "moota",
     "openint_scopes": undefined,
     "platforms": [
@@ -4941,7 +4941,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Notion",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-notion.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-notion.svg",
     "name": "notion",
     "openint_scopes": [
       "user:read",
@@ -5124,7 +5124,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Onebrick",
-    "logo_url": "/_assets/logo-onebrick.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-onebrick.svg",
     "name": "onebrick",
     "openint_scopes": undefined,
     "platforms": [
@@ -5234,7 +5234,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Outreach",
-    "logo_url": "/_assets/logo-outreach.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-outreach.svg",
     "name": "outreach",
     "openint_scopes": undefined,
     "platforms": [
@@ -5447,7 +5447,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Outreach",
-    "logo_url": "/_assets/logo-pipedrive.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-pipedrive.svg",
     "name": "pipedrive",
     "openint_scopes": undefined,
     "platforms": [
@@ -5660,7 +5660,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Plaid",
-    "logo_url": "/_assets/logo-plaid.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-plaid.svg",
     "name": "plaid",
     "openint_scopes": undefined,
     "platforms": [
@@ -5891,7 +5891,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Postgres",
-    "logo_url": "/_assets/logo-postgres.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-postgres.svg",
     "name": "postgres",
     "openint_scopes": undefined,
     "platforms": [
@@ -5928,7 +5928,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Quickbooks",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-quickbooks.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-quickbooks.svg",
     "name": "quickbooks",
     "openint_scopes": [
       "openid",
@@ -6137,7 +6137,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Ramp",
-    "logo_url": "/_assets/logo-ramp.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-ramp.svg",
     "name": "ramp",
     "openint_scopes": undefined,
     "platforms": [
@@ -6225,7 +6225,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Reddit",
-    "logo_url": "/_assets/logo-reddit.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-reddit.svg",
     "name": "reddit",
     "openint_scopes": undefined,
     "platforms": [
@@ -6438,7 +6438,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Salesforce",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesforce.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesforce.svg",
     "name": "salesforce",
     "openint_scopes": [
       "offline_access",
@@ -6607,7 +6607,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Salesloft",
-    "logo_url": "/_assets/logo-salesloft.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesloft.svg",
     "name": "salesloft",
     "openint_scopes": undefined,
     "platforms": [
@@ -6820,7 +6820,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Saltedge",
-    "logo_url": "/_assets/logo-saltedge.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-saltedge.svg",
     "name": "saltedge",
     "openint_scopes": undefined,
     "platforms": [
@@ -6856,7 +6856,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "SharePoint Online (v2)",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepointonline.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepointonline.svg",
     "name": "sharepointonline",
     "openint_scopes": [
       "offline_access",
@@ -7019,7 +7019,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Slack",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-slack.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-slack.svg",
     "name": "slack",
     "openint_scopes": [
       "users:read",
@@ -7214,7 +7214,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Splitwise",
-    "logo_url": "/_assets/logo-splitwise.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-splitwise.svg",
     "name": "splitwise",
     "openint_scopes": undefined,
     "platforms": [
@@ -7387,7 +7387,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Stripe",
-    "logo_url": "/_assets/logo-stripe.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-stripe.svg",
     "name": "stripe",
     "openint_scopes": undefined,
     "platforms": [
@@ -7446,7 +7446,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Teller",
-    "logo_url": "/_assets/logo-teller.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-teller.svg",
     "name": "teller",
     "openint_scopes": undefined,
     "platforms": [
@@ -7535,7 +7535,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Toggl",
-    "logo_url": "/_assets/logo-toggl.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-toggl.svg",
     "name": "toggl",
     "openint_scopes": undefined,
     "platforms": [
@@ -7606,7 +7606,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Twenty",
-    "logo_url": "/_assets/logo-twenty.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twenty.svg",
     "name": "twenty",
     "openint_scopes": undefined,
     "platforms": [
@@ -7631,7 +7631,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Twitter",
-    "logo_url": "/_assets/logo-twitter.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twitter.svg",
     "name": "twitter",
     "openint_scopes": undefined,
     "platforms": [
@@ -7844,7 +7844,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Venmo",
-    "logo_url": "/_assets/logo-venmo.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-venmo.svg",
     "name": "venmo",
     "openint_scopes": undefined,
     "platforms": [
@@ -7900,7 +7900,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Wise",
-    "logo_url": "/_assets/logo-wise.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-wise.svg",
     "name": "wise",
     "openint_scopes": undefined,
     "platforms": [
@@ -7979,7 +7979,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Xero",
-    "logo_url": "/_assets/logo-xero.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-xero.svg",
     "name": "xero",
     "openint_scopes": undefined,
     "platforms": [
@@ -8192,7 +8192,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Yodlee",
-    "logo_url": "/_assets/logo-yodlee.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-yodlee.svg",
     "name": "yodlee",
     "openint_scopes": undefined,
     "platforms": [
@@ -8427,7 +8427,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "display_name": "Zoho Desk",
-    "logo_url": "/_assets/logo-zohodesk.svg",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-zohodesk.svg",
     "name": "zohodesk",
     "openint_scopes": undefined,
     "platforms": [

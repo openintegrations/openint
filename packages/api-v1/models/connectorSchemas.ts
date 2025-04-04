@@ -127,8 +127,8 @@ export const getConnectorModel = (
     display_name: def.metadata?.displayName ?? titleCase(def.name),
     // TODO: replace this with our own custom domain later
     logo_url: logoUrl?.startsWith('http')
-      ? `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/${logoUrl}`
-      : logoUrl,
+      ? logoUrl
+      : `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public${logoUrl}`,
     stage: def.metadata?.stage ?? 'alpha',
     platforms: def.metadata?.platforms ?? ['cloud', 'local'],
     // verticals: def.metadata?.verticals ?? ['other'],
