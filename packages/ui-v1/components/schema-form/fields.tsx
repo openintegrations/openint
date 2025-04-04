@@ -5,6 +5,7 @@ import {Input, Switch} from '@openint/shadcn/ui'
 import {ConnectorBadges} from '../../domain-components/ConnectorCard'
 import ConnectorScopes from '../ConnectorScopes'
 import {CopyID} from '../CopyID'
+import {MultiSelectField} from './fields/MultiSelectField'
 
 interface OAuthFormData {
   client_id?: string
@@ -213,6 +214,7 @@ export function DisabledField(props: FieldProps<boolean>) {
 export const fields = {
   OAuthField,
   DisabledField,
+  MultiSelectField,
   // Default fields we can override
   // - ArrayField
   // - ArraySchemaField
