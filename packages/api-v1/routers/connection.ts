@@ -8,9 +8,9 @@ import {z, type Z} from '@openint/util/zod-utils'
 import {core, zConnectionSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
-  zConnectionExpanded,
   formatConnection,
   zConnectionError,
+  zConnectionExpanded,
   zConnectionStatus,
   zConnectonExpandOption,
   zIncludeSecrets,
@@ -161,9 +161,7 @@ export const connectionRouter = router({
         .optional(),
     )
     .output(
-      zListResponse(zConnectionExpanded).describe(
-        'The list of connections',
-      ),
+      zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input}) => {
       const connectorNames = Object.keys(defConnectors)
@@ -315,20 +313,19 @@ export const connectionRouter = router({
     .input(z.object({id: zConnectionId}))
     .output(z.object({id: zConnectionId}))
     .mutation(async ({ctx, input}) => {
-      const connection = await ctx.db.query.connection.findFirst({
-        where: eq(schema.connection.id, input.id),
-      })
-      if (!connection) {
+      const [deleted] = await ctx.db
+        .delete(schema.connection)
+        .where(eq(schema.connection.id, input.id))
+        // .returning({id: schema.connection.id}) // Why this this not working? Shoudl work
+        .returning()
+
+      if (!deleted) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Connection not found',
         })
       }
-
-      await ctx.db
-        .delete(schema.connection)
-        .where(eq(schema.connection.id, input.id))
-      return {id: connection.id}
+      return {id: deleted.id}
     }),
 
   createConnection: orgProcedure
