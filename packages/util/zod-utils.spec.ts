@@ -35,6 +35,25 @@ test('safeParse: extracts input from zod error', () => {
 
   expect(result.success).toBe(false)
   expect(getInputData(result.error)).toEqual(invalidInputs)
+  expect(result.error?.message).toMatchInlineSnapshot(
+    `
+    "{
+      "issues": [
+      {
+        "code": "invalid_type",
+        "expected": "boolean",
+        "received": "string",
+        "path": [
+          0,
+          "foo"
+        ],
+        "message": "Expected boolean, received string"
+      }
+    ],
+      "data": [{"foo":"bar"}]
+    }"
+  `,
+  )
 })
 
 test('parse: extracts input from zod error', () => {

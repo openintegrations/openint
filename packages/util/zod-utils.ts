@@ -8,6 +8,26 @@ function makeZod() {
   // This is the only way to ensure extendZodWithOpenApi is called before we use z
   extendZodWithOpenApi(zod)
 
+  const orgMessage = Object.getOwnPropertyDescriptor(
+    zod.ZodError.prototype,
+    'message',
+  )!.get
+  if (!orgMessage) {
+    throw new Error('Failed to get original ZodError.message getter')
+  }
+  Object.defineProperty(zod.ZodError.prototype, 'message', {
+    get() {
+      const msg = orgMessage.call(this)
+      // We do this to prevent data from being too long to display
+      return `{
+  "issues": ${msg},
+  "data": ${JSON.stringify(this.data)}
+}`
+    },
+    configurable: true,
+    enumerable: true,
+  })
+
   // extend zod to include the data in the error
   const origSafeParse = zod.ZodType.prototype.safeParse
   zod.ZodType.prototype.safeParse = function (data, params) {
