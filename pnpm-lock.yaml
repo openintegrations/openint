@@ -1056,9 +1056,6 @@ importers:
       '@opensdks/sdk-slack':
         specifier: ^0.0.14
         version: 0.0.14
-      '@opensdks/sdk-venice':
-        specifier: ^0.0.14
-        version: 0.0.14(@opensdks/runtime@0.0.19)
       mintlify:
         specifier: latest
         version: 4.0.424(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
@@ -3501,11 +3498,6 @@ packages:
 
   '@opensdks/sdk-twenty@0.0.5':
     resolution: {integrity: sha512-VvAMxuhHk5SFKrPq/v9Kur7rsvxF6L3Sxv1N4illO8PflmsiK6g8zFZj6bhYdmgnlYU5SrttDxDrYlVg1m9H+Q==}
-
-  '@opensdks/sdk-venice@0.0.14':
-    resolution: {integrity: sha512-mGbUqCrqsh5kGxI2gpjCCeqPCbYF0KMyB5Cc8xmcwursZIMFOxMZTYerlYYS0Ht5tRa/WltOuQJTgqUPYmimxg==}
-    peerDependencies:
-      '@opensdks/runtime': 0.0.14
 
   '@opensdks/sdk-xero@0.0.7':
     resolution: {integrity: sha512-NZLi+HH0Jrss+sCnLyDhnih24wjcz/u77zOvFtpBwbbwCUqPSYQ/s50qO0ek+6g9eJG3YxoeplOM51YbyszPwA==}
@@ -17167,10 +17159,6 @@ snapshots:
   '@opensdks/sdk-stripe@0.0.2': {}
 
   '@opensdks/sdk-twenty@0.0.5': {}
-
-  '@opensdks/sdk-venice@0.0.14(@opensdks/runtime@0.0.19)':
-    dependencies:
-      '@opensdks/runtime': 0.0.19
 
   '@opensdks/sdk-xero@0.0.7':
     dependencies:
