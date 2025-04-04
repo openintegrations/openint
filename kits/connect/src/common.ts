@@ -15,7 +15,7 @@ export type FrameMessage = z.infer<typeof zFrameMessage>
 export const defaultHost = 'https://connect.openint.dev'
 
 export interface GetIFrameProps {
-  baseUrl?: string | null
+  baseUrl?: string
   params?: {
     token?: string
     displayName?: string
@@ -31,8 +31,7 @@ export const getIFrameUrl = ({
   baseUrl = defaultHost,
   params = {},
 }: GetIFrameProps) => {
-  const placeholder = 'https://placeholder'
-  const url = new URL(defaultHost)
+  const url = new URL(baseUrl)
   // TODO; move this logic to server to load smartly based on whether the user has connections or not
   if (!params.view) {
     url.searchParams.set('view', 'add')
@@ -42,5 +41,5 @@ export const getIFrameUrl = ({
       url.searchParams.set(key, value)
     }
   })
-  return baseUrl ? url.toString() : url.toString().replace(placeholder, '')
+  return url.toString()
 }
