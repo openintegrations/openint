@@ -98,6 +98,14 @@ async function formatConnection(
     }
   }
 
+  // this is there because the v0 schema had scope as optional
+  if (
+    connection.settings?.oauth &&
+    !connection.settings.oauth.credentials.scope
+  ) {
+    connection.settings.oauth.credentials.scope = ''
+  }
+
   return {
     ...connection,
     // ...settingsToInclude, // buggy, fix me
