@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "generate:lists": "bun ./_generateConnectorLists.ts"
+    "generate:lists": "bun ./scripts/genConnectorLists.ts",
+    "generate:stories": "bun ./scripts/genConnectorStories.ts"
   },
   "dependencies": {
     "@openint/cnext": "workspace:*",
