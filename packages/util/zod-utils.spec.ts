@@ -1,5 +1,10 @@
 import {describe, expect, test} from '@jest/globals'
-import {zCoerceBoolean} from '../zod-utils'
+import {
+  getInputData,
+  getInputDataFromZodError,
+  z,
+  zCoerceBoolean,
+} from '../zod-utils'
 
 describe('z.coerce.boolean', () => {
   test.each([
@@ -25,4 +30,20 @@ describe('z.coerce.boolean', () => {
     const result = zCoerceBoolean().parse(input)
     expect(result).toBe(expected)
   })
+})
+
+test('extracts input from zod error', () => {
+  const invalidInputs = [{foo: 'bar'}]
+  const schema = z.array(z.object({foo: z.boolean()}))
+  const result = schema.safeParse(invalidInputs)
+
+  expect(result.success).toBe(false)
+
+  expect(getInputData(result.error)).toEqual(invalidInputs)
+
+  try {
+    schema.parse(invalidInputs)
+  } catch (error) {
+    expect(getInputData(error)).toEqual(invalidInputs)
+  }
 })

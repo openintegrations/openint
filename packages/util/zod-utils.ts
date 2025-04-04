@@ -1,5 +1,5 @@
-import zod, {ZodError} from 'zod'
 import type Z from 'zod'
+import zod, {ZodError} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
 import {compact} from './array-utils'
 import {R} from './remeda'
@@ -7,12 +7,38 @@ import {R} from './remeda'
 function makeZod() {
   // This is the only way to ensure extendZodWithOpenApi is called before we use z
   extendZodWithOpenApi(zod)
+
+  // extend zod to include the data in the error
+  const origSafeParse = zod.ZodType.prototype.safeParse
+  zod.ZodType.prototype.safeParse = function (data, params) {
+    const result = origSafeParse.call(this, data, params)
+    if (!result.success) {
+      Object.assign(result.error, {data})
+    }
+    return result
+  }
+
   return zod
 }
 const z = makeZod()
 
-export type {Z}
 export {z, ZodError}
+export type {Z}
+
+export function getInputData(error: unknown) {
+  if (error instanceof ZodError) {
+    return getInputDataFromZodError(error)
+  }
+  return undefined
+}
+
+export function getInputDataFromZodError(error: ZodError) {
+  const data = (error as Z.ZodError & {data: unknown}).data
+  if (!data) {
+    throw new Error('No data found in ZodError. Did you z from makeZod')
+  }
+  return data
+}
 
 export function parseIf<T>(value: unknown, typeguard: (v: unknown) => v is T) {
   return typeguard(value) ? value : undefined
