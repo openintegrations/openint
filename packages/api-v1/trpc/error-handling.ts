@@ -11,7 +11,7 @@ import {
   type RouterCallerErrorHandler,
 } from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
-import {z, ZodError, type Z} from '@openint/util/zod-utils'
+import {isZodError, z, ZodErrorWithData, type Z} from '@openint/util/zod-utils'
 
 export const zErrorCode = z
   .enum(
@@ -66,7 +66,7 @@ export type APIError = Z.infer<typeof zAPIError>
 export function parseAPIError(error: unknown): APIError | undefined {
   // Handle TRPCError (from caller)
   if (error instanceof TRPCError) {
-    const cause = error.cause as ZodError | undefined
+    const cause = error.cause as ZodErrorWithData | undefined
     const isOutputError = error.message === 'Output validation failed'
     return zAPIError.parse(
       {
@@ -82,11 +82,11 @@ export function parseAPIError(error: unknown): APIError | undefined {
         output_issues: isOutputError ? cause?.errors : undefined,
       },
       {
-        errorMap: (issue, ctx) => {
+        errorMap: (_, ctx) => {
           console.warn(
             'Did you forget to add custom onError handler when using trpcRouter?',
           )
-          return {message: issue.message || ctx.defaultError}
+          return {message: ctx.defaultError}
         },
       },
     )
@@ -125,7 +125,7 @@ export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
 ) => {
   const {shape, error} = opts
   const trpcErr = error instanceof TRPCError ? error : undefined
-  const zodErr = trpcErr?.cause instanceof ZodError ? trpcErr.cause : undefined
+  const zodErr = isZodError(trpcErr?.cause) ? trpcErr.cause : undefined
 
   // console.log('errorFormatter', opts)
   // console.log('error', error.message)
@@ -164,7 +164,7 @@ export const onError: RouterCallerErrorHandler<unknown> = ({
   if (isInputError) {
     Object.assign(error, {message: 'Input validation failed'})
   }
-  // if (error instanceof ZodError) {
+  // if (isZodError(error)) {
   //   Object.assign(error, {
   //     issues: error.errors,
   //   })

@@ -1,10 +1,5 @@
 import {describe, expect, test} from '@jest/globals'
-import {
-  getInputData,
-  getInputDataFromZodError,
-  z,
-  zCoerceBoolean,
-} from '../zod-utils'
+import {getInputData, z, zCoerceBoolean} from './zod-utils'
 
 describe('z.coerce.boolean', () => {
   test.each([
@@ -32,17 +27,35 @@ describe('z.coerce.boolean', () => {
   })
 })
 
-test('extracts input from zod error', () => {
-  const invalidInputs = [{foo: 'bar'}]
-  const schema = z.array(z.object({foo: z.boolean()}))
+const invalidInputs = [{foo: 'bar'}]
+const schema = z.array(z.object({foo: z.boolean()}))
+
+test('safeParse: extracts input from zod error', () => {
   const result = schema.safeParse(invalidInputs)
 
   expect(result.success).toBe(false)
-
   expect(getInputData(result.error)).toEqual(invalidInputs)
+})
 
+test('parse: extracts input from zod error', () => {
   try {
     schema.parse(invalidInputs)
+    expect(false).toBe(true) // Fail
+  } catch (error) {
+    expect(getInputData(error)).toEqual(invalidInputs)
+  }
+})
+
+test('safeParseAsync: extracts input from zod error', async () => {
+  const result = await schema.safeParseAsync(invalidInputs)
+  expect(result.success).toBe(false)
+  expect(getInputData(result.error)).toEqual(invalidInputs)
+})
+
+test('parseAsync: extracts input from zod error', async () => {
+  try {
+    await schema.parseAsync(invalidInputs)
+    expect(false).toBe(true) // Fail
   } catch (error) {
     expect(getInputData(error)).toEqual(invalidInputs)
   }

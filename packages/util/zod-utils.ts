@@ -17,27 +17,41 @@ function makeZod() {
     }
     return result
   }
+  const origSafeParseAsync = zod.ZodType.prototype.safeParseAsync
+  zod.ZodType.prototype.safeParseAsync = async function (data, params) {
+    const result = await origSafeParseAsync.call(this, data, params)
+    if (!result.success) {
+      Object.assign(result.error, {data})
+    }
+    return result
+  }
+  // Consider adding more specific handling around adding local data failure
+  // to the issues object also via z.setErrorMap
 
   return zod
 }
-const z = makeZod()
 
-export {z, ZodError}
 export type {Z}
+export type ZodErrorWithData<T = unknown> = Z.ZodError & {data: T}
 
-export function getInputData(error: unknown) {
+export const z = makeZod()
+
+export function isZodError<T>(error: unknown): error is ZodErrorWithData<T> {
   if (error instanceof ZodError) {
-    return getInputDataFromZodError(error)
+    if (!('data' in error)) {
+      console.error('No data found in ZodError. Did you z from makeZod', error)
+      throw new Error('No data found in ZodError. Did you z from makeZod')
+    }
+    return true
   }
-  return undefined
+  return false
 }
 
-export function getInputDataFromZodError(error: ZodError) {
-  const data = (error as Z.ZodError & {data: unknown}).data
-  if (!data) {
-    throw new Error('No data found in ZodError. Did you z from makeZod')
+export function getInputData<T>(error: unknown): T | undefined {
+  if (isZodError<T>(error)) {
+    return error.data
   }
-  return data
+  return undefined
 }
 
 export function parseIf<T>(value: unknown, typeguard: (v: unknown) => v is T) {
