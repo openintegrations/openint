@@ -24,7 +24,7 @@ const theme: ThemeProps = {}
 export const RJSFForm = withTheme(theme) as typeof Form
 
 /** For use with createRef... */
-export type SchemaFormElement = Form
+export type JSONSchemaFormRef = Form
 
 export interface JSONSchemaFormProps<TData extends Record<string, unknown>>
   extends Omit<FormProps<TData>, 'schema' | 'validator' | 'onSubmit'> {

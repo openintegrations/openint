@@ -1132,12 +1132,12 @@ importers:
 
   kits/connect:
     dependencies:
-      '@opensdks/sdk-openint':
-        specifier: latest
-        version: 0.1.17(@opensdks/runtime@0.0.22)
       react:
         specifier: 19.0.0
         version: 19.0.0
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
@@ -3483,11 +3483,6 @@ packages:
 
   '@opensdks/sdk-openai@0.0.14':
     resolution: {integrity: sha512-QqLiT2LAZnHZc5pyGNRyhBsk87QfDYUwAi3zE3VhGQSLnT88KiZ+TOpIJIyM1zqcQIlXPIy98H/DSWSWufDDQA==}
-
-  '@opensdks/sdk-openint@0.1.17':
-    resolution: {integrity: sha512-JAPdTOhhg+rnVwUWL7rae5YGPuk41Zh3XE1mgjkIGNz7YAGnqBwZCwX+EJtAzeD/QZc9sX9QyDElmU4yxzBTUw==}
-    peerDependencies:
-      '@opensdks/runtime': 0.0.22
 
   '@opensdks/sdk-outreach@0.0.15':
     resolution: {integrity: sha512-X3HsfDHFs3VFi6xn3EZ75b6WoKL0geVIj+00MuypAgilbbecfrtNlslfMHD/KHQgfZPo+n92ipECJfO5XbtYsg==}
@@ -17162,10 +17157,6 @@ snapshots:
   '@opensdks/sdk-onebrick@0.0.0': {}
 
   '@opensdks/sdk-openai@0.0.14': {}
-
-  '@opensdks/sdk-openint@0.1.17(@opensdks/runtime@0.0.22)':
-    dependencies:
-      '@opensdks/runtime': 0.0.22
 
   '@opensdks/sdk-outreach@0.0.15': {}
 
