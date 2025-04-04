@@ -236,11 +236,13 @@ export const connectorConfigRouter = router({
         // const delimiter =
         //   defConnectors[item.connector_name as keyof typeof defConnectors]
         //     ?.metadata?.oauth?.scopesDelimiter
-        if (
-          item.config?.oauth?.scopes &&
-          typeof item.config.oauth.scopes === 'string'
-        ) {
-          item.config.oauth.scopes = item.config.oauth.scopes.split(/,\s*/)
+        if (item.config?.oauth) {
+          if (!item.config?.oauth?.scopes) {
+            item.config.oauth.scopes = []
+          }
+          if (typeof item.config.oauth.scopes === 'string') {
+            item.config.oauth.scopes = item.config.oauth.scopes.split(/,\s*/)
+          }
         }
       })
       return {
