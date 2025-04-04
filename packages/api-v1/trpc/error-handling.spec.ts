@@ -6,7 +6,24 @@ import {createOpenApiFetchHandler, type OpenApiMeta} from 'trpc-to-openapi'
 import {z, ZodError} from '@openint/util/zod-utils'
 import {onError, parseAPIError} from './error-handling'
 
-const trpc = initTRPC.meta<OpenApiMeta>().create()
+const trpc = initTRPC.meta<OpenApiMeta>().create({
+  errorFormatter: (opts) => {
+    const {shape, error} = opts
+    const trpcErr = error instanceof TRPCError ? error : undefined
+    // console.log('errorFormatter', opts)
+    // console.log('error', error.message)
+    const outputZodErr =
+      error.message === 'Output validation failed' &&
+      trpcErr?.cause instanceof ZodError
+        ? trpcErr.cause
+        : undefined
+
+    return {
+      ...shape,
+      ...(outputZodErr ? {output_issues: outputZodErr.errors} : {}),
+    }
+  },
+})
 
 const router = trpc.router({
   errorTest: trpc.procedure
@@ -157,16 +174,15 @@ describe('OpenAPI endpoints', () => {
         path: 'errOutputValidation',
         stack: expect.any(String),
       },
-      // Output validation does not return issues unfortunately
-      // issues: [
-      //   {
-      //     code: 'invalid_type',
-      //     expected: 'string',
-      //     received: 'undefined',
-      //     path: ['key'],
-      //     message: 'Required',
-      //   },
-      // ],
+      output_issues: [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'undefined',
+          path: ['key'],
+          message: 'Required',
+        },
+      ],
     })
     expect(parseAPIError(json)).toEqual(json)
   })
@@ -355,6 +371,13 @@ describe('TRPC over http', () => {
         path: 'errOutputValidation',
         stack: expect.any(String),
       },
+      output_issues: [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'undefined',
+        },
+      ],
     })
   })
 })
@@ -479,7 +502,7 @@ describe('TRPC caller', () => {
         path: 'errOutputValidation',
         stack: expect.any(String),
       },
-      issues: [
+      output_issues: [
         {
           code: 'invalid_type',
           expected: 'string',

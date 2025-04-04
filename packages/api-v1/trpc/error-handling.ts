@@ -29,6 +29,16 @@ export const zHTTPStatus = z
   .refine((n) => n >= 100 && n < 600, 'Invalid HTTP status')
   .openapi({ref: 'HTTPStatus'})
 
+const zIssue = z
+  .object({
+    code: z.string().describe('Zod issue code'),
+    expected: z.string().optional().describe('Expected type'),
+    received: z.string().optional().describe('Received type'),
+    path: z.array(z.string()).describe('JSONPath to the error'),
+    message: z.string().describe('Error message'),
+  })
+  .openapi({ref: 'ZodIssue'})
+
 export const zAPIError = z
   .object({
     code: zErrorCode,
@@ -41,18 +51,9 @@ export const zAPIError = z
         stack: z.string().optional().describe('Stack trace only in dev'),
       })
       .optional(),
-    /** Zod issues */
-    issues: z
-      .array(
-        z.object({
-          code: z.string().describe('Zod issue code'),
-          expected: z.string().optional().describe('Expected type'),
-          received: z.string().optional().describe('Received type'),
-          path: z.array(z.string()).describe('JSONPath to the error'),
-          message: z.string().describe('Error message'),
-        }),
-      )
-      .optional(),
+    /** Input issues */
+    issues: z.array(zIssue).optional(),
+    output_issues: z.array(zIssue).optional(),
   })
   .openapi({ref: 'APIError'})
 
@@ -62,6 +63,7 @@ export function parseAPIError(error: unknown): APIError | undefined {
   // Handle TRPCError (from caller)
   if (error instanceof TRPCError) {
     const cause = error.cause as ZodError | undefined
+    const isOutputError = error.message === 'Output validation failed'
     return zAPIError.parse(
       {
         code: error.code,
@@ -72,7 +74,8 @@ export function parseAPIError(error: unknown): APIError | undefined {
           path: (error as any).path,
           stack: error.stack,
         },
-        issues: cause?.errors,
+        issues: isOutputError ? undefined : cause?.errors,
+        output_issues: isOutputError ? cause?.errors : undefined,
       },
       {
         errorMap: (issue, ctx) => {
@@ -97,6 +100,7 @@ export function parseAPIError(error: unknown): APIError | undefined {
         stack: error.data?.stack,
       },
       issues: safeJSONParse(error.message) ?? undefined,
+      output_issues: error.shape.output_issues ?? undefined,
     })
   }
 
@@ -106,6 +110,8 @@ export function parseAPIError(error: unknown): APIError | undefined {
 /**
  * TRPCError does not have path, so we need to add it in order to normalize it
  * properly for parseAPIError
+ *
+ * This only works for the direct createCaller pattern though.
  */
 export const onError: RouterCallerErrorHandler<unknown> = ({
   error,
@@ -116,6 +122,8 @@ export const onError: RouterCallerErrorHandler<unknown> = ({
 }) => {
   // Consider adding input and context to make error even more accurate
   // console.log('onError', {error, path, input, ctx, type})
+  // console.log('onError', {error, path})
+
   Object.assign(error, {path})
   if (error instanceof ZodError) {
     Object.assign(error, {
