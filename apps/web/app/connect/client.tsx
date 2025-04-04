@@ -127,6 +127,7 @@ export function AddConnectionInner({
         <Component
           key={name}
           connector_name={name}
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           onConnectFn={React.useCallback((fn) => {
             ref.current = fn
 
