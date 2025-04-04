@@ -24,18 +24,14 @@ const validateResponse = (res: Array<Core['connector_config']>, id: string) => {
   }
 }
 
+// TODO: Add connector.schemas
 const zExpandOptions = z
   .enum(['connector', 'enabled_integrations', 'connection_count'])
   .describe(
     'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)',
   )
 
-export function expandConnector(
-  connectorName: string,
-): Pick<
-  Core['connector'],
-  'name' | 'display_name' | 'logo_url' | 'stage' | 'platforms'
-> {
+export function expandConnector(connectorName: string): Core['connector'] {
   const connector = defConnectors[connectorName as keyof typeof defConnectors]
   if (!connector) {
     throw new TRPCError({

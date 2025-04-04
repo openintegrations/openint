@@ -10,7 +10,7 @@ import {
   AddConnectorConfig,
   ConnectorTableCell,
   JSONSchemaForm,
-  type SchemaFormElement,
+  type JSONSchemaFormRef,
 } from '@openint/ui-v1'
 import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
@@ -34,7 +34,7 @@ export function ConnectorConfigList(props: {
   const [selectedCcfg, setSelectedCcfg] = useState<ConnectorConfig<
     'connector' | 'integrations' | 'connection_count'
   > | null>(null)
-  const formRef = useRef<SchemaFormElement>(null)
+  const formRef = useRef<JSONSchemaFormRef>(null)
 
   const {initialData, initialConnectorData} = props
 

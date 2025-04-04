@@ -1,6 +1,6 @@
 // temp ids
+import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {z} from '@openint/util/zod-utils'
-import {serverConnectors} from '@openint/all-connectors/connectors.server'
 
 export const zConnectionId = z
   .string()
@@ -18,10 +18,5 @@ export const zCustomerId = z
   )
 
 export const zConnectorName = z
-  .enum(
-    Object.keys(serverConnectors).filter((key) => key !== 'postgres') as [
-      string,
-      ...string[],
-    ],
-  )
+  .enum(Object.keys(defConnectors) as [string, ...string[]])
   .describe('The name of the connector')
