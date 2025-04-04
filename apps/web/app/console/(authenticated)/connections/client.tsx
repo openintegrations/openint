@@ -1,7 +1,7 @@
 'use client'
 
 import {useMemo, useState} from 'react'
-import {Core} from '@openint/api-v1/models'
+import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CommandPopover, ConnectionTableCell, CopyID} from '@openint/ui-v1'
@@ -11,15 +11,21 @@ import {formatIsoDateString} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/app/GlobalCommandBarProvider'
 import {useTRPC} from '../client'
 
-const columns: Array<ColumnDef<Core['connection']>> = [
+const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {
     id: 'id',
     header: 'id',
-    cell: ({row}) => <ConnectionTableCell connection={row.original} />,
+    cell: ({row}) => (
+      <ConnectionTableCell
+        connection={row.original}
+        logo_url={row.original?.connector?.logo_url}
+      />
+    ),
   },
   {
     id: 'connector_name',
     header: 'Connector',
+    accessorKey: 'connector.name',
   },
   {
     id: 'customer_id',
@@ -42,7 +48,7 @@ const columns: Array<ColumnDef<Core['connection']>> = [
 
 export function ConnectionsPage(props: {
   initialData?: {
-    items: Array<Core['connection']>
+    items: ConnectionExpanded[]
     total: number
     limit: number
     offset: number
@@ -95,7 +101,7 @@ export function ConnectionsPage(props: {
             definitions={definitions}
           />
         ),
-      } as ColumnDef<Core['connection']>,
+      } as ColumnDef<ConnectionExpanded>,
     ],
     [deleteConn],
   )
@@ -103,7 +109,7 @@ export function ConnectionsPage(props: {
   return (
     <>
       <div>
-        <DataTable<Core['connection'], string | number | string[]>
+        <DataTable<ConnectionExpanded, string | number | string[]>
           data={connectionData.data.items}
           columns={columnsWithActions}
           onRowClick={handleRowClick}>
