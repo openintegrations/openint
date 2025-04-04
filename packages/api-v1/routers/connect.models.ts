@@ -1,6 +1,6 @@
 import {zCustomerId} from '@openint/cdk'
 import {z, zCoerceBoolean} from '@openint/util/zod-utils'
-import {zConnectorName} from './utils/types'
+import {zConnectorName} from './connector.models'
 
 export const connectClientOptions = z
   .object({
@@ -39,7 +39,7 @@ export const connectClientOptions = z
       'Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client',
   })
 
-export const customerRouterModels = {
+export const connectRouterModels = {
   getMagicLinkInput: z.object({
     customer_id: zCustomerId.openapi({
       param: {in: 'path', name: 'customer_id'},

@@ -12,6 +12,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
+import type {ConnectorName} from '@openint/all-connectors'
 
 export const orgRole = pgRole('org')
 export const customerRole = pgRole('customer')
@@ -29,6 +30,7 @@ export const connection = pgTable(
       .notNull(),
     connector_name: varchar()
       .notNull()
+      .$type<ConnectorName>()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
     customer_id: varchar(),
     connector_config_id: varchar().notNull(),
@@ -230,6 +232,7 @@ export const integration = pgTable(
       .notNull(),
     connector_name: varchar()
       .notNull()
+      .$type<ConnectorName>()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
     standard: jsonb().$type<any>().default({}).notNull(),
     external: jsonb().$type<any>().default({}).notNull(),
@@ -272,6 +275,7 @@ export const connector_config = pgTable(
       .notNull(),
     connector_name: varchar()
       .notNull()
+      .$type<ConnectorName>()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
     config: jsonb().$type<any>().default({}).notNull(),
     created_at: timestamp({withTimezone: true, mode: 'string'})

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import {customerRouterModels} from '@openint/api-v1/routers/customer.models'
+import {connectRouterModels} from '@openint/api-v1/routers/connect.models'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
 import {useSuspenseQuery} from '@openint/ui-v1/trpc'
@@ -9,7 +9,7 @@ import {Z} from '@openint/util/zod-utils'
 import {useTRPC} from '@/app/console/(authenticated)/trpc'
 
 // Define the type for the form data based on the schema
-type GetMagicLinkInput = Z.infer<typeof customerRouterModels.getMagicLinkInput>
+type GetMagicLinkInput = Z.infer<typeof connectRouterModels.getMagicLinkInput>
 
 export function ConfigureConnect() {
   // Initialize with default values from the schema
@@ -27,7 +27,7 @@ export function ConfigureConnect() {
       <div className="w-sm flex min-h-0 flex-col p-4 pr-2">
         <h2 className="mb-4 text-xl font-semibold">Configure</h2>
         <ZodSchemaForm
-          schema={customerRouterModels.getMagicLinkInput}
+          schema={connectRouterModels.getMagicLinkInput}
           formData={formData}
           onChange={(change) => {
             if (change.formData) {

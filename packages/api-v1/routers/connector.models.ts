@@ -1,3 +1,4 @@
+import {zConnectorName, type ConnectorName} from '@openint/all-connectors'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {zodToOas31Schema} from '@openint/util/schema'
@@ -98,37 +99,56 @@ export const zConnector = z.object({
     .optional(),
 })
 
+export {zConnectorName, type ConnectorName}
+
+export function getConnectorModelByName(
+  name: ConnectorName | string,
+  opts: {includeSchemas?: boolean} = {},
+): Z.infer<typeof zConnector> {
+  const def = defConnectors[name as keyof typeof defConnectors]
+  if (!def) {
+    throw new Error(`Connector not found: ${name}`)
+  }
+  return getConnectorModel(def, opts)
+}
+
 export const getConnectorModel = (
   def: ConnectorDef,
   opts: {includeSchemas?: boolean} = {},
-): Z.infer<typeof zConnector> => ({
-  name: def.name,
-  display_name: def.metadata?.displayName ?? titleCase(def.name),
-  logo_url: def.metadata?.logoSvg
+): Z.infer<typeof zConnector> => {
+  const logoUrl = def.metadata?.logoSvg
     ? urlFromImage({type: 'svg', data: def.metadata?.logoSvg})
-    : def.metadata?.logoUrl,
-  stage: def.metadata?.stage ?? 'alpha',
-  platforms: def.metadata?.platforms ?? ['cloud', 'local'],
-  // verticals: def.metadata?.verticals ?? ['other'],
-  // authType: def.metadata?.authType,
+    : def.metadata?.logoUrl
+  return {
+    name: def.name,
+    display_name: def.metadata?.displayName ?? titleCase(def.name),
+    // TODO: replace this with our own custom domain later
+    logo_url: logoUrl?.startsWith('http')
+      ? logoUrl
+      : `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public${logoUrl}`,
+    stage: def.metadata?.stage ?? 'alpha',
+    platforms: def.metadata?.platforms ?? ['cloud', 'local'],
+    // verticals: def.metadata?.verticals ?? ['other'],
+    // authType: def.metadata?.authType,
 
-  // hasPreConnect: def.preConnect != null,
-  // hasUseConnectHook: def.useConnectHook != null,
-  // TODO: Maybe nangoProvider be more explicit as a base provider?
-  // hasPostConnect: def.postConnect != null || def.metadata?.nangoProvider,
-  // nangoProvider: def.metadata?.nangoProvider,
-  schemas: opts.includeSchemas
-    ? jsonSchemasForConnectorSchemas(def.schemas)
-    : undefined,
-  openint_scopes:
-    def.metadata?.jsonDef?.auth.type === 'OAUTH2'
-      ? def.metadata?.jsonDef?.auth.openint_scopes
+    // hasPreConnect: def.preConnect != null,
+    // hasUseConnectHook: def.useConnectHook != null,
+    // TODO: Maybe nangoProvider be more explicit as a base provider?
+    // hasPostConnect: def.postConnect != null || def.metadata?.nangoProvider,
+    // nangoProvider: def.metadata?.nangoProvider,
+    schemas: opts.includeSchemas
+      ? jsonSchemasForConnectorSchemas(def.schemas)
       : undefined,
-  scopes:
-    def.metadata?.jsonDef?.auth.type === 'OAUTH2'
-      ? def.metadata?.jsonDef?.auth.scopes
-      : undefined,
-})
+    openint_scopes:
+      def.metadata?.jsonDef?.auth.type === 'OAUTH2'
+        ? def.metadata?.jsonDef?.auth.openint_scopes
+        : undefined,
+    scopes:
+      def.metadata?.jsonDef?.auth.type === 'OAUTH2'
+        ? def.metadata?.jsonDef?.auth.scopes
+        : undefined,
+  }
+}
 
 export function jsonSchemasForConnectorSchemas<T extends ConnectorSchemas>(
   schemas: T,

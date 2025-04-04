@@ -16,7 +16,6 @@
     "@opensdks/sdk-discord": "^0.0.14",
     "@opensdks/sdk-openai": "^0.0.14",
     "@opensdks/sdk-slack": "^0.0.14",
-    "@opensdks/sdk-venice": "^0.0.14",
     "mintlify": "latest"
   }
 }

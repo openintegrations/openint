@@ -12,6 +12,12 @@ import {type RJSFSchema} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@openint/shadcn/ui'
 import {transformJSONSchema, type Oas31Schema} from '@openint/util/schema'
 import {fields} from './fields'
 import {jsonSchemaToUiSchema} from './jsonSchemaToUiSchema'
@@ -88,7 +94,7 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
 
   const uiSchema = jsonSchemaToUiSchema(jsonSchema)
 
-  const form = (
+  const formElement = (
     <RJSFForm<TData>
       disabled={loading}
       {...props}
@@ -120,15 +126,23 @@ export const JSONSchemaForm = <TData extends Record<string, unknown>>({
   )
   return debugMode ? (
     <>
-      {form}
-      <h3>JSON Schema</h3>
-      <pre>{JSON.stringify(jsonSchema, null, 2)}</pre>
-      <h3>UI Schema</h3>
-      <pre>{JSON.stringify(uiSchema, null, 2)}</pre>
-      <h3>FormData</h3>
-      <pre>{JSON.stringify(formData, null, 2)}</pre>
+      {formElement}
+
+      <Accordion type="single" collapsible>
+        <AccordionItem value="debug">
+          <AccordionTrigger>Debug Information</AccordionTrigger>
+          <AccordionContent className="overflow-scroll">
+            <h3>JSON Schema</h3>
+            <pre>{JSON.stringify(jsonSchema, null, 2)}</pre>
+            <h3>UI Schema</h3>
+            <pre>{JSON.stringify(uiSchema, null, 2)}</pre>
+            <h3>FormData</h3>
+            <pre>{JSON.stringify(formData, null, 2)}</pre>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   ) : (
-    form
+    formElement
   )
 }

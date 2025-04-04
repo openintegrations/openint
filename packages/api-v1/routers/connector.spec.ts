@@ -20,25 +20,25 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   test('list connectors', async () => {
     const res = await asOrg.listConnectors()
 
-    expect(res.length).toBeGreaterThan(1)
+    expect(res.items.length).toBeGreaterThan(1)
   })
 
-  // TODO: fix this
-  test.skip('list connectors with integrations', async () => {
-    const res = await asOrg.listConnectors({expand: 'integrations'})
-    const mergeIndex = res.findIndex((c) => c.name === 'merge')
-
-    expect(res[mergeIndex]?.integrations?.length).toBeGreaterThan(1)
+  test('list connectors with schemas', async () => {
+    const res = await asOrg.listConnectors({expand: ['schemas']})
+    expect(res.items).toMatchSnapshot()
   })
 
   test('get connector by with invalid name returns error', async () => {
-    await expect(asOrg.getConnectorByName({name: 'foo'})).rejects.toThrow(
-      /Input validation failed/,
-    )
+    await expect(
+      asOrg.getConnectorByName({name: 'foo' as never}),
+    ).rejects.toThrow(/Input validation failed/)
   })
 
   test('get connector by name', async () => {
-    const res = await asOrg.getConnectorByName({name: 'googledrive'})
+    const res = await asOrg.getConnectorByName({
+      name: 'googledrive',
+      expand: ['schemas'],
+    })
 
     expect(res).toMatchObject({
       name: 'googledrive',
