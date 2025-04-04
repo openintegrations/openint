@@ -27,7 +27,11 @@ export const plaidSchemas = {
           })
           .openapi({title: 'Use my own'}),
       ])
-      .optional(),
+      .optional()
+      .openapi({
+        'ui:field': 'CredentialsField',
+        'ui:fieldReplacesAnyOrOneOf': true,
+      }),
     clientName: z
       .string()
       .max(30)
