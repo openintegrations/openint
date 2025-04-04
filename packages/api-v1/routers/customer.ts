@@ -1,12 +1,9 @@
 import {TRPCError} from '@trpc/server'
-import type {CustomerId, Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
-import {getServerUrl} from '@openint/env'
 import {z} from '@openint/util/zod-utils'
 import {core, Customer} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
-import {customerRouterModels} from './customer.models'
 import {
   applyPaginationAndOrder,
   processTypedPaginatedResponse,
@@ -16,91 +13,7 @@ import {
 } from './utils/pagination'
 import {zCustomerId} from './utils/types'
 
-function asCustomer(
-  viewer: Viewer,
-  input: {customerId?: CustomerId | null},
-): Viewer<'customer'> {
-  if (!('orgId' in viewer) || !viewer.orgId) {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: 'Current viewer missing orgId to create token',
-    })
-  }
-  if (
-    viewer.role === 'customer' &&
-    input.customerId &&
-    input.customerId !== viewer.customerId
-  ) {
-    throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'Current viewer cannot create token for other customer',
-    })
-  }
-  const customerId =
-    viewer.role === 'customer' ? viewer.customerId : input.customerId
-  if (!customerId) {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: 'Either call as an customer or pass customerId explicitly',
-    })
-  }
-
-  return {role: 'customer', customerId, orgId: viewer.orgId}
-}
-
 export const customerRouter = router({
-  getMagicLink: orgProcedure
-    .meta({
-      openapi: {
-        method: 'POST',
-        path: '/customer/{customer_id}/magic-link',
-        description:
-          'Create a magic link that is ready to be shared with customers who want to use Connect',
-        summary: 'Create Magic Link',
-      },
-    })
-    .input(customerRouterModels.getMagicLinkInput.nullish())
-    .output(
-      z.object({
-        magic_link_url: z
-          .string()
-          .describe('The Connect magic link url to share with the user.'),
-      }),
-    )
-    .query(async ({ctx, input}) => {
-      // TODO: replace with new signing and persisting mechanism
-      const jwt = makeJwtClient({
-        secretOrPublicKey: process.env['JWT_SECRET']!,
-      })
-      if (!input || !input.customer_id) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message:
-            'Missing customer_id in path /customer/{customer_id}/magic-link',
-        })
-      }
-      const token = await jwt.signViewer(
-        asCustomer(ctx.viewer, {customerId: input.customer_id as any}),
-        {
-          validityInSeconds: input.validity_in_seconds,
-        },
-      )
-
-      const url = new URL('/connect', getServerUrl(null))
-      url.searchParams.set('token', token)
-
-      if (input.client_options) {
-        for (const [key, value] of Object.entries(input.client_options)) {
-          if (value !== undefined) {
-            url.searchParams.set(key, value.toString())
-          }
-        }
-      }
-
-      return {
-        magic_link_url: url.toString(),
-      }
-    }),
   createToken: orgProcedure
     .meta({
       openapi: {

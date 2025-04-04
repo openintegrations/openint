@@ -39,7 +39,7 @@ export const connectClientOptions = z
       'Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client',
   })
 
-export const customerRouterModels = {
+export const connectRouterModels = {
   getMagicLinkInput: z.object({
     customer_id: zCustomerId.openapi({
       param: {in: 'path', name: 'customer_id'},

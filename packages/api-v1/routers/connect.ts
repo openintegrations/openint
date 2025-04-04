@@ -1,17 +1,71 @@
-import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
-import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
+import {asCustomerOfOrg, makeId, makeJwtClient, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
+import {getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
+import {TRPCError} from '@trpc/server'
 import {core, parseNonEmpty} from '../models'
+import {customerProcedure, orgProcedure, router} from '../trpc/_base'
+import {connectRouterModels} from './connect.models'
 import {connectorSchemas} from './connector.models'
-import {customerProcedure, router} from '../trpc/_base'
 import {md} from './utils/md'
 
 export const connectRouter = router({
+  getMagicLink: orgProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/customer/{customer_id}/magic-link',
+        description:
+          'Create a magic link that is ready to be shared with customers who want to use Connect',
+        summary: 'Create Magic Link',
+      },
+    })
+    .input(connectRouterModels.getMagicLinkInput.nullish())
+    .output(
+      z.object({
+        magic_link_url: z
+          .string()
+          .describe('The Connect magic link url to share with the user.'),
+      }),
+    )
+    .query(async ({ctx, input}) => {
+      // TODO: replace with new signing and persisting mechanism
+      const jwt = makeJwtClient({
+        secretOrPublicKey: process.env['JWT_SECRET']!,
+      })
+      if (!input || !input.customer_id) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message:
+            'Missing customer_id in path /customer/{customer_id}/magic-link',
+        })
+      }
+      const token = await jwt.signViewer(
+        asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
+        {
+          validityInSeconds: input.validity_in_seconds,
+        },
+      )
+
+      const url = new URL('/connect', getServerUrl(null))
+      url.searchParams.set('token', token)
+
+      if (input.client_options) {
+        for (const [key, value] of Object.entries(input.client_options)) {
+          if (value !== undefined) {
+            url.searchParams.set(key, value.toString())
+          }
+        }
+      }
+
+      return {
+        magic_link_url: url.toString(),
+      }
+    }),
   preConnect: customerProcedure
     .meta({
       openapi: {
