@@ -22,6 +22,7 @@ export const createFetchHandlerTRPC =
       createContext: () => routerContextFromRequest({req, db: opts.db}),
       endpoint: opts.endpoint,
       req,
+      onError,
     })
   }
 
@@ -33,6 +34,7 @@ export const createFetchHandlerOpenAPI =
       createContext: () => routerContextFromRequest({req, db: opts.db}),
       endpoint: opts.endpoint,
       req,
+      onError,
     })
   }
 

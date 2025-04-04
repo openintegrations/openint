@@ -227,7 +227,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
             },
           },
         }),
-      ).rejects.toThrow('invalid_type')
+      ).rejects.toThrow('Input validation failed')
     })
 
     test('with metadata', async () => {

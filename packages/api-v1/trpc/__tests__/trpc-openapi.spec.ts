@@ -24,6 +24,7 @@ const router = trpc.router({
 })
 const handler = (req: Request) =>
   createOpenApiFetchHandler({endpoint: '/', req, router})
+
 test('handle single value', async () => {
   const res = await handler(
     new Request('http://localhost:3000/array-params?expand=integration'),
