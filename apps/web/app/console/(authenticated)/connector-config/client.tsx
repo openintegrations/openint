@@ -1,16 +1,11 @@
 'use client'
 
-import {ArrowLeft, Plus} from 'lucide-react'
+import {Plus} from 'lucide-react'
 import {useRef, useState} from 'react'
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {AppRouterOutput} from '@openint/api-v1/routers'
 import {Button} from '@openint/shadcn/ui'
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetTitle,
-} from '@openint/shadcn/ui/sheet'
+import {Sheet, SheetContent, SheetFooter} from '@openint/shadcn/ui/sheet'
 import {
   AddConnectorConfig,
   ConnectorTableCell,
@@ -149,11 +144,6 @@ export function ConnectorConfigList(props: {
 
   const handleSelectConnector = async (connector: Core['connector']) => {
     setSelectedConnector(connector)
-    setSelectedCcfg(null)
-  }
-
-  const handleBackToConnectors = () => {
-    setSelectedConnector(null)
     setSelectedCcfg(null)
   }
 
