@@ -182,7 +182,7 @@ export function AddConnectionInner({
 
   const postConnect = useMutation(
     trpc.postConnect.mutationOptions({
-      onSuccess: (data) => {},
+      onSuccess: () => {},
       onSettled: () => {},
     }),
   )
@@ -225,7 +225,7 @@ export function AddConnectionInner({
       toast.success('Connection created', {
         description: `Connection ${postConnectRes.id} created`,
       })
-      // This is the only way that works for now... 
+      // This is the only way that works for now...
       // TODO: Fix this madness
       setSearchParams({tab: 'my-connections'}, {shallow: false})
     } catch (error) {
