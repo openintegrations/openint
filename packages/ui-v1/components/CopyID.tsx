@@ -102,7 +102,9 @@ export function CopyID({
     return undefined
   }, [mountDelay])
 
-  const copyToClipboard = () => {
+  const copyToClipboard = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     if (!mounted) return
 
     navigator.clipboard

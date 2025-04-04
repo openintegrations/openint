@@ -18,18 +18,19 @@ type Story = StoryObj<typeof meta>
 // Multiple connectors in a list
 export const Default: Story = {
   args: {
-    connector: {
-      name: 'default',
-      stage: 'ga' as 'ga' | 'beta' | 'alpha',
-      platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
-    },
+    stage: 'ga' as 'ga' | 'beta' | 'alpha',
+    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
   },
+
   render: () => (
     <div className="flex flex-col gap-4">
       {Object.values(FIXTURES.connectors).map((connector, index) => (
         <div key={index} className="flex items-center gap-2">
           <span className="w-24 font-medium">{connector.name}:</span>
-          <ConnectorBadges connector={connector} />
+          <ConnectorBadges
+            stage={connector.stage}
+            platforms={connector.platforms}
+          />
         </div>
       ))}
     </div>
@@ -39,52 +40,32 @@ export const Default: Story = {
 // GA stage with web platform
 export const GAStage: Story = {
   args: {
-    connector: {
-      name: 'salesforce',
-      stage: 'ga' as 'ga' | 'beta' | 'alpha',
-      // platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
-    },
+    stage: 'ga' as 'ga' | 'beta' | 'alpha',
+    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
   },
 }
 
 // Beta stage with multiple platforms
 export const BetaStage: Story = {
   args: {
-    connector: {
-      name: 'hubspot',
-      stage: 'beta' as 'ga' | 'beta' | 'alpha',
-      platforms: ['web', 'mobile', 'desktop'] as (
-        | 'web'
-        | 'mobile'
-        | 'desktop'
-      )[],
-    },
+    stage: 'beta' as 'ga' | 'beta' | 'alpha',
+    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
   },
 }
 
 // Alpha stage with single platform
 export const AlphaStage: Story = {
   args: {
-    connector: {
-      name: 'notion',
-      stage: 'alpha' as 'ga' | 'beta' | 'alpha',
-      platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
-    },
+    stage: 'alpha' as 'ga' | 'beta' | 'alpha',
+    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
   },
 }
 
 // Many platforms to demonstrate the +X indicator on mobile
 export const ManyPlatforms: Story = {
   args: {
-    connector: {
-      name: 'multi-platform',
-      stage: 'ga' as 'ga' | 'beta' | 'alpha',
-      platforms: ['web', 'mobile', 'desktop'] as (
-        | 'web'
-        | 'mobile'
-        | 'desktop'
-      )[],
-    },
+    stage: 'ga' as 'ga' | 'beta' | 'alpha',
+    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
   },
   parameters: {
     viewport: {
@@ -102,15 +83,8 @@ export const ManyPlatforms: Story = {
 // Mobile view with limited badges
 export const MobileView: Story = {
   args: {
-    connector: {
-      name: 'mobile-view',
-      stage: 'beta' as 'ga' | 'beta' | 'alpha',
-      platforms: ['web', 'mobile', 'desktop'] as (
-        | 'web'
-        | 'mobile'
-        | 'desktop'
-      )[],
-    },
+    stage: 'beta' as 'ga' | 'beta' | 'alpha',
+    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
   },
   parameters: {
     viewport: {
@@ -127,15 +101,8 @@ export const MobileView: Story = {
 // Desktop view with all badges
 export const DesktopView: Story = {
   args: {
-    connector: {
-      name: 'desktop-view',
-      stage: 'beta' as 'ga' | 'beta' | 'alpha',
-      platforms: ['web', 'mobile', 'desktop'] as (
-        | 'web'
-        | 'mobile'
-        | 'desktop'
-      )[],
-    },
+    stage: 'beta' as 'ga' | 'beta' | 'alpha',
+    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
   },
   parameters: {
     viewport: {
@@ -152,33 +119,20 @@ export const DesktopView: Story = {
 // No stage, only platforms
 export const PlatformsOnly: Story = {
   args: {
-    connector: {
-      name: 'platforms-only',
-      platforms: ['web', 'mobile'] as ('web' | 'mobile' | 'desktop')[],
-    },
+    platforms: ['web', 'mobile'] as ('web' | 'mobile' | 'desktop')[],
   },
 }
 
 // No platforms, only stage
 export const StageOnly: Story = {
   args: {
-    connector: {
-      name: 'stage-only',
-      stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    },
+    stage: 'ga' as 'ga' | 'beta' | 'alpha',
   },
 }
 
 // All possible platforms
 export const AllPlatforms: Story = {
   args: {
-    connector: {
-      name: 'all-platforms',
-      platforms: ['web', 'mobile', 'desktop'] as (
-        | 'web'
-        | 'mobile'
-        | 'desktop'
-      )[],
-    },
+    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
   },
 }

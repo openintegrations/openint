@@ -75,7 +75,7 @@ export const zConnector = z.object({
   name: z.string(),
   display_name: z.string().optional(),
   logo_url: z.string().optional(),
-  stage: z.enum(['alpha', 'beta', 'ga']).optional(),
+  stage: z.enum(['alpha', 'beta', 'ga', 'hidden']).optional(),
   platforms: z
     // TODO: Fix me to be the right ones
     .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
@@ -107,8 +107,8 @@ export const getConnectorModel = (
   logo_url: def.metadata?.logoSvg
     ? urlFromImage({type: 'svg', data: def.metadata?.logoSvg})
     : def.metadata?.logoUrl,
-  // stage: def.metadata?.stage ?? 'alpha',
-  // platforms: def.metadata?.platforms ?? ['cloud', 'local'],
+  stage: def.metadata?.stage ?? 'alpha',
+  platforms: def.metadata?.platforms ?? ['cloud', 'local'],
   // verticals: def.metadata?.verticals ?? ['other'],
   // authType: def.metadata?.authType,
 

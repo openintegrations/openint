@@ -41,7 +41,10 @@ const ConnectorCard = ({
         <h3 className="text-xl font-semibold transition-colors group-hover:text-gray-900">
           {display_name || name}
         </h3>
-        <ConnectorBadges connector={connector} />
+        <ConnectorBadges
+          stage={connector.stage}
+          platforms={connector.platforms}
+        />
       </div>
     </div>
   )
@@ -53,9 +56,11 @@ export {ConnectorCard}
 
 // Export the ConnectorBadges component so it can be used in stories
 export const ConnectorBadges = ({
-  connector: {stage, platforms},
+  stage,
+  platforms,
 }: {
-  connector: Core['connector']
+  stage?: Core['connector']['stage']
+  platforms?: Core['connector']['platforms']
 }) => {
   // Create an array of all badges
   const allBadges = [
