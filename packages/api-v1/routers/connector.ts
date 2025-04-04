@@ -3,6 +3,7 @@ import {z, type Z} from '@openint/util/zod-utils'
 import {core} from '../models'
 import {getConnectorModel, zConnectorName} from '../models/connectorSchemas'
 import {publicProcedure, router} from '../trpc/_base'
+import {zListResponse} from './utils/pagination'
 
 export const zConnectorExtended = core.connector.extend({
   integrations: z.array(core.integration).optional(),
@@ -24,19 +25,20 @@ export const connectorRouter = router({
       },
     })
     .input(z.object({expand: z.array(zExpandOption)}).optional())
-    .output(
-      // Fix the output to be a proper list response type
-      z
-        .array(zConnectorExtended)
-        .describe('List of connectors with selected fields'),
-    )
-    .query(async ({input}) =>
-      Object.values(defConnectors).map((def) =>
+    .output(zListResponse(zConnectorExtended).describe('List of connectors'))
+    .query(async ({input}) => {
+      const items = Object.values(defConnectors).map((def) =>
         getConnectorModel(def, {
           includeSchemas: input?.expand?.includes('schemas'),
         }),
-      ),
-    ),
+      )
+      return {
+        items,
+        total: items.length,
+        limit: 0,
+        offset: 0,
+      }
+    }),
   getConnectorByName: publicProcedure
     .meta({
       openapi: {

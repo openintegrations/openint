@@ -1,5 +1,4 @@
 // temp ids
-import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {z} from '@openint/util/zod-utils'
 
 export const zConnectionId = z

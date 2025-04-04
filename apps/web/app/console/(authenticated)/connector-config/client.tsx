@@ -132,7 +132,7 @@ export function ConnectorConfigList(props: {
     ccfg: ConnectorConfig<'connector' | 'integrations' | 'connection_count'>,
   ) => {
     // Find the full connector data from the connectors list
-    const fullConnector = connectorRes.data.find(
+    const fullConnector = connectorRes.data.items.find(
       (c) => c.name === ccfg.connector?.name,
     )
 
