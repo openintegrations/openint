@@ -55,7 +55,11 @@ export default async function Page(
           </CardContent>
           <CardFooter className="flex justify-center">
             <Button asChild size="lg">
-              <Link href="https://console.openint.dev">
+              {/* We do this as in production the renderer may be connect.openint.dev */}
+              <Link
+                href={
+                  isProduction ? 'https://console.openint.dev' : '/console'
+                }>
                 Go to OpenInt Console
               </Link>
             </Button>
