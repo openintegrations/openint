@@ -1,4 +1,4 @@
-import {z, ZodError, type Z} from '@openint/util/zod-utils'
+import {isZodError, z, type Z} from '@openint/util/zod-utils'
 import {oauth2Schemas, zOAuthConfig} from './def'
 import {mapOauthParams, prepareScopes} from './utils'
 
@@ -42,7 +42,7 @@ export async function makeTokenRequest(
       },
     )
   } catch (error) {
-    if (error instanceof ZodError) {
+    if (isZodError(error)) {
       throw new Error(
         `Invalid oauth2 ${flowType} token response format: ${error.message}`,
       )
