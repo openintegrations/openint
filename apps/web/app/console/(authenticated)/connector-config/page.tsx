@@ -22,7 +22,7 @@ export default async function Page(props: PageProps) {
           <ConnectorConfigList
             initialData={
               (await api.listConnectorConfigs({
-                expand: 'connector,enabled_integrations,connection_count',
+                expand: ['connection_count', 'connector.schemas'],
               })) as {
                 items: Array<
                   ConnectorConfig<

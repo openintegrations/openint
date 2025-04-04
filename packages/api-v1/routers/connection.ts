@@ -6,9 +6,13 @@ import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
 import {Core, core, zConnectionSettings} from '../models'
-import {getConnectorModel, zConnectorName} from '../models/connectorSchemas'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
+import {
+  getConnectorModelByName,
+  zConnectorName,
+  type ConnectorName,
+} from './connector.models'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -89,7 +93,9 @@ async function formatConnection(
   let expandedFields = {}
   if (expand.includes('connector')) {
     expandedFields = {
-      connector: getConnectorModel(connection.connector_name),
+      connector: getConnectorModelByName(
+        connection.connector_name as ConnectorName,
+      ),
     }
   }
 

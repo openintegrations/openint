@@ -41,7 +41,7 @@ export function ConnectorConfigList(props: {
   const trpc = useTRPC()
   const res = useSuspenseQuery(
     trpc.listConnectorConfigs.queryOptions(
-      {expand: 'enabled_integrations,connector'},
+      {expand: ['connector.schemas']},
       initialData ? {initialData} : undefined,
     ),
   )
@@ -287,7 +287,7 @@ export function ConnectorConfigList(props: {
             </>
           ) : (
             <AddConnectorConfig
-              connectors={connectorRes.data}
+              connectors={connectorRes.data.items}
               onSelectConnector={handleSelectConnector}
             />
           )}

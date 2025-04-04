@@ -12,12 +12,12 @@ import {
 import {
   getConnectorModelByName,
   zConnectorName,
-} from '../models/connectorSchemas'
+} from './connector.models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {zListParams, zListResponse} from './utils/pagination'
 import {zConnectorConfigId} from './utils/types'
 
-const zExpand = z
+const zExpandOption = z
   .enum([
     'connector',
     'connector.schemas',
@@ -43,7 +43,7 @@ export const connectorConfigRouter = router({
     .input(
       zListParams
         .extend({
-          expand: z.array(zExpand).optional(),
+          expand: z.array(zExpandOption).optional(),
           connector_name: zConnectorName
             .optional()
             .describe('The name of the connector to filter by'),

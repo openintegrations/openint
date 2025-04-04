@@ -5,6 +5,7 @@ import React from 'react'
 import {clientConnectors} from '@openint/all-connectors/connectors.client'
 import {AppRouterOutput} from '@openint/api-v1'
 import {ConnectorConfig} from '@openint/api-v1/models'
+import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
 import type {ConnectorClient, JSONSchema} from '@openint/cdk'
 import {Button, Label, toast} from '@openint/shadcn/ui'
 import {
@@ -151,7 +152,7 @@ export function AddConnectionInner({
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
 
-  const name = connectorConfig.connector_name
+  const name = connectorConfig.connector_name as ConnectorName
 
   if (!connectorConfig.connector) {
     throw new Error(`Connector missing in AddConnectionInner`)
@@ -287,7 +288,7 @@ export function AddConnectionInner({
 }
 
 export function MyConnectionsClient(props: {
-  connector_name?: string
+  connector_name?: ConnectorName
   initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))

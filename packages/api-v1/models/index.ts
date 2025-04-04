@@ -1,8 +1,8 @@
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import {schema} from '@openint/db'
 import {z, type Z} from '@openint/util/zod-utils'
-import type {NonEmptyArray} from './connectorSchemas'
-import {connectorSchemas, zConnector} from './connectorSchemas'
+import type {NonEmptyArray} from '../routers/connector.models'
+import {connectorSchemas, zConnector} from '../routers/connector.models'
 
 const zMetadata = z.record(z.string(), z.unknown()).describe(`
   JSON object can can be used to associate arbitrary metadata to
@@ -52,6 +52,8 @@ export const zConnectionSettings = z
   )
   .describe('Connector specific data')
 
+// TODO: Move core models into individual files that correspond to each of the routers
+// Should be more sustainable also and only keep certain field level data structure in here
 export const core = {
   event,
   event_insert,
@@ -65,7 +67,7 @@ export const core = {
           connector_config_id: z.string().nullable(),
           customer_id: z.string(),
           integration_id: z.string().nullable(),
-          metadata: zMetadata.nullable(),
+          metadata: zMetadata.nullish(),
         })
         .describe('Connection Base'),
       zConnectionSettings,
@@ -79,7 +81,7 @@ export const core = {
           org_id: z.string(),
           display_name: z.string().nullable(),
           disabled: z.boolean().nullable(),
-          metadata: zMetadata.nullable(),
+          metadata: zMetadata.nullish(),
         })
         .describe('Connector Config Base'),
       z

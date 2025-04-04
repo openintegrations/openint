@@ -1,8 +1,8 @@
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {z, type Z} from '@openint/util/zod-utils'
 import {core} from '../models'
-import {getConnectorModel, zConnectorName} from '../models/connectorSchemas'
 import {publicProcedure, router} from '../trpc/_base'
+import {getConnectorModel, zConnectorName} from './connector.models'
 import {zListResponse} from './utils/pagination'
 
 export const zConnectorExtended = core.connector.extend({
@@ -24,7 +24,7 @@ export const connectorRouter = router({
         summary: 'List Connectors',
       },
     })
-    .input(z.object({expand: z.array(zExpandOption)}).optional())
+    .input(z.object({expand: z.array(zExpandOption).optional()}).optional())
     .output(zListResponse(zConnectorExtended).describe('List of connectors'))
     .query(async ({input}) => {
       const items = Object.values(defConnectors).map((def) =>

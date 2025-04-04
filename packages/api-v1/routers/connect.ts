@@ -7,7 +7,7 @@ import {dbUpsertOne, eq, schema} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {core, parseNonEmpty} from '../models'
-import {connectorSchemas} from '../models/connectorSchemas'
+import {connectorSchemas} from './connector.models'
 import {customerProcedure, router} from '../trpc/_base'
 import {md} from './utils/md'
 

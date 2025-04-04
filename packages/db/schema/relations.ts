@@ -50,7 +50,7 @@ export const connector_configRelations = relations(
   }),
 )
 
-export const integrationRelations = relations(integration, ({many, one}) => ({
+export const integrationRelations = relations(integration, ({many}) => ({
   connections: many(connection),
   // Connector, but connector is alas not a model
   // Though integrations could possibly have to do with connector configs
