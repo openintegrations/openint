@@ -1,22 +1,18 @@
 import {TRPCError} from '@trpc/server'
+import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
-import {and, eq, schema, sql} from '@openint/db'
+import {and, asc, desc, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {core, type Core} from '../models/core'
+import {
+  ConnectorConfig,
+  connectorConfigExtended,
+  core,
+  zConnectorConfigExpandOption,
+} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
-import {
-  getConnectorModelByName,
-  zConnectorName,
-  type ConnectorName,
-} from './connector.models'
-import {connectorConfigExtended, zConnectorConfigExpandOption} from './connectorConfig.models'
-import {
-  applyPaginationAndOrder,
-  processPaginatedResponse,
-  zListParams,
-  zListResponse,
-} from './utils/pagination'
+import {getConnectorModelByName, zConnectorName} from './connector.models'
+import {zListParams, zListResponse} from './utils/pagination'
 import {zConnectorConfigId} from './utils/types'
 
 export const connectorConfigRouter = router({
@@ -42,71 +38,67 @@ export const connectorConfigRouter = router({
     )
     .output(
       zListResponse(connectorConfigExtended).describe(
-        'The list of connector configs',
+        'The list of connector configurations',
       ),
     )
-    .query(async ({ctx, input}) => {
-      const {query, limit, offset} = applyPaginationAndOrder(
-        ctx.db
-          .select({
-            connector_config: schema.connector_config,
-            total: sql`count(*) over()`,
-          })
-          .from(schema.connector_config)
-          .where(
-            and(
-              input?.connector_name
-                ? eq(
-                    schema.connector_config.connector_name,
-                    input.connector_name,
-                  )
-                : undefined,
-            ),
-          ),
-        schema.connector_config.created_at,
-        input,
-      )
+    .query(async ({ctx, input: {expand, connector_name, ...params} = {}}) => {
+      const includeConnectionCount = expand?.includes('connection_count')
 
-      const {items, total} = await processPaginatedResponse(
-        query,
-        'connector_config',
-      )
+      const connectorNames = Object.keys(defConnectors)
+
+      const connectionCountExtra = {
+        connection_count: sql<number>`(
+          SELECT COUNT(*)
+          FROM ${schema.connection}
+          WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
+        )`.as('connection_count'),
+      }
+
+      const items = await ctx.db.query.connector_config.findMany({
+        extras: {
+          total: sql<number>`count(*) over ()`.as('total'),
+          // TODO: Fix typing to make connection_count optional
+          ...((includeConnectionCount &&
+            connectionCountExtra) as typeof connectionCountExtra),
+        },
+        where: and(
+          connector_name
+            ? eq(schema.connector_config.connector_name, connector_name)
+            : undefined,
+          // excluding data from old connectors that are no longer supported
+          eq(
+            schema.connector_config.connector_name,
+            sql`ANY(${sql.param(connectorNames)})`,
+          ),
+        ),
+        orderBy: [
+          desc(schema.connector_config.updated_at),
+          asc(schema.connector_config.id),
+        ],
+        limit: params?.limit ?? 50,
+        offset: params?.offset ?? 0,
+      })
+
+      const limit = params?.limit ?? 50
+      const offset = params?.offset ?? 0
+      const total = items[0]?.total ?? 0
+
+      // console.log(items)
+      const expandedItems = items.map((item) => {
+        const ccfg: ConnectorConfig = item
+        if (
+          expand?.includes('connector') ||
+          expand?.includes('connector.schemas')
+        ) {
+          ccfg.connector = getConnectorModelByName(item.connector_name, {
+            includeSchemas: expand?.includes('connector.schemas'),
+          })
+        }
+        return ccfg
+      })
 
       return {
-        items: await Promise.all(
-          items.map(async (item: any) => {
-            const ccfg: Core['connector_config'] = item
-            let expandedFields = {}
-
-            if (input?.expand?.includes('connector')) {
-              expandedFields = {
-                connector: getConnectorModelByName(
-                  ccfg.connector_name as ConnectorName,
-                ),
-              }
-            }
-
-            if (input?.expand?.includes('connection_count')) {
-              const connectionCount = await ctx.db
-                .select({
-                  count: sql`count(*)`,
-                })
-                .from(schema.connection)
-                .where(eq(schema.connection.connector_config_id, ccfg.id))
-                .then((rows) => rows[0]?.count ?? 0)
-
-              expandedFields = {
-                ...expandedFields,
-                connection_count: connectionCount,
-              }
-            }
-
-            return {
-              ...ccfg,
-              ...expandedFields,
-            }
-          }),
-        ),
+        items: expandedItems,
         total,
         limit,
         offset,
