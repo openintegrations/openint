@@ -3,6 +3,7 @@ import {initTRPC, TRPCError} from '@trpc/server'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {createOpenApiFetchHandler, type OpenApiMeta} from 'trpc-to-openapi'
+import {safeJSONParse} from '@openint/util/json-utils'
 import {z, ZodError} from '@openint/util/zod-utils'
 import {onError, parseAPIError} from './error-handling'
 
@@ -10,17 +11,25 @@ const trpc = initTRPC.meta<OpenApiMeta>().create({
   errorFormatter: (opts) => {
     const {shape, error} = opts
     const trpcErr = error instanceof TRPCError ? error : undefined
+    const zodErr =
+      trpcErr?.cause instanceof ZodError ? trpcErr.cause : undefined
+
     // console.log('errorFormatter', opts)
     // console.log('error', error.message)
-    const outputZodErr =
-      error.message === 'Output validation failed' &&
-      trpcErr?.cause instanceof ZodError
-        ? trpcErr.cause
-        : undefined
+    // TODO: Parse that this is zod json
+    const isInputError = safeJSONParse(error.message) != null
 
     return {
       ...shape,
-      ...(outputZodErr ? {output_issues: outputZodErr.errors} : {}),
+      ...(zodErr && error.message === 'Output validation failed'
+        ? {output_issues: zodErr.errors}
+        : {}),
+      ...(isInputError
+        ? {
+            message: 'Input validation failed',
+            issues: zodErr?.errors,
+          }
+        : {}),
     }
   },
 })
@@ -258,25 +267,8 @@ describe('TRPC over http', () => {
       .catch((e) => e)
 
     expect(err).toBeInstanceOf(TRPCClientError)
+    expect(err.message).toEqual('Input validation failed')
 
-    // console.log(err)
-    // It's really quite a hack. Seems that openapi actually gives us better errors!
-    // TODO: Customize shape to make this better
-    expect(err.message).toEqual(
-      JSON.stringify(
-        [
-          {
-            code: 'invalid_type',
-            expected: 'string',
-            received: 'undefined',
-            path: ['code'],
-            message: 'Required',
-          },
-        ],
-        null,
-        2,
-      ),
-    )
     expect(err.data).toMatchObject({
       code: 'BAD_REQUEST',
       httpStatus: 400,
@@ -285,8 +277,7 @@ describe('TRPC over http', () => {
     })
     expect(parseAPIError(err)).toMatchObject({
       code: 'BAD_REQUEST',
-      // No way to get the message from the TRPCError unfortunately
-      // message: 'Input validation failed',
+      message: 'Input validation failed',
       // TODO: Implement custom message similar to
       // https://github.com/mcampa/trpc-to-openapi/blob/af44cc54d1d719b1bc77d05067cdd4a3b4f882aa/src/adapters/node-http/core.ts#L197-L210
       data: {
@@ -307,21 +298,10 @@ describe('TRPC over http', () => {
     })
 
     const json = err.meta?.['responseJSON']
+
     expect(json).toEqual({
       error: {
-        message: JSON.stringify(
-          [
-            {
-              code: 'invalid_type',
-              expected: 'string',
-              received: 'undefined',
-              path: ['code'],
-              message: 'Required',
-            },
-          ],
-          null,
-          2,
-        ),
+        message: 'Input validation failed',
         code: TRPC_ERROR_CODES_BY_KEY.BAD_REQUEST,
         data: {
           code: 'BAD_REQUEST',
@@ -329,6 +309,15 @@ describe('TRPC over http', () => {
           path: 'errorTest',
           stack: expect.any(String),
         },
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            received: 'undefined',
+            path: ['code'],
+            message: 'Required',
+          },
+        ],
       },
     })
 

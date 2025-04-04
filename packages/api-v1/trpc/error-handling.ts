@@ -99,7 +99,7 @@ export function parseAPIError(error: unknown): APIError | undefined {
         path: error.data?.path,
         stack: error.data?.stack,
       },
-      issues: safeJSONParse(error.message) ?? undefined,
+      issues: error.shape.issues ?? safeJSONParse(error.message) ?? undefined,
       output_issues: error.shape.output_issues ?? undefined,
     })
   }
@@ -125,9 +125,9 @@ export const onError: RouterCallerErrorHandler<unknown> = ({
   // console.log('onError', {error, path})
 
   Object.assign(error, {path})
-  if (error instanceof ZodError) {
-    Object.assign(error, {
-      issues: error.errors,
-    })
-  }
+  // if (error instanceof ZodError) {
+  //   Object.assign(error, {
+  //     issues: error.errors,
+  //   })
+  // }
 }
