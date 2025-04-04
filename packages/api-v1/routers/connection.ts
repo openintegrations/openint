@@ -1,15 +1,14 @@
+import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
-import {TRPCError} from '@trpc/server'
 import {Core, core, zConnectionSettings} from '../models'
-import {zConnectorName} from '../models/connectorSchemas'
+import {getConnectorModel, zConnectorName} from '../models/connectorSchemas'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {type RouterContext} from '../trpc/context'
-import {expandConnector} from './connectorConfig'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
@@ -90,7 +89,7 @@ async function formatConnection(
   let expandedFields = {}
   if (expand.includes('connector')) {
     expandedFields = {
-      connector: expandConnector(connection.connector_name),
+      connector: getConnectorModel(connection.connector_name),
     }
   }
 
