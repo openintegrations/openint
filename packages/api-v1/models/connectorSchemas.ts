@@ -100,7 +100,7 @@ export const zConnector = z.object({
 
 export const zConnectorName = z
   .enum(Object.keys(defConnectors) as [keyof typeof defConnectors])
-  .describe('The name of the connector')
+  .openapi({ref: 'core.connector.name'})
 
 export type ConnectorName = Z.infer<typeof zConnectorName>
 
