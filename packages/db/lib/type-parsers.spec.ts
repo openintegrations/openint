@@ -20,6 +20,12 @@ describeEachDatabase({drivers: 'all', __filename}, (db) => {
       ),
     ).rejects.toThrow('Number overflow')
   })
+
+  test('timestamptz type parser', async () => {
+    const timestamp = '2024-01-01T12:00:00Z'
+    const res = await db.$exec(`SELECT '${timestamp}'::timestamptz as ts`)
+    expect(res.rows[0]?.ts).toEqual('2024-01-01 12:00:00+00')
+  })
 })
 
 test('parseNumber', () => {

@@ -6,24 +6,10 @@ import {types as pgTypes, Pool} from 'pg'
 import type {Viewer} from '@openint/cdk'
 import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
-import {parseNumber} from './lib/type-parsers'
+import {setTypeParsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
-export function setTypeParsers() {
-  pgTypes.setTypeParser(pgTypes.builtins.DATE, (val) => val)
-  pgTypes.setTypeParser(pgTypes.builtins.TIMESTAMP, (val) => val)
-  pgTypes.setTypeParser(pgTypes.builtins.TIMESTAMPTZ, (val) => val)
-  pgTypes.setTypeParser(pgTypes.builtins.INTERVAL, (val) => val)
-  pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (val) => parseNumber(val))
-  pgTypes.setTypeParser(pgTypes.builtins.INT8, (val) => parseNumber(val))
-  pgTypes.setTypeParser(pgTypes.builtins.INT4, (val) => parseNumber(val))
-  pgTypes.setTypeParser(pgTypes.builtins.INT2, (val) => parseNumber(val))
-  pgTypes.setTypeParser(pgTypes.builtins.FLOAT8, (val) => parseNumber(val))
-  pgTypes.setTypeParser(pgTypes.builtins.FLOAT4, (val) => parseNumber(val))
-  pgTypes.setTypeParser(pgTypes.builtins.MONEY, (val) => parseNumber(val))
-
-  return pgTypes
-}
+const typeParsers = setTypeParsers(pgTypes)
 
 function drizzleForViewer(
   pool: Pool,
@@ -40,7 +26,7 @@ function drizzleForViewer(
       }
       const res = await client.query({
         text: query,
-        types: setTypeParsers(),
+        types: typeParsers,
         values: params,
         ...(method === 'all' ? {rowMode: 'array'} : {}),
       })
@@ -60,7 +46,7 @@ function drizzleForViewer(
 }
 
 export function initDbPg(url: string, options: DbOptions = {}) {
-  const pool = new Pool({connectionString: url, types: setTypeParsers()})
+  const pool = new Pool({connectionString: url, types: typeParsers})
 
   const db = drizzleForViewer(pool, null, options)
 
@@ -96,7 +82,7 @@ export function initDbPg(url: string, options: DbOptions = {}) {
 }
 
 export function initDbPgDirect(url: string, options: DbOptions = {}) {
-  const pool = new Pool({connectionString: url})
+  const pool = new Pool({connectionString: url, types: typeParsers})
   const db = drizzlePg({...getDrizzleConfig(options), client: pool})
   return dbFactory('pg-direct', db, {
     async $exec(query) {

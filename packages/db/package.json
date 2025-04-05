@@ -21,6 +21,7 @@
     "drizzle-orm": "^0.39.1",
     "json-stable-stringify": "^1.1.1",
     "pg": "^8.13.3",
+    "pg-types": "^4.0.2",
     "postgres": "^3.4.5"
   },
   "devDependencies": {

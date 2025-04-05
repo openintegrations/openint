@@ -1242,6 +1242,9 @@ importers:
       pg:
         specifier: ^8.13.3
         version: 8.13.3(pg-native@3.0.1)
+      pg-types:
+        specifier: ^4.0.2
+        version: 4.0.2
       postgres:
         specifier: ^3.4.5
         version: 3.4.5

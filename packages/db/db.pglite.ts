@@ -1,5 +1,5 @@
-import type {ParserOptions, QueryOptions} from '@electric-sql/pglite'
-import {PGlite, types} from '@electric-sql/pglite'
+import type {QueryOptions} from '@electric-sql/pglite'
+import {PGlite} from '@electric-sql/pglite'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {drizzle as drizzlePGLite} from 'drizzle-orm/pglite'
@@ -11,17 +11,8 @@ import {
   getMigrationConfig,
   type DbOptions,
 } from './db'
-import {parseNumber} from './lib/type-parsers'
+import {parsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
-
-const parsers = {
-  [types.TIMESTAMP]: (value) => value,
-  [types.TIMESTAMPTZ]: (value) => value,
-  [types.INTERVAL]: (value) => value,
-  [types.DATE]: (value) => value,
-  [types.NUMERIC]: (value) => parseNumber(value),
-  [types.INT8]: (value) => parseNumber(value),
-} satisfies ParserOptions
 
 function drizzleForViewer(
   pglite: PGlite,
