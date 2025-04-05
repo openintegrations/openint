@@ -11,7 +11,7 @@ const zOauthConnectorConfig = z
   })
   .describe('Base oauth configuration for the connector')
   .openapi({
-    'ui:field': 'OAuthField',
+    // 'ui:field': 'OAuthField',
   })
 
 const zOAuthConnectionSettings = z.object({
