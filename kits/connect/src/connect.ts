@@ -1,24 +1,45 @@
-import React from 'react'
-import {createRoot} from 'react-dom/client'
-import {ConnectEmbed, ConnectEmbedProps} from './ConnectEmbed'
-import {createConnectModal} from './dialog'
+import {ConnectProps, createConnectIframe} from './common'
 
 export const Connect = {
   embed: (
-    props: ConnectEmbedProps & {containerRef: React.RefObject<HTMLDivElement>},
+    props: ConnectProps & {
+      containerRef: HTMLElement | string
+    },
   ) => {
-    if (props.containerRef.current) {
-      const embedElement = React.createElement(ConnectEmbed, props)
-      const root = createRoot(props.containerRef.current)
-      root.render(embedElement)
+    let targetContainer: HTMLElement | null = null
+
+    if (typeof props.containerRef === 'string') {
+      targetContainer = document.querySelector(props.containerRef)
     } else {
-      console.error(
-        `Connect embed: containerRef is not found for ${props.containerRef}`,
-      )
+      targetContainer = props.containerRef
+    }
+
+    if (targetContainer) {
+      const iframeWrapper = createConnectIframe(props)
+
+      // Clear existing content
+      targetContainer.innerHTML = ''
+      targetContainer.appendChild(iframeWrapper)
+    } else {
+      console.error(`Connect embed: container ${props.containerRef} not found`)
     }
   },
-  modal: (props: ConnectEmbedProps) => {
-    const controller = createConnectModal(props)
-    return controller.setOpen
+  modal: () => {
+    console.error(
+      'Modal mode is not yet supported. Please contact us at support@openint.dev if you need this feature.',
+    )
+    throw new Error(
+      'Modal mode is not yet supported. Please contact us at support@openint.dev if you need this feature.',
+    )
+    // const controller = createConnectModal(props)
+    // return controller.setOpen
+  },
+  redirect: () => {
+    console.error(
+      'Redirect mode is not yet supported. Please contact us at support@openint.dev if you need this feature.',
+    )
+    throw new Error(
+      'Redirect mode is not yet supported. Please contact us at support@openint.dev if you need this feature.',
+    )
   },
 }

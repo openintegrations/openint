@@ -1,3 +1,5 @@
+import {z} from 'zod'
+
 // example event
 // {
 //   "name": "connect/connection-connected",
@@ -7,44 +9,62 @@
 //   "id": "evt_xxxx",
 //   "ts": 1741530259940
 // }
-export interface OpenIntEvent {
-  name: string
-  data: {
-    connectionId?: string
-    [key: string]: any
-  }
-  id: string
-  ts: number
+
+export const zOpenIntEvent = z.object({
+  // TODO: pull this in from the server OAS spec
+  // NOTE: connect.loaded is currently only client side
+  name: z.enum(['connect.connection-connected', 'connect.loaded'] as const),
+  data: z
+    .object({
+      connection_id: z.string().optional(),
+    })
+    .passthrough()
+    .optional(),
+  id: z.string().startsWith('evt_'),
+  ts: z.number(),
+})
+
+export type OpenIntEvent = z.infer<typeof zOpenIntEvent>
+
+export const createClientOnlyEventId = () => {
+  return `evt_CLIENTONLY_${Math.random().toString(36).substring(2, 15)}`
 }
 
 export const frameEventsListener = (
   callback: (event: OpenIntEvent) => void,
 ): (() => void) => {
-  // Add a delay before looking for the iframe
-  setTimeout(() => {
-    // Try to find specific iframe first
-    const targetFrame =
-      (window.frames as unknown as Record<string, Window>)[
-        'openint-connect-frame'
-      ] ||
-      (window.document.getElementById('openint-connect-frame') as any)
-        ?.contentWindow ||
-      window.frames[0] // Fallback to first iframe if specific frame not found
-
-    if (targetFrame) {
-      // Send to specific iframe if found
-      targetFrame.postMessage('openIntListen', '*')
-    } else {
-      // Fall back to sending to all windows
-      window.postMessage('openIntListen', '*')
-    }
-  }, 3000) // 3 second delay for it to load. we don't offer initial load events anyways
+  // Use a more reliable approach than a fixed delay
+  const iframe = document.getElementById(
+    'openint-connect-frame',
+  ) as HTMLIFrameElement
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage('openIntListen', '*')
+  } else {
+    // Set up a mutation observer to detect when the iframe is added
+    const observer = new MutationObserver(() => {
+      const iframe = document.getElementById(
+        'openint-connect-frame',
+      ) as HTMLIFrameElement
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage('openIntListen', '*')
+        observer.disconnect()
+      }
+    })
+    observer.observe(document.body, {childList: true, subtree: true})
+  }
 
   const messageListener = (event: MessageEvent) => {
     // Check if the event data has the openIntEvent type
     if (typeof event.data === 'object' && event.data !== null) {
       if (event.data.type === 'openIntEvent' && event.data.event) {
-        callback(event.data.event)
+        let payload = event.data.event
+        // the backend may still be sending it as connectionId (camel case)
+        if (payload.data.connectionId) {
+          payload.data.connection_id = payload.data.connectionId
+          delete payload.data.connectionId
+        }
+
+        callback(payload)
         return
       }
     }
