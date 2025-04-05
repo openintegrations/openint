@@ -1,4 +1,3 @@
-import {R} from '@openint/util/remeda'
 import {toBase64Url} from '@openint/util/string-utils'
 import {stringifyQueryParams} from '@openint/util/url-utils'
 import type {Z} from '@openint/util/zod-utils'
@@ -103,24 +102,23 @@ export function createOAuth2Client<
     state?: string
     code_verifier?: string
   }) => {
-    let codeChallenge: string | undefined
-
-    if (params.code_verifier) {
-      codeChallenge = await createCodeChallenge(params.code_verifier)
+    const searchParams = {
+      ...params,
+      response_type: 'code',
+      client_id: config.clientId,
+      ...(params.code_verifier && {
+        code_challenge: await createCodeChallenge(params.code_verifier),
+        code_challenge_method: 'S256',
+      }),
+    }
+    const url = new URL(config.authorizeURL)
+    for (const [key, value] of Object.entries(searchParams)) {
+      if (value != null) {
+        url.searchParams.append(key, String(value))
+      }
     }
 
-    return `${config.authorizeURL}?${stringifyQueryParams(
-      R.pickBy(
-        {
-          response_type: 'code',
-          client_id: config.clientId,
-          ...params,
-          code_challenge: codeChallenge,
-          code_challenge_method: codeChallenge ? 'S256' : undefined,
-        },
-        (val) => val != null,
-      ),
-    )}`
+    return url.toString()
   }
 
   const getToken = ({
@@ -167,25 +165,4 @@ export function createOAuth2Client<
     revokeToken,
     getTokenWithClientCredentials,
   }
-}
-
-export type OAuth2Client<TToken extends TokenResponse = TokenResponse> = {
-  getAuthorizeUrl: (params: {
-    redirect_uri: string
-    scope?: string
-    state?: string
-    code_verifier?: string
-  }) => Promise<string>
-  getToken: (params: {
-    code: string
-    redirectUri: string
-    code_verifier?: string
-  }) => Promise<TToken & {refresh_token: string}>
-  refreshToken: (
-    refreshToken: string,
-  ) => Promise<TToken & {refresh_token: string}>
-  revokeToken: (token: string) => Promise<unknown>
-  getTokenWithClientCredentials: (params?: {
-    scope: string
-  }) => Promise<TToken & {refresh_token: string}>
 }
