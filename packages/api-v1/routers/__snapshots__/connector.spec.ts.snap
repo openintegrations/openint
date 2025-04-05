@@ -2295,35 +2295,62 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "description": "Base oauth configuration for the connector",
-            "properties": {
-              "client_id": {
-                "type": [
-                  "string",
-                  "null",
-                ],
-              },
-              "client_secret": {
-                "type": [
-                  "string",
-                  "null",
-                ],
-              },
-              "scopes": {
-                "items": {
-                  "type": "string",
+            "anyOf": [
+              {
+                "properties": {
+                  "scopes": {
+                    "description": "Scopes for OpenInt Platform Credentials",
+                    "items": {
+                      "enum": [
+                        "https://www.googleapis.com/auth/drive.file",
+                      ],
+                      "type": "string",
+                    },
+                    "title": "Scopes",
+                    "type": "array",
+                  },
                 },
+                "required": [
+                  "scopes",
+                ],
+                "title": "Use OpenInt platform credentials",
+                "type": "object",
+              },
+              {
+                "description": "Base oauth configuration for the connector",
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "scopes": {
+                    "items": {
+                      "type": "string",
+                    },
+                    "type": [
+                      "array",
+                      "null",
+                    ],
+                  },
+                },
+                "title": "Use my own",
                 "type": [
-                  "array",
+                  "object",
                   "null",
                 ],
+                "ui:field": "OAuthField",
               },
-            },
-            "type": [
-              "object",
-              "null",
             ],
             "ui:field": "OAuthField",
+            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -5766,6 +5793,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "type": "string",
             },
             "type": "array",
+            "ui:field": "MultiSelectField",
           },
           "credentials": {
             "anyOf": [
@@ -5790,6 +5818,8 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "object",
               },
             ],
+            "ui:field": "CredentialsField",
+            "ui:fieldReplacesAnyOrOneOf": true,
           },
           "envName": {
             "enum": [
@@ -5837,6 +5867,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "type": "string",
             },
             "type": "array",
+            "ui:field": "MultiSelectField",
           },
         },
         "required": [
