@@ -4,7 +4,7 @@ import {
   HTTPError as OpenapiHTTPError,
 } from '@opensdks/runtime'
 import {initYodleeSDK} from '@opensdks/sdk-yodlee'
-import {$makeProxyAgent, getDefaultProxyAgent} from '@openint/util/http/http-utils'
+import {$makeProxyAgent, getDefaultProxyAgent} from '@openint/util/http'
 import {createHTTPClient} from '@openint/util/http/index'
 import {DateTime, parseDateTime} from '@openint/util/date-utils'
 import {R} from '@openint/util/remeda'

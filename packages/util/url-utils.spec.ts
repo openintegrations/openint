@@ -1,9 +1,5 @@
-import {
-  parseUrl,
-  stringifyUrl,
-  joinPath,
-  stringifyQueryParams,
-} from './url-utils'
+import {joinPath, parseQueryParams, stringifyQueryParams} from './url-utils'
+
 // import path from 'node:path'
 
 test.each([
@@ -24,16 +20,13 @@ test.each([
   expect(joinPath(p1, p2)).toEqual(output)
 })
 
-test('delete query param', () => {
-  const parsed = parseUrl('/rest/v1/?token=key_01GSH1T4KV4BP8QEA2SM0MTDS1')
-  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-  delete parsed.query['token']
-  expect(stringifyUrl(parsed)).toEqual('/rest/v1/')
-})
-
 test.each([
-  [{metadata: {id: 123}}, 'metadata%5Bid%5D=123'],
+  [{metadata: {id: '123'}}, 'metadata[id]=123'],
   [{hello: 'world', again: '123'}, 'hello=world&again=123'],
-])('stringifyQueryParams(%o) -> %o', (input, output) => {
+  [{arr: ['a', 'b']}, 'arr[0]=a&arr[1]=b'],
+  [{obj: {a: 'b', c: ['d', 'e']}}, 'obj[a]=b&obj[c][0]=d&obj[c][1]=e'],
+])('stringifyQueryParams(%o) -> %o', (input, decodedOutput) => {
+  const output = encodeURI(decodedOutput)
   expect(stringifyQueryParams(input)).toEqual(output)
+  expect(parseQueryParams(output)).toEqual(input)
 })

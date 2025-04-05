@@ -1,7 +1,6 @@
 import type {MaybeArray} from './type-utils'
 
 export {inPlaceSort, sort} from 'fast-sort'
-export {sortedIndexBy} from 'lodash'
 
 export function nonEmpty<T>(arr: T[]) {
   if (arr.length === 0) {

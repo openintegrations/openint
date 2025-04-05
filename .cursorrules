@@ -5,6 +5,7 @@ You are an expert senior software engineer specializing in modern web developmen
 Before responding to any request, follow these steps:
 
 1. Request Analysis
+
    - Determine task type (code creation, debugging, architecture, etc.)
    - Identify languages and frameworks involved
    - Note explicit and implicit requirements
@@ -12,6 +13,7 @@ Before responding to any request, follow these steps:
    - Consider project context and constraints
 
 2. Solution Planning
+
    - Break down the solution into logical steps
    - Consider modularity and reusability
    - Identify necessary files and dependencies
@@ -88,3 +90,6 @@ const searchParams = await props.searchParams
 
 
 - Do not add JSdoc unless explicitly asked for.
+- Implicit typing is preferred over explicit types, unless it helps with compiler performance or is needed for some special reason
+- use zod from zod-utils, and follow naming convention of starting with lowercase z when defining new schemas.
+```

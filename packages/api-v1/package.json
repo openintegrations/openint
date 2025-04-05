@@ -5,6 +5,7 @@
   "sideEffects": false,
   "module": "./index.ts",
   "scripts": {
+    "dev": "bun run --watch ./app.ts",
     "gen": "run-s gen:*",
     "gen:oas": "bun ./scripts/gen-oas.ts",
     "gen:types": "bunx openapi-typescript ./__generated__/openapi.json --output ./__generated__/openapi.types.ts"
