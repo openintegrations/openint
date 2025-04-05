@@ -5,20 +5,17 @@ import type {
 import {neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
+import * as pgTypes from 'pg-types'
 import type {Viewer} from '@openint/cdk'
 import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
-import {setTypeParsers} from './db.pg'
+import {setTypeParsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
-// this is also unfortunately global... which is needed for neon. in particular it shares state with
-// node postgres driver as well. However at least we want consistent type parsing...
-// This creates a dependency on pg from neon, but that is not avoidable given the requirement on
-// pgTypes. However at least it doesn't really pull in much else deps
-const typeParsers = setTypeParsers()
+const typeParsers = setTypeParsers(pgTypes)
 
 function drizzleForViewer(
-  neonSql: NeonQueryFunction<false, false>,
+  neonSql: NeonQueryFunction<boolean, boolean>,
   viewer: Viewer | null,
   options: DbOptions,
 ) {
@@ -38,7 +35,7 @@ function drizzleForViewer(
           // same impact as reset role
           [
             ...rlsStatementsForViewer(viewer).map((q) => neonSql(q)),
-            neonSql(query, params, opts) as never, // TODO: Fix typing ....
+            neonSql(query, params, opts),
           ],
           opts,
         )
@@ -65,7 +62,7 @@ export function initDbNeon(url: string, options: DbOptions = {}) {
     return `${protocol}://${host}:${port}/sql`
   }
 
-  const neonSql = neon(url, {types: typeParsers})
+  const neonSql = neon<boolean, boolean>(url, {types: typeParsers})
 
   const db = drizzleForViewer(neonSql, null, options)
 
