@@ -9,7 +9,7 @@ interface Schema {
   default?: string[]
 }
 
-const getValueByName = (name: string): string =>
+const camelCaseToFieldName = (name: string): string =>
   name
     .replace(/([A-Z])/g, ' $1')
     .split(' ')
@@ -28,7 +28,7 @@ export function MultiSelectField<T extends string[] = string[]>(
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="font-bold">{getValueByName(props.name)}</h3>
+      <h3 className="font-bold">{camelCaseToFieldName(props.name)}</h3>
       <MultiSelect
         items={items.enum ?? []}
         onChange={handleChange}
