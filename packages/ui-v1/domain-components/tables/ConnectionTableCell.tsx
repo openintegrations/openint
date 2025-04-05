@@ -1,35 +1,36 @@
 'use client'
 
 import Image from 'next/image'
-import {Core} from '@openint/api-v1/models'
+import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {CopyID} from '../../components/CopyID'
-import {getConnectorLogoUrl} from '../../utils'
 
 interface ConnectionTableCellProps
   extends React.HTMLAttributes<HTMLDivElement> {
   connection: Core['connection']
   useLogo?: boolean
   className?: string
+  logo_url?: string
 }
 
 export function ConnectionTableCell({
   connection,
   useLogo = true,
   className,
+  logo_url,
 }: ConnectionTableCellProps) {
   const logo = (
     <div
       className={cn(
-        'bg-primary/15 relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded',
+        'bg-primary/15 relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded-md',
         'h-8 w-8',
       )}>
-      {useLogo && (
+      {useLogo && logo_url && (
         <Image
-          src={getConnectorLogoUrl(connection.connector_name)}
+          src={logo_url}
           alt={`${connection.connector_name} logo`}
-          width={2}
-          height={12}
+          width={100}
+          height={100}
           className="text-primary"
         />
       )}

@@ -196,6 +196,7 @@
                 "linear",
                 "linkedin",
                 "lunchmoney",
+                "mercury",
                 "merge",
                 "microsoft",
                 "moota",
@@ -204,6 +205,7 @@
                 "outreach",
                 "pipedrive",
                 "plaid",
+                "postgres",
                 "quickbooks",
                 "ramp",
                 "reddit",
@@ -218,6 +220,7 @@
                 "toggl",
                 "twenty",
                 "twitter",
+                "venmo",
                 "wise",
                 "xero",
                 "yodlee",
@@ -1226,6 +1229,7 @@
                 "linear",
                 "linkedin",
                 "lunchmoney",
+                "mercury",
                 "merge",
                 "microsoft",
                 "moota",
@@ -1234,6 +1238,7 @@
                 "outreach",
                 "pipedrive",
                 "plaid",
+                "postgres",
                 "quickbooks",
                 "ramp",
                 "reddit",
@@ -1248,6 +1253,7 @@
                 "toggl",
                 "twenty",
                 "twitter",
+                "venmo",
                 "wise",
                 "xero",
                 "yodlee",
@@ -2203,8 +2209,64 @@
                       "connector_name": {
                         "type": "string",
                         "enum": [
+                          "aircall",
+                          "airtable",
+                          "apollo",
+                          "brex",
+                          "coda",
+                          "confluence",
+                          "discord",
+                          "facebook",
+                          "finch",
+                          "firebase",
+                          "foreceipt",
+                          "github",
+                          "gong",
+                          "googlecalendar",
+                          "googledocs",
+                          "googledrive",
+                          "googlemail",
+                          "googlesheet",
+                          "greenhouse",
+                          "heron",
+                          "hubspot",
+                          "instagram",
+                          "intercom",
+                          "jira",
+                          "kustomer",
+                          "lever",
+                          "linear",
+                          "linkedin",
+                          "lunchmoney",
+                          "mercury",
+                          "merge",
+                          "microsoft",
+                          "moota",
+                          "notion",
+                          "onebrick",
+                          "outreach",
+                          "pipedrive",
                           "plaid",
-                          "greenhouse"
+                          "postgres",
+                          "quickbooks",
+                          "ramp",
+                          "reddit",
+                          "salesforce",
+                          "salesloft",
+                          "saltedge",
+                          "sharepointonline",
+                          "slack",
+                          "splitwise",
+                          "stripe",
+                          "teller",
+                          "toggl",
+                          "twenty",
+                          "twitter",
+                          "venmo",
+                          "wise",
+                          "xero",
+                          "yodlee",
+                          "zohodesk"
                         ],
                         "description": "The name of the connector to limit connection to. Default to all otherwise"
                       },
@@ -2766,7 +2828,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -3239,7 +3302,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -3377,7 +3441,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4020,7 +4085,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4355,7 +4421,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4493,7 +4560,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4631,7 +4699,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4769,7 +4838,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4907,7 +4977,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -5129,7 +5200,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -6260,7 +6332,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -6398,7 +6471,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -6979,7 +7053,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -7817,7 +7892,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -8226,7 +8302,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -8610,7 +8687,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -8748,7 +8826,8 @@
                     }
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -10383,7 +10462,8 @@
             "enum": [
               "alpha",
               "beta",
-              "ga"
+              "ga",
+              "hidden"
             ]
           },
           "platforms": {
@@ -10411,6 +10491,32 @@
               "connect_output": {}
             },
             "additionalProperties": false
+          },
+          "openint_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope"
+              ]
+            }
           }
         },
         "required": [

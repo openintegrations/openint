@@ -96,6 +96,38 @@ export function asOrgIfCustomer(viewer: Viewer): Viewer {
   return viewer
 }
 
+export function asCustomerOfOrg(
+  viewer: Viewer,
+  input: {customerId: CustomerId},
+): Viewer<'customer'> {
+  if (!('orgId' in viewer) || !viewer.orgId) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Current viewer missing orgId to create token',
+    })
+  }
+  if (
+    viewer.role === 'customer' &&
+    input.customerId &&
+    input.customerId !== viewer.customerId
+  ) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Current viewer cannot create token for other customer',
+    })
+  }
+  const customerId =
+    viewer.role === 'customer' ? viewer.customerId : input.customerId
+  if (!customerId) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Either call as an customer or pass customerId explicitly',
+    })
+  }
+
+  return {role: 'customer', customerId, orgId: viewer.orgId}
+}
+
 // MARK: - JWT
 
 /**

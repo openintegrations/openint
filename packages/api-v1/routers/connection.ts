@@ -1,130 +1,28 @@
 import {TRPCError} from '@trpc/server'
-import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
-import {Core, core, zConnectionSettings} from '../models'
+import {core, zConnectionSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
-import {type RouterContext} from '../trpc/context'
-import {expandConnector} from './connectorConfig'
+import {
+  formatConnection,
+  zConnectionError,
+  zConnectionExpanded,
+  zConnectionStatus,
+  zConnectonExpandOption,
+  zIncludeSecrets,
+  zRefreshPolicy,
+} from './connection.models'
+import {zConnectorName} from './connector.models'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,
   zListParams,
   zListResponse,
 } from './utils/pagination'
-import {
-  zConnectionId,
-  zConnectorConfigId,
-  zConnectorName,
-  zCustomerId,
-} from './utils/types'
-
-const zIncludeSecrets = z
-  .enum(['none', 'basic', 'all'])
-  .describe(
-    'Controls secret inclusion: none (default), basic (auth only), or all secrets',
-  )
-const zRefreshPolicy = z
-  .enum(['none', 'force', 'auto'])
-  .describe(
-    'Controls credential refresh: none (never), force (always), or auto (when expired, default)',
-  )
-
-const zConnectionStatus = z
-  .enum(['healthy', 'disconnected', 'error', 'manual'])
-  .describe(
-    'Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)',
-  )
-
-const zConnectionError = z
-  .enum(['refresh_failed', 'unknown_external_error'])
-  .describe('Error types: refresh_failed and unknown_external_error')
-
-export function stripSensitiveOauthCredentials(credentials: any) {
-  return {
-    ...credentials,
-    refresh_token: undefined,
-    raw: undefined,
-  }
-}
-
-async function formatConnection(
-  _ctx: RouterContext,
-  connection: Core['connection'],
-  include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
-  expand: Z.infer<typeof zExpandOptions>[] = [],
-) {
-  const connector =
-    defConnectors[connection.connector_name as keyof typeof defConnectors]
-  if (!connector) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: `Connector not found for connection ${connection.id}`,
-    })
-  }
-
-  console.log('include_secrets', include_secrets)
-
-  // Handle different levels of secret inclusion
-  // the default is 'none' at which point settings should be an empty object
-  // let settingsToInclude = {settings: {}}
-  // if (include_secrets === 'basic' && connection.settings.oauth) {
-  //   settingsToInclude = {
-  //     settings: {
-  //       ...connection.settings,
-  //       // NOTE: in future we should add other settings sensitive value
-  //       // stripping for things like api key here and abstract it
-  //       oauth: connection.settings?.oauth?.credentials
-  //         ? {
-  //             ...connection.settings.oauth,
-  //             credentials: stripSensitiveOauthCredentials(
-  //               connection.settings.oauth.credentials,
-  //             ),
-  //           }
-  //         : undefined,
-  //     },
-  //   }
-  // } else if (include_secrets === 'all') {
-  //   settingsToInclude = {settings: connection.settings}
-  // }
-
-  let expandedFields = {}
-  if (expand.includes('connector')) {
-    expandedFields = {
-      connector: expandConnector(connection.connector_name),
-    }
-  }
-
-  // this is there because the v0 schema had scope as optional
-  if (
-    connection.settings?.oauth &&
-    !connection.settings.oauth.credentials.scope
-  ) {
-    connection.settings.oauth.credentials.scope = ''
-  }
-
-  return {
-    ...connection,
-    // ...settingsToInclude, // buggy, fix me
-    ...expandedFields,
-  }
-}
-
-const connectionWithRelations = z
-  .intersection(
-    core.connection,
-    z.object({
-      connector: core.connector.optional(),
-    }),
-  )
-  .describe('The connection details')
-
-const zExpandOptions = z
-  .enum(['connector'])
-  .describe('Fields to expand: connector (includes connector details)')
+import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
   getConnection: orgProcedure
@@ -142,10 +40,10 @@ export const connectionRouter = router({
         id: zConnectionId,
         include_secrets: zIncludeSecrets.optional().default('none'),
         refresh_policy: zRefreshPolicy.optional().default('auto'),
-        expand: z.array(zExpandOptions).optional().default([]),
+        expand: z.array(zConnectonExpandOption).optional().default([]),
       }),
     )
-    .output(connectionWithRelations)
+    .output(zConnectionExpanded)
     .query(async ({ctx, input}) => {
       // console.log(
       //   'getConnection',
@@ -257,17 +155,15 @@ export const connectionRouter = router({
           customer_id: zCustomerId.optional(),
           connector_config_id: zConnectorConfigId.optional(),
           include_secrets: zIncludeSecrets.optional().default('none'),
-          expand: z.array(zExpandOptions).optional().default([]),
+          expand: z.array(zConnectonExpandOption).optional().default([]),
         })
         .optional(),
     )
     .output(
-      zListResponse(connectionWithRelations).describe(
-        'The list of connections',
-      ),
+      zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input}) => {
-      const connectorNames = Object.keys(defConnectors)
+      const connectorNames = zConnectorName.options
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
@@ -416,20 +312,19 @@ export const connectionRouter = router({
     .input(z.object({id: zConnectionId}))
     .output(z.object({id: zConnectionId}))
     .mutation(async ({ctx, input}) => {
-      const connection = await ctx.db.query.connection.findFirst({
-        where: eq(schema.connection.id, input.id),
-      })
-      if (!connection) {
+      const [deleted] = await ctx.db
+        .delete(schema.connection)
+        .where(eq(schema.connection.id, input.id))
+        // .returning({id: schema.connection.id}) // Why this this not working? Shoudl work
+        .returning()
+
+      if (!deleted) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Connection not found',
         })
       }
-
-      await ctx.db
-        .delete(schema.connection)
-        .where(eq(schema.connection.id, input.id))
-      return {id: connection.id}
+      return {id: deleted.id}
     }),
 
   createConnection: orgProcedure

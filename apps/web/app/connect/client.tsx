@@ -4,7 +4,8 @@ import dynamic from 'next/dynamic'
 import React from 'react'
 import {clientConnectors} from '@openint/all-connectors/connectors.client'
 import {AppRouterOutput} from '@openint/api-v1'
-import {ConnectorConfig} from '@openint/api-v1/models'
+import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
+import {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
 import type {ConnectorClient, JSONSchema} from '@openint/cdk'
 import {Button, Label, toast} from '@openint/shadcn/ui'
 import {
@@ -153,7 +154,7 @@ export function AddConnectionInner({
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
   const [isConnecting, setIsConnecting] = React.useState(false)
 
-  const name = connectorConfig.connector_name
+  const name = connectorConfig.connector_name as ConnectorName
 
   if (!connectorConfig.connector) {
     throw new Error(`Connector missing in AddConnectionInner`)
@@ -248,9 +249,13 @@ export function AddConnectionInner({
     // TODO: handle me, for thigns like oauth connectors
     // console.warn(`Unhandled connector: ${name}`)
     // throw new Error(`Unhandled connector: ${name}`)
-    Component = makeManualConnectorClientComponent(
-      connectorConfig.connector!.schemas!.connection_settings!,
-    )
+    const settingsJsonSchema =
+      connectorConfig.connector?.schemas?.connection_settings
+    if (settingsJsonSchema) {
+      Component = makeManualConnectorClientComponent(settingsJsonSchema)
+    } else {
+      console.warn(`No Component for connector: ${name}`)
+    }
   }
   if (isConnecting || postConnect.isPending) {
     return <Spinner />
@@ -290,7 +295,7 @@ export function AddConnectionInner({
 }
 
 export function MyConnectionsClient(props: {
-  connector_name?: string
+  connector_name?: ConnectorName
   initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))

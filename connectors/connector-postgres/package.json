@@ -5,12 +5,11 @@
   "module": "./index.ts",
   "dependencies": {
     "@openint/cdk": "workspace:*",
-    "@openint/db": "workspace:*",
     "@openint/util": "workspace:*",
     "drizzle-kit": "^0.30.4",
     "drizzle-orm": "^0.39.1",
     "json-stable-stringify": "^1.1.1",
-    "postgres": "^3.4.5"
+    "pg": "^8.13.3"
   },
   "devDependencies": {
     "@openint/env": "workspace:*",

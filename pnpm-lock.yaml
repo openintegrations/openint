@@ -370,6 +370,9 @@ importers:
       '@openint/connector-zohodesk':
         specifier: workspace:*
         version: link:../connector-zohodesk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
     devDependencies:
       bun:
         specifier: latest
@@ -383,18 +386,12 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
-      '@openint/db':
-        specifier: workspace:*
-        version: link:../../packages/db
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
-      airtable:
-        specifier: 0.11.4
-        version: 0.11.4
 
   connectors/connector-airtable:
     dependencies:
@@ -446,15 +443,6 @@ importers:
       '@opensdks/sdk-coda':
         specifier: ^0.0.1
         version: 0.0.1
-
-  connectors/connector-expensify:
-    dependencies:
-      '@openint/cdk':
-        specifier: workspace:*
-        version: link:../../kits/cdk
-      '@openint/util':
-        specifier: workspace:*
-        version: link:../../packages/util
 
   connectors/connector-facebook:
     dependencies:
@@ -781,9 +769,6 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
-      '@openint/db':
-        specifier: workspace:*
-        version: link:../../packages/db
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
@@ -796,9 +781,9 @@ importers:
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.5
+      pg:
+        specifier: ^8.13.3
+        version: 8.13.3(pg-native@3.0.1)
     devDependencies:
       '@openint/env':
         specifier: workspace:*
@@ -1071,9 +1056,6 @@ importers:
       '@opensdks/sdk-slack':
         specifier: ^0.0.14
         version: 0.0.14
-      '@opensdks/sdk-venice':
-        specifier: ^0.0.14
-        version: 0.0.14(@opensdks/runtime@0.0.19)
       mintlify:
         specifier: latest
         version: 4.0.424(@types/node@22.13.10)(@types/react@19.0.10)(bufferutil@4.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)(utf-8-validate@5.0.10)
@@ -1267,6 +1249,9 @@ importers:
         specifier: ^3.4.5
         version: 3.4.5
     devDependencies:
+      '@openint/all-connectors':
+        specifier: workspace:*
+        version: link:../../connectors/all-connectors
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
@@ -3516,11 +3501,6 @@ packages:
 
   '@opensdks/sdk-twenty@0.0.5':
     resolution: {integrity: sha512-VvAMxuhHk5SFKrPq/v9Kur7rsvxF6L3Sxv1N4illO8PflmsiK6g8zFZj6bhYdmgnlYU5SrttDxDrYlVg1m9H+Q==}
-
-  '@opensdks/sdk-venice@0.0.14':
-    resolution: {integrity: sha512-mGbUqCrqsh5kGxI2gpjCCeqPCbYF0KMyB5Cc8xmcwursZIMFOxMZTYerlYYS0Ht5tRa/WltOuQJTgqUPYmimxg==}
-    peerDependencies:
-      '@opensdks/runtime': 0.0.14
 
   '@opensdks/sdk-xero@0.0.7':
     resolution: {integrity: sha512-NZLi+HH0Jrss+sCnLyDhnih24wjcz/u77zOvFtpBwbbwCUqPSYQ/s50qO0ek+6g9eJG3YxoeplOM51YbyszPwA==}
@@ -17182,10 +17162,6 @@ snapshots:
   '@opensdks/sdk-stripe@0.0.2': {}
 
   '@opensdks/sdk-twenty@0.0.5': {}
-
-  '@opensdks/sdk-venice@0.0.14(@opensdks/runtime@0.0.19)':
-    dependencies:
-      '@opensdks/runtime': 0.0.19
 
   '@opensdks/sdk-xero@0.0.7':
     dependencies:

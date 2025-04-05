@@ -2708,7 +2708,7 @@ export interface components {
             display_name?: string;
             logo_url?: string;
             /** @enum {string} */
-            stage?: "alpha" | "beta" | "ga";
+            stage?: "alpha" | "beta" | "ga" | "hidden";
             platforms?: ("web" | "mobile" | "desktop" | "local" | "cloud")[];
             schemas?: {
                 connector_config?: unknown;
@@ -2719,6 +2719,12 @@ export interface components {
                 connect_input?: unknown;
                 connect_output?: unknown;
             };
+            openint_scopes?: string[];
+            scopes?: {
+                scope: string;
+                display_name?: string;
+                description?: string;
+            }[];
         };
         /** Integration */
         "core.integration": {
@@ -2967,7 +2973,7 @@ export interface operations {
                  *     Available Options: `connector`, `enabled_integrations` */
                 expand?: string;
                 /** @description The name of the connector */
-                connector_name?: "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "wise" | "xero" | "yodlee" | "zohodesk";
+                connector_name?: "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "mercury" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "postgres" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "venmo" | "wise" | "xero" | "yodlee" | "zohodesk";
             };
             header?: never;
             path?: never;
@@ -3223,7 +3229,7 @@ export interface operations {
                 /** @description Offset the items returned */
                 offset?: number;
                 /** @description The name of the connector */
-                connector_name?: "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "wise" | "xero" | "yodlee" | "zohodesk";
+                connector_name?: "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "mercury" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "postgres" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "venmo" | "wise" | "xero" | "yodlee" | "zohodesk";
                 /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                 customer_id?: string;
                 /** @description The id of the connector config, starts with `ccfg_` */
@@ -3494,7 +3500,7 @@ export interface operations {
                          * @description The name of the connector to limit connection to. Default to all otherwise
                          * @enum {string}
                          */
-                        connector_name?: "plaid" | "greenhouse";
+                        connector_name?: "aircall" | "airtable" | "apollo" | "brex" | "coda" | "confluence" | "discord" | "facebook" | "finch" | "firebase" | "foreceipt" | "github" | "gong" | "googlecalendar" | "googledocs" | "googledrive" | "googlemail" | "googlesheet" | "greenhouse" | "heron" | "hubspot" | "instagram" | "intercom" | "jira" | "kustomer" | "lever" | "linear" | "linkedin" | "lunchmoney" | "mercury" | "merge" | "microsoft" | "moota" | "notion" | "onebrick" | "outreach" | "pipedrive" | "plaid" | "postgres" | "quickbooks" | "ramp" | "reddit" | "salesforce" | "salesloft" | "saltedge" | "sharepointonline" | "slack" | "splitwise" | "stripe" | "teller" | "toggl" | "twenty" | "twitter" | "venmo" | "wise" | "xero" | "yodlee" | "zohodesk";
                         /**
                          * Debug
                          * @description Whether to enable debug mode

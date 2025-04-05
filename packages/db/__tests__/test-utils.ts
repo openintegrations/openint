@@ -3,12 +3,12 @@ import {afterAll, beforeAll, describe} from '@jest/globals'
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {env, envRequired} from '@openint/env'
+import {snakeCase} from '@openint/util/string-utils'
 import {schema} from '..'
 import type {AnyDatabase, Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
 import {initDbPg, initDbPgDirect} from '../db.pg'
 import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
-import {snakeCase} from '@openint/util/string-utils'
 
 interface TestDbInitOptions {
   url: string

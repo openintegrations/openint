@@ -1,42 +1,20 @@
-import {TRPCError} from '@trpc/server'
-import {z, type Z} from '@openint/util/zod-utils'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import type {ConnectorDef} from '@openint/cdk'
-import {core, type Core} from '../models'
-import {getConnectorModel} from '../models/connectorSchemas'
-import {orgProcedure, router} from '../trpc/_base'
+import {z, type Z} from '@openint/util/zod-utils'
+import {core} from '../models'
+import {publicProcedure, router} from '../trpc/_base'
+import {getConnectorModel, zConnectorName} from './connector.models'
+import {zListResponse} from './utils/pagination'
 
-interface IntegrationsResponse {
-  items: Array<Core['integration']>
-}
-
-interface ListIntegrationsFunction {
-  (params: any): Promise<IntegrationsResponse>
-}
-
-function isListIntegrationsFunction(
-  value: unknown,
-): value is ListIntegrationsFunction {
-  return typeof value === 'function'
-}
-
-const connectorOutput = core.connector.extend({
+export const zConnectorExtended = core.connector.extend({
   integrations: z.array(core.integration).optional(),
 })
 
-export const zExpandOptions = z
-  .enum(['integrations'])
-  .describe('Fields to expand connector with its integrations')
+export type ConnectorExtended = Z.infer<typeof zConnectorExtended>
 
-type ExpandEnum = Z.infer<typeof zExpandOptions>
-
-const zConnectorName = z.enum(
-  Object.keys(defConnectors) as [string, ...string[]],
-)
+export const zExpandOption = z.enum(['schemas'])
 
 export const connectorRouter = router({
-  listConnectors: orgProcedure
+  listConnectors: publicProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -46,80 +24,22 @@ export const connectorRouter = router({
         summary: 'List Connectors',
       },
     })
-    .input(
-      z
-        .object({
-          expand: z
-            .string()
-            .transform((val) => val.split(',').map((s) => s.trim()))
-            .refine(
-              (items) =>
-                items.every((item) => zExpandOptions.safeParse(item).success),
-              {
-                message:
-                  'Invalid expand option. Valid options are: integrations',
-              },
-            )
-            .describe(
-              'Comma separated list of fields to optionally expand.\n\nAvailable Options: `integrations`',
-            )
-            .optional(),
-        })
-        .optional(),
-    )
-    .output(
-      z
-        .array(connectorOutput)
-        .describe('List of connectors with selected fields'),
-    )
+    .input(z.object({expand: z.array(zExpandOption).optional()}).optional())
+    .output(zListResponse(zConnectorExtended).describe('List of connectors'))
     .query(async ({input}) => {
-      const promises = Object.entries(defConnectors).map(
-        async ([name, def]) => {
-          const result: Z.infer<typeof connectorOutput> = getConnectorModel(
-            def as ConnectorDef,
-            {
-              includeSchemas: true,
-            },
-          )
-
-          const expand = (input?.expand || []) as ExpandEnum[]
-
-          const server = serverConnectors[name as keyof typeof serverConnectors]
-          if (
-            expand.includes('integrations') &&
-            server &&
-            'listIntegrations' in server
-          ) {
-            if (isListIntegrationsFunction(server.listIntegrations)) {
-              try {
-                const integrations = await server.listIntegrations({})
-
-                if (
-                  integrations &&
-                  'items' in integrations &&
-                  Array.isArray(integrations.items)
-                ) {
-                  result.integrations = integrations.items
-                } else {
-                  result.integrations = []
-                }
-              } catch (error) {
-                throw new TRPCError({
-                  code: 'INTERNAL_SERVER_ERROR',
-                  message: `Error listing integrations for connector: ${name}`,
-                })
-              }
-            } else {
-              result.integrations = []
-            }
-          }
-
-          return result
-        },
+      const items = Object.values(defConnectors).map((def) =>
+        getConnectorModel(def, {
+          includeSchemas: input?.expand?.includes('schemas'),
+        }),
       )
-      return Promise.all(promises)
+      return {
+        items,
+        total: items.length,
+        limit: 0,
+        offset: 0,
+      }
     }),
-  getConnectorByName: orgProcedure
+  getConnectorByName: publicProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -130,28 +50,14 @@ export const connectorRouter = router({
     })
     .input(
       z.object({
-        name: zConnectorName.describe(
-          `String connector name.\n\nAvailable Options: ${Object.keys(
-            defConnectors,
-          )
-            .map((name) => `\`${name}\``)
-            .join(', ')}`,
-        ),
+        name: zConnectorName,
+        expand: z.array(zExpandOption).optional(),
       }),
     )
-    .output(connectorOutput)
+    .output(zConnectorExtended)
     .query(async ({input}) => {
-      const connector = defConnectors[input.name as keyof typeof defConnectors]
-
-      if (!connector) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Connector with name "${input.name}" not found`,
-        })
-      }
-
-      return getConnectorModel(connector as ConnectorDef, {
-        includeSchemas: true,
+      return getConnectorModel(defConnectors[input.name], {
+        includeSchemas: input.expand?.includes('schemas'),
       })
     }),
 })
