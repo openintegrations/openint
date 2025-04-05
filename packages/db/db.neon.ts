@@ -6,18 +6,17 @@ import {
 } from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
-import {types} from 'pg'
 import type {Viewer} from '@openint/cdk'
 import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
+import {setTypeParsers} from './db.pg'
 import {rlsStatementsForViewer} from './schema/rls'
 
-// this is also unfortunately global... in particular it shares state with
+// this is also unfortunately global... which is needed for neon. in particular it shares state with
 // node postgres driver as well. However at least we want consistent type parsing...
-types.setTypeParser(types.builtins.DATE, (val) => val)
-types.setTypeParser(types.builtins.TIMESTAMP, (val) => val)
-types.setTypeParser(types.builtins.TIMESTAMPTZ, (val) => val)
-types.setTypeParser(types.builtins.INTERVAL, (val) => val)
+// This creates a dependency on pg from neon, but that is not avoidable given the requirement on
+// pgTypes. However at least it doesn't really pull in much else deps
+const typeParsers = setTypeParsers()
 
 function drizzleForViewer(
   neonSql: NeonQueryFunction<false, false>,
@@ -28,7 +27,7 @@ function drizzleForViewer(
     const opts: HTTPQueryOptions<boolean, true> = {
       fullResults: true,
       arrayMode: method === 'all',
-      types, // types does not seem to work at initialization time, and thus we have to further add it to every query
+      types: typeParsers, // types does not seem to work at initialization time, and thus we have to further add it to every query
     }
 
     const allResponses = !viewer
@@ -84,7 +83,7 @@ export function initDbNeon(url: string, options: DbOptions = {}) {
     return `${protocol}://${host}:${port}/sql`
   }
 
-  const neonSql = neon(url, {types})
+  const neonSql = neon(url, {types: typeParsers})
 
   const db = drizzleForViewer(neonSql, null, options)
 
