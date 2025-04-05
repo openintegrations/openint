@@ -16,9 +16,14 @@ import {nonEmpty} from '@openint/util/array-utils'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {core} from '../models'
-import {customerProcedure, orgProcedure, router} from '../trpc/_base'
+import {
+  authenticatedProcedure,
+  customerProcedure,
+  orgProcedure,
+  router,
+} from '../trpc/_base'
 import {connectRouterModels} from './connect.models'
-import {connectorSchemas} from './connector.models'
+import {ConnectorName, connectorSchemas} from './connector.models'
 import {md} from './utils/md'
 
 export const connectRouter = router({
@@ -286,5 +291,64 @@ export const connectRouter = router({
         // same as connection.ts
         customer_id: ctx.viewer.customerId ?? ctx.viewer.userId ?? '',
       }
+    }),
+
+  revokeConnection: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/connect/revoke',
+      },
+    })
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .output(core.connection)
+    .mutation(async ({ctx, input}) => {
+      const conn = await ctx.db.query.connection.findFirst({
+        where: eq(schema.connection.id, input.id),
+      })
+      if (!conn) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connection ${input.id} not found`,
+        })
+      }
+      // Two requests instead of one to allow RLS to apply. Revoke is not a common operation
+      const ccfg =
+        await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
+          where: eq(schema.connector_config.id, conn.connector_config_id),
+        })
+      if (!ccfg) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config ${conn.connector_config_id} not found`,
+        })
+      }
+
+      const connector = serverConnectors[
+        conn.connector_name as keyof typeof serverConnectors
+      ] as ConnectorServer
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector ${conn.connector_name} not found`,
+        })
+      }
+
+      // TODO: Make me metter here
+      const instance = connector.newInstance?.({
+        config: ccfg.config,
+        settings: conn.settings,
+        fetchLinks: [],
+        onSettingsChange: () => {},
+      })
+
+      await connector.revokeConnection?.(conn.settings, ccfg.config, instance)
+
+      // TODO: make sure statis is updated
+      return conn!
     }),
 })

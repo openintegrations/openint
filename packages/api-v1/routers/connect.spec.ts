@@ -183,6 +183,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     test.todo('refresh token')
 
     test.todo('revoke connection')
+
+    test.todo('handle status update after external revoke')
   })
 
   describe('apikey based auth', () => {
@@ -231,9 +233,15 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
       expect(res.settings).toEqual(settings)
     })
+
+    test.todo('check connection')
+
+    test.todo('revoke connection')
+
+    test.todo('handle status update after external revoke')
   })
 
-  describe.only('custom auth', () => {
+  describe('custom auth', () => {
     const ccfgRes = $test('create plaid connector config', async () => {
       const res = await asUser.createConnectorConfig({
         connector_name: 'plaid',
@@ -290,9 +298,17 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     test.todo('check connection')
 
-    test.todo('revoke connection')
+    test('revoke connection', async () => {
+      const res = await asCustomer.revokeConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(res).toMatchObject({
+        id: postConnectRes.current.id,
+      })
+      // TODO: Check connection settings
+    })
 
-    test.todo('handle token refresh')
+    test.todo('handle status update after external revoke')
   })
 })
 
