@@ -1,448 +1,335 @@
 import {
   AuthorizationServer,
-  generateRandomToken,
   GrantIdentifier,
+  OAuthAuthCode,
+  OAuthAuthCodeRepository,
   OAuthClient,
   OAuthClientRepository,
   OAuthScope,
+  OAuthScopeRepository,
+  OAuthToken,
   OAuthTokenRepository,
   OAuthUser,
+  OAuthUserIdentifier,
   OAuthUserRepository,
+  RequestInterface,
 } from '@jmondi/oauth2-server'
+import {responseToVanilla} from '@jmondi/oauth2-server/vanilla'
 import {Elysia} from 'elysia'
+import {withLoopback} from '@openint/loopback-link'
 
-// Define the OAuth client model
-export interface OAuthClientModel {
-  id: string
-  name: string
-  secret: string
-  redirectUris: string[]
-  allowedGrantTypes: string[]
-  allowedScopes: string[]
-  userId: string
+async function requestFromVanilla2(req: Request) {
+  const url = new URL(req.url)
+  const query: Record<string, string> = {}
+  url.searchParams.forEach((value, key) => {
+    query[key] = value
+  })
+
+  let body: Record<string, any> = {}
+  const contentType = req.headers.get('content-type')
+
+  if (contentType?.includes('application/x-www-form-urlencoded')) {
+    const formData = await req.text()
+    const params = new URLSearchParams(formData)
+    body = Object.fromEntries(params.entries())
+  } else if (req.body instanceof ReadableStream) {
+    try {
+      body = await req.json()
+    } catch {
+      body = {}
+    }
+  } else if (req.body != null) {
+    try {
+      body = JSON.parse(req.body)
+    } catch {
+      body = {}
+    }
+  }
+
+  const headers: Record<string, string> = {}
+  req.headers.forEach((value, key) => {
+    if (key === 'cookie') return
+    headers[key] = value
+  })
+
+  return {
+    query,
+    body,
+    headers,
+  } satisfies RequestInterface
 }
 
-// Define the OAuth token model
-export interface OAuthTokenModel {
-  accessToken: string
-  refreshToken?: string
-  expiresAt: Date
-  scopes: string[]
-  clientId: string
-  userId: string
-}
-
-// Define the OAuth user model
-export interface OAuthUserModel {
-  id: string
-  email: string
-  password: string
-}
-
-// Define the OAuth scope model
-export interface OAuthScopeModel {
-  name: string
-  description: string
-}
-
-// Define the OAuth client repository
 export class ClientRepository implements OAuthClientRepository {
-  private clients: Map<string, OAuthClientModel> = new Map()
+  private clients: OAuthClient[] = []
 
-  constructor(clients: OAuthClientModel[] = []) {
-    clients.forEach((client) => this.clients.set(client.id, client))
+  constructor(initialClients: OAuthClient[] = []) {
+    this.clients = initialClients
   }
 
   async getByIdentifier(clientId: string): Promise<OAuthClient> {
-    const client = this.clients.get(clientId)
+    const client = this.clients.find((c) => c.id === clientId)
+    console.log('getByIdentifier', clientId, client)
     if (!client) {
-      throw new Error(`Client with ID ${clientId} not found`)
+      throw new Error(`Client not found: ${clientId}`)
     }
-
-    return {
-      id: client.id,
-      name: client.name,
-      secret: client.secret,
-      redirectUris: client.redirectUris,
-      allowedGrants: client.allowedGrantTypes as GrantIdentifier[],
-      scopes: client.allowedScopes.map((scope) => ({name: scope})),
-      userId: client.userId,
-    }
+    return client
   }
 
-  async validateClient(
-    clientId: string,
-    clientSecret: string,
+  async isClientValid(
     grantType: GrantIdentifier,
+    client: OAuthClient,
+    clientSecret?: string,
   ): Promise<boolean> {
-    const client = await this.getByIdentifier(clientId)
-    return (
-      client.secret === clientSecret && client.allowedGrants.includes(grantType)
-    )
-  }
-
-  async validateRedirectUri(
-    clientId: string,
-    redirectUri: string,
-  ): Promise<boolean> {
-    const client = await this.getByIdentifier(clientId)
-    return client.redirectUris.includes(redirectUri)
-  }
-
-  async isClientValid(clientId: string): Promise<boolean> {
-    try {
-      await this.getByIdentifier(clientId)
-      return true
-    } catch (error) {
+    console.log('isClientValid', grantType, client, clientSecret)
+    // Verify the client secret if provided
+    if (clientSecret && client.secret !== clientSecret) {
       return false
     }
+
+    // Check if the grant type is allowed for this client
+    return client.allowedGrants.includes(grantType)
   }
 }
 
 // Define the OAuth token repository
 export class TokenRepository implements OAuthTokenRepository {
-  private tokens: Map<string, OAuthTokenModel> = new Map()
+  private tokens: OAuthToken[] = []
+
+  constructor(initialTokens: OAuthToken[] = []) {
+    this.tokens = initialTokens
+  }
 
   async issueToken(
     client: OAuthClient,
-    user: OAuthUser,
     scopes: OAuthScope[],
-  ): Promise<string> {
-    const accessToken = generateRandomToken()
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
-
-    this.tokens.set(accessToken, {
-      accessToken,
-      expiresAt,
-      scopes: scopes.map((scope) => scope.name),
-      clientId: client.id,
-      userId: user.id,
-    })
-
-    return accessToken
+    user?: OAuthUser | null,
+  ): Promise<OAuthToken> {
+    const token: OAuthToken = {
+      accessToken: crypto.randomUUID(),
+      refreshToken: crypto.randomUUID(),
+      accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+      scopes: scopes,
+      client,
+      userId: user?.id,
+    }
+    await this.persist(token)
+    return token
   }
 
   async issueRefreshToken(
+    accessToken: OAuthToken,
     client: OAuthClient,
-    user: OAuthUser,
-    scopes: OAuthScope[],
-  ): Promise<string> {
-    const refreshToken = generateRandomToken()
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
-
-    this.tokens.set(refreshToken, {
-      accessToken: refreshToken,
-      refreshToken,
-      expiresAt,
-      scopes: scopes.map((scope) => scope.name),
-      clientId: client.id,
-      userId: user.id,
-    })
-
-    return refreshToken
-  }
-
-  async findToken(accessToken: string): Promise<{
-    accessToken: string
-    refreshToken?: string
-    accessTokenExpiresAt: Date
-    refreshTokenExpiresAt?: Date
-    scopes: OAuthScope[]
-    client: OAuthClient
-    user: OAuthUser
-  } | null> {
-    const token = this.tokens.get(accessToken)
-    if (!token) {
-      return null
-    }
-
-    const client = await this.getClientById(token.clientId)
-    const user = await this.getUserById(token.userId)
-    const scopes = await this.getScopesByName(token.scopes)
-
-    return {
-      accessToken: token.accessToken,
-      refreshToken: token.refreshToken,
-      accessTokenExpiresAt: token.expiresAt,
-      refreshTokenExpiresAt: token.refreshToken
-        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
-        : undefined,
-      scopes,
+  ): Promise<OAuthToken> {
+    const token: OAuthToken = {
+      accessToken: crypto.randomUUID(),
+      refreshToken: crypto.randomUUID(),
+      accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+      scopes: accessToken.scopes,
       client,
-      user,
+      userId: accessToken.userId,
     }
+    await this.persist(token)
+    return token
   }
 
-  async revokeToken(accessToken: string): Promise<void> {
-    this.tokens.delete(accessToken)
+  async persist(accessToken: OAuthToken): Promise<void> {
+    this.tokens.push(accessToken)
   }
 
-  async persist(token: {
-    accessToken: string
-    refreshToken?: string
-    accessTokenExpiresAt: Date
-    refreshTokenExpiresAt?: Date
-    scopes: OAuthScope[]
-    client: OAuthClient
-    user: OAuthUser
-  }): Promise<void> {
-    this.tokens.set(token.accessToken, {
-      accessToken: token.accessToken,
-      refreshToken: token.refreshToken,
-      expiresAt: token.accessTokenExpiresAt,
-      scopes: token.scopes.map((scope) => scope.name),
-      clientId: token.client.id,
-      userId: token.user.id,
-    })
-  }
-
-  private async getClientById(clientId: string): Promise<OAuthClient> {
-    // This is a simplified implementation
-    // In a real application, you would fetch the client from a database
-    return {
-      id: clientId,
-      name: 'Client',
-      secret: 'secret',
-      redirectUris: ['http://localhost:3000/callback'],
-      allowedGrants: [
-        'authorization_code',
-        'refresh_token',
-      ] as GrantIdentifier[],
-      scopes: [{name: 'read'}, {name: 'write'}],
-      userId: 'user1',
-    }
-  }
-
-  private async getUserById(userId: string): Promise<OAuthUser> {
-    // This is a simplified implementation
-    // In a real application, you would fetch the user from a database
-    return {
-      id: userId,
-      email: 'user@example.com',
-      password: 'password',
-    }
-  }
-
-  private async getScopesByName(scopeNames: string[]): Promise<OAuthScope[]> {
-    return scopeNames.map((name) => ({name}))
-  }
-}
-
-// Define the OAuth user repository
-export class UserRepository implements OAuthUserRepository {
-  private users: Map<string, OAuthUserModel> = new Map()
-
-  constructor(users: OAuthUserModel[] = []) {
-    users.forEach((user) => this.users.set(user.id, user))
-  }
-
-  async getUserByIdentifier(userId: string): Promise<OAuthUser> {
-    const user = this.users.get(userId)
-    if (!user) {
-      throw new Error(`User with ID ${userId} not found`)
-    }
-
-    return {
-      id: user.id,
-      email: user.email,
-      password: user.password,
-    }
-  }
-
-  async getUserByCredentials(
-    email: string,
-    password: string,
-  ): Promise<OAuthUser> {
-    const user = Array.from(this.users.values()).find(
-      (u) => u.email === email && u.password === password,
+  async revoke(accessToken: OAuthToken): Promise<void> {
+    this.tokens = this.tokens.filter(
+      (token) => token.accessToken !== accessToken.accessToken,
     )
-    if (!user) {
-      throw new Error('Invalid credentials')
-    }
+  }
 
-    return {
-      id: user.id,
-      email: user.email,
-      password: user.password,
+  async revokeDescendantsOf(authCodeId: string): Promise<void> {
+    // In this simple implementation, we don't track relationships between tokens
+    return
+  }
+
+  async isRefreshTokenRevoked(refreshToken: OAuthToken): Promise<boolean> {
+    return !this.tokens.some(
+      (token) => token.refreshToken === refreshToken.refreshToken,
+    )
+  }
+
+  async getByRefreshToken(refreshTokenToken: string): Promise<OAuthToken> {
+    const token = this.tokens.find(
+      (token) => token.refreshToken === refreshTokenToken,
+    )
+    if (!token) {
+      throw new Error('Refresh token not found')
     }
+    return token
+  }
+
+  async getByAccessToken(accessTokenToken: string): Promise<OAuthToken> {
+    const token = this.tokens.find(
+      (token) => token.accessToken === accessTokenToken,
+    )
+    if (!token) {
+      throw new Error('Access token not found')
+    }
+    return token
   }
 }
 
 // Define the OAuth scope repository
-export class ScopeRepository {
-  private scopes: Map<string, OAuthScopeModel> = new Map()
+export class ScopeRepository implements OAuthScopeRepository {
+  private scopes: OAuthScope[] = []
 
-  constructor(scopes: OAuthScopeModel[] = []) {
-    scopes.forEach((scope) => this.scopes.set(scope.name, scope))
+  constructor(initialScopes: OAuthScope[] = []) {
+    this.scopes = initialScopes
   }
 
-  async getAllScopes(): Promise<OAuthScope[]> {
-    return Array.from(this.scopes.values()).map((scope) => ({
-      name: scope.name,
-      description: scope.description,
-    }))
+  async getAllByIdentifiers(scopeNames: string[]): Promise<OAuthScope[]> {
+    return scopeNames.map((name) => {
+      const scope = this.scopes.find((s) => s.name === name)
+      return (
+        scope || {
+          name,
+          description: `Scope for ${name}`,
+        }
+      )
+    })
   }
 
-  async getScopesByName(names: string[]): Promise<OAuthScope[]> {
-    return names
-      .map((name) => this.scopes.get(name))
-      .filter((scope): scope is OAuthScopeModel => scope !== undefined)
-      .map((scope) => ({
-        name: scope.name,
-        description: scope.description,
-      }))
-  }
-}
-
-// Define the token generator
-export class CustomTokenGenerator implements TokenGenerator {
-  generateAccessToken(): string {
-    return generateRandomToken()
-  }
-
-  generateRefreshToken(): string {
-    return generateRandomToken()
-  }
-}
-
-// Define the OAuth server
-export class OAuthServer {
-  private authorizationServer: AuthorizationServer
-  private clientRepository: ClientRepository
-  private tokenRepository: TokenRepository
-  private userRepository: UserRepository
-  private scopeRepository: ScopeRepository
-
-  constructor(
-    clientRepository: ClientRepository,
-    tokenRepository: TokenRepository,
-    userRepository: UserRepository,
-    scopeRepository: ScopeRepository,
-  ) {
-    this.clientRepository = clientRepository
-    this.tokenRepository = tokenRepository
-    this.userRepository = userRepository
-    this.scopeRepository = scopeRepository
-
-    this.authorizationServer = new AuthorizationServer(
-      this.clientRepository,
-      this.tokenRepository,
-      this.userRepository,
-      this.scopeRepository,
+  async finalize(
+    scopes: OAuthScope[],
+    identifier: GrantIdentifier,
+    client: OAuthClient,
+    user_id?: string,
+  ): Promise<OAuthScope[]> {
+    // Return the requested scopes that are allowed for this client
+    return scopes.filter((scope) =>
+      client.scopes.some((clientScope) => clientScope.name === scope.name),
     )
   }
+}
 
-  // Handle authorization request
-  async handleAuthorizationRequest(req: Request, res: Response): Promise<void> {
-    await this.authorizationServer.validateAuthorizationRequest(req)
-    const authorizationResponse =
-      await this.authorizationServer.completeAuthorizationRequest(req, res)
-    await authorizationResponse.send(res)
+export class AuthCodeRepository implements OAuthAuthCodeRepository {
+  private authCodes: OAuthAuthCode[] = []
+
+  async getByIdentifier(authCodeCode: string): Promise<OAuthAuthCode> {
+    const authCode = this.authCodes.find((code) => code.code === authCodeCode)
+    if (!authCode) {
+      throw new Error(`Auth code not found: ${authCodeCode}`)
+    }
+    return authCode
   }
 
-  // Handle token request
-  async handleTokenRequest(req: Request, res: Response): Promise<void> {
-    await this.authorizationServer.validateTokenRequest(req)
-    const tokenResponse =
-      await this.authorizationServer.respondToAccessTokenRequest(req, res)
-    await tokenResponse.send(res)
+  async issueAuthCode(
+    client: OAuthClient,
+    user: OAuthUser | undefined,
+    scopes: OAuthScope[],
+  ): Promise<OAuthAuthCode> {
+    const authCode: OAuthAuthCode = {
+      code: Math.random().toString(36).substring(2),
+      client,
+      user,
+      scopes,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+      redirectUri: client.redirectUris[0],
+      codeChallenge: null,
+      codeChallengeMethod: null,
+    }
+    await this.persist(authCode)
+    return authCode
   }
 
-  // Handle token introspection
-  async handleIntrospectionRequest(req: Request, res: Response): Promise<void> {
-    const introspectionResponse =
-      await this.authorizationServer.respondToIntrospectionRequest(req, res)
-    await introspectionResponse.send(res)
+  async persist(authCode: OAuthAuthCode): Promise<void> {
+    this.authCodes.push(authCode)
   }
 
-  // Handle token revocation
-  async handleRevocationRequest(req: Request, res: Response): Promise<void> {
-    await this.authorizationServer.validateRevocationRequest(req)
-    const revocationResponse =
-      await this.authorizationServer.respondToRevocationRequest(req, res)
-    await revocationResponse.send(res)
+  async isRevoked(authCodeCode: string): Promise<boolean> {
+    try {
+      const authCode = await this.getByIdentifier(authCodeCode)
+      return authCode.expiresAt < new Date()
+    } catch {
+      return true
+    }
+  }
+
+  async revoke(authCodeCode: string): Promise<void> {
+    this.authCodes = this.authCodes.filter((code) => code.code !== authCodeCode)
+  }
+}
+
+export class UserRepository implements OAuthUserRepository {
+  private users: OAuthUser[] = []
+
+  constructor(initialUsers: OAuthUser[] = []) {
+    this.users = initialUsers
+  }
+
+  async getUserByCredentials(
+    identifier: OAuthUserIdentifier,
+    _password?: string,
+    _grantType?: GrantIdentifier,
+    _client?: OAuthClient,
+  ): Promise<OAuthUser | undefined> {
+    const user = this.users.find((user) => {
+      if (typeof identifier === 'string') {
+        return user.id === identifier
+      }
+      return user.id === identifier
+    })
+    return user
   }
 }
 
 // Create Elysia routes for OAuth endpoints
-export function createOAuthRoutes(oauthServer: OAuthServer): Elysia {
-  return new Elysia({prefix: '/oauth'})
-    .get('/authorize', async ({request, set}) => {
-      const req = new Request(request)
-      const res = new Response()
-
-      try {
-        await oauthServer.handleAuthorizationRequest(req, res)
-        return res.body
-      } catch (error) {
-        set.status = 400
-        return {error: (error as Error).message}
-      }
+export function createOAuthElysia(authServer: AuthorizationServer): Elysia {
+  return new Elysia()
+    .get('/authorize', async ({request}) => {
+      return requestFromVanilla2(request)
+        .then(async (req) => {
+          console.log('req', req)
+          const authReq = await authServer.validateAuthorizationRequest(req)
+          console.log('authReq', authReq)
+          authReq.isAuthorizationApproved = true
+          authReq.user = {id: 'user1', username: 'testuser'}
+          const authRes = await authServer.completeAuthorizationRequest(authReq)
+          console.log('authRes', authRes)
+          return authRes
+        })
+        .catch((err) => {
+          console.log('err', err)
+          throw err
+        })
+        .then(responseToVanilla)
     })
-    .post('/token', async ({request, set}) => {
-      const req = new Request(request)
-      const res = new Response()
-
-      try {
-        await oauthServer.handleTokenRequest(req, res)
-        return res.body
-      } catch (error) {
-        set.status = 400
-        return {error: (error as Error).message}
-      }
+    .post('/token', async ({request}) => {
+      return requestFromVanilla2(request)
+        .then(async (req) => {
+          console.log('req', req)
+          const res = await authServer.respondToAccessTokenRequest(req)
+          console.log('res', res)
+          return res
+        })
+        .catch((err) => {
+          console.log('err', err)
+          throw err
+        })
+        .then(responseToVanilla)
     })
-    .post('/introspect', async ({request, set}) => {
-      const req = new Request(request)
-      const res = new Response()
 
-      try {
-        await oauthServer.handleIntrospectionRequest(req, res)
-        return res.body
-      } catch (error) {
-        set.status = 400
-        return {error: (error as Error).message}
-      }
-    })
-    .post('/revoke', async ({request, set}) => {
-      const req = new Request(request)
-      const res = new Response()
-
-      try {
-        await oauthServer.handleRevocationRequest(req, res)
-        return res.body
-      } catch (error) {
-        set.status = 400
-        return {error: (error as Error).message}
-      }
-    })
+    .post('/introspect', async ({request, set}) => {})
+    .post('/revoke', async ({request, set}) => {})
 }
 
 // Create a default OAuth server with sample data
-export function createDefaultOAuthServer(): OAuthServer {
+export function createTestOAuthServer() {
   // Sample clients
-  const clients: OAuthClientModel[] = [
-    {
-      id: 'client1',
-      name: 'Sample Client',
-      secret: 'secret1',
-      redirectUris: ['http://localhost:3000/callback'],
-      allowedGrantTypes: ['authorization_code', 'refresh_token'],
-      allowedScopes: ['read', 'write'],
-      userId: 'user1',
-    },
-  ]
-
-  // Sample users
-  const users: OAuthUserModel[] = [
-    {
-      id: 'user1',
-      email: 'user@example.com',
-      password: 'password',
-    },
-  ]
-
-  // Sample scopes
-  const scopes: OAuthScopeModel[] = [
+  const client: OAuthClient = {
+    id: 'client1',
+    name: 'Sample Client',
+    secret: 'secret1',
+    redirectUris: ['http://localhost:3000/callback'],
+    allowedGrants: ['authorization_code', 'refresh_token'],
+    scopes: [{name: 'read'}, {name: 'write'}],
+  }
+  const scopes: OAuthScope[] = [
     {
       name: 'read',
       description: 'Read access',
@@ -453,21 +340,77 @@ export function createDefaultOAuthServer(): OAuthServer {
     },
   ]
 
-  const clientRepository = new ClientRepository(clients)
-  const tokenRepository = new TokenRepository()
-  const userRepository = new UserRepository(users)
+  const clientRepository = new ClientRepository([client])
+  const tokenRepository = new TokenRepository([
+    {
+      accessToken: 'some_access_token',
+      accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000),
+      refreshToken: 'some_refresh_token',
+      refreshTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000),
+      scopes: [{name: 'read'}, {name: 'write'}],
+      client,
+    },
+  ])
   const scopeRepository = new ScopeRepository(scopes)
 
-  return new OAuthServer(
+  const server = new AuthorizationServer(
     clientRepository,
     tokenRepository,
-    userRepository,
     scopeRepository,
+    'my-service',
   )
+  server.enableGrantTypes('refresh_token')
+  server.enableGrantTypes({
+    grant: 'authorization_code',
+    authCodeRepository: new AuthCodeRepository(),
+    userRepository: new UserRepository([{id: 'user1', username: 'testuser'}]),
+  })
+  return server
 }
 
-// Export a function to create OAuth routes with default server
-export function createDefaultOAuthRoutes(): Elysia {
-  const oauthServer = createDefaultOAuthServer()
-  return createOAuthRoutes(oauthServer)
+// @ts-expect-error
+if (import.meta.main) {
+  const app = createOAuthElysia(createTestOAuthServer())
+
+  const authorizeRequest = new Request(
+    'http://localhost/authorize?' +
+      new URLSearchParams({
+        response_type: 'code',
+        client_id: 'client1',
+        redirect_uri: 'http://localhost:3000/callback',
+        scope: 'read',
+        state: 'xyz',
+        // TODO: Figure out how not to have this challenge....
+        code_challenge: 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM',
+        code_challenge_method: 'S256',
+      }).toString(),
+    {redirect: 'manual'},
+  )
+
+  const handleWithLink = withLoopback(app.handle)
+
+  handleWithLink(authorizeRequest)
+    .then(async (res) => {
+      console.log('asdasdfasdfasdfdas', res)
+    })
+    .catch((err) => {
+      console.log('err', err)
+    })
+
+  // const request = new Request('http://localhost/token', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //   },
+  //   body: new URLSearchParams({
+  //     grant_type: 'refresh_token',
+  //     client_id: 'client1',
+  //     client_secret: 'secret1',
+  //     refresh_token: 'some_refresh_token',
+  //     scope: 'read',
+  //   }).toString(),
+  // })
+  // app.handle(request).then(async (res) => {
+  //   console.log(await res.text())
+  // })
 }

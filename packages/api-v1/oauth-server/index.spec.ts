@@ -1,6 +1,9 @@
-import {describe, expect, it} from '@jest/globals'
+import {beforeAll, describe, expect, it} from '@jest/globals'
+import {applyLinks} from '@opensdks/fetch-links'
+import {loopbackLink} from '@openint/loopback-link'
 import {
   ClientRepository,
+  createTestOauthElysia,
   OAuthClientModel,
   OAuthScopeModel,
   OAuthUserModel,
@@ -424,5 +427,137 @@ describe('OAuth Server', () => {
       const token = await repository.findToken(accessToken)
       expect(token).toBeNull()
     })
+  })
+})
+
+describe('OAuth Routes', () => {
+  let app: ReturnType<typeof createTestOauthElysia>
+
+  const handle = (request: Request) => {
+    return applyLinks(request, [loopbackLink(), app.handle])
+  }
+
+  beforeAll(() => {
+    app = createTestOauthElysia()
+  })
+
+  it('should handle OAuth authorization request', async () => {
+    // Create a request to the /oauth/authorize endpoint
+    const request = new Request(
+      'http://localhost/oauth/authorize?response_type=code&client_id=client1&redirect_uri=http://localhost:3000/callback&scope=read',
+      {
+        method: 'GET',
+      },
+    )
+
+    // Handle the request
+    const response = await handle(request)
+
+    // Check that the response is valid
+    expect(response.status).toBe(200)
+    const responseData = await response.json()
+    expect(responseData).toBeDefined()
+  })
+
+  it.only('should handle OAuth token request', async () => {
+    // Create a request to the /oauth/token endpoint
+    const request = new Request('http://localhost/oauth/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        grant_type: 'client_credentials',
+        client_id: 'client1',
+        client_secret: 'secret1',
+        scope: 'read',
+      }).toString(),
+    })
+
+    // Handle the request
+    const response = await handle(request)
+
+    // Check that the response is valid
+    expect(response.status).toBe(200)
+    const responseData = await response.json()
+    expect(responseData).toBeDefined()
+    expect(responseData.access_token).toBeDefined()
+  })
+
+  it('should handle OAuth token introspection', async () => {
+    // First, get a token
+    const tokenRequest = new Request('http://localhost/oauth/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        grant_type: 'client_credentials',
+        client_id: 'client1',
+        client_secret: 'secret1',
+        scope: 'read',
+      }).toString(),
+    })
+
+    const tokenResponse = await handle(tokenRequest)
+    const tokenData = await tokenResponse.json()
+    const accessToken = tokenData.access_token
+
+    // Now introspect the token
+    const introspectRequest = new Request('http://localhost/oauth/introspect', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        token: accessToken,
+        token_type_hint: 'access_token',
+      }).toString(),
+    })
+
+    const introspectResponse = await handle(introspectRequest)
+
+    // Check that the response is valid
+    expect(introspectResponse.status).toBe(200)
+    const introspectData = await introspectResponse.json()
+    expect(introspectData).toBeDefined()
+    expect(introspectData.active).toBe(true)
+  })
+
+  it('should handle OAuth token revocation', async () => {
+    // First, get a token
+    const tokenRequest = new Request('http://localhost/oauth/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        grant_type: 'client_credentials',
+        client_id: 'client1',
+        client_secret: 'secret1',
+        scope: 'read',
+      }).toString(),
+    })
+
+    const tokenResponse = await handle(tokenRequest)
+    const tokenData = await tokenResponse.json()
+    const accessToken = tokenData.access_token
+
+    // Now revoke the token
+    const revokeRequest = new Request('http://localhost/oauth/revoke', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        token: accessToken,
+        token_type_hint: 'access_token',
+      }).toString(),
+    })
+
+    const revokeResponse = await handle(revokeRequest)
+
+    // Check that the response is valid
+    expect(revokeResponse.status).toBe(200)
   })
 })
