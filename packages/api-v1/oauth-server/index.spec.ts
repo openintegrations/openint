@@ -19,12 +19,12 @@ import {
 } from '@jmondi/oauth2-server'
 import {withLoopback} from '@openint/loopback-link'
 import {
-  AuthCodeRepository,
-  ClientRepository,
+  createAuthCodeRepository,
+  createClientRepository,
+  createScopeRepository,
+  createTokenRepository,
+  createUserRepository,
   elysiaFromAuthorizationServer,
-  ScopeRepository,
-  TokenRepository,
-  UserRepository,
 } from '.'
 
 // describe('OAuth Server', () => {
@@ -599,8 +599,8 @@ export function createTestOAuthServer() {
     },
   ]
 
-  const clientRepository = new ClientRepository([client])
-  const tokenRepository = new TokenRepository([
+  const clientRepository = createClientRepository([client])
+  const tokenRepository = createTokenRepository([
     {
       accessToken: 'some_access_token',
       accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000),
@@ -610,7 +610,7 @@ export function createTestOAuthServer() {
       client,
     },
   ])
-  const scopeRepository = new ScopeRepository(scopes)
+  const scopeRepository = createScopeRepository(scopes)
 
   const server = new AuthorizationServer(
     clientRepository,
@@ -621,8 +621,8 @@ export function createTestOAuthServer() {
   server.enableGrantTypes('refresh_token')
   server.enableGrantTypes({
     grant: 'authorization_code',
-    authCodeRepository: new AuthCodeRepository(),
-    userRepository: new UserRepository([{id: 'user1', username: 'testuser'}]),
+    authCodeRepository: createAuthCodeRepository(),
+    userRepository: createUserRepository([{id: 'user1', username: 'testuser'}]),
   })
   return server
 }
