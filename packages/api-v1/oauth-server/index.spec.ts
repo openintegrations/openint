@@ -2,7 +2,7 @@
 /* eslint-disable jest/no-standalone-expect */
 import {expect} from '@jest/globals'
 import {$test} from '@openint/util/__tests__/test-utils'
-import {OAuth2Client} from '@openint/util/http/OAuth2Client'
+import {createOAuth2Client} from '@openint/util/http/OAuth2Client'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
 import {createOAuth2Server, type OAuthClient, type OAuthUser} from '.'
@@ -33,7 +33,7 @@ const app = createOAuth2Server({
 })
 
 // Create OAuth2Client instance for testing
-const oauthClient = new OAuth2Client(
+const oauthClient = createOAuth2Client(
   {
     clientId: client.id,
     clientSecret: client.secret,

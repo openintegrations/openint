@@ -22,30 +22,25 @@ const zOAuth2ClientConfig = z.object({
 export type OAuth2ClientConfig = Z.infer<typeof zOAuth2ClientConfig>
 export type TokenResponse = Z.infer<typeof zTokenResponse>
 
-export class OAuth2Client<
-  TError = unknown,
+export function createOAuth2Client<
   TToken extends TokenResponse = TokenResponse,
-> {
-  constructor(
-    private readonly config: OAuth2ClientConfig,
-    private readonly fetch: (
-      req: Request,
-    ) => Promise<Response> = globalThis.fetch,
-  ) {
-    zOAuth2ClientConfig.parse(config)
-  }
+>(
+  config: OAuth2ClientConfig,
+  fetch: (req: Request) => Promise<Response> = globalThis.fetch,
+) {
+  zOAuth2ClientConfig.parse(config)
 
-  private async post<T>(
+  const post = async <T>(
     url: string,
     params: Record<string, unknown>,
-  ): Promise<T> {
-    const {clientAuthLocation = 'body'} = this.config
+  ): Promise<T> => {
+    const {clientAuthLocation = 'body'} = config
     const body = stringifyQueryParams({
       ...params,
       ...(clientAuthLocation !== 'header'
         ? {
-            client_id: this.config.clientId,
-            client_secret: this.config.clientSecret,
+            client_id: config.clientId,
+            client_secret: config.clientSecret,
           }
         : {}),
     })
@@ -56,11 +51,11 @@ export class OAuth2Client<
 
     if (clientAuthLocation === 'header') {
       headers['Authorization'] = `Basic ${Buffer.from(
-        `${this.config.clientId}:${this.config.clientSecret}`,
+        `${config.clientId}:${config.clientSecret}`,
       ).toString('base64')}`
     }
 
-    const response = await this.fetch(
+    const response = await fetch(
       new Request(url, {method: 'POST', headers, body}),
     )
 
@@ -68,7 +63,7 @@ export class OAuth2Client<
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const error = await response.json().catch(() => null)
       throw new OAuth2Error<TError>(
-        this.config.errorToString?.(error as TError) ?? JSON.stringify(error),
+        config.errorToString?.(error as TError) ?? JSON.stringify(error),
         error as TError,
         {
           status: response.status,
@@ -83,24 +78,23 @@ export class OAuth2Client<
     return response.json() as Promise<T>
   }
 
-  // TODO: Use an actual oauth library
-  getAuthorizeUrl(params: {
+  const getAuthorizeUrl = (params: {
     redirect_uri: string
     scope?: string
     state?: string
     code_verifier?: string
-  }) {
+  }) => {
     const codeChallenge = params.code_verifier
       ? Buffer.from(
           crypto.createHash('sha256').update(params.code_verifier).digest(),
         ).toString('base64url')
       : undefined
 
-    return `${this.config.authorizeURL}?${stringifyQueryParams(
+    return `${config.authorizeURL}?${stringifyQueryParams(
       pickBy(
         {
           response_type: 'code',
-          client_id: this.config.clientId,
+          client_id: config.clientId,
           ...params,
           code_challenge: codeChallenge,
           code_challenge_method: codeChallenge ? 'S256' : undefined,
@@ -110,7 +104,7 @@ export class OAuth2Client<
     )}`
   }
 
-  getToken({
+  const getToken = ({
     code,
     redirectUri: redirect_uri,
     code_verifier,
@@ -118,37 +112,41 @@ export class OAuth2Client<
     code: string
     redirectUri: string
     code_verifier?: string
-  }) {
-    return this.post<TToken & {refresh_token: string}>(this.config.tokenURL, {
+  }) =>
+    post<TToken & {refresh_token: string}>(config.tokenURL, {
       grant_type: 'authorization_code',
       code,
       redirect_uri,
       code_verifier,
     })
-  }
 
-  refreshToken(refreshToken: string) {
-    // Not sure if `refresh_token` always exists. Does for QBO.
-    return this.post<TToken & {refresh_token: string}>(this.config.tokenURL, {
+  const refreshToken = (refreshToken: string) =>
+    post<TToken & {refresh_token: string}>(config.tokenURL, {
       grant_type: 'refresh_token',
       refresh_token: refreshToken,
     })
-  }
 
-  revokeToken(token: string) {
-    if (!this.config.revokeUrl) {
+  const revokeToken = (token: string) => {
+    if (!config.revokeUrl) {
       throw new Error('Missing revokeUrl. Cannot revoke token')
     }
-    return this.post(this.config.revokeUrl, {
+    return post(config.revokeUrl, {
       token,
     })
   }
 
-  getTokenWithClientCredentials(params?: {scope: string}) {
-    return this.post<TToken & {refresh_token: string}>(this.config.tokenURL, {
+  const getTokenWithClientCredentials = (params?: {scope: string}) =>
+    post<TToken & {refresh_token: string}>(config.tokenURL, {
       grant_type: 'client_credentials',
       scope: params?.scope,
     })
+
+  return {
+    getAuthorizeUrl,
+    getToken,
+    refreshToken,
+    revokeToken,
+    getTokenWithClientCredentials,
   }
 }
 
