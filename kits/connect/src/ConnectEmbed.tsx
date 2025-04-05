@@ -3,7 +3,7 @@ import {ConnectProps, createConnectIframe} from './common'
 
 export function ConnectEmbed(props: ConnectProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const {baseUrl, connectParams, height, width, onEvent, ...iframeProps} = props
+  const {baseUrl, connectParams, height, width, onEvent} = props
 
   React.useEffect(() => {
     if (!containerRef.current) return

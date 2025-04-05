@@ -1,5 +1,3 @@
-import {z} from 'zod'
-
 // example event
 // {
 //   "name": "connect/connection-connected",
@@ -10,23 +8,21 @@ import {z} from 'zod'
 //   "ts": 1741530259940
 // }
 
-export const zOpenIntEvent = z.object({
-  // TODO: pull this in from the server OAS spec
-  // NOTE: connect.loaded is currently only client side
-  name: z.enum(['connect.connection-connected', 'connect.loaded'] as const),
-  data: z
-    .object({
-      connection_id: z.string().optional(),
-    })
-    .passthrough()
-    .optional(),
-  id: z.string().startsWith('evt_'),
-  ts: z.number(),
-})
+// TODO: pull this in from the server OAS spec
+// NOTE: connect.loaded is currently only client side
+export type EventName = 'connect.connection-connected' | 'connect.loaded'
 
-export type OpenIntEvent = z.infer<typeof zOpenIntEvent>
+export interface OpenIntEvent {
+  name: EventName
+  data?: {
+    connection_id?: string
+    [key: string]: any
+  }
+  id: string // Should start with 'evt_'
+  ts: number
+}
 
-export const createClientOnlyEventId = () => {
+export const createClientOnlyEventId = (): string => {
   return `evt_CLIENTONLY_${Math.random().toString(36).substring(2, 15)}`
 }
 
@@ -59,12 +55,12 @@ export const frameEventsListener = (
       if (event.data.type === 'openIntEvent' && event.data.event) {
         let payload = event.data.event
         // the backend may still be sending it as connectionId (camel case)
-        if (payload.data.connectionId) {
+        if (payload.data?.connectionId) {
           payload.data.connection_id = payload.data.connectionId
           delete payload.data.connectionId
         }
 
-        callback(payload)
+        callback(payload as OpenIntEvent)
         return
       }
     }
