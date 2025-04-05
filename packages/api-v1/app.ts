@@ -9,7 +9,6 @@ import {
 } from './handlers'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
-import {createTestOauthElysia} from './oauth-server'
 
 export interface CreateAppOptions
   extends Omit<CreateFetchHandlerOptions, 'endpoint' | 'router'> {}
@@ -43,8 +42,6 @@ export function createApp({db}: CreateAppOptions) {
     .all('/v1/*', ({request}) =>
       createFetchHandlerOpenAPI({endpoint: '/v1', db})(request),
     )
-    // Add OAuth routes
-    .use(createTestOauthElysia())
   return app
 }
 
