@@ -188,6 +188,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 pre connect - get authorization url
 
 connect - visit authorization url, get 302 redirect with code and state
+return the needed data to the client via popup
 
 post connect - exchange code for token 
 

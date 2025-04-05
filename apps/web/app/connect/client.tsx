@@ -70,6 +70,17 @@ const ConnectorClientComponents = Object.fromEntries(
   ]),
 )
 
+function makeNativeOauthConnectorClientComponent(
+  settingsJsonSchema: JSONSchema,
+) {
+  // createNativeOauthConnect
+  // open popup
+  // listen for message from popup
+  // parse message
+  // close popup
+  // return code and state to the client via message pasing
+}
+
 function makeManualConnectorClientComponent(settingsJsonSchema: JSONSchema) {
   return function ManualConnectorClientComponent({
     onConnectFn,

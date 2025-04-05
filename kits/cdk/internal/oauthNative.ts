@@ -1,6 +1,6 @@
 export interface OAuthConnectConfig {
-  connectorName: string
-  authType: 'OAUTH2' | 'OAUTH1' | 'OAUTH2CC'
+  // connectorName: string
+  // authType: 'OAUTH2' | 'OAUTH1' | 'OAUTH2CC'
   authorizationUrl: string // From preConnect
   connectionId?: string
 }
