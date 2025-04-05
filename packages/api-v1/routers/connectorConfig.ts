@@ -47,8 +47,9 @@ export const connectorConfigRouter = router({
       const connectorNames = Object.keys(defConnectors)
 
       const connectionCountExtra = {
+        // Need to cast to double precision to avoid being used as string
         connection_count: sql<number>`(
-          SELECT COUNT(*)
+          SELECT COUNT(*) :: double precision
           FROM ${schema.connection}
           WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
         )`.as('connection_count'),
@@ -56,7 +57,7 @@ export const connectorConfigRouter = router({
 
       const items = await ctx.db.query.connector_config.findMany({
         extras: {
-          total: sql<number>`count(*) over ()`.as('total'),
+          total: sql<number>`(count(*) over ())::double precision`.as('total'),
           // TODO: Fix typing to make connection_count optional
           ...((includeConnectionCount &&
             connectionCountExtra) as typeof connectionCountExtra),
