@@ -23,10 +23,8 @@ function makeZod() {
       get() {
         const msg = orgMessage.call(this)
         // We do this to prevent data from being too long to display
-        return `{
-    "issues": ${msg},
-    "data": ${JSON.stringify(this.data)}
-  }`
+        const issues = JSON.parse(msg)
+        return JSON.stringify({issues, data: this.data}, null, 2)
       },
       configurable: true,
       enumerable: true,
