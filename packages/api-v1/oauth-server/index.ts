@@ -12,52 +12,9 @@ import {
   OAuthUser,
   OAuthUserIdentifier,
   OAuthUserRepository,
-  RequestInterface,
 } from '@jmondi/oauth2-server'
-import {responseToVanilla} from '@jmondi/oauth2-server/vanilla'
 import {Elysia} from 'elysia'
-import {withLoopback} from '@openint/loopback-link'
-
-async function requestFromVanilla2(req: Request) {
-  const url = new URL(req.url)
-  const query: Record<string, string> = {}
-  url.searchParams.forEach((value, key) => {
-    query[key] = value
-  })
-
-  let body: Record<string, any> = {}
-  const contentType = req.headers.get('content-type')
-
-  if (contentType?.includes('application/x-www-form-urlencoded')) {
-    const formData = await req.text()
-    const params = new URLSearchParams(formData)
-    body = Object.fromEntries(params.entries())
-  } else if (req.body instanceof ReadableStream) {
-    try {
-      body = await req.json()
-    } catch {
-      body = {}
-    }
-  } else if (req.body != null) {
-    try {
-      body = JSON.parse(req.body)
-    } catch {
-      body = {}
-    }
-  }
-
-  const headers: Record<string, string> = {}
-  req.headers.forEach((value, key) => {
-    if (key === 'cookie') return
-    headers[key] = value
-  })
-
-  return {
-    query,
-    body,
-    headers,
-  } satisfies RequestInterface
-}
+import {requestFromVanilla, responseToVanilla} from './utils'
 
 export class ClientRepository implements OAuthClientRepository {
   private clients: OAuthClient[] = []
@@ -110,7 +67,7 @@ export class TokenRepository implements OAuthTokenRepository {
       accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
       scopes: scopes,
       client,
-      userId: user?.id,
+      user: user,
     }
     await this.persist(token)
     return token
@@ -126,7 +83,7 @@ export class TokenRepository implements OAuthTokenRepository {
       accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
       scopes: accessToken.scopes,
       client,
-      userId: accessToken.userId,
+      user: accessToken.user,
     }
     await this.persist(token)
     return token
@@ -279,10 +236,10 @@ export class UserRepository implements OAuthUserRepository {
 }
 
 // Create Elysia routes for OAuth endpoints
-export function createOAuthElysia(authServer: AuthorizationServer): Elysia {
+export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
   return new Elysia()
     .get('/authorize', async ({request}) => {
-      return requestFromVanilla2(request)
+      return requestFromVanilla(request)
         .then(async (req) => {
           console.log('req', req)
           const authReq = await authServer.validateAuthorizationRequest(req)
@@ -300,7 +257,7 @@ export function createOAuthElysia(authServer: AuthorizationServer): Elysia {
         .then(responseToVanilla)
     })
     .post('/token', async ({request}) => {
-      return requestFromVanilla2(request)
+      return requestFromVanilla(request)
         .then(async (req) => {
           console.log('req', req)
           const res = await authServer.respondToAccessTokenRequest(req)
@@ -314,103 +271,6 @@ export function createOAuthElysia(authServer: AuthorizationServer): Elysia {
         .then(responseToVanilla)
     })
 
-    .post('/introspect', async ({request, set}) => {})
-    .post('/revoke', async ({request, set}) => {})
-}
-
-// Create a default OAuth server with sample data
-export function createTestOAuthServer() {
-  // Sample clients
-  const client: OAuthClient = {
-    id: 'client1',
-    name: 'Sample Client',
-    secret: 'secret1',
-    redirectUris: ['http://localhost:3000/callback'],
-    allowedGrants: ['authorization_code', 'refresh_token'],
-    scopes: [{name: 'read'}, {name: 'write'}],
-  }
-  const scopes: OAuthScope[] = [
-    {
-      name: 'read',
-      description: 'Read access',
-    },
-    {
-      name: 'write',
-      description: 'Write access',
-    },
-  ]
-
-  const clientRepository = new ClientRepository([client])
-  const tokenRepository = new TokenRepository([
-    {
-      accessToken: 'some_access_token',
-      accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000),
-      refreshToken: 'some_refresh_token',
-      refreshTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000),
-      scopes: [{name: 'read'}, {name: 'write'}],
-      client,
-    },
-  ])
-  const scopeRepository = new ScopeRepository(scopes)
-
-  const server = new AuthorizationServer(
-    clientRepository,
-    tokenRepository,
-    scopeRepository,
-    'my-service',
-  )
-  server.enableGrantTypes('refresh_token')
-  server.enableGrantTypes({
-    grant: 'authorization_code',
-    authCodeRepository: new AuthCodeRepository(),
-    userRepository: new UserRepository([{id: 'user1', username: 'testuser'}]),
-  })
-  return server
-}
-
-// @ts-expect-error
-if (import.meta.main) {
-  const app = createOAuthElysia(createTestOAuthServer())
-
-  const authorizeRequest = new Request(
-    'http://localhost/authorize?' +
-      new URLSearchParams({
-        response_type: 'code',
-        client_id: 'client1',
-        redirect_uri: 'http://localhost:3000/callback',
-        scope: 'read',
-        state: 'xyz',
-        // TODO: Figure out how not to have this challenge....
-        code_challenge: 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM',
-        code_challenge_method: 'S256',
-      }).toString(),
-    {redirect: 'manual'},
-  )
-
-  const handleWithLink = withLoopback(app.handle)
-
-  handleWithLink(authorizeRequest)
-    .then(async (res) => {
-      console.log('asdasdfasdfasdfdas', res)
-    })
-    .catch((err) => {
-      console.log('err', err)
-    })
-
-  // const request = new Request('http://localhost/token', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //   },
-  //   body: new URLSearchParams({
-  //     grant_type: 'refresh_token',
-  //     client_id: 'client1',
-  //     client_secret: 'secret1',
-  //     refresh_token: 'some_refresh_token',
-  //     scope: 'read',
-  //   }).toString(),
-  // })
-  // app.handle(request).then(async (res) => {
-  //   console.log(await res.text())
-  // })
+    .post('/introspect', async () => {})
+    .post('/revoke', async () => {})
 }
