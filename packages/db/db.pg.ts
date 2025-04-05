@@ -6,6 +6,7 @@ import {types as pgTypes, Pool} from 'pg'
 import type {Viewer} from '@openint/cdk'
 import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
+import {parseNumber} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
 export function setTypeParsers() {
@@ -14,8 +15,8 @@ export function setTypeParsers() {
   pgTypes.setTypeParser(pgTypes.builtins.TIMESTAMPTZ, (val) => val)
   pgTypes.setTypeParser(pgTypes.builtins.INTERVAL, (val) => val)
   // TODO: Add warning if we have overflow here...
-  pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (val) => Number(val))
-  pgTypes.setTypeParser(pgTypes.builtins.INT8, (val) => Number(val))
+  pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (val) => parseNumber(val))
+  pgTypes.setTypeParser(pgTypes.builtins.INT8, (val) => parseNumber(val))
 
   return pgTypes
 }

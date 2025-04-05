@@ -11,6 +11,7 @@ import {
   getMigrationConfig,
   type DbOptions,
 } from './db'
+import {parseNumber} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
 const parsers = {
@@ -19,8 +20,8 @@ const parsers = {
   [types.INTERVAL]: (value) => value,
   [types.DATE]: (value) => value,
   // TODO: Add warning if we have overflow here...
-  [types.NUMERIC]: (value) => Number(value),
-  [types.INT8]: (value) => Number(value),
+  [types.NUMERIC]: (value) => parseNumber(value),
+  [types.INT8]: (value) => parseNumber(value),
 } satisfies ParserOptions
 
 function drizzleForViewer(
