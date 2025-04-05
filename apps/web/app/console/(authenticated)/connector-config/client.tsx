@@ -5,7 +5,13 @@ import {useRef, useState} from 'react'
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {AppRouterOutput} from '@openint/api-v1/routers'
 import {Button} from '@openint/shadcn/ui'
-import {Sheet, SheetContent, SheetFooter} from '@openint/shadcn/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '@openint/shadcn/ui/sheet'
 import {
   AddConnectorConfig,
   ConnectorTableCell,
@@ -262,6 +268,13 @@ export function ConnectorConfigList(props: {
           }
         }}>
         <SheetContent side="right" className="min-w-1/3 p-8 pb-0">
+          <SheetHeader>
+            <SheetTitle>
+              {selectedConnector ? 'Edit Connector' : 'Add Connector'}
+            </SheetTitle>
+          </SheetHeader>
+          {/* Add sheet description here? */}
+
           {selectedConnector ? (
             <>
               <JSONSchemaForm
