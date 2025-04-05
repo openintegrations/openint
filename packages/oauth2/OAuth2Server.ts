@@ -193,7 +193,7 @@ export function createAuthCodeRepository(
 export function createUserRepository(initialUsers: OAuthUser[] = []) {
   const users = [...initialUsers]
 
-  return {
+  const repo = {
     async getUserByCredentials(identifier, _password, _grantType, _client) {
       const user = users.find((user) => {
         if (typeof identifier === 'string') {
@@ -204,9 +204,14 @@ export function createUserRepository(initialUsers: OAuthUser[] = []) {
       return user
     },
   } satisfies OAuthUserRepository
+
+  return {
+    users,
+    ...repo,
+  }
 }
 
-export function createAuthorizationServer({
+export function createOAuth2Server({
   clients,
   scopes,
   users,
@@ -223,25 +228,23 @@ export function createAuthorizationServer({
   const tokenRepository = createTokenRepository([])
   const scopeRepository = createScopeRepository(scopes)
 
-  const server = new AuthorizationServer(
+  const authServer = new AuthorizationServer(
     clientRepository,
     tokenRepository,
     scopeRepository,
     serviceName,
   )
 
-  server.enableGrantTypes('refresh_token')
-  server.enableGrantTypes({
+  const userRepository = createUserRepository(users)
+  const authCodeRepository = createAuthCodeRepository(authCodes)
+
+  authServer.enableGrantTypes('refresh_token')
+  authServer.enableGrantTypes({
     grant: 'authorization_code',
-    authCodeRepository: createAuthCodeRepository(authCodes),
-    userRepository: createUserRepository(users),
+    authCodeRepository,
+    userRepository,
   })
 
-  return server
-}
-
-// Create Elysia routes for OAuth endpoints
-export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
   return new Elysia()
     .get('/authorize', async ({request}) =>
       requestFromVanilla(request)
@@ -250,7 +253,7 @@ export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
           const authReq = await authServer.validateAuthorizationRequest(req)
           // console.log('authReq', authReq)
           authReq.isAuthorizationApproved = true
-          authReq.user = {id: 'user1', username: 'testuser'}
+          authReq.user = userRepository.users[0]
           const authRes = await authServer.completeAuthorizationRequest(authReq)
           // console.log('authRes', authRes)
           return authRes
@@ -299,10 +302,4 @@ export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
         })
         .then(responseToVanilla),
     )
-}
-
-export function createOAuth2Server(
-  opts: Parameters<typeof createAuthorizationServer>[0],
-) {
-  return elysiaFromAuthorizationServer(createAuthorizationServer(opts))
 }

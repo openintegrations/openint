@@ -3,6 +3,7 @@ import {R} from '@openint/util/remeda'
 import {stringifyQueryParams} from '@openint/util/url-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
+import {OAuth2Error} from './OAuth2Error'
 
 const zTokenResponse = z.object({
   access_token: z.string(),
@@ -147,25 +148,5 @@ export function createOAuth2Client<
     refreshToken,
     revokeToken,
     getTokenWithClientCredentials,
-  }
-}
-
-export class OAuth2Error<T = unknown> extends Error {
-  override name = 'OAuth2Error'
-
-  constructor(
-    // prettier-ignore
-    public override readonly message: string,
-    public readonly data: T,
-    public readonly request: {
-      status: number
-      statusText: string
-      url: string
-      method: string
-      headers: Record<string, string>
-    },
-  ) {
-    super(message)
-    Object.setPrototypeOf(this, OAuth2Error.prototype)
   }
 }
