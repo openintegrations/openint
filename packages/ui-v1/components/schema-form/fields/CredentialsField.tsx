@@ -27,8 +27,6 @@ export function CredentialsField<T extends Credentials = Credentials>(
     !formData?.clientId && !formData?.clientSecret,
   )
 
-  console.log({initialData, formData})
-
   const handleChange = (field: string, value?: string | string[]) => {
     onChange({
       ...formData,
