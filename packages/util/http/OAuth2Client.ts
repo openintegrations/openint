@@ -1,4 +1,4 @@
-import {pickBy} from 'lodash'
+import {pickBy} from 'remeda'
 import {stringifyQueryParams} from '../url-utils'
 
 export interface OAuth2ClientConfig<TError = unknown> {
