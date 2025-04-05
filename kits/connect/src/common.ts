@@ -12,9 +12,7 @@ export const zFrameMessage = z.discriminatedUnion('type', [
 ])
 export type FrameMessage = z.infer<typeof zFrameMessage>
 
-export const defaultHost = 'https://connect.openint.dev'
-
-export interface GetIFrameProps {
+export interface ConnectProps {
   baseUrl?: string
   params?: {
     token?: string
@@ -26,13 +24,15 @@ export interface GetIFrameProps {
     theme?: 'light' | 'dark'
   }
 }
+export const defaultHost = 'https://connect.openint.dev'
 
-export const getIFrameUrl = ({
+export const createMagicLinkUrl = ({
   baseUrl = defaultHost,
   params = {},
-}: GetIFrameProps) => {
+}: ConnectProps) => {
   const url = new URL(baseUrl)
-  // TODO; move this logic to server to load smartly based on whether the user has connections or not
+  // TODO; create a new view in the server call default if there's no view and
+  // smartly load the right view based on whether the user has connections or not
   if (!params.view) {
     url.searchParams.set('view', 'add')
   }

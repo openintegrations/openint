@@ -1,25 +1,27 @@
 import React from 'react'
-import type {GetIFrameProps} from './common'
-import {getIFrameUrl} from './common'
+import {ConnectProps, createMagicLinkUrl} from './common'
+import {frameEventsListener, OpenIntEvent} from './events'
 
-export interface OpenIntConnectEmbedProps
-  extends GetIFrameProps,
+export interface ConnectEmbedProps
+  extends ConnectProps,
     React.IframeHTMLAttributes<HTMLIFrameElement> {
   onReady?: () => void
+  // TODO: Make the events typed
+  onEvent?: (event: OpenIntEvent, unsubscribe: () => void) => void
 }
 
 const DEFAULT_HEIGHT = 500
 const DEFAULT_WIDTH = 350
-export const OpenIntConnectEmbed = React.memo(
+export const ConnectEmbed = React.memo(
   React.forwardRef(
     (
-      props: OpenIntConnectEmbedProps,
+      props: ConnectEmbedProps,
       forwardedRef: React.ForwardedRef<HTMLIFrameElement>,
     ) => {
-      const {baseUrl, params, onReady, ...iframeProps} = props
+      const {baseUrl, params, onReady, onEvent, ...iframeProps} = props
 
       const url = React.useMemo(
-        () => getIFrameUrl({baseUrl, params}),
+        () => createMagicLinkUrl({baseUrl, params}),
         [baseUrl, params],
       )
 
@@ -81,6 +83,11 @@ export const OpenIntConnectEmbed = React.memo(
             onLoad={() => {
               setLoading(false)
               onReady?.()
+              if (onEvent) {
+                const unsubscribe = frameEventsListener((event) => {
+                  onEvent(event, unsubscribe)
+                })
+              }
             }}
             src={url}
             width={width}
@@ -148,4 +155,4 @@ export const OpenIntConnectEmbed = React.memo(
   ),
 )
 
-OpenIntConnectEmbed.displayName = 'OpenIntConnectEmbed'
+ConnectEmbed.displayName = 'ConnectEmbed'

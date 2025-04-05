@@ -1,5 +1,24 @@
+// example event
+// {
+//   "name": "connect/connection-connected",
+//   "data": {
+//     "connectionId": "conn_microsoft_xxxxx"
+//   },
+//   "id": "evt_xxxx",
+//   "ts": 1741530259940
+// }
+export interface OpenIntEvent {
+  name: string
+  data: {
+    connectionId?: string
+    [key: string]: any
+  }
+  id: string
+  ts: number
+}
+
 export const frameEventsListener = (
-  callback: (event: any) => void,
+  callback: (event: OpenIntEvent) => void,
 ): (() => void) => {
   // Add a delay before looking for the iframe
   setTimeout(() => {
