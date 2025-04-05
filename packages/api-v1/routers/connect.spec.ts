@@ -125,3 +125,14 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     expect(state).toBeDefined()
   })
 })
+
+/*
+
+pre connect - get authorization url
+
+connect - visit authorization url, get 302 redirect with code and state
+
+post connect - exchange code for token 
+
+
+*/
