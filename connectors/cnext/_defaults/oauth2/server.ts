@@ -3,7 +3,7 @@ import {extractId, makeId} from '@openint/cdk'
 import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {type Z} from '@openint/util/zod-utils'
-import {oauth2Schemas, zOAuthConfig} from './def'
+import type {oauth2Schemas, zOAuthConfig} from './def'
 import {
   authorizeHandler,
   defaultTokenExchangeHandler,

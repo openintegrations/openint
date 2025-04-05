@@ -1,0 +1,13 @@
+{
+  "name": "@openint/oauth2",
+  "version": "0.0.0",
+  "private": true,
+  "module": "./index.ts",
+  "scripts": {},
+  "dependencies": {
+    "@jmondi/oauth2-server": "^4.0.3",
+    "@openint/util": "workspace:*",
+    "elysia": "^1.2.12"
+  },
+  "devDependencies": {}
+}
