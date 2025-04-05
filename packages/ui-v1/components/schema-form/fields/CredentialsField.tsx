@@ -2,6 +2,7 @@ import type {FieldProps} from '@rjsf/utils'
 import {useState} from 'react'
 import type {ConnectorConfig} from '@openint/api-v1/models'
 import {Input} from '@openint/shadcn/ui/input'
+import {Label} from '@openint/shadcn/ui/label'
 import {Switch} from '@openint/shadcn/ui/switch'
 
 type Credentials = {
@@ -53,11 +54,8 @@ export function CredentialsField<T extends Credentials = Credentials>(
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <label htmlFor="use-openint-credentials" className="font-bold">
-          Use OpenInt {connectorName} credentials
-        </label>
+        <Label>Use OpenInt {connectorName} credentials</Label>
         <Switch
-          id="use-openint-credentials"
           checked={useOpenIntCredentials}
           onCheckedChange={handleSwitchChange}
         />
@@ -65,13 +63,8 @@ export function CredentialsField<T extends Credentials = Credentials>(
 
       {!useOpenIntCredentials && (
         <div className="space-y-2">
-          <label
-            htmlFor="client-id"
-            className="text-sm font-medium text-gray-700">
-            Client ID
-          </label>
+          <Label>Client ID</Label>
           <Input
-            id="client-id"
             type="text"
             value={formData?.clientId || ''}
             onChange={(e) => {
