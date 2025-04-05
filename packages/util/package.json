@@ -9,7 +9,7 @@
     "async-sema": "3.1.1",
     "awilix": "7.0.3",
     "axios": "0.21.1",
-    "change-case": "^5.4.4",
+    "change-case": "^4.1.2",
     "decimal.js": "10.4.0",
     "deepmerge-ts": "4.2.2",
     "fast-equals": "3.0.3",

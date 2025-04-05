@@ -5,7 +5,7 @@ import type {
   Source,
 } from '@openint/sync'
 import {castIs, z, type Z} from '@openint/util/zod-utils'
-import {AuthType, JsonConnectorDef} from '../../connectors/cnext'
+import type {AuthType, JsonConnectorDef} from '../../connectors/cnext'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
 import {zExternalId, zId} from './id.types'
