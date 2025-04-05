@@ -16,6 +16,11 @@ export function setTypeParsers() {
   pgTypes.setTypeParser(pgTypes.builtins.INTERVAL, (val) => val)
   pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (val) => parseNumber(val))
   pgTypes.setTypeParser(pgTypes.builtins.INT8, (val) => parseNumber(val))
+  pgTypes.setTypeParser(pgTypes.builtins.INT4, (val) => parseNumber(val))
+  pgTypes.setTypeParser(pgTypes.builtins.INT2, (val) => parseNumber(val))
+  pgTypes.setTypeParser(pgTypes.builtins.FLOAT8, (val) => parseNumber(val))
+  pgTypes.setTypeParser(pgTypes.builtins.FLOAT4, (val) => parseNumber(val))
+  pgTypes.setTypeParser(pgTypes.builtins.MONEY, (val) => parseNumber(val))
 
   return pgTypes
 }

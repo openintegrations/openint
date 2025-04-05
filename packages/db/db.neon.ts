@@ -1,9 +1,8 @@
-import {
+import type {
   HTTPQueryOptions,
-  neon,
-  neonConfig,
   NeonQueryFunction,
 } from '@neondatabase/serverless'
+import {neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
 import type {Viewer} from '@openint/cdk'
@@ -39,28 +38,11 @@ function drizzleForViewer(
           // same impact as reset role
           [
             ...rlsStatementsForViewer(viewer).map((q) => neonSql(q)),
-            neonSql(query, params),
+            neonSql(query, params, opts) as never, // TODO: Fix typing ....
           ],
           opts,
         )
     const res = allResponses.pop()
-
-    // This is a really poor workaround because `types` is not working on prod though works in tests... What gives?
-    // TODO: Make me work for arrayMode: true
-    if (res?.rows) {
-      res.rows = res.rows.map((row) => {
-        if (typeof row === 'object' && row !== null) {
-          const newRow: Record<string, unknown> = {...row}
-          for (const key in newRow) {
-            if (newRow[key] instanceof Date) {
-              newRow[key] = newRow[key].toISOString()
-            }
-          }
-          return newRow
-        }
-        return row
-      })
-    }
 
     return {rows: res?.rows ?? []}
   }, getDrizzleConfig(options))
