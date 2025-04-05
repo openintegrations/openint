@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 import type {
   OAuthAuthCode,
   OAuthAuthCodeRepository,
@@ -13,6 +14,8 @@ import type {
 import {AuthorizationServer} from '@jmondi/oauth2-server'
 import {Elysia} from 'elysia'
 import {requestFromVanilla, responseToVanilla} from './utils'
+
+export type {OAuthAuthCode, OAuthClient, OAuthScope, OAuthToken, OAuthUser}
 
 export function createClientRepository(initialClients: OAuthClient[] = []) {
   const clients = [...initialClients]
@@ -244,8 +247,8 @@ export function createAuthorizationServer({
 // Create Elysia routes for OAuth endpoints
 export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
   return new Elysia()
-    .get('/authorize', async ({request}) => {
-      return requestFromVanilla(request)
+    .get('/authorize', async ({request}) =>
+      requestFromVanilla(request)
         .then(async (req) => {
           // console.log('req', req)
           const authReq = await authServer.validateAuthorizationRequest(req)
@@ -257,13 +260,13 @@ export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
           return authRes
         })
         .catch((err) => {
-          // console.log('err', err)
+          console.log('err', err)
           throw err
         })
-        .then(responseToVanilla)
-    })
-    .post('/token', async ({request}) => {
-      return requestFromVanilla(request)
+        .then(responseToVanilla),
+    )
+    .post('/token', async ({request}) =>
+      requestFromVanilla(request)
         .then(async (req) => {
           // console.log('req', req)
           const res = await authServer.respondToAccessTokenRequest(req)
@@ -271,11 +274,11 @@ export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
           return res
         })
         .catch((err) => {
-          // console.log('err', err)
+          console.log('err', err)
           throw err
         })
-        .then(responseToVanilla)
-    })
+        .then(responseToVanilla),
+    )
 
     .post('/introspect', async () => {})
     .post('/revoke', async () => {})

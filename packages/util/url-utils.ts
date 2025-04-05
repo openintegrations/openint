@@ -58,3 +58,22 @@ export function buildUrl(input: {
     input.params && _stringifyQueryParams(input.params),
   ]).join('?')
 }
+
+/** Does not handle parents for now... */
+export function urlSearchParamsToJson(
+  searchParams: URLSearchParams,
+): Record<string, string | string[]> {
+  const result: Record<string, string | string[]> = {}
+  searchParams.forEach((value, key) => {
+    if (key in result) {
+      // If key exists, convert to array if needed and append value
+      const existing = result[key]
+      result[key] = Array.isArray(existing)
+        ? [...existing, value]
+        : [existing as string, value]
+    } else {
+      result[key] = value
+    }
+  })
+  return result
+}
