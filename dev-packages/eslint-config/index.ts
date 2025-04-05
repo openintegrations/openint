@@ -106,7 +106,7 @@ export const configs = keyAsName({
   //   // extends: [pluginImport.flatConfigs.recommended],
   //   plugins: {import: pluginImport},
   //   rules: {
-  //     // TODO: This rule is not working for some reason. Fix me.... 
+  //     // TODO: This rule is not working for some reason. Fix me....
   //     'import/no-extraneous-dependencies': [
   //       'error',
   //       {
@@ -321,6 +321,10 @@ export const configs = keyAsName({
     rules: {
       ...pluginJestFormatting.configs.recommended.overrides.rules,
       'jest/expect-expect': 'off',
+      'jest/no-standalone-expect': [
+        'error',
+        {additionalTestBlockFunctions: ['$test']},
+      ],
     },
   },
   prettier: {

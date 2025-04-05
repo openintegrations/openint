@@ -105,6 +105,9 @@ export async function authorizeHandler({
           oauthConfig,
         ),
       ),
+      // TODO: Make this configurable
+      code_challenge: 'xxx',
+      code_challenge_method: 'S256',
       // TODO: create a separate state ID in the database instead of using connectionId
       state: Buffer.from(connectionId).toString('base64'),
       ...(oauthConfig.params_config.authorize ?? {}),
