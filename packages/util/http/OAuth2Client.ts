@@ -26,7 +26,12 @@ export class OAuth2Client<
   TError = unknown,
   TToken extends TokenResponse = TokenResponse,
 > {
-  constructor(private readonly config: OAuth2ClientConfig) {
+  constructor(
+    private readonly config: OAuth2ClientConfig,
+    private readonly fetch: (
+      req: Request,
+    ) => Promise<Response> = globalThis.fetch,
+  ) {
     zOAuth2ClientConfig.parse(config)
   }
 
@@ -55,11 +60,9 @@ export class OAuth2Client<
       ).toString('base64')}`
     }
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body,
-    })
+    const response = await this.fetch(
+      new Request(url, {method: 'POST', headers, body}),
+    )
 
     if (!response.ok) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
