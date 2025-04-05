@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable jest/no-standalone-expect */
 import crypto from 'node:crypto'
-import {describe, expect} from '@jest/globals'
+import {expect} from '@jest/globals'
 import {base64urlencode} from '@jmondi/oauth2-server'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
