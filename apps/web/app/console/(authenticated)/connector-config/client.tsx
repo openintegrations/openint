@@ -47,12 +47,15 @@ export function ConnectorConfigList(props: {
   )
   const connectorRes = useSuspenseQuery(
     trpc.listConnectors.queryOptions(
-      {},
+      {
+        expand: ['schemas'],
+      },
       initialConnectorData ? {initialData: initialConnectorData} : undefined,
     ),
   )
 
   const connectorConfigs = res.data.items
+
   const formSchema = {
     type: 'object' as const,
     properties: {
