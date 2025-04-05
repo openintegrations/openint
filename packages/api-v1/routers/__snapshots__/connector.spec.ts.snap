@@ -5766,6 +5766,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "type": "string",
             },
             "type": "array",
+            "ui:field": "MultiSelectField",
           },
           "credentials": {
             "anyOf": [
@@ -5790,6 +5791,8 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "object",
               },
             ],
+            "ui:field": "CredentialsField",
+            "ui:fieldReplacesAnyOrOneOf": true,
           },
           "envName": {
             "enum": [
@@ -5837,6 +5840,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "type": "string",
             },
             "type": "array",
+            "ui:field": "MultiSelectField",
           },
         },
         "required": [
