@@ -20,7 +20,7 @@ export function createClientRepository(initialClients: OAuthClient[] = []) {
   return {
     async getByIdentifier(clientId) {
       const client = clients.find((c) => c.id === clientId)
-      console.log('getByIdentifier', clientId, client)
+      // console.log('getByIdentifier', clientId, client)
       if (!client) {
         throw new Error(`Client not found: ${clientId}`)
       }
@@ -28,7 +28,7 @@ export function createClientRepository(initialClients: OAuthClient[] = []) {
     },
 
     async isClientValid(grantType, client, clientSecret) {
-      console.log('isClientValid', grantType, client, clientSecret)
+      // console.log('isClientValid', grantType, client, clientSecret)
       // Verify the client secret if provided
       if (clientSecret && client.secret !== clientSecret) {
         return false
@@ -207,47 +207,7 @@ export function createUserRepository(initialUsers: OAuthUser[] = []) {
   } satisfies OAuthUserRepository
 }
 
-// Create Elysia routes for OAuth endpoints
-export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
-  return new Elysia()
-    .get('/authorize', async ({request}) => {
-      return requestFromVanilla(request)
-        .then(async (req) => {
-          console.log('req', req)
-          const authReq = await authServer.validateAuthorizationRequest(req)
-          console.log('authReq', authReq)
-          authReq.isAuthorizationApproved = true
-          authReq.user = {id: 'user1', username: 'testuser'}
-          const authRes = await authServer.completeAuthorizationRequest(authReq)
-          console.log('authRes', authRes)
-          return authRes
-        })
-        .catch((err) => {
-          console.log('err', err)
-          throw err
-        })
-        .then(responseToVanilla)
-    })
-    .post('/token', async ({request}) => {
-      return requestFromVanilla(request)
-        .then(async (req) => {
-          console.log('req', req)
-          const res = await authServer.respondToAccessTokenRequest(req)
-          console.log('res', res)
-          return res
-        })
-        .catch((err) => {
-          console.log('err', err)
-          throw err
-        })
-        .then(responseToVanilla)
-    })
-
-    .post('/introspect', async () => {})
-    .post('/revoke', async () => {})
-}
-
-export function createOAuth2Server({
+export function createAuthorizationServer({
   clients,
   scopes,
   users,
@@ -279,4 +239,50 @@ export function createOAuth2Server({
   })
 
   return server
+}
+
+// Create Elysia routes for OAuth endpoints
+export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
+  return new Elysia()
+    .get('/authorize', async ({request}) => {
+      return requestFromVanilla(request)
+        .then(async (req) => {
+          // console.log('req', req)
+          const authReq = await authServer.validateAuthorizationRequest(req)
+          // console.log('authReq', authReq)
+          authReq.isAuthorizationApproved = true
+          authReq.user = {id: 'user1', username: 'testuser'}
+          const authRes = await authServer.completeAuthorizationRequest(authReq)
+          // console.log('authRes', authRes)
+          return authRes
+        })
+        .catch((err) => {
+          // console.log('err', err)
+          throw err
+        })
+        .then(responseToVanilla)
+    })
+    .post('/token', async ({request}) => {
+      return requestFromVanilla(request)
+        .then(async (req) => {
+          // console.log('req', req)
+          const res = await authServer.respondToAccessTokenRequest(req)
+          // console.log('res', res)
+          return res
+        })
+        .catch((err) => {
+          // console.log('err', err)
+          throw err
+        })
+        .then(responseToVanilla)
+    })
+
+    .post('/introspect', async () => {})
+    .post('/revoke', async () => {})
+}
+
+export function createOAuth2Server(
+  opts: Parameters<typeof createAuthorizationServer>[0],
+) {
+  return elysiaFromAuthorizationServer(createAuthorizationServer(opts))
 }
