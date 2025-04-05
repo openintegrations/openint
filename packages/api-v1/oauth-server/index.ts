@@ -1,6 +1,4 @@
-import {
-  AuthorizationServer,
-  GrantIdentifier,
+import type {
   OAuthAuthCode,
   OAuthAuthCodeRepository,
   OAuthClient,
@@ -10,9 +8,9 @@ import {
   OAuthToken,
   OAuthTokenRepository,
   OAuthUser,
-  OAuthUserIdentifier,
   OAuthUserRepository,
 } from '@jmondi/oauth2-server'
+import {AuthorizationServer} from '@jmondi/oauth2-server'
 import {Elysia} from 'elysia'
 import {requestFromVanilla, responseToVanilla} from './utils'
 
@@ -20,7 +18,7 @@ export function createClientRepository(initialClients: OAuthClient[] = []) {
   const clients = [...initialClients]
 
   return {
-    async getByIdentifier(clientId: string): Promise<OAuthClient> {
+    async getByIdentifier(clientId) {
       const client = clients.find((c) => c.id === clientId)
       console.log('getByIdentifier', clientId, client)
       if (!client) {
@@ -29,11 +27,7 @@ export function createClientRepository(initialClients: OAuthClient[] = []) {
       return client
     },
 
-    async isClientValid(
-      grantType: GrantIdentifier,
-      client: OAuthClient,
-      clientSecret?: string,
-    ): Promise<boolean> {
+    async isClientValid(grantType, client, clientSecret) {
       console.log('isClientValid', grantType, client, clientSecret)
       // Verify the client secret if provided
       if (clientSecret && client.secret !== clientSecret) {
@@ -50,12 +44,8 @@ export function createTokenRepository(initialTokens: OAuthToken[] = []) {
   const tokens = [...initialTokens]
 
   return {
-    async issueToken(
-      client: OAuthClient,
-      scopes: OAuthScope[],
-      user?: OAuthUser | null,
-    ): Promise<OAuthToken> {
-      const token: OAuthToken = {
+    async issueToken(client, scopes, user) {
+      const token = {
         accessToken: crypto.randomUUID(),
         refreshToken: crypto.randomUUID(),
         accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
@@ -67,11 +57,8 @@ export function createTokenRepository(initialTokens: OAuthToken[] = []) {
       return token
     },
 
-    async issueRefreshToken(
-      accessToken: OAuthToken,
-      client: OAuthClient,
-    ): Promise<OAuthToken> {
-      const token: OAuthToken = {
+    async issueRefreshToken(accessToken, client) {
+      const token = {
         accessToken: crypto.randomUUID(),
         refreshToken: crypto.randomUUID(),
         accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
@@ -83,11 +70,11 @@ export function createTokenRepository(initialTokens: OAuthToken[] = []) {
       return token
     },
 
-    async persist(accessToken: OAuthToken): Promise<void> {
+    async persist(accessToken) {
       tokens.push(accessToken)
     },
 
-    async revoke(accessToken: OAuthToken): Promise<void> {
+    async revoke(accessToken) {
       const index = tokens.findIndex(
         (token) => token.accessToken === accessToken.accessToken,
       )
@@ -96,18 +83,17 @@ export function createTokenRepository(initialTokens: OAuthToken[] = []) {
       }
     },
 
-    async revokeDescendantsOf(authCodeId: string): Promise<void> {
-      // In this simple implementation, we don't track relationships between tokens
-      return
+    async revokeDescendantsOf(_authCodeId) {
+      throw new Error('Not implemented')
     },
 
-    async isRefreshTokenRevoked(refreshToken: OAuthToken): Promise<boolean> {
+    async isRefreshTokenRevoked(refreshToken) {
       return !tokens.some(
         (token) => token.refreshToken === refreshToken.refreshToken,
       )
     },
 
-    async getByRefreshToken(refreshTokenToken: string): Promise<OAuthToken> {
+    async getByRefreshToken(refreshTokenToken) {
       const token = tokens.find(
         (token) => token.refreshToken === refreshTokenToken,
       )
@@ -117,7 +103,7 @@ export function createTokenRepository(initialTokens: OAuthToken[] = []) {
       return token
     },
 
-    async getByAccessToken(accessTokenToken: string): Promise<OAuthToken> {
+    async getByAccessToken(accessTokenToken) {
       const token = tokens.find(
         (token) => token.accessToken === accessTokenToken,
       )
@@ -133,7 +119,7 @@ export function createScopeRepository(initialScopes: OAuthScope[] = []) {
   const scopes = [...initialScopes]
 
   return {
-    async getAllByIdentifiers(scopeNames: string[]): Promise<OAuthScope[]> {
+    async getAllByIdentifiers(scopeNames) {
       return scopeNames.map((name) => {
         const scope = scopes.find((s) => s.name === name)
         return (
@@ -145,12 +131,7 @@ export function createScopeRepository(initialScopes: OAuthScope[] = []) {
       })
     },
 
-    async finalize(
-      scopes: OAuthScope[],
-      identifier: GrantIdentifier,
-      client: OAuthClient,
-      user_id?: string,
-    ): Promise<OAuthScope[]> {
+    async finalize(scopes, _identifier, client, _user_id) {
       // Return the requested scopes that are allowed for this client
       return scopes.filter((scope) =>
         client.scopes.some((clientScope) => clientScope.name === scope.name),
@@ -159,11 +140,13 @@ export function createScopeRepository(initialScopes: OAuthScope[] = []) {
   } satisfies OAuthScopeRepository
 }
 
-export function createAuthCodeRepository() {
-  const authCodes: OAuthAuthCode[] = []
+export function createAuthCodeRepository(
+  initialAuthCodes: OAuthAuthCode[] = [],
+) {
+  const authCodes = [...initialAuthCodes]
 
   return {
-    async getByIdentifier(authCodeCode: string): Promise<OAuthAuthCode> {
+    async getByIdentifier(authCodeCode) {
       const authCode = authCodes.find((code) => code.code === authCodeCode)
       if (!authCode) {
         throw new Error(`Auth code not found: ${authCodeCode}`)
@@ -171,12 +154,8 @@ export function createAuthCodeRepository() {
       return authCode
     },
 
-    async issueAuthCode(
-      client: OAuthClient,
-      user: OAuthUser | undefined,
-      scopes: OAuthScope[],
-    ): Promise<OAuthAuthCode> {
-      const authCode: OAuthAuthCode = {
+    async issueAuthCode(client, user, scopes) {
+      const authCode = {
         code: Math.random().toString(36).substring(2),
         client,
         user,
@@ -190,11 +169,11 @@ export function createAuthCodeRepository() {
       return authCode
     },
 
-    async persist(authCode: OAuthAuthCode): Promise<void> {
+    async persist(authCode) {
       authCodes.push(authCode)
     },
 
-    async isRevoked(authCodeCode: string): Promise<boolean> {
+    async isRevoked(authCodeCode) {
       try {
         const authCode = await this.getByIdentifier(authCodeCode)
         return authCode.expiresAt < new Date()
@@ -203,7 +182,7 @@ export function createAuthCodeRepository() {
       }
     },
 
-    async revoke(authCodeCode: string): Promise<void> {
+    async revoke(authCodeCode) {
       const index = authCodes.findIndex((code) => code.code === authCodeCode)
       if (index !== -1) {
         authCodes.splice(index, 1)
@@ -216,12 +195,7 @@ export function createUserRepository(initialUsers: OAuthUser[] = []) {
   const users = [...initialUsers]
 
   return {
-    async getUserByCredentials(
-      identifier: OAuthUserIdentifier,
-      _password?: string,
-      _grantType?: GrantIdentifier,
-      _client?: OAuthClient,
-    ): Promise<OAuthUser | undefined> {
+    async getUserByCredentials(identifier, _password, _grantType, _client) {
       const user = users.find((user) => {
         if (typeof identifier === 'string') {
           return user.id === identifier
@@ -271,4 +245,38 @@ export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
 
     .post('/introspect', async () => {})
     .post('/revoke', async () => {})
+}
+
+export function createOAuth2Server({
+  clients,
+  scopes,
+  users,
+  authCodes,
+  serviceName = 'my-service',
+}: {
+  clients?: OAuthClient[]
+  scopes?: OAuthScope[]
+  users?: OAuthUser[]
+  authCodes?: OAuthAuthCode[]
+  serviceName?: string
+}) {
+  const clientRepository = createClientRepository(clients)
+  const tokenRepository = createTokenRepository([])
+  const scopeRepository = createScopeRepository(scopes)
+
+  const server = new AuthorizationServer(
+    clientRepository,
+    tokenRepository,
+    scopeRepository,
+    serviceName,
+  )
+
+  server.enableGrantTypes('refresh_token')
+  server.enableGrantTypes({
+    grant: 'authorization_code',
+    authCodeRepository: createAuthCodeRepository(authCodes),
+    userRepository: createUserRepository(users),
+  })
+
+  return server
 }
