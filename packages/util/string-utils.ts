@@ -28,3 +28,14 @@ export {default as pluralize} from 'pluralize'
 // MARK: - Hashing
 
 export {default as md5Hash} from 'md5-hex'
+
+/**
+ * Converts a Uint8Array to a base64url string
+ */
+export function toBase64Url(bytes: Uint8Array) {
+  const base64String = btoa(String.fromCharCode(...bytes))
+  return base64String
+    .replace(/\+/g, '-') // Replace '+' with '-' for URL-safe base64
+    .replace(/\//g, '_') // Replace '/' with '_' for URL-safe base64
+    .replace(/=+$/, '') // Remove padding '=' characters at the end
+}
