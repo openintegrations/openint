@@ -28,6 +28,7 @@
   "devDependencies": {
     "@openint/loopback-link": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
+    "@openint/cnext": "workspace:*",
     "@trpc/client": "^11.0.1",
     "bun": "^1.2.4",
     "bun-types": "^1.2.4",

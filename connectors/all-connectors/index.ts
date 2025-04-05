@@ -1,4 +1,5 @@
-import {Z, z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 import meta from './meta'
 
 export const zConnectorName = z

@@ -4,8 +4,8 @@ import {makeId} from '@openint/cdk'
 import {and, asc, desc, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
+import type {ConnectorConfig} from '../models'
 import {
-  ConnectorConfig,
   connectorConfigExtended,
   core,
   zConnectorConfigExpandOption,
@@ -111,7 +111,7 @@ export const connectorConfigRouter = router({
     })
     .input(
       z.object({
-        connector_name: z.string(),
+        connector_name: zConnectorName,
         display_name: z.string().optional(),
         disabled: z.boolean().optional(),
         config: z.record(z.unknown()).nullish(),
