@@ -5,7 +5,8 @@ import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {createOAuth2Server} from '@openint/oauth2/OAuth2Server'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
-import {z, Z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 import {getTestTRPCClient} from '../__tests__/test-utils'
 import {trpc} from '../trpc/_base'
 import {routerContextFromViewer} from '../trpc/context'
@@ -187,6 +188,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   describe('apikey based auth', () => {
     const settings = {apiKey: 'key-123'}
 
+    // TODO: create a dummy apikey based connector instead
     const ccfgRes = $test('create connector config', async () => {
       const res = await asUser.createConnectorConfig({
         connector_name: 'greenhouse',
@@ -229,6 +231,68 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
       expect(res.settings).toEqual(settings)
     })
+  })
+
+  describe.only('custom auth', () => {
+    const ccfgRes = $test('create plaid connector config', async () => {
+      const res = await asUser.createConnectorConfig({
+        connector_name: 'plaid',
+        config: {
+          envName: 'sandbox',
+          clientName: 'Test Client',
+          products: ['transactions'],
+          countryCodes: ['US'],
+          language: 'en',
+          credentials: null,
+        },
+      })
+      expect(res).toMatchObject({
+        id: expect.any(String),
+        org_id: 'org_222',
+        connector_name: 'plaid',
+      })
+      return res
+    })
+
+    const preConnectRes = $test('preConnect', async () => {
+      const res = await asCustomer.preConnect({
+        id: ccfgRes.current.id,
+        options: {},
+        data: {
+          connector_name: ccfgRes.current.connector_name,
+          input: {sandboxPublicTokenCreate: true},
+        },
+      })
+      // TODO: Use plaid schema to parse here.
+      expect(res.output).toEqual({public_token: expect.any(String)})
+      return res
+    })
+
+    const postConnectRes = $test('postConnect', async () => {
+      const res = await asCustomer.postConnect({
+        id: ccfgRes.current.id,
+        options: {},
+        data: {
+          connector_name: ccfgRes.current.connector_name,
+          input: preConnectRes.current.output,
+        },
+      })
+
+      return res
+    })
+
+    test('get connection', async () => {
+      const res = await asCustomer.getConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(res.settings).toEqual(postConnectRes.current.settings)
+    })
+
+    test.todo('check connection')
+
+    test.todo('revoke connection')
+
+    test.todo('handle token refresh')
   })
 })
 
