@@ -1,8 +1,7 @@
-import {z} from '@openint/util/zod-utils'
+import {memoize} from '@openint/util/function-utils'
 import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {memoize} from '@openint/util/function-utils'
-import {OAuth2Client} from '@openint/util/http/OAuth2Client'
+import {z} from '@openint/util/zod-utils'
 
 export const zRampConfig = z.object({
   clientId: z.string(),
@@ -39,10 +38,10 @@ const userResponseSchema = z.object({
   ]),
 })
 
-const getTokenInputSchema = z.object({
-  code: z.string(),
-  redirectUri: z.string(),
-})
+// const getTokenInputSchema = z.object({
+//   code: z.string(),
+//   redirectUri: z.string(),
+// })
 
 export const transactionInputSchema = z.object({
   accessToken: z.string(),
@@ -116,7 +115,7 @@ const transactionResponsesSchema = z.object({
   }),
 })
 
-export const makeRampClient = zFunction(zRampConfig, (cfg) => {
+export const makeRampClient = zFunction(zRampConfig, (_cfg) => {
   const createClient = memoize((accessToken: string) =>
     createHTTPClient({
       baseURL: 'https://api.ramp.com/developer/v1',
@@ -128,33 +127,33 @@ export const makeRampClient = zFunction(zRampConfig, (cfg) => {
     }),
   )
 
-  const oAuth2Client = new OAuth2Client({
-    authorizeURL: 'https://app.ramp.com/v1/authorize',
-    clientId: cfg.clientId,
-    clientSecret: cfg.clientSecret,
-    tokenURL: 'https://api.ramp.com/developer/v1/token',
-    clientAuthLocation: 'header',
-  })
+  // const oAuth2Client = new OAuth2Client({
+  //   authorizeURL: 'https://app.ramp.com/v1/authorize',
+  //   clientId: cfg.clientId,
+  //   clientSecret: cfg.clientSecret,
+  //   tokenURL: 'https://api.ramp.com/developer/v1/token',
+  //   clientAuthLocation: 'header',
+  // })
 
   return {
-    getAccessToken: zFunction(() =>
-      oAuth2Client
-        .getTokenWithClientCredentials({
-          scope: 'users:read transactions:read business:read',
-        })
-        .then((r) => r.access_token),
-    ),
-    getAuthorizeUrl: zFunction(z.string(), (redirectUri) =>
-      oAuth2Client.getAuthorizeUrl({
-        redirect_uri: redirectUri,
-        scope: 'users:read transactions:read business:read',
-      }),
-    ),
-    getToken: zFunction(getTokenInputSchema, (opts) =>
-      oAuth2Client
-        .getToken(opts.code, opts.redirectUri)
-        .then((r) => r.access_token),
-    ),
+    // getAccessToken: zFunction(() =>
+    //   oAuth2Client
+    //     .getTokenWithClientCredentials({
+    //       scope: 'users:read transactions:read business:read',
+    //     })
+    //     .then((r) => r.access_token),
+    // ),
+    // getAuthorizeUrl: zFunction(z.string(), (redirectUri) =>
+    //   oAuth2Client.getAuthorizeUrl({
+    //     redirect_uri: redirectUri,
+    //     scope: 'users:read transactions:read business:read',
+    //   }),
+    // ),
+    // getToken: zFunction(getTokenInputSchema, (opts) =>
+    //   oAuth2Client
+    //     .getToken(opts.code, opts.redirectUri)
+    //     .then((r) => r.access_token),
+    // ),
     getUsers: zFunction(z.string(), (token) =>
       createClient(token)
         .get<{data: unknown[]}>('/users')

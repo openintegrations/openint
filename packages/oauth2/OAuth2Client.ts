@@ -63,9 +63,9 @@ export function createOAuth2Client<
     if (!response.ok) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const error = await response.json().catch(() => null)
-      throw new OAuth2Error<TError>(
-        config.errorToString?.(error as TError) ?? JSON.stringify(error),
-        error as TError,
+      throw new OAuth2Error(
+        config.errorToString?.(error) ?? JSON.stringify(error),
+        error,
         {
           status: response.status,
           statusText: response.statusText,

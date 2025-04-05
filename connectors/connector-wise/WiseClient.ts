@@ -1,5 +1,5 @@
 import {memoize} from '@openint/util/function-utils'
-import {createHTTPClient, OAuth2Client} from '@openint/util/http/index'
+import {createHTTPClient} from '@openint/util/http'
 import {zFunction} from '@openint/util/zod-function-utils'
 import {z, type Z} from '@openint/util/zod-utils'
 
@@ -82,18 +82,18 @@ export const makeWiseClient = zFunction(zWiseConfig, (cfg) => {
     })
   })
 
-  const oAuth2Client = new OAuth2Client({
-    authorizeURL: '',
-    clientId: cfg.clientId ?? '',
-    clientSecret: cfg.clientSecret ?? '',
-    tokenURL: 'https://api.sandbox.transferwise.tech/oauth/token',
-    clientAuthLocation: 'header',
-  })
+  // const oAuth2Client = new OAuth2Client({
+  //   authorizeURL: '',
+  //   clientId: cfg.clientId ?? '',
+  //   clientSecret: cfg.clientSecret ?? '',
+  //   tokenURL: 'https://api.sandbox.transferwise.tech/oauth/token',
+  //   clientAuthLocation: 'header',
+  // })
 
   return {
-    getAccessToken: zFunction(() =>
-      oAuth2Client.getTokenWithClientCredentials().then((r) => r.access_token),
-    ),
+    // getAccessToken: zFunction(() =>
+    //   oAuth2Client.getTokenWithClientCredentials().then((r) => r.access_token),
+    // ),
     getProfiles: zFunction(zEnvName, (envName) =>
       fromEnv(envName)
         .get<unknown>('/v1/profiles')

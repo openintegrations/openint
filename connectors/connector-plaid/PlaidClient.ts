@@ -1,5 +1,4 @@
 import {createEnv} from '@t3-oss/env-core'
-import {zFunction} from '@openint/util/zod-function-utils'
 import {
   Configuration,
   CountryCode,
@@ -7,9 +6,10 @@ import {
   PlaidEnvironments,
   Products,
 } from 'plaid'
-import {z, type Z, zCast} from '@openint/util/zod-utils'
 import {memoize} from '@openint/util/function-utils'
-import {getDefaultProxyAgent} from '@openint/util/http/http-utils'
+import {getDefaultProxyAgent} from '@openint/util/http'
+import {zFunction} from '@openint/util/zod-function-utils'
+import {z, zCast, type Z} from '@openint/util/zod-utils'
 import {inferPlaidEnvFromToken} from './plaid-utils'
 import type {WebhookShape} from './plaid.types'
 
