@@ -19,7 +19,6 @@ const parsers = {
   [types.TIMESTAMPTZ]: (value) => value,
   [types.INTERVAL]: (value) => value,
   [types.DATE]: (value) => value,
-  // TODO: Add warning if we have overflow here...
   [types.NUMERIC]: (value) => parseNumber(value),
   [types.INT8]: (value) => parseNumber(value),
 } satisfies ParserOptions

@@ -14,7 +14,6 @@ export function setTypeParsers() {
   pgTypes.setTypeParser(pgTypes.builtins.TIMESTAMP, (val) => val)
   pgTypes.setTypeParser(pgTypes.builtins.TIMESTAMPTZ, (val) => val)
   pgTypes.setTypeParser(pgTypes.builtins.INTERVAL, (val) => val)
-  // TODO: Add warning if we have overflow here...
   pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (val) => parseNumber(val))
   pgTypes.setTypeParser(pgTypes.builtins.INT8, (val) => parseNumber(val))
 
