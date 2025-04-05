@@ -1184,6 +1184,9 @@ importers:
       '@openint/loopback-link':
         specifier: workspace:*
         version: link:../../dev-packages/loopback-link
+      '@openint/oauth2':
+        specifier: workspace:*
+        version: link:../oauth2
       '@opensdks/fetch-links':
         specifier: ^0.0.22
         version: 0.0.22
