@@ -1,3 +1,5 @@
+// TODO: this is a bit of a mess, but it works for now. Consider cleaning up the types
+
 import {isZodType, z, type Z} from './zod-utils'
 
 /** Use fn.implementation to access the raw fn without validation */
