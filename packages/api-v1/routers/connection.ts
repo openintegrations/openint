@@ -25,7 +25,7 @@ import {
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
-  getConnection: orgProcedure
+  getConnection: authenticatedProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -63,24 +63,6 @@ export const connectionRouter = router({
         })
       }
 
-      const connector_config = await ctx.db.query.connector_config.findFirst({
-        where: eq(schema.connector_config.id, connection.connector_config_id),
-        columns: {
-          id: true,
-          connector_name: true,
-          config: true,
-          created_at: true,
-          updated_at: true,
-        },
-      })
-
-      if (!connector_config) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Connector config not found',
-        })
-      }
-
       const connector =
         serverConnectors[
           connection.connector_name as keyof typeof serverConnectors
@@ -105,6 +87,24 @@ export const connectionRouter = router({
         'refreshConnection' in connector &&
         typeof connector.refreshConnection === 'function'
       ) {
+        const connector_config = await ctx.db.query.connector_config.findFirst({
+          where: eq(schema.connector_config.id, connection.connector_config_id),
+          columns: {
+            id: true,
+            connector_name: true,
+            config: true,
+            created_at: true,
+            updated_at: true,
+          },
+        })
+
+        if (!connector_config) {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Connector config not found',
+          })
+        }
+
         const refreshedConnectionSettings = await connector.refreshConnection(
           connection.settings,
           connector_config.config,

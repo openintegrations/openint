@@ -114,7 +114,7 @@ export const oauth2Schemas = {
   }),
   connectOutput: z.object({
     code: z.string(),
-    connectionId: z.string(),
+    // connectionId: z.string(),
     state: z.string(),
   }),
 } satisfies Omit<ConnectorSchemas, 'name'>

@@ -7,8 +7,14 @@ export interface ViewerContext<T extends Viewer = Viewer> {
   db: AnyDrizzle
 }
 
+interface RouterContextExtra {
+  /** Custom fetch, typically for testing purposes */
+  fetch?: (req: Request) => Promise<Response>
+}
+
 export interface RouterContext<T extends Viewer = Viewer>
-  extends ViewerContext<T> {
+  extends ViewerContext<T>,
+    RouterContextExtra {
   as: (viewer: Viewer) => ViewerContext
   /** Elevates the role to org if the viewer is a customer to allow access to org data */
   asOrgIfCustomer: ViewerContext
@@ -24,7 +30,8 @@ export async function routerContextFromRequest({
   })
 }
 
-interface CreateRouterContextOptions<T extends Viewer = Viewer> {
+interface CreateRouterContextOptions<T extends Viewer = Viewer>
+  extends RouterContextExtra {
   viewer: T
   db: AnyDatabase
 }
@@ -32,6 +39,7 @@ interface CreateRouterContextOptions<T extends Viewer = Viewer> {
 export function routerContextFromViewer<T extends Viewer>({
   viewer: currentViewer,
   db,
+  ...extra
 }: CreateRouterContextOptions<T>): RouterContext<T> {
   function createViewerContext<T2 extends Viewer>(
     viewer: T2,
@@ -44,6 +52,7 @@ export function routerContextFromViewer<T extends Viewer>({
   }
 
   return {
+    ...extra,
     ...createViewerContext(currentViewer),
     as: createViewerContext,
     asOrgIfCustomer: createViewerContext(asOrgIfCustomer(currentViewer)),

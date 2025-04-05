@@ -4,7 +4,8 @@ import {oauth2Schemas} from '@openint/cnext/_defaults/oauth2/def'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {createOAuth2Server} from '@openint/oauth2/OAuth2Server'
 import {$test} from '@openint/util/__tests__/test-utils'
-import type {Z} from '@openint/util/zod-utils'
+import {urlSearchParamsToJson} from '@openint/util/url-utils'
+import {z, Z} from '@openint/util/zod-utils'
 import {getTestTRPCClient} from '../__tests__/test-utils'
 import {trpc} from '../trpc/_base'
 import {routerContextFromViewer} from '../trpc/context'
@@ -33,7 +34,7 @@ const configOauth = {
   // should contain whether server requires pkce
 } satisfies Z.infer<typeof oauth2Schemas.connectorConfig>['oauth']
 
-const oauth2Server = createOAuth2Server({
+const _oauth2Server = createOAuth2Server({
   clients: [
     {
       id: configOauth.client_id,
@@ -55,12 +56,18 @@ const oauth2Server = createOAuth2Server({
   authCodes: [],
 })
 
-const app = new Elysia().group('/oauth', (group) => group.use(oauth2Server))
+const oauth2Server = new Elysia().group('/oauth', (group) =>
+  group.use(_oauth2Server),
+)
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   /** Preferred approach */
   function getCaller(viewer: Viewer) {
-    return router.createCaller(routerContextFromViewer({db, viewer}), {onError})
+    return router.createCaller(
+      // inject oauth2Server.handle as fetch for the code exchange later
+      routerContextFromViewer({db, viewer, fetch: oauth2Server.handle}),
+      {onError},
+    )
   }
   /** Also possible */
   function getClient(viewer: Viewer) {
@@ -110,20 +117,70 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     return oauth2Schemas.connectInput.parse(res.output)
   })
 
-  $test('connect get 302 redirect', async () => {
+  const connectRes = $test('connect get 302 redirect', async () => {
     const request = new Request(preConnectRes.current.authorization_url, {
       redirect: 'manual',
     })
-    const response = await app.handle(request)
+    const response = await oauth2Server.handle(request)
     expect(response.status).toBe(302)
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const url = new URL(response.headers.get('Location')!)
     expect(url.pathname).toBe('/connect/callback')
-    const code = url.searchParams.get('code')
-    expect(code).toBeDefined()
-    const state = url.searchParams.get('state')
-    expect(state).toBeDefined()
+
+    return z
+      .object({
+        code: z.string(),
+        state: z.string(),
+      })
+      .parse(urlSearchParamsToJson(url.searchParams))
   })
+
+  const postConnectRes = $test('postConnect', async () => {
+    const res = await asCustomer.postConnect({
+      id: ccfgRes.current.id,
+      options: {},
+      data: {
+        connector_name: ccfgRes.current.connector_name,
+        input: connectRes.current,
+      },
+    })
+
+    const settings = oauth2Schemas.connectionSettings.parse(res.settings)
+    return {
+      id: res.id,
+      settings,
+    }
+  })
+
+  // use access token to do something useful, like introspect
+  test('introspect token', async () => {
+    const res = await oauth2Server.handle(
+      new Request('http://localhost/oauth/token/introspect', {
+        method: 'POST',
+        body: new URLSearchParams({
+          token:
+            postConnectRes.current.settings.oauth.credentials!.access_token,
+          client_id: configOauth.client_id,
+          client_secret: configOauth.client_secret,
+        }),
+      }),
+    )
+    const json = await res.json()
+    expect(json.active).toBe(true)
+  })
+
+  test('get connection', async () => {
+    const res = await asCustomer.getConnection({
+      id: postConnectRes.current.id,
+    })
+    expect(res.settings).toEqual(postConnectRes.current.settings)
+  })
+
+  test.todo('check connection')
+
+  test.todo('refresh token')
+
+  test.todo('revoke connection')
 })
 
 /*

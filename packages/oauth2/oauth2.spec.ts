@@ -48,6 +48,9 @@ const oauthClient = createOAuth2Client(
   app.handle,
 )
 
+/** Code verifier must follow the specifications of RFC-7636. We
+ * should add a function to generate a random code verifier that meets the spec
+ * to OAuth2Client.ts */
 const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
 
 const authorizeRes = $test('authorize redirect with PKCE', async () => {

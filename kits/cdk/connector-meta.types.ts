@@ -111,6 +111,8 @@ export interface ConnectContext<TSettings>
     externalId: ExternalId
     settings: TSettings
   } | null
+  /** Custom fetch, typically for testing purposes */
+  fetch?: (req: Request) => Promise<Response>
 }
 
 // TODO: We should rename `provider` to `integration` given that they are both

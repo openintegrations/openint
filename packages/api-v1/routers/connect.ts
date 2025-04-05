@@ -169,6 +169,7 @@ export const connectRouter = router({
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
+          fetch: ctx.fetch,
         },
         input.data.input,
       )
@@ -228,9 +229,10 @@ export const connectRouter = router({
           message: `Connector ${input.data.connector_name} not found`,
         })
       }
-      const ccfg = await ctx.db.query.connector_config.findFirst({
-        where: eq(schema.connector_config.id, input.id),
-      })
+      const ccfg =
+        await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
+          where: eq(schema.connector_config.id, input.id),
+        })
       if (!ccfg) {
         throw new TRPCError({
           code: 'NOT_FOUND',
@@ -238,7 +240,7 @@ export const connectRouter = router({
         })
       }
 
-      console.log('preConnect', input, ctx, ccfg)
+      console.log('postConnect', input, ctx, ccfg)
       const connUpdate = await connector.postConnect?.(
         input.data.input,
         ccfg.config,
@@ -248,6 +250,7 @@ export const connectRouter = router({
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
+          fetch: ctx.fetch,
         },
       )
       const id = makeId('conn', input.data.connector_name, makeUlid())
@@ -257,7 +260,8 @@ export const connectRouter = router({
       const settings = zSettings.parse(connUpdate?.settings ?? input.data.input)
 
       const [conn] = await dbUpsertOne(
-        ctx.db,
+        // TODO: Update rls to allow customer to upsert their own connections
+        ctx.asOrgIfCustomer.db,
         schema.connection,
         {
           id,

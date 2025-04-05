@@ -8,7 +8,7 @@ import {OAuth2Error} from './OAuth2Error'
 /**
  * Utility function to create a code challenge from a code verifier using Web Crypto API
  */
-async function createCodeChallenge(codeVerifier: string): Promise<string> {
+async function createCodeChallenge(codeVerifier: string) {
   // Convert the string to a Uint8Array
   const encoder = new TextEncoder()
   const data = encoder.encode(codeVerifier)
