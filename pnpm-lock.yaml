@@ -1178,6 +1178,9 @@ importers:
         specifier: ^2.1.3
         version: 2.1.3(@trpc/server@11.0.1(typescript@5.8.2))(zod-openapi@4.2.4(zod@3.24.2))(zod@3.24.2)
     devDependencies:
+      '@openint/cnext':
+        specifier: workspace:*
+        version: link:../../connectors/cnext
       '@openint/loopback-link':
         specifier: workspace:*
         version: link:../../dev-packages/loopback-link

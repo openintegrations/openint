@@ -10,6 +10,7 @@ export const jsonDef = {
   version: 1,
   auth: {
     type: 'OAUTH2',
+    // TODO: Get these from the connector config
     authorization_request_url: 'http://localhost:3000/oauth/authorize',
     token_request_url: 'http://localhost:3000/oauth/token',
     scope_separator: ' ',

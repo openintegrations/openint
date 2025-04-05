@@ -1,12 +1,19 @@
+import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
-import {asCustomerOfOrg, makeId, makeJwtClient, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
+import {
+  asCustomerOfOrg,
+  makeId,
+  makeJwtClient,
+  zConnectOptions,
+  zId,
+  zPostConnectOptions,
+} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {TRPCError} from '@trpc/server'
 import {core, parseNonEmpty} from '../models'
 import {customerProcedure, orgProcedure, router} from '../trpc/_base'
 import {connectRouterModels} from './connect.models'
@@ -76,6 +83,7 @@ export const connectRouter = router({
     })
     .input(
       z.object({
+        // Rename to connector_config_id
         id: zId('ccfg').describe(md`
           Must correspond to data.connector_name.
           Technically id should imply connector_name already but there is no way to
@@ -114,6 +122,7 @@ export const connectRouter = router({
               z
                 .object({
                   connector_name: s.shape.connector_name,
+                  // TODO: Rename to connectInput
                   output: s.shape.connectInput,
                 })
                 .openapi({
