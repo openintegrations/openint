@@ -1,8 +1,8 @@
 import crypto from 'node:crypto'
-import {pickBy} from 'remeda'
-import {stringifyQueryParams} from '../url-utils'
-import type {Z} from '../zod-utils'
-import {z} from '../zod-utils'
+import {R} from '@openint/util/remeda'
+import {stringifyQueryParams} from '@openint/util/url-utils'
+import type {Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 
 const zTokenResponse = z.object({
   access_token: z.string(),
@@ -91,7 +91,7 @@ export function createOAuth2Client<
       : undefined
 
     return `${config.authorizeURL}?${stringifyQueryParams(
-      pickBy(
+      R.pickBy(
         {
           response_type: 'code',
           client_id: config.clientId,

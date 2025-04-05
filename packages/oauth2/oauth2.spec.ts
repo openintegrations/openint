@@ -2,10 +2,14 @@
 /* eslint-disable jest/no-standalone-expect */
 import {expect} from '@jest/globals'
 import {$test} from '@openint/util/__tests__/test-utils'
-import {createOAuth2Client} from '@openint/util/http/OAuth2Client'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
-import {createOAuth2Server, type OAuthClient, type OAuthUser} from '.'
+import {createOAuth2Client} from './OAuth2Client'
+import {
+  createOAuth2Server,
+  type OAuthClient,
+  type OAuthUser,
+} from './OAuth2Server'
 
 const client = {
   id: 'client1',
