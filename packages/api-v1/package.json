@@ -5,6 +5,7 @@
   "sideEffects": false,
   "module": "./index.ts",
   "scripts": {
+    "dev": "bun run --watch ./app.ts",
     "gen": "run-s gen:*",
     "gen:oas": "bun ./scripts/gen-oas.ts",
     "gen:types": "bunx openapi-typescript ./__generated__/openapi.json --output ./__generated__/openapi.types.ts"
@@ -12,6 +13,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.12.10",
     "@elysiajs/swagger": "^1.2.0",
+    "@jmondi/oauth2-server": "^4.0.3",
     "@openint/all-connectors": "workspace:*",
     "@openint/cdk": "workspace:*",
     "@openint/db": "workspace:*",
