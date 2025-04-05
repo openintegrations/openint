@@ -96,30 +96,37 @@ export function createOAuth2Client<
     return response.json() as Promise<T>
   }
 
-  const getAuthorizeUrl = async (params: {
-    redirect_uri: string
-    scope?: string
-    state?: string
-    code_verifier?: string
-  }) => {
-    const searchParams = {
-      ...params,
-      response_type: 'code',
-      client_id: config.clientId,
-      ...(params.code_verifier && {
-        code_challenge: await createCodeChallenge(params.code_verifier),
-        code_challenge_method: 'S256',
+  /// Maybe zFunction is actually quite handy, though simpler would be better
+  // we just need to be able to access the args and return type schemas
+  const getAuthorizeUrl = z
+    .function()
+    .args(
+      z.object({
+        redirect_uri: z.string(),
+        scope: z.string().optional(),
+        state: z.string().optional(),
+        code_verifier: z.string().optional(),
       }),
-    }
-    const url = new URL(config.authorizeURL)
-    for (const [key, value] of Object.entries(searchParams)) {
-      if (value != null) {
-        url.searchParams.append(key, String(value))
+    )
+    .implement(async ({code_verifier, ...params}) => {
+      const searchParams = {
+        ...params,
+        response_type: 'code',
+        client_id: config.clientId,
+        ...(code_verifier && {
+          code_challenge: await createCodeChallenge(code_verifier),
+          code_challenge_method: 'S256',
+        }),
       }
-    }
+      const url = new URL(config.authorizeURL)
+      for (const [key, value] of Object.entries(searchParams)) {
+        if (value != null) {
+          url.searchParams.append(key, String(value))
+        }
+      }
 
-    return url.toString()
-  }
+      return url.toString()
+    })
 
   const getToken = ({
     code,
