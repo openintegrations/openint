@@ -110,6 +110,7 @@ export const connectorConfigRouter = router({
       openapi: {method: 'POST', path: '/connector-config', enabled: false},
     })
     .input(
+      // TODO: Fix me to make this a discriminated union
       z.object({
         connector_name: zConnectorName,
         display_name: z.string().optional(),
@@ -118,6 +119,7 @@ export const connectorConfigRouter = router({
       }),
     )
     .output(
+      // TODO: Fix me to make this a discriminated union
       z.intersection(
         core.connector_config,
         z.object({
