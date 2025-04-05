@@ -2,7 +2,6 @@
 /* eslint-disable jest/no-standalone-expect */
 import crypto from 'node:crypto'
 import {expect} from '@jest/globals'
-import {base64urlencode} from '@jmondi/oauth2-server'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
@@ -34,9 +33,9 @@ const app = createOAuth2Server({
 })
 
 const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
-const codeChallenge = base64urlencode(
+const codeChallenge = Buffer.from(
   crypto.createHash('sha256').update(codeVerifier).digest(),
-)
+).toString('base64url')
 
 const authorizeRes = $test('authorize redirect with PKCE', async () => {
   const authorizeRequest = new Request(
