@@ -2295,62 +2295,35 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "https://www.googleapis.com/auth/drive.file",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
