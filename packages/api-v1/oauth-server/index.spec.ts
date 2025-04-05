@@ -30,9 +30,9 @@ describe('OAuth Authorization Flow', () => {
     serviceName: 'my-service',
   })
 
-  const codeChallenge = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
-  const codeVerifier = base64urlencode(
-    crypto.createHash('sha256').update(codeChallenge).digest(),
+  const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
+  const codeChallenge = base64urlencode(
+    crypto.createHash('sha256').update(codeVerifier).digest(),
   )
 
   const authorizeRes = $test(
@@ -86,11 +86,18 @@ describe('OAuth Authorization Flow', () => {
     })
 
     const response = await app.handle(tokenRequest)
-    console.log('response', await response.text())
-    // expect(response.status).toBe(200)
-    // expect(response.json()).resolves.toEqual({
-    //   access_token: expect.any(String),
-    //   token_type: 'Bearer',
-    // })
+    expect(response.status).toBe(200)
+
+    const res = z
+      .object({
+        access_token: z.string(),
+        expires_in: z.number(),
+        token_type: z.literal('Bearer'),
+        scope: z.literal(client.scopes[0].name),
+        refresh_token: z.string(),
+      })
+      .parse(await response.json())
+
+    return res
   })
 })
