@@ -1,5 +1,6 @@
 import {toBase64Url} from '@openint/util/string-utils'
 import {stringifyQueryParams} from '@openint/util/url-utils'
+import {zFunction} from '@openint/util/zod-function-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
 import {OAuth2Error} from './OAuth2Error'
@@ -96,19 +97,14 @@ export function createOAuth2Client<
     return response.json() as Promise<T>
   }
 
-  /// Maybe zFunction is actually quite handy, though simpler would be better
-  // we just need to be able to access the args and return type schemas
-  const getAuthorizeUrl = z
-    .function()
-    .args(
-      z.object({
-        redirect_uri: z.string(),
-        scope: z.string().optional(),
-        state: z.string().optional(),
-        code_verifier: z.string().optional(),
-      }),
-    )
-    .implement(async ({code_verifier, ...params}) => {
+  const getAuthorizeUrl = zFunction(
+    z.object({
+      redirect_uri: z.string(),
+      scope: z.string().optional(),
+      state: z.string().optional(),
+      code_verifier: z.string().optional(),
+    }),
+    async ({code_verifier, ...params}) => {
       const searchParams = {
         ...params,
         response_type: 'code',
@@ -126,7 +122,8 @@ export function createOAuth2Client<
       }
 
       return url.toString()
-    })
+    },
+  )
 
   const getToken = ({
     code,
