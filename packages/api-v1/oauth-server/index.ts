@@ -100,20 +100,16 @@ export function createTokenRepository(initialTokens: OAuthToken[] = []) {
       const token = tokens.find(
         (token) => token.refreshToken === refreshTokenToken,
       )
-      if (!token) {
-        throw new Error('Refresh token not found')
-      }
-      return token
+      // Type is wrong here, null means token not found
+      return token ?? (null as unknown as OAuthToken)
     },
 
     async getByAccessToken(accessTokenToken) {
       const token = tokens.find(
         (token) => token.accessToken === accessTokenToken,
       )
-      if (!token) {
-        throw new Error('Access token not found')
-      }
-      return token
+      // Type is wrong here, null means token not found
+      return token ?? (null as unknown as OAuthToken)
     },
   } satisfies OAuthTokenRepository
 }
@@ -259,8 +255,8 @@ export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
           // console.log('authRes', authRes)
           return authRes
         })
-        .catch((err) => {
-          console.log('err', err)
+        .catch((err: unknown) => {
+          console.log('/authorize err', err)
           throw err
         })
         .then(responseToVanilla),
@@ -273,15 +269,36 @@ export function elysiaFromAuthorizationServer(authServer: AuthorizationServer) {
           // console.log('res', res)
           return res
         })
-        .catch((err) => {
-          console.log('err', err)
+        .catch((err: unknown) => {
+          console.log('/token err', err)
           throw err
         })
         .then(responseToVanilla),
     )
-
-    .post('/introspect', async () => {})
-    .post('/revoke', async () => {})
+    .post('/token/introspect', async ({request}) =>
+      requestFromVanilla(request)
+        .then(async (req) => {
+          const res = await authServer.introspect(req)
+          return res
+        })
+        .catch((err: unknown) => {
+          console.log('/token/introspect err', err)
+          throw err
+        })
+        .then(responseToVanilla),
+    )
+    .post('/token/revoke', async ({request}) =>
+      requestFromVanilla(request)
+        .then(async (req) => {
+          const res = await authServer.revoke(req)
+          return res
+        })
+        .catch((err: unknown) => {
+          console.log('/token/revoke err', err)
+          throw err
+        })
+        .then(responseToVanilla),
+    )
 }
 
 export function createOAuth2Server(
