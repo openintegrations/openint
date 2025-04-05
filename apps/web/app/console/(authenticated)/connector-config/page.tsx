@@ -34,7 +34,9 @@ export default async function Page(props: PageProps) {
                 offset: number
               }
             }
-            initialConnectorData={await api.listConnectors()}
+            initialConnectorData={await api.listConnectors({
+              expand: ['schemas'],
+            })}
           />
         </Suspense>
       </ClientApp>

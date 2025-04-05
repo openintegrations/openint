@@ -27,7 +27,11 @@ export const plaidSchemas = {
           })
           .openapi({title: 'Use my own'}),
       ])
-      .optional(),
+      .optional()
+      .openapi({
+        'ui:field': 'CredentialsField',
+        'ui:fieldReplacesAnyOrOneOf': true,
+      }),
     clientName: z
       .string()
       .max(30)
@@ -37,10 +41,15 @@ export const plaidSchemas = {
         Maximum length of 30 characters.
         If a value longer than 30 characters is provided, Link will display "This Application" instead.`,
       ),
-    products: z.array(zProducts).default([Products.Transactions]),
+    products: z.array(zProducts).default([Products.Transactions]).openapi({
+      'ui:field': 'MultiSelectField',
+    }),
     countryCodes: z
       .array(zCountryCode)
-      .default([CountryCode.Us, CountryCode.Ca]),
+      .default([CountryCode.Us, CountryCode.Ca])
+      .openapi({
+        'ui:field': 'MultiSelectField',
+      }),
     /**
      * When using a Link customization, the language configured
      * here must match the setting in the customization, or the customization will not be applied.
