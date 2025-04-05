@@ -86,101 +86,150 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   })
   // Tests linearly depend on each other for performance and simplicty
 
-  const ccfgRes = $test('create connector config', async () => {
-    const res = await asUser.createConnectorConfig({
-      connector_name: 'dummy-oauth2',
-      // TODO: Ensure discriminated union for this.
-      config: {oauth: configOauth},
-    })
-
-    expect(res).toMatchObject({
-      id: expect.any(String),
-      org_id: 'org_222',
-      connector_name: 'dummy-oauth2',
-    })
-
-    const parsed = oauth2Schemas.connectorConfig.parse(res.config)
-    expect(parsed.oauth).toEqual(configOauth)
-
-    return res
-  })
-
-  const preConnectRes = $test('preConnect', async () => {
-    const res = await asCustomer.preConnect({
-      id: ccfgRes.current.id,
-      options: {},
-      data: {
-        connector_name: ccfgRes.current.connector_name,
-        input: {},
-      },
-    })
-    return oauth2Schemas.connectInput.parse(res.output)
-  })
-
-  const connectRes = $test('connect get 302 redirect', async () => {
-    const request = new Request(preConnectRes.current.authorization_url, {
-      redirect: 'manual',
-    })
-    const response = await oauth2Server.handle(request)
-    expect(response.status).toBe(302)
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const url = new URL(response.headers.get('Location')!)
-    expect(url.pathname).toBe('/connect/callback')
-
-    return z
-      .object({
-        code: z.string(),
-        state: z.string(),
+  describe('oauth2', () => {
+    const ccfgRes = $test('create connector config', async () => {
+      const res = await asUser.createConnectorConfig({
+        connector_name: 'dummy-oauth2',
+        // TODO: Ensure discriminated union for this.
+        config: {oauth: configOauth},
       })
-      .parse(urlSearchParamsToJson(url.searchParams))
-  })
 
-  const postConnectRes = $test('postConnect', async () => {
-    const res = await asCustomer.postConnect({
-      id: ccfgRes.current.id,
-      options: {},
-      data: {
-        connector_name: ccfgRes.current.connector_name,
-        input: connectRes.current,
-      },
+      expect(res).toMatchObject({
+        id: expect.any(String),
+        org_id: 'org_222',
+        connector_name: 'dummy-oauth2',
+      })
+
+      const parsed = oauth2Schemas.connectorConfig.parse(res.config)
+      expect(parsed.oauth).toEqual(configOauth)
+
+      return res
     })
 
-    const settings = oauth2Schemas.connectionSettings.parse(res.settings)
-    return {
-      id: res.id,
-      settings,
-    }
-  })
+    const preConnectRes = $test('preConnect', async () => {
+      const res = await asCustomer.preConnect({
+        id: ccfgRes.current.id,
+        options: {},
+        data: {
+          connector_name: ccfgRes.current.connector_name,
+          input: {},
+        },
+      })
+      return oauth2Schemas.connectInput.parse(res.output)
+    })
 
-  // use access token to do something useful, like introspect
-  test('introspect token', async () => {
-    const res = await oauth2Server.handle(
-      new Request('http://localhost/oauth/token/introspect', {
-        method: 'POST',
-        body: new URLSearchParams({
-          token:
-            postConnectRes.current.settings.oauth.credentials!.access_token,
-          client_id: configOauth.client_id,
-          client_secret: configOauth.client_secret,
+    const connectRes = $test('connect get 302 redirect', async () => {
+      const request = new Request(preConnectRes.current.authorization_url, {
+        redirect: 'manual',
+      })
+      const response = await oauth2Server.handle(request)
+      expect(response.status).toBe(302)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const url = new URL(response.headers.get('Location')!)
+      expect(url.pathname).toBe('/connect/callback')
+
+      return z
+        .object({
+          code: z.string(),
+          state: z.string(),
+        })
+        .parse(urlSearchParamsToJson(url.searchParams))
+    })
+
+    const postConnectRes = $test('postConnect', async () => {
+      const res = await asCustomer.postConnect({
+        id: ccfgRes.current.id,
+        options: {},
+        data: {
+          connector_name: ccfgRes.current.connector_name,
+          input: connectRes.current,
+        },
+      })
+
+      const settings = oauth2Schemas.connectionSettings.parse(res.settings)
+      return {
+        id: res.id,
+        settings,
+      }
+    })
+
+    // use access token to do something useful, like introspect
+    test('introspect token', async () => {
+      const res = await oauth2Server.handle(
+        new Request('http://localhost/oauth/token/introspect', {
+          method: 'POST',
+          body: new URLSearchParams({
+            token:
+              postConnectRes.current.settings.oauth.credentials!.access_token,
+            client_id: configOauth.client_id,
+            client_secret: configOauth.client_secret,
+          }),
         }),
-      }),
-    )
-    const json = await res.json()
-    expect(json.active).toBe(true)
-  })
-
-  test('get connection', async () => {
-    const res = await asCustomer.getConnection({
-      id: postConnectRes.current.id,
+      )
+      const json = await res.json()
+      expect(json.active).toBe(true)
     })
-    expect(res.settings).toEqual(postConnectRes.current.settings)
+
+    test('get connection', async () => {
+      const res = await asCustomer.getConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(res.settings).toEqual(postConnectRes.current.settings)
+    })
+
+    test.todo('check connection')
+
+    test.todo('refresh token')
+
+    test.todo('revoke connection')
   })
 
-  test.todo('check connection')
+  describe('apikey based auth', () => {
+    const settings = {apiKey: 'key-123'}
 
-  test.todo('refresh token')
+    const ccfgRes = $test('create connector config', async () => {
+      const res = await asUser.createConnectorConfig({
+        connector_name: 'greenhouse',
+        config: {},
+      })
+      expect(res).toMatchObject({
+        id: expect.any(String),
+        org_id: 'org_222',
+        connector_name: 'greenhouse',
+      })
+      return res
+    })
 
-  test.todo('revoke connection')
+    // Not needed really, does not actually even get implemented
+    test('preConnect', async () => {
+      const res = await asCustomer.preConnect({
+        id: ccfgRes.current.id,
+        options: {},
+        data: {connector_name: ccfgRes.current.connector_name, input: {}},
+      })
+      expect(res.output).toEqual({})
+    })
+
+    const postConnectRes = $test('postConnect', async () => {
+      const res = await asCustomer.postConnect({
+        id: ccfgRes.current.id,
+        options: {},
+        data: {
+          connector_name: ccfgRes.current.connector_name,
+          input: settings,
+        },
+      })
+      expect(res.settings).toEqual(settings)
+      return res
+    })
+
+    test('get connection', async () => {
+      const res = await asCustomer.getConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(res.settings).toEqual(settings)
+    })
+  })
 })
 
 /*

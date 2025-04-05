@@ -12,9 +12,10 @@ import {
 } from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {getServerUrl} from '@openint/env'
+import {nonEmpty} from '@openint/util/array-utils'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {core, parseNonEmpty} from '../models'
+import {core} from '../models'
 import {customerProcedure, orgProcedure, router} from '../trpc/_base'
 import {connectRouterModels} from './connect.models'
 import {connectorSchemas} from './connector.models'
@@ -91,13 +92,16 @@ export const connectRouter = router({
         `),
         options: zConnectOptions,
 
+        // TODO: Move this into connector.models.ts
+
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
         // this is a limitation of trpc-to-OpenAPI. Need to think more about this
+
         data: z
           .discriminatedUnion(
             'connector_name',
-            parseNonEmpty(
+            nonEmpty(
               connectorSchemas.preConnectInput.map((s) =>
                 z
                   .object({
@@ -117,7 +121,7 @@ export const connectRouter = router({
       z
         .discriminatedUnion(
           'connector_name',
-          parseNonEmpty(
+          nonEmpty(
             connectorSchemas.connectInput.map((s) =>
               z
                 .object({
@@ -176,7 +180,7 @@ export const connectRouter = router({
       console.log('preConnect output', res)
       return {
         connector_name: input.data.connector_name,
-        output: res,
+        output: res ?? {},
       }
     }),
   postConnect: customerProcedure
@@ -200,7 +204,7 @@ export const connectRouter = router({
         data: z
           .discriminatedUnion(
             'connector_name',
-            parseNonEmpty(
+            nonEmpty(
               connectorSchemas.connectOutput.map((s) =>
                 z
                   .object({

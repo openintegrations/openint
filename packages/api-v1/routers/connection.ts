@@ -4,7 +4,7 @@ import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
-import {core, zConnectionSettings} from '../models'
+import {core, zDiscriminatedSettings} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   formatConnection,
@@ -341,7 +341,7 @@ export const connectionRouter = router({
         connector_config_id: zConnectorConfigId,
         metadata: z.record(z.unknown()).optional(),
         customer_id: zCustomerId,
-        data: zConnectionSettings,
+        data: zDiscriminatedSettings,
       }),
     )
     .output(core.connection)
