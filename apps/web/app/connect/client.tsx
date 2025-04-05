@@ -20,6 +20,7 @@ import {
   DataTileView,
   JSONSchemaForm,
   JSONSchemaFormRef,
+  Spinner,
   useMutableSearchParams,
 } from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
@@ -151,6 +152,7 @@ export function AddConnectionInner({
   initialData?: Promise<AppRouterOutput['preConnect']>
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
+  const [isConnecting, setIsConnecting] = React.useState(false)
 
   const name = connectorConfig.connector_name as ConnectorName
 
@@ -192,6 +194,7 @@ export function AddConnectionInner({
 
   const handleConnect = React.useCallback(async () => {
     try {
+      setIsConnecting(true)
       console.log('ref.current', ref.current)
       const connectRes = await ref.current?.(preConnectRes.data.output, {
         connectorConfigId: connectorConfig.id as `ccfg_${string}`,
@@ -234,6 +237,8 @@ export function AddConnectionInner({
       toast.error('Error connecting', {
         description: `${error}`,
       })
+    } finally {
+      setIsConnecting(false)
     }
   }, [connectorConfig, preConnectRes])
 
@@ -252,7 +257,9 @@ export function AddConnectionInner({
       console.warn(`No Component for connector: ${name}`)
     }
   }
-
+  if (isConnecting || postConnect.isPending) {
+    return <Spinner />
+  }
   return (
     <>
       {/*
@@ -280,7 +287,7 @@ export function AddConnectionInner({
         connectorConfig={connectorConfig as ConnectorConfig<'connector'>}
         onPress={() => handleConnect()}>
         <Label className="text-muted-foreground pointer-events-none ml-auto text-sm">
-          Connect
+          {isConnecting || postConnect.isPending ? 'Connecting...' : 'Connect'}
         </Label>
       </ConnectorConfigCard>
     </>
@@ -292,7 +299,13 @@ export function MyConnectionsClient(props: {
   initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
+  const [isLoading, setIsLoading] = React.useState(true)
   const trpc = useTRPC()
+
+  React.useEffect(() => {
+    setIsLoading(false)
+  }, [])
+
   const res = useSuspenseQuery(
     trpc.listConnections.queryOptions(
       {connector_name: props.connector_name, expand: ['connector']},
@@ -301,6 +314,23 @@ export function MyConnectionsClient(props: {
   )
 
   const definitions = useCommandDefinitionMap()
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <Spinner />
+      </div>
+    )
+  }
+
+  if (!res.data.items.length) {
+    return (
+      <div className="text-muted-foreground py-8 text-center">
+        No connections found
+      </div>
+    )
+  }
+
   return (
     <DataTileView
       data={res.data.items}
