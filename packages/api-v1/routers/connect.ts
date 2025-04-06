@@ -181,9 +181,9 @@ export const connectRouter = router({
 
       const postConnect =
         connector.postConnect ??
-        ((output) => ({
+        (({connectOutput}) => ({
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          settings: output,
+          settings: connectOutput,
           connectionExternalId: '', // TODO: Check on me....
         }))
 
