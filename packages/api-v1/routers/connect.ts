@@ -1,4 +1,5 @@
 import {TRPCError} from '@trpc/server'
+import {connectorSchemas} from '@openint/all-connectors/schemas'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
@@ -23,7 +24,6 @@ import {
   router,
 } from '../trpc/_base'
 import {connectRouterModels} from './connect.models'
-import {connectorSchemas} from './connector.models'
 import {md} from './utils/md'
 
 export const connectRouter = router({

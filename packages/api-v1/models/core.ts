@@ -1,11 +1,8 @@
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import {schema} from '@openint/db'
 import {z, type Z} from '@openint/util/zod-utils'
-import {
-  zConnector,
-  zDiscriminatedConfig,
-  zDiscriminatedSettings,
-} from '../routers/connector.models'
+import {zConnector} from '../routers/connector.models'
+import {zDiscriminatedConfig, zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 
 const zMetadata = z.record(z.string(), z.unknown()).describe(`
   JSON object can can be used to associate arbitrary metadata to

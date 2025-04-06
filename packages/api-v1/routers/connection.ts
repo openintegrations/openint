@@ -1,10 +1,11 @@
 import {TRPCError} from '@trpc/server'
+import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
-import {core, zDiscriminatedSettings} from '../models'
+import {core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   formatConnection,

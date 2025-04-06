@@ -1,8 +1,8 @@
 // generated file. Do not modify by hand
 
 import type {Meta, StoryObj} from '@storybook/react'
-import type {ConnectorName} from '@openint/all-connectors'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
+import type {ConnectorName} from '@openint/all-connectors/schemas'
 import {Card} from '@openint/shadcn/ui'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm} from '../components/schema-form/JSONSchemaForm'

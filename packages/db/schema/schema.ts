@@ -12,7 +12,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
-import type {ConnectorName} from '@openint/all-connectors'
+import type {ConnectorName} from '@openint/all-connectors/schemas'
 
 export const orgRole = pgRole('org')
 export const customerRole = pgRole('customer')
