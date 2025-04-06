@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['consumer', 'business'] as const,
-  connector_name: 'googledrive' as const,
   verticals: ['file-storage'] as const,
   display_name: 'Google Drive' as const,
   stage: 'ga' as const,

@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'hubspot',
   verticals: ['ticketing', 'crm'],
   display_name: 'HubSpot',
   stage: 'ga',

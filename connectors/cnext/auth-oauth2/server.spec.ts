@@ -38,8 +38,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
     mockFetch = jest.fn()
     global.fetch = mockFetch
 
-    mockConnectorDef = generateOauthConnectorDef({
-      connector_name: 'test_connector',
+    mockConnectorDef = generateOauthConnectorDef('test_connector', {
       display_name: 'Test Connector',
       stage: 'alpha',
       version: 1,

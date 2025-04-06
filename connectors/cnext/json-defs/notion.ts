@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'notion',
   verticals: ['wiki'],
   display_name: 'Notion',
   stage: 'ga',

@@ -9,7 +9,10 @@ import type {JsonConnectorDef} from '../schema'
  * Currently only handles Oauth2 ccfgs and connection settings but in future we can switch and generate
  * depending on the def.auth.type
  */
-export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
+export function generateOauthConnectorDef<
+  N extends string,
+  T extends JsonConnectorDef,
+>(name: N, def: T) {
   const connectorConfig = () => {
     let schema = oauth2Schemas.connector_config
     // if there are any connector config overrides, we need to add them to the schema
@@ -21,9 +24,7 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
       })
     }
 
-    const defaultCredentialsConfigured = getConnectorDefaultCredentials(
-      def.connector_name,
-    )
+    const defaultCredentialsConfigured = getConnectorDefaultCredentials(name)
 
     // if there are default credentials configured, we need to add a choice between using the default credentials and the user's own
     // in future only paid customers will get this option
@@ -77,10 +78,10 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
   }
 
   return {
-    name: def.connector_name as T['connector_name'],
+    name,
     schemas: {
       ...oauth2Schemas,
-      name: z.literal(def.connector_name as T['connector_name']),
+      name: z.literal(name),
       connector_config: connectorConfig() as any,
       connection_settings: connectionSettings() as any,
     },
@@ -88,11 +89,9 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
       displayName: def.display_name,
       stage: def.stage,
       verticals: def.verticals,
-      logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-${def.connector_name}.svg`,
+      logoUrl: `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-${name}.svg`,
       authType: def.auth.type,
       jsonDef: def,
     },
-  } satisfies ConnectorDef<
-    typeof oauth2Schemas & {name: Z.ZodLiteral<T['connector_name']>}
-  >
+  } satisfies ConnectorDef<typeof oauth2Schemas & {name: Z.ZodLiteral<N>}>
 }

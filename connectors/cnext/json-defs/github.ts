@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'github',
   verticals: ['developer-tools', 'ticketing'],
   display_name: 'GitHub (User OAuth)',
   stage: 'ga',

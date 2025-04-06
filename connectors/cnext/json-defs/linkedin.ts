@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'linkedin',
   verticals: ['ats', 'social-media'],
   display_name: 'LinkedIn',
   stage: 'ga',

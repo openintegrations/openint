@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'googlecalendar',
   verticals: ['other'],
   display_name: 'Google Calendar',
   stage: 'ga',

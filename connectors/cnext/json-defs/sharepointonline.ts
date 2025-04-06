@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'sharepointonline',
   verticals: ['file-storage', 'communication'],
   display_name: 'SharePoint Online (v2)',
   stage: 'ga',

@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'googlemail',
   verticals: ['other'],
   display_name: 'Gmail',
   stage: 'ga',

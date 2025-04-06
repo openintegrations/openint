@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'discord',
   verticals: ['social-media'],
   display_name: 'Discord',
   stage: 'ga',

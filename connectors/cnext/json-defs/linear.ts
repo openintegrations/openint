@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'linear',
   verticals: ['ticketing'],
   display_name: 'Linear',
   stage: 'ga',

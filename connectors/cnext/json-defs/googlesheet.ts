@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'googlesheet',
   verticals: ['flat-files-and-spreadsheets'],
   display_name: 'Google Sheet',
   stage: 'ga',

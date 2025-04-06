@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['consumer'],
-  connector_name: 'dummy-oauth2', // This should be determined by the filename for consistency
   verticals: ['social-media'],
   display_name: 'Dummy OAuth2',
   stage: 'ga',

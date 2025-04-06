@@ -30,10 +30,8 @@ export const zAudience = z
 export type Audience = Z.infer<typeof zAudience>
 
 export const zJsonConnectorDef = z.object({
+  // name will be auto generated from filename
   audience: z.array(zAudience).describe('The audiences of the connector'),
-  connector_name: z
-    .string()
-    .describe('The unique name of the provider in kebab-case'),
   stage: zConnectorStage.describe('The readiness level of the connector'),
   version: z
     .number()

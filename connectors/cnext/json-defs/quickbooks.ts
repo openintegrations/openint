@@ -3,7 +3,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'quickbooks',
   verticals: ['accounting'],
   display_name: 'Quickbooks',
   stage: 'ga',

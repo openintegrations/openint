@@ -2,7 +2,6 @@ import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['business'],
-  connector_name: 'googledocs',
   verticals: ['other'],
   display_name: 'Google Docs',
   stage: 'ga',
