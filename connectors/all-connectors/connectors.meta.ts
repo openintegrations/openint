@@ -1,6 +1,10 @@
 // generated file. Do not modify by hand
 
 export default {
+  aircall: {
+    hasClient: false,
+    hasServer: false,
+  },
   airtable: {
     hasClient: false,
     hasServer: true,
@@ -16,6 +20,18 @@ export default {
   coda: {
     hasClient: false,
     hasServer: true,
+  },
+  confluence: {
+    hasClient: false,
+    hasServer: false,
+  },
+  discord: {
+    hasClient: false,
+    hasServer: false,
+  },
+  'dummy-oauth2': {
+    hasClient: false,
+    hasServer: false,
   },
   facebook: {
     hasClient: false,
@@ -33,9 +49,33 @@ export default {
     hasClient: false,
     hasServer: true,
   },
+  github: {
+    hasClient: false,
+    hasServer: false,
+  },
   gong: {
     hasClient: false,
     hasServer: true,
+  },
+  googlecalendar: {
+    hasClient: false,
+    hasServer: false,
+  },
+  googledocs: {
+    hasClient: false,
+    hasServer: false,
+  },
+  googledrive: {
+    hasClient: false,
+    hasServer: false,
+  },
+  googlemail: {
+    hasClient: false,
+    hasServer: false,
+  },
+  googlesheet: {
+    hasClient: false,
+    hasServer: false,
   },
   greenhouse: {
     hasClient: false,
@@ -44,6 +84,10 @@ export default {
   heron: {
     hasClient: false,
     hasServer: true,
+  },
+  hubspot: {
+    hasClient: false,
+    hasServer: false,
   },
   instagram: {
     hasClient: false,
@@ -65,9 +109,21 @@ export default {
     hasClient: false,
     hasServer: true,
   },
+  linear: {
+    hasClient: false,
+    hasServer: false,
+  },
+  linkedin: {
+    hasClient: false,
+    hasServer: false,
+  },
   lunchmoney: {
     hasClient: false,
     hasServer: true,
+  },
+  mercury: {
+    hasClient: false,
+    hasServer: false,
   },
   merge: {
     hasClient: true,
@@ -80,6 +136,10 @@ export default {
   moota: {
     hasClient: false,
     hasServer: true,
+  },
+  notion: {
+    hasClient: false,
+    hasServer: false,
   },
   onebrick: {
     hasClient: true,
@@ -101,6 +161,10 @@ export default {
     hasClient: false,
     hasServer: true,
   },
+  quickbooks: {
+    hasClient: false,
+    hasServer: false,
+  },
   ramp: {
     hasClient: false,
     hasServer: true,
@@ -109,6 +173,10 @@ export default {
     hasClient: false,
     hasServer: true,
   },
+  salesforce: {
+    hasClient: false,
+    hasServer: false,
+  },
   salesloft: {
     hasClient: false,
     hasServer: true,
@@ -116,6 +184,14 @@ export default {
   saltedge: {
     hasClient: false,
     hasServer: true,
+  },
+  sharepointonline: {
+    hasClient: false,
+    hasServer: false,
+  },
+  slack: {
+    hasClient: false,
+    hasServer: false,
   },
   splitwise: {
     hasClient: false,
@@ -140,6 +216,10 @@ export default {
   twitter: {
     hasClient: false,
     hasServer: true,
+  },
+  venmo: {
+    hasClient: false,
+    hasServer: false,
   },
   wise: {
     hasClient: false,

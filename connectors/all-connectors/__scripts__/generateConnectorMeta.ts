@@ -1,13 +1,12 @@
 // Write the metadata file
 import {join} from 'path'
 import {clientConnectors} from '../connectors.client'
-import {customConnectors} from '../connectors.server'
+import {defConnectors} from '../connectors.def'
+import {customConnectors as customServerConnectors} from '../connectors.server'
 import {writePretty} from './writePretty'
 
 // Get all unique connector names
-const allConnectors = Array.from(
-  new Set([...Object.keys(customConnectors), ...Object.keys(clientConnectors)]),
-).sort()
+const allConnectors = Object.keys(defConnectors).sort()
 
 // Generate the metadata file content
 const metadataContent = `
@@ -15,9 +14,9 @@ const metadataContent = `
 export default {
 ${allConnectors
   .map(
-    (name) => `  ${name}: {
+    (name) => `  '${name}': {
     hasClient: ${name in clientConnectors},
-    hasServer: ${name in customConnectors}
+    hasServer: ${name in customServerConnectors}
   }`,
   )
   .join(',\n')}
