@@ -106,10 +106,10 @@ export const connectionRouter = router({
           })
         }
 
-        const refreshedConnectionSettings = await connector.refreshConnection(
-          connection.settings,
-          connector_config.config,
-        )
+        const refreshedConnectionSettings = await connector.refreshConnection({
+          settings: connection.settings,
+          config: connector_config.config,
+        })
         const updatedConnection = await ctx.db
           .update(schema.connection)
           .set({

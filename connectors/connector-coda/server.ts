@@ -8,7 +8,7 @@ export const codaServer = {
     return initCodaSDK({headers: {Authorization: `Bearer ${settings.apiKey}`}})
   },
 
-  async proxy(instance, req) {
+  async proxy({instance, req}) {
     return instance
       .request(req.method as 'GET', req.url.replace(/.+\/api\/proxy/, ''), {
         headers: req.headers,

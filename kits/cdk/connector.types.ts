@@ -110,18 +110,17 @@ export interface ConnectorServer<
 
   // MARK: - Connect
 
-  preConnect?: (
-    config: T['_types']['connector_config'],
-    context: ConnectContext<T['_types']['connection_settings']>,
-    // TODO: Turn this into an object instead
-    input: T['_types']['pre_connect_input'],
-  ) => Promise<T['_types']['connect_input']>
+  preConnect?: (opts: {
+    config: T['_types']['connector_config']
+    context: ConnectContext<T['_types']['connection_settings']>
+    input: T['_types']['pre_connect_input']
+  }) => Promise<T['_types']['connect_input']>
 
-  postConnect?: (
-    connectOutput: T['_types']['connect_output'],
-    config: T['_types']['connector_config'],
-    context: ConnectContext<T['_types']['connection_settings']>,
-  ) => MaybePromise<
+  postConnect?: (opts: {
+    connectOutput: T['_types']['connect_output']
+    config: T['_types']['connector_config']
+    context: ConnectContext<T['_types']['connection_settings']>
+  }) => MaybePromise<
     Omit<
       ConnectionUpdate<AnyEntityPayload, T['_types']['connection_settings']>,
       'customerId'
@@ -129,7 +128,7 @@ export interface ConnectorServer<
   >
 
   checkConnection?: (
-    input: OmitNever<{
+    opts: OmitNever<{
       settings: T['_types']['connection_settings']
       config: T['_types']['connector_config']
       options: CheckConnectionOptions
@@ -144,11 +143,11 @@ export interface ConnectorServer<
   >
 
   // This probably need to also return an observable
-  revokeConnection?: (
-    settings: T['_types']['connection_settings'],
-    config: T['_types']['connector_config'],
-    instance: TInstance,
-  ) => Promise<unknown>
+  revokeConnection?: (opts: {
+    settings: T['_types']['connection_settings']
+    config: T['_types']['connector_config']
+    instance: TInstance
+  }) => Promise<unknown>
 
   // MARK: - Sync
 
@@ -168,26 +167,26 @@ export interface ConnectorServer<
     }>
   }>
 
-  refreshConnection?: (
-    settings: T['_types']['connection_settings'],
-    config: T['_types']['connector_config'],
-  ) => Promise<T['_types']['connection_settings']>
+  refreshConnection?: (opts: {
+    settings: T['_types']['connection_settings']
+    config: T['_types']['connector_config']
+  }) => Promise<T['_types']['connection_settings']>
 
   // MARK - Webhook
   // Need to add a input schema for each provider to verify the shape of the received
   // webhook requests...
 
   /** @deprecated */
-  handleWebhook?: (
-    webhookInput: T['_types']['webhook_input'],
-    config: T['_types']['connector_config'],
-  ) => MaybePromise<
+  handleWebhook?: (opts: {
+    webhookInput: T['_types']['webhook_input']
+    config: T['_types']['connector_config']
+  }) => MaybePromise<
     WebhookReturnType<AnyEntityPayload, T['_types']['connection_settings']>
   >
 
   /** Passthrough request proxy */
   /** @deprecated */
-  proxy?: (instance: TInstance, req: Request) => Promise<Response>
+  proxy?: (opts: {instance: TInstance; req: Request}) => Promise<Response>
 }
 
 export interface ConnectorImpl<TSchemas extends ConnectorSchemas>

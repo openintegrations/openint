@@ -2,11 +2,11 @@ import type {ConnectorServer} from '@openint/cdk'
 import type {wiseSchemas} from './def'
 
 export const wiseServer = {
-  postConnect: (input) => ({
-    connectionExternalId: input.apiToken ?? '',
+  postConnect: ({connectOutput}) => ({
+    connectionExternalId: connectOutput.apiToken ?? '',
     settings: {
-      envName: input.envName ?? '',
-      apiToken: input.apiToken,
+      envName: connectOutput.envName ?? '',
+      apiToken: connectOutput.apiToken,
     },
   }),
 } satisfies ConnectorServer<typeof wiseSchemas>

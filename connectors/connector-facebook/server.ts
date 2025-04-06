@@ -2,7 +2,7 @@ import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
 import type {facebookSchemas} from './def'
 
 export const facebookServer = {
-  postConnect: async (connectOutput) => {
+  postConnect: async ({connectOutput}) => {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
     })

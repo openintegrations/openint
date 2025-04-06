@@ -8,11 +8,11 @@ export const finchServer = {
   // Connect
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  preConnect: async (config) => ({
+  preConnect: async ({config}) => ({
     client_id: config.client_id,
     products: config.products,
   }),
-  postConnect: async (connectOutput, config) => {
+  postConnect: async ({connectOutput, config}) => {
     const finch = initFinchSDK({
       headers: {
         'FINCH-API-VERSION': config.api_version ?? '2020-09-17',
@@ -49,7 +49,7 @@ export const finchServer = {
     })
     return sdk
   },
-  revokeConnection: async (_, __, instance) => {
+  revokeConnection: async ({instance}) => {
     await instance.POST('/disconnect')
   },
 } satisfies ConnectorServer<typeof finchSchemas, FinchSDK>

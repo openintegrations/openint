@@ -4,9 +4,9 @@ import {makeYodleeClient} from './YodleeClient'
 
 export const yodleeServer = {
   // TODO: handle reconnecting scenario
-  preConnect: async (config, {extCustomerId: userId}) => {
+  preConnect: async ({config, context}) => {
     const loginName =
-      config.envName === 'sandbox' ? config?.sandboxLoginName : userId
+      config.envName === 'sandbox' ? config?.sandboxLoginName : context.extCustomerId
     if (!loginName) {
       throw new Error('[Yodlee] Sandbox login name not configured')
     }
@@ -18,36 +18,32 @@ export const yodleeServer = {
   // Without closure we get type issues in openint.config.ts, not sure why
   // https://share.cleanshot.com/X3cQDA
 
-  postConnect: async (
-    {providerAccountId, providerId},
-    config,
-    {extCustomerId: userId},
-  ) => {
+  postConnect: async ({connectOutput, config, context}) => {
     // Should we get accessToken & loginName from the preConnect phase?
     const loginName =
-      config.envName === 'sandbox' ? config?.sandboxLoginName : userId
+      config.envName === 'sandbox' ? config?.sandboxLoginName : context.extCustomerId
     if (!loginName) {
       throw new Error('[Yodlee] Sandbox login name not configured')
     }
     const yodlee = makeYodleeClient(config, {role: 'user', loginName})
     const [providerAccount, provider, user] = await Promise.all([
-      yodlee.getProviderAccount(providerAccountId),
-      yodlee.getProvider(providerId),
+      yodlee.getProviderAccount(connectOutput.providerAccountId),
+      yodlee.getProvider(connectOutput.providerId),
       yodlee.getUser(),
     ])
 
     return {
-      connectionExternalId: providerAccountId,
+      connectionExternalId: connectOutput.providerAccountId,
       settings: {
         loginName,
-        providerAccountId,
+        providerAccountId: connectOutput.providerAccountId,
         provider,
         providerAccount,
         user,
         accessToken: yodlee.accessToken,
       },
       integration: provider
-        ? {externalId: providerId, data: {...provider}}
+        ? {externalId: connectOutput.providerId, data: {...provider}}
         : undefined,
     }
   },
