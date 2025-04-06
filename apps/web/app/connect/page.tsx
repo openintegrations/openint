@@ -107,8 +107,8 @@ export default async function Page(
           </pre>
         )}
         <div className="flex h-screen w-full">
-          {/* Left Banner - Hidden on mobile, shown on md+ screens */}
-          <div className="bg-primary/10 hidden md:flex md:w-[320px] lg:w-[550px]">
+          {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
+          <div className="bg-primary/10 hidden lg:flex lg:w-[550px]">
             <div className="flex flex-col items-start p-8">
               {/* TODO: Add organization logo here */}
               <div className="h-48" />

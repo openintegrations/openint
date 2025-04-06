@@ -29,7 +29,12 @@ export function ConnectEmbed(props: ConnectProps) {
   //     <style>...</style>
   //   </div>
   // </div>
-  return <div ref={containerRef} />
+  return (
+    <div
+      style={{width: width || '100%', height: height || '100%'}}
+      ref={containerRef}
+    />
+  )
 }
 
 ConnectEmbed.displayName = 'ConnectEmbed'

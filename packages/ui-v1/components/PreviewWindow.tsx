@@ -330,8 +330,8 @@ export function TabletScreen({
 }
 
 interface PreviewWindowProps extends PreviewProps {
-  defaultView?: 'browser' | 'tablet' | 'mobile'
-  supportedViews?: ('browser' | 'tablet' | 'mobile')[]
+  defaultView?: 'Magic Link' | 'Embedded' | 'Mobile'
+  supportedViews?: ('Magic Link' | 'Embedded' | 'Mobile')[]
 }
 
 export function PreviewWindow({
@@ -339,8 +339,8 @@ export function PreviewWindow({
   className,
   url = 'https://example.com',
   isLoading = false,
-  defaultView = 'browser',
-  supportedViews = ['browser', 'mobile'],
+  defaultView = 'Magic Link',
+  supportedViews = ['Magic Link', 'Embedded', 'Mobile'],
 }: PreviewWindowProps) {
   const [view, setView] =
     React.useState<(typeof supportedViews)[number]>(defaultView)
@@ -359,9 +359,9 @@ export function PreviewWindow({
               key={view}
               value={view}
               className="flex items-center gap-2">
-              {view === 'browser' && <MonitorIcon className="h-4 w-4" />}
-              {view === 'tablet' && <TabletIcon className="h-4 w-4" />}
-              {view === 'mobile' && <SmartphoneIcon className="h-4 w-4" />}
+              {view === 'Magic Link' && <MonitorIcon className="h-4 w-4" />}
+              {view === 'Embedded' && <TabletIcon className="h-4 w-4" />}
+              {view === 'Mobile' && <SmartphoneIcon className="h-4 w-4" />}
               {view}
             </TabsTrigger>
           ))}
@@ -369,20 +369,20 @@ export function PreviewWindow({
       </div>
       {/* Preview Container */}
 
-      <TabsContent value="browser" className="mt-0 flex justify-center">
+      <TabsContent value="Magic Link" className="mt-0 flex justify-center">
         <BrowserWindow url={url} isLoading={isLoading}>
           {children}
         </BrowserWindow>
       </TabsContent>
-      <TabsContent value="mobile" className="mt-0 flex justify-center">
-        <MobileScreen url={url} isLoading={isLoading}>
-          {children}
-        </MobileScreen>
-      </TabsContent>
-      <TabsContent value="tablet" className="mt-0 flex justify-center">
+      <TabsContent value="Embedded" className="mt-0 flex justify-center">
         <TabletScreen url={url} isLoading={isLoading}>
           {children}
         </TabletScreen>
+      </TabsContent>
+      <TabsContent value="Mobile" className="mt-0 flex justify-center">
+        <MobileScreen url={url} isLoading={isLoading}>
+          {children}
+        </MobileScreen>
       </TabsContent>
     </Tabs>
   )

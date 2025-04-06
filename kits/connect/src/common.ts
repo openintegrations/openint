@@ -21,9 +21,6 @@ export interface ConnectProps {
   }
 }
 const DEFAULT_HOST = 'https://connect.openint.dev'
-const DEFAULT_HEIGHT = 500
-const DEFAULT_WIDTH = 350
-
 const createMagicLinkUrl = ({
   baseUrl = DEFAULT_HOST,
   token,
@@ -65,35 +62,15 @@ export function createConnectIframe(props: ConnectProps) {
   iframe.name = 'openint-connect-frame'
   iframe.id = 'openint-connect-frame'
 
-  const finalHeight =
-    typeof height === 'number'
-      ? Math.max(height, DEFAULT_HEIGHT)
-      : DEFAULT_HEIGHT
-
-  if (finalHeight < DEFAULT_HEIGHT) {
-    console.warn(
-      `Minimum height for Connect is ${DEFAULT_HEIGHT}px. Using ${DEFAULT_HEIGHT}px instead.`,
-    )
-  }
-
-  const finalWidth =
-    typeof width === 'number' ? Math.max(width, DEFAULT_WIDTH) : DEFAULT_WIDTH
-
-  if (finalWidth < DEFAULT_WIDTH) {
-    console.warn(
-      `Minimum width for Connect is ${DEFAULT_WIDTH}px. Using ${DEFAULT_WIDTH}px instead.`,
-    )
-  }
-
-  iframe.width = String(finalWidth)
-  iframe.height = String(finalHeight)
+  iframe.width = String(width || '100%')
+  iframe.height = String(height || '100%')
 
   // Add styles
   const style = document.createElement('style')
   style.textContent = `
      .connect-embed-wrapper {
           display: flex;
-          height: ${finalHeight}px;
+          height: ${width || '100%'}px;
           position: relative;
         }
         .connect-embed-wrapper .spinner-container {
@@ -108,8 +85,8 @@ export function createConnectIframe(props: ConnectProps) {
           height: 100%;
           background: ${connectParams?.theme === 'dark' ? '#1C1C1C' : 'white'};
           transition: opacity 0.3s ease;
-          max-width: ${finalWidth}px;
-          max-height: ${finalHeight}px;
+          max-width: ${width || '100%'}px;
+          max-height: ${height || '100%'}px;
         }
         .connect-embed-wrapper .spinner-container.loaded {
           opacity: 0;
