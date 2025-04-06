@@ -1,8 +1,11 @@
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
+import {
+  zDiscriminatedConfig,
+  zDiscriminatedSettings,
+} from '@openint/all-connectors/schemas'
 import {schema} from '@openint/db'
 import {z, type Z} from '@openint/util/zod-utils'
 import {zConnector} from '../routers/connector.models'
-import {zDiscriminatedConfig, zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 
 const zMetadata = z.record(z.string(), z.unknown()).describe(`
   JSON object can can be used to associate arbitrary metadata to
@@ -22,6 +25,23 @@ const organization_select = createSelectSchema(schema.organization).openapi({
   ref: 'core.organization',
 })
 
+const connection_select = z.intersection(
+  createSelectSchema(schema.connection).omit({
+    settings: true,
+    connector_name: true,
+    env_name: true, // not sure if we want this
+  }),
+  zDiscriminatedSettings,
+)
+
+const connection_insert = z.intersection(
+  createInsertSchema(schema.connection).omit({
+    settings: true,
+    env_name: true, // not sure if we want this
+  }),
+  zDiscriminatedSettings,
+)
+
 const connector_config_select = z
   .intersection(
     createSelectSchema(schema.connector_config).omit({
@@ -31,7 +51,7 @@ const connector_config_select = z
       default_pipe_out: true,
       default_pipe_in_source_id: true,
       default_pipe_out_destination_id: true,
-      env_name: true,
+      env_name: true, // not sure if we want this
     }),
     zDiscriminatedConfig,
   )
@@ -62,6 +82,9 @@ export const core = {
   event_select,
   event_insert,
   organization_select,
+
+  connection_select,
+  connection_insert,
 
   /** @deprecated Use connection_select and connection_insert instead */
   connection: z
@@ -117,8 +140,8 @@ export const core = {
     })
     .passthrough()
     .openapi({ref: 'core.integration', title: 'Integration'}),
-  customer: coreBase
-    .extend({
+  customer: z
+    .object({
       id: z.string(),
       connection_count: z.number(),
     })

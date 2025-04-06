@@ -35,6 +35,7 @@ export const connection = pgTable(
     customer_id: varchar(),
     connector_config_id: varchar().notNull(),
     integration_id: varchar(),
+    /** @deprecated Not sure if we want this */
     env_name: varchar(),
     settings: jsonb().default({}).notNull().$type<any>(),
     created_at: timestamp({withTimezone: true, mode: 'string'})
