@@ -1,9 +1,22 @@
-import crypto from 'node:crypto'
-import {R} from '@openint/util/remeda'
+import {toBase64Url} from '@openint/util/string-utils'
 import {stringifyQueryParams} from '@openint/util/url-utils'
+import {zFunction} from '@openint/util/zod-function-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
 import {OAuth2Error} from './OAuth2Error'
+
+/**
+ * Utility function to create a code challenge from a code verifier using Web Crypto API
+ */
+async function createCodeChallenge(codeVerifier: string) {
+  // Convert the string to a Uint8Array
+  const encoder = new TextEncoder()
+  const data = encoder.encode(codeVerifier)
+  // Hash the data with SHA-256
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  // Convert the hash to base64url
+  return toBase64Url(new Uint8Array(hashBuffer))
+}
 
 const zTokenResponse = z.object({
   access_token: z.string(),
@@ -23,6 +36,11 @@ const zOAuth2ClientConfig = z.object({
 export type OAuth2ClientConfig = Z.infer<typeof zOAuth2ClientConfig>
 export type TokenResponse = Z.infer<typeof zTokenResponse>
 
+/**
+ * Consider switching to, but then we'd have to be ESM and deal with external
+ * implementation details.
+ * https://github.com/badgateway/oauth2-client
+ */
 export function createOAuth2Client<
   TToken extends TokenResponse = TokenResponse,
 >(
@@ -79,31 +97,33 @@ export function createOAuth2Client<
     return response.json() as Promise<T>
   }
 
-  const getAuthorizeUrl = (params: {
-    redirect_uri: string
-    scope?: string
-    state?: string
-    code_verifier?: string
-  }) => {
-    const codeChallenge = params.code_verifier
-      ? Buffer.from(
-          crypto.createHash('sha256').update(params.code_verifier).digest(),
-        ).toString('base64url')
-      : undefined
+  const getAuthorizeUrl = zFunction(
+    z.object({
+      redirect_uri: z.string(),
+      scope: z.string().optional(),
+      state: z.string().optional(),
+      code_verifier: z.string().optional(),
+    }),
+    async ({code_verifier, ...params}) => {
+      const searchParams = {
+        ...params,
+        response_type: 'code',
+        client_id: config.clientId,
+        ...(code_verifier && {
+          code_challenge: await createCodeChallenge(code_verifier),
+          code_challenge_method: 'S256',
+        }),
+      }
+      const url = new URL(config.authorizeURL)
+      for (const [key, value] of Object.entries(searchParams)) {
+        if (value != null) {
+          url.searchParams.append(key, String(value))
+        }
+      }
 
-    return `${config.authorizeURL}?${stringifyQueryParams(
-      R.pickBy(
-        {
-          response_type: 'code',
-          client_id: config.clientId,
-          ...params,
-          code_challenge: codeChallenge,
-          code_challenge_method: codeChallenge ? 'S256' : undefined,
-        },
-        (val) => val != null,
-      ),
-    )}`
-  }
+      return url.toString()
+    },
+  )
 
   const getToken = ({
     code,

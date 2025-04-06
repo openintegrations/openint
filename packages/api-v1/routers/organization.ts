@@ -19,7 +19,7 @@ export const organizationRouter = router({
     })
     .input(z.void())
     .output(
-      core.organization.extend({
+      core.organization_select.extend({
         metadata: z.object({webhook_url: z.string().nullish()}),
       }),
     )

@@ -1,3 +1,4 @@
+import {toBase64Url} from '@openint/util/string-utils'
 import {isZodError, z, type Z} from '@openint/util/zod-utils'
 import {oauth2Schemas, zOAuthConfig} from './def'
 import {mapOauthParams, prepareScopes} from './utils'
@@ -7,17 +8,20 @@ export async function makeTokenRequest(
   params: Record<string, string>,
   flowType: 'exchange' | 'refresh',
   // note: we may want to add bodyFormat: form or json as an option
+  fetch: (req: Request) => Promise<Response> = globalThis.fetch,
 ): Promise<
   Z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
-    },
-    body: new URLSearchParams(params),
-  })
+  const response = await fetch(
+    new Request(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+      },
+      body: new URLSearchParams(params),
+    }),
+  )
 
   if (!response.ok) {
     const errorText = await response.text()
@@ -78,6 +82,20 @@ export const zAuthorizeHandlerArgs = z.object({
   connectionId: z.string(),
 })
 
+async function createCodeChallenge(codeVerifier: string) {
+  // Convert the string to a Uint8Array
+  const encoder = new TextEncoder()
+  const data = encoder.encode(codeVerifier)
+  // Hash the data with SHA-256
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  // Convert the hash to base64url
+  return toBase64Url(new Uint8Array(hashBuffer))
+}
+
+/** Code verifier must follow the specifications of RFC-7636. We
+ * should add a function to generate a random code verifier that meets the spec */
+const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
+
 export async function authorizeHandler({
   oauthConfig,
   redirectUri,
@@ -105,8 +123,12 @@ export async function authorizeHandler({
           oauthConfig,
         ),
       ),
+      // TODO: Make this configurable
+      code_challenge: await createCodeChallenge(codeVerifier),
+      code_challenge_method: 'S256',
       // TODO: create a separate state ID in the database instead of using connectionId
-      state: Buffer.from(connectionId).toString('base64'),
+      // state: Buffer.from(connectionId).toString('base64'),
+      state: connectionId,
       ...(oauthConfig.params_config.authorize ?? {}),
     },
     oauthConfig.params_config.param_names ?? {},
@@ -132,7 +154,10 @@ export async function defaultTokenExchangeHandler({
   redirectUri,
   code,
   state,
-}: Z.infer<typeof zTokenExchangeHandlerArgs>): Promise<
+  fetch,
+}: Z.infer<typeof zTokenExchangeHandlerArgs> & {
+  fetch?: (req: Request) => Promise<Response>
+}): Promise<
   Z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
 > {
   validateOAuthCredentials(oauthConfig)
@@ -141,20 +166,27 @@ export async function defaultTokenExchangeHandler({
     {
       client_id: oauthConfig.connector_config.oauth.client_id,
       client_secret: oauthConfig.connector_config.oauth.client_secret,
-      redirectUri,
+      redirect_uri: redirectUri,
       scope: prepareScopes(
         oauthConfig.connector_config.oauth.scopes ?? [],
         oauthConfig,
       ),
       state,
+      code_verifier: codeVerifier,
       grant_type: 'authorization_code',
       code,
       ...(oauthConfig.params_config.token ?? {}),
     },
     oauthConfig.params_config.param_names ?? {},
   )
+  console.log('token exchange params', params, 'fetch', fetch)
 
-  return makeTokenRequest(oauthConfig.token_request_url, params, 'exchange')
+  return makeTokenRequest(
+    oauthConfig.token_request_url,
+    params,
+    'exchange',
+    fetch,
+  )
 }
 
 export const zTokenRefreshHandlerArgs = z.object({

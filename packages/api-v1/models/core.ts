@@ -1,8 +1,11 @@
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import {schema} from '@openint/db'
 import {z, type Z} from '@openint/util/zod-utils'
-import type {NonEmptyArray} from '../routers/connector.models'
-import {connectorSchemas, zConnector} from '../routers/connector.models'
+import {
+  zConnector,
+  zDiscriminatedConfig,
+  zDiscriminatedSettings,
+} from '../routers/connector.models'
 
 const zMetadata = z.record(z.string(), z.unknown()).describe(`
   JSON object can can be used to associate arbitrary metadata to
@@ -10,23 +13,45 @@ const zMetadata = z.record(z.string(), z.unknown()).describe(`
   During updates this object will be shallowly merged
 `)
 
-const event = createSelectSchema(schema.event).openapi({
+const event_select = createSelectSchema(schema.event).openapi({
   ref: 'core.event',
 })
+
 const event_insert = createInsertSchema(schema.event).openapi({
   ref: 'core.event_insert',
 })
 
-const organization = createSelectSchema(schema.organization).openapi({
+const organization_select = createSelectSchema(schema.organization).openapi({
   ref: 'core.organization',
 })
 
-export function parseNonEmpty<T>(arr: T[]) {
-  if (arr.length === 0) {
-    throw new Error('Array is empty')
-  }
-  return arr as NonEmptyArray<T>
-}
+const connector_config_select = z
+  .intersection(
+    createSelectSchema(schema.connector_config).omit({
+      config: true,
+      connector_name: true,
+      default_pipe_in: true,
+      default_pipe_out: true,
+      default_pipe_in_source_id: true,
+      default_pipe_out_destination_id: true,
+      env_name: true,
+    }),
+    zDiscriminatedConfig,
+  )
+  .openapi({ref: 'core.connector_config_select'})
+
+const connector_config_insert = z
+  .intersection(
+    createInsertSchema(schema.connector_config).omit({
+      config: true,
+      default_pipe_in: true,
+      default_pipe_out: true,
+      org_id: true,
+      id: true,
+    }),
+    zDiscriminatedConfig,
+  )
+  .openapi({ref: 'core.connector_config_insert'})
 
 const coreBase = z.object({
   id: z.string(),
@@ -34,30 +59,14 @@ const coreBase = z.object({
   created_at: z.string(), // .datetime(), // TODO: Ensure date time format is respected
 })
 
-export const zConnectionSettings = z
-  .discriminatedUnion(
-    'connector_name',
-    parseNonEmpty(
-      connectorSchemas.connectionSettings.map((s) =>
-        z
-          .object({
-            connector_name: s.shape.connector_name,
-            settings: s.shape.connectionSettings,
-          })
-          .openapi({
-            ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
-          }),
-      ),
-    ),
-  )
-  .describe('Connector specific data')
-
 // TODO: Move core models into individual files that correspond to each of the routers
 // Should be more sustainable also and only keep certain field level data structure in here
 export const core = {
-  event,
+  event_select,
   event_insert,
-  organization,
+  organization_select,
+
+  /** @deprecated Use connection_select and connection_insert instead */
   connection: z
     .intersection(
       coreBase
@@ -70,11 +79,15 @@ export const core = {
           metadata: zMetadata.nullish(),
         })
         .describe('Connection Base'),
-      zConnectionSettings,
+      zDiscriminatedSettings,
     )
     .openapi({ref: 'core.connection', title: 'Connection'}),
 
+  connector_config_select,
+  connector_config_insert,
+  /** @deprecated Use connector_config_select and connector_config_insert instead */
   connector_config: z
+
     .intersection(
       coreBase
         .extend({
@@ -84,29 +97,16 @@ export const core = {
           metadata: zMetadata.nullish(),
         })
         .describe('Connector Config Base'),
-      z
-        .discriminatedUnion(
-          'connector_name',
-          parseNonEmpty(
-            connectorSchemas.connectorConfig.map((s) =>
-              z
-                .object({
-                  connector_name: s.shape.connector_name,
-                  config: s.shape.connectorConfig,
-                })
-                .openapi({
-                  ref: `connectors.${s.shape.connector_name.value}.connectorConfig`,
-                }),
-            ),
-          ),
-        )
-        .describe('Connector specific data'),
+      zDiscriminatedConfig,
     )
     .openapi({
       ref: 'core.connector_config',
       title: 'Connector Config',
     }),
+
   connector: zConnector.openapi({ref: 'core.connector', title: 'Connector'}),
+
+  /** @deprecated Use integration_select and integration_insert instead */
   integration: z
     .object({
       connector_name: z.string(),
@@ -158,4 +158,4 @@ export type ConnectionExpanded<
 export type Customer = Core['customer']
 
 // MARK: - Event
-export type Event = Core['event']
+export type Event = Core['event_select']

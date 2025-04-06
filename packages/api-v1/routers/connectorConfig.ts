@@ -4,8 +4,8 @@ import {makeId} from '@openint/cdk'
 import {and, asc, desc, eq, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
+import type {ConnectorConfig} from '../models'
 import {
-  ConnectorConfig,
   connectorConfigExtended,
   core,
   zConnectorConfigExpandOption,
@@ -84,7 +84,7 @@ export const connectorConfigRouter = router({
       const offset = params?.offset ?? 0
       const total = items[0]?.total ?? 0
 
-      // console.log(items)
+      console.log(items)
       const expandedItems = items.map((item) => {
         const ccfg: ConnectorConfig = item
         if (
@@ -109,32 +109,15 @@ export const connectorConfigRouter = router({
     .meta({
       openapi: {method: 'POST', path: '/connector-config', enabled: false},
     })
-    .input(
-      z.object({
-        connector_name: z.string(),
-        display_name: z.string().optional(),
-        disabled: z.boolean().optional(),
-        config: z.record(z.unknown()).nullish(),
-      }),
-    )
-    .output(
-      z.intersection(
-        core.connector_config,
-        z.object({
-          config: z.record(z.unknown()).nullable(),
-        }),
-      ),
-    )
-    .mutation(async ({ctx, input}) => {
-      const {connector_name, display_name, disabled, config} = input
+    .input(core.connector_config_insert)
+    .output(core.connector_config_select)
+    .mutation(async ({ctx, input: {connector_name, ...input}}) => {
       const [ccfg] = await ctx.db
         .insert(schema.connector_config)
         .values({
+          ...input,
           org_id: ctx.viewer.orgId,
           id: makeId('ccfg', connector_name, makeUlid()),
-          display_name,
-          disabled,
-          config,
         })
         .returning()
 
@@ -152,14 +135,7 @@ export const connectorConfigRouter = router({
         config: z.record(z.unknown()).nullish(),
       }),
     )
-    .output(
-      z.intersection(
-        core.connector_config,
-        z.object({
-          config: z.record(z.unknown()).nullable(),
-        }),
-      ),
-    )
+    .output(core.connector_config)
     .mutation(async ({ctx, input}) => {
       const {id, config, display_name, disabled} = input
       const res = await ctx.db

@@ -1,6 +1,6 @@
 import type {Handler} from 'elysia'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {ConnectorServer} from '@openint/cdk'
+import type {ConnectorServer} from '@openint/cdk'
 import {
   and,
   desc,

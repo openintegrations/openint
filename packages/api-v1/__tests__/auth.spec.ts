@@ -2,9 +2,9 @@ import type {CustomerId, Viewer} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {initDbPGLite} from '@openint/db/db.pglite'
+import {makeUlid} from '@openint/util/id-utils'
 import {createTRPCCaller} from '../handlers'
 import {getTestTRPCClient} from './test-utils'
-import {makeUlid} from '@openint/util/id-utils'
 
 const viewers = {
   anon: {role: 'anon'},
@@ -68,7 +68,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   test('apikey auth success', async () => {
     const client = getTestTRPCClient({db}, {api_key: apiKey})
     const res = await client.viewer.query()
-    expect(res).toEqual({role: 'org'})
+    expect(res).toMatchObject({role: 'org'})
   })
 
   test('apikey auth failure', async () => {

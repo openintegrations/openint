@@ -10,29 +10,34 @@ import {onError} from './trpc/error-handling'
 
 export interface CreateFetchHandlerOptions {
   endpoint: `/${string}`
-  db: Database
   router?: AnyTRPCRouter
+  // Think about the types a bit more, kind of confusing as is
+  db: Database
+  /** Additional viewer to use for the request not part of the authorization header */
+  getAdditionalViewer?: () => Promise<Viewer>
 }
 
 export const createFetchHandlerTRPC =
-  (opts: CreateFetchHandlerOptions) => (req: Request) => {
-    console.log('handleTrpcRequest', req.url, opts.endpoint)
+  ({endpoint, router, ...opts}: CreateFetchHandlerOptions) =>
+  (req: Request) => {
+    console.log('handleTrpcRequest', req.url, endpoint)
     return fetchRequestHandler({
-      router: opts.router ?? appRouter,
-      createContext: () => routerContextFromRequest({req, db: opts.db}),
-      endpoint: opts.endpoint,
+      router: router ?? appRouter,
+      createContext: () => routerContextFromRequest({...opts, req}),
+      endpoint,
       req,
       onError,
     })
   }
 
 export const createFetchHandlerOpenAPI =
-  (opts: CreateFetchHandlerOptions) => (req: Request) => {
-    console.log('handleOpenApiRequest', req.url, opts.endpoint)
+  ({endpoint, router, ...opts}: CreateFetchHandlerOptions) =>
+  (req: Request) => {
+    console.log('handleOpenApiRequest', req.url, endpoint)
     return createOpenApiFetchHandler({
-      router: opts.router ?? appRouter,
-      createContext: () => routerContextFromRequest({req, db: opts.db}),
-      endpoint: opts.endpoint,
+      router: router ?? appRouter,
+      createContext: () => routerContextFromRequest({...opts, req}),
+      endpoint,
       req,
       onError,
     })

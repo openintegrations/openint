@@ -1,14 +1,27 @@
+import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
-import {asCustomerOfOrg, makeId, makeJwtClient, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
+import {
+  asCustomerOfOrg,
+  makeId,
+  makeJwtClient,
+  zConnectOptions,
+  zId,
+  zPostConnectOptions,
+} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {getServerUrl} from '@openint/env'
+import {nonEmpty} from '@openint/util/array-utils'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {TRPCError} from '@trpc/server'
-import {core, parseNonEmpty} from '../models'
-import {customerProcedure, orgProcedure, router} from '../trpc/_base'
+import {core} from '../models'
+import {
+  authenticatedProcedure,
+  customerProcedure,
+  orgProcedure,
+  router,
+} from '../trpc/_base'
 import {connectRouterModels} from './connect.models'
 import {connectorSchemas} from './connector.models'
 import {md} from './utils/md'
@@ -76,6 +89,7 @@ export const connectRouter = router({
     })
     .input(
       z.object({
+        // Rename to connector_config_id
         id: zId('ccfg').describe(md`
           Must correspond to data.connector_name.
           Technically id should imply connector_name already but there is no way to
@@ -83,13 +97,16 @@ export const connectRouter = router({
         `),
         options: zConnectOptions,
 
+        // TODO: Move this into connector.models.ts
+
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
         // this is a limitation of trpc-to-OpenAPI. Need to think more about this
+
         data: z
           .discriminatedUnion(
             'connector_name',
-            parseNonEmpty(
+            nonEmpty(
               connectorSchemas.preConnectInput.map((s) =>
                 z
                   .object({
@@ -109,11 +126,12 @@ export const connectRouter = router({
       z
         .discriminatedUnion(
           'connector_name',
-          parseNonEmpty(
+          nonEmpty(
             connectorSchemas.connectInput.map((s) =>
               z
                 .object({
                   connector_name: s.shape.connector_name,
+                  // TODO: Rename to connectInput
                   output: s.shape.connectInput,
                 })
                 .openapi({
@@ -160,13 +178,14 @@ export const connectRouter = router({
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
+          fetch: ctx.fetch,
         },
         input.data.input,
       )
       console.log('preConnect output', res)
       return {
         connector_name: input.data.connector_name,
-        output: res,
+        output: res ?? {},
       }
     }),
   postConnect: customerProcedure
@@ -190,7 +209,7 @@ export const connectRouter = router({
         data: z
           .discriminatedUnion(
             'connector_name',
-            parseNonEmpty(
+            nonEmpty(
               connectorSchemas.connectOutput.map((s) =>
                 z
                   .object({
@@ -219,9 +238,10 @@ export const connectRouter = router({
           message: `Connector ${input.data.connector_name} not found`,
         })
       }
-      const ccfg = await ctx.db.query.connector_config.findFirst({
-        where: eq(schema.connector_config.id, input.id),
-      })
+      const ccfg =
+        await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
+          where: eq(schema.connector_config.id, input.id),
+        })
       if (!ccfg) {
         throw new TRPCError({
           code: 'NOT_FOUND',
@@ -229,7 +249,7 @@ export const connectRouter = router({
         })
       }
 
-      console.log('preConnect', input, ctx, ccfg)
+      console.log('postConnect', input, ctx, ccfg)
       const connUpdate = await connector.postConnect?.(
         input.data.input,
         ccfg.config,
@@ -239,6 +259,7 @@ export const connectRouter = router({
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
+          fetch: ctx.fetch,
         },
       )
       const id = makeId('conn', input.data.connector_name, makeUlid())
@@ -248,7 +269,8 @@ export const connectRouter = router({
       const settings = zSettings.parse(connUpdate?.settings ?? input.data.input)
 
       const [conn] = await dbUpsertOne(
-        ctx.db,
+        // TODO: Update rls to allow customer to upsert their own connections
+        ctx.asOrgIfCustomer.db,
         schema.connection,
         {
           id,
@@ -268,6 +290,68 @@ export const connectRouter = router({
         //Type 'null' is not assignable to type 'string'.
         // same as connection.ts
         customer_id: ctx.viewer.customerId ?? ctx.viewer.userId ?? '',
+      }
+    }),
+
+  revokeConnection: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/connect/revoke',
+      },
+    })
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .output(core.connection)
+    .mutation(async ({ctx, input}) => {
+      const conn = await ctx.db.query.connection.findFirst({
+        where: eq(schema.connection.id, input.id),
+      })
+      if (!conn) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connection ${input.id} not found`,
+        })
+      }
+      // Two requests instead of one to allow RLS to apply. Revoke is not a common operation
+      const ccfg =
+        await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
+          where: eq(schema.connector_config.id, conn.connector_config_id),
+        })
+      if (!ccfg) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector config ${conn.connector_config_id} not found`,
+        })
+      }
+
+      const connector = serverConnectors[
+        conn.connector_name as keyof typeof serverConnectors
+      ] as ConnectorServer
+      if (!connector) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Connector ${conn.connector_name} not found`,
+        })
+      }
+
+      // TODO: Make me metter here
+      const instance = connector.newInstance?.({
+        config: ccfg.config,
+        settings: conn.settings,
+        fetchLinks: [],
+        onSettingsChange: () => {},
+      })
+
+      await connector.revokeConnection?.(conn.settings, ccfg.config, instance)
+
+      // TODO: make sure statis is updated
+      return {
+        ...conn!,
+        customer_id: conn.customer_id!, // Fix me
       }
     }),
 })

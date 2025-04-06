@@ -75,3 +75,17 @@ test('parseAsync: extracts input from zod error', async () => {
     expect(getInputData(error)).toEqual(invalidInputs)
   }
 })
+
+test('extract openapi metadata from zod type', () => {
+  const schema = z.unknown().openapi({
+    ref: 'mySchema',
+    description: 'my description',
+  })
+
+  // Does not set the schema description unfortunately
+  expect(schema.description).toBeUndefined()
+  expect(schema._def.zodOpenApi?.openapi).toEqual({
+    ref: 'mySchema',
+    description: 'my description',
+  })
+})

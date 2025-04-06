@@ -34,7 +34,7 @@ export const eventRouter = router({
       },
     })
     .input(zListParams.optional())
-    .output(zListResponse(core.event))
+    .output(zListResponse(core.event_select))
     .query(async ({ctx, input}) => {
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db

@@ -1,4 +1,4 @@
-import {ConnectorSchemas} from '@openint/cdk'
+import type {ConnectorSchemas} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 
 const zOauthConnectorConfig = z
@@ -6,10 +6,12 @@ const zOauthConnectorConfig = z
     client_id: z.string().nullish(),
     client_secret: z.string().nullish(),
     scopes: z.array(z.string()).nullish(),
+    // TODO: Is this needed?
+    redirect_uri: z.string().nullish(),
   })
   .describe('Base oauth configuration for the connector')
   .openapi({
-    'ui:field': 'OAuthField',
+    // 'ui:field': 'OAuthField',
   })
 
 const zOAuthConnectionSettings = z.object({
@@ -112,7 +114,7 @@ export const oauth2Schemas = {
   }),
   connectOutput: z.object({
     code: z.string(),
-    connectionId: z.string(),
+    // connectionId: z.string(),
     state: z.string(),
   }),
 } satisfies Omit<ConnectorSchemas, 'name'>
