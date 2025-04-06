@@ -15,7 +15,7 @@ export interface OAuthError extends Error {
   details?: any
 }
 
-export default async function createNativeOauthConnect(
+export async function openOAuthPopup(
   config: OAuthConnectConfig,
 ): Promise<OAuthConnectResult> {
   console.log('createNativeOauthConnect', config)

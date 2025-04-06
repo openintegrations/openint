@@ -211,8 +211,8 @@ function AddConnectionServer({
   const api = createAPICaller(viewer)
   const name = connectorConfig.connector_name
   const res = api.preConnect({
-    id: connectorConfig.id,
-    data: {connector_name: name, input: {}},
+    connector_config_id: connectorConfig.id,
+    discriminated_data: {connector_name: name, pre_connect_input: {}},
     options: {},
   })
 

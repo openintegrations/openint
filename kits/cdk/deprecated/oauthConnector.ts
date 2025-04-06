@@ -33,6 +33,7 @@ const zOauthCredentials = z.object({
     })
     .passthrough(), // This allows additional properties,
 })
+
 export const oauthBaseSchema = {
   name: z.literal('__oauth__'), // TODO: This is a noop
   connectorConfig: z.object({
