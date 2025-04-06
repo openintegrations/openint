@@ -107,6 +107,7 @@ export default async function createNativeOauthConnect(
 
           // Validate response has required fields
           if (!response.code || !response.state) {
+            console.error('Invalid response from authorization server', event)
             throw createOAuthError(
               'auth_error',
               'Invalid response from authorization server',
