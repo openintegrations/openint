@@ -70,7 +70,7 @@ const authorizeRes = $test('authorize redirect with PKCE', async () => {
 
   expect(response.headers.get('Location')).toBeTruthy()
   const url = new URL(response.headers.get('Location')!)
-  expect(url.pathname).toBe('/callback')
+  expect(url.pathname).toBe('/connect/callback')
   expect(url.searchParams.get('code')).toBeTruthy()
   expect(url.searchParams.get('state')).toBe('xyz')
 
