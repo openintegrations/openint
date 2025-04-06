@@ -3,7 +3,7 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 
 // Path to the defs directory
-const defsDir = path.join(__dirname, '../defs')
+const defsDir = path.join(__dirname, '../json-defs')
 
 // Path to the output file (now index.ts in the defs folder)
 const outputFile = path.join(defsDir, 'index.ts')

@@ -1,4 +1,4 @@
-import type {JsonConnectorDef} from '../def'
+import type {JsonConnectorDef} from '../schema'
 
 export default {
   audience: ['consumer', 'business'] as const,

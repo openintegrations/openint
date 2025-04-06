@@ -4,7 +4,7 @@
   "private": true,
   "module": "./index.ts",
   "scripts": {
-    "gen:index": "bun ./__scripts__/generate-defs-index.ts"
+    "gen:index": "bun ./__scripts__/generate-index.ts"
   },
   "dependencies": {
     "@openint/cdk": "workspace:*",

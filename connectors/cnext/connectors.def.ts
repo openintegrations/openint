@@ -1,5 +1,5 @@
 import {R} from '@openint/util/remeda'
 import {generateOauthConnectorDef} from './auth-oauth2/schema'
-import jsonDefs from './defs'
+import jsonDefs from './json-defs'
 
 export const defConnectors = R.mapValues(jsonDefs, generateOauthConnectorDef)
