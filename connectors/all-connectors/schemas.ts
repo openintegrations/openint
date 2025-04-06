@@ -14,7 +14,7 @@ import type {ConnectorName} from './name'
 export const schemasByConnectorName = Object.fromEntries(
   Object.entries(defConnectors).map(([name, def]) => [
     name,
-    materializeSchemas(def.schemas),
+    materializeSchemas(def.schemas) as Record<SchemaKey, Z.ZodTypeAny>,
   ]),
 ) as Record<ConnectorName, Record<SchemaKey, Z.ZodTypeAny>>
 

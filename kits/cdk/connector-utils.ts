@@ -1,7 +1,6 @@
 import {zodToOas31Schema} from '@openint/util/schema'
-import type {NonEmptyArray} from '@openint/util/type-utils'
-import type {Z} from '@openint/util/zod-utils'
-import {z, zCast} from '@openint/util/zod-utils'
+import type {Invert, NonEmptyArray} from '@openint/util/type-utils'
+import {Z, z, zCast} from '@openint/util/zod-utils'
 import type {ConnectorSchemas} from './connector.types'
 
 export const _zOauthConfig = z.object({
@@ -53,13 +52,17 @@ const schemaKeyFromCamelCase = {
 
 export type SchemaKey = (typeof schemaKeyFromCamelCase)[CamelCaseSchemaKey]
 
+type BackToCamelCase<K extends SchemaKey> = Invert<
+  typeof schemaKeyFromCamelCase
+>[K]
+
 export const schemaKeys = Object.values(
   schemaKeyFromCamelCase,
 ) as NonEmptyArray<SchemaKey>
 
 export const zConnectorSchemas = z.record(z.enum(schemaKeys), zJSONSchema)
 
-export function materializeSchemas(schemas: ConnectorSchemas) {
+export function materializeSchemas<T extends ConnectorSchemas>(schemas: T) {
   return Object.fromEntries(
     camelCaseSchemaKeys.map((camelKey) => {
       const schemaKey = schemaKeyFromCamelCase[camelKey]
@@ -79,13 +82,22 @@ export function materializeSchemas(schemas: ConnectorSchemas) {
 
       return [schemaKey, schema]
     }),
-  ) as Record<SchemaKey, Z.ZodTypeAny>
+  ) as {
+    // TODO: Use mapObject from util/object-utils to simplify this typing...
+    [Key in SchemaKey]: T[BackToCamelCase<Key>] extends Z.ZodTypeAny
+      ? T[BackToCamelCase<Key>]
+      : BackToCamelCase<Key> extends 'connectOutput'
+        ? T['connectionSettings'] extends Z.ZodTypeAny
+          ? T['connectionSettings']
+          : Z.ZodObject<{}, 'strict'>
+        : Z.ZodObject<{}, 'strict'>
+  }
 }
 
 /** Accepts snake_case schemas */
-export function jsonSchemasFromMaterializedSchemas(
-  schemas: Record<SchemaKey, Z.ZodTypeAny>,
-) {
+export function jsonSchemasFromMaterializedSchemas<
+  T extends Record<SchemaKey, Z.ZodTypeAny>,
+>(schemas: T) {
   return Object.fromEntries(
     Object.entries(schemas)
       .filter(([k]) =>
@@ -105,5 +117,5 @@ export function jsonSchemasFromMaterializedSchemas(
           )
         }
       }),
-  ) as Record<SchemaKey, JSONSchema>
+  ) as {[Key in keyof T]: JSONSchema}
 }
