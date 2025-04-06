@@ -9,6 +9,12 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
-    "@openint/util": "workspace:*"
+    "@openint/oauth2": "workspace:*",
+    "@openint/util": "workspace:*",
+    "mustache": "^4.2.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/mustache": "^4.2.5"
   }
 }

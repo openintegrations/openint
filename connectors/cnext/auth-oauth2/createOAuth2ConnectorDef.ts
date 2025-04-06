@@ -9,7 +9,7 @@ import type {JsonConnectorDef} from '../schema'
  * Currently only handles Oauth2 ccfgs and connection settings but in future we can switch and generate
  * depending on the def.auth.type
  */
-export function generateOauthConnectorDef<
+export function createOAuth2ConnectorDef<
   N extends string,
   T extends JsonConnectorDef,
 >(name: N, def: T) {
