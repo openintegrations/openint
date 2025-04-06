@@ -16,32 +16,51 @@ paths:
       parameters:
         - in: query
           name: expand
-          description: |-
-            Comma separated list of fields to optionally expand.
-
-            Available Options: `integrations`
           schema:
-            type: string
-            description: |-
-              Comma separated list of fields to optionally expand.
-
-              Available Options: `integrations`
+            type: array
+            items:
+              type: string
+              enum:
+                - schemas
       responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/core.connector'
-                  properties:
-                    integrations:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/core.integration'
-                description: List of connectors with selected fields
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/core.connector'
+                      properties:
+                        integrations:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/core.integration_select'
+                  total:
+                    type: integer
+                    minimum: 0
+                    description: Total number of items in the database for the organization
+                  limit:
+                    type: integer
+                    minimum: 0
+                    maximum: 100
+                    default: 50
+                    description: Limit the number of items returned
+                  offset:
+                    type: integer
+                    minimum: 0
+                    default: 0
+                    description: Offset the items returned
+                required:
+                  - items
+                  - total
+                  - limit
+                  - offset
+                description: List of connectors
         '400':
           description: Invalid input data
           content:
@@ -84,7 +103,7 @@ paths:
             async function main() {
               const response = await client.listConnectors();
 
-              console.log(response);
+              console.log(response.items);
             }
 
             main();
@@ -97,7 +116,7 @@ paths:
                 api_key=os.environ.get("OPENINT_API_KEY"),  # This is the default and can be omitted
             )
             response = client.list_connectors()
-            print(response)
+            print(response.items)
   /connector-config:
     get:
       operationId: listConnectorConfigs
@@ -109,98 +128,30 @@ paths:
       parameters:
         - in: query
           name: limit
-          description: Limit the number of items returned
           schema:
             type: integer
             minimum: 0
             maximum: 100
-            default: 50
-            description: Limit the number of items returned
         - in: query
           name: offset
-          description: Offset the items returned
           schema:
             type: integer
             minimum: 0
-            default: 0
-            description: Offset the items returned
         - in: query
           name: expand
-          description: |-
-            Comma separated list of fields to optionally expand.
-
-            Available Options: `connector`, `enabled_integrations`
           schema:
-            type: string
-            description: |-
-              Comma separated list of fields to optionally expand.
-
-              Available Options: `connector`, `enabled_integrations`
+            type: array
+            items:
+              type: string
+              enum:
+                - connector
+                - connector.schemas
+                - connection_count
+              description: 'Fields to expand: connector (includes connector details), enabled_integrations (includes enabled integrations details)'
         - in: query
           name: connector_name
-          description: The name of the connector
           schema:
-            type: string
-            enum:
-              - aircall
-              - airtable
-              - apollo
-              - brex
-              - coda
-              - confluence
-              - discord
-              - facebook
-              - finch
-              - firebase
-              - foreceipt
-              - github
-              - gong
-              - googlecalendar
-              - googledocs
-              - googledrive
-              - googlemail
-              - googlesheet
-              - greenhouse
-              - heron
-              - hubspot
-              - instagram
-              - intercom
-              - jira
-              - kustomer
-              - lever
-              - linear
-              - linkedin
-              - lunchmoney
-              - mercury
-              - merge
-              - microsoft
-              - moota
-              - notion
-              - onebrick
-              - outreach
-              - pipedrive
-              - plaid
-              - postgres
-              - quickbooks
-              - ramp
-              - reddit
-              - salesforce
-              - salesloft
-              - saltedge
-              - sharepointonline
-              - slack
-              - splitwise
-              - stripe
-              - teller
-              - toggl
-              - twenty
-              - twitter
-              - venmo
-              - wise
-              - xero
-              - yodlee
-              - zohodesk
-            description: The name of the connector
+            $ref: '#/components/schemas/core.connector.name'
       responses:
         '200':
           description: Successful response
@@ -217,9 +168,9 @@ paths:
                           properties:
                             id:
                               type: string
-                            updated_at:
-                              type: string
                             created_at:
+                              type: string
+                            updated_at:
                               type: string
                             org_id:
                               type: string
@@ -231,134 +182,145 @@ paths:
                               type:
                                 - boolean
                                 - 'null'
+                            metadata:
+                              type:
+                                - object
+                                - 'null'
+                              additionalProperties: {}
+                              description: |2
+
+                                  JSON object can can be used to associate arbitrary metadata to
+                                  avoid needing a separate 1-1 table just for simple key values in your application.
+                                  During updates this object will be shallowly merged
                           required:
                             - id
-                            - updated_at
                             - created_at
+                            - updated_at
                             - org_id
                             - display_name
                             - disabled
-                          description: Connector Config Base
                         - oneOf:
-                            - $ref: '#/components/schemas/connectors.aircall.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.airtable.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.apollo.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.brex.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.coda.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.confluence.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.discord.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.facebook.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.finch.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.firebase.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.foreceipt.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.github.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.gong.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.googlecalendar.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.googledocs.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.googledrive.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.googlemail.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.googlesheet.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.greenhouse.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.heron.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.hubspot.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.instagram.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.intercom.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.jira.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.kustomer.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.lever.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.linear.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.linkedin.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.lunchmoney.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.mercury.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.merge.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.microsoft.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.moota.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.notion.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.onebrick.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.outreach.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.pipedrive.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.plaid.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.postgres.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.quickbooks.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.ramp.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.reddit.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.salesforce.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.salesloft.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.saltedge.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.sharepointonline.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.slack.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.splitwise.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.stripe.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.teller.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.toggl.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.twenty.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.twitter.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.venmo.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.wise.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.xero.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.yodlee.connectorConfig'
-                            - $ref: '#/components/schemas/connectors.zohodesk.connectorConfig'
+                            - $ref: '#/components/schemas/connector.dummy-oauth2.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.sharepointonline.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.slack.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.github.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.quickbooks.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.googlemail.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.notion.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.linkedin.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.googledocs.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.aircall.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.googlecalendar.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.googlesheet.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.discord.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.hubspot.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.salesforce.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.linear.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.confluence.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.googledrive.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.airtable.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.apollo.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.brex.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.coda.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.facebook.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.finch.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.firebase.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.foreceipt.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.gong.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.greenhouse.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.heron.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.instagram.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.intercom.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.jira.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.kustomer.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.lever.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.lunchmoney.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.mercury.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.merge.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.microsoft.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.moota.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.onebrick.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.outreach.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.pipedrive.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.plaid.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.postgres.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.ramp.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.reddit.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.salesloft.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.saltedge.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.splitwise.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.stripe.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.teller.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.toggl.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.twenty.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.twitter.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.venmo.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.wise.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.xero.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.yodlee.discriminated_connector_config'
+                            - $ref: '#/components/schemas/connector.zohodesk.discriminated_connector_config'
                           discriminator:
                             propertyName: connector_name
                             mapping:
-                              aircall: '#/components/schemas/connectors.aircall.connectorConfig'
-                              airtable: '#/components/schemas/connectors.airtable.connectorConfig'
-                              apollo: '#/components/schemas/connectors.apollo.connectorConfig'
-                              brex: '#/components/schemas/connectors.brex.connectorConfig'
-                              coda: '#/components/schemas/connectors.coda.connectorConfig'
-                              confluence: '#/components/schemas/connectors.confluence.connectorConfig'
-                              discord: '#/components/schemas/connectors.discord.connectorConfig'
-                              facebook: '#/components/schemas/connectors.facebook.connectorConfig'
-                              finch: '#/components/schemas/connectors.finch.connectorConfig'
-                              firebase: '#/components/schemas/connectors.firebase.connectorConfig'
-                              foreceipt: '#/components/schemas/connectors.foreceipt.connectorConfig'
-                              github: '#/components/schemas/connectors.github.connectorConfig'
-                              gong: '#/components/schemas/connectors.gong.connectorConfig'
-                              googlecalendar: '#/components/schemas/connectors.googlecalendar.connectorConfig'
-                              googledocs: '#/components/schemas/connectors.googledocs.connectorConfig'
-                              googledrive: '#/components/schemas/connectors.googledrive.connectorConfig'
-                              googlemail: '#/components/schemas/connectors.googlemail.connectorConfig'
-                              googlesheet: '#/components/schemas/connectors.googlesheet.connectorConfig'
-                              greenhouse: '#/components/schemas/connectors.greenhouse.connectorConfig'
-                              heron: '#/components/schemas/connectors.heron.connectorConfig'
-                              hubspot: '#/components/schemas/connectors.hubspot.connectorConfig'
-                              instagram: '#/components/schemas/connectors.instagram.connectorConfig'
-                              intercom: '#/components/schemas/connectors.intercom.connectorConfig'
-                              jira: '#/components/schemas/connectors.jira.connectorConfig'
-                              kustomer: '#/components/schemas/connectors.kustomer.connectorConfig'
-                              lever: '#/components/schemas/connectors.lever.connectorConfig'
-                              linear: '#/components/schemas/connectors.linear.connectorConfig'
-                              linkedin: '#/components/schemas/connectors.linkedin.connectorConfig'
-                              lunchmoney: '#/components/schemas/connectors.lunchmoney.connectorConfig'
-                              mercury: '#/components/schemas/connectors.mercury.connectorConfig'
-                              merge: '#/components/schemas/connectors.merge.connectorConfig'
-                              microsoft: '#/components/schemas/connectors.microsoft.connectorConfig'
-                              moota: '#/components/schemas/connectors.moota.connectorConfig'
-                              notion: '#/components/schemas/connectors.notion.connectorConfig'
-                              onebrick: '#/components/schemas/connectors.onebrick.connectorConfig'
-                              outreach: '#/components/schemas/connectors.outreach.connectorConfig'
-                              pipedrive: '#/components/schemas/connectors.pipedrive.connectorConfig'
-                              plaid: '#/components/schemas/connectors.plaid.connectorConfig'
-                              postgres: '#/components/schemas/connectors.postgres.connectorConfig'
-                              quickbooks: '#/components/schemas/connectors.quickbooks.connectorConfig'
-                              ramp: '#/components/schemas/connectors.ramp.connectorConfig'
-                              reddit: '#/components/schemas/connectors.reddit.connectorConfig'
-                              salesforce: '#/components/schemas/connectors.salesforce.connectorConfig'
-                              salesloft: '#/components/schemas/connectors.salesloft.connectorConfig'
-                              saltedge: '#/components/schemas/connectors.saltedge.connectorConfig'
-                              sharepointonline: '#/components/schemas/connectors.sharepointonline.connectorConfig'
-                              slack: '#/components/schemas/connectors.slack.connectorConfig'
-                              splitwise: '#/components/schemas/connectors.splitwise.connectorConfig'
-                              stripe: '#/components/schemas/connectors.stripe.connectorConfig'
-                              teller: '#/components/schemas/connectors.teller.connectorConfig'
-                              toggl: '#/components/schemas/connectors.toggl.connectorConfig'
-                              twenty: '#/components/schemas/connectors.twenty.connectorConfig'
-                              twitter: '#/components/schemas/connectors.twitter.connectorConfig'
-                              venmo: '#/components/schemas/connectors.venmo.connectorConfig'
-                              wise: '#/components/schemas/connectors.wise.connectorConfig'
-                              xero: '#/components/schemas/connectors.xero.connectorConfig'
-                              yodlee: '#/components/schemas/connectors.yodlee.connectorConfig'
-                              zohodesk: '#/components/schemas/connectors.zohodesk.connectorConfig'
+                              dummy-oauth2: '#/components/schemas/connector.dummy-oauth2.discriminated_connector_config'
+                              sharepointonline: '#/components/schemas/connector.sharepointonline.discriminated_connector_config'
+                              slack: '#/components/schemas/connector.slack.discriminated_connector_config'
+                              github: '#/components/schemas/connector.github.discriminated_connector_config'
+                              quickbooks: '#/components/schemas/connector.quickbooks.discriminated_connector_config'
+                              googlemail: '#/components/schemas/connector.googlemail.discriminated_connector_config'
+                              notion: '#/components/schemas/connector.notion.discriminated_connector_config'
+                              linkedin: '#/components/schemas/connector.linkedin.discriminated_connector_config'
+                              googledocs: '#/components/schemas/connector.googledocs.discriminated_connector_config'
+                              aircall: '#/components/schemas/connector.aircall.discriminated_connector_config'
+                              googlecalendar: '#/components/schemas/connector.googlecalendar.discriminated_connector_config'
+                              googlesheet: '#/components/schemas/connector.googlesheet.discriminated_connector_config'
+                              discord: '#/components/schemas/connector.discord.discriminated_connector_config'
+                              hubspot: '#/components/schemas/connector.hubspot.discriminated_connector_config'
+                              salesforce: '#/components/schemas/connector.salesforce.discriminated_connector_config'
+                              linear: '#/components/schemas/connector.linear.discriminated_connector_config'
+                              confluence: '#/components/schemas/connector.confluence.discriminated_connector_config'
+                              googledrive: '#/components/schemas/connector.googledrive.discriminated_connector_config'
+                              airtable: '#/components/schemas/connector.airtable.discriminated_connector_config'
+                              apollo: '#/components/schemas/connector.apollo.discriminated_connector_config'
+                              brex: '#/components/schemas/connector.brex.discriminated_connector_config'
+                              coda: '#/components/schemas/connector.coda.discriminated_connector_config'
+                              facebook: '#/components/schemas/connector.facebook.discriminated_connector_config'
+                              finch: '#/components/schemas/connector.finch.discriminated_connector_config'
+                              firebase: '#/components/schemas/connector.firebase.discriminated_connector_config'
+                              foreceipt: '#/components/schemas/connector.foreceipt.discriminated_connector_config'
+                              gong: '#/components/schemas/connector.gong.discriminated_connector_config'
+                              greenhouse: '#/components/schemas/connector.greenhouse.discriminated_connector_config'
+                              heron: '#/components/schemas/connector.heron.discriminated_connector_config'
+                              instagram: '#/components/schemas/connector.instagram.discriminated_connector_config'
+                              intercom: '#/components/schemas/connector.intercom.discriminated_connector_config'
+                              jira: '#/components/schemas/connector.jira.discriminated_connector_config'
+                              kustomer: '#/components/schemas/connector.kustomer.discriminated_connector_config'
+                              lever: '#/components/schemas/connector.lever.discriminated_connector_config'
+                              lunchmoney: '#/components/schemas/connector.lunchmoney.discriminated_connector_config'
+                              mercury: '#/components/schemas/connector.mercury.discriminated_connector_config'
+                              merge: '#/components/schemas/connector.merge.discriminated_connector_config'
+                              microsoft: '#/components/schemas/connector.microsoft.discriminated_connector_config'
+                              moota: '#/components/schemas/connector.moota.discriminated_connector_config'
+                              onebrick: '#/components/schemas/connector.onebrick.discriminated_connector_config'
+                              outreach: '#/components/schemas/connector.outreach.discriminated_connector_config'
+                              pipedrive: '#/components/schemas/connector.pipedrive.discriminated_connector_config'
+                              plaid: '#/components/schemas/connector.plaid.discriminated_connector_config'
+                              postgres: '#/components/schemas/connector.postgres.discriminated_connector_config'
+                              ramp: '#/components/schemas/connector.ramp.discriminated_connector_config'
+                              reddit: '#/components/schemas/connector.reddit.discriminated_connector_config'
+                              salesloft: '#/components/schemas/connector.salesloft.discriminated_connector_config'
+                              saltedge: '#/components/schemas/connector.saltedge.discriminated_connector_config'
+                              splitwise: '#/components/schemas/connector.splitwise.discriminated_connector_config'
+                              stripe: '#/components/schemas/connector.stripe.discriminated_connector_config'
+                              teller: '#/components/schemas/connector.teller.discriminated_connector_config'
+                              toggl: '#/components/schemas/connector.toggl.discriminated_connector_config'
+                              twenty: '#/components/schemas/connector.twenty.discriminated_connector_config'
+                              twitter: '#/components/schemas/connector.twitter.discriminated_connector_config'
+                              venmo: '#/components/schemas/connector.venmo.discriminated_connector_config'
+                              wise: '#/components/schemas/connector.wise.discriminated_connector_config'
+                              xero: '#/components/schemas/connector.xero.discriminated_connector_config'
+                              yodlee: '#/components/schemas/connector.yodlee.discriminated_connector_config'
+                              zohodesk: '#/components/schemas/connector.zohodesk.discriminated_connector_config'
                           description: Connector specific data
                         - type: object
                           properties:
@@ -367,7 +329,7 @@ paths:
                             integrations:
                               type: object
                               additionalProperties:
-                                $ref: '#/components/schemas/core.integration'
+                                $ref: '#/components/schemas/core.integration_select'
                             connection_count:
                               type: number
                   total:
@@ -509,154 +471,169 @@ paths:
                     properties:
                       id:
                         type: string
-                      updated_at:
-                        type: string
-                      created_at:
-                        type: string
-                      connector_config_id:
+                      customer_id:
                         type:
                           - string
                           - 'null'
-                      customer_id:
+                      connector_config_id:
                         type: string
                       integration_id:
                         type:
                           - string
+                          - 'null'
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      display_name:
+                        type:
+                          - string
+                          - 'null'
+                      disabled:
+                        type:
+                          - boolean
                           - 'null'
                       metadata:
                         type:
                           - object
                           - 'null'
                         additionalProperties: {}
+                        description: |2
+
+                            JSON object can can be used to associate arbitrary metadata to
+                            avoid needing a separate 1-1 table just for simple key values in your application.
+                            During updates this object will be shallowly merged
                     required:
                       - id
-                      - updated_at
-                      - created_at
-                      - connector_config_id
                       - customer_id
+                      - connector_config_id
                       - integration_id
-                      - metadata
-                    description: Connection Base
+                      - created_at
+                      - updated_at
+                      - display_name
+                      - disabled
                   - oneOf:
-                      - $ref: '#/components/schemas/connectors.aircall.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.airtable.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.apollo.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.brex.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.coda.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.confluence.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.discord.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.facebook.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.finch.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.firebase.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.foreceipt.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.github.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.gong.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.googlecalendar.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.googledocs.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.googledrive.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.googlemail.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.googlesheet.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.greenhouse.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.heron.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.hubspot.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.instagram.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.intercom.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.jira.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.kustomer.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.lever.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.linear.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.linkedin.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.lunchmoney.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.mercury.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.merge.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.microsoft.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.moota.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.notion.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.onebrick.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.outreach.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.pipedrive.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.plaid.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.postgres.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.quickbooks.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.ramp.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.reddit.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.salesforce.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.salesloft.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.saltedge.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.sharepointonline.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.slack.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.splitwise.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.stripe.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.teller.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.toggl.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.twenty.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.twitter.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.venmo.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.wise.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.xero.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.yodlee.connectionSettings'
-                      - $ref: '#/components/schemas/connectors.zohodesk.connectionSettings'
+                      - $ref: '#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.sharepointonline.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.slack.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.github.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.quickbooks.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.googlemail.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.notion.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.linkedin.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.googledocs.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.aircall.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.googlecalendar.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.googlesheet.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.discord.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.hubspot.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.salesforce.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.linear.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.confluence.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.googledrive.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.airtable.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.apollo.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.brex.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.coda.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.facebook.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.finch.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.firebase.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.foreceipt.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.gong.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.greenhouse.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.heron.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.instagram.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.intercom.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.jira.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.kustomer.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.lever.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.lunchmoney.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.mercury.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.merge.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.microsoft.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.moota.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.outreach.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.pipedrive.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.plaid.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.postgres.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.ramp.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.reddit.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.salesloft.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.saltedge.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.splitwise.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.stripe.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.teller.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.toggl.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.twenty.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.twitter.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.venmo.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.wise.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.xero.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
+                      - $ref: '#/components/schemas/connector.zohodesk.discriminated_connection_settings'
                     discriminator:
                       propertyName: connector_name
                       mapping:
-                        aircall: '#/components/schemas/connectors.aircall.connectionSettings'
-                        airtable: '#/components/schemas/connectors.airtable.connectionSettings'
-                        apollo: '#/components/schemas/connectors.apollo.connectionSettings'
-                        brex: '#/components/schemas/connectors.brex.connectionSettings'
-                        coda: '#/components/schemas/connectors.coda.connectionSettings'
-                        confluence: '#/components/schemas/connectors.confluence.connectionSettings'
-                        discord: '#/components/schemas/connectors.discord.connectionSettings'
-                        facebook: '#/components/schemas/connectors.facebook.connectionSettings'
-                        finch: '#/components/schemas/connectors.finch.connectionSettings'
-                        firebase: '#/components/schemas/connectors.firebase.connectionSettings'
-                        foreceipt: '#/components/schemas/connectors.foreceipt.connectionSettings'
-                        github: '#/components/schemas/connectors.github.connectionSettings'
-                        gong: '#/components/schemas/connectors.gong.connectionSettings'
-                        googlecalendar: '#/components/schemas/connectors.googlecalendar.connectionSettings'
-                        googledocs: '#/components/schemas/connectors.googledocs.connectionSettings'
-                        googledrive: '#/components/schemas/connectors.googledrive.connectionSettings'
-                        googlemail: '#/components/schemas/connectors.googlemail.connectionSettings'
-                        googlesheet: '#/components/schemas/connectors.googlesheet.connectionSettings'
-                        greenhouse: '#/components/schemas/connectors.greenhouse.connectionSettings'
-                        heron: '#/components/schemas/connectors.heron.connectionSettings'
-                        hubspot: '#/components/schemas/connectors.hubspot.connectionSettings'
-                        instagram: '#/components/schemas/connectors.instagram.connectionSettings'
-                        intercom: '#/components/schemas/connectors.intercom.connectionSettings'
-                        jira: '#/components/schemas/connectors.jira.connectionSettings'
-                        kustomer: '#/components/schemas/connectors.kustomer.connectionSettings'
-                        lever: '#/components/schemas/connectors.lever.connectionSettings'
-                        linear: '#/components/schemas/connectors.linear.connectionSettings'
-                        linkedin: '#/components/schemas/connectors.linkedin.connectionSettings'
-                        lunchmoney: '#/components/schemas/connectors.lunchmoney.connectionSettings'
-                        mercury: '#/components/schemas/connectors.mercury.connectionSettings'
-                        merge: '#/components/schemas/connectors.merge.connectionSettings'
-                        microsoft: '#/components/schemas/connectors.microsoft.connectionSettings'
-                        moota: '#/components/schemas/connectors.moota.connectionSettings'
-                        notion: '#/components/schemas/connectors.notion.connectionSettings'
-                        onebrick: '#/components/schemas/connectors.onebrick.connectionSettings'
-                        outreach: '#/components/schemas/connectors.outreach.connectionSettings'
-                        pipedrive: '#/components/schemas/connectors.pipedrive.connectionSettings'
-                        plaid: '#/components/schemas/connectors.plaid.connectionSettings'
-                        postgres: '#/components/schemas/connectors.postgres.connectionSettings'
-                        quickbooks: '#/components/schemas/connectors.quickbooks.connectionSettings'
-                        ramp: '#/components/schemas/connectors.ramp.connectionSettings'
-                        reddit: '#/components/schemas/connectors.reddit.connectionSettings'
-                        salesforce: '#/components/schemas/connectors.salesforce.connectionSettings'
-                        salesloft: '#/components/schemas/connectors.salesloft.connectionSettings'
-                        saltedge: '#/components/schemas/connectors.saltedge.connectionSettings'
-                        sharepointonline: '#/components/schemas/connectors.sharepointonline.connectionSettings'
-                        slack: '#/components/schemas/connectors.slack.connectionSettings'
-                        splitwise: '#/components/schemas/connectors.splitwise.connectionSettings'
-                        stripe: '#/components/schemas/connectors.stripe.connectionSettings'
-                        teller: '#/components/schemas/connectors.teller.connectionSettings'
-                        toggl: '#/components/schemas/connectors.toggl.connectionSettings'
-                        twenty: '#/components/schemas/connectors.twenty.connectionSettings'
-                        twitter: '#/components/schemas/connectors.twitter.connectionSettings'
-                        venmo: '#/components/schemas/connectors.venmo.connectionSettings'
-                        wise: '#/components/schemas/connectors.wise.connectionSettings'
-                        xero: '#/components/schemas/connectors.xero.connectionSettings'
-                        yodlee: '#/components/schemas/connectors.yodlee.connectionSettings'
-                        zohodesk: '#/components/schemas/connectors.zohodesk.connectionSettings'
+                        dummy-oauth2: '#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings'
+                        sharepointonline: '#/components/schemas/connector.sharepointonline.discriminated_connection_settings'
+                        slack: '#/components/schemas/connector.slack.discriminated_connection_settings'
+                        github: '#/components/schemas/connector.github.discriminated_connection_settings'
+                        quickbooks: '#/components/schemas/connector.quickbooks.discriminated_connection_settings'
+                        googlemail: '#/components/schemas/connector.googlemail.discriminated_connection_settings'
+                        notion: '#/components/schemas/connector.notion.discriminated_connection_settings'
+                        linkedin: '#/components/schemas/connector.linkedin.discriminated_connection_settings'
+                        googledocs: '#/components/schemas/connector.googledocs.discriminated_connection_settings'
+                        aircall: '#/components/schemas/connector.aircall.discriminated_connection_settings'
+                        googlecalendar: '#/components/schemas/connector.googlecalendar.discriminated_connection_settings'
+                        googlesheet: '#/components/schemas/connector.googlesheet.discriminated_connection_settings'
+                        discord: '#/components/schemas/connector.discord.discriminated_connection_settings'
+                        hubspot: '#/components/schemas/connector.hubspot.discriminated_connection_settings'
+                        salesforce: '#/components/schemas/connector.salesforce.discriminated_connection_settings'
+                        linear: '#/components/schemas/connector.linear.discriminated_connection_settings'
+                        confluence: '#/components/schemas/connector.confluence.discriminated_connection_settings'
+                        googledrive: '#/components/schemas/connector.googledrive.discriminated_connection_settings'
+                        airtable: '#/components/schemas/connector.airtable.discriminated_connection_settings'
+                        apollo: '#/components/schemas/connector.apollo.discriminated_connection_settings'
+                        brex: '#/components/schemas/connector.brex.discriminated_connection_settings'
+                        coda: '#/components/schemas/connector.coda.discriminated_connection_settings'
+                        facebook: '#/components/schemas/connector.facebook.discriminated_connection_settings'
+                        finch: '#/components/schemas/connector.finch.discriminated_connection_settings'
+                        firebase: '#/components/schemas/connector.firebase.discriminated_connection_settings'
+                        foreceipt: '#/components/schemas/connector.foreceipt.discriminated_connection_settings'
+                        gong: '#/components/schemas/connector.gong.discriminated_connection_settings'
+                        greenhouse: '#/components/schemas/connector.greenhouse.discriminated_connection_settings'
+                        heron: '#/components/schemas/connector.heron.discriminated_connection_settings'
+                        instagram: '#/components/schemas/connector.instagram.discriminated_connection_settings'
+                        intercom: '#/components/schemas/connector.intercom.discriminated_connection_settings'
+                        jira: '#/components/schemas/connector.jira.discriminated_connection_settings'
+                        kustomer: '#/components/schemas/connector.kustomer.discriminated_connection_settings'
+                        lever: '#/components/schemas/connector.lever.discriminated_connection_settings'
+                        lunchmoney: '#/components/schemas/connector.lunchmoney.discriminated_connection_settings'
+                        mercury: '#/components/schemas/connector.mercury.discriminated_connection_settings'
+                        merge: '#/components/schemas/connector.merge.discriminated_connection_settings'
+                        microsoft: '#/components/schemas/connector.microsoft.discriminated_connection_settings'
+                        moota: '#/components/schemas/connector.moota.discriminated_connection_settings'
+                        onebrick: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                        outreach: '#/components/schemas/connector.outreach.discriminated_connection_settings'
+                        pipedrive: '#/components/schemas/connector.pipedrive.discriminated_connection_settings'
+                        plaid: '#/components/schemas/connector.plaid.discriminated_connection_settings'
+                        postgres: '#/components/schemas/connector.postgres.discriminated_connection_settings'
+                        ramp: '#/components/schemas/connector.ramp.discriminated_connection_settings'
+                        reddit: '#/components/schemas/connector.reddit.discriminated_connection_settings'
+                        salesloft: '#/components/schemas/connector.salesloft.discriminated_connection_settings'
+                        saltedge: '#/components/schemas/connector.saltedge.discriminated_connection_settings'
+                        splitwise: '#/components/schemas/connector.splitwise.discriminated_connection_settings'
+                        stripe: '#/components/schemas/connector.stripe.discriminated_connection_settings'
+                        teller: '#/components/schemas/connector.teller.discriminated_connection_settings'
+                        toggl: '#/components/schemas/connector.toggl.discriminated_connection_settings'
+                        twenty: '#/components/schemas/connector.twenty.discriminated_connection_settings'
+                        twitter: '#/components/schemas/connector.twitter.discriminated_connection_settings'
+                        venmo: '#/components/schemas/connector.venmo.discriminated_connection_settings'
+                        wise: '#/components/schemas/connector.wise.discriminated_connection_settings'
+                        xero: '#/components/schemas/connector.xero.discriminated_connection_settings'
+                        yodlee: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
+                        zohodesk: '#/components/schemas/connector.zohodesk.discriminated_connection_settings'
                     description: Connector specific data
                   - type: object
                     properties:
@@ -820,86 +797,19 @@ paths:
       parameters:
         - in: query
           name: limit
-          description: Limit the number of items returned
           schema:
             type: integer
             minimum: 0
             maximum: 100
-            default: 50
-            description: Limit the number of items returned
         - in: query
           name: offset
-          description: Offset the items returned
           schema:
             type: integer
             minimum: 0
-            default: 0
-            description: Offset the items returned
         - in: query
           name: connector_name
-          description: The name of the connector
           schema:
-            type: string
-            enum:
-              - aircall
-              - airtable
-              - apollo
-              - brex
-              - coda
-              - confluence
-              - discord
-              - facebook
-              - finch
-              - firebase
-              - foreceipt
-              - github
-              - gong
-              - googlecalendar
-              - googledocs
-              - googledrive
-              - googlemail
-              - googlesheet
-              - greenhouse
-              - heron
-              - hubspot
-              - instagram
-              - intercom
-              - jira
-              - kustomer
-              - lever
-              - linear
-              - linkedin
-              - lunchmoney
-              - mercury
-              - merge
-              - microsoft
-              - moota
-              - notion
-              - onebrick
-              - outreach
-              - pipedrive
-              - plaid
-              - postgres
-              - quickbooks
-              - ramp
-              - reddit
-              - salesforce
-              - salesloft
-              - saltedge
-              - sharepointonline
-              - slack
-              - splitwise
-              - stripe
-              - teller
-              - toggl
-              - twenty
-              - twitter
-              - venmo
-              - wise
-              - xero
-              - yodlee
-              - zohodesk
-            description: The name of the connector
+            $ref: '#/components/schemas/core.connector.name'
         - in: query
           name: customer_id
           description: The id of the customer in your application. Ensure it is unique for that customer.
@@ -950,154 +860,169 @@ paths:
                           properties:
                             id:
                               type: string
-                            updated_at:
-                              type: string
-                            created_at:
-                              type: string
-                            connector_config_id:
+                            customer_id:
                               type:
                                 - string
                                 - 'null'
-                            customer_id:
+                            connector_config_id:
                               type: string
                             integration_id:
                               type:
                                 - string
+                                - 'null'
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                            display_name:
+                              type:
+                                - string
+                                - 'null'
+                            disabled:
+                              type:
+                                - boolean
                                 - 'null'
                             metadata:
                               type:
                                 - object
                                 - 'null'
                               additionalProperties: {}
+                              description: |2
+
+                                  JSON object can can be used to associate arbitrary metadata to
+                                  avoid needing a separate 1-1 table just for simple key values in your application.
+                                  During updates this object will be shallowly merged
                           required:
                             - id
-                            - updated_at
-                            - created_at
-                            - connector_config_id
                             - customer_id
+                            - connector_config_id
                             - integration_id
-                            - metadata
-                          description: Connection Base
+                            - created_at
+                            - updated_at
+                            - display_name
+                            - disabled
                         - oneOf:
-                            - $ref: '#/components/schemas/connectors.aircall.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.airtable.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.apollo.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.brex.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.coda.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.confluence.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.discord.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.facebook.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.finch.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.firebase.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.foreceipt.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.github.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.gong.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.googlecalendar.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.googledocs.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.googledrive.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.googlemail.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.googlesheet.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.greenhouse.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.heron.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.hubspot.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.instagram.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.intercom.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.jira.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.kustomer.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.lever.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.linear.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.linkedin.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.lunchmoney.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.mercury.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.merge.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.microsoft.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.moota.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.notion.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.onebrick.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.outreach.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.pipedrive.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.plaid.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.postgres.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.quickbooks.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.ramp.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.reddit.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.salesforce.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.salesloft.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.saltedge.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.sharepointonline.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.slack.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.splitwise.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.stripe.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.teller.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.toggl.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.twenty.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.twitter.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.venmo.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.wise.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.xero.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.yodlee.connectionSettings'
-                            - $ref: '#/components/schemas/connectors.zohodesk.connectionSettings'
+                            - $ref: '#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.sharepointonline.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.slack.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.github.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.quickbooks.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.googlemail.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.notion.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.linkedin.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.googledocs.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.aircall.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.googlecalendar.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.googlesheet.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.discord.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.hubspot.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.salesforce.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.linear.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.confluence.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.googledrive.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.airtable.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.apollo.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.brex.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.coda.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.facebook.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.finch.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.firebase.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.foreceipt.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.gong.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.greenhouse.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.heron.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.instagram.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.intercom.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.jira.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.kustomer.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.lever.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.lunchmoney.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.mercury.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.merge.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.microsoft.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.moota.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.outreach.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.pipedrive.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.plaid.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.postgres.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.ramp.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.reddit.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.salesloft.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.saltedge.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.splitwise.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.stripe.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.teller.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.toggl.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.twenty.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.twitter.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.venmo.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.wise.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.xero.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
+                            - $ref: '#/components/schemas/connector.zohodesk.discriminated_connection_settings'
                           discriminator:
                             propertyName: connector_name
                             mapping:
-                              aircall: '#/components/schemas/connectors.aircall.connectionSettings'
-                              airtable: '#/components/schemas/connectors.airtable.connectionSettings'
-                              apollo: '#/components/schemas/connectors.apollo.connectionSettings'
-                              brex: '#/components/schemas/connectors.brex.connectionSettings'
-                              coda: '#/components/schemas/connectors.coda.connectionSettings'
-                              confluence: '#/components/schemas/connectors.confluence.connectionSettings'
-                              discord: '#/components/schemas/connectors.discord.connectionSettings'
-                              facebook: '#/components/schemas/connectors.facebook.connectionSettings'
-                              finch: '#/components/schemas/connectors.finch.connectionSettings'
-                              firebase: '#/components/schemas/connectors.firebase.connectionSettings'
-                              foreceipt: '#/components/schemas/connectors.foreceipt.connectionSettings'
-                              github: '#/components/schemas/connectors.github.connectionSettings'
-                              gong: '#/components/schemas/connectors.gong.connectionSettings'
-                              googlecalendar: '#/components/schemas/connectors.googlecalendar.connectionSettings'
-                              googledocs: '#/components/schemas/connectors.googledocs.connectionSettings'
-                              googledrive: '#/components/schemas/connectors.googledrive.connectionSettings'
-                              googlemail: '#/components/schemas/connectors.googlemail.connectionSettings'
-                              googlesheet: '#/components/schemas/connectors.googlesheet.connectionSettings'
-                              greenhouse: '#/components/schemas/connectors.greenhouse.connectionSettings'
-                              heron: '#/components/schemas/connectors.heron.connectionSettings'
-                              hubspot: '#/components/schemas/connectors.hubspot.connectionSettings'
-                              instagram: '#/components/schemas/connectors.instagram.connectionSettings'
-                              intercom: '#/components/schemas/connectors.intercom.connectionSettings'
-                              jira: '#/components/schemas/connectors.jira.connectionSettings'
-                              kustomer: '#/components/schemas/connectors.kustomer.connectionSettings'
-                              lever: '#/components/schemas/connectors.lever.connectionSettings'
-                              linear: '#/components/schemas/connectors.linear.connectionSettings'
-                              linkedin: '#/components/schemas/connectors.linkedin.connectionSettings'
-                              lunchmoney: '#/components/schemas/connectors.lunchmoney.connectionSettings'
-                              mercury: '#/components/schemas/connectors.mercury.connectionSettings'
-                              merge: '#/components/schemas/connectors.merge.connectionSettings'
-                              microsoft: '#/components/schemas/connectors.microsoft.connectionSettings'
-                              moota: '#/components/schemas/connectors.moota.connectionSettings'
-                              notion: '#/components/schemas/connectors.notion.connectionSettings'
-                              onebrick: '#/components/schemas/connectors.onebrick.connectionSettings'
-                              outreach: '#/components/schemas/connectors.outreach.connectionSettings'
-                              pipedrive: '#/components/schemas/connectors.pipedrive.connectionSettings'
-                              plaid: '#/components/schemas/connectors.plaid.connectionSettings'
-                              postgres: '#/components/schemas/connectors.postgres.connectionSettings'
-                              quickbooks: '#/components/schemas/connectors.quickbooks.connectionSettings'
-                              ramp: '#/components/schemas/connectors.ramp.connectionSettings'
-                              reddit: '#/components/schemas/connectors.reddit.connectionSettings'
-                              salesforce: '#/components/schemas/connectors.salesforce.connectionSettings'
-                              salesloft: '#/components/schemas/connectors.salesloft.connectionSettings'
-                              saltedge: '#/components/schemas/connectors.saltedge.connectionSettings'
-                              sharepointonline: '#/components/schemas/connectors.sharepointonline.connectionSettings'
-                              slack: '#/components/schemas/connectors.slack.connectionSettings'
-                              splitwise: '#/components/schemas/connectors.splitwise.connectionSettings'
-                              stripe: '#/components/schemas/connectors.stripe.connectionSettings'
-                              teller: '#/components/schemas/connectors.teller.connectionSettings'
-                              toggl: '#/components/schemas/connectors.toggl.connectionSettings'
-                              twenty: '#/components/schemas/connectors.twenty.connectionSettings'
-                              twitter: '#/components/schemas/connectors.twitter.connectionSettings'
-                              venmo: '#/components/schemas/connectors.venmo.connectionSettings'
-                              wise: '#/components/schemas/connectors.wise.connectionSettings'
-                              xero: '#/components/schemas/connectors.xero.connectionSettings'
-                              yodlee: '#/components/schemas/connectors.yodlee.connectionSettings'
-                              zohodesk: '#/components/schemas/connectors.zohodesk.connectionSettings'
+                              dummy-oauth2: '#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings'
+                              sharepointonline: '#/components/schemas/connector.sharepointonline.discriminated_connection_settings'
+                              slack: '#/components/schemas/connector.slack.discriminated_connection_settings'
+                              github: '#/components/schemas/connector.github.discriminated_connection_settings'
+                              quickbooks: '#/components/schemas/connector.quickbooks.discriminated_connection_settings'
+                              googlemail: '#/components/schemas/connector.googlemail.discriminated_connection_settings'
+                              notion: '#/components/schemas/connector.notion.discriminated_connection_settings'
+                              linkedin: '#/components/schemas/connector.linkedin.discriminated_connection_settings'
+                              googledocs: '#/components/schemas/connector.googledocs.discriminated_connection_settings'
+                              aircall: '#/components/schemas/connector.aircall.discriminated_connection_settings'
+                              googlecalendar: '#/components/schemas/connector.googlecalendar.discriminated_connection_settings'
+                              googlesheet: '#/components/schemas/connector.googlesheet.discriminated_connection_settings'
+                              discord: '#/components/schemas/connector.discord.discriminated_connection_settings'
+                              hubspot: '#/components/schemas/connector.hubspot.discriminated_connection_settings'
+                              salesforce: '#/components/schemas/connector.salesforce.discriminated_connection_settings'
+                              linear: '#/components/schemas/connector.linear.discriminated_connection_settings'
+                              confluence: '#/components/schemas/connector.confluence.discriminated_connection_settings'
+                              googledrive: '#/components/schemas/connector.googledrive.discriminated_connection_settings'
+                              airtable: '#/components/schemas/connector.airtable.discriminated_connection_settings'
+                              apollo: '#/components/schemas/connector.apollo.discriminated_connection_settings'
+                              brex: '#/components/schemas/connector.brex.discriminated_connection_settings'
+                              coda: '#/components/schemas/connector.coda.discriminated_connection_settings'
+                              facebook: '#/components/schemas/connector.facebook.discriminated_connection_settings'
+                              finch: '#/components/schemas/connector.finch.discriminated_connection_settings'
+                              firebase: '#/components/schemas/connector.firebase.discriminated_connection_settings'
+                              foreceipt: '#/components/schemas/connector.foreceipt.discriminated_connection_settings'
+                              gong: '#/components/schemas/connector.gong.discriminated_connection_settings'
+                              greenhouse: '#/components/schemas/connector.greenhouse.discriminated_connection_settings'
+                              heron: '#/components/schemas/connector.heron.discriminated_connection_settings'
+                              instagram: '#/components/schemas/connector.instagram.discriminated_connection_settings'
+                              intercom: '#/components/schemas/connector.intercom.discriminated_connection_settings'
+                              jira: '#/components/schemas/connector.jira.discriminated_connection_settings'
+                              kustomer: '#/components/schemas/connector.kustomer.discriminated_connection_settings'
+                              lever: '#/components/schemas/connector.lever.discriminated_connection_settings'
+                              lunchmoney: '#/components/schemas/connector.lunchmoney.discriminated_connection_settings'
+                              mercury: '#/components/schemas/connector.mercury.discriminated_connection_settings'
+                              merge: '#/components/schemas/connector.merge.discriminated_connection_settings'
+                              microsoft: '#/components/schemas/connector.microsoft.discriminated_connection_settings'
+                              moota: '#/components/schemas/connector.moota.discriminated_connection_settings'
+                              onebrick: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                              outreach: '#/components/schemas/connector.outreach.discriminated_connection_settings'
+                              pipedrive: '#/components/schemas/connector.pipedrive.discriminated_connection_settings'
+                              plaid: '#/components/schemas/connector.plaid.discriminated_connection_settings'
+                              postgres: '#/components/schemas/connector.postgres.discriminated_connection_settings'
+                              ramp: '#/components/schemas/connector.ramp.discriminated_connection_settings'
+                              reddit: '#/components/schemas/connector.reddit.discriminated_connection_settings'
+                              salesloft: '#/components/schemas/connector.salesloft.discriminated_connection_settings'
+                              saltedge: '#/components/schemas/connector.saltedge.discriminated_connection_settings'
+                              splitwise: '#/components/schemas/connector.splitwise.discriminated_connection_settings'
+                              stripe: '#/components/schemas/connector.stripe.discriminated_connection_settings'
+                              teller: '#/components/schemas/connector.teller.discriminated_connection_settings'
+                              toggl: '#/components/schemas/connector.toggl.discriminated_connection_settings'
+                              twenty: '#/components/schemas/connector.twenty.discriminated_connection_settings'
+                              twitter: '#/components/schemas/connector.twitter.discriminated_connection_settings'
+                              venmo: '#/components/schemas/connector.venmo.discriminated_connection_settings'
+                              wise: '#/components/schemas/connector.wise.discriminated_connection_settings'
+                              xero: '#/components/schemas/connector.xero.discriminated_connection_settings'
+                              yodlee: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
+                              zohodesk: '#/components/schemas/connector.zohodesk.discriminated_connection_settings'
                           description: Connector specific data
                         - type: object
                           properties:
@@ -1209,125 +1134,127 @@ paths:
                   description: The id of the customer in your application. Ensure it is unique for that customer.
                 data:
                   oneOf:
-                    - $ref: '#/components/schemas/connectors.aircall.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.airtable.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.apollo.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.brex.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.coda.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.confluence.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.discord.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.facebook.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.finch.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.firebase.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.foreceipt.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.github.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.gong.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.googlecalendar.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.googledocs.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.googledrive.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.googlemail.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.googlesheet.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.greenhouse.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.heron.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.hubspot.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.instagram.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.intercom.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.jira.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.kustomer.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.lever.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.linear.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.linkedin.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.lunchmoney.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.mercury.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.merge.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.microsoft.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.moota.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.notion.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.onebrick.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.outreach.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.pipedrive.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.plaid.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.postgres.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.quickbooks.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.ramp.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.reddit.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.salesforce.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.salesloft.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.saltedge.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.sharepointonline.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.slack.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.splitwise.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.stripe.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.teller.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.toggl.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.twenty.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.twitter.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.venmo.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.wise.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.xero.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.yodlee.connectionSettings'
-                    - $ref: '#/components/schemas/connectors.zohodesk.connectionSettings'
+                    - $ref: '#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.sharepointonline.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.slack.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.github.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.quickbooks.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.googlemail.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.notion.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.linkedin.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.googledocs.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.aircall.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.googlecalendar.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.googlesheet.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.discord.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.hubspot.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.salesforce.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.linear.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.confluence.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.googledrive.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.airtable.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.apollo.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.brex.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.coda.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.facebook.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.finch.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.firebase.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.foreceipt.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.gong.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.greenhouse.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.heron.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.instagram.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.intercom.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.jira.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.kustomer.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.lever.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.lunchmoney.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.mercury.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.merge.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.microsoft.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.moota.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.outreach.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.pipedrive.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.plaid.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.postgres.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.ramp.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.reddit.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.salesloft.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.saltedge.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.splitwise.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.stripe.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.teller.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.toggl.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.twenty.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.twitter.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.venmo.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.wise.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.xero.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
+                    - $ref: '#/components/schemas/connector.zohodesk.discriminated_connection_settings'
                   discriminator:
                     propertyName: connector_name
                     mapping:
-                      aircall: '#/components/schemas/connectors.aircall.connectionSettings'
-                      airtable: '#/components/schemas/connectors.airtable.connectionSettings'
-                      apollo: '#/components/schemas/connectors.apollo.connectionSettings'
-                      brex: '#/components/schemas/connectors.brex.connectionSettings'
-                      coda: '#/components/schemas/connectors.coda.connectionSettings'
-                      confluence: '#/components/schemas/connectors.confluence.connectionSettings'
-                      discord: '#/components/schemas/connectors.discord.connectionSettings'
-                      facebook: '#/components/schemas/connectors.facebook.connectionSettings'
-                      finch: '#/components/schemas/connectors.finch.connectionSettings'
-                      firebase: '#/components/schemas/connectors.firebase.connectionSettings'
-                      foreceipt: '#/components/schemas/connectors.foreceipt.connectionSettings'
-                      github: '#/components/schemas/connectors.github.connectionSettings'
-                      gong: '#/components/schemas/connectors.gong.connectionSettings'
-                      googlecalendar: '#/components/schemas/connectors.googlecalendar.connectionSettings'
-                      googledocs: '#/components/schemas/connectors.googledocs.connectionSettings'
-                      googledrive: '#/components/schemas/connectors.googledrive.connectionSettings'
-                      googlemail: '#/components/schemas/connectors.googlemail.connectionSettings'
-                      googlesheet: '#/components/schemas/connectors.googlesheet.connectionSettings'
-                      greenhouse: '#/components/schemas/connectors.greenhouse.connectionSettings'
-                      heron: '#/components/schemas/connectors.heron.connectionSettings'
-                      hubspot: '#/components/schemas/connectors.hubspot.connectionSettings'
-                      instagram: '#/components/schemas/connectors.instagram.connectionSettings'
-                      intercom: '#/components/schemas/connectors.intercom.connectionSettings'
-                      jira: '#/components/schemas/connectors.jira.connectionSettings'
-                      kustomer: '#/components/schemas/connectors.kustomer.connectionSettings'
-                      lever: '#/components/schemas/connectors.lever.connectionSettings'
-                      linear: '#/components/schemas/connectors.linear.connectionSettings'
-                      linkedin: '#/components/schemas/connectors.linkedin.connectionSettings'
-                      lunchmoney: '#/components/schemas/connectors.lunchmoney.connectionSettings'
-                      mercury: '#/components/schemas/connectors.mercury.connectionSettings'
-                      merge: '#/components/schemas/connectors.merge.connectionSettings'
-                      microsoft: '#/components/schemas/connectors.microsoft.connectionSettings'
-                      moota: '#/components/schemas/connectors.moota.connectionSettings'
-                      notion: '#/components/schemas/connectors.notion.connectionSettings'
-                      onebrick: '#/components/schemas/connectors.onebrick.connectionSettings'
-                      outreach: '#/components/schemas/connectors.outreach.connectionSettings'
-                      pipedrive: '#/components/schemas/connectors.pipedrive.connectionSettings'
-                      plaid: '#/components/schemas/connectors.plaid.connectionSettings'
-                      postgres: '#/components/schemas/connectors.postgres.connectionSettings'
-                      quickbooks: '#/components/schemas/connectors.quickbooks.connectionSettings'
-                      ramp: '#/components/schemas/connectors.ramp.connectionSettings'
-                      reddit: '#/components/schemas/connectors.reddit.connectionSettings'
-                      salesforce: '#/components/schemas/connectors.salesforce.connectionSettings'
-                      salesloft: '#/components/schemas/connectors.salesloft.connectionSettings'
-                      saltedge: '#/components/schemas/connectors.saltedge.connectionSettings'
-                      sharepointonline: '#/components/schemas/connectors.sharepointonline.connectionSettings'
-                      slack: '#/components/schemas/connectors.slack.connectionSettings'
-                      splitwise: '#/components/schemas/connectors.splitwise.connectionSettings'
-                      stripe: '#/components/schemas/connectors.stripe.connectionSettings'
-                      teller: '#/components/schemas/connectors.teller.connectionSettings'
-                      toggl: '#/components/schemas/connectors.toggl.connectionSettings'
-                      twenty: '#/components/schemas/connectors.twenty.connectionSettings'
-                      twitter: '#/components/schemas/connectors.twitter.connectionSettings'
-                      venmo: '#/components/schemas/connectors.venmo.connectionSettings'
-                      wise: '#/components/schemas/connectors.wise.connectionSettings'
-                      xero: '#/components/schemas/connectors.xero.connectionSettings'
-                      yodlee: '#/components/schemas/connectors.yodlee.connectionSettings'
-                      zohodesk: '#/components/schemas/connectors.zohodesk.connectionSettings'
+                      dummy-oauth2: '#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings'
+                      sharepointonline: '#/components/schemas/connector.sharepointonline.discriminated_connection_settings'
+                      slack: '#/components/schemas/connector.slack.discriminated_connection_settings'
+                      github: '#/components/schemas/connector.github.discriminated_connection_settings'
+                      quickbooks: '#/components/schemas/connector.quickbooks.discriminated_connection_settings'
+                      googlemail: '#/components/schemas/connector.googlemail.discriminated_connection_settings'
+                      notion: '#/components/schemas/connector.notion.discriminated_connection_settings'
+                      linkedin: '#/components/schemas/connector.linkedin.discriminated_connection_settings'
+                      googledocs: '#/components/schemas/connector.googledocs.discriminated_connection_settings'
+                      aircall: '#/components/schemas/connector.aircall.discriminated_connection_settings'
+                      googlecalendar: '#/components/schemas/connector.googlecalendar.discriminated_connection_settings'
+                      googlesheet: '#/components/schemas/connector.googlesheet.discriminated_connection_settings'
+                      discord: '#/components/schemas/connector.discord.discriminated_connection_settings'
+                      hubspot: '#/components/schemas/connector.hubspot.discriminated_connection_settings'
+                      salesforce: '#/components/schemas/connector.salesforce.discriminated_connection_settings'
+                      linear: '#/components/schemas/connector.linear.discriminated_connection_settings'
+                      confluence: '#/components/schemas/connector.confluence.discriminated_connection_settings'
+                      googledrive: '#/components/schemas/connector.googledrive.discriminated_connection_settings'
+                      airtable: '#/components/schemas/connector.airtable.discriminated_connection_settings'
+                      apollo: '#/components/schemas/connector.apollo.discriminated_connection_settings'
+                      brex: '#/components/schemas/connector.brex.discriminated_connection_settings'
+                      coda: '#/components/schemas/connector.coda.discriminated_connection_settings'
+                      facebook: '#/components/schemas/connector.facebook.discriminated_connection_settings'
+                      finch: '#/components/schemas/connector.finch.discriminated_connection_settings'
+                      firebase: '#/components/schemas/connector.firebase.discriminated_connection_settings'
+                      foreceipt: '#/components/schemas/connector.foreceipt.discriminated_connection_settings'
+                      gong: '#/components/schemas/connector.gong.discriminated_connection_settings'
+                      greenhouse: '#/components/schemas/connector.greenhouse.discriminated_connection_settings'
+                      heron: '#/components/schemas/connector.heron.discriminated_connection_settings'
+                      instagram: '#/components/schemas/connector.instagram.discriminated_connection_settings'
+                      intercom: '#/components/schemas/connector.intercom.discriminated_connection_settings'
+                      jira: '#/components/schemas/connector.jira.discriminated_connection_settings'
+                      kustomer: '#/components/schemas/connector.kustomer.discriminated_connection_settings'
+                      lever: '#/components/schemas/connector.lever.discriminated_connection_settings'
+                      lunchmoney: '#/components/schemas/connector.lunchmoney.discriminated_connection_settings'
+                      mercury: '#/components/schemas/connector.mercury.discriminated_connection_settings'
+                      merge: '#/components/schemas/connector.merge.discriminated_connection_settings'
+                      microsoft: '#/components/schemas/connector.microsoft.discriminated_connection_settings'
+                      moota: '#/components/schemas/connector.moota.discriminated_connection_settings'
+                      onebrick: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+                      outreach: '#/components/schemas/connector.outreach.discriminated_connection_settings'
+                      pipedrive: '#/components/schemas/connector.pipedrive.discriminated_connection_settings'
+                      plaid: '#/components/schemas/connector.plaid.discriminated_connection_settings'
+                      postgres: '#/components/schemas/connector.postgres.discriminated_connection_settings'
+                      ramp: '#/components/schemas/connector.ramp.discriminated_connection_settings'
+                      reddit: '#/components/schemas/connector.reddit.discriminated_connection_settings'
+                      salesloft: '#/components/schemas/connector.salesloft.discriminated_connection_settings'
+                      saltedge: '#/components/schemas/connector.saltedge.discriminated_connection_settings'
+                      splitwise: '#/components/schemas/connector.splitwise.discriminated_connection_settings'
+                      stripe: '#/components/schemas/connector.stripe.discriminated_connection_settings'
+                      teller: '#/components/schemas/connector.teller.discriminated_connection_settings'
+                      toggl: '#/components/schemas/connector.toggl.discriminated_connection_settings'
+                      twenty: '#/components/schemas/connector.twenty.discriminated_connection_settings'
+                      twitter: '#/components/schemas/connector.twitter.discriminated_connection_settings'
+                      venmo: '#/components/schemas/connector.venmo.discriminated_connection_settings'
+                      wise: '#/components/schemas/connector.wise.discriminated_connection_settings'
+                      xero: '#/components/schemas/connector.xero.discriminated_connection_settings'
+                      yodlee: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
+                      zohodesk: '#/components/schemas/connector.zohodesk.discriminated_connection_settings'
                   description: Connector specific data
               required:
                 - connector_config_id
@@ -1339,7 +1266,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/core.connection'
+                $ref: '#/components/schemas/core.connection_select'
         '400':
           description: Invalid input data
           content:
@@ -1377,17 +1304,7 @@ paths:
               const response = await client.createConnection({
                 connector_config_id: 'ccfg_',
                 customer_id: 'customer_id',
-                data: {
-                  connector_name: 'aircall',
-                  settings: {
-                    oauth: {
-                      created_at: 'created_at',
-                      last_fetched_at: 'last_fetched_at',
-                      metadata: { foo: 'bar' },
-                      updated_at: 'updated_at',
-                    },
-                  },
-                },
+                data: { connector_name: 'dummy-oauth2', settings: { oauth: {} } },
               });
 
               console.log(response);
@@ -1406,16 +1323,9 @@ paths:
                 connector_config_id="ccfg_",
                 customer_id="customer_id",
                 data={
-                    "connector_name": "aircall",
+                    "connector_name": "dummy-oauth2",
                     "settings": {
-                        "oauth": {
-                            "created_at": "created_at",
-                            "last_fetched_at": "last_fetched_at",
-                            "metadata": {
-                                "foo": "bar"
-                            },
-                            "updated_at": "updated_at",
-                        }
+                        "oauth": {}
                     },
                 },
             )
@@ -1559,66 +1469,7 @@ paths:
                       description: The default view to show when the magic link is opened. Defaults to "add"
                       default: add
                     connector_name:
-                      type: string
-                      enum:
-                        - aircall
-                        - airtable
-                        - apollo
-                        - brex
-                        - coda
-                        - confluence
-                        - discord
-                        - facebook
-                        - finch
-                        - firebase
-                        - foreceipt
-                        - github
-                        - gong
-                        - googlecalendar
-                        - googledocs
-                        - googledrive
-                        - googlemail
-                        - googlesheet
-                        - greenhouse
-                        - heron
-                        - hubspot
-                        - instagram
-                        - intercom
-                        - jira
-                        - kustomer
-                        - lever
-                        - linear
-                        - linkedin
-                        - lunchmoney
-                        - mercury
-                        - merge
-                        - microsoft
-                        - moota
-                        - notion
-                        - onebrick
-                        - outreach
-                        - pipedrive
-                        - plaid
-                        - postgres
-                        - quickbooks
-                        - ramp
-                        - reddit
-                        - salesforce
-                        - salesloft
-                        - saltedge
-                        - sharepointonline
-                        - slack
-                        - splitwise
-                        - stripe
-                        - teller
-                        - toggl
-                        - twenty
-                        - twitter
-                        - venmo
-                        - wise
-                        - xero
-                        - yodlee
-                        - zohodesk
+                      $ref: '#/components/schemas/core.connector.name'
                       description: The name of the connector to limit connection to. Default to all otherwise
                     debug:
                       type: boolean
@@ -1700,6 +1551,54 @@ paths:
                 customer_id="x",
             )
             print(response.magic_link_url)
+  /connect/revoke:
+    post:
+      operationId: revokeConnection
+      security:
+        - ApiKey: []
+        - CustomerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+              required:
+                - id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/core.connection_select'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
   /customer/{customer_id}/token:
     post:
       operationId: createToken
@@ -1813,7 +1712,7 @@ components:
         - BASIC
         - API_KEY
       title: AuthMode
-    connectors.aircall.connectionSettings:
+    connector.aircall.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -1832,6 +1731,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -1862,18 +1762,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: aircall
-    connectors.aircall.connectorConfig:
+    connector.aircall.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -1901,15 +1796,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: aircall
-    connectors.airtable.connectionSettings:
+    connector.airtable.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -1929,19 +1827,20 @@ components:
         - connector_name
         - settings
       title: airtable
-    connectors.airtable.connectorConfig:
+    connector.airtable.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: airtable
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: airtable
-    connectors.apollo.connectionSettings:
+    connector.apollo.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2044,19 +1943,20 @@ components:
         - connector_name
         - settings
       title: apollo
-    connectors.apollo.connectorConfig:
+    connector.apollo.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: apollo
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: apollo
-    connectors.brex.connectionSettings:
+    connector.brex.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2073,7 +1973,7 @@ components:
         - connector_name
         - settings
       title: brex
-    connectors.brex.connectorConfig:
+    connector.brex.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -2104,7 +2004,7 @@ components:
         - connector_name
         - config
       title: brex
-    connectors.coda.connectionSettings:
+    connector.coda.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2121,19 +2021,20 @@ components:
         - connector_name
         - settings
       title: coda
-    connectors.coda.connectorConfig:
+    connector.coda.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: coda
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: coda
-    connectors.confluence.connectionSettings:
+    connector.confluence.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2152,6 +2053,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -2182,18 +2084,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: confluence
-    connectors.confluence.connectorConfig:
+    connector.confluence.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -2221,15 +2118,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: confluence
-    connectors.discord.connectionSettings:
+    connector.discord.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2248,6 +2148,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -2278,18 +2179,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: discord
-    connectors.discord.connectorConfig:
+    connector.discord.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -2317,15 +2213,113 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: discord
-    connectors.facebook.connectionSettings:
+    connector.dummy-oauth2.discriminated_connection_settings:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: dummy-oauth2
+        settings:
+          type: object
+          properties:
+            oauth:
+              type: object
+              properties:
+                credentials:
+                  type: object
+                  properties:
+                    access_token:
+                      type: string
+                    client_id:
+                      type: string
+                      description: Client ID used for the connection
+                    scope:
+                      type: string
+                    refresh_token:
+                      type: string
+                    expires_in:
+                      type: number
+                    expires_at:
+                      type: string
+                    token_type:
+                      type: string
+                    raw:
+                      type: object
+                      additionalProperties: {}
+                  required:
+                    - access_token
+                    - client_id
+                    - scope
+                    - raw
+                  description: Output of the postConnect hook for oauth2 connectors
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                last_fetched_at:
+                  type: string
+                metadata:
+                  type:
+                    - object
+                    - 'null'
+                  additionalProperties: {}
+          required:
+            - oauth
+      required:
+        - connector_name
+        - settings
+      title: dummy-oauth2
+    connector.dummy-oauth2.discriminated_connector_config:
+      type: object
+      properties:
+        connector_name:
+          type: string
+          const: dummy-oauth2
+        config:
+          type: object
+          properties:
+            oauth:
+              type:
+                - object
+                - 'null'
+              properties:
+                client_id:
+                  type:
+                    - string
+                    - 'null'
+                client_secret:
+                  type:
+                    - string
+                    - 'null'
+                scopes:
+                  type:
+                    - array
+                    - 'null'
+                  items:
+                    type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
+              description: Base oauth configuration for the connector
+          required:
+            - oauth
+      required:
+        - connector_name
+        - config
+      title: dummy-oauth2
+    connector.facebook.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2428,7 +2422,7 @@ components:
         - connector_name
         - settings
       title: facebook
-    connectors.facebook.connectorConfig:
+    connector.facebook.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -2455,7 +2449,7 @@ components:
         - connector_name
         - config
       title: facebook
-    connectors.finch.connectionSettings:
+    connector.finch.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2472,7 +2466,7 @@ components:
         - connector_name
         - settings
       title: finch
-    connectors.finch.connectorConfig:
+    connector.finch.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -2510,7 +2504,7 @@ components:
         - connector_name
         - config
       title: finch
-    connectors.firebase.connectionSettings:
+    connector.firebase.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2620,19 +2614,20 @@ components:
         - connector_name
         - settings
       title: firebase
-    connectors.firebase.connectorConfig:
+    connector.firebase.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: firebase
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: firebase
-    connectors.foreceipt.connectionSettings:
+    connector.foreceipt.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2654,19 +2649,20 @@ components:
         - connector_name
         - settings
       title: foreceipt
-    connectors.foreceipt.connectorConfig:
+    connector.foreceipt.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: foreceipt
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: foreceipt
-    connectors.github.connectionSettings:
+    connector.github.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2685,6 +2681,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -2715,18 +2712,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: github
-    connectors.github.connectorConfig:
+    connector.github.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -2754,15 +2746,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: github
-    connectors.gong.connectionSettings:
+    connector.gong.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2865,7 +2860,7 @@ components:
         - connector_name
         - settings
       title: gong
-    connectors.gong.connectorConfig:
+    connector.gong.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -2892,7 +2887,7 @@ components:
         - connector_name
         - config
       title: gong
-    connectors.googlecalendar.connectionSettings:
+    connector.googlecalendar.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -2911,6 +2906,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -2941,18 +2937,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: googlecalendar
-    connectors.googlecalendar.connectorConfig:
+    connector.googlecalendar.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -2980,15 +2971,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: googlecalendar
-    connectors.googledocs.connectionSettings:
+    connector.googledocs.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3007,6 +3001,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -3037,18 +3032,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: googledocs
-    connectors.googledocs.connectorConfig:
+    connector.googledocs.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3076,15 +3066,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: googledocs
-    connectors.googledrive.connectionSettings:
+    connector.googledrive.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3103,6 +3096,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -3133,18 +3127,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: googledrive
-    connectors.googledrive.connectorConfig:
+    connector.googledrive.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3172,15 +3161,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: googledrive
-    connectors.googlemail.connectionSettings:
+    connector.googlemail.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3199,6 +3191,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -3229,18 +3222,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: googlemail
-    connectors.googlemail.connectorConfig:
+    connector.googlemail.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3268,15 +3256,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: googlemail
-    connectors.googlesheet.connectionSettings:
+    connector.googlesheet.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3295,6 +3286,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -3325,18 +3317,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: googlesheet
-    connectors.googlesheet.connectorConfig:
+    connector.googlesheet.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3364,15 +3351,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: googlesheet
-    connectors.greenhouse.connectionSettings:
+    connector.greenhouse.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3389,31 +3379,33 @@ components:
         - connector_name
         - settings
       title: greenhouse
-    connectors.greenhouse.connectorConfig:
+    connector.greenhouse.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: greenhouse
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: greenhouse
-    connectors.heron.connectionSettings:
+    connector.heron.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
           type: string
           const: heron
         settings:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - settings
       title: heron
-    connectors.heron.connectorConfig:
+    connector.heron.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3430,7 +3422,7 @@ components:
         - connector_name
         - config
       title: heron
-    connectors.hubspot.connectionSettings:
+    connector.hubspot.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3449,6 +3441,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -3479,18 +3472,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: hubspot
-    connectors.hubspot.connectorConfig:
+    connector.hubspot.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3518,15 +3506,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: hubspot
-    connectors.instagram.connectionSettings:
+    connector.instagram.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3629,7 +3620,7 @@ components:
         - connector_name
         - settings
       title: instagram
-    connectors.instagram.connectorConfig:
+    connector.instagram.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3656,7 +3647,7 @@ components:
         - connector_name
         - config
       title: instagram
-    connectors.intercom.connectionSettings:
+    connector.intercom.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3759,7 +3750,7 @@ components:
         - connector_name
         - settings
       title: intercom
-    connectors.intercom.connectorConfig:
+    connector.intercom.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3786,7 +3777,7 @@ components:
         - connector_name
         - config
       title: intercom
-    connectors.jira.connectionSettings:
+    connector.jira.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -3889,7 +3880,7 @@ components:
         - connector_name
         - settings
       title: jira
-    connectors.jira.connectorConfig:
+    connector.jira.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -3916,7 +3907,7 @@ components:
         - connector_name
         - config
       title: jira
-    connectors.kustomer.connectionSettings:
+    connector.kustomer.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4019,7 +4010,7 @@ components:
         - connector_name
         - settings
       title: kustomer
-    connectors.kustomer.connectorConfig:
+    connector.kustomer.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4046,7 +4037,7 @@ components:
         - connector_name
         - config
       title: kustomer
-    connectors.lever.connectionSettings:
+    connector.lever.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4149,7 +4140,7 @@ components:
         - connector_name
         - settings
       title: lever
-    connectors.lever.connectorConfig:
+    connector.lever.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4182,7 +4173,7 @@ components:
         - connector_name
         - config
       title: lever
-    connectors.linear.connectionSettings:
+    connector.linear.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4201,6 +4192,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -4231,18 +4223,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: linear
-    connectors.linear.connectorConfig:
+    connector.linear.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4270,15 +4257,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: linear
-    connectors.linkedin.connectionSettings:
+    connector.linkedin.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4297,6 +4287,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -4327,18 +4318,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: linkedin
-    connectors.linkedin.connectorConfig:
+    connector.linkedin.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4366,27 +4352,31 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: linkedin
-    connectors.lunchmoney.connectionSettings:
+    connector.lunchmoney.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
           type: string
           const: lunchmoney
         settings:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - settings
       title: lunchmoney
-    connectors.lunchmoney.connectorConfig:
+    connector.lunchmoney.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4403,19 +4393,20 @@ components:
         - connector_name
         - config
       title: lunchmoney
-    connectors.mercury.connectionSettings:
+    connector.mercury.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
           type: string
           const: mercury
         settings:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - settings
       title: mercury
-    connectors.mercury.connectorConfig:
+    connector.mercury.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4446,7 +4437,7 @@ components:
         - connector_name
         - config
       title: mercury
-    connectors.merge.connectionSettings:
+    connector.merge.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4464,7 +4455,7 @@ components:
         - connector_name
         - settings
       title: merge
-    connectors.merge.connectorConfig:
+    connector.merge.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4481,7 +4472,7 @@ components:
         - connector_name
         - config
       title: merge
-    connectors.microsoft.connectionSettings:
+    connector.microsoft.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4586,7 +4577,7 @@ components:
         - connector_name
         - settings
       title: microsoft
-    connectors.microsoft.connectorConfig:
+    connector.microsoft.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4642,19 +4633,20 @@ components:
         - connector_name
         - config
       title: microsoft
-    connectors.moota.connectionSettings:
+    connector.moota.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
           type: string
           const: moota
         settings:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - settings
       title: moota
-    connectors.moota.connectorConfig:
+    connector.moota.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4671,7 +4663,7 @@ components:
         - connector_name
         - config
       title: moota
-    connectors.notion.connectionSettings:
+    connector.notion.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4690,6 +4682,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -4720,18 +4713,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: notion
-    connectors.notion.connectorConfig:
+    connector.notion.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4759,15 +4747,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: notion
-    connectors.onebrick.connectionSettings:
+    connector.onebrick.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4784,7 +4775,7 @@ components:
         - connector_name
         - settings
       title: onebrick
-    connectors.onebrick.connectorConfig:
+    connector.onebrick.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4821,7 +4812,7 @@ components:
         - connector_name
         - config
       title: onebrick
-    connectors.outreach.connectionSettings:
+    connector.outreach.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -4924,7 +4915,7 @@ components:
         - connector_name
         - settings
       title: outreach
-    connectors.outreach.connectorConfig:
+    connector.outreach.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -4951,7 +4942,7 @@ components:
         - connector_name
         - config
       title: outreach
-    connectors.pipedrive.connectionSettings:
+    connector.pipedrive.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5054,7 +5045,7 @@ components:
         - connector_name
         - settings
       title: pipedrive
-    connectors.pipedrive.connectorConfig:
+    connector.pipedrive.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5081,7 +5072,7 @@ components:
         - connector_name
         - config
       title: pipedrive
-    connectors.plaid.connectionSettings:
+    connector.plaid.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5107,7 +5098,7 @@ components:
         - connector_name
         - settings
       title: plaid
-    connectors.plaid.connectorConfig:
+    connector.plaid.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5136,6 +5127,8 @@ components:
                     - clientId
                     - clientSecret
                   title: Use my own
+              ui:field: CredentialsField
+              ui:fieldReplacesAnyOrOneOf: true
             clientName:
               type: string
               maxLength: 30
@@ -5168,6 +5161,7 @@ components:
                   - recurring_transactions
               default:
                 - transactions
+              ui:field: MultiSelectField
             countryCodes:
               type: array
               items:
@@ -5192,6 +5186,7 @@ components:
               default:
                 - US
                 - CA
+              ui:field: MultiSelectField
             language:
               type: string
               enum:
@@ -5211,7 +5206,7 @@ components:
         - connector_name
         - config
       title: plaid
-    connectors.postgres.connectionSettings:
+    connector.postgres.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5236,19 +5231,20 @@ components:
         - connector_name
         - settings
       title: postgres
-    connectors.postgres.connectorConfig:
+    connector.postgres.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: postgres
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: postgres
-    connectors.quickbooks.connectionSettings:
+    connector.quickbooks.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5267,6 +5263,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -5297,11 +5294,6 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
             realmId:
               type: string
               pattern: \d{16}
@@ -5313,7 +5305,7 @@ components:
         - connector_name
         - settings
       title: quickbooks
-    connectors.quickbooks.connectorConfig:
+    connector.quickbooks.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5341,15 +5333,25 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
+            envName:
+              type: string
+              enum:
+                - sandbox
+                - production
+              default: sandbox
           required:
             - oauth
+            - envName
       required:
         - connector_name
         - config
       title: quickbooks
-    connectors.ramp.connectionSettings:
+    connector.ramp.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5370,7 +5372,7 @@ components:
         - connector_name
         - settings
       title: ramp
-    connectors.ramp.connectorConfig:
+    connector.ramp.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5395,7 +5397,7 @@ components:
         - connector_name
         - config
       title: ramp
-    connectors.reddit.connectionSettings:
+    connector.reddit.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5498,7 +5500,7 @@ components:
         - connector_name
         - settings
       title: reddit
-    connectors.reddit.connectorConfig:
+    connector.reddit.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5525,7 +5527,7 @@ components:
         - connector_name
         - config
       title: reddit
-    connectors.salesforce.connectionSettings:
+    connector.salesforce.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5544,6 +5546,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -5574,11 +5577,6 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
             instance_url:
               type: string
               pattern: https?:\/\/.*
@@ -5590,7 +5588,7 @@ components:
         - connector_name
         - settings
       title: salesforce
-    connectors.salesforce.connectorConfig:
+    connector.salesforce.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5618,15 +5616,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: salesforce
-    connectors.salesloft.connectionSettings:
+    connector.salesloft.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5729,7 +5730,7 @@ components:
         - connector_name
         - settings
       title: salesloft
-    connectors.salesloft.connectorConfig:
+    connector.salesloft.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5756,7 +5757,7 @@ components:
         - connector_name
         - config
       title: salesloft
-    connectors.saltedge.connectionSettings:
+    connector.saltedge.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5766,7 +5767,7 @@ components:
       required:
         - connector_name
       title: saltedge
-    connectors.saltedge.connectorConfig:
+    connector.saltedge.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5790,7 +5791,7 @@ components:
         - connector_name
         - config
       title: saltedge
-    connectors.sharepointonline.connectionSettings:
+    connector.sharepointonline.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5809,6 +5810,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -5839,18 +5841,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: sharepointonline
-    connectors.sharepointonline.connectorConfig:
+    connector.sharepointonline.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5878,15 +5875,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: sharepointonline
-    connectors.slack.connectionSettings:
+    connector.slack.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -5905,6 +5905,7 @@ components:
                       type: string
                     client_id:
                       type: string
+                      description: Client ID used for the connection
                     scope:
                       type: string
                     refresh_token:
@@ -5935,18 +5936,13 @@ components:
                     - object
                     - 'null'
                   additionalProperties: {}
-              required:
-                - created_at
-                - updated_at
-                - last_fetched_at
-                - metadata
           required:
             - oauth
       required:
         - connector_name
         - settings
       title: slack
-    connectors.slack.connectorConfig:
+    connector.slack.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -5974,15 +5970,18 @@ components:
                     - 'null'
                   items:
                     type: string
+                redirect_uri:
+                  type:
+                    - string
+                    - 'null'
               description: Base oauth configuration for the connector
-              ui:field: OAuthField
           required:
             - oauth
       required:
         - connector_name
         - config
       title: slack
-    connectors.splitwise.connectionSettings:
+    connector.splitwise.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6104,19 +6103,20 @@ components:
         - connector_name
         - settings
       title: splitwise
-    connectors.splitwise.connectorConfig:
+    connector.splitwise.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: splitwise
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: splitwise
-    connectors.stripe.connectionSettings:
+    connector.stripe.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6133,7 +6133,7 @@ components:
         - connector_name
         - settings
       title: stripe
-    connectors.stripe.connectorConfig:
+    connector.stripe.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -6164,7 +6164,7 @@ components:
         - connector_name
         - config
       title: stripe
-    connectors.teller.connectionSettings:
+    connector.teller.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6181,7 +6181,7 @@ components:
         - connector_name
         - settings
       title: teller
-    connectors.teller.connectorConfig:
+    connector.teller.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -6202,7 +6202,7 @@ components:
         - connector_name
         - config
       title: teller
-    connectors.toggl.connectionSettings:
+    connector.toggl.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6227,19 +6227,20 @@ components:
         - connector_name
         - settings
       title: toggl
-    connectors.toggl.connectorConfig:
+    connector.toggl.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: toggl
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: toggl
-    connectors.twenty.connectionSettings:
+    connector.twenty.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6256,19 +6257,20 @@ components:
         - connector_name
         - settings
       title: twenty
-    connectors.twenty.connectorConfig:
+    connector.twenty.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: twenty
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: twenty
-    connectors.twitter.connectionSettings:
+    connector.twitter.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6371,7 +6373,7 @@ components:
         - connector_name
         - settings
       title: twitter
-    connectors.twitter.connectorConfig:
+    connector.twitter.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -6398,7 +6400,7 @@ components:
         - connector_name
         - config
       title: twitter
-    connectors.venmo.connectionSettings:
+    connector.venmo.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6413,7 +6415,7 @@ components:
         - connector_name
         - settings
       title: venmo
-    connectors.venmo.connectorConfig:
+    connector.venmo.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -6446,7 +6448,7 @@ components:
         - connector_name
         - config
       title: venmo
-    connectors.wise.connectionSettings:
+    connector.wise.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6470,19 +6472,20 @@ components:
         - connector_name
         - settings
       title: wise
-    connectors.wise.connectorConfig:
+    connector.wise.discriminated_connector_config:
       type: object
       properties:
         connector_name:
           type: string
           const: wise
         config:
-          type: 'null'
+          type: object
+          additionalProperties: false
       required:
         - connector_name
         - config
       title: wise
-    connectors.xero.connectionSettings:
+    connector.xero.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6585,7 +6588,7 @@ components:
         - connector_name
         - settings
       title: xero
-    connectors.xero.connectorConfig:
+    connector.xero.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -6612,7 +6615,7 @@ components:
         - connector_name
         - config
       title: xero
-    connectors.yodlee.connectionSettings:
+    connector.yodlee.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6692,7 +6695,7 @@ components:
         - connector_name
         - settings
       title: yodlee
-    connectors.yodlee.connectorConfig:
+    connector.yodlee.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -6738,7 +6741,7 @@ components:
         - connector_name
         - config
       title: yodlee
-    connectors.zohodesk.connectionSettings:
+    connector.zohodesk.discriminated_connection_settings:
       type: object
       properties:
         connector_name:
@@ -6841,7 +6844,7 @@ components:
         - connector_name
         - settings
       title: zohodesk
-    connectors.zohodesk.connectorConfig:
+    connector.zohodesk.discriminated_connector_config:
       type: object
       properties:
         connector_name:
@@ -6868,162 +6871,177 @@ components:
         - connector_name
         - config
       title: zohodesk
-    core.connection:
+    core.connection_select:
       allOf:
         - type: object
           properties:
             id:
               type: string
-            updated_at:
-              type: string
-            created_at:
-              type: string
-            connector_config_id:
+            customer_id:
               type:
                 - string
                 - 'null'
-            customer_id:
+            connector_config_id:
               type: string
             integration_id:
               type:
                 - string
+                - 'null'
+            created_at:
+              type: string
+            updated_at:
+              type: string
+            display_name:
+              type:
+                - string
+                - 'null'
+            disabled:
+              type:
+                - boolean
                 - 'null'
             metadata:
               type:
                 - object
                 - 'null'
               additionalProperties: {}
+              description: |2
+
+                  JSON object can can be used to associate arbitrary metadata to
+                  avoid needing a separate 1-1 table just for simple key values in your application.
+                  During updates this object will be shallowly merged
           required:
             - id
-            - updated_at
-            - created_at
-            - connector_config_id
             - customer_id
+            - connector_config_id
             - integration_id
-            - metadata
-          description: Connection Base
+            - created_at
+            - updated_at
+            - display_name
+            - disabled
         - oneOf:
-            - $ref: '#/components/schemas/connectors.aircall.connectionSettings'
-            - $ref: '#/components/schemas/connectors.airtable.connectionSettings'
-            - $ref: '#/components/schemas/connectors.apollo.connectionSettings'
-            - $ref: '#/components/schemas/connectors.brex.connectionSettings'
-            - $ref: '#/components/schemas/connectors.coda.connectionSettings'
-            - $ref: '#/components/schemas/connectors.confluence.connectionSettings'
-            - $ref: '#/components/schemas/connectors.discord.connectionSettings'
-            - $ref: '#/components/schemas/connectors.facebook.connectionSettings'
-            - $ref: '#/components/schemas/connectors.finch.connectionSettings'
-            - $ref: '#/components/schemas/connectors.firebase.connectionSettings'
-            - $ref: '#/components/schemas/connectors.foreceipt.connectionSettings'
-            - $ref: '#/components/schemas/connectors.github.connectionSettings'
-            - $ref: '#/components/schemas/connectors.gong.connectionSettings'
-            - $ref: '#/components/schemas/connectors.googlecalendar.connectionSettings'
-            - $ref: '#/components/schemas/connectors.googledocs.connectionSettings'
-            - $ref: '#/components/schemas/connectors.googledrive.connectionSettings'
-            - $ref: '#/components/schemas/connectors.googlemail.connectionSettings'
-            - $ref: '#/components/schemas/connectors.googlesheet.connectionSettings'
-            - $ref: '#/components/schemas/connectors.greenhouse.connectionSettings'
-            - $ref: '#/components/schemas/connectors.heron.connectionSettings'
-            - $ref: '#/components/schemas/connectors.hubspot.connectionSettings'
-            - $ref: '#/components/schemas/connectors.instagram.connectionSettings'
-            - $ref: '#/components/schemas/connectors.intercom.connectionSettings'
-            - $ref: '#/components/schemas/connectors.jira.connectionSettings'
-            - $ref: '#/components/schemas/connectors.kustomer.connectionSettings'
-            - $ref: '#/components/schemas/connectors.lever.connectionSettings'
-            - $ref: '#/components/schemas/connectors.linear.connectionSettings'
-            - $ref: '#/components/schemas/connectors.linkedin.connectionSettings'
-            - $ref: '#/components/schemas/connectors.lunchmoney.connectionSettings'
-            - $ref: '#/components/schemas/connectors.mercury.connectionSettings'
-            - $ref: '#/components/schemas/connectors.merge.connectionSettings'
-            - $ref: '#/components/schemas/connectors.microsoft.connectionSettings'
-            - $ref: '#/components/schemas/connectors.moota.connectionSettings'
-            - $ref: '#/components/schemas/connectors.notion.connectionSettings'
-            - $ref: '#/components/schemas/connectors.onebrick.connectionSettings'
-            - $ref: '#/components/schemas/connectors.outreach.connectionSettings'
-            - $ref: '#/components/schemas/connectors.pipedrive.connectionSettings'
-            - $ref: '#/components/schemas/connectors.plaid.connectionSettings'
-            - $ref: '#/components/schemas/connectors.postgres.connectionSettings'
-            - $ref: '#/components/schemas/connectors.quickbooks.connectionSettings'
-            - $ref: '#/components/schemas/connectors.ramp.connectionSettings'
-            - $ref: '#/components/schemas/connectors.reddit.connectionSettings'
-            - $ref: '#/components/schemas/connectors.salesforce.connectionSettings'
-            - $ref: '#/components/schemas/connectors.salesloft.connectionSettings'
-            - $ref: '#/components/schemas/connectors.saltedge.connectionSettings'
-            - $ref: '#/components/schemas/connectors.sharepointonline.connectionSettings'
-            - $ref: '#/components/schemas/connectors.slack.connectionSettings'
-            - $ref: '#/components/schemas/connectors.splitwise.connectionSettings'
-            - $ref: '#/components/schemas/connectors.stripe.connectionSettings'
-            - $ref: '#/components/schemas/connectors.teller.connectionSettings'
-            - $ref: '#/components/schemas/connectors.toggl.connectionSettings'
-            - $ref: '#/components/schemas/connectors.twenty.connectionSettings'
-            - $ref: '#/components/schemas/connectors.twitter.connectionSettings'
-            - $ref: '#/components/schemas/connectors.venmo.connectionSettings'
-            - $ref: '#/components/schemas/connectors.wise.connectionSettings'
-            - $ref: '#/components/schemas/connectors.xero.connectionSettings'
-            - $ref: '#/components/schemas/connectors.yodlee.connectionSettings'
-            - $ref: '#/components/schemas/connectors.zohodesk.connectionSettings'
+            - $ref: '#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.sharepointonline.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.slack.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.github.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.quickbooks.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.googlemail.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.notion.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.linkedin.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.googledocs.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.aircall.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.googlecalendar.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.googlesheet.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.discord.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.hubspot.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.salesforce.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.linear.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.confluence.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.googledrive.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.airtable.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.apollo.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.brex.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.coda.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.facebook.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.finch.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.firebase.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.foreceipt.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.gong.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.greenhouse.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.heron.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.instagram.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.intercom.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.jira.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.kustomer.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.lever.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.lunchmoney.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.mercury.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.merge.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.microsoft.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.moota.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.outreach.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.pipedrive.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.plaid.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.postgres.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.ramp.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.reddit.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.salesloft.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.saltedge.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.splitwise.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.stripe.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.teller.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.toggl.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.twenty.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.twitter.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.venmo.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.wise.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.xero.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
+            - $ref: '#/components/schemas/connector.zohodesk.discriminated_connection_settings'
           discriminator:
             propertyName: connector_name
             mapping:
-              aircall: '#/components/schemas/connectors.aircall.connectionSettings'
-              airtable: '#/components/schemas/connectors.airtable.connectionSettings'
-              apollo: '#/components/schemas/connectors.apollo.connectionSettings'
-              brex: '#/components/schemas/connectors.brex.connectionSettings'
-              coda: '#/components/schemas/connectors.coda.connectionSettings'
-              confluence: '#/components/schemas/connectors.confluence.connectionSettings'
-              discord: '#/components/schemas/connectors.discord.connectionSettings'
-              facebook: '#/components/schemas/connectors.facebook.connectionSettings'
-              finch: '#/components/schemas/connectors.finch.connectionSettings'
-              firebase: '#/components/schemas/connectors.firebase.connectionSettings'
-              foreceipt: '#/components/schemas/connectors.foreceipt.connectionSettings'
-              github: '#/components/schemas/connectors.github.connectionSettings'
-              gong: '#/components/schemas/connectors.gong.connectionSettings'
-              googlecalendar: '#/components/schemas/connectors.googlecalendar.connectionSettings'
-              googledocs: '#/components/schemas/connectors.googledocs.connectionSettings'
-              googledrive: '#/components/schemas/connectors.googledrive.connectionSettings'
-              googlemail: '#/components/schemas/connectors.googlemail.connectionSettings'
-              googlesheet: '#/components/schemas/connectors.googlesheet.connectionSettings'
-              greenhouse: '#/components/schemas/connectors.greenhouse.connectionSettings'
-              heron: '#/components/schemas/connectors.heron.connectionSettings'
-              hubspot: '#/components/schemas/connectors.hubspot.connectionSettings'
-              instagram: '#/components/schemas/connectors.instagram.connectionSettings'
-              intercom: '#/components/schemas/connectors.intercom.connectionSettings'
-              jira: '#/components/schemas/connectors.jira.connectionSettings'
-              kustomer: '#/components/schemas/connectors.kustomer.connectionSettings'
-              lever: '#/components/schemas/connectors.lever.connectionSettings'
-              linear: '#/components/schemas/connectors.linear.connectionSettings'
-              linkedin: '#/components/schemas/connectors.linkedin.connectionSettings'
-              lunchmoney: '#/components/schemas/connectors.lunchmoney.connectionSettings'
-              mercury: '#/components/schemas/connectors.mercury.connectionSettings'
-              merge: '#/components/schemas/connectors.merge.connectionSettings'
-              microsoft: '#/components/schemas/connectors.microsoft.connectionSettings'
-              moota: '#/components/schemas/connectors.moota.connectionSettings'
-              notion: '#/components/schemas/connectors.notion.connectionSettings'
-              onebrick: '#/components/schemas/connectors.onebrick.connectionSettings'
-              outreach: '#/components/schemas/connectors.outreach.connectionSettings'
-              pipedrive: '#/components/schemas/connectors.pipedrive.connectionSettings'
-              plaid: '#/components/schemas/connectors.plaid.connectionSettings'
-              postgres: '#/components/schemas/connectors.postgres.connectionSettings'
-              quickbooks: '#/components/schemas/connectors.quickbooks.connectionSettings'
-              ramp: '#/components/schemas/connectors.ramp.connectionSettings'
-              reddit: '#/components/schemas/connectors.reddit.connectionSettings'
-              salesforce: '#/components/schemas/connectors.salesforce.connectionSettings'
-              salesloft: '#/components/schemas/connectors.salesloft.connectionSettings'
-              saltedge: '#/components/schemas/connectors.saltedge.connectionSettings'
-              sharepointonline: '#/components/schemas/connectors.sharepointonline.connectionSettings'
-              slack: '#/components/schemas/connectors.slack.connectionSettings'
-              splitwise: '#/components/schemas/connectors.splitwise.connectionSettings'
-              stripe: '#/components/schemas/connectors.stripe.connectionSettings'
-              teller: '#/components/schemas/connectors.teller.connectionSettings'
-              toggl: '#/components/schemas/connectors.toggl.connectionSettings'
-              twenty: '#/components/schemas/connectors.twenty.connectionSettings'
-              twitter: '#/components/schemas/connectors.twitter.connectionSettings'
-              venmo: '#/components/schemas/connectors.venmo.connectionSettings'
-              wise: '#/components/schemas/connectors.wise.connectionSettings'
-              xero: '#/components/schemas/connectors.xero.connectionSettings'
-              yodlee: '#/components/schemas/connectors.yodlee.connectionSettings'
-              zohodesk: '#/components/schemas/connectors.zohodesk.connectionSettings'
+              dummy-oauth2: '#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings'
+              sharepointonline: '#/components/schemas/connector.sharepointonline.discriminated_connection_settings'
+              slack: '#/components/schemas/connector.slack.discriminated_connection_settings'
+              github: '#/components/schemas/connector.github.discriminated_connection_settings'
+              quickbooks: '#/components/schemas/connector.quickbooks.discriminated_connection_settings'
+              googlemail: '#/components/schemas/connector.googlemail.discriminated_connection_settings'
+              notion: '#/components/schemas/connector.notion.discriminated_connection_settings'
+              linkedin: '#/components/schemas/connector.linkedin.discriminated_connection_settings'
+              googledocs: '#/components/schemas/connector.googledocs.discriminated_connection_settings'
+              aircall: '#/components/schemas/connector.aircall.discriminated_connection_settings'
+              googlecalendar: '#/components/schemas/connector.googlecalendar.discriminated_connection_settings'
+              googlesheet: '#/components/schemas/connector.googlesheet.discriminated_connection_settings'
+              discord: '#/components/schemas/connector.discord.discriminated_connection_settings'
+              hubspot: '#/components/schemas/connector.hubspot.discriminated_connection_settings'
+              salesforce: '#/components/schemas/connector.salesforce.discriminated_connection_settings'
+              linear: '#/components/schemas/connector.linear.discriminated_connection_settings'
+              confluence: '#/components/schemas/connector.confluence.discriminated_connection_settings'
+              googledrive: '#/components/schemas/connector.googledrive.discriminated_connection_settings'
+              airtable: '#/components/schemas/connector.airtable.discriminated_connection_settings'
+              apollo: '#/components/schemas/connector.apollo.discriminated_connection_settings'
+              brex: '#/components/schemas/connector.brex.discriminated_connection_settings'
+              coda: '#/components/schemas/connector.coda.discriminated_connection_settings'
+              facebook: '#/components/schemas/connector.facebook.discriminated_connection_settings'
+              finch: '#/components/schemas/connector.finch.discriminated_connection_settings'
+              firebase: '#/components/schemas/connector.firebase.discriminated_connection_settings'
+              foreceipt: '#/components/schemas/connector.foreceipt.discriminated_connection_settings'
+              gong: '#/components/schemas/connector.gong.discriminated_connection_settings'
+              greenhouse: '#/components/schemas/connector.greenhouse.discriminated_connection_settings'
+              heron: '#/components/schemas/connector.heron.discriminated_connection_settings'
+              instagram: '#/components/schemas/connector.instagram.discriminated_connection_settings'
+              intercom: '#/components/schemas/connector.intercom.discriminated_connection_settings'
+              jira: '#/components/schemas/connector.jira.discriminated_connection_settings'
+              kustomer: '#/components/schemas/connector.kustomer.discriminated_connection_settings'
+              lever: '#/components/schemas/connector.lever.discriminated_connection_settings'
+              lunchmoney: '#/components/schemas/connector.lunchmoney.discriminated_connection_settings'
+              mercury: '#/components/schemas/connector.mercury.discriminated_connection_settings'
+              merge: '#/components/schemas/connector.merge.discriminated_connection_settings'
+              microsoft: '#/components/schemas/connector.microsoft.discriminated_connection_settings'
+              moota: '#/components/schemas/connector.moota.discriminated_connection_settings'
+              onebrick: '#/components/schemas/connector.onebrick.discriminated_connection_settings'
+              outreach: '#/components/schemas/connector.outreach.discriminated_connection_settings'
+              pipedrive: '#/components/schemas/connector.pipedrive.discriminated_connection_settings'
+              plaid: '#/components/schemas/connector.plaid.discriminated_connection_settings'
+              postgres: '#/components/schemas/connector.postgres.discriminated_connection_settings'
+              ramp: '#/components/schemas/connector.ramp.discriminated_connection_settings'
+              reddit: '#/components/schemas/connector.reddit.discriminated_connection_settings'
+              salesloft: '#/components/schemas/connector.salesloft.discriminated_connection_settings'
+              saltedge: '#/components/schemas/connector.saltedge.discriminated_connection_settings'
+              splitwise: '#/components/schemas/connector.splitwise.discriminated_connection_settings'
+              stripe: '#/components/schemas/connector.stripe.discriminated_connection_settings'
+              teller: '#/components/schemas/connector.teller.discriminated_connection_settings'
+              toggl: '#/components/schemas/connector.toggl.discriminated_connection_settings'
+              twenty: '#/components/schemas/connector.twenty.discriminated_connection_settings'
+              twitter: '#/components/schemas/connector.twitter.discriminated_connection_settings'
+              venmo: '#/components/schemas/connector.venmo.discriminated_connection_settings'
+              wise: '#/components/schemas/connector.wise.discriminated_connection_settings'
+              xero: '#/components/schemas/connector.xero.discriminated_connection_settings'
+              yodlee: '#/components/schemas/connector.yodlee.discriminated_connection_settings'
+              zohodesk: '#/components/schemas/connector.zohodesk.discriminated_connection_settings'
           description: Connector specific data
-      title: Connection
+      title: connection_select
     core.connector:
       type: object
       properties:
@@ -7061,6 +7079,15 @@ components:
             connect_input: {}
             connect_output: {}
           additionalProperties: false
+        authType:
+          type: string
+          enum:
+            - BASIC
+            - OAUTH1
+            - OAUTH2
+            - OAUTH2CC
+            - API_KEY
+            - CUSTOM
         openint_scopes:
           type: array
           items:
@@ -7081,11 +7108,102 @@ components:
       required:
         - name
       title: Connector
-    core.integration:
+    core.connector.name:
+      type: string
+      enum:
+        - aircall
+        - airtable
+        - apollo
+        - brex
+        - coda
+        - confluence
+        - discord
+        - dummy-oauth2
+        - facebook
+        - finch
+        - firebase
+        - foreceipt
+        - github
+        - gong
+        - googlecalendar
+        - googledocs
+        - googledrive
+        - googlemail
+        - googlesheet
+        - greenhouse
+        - heron
+        - hubspot
+        - instagram
+        - intercom
+        - jira
+        - kustomer
+        - lever
+        - linear
+        - linkedin
+        - lunchmoney
+        - mercury
+        - merge
+        - microsoft
+        - moota
+        - notion
+        - onebrick
+        - outreach
+        - pipedrive
+        - plaid
+        - postgres
+        - quickbooks
+        - ramp
+        - reddit
+        - salesforce
+        - salesloft
+        - saltedge
+        - sharepointonline
+        - slack
+        - splitwise
+        - stripe
+        - teller
+        - toggl
+        - twenty
+        - twitter
+        - venmo
+        - wise
+        - xero
+        - yodlee
+        - zohodesk
+      title: connector
+    core.integration_select:
       type: object
       properties:
-        connector_name:
+        id:
           type: string
+        standard:
+          anyOf:
+            - anyOf:
+                - type: string
+                - type: number
+                - type: boolean
+                - type: 'null'
+            - type: object
+              additionalProperties: {}
+            - type: array
+              items: {}
+        external:
+          anyOf:
+            - anyOf:
+                - type: string
+                - type: number
+                - type: boolean
+                - type: 'null'
+            - type: object
+              additionalProperties: {}
+            - type: array
+              items: {}
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        connector_name:
+          $ref: '#/components/schemas/core.connector.name'
         name:
           type: string
         logo_url:
@@ -7124,10 +7242,14 @@ components:
             - string
             - 'null'
       required:
+        - id
+        - standard
+        - external
+        - created_at
+        - updated_at
         - connector_name
         - name
-      additionalProperties: true
-      title: Integration
+      title: integration_select
     error.BAD_REQUEST:
       type: object
       properties:
