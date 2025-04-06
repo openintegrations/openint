@@ -5,18 +5,12 @@ import type {NonEmptyArray} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z, zCast} from '@openint/util/zod-utils'
 import {defConnectors} from './connectors.def'
-import meta from './meta'
+import type {ConnectorName} from './name'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type JSONSchema = {}
 
 export const zJSONSchema = zCast<JSONSchema>()
-
-export const zConnectorName = z
-  .enum(Object.keys(meta) as [keyof typeof meta])
-  .openapi({ref: 'core.connector.name'})
-
-export type ConnectorName = Z.infer<typeof zConnectorName>
 
 // Dedupe this with `ConnectorSchemas` type would be nice
 const camelCaseSchemaKeys = [
@@ -85,6 +79,7 @@ export const connectorSchemasByKey = Object.fromEntries(
   >
 }
 
+/** Workaround for fact that connection.settings instead of connection.connection_settings */
 export const zDiscriminatedSettings = z
   .discriminatedUnion(
     'connector_name',
@@ -103,6 +98,7 @@ export const zDiscriminatedSettings = z
   )
   .describe('Connector specific data')
 
+/** Workaround for fact that connector_config.config instead of connector_config.connector_config */
 export const zDiscriminatedConfig = z
   .discriminatedUnion(
     'connector_name',
@@ -121,7 +117,9 @@ export const zDiscriminatedConfig = z
   )
   .describe('Connector specific data')
 
-export function jsonSchemasForConnectorSchemas(schemas: ConnectorSchemas) {
+// MARK: - JSON schemas
+
+function jsonSchemasForConnectorSchemas(schemas: ConnectorSchemas) {
   return Object.fromEntries(
     Object.entries(schemas)
       .filter(([k]) => camelCaseSchemaKeys.includes(k as CamelCaseSchemaKey))
@@ -141,3 +139,15 @@ export function jsonSchemasForConnectorSchemas(schemas: ConnectorSchemas) {
       }),
   ) as Record<SchemaKey, JSONSchema>
 }
+
+/**
+ * TODO: pre-compute this and store it in the connectors.meta.ts file.
+ * to further reduce the amount of work we need to do at runtime.
+ * Though it'd increase size of codebase
+ */
+export const jsonSchemasByConnectorName = Object.fromEntries(
+  Object.entries(defConnectors).map(([name, def]) => [
+    name,
+    jsonSchemasForConnectorSchemas(def.schemas),
+  ]),
+) as Record<ConnectorName, Record<SchemaKey, JSONSchema>>

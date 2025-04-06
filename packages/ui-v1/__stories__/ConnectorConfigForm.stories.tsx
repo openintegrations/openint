@@ -2,7 +2,7 @@
 
 import type {Meta, StoryObj} from '@storybook/react'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import type {ConnectorName} from '@openint/all-connectors/schemas'
+import type {ConnectorName} from '@openint/all-connectors/name'
 import {Card} from '@openint/shadcn/ui'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm} from '../components/schema-form/JSONSchemaForm'

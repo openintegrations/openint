@@ -1,7 +1,7 @@
 // generated file. Do not modify by hand
 
 import type {Meta, StoryObj} from '@storybook/react'
-import type {ConnectorName} from '@openint/all-connectors/schemas'
+import type {ConnectorName} from '@openint/all-connectors/name'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {Card} from '@openint/shadcn/ui'
 import {zodToOas31Schema} from '@openint/util/schema'

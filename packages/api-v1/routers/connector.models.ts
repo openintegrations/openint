@@ -1,8 +1,8 @@
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import type {ConnectorName} from '@openint/all-connectors/schemas'
+import type {ConnectorName} from '@openint/all-connectors/name'
+import {zConnectorName} from '@openint/all-connectors/name'
 import {
-  jsonSchemasForConnectorSchemas,
-  zConnectorName,
+  jsonSchemasByConnectorName,
   zConnectorSchemas,
 } from '@openint/all-connectors/schemas'
 import type {ConnectorDef} from '@openint/cdk'
@@ -70,7 +70,7 @@ export const getConnectorModel = (
     // hasPostConnect: def.postConnect != null || def.metadata?.nangoProvider,
     // nangoProvider: def.metadata?.nangoProvider,
     schemas: opts.includeSchemas
-      ? jsonSchemasForConnectorSchemas(def.schemas)
+      ? jsonSchemasByConnectorName[def.name as ConnectorName]
       : undefined,
     openint_scopes:
       def.metadata?.jsonDef?.auth.type === 'OAUTH2'
