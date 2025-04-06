@@ -280,11 +280,10 @@ export class UnreachableCaseError extends Error {
 }
 
 // Utility type to check if two types are equal
-export type _IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends <
-  T,
->() => T extends B ? 1 : 2
-  ? true
-  : false
+export type _IsEqual<A, B> =
+  (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+    ? true
+    : false
 // Utility type to check if two types are not equal
 export type _NotEqual<A, B> = _IsEqual<A, B> extends true ? false : true
 

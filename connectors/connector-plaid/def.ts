@@ -84,7 +84,7 @@ export const plaidSchemas = {
     z.object({public_token: z.string()}),
   ]),
   connectOutput: z.object({
-    publicToken: z.string(),
+    public_token: z.string(),
     meta: zCast<PlaidLinkOnSuccessMetadata>().optional(),
   }),
   webhookInput: zWebhookInput,

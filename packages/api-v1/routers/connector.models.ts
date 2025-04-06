@@ -1,14 +1,12 @@
 import {zConnectorName, type ConnectorName} from '@openint/all-connectors'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
+import {nonEmpty} from '@openint/util/array-utils'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {titleCase} from '@openint/util/string-utils'
+import type {NonEmptyArray} from '@openint/util/type-utils'
 import {urlFromImage} from '@openint/util/url-utils'
 import {z, type Z} from '@openint/util/zod-utils'
-
-// import {z} from '@openint/util/zod-utils'
-
-export type NonEmptyArray<T> = [T, ...T[]]
 
 // Dedupe this with `ConnectorSchemas` type would be nice
 export const schemaKeys = [
@@ -49,7 +47,10 @@ export const connectorSchemas = Object.fromEntries(
         // Have to do this due to zod version mismatch
         // Also declaring .openapi on mismatched zod does not work due to
         // differing registration holders in zod-openapi
-          (schemas[key] as unknown as Z.ZodTypeAny | undefined) ?? z.null(),
+          (schemas[key] as unknown as Z.ZodTypeAny | undefined) ??
+          // null does not work because jsonb fields in the DB are not nullable
+          // z.union([z.null(), z.object({}).strict()]),
+          z.object({}).strict(),
       })
     }),
   ]),
@@ -62,6 +63,42 @@ export const connectorSchemas = Object.fromEntries(
     >
   >
 }
+
+export const zDiscriminatedSettings = z
+  .discriminatedUnion(
+    'connector_name',
+    nonEmpty(
+      connectorSchemas.connectionSettings.map((s) =>
+        z
+          .object({
+            connector_name: s.shape.connector_name,
+            settings: s.shape.connectionSettings,
+          })
+          .openapi({
+            ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
+          }),
+      ),
+    ),
+  )
+  .describe('Connector specific data')
+
+export const zDiscriminatedConfig = z
+  .discriminatedUnion(
+    'connector_name',
+    nonEmpty(
+      connectorSchemas.connectorConfig.map((s) =>
+        z
+          .object({
+            connector_name: s.shape.connector_name,
+            config: s.shape.connectorConfig,
+          })
+          .openapi({
+            ref: `connectors.${s.shape.connector_name.value}.connectorConfig`,
+          }),
+      ),
+    ),
+  )
+  .describe('Connector specific data')
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type JSONSchema = {}

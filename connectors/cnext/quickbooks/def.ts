@@ -82,6 +82,9 @@ export const jsonDef = {
           'The realmId of your quickbooks company (e.g., 9341453474484455)',
         ),
     }),
+    connector_config: z.object({
+      envName: z.enum(['sandbox', 'production']).default('sandbox'),
+    }),
   },
 } satisfies JsonConnectorDef
 

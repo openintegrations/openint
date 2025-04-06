@@ -1,14 +1,13 @@
 export interface OAuthConnectConfig {
-  connectorName: string
-  authType: 'OAUTH2' | 'OAUTH1' | 'OAUTH2CC'
-  authorizationUrl: string // From preConnect
+  // connectorName: string
+  // authType: 'OAUTH2' | 'OAUTH1' | 'OAUTH2CC'
+  authorization_url: string // From preConnect
   connectionId?: string
 }
 
 export interface OAuthConnectResult {
   code: string
   state: string
-  connectionId: string
 }
 
 export interface OAuthError extends Error {
@@ -19,6 +18,10 @@ export interface OAuthError extends Error {
 export default async function createNativeOauthConnect(
   config: OAuthConnectConfig,
 ): Promise<OAuthConnectResult> {
+  console.log('createNativeOauthConnect', config)
+  if (!config.authorization_url) {
+    throw createOAuthError('auth_error', 'No authorization URL provided')
+  }
   let activePopup: Window | null = null
   let activeListener: ((e: MessageEvent) => void) | null = null
 
@@ -48,7 +51,7 @@ export default async function createNativeOauthConnect(
 
       // Open popup with more complete window features
       activePopup = window.open(
-        config.authorizationUrl,
+        config.authorization_url,
         'oauth-popup',
         `width=${width},height=${height},left=${left},top=${top},` +
           `scrollbars=yes,resizable=yes,status=no,toolbar=no,` +
@@ -114,21 +117,6 @@ export default async function createNativeOauthConnect(
           clearInterval(popupTimer)
           closePopup()
 
-          const parsedConnectionId = decodeURIComponent(
-            window.atob(response.state.replace(/-/g, '+').replace(/_/g, '/')),
-          )
-
-          if (
-            !parsedConnectionId.startsWith('conn_') ||
-            (config.connectionId && parsedConnectionId !== config.connectionId)
-          ) {
-            // note: should this be here?
-            throw createOAuthError(
-              'auth_error',
-              `Invalid connection id: raw=${response.state} parsed=${parsedConnectionId} config=${config.connectionId}`,
-            )
-          }
-
           // console.log('resolving oauth promise', {
           //   code: response.code,
           //   state: response.state,
@@ -138,7 +126,6 @@ export default async function createNativeOauthConnect(
           resolve({
             code: response.code,
             state: response.state,
-            connectionId: parsedConnectionId,
           })
         } catch (err) {
           clearInterval(popupTimer)

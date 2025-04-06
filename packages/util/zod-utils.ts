@@ -23,10 +23,16 @@ function makeZod() {
       get() {
         const msg = orgMessage.call(this)
         // We do this to prevent data from being too long to display
-        return `{
-    "issues": ${msg},
-    "data": ${JSON.stringify(this.data)}
-  }`
+        const issues = JSON.parse(msg)
+        // const jsonSchema = zodToOas31Schema(this.schema)
+        // This can sometimes be too long to display, so never mind for now
+        const schema = this.schema as Z.ZodType
+        const openapi = schema._def.zodOpenApi?.openapi
+        return JSON.stringify(
+          {issues, data: this.data, openapi, description: schema.description},
+          null,
+          2,
+        )
       },
       configurable: true,
       enumerable: true,
@@ -37,7 +43,7 @@ function makeZod() {
     zod.ZodType.prototype.safeParse = function (data, params) {
       const result = origSafeParse.call(this, data, params)
       if (!result.success) {
-        Object.assign(result.error, {data})
+        Object.assign(result.error, {data, schema: this})
       }
       return result
     }
@@ -45,7 +51,7 @@ function makeZod() {
     zod.ZodType.prototype.safeParseAsync = async function (data, params) {
       const result = await origSafeParseAsync.call(this, data, params)
       if (!result.success) {
-        Object.assign(result.error, {data})
+        Object.assign(result.error, {data, schema: this})
       }
       return result
     }

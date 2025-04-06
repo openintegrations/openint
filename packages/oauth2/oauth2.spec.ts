@@ -15,7 +15,7 @@ const client = {
   id: 'client1',
   name: 'Sample Client',
   secret: 'secret1',
-  redirectUris: ['http://localhost:3000/callback'],
+  redirectUris: ['http://localhost:4000/connect/callback'],
   allowedGrants: [
     'authorization_code',
     'refresh_token',
@@ -48,11 +48,14 @@ const oauthClient = createOAuth2Client(
   app.handle,
 )
 
+/** Code verifier must follow the specifications of RFC-7636. We
+ * should add a function to generate a random code verifier that meets the spec
+ * to OAuth2Client.ts */
 const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
 
 const authorizeRes = $test('authorize redirect with PKCE', async () => {
   // Use OAuth2Client to generate the authorize URL
-  const authorizeUrl = oauthClient.getAuthorizeUrl({
+  const authorizeUrl = await oauthClient.getAuthorizeUrl({
     redirect_uri: client.redirectUris[0],
     scope: client.scopes[0].name,
     state: 'xyz',
@@ -67,7 +70,7 @@ const authorizeRes = $test('authorize redirect with PKCE', async () => {
 
   expect(response.headers.get('Location')).toBeTruthy()
   const url = new URL(response.headers.get('Location')!)
-  expect(url.pathname).toBe('/callback')
+  expect(url.pathname).toBe('/connect/callback')
   expect(url.searchParams.get('code')).toBeTruthy()
   expect(url.searchParams.get('state')).toBe('xyz')
 

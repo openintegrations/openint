@@ -60,6 +60,8 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
     }
     return z.object({
       oauth: schema.shape.oauth,
+      // make sure to merge in any additional connector config fields
+      ...(def.auth.connector_config?.shape as Record<string, Z.ZodTypeAny>),
     })
   }
 

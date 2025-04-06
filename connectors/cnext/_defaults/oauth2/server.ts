@@ -127,10 +127,9 @@ export function generateOAuth2Server<
       }) as any
     },
 
-    async postConnect(connectOutput, connectorConfig, connectionSettings) {
-      console.log(
-        `Oauth2 Postconnect called for connectionId ${connectOutput.connectionId}`,
-      )
+    async postConnect(connectOutput, connectorConfig, ctx) {
+      const connectionId = connectOutput.state
+      console.log(`Oauth2 Postconnect called for connectionId ${connectionId}`)
       const ccfg = injectCcfgDefaultCredentials(
         connectorConfig,
         connectorDef.name,
@@ -142,19 +141,21 @@ export function generateOAuth2Server<
             oauthConfig,
             ccfg.oauth,
             // @ts-expect-error: QQ: fix this
-            connectionSettings.oauth,
+            ctx.oauth,
           ),
           connector_config: ccfg,
         } satisfies Z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
         state: connectOutput.state,
         redirectUri: getServerUrl(null) + '/connect/callback',
+        fetch: ctx.fetch,
       })
+      console.log('token exchange result', result)
 
       return {
         // QQ: is this the right thing to do here?
-        connectionExternalId: connectOutput.connectionId
-          ? extractId(connectOutput.connectionId as any)[2]
+        connectionExternalId: connectionId
+          ? extractId(connectionId as any)[2]
           : undefined,
         settings: {
           oauth: {

@@ -22,11 +22,8 @@ import {
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
-import {
-  AddConnectionInner,
-  ConnectorConfigForCustomer,
-  MyConnectionsClient,
-} from './client'
+import type {ConnectorConfigForCustomer} from './client'
+import {AddConnectionInner, MyConnectionsClient} from './client'
 import {TabsClient} from './Tabs.client'
 
 function Fallback() {
@@ -133,7 +130,7 @@ export default async function Page(
           {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
 
           <TabsClient
-            defaultValue="my-connections"
+            defaultValue="manage"
             paramKey="tab"
             className="max-w-3xl flex-1 p-4">
             <TabsList className="grid w-full grid-cols-2">

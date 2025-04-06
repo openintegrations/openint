@@ -2,6 +2,7 @@ import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
+import {createOAuth2Server} from '@openint/oauth2/OAuth2Server'
 import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
@@ -10,11 +11,12 @@ import {
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CreateAppOptions
   extends Omit<CreateFetchHandlerOptions, 'endpoint' | 'router'> {}
 
 // It's annoying how elysia does not really allow for dependency injection like TRPC, so we do ourselves
-export function createApp({db}: CreateAppOptions) {
+export function createApp(opts: CreateAppOptions) {
   const app = new Elysia()
     .get('/health', () => ({healthy: true}), {detail: {hide: true}})
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}), {
@@ -37,10 +39,35 @@ export function createApp({db}: CreateAppOptions) {
     // no other settings seems to work when mounted inside next.js. Direct elysia listen works
     // in a more consistent way and we should probably add some test specifically for next.js mounted behavior
     .all('/v1/trpc/*', ({request}) =>
-      createFetchHandlerTRPC({endpoint: '/v1/trpc', db})(request),
+      createFetchHandlerTRPC({...opts, endpoint: '/v1/trpc'})(request),
     )
     .all('/v1/*', ({request}) =>
-      createFetchHandlerOpenAPI({endpoint: '/v1', db})(request),
+      createFetchHandlerOpenAPI({...opts, endpoint: '/v1'})(request),
+    )
+    // For testing purposes only
+    .group('/dummy-oauth2', (group) =>
+      group.use(
+        createOAuth2Server({
+          // TODO: have a better way to unify this
+          clients: [
+            {
+              id: 'client_1',
+              name: 'client_1',
+              secret: 'secret_1',
+              redirectUris: ['http://localhost:4000/connect/callback'],
+              allowedGrants: [
+                'authorization_code',
+                'refresh_token',
+                'client_credentials',
+              ],
+              scopes: [{name: 'read'}, {name: 'write'}],
+            },
+          ],
+          scopes: [{name: 'read'}, {name: 'write'}],
+          users: [{id: 'user_1', username: 'user_1', password: 'password_1'}],
+          authCodes: [],
+        }),
+      ),
     )
   return app
 }
