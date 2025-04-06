@@ -1,8 +1,7 @@
-import {TRPCError} from '@trpc/server'
 import {compact} from '@openint/util/array-utils'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
 import {z, type Z} from '@openint/util/zod-utils'
-import type {CustomerId, ExtCustomerId} from './id.types'
+import type {ExtCustomerId} from './id.types'
 import {zCustomerId, zId, zUserId} from './id.types'
 
 export const zViewerRole = z.enum(['anon', 'customer', 'user', 'org', 'system'])
@@ -92,38 +91,6 @@ export function asOrgIfCustomer(viewer: Viewer): Viewer {
     return {role: 'org', orgId: viewer.orgId}
   }
   return viewer
-}
-
-export function asCustomerOfOrg(
-  viewer: Viewer,
-  input: {customerId: CustomerId},
-): Viewer<'customer'> {
-  if (!('orgId' in viewer) || !viewer.orgId) {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: 'Current viewer missing orgId to create token',
-    })
-  }
-  if (
-    viewer.role === 'customer' &&
-    input.customerId &&
-    input.customerId !== viewer.customerId
-  ) {
-    throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'Current viewer cannot create token for other customer',
-    })
-  }
-  const customerId =
-    viewer.role === 'customer' ? viewer.customerId : input.customerId
-  if (!customerId) {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: 'Either call as an customer or pass customerId explicitly',
-    })
-  }
-
-  return {role: 'customer', customerId, orgId: viewer.orgId}
 }
 
 /**

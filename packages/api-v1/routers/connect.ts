@@ -3,18 +3,12 @@ import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
-import {
-  asCustomerOfOrg,
-  makeId,
-  zConnectOptions,
-  zId,
-  zPostConnectOptions,
-} from '@openint/cdk'
+import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {makeJwtClient} from '../lib/makeJwtClient'
+import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
 import {core} from '../models'
 import {
   authenticatedProcedure,
@@ -60,9 +54,7 @@ export const connectRouter = router({
       }
       const token = await jwt.signViewer(
         asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
-        {
-          validityInSeconds: input.validity_in_seconds,
-        },
+        {validityInSeconds: input.validity_in_seconds},
       )
 
       const url = new URL('/connect', getServerUrl(null))

@@ -1080,9 +1080,6 @@ importers:
       '@opensdks/sdk-nango':
         specifier: 0.0.6
         version: 0.0.6
-      '@trpc/server':
-        specifier: ^11.0.1
-        version: 11.0.1(typescript@5.8.2)
       react:
         specifier: 19.0.0
         version: 19.0.0
