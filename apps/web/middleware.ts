@@ -1,4 +1,4 @@
-import {clerkMiddleware} from '@clerk/nextjs/server'
+import {clerkMiddleware} from '@openint/console-auth/server'
 
 // Disable redirects
 export default clerkMiddleware()
