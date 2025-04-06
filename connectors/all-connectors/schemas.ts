@@ -1,10 +1,16 @@
 import type {ConnectorSchemas} from '@openint/cdk'
 import {nonEmpty} from '@openint/util/array-utils'
+import {zodToOas31Schema} from '@openint/util/schema'
 import type {NonEmptyArray} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
-import {z} from '@openint/util/zod-utils'
+import {z, zCast} from '@openint/util/zod-utils'
 import {defConnectors} from './connectors.def'
 import meta from './meta'
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type JSONSchema = {}
+
+export const zJSONSchema = zCast<JSONSchema>()
 
 export const zConnectorName = z
   .enum(Object.keys(meta) as [keyof typeof meta])
@@ -13,7 +19,7 @@ export const zConnectorName = z
 export type ConnectorName = Z.infer<typeof zConnectorName>
 
 // Dedupe this with `ConnectorSchemas` type would be nice
-export const schemaKeys = [
+const camelCaseSchemaKeys = [
   'connectorConfig',
   'connectionSettings',
   'integrationData',
@@ -23,10 +29,10 @@ export const schemaKeys = [
   'connectOutput',
 ] as const
 
-export type SchemaKey = (typeof schemaKeys)[number]
+type CamelCaseSchemaKey = (typeof camelCaseSchemaKeys)[number]
 
 /** TODO: Remove this abstraction by refactoring ConnectorDef itself to use snake_case keys */
-export const schemaKeyToSnakeCase = {
+const schemaKeyFromCamelCase = {
   connectorConfig: 'connector_config',
   connectionSettings: 'connection_settings',
   integrationData: 'integration_data',
@@ -34,14 +40,19 @@ export const schemaKeyToSnakeCase = {
   preConnectInput: 'pre_connect_input',
   connectInput: 'connect_input',
   connectOutput: 'connect_output',
-} as const satisfies Record<SchemaKey, string>
+} as const satisfies Record<CamelCaseSchemaKey, string>
 
-export type SchemaKeySnakecased = (typeof schemaKeyToSnakeCase)[SchemaKey]
+export type SchemaKey = (typeof schemaKeyFromCamelCase)[CamelCaseSchemaKey]
+
+export const zConnectorSchemas = z.record(
+  z.enum(Object.values(schemaKeyFromCamelCase) as [SchemaKey]),
+  zJSONSchema,
+)
 
 // Maybe this belongs in the all-connectors package?
 /* schemaKey -> Array<{$schemaKey: schema}>  */
 export const connectorSchemas = Object.fromEntries(
-  schemaKeys.map((key) => [
+  camelCaseSchemaKeys.map((key) => [
     key,
     Object.entries(defConnectors).map(([name, def]) => {
       const schemas = def.schemas as ConnectorSchemas
@@ -59,7 +70,7 @@ export const connectorSchemas = Object.fromEntries(
     }),
   ]),
 ) as {
-  [Key in SchemaKey]: NonEmptyArray<
+  [Key in CamelCaseSchemaKey]: NonEmptyArray<
     Z.ZodObject<
       {connector_name: Z.ZodLiteral<string>} & {
         [k in Key]: Z.ZodTypeAny
@@ -103,3 +114,25 @@ export const zDiscriminatedConfig = z
     ),
   )
   .describe('Connector specific data')
+
+export function jsonSchemasForConnectorSchemas(schemas: ConnectorSchemas) {
+  return Object.fromEntries(
+    Object.entries(schemas)
+      .filter(([k]) => camelCaseSchemaKeys.includes(k as CamelCaseSchemaKey))
+      .map(([schemaKey, schema]) => {
+        try {
+          return [
+            schemaKeyFromCamelCase[schemaKey as CamelCaseSchemaKey],
+            schema instanceof z.ZodSchema
+              ? // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                zodToOas31Schema(schema)
+              : undefined,
+          ]
+        } catch (err) {
+          throw new Error(
+            `Failed to convert schema for ${schemaKey.toString()}: ${err}`,
+          )
+        }
+      }),
+  ) as Record<SchemaKey, JSONSchema>
+}

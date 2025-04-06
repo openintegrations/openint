@@ -1,24 +1,14 @@
-import type {
-  ConnectorName,
-  SchemaKey,
-  SchemaKeySnakecased,
-} from '@openint/all-connectors/schemas'
-import {
-  schemaKeys,
-  schemaKeyToSnakeCase,
-  zConnectorName,
-} from '@openint/all-connectors/schemas'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
-import {zodToOas31Schema} from '@openint/util/schema'
+import type {ConnectorName} from '@openint/all-connectors/schemas'
+import {
+  jsonSchemasForConnectorSchemas,
+  zConnectorName,
+  zConnectorSchemas,
+} from '@openint/all-connectors/schemas'
+import type {ConnectorDef} from '@openint/cdk'
 import {titleCase} from '@openint/util/string-utils'
 import {urlFromImage} from '@openint/util/url-utils'
-import {z, zCast, type Z} from '@openint/util/zod-utils'
-
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type JSONSchema = {}
-
-export const zJSONSchema = zCast<JSONSchema>()
+import {z, type Z} from '@openint/util/zod-utils'
 
 export const zConnector = z.object({
   name: z.string(),
@@ -29,12 +19,7 @@ export const zConnector = z.object({
     // TODO: Fix me to be the right ones
     .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
     .optional(),
-  schemas: z
-    .record(
-      z.enum(Object.values(schemaKeyToSnakeCase) as [SchemaKeySnakecased]),
-      zJSONSchema,
-    )
-    .optional(),
+  schemas: zConnectorSchemas.optional(),
   openint_scopes: z.array(z.string()).optional(),
   scopes: z
     .array(
@@ -50,7 +35,7 @@ export const zConnector = z.object({
 export {zConnectorName, type ConnectorName}
 
 export function getConnectorModelByName(
-  name: ConnectorName | string,
+  name: string, // ConnectorName
   opts: {includeSchemas?: boolean} = {},
 ): Z.infer<typeof zConnector> {
   const def = defConnectors[name as keyof typeof defConnectors]
@@ -96,28 +81,4 @@ export const getConnectorModel = (
         ? def.metadata?.jsonDef?.auth.scopes
         : undefined,
   }
-}
-
-export function jsonSchemasForConnectorSchemas<T extends ConnectorSchemas>(
-  schemas: T,
-) {
-  return Object.fromEntries(
-    Object.entries(schemas)
-      .filter(([k]) => schemaKeys.includes(k as SchemaKey))
-      .map(([schemaKey, schema]) => {
-        try {
-          return [
-            schemaKeyToSnakeCase[schemaKey as SchemaKey],
-            schema instanceof z.ZodSchema
-              ? // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                zodToOas31Schema(schema)
-              : undefined,
-          ]
-        } catch (err) {
-          throw new Error(
-            `Failed to convert schema for ${schemaKey.toString()}: ${err}`,
-          )
-        }
-      }),
-  ) as Record<SchemaKeySnakecased, JSONSchema>
 }
