@@ -2914,17 +2914,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
-      "connect_output": {
-        "properties": {
-          "apiKey": {
-            "type": "string",
-          },
-        },
-        "required": [
-          "apiKey",
-        ],
-        "type": "object",
-      },
       "connection_settings": {
         "properties": {
           "apiKey": {
