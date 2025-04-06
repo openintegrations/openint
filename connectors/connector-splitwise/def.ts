@@ -6,7 +6,7 @@ import {zCurrentUser} from './splitwise-schema'
 
 export const splitwiseSchemas = {
   name: z.literal('splitwise'),
-  connectionSettings: z.object({
+  connection_settings: z.object({
     currentUser: zCurrentUser.nullish(),
     accessToken: z.string(),
   }),

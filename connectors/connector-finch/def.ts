@@ -17,7 +17,7 @@ const zProduct = z.enum([
 export const finchSchemas = {
   name: z.literal('finch'),
   // Auth
-  connectorConfig: z.object({
+  connector_config: z.object({
     client_id: z.string(),
     client_secret: z.string(),
     api_version: z.string().optional().describe('Finch API version'),
@@ -27,22 +27,22 @@ export const finchSchemas = {
         'Finch products to access, @see https://developer.tryfinch.com/api-reference/development-guides/Permissions',
       ),
   }),
-  connectionSettings: z.object({
+  connection_settings: z.object({
     access_token: z.string(),
   }),
 
   // Connect
-  preConnectInput: z.object({
+  pre_connect_input: z.object({
     // categories: z.array(zCategory),
     // customer_email_address: z.string().optional(),
     // customer_organization_name: z.string().optional(),
     state: z.string().optional(),
   }),
-  connectInput: z.object({
+  connect_input: z.object({
     client_id: z.string(),
     products: z.array(zProduct),
   }),
-  connectOutput: z.object({
+  connect_output: z.object({
     state: z.string().optional(),
     code: z.string(),
   }),

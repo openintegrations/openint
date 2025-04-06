@@ -36,7 +36,7 @@ const zOauthCredentials = z.object({
 
 export const oauthBaseSchema = {
   name: z.literal('__oauth__'), // TODO: This is a noop
-  connectorConfig: z.object({
+  connector_config: z.object({
     oauth: z.object({
       client_id: z.string(),
       client_secret: z.string(),
@@ -44,7 +44,7 @@ export const oauthBaseSchema = {
       scopes: z.string().optional(),
     }),
   }),
-  connectionSettings: z.object({
+  connection_settings: z.object({
     // equivalent to nango /v1/connections data.connection object with certain fields removed like id
     oauth: z.object({
       credentials: zOauthCredentials,
@@ -60,7 +60,7 @@ export const oauthBaseSchema = {
     // TODO: add error fields here or maybe at a higher level to capture when connection needs to be refreshed
     error: zOauthConnectionError.nullish(),
   }),
-  connectOutput: z.object({
+  connect_output: z.object({
     providerConfigKey: zId('ccfg'),
     connectionId: zId('conn'),
   }),

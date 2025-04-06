@@ -13,10 +13,10 @@ import {
 import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
 function injectCcfgDefaultCredentials(
-  connectorConfig: Z.infer<typeof oauth2Schemas.connectorConfig>,
+  connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>,
   connectorName: string,
   oauthConfig: Z.infer<typeof zOAuthConfig>,
-): Z.infer<typeof oauth2Schemas.connectorConfig> {
+): Z.infer<typeof oauth2Schemas.connector_config> {
   const defaultCredentials = getConnectorDefaultCredentials(connectorName)
   if (
     !connectorConfig.oauth?.client_id &&

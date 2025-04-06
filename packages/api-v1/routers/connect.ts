@@ -207,7 +207,7 @@ export const connectRouter = router({
       )
 
       // would be much nicer if this is the materialized schemas
-      const zSettings = def.schemas.connectionSettings ?? z.object({}).strict()
+      const zSettings = def.schemas.connection_settings ?? z.object({}).strict()
 
       const settings = zSettings.parse(connUpdate.settings)
 

@@ -2,18 +2,18 @@ import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 
-export const zConfig = oauthBaseSchema.connectorConfig
+export const zConfig = oauthBaseSchema.connector_config
 
-const oConn = oauthBaseSchema.connectionSettings
+const oConn = oauthBaseSchema.connection_settings
 export const zSettings = oConn.extend({
   oauth: oConn.shape.oauth,
 })
 
 export const gongSchemas = {
   name: z.literal('gong'),
-  connectorConfig: zConfig,
-  connectionSettings: zSettings,
-  connectOutput: oauthBaseSchema.connectOutput,
+  connector_config: zConfig,
+  connection_settings: zSettings,
+  connect_output: oauthBaseSchema.connect_output,
 } satisfies ConnectorSchemas
 
 export const gongHelpers = connHelpers(gongSchemas)

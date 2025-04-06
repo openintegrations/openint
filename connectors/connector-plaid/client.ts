@@ -11,7 +11,7 @@ export const plaidClientConnector = {
   useConnectHook: (_) => {
     const [state, setState] = React.useState<{
       options: RequiredOnly<PlaidLinkOptions, 'token'>
-      res$: Deferred<(typeof helpers)['_types']['connectOutput']>
+      res$: Deferred<(typeof helpers)['_types']['connect_output']>
     } | null>(null)
 
     const plaidLink = usePlaidLink({
@@ -70,7 +70,7 @@ export const plaidClientConnector = {
           integrationExternalId,
         })
       }
-      const res$ = new Deferred<(typeof helpers)['_types']['connectOutput']>()
+      const res$ = new Deferred<(typeof helpers)['_types']['connect_output']>()
       setState({options: {token: opts.link_token}, res$})
       return res$.promise
     }

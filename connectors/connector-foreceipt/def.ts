@@ -12,13 +12,13 @@ export const zForeceiptConfig = z.object({
 export const foreceiptSchemas = {
   name: z.literal('foreceipt'),
   // connectorConfig: zForeceiptConfig,
-  connectionSettings: z.object({
+  connection_settings: z.object({
     credentials: zCast<Readonly<Foreceipt.Credentials>>(),
     _id: zCast<ExternalId>(),
     envName: z.enum(['staging', 'production']),
   }),
-  connectInput: zForeceiptConfig,
-  connectOutput: zForeceiptConfig,
+  connect_input: zForeceiptConfig,
+  connect_output: zForeceiptConfig,
 } satisfies ConnectorSchemas
 
 export const foreceiptHelpers = connHelpers(foreceiptSchemas)

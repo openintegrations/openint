@@ -12,7 +12,7 @@ export const postgresSchemas = {
   // if it's connectionSettings then it doesn't make as much sense to configure
   // in the list of integrations...
   // How do we create default connections for integrations that are basically single connection?
-  connectionSettings: zPgConfig.pick({databaseUrl: true}).extend({
+  connection_settings: zPgConfig.pick({databaseUrl: true}).extend({
     // gotta make sourceQueries a Textarea
     sourceQueries: z
       .object({

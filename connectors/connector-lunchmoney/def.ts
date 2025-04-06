@@ -5,7 +5,7 @@ import {zConfig} from './lunchmoneyClient'
 
 export const lunchmoneySchemas = {
   name: z.literal('lunchmoney'),
-  connectorConfig: zConfig,
+  connector_config: zConfig,
 } satisfies ConnectorSchemas
 
 export const lunchmoneyHelpers = connHelpers(lunchmoneySchemas)

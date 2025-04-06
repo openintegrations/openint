@@ -5,7 +5,7 @@ import {zAirtableResourceSettings} from './AirtableClient'
 
 export const airtableSchemas = {
   name: z.literal('airtable'),
-  connectionSettings: zAirtableResourceSettings,
+  connection_settings: zAirtableResourceSettings,
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(airtableSchemas)
