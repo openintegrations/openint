@@ -395,6 +395,16 @@ importers:
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util
+      mustache:
+        specifier: ^4.2.0
+        version: 4.2.0
+    devDependencies:
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
+      '@types/mustache':
+        specifier: ^4.2.5
+        version: 4.2.5
 
   connectors/connector-airtable:
     dependencies:
@@ -6196,6 +6206,9 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
+  '@types/mustache@4.2.5':
+    resolution: {integrity: sha512-PLwiVvTBg59tGFL/8VpcGvqOu3L4OuveNvPi0EYbWchRdEVP++yRUXJPFl+CApKEq13017/4Nf7aQ5lTtHUNsA==}
+
   '@types/mysql@2.15.26':
     resolution: {integrity: sha512-DSLCOXhkvfS5WNNPbfn2KdICAmk8lLc+/PNvnPnF7gOdMZCxopXduqv0OQ13y/yA/zXTSikZZqVgybUxOEg6YQ==}
 
@@ -11289,6 +11302,10 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  mustache@4.2.0:
+    resolution: {integrity: sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==}
+    hasBin: true
 
   mute-stream@2.0.0:
     resolution: {integrity: sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA==}
@@ -20036,6 +20053,8 @@ snapshots:
 
   '@types/ms@0.7.34': {}
 
+  '@types/mustache@4.2.5': {}
+
   '@types/mysql@2.15.26':
     dependencies:
       '@types/node': 22.13.10
@@ -27029,6 +27048,8 @@ snapshots:
       typescript: 5.8.2
     transitivePeerDependencies:
       - '@types/node'
+
+  mustache@4.2.0: {}
 
   mute-stream@2.0.0: {}
 
