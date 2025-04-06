@@ -51,18 +51,18 @@ export const zConnectorSchemas = z.record(
 
 // Maybe this belongs in the all-connectors package?
 /* schemaKey -> Array<{$schemaKey: schema}>  */
-export const connectorSchemas = Object.fromEntries(
-  camelCaseSchemaKeys.map((key) => [
-    key,
+export const connectorSchemasByKey = Object.fromEntries(
+  camelCaseSchemaKeys.map((camelKey) => [
+    schemaKeyFromCamelCase[camelKey],
     Object.entries(defConnectors).map(([name, def]) => {
       const schemas = def.schemas as ConnectorSchemas
       return z.object({
         connector_name: z.literal(name),
-        [key]:
-        // Have to do this due to zod version mismatch
-        // Also declaring .openapi on mismatched zod does not work due to
-        // differing registration holders in zod-openapi
-          (schemas[key] as unknown as Z.ZodTypeAny | undefined) ??
+        [schemaKeyFromCamelCase[camelKey]]:
+          // Have to do this due to zod version mismatch
+          // Also declaring .openapi on mismatched zod does not work due to
+          // differing registration holders in zod-openapi
+          (schemas[camelKey] as unknown as Z.ZodTypeAny | undefined) ??
           // null does not work because jsonb fields in the DB are not nullable
           // z.union([z.null(), z.object({}).strict()]),
           z.object({}).strict(),
@@ -70,7 +70,7 @@ export const connectorSchemas = Object.fromEntries(
     }),
   ]),
 ) as {
-  [Key in CamelCaseSchemaKey]: NonEmptyArray<
+  [Key in SchemaKey]: NonEmptyArray<
     Z.ZodObject<
       {connector_name: Z.ZodLiteral<string>} & {
         [k in Key]: Z.ZodTypeAny
@@ -83,14 +83,14 @@ export const zDiscriminatedSettings = z
   .discriminatedUnion(
     'connector_name',
     nonEmpty(
-      connectorSchemas.connectionSettings.map((s) =>
+      connectorSchemasByKey.connection_settings.map((s) =>
         z
           .object({
             connector_name: s.shape.connector_name,
-            settings: s.shape.connectionSettings,
+            settings: s.shape.connection_settings,
           })
           .openapi({
-            ref: `connectors.${s.shape.connector_name.value}.connectionSettings`,
+            ref: `connectors.${s.shape.connector_name.value}.connection_settings`,
           }),
       ),
     ),
@@ -101,14 +101,14 @@ export const zDiscriminatedConfig = z
   .discriminatedUnion(
     'connector_name',
     nonEmpty(
-      connectorSchemas.connectorConfig.map((s) =>
+      connectorSchemasByKey.connector_config.map((s) =>
         z
           .object({
             connector_name: s.shape.connector_name,
-            config: s.shape.connectorConfig,
+            config: s.shape.connector_config,
           })
           .openapi({
-            ref: `connectors.${s.shape.connector_name.value}.connectorConfig`,
+            ref: `connectors.${s.shape.connector_name.value}.connector_config`,
           }),
       ),
     ),

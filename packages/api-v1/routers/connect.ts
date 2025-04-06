@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
-import {connectorSchemas} from '@openint/all-connectors/schemas'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
+import {connectorSchemasByKey} from '@openint/all-connectors/schemas'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {
   asCustomerOfOrg,
@@ -107,14 +107,14 @@ export const connectRouter = router({
           .discriminatedUnion(
             'connector_name',
             nonEmpty(
-              connectorSchemas.preConnectInput.map((s) =>
+              connectorSchemasByKey.pre_connect_input.map((s) =>
                 z
                   .object({
                     connector_name: s.shape.connector_name,
-                    input: s.shape.preConnectInput,
+                    input: s.shape.pre_connect_input,
                   })
                   .openapi({
-                    ref: `connectors.${s.shape.connector_name.value}.preConnectInput`,
+                    ref: `connectors.${s.shape.connector_name.value}.pre_connect_input`,
                   }),
               ),
             ),
@@ -127,15 +127,15 @@ export const connectRouter = router({
         .discriminatedUnion(
           'connector_name',
           nonEmpty(
-            connectorSchemas.connectInput.map((s) =>
+            connectorSchemasByKey.connect_input.map((s) =>
               z
                 .object({
                   connector_name: s.shape.connector_name,
                   // TODO: Rename to connectInput
-                  output: s.shape.connectInput,
+                  output: s.shape.connect_input,
                 })
                 .openapi({
-                  ref: `connectors.${s.shape.connector_name.value}.connectInput`,
+                  ref: `connectors.${s.shape.connector_name.value}.connect_input`,
                 }),
             ),
           ),
@@ -210,14 +210,14 @@ export const connectRouter = router({
           .discriminatedUnion(
             'connector_name',
             nonEmpty(
-              connectorSchemas.connectOutput.map((s) =>
+              connectorSchemasByKey.connect_output.map((s) =>
                 z
                   .object({
                     connector_name: s.shape.connector_name,
-                    input: s.shape.connectOutput,
+                    input: s.shape.connect_output,
                   })
                   .openapi({
-                    ref: `connectors.${s.shape.connector_name.value}.connectOutput`,
+                    ref: `connectors.${s.shape.connector_name.value}.connect_output`,
                   }),
               ),
             ),
