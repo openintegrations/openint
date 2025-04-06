@@ -1,10 +1,7 @@
 import type {ConnectorDef, ConnectorServer, ExternalId} from '@openint/cdk'
 import {makeId} from '@openint/cdk'
 import {getServerUrl} from '@openint/env'
-import {
-  createCodeChallenge,
-  createCodeVerifier,
-} from '@openint/oauth2/utils.client'
+import {createCodeVerifier} from '@openint/oauth2/utils.client'
 import {makeUlid} from '@openint/util/id-utils'
 import {type Z} from '@openint/util/zod-utils'
 import type {oauth2Schemas, zOAuthConfig} from './schemas'
