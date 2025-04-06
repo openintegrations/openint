@@ -155,7 +155,7 @@ export const connectRouter = router({
         discriminated_data: discriminatedUnionBySchemaKey.connect_output,
       }),
     )
-    .output(core.connection)
+    .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
       console.log('postConnect', input, ctx)
       const connectors = serverConnectors as Record<string, ConnectorServer>
@@ -244,7 +244,7 @@ export const connectRouter = router({
       },
     })
     .input(z.object({id: z.string()}))
-    .output(core.connection)
+    .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
       const conn = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),

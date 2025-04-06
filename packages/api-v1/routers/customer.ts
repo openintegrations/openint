@@ -2,12 +2,13 @@ import {TRPCError} from '@trpc/server'
 import {schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
 import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
-import {core, Customer} from '../models'
+import type {Customer} from '../models'
+import {core} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
+import type {Query} from './utils/pagination'
 import {
   applyPaginationAndOrder,
   processTypedPaginatedResponse,
-  Query,
   zListParams,
   zListResponse,
 } from './utils/pagination'
@@ -86,14 +87,18 @@ export const customerRouter = router({
         })
         .optional(),
     )
-    .output(zListResponse(core.customer))
+    .output(
+      zListResponse(
+        core.customer_select.extend({connection_count: z.number()}),
+      ),
+    )
     .query(async ({ctx, input}) => {
       const baseQuery = ctx.db
         .select({
-          id: schema.connection.customer_id,
+          id: schema.customer.id,
           connection_count: sql<number>`cast(count(*) as integer)`,
-          created_at: sql<Date>`min(${schema.connection.created_at})`,
-          updated_at: sql<Date>`max(${schema.connection.updated_at})`,
+          created_at: sql<string>`min(${schema.connection.created_at})`,
+          updated_at: sql<string>`max(${schema.connection.updated_at})`,
         })
         .from(schema.connection)
         .where(
@@ -109,12 +114,14 @@ export const customerRouter = router({
         input,
       )
 
+      const res = await query
+
       const {items, total} = await processTypedPaginatedResponse<Customer>(
         query as unknown as Query,
       )
 
       return {
-        items,
+        items: items as typeof res,
         total,
         limit,
         offset,

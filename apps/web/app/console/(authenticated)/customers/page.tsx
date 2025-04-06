@@ -18,7 +18,7 @@ export default async function Page(props: PageProps) {
     <div>
       <ClientApp token={token}>
         <Suspense fallback={<Fallback />}>
-          <CustomerList initialData={await api.listCustomers()} />
+          <CustomerList initialData={api.listCustomers()} />
         </Suspense>
       </ClientApp>
     </div>

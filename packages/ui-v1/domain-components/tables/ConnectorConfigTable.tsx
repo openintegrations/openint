@@ -1,14 +1,14 @@
 'use client'
 
 import {MoreHorizontal} from 'lucide-react'
-import {Core} from '@openint/api-v1/models'
+import type {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
-import type {ColumnDef} from '../../components/DataTable'
 import {DataTable} from '../../components/DataTable'
+import type {ColumnDef} from '../../components/DataTable'
 import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 
 // Define the columns for the connector config table
-export const columns: Array<ColumnDef<Core['connector_config']>> = [
+export const columns: Array<ColumnDef<Core['connector_config_select']>> = [
   {
     id: 'connectorConfig',
     header: 'Connector Name',
@@ -69,9 +69,9 @@ export function ConnectorConfigTable({
   enableSelect,
   onRowClick,
 }: {
-  data: Core['connector_config'][]
+  data: Array<Core['connector_config_select']>
   enableSelect?: boolean
-  onRowClick?: (connectorConfig: Core['connector_config']) => void
+  onRowClick?: (connectorConfig: Core['connector_config_select']) => void
 }) {
   return (
     <DataTable

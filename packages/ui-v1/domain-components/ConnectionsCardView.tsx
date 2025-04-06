@@ -16,7 +16,7 @@ import type {StatusType} from '../components/StatusDot'
 import {ConnectionTableCell} from './tables/ConnectionTableCell'
 
 export interface ConnectionCardProps {
-  connection: Core['connection']
+  connection: Core['connection_select']
   status: StatusType
   category?: string
   platform?: string

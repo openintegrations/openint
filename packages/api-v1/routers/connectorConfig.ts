@@ -135,7 +135,7 @@ export const connectorConfigRouter = router({
         config: z.record(z.unknown()).nullish(),
       }),
     )
-    .output(core.connector_config)
+    .output(core.connector_config_select)
     .mutation(async ({ctx, input}) => {
       const {id, config, display_name, disabled} = input
       const res = await ctx.db
