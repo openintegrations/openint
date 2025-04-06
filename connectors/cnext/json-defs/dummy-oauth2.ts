@@ -8,6 +8,7 @@ export default {
   version: 1,
   auth: {
     type: 'OAUTH2',
+    code_challenge_method: 'S256',
     // TODO: Get these from the connector config
     authorization_request_url:
       'http://localhost:4000/api/dummy-oauth2/authorize',

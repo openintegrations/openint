@@ -1,6 +1,10 @@
 import type {ConnectorDef, ConnectorServer, ExternalId} from '@openint/cdk'
 import {makeId} from '@openint/cdk'
 import {getServerUrl} from '@openint/env'
+import {
+  createCodeChallenge,
+  createCodeVerifier,
+} from '@openint/oauth2/utils.client'
 import {makeUlid} from '@openint/util/id-utils'
 import {type Z} from '@openint/util/zod-utils'
 import type {oauth2Schemas, zOAuthConfig} from './schemas'
@@ -27,10 +31,6 @@ export function createOAuth2ConnectorServer<
     throw new Error('This server can only be used with OAuth2 connectors')
   }
 
-  // TODO: should add a function to generate a random code verifier that meets the spec
-  // And also have it pass through preconnect / poast connect
-  const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
-
   // Create the base server implementation
   const baseServer = {
     newInstance: ({config, settings}) =>
@@ -56,15 +56,26 @@ export function createOAuth2ConnectorServer<
         connectionSettings: undefined,
         fetch: context.fetch,
       })
+
+      const codeChallenge = oauthConfig.code_challenge_method
+        ? {
+            verifier: createCodeVerifier(),
+            method: oauthConfig.code_challenge_method,
+          }
+        : undefined
+
       const authorizeUrl = await client.getAuthorizeUrl({
         redirect_uri: getServerUrl(null) + '/connect/callback',
         scopes: config.oauth?.scopes ?? [],
         state: connectionId,
-        code_verifier: codeVerifier,
+        code_challenge: codeChallenge,
         ...oauthConfig.params_config.authorize,
       })
 
-      return {authorization_url: authorizeUrl}
+      return {
+        authorization_url: authorizeUrl,
+        code_verifier: codeChallenge?.verifier,
+      }
     },
 
     async postConnect({connectOutput, config, context}) {
@@ -82,7 +93,7 @@ export function createOAuth2ConnectorServer<
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
         redirectUri: getServerUrl(null) + '/connect/callback',
-        code_verifier: codeVerifier,
+        code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })
 

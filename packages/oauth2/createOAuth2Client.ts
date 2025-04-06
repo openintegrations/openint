@@ -1,24 +1,10 @@
 import {safeJSONParse} from '@openint/util/json-utils'
-import {toBase64Url} from '@openint/util/string-utils'
 import {stringifyQueryParams} from '@openint/util/url-utils'
 import {zFunction} from '@openint/util/zod-function-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
 import {OAuth2Error} from './OAuth2Error'
-import {renameObjectKeys} from './utils.client'
-
-/**
- * Utility function to create a code challenge from a code verifier using Web Crypto API
- */
-async function createCodeChallenge(codeVerifier: string) {
-  // Convert the string to a Uint8Array
-  const encoder = new TextEncoder()
-  const data = encoder.encode(codeVerifier)
-  // Hash the data with SHA-256
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  // Convert the hash to base64url
-  return toBase64Url(new Uint8Array(hashBuffer))
-}
+import {createCodeChallenge, renameObjectKeys} from './utils.client'
 
 const zTokenResponse = z.object({
   access_token: z.string(),
@@ -148,18 +134,27 @@ export function createOAuth2Client(
       redirect_uri: z.string(),
       scopes: z.array(z.string()).optional(),
       state: z.string().optional(),
-      code_verifier: z.string().optional(),
+      code_challenge: z
+        .object({
+          verifier: z.string(),
+          method: z.enum(['S256', 'plain']),
+        })
+        .optional(),
+
       additional_params: z.record(z.string(), z.string()).optional(),
     }),
-    async ({code_verifier, scopes, additional_params, ...rest}) => {
+    async ({code_challenge, scopes, additional_params, ...rest}) => {
       const searchParams = {
         ...rest,
         response_type: 'code',
         client_id: config.clientId,
         ...(scopes && scopes.length > 0 && {scope: joinScopes(scopes)}),
-        ...(code_verifier && {
-          code_challenge: await createCodeChallenge(code_verifier),
-          code_challenge_method: 'S256',
+        ...(code_challenge && {
+          code_challenge:
+            code_challenge.method === 'S256'
+              ? await createCodeChallenge(code_challenge.verifier)
+              : code_challenge.verifier,
+          code_challenge_method: code_challenge.method,
         }),
         ...additional_params,
       }
