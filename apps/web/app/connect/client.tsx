@@ -6,11 +6,7 @@ import {clientConnectors} from '@openint/all-connectors/connectors.client'
 import type {AppRouterOutput} from '@openint/api-v1'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
 import type {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
-import {
-  createNativeOauthConnect,
-  type ConnectorClient,
-  type JSONSchema,
-} from '@openint/cdk'
+import {type ConnectorClient, type JSONSchema} from '@openint/cdk'
 import {Button, Label, toast} from '@openint/shadcn/ui'
 import {
   Dialog,
@@ -36,6 +32,7 @@ import {
 import {Deferred} from '@openint/util/promise-utils'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
+import {openOAuthPopup} from './callback/openOAuthPopup'
 
 // MARK: - Connector Client Components
 
@@ -86,7 +83,7 @@ export function makeNativeOauthConnectorClientComponent(preConnectRes: {
     onConnectFn: (fn?: ConnectFn) => void
   }) {
     const connectFn = React.useCallback(
-      () => createNativeOauthConnect(preConnectRes),
+      () => openOAuthPopup(preConnectRes),
       [preConnectRes],
     )
     React.useEffect(() => {
