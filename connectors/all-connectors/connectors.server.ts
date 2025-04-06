@@ -40,9 +40,9 @@ import {default as connectorWise} from '@openint/connector-wise/server'
 import {default as connectorXero} from '@openint/connector-xero/server'
 import {default as connectorYodlee} from '@openint/connector-yodlee/server'
 import {default as connectorZohodesk} from '@openint/connector-zohodesk/server'
+import type {NoOverlappingKeys} from '@openint/util/type-utils'
 
-export const serverConnectors = {
-  ...cnextConnectors,
+const customConnectors = {
   airtable: connectorAirtable,
   apollo: connectorApollo,
   brex: connectorBrex,
@@ -83,3 +83,8 @@ export const serverConnectors = {
   yodlee: connectorYodlee,
   zohodesk: connectorZohodesk,
 }
+
+export const serverConnectors = {
+  ...cnextConnectors,
+  ...customConnectors,
+} satisfies NoOverlappingKeys<typeof cnextConnectors, typeof customConnectors>

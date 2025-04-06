@@ -138,6 +138,7 @@ async function main() {
       await writePretty(
         `connectors.${entry}.ts`,
         `
+        import type {NoOverlappingKeys} from '@openint/util/type-utils'
         import {${entry}Connectors as cnextConnectors} from '@openint/cnext/connectors.${entry}'
         
         ${list
@@ -157,12 +158,16 @@ async function main() {
             }'`
           })
           .join('\n')}
-      export const ${entry}Connectors = {
-        ...cnextConnectors,
+       const customConnectors = {
       ${list
         .sort((a, b) => a.name?.localeCompare(b.name || '') || 0)
         .map(({name, varName}) => `'${name}': ${varName},`)
         .join('\n')}}
+
+        export const ${entry}Connectors = {
+          ...cnextConnectors,
+          ...customConnectors,
+        } satisfies NoOverlappingKeys<typeof cnextConnectors, typeof customConnectors>
     `,
       )
     }
