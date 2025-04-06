@@ -1,6 +1,6 @@
 import type {Z} from '@openint/util/zod-utils'
 import type {zOAuthConfig} from './def'
-import {mapOauthParams, prepareScopes} from './utils'
+import {prepareScopes, renameObjectKeys} from './utils'
 
 test('Scope separator should work correctly for different delimiters', () => {
   const mockOauthConfig = {
@@ -41,7 +41,7 @@ test('Scope separator should work correctly for different delimiters', () => {
   ).toBe(encodeURIComponent(scopesWithCommaSeparator))
 })
 
-describe('mapOauthParams', () => {
+describe('renameObjectKeys', () => {
   test('should map parameters according to paramNames', () => {
     const params = {
       client_id: 'test-client-id',
@@ -55,7 +55,7 @@ describe('mapOauthParams', () => {
       scope: 'scopes',
     }
 
-    const result = mapOauthParams(params, paramNames)
+    const result = renameObjectKeys(params, paramNames)
 
     expect(result).toEqual({
       clientKey: 'test-client-id',
@@ -71,7 +71,7 @@ describe('mapOauthParams', () => {
       client_secret: 'clientSecret',
     }
 
-    const result = mapOauthParams(params, paramNames)
+    const result = renameObjectKeys(params, paramNames)
 
     expect(result).toEqual({})
   })
@@ -83,7 +83,7 @@ describe('mapOauthParams', () => {
     }
     const paramNames = {}
 
-    const result = mapOauthParams(params, paramNames)
+    const result = renameObjectKeys(params, paramNames)
 
     // With empty paramNames, we expect the original params to be returned unchanged
     expect(result).toEqual({
@@ -105,7 +105,7 @@ describe('mapOauthParams', () => {
       client_secret: 'clientSecret',
     }
 
-    const result = mapOauthParams(params, paramNames)
+    const result = renameObjectKeys(params, paramNames)
 
     // Parameters with mappings should be renamed, others should remain unchanged
     expect(result).toEqual({
@@ -129,7 +129,7 @@ describe('mapOauthParams', () => {
       scope: 'scope',
     }
 
-    const result = mapOauthParams(params, paramNames)
+    const result = renameObjectKeys(params, paramNames)
 
     expect(result).toEqual({
       consumer_key: 'salesforce-client-id',

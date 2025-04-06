@@ -1,7 +1,7 @@
 import {toBase64Url} from '@openint/util/string-utils'
 import {isZodError, z, type Z} from '@openint/util/zod-utils'
 import {oauth2Schemas, zOAuthConfig} from './def'
-import {mapOauthParams, prepareScopes} from './utils'
+import {renameObjectKeys, prepareScopes} from './utils'
 
 export async function makeTokenRequest(
   url: string,
@@ -111,7 +111,7 @@ export async function authorizeHandler({
 
   const url = new URL(oauthConfig.authorization_request_url)
 
-  const params = mapOauthParams(
+  const params = renameObjectKeys(
     {
       client_id: oauthConfig.connector_config.oauth.client_id,
       redirect_uri: redirectUri,
@@ -162,7 +162,7 @@ export async function defaultTokenExchangeHandler({
 > {
   validateOAuthCredentials(oauthConfig)
 
-  const params = mapOauthParams(
+  const params = renameObjectKeys(
     {
       client_id: oauthConfig.connector_config.oauth.client_id,
       client_secret: oauthConfig.connector_config.oauth.client_secret,
@@ -202,7 +202,7 @@ export async function tokenRefreshHandler({
 > {
   validateOAuthCredentials(oauthConfig)
 
-  const params = mapOauthParams(
+  const params = renameObjectKeys(
     {
       client_id: oauthConfig.connector_config.oauth.client_id,
       client_secret: oauthConfig.connector_config.oauth.client_secret,

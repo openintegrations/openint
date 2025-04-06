@@ -54,6 +54,18 @@ function injectCcfgDefaultCredentials(
   return connectorConfig
 }
 
+function clientFromConnectorConfig(
+  connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>,
+) {
+  return createOAuth2Client({
+    clientId: connectorConfig.oauth?.client_id,
+    clientSecret: connectorConfig.oauth?.client_secret,
+    redirectUri: getServerUrl(null) + '/connect/callback',
+    scopes: connectorConfig.oauth?.scopes,
+  })
+}
+
+
 /*
  * This function generates a server implementation for an OAuth2 connector.
  * It takes a connector definition and overrides for the server implementation.
@@ -61,15 +73,10 @@ function injectCcfgDefaultCredentials(
  * Inspired by https://github.com/lelylan/simple-oauth2/blob/master/API.md
  *
  */
-export function generateOAuth2Server<
+export function generateOAuth2ConnectorServer<
   TName extends string,
   T extends typeof oauth2Schemas & {name: Z.ZodLiteral<TName>},
-  D extends ConnectorDef<T>,
->(
-  connectorDef: D,
-  oauthConfig: Z.infer<typeof zOAuthConfig>,
-  overrides?: Partial<ConnectorServer<T>>,
-): ConnectorServer<T> {
+>(connectorDef: ConnectorDef<T>, oauthConfig: Z.infer<typeof zOAuthConfig>) {
   if (
     // TODO: connectorDef.auth.type !== 'OAUTH2CC'?
     connectorDef.metadata?.authType !== 'OAUTH2'
@@ -78,7 +85,7 @@ export function generateOAuth2Server<
   }
 
   // Create the base server implementation
-  const baseServer: ConnectorServer<T> = {
+  const baseServer: ConnectorServer<ConnectorDef<T>['schemas']> = {
     newInstance: ({config}) => {
       // Use the same helper function to get credentials
       const credentials = injectCcfgDefaultCredentials(
@@ -92,25 +99,19 @@ export function generateOAuth2Server<
 
     async preConnect({config, context, input}) {
       const connectionId =
-        input.connectionId ?? makeId('conn', connectorDef.name, makeUlid())
+        input.connection_id ?? makeId('conn', connectorDef.name, makeUlid())
 
       console.log(
         `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!context.connection}`,
       )
-
-      // console.warn(
-      //   `Oauth2 Preconnect called with oauthConfig ${JSON.stringify(
-      //     oauthConfig,
-      //   )} and connectorConfig ${JSON.stringify(
-      //     config,
-      //   )} and connectionSettings ${JSON.stringify(context.connection)}`,
-      // )
 
       const ccfg = injectCcfgDefaultCredentials(
         config,
         connectorDef.name,
         oauthConfig,
       )
+      
+
       return authorizeHandler({
         oauthConfig: {
           ...renderTemplateObject(oauthConfig, {
@@ -248,9 +249,5 @@ export function generateOAuth2Server<
     },
   }
 
-  // Apply any server method overrides
-  return {
-    ...baseServer,
-    ...overrides,
-  } as ConnectorServer<T>
+  return baseServer
 }

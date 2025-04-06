@@ -392,6 +392,9 @@ importers:
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
+      '@openint/oauth2':
+        specifier: workspace:*
+        version: link:../../packages/oauth2
       '@openint/util':
         specifier: workspace:*
         version: link:../../packages/util

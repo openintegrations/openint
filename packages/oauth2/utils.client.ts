@@ -1,17 +1,3 @@
-import {type Z} from '@openint/util/zod-utils'
-import type {zOAuthConfig} from './def'
-
-export function prepareScopes(
-  scopes: string[],
-  jsonConfig: Z.infer<typeof zOAuthConfig>,
-) {
-  const scopeSeparator = jsonConfig.scope_separator ?? ' '
-
-  if (!scopes || !Array.isArray(scopes) || scopes.length === 0) {
-    return ''
-  }
-  return scopes.join(encodeURIComponent(scopeSeparator))
-}
 
 /*
  * This function takes the paramNames map where a user can map were fields like client_id and client_secret are named in particular oauth connector.

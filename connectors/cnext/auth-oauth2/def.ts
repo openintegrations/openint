@@ -108,13 +108,19 @@ export const oauth2Schemas = {
   }),
   // No pre connect input is necessary for oauth2
   // TODO: Fix to be unnecessary
-  pre_connect_input: z.any(),
+  pre_connect_input: z.object({
+    connection_id: z
+      .string()
+      .optional()
+      .describe('In case of re-connecting, id of the existing connection'),
+  }),
   connect_input: z.object({
-    authorization_url: z.string(),
+    authorization_url: z.string().describe('URL to take user to for approval'),
   }),
   connect_output: z.object({
-    code: z.string(),
-    // connectionId: z.string(),
-    state: z.string(),
+    code: z
+      .string()
+      .describe('OAuth2 authorization code used for token exchange'),
+    state: z.string().describe('OAuth2 state'),
   }),
 } satisfies Omit<ConnectorSchemas, 'name'>

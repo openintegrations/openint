@@ -57,7 +57,7 @@ const authorizeRes = $test('authorize redirect with PKCE', async () => {
   // Use OAuth2Client to generate the authorize URL
   const authorizeUrl = await oauthClient.getAuthorizeUrl({
     redirect_uri: client.redirectUris[0],
-    scope: client.scopes[0].name,
+    scopes: [client.scopes[0].name],
     state: 'xyz',
     code_verifier: codeVerifier,
   })

@@ -4,6 +4,7 @@ import {zFunction} from '@openint/util/zod-function-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
 import {OAuth2Error} from './OAuth2Error'
+import {renameObjectKeys} from './utils.client'
 
 /**
  * Utility function to create a code challenge from a code verifier using Web Crypto API
@@ -31,6 +32,13 @@ const zOAuth2ClientConfig = z.object({
   revokeUrl: z.string().optional(),
   clientAuthLocation: z.enum(['body', 'header']).optional(),
   errorToString: z.function().args(z.unknown()).returns(z.string()).optional(),
+  /** renameObjectKeys to the names used by the oauth provider */
+  paramKeyMapping: z.record(z.string(), z.string()).optional(),
+  /** Do we need to support other delimiters? */
+  scopeDelimiter: z
+    .enum([' ', ',', ';'])
+    .optional()
+    .describe('Delimiter for scopes, defaults to space'),
 })
 
 export type OAuth2ClientConfig = Z.infer<typeof zOAuth2ClientConfig>
@@ -54,7 +62,7 @@ export function createOAuth2Client<
     params: Record<string, unknown>,
   ): Promise<T> => {
     const {clientAuthLocation = 'body'} = config
-    const body = stringifyQueryParams({
+    const resolvedParams = {
       ...params,
       ...(clientAuthLocation !== 'header'
         ? {
@@ -62,7 +70,10 @@ export function createOAuth2Client<
             client_secret: config.clientSecret,
           }
         : {}),
-    })
+    }
+    const body = stringifyQueryParams(
+      renameObjectKeys(resolvedParams, config.paramKeyMapping ?? {}),
+    )
 
     const headers: HeadersInit = {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -100,15 +111,19 @@ export function createOAuth2Client<
   const getAuthorizeUrl = zFunction(
     z.object({
       redirect_uri: z.string(),
-      scope: z.string().optional(),
+      scopes: z.array(z.string()).optional(),
       state: z.string().optional(),
       code_verifier: z.string().optional(),
     }),
-    async ({code_verifier, ...params}) => {
+    async ({code_verifier, scopes, ...params}) => {
       const searchParams = {
         ...params,
         response_type: 'code',
         client_id: config.clientId,
+        ...(scopes &&
+          scopes.length > 0 && {
+            scope: scopes.join(config.scopeDelimiter ?? ' '),
+          }),
         ...(code_verifier && {
           code_challenge: await createCodeChallenge(code_verifier),
           code_challenge_method: 'S256',
@@ -156,10 +171,12 @@ export function createOAuth2Client<
     })
   }
 
-  const getTokenWithClientCredentials = (params?: {scope: string}) =>
+  const getTokenWithClientCredentials = (params?: {scopes?: string[]}) =>
     post<TToken & {refresh_token: string}>(config.tokenURL, {
       grant_type: 'client_credentials',
-      scope: params?.scope,
+      ...(params?.scopes?.length && {
+        scope: params.scopes.join(config.scopeDelimiter ?? ' '),
+      }),
     })
 
   return {

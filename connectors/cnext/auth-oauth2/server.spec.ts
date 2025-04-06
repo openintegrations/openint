@@ -5,7 +5,7 @@ import {describeEachDatabase} from '../../../packages/db/__tests__/test-utils'
 import type {JsonConnectorDef} from '../schema'
 import type {zOAuthConfig} from './def'
 import {generateOauthConnectorDef} from './schema'
-import {generateOAuth2Server} from './server'
+import {generateOAuth2ConnectorServer} from './server'
 
 const logger = false
 
@@ -51,7 +51,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('newInstance should throw error if client credentials are missing', () => {
-    const server = generateOAuth2Server(
+    const server = generateOAuth2ConnectorServer(
       mockConnectorDef as any,
       mockOauthConfig,
     )
@@ -71,7 +71,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('newInstance should initialize successfully with valid credentials', () => {
-    const server = generateOAuth2Server(
+    const server = generateOAuth2ConnectorServer(
       mockConnectorDef as any,
       mockOauthConfig,
     )
@@ -92,7 +92,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
   })
 
   test('preConnect should generate correct authorization URL', async () => {
-    const server = generateOAuth2Server(
+    const server = generateOAuth2ConnectorServer(
       mockConnectorDef as any,
       mockOauthConfig,
     )
@@ -140,7 +140,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       openint_scopes: ['read', 'write'], // Only these scopes are allowed
     }
 
-    const server = generateOAuth2Server(
+    const server = generateOAuth2ConnectorServer(
       mockConnectorDef as any,
       serverOauthConfig,
     )

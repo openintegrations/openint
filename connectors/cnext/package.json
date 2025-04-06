@@ -9,6 +9,7 @@
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",
+    "@openint/oauth2": "workspace:*",
     "@openint/util": "workspace:*",
     "mustache": "^4.2.0"
   },
