@@ -1,19 +1,22 @@
 'use client'
 
-import {useOrganization, useOrganizationList} from '@clerk/nextjs'
 import {useRouter} from 'next/navigation'
 import React from 'react'
+import type {CommandDefinitionMapInput} from '@openint/commands'
 import {
   cmdInit,
-  CommandDefinitionMapInput,
   type CommandDefinitionInput,
   type CommandDefinitionMap,
 } from '@openint/commands'
+import {
+  useOrganization,
+  useOrganizationList,
+  useSession,
+} from '@openint/console-auth/client'
 import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
 import {SIDEBAR_NAV_ITEMS} from '@openint/ui-v1/navigation/app-sidebar'
 import {useMutation, useQueryClient} from '@openint/ui-v1/trpc'
 import {z} from '@openint/util/zod-utils'
-import {useSession} from '@/lib-client/auth.client'
 import {useTRPC} from './console/(authenticated)/client'
 
 export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {

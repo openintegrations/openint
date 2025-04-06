@@ -1,0 +1,18 @@
+{
+  "name": "@openint/console-auth",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "@clerk/nextjs": "^6.13.0",
+    "@openint/cdk": "workspace:*",
+    "@openint/env": "workspace:*",
+    "@openint/util": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "*"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}

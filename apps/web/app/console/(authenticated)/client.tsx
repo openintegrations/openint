@@ -1,8 +1,8 @@
 'use client'
 
-import {useAuth, useUser} from '@clerk/nextjs'
 import React from 'react'
 import type {AppRouter} from '@openint/api-v1'
+import {useAuth, useUser} from '@openint/console-auth/client'
 import {getServerUrl} from '@openint/env'
 import {Toaster} from '@openint/shadcn/ui'
 import {
