@@ -1,6 +1,7 @@
 import {zodToOas31Schema} from '@openint/util/schema'
 import type {Invert, NonEmptyArray} from '@openint/util/type-utils'
-import {Z, z, zCast} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
+import {z, zCast} from '@openint/util/zod-utils'
 import type {ConnectorSchemas} from './connector.types'
 
 export const _zOauthConfig = z.object({
@@ -23,6 +24,7 @@ export const zCcfgAuth = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+/**  ReturnType<typeof zodToOas31Schema> | JSONSchema7Definition */
 export type JSONSchema = {}
 
 export const zJSONSchema = zCast<JSONSchema>()
@@ -52,7 +54,7 @@ const schemaKeyFromCamelCase = {
 
 export type SchemaKey = (typeof schemaKeyFromCamelCase)[CamelCaseSchemaKey]
 
-type BackToCamelCase<K extends SchemaKey> = Invert<
+type ToCamelCaseSchemaKey<K extends SchemaKey> = Invert<
   typeof schemaKeyFromCamelCase
 >[K]
 
@@ -83,10 +85,9 @@ export function materializeSchemas<T extends ConnectorSchemas>(schemas: T) {
       return [schemaKey, schema]
     }),
   ) as {
-    // TODO: Use mapObject from util/object-utils to simplify this typing...
-    [Key in SchemaKey]: T[BackToCamelCase<Key>] extends Z.ZodTypeAny
-      ? T[BackToCamelCase<Key>]
-      : BackToCamelCase<Key> extends 'connectOutput'
+    [Key in SchemaKey]: T[ToCamelCaseSchemaKey<Key>] extends Z.ZodTypeAny
+      ? T[ToCamelCaseSchemaKey<Key>]
+      : ToCamelCaseSchemaKey<Key> extends 'connectOutput'
         ? T['connectionSettings'] extends Z.ZodTypeAny
           ? T['connectionSettings']
           : Z.ZodObject<{}, 'strict'>

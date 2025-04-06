@@ -1,4 +1,3 @@
-import Elysia from 'elysia'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {oauth2Schemas} from '@openint/cnext/_defaults/oauth2/def'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
@@ -7,6 +6,7 @@ import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
+import Elysia from 'elysia'
 import {trpc} from '../trpc/_base'
 import {routerContextFromViewer} from '../trpc/context'
 import {onError} from '../trpc/error-handling'
@@ -203,7 +203,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       const res = await asCustomer.preConnect({
         connector_config_id: ccfgRes.current.id,
         options: {},
-        discriminated_data: {connector_name: ccfgRes.current.connector_name, pre_connect_input: {}},
+        discriminated_data: {
+          connector_name: ccfgRes.current.connector_name,
+          pre_connect_input: {},
+        },
       })
       expect(res.connect_input).toEqual({})
     })

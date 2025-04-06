@@ -50,10 +50,12 @@ export const discriminatedUnionBySchemaKey = Object.fromEntries(
 ) as {
   [Key in SchemaKey]: Z.ZodDiscriminatedUnion<
     'connector_name',
-    // can we discriminate this to get the actual zod type? We probably could!
     NonEmptyArray<
       Z.ZodObject<
-        {connector_name: Z.ZodLiteral<string>} & {[k in Key]: Z.ZodTypeAny}
+        // Technicaly we could make both key and value more specifically typed, but it'd be a pain to use
+        {connector_name: Z.ZodLiteral<string /* ConnectorName */>} & {
+          [k in Key]: Z.ZodTypeAny
+        }
       >
     >
   >
