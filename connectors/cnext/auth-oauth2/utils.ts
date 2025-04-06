@@ -1,5 +1,5 @@
 import {getConnectorDefaultCredentials} from '@openint/env'
-import {createOAuth2Client} from '@openint/oauth2/OAuth2Client'
+import {createOAuth2Client} from '@openint/oauth2/createOAuth2Client'
 import {type Z} from '@openint/util/zod-utils'
 import {renderTemplateObject} from '../lib/template'
 import type {oauth2Schemas, zOAuthConfig} from './schemas'

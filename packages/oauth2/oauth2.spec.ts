@@ -4,12 +4,12 @@ import {expect} from '@jest/globals'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
-import {createOAuth2Client} from './OAuth2Client'
+import {createOAuth2Client} from './createOAuth2Client'
 import {
   createOAuth2Server,
   type OAuthClient,
   type OAuthUser,
-} from './OAuth2Server'
+} from './createOAuth2Server'
 
 const client = {
   id: 'client1',

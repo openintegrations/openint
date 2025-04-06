@@ -3,6 +3,7 @@
 exports[`db: pglite list connectors with schemas 1`] = `
 [
   {
+    "authType": "OAUTH2",
     "display_name": "Aircall (OAuth)",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-aircall.svg",
     "name": "aircall",
@@ -17,6 +18,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -28,9 +30,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -54,6 +58,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -98,12 +103,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -160,7 +159,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -203,6 +210,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Airtable",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-airtable.svg",
     "name": "airtable",
@@ -267,6 +275,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Apollo",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-apollo.svg",
     "name": "apollo",
@@ -613,6 +622,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Brex",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-brex.svg",
     "name": "brex",
@@ -696,6 +706,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Coda",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-coda.svg",
     "name": "coda",
@@ -752,6 +763,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Confluence",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-confluence.svg",
     "name": "confluence",
@@ -766,6 +778,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -777,9 +790,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -803,6 +818,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -847,12 +863,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -909,7 +919,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -952,6 +970,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Discord",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-discord.svg",
     "name": "discord",
@@ -966,6 +985,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -977,9 +997,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -1003,6 +1025,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -1047,12 +1070,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -1109,7 +1126,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -1156,6 +1181,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Dummy OAuth2",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-dummy-oauth2.svg",
     "name": "dummy-oauth2",
@@ -1170,6 +1196,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -1181,9 +1208,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -1207,6 +1236,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -1251,12 +1281,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -1313,7 +1337,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -1332,6 +1364,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Facebook",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-facebook.svg",
     "name": "facebook",
@@ -1561,6 +1594,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Finch",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-finch.svg",
     "name": "finch",
@@ -1681,6 +1715,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Firebase",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-firebase.svg",
     "name": "firebase",
@@ -2021,6 +2056,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Foreceipt",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-foreceipt.svg",
     "name": "foreceipt",
@@ -2102,6 +2138,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "GitHub (User OAuth)",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-github.svg",
     "name": "github",
@@ -2116,6 +2153,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -2127,9 +2165,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -2153,6 +2193,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -2197,12 +2238,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -2259,7 +2294,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -2298,6 +2341,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Gong",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-gong.svg",
     "name": "gong",
@@ -2527,6 +2571,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Google Calendar",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlecalendar.svg",
     "name": "googlecalendar",
@@ -2541,6 +2586,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -2552,9 +2598,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -2578,6 +2626,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -2622,12 +2671,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -2684,7 +2727,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -2715,6 +2766,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Google Docs",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledocs.svg",
     "name": "googledocs",
@@ -2729,6 +2781,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -2740,9 +2793,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -2766,6 +2821,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -2810,12 +2866,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -2872,7 +2922,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -2903,6 +2961,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Google Drive",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledrive.svg",
     "name": "googledrive",
@@ -2917,6 +2976,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -2928,9 +2988,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -2954,6 +3016,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -2998,12 +3061,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -3060,7 +3117,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -3083,6 +3148,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Gmail",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlemail.svg",
     "name": "googlemail",
@@ -3097,6 +3163,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -3108,9 +3175,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -3134,6 +3203,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -3178,12 +3248,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -3240,7 +3304,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -3287,6 +3359,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Google Sheet",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlesheet.svg",
     "name": "googlesheet",
@@ -3301,6 +3374,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -3312,9 +3386,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -3338,6 +3414,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -3382,12 +3459,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -3444,7 +3515,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -3479,6 +3558,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Greenhouse",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-greenhouse.svg",
     "name": "greenhouse",
@@ -3535,6 +3615,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Heron Data",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-heron.svg",
     "name": "heron",
@@ -3584,6 +3665,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "HubSpot",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-hubspot.svg",
     "name": "hubspot",
@@ -3598,6 +3680,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -3609,9 +3692,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -3635,6 +3720,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -3679,12 +3765,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -3768,7 +3848,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -3847,6 +3935,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Instagram",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-instagram.svg",
     "name": "instagram",
@@ -4076,6 +4165,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Intercom",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-intercom.svg",
     "name": "intercom",
@@ -4305,6 +4395,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Jira",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-jira.svg",
     "name": "jira",
@@ -4534,6 +4625,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Kustomer",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-kustomer.svg",
     "name": "kustomer",
@@ -4763,6 +4855,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Lever",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lever.svg",
     "name": "lever",
@@ -5000,6 +5093,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Linear",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linear.svg",
     "name": "linear",
@@ -5014,6 +5108,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -5025,9 +5120,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -5051,6 +5148,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -5095,12 +5193,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -5157,7 +5249,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -5200,6 +5300,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "LinkedIn",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linkedin.svg",
     "name": "linkedin",
@@ -5214,6 +5315,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -5225,9 +5327,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -5251,6 +5355,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -5295,12 +5400,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -5357,7 +5456,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -5400,6 +5507,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Lunchmoney",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lunchmoney.svg",
     "name": "lunchmoney",
@@ -5449,6 +5557,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Mercury",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-mercury.svg",
     "name": "mercury",
@@ -5521,6 +5630,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "merge.dev",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-merge.svg",
     "name": "merge",
@@ -5618,6 +5728,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "microsoft",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-microsoft.svg",
     "name": "microsoft",
@@ -5893,6 +6004,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Moota",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-moota.svg",
     "name": "moota",
@@ -5942,6 +6054,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Notion",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-notion.svg",
     "name": "notion",
@@ -5956,6 +6069,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -5967,9 +6081,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -5993,6 +6109,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -6037,12 +6154,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -6099,7 +6210,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -6134,6 +6253,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Onebrick",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-onebrick.svg",
     "name": "onebrick",
@@ -6252,6 +6372,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Outreach",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-outreach.svg",
     "name": "outreach",
@@ -6481,6 +6602,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Outreach",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-pipedrive.svg",
     "name": "pipedrive",
@@ -6710,6 +6832,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Plaid",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-plaid.svg",
     "name": "plaid",
@@ -6945,6 +7068,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Postgres",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-postgres.svg",
     "name": "postgres",
@@ -7025,6 +7149,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Quickbooks",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-quickbooks.svg",
     "name": "quickbooks",
@@ -7039,6 +7164,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -7050,9 +7176,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -7076,6 +7204,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -7120,12 +7249,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
           "realmId": {
@@ -7197,7 +7320,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -7252,6 +7383,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Ramp",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-ramp.svg",
     "name": "ramp",
@@ -7352,6 +7484,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Reddit",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-reddit.svg",
     "name": "reddit",
@@ -7581,6 +7714,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Salesforce",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesforce.svg",
     "name": "salesforce",
@@ -7595,6 +7729,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -7606,9 +7741,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -7637,6 +7774,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -7681,12 +7819,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -7744,7 +7876,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -7759,6 +7899,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Salesloft",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesloft.svg",
     "name": "salesloft",
@@ -7988,6 +8129,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Saltedge",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-saltedge.svg",
     "name": "saltedge",
@@ -8041,6 +8183,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "SharePoint Online (v2)",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepointonline.svg",
     "name": "sharepointonline",
@@ -8055,6 +8198,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -8066,9 +8210,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -8092,6 +8238,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -8136,12 +8283,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -8198,7 +8339,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -8213,6 +8362,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
     "display_name": "Slack",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-slack.svg",
     "name": "slack",
@@ -8227,6 +8377,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_input": {
         "properties": {
           "authorization_url": {
+            "description": "URL to take user to for approval",
             "type": "string",
           },
         },
@@ -8238,9 +8389,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "code": {
+            "description": "OAuth2 authorization code used for token exchange",
             "type": "string",
           },
           "state": {
+            "description": "OAuth2 state",
             "type": "string",
           },
         },
@@ -8264,6 +8417,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                     "type": "string",
                   },
                   "client_id": {
+                    "description": "Client ID used for the connection",
                     "type": "string",
                   },
                   "expires_at": {
@@ -8308,12 +8462,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "string",
               },
             },
-            "required": [
-              "created_at",
-              "updated_at",
-              "last_fetched_at",
-              "metadata",
-            ],
             "type": "object",
           },
         },
@@ -8370,7 +8518,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "additionalProperties": false,
         "type": "object",
       },
-      "pre_connect_input": {},
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
       "webhook_input": {
         "additionalProperties": false,
         "type": "object",
@@ -8417,6 +8573,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Splitwise",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-splitwise.svg",
     "name": "splitwise",
@@ -8769,6 +8926,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Stripe",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-stripe.svg",
     "name": "stripe",
@@ -8855,6 +9013,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Teller",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-teller.svg",
     "name": "teller",
@@ -8952,6 +9111,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Toggl",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-toggl.svg",
     "name": "toggl",
@@ -9039,6 +9199,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Twenty",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twenty.svg",
     "name": "twenty",
@@ -9095,6 +9256,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Twitter",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twitter.svg",
     "name": "twitter",
@@ -9324,6 +9486,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Venmo",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-venmo.svg",
     "name": "venmo",
@@ -9403,6 +9566,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Wise",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-wise.svg",
     "name": "wise",
@@ -9498,6 +9662,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Xero",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-xero.svg",
     "name": "xero",
@@ -9727,6 +9892,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Yodlee",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-yodlee.svg",
     "name": "yodlee",
@@ -9970,6 +10136,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "alpha",
   },
   {
+    "authType": "CUSTOM",
     "display_name": "Zoho Desk",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-zohodesk.svg",
     "name": "zohodesk",
