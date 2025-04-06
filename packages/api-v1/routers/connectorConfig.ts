@@ -100,7 +100,7 @@ export const connectorConfigRouter = router({
 
       // this is done as v0 had scopes as a string and we've moved it to an array in v1
       // but some connector names are called the same
-      processedItems.forEach((item) => {
+      expandedItems.forEach((item) => {
         // TODO: move to a delimeter based on the connector metadata once we have jsonDef in metadata
         // const delimiter =
         //   defConnectors[item.connector_name as keyof typeof defConnectors]
