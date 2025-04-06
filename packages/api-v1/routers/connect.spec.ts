@@ -1,6 +1,6 @@
 import Elysia from 'elysia'
 import type {CustomerId, Viewer} from '@openint/cdk'
-import {oauth2Schemas} from '@openint/cnext/_defaults/oauth2/def'
+import {oauth2Schemas} from '@openint/cnext/oauth2/def'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {createOAuth2Server} from '@openint/oauth2/OAuth2Server'
 import {$test} from '@openint/util/__tests__/test-utils'

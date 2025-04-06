@@ -1,5 +1,5 @@
 import {z} from '@openint/util/zod-utils'
-import {generateOauthConnectorDef} from '../../_defaults/oauth2/schema'
+import {generateOauthConnectorDef} from '../../oauth2/schema'
 import type {JsonConnectorDef} from '../../def'
 
 export const jsonDef = {

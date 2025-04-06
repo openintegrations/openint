@@ -1,9 +1,9 @@
-import {ConnectorDef} from '@openint/cdk'
+import type {ConnectorDef} from '@openint/cdk'
 import {type Z} from '@openint/util/zod-utils'
 // TODO: Fix this hack... but it is needed to avoid circular dependency for now
-import {describeEachDatabase} from '../../../../packages/db/__tests__/test-utils'
-import type {JsonConnectorDef} from '../../def'
-import {zOAuthConfig} from './def'
+import {describeEachDatabase} from '../../../packages/db/__tests__/test-utils'
+import type {JsonConnectorDef} from '../def'
+import type {zOAuthConfig} from './def'
 import {generateOauthConnectorDef} from './schema'
 import {generateOAuth2Server} from './server'
 import {mapOauthParams} from './utils'

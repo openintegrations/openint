@@ -1,7 +1,7 @@
 import {zConnectorStage, zVerticalKey} from '@openint/cdk'
 import {z, type Z} from '@openint/util/zod-utils'
-import {zAPIKeyConnectorDef} from './_defaults/apikey'
-import {zOAuthConfig} from './_defaults/oauth2'
+import {zAPIKeyConnectorDef} from './apikey'
+import {zOAuthConfig} from './oauth2'
 
 // the idea is that this is provided by a CMS like payload and
 // is searchable based on the connector name
