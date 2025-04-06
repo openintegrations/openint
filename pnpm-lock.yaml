@@ -1065,9 +1065,6 @@ importers:
 
   kits/cdk:
     dependencies:
-      '@jsonurl/jsonurl':
-        specifier: ^1.1.7
-        version: 1.1.7(patch_hash=2048c2869df98564de76ebdd8cdf655260560d85e1c74568aeb503efa2c312b0)
       '@openint/sync':
         specifier: workspace:*
         version: link:../sync
@@ -1613,6 +1610,9 @@ importers:
 
   packages/util:
     dependencies:
+      '@jsonurl/jsonurl':
+        specifier: 1.1.7
+        version: 1.1.7(patch_hash=2048c2869df98564de76ebdd8cdf655260560d85e1c74568aeb503efa2c312b0)
       accounting:
         specifier: 0.4.1
         version: 0.4.1

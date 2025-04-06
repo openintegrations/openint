@@ -6,7 +6,6 @@
   "sideEffects": false,
   "module": "./index.ts",
   "dependencies": {
-    "@jsonurl/jsonurl": "^1.1.7",
     "@openint/sync": "workspace:*",
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
