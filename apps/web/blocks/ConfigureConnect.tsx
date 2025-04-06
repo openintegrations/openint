@@ -2,24 +2,30 @@
 
 import React from 'react'
 import {connectRouterModels} from '@openint/api-v1/routers/connect.models'
+import {ConnectEmbed} from '@openint/connect'
+import {getServerUrl} from '@openint/env'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
-import {useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {useMutation} from '@openint/ui-v1/trpc'
 import {Z} from '@openint/util/zod-utils'
 import {useTRPC} from '@/app/console/(authenticated)/trpc'
 
 // Define the type for the form data based on the schema
-type GetMagicLinkInput = Z.infer<typeof connectRouterModels.getMagicLinkInput>
+type CreateTokenInput = Z.infer<typeof connectRouterModels.createTokenInput>
 
 export function ConfigureConnect() {
   // Initialize with default values from the schema
-  const [formData, setFormData] = React.useState<GetMagicLinkInput>({
+  const [formData, setFormData] = React.useState<CreateTokenInput>({
     customer_id: 'cust_123' as any, // Using type assertion for the branded type
     validity_in_seconds: 2592000,
   })
 
   const trpc = useTRPC()
-  const res = useSuspenseQuery(trpc.getMagicLink.queryOptions(formData))
+  const mutation = useMutation(trpc.createToken.mutationOptions())
+
+  React.useEffect(() => {
+    mutation.mutate(formData)
+  }, [formData])
 
   return (
     <div className="flex max-h-full flex-1 gap-4">
@@ -41,9 +47,16 @@ export function ConfigureConnect() {
       <div className="flex flex-1 flex-col p-4">
         <h2 className="mb-4 text-xl font-semibold">Preview</h2>
         <PreviewWindow
-          url={res.data.magic_link_url}
+          url={'https://connect.openint.dev'}
           className="flex-1 overflow-scroll">
-          <iframe src={res.data.magic_link_url} className="h-full w-full" />
+          {mutation.data?.token && (
+            <ConnectEmbed
+              className="h-full w-full"
+              token={mutation.data?.token}
+              baseUrl={getServerUrl(null) + '/connect'}
+            />
+          )}
+          {/* <iframe src={mutation.data?.token} className="h-full w-full" /> */}
           {/* <div className="bg-muted/50 flex h-full items-center justify-center">
             <div className="text-center">
               <h1 className="text-2xl font-bold">Connect Preview</h1>

@@ -53,4 +53,11 @@ export const connectRouterModels = {
       ),
     client_options: connectClientOptions.optional(),
   }),
+  createTokenInput: z.object({
+    customer_id: zCustomerId.openapi({
+      param: {in: 'path', name: 'customer_id'},
+    }),
+    validity_in_seconds: z.number().optional().default(2592000),
+    client_options: connectClientOptions.optional(),
+  }),
 }
