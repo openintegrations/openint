@@ -23,7 +23,7 @@ import {
   router,
 } from '../trpc/_base'
 import {connectRouterModels} from './connect.models'
-import {ConnectorName, connectorSchemas} from './connector.models'
+import {connectorSchemas} from './connector.models'
 import {md} from './utils/md'
 
 export const connectRouter = router({
@@ -349,6 +349,9 @@ export const connectRouter = router({
       await connector.revokeConnection?.(conn.settings, ccfg.config, instance)
 
       // TODO: make sure statis is updated
-      return conn!
+      return {
+        ...conn!,
+        customer_id: conn.customer_id!, // Fix me
+      }
     }),
 })
