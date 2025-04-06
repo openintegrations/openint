@@ -88,10 +88,10 @@ export interface ConnectorClient<
 }
 
 export interface ConnectorServer<
-  TDef extends ConnectorSchemas = ConnectorSchemas,
+  TSchemas extends ConnectorSchemas = ConnectorSchemas,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TInstance = any,
-  T extends ConnHelpers<TDef> = ConnHelpers<TDef>,
+  T extends ConnHelpers<TSchemas> = ConnHelpers<TSchemas>,
 > {
   /**
    * Work around typescript not having contextual typing support for classes that implement interfaces

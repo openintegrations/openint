@@ -139,14 +139,14 @@ export const makeRampClient = zFunction(zRampConfig, (_cfg) => {
     // getAccessToken: zFunction(() =>
     //   oAuth2Client
     //     .getTokenWithClientCredentials({
-    //       scope: 'users:read transactions:read business:read',
+    //       scopes: ['users:read', 'transactions:read', 'business:read'],
     //     })
     //     .then((r) => r.access_token),
     // ),
     // getAuthorizeUrl: zFunction(z.string(), (redirectUri) =>
     //   oAuth2Client.getAuthorizeUrl({
     //     redirect_uri: redirectUri,
-    //     scope: 'users:read transactions:read business:read',
+    //     scopes: ['users:read', 'transactions:read', 'business:read'],
     //   }),
     // ),
     // getToken: zFunction(getTokenInputSchema, (opts) =>
