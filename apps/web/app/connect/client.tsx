@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import React from 'react'
 import {clientConnectors} from '@openint/all-connectors/connectors.client'
-import {AppRouterOutput} from '@openint/api-v1'
+import type {AppRouterOutput} from '@openint/api-v1'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
 import {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
 import type {ConnectorClient, JSONSchema} from '@openint/cdk'
@@ -15,11 +15,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@openint/shadcn/ui/dialog'
+import type {JSONSchemaFormRef} from '@openint/ui-v1'
 import {
   CommandPopover,
   DataTileView,
   JSONSchemaForm,
-  JSONSchemaFormRef,
   useMutableSearchParams,
 } from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
@@ -70,8 +70,8 @@ const ConnectorClientComponents = Object.fromEntries(
   ]),
 )
 
-function makeNativeOauthConnectorClientComponent(
-  settingsJsonSchema: JSONSchema,
+export function makeNativeOauthConnectorClientComponent(
+  _settingsJsonSchema: JSONSchema,
 ) {
   // createNativeOauthConnect
   // open popup

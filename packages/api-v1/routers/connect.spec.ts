@@ -1,4 +1,3 @@
-import Elysia from 'elysia'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {oauth2Schemas} from '@openint/cnext/_defaults/oauth2/def'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
@@ -7,7 +6,7 @@ import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
-import {getTestTRPCClient} from '../__tests__/test-utils'
+import Elysia from 'elysia'
 import {trpc} from '../trpc/_base'
 import {routerContextFromViewer} from '../trpc/context'
 import {onError} from '../trpc/error-handling'
@@ -70,11 +69,6 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       {onError},
     )
   }
-  /** Also possible */
-  function getClient(viewer: Viewer) {
-    return getTestTRPCClient({db, router: connectorConfigRouter}, viewer)
-  }
-  const asOrg = getCaller({role: 'org', orgId: 'org_222'})
   const asUser = getCaller({
     role: 'user',
     userId: 'user_222',
