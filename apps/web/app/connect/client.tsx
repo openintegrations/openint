@@ -75,7 +75,7 @@ const ConnectorClientComponents = Object.fromEntries(
 )
 
 export function makeNativeOauthConnectorClientComponent(preConnectRes: {
-  authorizationUrl: string
+  authorization_url: string
 }) {
   // createNativeOauthConnect(preConnectRes)
 
