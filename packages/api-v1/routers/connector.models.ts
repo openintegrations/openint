@@ -17,6 +17,11 @@ export const zConnector = z.object({
     .array(z.enum(['web', 'mobile', 'desktop', 'local', 'cloud']))
     .optional(),
   schemas: zConnectorSchemas.optional(),
+  authType: z
+    // custom should be considered to be default
+    .enum(['BASIC', 'OAUTH1', 'OAUTH2', 'OAUTH2CC', 'API_KEY', 'CUSTOM'])
+    .optional(),
+  // FIX ME: This should be nested under auth
   openint_scopes: z.array(z.string()).optional(),
   scopes: z
     .array(
@@ -58,6 +63,7 @@ export const getConnectorModel = (
       : `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public${logoUrl}`,
     stage: def.metadata?.stage ?? 'alpha',
     platforms: def.metadata?.platforms ?? ['cloud', 'local'],
+    authType: def.metadata?.authType ?? 'CUSTOM',
     // verticals: def.metadata?.verticals ?? ['other'],
     // authType: def.metadata?.authType,
 
