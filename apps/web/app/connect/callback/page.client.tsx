@@ -34,7 +34,8 @@ export function ConnectCallbackClient({
           onClick={() => {
             const opener = window.opener as Window | null
             if (opener) {
-              opener.postMessage({success: true, data}, '*')
+              // TODO: refactor the data format
+              opener.postMessage(data, '*')
               window.close()
             }
           }}>
