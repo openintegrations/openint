@@ -18,7 +18,7 @@ const zOAuthConnectionSettings = z.object({
   credentials: z
     .object({
       access_token: z.string(),
-      client_id: z.string(),
+      client_id: z.string().describe('Client ID used for the connection'),
       scope: z.string(),
       refresh_token: z.string().optional(),
       expires_in: z.number().optional(),
@@ -30,16 +30,22 @@ const zOAuthConnectionSettings = z.object({
     })
     .optional()
     .describe('Output of the postConnect hook for oauth2 connectors'),
-  created_at: z.string(),
-  updated_at: z.string(),
-  last_fetched_at: z.string(),
-  metadata: z.record(z.unknown()).nullable(),
+  /** @deprecated */
+  created_at: z.string().optional(),
+  /** @deprecated */
+  updated_at: z.string().optional(),
+  /** @deprecated */
+  last_fetched_at: z.string().optional(),
+  /** @deprecated */
+  metadata: z.record(z.unknown()).nullable().optional(),
 })
 
 export const zAuthParamsConfig = z.object({
   authorize: z.record(z.string(), z.string()).optional(),
   token: z.record(z.string(), z.string()).optional(),
   refresh: z.record(z.string(), z.string()).optional(),
+  introspect: z.record(z.string(), z.string()).optional(),
+  revoke: z.record(z.string(), z.string()).optional(),
   param_names: z
     .object({
       client_id: z.string().optional(),
@@ -67,6 +73,16 @@ export const zOAuthConfig = z.object({
     .string()
     .url()
     .describe('URL to obtain an access token from the provider'),
+  introspection_request_url: z
+    .string()
+    .url()
+    .optional()
+    .describe('URL to introspect an access token from the provider'),
+  revocation_request_url: z
+    .string()
+    .url()
+    .optional()
+    .describe('URL to revoke an access token from the provider'),
   openint_scopes: z
     .array(z.string())
     .optional()

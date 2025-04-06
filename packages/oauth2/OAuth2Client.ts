@@ -1,3 +1,4 @@
+import {safeJSONParse} from '@openint/util/json-utils'
 import {toBase64Url} from '@openint/util/string-utils'
 import {stringifyQueryParams} from '@openint/util/url-utils'
 import {zFunction} from '@openint/util/zod-function-utils'
@@ -76,20 +77,22 @@ export type TokenIntrospectionResponse = Z.infer<
  * implementation details.
  * https://github.com/badgateway/oauth2-client
  */
-export function createOAuth2Client<
-  TToken extends TokenResponse = TokenResponse,
->(
-  config: OAuth2ClientConfig,
+export function createOAuth2Client(
+  _config: OAuth2ClientConfig,
   fetch: (req: Request) => Promise<Response> = globalThis.fetch,
 ) {
-  zOAuth2ClientConfig.parse(config)
+  const config = Object.freeze(zOAuth2ClientConfig.parse(_config))
+
+  function joinScopes(scopes: string[]) {
+    return scopes.join(config.scopeDelimiter ?? ' ')
+  }
 
   const post = async <T>(
     url: string,
     params: Record<string, unknown>,
   ): Promise<T> => {
     const {clientAuthLocation = 'body'} = config
-    const resolvedParams = {
+    const fullParams = {
       ...params,
       ...(clientAuthLocation !== 'header'
         ? {
@@ -98,9 +101,12 @@ export function createOAuth2Client<
           }
         : {}),
     }
-    const body = stringifyQueryParams(
-      renameObjectKeys(resolvedParams, config.paramKeyMapping ?? {}),
+    const resolvedParams = renameObjectKeys(
+      fullParams,
+      config.paramKeyMapping ?? {},
     )
+    // console.log(`resolvedParams`, resolvedParams)
+    const body = stringifyQueryParams(resolvedParams)
 
     const headers: HeadersInit = {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -118,10 +124,12 @@ export function createOAuth2Client<
 
     if (!response.ok) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const error = await response.json().catch(() => null)
+      const errorText = await response.text().catch(() => null)
+      // console.log(`errorText`, errorText)
+      const errorJSON = safeJSONParse(errorText)
       throw new OAuth2Error(
-        config.errorToString?.(error) ?? JSON.stringify(error),
-        error,
+        config.errorToString?.(errorJSON) ?? JSON.stringify(errorJSON),
+        errorJSON,
         {
           status: response.status,
           statusText: response.statusText,
@@ -148,10 +156,7 @@ export function createOAuth2Client<
         ...rest,
         response_type: 'code',
         client_id: config.clientId,
-        ...(scopes &&
-          scopes.length > 0 && {
-            scope: scopes.join(config.scopeDelimiter ?? ' '),
-          }),
+        ...(scopes && scopes.length > 0 && {scope: joinScopes(scopes)}),
         ...(code_verifier && {
           code_challenge: await createCodeChallenge(code_verifier),
           code_challenge_method: 'S256',
@@ -225,11 +230,9 @@ export function createOAuth2Client<
       scopes: z.array(z.string()).optional(),
     }),
     ({scopes}) =>
-      post<TToken & {refresh_token: string}>(config.tokenURL, {
+      post<TokenResponse & {refresh_token: string}>(config.tokenURL, {
         grant_type: 'client_credentials',
-        ...(scopes?.length && {
-          scope: scopes.join(config.scopeDelimiter ?? ' '),
-        }),
+        ...(scopes?.length && {scope: joinScopes(scopes)}),
       }).then((data) => zTokenResponse.parse(data)),
   )
 
@@ -252,6 +255,10 @@ export function createOAuth2Client<
   )
 
   return {
+    get config() {
+      return config
+    },
+    joinScopes,
     getAuthorizeUrl,
     exchangeCodeForToken,
     refreshToken,

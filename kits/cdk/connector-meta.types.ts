@@ -146,7 +146,7 @@ export interface ConnectionUpdate<
   // make `ResoUpdateData.id` not prefixed so we can have better inheritance
   extends Omit<ConnectionUpdateData<TSettings>, 'id'> {
   // Subset of connUpdate
-  connectionExternalId: ExternalId
+  connectionExternalId?: ExternalId
   // Can we inherit types used by metaLinks?
   /** If missing it means do not change the userId... */
   customerId?: CustomerId | null
