@@ -1,7 +1,7 @@
 import {redirect} from 'next/navigation'
 import React from 'react'
 import {AppLayout} from '@openint/ui-v1'
-import {OrganizationSwitcher, UserButton} from '@/lib-client/auth.client'
+import {OrganizationSwitcher, UserButton} from '@openint/console-auth/client'
 import {currentViewer} from '@/lib-server/auth.server'
 import {GlobalCommandBarProvider} from '../../GlobalCommandBarProvider'
 import {ClientApp} from './client'
