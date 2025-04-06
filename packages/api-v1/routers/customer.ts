@@ -114,8 +114,6 @@ export const customerRouter = router({
         input,
       )
 
-      const res = await query
-
       const {items, total} = await processTypedPaginatedResponse<Customer>(
         query as unknown as Query,
       )
