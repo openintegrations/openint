@@ -9,7 +9,7 @@ import {camelCase} from '@openint/util/string-utils'
 import {writePretty} from './writePretty'
 
 async function generateCnextIndex() {
-  const cnextPath = pathJoin(__dirname, '../../../connectors/cnext')
+  const cnextPath = pathJoin(__dirname, '../../../connectors/cnext/connectors')
   const cnextConnectors = fs
     .readdirSync(cnextPath, {
       withFileTypes: true,
@@ -25,9 +25,7 @@ async function generateCnextIndex() {
 
   await writePretty(
     'index.ts',
-    `export type {JsonConnectorDef} from './def'
-    export type {AuthType} from './def'
-
+    `
     ${cnextConnectors
       .map((d) => {
         const connectorName = `connector${d.name
@@ -119,7 +117,7 @@ const connectorList: Connector[] = [
 
   // Add cnext connectors
   ...fs
-    .readdirSync(pathJoin(__dirname, '../../../connectors/cnext'), {
+    .readdirSync(pathJoin(__dirname, '../../../connectors/cnext/connectors'), {
       withFileTypes: true,
     })
     .filter(
