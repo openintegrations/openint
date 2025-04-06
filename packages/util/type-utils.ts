@@ -339,3 +339,9 @@ export type __TestDiscriminatedUnionWithAllKeys2 = _Assert<
     | ({type: 'b'; bar: number} & {foo?: undefined; baz?: undefined})
   >
 >
+
+export type NoOverlappingKeys<T1, T2> = {
+  [K in keyof T1]: K extends keyof T2 ? never : T1[K]
+} & {
+  [K in keyof T2]: K extends keyof T1 ? never : T2[K]
+}

@@ -5,7 +5,8 @@ import type {
   Source,
 } from '@openint/sync'
 import {castIs, z, type Z} from '@openint/util/zod-utils'
-import type {AuthType, JsonConnectorDef} from '../../connectors/cnext'
+// TODO: Fix this cyclic import hack
+import type {AuthType, JsonConnectorDef} from '../../connectors/cnext/schema'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
 import {zExternalId, zId} from './id.types'

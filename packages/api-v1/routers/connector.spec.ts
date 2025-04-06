@@ -25,7 +25,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('list connectors with schemas', async () => {
     const res = await asOrg.listConnectors({expand: ['schemas']})
-    expect(res.items).toMatchSnapshot()
+    expect(
+      res.items.sort((a, b) => a.name.localeCompare(b.name)),
+    ).toMatchSnapshot()
   })
 
   test('get connector by with invalid name returns error', async () => {
