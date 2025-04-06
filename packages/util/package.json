@@ -5,6 +5,7 @@
   "sideEffects": false,
   "module": "./index.ts",
   "dependencies": {
+    "@jsonurl/jsonurl": "1.1.7",
     "accounting": "0.4.1",
     "async-sema": "3.1.1",
     "awilix": "7.0.3",

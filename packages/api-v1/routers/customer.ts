@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
-import {asCustomerOfOrg, makeJwtClient} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
+import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
 import {core, Customer} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
 import {
@@ -62,9 +62,7 @@ export const customerRouter = router({
 
       const token = await jwt.signViewer(
         asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
-        {
-          validityInSeconds: input.validity_in_seconds,
-        },
+        {validityInSeconds: input.validity_in_seconds},
       )
 
       return {

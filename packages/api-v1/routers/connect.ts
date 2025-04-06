@@ -1,20 +1,14 @@
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
+import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
-import {
-  asCustomerOfOrg,
-  makeId,
-  makeJwtClient,
-  zConnectOptions,
-  zId,
-  zPostConnectOptions,
-} from '@openint/cdk'
+import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {getServerUrl} from '@openint/env'
-import {nonEmpty} from '@openint/util/array-utils'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
+import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
 import {core} from '../models'
 import {
   authenticatedProcedure,
@@ -23,10 +17,11 @@ import {
   router,
 } from '../trpc/_base'
 import {connectRouterModels} from './connect.models'
-import {connectorSchemas} from './connector.models'
 import {md} from './utils/md'
 
 export const connectRouter = router({
+  // TODO: Move create token in here...  and make sure createToken can contain
+  // signed client options as well and have them override the client options from url params
   getMagicLink: orgProcedure
     .meta({
       openapi: {
@@ -37,7 +32,7 @@ export const connectRouter = router({
         summary: 'Create Magic Link',
       },
     })
-    .input(connectRouterModels.getMagicLinkInput.nullish())
+    .input(connectRouterModels.getMagicLinkInput.optional())
     .output(
       z.object({
         magic_link_url: z
@@ -59,9 +54,7 @@ export const connectRouter = router({
       }
       const token = await jwt.signViewer(
         asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
-        {
-          validityInSeconds: input.validity_in_seconds,
-        },
+        {validityInSeconds: input.validity_in_seconds},
       )
 
       const url = new URL('/connect', getServerUrl(null))
@@ -81,84 +74,39 @@ export const connectRouter = router({
     }),
   preConnect: customerProcedure
     .meta({
-      openapi: {
-        method: 'POST',
-        path: '/connect/pre-connect',
-        enabled: false,
-      },
+      openapi: {enabled: false, method: 'POST', path: '/connect/pre-connect'},
     })
     .input(
       z.object({
-        // Rename to connector_config_id
-        id: zId('ccfg').describe(md`
+        connector_config_id: zId('ccfg').describe(md`
           Must correspond to data.connector_name.
           Technically id should imply connector_name already but there is no way to
           specify a discriminated union with id alone.
         `),
         options: zConnectOptions,
-
-        // TODO: Move this into connector.models.ts
-
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
-        // this is a limitation of trpc-to-OpenAPI. Need to think more about this
-
-        data: z
-          .discriminatedUnion(
-            'connector_name',
-            nonEmpty(
-              connectorSchemas.preConnectInput.map((s) =>
-                z
-                  .object({
-                    connector_name: s.shape.connector_name,
-                    input: s.shape.preConnectInput,
-                  })
-                  .openapi({
-                    ref: `connectors.${s.shape.connector_name.value}.preConnectInput`,
-                  }),
-              ),
-            ),
-          )
-          .describe('Connector specific data'),
+        discriminated_data: discriminatedUnionBySchemaKey.pre_connect_input,
       }),
     )
-    .output(
-      z
-        .discriminatedUnion(
-          'connector_name',
-          nonEmpty(
-            connectorSchemas.connectInput.map((s) =>
-              z
-                .object({
-                  connector_name: s.shape.connector_name,
-                  // TODO: Rename to connectInput
-                  output: s.shape.connectInput,
-                })
-                .openapi({
-                  ref: `connectors.${s.shape.connector_name.value}.connectInput`,
-                }),
-            ),
-          ),
-        )
-        .describe('Connector specific data'),
-    )
+    .output(discriminatedUnionBySchemaKey.connect_input)
     .query(async ({ctx, input}) => {
       const connectors = serverConnectors as Record<string, ConnectorServer>
-      const connector = connectors[input.data.connector_name]
+      const connector = connectors[input.discriminated_data.connector_name]
       if (!connector) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector ${input.data.connector_name} not found`,
+          message: `Connector ${input.discriminated_data.connector_name} not found`,
         })
       }
       const ccfg =
         await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
-          where: eq(schema.connector_config.id, input.id),
+          where: eq(schema.connector_config.id, input.connector_config_id),
         })
       if (!ccfg) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector config ${input.id} not found`,
+          message: `Connector config ${input.connector_config_id} not found`,
         })
       }
 
@@ -169,8 +117,10 @@ export const connectRouter = router({
         })
       }
 
-      console.log('preConnect input', input)
-      const res = await connector.preConnect?.(
+      const preConnect = connector.preConnect ?? (() => ({}))
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/await-thenable
+      const res = await preConnect(
         ccfg.config,
         {
           webhookBaseUrl:
@@ -180,25 +130,21 @@ export const connectRouter = router({
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
         },
-        input.data.input,
+        input.discriminated_data.pre_connect_input,
       )
-      console.log('preConnect output', res)
+
       return {
-        connector_name: input.data.connector_name,
-        output: res ?? {},
+        connector_name: input.discriminated_data.connector_name,
+        connect_input: res,
       }
     }),
   postConnect: customerProcedure
     .meta({
-      openapi: {
-        enabled: false, // tuple type not supported by openAPI
-        method: 'POST',
-        path: '/connect/post-connect',
-      },
+      openapi: {enabled: false, method: 'POST', path: '/connect/post-connect'},
     })
     .input(
       z.object({
-        id: zId('ccfg').describe(md`
+        connector_config_id: zId('ccfg').describe(md`
           Must correspond to data.connector_name.
           Technically id should imply connector_name already but there is no way to
           specify a discriminated union with id alone.
@@ -206,23 +152,7 @@ export const connectRouter = router({
         options: zPostConnectOptions,
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
-        data: z
-          .discriminatedUnion(
-            'connector_name',
-            nonEmpty(
-              connectorSchemas.connectOutput.map((s) =>
-                z
-                  .object({
-                    connector_name: s.shape.connector_name,
-                    input: s.shape.connectOutput,
-                  })
-                  .openapi({
-                    ref: `connectors.${s.shape.connector_name.value}.connectOutput`,
-                  }),
-              ),
-            ),
-          )
-          .describe('Connector specific data'),
+        discriminated_data: discriminatedUnionBySchemaKey.connect_output,
       }),
     )
     .output(core.connection)
@@ -230,28 +160,36 @@ export const connectRouter = router({
       console.log('postConnect', input, ctx)
       const connectors = serverConnectors as Record<string, ConnectorServer>
       const defs = defConnectors as Record<string, ConnectorDef>
-      const connector = connectors[input.data.connector_name]
-      const def = defs[input.data.connector_name]
+      const connector = connectors[input.discriminated_data.connector_name]
+      const def = defs[input.discriminated_data.connector_name]
       if (!connector || !def) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector ${input.data.connector_name} not found`,
+          message: `Connector ${input.discriminated_data.connector_name} not found`,
         })
       }
       const ccfg =
         await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
-          where: eq(schema.connector_config.id, input.id),
+          where: eq(schema.connector_config.id, input.connector_config_id),
         })
       if (!ccfg) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector config ${input.id} not found`,
+          message: `Connector config ${input.connector_config_id} not found`,
         })
       }
 
+      const postConnect =
+        connector.postConnect ??
+        ((output) => ({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          settings: output,
+          connectionExternalId: '', // TODO: Check on me....
+        }))
+
       console.log('postConnect', input, ctx, ccfg)
-      const connUpdate = await connector.postConnect?.(
-        input.data.input,
+      const connUpdate = await postConnect(
+        input.discriminated_data.connect_output,
         ccfg.config,
         {
           webhookBaseUrl:
@@ -262,11 +200,16 @@ export const connectRouter = router({
           fetch: ctx.fetch,
         },
       )
-      const id = makeId('conn', input.data.connector_name, makeUlid())
+      const id = makeId(
+        'conn',
+        input.discriminated_data.connector_name,
+        makeUlid(),
+      )
 
-      const zSettings = def.schemas.connectionSettings ?? z.unknown()
-      // Assume input is the settings
-      const settings = zSettings.parse(connUpdate?.settings ?? input.data.input)
+      // would be much nicer if this is the materialized schemas
+      const zSettings = def.schemas.connectionSettings ?? z.object({}).strict()
+
+      const settings = zSettings.parse(connUpdate.settings)
 
       const [conn] = await dbUpsertOne(
         // TODO: Update rls to allow customer to upsert their own connections
@@ -275,7 +218,7 @@ export const connectRouter = router({
         {
           id,
           settings,
-          connector_config_id: input.id,
+          connector_config_id: input.connector_config_id,
           customer_id: ctx.viewer.customerId ?? ctx.viewer.userId,
           // add integration id
         },
@@ -300,11 +243,7 @@ export const connectRouter = router({
         path: '/connect/revoke',
       },
     })
-    .input(
-      z.object({
-        id: z.string(),
-      }),
-    )
+    .input(z.object({id: z.string()}))
     .output(core.connection)
     .mutation(async ({ctx, input}) => {
       const conn = await ctx.db.query.connection.findFirst({

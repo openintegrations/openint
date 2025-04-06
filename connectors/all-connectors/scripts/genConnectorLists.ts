@@ -156,7 +156,7 @@ async function main() {
   await generateCnextIndex()
 
   await writePretty(
-    'meta.ts',
+    'connectors.meta.ts',
     `
   export default ${JSON.stringify(
     Object.fromEntries(connectorList.map((c) => [c.name, c])),

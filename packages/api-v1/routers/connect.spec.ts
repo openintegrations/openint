@@ -1,4 +1,3 @@
-import Elysia from 'elysia'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {oauth2Schemas} from '@openint/cnext/_defaults/oauth2/def'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
@@ -7,6 +6,7 @@ import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
+import Elysia from 'elysia'
 import {trpc} from '../trpc/_base'
 import {routerContextFromViewer} from '../trpc/context'
 import {onError} from '../trpc/error-handling'
@@ -103,14 +103,14 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     const preConnectRes = $test('preConnect', async () => {
       const res = await asCustomer.preConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
-          input: {},
+          pre_connect_input: {},
         },
       })
-      return oauth2Schemas.connectInput.parse(res.output)
+      return oauth2Schemas.connectInput.parse(res.connect_input)
     })
 
     const connectRes = $test('connect get 302 redirect', async () => {
@@ -133,11 +133,11 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     const postConnectRes = $test('postConnect', async () => {
       const res = await asCustomer.postConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
-          input: connectRes.current,
+          connect_output: connectRes.current,
         },
       })
 
@@ -201,20 +201,23 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     // Not needed really, does not actually even get implemented
     test('preConnect', async () => {
       const res = await asCustomer.preConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {connector_name: ccfgRes.current.connector_name, input: {}},
+        discriminated_data: {
+          connector_name: ccfgRes.current.connector_name,
+          pre_connect_input: {},
+        },
       })
-      expect(res.output).toEqual({})
+      expect(res.connect_input).toEqual({})
     })
 
     const postConnectRes = $test('postConnect', async () => {
       const res = await asCustomer.postConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
-          input: settings,
+          connect_output: settings,
         },
       })
       expect(res.settings).toEqual(settings)
@@ -258,25 +261,25 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     const preConnectRes = $test('preConnect', async () => {
       const res = await asCustomer.preConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
-          input: {sandboxPublicTokenCreate: true},
+          pre_connect_input: {sandboxPublicTokenCreate: true},
         },
       })
       // TODO: Use plaid schema to parse here.
-      expect(res.output).toEqual({public_token: expect.any(String)})
+      expect(res.connect_input).toEqual({public_token: expect.any(String)})
       return res
     })
 
     const postConnectRes = $test('postConnect', async () => {
       const res = await asCustomer.postConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
-          input: preConnectRes.current.output,
+          connect_output: preConnectRes.current.connect_input,
         },
       })
 
