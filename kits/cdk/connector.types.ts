@@ -19,7 +19,7 @@ import type {
 } from './connector-meta.types'
 import type {Id} from './id.types'
 import {makeId} from './id.types'
-import type {ZStandard} from './models'
+import type {ZStandard} from './zStandard'
 import type {VerticalKey} from './verticals'
 
 /**
