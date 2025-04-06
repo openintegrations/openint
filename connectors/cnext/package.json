@@ -2,8 +2,10 @@
   "name": "@openint/cnext",
   "version": "0.0.0",
   "private": true,
-  "sideEffects": [],
   "module": "./index.ts",
+  "scripts": {
+    "gen:index": "bun ./__scripts__/generate-index.ts"
+  },
   "dependencies": {
     "@openint/cdk": "workspace:*",
     "@openint/env": "workspace:*",

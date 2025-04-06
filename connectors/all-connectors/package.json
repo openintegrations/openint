@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "generate:lists": "bun ./scripts/genConnectorLists.ts",
-    "generate:stories": "bun ./scripts/genConnectorStories.ts"
+    "generate": "run-s generate:lists generate:stories generate:meta",
+    "generate:lists": "bun ./__scripts__/generateConnectorLists.ts",
+    "generate:meta": "bun ./__scripts__/generateConnectorMeta.ts",
+    "generate:stories": "bun ./__scripts__/generateConnectorStories.ts"
   },
   "dependencies": {
     "@openint/cdk": "workspace:*",
