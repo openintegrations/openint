@@ -113,8 +113,7 @@ export function generateOAuth2Server<
       )
       return authorizeHandler({
         oauthConfig: {
-          ...renderTemplateObject({
-            templateObject: oauthConfig,
+          ...renderTemplateObject(oauthConfig, {
             connectorConfig: ccfg,
             connectionSettings: context.connection?.settings?.oauth ?? {},
           }),
@@ -136,8 +135,7 @@ export function generateOAuth2Server<
       )
       const result = await defaultTokenExchangeHandler({
         oauthConfig: {
-          ...renderTemplateObject({
-            templateObject: oauthConfig,
+          ...renderTemplateObject(oauthConfig, {
             connectorConfig: ccfg,
             connectionSettings: context.connection?.settings?.oauth ?? {},
           }),
@@ -189,8 +187,7 @@ export function generateOAuth2Server<
 
       const result = await tokenRefreshHandler({
         oauthConfig: {
-          ...renderTemplateObject({
-            templateObject: oauthConfig,
+          ...renderTemplateObject(oauthConfig, {
             connectorConfig: ccfg,
             connectionSettings: settings.oauth,
           }),

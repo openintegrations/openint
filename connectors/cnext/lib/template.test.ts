@@ -63,11 +63,12 @@ describe('renderTemplateObject', () => {
       apiKey: 'secret-key-123',
     }
 
-    const result = renderTemplateObject({
-      templateObject: template,
+    const context = {
       connectorConfig,
       connectionSettings,
-    })
+    }
+
+    const result = renderTemplateObject(template, context)
 
     expect(result).toEqual({
       name: 'TestConnector',
@@ -94,11 +95,12 @@ describe('renderTemplateObject', () => {
 
     const connectionSettings = {}
 
-    const result = renderTemplateObject({
-      templateObject: template,
+    const context = {
       connectorConfig,
       connectionSettings,
-    })
+    }
+
+    const result = renderTemplateObject(template, context)
 
     expect(result).toEqual({
       endpoints: [
@@ -121,13 +123,14 @@ describe('renderTemplateObject', () => {
 
     const connectionSettings = {}
 
+    const context = {
+      connectorConfig,
+      connectionSettings,
+    }
+
     // Should return the original object if JSON parsing fails
     expect(() =>
-      renderTemplateObject({
-        templateObject: template,
-        connectorConfig,
-        connectionSettings,
-      }),
+      renderTemplateObject(template, context),
     ).toThrow('Error processing object template')
   })
 
@@ -136,12 +139,13 @@ describe('renderTemplateObject', () => {
     const connectorConfig = {}
     const connectionSettings = {}
 
+    const context = {
+      connectorConfig,
+      connectionSettings,
+    }
+
     expect(() =>
-      renderTemplateObject({
-        templateObject: template as unknown as Record<string, unknown>,
-        connectorConfig,
-        connectionSettings,
-      }),
+      renderTemplateObject(template as unknown as Record<string, unknown>, context),
     ).toThrow('Template must be a plain object')
   })
 
@@ -160,11 +164,12 @@ describe('renderTemplateObject', () => {
 
     const connectionSettings = {}
 
-    const result = renderTemplateObject({
-      templateObject: template,
+    const context = {
       connectorConfig,
       connectionSettings,
-    })
+    }
+
+    const result = renderTemplateObject(template, context)
 
     expect(result).toEqual({
       prefix_test: 'value',

@@ -1,6 +1,6 @@
 import type {Z} from '@openint/util/zod-utils'
 import type {zOAuthConfig} from './def'
-import {prepareScopes} from './utils'
+import {mapOauthParams, prepareScopes} from './utils'
 
 test('Scope separator should work correctly for different delimiters', () => {
   const mockOauthConfig = {
@@ -39,4 +39,102 @@ test('Scope separator should work correctly for different delimiters', () => {
       {...mockOauthConfig, scope_separator: ','},
     ),
   ).toBe(encodeURIComponent(scopesWithCommaSeparator))
+})
+
+describe('mapOauthParams', () => {
+  test('should map parameters according to paramNames', () => {
+    const params = {
+      client_id: 'test-client-id',
+      client_secret: 'test-client-secret',
+      scope: 'read',
+    }
+
+    const paramNames = {
+      client_id: 'clientKey',
+      client_secret: 'clientSecret',
+      scope: 'scopes',
+    }
+
+    const result = mapOauthParams(params, paramNames)
+
+    expect(result).toEqual({
+      clientKey: 'test-client-id',
+      clientSecret: 'test-client-secret',
+      scopes: 'read',
+    })
+  })
+
+  test('should handle empty params', () => {
+    const params = {}
+    const paramNames = {
+      client_id: 'clientKey',
+      client_secret: 'clientSecret',
+    }
+
+    const result = mapOauthParams(params, paramNames)
+
+    expect(result).toEqual({})
+  })
+
+  test('should handle empty paramNames', () => {
+    const params = {
+      client_id: 'test-client-id',
+      client_secret: 'test-client-secret',
+    }
+    const paramNames = {}
+
+    const result = mapOauthParams(params, paramNames)
+
+    // With empty paramNames, we expect the original params to be returned unchanged
+    expect(result).toEqual({
+      client_id: 'test-client-id',
+      client_secret: 'test-client-secret',
+    })
+  })
+
+  test('should keep parameters that are not in paramNames', () => {
+    const params = {
+      client_id: 'test-client-id',
+      client_secret: 'test-client-secret',
+      redirect_uri: 'https://example.com/callback',
+      state: 'random-state',
+    }
+
+    const paramNames = {
+      client_id: 'clientKey',
+      client_secret: 'clientSecret',
+    }
+
+    const result = mapOauthParams(params, paramNames)
+
+    // Parameters with mappings should be renamed, others should remain unchanged
+    expect(result).toEqual({
+      clientKey: 'test-client-id',
+      clientSecret: 'test-client-secret',
+      redirect_uri: 'https://example.com/callback',
+      state: 'random-state',
+    })
+  })
+
+  test('should handle Salesforce-like parameter mapping', () => {
+    const params = {
+      client_id: 'salesforce-client-id',
+      client_secret: 'salesforce-client-secret',
+      scope: 'api',
+    }
+
+    const paramNames = {
+      client_id: 'consumer_key',
+      client_secret: 'consumer_secret',
+      scope: 'scope',
+    }
+
+    const result = mapOauthParams(params, paramNames)
+
+    expect(result).toEqual({
+      consumer_key: 'salesforce-client-id',
+      consumer_secret: 'salesforce-client-secret',
+      scope: 'api',
+    })
+  })
 })

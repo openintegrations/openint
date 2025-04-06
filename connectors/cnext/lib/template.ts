@@ -5,23 +5,10 @@ import {isPlainObject} from '@openint/util/object-utils'
 export function renderTemplateObject<
   T extends Record<string, unknown>,
   U extends Record<string, unknown> = T,
->({
-  templateObject,
-  connectorConfig,
-  connectionSettings,
-}: {
-  templateObject: T
-  connectorConfig: Record<string, unknown>
-  connectionSettings: Record<string, unknown>
-}): U {
+>(templateObject: T, context: Record<string, unknown>): U {
   // Handle non-object inputs
   if (!isPlainObject(templateObject)) {
     throw new Error('Template must be a plain object')
-  }
-
-  const context = {
-    connectorConfig,
-    connectionSettings,
   }
 
   try {
