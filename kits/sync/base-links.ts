@@ -1,17 +1,18 @@
-import type {
-  AnyEntityPayload,
-  ConnectionUpdateData,
-  Link,
-  StateUpdateData,
-  SyncOperation,
-} from '@openint/sync'
 import {compact} from '@openint/util/array-utils'
 import type {WritableDraft} from '@openint/util/immutable-utils'
 import {produce} from '@openint/util/immutable-utils'
 import {Rx, rxjs} from '@openint/util/observable-utils'
 import {R} from '@openint/util/remeda'
 import {snakeCase} from '@openint/util/string-utils'
-import type {Id} from './id.types'
+import type {
+  AnyEntityPayload,
+  ConnectionUpdateData,
+  Link,
+  StateUpdateData,
+  SyncOperation,
+} from './protocol'
+
+type Id = string
 
 type OperationType = SyncOperation['type']
 export type OpHandlers<
@@ -111,7 +112,7 @@ export function mergeReady<T>(len: number): Link<T> {
 
 export function prefixConnectorNameLink(ctx: {
   source: {
-    id: Id['conn']
+    id: Id
     connectorConfig: {connectorName: string}
     metadata?: unknown
   }
@@ -128,7 +129,7 @@ export function prefixConnectorNameLink(ctx: {
 
 export function singleTableLink(_ctx: {
   source: {
-    id: Id['conn']
+    id: Id
     connectorConfig: {connectorName: string}
     metadata?: unknown
   }
@@ -146,7 +147,7 @@ export function singleTableLink(_ctx: {
 
 export function agColumnRenameLink(_ctx: {
   source: {
-    id: Id['conn']
+    id: Id
     connectorConfig: {connectorName: string}
     metadata?: unknown
   }
