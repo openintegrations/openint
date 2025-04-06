@@ -133,7 +133,7 @@ export default async function Page(
           {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
 
           <TabsClient
-            defaultValue="my-connections"
+            defaultValue="manage"
             paramKey="tab"
             className="max-w-3xl flex-1 p-4">
             <TabsList className="grid w-full grid-cols-2">

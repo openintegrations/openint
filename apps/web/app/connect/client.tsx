@@ -262,7 +262,7 @@ export function AddConnectionInner({
       })
       // This is the only way that works for now...
       // TODO: Fix this madness
-      setSearchParams({tab: 'my-connections'}, {shallow: false})
+      setSearchParams({tab: 'manage'}, {shallow: false})
     } catch (error) {
       console.error('Error connecting', error)
       toast.error('Error connecting', {
