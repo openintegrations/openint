@@ -212,7 +212,7 @@ function AddConnectionServer({
   const name = connectorConfig.connector_name
   const res = api.preConnect({
     id: connectorConfig.id,
-    data: {connector_name: name, input: {}},
+    data: {connector_name: name, pre_connect_input: {}},
     options: {},
   })
 

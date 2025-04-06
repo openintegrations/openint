@@ -13,7 +13,6 @@ import {
 } from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {getServerUrl} from '@openint/env'
-import {nonEmpty} from '@openint/util/array-utils'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {core} from '../models'
@@ -96,52 +95,10 @@ export const connectRouter = router({
           specify a discriminated union with id alone.
         `),
         options: zConnectOptions,
-
-        // TODO: Move this into connector.models.ts
-
-        // Unable to put data at the top level due to
-        // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
-        // this is a limitation of trpc-to-OpenAPI. Need to think more about this
-
-        data: z
-          .discriminatedUnion(
-            'connector_name',
-            nonEmpty(
-              connectorSchemasByKey.pre_connect_input.map((s) =>
-                z
-                  .object({
-                    connector_name: s.shape.connector_name,
-                    input: s.shape.pre_connect_input,
-                  })
-                  .openapi({
-                    ref: `connectors.${s.shape.connector_name.value}.pre_connect_input`,
-                  }),
-              ),
-            ),
-          )
-          .describe('Connector specific data'),
+        data: connectorSchemasByKey.pre_connect_input,
       }),
     )
-    .output(
-      z
-        .discriminatedUnion(
-          'connector_name',
-          nonEmpty(
-            connectorSchemasByKey.connect_input.map((s) =>
-              z
-                .object({
-                  connector_name: s.shape.connector_name,
-                  // TODO: Rename to connectInput
-                  output: s.shape.connect_input,
-                })
-                .openapi({
-                  ref: `connectors.${s.shape.connector_name.value}.connect_input`,
-                }),
-            ),
-          ),
-        )
-        .describe('Connector specific data'),
-    )
+    .output(connectorSchemasByKey.connect_input)
     .query(async ({ctx, input}) => {
       const connectors = serverConnectors as Record<string, ConnectorServer>
       const connector = connectors[input.data.connector_name]
@@ -180,12 +137,12 @@ export const connectRouter = router({
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
         },
-        input.data.input,
+        input.data.pre_connect_input,
       )
       console.log('preConnect output', res)
       return {
         connector_name: input.data.connector_name,
-        output: res ?? {},
+        connect_input: res ?? {},
       }
     }),
   postConnect: customerProcedure
@@ -206,23 +163,7 @@ export const connectRouter = router({
         options: zPostConnectOptions,
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
-        data: z
-          .discriminatedUnion(
-            'connector_name',
-            nonEmpty(
-              connectorSchemasByKey.connect_output.map((s) =>
-                z
-                  .object({
-                    connector_name: s.shape.connector_name,
-                    input: s.shape.connect_output,
-                  })
-                  .openapi({
-                    ref: `connectors.${s.shape.connector_name.value}.connect_output`,
-                  }),
-              ),
-            ),
-          )
-          .describe('Connector specific data'),
+        data: connectorSchemasByKey.connect_output,
       }),
     )
     .output(core.connection)
@@ -251,7 +192,7 @@ export const connectRouter = router({
 
       console.log('postConnect', input, ctx, ccfg)
       const connUpdate = await connector.postConnect?.(
-        input.data.input,
+        input.data.connect_output,
         ccfg.config,
         {
           webhookBaseUrl:
@@ -266,7 +207,9 @@ export const connectRouter = router({
 
       const zSettings = def.schemas.connectionSettings ?? z.unknown()
       // Assume input is the settings
-      const settings = zSettings.parse(connUpdate?.settings ?? input.data.input)
+      const settings = zSettings.parse(
+        connUpdate?.settings ?? input.data.connect_output,
+      )
 
       const [conn] = await dbUpsertOne(
         // TODO: Update rls to allow customer to upsert their own connections
@@ -300,11 +243,7 @@ export const connectRouter = router({
         path: '/connect/revoke',
       },
     })
-    .input(
-      z.object({
-        id: z.string(),
-      }),
-    )
+    .input(z.object({id: z.string()}))
     .output(core.connection)
     .mutation(async ({ctx, input}) => {
       const conn = await ctx.db.query.connection.findFirst({

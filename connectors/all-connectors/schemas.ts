@@ -52,29 +52,35 @@ export const zConnectorSchemas = z.record(
 // Maybe this belongs in the all-connectors package?
 /* schemaKey -> Array<{$schemaKey: schema}>  */
 export const connectorSchemasByKey = Object.fromEntries(
-  camelCaseSchemaKeys.map((camelKey) => [
-    schemaKeyFromCamelCase[camelKey],
-    Object.entries(defConnectors).map(([name, def]) => {
-      const schemas = def.schemas as ConnectorSchemas
-      return z.object({
-        connector_name: z.literal(name),
-        [schemaKeyFromCamelCase[camelKey]]:
-          // Have to do this due to zod version mismatch
-          // Also declaring .openapi on mismatched zod does not work due to
-          // differing registration holders in zod-openapi
-          (schemas[camelKey] as unknown as Z.ZodTypeAny | undefined) ??
-          // null does not work because jsonb fields in the DB are not nullable
-          // z.union([z.null(), z.object({}).strict()]),
-          z.object({}).strict(),
-      })
-    }),
-  ]),
+  camelCaseSchemaKeys.map((camelKey) => {
+    const schemaKey = schemaKeyFromCamelCase[camelKey]
+    return [
+      schemaKey,
+      z.discriminatedUnion(
+        'connector_name',
+        nonEmpty(
+          Object.entries(defConnectors).map(([name, def]) => {
+            // null does not work because jsonb fields in the DB are not nullable
+            // z.union([z.null(), z.object({}).strict()]),
+            const schema =
+              (def.schemas as ConnectorSchemas)[camelKey] ??
+              z.object({}).strict()
+            return z
+              .object({connector_name: z.literal(name), [schemaKey]: schema})
+              .openapi({ref: `connector.${name}.${schemaKey}`})
+          }),
+        ),
+      ),
+    ]
+  }),
 ) as {
-  [Key in SchemaKey]: NonEmptyArray<
-    Z.ZodObject<
-      {connector_name: Z.ZodLiteral<string>} & {
-        [k in Key]: Z.ZodTypeAny
-      }
+  [Key in SchemaKey]: Z.ZodDiscriminatedUnion<
+    'connector_name',
+    // can we discriminate this to get the actual zod type? We probably could!
+    NonEmptyArray<
+      Z.ZodObject<
+        {connector_name: Z.ZodLiteral<string>} & {[k in Key]: Z.ZodTypeAny}
+      >
     >
   >
 }
@@ -83,14 +89,14 @@ export const zDiscriminatedSettings = z
   .discriminatedUnion(
     'connector_name',
     nonEmpty(
-      connectorSchemasByKey.connection_settings.map((s) =>
+      connectorSchemasByKey.connection_settings.options.map((s) =>
         z
           .object({
             connector_name: s.shape.connector_name,
             settings: s.shape.connection_settings,
           })
           .openapi({
-            ref: `connectors.${s.shape.connector_name.value}.connection_settings`,
+            ref: `connector.${s.shape.connector_name.value}.connection_settings`,
           }),
       ),
     ),
@@ -101,14 +107,14 @@ export const zDiscriminatedConfig = z
   .discriminatedUnion(
     'connector_name',
     nonEmpty(
-      connectorSchemasByKey.connector_config.map((s) =>
+      connectorSchemasByKey.connector_config.options.map((s) =>
         z
           .object({
             connector_name: s.shape.connector_name,
             config: s.shape.connector_config,
           })
           .openapi({
-            ref: `connectors.${s.shape.connector_name.value}.connector_config`,
+            ref: `connector.${s.shape.connector_name.value}.connector_config`,
           }),
       ),
     ),
@@ -124,8 +130,7 @@ export function jsonSchemasForConnectorSchemas(schemas: ConnectorSchemas) {
           return [
             schemaKeyFromCamelCase[schemaKey as CamelCaseSchemaKey],
             schema instanceof z.ZodSchema
-              ? // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                zodToOas31Schema(schema)
+              ? zodToOas31Schema(schema)
               : undefined,
           ]
         } catch (err) {

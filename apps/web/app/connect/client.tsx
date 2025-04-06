@@ -204,7 +204,7 @@ export function AddConnectionInner({
         id: connectorConfig.id,
         data: {
           connector_name: name,
-          input: {},
+          pre_connect_input: {},
         },
         options: {},
       },
@@ -227,20 +227,23 @@ export function AddConnectionInner({
   const handleConnect = React.useCallback(async () => {
     try {
       console.log('ref.current', ref.current)
-      const connectRes = await ref.current?.(preConnectRes.data.output, {
+      const connectRes = await ref.current?.(preConnectRes.data.connect_input, {
         connectorConfigId: connectorConfig.id as `ccfg_${string}`,
         connectionExternalId: undefined,
         integrationExternalId: undefined,
       })
       console.log('connectRes', connectRes)
+      /// todo: always validate schema even if pre/post connect are not
+      // implemented
       const postConnectRes = await postConnect.mutateAsync({
         id: connectorConfig.id,
         data: {
           connector_name: name,
-          input: connectRes,
+          connect_output: connectRes,
         },
         options: {},
       })
+
       console.log('postConnectRes', postConnectRes)
 
       // None of this is working, why!!!
@@ -276,7 +279,7 @@ export function AddConnectionInner({
 
   if (!Component && name === 'dummy-oauth2') {
     Component = makeNativeOauthConnectorClientComponent(
-      preConnectRes.data.output,
+      preConnectRes.data.connect_input,
     )
   } else if (!Component) {
     // TODO: handle me, for thigns like oauth connectors
