@@ -18,6 +18,7 @@
     "@openint/db": "workspace:*",
     "@openint/env": "workspace:*",
     "@openint/events": "workspace:*",
+    "@openint/oauth2": "workspace:*",
     "@openint/sdk": "0.1.0-alpha.20",
     "@openint/util": "workspace:*",
     "@trpc/server": "^11.0.1",
@@ -28,7 +29,6 @@
   "devDependencies": {
     "@openint/cnext": "workspace:*",
     "@openint/loopback-link": "workspace:*",
-    "@openint/oauth2": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@trpc/client": "^11.0.1",
     "bun": "^1.2.4",

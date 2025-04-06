@@ -2,6 +2,7 @@ import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
+import {createOAuth2Server} from '@openint/oauth2/OAuth2Server'
 import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,
@@ -41,6 +42,27 @@ export function createApp({db}: CreateAppOptions) {
     )
     .all('/v1/*', ({request}) =>
       createFetchHandlerOpenAPI({endpoint: '/v1', db})(request),
+    )
+    // For testing purposes only
+    .group('/dummy-oauth2', (group) =>
+      group.use(
+        createOAuth2Server({
+          // TODO: have a better way to unify this
+          clients: [
+            {
+              id: 'client_1',
+              name: 'client_1',
+              secret: 'secret_1',
+              redirectUris: ['http://localhost:4000/connect/callback'],
+              allowedGrants: ['authorization_code', 'refresh_token'],
+              scopes: [{name: 'read'}, {name: 'write'}],
+            },
+          ],
+          scopes: [{name: 'read'}, {name: 'write'}],
+          users: [{id: 'user_1', username: 'user_1', password: 'password_1'}],
+          authCodes: [],
+        }),
+      ),
     )
   return app
 }

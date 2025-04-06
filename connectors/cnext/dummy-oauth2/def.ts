@@ -11,8 +11,9 @@ export const jsonDef = {
   auth: {
     type: 'OAUTH2',
     // TODO: Get these from the connector config
-    authorization_request_url: 'http://localhost:3000/oauth/authorize',
-    token_request_url: 'http://localhost:3000/oauth/token',
+    authorization_request_url:
+      'http://localhost:4000/api/dummy-oauth2/authorize',
+    token_request_url: 'http://localhost:4000/api/dummy-oauth2/token',
     scope_separator: ' ',
     params_config: {},
     openint_scopes: ['read:profile'],

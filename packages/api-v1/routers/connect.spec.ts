@@ -1,3 +1,4 @@
+import Elysia from 'elysia'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {oauth2Schemas} from '@openint/cnext/_defaults/oauth2/def'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
@@ -6,7 +7,6 @@ import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
-import Elysia from 'elysia'
 import {trpc} from '../trpc/_base'
 import {routerContextFromViewer} from '../trpc/context'
 import {onError} from '../trpc/error-handling'
@@ -56,8 +56,8 @@ const _oauth2Server = createOAuth2Server({
   authCodes: [],
 })
 
-const oauth2Server = new Elysia().group('/oauth', (group) =>
-  group.use(_oauth2Server),
+const oauth2Server = new Elysia({prefix: '/api/dummy-oauth2'}).use(
+  _oauth2Server,
 )
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
@@ -151,7 +151,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     // use access token to do something useful, like introspect
     test('introspect token', async () => {
       const res = await oauth2Server.handle(
-        new Request('http://localhost/oauth/token/introspect', {
+        new Request('http://localhost/api/dummy-oauth2/token/introspect', {
           method: 'POST',
           body: new URLSearchParams({
             token:

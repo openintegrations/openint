@@ -1159,6 +1159,9 @@ importers:
       '@openint/events':
         specifier: workspace:*
         version: link:../events
+      '@openint/oauth2':
+        specifier: workspace:*
+        version: link:../oauth2
       '@openint/sdk':
         specifier: 0.1.0-alpha.20
         version: 0.1.0-alpha.20
@@ -1184,9 +1187,6 @@ importers:
       '@openint/loopback-link':
         specifier: workspace:*
         version: link:../../dev-packages/loopback-link
-      '@openint/oauth2':
-        specifier: workspace:*
-        version: link:../oauth2
       '@opensdks/fetch-links':
         specifier: ^0.0.22
         version: 0.0.22

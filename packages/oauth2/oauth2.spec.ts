@@ -15,7 +15,7 @@ const client = {
   id: 'client1',
   name: 'Sample Client',
   secret: 'secret1',
-  redirectUris: ['http://localhost:3000/callback'],
+  redirectUris: ['http://localhost:4000/connect/callback'],
   allowedGrants: [
     'authorization_code',
     'refresh_token',
