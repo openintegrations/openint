@@ -87,12 +87,12 @@ export type OpenDialogFn = (
 export type UseConnectHook<T extends ConnHelpers = ConnHelpers> = (scope: {
   openDialog: OpenDialogFn
 }) => (
-  connectInput: T['_types']['connectInput'],
+  connectInput: T['_types']['connect_input'],
   context: ConnectOptions & {
     // TODO: Does this belong here?
     connectorConfigId: Id['ccfg']
   },
-) => Promise<T['_types']['connectOutput']>
+) => Promise<T['_types']['connect_output']>
 
 // MARK: - Server side connect types
 

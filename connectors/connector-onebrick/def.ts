@@ -10,13 +10,13 @@ const connectInputSchema = z.object({
 
 export const onebrickSchemas = {
   name: z.literal('onebrick'),
-  connectorConfig: zOneBrickConfig,
-  connectionSettings: z.object({accessToken: z.string()}),
-  connectInput: connectInputSchema,
-  connectOutput: z.object({
+  connector_config: zOneBrickConfig,
+  connection_settings: z.object({accessToken: z.string()}),
+  connect_input: connectInputSchema,
+  connect_output: z.object({
     publicToken: z.string(),
   }),
-  webhookInput: zWebhookInput,
+  webhook_input: zWebhookInput,
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(onebrickSchemas)

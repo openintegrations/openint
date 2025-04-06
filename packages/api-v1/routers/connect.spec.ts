@@ -1,3 +1,4 @@
+import Elysia from 'elysia'
 import type {CustomerId, Viewer} from '@openint/cdk'
 import {oauth2Schemas} from '@openint/cnext/_defaults/oauth2/def'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
@@ -6,7 +7,6 @@ import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
-import Elysia from 'elysia'
 import {trpc} from '../trpc/_base'
 import {routerContextFromViewer} from '../trpc/context'
 import {onError} from '../trpc/error-handling'
@@ -32,7 +32,7 @@ const configOauth = {
   scopes: ['scope1', 'scope2'],
   redirect_uri: 'http://localhost:3000/connect/callback',
   // should contain whether server requires pkce
-} satisfies Z.infer<typeof oauth2Schemas.connectorConfig>['oauth']
+} satisfies Z.infer<typeof oauth2Schemas.connector_config>['oauth']
 
 const _oauth2Server = createOAuth2Server({
   clients: [
@@ -95,7 +95,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         connector_name: 'dummy-oauth2',
       })
 
-      const parsed = oauth2Schemas.connectorConfig.parse(res.config)
+      const parsed = oauth2Schemas.connector_config.parse(res.config)
       expect(parsed.oauth).toEqual(configOauth)
 
       return res
@@ -110,7 +110,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           pre_connect_input: {},
         },
       })
-      return oauth2Schemas.connectInput.parse(res.connect_input)
+      return oauth2Schemas.connect_input.parse(res.connect_input)
     })
 
     const connectRes = $test('connect get 302 redirect', async () => {
@@ -141,7 +141,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         },
       })
 
-      const settings = oauth2Schemas.connectionSettings.parse(res.settings)
+      const settings = oauth2Schemas.connection_settings.parse(res.settings)
       return {
         id: res.id,
         settings,

@@ -5,7 +5,7 @@ import {zConfig} from './mootaClient'
 
 export const mootaSchemas = {
   name: z.literal('moota'),
-  connectorConfig: zConfig,
+  connector_config: zConfig,
 } satisfies ConnectorSchemas
 
 export const mootaHelpers = connHelpers(mootaSchemas)

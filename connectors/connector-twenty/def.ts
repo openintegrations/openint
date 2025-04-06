@@ -4,7 +4,7 @@ import {z} from '@openint/util/zod-utils'
 
 export const twentySchemas = {
   name: z.literal('twenty'),
-  connectionSettings: z.object({
+  connection_settings: z.object({
     access_token: z.string(),
   }),
 } satisfies ConnectorSchemas

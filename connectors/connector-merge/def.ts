@@ -12,25 +12,25 @@ type Category = Oas['components']['schemas']['category']
 
 export const mergeSchemas = {
   name: z.literal('merge'),
-  connectorConfig: z.object({
+  connector_config: z.object({
     apiKey: z.string(),
   }),
 
-  integrationData: zCast<Integration>(),
-  connectionSettings: z.object({
+  integration_data: zCast<Integration>(),
+  connection_settings: z.object({
     accountToken: z.string(),
     accountDetails: zCast<components['schemas']['AccountDetails']>().optional(),
   }),
-  preConnectInput: z.object({
+  pre_connect_input: z.object({
     // TODO: Use proper openapi spec rather than just a runtime type...
     categories: z.array(zCast<Category>()),
     customer_email_address: z.string().optional(),
     customer_organization_name: z.string().optional(),
   }),
-  connectInput: z.object({
+  connect_input: z.object({
     link_token: z.string(),
   }),
-  connectOutput: z.union([
+  connect_output: z.union([
     z.object({publicToken: z.string()}),
     // Perfect example why this should be called postConnectInput
     // Can only be provided via CLI...

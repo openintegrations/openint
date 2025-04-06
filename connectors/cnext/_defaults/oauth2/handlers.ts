@@ -10,7 +10,7 @@ export async function makeTokenRequest(
   // note: we may want to add bodyFormat: form or json as an option
   fetch: (req: Request) => Promise<Response> = globalThis.fetch,
 ): Promise<
-  Z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
+  Z.infer<typeof oauth2Schemas.connection_settings.shape.oauth.shape.credentials>
 > {
   const response = await fetch(
     new Request(url, {
@@ -32,7 +32,7 @@ export async function makeTokenRequest(
 
   try {
     const json = await response.json()
-    return oauth2Schemas.connectionSettings.shape.oauth.shape.credentials.parse(
+    return oauth2Schemas.connection_settings.shape.oauth.shape.credentials.parse(
       {
         ...json,
         client_id: params['client_id'],
@@ -158,7 +158,7 @@ export async function defaultTokenExchangeHandler({
 }: Z.infer<typeof zTokenExchangeHandlerArgs> & {
   fetch?: (req: Request) => Promise<Response>
 }): Promise<
-  Z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
+  Z.infer<typeof oauth2Schemas.connection_settings.shape.oauth.shape.credentials>
 > {
   validateOAuthCredentials(oauthConfig)
 
@@ -198,7 +198,7 @@ export async function tokenRefreshHandler({
   oauthConfig,
   refreshToken,
 }: Z.infer<typeof zTokenRefreshHandlerArgs>): Promise<
-  Z.infer<typeof oauth2Schemas.connectionSettings.shape.oauth.shape.credentials>
+  Z.infer<typeof oauth2Schemas.connection_settings.shape.oauth.shape.credentials>
 > {
   validateOAuthCredentials(oauthConfig)
 

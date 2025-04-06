@@ -4,9 +4,9 @@ import {z} from '@openint/util/zod-utils'
 
 export const brexSchemas = {
   name: z.literal('brex'),
-  connectorConfig: zCcfgAuth.oauthOrApikeyAuth,
-  integrationData: z.unknown(),
-  connectionSettings: z.object({
+  connector_config: zCcfgAuth.oauthOrApikeyAuth,
+  integration_data: z.unknown(),
+  connection_settings: z.object({
     accessToken: z.string(),
   }),
 } satisfies ConnectorSchemas

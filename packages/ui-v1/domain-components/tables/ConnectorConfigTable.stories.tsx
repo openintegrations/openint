@@ -13,7 +13,7 @@ import {columns, ConnectorConfigTable} from './ConnectorConfigTable'
 import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 
 // Sample data for the connector config table
-const connectorConfigs: Core['connector_config'][] = [
+const connectorConfigs: Core['connector_config_select'][] = [
   {
     id: '101',
     display_name: 'Salesforce',
@@ -25,6 +25,7 @@ const connectorConfigs: Core['connector_config'][] = [
     created_at: '2025-05-12T12:00:00Z',
     updated_at: '2025-05-12T12:00:00Z',
     org_id: 'org-123',
+    metadata: {},
   },
   {
     id: '102',
@@ -37,6 +38,7 @@ const connectorConfigs: Core['connector_config'][] = [
     created_at: '2025-05-10T12:00:00Z',
     updated_at: '2025-05-10T12:00:00Z',
     org_id: 'org-123',
+    metadata: {},
   },
   {
     id: '103',
@@ -49,6 +51,7 @@ const connectorConfigs: Core['connector_config'][] = [
     created_at: '2025-05-08T12:00:00Z',
     updated_at: '2025-05-08T12:00:00Z',
     org_id: 'org-123',
+    metadata: {},
   },
   {
     id: '104',
@@ -61,6 +64,7 @@ const connectorConfigs: Core['connector_config'][] = [
     created_at: '2025-05-06T12:00:00Z',
     updated_at: '2025-05-06T12:00:00Z',
     org_id: 'org-123',
+    metadata: {},
   },
   {
     id: '105',
@@ -73,6 +77,7 @@ const connectorConfigs: Core['connector_config'][] = [
     created_at: '2025-05-04T12:00:00Z',
     updated_at: '2025-05-04T12:00:00Z',
     org_id: 'org-123',
+    metadata: {},
   },
 ]
 
@@ -86,13 +91,13 @@ const meta = {
 
 export default meta
 type Story = StoryObj<
-  | typeof DataTable<Core['connector_config'], unknown>
+  | typeof DataTable<Core['connector_config_select'], unknown>
   | typeof ConnectorConfigTable
 >
 
 type StoryArgs = {
-  data: Core['connector_config'][]
-  columns: ColumnDef<Core['connector_config'], unknown>[]
+  data: Core['connector_config_select'][]
+  columns: ColumnDef<Core['connector_config_select'], unknown>[]
   enableSelect?: boolean
 }
 
@@ -124,7 +129,7 @@ const SelectionActionsBar = () => {
   // Handle row deletion (would be connected to API in real application)
   const handleDeleteRows = (
     _selectedRows: Record<string, boolean>,
-    selectedItems: Core['connector_config'][],
+    selectedItems: Core['connector_config_select'][],
   ) => {
     console.log('Deleting connector configs:', selectedItems)
     alert(
@@ -136,7 +141,7 @@ const SelectionActionsBar = () => {
 
   // Use the hook to get selection state and handlers
   const {selectedCount, handleClear, handleDelete} = useTableRowSelection<
-    Core['connector_config']
+    Core['connector_config_select']
   >(table, handleDeleteRows)
 
   return selectedCount > 0 ? (
@@ -173,7 +178,7 @@ export const WithRowSelection: Story = {
 }
 
 // Define compact cell columns for the connector config table
-const compactColumns: Array<ColumnDef<Core['connector_config'], unknown>> = [
+const compactColumns: Array<ColumnDef<Core['connector_config_select'], unknown>> = [
   {
     id: 'connectorConfig',
     header: 'Connector Config',

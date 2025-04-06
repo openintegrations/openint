@@ -52,7 +52,7 @@ export const zSettings = z.discriminatedUnion('role', [
 
 export const firebaseSchemas = {
   name: z.literal('firebase'),
-  connectionSettings: zSettings,
+  connection_settings: zSettings,
 } satisfies ConnectorSchemas
 
 export const firebaseHelpers = connHelpers(firebaseSchemas)

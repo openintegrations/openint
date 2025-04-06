@@ -12,7 +12,7 @@ export const apolloSchemas = {
   //   api_key: z.string(),
   // }),
   // TODO: Migrate away from nango...
-  connectionSettings: oauthBaseSchema.connectionSettings,
+  connection_settings: oauthBaseSchema.connection_settings,
 } satisfies ConnectorSchemas
 
 export const apolloHelpers = connHelpers(apolloSchemas)

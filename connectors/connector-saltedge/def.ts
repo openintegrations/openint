@@ -5,8 +5,8 @@ import {zConfig} from './saltedgeClient'
 
 export const saltedgeSchemas = {
   name: z.literal('saltedge'),
-  connectorConfig: zConfig,
-  connectionSettings: zCast<SaltEdge.Connection & {_id: ExternalId}>(),
+  connector_config: zConfig,
+  connection_settings: zCast<SaltEdge.Connection & {_id: ExternalId}>(),
 } satisfies ConnectorSchemas
 
 export const saltedgeHelpers = connHelpers(saltedgeSchemas)

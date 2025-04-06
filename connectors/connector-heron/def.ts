@@ -4,7 +4,7 @@ import {z} from '@openint/util/zod-utils'
 
 export const heronSchemas = {
   name: z.literal('heron'),
-  connectorConfig: z.object({apiKey: z.string()}),
+  connector_config: z.object({apiKey: z.string()}),
   // is customerId actually needed here?
   // How do we create default connections for integrations that are basically single connection?
 } satisfies ConnectorSchemas

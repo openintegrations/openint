@@ -2,9 +2,9 @@ import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 
-export const zConfig = oauthBaseSchema.connectorConfig
+export const zConfig = oauthBaseSchema.connector_config
 
-const oReso = oauthBaseSchema.connectionSettings
+const oReso = oauthBaseSchema.connection_settings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
   client_id: z.string().optional(),
@@ -12,7 +12,7 @@ export const zSettings = oReso.extend({
 
 export const microsoftSchemas = {
   name: z.literal('microsoft'),
-  connectorConfig: z.object({
+  connector_config: z.object({
     oauth: z.object({
       client_id: z.string(),
       client_secret: z.string(),
@@ -54,8 +54,8 @@ export const microsoftSchemas = {
         .optional(),
     }),
   }),
-  connectionSettings: zSettings,
-  connectOutput: oauthBaseSchema.connectOutput,
+  connection_settings: zSettings,
+  connect_output: oauthBaseSchema.connect_output,
 } satisfies ConnectorSchemas
 
 export const microsoftHelpers = connHelpers(microsoftSchemas)

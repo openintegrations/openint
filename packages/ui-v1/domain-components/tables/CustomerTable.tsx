@@ -1,7 +1,7 @@
 'use client'
 
 import {MoreHorizontal} from 'lucide-react'
-import {Customer} from '@openint/api-v1/models'
+import type {AppRouterOutput} from '@openint/api-v1'
 import {Button} from '@openint/shadcn/ui'
 import {CopyID} from '../../components'
 import type {ColumnDef} from '../../components/DataTable'
@@ -9,7 +9,9 @@ import {DataTable} from '../../components/DataTable'
 import {Icon} from '../../components/Icon'
 import {formatIsoDateString} from '../../utils'
 
-const columns: Array<ColumnDef<Customer>> = [
+const columns: Array<
+  ColumnDef<AppRouterOutput['listCustomers']['items'][number]>
+> = [
   {
     id: 'id',
     header: 'Customer Id',
@@ -65,7 +67,11 @@ const columns: Array<ColumnDef<Customer>> = [
   },
 ]
 
-export function CustomersTable({data}: {data: Customer[]}) {
+export function CustomersTable({
+  data,
+}: {
+  data: AppRouterOutput['listCustomers']['items']
+}) {
   return (
     <DataTable data={data} columns={columns} enableSelect={false}>
       <DataTable.Header>

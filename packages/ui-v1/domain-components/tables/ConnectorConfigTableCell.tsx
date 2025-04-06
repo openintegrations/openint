@@ -8,7 +8,7 @@ import {StatusDot, StatusType} from '../../components/StatusDot'
 
 interface ConnectorConfigTableCellProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  connectorConfig: Core['connector_config']
+  connectorConfig: Core['connector_config_select']
   simple?: boolean
   compact?: boolean
   status?: StatusType

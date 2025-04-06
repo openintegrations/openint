@@ -91,10 +91,10 @@ export async function refreshStaleConnections(
           }
 
           try {
-            const refreshedSettings = await connector.refreshConnection(
-              connection.connection.settings,
-              connection.connector_config.config,
-            )
+            const refreshedSettings = await connector.refreshConnection({
+              settings: connection.connection.settings,
+              config: connection.connector_config.config,
+            })
             await db
               .update(schema.connection)
               .set({

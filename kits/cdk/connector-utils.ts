@@ -1,5 +1,4 @@
 import {zodToOas31Schema} from '@openint/util/schema'
-import type {Invert, NonEmptyArray} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z, zCast} from '@openint/util/zod-utils'
 import type {ConnectorSchemas} from './connector.types'
@@ -28,52 +27,30 @@ export const zCcfgAuth = {
 export type JSONSchema = {}
 
 export const zJSONSchema = zCast<JSONSchema>()
+// Exclude name key
+export const schemaKeys = [
+  'connector_config',
+  'connection_settings',
+  'integration_data',
+  'webhook_input',
+  'pre_connect_input',
+  'connect_input',
+  'connect_output',
+] as const satisfies Array<keyof ConnectorSchemas>
 
-const camelCaseSchemaKeys = [
-  'connectorConfig',
-  'connectionSettings',
-  'integrationData',
-  'webhookInput',
-  'preConnectInput',
-  'connectInput',
-  'connectOutput',
-] as const
-
-type CamelCaseSchemaKey = (typeof camelCaseSchemaKeys)[number]
-
-/** TODO: Remove this abstraction by refactoring ConnectorDef itself to use snake_case keys */
-const schemaKeyFromCamelCase = {
-  connectorConfig: 'connector_config',
-  connectionSettings: 'connection_settings',
-  integrationData: 'integration_data',
-  webhookInput: 'webhook_input',
-  preConnectInput: 'pre_connect_input',
-  connectInput: 'connect_input',
-  connectOutput: 'connect_output',
-} as const satisfies Record<CamelCaseSchemaKey, string>
-
-export type SchemaKey = (typeof schemaKeyFromCamelCase)[CamelCaseSchemaKey]
-
-type ToCamelCaseSchemaKey<K extends SchemaKey> = Invert<
-  typeof schemaKeyFromCamelCase
->[K]
-
-export const schemaKeys = Object.values(
-  schemaKeyFromCamelCase,
-) as NonEmptyArray<SchemaKey>
+export type SchemaKey = (typeof schemaKeys)[number]
 
 export const zConnectorSchemas = z.record(z.enum(schemaKeys), zJSONSchema)
 
 export function materializeSchemas<T extends ConnectorSchemas>(schemas: T) {
   return Object.fromEntries(
-    camelCaseSchemaKeys.map((camelKey) => {
-      const schemaKey = schemaKeyFromCamelCase[camelKey]
-      let schema = schemas[camelKey]
+    schemaKeys.map((schemaKey) => {
+      let schema = schemas[schemaKey]
 
       // if connect output is missing, it is assumed that the useConnectHook
       // will return the connection settings as its output
       if (!schema && schemaKey === 'connect_output') {
-        schema = schemas.connectionSettings
+        schema = schemas.connection_settings
       }
 
       if (!schema) {
@@ -85,11 +62,11 @@ export function materializeSchemas<T extends ConnectorSchemas>(schemas: T) {
       return [schemaKey, schema]
     }),
   ) as {
-    [Key in SchemaKey]: T[ToCamelCaseSchemaKey<Key>] extends Z.ZodTypeAny
-      ? T[ToCamelCaseSchemaKey<Key>]
-      : ToCamelCaseSchemaKey<Key> extends 'connectOutput'
-        ? T['connectionSettings'] extends Z.ZodTypeAny
-          ? T['connectionSettings']
+    [Key in SchemaKey]: T[Key] extends Z.ZodTypeAny
+      ? T[Key]
+      : Key extends 'connectOutput'
+        ? T['connection_settings'] extends Z.ZodTypeAny
+          ? T['connection_settings']
           : Z.ZodObject<{}, 'strict'>
         : Z.ZodObject<{}, 'strict'>
   }
@@ -101,9 +78,7 @@ export function jsonSchemasFromMaterializedSchemas<
 >(schemas: T) {
   return Object.fromEntries(
     Object.entries(schemas)
-      .filter(([k]) =>
-        Object.values(schemaKeyFromCamelCase).includes(k as never),
-      )
+      .filter(([k]) => schemaKeys.includes(k as SchemaKey))
       .map(([schemaKey, schema]) => {
         try {
           return [

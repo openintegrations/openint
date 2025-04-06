@@ -9,19 +9,19 @@ import {JSONSchemaForm} from '../components/schema-form/JSONSchemaForm'
 
 function FormWrapper(props: {name: ConnectorName}) {
   const schemas = defConnectors[props.name].schemas
-  if (!('connectorConfig' in schemas)) {
+  if (!('connector_config' in schemas)) {
     throw new Error(
-      'Connector ' + props.name + ' does not have a connectorConfig',
+      'Connector ' + props.name + ' does not have a connector_config',
     )
   }
 
   return (
     <Card className="w-md p-4">
-      <h1 className="text-lg font-bold">{props.name} connectorConfig</h1>
+      <h1 className="text-lg font-bold">{props.name} connector_config</h1>
       <hr />
       <JSONSchemaForm
         debugMode
-        jsonSchema={zodToOas31Schema(schemas.connectorConfig)}
+        jsonSchema={zodToOas31Schema(schemas.connector_config)}
       />
     </Card>
   )
