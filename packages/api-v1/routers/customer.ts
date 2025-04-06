@@ -95,7 +95,7 @@ export const customerRouter = router({
     .query(async ({ctx, input}) => {
       const baseQuery = ctx.db
         .select({
-          id: schema.customer.id,
+          id: schema.connection.customer_id,
           connection_count: sql<number>`cast(count(*) as integer)`,
           created_at: sql<string>`min(${schema.connection.created_at})`,
           updated_at: sql<string>`max(${schema.connection.updated_at})`,
@@ -121,7 +121,10 @@ export const customerRouter = router({
       )
 
       return {
-        items: items as typeof res,
+        items: items.filter(
+          (item): item is Customer & {connection_count: number} =>
+            item.id !== null,
+        ),
         total,
         limit,
         offset,
