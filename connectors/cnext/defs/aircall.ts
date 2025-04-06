@@ -1,7 +1,6 @@
-import {generateOauthConnectorDef} from '../../oauth2/schema'
-import type {JsonConnectorDef} from '../../def'
+import type {JsonConnectorDef} from '../def'
 
-export const jsonDef = {
+export default {
   audience: ['business'],
   connector_name: 'aircall',
   verticals: ['ticketing'],
@@ -62,5 +61,3 @@ export const jsonDef = {
     ],
   },
 } satisfies JsonConnectorDef
-
-export const def = generateOauthConnectorDef(jsonDef)

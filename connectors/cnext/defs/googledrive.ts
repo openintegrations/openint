@@ -1,7 +1,6 @@
-import {generateOauthConnectorDef} from '../../oauth2/schema'
-import type {JsonConnectorDef} from '../../def'
+import type {JsonConnectorDef} from '../def'
 
-export const jsonDef = {
+export default {
   audience: ['consumer', 'business'] as const,
   connector_name: 'googledrive' as const,
   verticals: ['file-storage'] as const,
@@ -40,5 +39,3 @@ export const jsonDef = {
     openint_scopes: ['https://www.googleapis.com/auth/drive.file'],
   },
 } satisfies JsonConnectorDef
-
-export const def = generateOauthConnectorDef(jsonDef)
