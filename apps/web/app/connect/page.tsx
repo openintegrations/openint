@@ -22,11 +22,8 @@ import {
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
-import {
-  AddConnectionInner,
-  ConnectorConfigForCustomer,
-  MyConnectionsClient,
-} from './client'
+import type {ConnectorConfigForCustomer} from './client'
+import {AddConnectionInner, MyConnectionsClient} from './client'
 import {TabsClient} from './Tabs.client'
 
 function Fallback() {

@@ -11,11 +11,12 @@ import {
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CreateAppOptions
   extends Omit<CreateFetchHandlerOptions, 'endpoint' | 'router'> {}
 
 // It's annoying how elysia does not really allow for dependency injection like TRPC, so we do ourselves
-export function createApp({db}: CreateAppOptions) {
+export function createApp(opts: CreateAppOptions) {
   const app = new Elysia()
     .get('/health', () => ({healthy: true}), {detail: {hide: true}})
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}), {
@@ -38,10 +39,10 @@ export function createApp({db}: CreateAppOptions) {
     // no other settings seems to work when mounted inside next.js. Direct elysia listen works
     // in a more consistent way and we should probably add some test specifically for next.js mounted behavior
     .all('/v1/trpc/*', ({request}) =>
-      createFetchHandlerTRPC({endpoint: '/v1/trpc', db})(request),
+      createFetchHandlerTRPC({...opts, endpoint: '/v1/trpc'})(request),
     )
     .all('/v1/*', ({request}) =>
-      createFetchHandlerOpenAPI({endpoint: '/v1', db})(request),
+      createFetchHandlerOpenAPI({...opts, endpoint: '/v1'})(request),
     )
     // For testing purposes only
     .group('/dummy-oauth2', (group) =>

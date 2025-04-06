@@ -7,33 +7,33 @@ import {z, type Z} from '@openint/util/zod-utils'
 import type {CustomerId, ExtCustomerId, Id, UserId} from './id.types'
 import {zCustomerId, zId, zUserId} from './id.types'
 
-export const zRole = z.enum(['anon', 'customer', 'user', 'org', 'system'])
+export const zViewerRole = z.enum(['anon', 'customer', 'user', 'org', 'system'])
 export {ExtCustomerId}
 
 export const zViewer = z
   .discriminatedUnion('role', [
-    z.object({role: z.literal(zRole.Enum.anon)}),
+    z.object({role: z.literal(zViewerRole.Enum.anon)}),
     // prettier-ignore
-    z.object({role: z.literal(zRole.Enum.customer), customerId: zCustomerId, orgId: zId('org')}),
+    z.object({role: z.literal(zViewerRole.Enum.customer), customerId: zCustomerId, orgId: zId('org')}),
     z.object({
-      role: z.literal(zRole.Enum.user),
+      role: z.literal(zViewerRole.Enum.user),
       userId: zUserId,
       orgId: zId('org').nullish(),
       extra: z.record(z.unknown()).optional().describe('Currently clerk user'),
     }),
     z.object({
-      role: z.literal(zRole.Enum.org),
+      role: z.literal(zViewerRole.Enum.org),
       orgId: zId('org'),
       extra: z
         .record(z.unknown())
         .optional()
         .describe('Currently clerk organization'),
     }),
-    z.object({role: z.literal(zRole.Enum.system)}),
+    z.object({role: z.literal(zViewerRole.Enum.system)}),
   ])
   .openapi({ref: 'Viewer'})
 
-export type ViewerRole = Z.infer<typeof zRole>
+export type ViewerRole = Z.infer<typeof zViewerRole>
 
 type _Viewer = DiscriminatedUnionWithAllKeys<Z.infer<typeof zViewer>>
 export type Viewer<R extends ViewerRole = ViewerRole> = Extract<
@@ -128,6 +128,16 @@ export function asCustomerOfOrg(
   return {role: 'customer', customerId, orgId: viewer.orgId}
 }
 
+/**
+ * Used when there are multiple authentication methods, resolve to the first
+ * non-anon viewer or anon if none are found
+ */
+export function resolveViewer(
+  viewers: Array<Viewer | null | undefined>,
+): Viewer {
+  return viewers.find((v) => v?.role !== 'anon') ?? {role: 'anon'}
+}
+
 // MARK: - JWT
 
 /**
@@ -152,7 +162,7 @@ export const zJwtPayload = z.object({
    * by default and it's a bit too much work right now to switch to `user` so we shall
    * accept both then
    */
-  role: z.enum([...zRole.options, 'authenticated']),
+  role: z.enum([...zViewerRole.options, 'authenticated']),
   /** Enforce that all jwts are timed. The actual validity check is done by jwtClient */
   exp: z.number(),
   org_id: zId('org').nullish(),

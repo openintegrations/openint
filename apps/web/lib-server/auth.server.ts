@@ -1,9 +1,8 @@
 import {auth} from '@clerk/nextjs/server'
 import {type Id, type Viewer} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
-import type {MaybePromise} from '@openint/util/type-utils'
-import type {NonEmptyArray} from '@openint/util/type-utils'
 import {makeUlid} from '@openint/util/id-utils'
+import type {MaybePromise, NonEmptyArray} from '@openint/util/type-utils'
 import {z} from '@openint/util/zod-utils'
 import type {PageProps} from '@/lib-common/next-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
@@ -85,5 +84,6 @@ async function firstNonAnonViewerOrFirst(
   _viewers: NonEmptyArray<MaybePromise<ServerSession>>,
 ): Promise<ServerSession> {
   const viewers = await Promise.all(_viewers)
+  // TODO: Refactor this with resolveViewer. bit we need the token though...
   return viewers.find((v) => v.viewer.role !== 'anon') ?? viewers[0]
 }

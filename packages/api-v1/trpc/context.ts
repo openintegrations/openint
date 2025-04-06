@@ -1,4 +1,4 @@
-import {asOrgIfCustomer, type Viewer} from '@openint/cdk'
+import {asOrgIfCustomer, resolveViewer, type Viewer} from '@openint/cdk'
 import type {AnyDatabase, AnyDrizzle} from '@openint/db/db'
 import {viewerFromRequest} from './authentication'
 
@@ -20,27 +20,34 @@ export interface RouterContext<T extends Viewer = Viewer>
   asOrgIfCustomer: ViewerContext
 }
 
-export async function routerContextFromRequest({
-  req,
-  ...ctx
-}: {req: Request} & Omit<CreateRouterContextOptions, 'viewer'>) {
-  return routerContextFromViewer({
-    ...ctx,
-    viewer: await viewerFromRequest(ctx, req),
-  })
+// MARK: - createRouterContext
+interface CreateRouterContextOptions extends RouterContextExtra {
+  db: AnyDatabase
 }
 
-interface CreateRouterContextOptions<T extends Viewer = Viewer>
-  extends RouterContextExtra {
-  viewer: T
-  db: AnyDatabase
+export async function routerContextFromRequest({
+  req,
+  getAdditionalViewer,
+  ...ctx
+}: CreateRouterContextOptions & {
+  req: Request
+  /** Additional viewer to use for the request not part of the authorization header */
+  getAdditionalViewer?: () => Promise<Viewer>
+}) {
+  return routerContextFromViewer({
+    ...ctx,
+    viewer: resolveViewer([
+      await viewerFromRequest(ctx, req),
+      await getAdditionalViewer?.(),
+    ]),
+  })
 }
 
 export function routerContextFromViewer<T extends Viewer>({
   viewer: currentViewer,
   db,
   ...extra
-}: CreateRouterContextOptions<T>): RouterContext<T> {
+}: CreateRouterContextOptions & {viewer: T}): RouterContext<T> {
   function createViewerContext<T2 extends Viewer>(
     viewer: T2,
   ): ViewerContext<T2> {

@@ -1,10 +1,9 @@
-import {auth} from '@clerk/nextjs/server'
-import {TRPCError} from '@trpc/server'
 import type {Id, Viewer} from '@openint/cdk'
 import {makeJwtClient} from '@openint/cdk'
 import {eq, schema} from '@openint/db'
 import type {AnyDatabase} from '@openint/db/db'
 import {envRequired} from '@openint/env'
+import {TRPCError} from '@trpc/server'
 
 export async function viewerFromRequest(
   ctx: {db: AnyDatabase},
@@ -40,26 +39,10 @@ export async function viewerFromRequest(
     return {role: 'org', orgId: org.id as Id['org']}
   }
 
-  if (token) {
-    try {
-      const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
-      return await jwt.verifyViewer(token)
-    } catch (err) {
-      throw new TRPCError({code: 'UNAUTHORIZED', message: `${err}`})
-    }
+  try {
+    const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
+    return await jwt.verifyViewer(token)
+  } catch (err) {
+    throw new TRPCError({code: 'UNAUTHORIZED', message: `${err}`})
   }
-
-  // TODO: Should parse our own cookie instead. Do not rely on clerk here
-
-  const authInfo = await auth()
-
-  const viewer: Viewer = authInfo.userId
-    ? {
-        role: 'user',
-        userId: authInfo.userId as Id['user'],
-        orgId: authInfo.orgId as Id['org'],
-      }
-    : {role: 'anon'}
-
-  return viewer
 }
