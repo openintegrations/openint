@@ -5,8 +5,12 @@ import React from 'react'
 import {clientConnectors} from '@openint/all-connectors/connectors.client'
 import type {AppRouterOutput} from '@openint/api-v1'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
-import {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
-import type {ConnectorClient, JSONSchema} from '@openint/cdk'
+import type {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
+import {
+  createNativeOauthConnect,
+  type ConnectorClient,
+  type JSONSchema,
+} from '@openint/cdk'
 import {Button, Label, toast} from '@openint/shadcn/ui'
 import {
   Dialog,
@@ -70,9 +74,28 @@ const ConnectorClientComponents = Object.fromEntries(
   ]),
 )
 
-export function makeNativeOauthConnectorClientComponent(
-  _settingsJsonSchema: JSONSchema,
-) {
+export function makeNativeOauthConnectorClientComponent(preConnectRes: {
+  authorizationUrl: string
+}) {
+  // createNativeOauthConnect(preConnectRes)
+
+  return function ManualConnectorClientComponent({
+    onConnectFn,
+  }: {
+    connector_name?: string
+    onConnectFn: (fn?: ConnectFn) => void
+  }) {
+    const connectFn = React.useCallback(
+      () => createNativeOauthConnect(preConnectRes),
+      [preConnectRes],
+    )
+    React.useEffect(() => {
+      onConnectFn(connectFn)
+    }, [onConnectFn, connectFn])
+
+    return null
+  }
+
   // createNativeOauthConnect
   // open popup
   // listen for message from popup
@@ -251,7 +274,11 @@ export function AddConnectionInner({
   let Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
 
-  if (!Component) {
+  if (!Component && name === 'dummy-oauth2') {
+    Component = makeNativeOauthConnectorClientComponent(
+      preConnectRes.data.output,
+    )
+  } else if (!Component) {
     // TODO: handle me, for thigns like oauth connectors
     // console.warn(`Unhandled connector: ${name}`)
     // throw new Error(`Unhandled connector: ${name}`)

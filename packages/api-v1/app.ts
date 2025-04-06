@@ -54,7 +54,11 @@ export function createApp({db}: CreateAppOptions) {
               name: 'client_1',
               secret: 'secret_1',
               redirectUris: ['http://localhost:4000/connect/callback'],
-              allowedGrants: ['authorization_code', 'refresh_token'],
+              allowedGrants: [
+                'authorization_code',
+                'refresh_token',
+                'client_credentials',
+              ],
               scopes: [{name: 'read'}, {name: 'write'}],
             },
           ],

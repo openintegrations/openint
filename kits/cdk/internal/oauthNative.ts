@@ -1,7 +1,7 @@
 export interface OAuthConnectConfig {
   // connectorName: string
   // authType: 'OAUTH2' | 'OAUTH1' | 'OAUTH2CC'
-  authorizationUrl: string // From preConnect
+  authorization_url: string // From preConnect
   connectionId?: string
 }
 
@@ -19,6 +19,10 @@ export interface OAuthError extends Error {
 export default async function createNativeOauthConnect(
   config: OAuthConnectConfig,
 ): Promise<OAuthConnectResult> {
+  console.log('createNativeOauthConnect', config)
+  if (!config.authorization_url) {
+    throw createOAuthError('auth_error', 'No authorization URL provided')
+  }
   let activePopup: Window | null = null
   let activeListener: ((e: MessageEvent) => void) | null = null
 
@@ -48,7 +52,7 @@ export default async function createNativeOauthConnect(
 
       // Open popup with more complete window features
       activePopup = window.open(
-        config.authorizationUrl,
+        config.authorization_url,
         'oauth-popup',
         `width=${width},height=${height},left=${left},top=${top},` +
           `scrollbars=yes,resizable=yes,status=no,toolbar=no,` +
