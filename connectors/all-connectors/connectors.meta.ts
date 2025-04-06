@@ -1,604 +1,611 @@
 // generated file. Do not modify by hand
 
 export default {
-  gong: {
-    name: 'gong',
-    dirName: 'connector-gong',
-    varName: 'connectorGong',
-    imports: {
-      def: '@openint/connector-gong/def',
-      server: '@openint/connector-gong/server',
-    },
-  },
-  coda: {
-    name: 'coda',
-    dirName: 'connector-coda',
-    varName: 'connectorCoda',
-    imports: {
-      def: '@openint/connector-coda/def',
-      server: '@openint/connector-coda/server',
-    },
-  },
-  toggl: {
-    name: 'toggl',
-    dirName: 'connector-toggl',
-    varName: 'connectorToggl',
-    imports: {
-      def: '@openint/connector-toggl/def',
-      server: '@openint/connector-toggl/server',
-    },
-  },
-  ramp: {
-    name: 'ramp',
-    dirName: 'connector-ramp',
-    varName: 'connectorRamp',
-    imports: {
-      def: '@openint/connector-ramp/def',
-      server: '@openint/connector-ramp/server',
-    },
-  },
-  wise: {
-    name: 'wise',
-    dirName: 'connector-wise',
-    varName: 'connectorWise',
-    imports: {
-      def: '@openint/connector-wise/def',
-      server: '@openint/connector-wise/server',
-    },
-  },
-  outreach: {
-    name: 'outreach',
-    dirName: 'connector-outreach',
-    varName: 'connectorOutreach',
-    imports: {
-      def: '@openint/connector-outreach/def',
-      server: '@openint/connector-outreach/server',
-    },
-  },
-  instagram: {
-    name: 'instagram',
-    dirName: 'connector-instagram',
-    varName: 'connectorInstagram',
-    imports: {
-      def: '@openint/connector-instagram/def',
-      server: '@openint/connector-instagram/server',
-    },
-  },
-  moota: {
-    name: 'moota',
-    dirName: 'connector-moota',
-    varName: 'connectorMoota',
-    imports: {
-      def: '@openint/connector-moota/def',
-      server: '@openint/connector-moota/server',
-    },
-  },
-  teller: {
-    name: 'teller',
-    dirName: 'connector-teller',
-    varName: 'connectorTeller',
-    imports: {
-      def: '@openint/connector-teller/def',
-      client: '@openint/connector-teller/client',
-      server: '@openint/connector-teller/server',
-    },
-  },
-  plaid: {
-    name: 'plaid',
-    dirName: 'connector-plaid',
-    varName: 'connectorPlaid',
-    imports: {
-      def: '@openint/connector-plaid/def',
-      client: '@openint/connector-plaid/client',
-      server: '@openint/connector-plaid/server',
+  aircall: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Aircall (OAuth)',
+      stage: 'ga',
+      verticals: ['ticketing'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-aircall.svg',
+      authType: 'OAUTH2',
     },
   },
   airtable: {
-    name: 'airtable',
-    dirName: 'connector-airtable',
-    varName: 'connectorAirtable',
-    imports: {
-      def: '@openint/connector-airtable/def',
-      server: '@openint/connector-airtable/server',
-    },
-  },
-  finch: {
-    name: 'finch',
-    dirName: 'connector-finch',
-    varName: 'connectorFinch',
-    imports: {
-      def: '@openint/connector-finch/def',
-      client: '@openint/connector-finch/client',
-      server: '@openint/connector-finch/server',
-    },
-  },
-  firebase: {
-    name: 'firebase',
-    dirName: 'connector-firebase',
-    varName: 'connectorFirebase',
-    imports: {
-      def: '@openint/connector-firebase/def',
-      server: '@openint/connector-firebase/server',
-    },
-  },
-  postgres: {
-    name: 'postgres',
-    dirName: 'connector-postgres',
-    varName: 'connectorPostgres',
-    imports: {
-      def: '@openint/connector-postgres/def',
-      server: '@openint/connector-postgres/server',
-    },
-  },
-  facebook: {
-    name: 'facebook',
-    dirName: 'connector-facebook',
-    varName: 'connectorFacebook',
-    imports: {
-      def: '@openint/connector-facebook/def',
-      server: '@openint/connector-facebook/server',
-    },
-  },
-  kustomer: {
-    name: 'kustomer',
-    dirName: 'connector-kustomer',
-    varName: 'connectorKustomer',
-    imports: {
-      def: '@openint/connector-kustomer/def',
-      server: '@openint/connector-kustomer/server',
-    },
-  },
-  jira: {
-    name: 'jira',
-    dirName: 'connector-jira',
-    varName: 'connectorJira',
-    imports: {
-      def: '@openint/connector-jira/def',
-      server: '@openint/connector-jira/server',
-    },
-  },
-  twenty: {
-    name: 'twenty',
-    dirName: 'connector-twenty',
-    varName: 'connectorTwenty',
-    imports: {
-      def: '@openint/connector-twenty/def',
-      server: '@openint/connector-twenty/server',
-    },
-  },
-  greenhouse: {
-    name: 'greenhouse',
-    dirName: 'connector-greenhouse',
-    varName: 'connectorGreenhouse',
-    imports: {
-      def: '@openint/connector-greenhouse/def',
-      server: '@openint/connector-greenhouse/server',
-    },
-  },
-  pipedrive: {
-    name: 'pipedrive',
-    dirName: 'connector-pipedrive',
-    varName: 'connectorPipedrive',
-    imports: {
-      def: '@openint/connector-pipedrive/def',
-      server: '@openint/connector-pipedrive/server',
-    },
-  },
-  mercury: {
-    name: 'mercury',
-    dirName: 'connector-mercury',
-    varName: 'connectorMercury',
-    imports: {def: '@openint/connector-mercury/def'},
-  },
-  venmo: {
-    name: 'venmo',
-    dirName: 'connector-venmo',
-    varName: 'connectorVenmo',
-    imports: {def: '@openint/connector-venmo/def'},
-  },
-  microsoft: {
-    name: 'microsoft',
-    dirName: 'connector-microsoft',
-    varName: 'connectorMicrosoft',
-    imports: {
-      def: '@openint/connector-microsoft/def',
-      server: '@openint/connector-microsoft/server',
-    },
-  },
-  heron: {
-    name: 'heron',
-    dirName: 'connector-heron',
-    varName: 'connectorHeron',
-    imports: {
-      def: '@openint/connector-heron/def',
-      server: '@openint/connector-heron/server',
-    },
-  },
-  twitter: {
-    name: 'twitter',
-    dirName: 'connector-twitter',
-    varName: 'connectorTwitter',
-    imports: {
-      def: '@openint/connector-twitter/def',
-      server: '@openint/connector-twitter/server',
-    },
-  },
-  intercom: {
-    name: 'intercom',
-    dirName: 'connector-intercom',
-    varName: 'connectorIntercom',
-    imports: {
-      def: '@openint/connector-intercom/def',
-      server: '@openint/connector-intercom/server',
-    },
-  },
-  xero: {
-    name: 'xero',
-    dirName: 'connector-xero',
-    varName: 'connectorXero',
-    imports: {
-      def: '@openint/connector-xero/def',
-      server: '@openint/connector-xero/server',
-    },
-  },
-  brex: {
-    name: 'brex',
-    dirName: 'connector-brex',
-    varName: 'connectorBrex',
-    imports: {
-      def: '@openint/connector-brex/def',
-      server: '@openint/connector-brex/server',
-    },
-  },
-  splitwise: {
-    name: 'splitwise',
-    dirName: 'connector-splitwise',
-    varName: 'connectorSplitwise',
-    imports: {
-      def: '@openint/connector-splitwise/def',
-      server: '@openint/connector-splitwise/server',
-    },
-  },
-  lunchmoney: {
-    name: 'lunchmoney',
-    dirName: 'connector-lunchmoney',
-    varName: 'connectorLunchmoney',
-    imports: {
-      def: '@openint/connector-lunchmoney/def',
-      server: '@openint/connector-lunchmoney/server',
-    },
-  },
-  lever: {
-    name: 'lever',
-    dirName: 'connector-lever',
-    varName: 'connectorLever',
-    imports: {
-      def: '@openint/connector-lever/def',
-      server: '@openint/connector-lever/server',
-    },
-  },
-  stripe: {
-    name: 'stripe',
-    dirName: 'connector-stripe',
-    varName: 'connectorStripe',
-    imports: {
-      def: '@openint/connector-stripe/def',
-      server: '@openint/connector-stripe/server',
-    },
-  },
-  yodlee: {
-    name: 'yodlee',
-    dirName: 'connector-yodlee',
-    varName: 'connectorYodlee',
-    imports: {
-      def: '@openint/connector-yodlee/def',
-      client: '@openint/connector-yodlee/client',
-      server: '@openint/connector-yodlee/server',
-    },
-  },
-  saltedge: {
-    name: 'saltedge',
-    dirName: 'connector-saltedge',
-    varName: 'connectorSaltedge',
-    imports: {
-      def: '@openint/connector-saltedge/def',
-      server: '@openint/connector-saltedge/server',
-    },
-  },
-  salesloft: {
-    name: 'salesloft',
-    dirName: 'connector-salesloft',
-    varName: 'connectorSalesloft',
-    imports: {
-      def: '@openint/connector-salesloft/def',
-      server: '@openint/connector-salesloft/server',
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['database'],
+      logoUrl: '/_assets/logo-airtable.svg',
     },
   },
   apollo: {
-    name: 'apollo',
-    dirName: 'connector-apollo',
-    varName: 'connectorApollo',
-    imports: {
-      def: '@openint/connector-apollo/def',
-      server: '@openint/connector-apollo/server',
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['sales-engagement'],
+      displayName: 'Apollo',
+      stage: 'beta',
+      logoUrl: '/_assets/logo-apollo.svg',
     },
   },
-  foreceipt: {
-    name: 'foreceipt',
-    dirName: 'connector-foreceipt',
-    varName: 'connectorForeceipt',
-    imports: {
-      def: '@openint/connector-foreceipt/def',
-      server: '@openint/connector-foreceipt/server',
+  brex: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-brex.svg',
+      stage: 'beta',
     },
   },
-  merge: {
-    name: 'merge',
-    dirName: 'connector-merge',
-    varName: 'connectorMerge',
-    imports: {
-      def: '@openint/connector-merge/def',
-      client: '@openint/connector-merge/client',
-      server: '@openint/connector-merge/server',
-    },
-  },
-  reddit: {
-    name: 'reddit',
-    dirName: 'connector-reddit',
-    varName: 'connectorReddit',
-    imports: {
-      def: '@openint/connector-reddit/def',
-      server: '@openint/connector-reddit/server',
-    },
-  },
-  zohodesk: {
-    name: 'zohodesk',
-    dirName: 'connector-zohodesk',
-    varName: 'connectorZohodesk',
-    imports: {
-      def: '@openint/connector-zohodesk/def',
-      server: '@openint/connector-zohodesk/server',
-    },
-  },
-  onebrick: {
-    name: 'onebrick',
-    dirName: 'connector-onebrick',
-    varName: 'connectorOnebrick',
-    imports: {
-      def: '@openint/connector-onebrick/def',
-      client: '@openint/connector-onebrick/client',
-      server: '@openint/connector-onebrick/server',
-    },
-  },
-  discord: {
-    name: 'discord',
-    dirName: 'cnext-discord',
-    varName: 'connectorDiscord',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorDiscord_def',
-        server: 'connectorDiscord_server',
-      },
-    },
-  },
-  linear: {
-    name: 'linear',
-    dirName: 'cnext-linear',
-    varName: 'connectorLinear',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorLinear_def',
-        server: 'connectorLinear_server',
-      },
-    },
-  },
-  quickbooks: {
-    name: 'quickbooks',
-    dirName: 'cnext-quickbooks',
-    varName: 'connectorQuickbooks',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorQuickbooks_def',
-        server: 'connectorQuickbooks_server',
-      },
-    },
-  },
-  notion: {
-    name: 'notion',
-    dirName: 'cnext-notion',
-    varName: 'connectorNotion',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorNotion_def',
-        server: 'connectorNotion_server',
-      },
-    },
-  },
-  hubspot: {
-    name: 'hubspot',
-    dirName: 'cnext-hubspot',
-    varName: 'connectorHubspot',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorHubspot_def',
-        server: 'connectorHubspot_server',
-      },
-    },
-  },
-  github: {
-    name: 'github',
-    dirName: 'cnext-github',
-    varName: 'connectorGithub',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorGithub_def',
-        server: 'connectorGithub_server',
-      },
+  coda: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['flat-files-and-spreadsheets'],
+      logoUrl: '/_assets/logo-coda.svg',
+      stage: 'beta',
     },
   },
   confluence: {
-    name: 'confluence',
-    dirName: 'cnext-confluence',
-    varName: 'connectorConfluence',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorConfluence_def',
-        server: 'connectorConfluence_server',
-      },
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Confluence',
+      stage: 'ga',
+      verticals: ['wiki'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-confluence.svg',
+      authType: 'OAUTH2',
     },
   },
-  salesforce: {
-    name: 'salesforce',
-    dirName: 'cnext-salesforce',
-    varName: 'connectorSalesforce',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorSalesforce_def',
-        server: 'connectorSalesforce_server',
-      },
-    },
-  },
-  slack: {
-    name: 'slack',
-    dirName: 'cnext-slack',
-    varName: 'connectorSlack',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {def: 'connectorSlack_def', server: 'connectorSlack_server'},
-    },
-  },
-  googlemail: {
-    name: 'googlemail',
-    dirName: 'cnext-googlemail',
-    varName: 'connectorGooglemail',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorGooglemail_def',
-        server: 'connectorGooglemail_server',
-      },
+  discord: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Discord',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-discord.svg',
+      authType: 'OAUTH2',
     },
   },
   'dummy-oauth2': {
-    name: 'dummy-oauth2',
-    dirName: 'cnext-dummy-oauth2',
-    varName: 'connectorDummyOauth2',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorDummyOauth2_def',
-        server: 'connectorDummyOauth2_server',
-      },
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Dummy OAuth2',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-dummy-oauth2.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  facebook: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Facebook',
+      stage: 'beta',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-facebook.svg',
+      nangoProvider: 'facebook',
+    },
+  },
+  finch: {
+    hasClient: true,
+    hasServer: true,
+    metadata: {
+      verticals: ['payroll'],
+      logoUrl: '/_assets/logo-finch.svg',
+      stage: 'beta',
+    },
+  },
+  firebase: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['database'],
+      logoUrl: '/_assets/logo-firebase.svg',
+    },
+  },
+  foreceipt: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['expense-management'],
+      logoUrl: '/_assets/logo-foreceipt.svg',
+    },
+  },
+  github: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'GitHub (User OAuth)',
+      stage: 'ga',
+      verticals: ['developer-tools', 'ticketing'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-github.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  gong: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Gong',
+      stage: 'beta',
+      verticals: ['sales-enablement'],
+      logoUrl: '/_assets/logo-gong.svg',
+      nangoProvider: 'gong',
     },
   },
   googlecalendar: {
-    name: 'googlecalendar',
-    dirName: 'cnext-googlecalendar',
-    varName: 'connectorGooglecalendar',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorGooglecalendar_def',
-        server: 'connectorGooglecalendar_server',
-      },
-    },
-  },
-  sharepointonline: {
-    name: 'sharepointonline',
-    dirName: 'cnext-sharepointonline',
-    varName: 'connectorSharepointonline',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorSharepointonline_def',
-        server: 'connectorSharepointonline_server',
-      },
-    },
-  },
-  googlesheet: {
-    name: 'googlesheet',
-    dirName: 'cnext-googlesheet',
-    varName: 'connectorGooglesheet',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorGooglesheet_def',
-        server: 'connectorGooglesheet_server',
-      },
-    },
-  },
-  googledrive: {
-    name: 'googledrive',
-    dirName: 'cnext-googledrive',
-    varName: 'connectorGoogledrive',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorGoogledrive_def',
-        server: 'connectorGoogledrive_server',
-      },
-    },
-  },
-  aircall: {
-    name: 'aircall',
-    dirName: 'cnext-aircall',
-    varName: 'connectorAircall',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorAircall_def',
-        server: 'connectorAircall_server',
-      },
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Google Calendar',
+      stage: 'ga',
+      verticals: ['other'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlecalendar.svg',
+      authType: 'OAUTH2',
     },
   },
   googledocs: {
-    name: 'googledocs',
-    dirName: 'cnext-googledocs',
-    varName: 'connectorGoogledocs',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorGoogledocs_def',
-        server: 'connectorGoogledocs_server',
-      },
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Google Docs',
+      stage: 'ga',
+      verticals: ['other'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledocs.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  googledrive: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Google Drive',
+      stage: 'ga',
+      verticals: ['file-storage'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledrive.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  googlemail: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Gmail',
+      stage: 'ga',
+      verticals: ['other'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlemail.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  googlesheet: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Google Sheet',
+      stage: 'ga',
+      verticals: ['flat-files-and-spreadsheets'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlesheet.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  greenhouse: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Greenhouse',
+      stage: 'beta',
+      verticals: ['ats'],
+      logoUrl: '/_assets/logo-greenhouse.svg',
+    },
+  },
+  heron: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Heron Data',
+      stage: 'beta',
+      verticals: ['enrichment'],
+      logoUrl: '/_assets/logo-heron.svg',
+    },
+  },
+  hubspot: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'HubSpot',
+      stage: 'ga',
+      verticals: ['ticketing', 'crm'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-hubspot.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  instagram: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Instagram',
+      stage: 'beta',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-instagram.svg',
+      nangoProvider: 'instagram',
+    },
+  },
+  intercom: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Intercom',
+      stage: 'beta',
+      verticals: ['communication'],
+      logoUrl: '/_assets/logo-intercom.svg',
+      nangoProvider: 'intercom',
+    },
+  },
+  jira: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Jira',
+      stage: 'beta',
+      verticals: ['ticketing'],
+      logoUrl: '/_assets/logo-jira.svg',
+      nangoProvider: 'jira',
+    },
+  },
+  kustomer: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Kustomer',
+      stage: 'beta',
+      verticals: ['communication'],
+      logoUrl: '/_assets/logo-kustomer.svg',
+      nangoProvider: 'kustomer',
+    },
+  },
+  lever: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Lever',
+      stage: 'beta',
+      verticals: ['ats'],
+      logoUrl: '/_assets/logo-lever.svg',
+      nangoProvider: 'lever-sandbox',
+    },
+  },
+  linear: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Linear',
+      stage: 'ga',
+      verticals: ['ticketing'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linear.svg',
+      authType: 'OAUTH2',
     },
   },
   linkedin: {
-    name: 'linkedin',
-    dirName: 'cnext-linkedin',
-    varName: 'connectorLinkedin',
-    imports: {
-      def: '@openint/cnext',
-      server: '@openint/cnext',
-      importPath: {
-        def: 'connectorLinkedin_def',
-        server: 'connectorLinkedin_server',
-      },
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'LinkedIn',
+      stage: 'ga',
+      verticals: ['ats', 'social-media'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linkedin.svg',
+      authType: 'OAUTH2',
     },
   },
-}
+  lunchmoney: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['personal-finance'],
+      logoUrl: '/_assets/logo-lunchmoney.svg',
+    },
+  },
+  mercury: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-mercury.svg',
+      stage: 'alpha',
+    },
+  },
+  merge: {
+    hasClient: true,
+    hasServer: true,
+    metadata: {
+      displayName: 'merge.dev',
+      stage: 'beta',
+      logoUrl: '/_assets/logo-merge.svg',
+      verticals: ['accounting', 'commerce', 'crm', 'ats'],
+    },
+  },
+  microsoft: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'microsoft',
+      stage: 'beta',
+      verticals: ['file-storage'],
+      logoUrl: '/_assets/logo-microsoft.svg',
+      nangoProvider: 'microsoft',
+    },
+  },
+  moota: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-moota.svg',
+    },
+  },
+  notion: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Notion',
+      stage: 'ga',
+      verticals: ['wiki'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-notion.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  onebrick: {
+    hasClient: true,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-onebrick.svg',
+    },
+  },
+  outreach: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Outreach',
+      stage: 'beta',
+      verticals: ['sales-engagement'],
+      logoUrl: '/_assets/logo-outreach.svg',
+      nangoProvider: 'outreach',
+    },
+  },
+  pipedrive: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Outreach',
+      stage: 'beta',
+      verticals: ['crm'],
+      logoUrl: '/_assets/logo-pipedrive.svg',
+      nangoProvider: 'pipedrive',
+    },
+  },
+  plaid: {
+    hasClient: true,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking'],
+      displayName: 'Plaid',
+      stage: 'ga',
+      logoUrl: '/_assets/logo-plaid.svg',
+    },
+  },
+  postgres: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['database'],
+      logoUrl: '/_assets/logo-postgres.svg',
+      stage: 'ga',
+    },
+  },
+  quickbooks: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Quickbooks',
+      stage: 'ga',
+      verticals: ['accounting'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-quickbooks.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  ramp: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking', 'expense-management'],
+      logoUrl: '/_assets/logo-ramp.svg',
+      stage: 'beta',
+    },
+  },
+  reddit: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Reddit',
+      stage: 'beta',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-reddit.svg',
+      nangoProvider: 'reddit',
+    },
+  },
+  salesforce: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Salesforce',
+      stage: 'ga',
+      verticals: ['crm'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesforce.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  salesloft: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Salesloft',
+      stage: 'beta',
+      verticals: ['sales-engagement'],
+      logoUrl: '/_assets/logo-salesloft.svg',
+      nangoProvider: 'salesloft',
+    },
+  },
+  saltedge: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-saltedge.svg',
+    },
+  },
+  sharepointonline: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'SharePoint Online (v2)',
+      stage: 'ga',
+      verticals: ['file-storage', 'communication'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepointonline.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  slack: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Slack',
+      stage: 'ga',
+      verticals: ['other'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-slack.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  splitwise: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['personal-finance'],
+      logoUrl: '/_assets/logo-splitwise.svg',
+    },
+  },
+  stripe: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['commerce'],
+      logoUrl: '/_assets/logo-stripe.svg',
+      stage: 'beta',
+    },
+  },
+  teller: {
+    hasClient: true,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-teller.svg',
+      stage: 'beta',
+    },
+  },
+  toggl: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      logoUrl: '/_assets/logo-toggl.svg',
+    },
+  },
+  twenty: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['crm'],
+      logoUrl: '/_assets/logo-twenty.svg',
+      stage: 'beta',
+    },
+  },
+  twitter: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Twitter',
+      stage: 'beta',
+      verticals: ['social-media'],
+      logoUrl: '/_assets/logo-twitter.svg',
+      nangoProvider: 'twitter',
+    },
+  },
+  venmo: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-venmo.svg',
+    },
+  },
+  wise: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-wise.svg',
+    },
+  },
+  xero: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      verticals: ['accounting'],
+      logoUrl: '/_assets/logo-xero.svg',
+      displayName: 'Xero',
+      stage: 'beta',
+      nangoProvider: 'xero',
+    },
+  },
+  yodlee: {
+    hasClient: true,
+    hasServer: true,
+    metadata: {
+      verticals: ['banking'],
+      logoUrl: '/_assets/logo-yodlee.svg',
+    },
+  },
+  zohodesk: {
+    hasClient: false,
+    hasServer: true,
+    metadata: {
+      displayName: 'Zoho Desk',
+      stage: 'beta',
+      verticals: ['communication'],
+      logoUrl: '/_assets/logo-zohodesk.svg',
+      nangoProvider: 'zoho-desk',
+    },
+  },
+} as const

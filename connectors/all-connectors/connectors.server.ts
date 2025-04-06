@@ -1,24 +1,6 @@
 // generated file. Do not modify by hand
-import {
-  connectorAircall_server as connectorAircall,
-  connectorConfluence_server as connectorConfluence,
-  connectorDiscord_server as connectorDiscord,
-  connectorDummyOauth2_server as connectorDummyOauth2,
-  connectorGithub_server as connectorGithub,
-  connectorGooglecalendar_server as connectorGooglecalendar,
-  connectorGoogledocs_server as connectorGoogledocs,
-  connectorGoogledrive_server as connectorGoogledrive,
-  connectorGooglemail_server as connectorGooglemail,
-  connectorGooglesheet_server as connectorGooglesheet,
-  connectorHubspot_server as connectorHubspot,
-  connectorLinear_server as connectorLinear,
-  connectorLinkedin_server as connectorLinkedin,
-  connectorNotion_server as connectorNotion,
-  connectorQuickbooks_server as connectorQuickbooks,
-  connectorSalesforce_server as connectorSalesforce,
-  connectorSharepointonline_server as connectorSharepointonline,
-  connectorSlack_server as connectorSlack,
-} from '@openint/cnext'
+
+import {serverConnectors as cnextConnectors} from '@openint/cnext/connectors.server'
 import {default as connectorAirtable} from '@openint/connector-airtable/server'
 import {default as connectorApollo} from '@openint/connector-apollo/server'
 import {default as connectorBrex} from '@openint/connector-brex/server'
@@ -58,55 +40,38 @@ import {default as connectorWise} from '@openint/connector-wise/server'
 import {default as connectorXero} from '@openint/connector-xero/server'
 import {default as connectorYodlee} from '@openint/connector-yodlee/server'
 import {default as connectorZohodesk} from '@openint/connector-zohodesk/server'
+import type {NoOverlappingKeys} from '@openint/util/type-utils'
 
-export const serverConnectors = {
-  aircall: connectorAircall,
+export const customConnectors = {
   airtable: connectorAirtable,
   apollo: connectorApollo,
   brex: connectorBrex,
   coda: connectorCoda,
-  confluence: connectorConfluence,
-  discord: connectorDiscord,
-  'dummy-oauth2': connectorDummyOauth2,
   facebook: connectorFacebook,
   finch: connectorFinch,
   firebase: connectorFirebase,
   foreceipt: connectorForeceipt,
-  github: connectorGithub,
   gong: connectorGong,
-  googlecalendar: connectorGooglecalendar,
-  googledocs: connectorGoogledocs,
-  googledrive: connectorGoogledrive,
-  googlemail: connectorGooglemail,
-  googlesheet: connectorGooglesheet,
   greenhouse: connectorGreenhouse,
   heron: connectorHeron,
-  hubspot: connectorHubspot,
   instagram: connectorInstagram,
   intercom: connectorIntercom,
   jira: connectorJira,
   kustomer: connectorKustomer,
   lever: connectorLever,
-  linear: connectorLinear,
-  linkedin: connectorLinkedin,
   lunchmoney: connectorLunchmoney,
   merge: connectorMerge,
   microsoft: connectorMicrosoft,
   moota: connectorMoota,
-  notion: connectorNotion,
   onebrick: connectorOnebrick,
   outreach: connectorOutreach,
   pipedrive: connectorPipedrive,
   plaid: connectorPlaid,
   postgres: connectorPostgres,
-  quickbooks: connectorQuickbooks,
   ramp: connectorRamp,
   reddit: connectorReddit,
-  salesforce: connectorSalesforce,
   salesloft: connectorSalesloft,
   saltedge: connectorSaltedge,
-  sharepointonline: connectorSharepointonline,
-  slack: connectorSlack,
   splitwise: connectorSplitwise,
   stripe: connectorStripe,
   teller: connectorTeller,
@@ -118,3 +83,8 @@ export const serverConnectors = {
   yodlee: connectorYodlee,
   zohodesk: connectorZohodesk,
 }
+
+export const serverConnectors = {
+  ...cnextConnectors,
+  ...customConnectors,
+} satisfies NoOverlappingKeys<typeof cnextConnectors, typeof customConnectors>

@@ -92,4 +92,5 @@ const searchParams = await props.searchParams
 - Do not add JSdoc unless explicitly asked for.
 - Implicit typing is preferred over explicit types, unless it helps with compiler performance or is needed for some special reason
 - use zod from zod-utils, and follow naming convention of starting with lowercase z when defining new schemas.
-```
+
+- Always use bun when running ts files
