@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
-import {connectorSchemasByKey} from '@openint/all-connectors/schemas'
+import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {
   asCustomerOfOrg,
@@ -94,10 +94,10 @@ export const connectRouter = router({
         options: zConnectOptions,
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
-        discriminated_data: connectorSchemasByKey.pre_connect_input,
+        discriminated_data: discriminatedUnionBySchemaKey.pre_connect_input,
       }),
     )
-    .output(connectorSchemasByKey.connect_input)
+    .output(discriminatedUnionBySchemaKey.connect_input)
     .query(async ({ctx, input}) => {
       const connectors = serverConnectors as Record<string, ConnectorServer>
       const connector = connectors[input.discriminated_data.connector_name]
@@ -160,7 +160,7 @@ export const connectRouter = router({
         options: zPostConnectOptions,
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
-        discriminated_data: connectorSchemasByKey.connect_output,
+        discriminated_data: discriminatedUnionBySchemaKey.connect_output,
       }),
     )
     .output(core.connection)
