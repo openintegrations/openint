@@ -81,7 +81,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   })
   // Tests linearly depend on each other for performance and simplicty
 
-  describe.only('oauth2', () => {
+  describe('oauth2', () => {
     const ccfgRes = $test('create connector config', async () => {
       const res = await asUser.createConnectorConfig({
         connector_name: 'dummy-oauth2',
