@@ -1,144 +1,89 @@
+import {getConnectorDefaultCredentials} from '@openint/env'
+import {createOAuth2Client} from '@openint/oauth2/createOAuth2Client'
 import {type Z} from '@openint/util/zod-utils'
-import {zOAuthConfig} from './def'
+import {renderTemplateObject} from '../lib/template'
+import type {oauth2Schemas, zOAuthConfig} from './schemas'
 
-export function prepareScopes(
-  scopes: string[],
-  jsonConfig: Z.infer<typeof zOAuthConfig>,
-) {
-  const scopeSeparator = jsonConfig.scope_separator ?? ' '
+export function injectCcfgDefaultCredentials(
+  connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>,
+  connectorName: string,
+  oauthConfig: Z.infer<typeof zOAuthConfig>,
+): Z.infer<typeof oauth2Schemas.connector_config> {
+  const defaultCredentials = getConnectorDefaultCredentials(connectorName)
+  if (
+    !connectorConfig.oauth?.client_id &&
+    !connectorConfig.oauth?.client_secret &&
+    defaultCredentials?.['client_id'] &&
+    defaultCredentials?.['client_secret']
+  ) {
+    const configuredScopes = connectorConfig.oauth?.scopes ?? []
 
-  if (!scopes || !Array.isArray(scopes) || scopes.length === 0) {
-    return ''
-  }
-  return scopes.join(encodeURIComponent(scopeSeparator))
-}
-
-/**
- * Fills out variables in a URL string template with values from connector config and connection settings
- *
- * @param string - URL string containing variables in ${variable} format
- * @param connectorConfig - Connector configuration object containing values to substitute
- * @param connectionSettings - Connection settings object containing values to substitute
- * @returns URL string with variables replaced with actual values
- *
- * Variables can reference:
- * - Connector config values using ${connector_config.key}
- * - Connection settings using ${connection_settings.key}
- *
- * Example:
- * Input: "https://api.example.com/${connector_config.version}/users/${connection_settings.user_id}"
- * Output: "https://api.example.com/v1/users/123"
- */
-
-export function fillOutStringTemplateVariables(
-  string: string,
-  connectorConfig: any,
-  connectionSettings: any,
-) {
-  if (!string) return string
-  let filledUrl = string
-
-  // Ensure connectorConfig and connectionSettings are objects
-  connectorConfig = connectorConfig || {}
-  connectionSettings = connectionSettings || {}
-
-  // Match ${variable} pattern
-  const variableRegex = /\${([^}]+)}/g
-  const matches = string.match(variableRegex)
-
-  if (!matches) {
-    return filledUrl
-  }
-
-  matches.forEach((match) => {
-    // Extract variable name without ${} wrapper
-    const varName = match.slice(2, -1)
-
-    // Check if variable references connector_config
-    if (varName.startsWith('connector_config.')) {
-      const configKey = varName.split('.')[1]
-      const value = connectorConfig[configKey as keyof typeof connectorConfig]
-      if (value) {
-        filledUrl = filledUrl.replace(match, value)
-      }
-    }
-    // Check if variable references connection_settings
-    else if (varName.startsWith('connection_settings.')) {
-      const settingKey = varName.split('.')[1]
-      const value =
-        connectionSettings[settingKey as keyof typeof connectionSettings]
-      if (value) {
-        filledUrl = filledUrl.replace(match, value)
-      }
-    }
-  })
-
-  return filledUrl
-}
-
-export function fillOutStringTemplateVariablesInObjectKeys(
-  obj: any,
-  connectorConfig: any,
-  connectionSettings: any,
-): any {
-  if (!obj || typeof obj !== 'object') {
-    return obj
-  }
-
-  // Handle arrays properly
-  if (Array.isArray(obj)) {
-    return obj.map((item: any) =>
-      fillOutStringTemplateVariablesInObjectKeys(
-        item,
-        connectorConfig,
-        connectionSettings,
-      ),
-    )
-  }
-
-  const clone = {...obj}
-
-  for (const key of Object.keys(clone)) {
-    const value = clone[key]
-
-    if (typeof value === 'string') {
-      clone[key] = fillOutStringTemplateVariables(
-        value,
-        connectorConfig,
-        connectionSettings,
+    if (
+      oauthConfig.openint_scopes &&
+      configuredScopes.length > 0 &&
+      !configuredScopes.every((scope) =>
+        oauthConfig.openint_scopes?.includes(scope),
       )
-    } else if (value !== null && typeof value === 'object') {
-      clone[key] = fillOutStringTemplateVariablesInObjectKeys(
-        value,
-        connectorConfig,
-        connectionSettings,
+    ) {
+      const invalidScopes = configuredScopes.filter(
+        (scope) => !oauthConfig.openint_scopes?.includes(scope),
+      )
+      throw new Error(
+        `Invalid scopes configured: ${invalidScopes.join(', ')}. ` +
+          `Valid default scopes are: ${oauthConfig.openint_scopes?.join(', ')}`,
       )
     }
-  }
 
-  return clone
+    return {
+      ...connectorConfig,
+      oauth: {
+        client_id: defaultCredentials?.['client_id'],
+        client_secret: defaultCredentials?.['client_secret'],
+        scopes: configuredScopes ?? [],
+      },
+    }
+  }
+  return connectorConfig
 }
 
-/*
- * This function takes the paramNames map where a user can map were fields like client_id and client_secret are named in particular oauth connector.
- * For example salesforce may call client_id clientKey. In this case, the paramNames would have client_id: clientKey.
- * Following the SF example, this function will return a new object with the client_id field renamed to clientKey.
- * Write tests for this function to in different scenarios ensure that the clientKey is returned with the value initially set for client_id
- */
-export function mapOauthParams(
-  params: Record<string, string>,
-  paramNames: Record<string, string>,
-) {
-  const result: Record<string, string> = {}
-
-  // Process each parameter in the input
-  Object.entries(params).forEach(([key, value]) => {
-    if (key && paramNames && key in paramNames && paramNames[key]) {
-      result[paramNames[key]] = value
-    } else {
-      result[key] = value
-    }
+export function getClient({
+  connectorName,
+  oauthConfigTemplate,
+  connectorConfig,
+  connectionSettings,
+  fetch,
+}: {
+  connectorName: string
+  oauthConfigTemplate: Z.infer<typeof zOAuthConfig>
+  connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>
+  connectionSettings:
+    | Z.infer<typeof oauth2Schemas.connection_settings>
+    | undefined
+  fetch: undefined | ((req: Request) => Promise<Response>)
+}) {
+  const oauthConfig = renderTemplateObject(oauthConfigTemplate, {
+    connectorConfig,
+    connectionSettings: connectionSettings ?? {},
   })
-
-  return result
+  const ccfg = injectCcfgDefaultCredentials(
+    connectorConfig,
+    connectorName,
+    oauthConfig,
+  )
+  const client = createOAuth2Client(
+    {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      clientId: ccfg.oauth!.client_id!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      clientSecret: ccfg.oauth!.client_secret!,
+      authorizeURL: oauthConfig.authorization_request_url,
+      tokenURL: oauthConfig.token_request_url,
+      revokeUrl: oauthConfig.revocation_request_url,
+      scopeDelimiter: oauthConfig.scope_separator,
+      paramKeyMapping: oauthConfig.params_config.param_names,
+      clientAuthLocation: 'body', // Make this configurable
+    },
+    fetch,
+  )
+  return {client, oauthConfig}
 }

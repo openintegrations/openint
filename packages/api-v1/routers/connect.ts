@@ -209,6 +209,7 @@ export const connectRouter = router({
       // would be much nicer if this is the materialized schemas
       const zSettings = def.schemas.connection_settings ?? z.object({}).strict()
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const settings = zSettings.parse(connUpdate.settings)
 
       const [conn] = await dbUpsertOne(
@@ -220,6 +221,7 @@ export const connectRouter = router({
           settings,
           connector_config_id: input.connector_config_id,
           customer_id: ctx.viewer.customerId ?? ctx.viewer.userId,
+          
           // add integration id
         },
         {keyColumns: ['id']},
