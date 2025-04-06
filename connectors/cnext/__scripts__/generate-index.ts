@@ -6,12 +6,10 @@ import * as path from 'node:path'
 const defsDir = path.join(__dirname, '../json-defs')
 
 // Path to the output file (now index.ts in the defs folder)
-const outputFile = path.join(defsDir, 'index.ts')
+const outputFile = path.join(__dirname, '../json-defs.ts')
 
 // Get all .ts files in the defs directory
-const files = fs
-  .readdirSync(defsDir)
-  .filter((file) => file.endsWith('.ts') && file !== 'index.ts')
+const files = fs.readdirSync(defsDir).filter((file) => file.endsWith('.ts'))
 
 // Generate the content for index.ts
 let content = '// This file is auto-generated. Do not edit manually.\n\n'
@@ -26,7 +24,7 @@ function toValidIdentifier(fileName: string): string {
 files.forEach((file) => {
   const fileName = path.basename(file, '.ts')
   const importName = toValidIdentifier(fileName)
-  content += `import ${importName} from './${fileName}';\n`
+  content += `import ${importName} from './json-defs/${fileName}';\n`
 })
 
 // Add the object with all imports
