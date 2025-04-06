@@ -103,9 +103,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     const preConnectRes = $test('preConnect', async () => {
       const res = await asCustomer.preConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
           pre_connect_input: {},
         },
@@ -133,9 +133,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     const postConnectRes = $test('postConnect', async () => {
       const res = await asCustomer.postConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
           connect_output: connectRes.current,
         },
@@ -201,18 +201,18 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     // Not needed really, does not actually even get implemented
     test('preConnect', async () => {
       const res = await asCustomer.preConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {connector_name: ccfgRes.current.connector_name, pre_connect_input: {}},
+        discriminated_data: {connector_name: ccfgRes.current.connector_name, pre_connect_input: {}},
       })
       expect(res.connect_input).toEqual({})
     })
 
     const postConnectRes = $test('postConnect', async () => {
       const res = await asCustomer.postConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
           connect_output: settings,
         },
@@ -258,9 +258,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     const preConnectRes = $test('preConnect', async () => {
       const res = await asCustomer.preConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
           pre_connect_input: {sandboxPublicTokenCreate: true},
         },
@@ -272,9 +272,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
     const postConnectRes = $test('postConnect', async () => {
       const res = await asCustomer.postConnect({
-        id: ccfgRes.current.id,
+        connector_config_id: ccfgRes.current.id,
         options: {},
-        data: {
+        discriminated_data: {
           connector_name: ccfgRes.current.connector_name,
           connect_output: preConnectRes.current.connect_input,
         },

@@ -26,6 +26,8 @@ import {connectRouterModels} from './connect.models'
 import {md} from './utils/md'
 
 export const connectRouter = router({
+  // TODO: Move create token in here...  and make sure createToken can contain
+  // signed client options as well and have them override the client options from url params
   getMagicLink: orgProcedure
     .meta({
       openapi: {
@@ -36,7 +38,7 @@ export const connectRouter = router({
         summary: 'Create Magic Link',
       },
     })
-    .input(connectRouterModels.getMagicLinkInput.nullish())
+    .input(connectRouterModels.getMagicLinkInput.optional())
     .output(
       z.object({
         magic_link_url: z
@@ -88,34 +90,35 @@ export const connectRouter = router({
     })
     .input(
       z.object({
-        // Rename to connector_config_id
-        id: zId('ccfg').describe(md`
+        connector_config_id: zId('ccfg').describe(md`
           Must correspond to data.connector_name.
           Technically id should imply connector_name already but there is no way to
           specify a discriminated union with id alone.
         `),
         options: zConnectOptions,
-        data: connectorSchemasByKey.pre_connect_input,
+        // Unable to put data at the top level due to
+        // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
+        discriminated_data: connectorSchemasByKey.pre_connect_input,
       }),
     )
     .output(connectorSchemasByKey.connect_input)
     .query(async ({ctx, input}) => {
       const connectors = serverConnectors as Record<string, ConnectorServer>
-      const connector = connectors[input.data.connector_name]
+      const connector = connectors[input.discriminated_data.connector_name]
       if (!connector) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector ${input.data.connector_name} not found`,
+          message: `Connector ${input.discriminated_data.connector_name} not found`,
         })
       }
       const ccfg =
         await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
-          where: eq(schema.connector_config.id, input.id),
+          where: eq(schema.connector_config.id, input.connector_config_id),
         })
       if (!ccfg) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector config ${input.id} not found`,
+          message: `Connector config ${input.connector_config_id} not found`,
         })
       }
 
@@ -126,8 +129,10 @@ export const connectRouter = router({
         })
       }
 
-      console.log('preConnect input', input)
-      const res = await connector.preConnect?.(
+      const preConnect = connector.preConnect ?? (() => ({}))
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/await-thenable
+      const res = await preConnect(
         ccfg.config,
         {
           webhookBaseUrl:
@@ -137,12 +142,12 @@ export const connectRouter = router({
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
         },
-        input.data.pre_connect_input,
+        input.discriminated_data.pre_connect_input,
       )
-      console.log('preConnect output', res)
+
       return {
-        connector_name: input.data.connector_name,
-        connect_input: res ?? {},
+        connector_name: input.discriminated_data.connector_name,
+        connect_input: res,
       }
     }),
   postConnect: customerProcedure
@@ -155,7 +160,7 @@ export const connectRouter = router({
     })
     .input(
       z.object({
-        id: zId('ccfg').describe(md`
+        connector_config_id: zId('ccfg').describe(md`
           Must correspond to data.connector_name.
           Technically id should imply connector_name already but there is no way to
           specify a discriminated union with id alone.
@@ -163,7 +168,7 @@ export const connectRouter = router({
         options: zPostConnectOptions,
         // Unable to put data at the top level due to
         // TRPCError: [mutation.preConnect] - Input parser must be a ZodObject
-        data: connectorSchemasByKey.connect_output,
+        discriminated_data: connectorSchemasByKey.connect_output,
       }),
     )
     .output(core.connection)
@@ -171,28 +176,36 @@ export const connectRouter = router({
       console.log('postConnect', input, ctx)
       const connectors = serverConnectors as Record<string, ConnectorServer>
       const defs = defConnectors as Record<string, ConnectorDef>
-      const connector = connectors[input.data.connector_name]
-      const def = defs[input.data.connector_name]
+      const connector = connectors[input.discriminated_data.connector_name]
+      const def = defs[input.discriminated_data.connector_name]
       if (!connector || !def) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector ${input.data.connector_name} not found`,
+          message: `Connector ${input.discriminated_data.connector_name} not found`,
         })
       }
       const ccfg =
         await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
-          where: eq(schema.connector_config.id, input.id),
+          where: eq(schema.connector_config.id, input.connector_config_id),
         })
       if (!ccfg) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Connector config ${input.id} not found`,
+          message: `Connector config ${input.connector_config_id} not found`,
         })
       }
 
+      const postConnect =
+        connector.postConnect ??
+        ((output) => ({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          settings: output,
+          connectionExternalId: '', // TODO: Check on me....
+        }))
+
       console.log('postConnect', input, ctx, ccfg)
-      const connUpdate = await connector.postConnect?.(
-        input.data.connect_output,
+      const connUpdate = await postConnect(
+        input.discriminated_data.connect_output,
         ccfg.config,
         {
           webhookBaseUrl:
@@ -203,13 +216,16 @@ export const connectRouter = router({
           fetch: ctx.fetch,
         },
       )
-      const id = makeId('conn', input.data.connector_name, makeUlid())
-
-      const zSettings = def.schemas.connectionSettings ?? z.unknown()
-      // Assume input is the settings
-      const settings = zSettings.parse(
-        connUpdate?.settings ?? input.data.connect_output,
+      const id = makeId(
+        'conn',
+        input.discriminated_data.connector_name,
+        makeUlid(),
       )
+
+      // would be much nicer if this is the materialized schemas
+      const zSettings = def.schemas.connectionSettings ?? z.object({}).strict()
+
+      const settings = zSettings.parse(connUpdate.settings)
 
       const [conn] = await dbUpsertOne(
         // TODO: Update rls to allow customer to upsert their own connections
@@ -218,7 +234,7 @@ export const connectRouter = router({
         {
           id,
           settings,
-          connector_config_id: input.id,
+          connector_config_id: input.connector_config_id,
           customer_id: ctx.viewer.customerId ?? ctx.viewer.userId,
           // add integration id
         },

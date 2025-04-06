@@ -201,8 +201,8 @@ export function AddConnectionInner({
   const preConnectRes = useSuspenseQuery(
     trpc.preConnect.queryOptions(
       {
-        id: connectorConfig.id,
-        data: {
+        connector_config_id: connectorConfig.id,
+        discriminated_data: {
           connector_name: name,
           pre_connect_input: {},
         },
@@ -236,8 +236,8 @@ export function AddConnectionInner({
       /// todo: always validate schema even if pre/post connect are not
       // implemented
       const postConnectRes = await postConnect.mutateAsync({
-        id: connectorConfig.id,
-        data: {
+        connector_config_id: connectorConfig.id,
+        discriminated_data: {
           connector_name: name,
           connect_output: connectRes,
         },

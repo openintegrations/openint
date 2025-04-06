@@ -54,11 +54,24 @@ export const connectorSchemasByKey = Object.fromEntries(
         'connector_name',
         nonEmpty(
           Object.entries(defConnectors).map(([name, def]) => {
-            // null does not work because jsonb fields in the DB are not nullable
-            // z.union([z.null(), z.object({}).strict()]),
-            const schema =
-              (def.schemas as ConnectorSchemas)[camelKey] ??
-              z.object({}).strict()
+            // Consider adding a materializeSchemas function that would compute this on a per-connector basis
+            // to make it easier to work with indivdiually
+            // Would help in connect.ts postConnect
+            // Can work together with the new cnext clean up
+            const schemas = def.schemas as ConnectorSchemas
+            let schema = schemas[camelKey]
+
+            // if connect output is missing, it is assumed that the useConnectHook
+            // will return the connection settings as its output
+            if (!schema && schemaKey === 'connect_output') {
+              schema = schemas.connectionSettings
+            }
+
+            if (!schema) {
+              // null does not work because jsonb fields in the DB are not nullable
+              // z.union([z.null(), z.object({}).strict()]),
+              schema = z.object({}).strict()
+            }
             return z
               .object({connector_name: z.literal(name), [schemaKey]: schema})
               .openapi({ref: `connector.${name}.${schemaKey}`})
