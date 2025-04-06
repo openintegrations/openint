@@ -82,11 +82,7 @@ export const connectRouter = router({
     }),
   preConnect: customerProcedure
     .meta({
-      openapi: {
-        method: 'POST',
-        path: '/connect/pre-connect',
-        enabled: false,
-      },
+      openapi: {enabled: false, method: 'POST', path: '/connect/pre-connect'},
     })
     .input(
       z.object({
@@ -152,11 +148,7 @@ export const connectRouter = router({
     }),
   postConnect: customerProcedure
     .meta({
-      openapi: {
-        enabled: false, // tuple type not supported by openAPI
-        method: 'POST',
-        path: '/connect/post-connect',
-      },
+      openapi: {enabled: false, method: 'POST', path: '/connect/post-connect'},
     })
     .input(
       z.object({

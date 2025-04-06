@@ -74,7 +74,7 @@ export const connectorSchemasByKey = Object.fromEntries(
             }
             return z
               .object({connector_name: z.literal(name), [schemaKey]: schema})
-              .openapi({ref: `connector.${name}.${schemaKey}`})
+              .openapi({ref: `connector.${name}.discriminated_${schemaKey}`})
           }),
         ),
       ),
@@ -104,7 +104,7 @@ export const zDiscriminatedSettings = z
             settings: s.shape.connection_settings,
           })
           .openapi({
-            ref: `connector.${s.shape.connector_name.value}.connection_settings`,
+            ref: `connector.${s.shape.connector_name.value}.discriminated_connection_settings`,
           }),
       ),
     ),
@@ -123,7 +123,7 @@ export const zDiscriminatedConfig = z
             config: s.shape.connector_config,
           })
           .openapi({
-            ref: `connector.${s.shape.connector_name.value}.connector_config`,
+            ref: `connector.${s.shape.connector_name.value}.discriminated_connector_config`,
           }),
       ),
     ),
