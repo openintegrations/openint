@@ -2,11 +2,14 @@ import {drizzle as drizzlePg} from 'drizzle-orm/node-postgres'
 import {migrate} from 'drizzle-orm/node-postgres/migrator'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
-import {Pool, types} from 'pg'
+import {types as pgTypes, Pool} from 'pg'
 import type {Viewer} from '@openint/cdk'
 import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
+import {setTypeParsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
+
+const typeParsers = setTypeParsers(pgTypes)
 
 function drizzleForViewer(
   pool: Pool,
@@ -23,7 +26,7 @@ function drizzleForViewer(
       }
       const res = await client.query({
         text: query,
-        types,
+        types: typeParsers,
         values: params,
         ...(method === 'all' ? {rowMode: 'array'} : {}),
       })
@@ -43,12 +46,7 @@ function drizzleForViewer(
 }
 
 export function initDbPg(url: string, options: DbOptions = {}) {
-  types.setTypeParser(types.builtins.DATE, (val) => val)
-  types.setTypeParser(types.builtins.TIMESTAMP, (val) => val)
-  types.setTypeParser(types.builtins.TIMESTAMPTZ, (val) => val)
-  types.setTypeParser(types.builtins.INTERVAL, (val) => val)
-
-  const pool = new Pool({connectionString: url, types})
+  const pool = new Pool({connectionString: url, types: typeParsers})
 
   const db = drizzleForViewer(pool, null, options)
 
@@ -84,7 +82,7 @@ export function initDbPg(url: string, options: DbOptions = {}) {
 }
 
 export function initDbPgDirect(url: string, options: DbOptions = {}) {
-  const pool = new Pool({connectionString: url})
+  const pool = new Pool({connectionString: url, types: typeParsers})
   const db = drizzlePg({...getDrizzleConfig(options), client: pool})
   return dbFactory('pg-direct', db, {
     async $exec(query) {

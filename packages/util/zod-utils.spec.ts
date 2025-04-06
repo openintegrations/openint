@@ -75,3 +75,66 @@ test('parseAsync: extracts input from zod error', async () => {
     expect(getInputData(error)).toEqual(invalidInputs)
   }
 })
+
+test('extract openapi metadata from zod type', () => {
+  const schema = z.unknown().openapi({
+    ref: 'mySchema',
+    description: 'my description',
+  })
+
+  // Does not set the schema description unfortunately
+  expect(schema.description).toBeUndefined()
+  expect(schema._def.zodOpenApi?.openapi).toEqual({
+    ref: 'mySchema',
+    description: 'my description',
+  })
+})
+
+test('discriminated union error does not contain the matched discriminator', () => {
+  const catSchema = z.object({type: z.literal('cat'), meow: z.boolean()})
+
+  const dogSchema = z.object({type: z.literal('dog'), bark: z.boolean()})
+
+  const petSchema = z.discriminatedUnion('type', [catSchema, dogSchema])
+
+  // valid cases
+  expect(petSchema.parse({type: 'cat', meow: true})).toBeTruthy()
+  expect(petSchema.parse({type: 'dog', bark: true})).toBeTruthy()
+
+  // discriminator error
+  expect(
+    petSchema.safeParse({type: 'fish', swim: true}).error?.message,
+  ).toContain('invalid_union_discriminator')
+  expect(
+    petSchema.safeParse(
+      {type: 'fish', swim: true},
+      {
+        errorMap: (issue, ctx) => ({
+          message:
+            issue.code === 'invalid_union_discriminator'
+              ? 'Invalid pet type'
+              : ctx.defaultError,
+        }),
+      },
+    ).error?.message,
+  ).toContain('Invalid pet type')
+
+  // TODO: Figure out how to get matched discriminator from the error
+  // to improve the quality of the error message
+  expect(
+    JSON.stringify(
+      petSchema.safeParse(
+        {type: 'cat', bark: true},
+        {
+          errorMap: (issue, ctx) => {
+            console.log('Error issue:', issue)
+            console.log('Error context:', ctx)
+            return {
+              message: ctx.defaultError,
+            }
+          },
+        },
+      ).error?.issues,
+    ),
+  ).not.toContain('cat')
+})

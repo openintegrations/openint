@@ -1,5 +1,5 @@
 import type {QueryOptions} from '@electric-sql/pglite'
-import {PGlite, types} from '@electric-sql/pglite'
+import {PGlite} from '@electric-sql/pglite'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {drizzle as drizzlePGLite} from 'drizzle-orm/pglite'
@@ -11,6 +11,7 @@ import {
   getMigrationConfig,
   type DbOptions,
 } from './db'
+import {parsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 
 function drizzleForViewer(
@@ -22,12 +23,7 @@ function drizzleForViewer(
     const options: QueryOptions = {
       rowMode: method === 'all' ? 'array' : 'object',
       // identity parsers, allow drizzle itself to do the work of mapping based on for example timestamp mode
-      parsers: {
-        [types.TIMESTAMP]: (value) => value,
-        [types.TIMESTAMPTZ]: (value) => value,
-        [types.INTERVAL]: (value) => value,
-        [types.DATE]: (value) => value,
-      },
+      parsers,
     }
     if (viewer) {
       const res = await pglite.transaction(async (tx) => {
@@ -43,7 +39,7 @@ function drizzleForViewer(
 }
 
 export function initDbPGLite(options: DbOptions = {}) {
-  const pglite = new PGlite()
+  const pglite = new PGlite({parsers})
 
   const db = drizzleForViewer(pglite, null, options)
 
@@ -73,7 +69,7 @@ export function initDbPGLite(options: DbOptions = {}) {
 // For comparision, not used in prod as not easily used with viewer due to drizzle abstraction
 
 export function initDbPGLiteDirect(options: DbOptions) {
-  const pglite = new PGlite({})
+  const pglite = new PGlite({parsers})
   const db = drizzlePGLite({...getDrizzleConfig(options), client: pglite})
   return dbFactory('pglite-direct', db, {
     async $exec(query) {

@@ -20,6 +20,8 @@ export async function nodeRequestToWebRequest(req: IncomingMessage) {
     method,
     headers: headers as Record<string, string>,
     body: ['GET', 'HEAD'].includes(method || '') ? null : body,
+    // TODO: Figure out the right settings for this...
+    redirect: 'manual',
   })
 }
 

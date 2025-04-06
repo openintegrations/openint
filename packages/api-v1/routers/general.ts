@@ -1,3 +1,4 @@
+import {zViewerRole} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 import {publicProcedure, router} from '../trpc/_base'
 
@@ -44,9 +45,6 @@ export const generalRouter = router({
     })
     .input(z.void())
     // note: not returning zViewer as it seems to be tripping up the stainless sdk generation
-    .output(z.object({role: z.enum(['customer', 'org', 'anon', 'user'])}))
-    // @ts-expect-error
-    .query(({ctx}) => {
-      return {role: ctx.viewer.role}
-    }),
+    .output(z.object({role: zViewerRole}).passthrough())
+    .query(({ctx}) => ctx.viewer),
 })

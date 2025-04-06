@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import {sum} from 'lodash'
 
 /**
  * Should handle cases like math.equal(6.65 - 3.32 - 3.33, 0)
@@ -80,7 +79,7 @@ export const math = {
   isNonZero,
   isNegativeZero,
   round,
-  sum,
+
   precision,
   signOf,
 }

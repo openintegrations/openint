@@ -1,9 +1,9 @@
 import {TRPCError} from '@trpc/server'
 import type {Id, Viewer} from '@openint/cdk'
-import {makeJwtClient} from '@openint/cdk'
 import {eq, schema} from '@openint/db'
 import type {AnyDatabase} from '@openint/db/db'
 import {envRequired} from '@openint/env'
+import {makeJwtClient} from '../lib/makeJwtClient'
 
 export async function viewerFromRequest(
   ctx: {db: AnyDatabase},

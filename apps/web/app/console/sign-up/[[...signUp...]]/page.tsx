@@ -1,6 +1,6 @@
 import {redirect} from 'next/navigation'
 import {FullScreenCenter} from '@openint/ui-v1/components/FullScreenCenter'
-import {SignUp} from '@/lib-client/auth.client'
+import {SignUp} from '@openint/console-auth/client'
 import {currentViewer} from '@/lib-server/auth.server'
 
 export default async function SignInScreen() {

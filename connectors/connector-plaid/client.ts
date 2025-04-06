@@ -11,7 +11,7 @@ export const plaidClientConnector = {
   useConnectHook: (_) => {
     const [state, setState] = React.useState<{
       options: RequiredOnly<PlaidLinkOptions, 'token'>
-      res$: Deferred<(typeof helpers)['_types']['connectOutput']>
+      res$: Deferred<(typeof helpers)['_types']['connect_output']>
     } | null>(null)
 
     const plaidLink = usePlaidLink({
@@ -26,9 +26,9 @@ export const plaidClientConnector = {
       onEvent: (event, meta) => {
         console.log('[plaid] onEvent', event, meta)
       },
-      onSuccess: (publicToken, meta) => {
-        console.log('[plaid] onSuccess', {publicToken, meta})
-        state?.res$.resolve({publicToken, meta})
+      onSuccess: (public_token, meta) => {
+        console.log('[plaid] onSuccess', {public_token, meta})
+        state?.res$.resolve({public_token, meta})
         setState(null)
       },
       onExit: (err) => {
@@ -57,7 +57,7 @@ export const plaidClientConnector = {
     return async (opts, {integrationExternalId}) => {
       console.log('[plaid] Will connect', opts, plaidLink)
       if ('public_token' in opts) {
-        return {publicToken: opts.public_token}
+        return {public_token: opts.public_token}
       }
       if (plaidLink.error) {
         throw plaidLink.error
@@ -70,7 +70,7 @@ export const plaidClientConnector = {
           integrationExternalId,
         })
       }
-      const res$ = new Deferred<(typeof helpers)['_types']['connectOutput']>()
+      const res$ = new Deferred<(typeof helpers)['_types']['connect_output']>()
       setState({options: {token: opts.link_token}, res$})
       return res$.promise
     }

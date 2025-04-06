@@ -6,7 +6,7 @@ import {getConnectorModel, zConnectorName} from './connector.models'
 import {zListResponse} from './utils/pagination'
 
 export const zConnectorExtended = core.connector.extend({
-  integrations: z.array(core.integration).optional(),
+  integrations: z.array(core.integration_select).optional(),
 })
 
 export type ConnectorExtended = Z.infer<typeof zConnectorExtended>

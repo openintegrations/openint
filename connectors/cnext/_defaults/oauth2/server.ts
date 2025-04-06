@@ -3,7 +3,7 @@ import {extractId, makeId} from '@openint/cdk'
 import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {type Z} from '@openint/util/zod-utils'
-import {oauth2Schemas, zOAuthConfig} from './def'
+import type {oauth2Schemas, zOAuthConfig} from './def'
 import {
   authorizeHandler,
   defaultTokenExchangeHandler,
@@ -13,10 +13,10 @@ import {
 import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
 function injectCcfgDefaultCredentials(
-  connectorConfig: Z.infer<typeof oauth2Schemas.connectorConfig>,
+  connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>,
   connectorName: string,
   oauthConfig: Z.infer<typeof zOAuthConfig>,
-): Z.infer<typeof oauth2Schemas.connectorConfig> {
+): Z.infer<typeof oauth2Schemas.connector_config> {
   const defaultCredentials = getConnectorDefaultCredentials(connectorName)
   if (
     !connectorConfig.oauth?.client_id &&
@@ -90,24 +90,24 @@ export function generateOAuth2Server<
       validateOAuthCredentials({connector_config: credentials} as any)
     },
 
-    async preConnect(connectorConfig, connectionSettings, input) {
+    async preConnect({config, context, input}) {
       const connectionId =
         input.connectionId ?? makeId('conn', connectorDef.name, makeUlid())
 
       console.log(
-        `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!connectionSettings}`,
+        `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!context.connection}`,
       )
 
       // console.warn(
       //   `Oauth2 Preconnect called with oauthConfig ${JSON.stringify(
       //     oauthConfig,
       //   )} and connectorConfig ${JSON.stringify(
-      //     connectorConfig,
-      //   )} and connectionSettings ${JSON.stringify(connectionSettings)}`,
+      //     config,
+      //   )} and connectionSettings ${JSON.stringify(context.connection)}`,
       // )
 
       const ccfg = injectCcfgDefaultCredentials(
-        connectorConfig,
+        config,
         connectorDef.name,
         oauthConfig,
       )
@@ -115,9 +115,9 @@ export function generateOAuth2Server<
         oauthConfig: {
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
-            connectorConfig.oauth,
-            // @ts-expect-error: QQ: fix this
-            connectionSettings.oauth,
+            config.oauth,
+            // Access the oauth settings from the connection if available
+            context.connection?.settings?.oauth,
           ),
           connector_config: ccfg,
         },
@@ -127,12 +127,11 @@ export function generateOAuth2Server<
       }) as any
     },
 
-    async postConnect(connectOutput, connectorConfig, connectionSettings) {
-      console.log(
-        `Oauth2 Postconnect called for connectionId ${connectOutput.connectionId}`,
-      )
+    async postConnect({connectOutput, config, context}) {
+      const connectionId = connectOutput.state
+      console.log(`Oauth2 Postconnect called for connectionId ${connectionId}`)
       const ccfg = injectCcfgDefaultCredentials(
-        connectorConfig,
+        config,
         connectorDef.name,
         oauthConfig,
       )
@@ -141,20 +140,22 @@ export function generateOAuth2Server<
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
             ccfg.oauth,
-            // @ts-expect-error: QQ: fix this
-            connectionSettings.oauth,
+            // Access the oauth settings from the connection if available
+            context.connection?.settings?.oauth,
           ),
           connector_config: ccfg,
         } satisfies Z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
         state: connectOutput.state,
         redirectUri: getServerUrl(null) + '/connect/callback',
+        fetch: context.fetch,
       })
+      console.log('token exchange result', result)
 
       return {
         // QQ: is this the right thing to do here?
-        connectionExternalId: connectOutput.connectionId
-          ? extractId(connectOutput.connectionId as any)[2]
+        connectionExternalId: connectionId
+          ? extractId(connectionId as any)[2]
           : undefined,
         settings: {
           oauth: {
@@ -175,15 +176,15 @@ export function generateOAuth2Server<
       } as any // TODO: QQ review
     },
 
-    async refreshConnection(connectionSettings, connectorConfig) {
-      const refreshToken = connectionSettings?.oauth?.credentials?.refresh_token
+    async refreshConnection({settings, config}) {
+      const refreshToken = settings?.oauth?.credentials?.refresh_token
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
       }
 
       console.log(`Oauth2 Refresh connection called`)
       const ccfg = injectCcfgDefaultCredentials(
-        connectorConfig,
+        config,
         connectorDef.name,
         oauthConfig,
       )
@@ -193,10 +194,10 @@ export function generateOAuth2Server<
           ...fillOutStringTemplateVariablesInObjectKeys(
             oauthConfig,
             ccfg.oauth,
-            connectionSettings.oauth,
+            settings.oauth,
           ),
           connector_config: ccfg,
-          connection_settings: connectionSettings,
+          connection_settings: settings,
         } as any as Z.infer<typeof zOAuthConfig>, // TODO: fix this
         refreshToken: refreshToken,
       })
@@ -207,10 +208,10 @@ export function generateOAuth2Server<
             ...result,
             client_id: ccfg.oauth?.client_id,
           },
-          created_at: connectionSettings.oauth?.created_at,
+          created_at: settings.oauth?.created_at,
           updated_at: new Date().toISOString(),
           last_fetched_at: new Date().toISOString(),
-          metadata: connectionSettings.oauth?.metadata || null,
+          metadata: settings.oauth?.metadata || null,
         },
         metadata: {}, // QQ: do we need this?
       } as any
@@ -236,7 +237,7 @@ export function generateOAuth2Server<
 
         try {
           // Attempt to refresh the token
-          return this.refreshConnection(settings, config)
+          return this.refreshConnection({settings, config})
         } catch (error: any) {
           throw new Error(`Failed to refresh token: ${error.message}`)
         }

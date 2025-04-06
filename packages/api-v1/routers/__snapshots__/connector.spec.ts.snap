@@ -30,16 +30,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -133,6 +129,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -147,7 +149,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -155,7 +156,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -203,6 +212,25 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "airtableBase": {
+            "type": "string",
+          },
+          "apiKey": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "apiKey",
+          "airtableBase",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "airtableBase": {
@@ -216,6 +244,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "apiKey",
           "airtableBase",
         ],
+        "type": "object",
+      },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -232,6 +276,166 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "components": {
+          "schemas": {
+            "AuthMode": {
+              "enum": [
+                "OAUTH2",
+                "OAUTH1",
+                "BASIC",
+                "API_KEY",
+              ],
+              "type": "string",
+            },
+          },
+        },
+        "properties": {
+          "error": {
+            "properties": {
+              "code": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "refresh_token_external_error",
+                    ],
+                    "type": "string",
+                  },
+                  {
+                    "type": "string",
+                  },
+                ],
+              },
+              "message": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+            },
+            "required": [
+              "code",
+            ],
+            "type": [
+              "object",
+              "null",
+            ],
+          },
+          "oauth": {
+            "properties": {
+              "connection_config": {
+                "additionalProperties": {},
+                "properties": {
+                  "instance_url": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "portalId": {
+                    "type": [
+                      "number",
+                      "null",
+                    ],
+                  },
+                },
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "credentials": {
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "api_key": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "expires_at": {
+                    "format": "date-time",
+                    "type": "string",
+                  },
+                  "raw": {
+                    "additionalProperties": true,
+                    "properties": {
+                      "access_token": {
+                        "type": "string",
+                      },
+                      "expires_at": {
+                        "format": "date-time",
+                        "type": "string",
+                      },
+                      "expires_in": {
+                        "type": "number",
+                      },
+                      "refresh_token": {
+                        "type": [
+                          "string",
+                          "null",
+                        ],
+                      },
+                      "refresh_token_expires_in": {
+                        "type": [
+                          "number",
+                          "null",
+                        ],
+                      },
+                      "scope": {
+                        "type": "string",
+                      },
+                      "token_type": {
+                        "type": [
+                          "string",
+                          "null",
+                        ],
+                      },
+                    },
+                    "required": [
+                      "access_token",
+                    ],
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "type": {
+                    "$ref": "#/components/schemas/AuthMode",
+                  },
+                },
+                "required": [
+                  "type",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+            },
+            "required": [
+              "credentials",
+              "metadata",
+            ],
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "components": {
           "schemas": {
@@ -388,6 +592,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -402,6 +622,21 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "accessToken": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "accessToken",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "accessToken": {
@@ -448,6 +683,14 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "type": "object",
       },
       "integration_data": {},
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -462,6 +705,21 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "apiKey": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "apiKey",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "apiKey": {
@@ -471,6 +729,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "apiKey",
         ],
+        "type": "object",
+      },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -505,16 +779,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -608,6 +878,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -622,7 +898,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -630,7 +905,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -696,16 +979,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -799,6 +1078,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -813,7 +1098,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -821,7 +1105,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -864,6 +1156,182 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "display_name": "Dummy OAuth2",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-dummy-oauth2.svg",
+    "name": "dummy-oauth2",
+    "openint_scopes": [
+      "read:profile",
+    ],
+    "platforms": [
+      "cloud",
+      "local",
+    ],
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "type": "string",
+          },
+          "state": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "client_id",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "created_at",
+              "updated_at",
+              "last_fetched_at",
+              "metadata",
+            ],
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Read profile information",
+        "scope": "read:profile",
+      },
+      {
+        "description": "Read posts",
+        "scope": "write:posts",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
     "display_name": "Facebook",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-facebook.svg",
     "name": "facebook",
@@ -873,6 +1341,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -1072,6 +1544,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -1176,12 +1660,20 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {
         "properties": {
           "state": {
             "type": "string",
           },
         },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -1198,6 +1690,163 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "oneOf": [
+          {
+            "properties": {
+              "role": {
+                "const": "admin",
+                "type": "string",
+              },
+              "serviceAccount": {
+                "additionalProperties": {},
+                "properties": {
+                  "project_id": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "project_id",
+                ],
+                "type": "object",
+              },
+            },
+            "required": [
+              "role",
+              "serviceAccount",
+            ],
+            "type": "object",
+          },
+          {
+            "properties": {
+              "authData": {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "method": {
+                        "const": "userJson",
+                        "type": "string",
+                      },
+                      "userJson": {
+                        "additionalProperties": {},
+                        "properties": {
+                          "appName": {
+                            "type": "string",
+                          },
+                          "stsTokenManager": {
+                            "additionalProperties": {},
+                            "type": "object",
+                          },
+                          "uid": {
+                            "type": "string",
+                          },
+                        },
+                        "required": [
+                          "uid",
+                          "appName",
+                          "stsTokenManager",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                    "required": [
+                      "method",
+                      "userJson",
+                    ],
+                    "type": "object",
+                  },
+                  {
+                    "properties": {
+                      "customToken": {
+                        "type": "string",
+                      },
+                      "method": {
+                        "const": "customToken",
+                        "type": "string",
+                      },
+                    },
+                    "required": [
+                      "method",
+                      "customToken",
+                    ],
+                    "type": "object",
+                  },
+                  {
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                      },
+                      "method": {
+                        "const": "emailPassword",
+                        "type": "string",
+                      },
+                      "password": {
+                        "type": "string",
+                      },
+                    },
+                    "required": [
+                      "method",
+                      "email",
+                      "password",
+                    ],
+                    "type": "object",
+                  },
+                ],
+              },
+              "firebaseConfig": {
+                "properties": {
+                  "apiKey": {
+                    "type": "string",
+                  },
+                  "appId": {
+                    "type": "string",
+                  },
+                  "authDomain": {
+                    "type": "string",
+                  },
+                  "databaseURL": {
+                    "type": "string",
+                  },
+                  "measurementId": {
+                    "type": "string",
+                  },
+                  "messagingSenderId": {
+                    "type": "string",
+                  },
+                  "projectId": {
+                    "type": "string",
+                  },
+                  "storageBucket": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "projectId",
+                  "apiKey",
+                  "appId",
+                  "authDomain",
+                  "databaseURL",
+                ],
+                "type": "object",
+              },
+              "role": {
+                "const": "user",
+                "type": "string",
+              },
+            },
+            "required": [
+              "role",
+              "firebaseConfig",
+              "authData",
+            ],
+            "type": "object",
+          },
+        ],
+      },
       "connection_settings": {
         "oneOf": [
           {
@@ -1351,6 +2000,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
           },
         ],
       },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "alpha",
@@ -1416,6 +2081,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "alpha",
@@ -1448,16 +2129,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -1551,6 +2228,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -1565,7 +2248,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -1573,7 +2255,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -1617,6 +2307,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -1816,6 +2510,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -1848,16 +2554,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -1951,6 +2653,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -1965,7 +2673,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -1973,7 +2680,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -2027,16 +2742,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -2130,6 +2841,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -2144,7 +2861,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2152,7 +2868,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -2206,16 +2930,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -2309,6 +3029,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -2323,7 +3049,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2331,7 +3056,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -2377,16 +3110,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -2480,6 +3209,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -2494,7 +3229,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2502,7 +3236,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -2572,16 +3314,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -2675,6 +3413,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -2689,7 +3433,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2697,7 +3440,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -2737,8 +3488,21 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
-      "connect_input": {},
-      "connect_output": {},
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "apiKey": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "apiKey",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "apiKey": {
@@ -2750,7 +3514,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
-      "pre_connect_input": {},
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -2765,6 +3544,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connection_settings": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connector_config": {
         "properties": {
           "apiKey": {
@@ -2774,6 +3565,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "apiKey",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -2808,16 +3611,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -2933,6 +3732,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                       "null",
                     ],
                   },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
                   "scopes": {
                     "items": {
                       "type": "string",
@@ -2948,7 +3753,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "object",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
             ],
             "ui:field": "OAuthField",
@@ -2960,7 +3764,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -3044,6 +3856,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -3241,6 +4057,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "oauth",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -3257,6 +4085,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -3454,6 +4286,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "oauth",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -3470,6 +4314,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -3667,6 +4515,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "oauth",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -3683,6 +4543,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -3882,6 +4746,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -3896,6 +4772,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -4103,6 +4983,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -4135,16 +5027,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -4238,6 +5126,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -4252,7 +5146,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -4260,7 +5153,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -4326,16 +5227,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -4429,6 +5326,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -4443,7 +5346,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -4451,7 +5353,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -4499,6 +5409,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connection_settings": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connector_config": {
         "properties": {
           "accessToken": {
@@ -4508,6 +5430,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "accessToken",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -4524,6 +5458,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connection_settings": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connector_config": {
         "properties": {
           "apikeyAuth": {
@@ -4556,6 +5502,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "Oauth support",
           },
         },
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -4651,6 +5609,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -4665,6 +5627,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -4910,6 +5876,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -4924,6 +5902,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connection_settings": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connector_config": {
         "properties": {
           "token": {
@@ -4933,6 +5923,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "token",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -4967,16 +5969,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -5070,6 +6068,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -5084,7 +6088,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -5092,7 +6095,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -5210,6 +6221,14 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "webhook_input": {
         "properties": {
           "body": {},
@@ -5242,6 +6261,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -5439,6 +6462,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "oauth",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -5455,6 +6490,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -5652,6 +6691,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "oauth",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -5697,12 +6748,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connect_output": {
         "properties": {
           "meta": {},
-          "publicToken": {
+          "public_token": {
             "type": "string",
           },
         },
         "required": [
-          "publicToken",
+          "public_token",
         ],
         "type": "object",
       },
@@ -5766,6 +6817,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "type": "string",
             },
             "type": "array",
+            "ui:field": "MultiSelectField",
           },
           "credentials": {
             "anyOf": [
@@ -5790,6 +6842,8 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 "type": "object",
               },
             ],
+            "ui:field": "CredentialsField",
+            "ui:fieldReplacesAnyOrOneOf": true,
           },
           "envName": {
             "enum": [
@@ -5837,6 +6891,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "type": "string",
             },
             "type": "array",
+            "ui:field": "MultiSelectField",
           },
         },
         "required": [
@@ -5899,6 +6954,33 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "databaseUrl": {
+            "type": "string",
+          },
+          "sourceQueries": {
+            "properties": {
+              "invoice": {
+                "description": "Should order by lastModifiedAt and id descending",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "databaseUrl",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "databaseUrl": {
@@ -5920,6 +7002,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "databaseUrl",
         ],
+        "type": "object",
+      },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -5954,16 +7052,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -6048,6 +7142,14 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
       "connector_config": {
         "properties": {
+          "envName": {
+            "default": "sandbox",
+            "enum": [
+              "sandbox",
+              "production",
+            ],
+            "type": "string",
+          },
           "oauth": {
             "description": "Base oauth configuration for the connector",
             "properties": {
@@ -6058,6 +7160,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 ],
               },
               "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
                 "type": [
                   "string",
                   "null",
@@ -6077,15 +7185,23 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
           "oauth",
+          "envName",
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -6219,6 +7335,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -6233,6 +7361,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -6432,6 +7564,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -6464,16 +7608,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -6573,6 +7713,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -6587,7 +7733,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -6595,7 +7740,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -6615,6 +7768,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -6814,6 +7971,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -6828,6 +7997,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {},
       "connection_settings": {},
       "connector_config": {
         "properties": {
@@ -6848,6 +8022,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "appId",
           "secret",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -6882,16 +8068,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -6985,6 +8167,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -6999,7 +8187,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -7007,7 +8194,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -7045,16 +8240,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
           "code": {
             "type": "string",
           },
-          "connectionId": {
-            "type": "string",
-          },
           "state": {
             "type": "string",
           },
         },
         "required": [
           "code",
-          "connectionId",
           "state",
         ],
         "type": "object",
@@ -7148,6 +8339,12 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "null",
                 ],
               },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
               "scopes": {
                 "items": {
                   "type": "string",
@@ -7162,7 +8359,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
-            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -7170,7 +8366,15 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "pre_connect_input": {},
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": [
       {
@@ -7222,6 +8426,169 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "accessToken": {
+            "type": "string",
+          },
+          "currentUser": {
+            "properties": {
+              "country_code": {
+                "type": "string",
+              },
+              "custom_picture": {
+                "type": "boolean",
+              },
+              "date_format": {
+                "type": "string",
+              },
+              "default_currency": {
+                "type": "string",
+              },
+              "default_group_id": {
+                "type": "number",
+              },
+              "email": {
+                "type": "string",
+              },
+              "first_name": {
+                "type": "string",
+              },
+              "force_refresh_at": {
+                "type": "string",
+              },
+              "id": {
+                "type": "number",
+              },
+              "last_name": {
+                "type": "string",
+              },
+              "locale": {
+                "type": "string",
+              },
+              "notifications": {
+                "properties": {
+                  "added_as_friend": {
+                    "type": "boolean",
+                  },
+                  "added_to_group": {
+                    "type": "boolean",
+                  },
+                  "announcements": {
+                    "type": "boolean",
+                  },
+                  "bills": {
+                    "type": "boolean",
+                  },
+                  "expense_added": {
+                    "type": "boolean",
+                  },
+                  "expense_updated": {
+                    "type": "boolean",
+                  },
+                  "monthly_summary": {
+                    "type": "boolean",
+                  },
+                  "payments": {
+                    "type": "boolean",
+                  },
+                },
+                "required": [
+                  "added_as_friend",
+                  "added_to_group",
+                  "announcements",
+                  "bills",
+                  "expense_added",
+                  "expense_updated",
+                  "monthly_summary",
+                  "payments",
+                ],
+                "type": "object",
+              },
+              "notifications_count": {
+                "type": "number",
+              },
+              "notifications_read": {
+                "type": "string",
+              },
+              "picture": {
+                "properties": {
+                  "large": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "medium": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "original": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "small": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "xlarge": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                  "xxlarge": {
+                    "type": [
+                      "string",
+                      "null",
+                    ],
+                  },
+                },
+                "type": "object",
+              },
+              "registration_status": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "country_code",
+              "custom_picture",
+              "date_format",
+              "default_currency",
+              "default_group_id",
+              "email",
+              "first_name",
+              "force_refresh_at",
+              "id",
+              "last_name",
+              "locale",
+              "notifications",
+              "notifications_count",
+              "notifications_read",
+              "picture",
+              "registration_status",
+            ],
+            "type": [
+              "object",
+              "null",
+            ],
+          },
+        },
+        "required": [
+          "accessToken",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "accessToken": {
@@ -7381,6 +8748,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "alpha",
@@ -7395,6 +8778,21 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "secretKey": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "secretKey",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "secretKey": {
@@ -7438,6 +8836,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "Oauth support",
           },
         },
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -7529,6 +8939,14 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -7600,6 +9018,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "alpha",
@@ -7614,6 +9048,21 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "access_token",
+        ],
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "access_token": {
@@ -7623,6 +9072,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "access_token",
         ],
+        "type": "object",
+      },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -7639,6 +9104,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -7838,6 +9307,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "beta",
@@ -7852,6 +9333,17 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "credentials": {},
+          "me": {},
+        },
+        "type": "object",
+      },
       "connection_settings": {
         "properties": {
           "credentials": {},
@@ -7892,6 +9384,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
             ],
           },
         },
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -7973,6 +9477,22 @@ exports[`db: pglite list connectors with schemas 1`] = `
         ],
         "type": "object",
       },
+      "connector_config": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "alpha",
@@ -7987,6 +9507,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -8184,6 +9708,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "oauth",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },
@@ -8421,6 +9957,14 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "type": "object",
       },
       "integration_data": {},
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
     },
     "scopes": undefined,
     "stage": "alpha",
@@ -8435,6 +9979,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "local",
     ],
     "schemas": {
+      "connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
       "connect_output": {
         "properties": {
           "connectionId": {
@@ -8632,6 +10180,18 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "required": [
           "oauth",
         ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
         "type": "object",
       },
     },

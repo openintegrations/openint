@@ -1,5 +1,6 @@
 import {createTRPCCaller} from '@openint/api-v1'
-import {makeJwtClient, type Viewer} from '@openint/cdk'
+import {makeJwtClient} from '@openint/api-v1/lib/makeJwtClient'
+import {type Viewer} from '@openint/cdk'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
 

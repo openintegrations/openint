@@ -11,12 +11,10 @@
   },
   "devDependencies": {
     "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.0",
     "typescript": "*"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-dom": "*"
+    "react": "*"
   },
   "publishConfig": {
     "access": "public"

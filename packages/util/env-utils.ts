@@ -1,6 +1,6 @@
 import {sort} from 'fast-sort'
-import {compact} from 'lodash'
 import type {JsonValue} from 'type-fest'
+import {compact} from './array-utils'
 import {
   javascriptStringify,
   safeJSONParse,

@@ -4,8 +4,8 @@ import {z} from '@openint/util/zod-utils'
 
 export const stripeSchemas = {
   name: z.literal('stripe'),
-  connectorConfig: zCcfgAuth.oauthOrApikeyAuth,
-  connectionSettings: z.object({secretKey: z.string()}),
+  connector_config: zCcfgAuth.oauthOrApikeyAuth,
+  connection_settings: z.object({secretKey: z.string()}),
 } satisfies ConnectorSchemas
 
 export const stripeDef = {

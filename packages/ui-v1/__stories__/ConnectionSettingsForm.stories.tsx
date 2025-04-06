@@ -1,27 +1,27 @@
 // generated file. Do not modify by hand
 
 import type {Meta, StoryObj} from '@storybook/react'
-import type {ConnectorName} from '@openint/all-connectors'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
+import type {ConnectorName} from '@openint/all-connectors/name'
 import {Card} from '@openint/shadcn/ui'
 import {zodToOas31Schema} from '@openint/util/schema'
 import {JSONSchemaForm} from '../components/schema-form/JSONSchemaForm'
 
 function FormWrapper(props: {name: ConnectorName}) {
   const schemas = defConnectors[props.name].schemas
-  if (!('connectionSettings' in schemas)) {
+  if (!('connection_settings' in schemas)) {
     throw new Error(
-      'Connector ' + props.name + ' does not have a connectionSettings',
+      'Connector ' + props.name + ' does not have a connection_settings',
     )
   }
 
   return (
     <Card className="w-md p-4">
-      <h1 className="text-lg font-bold">{props.name} connectionSettings</h1>
+      <h1 className="text-lg font-bold">{props.name} connection_settings</h1>
       <hr />
       <JSONSchemaForm
         debugMode
-        jsonSchema={zodToOas31Schema(schemas.connectionSettings)}
+        jsonSchema={zodToOas31Schema(schemas.connection_settings)}
       />
     </Card>
   )

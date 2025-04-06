@@ -1,6 +1,6 @@
 import React, {Suspense} from 'react'
 import {Spinner} from '@openint/ui-v1'
-import {AuthProvider} from '@/lib-client/auth.client'
+import {AuthProvider} from '@openint/console-auth/client'
 
 export default function ConsoleLayout(props: {children: React.ReactNode}) {
   return (

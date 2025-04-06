@@ -32,7 +32,7 @@ export const zConnectonExpandOption = z
 
 export const zConnectionExpanded = z
   .intersection(
-    core.connection,
+    core.connection_select,
     z.object({
       connector: core.connector.optional(),
     }),
@@ -55,7 +55,7 @@ export function stripSensitiveOauthCredentials(credentials: any) {
  */
 export async function formatConnection(
   _ctx: any,
-  connection: Core['connection'],
+  connection: Core['connection_select'],
   include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
   expand: Z.infer<typeof zConnectonExpandOption>[] = [],
 ) {

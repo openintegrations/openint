@@ -1,13 +1,14 @@
 import {TRPCError} from '@trpc/server'
-import {asCustomerOfOrg, makeJwtClient} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
-import {core, Customer} from '../models'
+import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
+import type {Customer} from '../models'
+import {core} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
+import type {Query} from './utils/pagination'
 import {
   applyPaginationAndOrder,
   processTypedPaginatedResponse,
-  Query,
   zListParams,
   zListResponse,
 } from './utils/pagination'
@@ -62,9 +63,7 @@ export const customerRouter = router({
 
       const token = await jwt.signViewer(
         asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
-        {
-          validityInSeconds: input.validity_in_seconds,
-        },
+        {validityInSeconds: input.validity_in_seconds},
       )
 
       return {
@@ -88,14 +87,18 @@ export const customerRouter = router({
         })
         .optional(),
     )
-    .output(zListResponse(core.customer))
+    .output(
+      zListResponse(
+        core.customer_select.extend({connection_count: z.number()}),
+      ),
+    )
     .query(async ({ctx, input}) => {
       const baseQuery = ctx.db
         .select({
           id: schema.connection.customer_id,
           connection_count: sql<number>`cast(count(*) as integer)`,
-          created_at: sql<Date>`min(${schema.connection.created_at})`,
-          updated_at: sql<Date>`max(${schema.connection.updated_at})`,
+          created_at: sql<string>`min(${schema.connection.created_at})`,
+          updated_at: sql<string>`max(${schema.connection.updated_at})`,
         })
         .from(schema.connection)
         .where(
@@ -116,7 +119,10 @@ export const customerRouter = router({
       )
 
       return {
-        items,
+        items: items.filter(
+          (item): item is Customer & {connection_count: number} =>
+            item.id !== null,
+        ),
         total,
         limit,
         offset,

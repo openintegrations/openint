@@ -5,7 +5,7 @@ import type {
   Source,
 } from '@openint/sync'
 import {castIs, z, type Z} from '@openint/util/zod-utils'
-import {AuthType, JsonConnectorDef} from '../../connectors/cnext'
+import type {AuthType, JsonConnectorDef} from '../../connectors/cnext'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
 import {zExternalId, zId} from './id.types'
@@ -87,12 +87,12 @@ export type OpenDialogFn = (
 export type UseConnectHook<T extends ConnHelpers = ConnHelpers> = (scope: {
   openDialog: OpenDialogFn
 }) => (
-  connectInput: T['_types']['connectInput'],
+  connectInput: T['_types']['connect_input'],
   context: ConnectOptions & {
     // TODO: Does this belong here?
     connectorConfigId: Id['ccfg']
   },
-) => Promise<T['_types']['connectOutput']>
+) => Promise<T['_types']['connect_output']>
 
 // MARK: - Server side connect types
 
@@ -111,6 +111,8 @@ export interface ConnectContext<TSettings>
     externalId: ExternalId
     settings: TSettings
   } | null
+  /** Custom fetch, typically for testing purposes */
+  fetch?: (req: Request) => Promise<Response>
 }
 
 // TODO: We should rename `provider` to `integration` given that they are both

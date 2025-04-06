@@ -1,6 +1,7 @@
 'use client'
 
-import {useMemo, useState} from 'react'
+import React, {useMemo, useState} from 'react'
+import type {AppRouterOutput} from '@openint/api-v1'
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
@@ -31,7 +32,7 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
     id: 'customer_id',
     header: 'Customer',
     cell: ({row}) => (
-      <CopyID value={row.original.customer_id} size="compact" width="auto" />
+      <CopyID value={row.original.customer_id!} size="compact" width="auto" />
     ),
   },
   {
@@ -47,18 +48,13 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
 ]
 
 export function ConnectionsPage(props: {
-  initialData?: {
-    items: ConnectionExpanded[]
-    total: number
-    limit: number
-    offset: number
-  }
+  initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
-  const {initialData} = props
+  const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
   const trpc = useTRPC()
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedConnection, setSelectedConnection] = useState<
-    Core['connection'] | null
+    Core['connection_select'] | null
   >(null)
 
   const connectionData = useSuspenseQuery(
@@ -81,7 +77,7 @@ export function ConnectionsPage(props: {
   )
 
   const definitions = useCommandDefinitionMap()
-  const handleRowClick = (connection: Core['connection']) => {
+  const handleRowClick = (connection: Core['connection_select']) => {
     setSelectedConnection(connection)
     setSheetOpen(true)
   }

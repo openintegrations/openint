@@ -4,15 +4,15 @@ import {z} from '@openint/util/zod-utils'
 
 export const rampSchemas = {
   name: z.literal('ramp'),
-  connectorConfig: zCcfgAuth.oauth,
-  connectionSettings: z.object({
+  connector_config: zCcfgAuth.oauth,
+  connection_settings: z.object({
     accessToken: z.string().nullish(),
     startAfterTransactionId: z.string().nullish(),
   }),
-  connectInput: z.object({
+  connect_input: z.object({
     accessToken: z.string().nullish(),
   }),
-  connectOutput: z.object({
+  connect_output: z.object({
     accessToken: z.string().nullish(),
     clientId: z.string().nullish(),
     clientSecret: z.string().nullish(),

@@ -1,11 +1,12 @@
-import {ConnectorServer, makeId} from '@openint/cdk'
+import type {ConnectorServer} from '@openint/cdk'
+import {makeId} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {refreshStaleConnections} from './refreshStaleConnections'
 import {makeUlid} from '@openint/util/id-utils'
+import {refreshStaleConnections} from './refreshStaleConnections'
 
-// Create a mock refreshConnection function
-const mockRefreshConnection = jest.fn().mockImplementation((settings) => {
+// TODO: Actually test refreshing using a real oauth server...
+const mockRefreshConnection = jest.fn().mockImplementation(({settings}) => {
   return {
     ...settings,
     oauth: {

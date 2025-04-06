@@ -42,17 +42,17 @@ const integrations = [
 ]
 
 export const microsoftServer = {
-  async preConnect(_, context) {
+  async preConnect({config, context}) {
     // This returns auth options for Nango connect because it is an oauth integration
     // this behavior is not type checked though and could use some improvement
     // May be fixed if we turn nango into a connector
 
-    const globalScopes = _.oauth.scopes
+    const globalScopes = config.oauth.scopes
 
     const integrationScopesMap = integrations.reduce(
       (map, integration) => {
         map[integration.id] =
-          _.integrations[integration.id as keyof typeof _.integrations]?.scopes
+          config.integrations[integration.id as keyof typeof config.integrations]?.scopes
         return map
       },
       {} as Record<string, string | undefined>,
@@ -90,7 +90,11 @@ export const microsoftServer = {
       next_cursor: null,
     }
   },
-  async postConnect(connectOutput, config, context: any) {
+  async postConnect({connectOutput, config, context}: {
+    connectOutput: any
+    config: any
+    context: any
+  }) {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
     })

@@ -6,16 +6,16 @@ import {zEnvName} from './WiseClient'
 export const wiseSchemas = {
   name: z.literal('wise'),
   // connectorConfig: zWiseConfig,
-  connectionSettings: z.object({
+  connection_settings: z.object({
     envName: zEnvName,
     apiToken: z.string().nullish(),
   }),
-  connectInput: z.object({
+  connect_input: z.object({
     redirectUri: z.string(),
     clientId: z.string(),
     envName: zEnvName,
   }),
-  connectOutput: z.object({
+  connect_output: z.object({
     envName: zEnvName,
     apiToken: z.string().nullish(),
   }),

@@ -13,7 +13,7 @@ import {zCountryCode, zLanguage, zPlaidEnvName, zProducts} from './PlaidClient'
 export const plaidSchemas = {
   name: z.literal('plaid'),
   // There is a mixing of cases here... Unfortunately...
-  connectorConfig: z.object({
+  connector_config: z.object({
     // TODO: Change to snake_case... then move envName variable over...
     envName: zPlaidEnvName,
     credentials: z
@@ -27,7 +27,11 @@ export const plaidSchemas = {
           })
           .openapi({title: 'Use my own'}),
       ])
-      .optional(),
+      .optional()
+      .openapi({
+        'ui:field': 'CredentialsField',
+        'ui:fieldReplacesAnyOrOneOf': true,
+      }),
     clientName: z
       .string()
       .max(30)
@@ -37,10 +41,15 @@ export const plaidSchemas = {
         Maximum length of 30 characters.
         If a value longer than 30 characters is provided, Link will display "This Application" instead.`,
       ),
-    products: z.array(zProducts).default([Products.Transactions]),
+    products: z.array(zProducts).default([Products.Transactions]).openapi({
+      'ui:field': 'MultiSelectField',
+    }),
     countryCodes: z
       .array(zCountryCode)
-      .default([CountryCode.Us, CountryCode.Ca]),
+      .default([CountryCode.Us, CountryCode.Ca])
+      .openapi({
+        'ui:field': 'MultiSelectField',
+      }),
     /**
      * When using a Link customization, the language configured
      * here must match the setting in the customization, or the customization will not be applied.
@@ -53,7 +62,7 @@ export const plaidSchemas = {
     //     'When present, will show a single integration instead of one integration per institution supported by Plaid',
     // }),
   }),
-  connectionSettings: z.object({
+  connection_settings: z.object({
     itemId: z.string().nullish(),
     accessToken: z.string(),
     institution: zCast<plaid.Institution | undefined>(),
@@ -62,23 +71,23 @@ export const plaidSchemas = {
     /** Comes from webhook */
     webhookItemError: zCast<ErrorShape>().nullish(),
   }),
-  integrationData: zCast<plaid.Institution>(),
-  preConnectInput: z.object({
+  integration_data: zCast<plaid.Institution>(),
+  pre_connect_input: z.object({
     ...(process.env.NODE_ENV === 'production'
       ? {}
       : // Development mode only
         {sandboxPublicTokenCreate: z.boolean().optional()}),
     language: zLanguage.optional(),
   }),
-  connectInput: z.union([
+  connect_input: z.union([
     z.object({link_token: z.string()}),
     z.object({public_token: z.string()}),
   ]),
-  connectOutput: z.object({
-    publicToken: z.string(),
+  connect_output: z.object({
+    public_token: z.string(),
     meta: zCast<PlaidLinkOnSuccessMetadata>().optional(),
   }),
-  webhookInput: zWebhookInput,
+  webhook_input: zWebhookInput,
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(plaidSchemas)

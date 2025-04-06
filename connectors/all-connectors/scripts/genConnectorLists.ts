@@ -9,7 +9,7 @@ import {camelCase} from '@openint/util/string-utils'
 import {writePretty} from './writePretty'
 
 async function generateCnextIndex() {
-  const cnextPath = pathJoin(__dirname, '../../connectors/cnext')
+  const cnextPath = pathJoin(__dirname, '../../../connectors/cnext')
   const cnextConnectors = fs
     .readdirSync(cnextPath, {
       withFileTypes: true,
@@ -74,7 +74,7 @@ type Connector = {
 
 const connectorList: Connector[] = [
   ...fs
-    .readdirSync(pathJoin(__dirname, '../../connectors'), {
+    .readdirSync(pathJoin(__dirname, '../../../connectors'), {
       withFileTypes: true,
     })
     .filter(
@@ -82,7 +82,7 @@ const connectorList: Connector[] = [
         r.isDirectory() && r.name !== 'cnext' && r.name !== 'all-connectors',
     )
     .map((d) => {
-      const path = pathJoin(__dirname, '../../connectors', d.name)
+      const path = pathJoin(__dirname, '../../../connectors', d.name)
       const def = fs.existsSync(pathJoin(path, 'def.ts'))
         ? // TODO: Automate generation of package.json is still needed, otherwise does not work for new packages
           // @see https://share.cleanshot.com/wDmqwsHS
@@ -119,7 +119,7 @@ const connectorList: Connector[] = [
 
   // Add cnext connectors
   ...fs
-    .readdirSync(pathJoin(__dirname, '../../connectors/cnext'), {
+    .readdirSync(pathJoin(__dirname, '../../../connectors/cnext'), {
       withFileTypes: true,
     })
     .filter(
@@ -156,7 +156,7 @@ async function main() {
   await generateCnextIndex()
 
   await writePretty(
-    'meta.ts',
+    'connectors.meta.ts',
     `
   export default ${JSON.stringify(
     Object.fromEntries(connectorList.map((c) => [c.name, c])),

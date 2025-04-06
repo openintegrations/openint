@@ -12,7 +12,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
-import type {ConnectorName} from '@openint/all-connectors'
+import type {ConnectorName} from '@openint/all-connectors/name'
 
 export const orgRole = pgRole('org')
 export const customerRole = pgRole('customer')
@@ -35,6 +35,7 @@ export const connection = pgTable(
     customer_id: varchar(),
     connector_config_id: varchar().notNull(),
     integration_id: varchar(),
+    /** @deprecated Not sure if we want this */
     env_name: varchar(),
     settings: jsonb().default({}).notNull().$type<any>(),
     created_at: timestamp({withTimezone: true, mode: 'string'})

@@ -3,10 +3,10 @@
 import dynamic from 'next/dynamic'
 import React from 'react'
 import {clientConnectors} from '@openint/all-connectors/connectors.client'
-import {AppRouterOutput} from '@openint/api-v1'
+import type {AppRouterOutput} from '@openint/api-v1'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
-import {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
-import type {ConnectorClient, JSONSchema} from '@openint/cdk'
+import type {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
+import {type ConnectorClient, type JSONSchema} from '@openint/cdk'
 import {Button, Label, toast} from '@openint/shadcn/ui'
 import {
   Dialog,
@@ -33,6 +33,7 @@ import {
 import {Deferred} from '@openint/util/promise-utils'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
+import {openOAuthPopup} from './callback/openOAuthPopup'
 
 // MARK: - Connector Client Components
 
@@ -70,6 +71,36 @@ const ConnectorClientComponents = Object.fromEntries(
     }),
   ]),
 )
+
+export function makeNativeOauthConnectorClientComponent(preConnectRes: {
+  authorization_url: string
+}) {
+  // createNativeOauthConnect(preConnectRes)
+
+  return function ManualConnectorClientComponent({
+    onConnectFn,
+  }: {
+    connector_name?: string
+    onConnectFn: (fn?: ConnectFn) => void
+  }) {
+    const connectFn = React.useCallback(
+      () => openOAuthPopup(preConnectRes),
+      [preConnectRes],
+    )
+    React.useEffect(() => {
+      onConnectFn(connectFn)
+    }, [onConnectFn, connectFn])
+
+    return null
+  }
+
+  // createNativeOauthConnect
+  // open popup
+  // listen for message from popup
+  // parse message
+  // close popup
+  // return code and state to the client via message pasing
+}
 
 function makeManualConnectorClientComponent(settingsJsonSchema: JSONSchema) {
   return function ManualConnectorClientComponent({
@@ -169,10 +200,10 @@ export function AddConnectionInner({
   const preConnectRes = useSuspenseQuery(
     trpc.preConnect.queryOptions(
       {
-        id: connectorConfig.id,
-        data: {
+        connector_config_id: connectorConfig.id,
+        discriminated_data: {
           connector_name: name,
-          input: {},
+          pre_connect_input: {},
         },
         options: {},
       },
@@ -196,20 +227,23 @@ export function AddConnectionInner({
     try {
       setIsConnecting(true)
       console.log('ref.current', ref.current)
-      const connectRes = await ref.current?.(preConnectRes.data.output, {
+      const connectRes = await ref.current?.(preConnectRes.data.connect_input, {
         connectorConfigId: connectorConfig.id as `ccfg_${string}`,
         connectionExternalId: undefined,
         integrationExternalId: undefined,
       })
       console.log('connectRes', connectRes)
+      /// todo: always validate schema even if pre/post connect are not
+      // implemented
       const postConnectRes = await postConnect.mutateAsync({
-        id: connectorConfig.id,
-        data: {
+        connector_config_id: connectorConfig.id,
+        discriminated_data: {
           connector_name: name,
-          input: connectRes,
+          connect_output: connectRes,
         },
         options: {},
       })
+
       console.log('postConnectRes', postConnectRes)
 
       // None of this is working, why!!!
@@ -231,7 +265,7 @@ export function AddConnectionInner({
       })
       // This is the only way that works for now...
       // TODO: Fix this madness
-      setSearchParams({tab: 'my-connections'}, {shallow: false})
+      setSearchParams({tab: 'manage'}, {shallow: false})
     } catch (error) {
       console.error('Error connecting', error)
       toast.error('Error connecting', {
@@ -245,7 +279,11 @@ export function AddConnectionInner({
   let Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
 
-  if (!Component) {
+  if (!Component && name === 'dummy-oauth2') {
+    Component = makeNativeOauthConnectorClientComponent(
+      preConnectRes.data.connect_input,
+    )
+  } else if (!Component) {
     // TODO: handle me, for thigns like oauth connectors
     // console.warn(`Unhandled connector: ${name}`)
     // throw new Error(`Unhandled connector: ${name}`)

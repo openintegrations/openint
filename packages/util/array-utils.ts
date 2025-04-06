@@ -1,13 +1,12 @@
-import type {MaybeArray} from './type-utils'
+import type {MaybeArray, NonEmptyArray} from './type-utils'
 
 export {inPlaceSort, sort} from 'fast-sort'
-export {sortedIndexBy} from 'lodash'
 
 export function nonEmpty<T>(arr: T[]) {
   if (arr.length === 0) {
     throw new Error('Expected non-empty array')
   }
-  return arr as [T, ...T[]]
+  return arr as NonEmptyArray<T>
 }
 
 /**

@@ -1,10 +1,11 @@
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
+import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z, type Z} from '@openint/util/zod-utils'
-import {core, zConnectionSettings} from '../models'
+import {core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
   formatConnection,
@@ -25,7 +26,7 @@ import {
 import {zConnectionId, zConnectorConfigId, zCustomerId} from './utils/types'
 
 export const connectionRouter = router({
-  getConnection: orgProcedure
+  getConnection: authenticatedProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -63,24 +64,6 @@ export const connectionRouter = router({
         })
       }
 
-      const connector_config = await ctx.db.query.connector_config.findFirst({
-        where: eq(schema.connector_config.id, connection.connector_config_id),
-        columns: {
-          id: true,
-          connector_name: true,
-          config: true,
-          created_at: true,
-          updated_at: true,
-        },
-      })
-
-      if (!connector_config) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Connector config not found',
-        })
-      }
-
       const connector =
         serverConnectors[
           connection.connector_name as keyof typeof serverConnectors
@@ -105,10 +88,28 @@ export const connectionRouter = router({
         'refreshConnection' in connector &&
         typeof connector.refreshConnection === 'function'
       ) {
-        const refreshedConnectionSettings = await connector.refreshConnection(
-          connection.settings,
-          connector_config.config,
-        )
+        const connector_config = await ctx.db.query.connector_config.findFirst({
+          where: eq(schema.connector_config.id, connection.connector_config_id),
+          columns: {
+            id: true,
+            connector_name: true,
+            config: true,
+            created_at: true,
+            updated_at: true,
+          },
+        })
+
+        if (!connector_config) {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Connector config not found',
+          })
+        }
+
+        const refreshedConnectionSettings = await connector.refreshConnection({
+          settings: connection.settings,
+          config: connector_config.config,
+        })
         const updatedConnection = await ctx.db
           .update(schema.connection)
           .set({
@@ -133,7 +134,7 @@ export const connectionRouter = router({
       return formatConnection(
         ctx,
         // TODO: fix this any casting
-        connection as any as Z.infer<typeof core.connection>,
+        connection as any as Z.infer<typeof core.connection_select>,
         input.include_secrets,
         input.expand,
       )
@@ -341,10 +342,10 @@ export const connectionRouter = router({
         connector_config_id: zConnectorConfigId,
         metadata: z.record(z.unknown()).optional(),
         customer_id: zCustomerId,
-        data: zConnectionSettings,
+        data: zDiscriminatedSettings,
       }),
     )
-    .output(core.connection)
+    .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
       // Verify connector config exists
       const ccfg = await ctx.db.query.connector_config.findFirst({

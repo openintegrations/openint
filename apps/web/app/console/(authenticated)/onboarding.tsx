@@ -1,7 +1,11 @@
 'use client'
 
-import {useAuth, useOrganizationList, useUser} from '@clerk/nextjs'
 import {useRouter} from 'next/navigation'
+import {
+  useAuth,
+  useOrganizationList,
+  useUser,
+} from '@openint/console-auth/client'
 import {OnboardingModal} from '@openint/ui-v1'
 import {useMutation} from '@openint/ui-v1/trpc'
 import {useTRPC} from './client'

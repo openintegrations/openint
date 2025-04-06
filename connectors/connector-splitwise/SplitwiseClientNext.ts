@@ -1,5 +1,5 @@
 import type {HTTPError} from '@openint/util/http/index'
-import {createHTTPClient, OAuth2Client} from '@openint/util/http/index'
+import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
 import {z, type Z} from '@openint/util/zod-utils'
 import type {zCurrentUser, zExpense, zGroup} from './splitwise-schema'
@@ -33,22 +33,22 @@ export const makeSplitwiseClient = zFunction(zSplitwiseConfig, (cfg) => {
       },
     })
 
-  const oAuth2Client = new OAuth2Client({
-    authorizeURL: 'https://secure.splitwise.com/oauth/authorize',
-    clientId: cfg.clientId ?? '',
-    clientSecret: cfg.clientSecret ?? '',
-    tokenURL: 'https://secure.splitwise.com/oauth/token',
-    clientAuthLocation: 'header',
-  })
+  // const oAuth2Client = new OAuth2Client({
+  //   authorizeURL: 'https://secure.splitwise.com/oauth/authorize',
+  //   clientId: cfg.clientId ?? '',
+  //   clientSecret: cfg.clientSecret ?? '',
+  //   tokenURL: 'https://secure.splitwise.com/oauth/token',
+  //   clientAuthLocation: 'header',
+  // })
 
   return {
-    getToken: zFunction(
-      z.object({
-        code: z.string(),
-        redirectUri: z.string(),
-      }),
-      ({code, redirectUri}) => oAuth2Client.getToken(code, redirectUri),
-    ),
+    // getToken: zFunction(
+    //   z.object({
+    //     code: z.string(),
+    //     redirectUri: z.string(),
+    //   }),
+    //   ({code, redirectUri}) => oAuth2Client.getToken(code, redirectUri),
+    // ),
 
     getCurrentUser: zFunction(() =>
       createClient()
