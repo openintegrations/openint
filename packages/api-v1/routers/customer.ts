@@ -1,7 +1,8 @@
 import {TRPCError} from '@trpc/server'
-import {asCustomerOfOrg, makeJwtClient} from '@openint/cdk'
+import {asCustomerOfOrg} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
+import {makeJwtClient} from '../lib/makeJwtClient'
 import {core, Customer} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
 import {

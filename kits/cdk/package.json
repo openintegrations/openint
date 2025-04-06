@@ -12,7 +12,6 @@
     "@opensdks/runtime": "^0.0.19",
     "@opensdks/sdk-nango": "0.0.6",
     "@trpc/server": "^11.0.1",
-    "jose": "^5",
     "react-script-hook": "1.7.2"
   },
   "devDependencies": {

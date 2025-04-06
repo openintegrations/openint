@@ -6,7 +6,6 @@ import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {
   asCustomerOfOrg,
   makeId,
-  makeJwtClient,
   zConnectOptions,
   zId,
   zPostConnectOptions,
@@ -15,6 +14,7 @@ import {dbUpsertOne, eq, schema} from '@openint/db'
 import {getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
+import {makeJwtClient} from '../lib/makeJwtClient'
 import {core} from '../models'
 import {
   authenticatedProcedure,

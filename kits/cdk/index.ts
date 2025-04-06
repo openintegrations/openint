@@ -10,5 +10,3 @@ export * from './deprecated'
 export * from './zStandard'
 export * from './verticals'
 export * from './viewer'
-
-export * from './makeJwtClient'

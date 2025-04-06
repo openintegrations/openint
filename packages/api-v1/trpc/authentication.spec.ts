@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import {TRPCError} from '@trpc/server'
 import type {Id, Viewer} from '@openint/cdk'
-import {makeJwtClient} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {envRequired} from '@openint/env'
-import {viewerFromRequest} from './authentication'
 import {makeUlid} from '@openint/util/id-utils'
+import {makeJwtClient} from '../lib/makeJwtClient'
+import {viewerFromRequest} from './authentication'
 
 describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   // Setup real database
