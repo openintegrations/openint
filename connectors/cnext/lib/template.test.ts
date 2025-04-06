@@ -1,6 +1,6 @@
 import {describe, expect, it} from '@jest/globals'
 import Mustache from 'mustache'
-import {fillOutStringTemplateVariables} from './template'
+import {renderTemplateObject} from './template'
 
 describe('template', () => {
   it('should render a basic template', () => {
@@ -42,7 +42,7 @@ describe('template', () => {
   })
 })
 
-describe('fillOutStringTemplateVariables', () => {
+describe('renderTemplateObject', () => {
   it('should process object templates with connector config', () => {
     const template = {
       name: '{{connectorConfig.name}}',
@@ -63,11 +63,11 @@ describe('fillOutStringTemplateVariables', () => {
       apiKey: 'secret-key-123',
     }
 
-    const result = fillOutStringTemplateVariables(
-      template,
+    const result = renderTemplateObject({
+      templateObject: template,
       connectorConfig,
       connectionSettings,
-    )
+    })
 
     expect(result).toEqual({
       name: 'TestConnector',
@@ -94,11 +94,11 @@ describe('fillOutStringTemplateVariables', () => {
 
     const connectionSettings = {}
 
-    const result = fillOutStringTemplateVariables(
-      template,
+    const result = renderTemplateObject({
+      templateObject: template,
       connectorConfig,
       connectionSettings,
-    )
+    })
 
     expect(result).toEqual({
       endpoints: [
@@ -123,25 +123,26 @@ describe('fillOutStringTemplateVariables', () => {
 
     // Should return the original object if JSON parsing fails
     expect(() =>
-      fillOutStringTemplateVariables(
-        template,
+      renderTemplateObject({
+        templateObject: template,
         connectorConfig,
         connectionSettings,
-      ),
+      }),
     ).toThrow('Error processing object template')
   })
 
   it('should handle non-object inputs', () => {
-    const template = null as unknown as object
+    const template = null
     const connectorConfig = {}
     const connectionSettings = {}
 
-    const result = fillOutStringTemplateVariables(
-      template,
-      connectorConfig,
-      connectionSettings,
-    )
-    expect(result).toBeNull()
+    expect(() =>
+      renderTemplateObject({
+        templateObject: template as unknown as Record<string, unknown>,
+        connectorConfig,
+        connectionSettings,
+      }),
+    ).toThrow('Template must be a plain object')
   })
 
   it('should allow templating in object keys', () => {
@@ -159,11 +160,11 @@ describe('fillOutStringTemplateVariables', () => {
 
     const connectionSettings = {}
 
-    const result = fillOutStringTemplateVariables(
-      template,
+    const result = renderTemplateObject({
+      templateObject: template,
       connectorConfig,
       connectionSettings,
-    )
+    })
 
     expect(result).toEqual({
       prefix_test: 'value',

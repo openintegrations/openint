@@ -3,6 +3,7 @@ import {extractId, makeId} from '@openint/cdk'
 import {getConnectorDefaultCredentials, getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {type Z} from '@openint/util/zod-utils'
+import {renderTemplateObject} from '../lib/template'
 import type {oauth2Schemas, zOAuthConfig} from './def'
 import {
   authorizeHandler,
@@ -10,7 +11,6 @@ import {
   tokenRefreshHandler,
   validateOAuthCredentials,
 } from './handlers'
-import {fillOutStringTemplateVariablesInObjectKeys} from './utils'
 
 function injectCcfgDefaultCredentials(
   connectorConfig: Z.infer<typeof oauth2Schemas.connector_config>,
@@ -113,12 +113,11 @@ export function generateOAuth2Server<
       )
       return authorizeHandler({
         oauthConfig: {
-          ...fillOutStringTemplateVariablesInObjectKeys(
-            oauthConfig,
-            config.oauth,
-            // Access the oauth settings from the connection if available
-            context.connection?.settings?.oauth,
-          ),
+          ...renderTemplateObject({
+            templateObject: oauthConfig,
+            connectorConfig: ccfg,
+            connectionSettings: context.connection?.settings?.oauth ?? {},
+          }),
           connector_config: ccfg,
         },
         redirectUri: getServerUrl(null) + '/connect/callback',
@@ -137,12 +136,11 @@ export function generateOAuth2Server<
       )
       const result = await defaultTokenExchangeHandler({
         oauthConfig: {
-          ...fillOutStringTemplateVariablesInObjectKeys(
-            oauthConfig,
-            ccfg.oauth,
-            // Access the oauth settings from the connection if available
-            context.connection?.settings?.oauth,
-          ),
+          ...renderTemplateObject({
+            templateObject: oauthConfig,
+            connectorConfig: ccfg,
+            connectionSettings: context.connection?.settings?.oauth ?? {},
+          }),
           connector_config: ccfg,
         } satisfies Z.infer<typeof zOAuthConfig>,
         code: connectOutput.code,
@@ -191,11 +189,11 @@ export function generateOAuth2Server<
 
       const result = await tokenRefreshHandler({
         oauthConfig: {
-          ...fillOutStringTemplateVariablesInObjectKeys(
-            oauthConfig,
-            ccfg.oauth,
-            settings.oauth,
-          ),
+          ...renderTemplateObject({
+            templateObject: oauthConfig,
+            connectorConfig: ccfg,
+            connectionSettings: settings.oauth,
+          }),
           connector_config: ccfg,
           connection_settings: settings,
         } as any as Z.infer<typeof zOAuthConfig>, // TODO: fix this

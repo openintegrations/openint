@@ -1,5 +1,5 @@
 import {type Z} from '@openint/util/zod-utils'
-import {zOAuthConfig} from './def'
+import type {zOAuthConfig} from './def'
 
 export function prepareScopes(
   scopes: string[],
@@ -11,112 +11,6 @@ export function prepareScopes(
     return ''
   }
   return scopes.join(encodeURIComponent(scopeSeparator))
-}
-
-/**
- * Fills out variables in a URL string template with values from connector config and connection settings
- *
- * @param string - URL string containing variables in ${variable} format
- * @param connectorConfig - Connector configuration object containing values to substitute
- * @param connectionSettings - Connection settings object containing values to substitute
- * @returns URL string with variables replaced with actual values
- *
- * Variables can reference:
- * - Connector config values using ${connector_config.key}
- * - Connection settings using ${connection_settings.key}
- *
- * Example:
- * Input: "https://api.example.com/${connector_config.version}/users/${connection_settings.user_id}"
- * Output: "https://api.example.com/v1/users/123"
- */
-
-export function fillOutStringTemplateVariables(
-  string: string,
-  connectorConfig: any,
-  connectionSettings: any,
-) {
-  if (!string) return string
-  let filledUrl = string
-
-  // Ensure connectorConfig and connectionSettings are objects
-  connectorConfig = connectorConfig || {}
-  connectionSettings = connectionSettings || {}
-
-  // Match ${variable} pattern
-  const variableRegex = /\${([^}]+)}/g
-  const matches = string.match(variableRegex)
-
-  if (!matches) {
-    return filledUrl
-  }
-
-  matches.forEach((match) => {
-    // Extract variable name without ${} wrapper
-    const varName = match.slice(2, -1)
-
-    // Check if variable references connector_config
-    if (varName.startsWith('connector_config.')) {
-      const configKey = varName.split('.')[1]
-      const value = connectorConfig[configKey as keyof typeof connectorConfig]
-      if (value) {
-        filledUrl = filledUrl.replace(match, value)
-      }
-    }
-    // Check if variable references connection_settings
-    else if (varName.startsWith('connection_settings.')) {
-      const settingKey = varName.split('.')[1]
-      const value =
-        connectionSettings[settingKey as keyof typeof connectionSettings]
-      if (value) {
-        filledUrl = filledUrl.replace(match, value)
-      }
-    }
-  })
-
-  return filledUrl
-}
-
-export function fillOutStringTemplateVariablesInObjectKeys(
-  obj: any,
-  connectorConfig: any,
-  connectionSettings: any,
-): any {
-  if (!obj || typeof obj !== 'object') {
-    return obj
-  }
-
-  // Handle arrays properly
-  if (Array.isArray(obj)) {
-    return obj.map((item: any) =>
-      fillOutStringTemplateVariablesInObjectKeys(
-        item,
-        connectorConfig,
-        connectionSettings,
-      ),
-    )
-  }
-
-  const clone = {...obj}
-
-  for (const key of Object.keys(clone)) {
-    const value = clone[key]
-
-    if (typeof value === 'string') {
-      clone[key] = fillOutStringTemplateVariables(
-        value,
-        connectorConfig,
-        connectionSettings,
-      )
-    } else if (value !== null && typeof value === 'object') {
-      clone[key] = fillOutStringTemplateVariablesInObjectKeys(
-        value,
-        connectorConfig,
-        connectionSettings,
-      )
-    }
-  }
-
-  return clone
 }
 
 /*

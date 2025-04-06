@@ -1,15 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-parameters */
 import Mustache from 'mustache'
+import {isPlainObject} from '@openint/util/object-utils'
 
-export function fillOutStringTemplateVariables<
+export function renderTemplateObject<
   T extends Record<string, unknown>,
   U extends Record<string, unknown> = T,
->(
-  template: T,
-  connectorConfig: Record<string, unknown>,
-  connectionSettings: Record<string, unknown>,
-): U {
-  if (!template || typeof template !== 'object') {
-    return template as U
+>({
+  templateObject,
+  connectorConfig,
+  connectionSettings,
+}: {
+  templateObject: T
+  connectorConfig: Record<string, unknown>
+  connectionSettings: Record<string, unknown>
+}): U {
+  // Handle non-object inputs
+  if (!isPlainObject(templateObject)) {
+    throw new Error('Template must be a plain object')
   }
 
   const context = {
@@ -19,7 +26,7 @@ export function fillOutStringTemplateVariables<
 
   try {
     // Convert object to string
-    const templateString = JSON.stringify(template)
+    const templateString = JSON.stringify(templateObject)
 
     // Process the template string with custom delimiters to prevent escaping
     // Using triple braces {{{ }}} to prevent HTML escaping
@@ -27,12 +34,12 @@ export function fillOutStringTemplateVariables<
       templateString,
       context,
       {},
-      {escape: (text) => text},
+      {escape: (text) => String(text)},
     )
 
     // Parse back to object
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return JSON.parse(processedString)
+    return JSON.parse(processedString) as U
   } catch (error) {
     console.warn('Error processing object template:', error)
     throw new Error('Error processing object template')
