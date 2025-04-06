@@ -120,9 +120,9 @@ export const connectRouter = router({
       const preConnect = connector.preConnect ?? (() => ({}))
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/await-thenable
-      const res = await preConnect(
-        ccfg.config,
-        {
+      const res = await preConnect({
+        config: ccfg.config,
+        context: {
           webhookBaseUrl:
             'https://webhook.site/ce79fc9e-8f86-45f2-8701-749b770e5cdb',
           extCustomerId: (ctx.viewer.role === 'customer'
@@ -130,8 +130,8 @@ export const connectRouter = router({
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
         },
-        input.discriminated_data.pre_connect_input,
-      )
+        input: input.discriminated_data.pre_connect_input,
+      })
 
       return {
         connector_name: input.discriminated_data.connector_name,
@@ -155,7 +155,7 @@ export const connectRouter = router({
         discriminated_data: discriminatedUnionBySchemaKey.connect_output,
       }),
     )
-    .output(core.connection)
+    .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
       console.log('postConnect', input, ctx)
       const connectors = serverConnectors as Record<string, ConnectorServer>
@@ -181,17 +181,17 @@ export const connectRouter = router({
 
       const postConnect =
         connector.postConnect ??
-        ((output) => ({
+        (({connectOutput}) => ({
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          settings: output,
+          settings: connectOutput,
           connectionExternalId: '', // TODO: Check on me....
         }))
 
       console.log('postConnect', input, ctx, ccfg)
-      const connUpdate = await postConnect(
-        input.discriminated_data.connect_output,
-        ccfg.config,
-        {
+      const connUpdate = await postConnect({
+        connectOutput: input.discriminated_data.connect_output,
+        config: ccfg.config,
+        context: {
           webhookBaseUrl:
             'https://webhook.site/ce79fc9e-8f86-45f2-8701-749b770e5cdb',
           extCustomerId: (ctx.viewer.role === 'customer'
@@ -199,7 +199,7 @@ export const connectRouter = router({
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
         },
-      )
+      })
       const id = makeId(
         'conn',
         input.discriminated_data.connector_name,
@@ -207,7 +207,7 @@ export const connectRouter = router({
       )
 
       // would be much nicer if this is the materialized schemas
-      const zSettings = def.schemas.connectionSettings ?? z.object({}).strict()
+      const zSettings = def.schemas.connection_settings ?? z.object({}).strict()
 
       const settings = zSettings.parse(connUpdate.settings)
 
@@ -244,7 +244,7 @@ export const connectRouter = router({
       },
     })
     .input(z.object({id: z.string()}))
-    .output(core.connection)
+    .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
       const conn = await ctx.db.query.connection.findFirst({
         where: eq(schema.connection.id, input.id),
@@ -285,7 +285,11 @@ export const connectRouter = router({
         onSettingsChange: () => {},
       })
 
-      await connector.revokeConnection?.(conn.settings, ccfg.config, instance)
+      await connector.revokeConnection?.({
+        settings: conn.settings,
+        config: ccfg.config,
+        instance,
+      })
 
       // TODO: make sure statis is updated
       return {

@@ -39,7 +39,7 @@ type Story = StoryObj<typeof meta>
 
 async function main() {
   const connectorConfigStories = Object.entries(defConnectors)
-    .filter(([_, def]) => 'connectorConfig' in def.schemas)
+    .filter(([_, def]) => 'connector_config' in def.schemas)
     .map(
       ([name]) => `
     export const ${name}ConnectorConfig: Story = {
@@ -49,7 +49,7 @@ async function main() {
     )
 
   const connectionSettingsStories = Object.entries(defConnectors)
-    .filter(([_, def]) => 'connectionSettings' in def.schemas)
+    .filter(([_, def]) => 'connection_settings' in def.schemas)
     .map(
       ([name]) => `
     export const ${name}ConnectionSettings: Story = {
@@ -62,7 +62,7 @@ async function main() {
 
   await writePretty(
     'ConnectorConfigForm.stories.tsx',
-    templateMeta.replaceAll('$key', 'connectorConfig') +
+    templateMeta.replaceAll('$key', 'connector_config') +
       '\n' +
       connectorConfigStories.join('\n'),
     outputPath,
@@ -70,7 +70,7 @@ async function main() {
 
   await writePretty(
     'ConnectionSettingsForm.stories.tsx',
-    templateMeta.replaceAll('$key', 'connectionSettings') +
+    templateMeta.replaceAll('$key', 'connection_settings') +
       '\n' +
       connectionSettingsStories.join('\n'),
     outputPath,

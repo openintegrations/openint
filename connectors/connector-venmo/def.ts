@@ -21,8 +21,8 @@ const zSettings = z.object({
 
 export const venmoSchemas = {
   name: z.literal('venmo'),
-  connectorConfig: zConfig,
-  connectionSettings: zSettings,
+  connector_config: zConfig,
+  connection_settings: zSettings,
 } satisfies ConnectorSchemas
 
 export const helpers = connHelpers(venmoSchemas)

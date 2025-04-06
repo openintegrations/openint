@@ -3,9 +3,9 @@ import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
 import {connHelpers, oauthBaseSchema} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 
-export const zConfig = oauthBaseSchema.connectorConfig
+export const zConfig = oauthBaseSchema.connector_config
 
-const oReso = oauthBaseSchema.connectionSettings
+const oReso = oauthBaseSchema.connection_settings
 export const zSettings = oReso.extend({
   oauth: oReso.shape.oauth,
 })
@@ -19,9 +19,9 @@ export const XERO_ENTITY_NAME = {
 
 export const xeroSchemas = {
   name: z.literal('xero'),
-  connectorConfig: zConfig,
-  connectionSettings: zSettings,
-  connectOutput: oauthBaseSchema.connectOutput,
+  connector_config: zConfig,
+  connection_settings: zSettings,
+  connect_output: oauthBaseSchema.connect_output,
 } satisfies ConnectorSchemas
 
 export const xeroHelpers = connHelpers(xeroSchemas)

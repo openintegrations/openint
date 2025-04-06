@@ -2,7 +2,7 @@ import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
 import type {gongSchemas} from './def'
 
 export const gongServer = {
-  postConnect: async (connectOutput) => {
+  postConnect: async ({connectOutput}) => {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
     })

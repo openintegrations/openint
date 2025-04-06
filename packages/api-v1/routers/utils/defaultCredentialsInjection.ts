@@ -21,7 +21,7 @@ export function injectDefaultCredentials(
         inputClone,
       )
       // attempt to validate it against the oauth preexisting previous provider schema
-      const parsedConfig = oauthBaseSchema.connectorConfig.safeParse({
+      const parsedConfig = oauthBaseSchema.connector_config.safeParse({
         ...inputClone.config,
         oauth: {
           ...(inputClone.config as any)?.['oauth'],
@@ -60,7 +60,7 @@ export function injectDefaultCredentials(
     }
   }
 
-  const connectorParsedConfig = connector.schemas.connectorConfig?.safeParse(
+  const connectorParsedConfig = connector.schemas.connector_config?.safeParse(
     inputClone.config,
   )
   if (connectorParsedConfig && !connectorParsedConfig.success) {

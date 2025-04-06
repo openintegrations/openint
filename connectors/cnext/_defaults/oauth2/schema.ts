@@ -11,7 +11,7 @@ import type {JsonConnectorDef} from '../../def'
  */
 export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
   const connectorConfig = () => {
-    let schema = oauth2Schemas.connectorConfig
+    let schema = oauth2Schemas.connector_config
     // if there are any connector config overrides, we need to add them to the schema
     if (Object.keys(def.auth?.connector_config ?? {}).length > 0) {
       // TODO: does this need to do a deep merge of connectorConfig.oauth keys?
@@ -66,7 +66,7 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
   }
 
   const connectionSettings = () => {
-    let schema = oauth2Schemas.connectionSettings
+    let schema = oauth2Schemas.connection_settings
     if (def.auth.connection_settings) {
       schema = z.object({
         ...schema.shape,
@@ -81,8 +81,8 @@ export function generateOauthConnectorDef<T extends JsonConnectorDef>(def: T) {
     schemas: {
       ...oauth2Schemas,
       name: z.literal(def.connector_name as T['connector_name']),
-      connectorConfig: connectorConfig() as any,
-      connectionSettings: connectionSettings() as any,
+      connector_config: connectorConfig() as any,
+      connection_settings: connectionSettings() as any,
     },
     metadata: {
       displayName: def.display_name,

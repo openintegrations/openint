@@ -1,9 +1,10 @@
 import {z, type Z} from '@openint/util/zod-utils'
-import {Core, core} from '../models'
+import type {Core} from '../models'
+import {core} from '../models'
 
 export const connectorConfigExtensions = z.object({
   connector: core.connector.optional(),
-  integrations: z.record(core.integration).optional(),
+  integrations: z.record(core.integration_select).optional(),
   connection_count: z.number().optional(),
 })
 
@@ -12,7 +13,7 @@ export type ConnectorConfigExtensions = Z.infer<
 >
 
 export const connectorConfigExtended = z.intersection(
-  core.connector_config,
+  core.connector_config_select,
   connectorConfigExtensions,
 )
 
@@ -31,4 +32,5 @@ export const zConnectorConfigExpandOption = z
 // TODO: Think about this type a bit more...
 export type ConnectorConfig<
   T extends keyof ConnectorConfigExtensions = keyof ConnectorConfigExtensions,
-> = Core['connector_config'] & Partial<Pick<ConnectorConfigExtensions, T>>
+> = Core['connector_config_select'] &
+  Partial<Pick<ConnectorConfigExtensions, T>>

@@ -12,7 +12,7 @@ function modify<T>(input: T, fn: (input: T) => void): T {
 
 export const codaSchemas = {
   name: z.literal('coda'),
-  connectionSettings: z.object({apiKey: z.string()}),
+  connection_settings: z.object({apiKey: z.string()}),
 } satisfies ConnectorSchemas
 
 export const codaDef = {

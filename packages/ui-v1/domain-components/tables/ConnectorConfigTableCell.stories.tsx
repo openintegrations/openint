@@ -41,6 +41,8 @@ export const Default: Story = {
       updated_at: '2023-09-12T12:00:00Z',
       disabled: false,
       org_id: 'org-123',
+      metadata: {},
+      config: {},
     },
     status: 'warning',
     simple: false,
@@ -58,6 +60,8 @@ export const WithCompactVariant: Story = {
       updated_at: '2023-09-12T12:00:00Z',
       disabled: false,
       org_id: 'org-123',
+      metadata: {},
+      config: {},
     },
     status: 'healthy',
     simple: false,
@@ -75,6 +79,8 @@ export const WithSimpleVariant: Story = {
       updated_at: '2023-09-12T12:00:00Z',
       disabled: false,
       org_id: 'org-123',
+      metadata: {},
+      config: {},
     },
     status: 'offline',
     simple: true,
@@ -92,6 +98,8 @@ export const WithWarningStatus: Story = {
       updated_at: '2023-09-12T12:00:00Z',
       disabled: false,
       org_id: 'org-123',
+      metadata: {},
+      config: {},
     },
     status: 'warning',
     simple: false,
@@ -111,6 +119,8 @@ export const WithDifferentVariants: Story = {
           updated_at: '2023-09-12T12:00:00Z',
           disabled: false,
           org_id: 'org-123',
+          metadata: {},
+          config: {},
         }}
         status="healthy"
       />
@@ -123,6 +133,8 @@ export const WithDifferentVariants: Story = {
           updated_at: '2023-09-12T12:00:00Z',
           disabled: false,
           org_id: 'org-123',
+          metadata: {},
+          config: {},
         }}
         status="warning"
       />
@@ -135,6 +147,8 @@ export const WithDifferentVariants: Story = {
           updated_at: '2023-09-12T12:00:00Z',
           disabled: false,
           org_id: 'org-123',
+          metadata: {},
+          config: {},
         }}
         status="offline"
         simple={true}
@@ -148,6 +162,8 @@ export const WithDifferentVariants: Story = {
           updated_at: '2023-09-12T12:00:00Z',
           disabled: false,
           org_id: 'org-123',
+          metadata: {},
+          config: {},
         }}
         status="destructive"
         compact={true}
@@ -161,6 +177,8 @@ export const WithDifferentVariants: Story = {
           updated_at: '2023-09-12T12:00:00Z',
           disabled: false,
           org_id: 'org-123',
+          metadata: {},
+          config: {},
         }}
         status="healthy"
         compact={true}

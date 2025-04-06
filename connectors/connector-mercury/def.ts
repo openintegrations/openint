@@ -8,7 +8,7 @@ import {z} from '@openint/util/zod-utils'
 
 export const mercurySchemas = {
   name: z.literal('mercury'),
-  connectorConfig: zCcfgAuth.oauthOrApikeyAuth,
+  connector_config: zCcfgAuth.oauthOrApikeyAuth,
 } satisfies ConnectorSchemas
 
 export const mercuryDef = {

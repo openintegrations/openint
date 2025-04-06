@@ -6,10 +6,10 @@ import type {helpers, onebrickSchemas} from './def'
 export const onebrickClientConector = {
   useConnectHook: (_) => {
     const [options, setOptions] = React.useState<
-      (typeof helpers)['_types']['connectInput']
+      (typeof helpers)['_types']['connect_input']
     >({publicToken: undefined, redirect_url: undefined})
     const [deferred] = React.useState(
-      new Deferred<(typeof helpers)['_types']['connectOutput']>(),
+      new Deferred<(typeof helpers)['_types']['connect_output']>(),
     )
     React.useEffect(() => {
       if (options.publicToken && options.redirect_url) {

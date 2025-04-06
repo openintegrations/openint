@@ -5,15 +5,15 @@ import {z} from '@openint/util/zod-utils'
 export const togglSchemas = {
   name: z.literal('toggl'),
   // connectorConfig: zTogglConfig,
-  connectInput: z.object({
+  connect_input: z.object({
     apiToken: z.string(),
   }),
-  connectOutput: z.object({
+  connect_output: z.object({
     apiToken: z.string(),
     email: z.string().nullish(),
     password: z.string().nullish(),
   }),
-  connectionSettings: z.object({
+  connection_settings: z.object({
     apiToken: z.string(),
     email: z.string().nullish(),
     password: z.string().nullish(),

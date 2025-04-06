@@ -1,5 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {EntityTableCell} from './EntityTableCell'
+import type {Core} from '@openint/api-v1/models'
 
 const meta: Meta<typeof EntityTableCell> = {
   title: 'Tables/EntityTableCell',
@@ -8,7 +9,7 @@ const meta: Meta<typeof EntityTableCell> = {
   argTypes: {
     entityType: {
       control: 'select',
-      options: ['customer', 'connection', 'integration', 'connector-config'],
+      options: Object.keys({} as Core),
       description: 'Type of entity to display',
     },
     id: {
@@ -45,190 +46,38 @@ type Story = StoryObj<typeof EntityTableCell>
 // Basic example of a customer cell
 export const CustomerExample: Story = {
   args: {
-    entityType: 'customer',
+    entityType: 'customer_select',
     id: '12345678',
     name: 'Acme Corporation',
-    simple: false,
-    compact: false,
-    useIcon: false,
+  },
+}
+
+// Example with status
+export const WithStatus: Story = {
+  args: {
+    entityType: 'connection_select',
+    id: 'conn_123',
+    name: 'Production Connection',
     status: 'healthy',
   },
 }
 
-// Connection example with icon
-export const ConnectionWithIcon: Story = {
+// Compact example
+export const Compact: Story = {
   args: {
-    entityType: 'connection',
-    id: '87654321',
-    name: 'Salesforce Connection',
-    simple: false,
-    compact: false,
-    useIcon: true,
-    status: 'warning',
-  },
-}
-
-// Integration example with compact variant
-export const IntegrationCompact: Story = {
-  args: {
-    entityType: 'integration',
-    id: '98765432',
-    name: 'HubSpot Integration',
-    simple: false,
+    entityType: 'integration_select',
+    id: 'int_456',
+    name: 'Salesforce Integration',
     compact: true,
-    useIcon: false,
-    status: 'offline',
   },
 }
 
-// Connector Config with simple variant
-export const ConnectorConfigSimple: Story = {
+// Simple example
+export const Simple: Story = {
   args: {
-    entityType: 'connector_config',
-    id: '12312312',
-    name: 'Slack Connector',
+    entityType: 'connector_config_select',
+    id: 'config_789',
+    name: 'Default Config',
     simple: true,
-    compact: false,
-    useIcon: true,
-    status: 'destructive',
   },
-}
-
-// All variants displayed together
-export const AllVariants: Story = {
-  render: () => (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h3 className="text-sm font-medium text-gray-500">Default Variants</h3>
-        <div className="flex flex-col gap-4">
-          <EntityTableCell
-            entityType="customer"
-            id="12345678"
-            name="Acme Corporation"
-            status="healthy"
-          />
-          <EntityTableCell
-            entityType="connection"
-            id="87654321"
-            name="Salesforce Connection"
-            status="warning"
-          />
-          <EntityTableCell
-            entityType="integration"
-            id="98765432"
-            name="HubSpot Integration"
-            status="offline"
-          />
-          <EntityTableCell
-            entityType="connector_config"
-            id="12312312"
-            name="Slack Connector"
-            status="destructive"
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h3 className="text-sm font-medium text-gray-500">With Icons</h3>
-        <div className="flex flex-col gap-4">
-          <EntityTableCell
-            entityType="customer"
-            id="12345678"
-            name="Acme Corporation"
-            status="healthy"
-            useIcon
-          />
-          <EntityTableCell
-            entityType="connection"
-            id="87654321"
-            name="Salesforce Connection"
-            status="warning"
-            useIcon
-          />
-          <EntityTableCell
-            entityType="integration"
-            id="98765432"
-            name="HubSpot Integration"
-            status="offline"
-            useIcon
-          />
-          <EntityTableCell
-            entityType="connector_config"
-            id="12312312"
-            name="Slack Connector"
-            status="destructive"
-            useIcon
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h3 className="text-sm font-medium text-gray-500">Simple Variants</h3>
-        <div className="flex flex-col gap-4">
-          <EntityTableCell
-            entityType="customer"
-            id="12345678"
-            name="Acme Corporation"
-            status="healthy"
-            simple
-          />
-          <EntityTableCell
-            entityType="connection"
-            id="87654321"
-            name="Salesforce Connection"
-            status="warning"
-            simple
-          />
-          <EntityTableCell
-            entityType="integration"
-            id="98765432"
-            name="HubSpot Integration"
-            status="offline"
-            simple
-          />
-          <EntityTableCell
-            entityType="connector_config"
-            id="12312312"
-            name="Slack Connector"
-            status="destructive"
-            simple
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h3 className="text-sm font-medium text-gray-500">Compact Variants</h3>
-        <div className="flex flex-col gap-4">
-          <EntityTableCell
-            entityType="customer"
-            id="12345678"
-            name="Acme Corporation"
-            status="healthy"
-            compact
-          />
-          <EntityTableCell
-            entityType="connection"
-            id="87654321"
-            name="Salesforce Connection"
-            status="warning"
-            compact
-          />
-          <EntityTableCell
-            entityType="integration"
-            id="98765432"
-            name="HubSpot Integration"
-            status="offline"
-            compact
-          />
-          <EntityTableCell
-            entityType="connector_config"
-            id="12312312"
-            name="Slack Connector"
-            status="destructive"
-            compact
-          />
-        </div>
-      </div>
-    </div>
-  ),
 }

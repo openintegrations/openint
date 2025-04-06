@@ -5,16 +5,16 @@ import {zInstitution, zTellerConfig} from './TellerClient'
 
 export const tellerSchemas = {
   name: z.literal('teller'),
-  connectorConfig: zTellerConfig,
-  connectionSettings: z.object({
+  connector_config: zTellerConfig,
+  connection_settings: z.object({
     token: z.string(),
   }),
-  integrationData: zInstitution,
-  connectInput: z.object({
+  integration_data: zInstitution,
+  connect_input: z.object({
     applicationId: z.string(),
     userToken: z.string().nullish(),
   }),
-  connectOutput: z.object({
+  connect_output: z.object({
     token: z.string(),
   }),
 } satisfies ConnectorSchemas

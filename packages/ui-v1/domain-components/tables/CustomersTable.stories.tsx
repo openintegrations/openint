@@ -1,9 +1,9 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {Customer} from '@openint/api-v1/models'
+import type {AppRouterOutput} from '@openint/api-v1'
 import {DataTable} from '../../components/DataTable'
 import {CustomersTable} from './CustomerTable'
 
-const customers: Customer[] = [
+const customers: AppRouterOutput['listCustomers']['items'] = [
   {
     id: Math.random().toString(36).substring(2, 10),
     connection_count: 472,
@@ -39,7 +39,9 @@ const meta: Meta<typeof DataTable> = {
 }
 
 export default meta
-type Story = StoryObj<typeof DataTable<Customer, unknown>>
+type Story = StoryObj<
+  typeof DataTable<AppRouterOutput['listCustomers']['items'][number], unknown>
+>
 
 export const Default: Story = {
   args: {

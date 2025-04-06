@@ -7,7 +7,7 @@ import {CopyID} from '../../components/CopyID'
 
 interface ConnectionTableCellProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  connection: Core['connection']
+  connection: Core['connection_select']
   useLogo?: boolean
   className?: string
   logo_url?: string

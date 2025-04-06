@@ -28,11 +28,7 @@ export const plaidServerConnector = {
   // - prefetch
   // - connect
   // - commandsForResource
-  preConnect: (
-    config,
-    {extCustomerId: userId, connection, integrationExternalId, ...ctx},
-    input,
-  ) => {
+  preConnect: ({config, context, input}) => {
     if (input.sandboxPublicTokenCreate) {
       return makePlaidClient(config)
         .sandboxPublicTokenCreate({
@@ -43,20 +39,22 @@ export const plaidServerConnector = {
     }
     return makePlaidClient(config)
       .linkTokenCreate({
-        access_token: connection?.settings.accessToken, // Reconnecting
+        access_token: context.connection?.settings.accessToken, // Reconnecting
         // Not working as of the latest plaid api, need to think when this is relevant again.
         // https://share.cleanshot.com/5pKLdGh4
         // institution_id: integrationExternalId
         //   ? `${integrationExternalId}`
         //   : undefined, // Probably doesn't work, but we wish it does...
-        user: {client_user_id: userId},
+        user: {client_user_id: context.extCustomerId},
         client_name: config.clientName,
         language: input.language ?? config.language,
-        ...(!connection?.settings.accessToken && {products: config.products}),
+        ...(!context.connection?.settings.accessToken && {
+          products: config.products,
+        }),
         country_codes: config.countryCodes,
         // Webhook and redirect_uri would be part of the `connection` already.
         // redirect_uri: ctx.redirectUrl,
-        webhook: ctx.webhookBaseUrl,
+        webhook: context.webhookBaseUrl,
       })
       .then(({data: res}) => {
         console.log('willConnect response', res)
@@ -64,14 +62,16 @@ export const plaidServerConnector = {
       })
   },
 
-  postConnect: async ({public_token, meta}, config) => {
+  postConnect: async ({connectOutput, config}) => {
     const client: PlaidApi = makePlaidClient(config)
 
     const [{data: res}, {data: insRes}] = await Promise.all([
-      client.itemPublicTokenExchange({public_token}),
-      meta?.institution?.institution_id && config.envName
+      client.itemPublicTokenExchange({
+        public_token: connectOutput.public_token,
+      }),
+      connectOutput.meta?.institution?.institution_id && config.envName
         ? client.institutionsGetById({
-            institution_id: meta.institution.institution_id,
+            institution_id: connectOutput.meta.institution.institution_id,
             // Is this right? Get all country codes...
             country_codes: [
               CountryCode.Us,
@@ -90,7 +90,7 @@ export const plaidServerConnector = {
     ])
     console.log('[Plaid post connect]', res, insRes)
     // We will wait to sync the institution until later
-    const settings = def._type('connectionSettings', {
+    const settings = def._type('connection_settings', {
       itemId: res.item_id,
       accessToken: res.access_token,
       institution: insRes?.institution,
@@ -105,7 +105,7 @@ export const plaidServerConnector = {
         data: insRes.institution,
       },
       source$: rxjs.from(
-        (meta?.accounts ?? []).map((a) =>
+        (connectOutput.meta?.accounts ?? []).map((a) =>
           def._opData('account', a.id, {
             account_id: a.id,
             name: a.name,
@@ -173,7 +173,7 @@ export const plaidServerConnector = {
     return connUpdate
   },
 
-  revokeConnection: (settings, config) =>
+  revokeConnection: ({settings, config}) =>
     makePlaidClient(config)
       .itemRemove({access_token: settings.accessToken})
       .catch((err: IAxiosError) => {
@@ -191,8 +191,8 @@ export const plaidServerConnector = {
 
   // TODO(P2): Verify Plaid webhook authenticity for added security.
   // https://plaid.com/docs/#webhook-verification
-  handleWebhook: (input) => {
-    const webhook = zWebhook.parse(input.body)
+  handleWebhook: ({webhookInput}) => {
+    const webhook = zWebhook.parse(webhookInput.body)
     console.log('[plaid] Received webhook', webhook)
     const DEFAULT_SYNC = def._webhookReturn(webhook.item_id, {
       triggerDefaultSync: true,

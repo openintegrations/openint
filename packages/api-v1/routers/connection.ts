@@ -1,6 +1,6 @@
 import {TRPCError} from '@trpc/server'
-import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
+import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
@@ -106,10 +106,10 @@ export const connectionRouter = router({
           })
         }
 
-        const refreshedConnectionSettings = await connector.refreshConnection(
-          connection.settings,
-          connector_config.config,
-        )
+        const refreshedConnectionSettings = await connector.refreshConnection({
+          settings: connection.settings,
+          config: connector_config.config,
+        })
         const updatedConnection = await ctx.db
           .update(schema.connection)
           .set({
@@ -134,7 +134,7 @@ export const connectionRouter = router({
       return formatConnection(
         ctx,
         // TODO: fix this any casting
-        connection as any as Z.infer<typeof core.connection>,
+        connection as any as Z.infer<typeof core.connection_select>,
         input.include_secrets,
         input.expand,
       )
@@ -345,7 +345,7 @@ export const connectionRouter = router({
         data: zDiscriminatedSettings,
       }),
     )
-    .output(core.connection)
+    .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
       // Verify connector config exists
       const ccfg = await ctx.db.query.connector_config.findFirst({

@@ -19,8 +19,8 @@ import type {
 } from './connector-meta.types'
 import type {Id} from './id.types'
 import {makeId} from './id.types'
-import type {ZStandard} from './zStandard'
 import type {VerticalKey} from './verticals'
+import type {ZStandard} from './zStandard'
 
 /**
  * Equivalent to to airbyte's low code connector spec,
@@ -29,14 +29,14 @@ import type {VerticalKey} from './verticals'
 
 export interface ConnectorSchemas {
   name: Z.ZodLiteral<string>
-  connectorConfig?: Z.ZodTypeAny
-  connectionSettings?: Z.ZodTypeAny
-  integrationData?: Z.ZodTypeAny
-  webhookInput?: Z.ZodTypeAny
-  preConnectInput?: Z.ZodTypeAny
-  connectInput?: Z.ZodTypeAny
+  connector_config?: Z.ZodTypeAny
+  connection_settings?: Z.ZodTypeAny
+  integration_data?: Z.ZodTypeAny
+  webhook_input?: Z.ZodTypeAny
+  pre_connect_input?: Z.ZodTypeAny
+  connect_input?: Z.ZodTypeAny
   /** aka postConnectInput... Should we rename? */
-  connectOutput?: Z.ZodTypeAny
+  connect_output?: Z.ZodTypeAny
   /** Maybe can be derived from webhookInput | postConnOutput | inlineInput? */
 }
 
@@ -63,10 +63,10 @@ export interface ConnectorDef<
 
   standardMappers?: {
     integration?: (
-      data: T['_types']['integrationData'],
+      data: T['_types']['integration_data'],
     ) => Omit<ZStandard['integration'], 'id'>
     connection?: (
-      settings: T['_types']['connectionSettings'],
+      settings: T['_types']['connection_settings'],
     ) => Omit<ZStandard['connection'], 'id'>
   }
 }
@@ -79,12 +79,12 @@ export interface ConnectorClient<
     // userId: DeprecatedUserId | undefined
     openDialog: OpenDialogFn
   }) => (
-    connectInput: T['_types']['connectInput'],
+    connectInput: T['_types']['connect_input'],
     context: ConnectOptions & {
       // TODO: Does this belong here?
       connectorConfigId: Id['ccfg']
     },
-  ) => Promise<T['_types']['connectOutput']>
+  ) => Promise<T['_types']['connect_output']>
 }
 
 export interface ConnectorServer<
@@ -99,56 +99,55 @@ export interface ConnectorServer<
    * of contextual typing for interfaces. @see https://github.com/microsoft/TypeScript/issues/1373
    */
   newInstance?: (opts: {
-    config: T['_types']['connectorConfig']
-    settings: T['_types']['connectionSettings']
+    config: T['_types']['connector_config']
+    settings: T['_types']['connection_settings']
     fetchLinks: FetchLink[]
     /** @deprecated, use fetchLinks instead for things like token refreshes or connection status update */
     onSettingsChange: (
-      newSettings: T['_types']['connectionSettings'],
+      newSettings: T['_types']['connection_settings'],
     ) => MaybePromise<void>
   }) => TInstance
 
   // MARK: - Connect
 
-  preConnect?: (
-    config: T['_types']['connectorConfig'],
-    context: ConnectContext<T['_types']['connectionSettings']>,
-    // TODO: Turn this into an object instead
-    input: T['_types']['preConnectInput'],
-  ) => Promise<T['_types']['connectInput']>
+  preConnect?: (opts: {
+    config: T['_types']['connector_config']
+    context: ConnectContext<T['_types']['connection_settings']>
+    input: T['_types']['pre_connect_input']
+  }) => Promise<T['_types']['connect_input']>
 
-  postConnect?: (
-    connectOutput: T['_types']['connectOutput'],
-    config: T['_types']['connectorConfig'],
-    context: ConnectContext<T['_types']['connectionSettings']>,
-  ) => MaybePromise<
+  postConnect?: (opts: {
+    connectOutput: T['_types']['connect_output']
+    config: T['_types']['connector_config']
+    context: ConnectContext<T['_types']['connection_settings']>
+  }) => MaybePromise<
     Omit<
-      ConnectionUpdate<AnyEntityPayload, T['_types']['connectionSettings']>,
+      ConnectionUpdate<AnyEntityPayload, T['_types']['connection_settings']>,
       'customerId'
     >
   >
 
   checkConnection?: (
-    input: OmitNever<{
-      settings: T['_types']['connectionSettings']
-      config: T['_types']['connectorConfig']
+    opts: OmitNever<{
+      settings: T['_types']['connection_settings']
+      config: T['_types']['connector_config']
       options: CheckConnectionOptions
       context: CheckConnectionContext
       instance?: TInstance
     }>,
   ) => MaybePromise<
     Omit<
-      ConnectionUpdate<AnyEntityPayload, T['_types']['connectionSettings']>,
+      ConnectionUpdate<AnyEntityPayload, T['_types']['connection_settings']>,
       'customerId'
     >
   >
 
   // This probably need to also return an observable
-  revokeConnection?: (
-    settings: T['_types']['connectionSettings'],
-    config: T['_types']['connectorConfig'],
-    instance: TInstance,
-  ) => Promise<unknown>
+  revokeConnection?: (opts: {
+    settings: T['_types']['connection_settings']
+    config: T['_types']['connector_config']
+    instance: TInstance
+  }) => Promise<unknown>
 
   // MARK: - Sync
 
@@ -168,26 +167,26 @@ export interface ConnectorServer<
     }>
   }>
 
-  refreshConnection?: (
-    settings: T['_types']['connectionSettings'],
-    config: T['_types']['connectorConfig'],
-  ) => Promise<T['_types']['connectionSettings']>
+  refreshConnection?: (opts: {
+    settings: T['_types']['connection_settings']
+    config: T['_types']['connector_config']
+  }) => Promise<T['_types']['connection_settings']>
 
   // MARK - Webhook
   // Need to add a input schema for each provider to verify the shape of the received
   // webhook requests...
 
   /** @deprecated */
-  handleWebhook?: (
-    webhookInput: T['_types']['webhookInput'],
-    config: T['_types']['connectorConfig'],
-  ) => MaybePromise<
-    WebhookReturnType<AnyEntityPayload, T['_types']['connectionSettings']>
+  handleWebhook?: (opts: {
+    webhookInput: T['_types']['webhook_input']
+    config: T['_types']['connector_config']
+  }) => MaybePromise<
+    WebhookReturnType<AnyEntityPayload, T['_types']['connection_settings']>
   >
 
   /** Passthrough request proxy */
   /** @deprecated */
-  proxy?: (instance: TInstance, req: Request) => Promise<Response>
+  proxy?: (opts: {instance: TInstance; req: Request}) => Promise<Response>
 }
 
 export interface ConnectorImpl<TSchemas extends ConnectorSchemas>
@@ -216,13 +215,13 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
     SyncOperation<{
       id: string
       entityName: 'integration'
-      entity: _types['integrationData']
+      entity: _types['integration_data']
     }>,
     {type: 'data'}
   >
   type connUpdate = ConnectionUpdateData<
-    _types['connectionSettings'],
-    _types['integrationData']
+    _types['connection_settings'],
+    _types['integration_data']
   >
 
   type Op = SyncOperation<any, connUpdate>
@@ -232,9 +231,12 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
   type OpState = Extract<Op, {type: 'stateUpdate'}>
   type _connectionUpdateType = ConnectionUpdate<
     any,
-    _types['connectionSettings']
+    _types['connection_settings']
   >
-  type _webhookReturnType = WebhookReturnType<any, _types['connectionSettings']>
+  type _webhookReturnType = WebhookReturnType<
+    any,
+    _types['connection_settings']
+  >
   return {
     ...schemas,
     _types: {} as _types,
@@ -282,7 +284,7 @@ export function connHelpers<TSchemas extends ConnectorSchemas>(
       }) satisfies OpData,
     _intOpData: (
       id: ExternalId,
-      integrationData: _types['integrationData'],
+      integrationData: _types['integration_data'],
     ): IntOpData => ({
       type: 'data',
       data: {

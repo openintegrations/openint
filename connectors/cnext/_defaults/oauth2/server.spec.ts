@@ -105,20 +105,20 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
       throw new Error('preConnect is not defined')
     }
 
-    const result = await server.preConnect(
-      {
+    const result = await server.preConnect({
+      config: {
         oauth: {
           client_id: 'test_client_id',
           client_secret: 'test_client_secret',
           scopes: ['read', 'write'],
         },
       },
-      {
+      context: {
         extCustomerId: `cust_123` as any,
         webhookBaseUrl: 'https://example.com/webhook',
       },
-      {connectionId: 'test_connection_id'},
-    )
+      input: {connectionId: 'test_connection_id'},
+    })
 
     expect(result.authorization_url).toContain(
       'https://auth.example.com/authorize',
@@ -156,40 +156,40 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, () => {
 
     // Try to use an invalid scope
     await expect(
-      server.preConnect(
-        {
+      server.preConnect({
+        config: {
           oauth: {
             // 'non_default_scope' is not in openint_scopes. Since we're relying on default credentials,
             // we should not be able to use non default scope.
             scopes: ['read', 'non_default_scope'],
           },
         },
-        {
+        context: {
           extCustomerId: `cust_123` as any,
           webhookBaseUrl: 'https://example.com/webhook',
         },
-        {connectionId: 'test_connection_id'},
-      ),
+        input: {connectionId: 'test_connection_id'},
+      }),
     ).rejects.toThrow(
       'Invalid scopes configured: non_default_scope. Valid default scopes are: read, write',
     )
 
     // we're not relying on default credentials here, so we should be able to use an invalid scope
     await expect(
-      server.preConnect(
-        {
+      server.preConnect({
+        config: {
           oauth: {
             client_id: 'xxx',
             client_secret: 'yyy',
             scopes: ['read', 'non_default_scope'],
           },
         },
-        {
+        context: {
           extCustomerId: `cust_123` as any,
           webhookBaseUrl: 'https://example.com/webhook',
         },
-        {connectionId: 'test_connection_id'},
-      ),
+        input: {connectionId: 'test_connection_id'},
+      }),
     ).toBeTruthy()
   })
 

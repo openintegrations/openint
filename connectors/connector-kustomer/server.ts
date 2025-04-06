@@ -2,7 +2,7 @@ import {extractId, initNangoSDK, type ConnectorServer} from '@openint/cdk'
 import type {kustomerSchemas} from './def'
 
 export const kustomerServer = {
-  postConnect: async (connectOutput) => {
+  postConnect: async ({connectOutput}) => {
     const nango = initNangoSDK({
       headers: {authorization: `Bearer ${process.env['NANGO_SECRET_KEY']}`},
     })

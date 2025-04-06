@@ -99,20 +99,20 @@ export const zOAuthConfig = z.object({
 })
 
 export const oauth2Schemas = {
-  connectorConfig: z.object({
+  connector_config: z.object({
     oauth: zOauthConnectorConfig.nullable(),
   }),
 
-  connectionSettings: z.object({
+  connection_settings: z.object({
     oauth: zOAuthConnectionSettings,
   }),
   // No pre connect input is necessary for oauth2
   // TODO: Fix to be unnecessary
-  preConnectInput: z.any(),
-  connectInput: z.object({
+  pre_connect_input: z.any(),
+  connect_input: z.object({
     authorization_url: z.string(),
   }),
-  connectOutput: z.object({
+  connect_output: z.object({
     code: z.string(),
     // connectionId: z.string(),
     state: z.string(),

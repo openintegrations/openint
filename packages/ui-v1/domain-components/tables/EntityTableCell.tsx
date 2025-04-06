@@ -42,13 +42,13 @@ export function EntityTableCell(props: EntityTableCellProps) {
   // Get the appropriate icon for the entity type
   const getIconName = () => {
     switch (entityType) {
-      case 'customer':
+      case 'customer_select':
         return 'User'
-      case 'connection':
+      case 'connection_select':
         return 'Network'
-      case 'integration':
+      case 'integration_select':
         return 'AppWindow'
-      case 'connector_config':
+      case 'connector_config_select':
         return 'Settings'
       default:
         return 'File'
@@ -57,13 +57,13 @@ export function EntityTableCell(props: EntityTableCellProps) {
 
   function getEntityLabel(type: EntityType): string {
     switch (type) {
-      case 'customer':
+      case 'customer_select':
         return 'Customer'
-      case 'connection':
+      case 'connection_select':
         return 'Connection'
-      case 'integration':
+      case 'integration_select':
         return 'Integration'
-      case 'connector_config':
+      case 'connector_config_select':
         return 'Connector Config'
       default:
         return 'Entity'
