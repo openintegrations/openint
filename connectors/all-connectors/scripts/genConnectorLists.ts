@@ -8,48 +8,6 @@ import {join as pathJoin} from 'node:path'
 import {camelCase} from '@openint/util/string-utils'
 import {writePretty} from './writePretty'
 
-async function generateCnextIndex() {
-  const cnextPath = pathJoin(__dirname, '../../../connectors/cnext/connectors')
-  const cnextConnectors = fs
-    .readdirSync(cnextPath, {
-      withFileTypes: true,
-    })
-    .filter(
-      (r) =>
-        r.isDirectory() &&
-        r.name !== 'def' &&
-        !r.name.startsWith('.') &&
-        r.name !== 'node_modules' &&
-        !r.name.startsWith('_'),
-    )
-
-  await writePretty(
-    'index.ts',
-    `
-    ${cnextConnectors
-      .map((d) => {
-        const connectorName = `connector${d.name
-          .charAt(0)
-          .toUpperCase()}${camelCase(d.name.slice(1))}`
-        return `import {server as ${connectorName}_server} from './${d.name}'
-        import {def as ${connectorName}_def} from './${d.name}/def'`
-      })
-      .join('\n')}
-
-    export {
-      ${cnextConnectors
-        .map((d) => {
-          const connectorName = `connector${d.name
-            .charAt(0)
-            .toUpperCase()}${camelCase(d.name.slice(1))}`
-          return `${connectorName}_server, ${connectorName}_def`
-        })
-        .join(',\n      ')}
-    }`,
-    cnextPath,
-  )
-}
-
 type ConnectorImports = {
   def?: string
   client?: string
@@ -117,7 +75,7 @@ const connectorList: Connector[] = [
 
   // Add cnext connectors
   ...fs
-    .readdirSync(pathJoin(__dirname, '../../../connectors/cnext/connectors'), {
+    .readdirSync(pathJoin(__dirname, '../../../connectors/cnext/json-defs'), {
       withFileTypes: true,
     })
     .filter(
@@ -137,12 +95,12 @@ const connectorList: Connector[] = [
         dirName: `cnext-${d.name}`,
         varName: connectorName,
         imports: {
-          def: `@openint/cnext`,
-          server: `@openint/cnext`,
+          def: `@openint/cnext/connectors.def`,
+          server: `@openint/cnext/connectors.server`,
           // Using specific import path selectors for def and server
           importPath: {
-            def: `${connectorName}_def`,
-            server: `${connectorName}_server`,
+            def: `TODO: FIXME`,
+            server: `TODO: FIXME`,
           },
         },
       }
@@ -150,9 +108,6 @@ const connectorList: Connector[] = [
 ]
 
 async function main() {
-  // Generate the cnext index.ts first
-  await generateCnextIndex()
-
   await writePretty(
     'connectors.meta.ts',
     `
@@ -182,7 +137,10 @@ async function main() {
     } else {
       await writePretty(
         `connectors.${entry}.ts`,
-        `${list
+        `
+        import {${entry}Connectors as cnextConnectors} from '@openint/cnext/connectors.${entry}'
+        
+        ${list
           .map((int) => {
             // Check if this is a cnext connector
             const isCnext = int.dirName.startsWith('cnext-')
@@ -199,7 +157,9 @@ async function main() {
             }'`
           })
           .join('\n')}
-      export const ${entry}Connectors = {${list
+      export const ${entry}Connectors = {
+        ...cnextConnectors,
+      ${list
         .sort((a, b) => a.name?.localeCompare(b.name || '') || 0)
         .map(({name, varName}) => `'${name}': ${varName},`)
         .join('\n')}}

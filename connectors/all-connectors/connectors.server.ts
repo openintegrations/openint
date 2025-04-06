@@ -1,6 +1,6 @@
 // generated file. Do not modify by hand
 
-import {serverConnectors as cnextServerConnectors} from '@openint/cnext/connectors.server'
+import {serverConnectors as cnextConnectors} from '@openint/cnext/connectors.server'
 import {default as connectorAirtable} from '@openint/connector-airtable/server'
 import {default as connectorApollo} from '@openint/connector-apollo/server'
 import {default as connectorBrex} from '@openint/connector-brex/server'
@@ -42,7 +42,7 @@ import {default as connectorYodlee} from '@openint/connector-yodlee/server'
 import {default as connectorZohodesk} from '@openint/connector-zohodesk/server'
 
 export const serverConnectors = {
-  ...cnextServerConnectors,
+  ...cnextConnectors,
   airtable: connectorAirtable,
   apollo: connectorApollo,
   brex: connectorBrex,

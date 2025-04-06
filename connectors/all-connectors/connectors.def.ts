@@ -1,5 +1,6 @@
 // generated file. Do not modify by hand
-import {defConnectors as cnextDefConnectors} from '@openint/cnext/connectors.def'
+
+import {defConnectors as cnextConnectors} from '@openint/cnext/connectors.def'
 import {default as connectorAirtable} from '@openint/connector-airtable/def'
 import {default as connectorApollo} from '@openint/connector-apollo/def'
 import {default as connectorBrex} from '@openint/connector-brex/def'
@@ -43,7 +44,7 @@ import {default as connectorYodlee} from '@openint/connector-yodlee/def'
 import {default as connectorZohodesk} from '@openint/connector-zohodesk/def'
 
 export const defConnectors = {
-  ...cnextDefConnectors,
+  ...cnextConnectors,
   airtable: connectorAirtable,
   apollo: connectorApollo,
   brex: connectorBrex,
