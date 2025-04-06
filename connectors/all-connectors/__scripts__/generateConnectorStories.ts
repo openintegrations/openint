@@ -1,10 +1,11 @@
 import path from 'node:path'
+import {camelCase} from '@openint/util/string-utils'
 import {defConnectors} from '../connectors.def'
 import {writePretty} from './writePretty'
 
 const templateMeta = `
 import type {Meta, StoryObj} from '@storybook/react'
-import type {ConnectorName} from '@openint/all-connectors/schemas'
+import type {ConnectorName} from '@openint/all-connectors/name'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {Card} from '@openint/shadcn/ui'
 import {zodToOas31Schema} from '@openint/util/schema'
@@ -42,7 +43,7 @@ async function main() {
     .filter(([_, def]) => 'connector_config' in def.schemas)
     .map(
       ([name]) => `
-    export const ${name}ConnectorConfig: Story = {
+    export const ${camelCase(name)}ConnectorConfig: Story = {
       args: {name: '${name}'},
     }
   `,
@@ -52,7 +53,7 @@ async function main() {
     .filter(([_, def]) => 'connection_settings' in def.schemas)
     .map(
       ([name]) => `
-    export const ${name}ConnectionSettings: Story = {
+    export const ${camelCase(name)}ConnectionSettings: Story = {
       args: {name: '${name}'},
     }
   `,

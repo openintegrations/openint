@@ -72,51 +72,9 @@ const connectorList: Connector[] = [
       } satisfies Connector
     })
     .filter((c): c is NonNullable<typeof c> => !!c),
-
-  // Add cnext connectors
-  ...fs
-    .readdirSync(pathJoin(__dirname, '../../../connectors/cnext/json-defs'), {
-      withFileTypes: true,
-    })
-    .filter(
-      (r) =>
-        r.isDirectory() &&
-        r.name !== 'def' &&
-        !r.name.startsWith('.') &&
-        r.name !== 'node_modules' &&
-        !r.name.startsWith('_'),
-    )
-    .map((d) => {
-      const connectorName = `connector${d.name.charAt(0).toUpperCase()}${camelCase(
-        d.name.slice(1),
-      )}`
-      return {
-        name: d.name,
-        dirName: `cnext-${d.name}`,
-        varName: connectorName,
-        imports: {
-          def: `@openint/cnext/connectors.def`,
-          server: `@openint/cnext/connectors.server`,
-          // Using specific import path selectors for def and server
-          importPath: {
-            def: `TODO: FIXME`,
-            server: `TODO: FIXME`,
-          },
-        },
-      }
-    }),
 ]
 
 async function main() {
-  await writePretty(
-    'connectors.meta.ts',
-    `
-  export default ${JSON.stringify(
-    Object.fromEntries(connectorList.map((c) => [c.name, c])),
-  )}
-  `,
-  )
-
   const entries = ['def', 'client', 'server'] as const
 
   for (const entry of entries) {
@@ -158,7 +116,7 @@ async function main() {
             }'`
           })
           .join('\n')}
-       const customConnectors = {
+        export const customConnectors = {
       ${list
         .sort((a, b) => a.name?.localeCompare(b.name || '') || 0)
         .map(({name, varName}) => `'${name}': ${varName},`)
@@ -172,60 +130,6 @@ async function main() {
       )
     }
   }
-
-  // const mergedlist = connectorList.filter((int) =>
-  //   Object.values(int.imports).some((v) => !!v),
-  // )
-
-  // await writePretty(
-  //   'connectors.merged.ts',
-  //   `${mergedlist
-  //     .flatMap((int) => {
-  //       const validImports = Object.fromEntries(
-  //         Object.entries(int.imports)
-  //           .filter(([, v]) => !!v)
-  //           // Temp hack because mergedConnectors are only ever used server side
-  //           // This avoids server needing to import client side code unnecessarily
-  //           .filter(([k]) => k !== 'client'),
-  //       )
-  //       // Check if this is a cnext connector
-  //       const isCnext = int.dirName.startsWith('cnext-')
-
-  //       // Only get the valid import keys that should be imported and spread
-  //       const importKeys = Object.keys(validImports)
-
-  //       return [
-  //         isCnext
-  //           ? `import {${importKeys
-  //               .map(
-  //                 (k) =>
-  //                   int.importPath?.[k as keyof typeof int.importPath] ||
-  //                   `${int.varName}_${k}`,
-  //               )
-  //               .join(', ')}} from '${validImports['def']}'`
-  //           : Object.entries(validImports)
-  //               .map(
-  //                 ([k, v]) =>
-  //                   `import {default as ${int.varName}_${k}} from '${v}'`,
-  //               )
-  //               .join('\n'),
-  //         `const ${int.varName} = {
-  //           ${importKeys.map((k) => `...${int.varName}_${k}`).join(',')}
-  //         }`,
-  //       ]
-  //     })
-  //     .join('\n')}
-
-  //   export const mergedConnectors = {${mergedlist
-  //     .map(({name, varName}) => {
-  //       // Skip node_modules
-  //       if (name === 'node_modules') return null
-  //       return `'${name?.toLowerCase().replace(/-/g, '')}': ${varName},`
-  //     })
-  //     .filter(Boolean)
-  //     .join('\n')}}
-  // `,
-  // )
 }
 
 void main()

@@ -28,7 +28,7 @@ function FormWrapper(props: {name: ConnectorName}) {
 }
 
 const meta: Meta<typeof FormWrapper> = {
-  title: 'All Connectors/connectionSettings',
+  title: 'All Connectors/connection_settings',
   component: FormWrapper,
   parameters: {layout: 'centered'},
 }
@@ -36,8 +36,76 @@ const meta: Meta<typeof FormWrapper> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+export const dummyOauth2ConnectionSettings: Story = {
+  args: {name: 'dummy-oauth2'},
+}
+
+export const sharepointonlineConnectionSettings: Story = {
+  args: {name: 'sharepointonline'},
+}
+
+export const slackConnectionSettings: Story = {
+  args: {name: 'slack'},
+}
+
+export const githubConnectionSettings: Story = {
+  args: {name: 'github'},
+}
+
+export const quickbooksConnectionSettings: Story = {
+  args: {name: 'quickbooks'},
+}
+
+export const googlemailConnectionSettings: Story = {
+  args: {name: 'googlemail'},
+}
+
+export const notionConnectionSettings: Story = {
+  args: {name: 'notion'},
+}
+
+export const linkedinConnectionSettings: Story = {
+  args: {name: 'linkedin'},
+}
+
+export const googledocsConnectionSettings: Story = {
+  args: {name: 'googledocs'},
+}
+
 export const aircallConnectionSettings: Story = {
   args: {name: 'aircall'},
+}
+
+export const googlecalendarConnectionSettings: Story = {
+  args: {name: 'googlecalendar'},
+}
+
+export const googlesheetConnectionSettings: Story = {
+  args: {name: 'googlesheet'},
+}
+
+export const discordConnectionSettings: Story = {
+  args: {name: 'discord'},
+}
+
+export const hubspotConnectionSettings: Story = {
+  args: {name: 'hubspot'},
+}
+
+export const salesforceConnectionSettings: Story = {
+  args: {name: 'salesforce'},
+}
+
+export const linearConnectionSettings: Story = {
+  args: {name: 'linear'},
+}
+
+export const confluenceConnectionSettings: Story = {
+  args: {name: 'confluence'},
+}
+
+export const googledriveConnectionSettings: Story = {
+  args: {name: 'googledrive'},
 }
 
 export const airtableConnectionSettings: Story = {
@@ -56,14 +124,6 @@ export const codaConnectionSettings: Story = {
   args: {name: 'coda'},
 }
 
-export const confluenceConnectionSettings: Story = {
-  args: {name: 'confluence'},
-}
-
-export const discordConnectionSettings: Story = {
-  args: {name: 'discord'},
-}
-
 export const facebookConnectionSettings: Story = {
   args: {name: 'facebook'},
 }
@@ -80,40 +140,12 @@ export const foreceiptConnectionSettings: Story = {
   args: {name: 'foreceipt'},
 }
 
-export const githubConnectionSettings: Story = {
-  args: {name: 'github'},
-}
-
 export const gongConnectionSettings: Story = {
   args: {name: 'gong'},
 }
 
-export const googlecalendarConnectionSettings: Story = {
-  args: {name: 'googlecalendar'},
-}
-
-export const googledocsConnectionSettings: Story = {
-  args: {name: 'googledocs'},
-}
-
-export const googledriveConnectionSettings: Story = {
-  args: {name: 'googledrive'},
-}
-
-export const googlemailConnectionSettings: Story = {
-  args: {name: 'googlemail'},
-}
-
-export const googlesheetConnectionSettings: Story = {
-  args: {name: 'googlesheet'},
-}
-
 export const greenhouseConnectionSettings: Story = {
   args: {name: 'greenhouse'},
-}
-
-export const hubspotConnectionSettings: Story = {
-  args: {name: 'hubspot'},
 }
 
 export const instagramConnectionSettings: Story = {
@@ -136,24 +168,12 @@ export const leverConnectionSettings: Story = {
   args: {name: 'lever'},
 }
 
-export const linearConnectionSettings: Story = {
-  args: {name: 'linear'},
-}
-
-export const linkedinConnectionSettings: Story = {
-  args: {name: 'linkedin'},
-}
-
 export const mergeConnectionSettings: Story = {
   args: {name: 'merge'},
 }
 
 export const microsoftConnectionSettings: Story = {
   args: {name: 'microsoft'},
-}
-
-export const notionConnectionSettings: Story = {
-  args: {name: 'notion'},
 }
 
 export const onebrickConnectionSettings: Story = {
@@ -176,10 +196,6 @@ export const postgresConnectionSettings: Story = {
   args: {name: 'postgres'},
 }
 
-export const quickbooksConnectionSettings: Story = {
-  args: {name: 'quickbooks'},
-}
-
 export const rampConnectionSettings: Story = {
   args: {name: 'ramp'},
 }
@@ -188,24 +204,12 @@ export const redditConnectionSettings: Story = {
   args: {name: 'reddit'},
 }
 
-export const salesforceConnectionSettings: Story = {
-  args: {name: 'salesforce'},
-}
-
 export const salesloftConnectionSettings: Story = {
   args: {name: 'salesloft'},
 }
 
 export const saltedgeConnectionSettings: Story = {
   args: {name: 'saltedge'},
-}
-
-export const sharepointonlineConnectionSettings: Story = {
-  args: {name: 'sharepointonline'},
-}
-
-export const slackConnectionSettings: Story = {
-  args: {name: 'slack'},
 }
 
 export const splitwiseConnectionSettings: Story = {

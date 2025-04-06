@@ -44,7 +44,7 @@ import {default as connectorYodlee} from '@openint/connector-yodlee/def'
 import {default as connectorZohodesk} from '@openint/connector-zohodesk/def'
 import type {NoOverlappingKeys} from '@openint/util/type-utils'
 
-const customConnectors = {
+export const customConnectors = {
   airtable: connectorAirtable,
   apollo: connectorApollo,
   brex: connectorBrex,
