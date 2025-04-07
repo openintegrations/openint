@@ -24,28 +24,28 @@ const ConnectorCard = ({
   return (
     <div
       className={cn(
-        'group flex w-full max-w-md cursor-pointer items-center gap-6 rounded-lg border border-gray-200 p-6 transition-all hover:border-gray-400 hover:bg-gray-50 md:max-w-lg',
+        'group flex w-full max-w-md cursor-pointer flex-col items-start gap-4 rounded-lg border border-gray-200 p-6 transition-all hover:border-gray-400 hover:bg-gray-50 md:max-w-lg',
         className,
       )}
       {...props}>
-      <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-gray-50 transition-all group-hover:border-gray-300 group-hover:bg-gray-100/50">
-        {logo_url && (
-          <img
-            src={logo_url}
-            alt={`${name} logo`}
-            className="h-12 w-12 object-contain"
-          />
-        )}
-      </div>
-      <div className="flex flex-col gap-3">
-        <h3 className="text-xl font-semibold transition-colors group-hover:text-gray-900">
+      <div className="flex w-full flex-row items-center gap-4">
+        <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-gray-50 transition-all group-hover:border-gray-300 group-hover:bg-gray-100/50">
+          {logo_url && (
+            <img
+              src={logo_url}
+              alt={`${name} logo`}
+              className="h-12 w-12 object-contain"
+            />
+          )}
+        </div>
+        <h3 className="line-clamp-2 text-xl font-semibold transition-colors group-hover:text-gray-900">
           {display_name || name}
         </h3>
-        <ConnectorBadges
-          stage={connector.stage}
-          platforms={connector.platforms}
-        />
       </div>
+      <ConnectorBadges
+        stage={connector.stage}
+        platforms={connector.platforms}
+      />
     </div>
   )
 }
