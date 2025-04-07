@@ -14,7 +14,7 @@ export default function RootLayoutV1({children}: {children: React.ReactNode}) {
       // }}
     >
       <head></head>
-      <body className="bg-transparent">{children}</body>
+      <body className="bg-background">{children}</body>
     </html>
   )
 }
