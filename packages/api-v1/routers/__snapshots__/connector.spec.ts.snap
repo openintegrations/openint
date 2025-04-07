@@ -156,6 +156,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -924,6 +925,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -1139,6 +1141,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -1358,6 +1361,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2323,6 +2327,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2764,6 +2769,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2967,6 +2973,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -3170,6 +3177,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -3365,6 +3373,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -3584,6 +3593,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -3921,6 +3931,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "object",
                   "null",
                 ],
+                "ui:field": "OAuthField",
               },
             ],
             "ui:field": "OAuthField",
@@ -5334,6 +5345,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -5549,6 +5561,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -6311,6 +6324,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -7428,6 +7442,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -7993,6 +8008,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -8464,6 +8480,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -8651,6 +8668,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
