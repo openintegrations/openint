@@ -78,7 +78,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -827,7 +826,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -1027,7 +1025,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -1231,7 +1228,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -2177,7 +2173,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -2602,7 +2597,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -2790,7 +2784,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -2978,7 +2971,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -3158,7 +3150,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -3362,7 +3353,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -3659,7 +3649,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -5075,7 +5064,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -5275,7 +5263,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -6017,7 +6004,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -7100,7 +7086,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -7661,7 +7646,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -8116,7 +8100,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
@@ -8288,7 +8271,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
                 },
                 "required": [
                   "access_token",
-                  "client_id",
                   "scope",
                   "raw",
                 ],
