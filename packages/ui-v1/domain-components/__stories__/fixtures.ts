@@ -4,10 +4,6 @@ import type {
   Core,
 } from '@openint/api-v1/models'
 
-// @rodrigo FIX ME to have server return the same type
-// Also note Line 111 in ConnectorCard.tsx
-export type ConnectorTemporary = Core['connector']
-
 export type ConnectorConfigTemporary = ConnectorConfig<
   'connector' | 'connection_count'
 >
@@ -85,7 +81,7 @@ const connectors = {
     stage: 'beta' as const,
     platforms: ['web', 'desktop', 'mobile'],
   },
-} satisfies Record<string, ConnectorTemporary>
+} satisfies Record<string, Core['connector']>
 
 const integrations = {
   salesforce: {

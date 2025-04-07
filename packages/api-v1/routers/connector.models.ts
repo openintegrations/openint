@@ -61,8 +61,8 @@ export const getConnectorModel = (
     logo_url: logoUrl?.startsWith('http')
       ? logoUrl
       : `https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public${logoUrl}`,
-    stage: def.metadata?.stage ?? 'alpha',
-    platforms: def.metadata?.platforms ?? ['cloud', 'local'],
+    stage: def.metadata?.stage,
+    platforms: def.metadata?.platforms,
     authType: def.metadata?.authType ?? 'CUSTOM',
     // verticals: def.metadata?.verticals ?? ['other'],
     // authType: def.metadata?.authType,

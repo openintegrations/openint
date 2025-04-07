@@ -1,11 +1,10 @@
 import type {Meta, StoryObj} from '@storybook/react'
+import type {Core} from '@openint/api-v1/models'
 import {Button} from '@openint/shadcn/ui'
-import {
-  ConnectorTemporary,
-  FIXTURES,
-} from '../domain-components/__stories__/fixtures'
+import {FIXTURES} from '../domain-components/__stories__/fixtures'
 import {ConnectorTableCell} from '../domain-components/tables/ConnectorTableCell'
-import {ColumnDef, Columns, DataTable} from './DataTable'
+import {DataTable} from './DataTable'
+import type {ColumnDef, Columns} from './DataTable'
 
 const meta: Meta<typeof DataTable> = {
   component: DataTable,
@@ -107,7 +106,7 @@ const ConnectorConfigTableExample = () => {
 
   // Define columns for connector data
   const connectorColumns: Array<
-    ColumnDef<ConnectorTemporary, string | number | string[]>
+    ColumnDef<Core['connector'], string | number | string[]>
   > = [
     {
       id: 'connector',
@@ -151,7 +150,7 @@ const ConnectorConfigTableExample = () => {
   ]
 
   return (
-    <DataTable<ConnectorTemporary, string | number | string[]>
+    <DataTable<Core['connector'], string | number | string[]>
       data={connectorData}
       columns={connectorColumns}>
       <DataTable.Header>
