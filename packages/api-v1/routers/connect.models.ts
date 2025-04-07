@@ -14,11 +14,10 @@ export const zConnectOptions = z.object({
     description:
       'The names of the connectors to show in the connect page. If not provided, all connectors will be shown',
   }),
-  view: z.enum(['add', 'manage', 'default']).optional().openapi({
+  view: z.enum(['add', 'manage']).optional().openapi({
     title: 'Default View to load',
-    default: 'default',
     description:
-      'The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not',
+      'The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not',
   }),
   debug: zCoerceBoolean().optional().openapi({
     title: 'Debug',

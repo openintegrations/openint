@@ -17,7 +17,7 @@ export interface ConnectProps {
     // TODO: expand to https://coda.io/d/_d6fsw71RNUB/Implementing-a-native-UI-for-Connect-via-Core-APIs-and-Deep-Link_susYw00i
     returnUrl?: string
     connectorNames?: string[]
-    view?: 'add' | 'manage' | 'default'
+    view?: 'add' | 'manage'
     debug?: boolean
     // TODO: add theme enum and colors object
   }
@@ -29,11 +29,6 @@ const createMagicLinkUrl = ({
   connectOptions = {},
 }: ConnectProps) => {
   const url = new URL(baseURL)
-  // TODO; create a new view in the server called 'default' if there's no view and
-  // smartly load the right view based on whether the user has connections or not
-  if (!connectOptions.view) {
-    url.searchParams.set('view', 'default')
-  }
   url.searchParams.set('token', token)
   Object.entries(connectOptions).forEach(([key, value]) => {
     if (value && typeof value === 'string') {

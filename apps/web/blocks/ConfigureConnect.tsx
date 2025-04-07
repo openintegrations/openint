@@ -20,7 +20,6 @@ export function ConfigureConnect() {
     validity_in_seconds: 2592000,
     connect_options: {
       connector_names: [],
-      view: 'default',
     },
   })
 
