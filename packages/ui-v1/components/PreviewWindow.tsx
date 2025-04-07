@@ -1,19 +1,31 @@
-import {MonitorIcon, SmartphoneIcon, TabletIcon} from 'lucide-react'
+import {
+  ExternalLinkIcon,
+  MonitorIcon,
+  SmartphoneIcon,
+  TabletIcon,
+} from 'lucide-react'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui'
+import {
+  Button,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@openint/shadcn/ui'
 
 interface PreviewProps {
   children: React.ReactNode
   className?: string
-  url?: string
+  displayUrl?: string
+  shareUrl?: string
   isLoading?: boolean
 }
 
 export function BrowserWindow({
   children,
   className,
-  url = 'https://example.com',
+  displayUrl = 'https://example.com',
   isLoading = false,
 }: PreviewProps) {
   return (
@@ -50,7 +62,7 @@ export function BrowserWindow({
             </svg>
             <input
               type="text"
-              value={url}
+              value={displayUrl}
               readOnly
               className="text-muted-foreground w-full bg-transparent outline-none"
             />
@@ -124,7 +136,7 @@ export function BrowserWindow({
 export function MobileScreen({
   children,
   className,
-  url = 'https://example.com',
+  displayUrl = 'https://example.com',
   isLoading = false,
 }: PreviewProps) {
   return (
@@ -179,7 +191,7 @@ export function MobileScreen({
             <path d="M21 3v9h-9" />
           </svg>
           <span className="text-muted-foreground flex-1 truncate text-xs">
-            {url}
+            {displayUrl}
           </span>
           {isLoading && (
             <div className="ml-auto">
@@ -219,7 +231,7 @@ export function MobileScreen({
 export function TabletScreen({
   children,
   className,
-  url = 'https://example.com',
+  displayUrl = 'https://example.com',
   isLoading = false,
 }: PreviewProps) {
   return (
@@ -296,7 +308,9 @@ export function TabletScreen({
             <path d="M21 12a9 9 0 1 1-6.219-8.56" />
             <path d="M21 3v9h-9" />
           </svg>
-          <span className="text-muted-foreground flex-1 truncate">{url}</span>
+          <span className="text-muted-foreground flex-1 truncate">
+            {displayUrl}
+          </span>
           {isLoading && (
             <div className="ml-auto">
               <svg
@@ -337,7 +351,8 @@ interface PreviewWindowProps extends PreviewProps {
 export function PreviewWindow({
   children,
   className,
-  url = 'https://example.com',
+  displayUrl = 'https://example.com',
+  shareUrl,
   isLoading = false,
   defaultView = 'Magic Link',
   supportedViews = ['Magic Link', 'Embedded', 'Mobile'],
@@ -352,8 +367,8 @@ export function PreviewWindow({
       onValueChange={(value) =>
         setView(value as (typeof supportedViews)[number])
       }>
-      <div className="flex justify-center">
-        <TabsList>
+      <div className="relative flex items-center justify-center">
+        <TabsList className="flex items-center gap-2">
           {supportedViews.map((view) => (
             <TabsTrigger
               key={view}
@@ -366,21 +381,33 @@ export function PreviewWindow({
             </TabsTrigger>
           ))}
         </TabsList>
+
+        {shareUrl && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => window.open(shareUrl, '_blank')}
+            title="Open in new window"
+            className="absolute right-0">
+            <ExternalLinkIcon className="mr-2 h-4 w-4" />
+            Share
+          </Button>
+        )}
       </div>
       {/* Preview Container */}
 
       <TabsContent value="Magic Link" className="mt-0 flex justify-center">
-        <BrowserWindow url={url} isLoading={isLoading}>
+        <BrowserWindow displayUrl={displayUrl} isLoading={isLoading}>
           {children}
         </BrowserWindow>
       </TabsContent>
       <TabsContent value="Embedded" className="mt-0 flex justify-center">
-        <TabletScreen url={url} isLoading={isLoading}>
+        <TabletScreen displayUrl={displayUrl} isLoading={isLoading}>
           {children}
         </TabletScreen>
       </TabsContent>
       <TabsContent value="Mobile" className="mt-0 flex justify-center">
-        <MobileScreen url={url} isLoading={isLoading}>
+        <MobileScreen displayUrl={displayUrl} isLoading={isLoading}>
           {children}
         </MobileScreen>
       </TabsContent>

@@ -3,7 +3,7 @@
 import React from 'react'
 import {connectRouterModels} from '@openint/api-v1/routers/connect.models'
 import {ConnectEmbed} from '@openint/connect'
-import {getServerUrl} from '@openint/env'
+import {getServerUrl, isProduction} from '@openint/env'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
 import {useMutation} from '@openint/ui-v1/trpc'
@@ -51,7 +51,14 @@ export function ConfigureConnect() {
       <div className="flex flex-1 flex-col p-4">
         <h2 className="mb-4 text-xl font-semibold">Preview</h2>
         <PreviewWindow
-          url={'https://connect.openint.dev'}
+          displayUrl={'https://connect.openint.dev'}
+          shareUrl={
+            (isProduction
+              ? 'https://connect.openint.dev'
+              : getServerUrl(null) + '/connect') +
+            '?token=' +
+            mutation.data?.token
+          }
           className="flex-1 overflow-scroll">
           {mutation.data?.token && (
             <ConnectEmbed

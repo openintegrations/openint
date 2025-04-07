@@ -30,6 +30,7 @@ export const connectRouterModels = {
   getMagicLinkInput: z.object({
     customer_id: zCustomerId.openapi({
       param: {in: 'path', name: 'customer_id'},
+      description: 'The unique ID of the customer to create the magic link for',
     }),
     validity_in_seconds: z
       .number()
@@ -43,6 +44,7 @@ export const connectRouterModels = {
   createTokenInput: z.object({
     customer_id: zCustomerId.openapi({
       param: {in: 'path', name: 'customer_id'},
+      description: 'The unique ID of the customer to create the token for',
     }),
     validity_in_seconds: z.number().optional().default(2592000),
     connect_options: zConnectOptions.optional(),

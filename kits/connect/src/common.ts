@@ -81,7 +81,7 @@ export function createConnectIframe(props: ConnectProps) {
   style.textContent = `
      .connect-embed-wrapper {
           display: flex;
-          height: ${width || '100%'}px;
+          height: ${height || '100'}${height ? 'px' : '%'};
           position: relative;
         }
         .connect-embed-wrapper .spinner-container {
@@ -96,8 +96,8 @@ export function createConnectIframe(props: ConnectProps) {
           height: 100%;
           background: white; 
           transition: opacity 0.3s ease;
-          max-width: ${width || '100%'}px;
-          max-height: ${height || '100%'}px;
+          max-width: ${width || '100'}${width ? 'px' : '%'};
+          max-height: ${height || '100%'}${height ? 'px' : '%'};
         }
         .connect-embed-wrapper .spinner-container.loaded {
           opacity: 0;
