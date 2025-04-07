@@ -229,7 +229,8 @@ describe('proxyRequiredRecursive', () => {
       expect(proxied.b.d).toBe(undefined)
     })
 
-    it('should throw on explicitly defined undefined values in nested objects when throwOn is "undefined"', () => {
+    // eslint-disable-next-line jest/no-identical-title
+    it('throw on explicitly defined undefined values in nested objects when throwOn is "undefined"', () => {
       const obj = {
         a: 1,
         b: {

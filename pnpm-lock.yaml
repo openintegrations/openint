@@ -1034,6 +1034,9 @@ importers:
 
   dev-packages/loopback-link:
     dependencies:
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
       '@opensdks/fetch-links':
         specifier: ^0.0.22
         version: 0.0.22
@@ -1138,7 +1141,11 @@ importers:
         specifier: '*'
         version: 5.0.4
 
-  kits/sync: {}
+  kits/sync:
+    dependencies:
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../../packages/util
 
   packages/api-v1:
     dependencies:
@@ -1326,6 +1333,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../util
     devDependencies:
       inngest:
         specifier: ^3.22.13
