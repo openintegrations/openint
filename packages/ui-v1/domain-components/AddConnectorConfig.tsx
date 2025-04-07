@@ -3,7 +3,6 @@ import type {HTMLAttributes} from 'react'
 import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Input} from '@openint/shadcn/ui'
-import type {ConnectorTemporary} from './__stories__/fixtures'
 import {ConnectorCard} from './ConnectorCard'
 
 export interface AddConnectorConfigProps
@@ -40,9 +39,9 @@ export const AddConnectorConfig = ({
   )
 
   return (
-    <div className={cn('flex w-full flex-col', className)} {...props}>
+    <div className={cn('flex size-full flex-col', className)} {...props}>
       {/* Search bar */}
-      <div className={cn('p-6')}>
+      <div className={cn('py-1 pl-6 pr-10')}>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-400">
             <svg
@@ -63,28 +62,32 @@ export const AddConnectorConfig = ({
             type="text"
             placeholder="Search connectors..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+            }}
             className="w-full pl-10"
           />
         </div>
       </div>
 
       {/* Connector list */}
-      <div className={cn('grid grid-cols-1 gap-4 p-6 md:grid-cols-2')}>
-        {filteredConnectors.map((connector, index) => (
-          <div
-            key={`${connector.name}-${index}`}
-            onClick={() => onSelectConnector && onSelectConnector(connector)}>
-            {/* NOTE: casting to any and ConnectorTemporary is a temporary solution to avoid type
-            errors until we accept connector types from the server on ConnectorCard*/}
-            <ConnectorCard connector={connector as any as ConnectorTemporary} />
-          </div>
-        ))}
-        {filteredConnectors.length === 0 && (
-          <div className="col-span-2 py-8 text-center text-gray-500">
-            No connectors found matching &quot;{searchQuery}&quot;
-          </div>
-        )}
+      <div className={cn('min-h-0 flex-1 overflow-y-auto p-6')}>
+        <div className={cn('grid grid-cols-1 gap-4 2xl:grid-cols-2')}>
+          {filteredConnectors.map((connector, index) => (
+            <ConnectorCard
+              connector={connector}
+              key={`${connector.name}-${index}`}
+              onClick={() => {
+                onSelectConnector && onSelectConnector(connector)
+              }}
+            />
+          ))}
+          {filteredConnectors.length === 0 && (
+            <div className="col-span-2 py-8 text-center text-gray-500">
+              No connectors found matching &quot;{searchQuery}&quot;
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

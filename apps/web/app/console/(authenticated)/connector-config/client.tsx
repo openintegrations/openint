@@ -267,25 +267,39 @@ export function ConnectorConfigList(props: {
             setSelectedCcfg(null)
           }
         }}>
-        <SheetContent side="right" className="min-w-1/3 p-8 pb-0">
-          <SheetHeader>
-            <SheetTitle>
-              {selectedConnector ? 'Edit Connector' : 'Add Connector'}
-            </SheetTitle>
-          </SheetHeader>
-          {/* Add sheet description here? */}
+        <SheetContent
+          side="right"
+          className="sm:min-w-1/3 flex max-h-screen w-full flex-col overflow-hidden p-0">
+          <div className="p-4 pb-0">
+            <SheetHeader>
+              <SheetTitle className="text-lg">
+                {selectedConnector ? 'Edit Connector' : 'Add Connector'}
+              </SheetTitle>
+            </SheetHeader>
+          </div>
 
-          {selectedConnector ? (
-            <>
-              <JSONSchemaForm
-                ref={formRef}
-                jsonSchema={formSchema}
-                onSubmit={handleSave}
-                hideSubmitButton
-                formData={formData}
-                formContext={formContext}
+          <div className="flex-1 overflow-y-auto">
+            {selectedConnector ? (
+              <div className="px-8">
+                <JSONSchemaForm
+                  ref={formRef}
+                  jsonSchema={formSchema}
+                  onSubmit={handleSave}
+                  hideSubmitButton
+                  formData={formData}
+                  formContext={formContext}
+                />
+              </div>
+            ) : (
+              <AddConnectorConfig
+                connectors={connectorRes.data.items}
+                onSelectConnector={handleSelectConnector}
               />
-              <SheetFooter className="mt-auto flex flex-row justify-between border-t pt-4">
+            )}
+          </div>
+          {selectedConnector && (
+            <SheetFooter className="mt-auto border-t p-4">
+              <div className="flex w-full flex-row justify-between">
                 <Button
                   variant="destructive"
                   onClick={handleDelete}
@@ -299,13 +313,8 @@ export function ConnectorConfigList(props: {
                     ? 'Saving...'
                     : 'Save'}
                 </Button>
-              </SheetFooter>
-            </>
-          ) : (
-            <AddConnectorConfig
-              connectors={connectorRes.data.items}
-              onSelectConnector={handleSelectConnector}
-            />
+              </div>
+            </SheetFooter>
           )}
         </SheetContent>
       </Sheet>

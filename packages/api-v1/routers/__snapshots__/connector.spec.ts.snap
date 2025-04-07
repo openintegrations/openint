@@ -10,10 +10,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "contacts.read",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -155,6 +152,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -222,10 +220,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-airtable.svg",
     "name": "airtable",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -279,7 +274,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -287,10 +282,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-apollo.svg",
     "name": "apollo",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -634,10 +626,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-brex.svg",
     "name": "brex",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -718,10 +707,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-coda.svg",
     "name": "coda",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -777,10 +763,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "read:confluence-user",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -922,6 +905,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -991,10 +975,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "identify",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -1136,6 +1117,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -1209,10 +1191,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "read:profile",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -1354,6 +1333,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -1397,10 +1377,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-facebook.svg",
     "name": "facebook",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -1627,10 +1604,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-finch.svg",
     "name": "finch",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -1748,10 +1722,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-firebase.svg",
     "name": "firebase",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -2081,7 +2052,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -2089,10 +2060,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-foreceipt.svg",
     "name": "foreceipt",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -2163,7 +2131,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "OAUTH2",
@@ -2173,10 +2141,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "user:email",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -2318,6 +2283,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2381,10 +2347,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-gong.svg",
     "name": "gong",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -2613,10 +2576,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "https://www.googleapis.com/auth/calendar.readonly",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -2758,6 +2718,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -2815,10 +2776,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "https://www.googleapis.com/auth/documents.readonly",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -2960,6 +2918,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -3017,10 +2976,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "https://www.googleapis.com/auth/drive.file",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -3162,6 +3118,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -3211,10 +3168,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "https://www.googleapis.com/auth/gmail.metadata",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -3356,6 +3310,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -3429,10 +3384,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "https://www.googleapis.com/auth/drive.file",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -3574,6 +3526,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -3633,10 +3586,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-greenhouse.svg",
     "name": "greenhouse",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -3690,10 +3640,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-heron.svg",
     "name": "heron",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -3742,10 +3689,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "crm.objects.contacts.read",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -3910,6 +3854,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
                   "object",
                   "null",
                 ],
+                "ui:field": "OAuthField",
               },
             ],
             "ui:field": "OAuthField",
@@ -4017,10 +3962,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-instagram.svg",
     "name": "instagram",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -4247,10 +4189,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-intercom.svg",
     "name": "intercom",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -4477,10 +4416,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-jira.svg",
     "name": "jira",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -4707,10 +4643,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-kustomer.svg",
     "name": "kustomer",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -4937,10 +4870,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lever.svg",
     "name": "lever",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -5177,10 +5107,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "user:read",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -5322,6 +5249,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -5391,10 +5319,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "r_liteprofile",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -5536,6 +5461,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -5603,10 +5529,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lunchmoney.svg",
     "name": "lunchmoney",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -5645,7 +5568,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -5653,10 +5576,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-mercury.svg",
     "name": "mercury",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -5726,10 +5646,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-merge.svg",
     "name": "merge",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -5824,10 +5741,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-microsoft.svg",
     "name": "microsoft",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -6100,10 +6014,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-moota.svg",
     "name": "moota",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -6142,7 +6053,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "OAUTH2",
@@ -6152,10 +6063,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "user:read",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -6297,6 +6205,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -6356,10 +6265,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-onebrick.svg",
     "name": "onebrick",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -6467,7 +6373,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -6475,10 +6381,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-outreach.svg",
     "name": "outreach",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -6705,10 +6608,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-pipedrive.svg",
     "name": "pipedrive",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -6935,10 +6835,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-plaid.svg",
     "name": "plaid",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "anyOf": [
@@ -7171,10 +7068,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-postgres.svg",
     "name": "postgres",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -7254,10 +7148,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "openid",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -7413,6 +7304,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -7493,10 +7385,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-ramp.svg",
     "name": "ramp",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -7594,10 +7483,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-reddit.svg",
     "name": "reddit",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -7826,10 +7712,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "offline_access",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -7977,6 +7860,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -8016,10 +7900,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesloft.svg",
     "name": "salesloft",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -8246,10 +8127,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-saltedge.svg",
     "name": "saltedge",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -8292,7 +8170,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "OAUTH2",
@@ -8302,10 +8180,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "offline_access",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -8447,6 +8322,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -8488,10 +8364,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "openint_scopes": [
       "users:read",
     ],
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -8633,6 +8506,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "object",
               "null",
             ],
+            "ui:field": "OAuthField",
           },
         },
         "required": [
@@ -8704,10 +8578,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-splitwise.svg",
     "name": "splitwise",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -9049,7 +8920,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -9057,10 +8928,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-stripe.svg",
     "name": "stripe",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -9144,10 +9012,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-teller.svg",
     "name": "teller",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -9242,10 +9107,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-toggl.svg",
     "name": "toggl",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -9322,7 +9184,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -9330,10 +9192,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twenty.svg",
     "name": "twenty",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -9387,10 +9246,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twitter.svg",
     "name": "twitter",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -9617,10 +9473,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-venmo.svg",
     "name": "venmo",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -9689,7 +9542,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -9697,10 +9550,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-wise.svg",
     "name": "wise",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -9785,7 +9635,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -9793,10 +9643,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-xero.svg",
     "name": "xero",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
@@ -10023,10 +9870,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-yodlee.svg",
     "name": "yodlee",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "properties": {
@@ -10259,7 +10103,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
     },
     "scopes": undefined,
-    "stage": "alpha",
+    "stage": undefined,
   },
   {
     "authType": "CUSTOM",
@@ -10267,10 +10111,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-zohodesk.svg",
     "name": "zohodesk",
     "openint_scopes": undefined,
-    "platforms": [
-      "cloud",
-      "local",
-    ],
+    "platforms": undefined,
     "schemas": {
       "connect_input": {
         "additionalProperties": false,
