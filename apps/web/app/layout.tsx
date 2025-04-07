@@ -1,20 +1,21 @@
 import '@openint/ui-v1/global.css'
+import {ThemeProvider} from '@openint/ui-v1/components/ThemeProvider'
 
-export default function RootLayoutV1({children}: {children: React.ReactNode}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    // TODO Fix hydration error rather than suppress warning
-    // https://nextjs.org/docs/messages/react-hydration-error#solution-3-using-suppresshydrationwarning
-    <html
-      lang="en"
-      suppressHydrationWarning
-      // This is the same as :root {} in css. However using :root {} from elsewhere allows for
-      // better encapsulation
-      // style={{
-      //   '--background': '0deg 74.36% 26.56%',
-      // }}
-    >
+    // Needed for the theme provider to work, not sure why
+    // https://ui.shadcn.com/docs/dark-mode/next
+    <html lang="en" suppressHydrationWarning>
       <head></head>
-      <body className="bg-transparent">{children}</body>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

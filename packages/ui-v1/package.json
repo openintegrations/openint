@@ -23,6 +23,7 @@
     "@trpc/tanstack-react-query": "^11.0.1",
     "lucide-react": "^0.482.0",
     "next": "15.2.3",
+    "next-themes": "^0.3.0",
     "react": "^19.0.0",
     "sonner": "^1.4.0"
   },
