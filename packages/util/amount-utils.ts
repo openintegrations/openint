@@ -1,10 +1,9 @@
-import {R} from '@openint/util/remeda'
 import accounting from 'accounting'
 import {sort} from 'fast-sort'
 import invariant from 'tiny-invariant'
-
 import {math} from './math-utils'
 import {objectFromIterable, objectFromObject} from './object-utils'
+import {R} from './remeda'
 
 export type AnyAmount = Amount | AmountMap | MultiAmount | Amount[]
 

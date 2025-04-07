@@ -1,6 +1,7 @@
 import type {ConnectorDef, ConnectorServer, ExternalId} from '@openint/cdk'
 import {makeId} from '@openint/cdk'
 import {getServerUrl} from '@openint/env'
+import {createCodeVerifier} from '@openint/oauth2/utils.client'
 import {makeUlid} from '@openint/util/id-utils'
 import {type Z} from '@openint/util/zod-utils'
 import type {oauth2Schemas, zOAuthConfig} from './schemas'
@@ -27,10 +28,6 @@ export function createOAuth2ConnectorServer<
     throw new Error('This server can only be used with OAuth2 connectors')
   }
 
-  // TODO: should add a function to generate a random code verifier that meets the spec
-  // And also have it pass through preconnect / poast connect
-  const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
-
   // Create the base server implementation
   const baseServer = {
     newInstance: ({config, settings}) =>
@@ -40,6 +37,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: settings,
         fetch: undefined,
+        baseUrls: {api: '', console: '', connect: ''},
       }),
 
     async preConnect({config, context, input}) {
@@ -55,16 +53,28 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: undefined,
         fetch: context.fetch,
+        baseUrls: context.baseUrls,
       })
+
+      const codeChallenge = oauthConfig.code_challenge_method
+        ? {
+            verifier: createCodeVerifier(),
+            method: oauthConfig.code_challenge_method,
+          }
+        : undefined
+
       const authorizeUrl = await client.getAuthorizeUrl({
         redirect_uri: getServerUrl(null) + '/connect/callback',
         scopes: config.oauth?.scopes ?? [],
         state: connectionId,
-        code_verifier: codeVerifier,
+        code_challenge: codeChallenge,
         ...oauthConfig.params_config.authorize,
       })
 
-      return {authorization_url: authorizeUrl}
+      return {
+        authorization_url: authorizeUrl,
+        code_verifier: codeChallenge?.verifier,
+      }
     },
 
     async postConnect({connectOutput, config, context}) {
@@ -76,13 +86,14 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: undefined,
         fetch: context.fetch,
+        baseUrls: context.baseUrls,
       })
       // console.log(`oauthConfig`, oauthConfig)
 
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
         redirectUri: getServerUrl(null) + '/connect/callback',
-        code_verifier: codeVerifier,
+        code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })
 
@@ -118,6 +129,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: settings,
         fetch: undefined, // FIX: Always pass context
+        baseUrls: {api: '', console: '', connect: ''},
       })
       const res = await client.refreshToken({
         refresh_token: refreshToken,
@@ -151,6 +163,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: settings,
         fetch: undefined, // FIX: Always pass consistent context with fetch inside
+        baseUrls: {api: '', console: '', connect: ''},
       })
 
       const {expires_at: expiresAt, refresh_token: refreshToken} =
@@ -198,6 +211,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: settings,
         fetch: undefined, // FIX: Always pass consistent context with fetch inside
+        baseUrls: {api: '', console: '', connect: ''},
       })
       if (!settings.oauth.credentials?.access_token) {
         throw new Error('No access token available')

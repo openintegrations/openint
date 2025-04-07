@@ -1,6 +1,6 @@
-import {z} from '@openint/util/zod-utils'
 import {createEnv} from '@t3-oss/env-nextjs'
-import {proxyRequired} from './proxyRequired'
+import {proxyRequired} from '@openint/util/proxy-utils'
+import {z} from '@openint/util/zod-utils'
 
 export const testEnv = createEnv({
   server: {
