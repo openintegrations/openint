@@ -10,6 +10,7 @@ import {
   type OAuthClient,
   type OAuthUser,
 } from './createOAuth2Server'
+import {createCodeVerifier} from './utils.client'
 
 const client = {
   id: 'client1',
@@ -52,7 +53,7 @@ const oauthClient = createOAuth2Client(
 /** Code verifier must follow the specifications of RFC-7636. We
  * should add a function to generate a random code verifier that meets the spec
  * to OAuth2Client.ts */
-const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
+const codeVerifier = createCodeVerifier()
 
 const authorizeRes = $test('authorize redirect with PKCE', async () => {
   // Use OAuth2Client to generate the authorize URL
@@ -60,7 +61,7 @@ const authorizeRes = $test('authorize redirect with PKCE', async () => {
     redirect_uri: client.redirectUris[0],
     scopes: [client.scopes[0].name],
     state: 'xyz',
-    code_verifier: codeVerifier,
+    code_challenge: {verifier: codeVerifier, method: 'S256'},
   })
 
   const authorizeRequest = new Request(authorizeUrl, {redirect: 'manual'})

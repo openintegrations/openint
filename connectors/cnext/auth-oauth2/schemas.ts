@@ -65,6 +65,10 @@ export const zOAuthConfig = z.object({
   type: z
     .enum(['OAUTH2', 'OAUTH2CC'])
     .describe('The authentication type for OAuth-based providers'),
+  code_challenge_method: z
+    .enum(['S256', 'plain'])
+    .optional()
+    .describe('The method to use for PKCE code challenge'),
   authorization_request_url: z
     .string()
     .url()
@@ -131,9 +135,14 @@ export const oauth2Schemas = {
       .describe('In case of re-connecting, id of the existing connection'),
   }),
   connect_input: z.object({
+    code_verifier: z.string().optional().describe('Code verifier for PKCE'),
     authorization_url: z.string().describe('URL to take user to for approval'),
   }),
   connect_output: z.object({
+    code_verifier: z
+      .string()
+      .optional()
+      .describe('Code verifier for PKCE from the connect input'),
     code: z
       .string()
       .describe('OAuth2 authorization code used for token exchange'),

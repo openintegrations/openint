@@ -1,5 +1,6 @@
 import {describe, expect, it} from '@jest/globals'
 import Mustache from 'mustache'
+import {proxyRequiredRecursive} from '@openint/util/proxy-utils'
 import {renderTemplateObject} from './template'
 
 describe('template', () => {
@@ -39,6 +40,20 @@ describe('template', () => {
 
     expect(Mustache.render(template, dataTrue)).toBe('Hello')
     expect(Mustache.render(template, dataFalse)).toBe('Goodbye')
+  })
+
+  it('should throw for unmatched template variables', () => {
+    const template = 'Hello {{name}} {{baseUrls.connect}}'
+    const data = proxyRequiredRecursive(
+      {name: 'World'},
+      {
+        formatError: ({key, reason}) =>
+          new Error(`Missing variable for ${key} (${reason})`),
+      },
+    )
+    expect(() => Mustache.render(template, data)).toThrow(
+      'Missing variable for baseUrls (missing)',
+    )
   })
 })
 
@@ -129,9 +144,9 @@ describe('renderTemplateObject', () => {
     }
 
     // Should return the original object if JSON parsing fails
-    expect(() =>
-      renderTemplateObject(template, context),
-    ).toThrow('Error processing object template')
+    expect(() => renderTemplateObject(template, context)).toThrow(
+      'Error processing object template',
+    )
   })
 
   it('should handle non-object inputs', () => {
@@ -145,7 +160,10 @@ describe('renderTemplateObject', () => {
     }
 
     expect(() =>
-      renderTemplateObject(template as unknown as Record<string, unknown>, context),
+      renderTemplateObject(
+        template as unknown as Record<string, unknown>,
+        context,
+      ),
     ).toThrow('Template must be a plain object')
   })
 
@@ -177,5 +195,17 @@ describe('renderTemplateObject', () => {
         dynamicKey: 'nested value',
       },
     })
+  })
+
+  it('should throw for missing template variables', () => {
+    const template = {
+      name: '{{name}}',
+    }
+
+    const context = {}
+
+    expect(() => renderTemplateObject(template, context)).toThrow(
+      'Template variable "name" is required but missing',
+    )
   })
 })

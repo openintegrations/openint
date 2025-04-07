@@ -21,6 +21,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -31,6 +35,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -781,6 +789,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -791,6 +803,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -988,6 +1004,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -998,6 +1018,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -1199,6 +1223,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -1209,6 +1237,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -2156,6 +2188,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -2166,6 +2202,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -2589,6 +2629,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -2599,6 +2643,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -2784,6 +2832,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -2794,6 +2846,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -2979,6 +3035,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -2989,6 +3049,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -3166,6 +3230,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -3176,6 +3244,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -3377,6 +3449,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -3387,6 +3463,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -3683,6 +3763,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -3693,6 +3777,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -5111,6 +5199,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -5121,6 +5213,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -5318,6 +5414,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -5328,6 +5428,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -6072,6 +6176,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -6082,6 +6190,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -7167,6 +7279,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -7177,6 +7293,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -7732,6 +7852,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -7742,6 +7866,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -8201,6 +8329,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -8211,6 +8343,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {
@@ -8380,6 +8516,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
             "description": "URL to take user to for approval",
             "type": "string",
           },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
         },
         "required": [
           "authorization_url",
@@ -8390,6 +8530,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "properties": {
           "code": {
             "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
             "type": "string",
           },
           "state": {

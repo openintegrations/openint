@@ -6,8 +6,8 @@ import {
   isEmpty as _isEmpty,
   isPlainObject as _isPlainObject,
 } from 'lodash'
-import {R} from '@openint/util/remeda'
 import {math} from './math-utils'
+import {R} from './remeda'
 import type {
   AnyRecord,
   Invert,
@@ -75,7 +75,7 @@ export function deepPartialDeepEqual<
         !deepPartialDeepEqual(
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           obj[i]! as Record<string, unknown>,
-           
+
           matching[i],
           opts,
         )

@@ -1,3 +1,4 @@
+import {ConnectContext} from '@openint/cdk'
 import {getConnectorDefaultCredentials} from '@openint/env'
 import {createOAuth2Client} from '@openint/oauth2/createOAuth2Client'
 import {type Z} from '@openint/util/zod-utils'
@@ -51,7 +52,7 @@ export function getClient({
   oauthConfigTemplate,
   connectorConfig,
   connectionSettings,
-  fetch,
+  ...connectCtx
 }: {
   connectorName: string
   oauthConfigTemplate: Z.infer<typeof zOAuthConfig>
@@ -59,12 +60,13 @@ export function getClient({
   connectionSettings:
     | Z.infer<typeof oauth2Schemas.connection_settings>
     | undefined
-  fetch: undefined | ((req: Request) => Promise<Response>)
-}) {
+} & Pick<ConnectContext<{}>, 'baseUrls' | 'fetch'>) {
   const oauthConfig = renderTemplateObject(oauthConfigTemplate, {
     connectorConfig,
     connectionSettings: connectionSettings ?? {},
+    baseUrls: connectCtx.baseUrls,
   })
+
   const ccfg = injectCcfgDefaultCredentials(
     connectorConfig,
     connectorName,
@@ -83,7 +85,7 @@ export function getClient({
       paramKeyMapping: oauthConfig.params_config.param_names,
       clientAuthLocation: 'body', // Make this configurable
     },
-    fetch,
+    connectCtx.fetch,
   )
   return {client, oauthConfig}
 }

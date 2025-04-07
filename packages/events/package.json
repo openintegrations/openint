@@ -5,7 +5,8 @@
   "module": "./index.ts",
   "scripts": {},
   "dependencies": {
-    "@openint/cdk": "workspace:*"
+    "@openint/cdk": "workspace:*",
+    "@openint/util": "workspace:*"
   },
   "devDependencies": {
     "inngest": "^3.22.13"

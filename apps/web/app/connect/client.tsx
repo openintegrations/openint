@@ -73,6 +73,7 @@ const ConnectorClientComponents = Object.fromEntries(
 
 export function makeNativeOauthConnectorClientComponent(preConnectRes: {
   authorization_url: string
+  code_verifier?: string
 }) {
   // createNativeOauthConnect(preConnectRes)
 
@@ -82,7 +83,14 @@ export function makeNativeOauthConnectorClientComponent(preConnectRes: {
     connector_name?: string
     onConnectFn: (fn?: ConnectFn) => void
   }) {
-    const connectFn = React.useCallback(() => openOAuthPopup(preConnectRes), [])
+    const connectFn = React.useCallback(
+      () =>
+        openOAuthPopup(preConnectRes).then((data) => ({
+          ...data,
+          code_verifier: preConnectRes.code_verifier,
+        })),
+      [],
+    )
     React.useEffect(() => {
       onConnectFn(connectFn)
     }, [onConnectFn, connectFn])

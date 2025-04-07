@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import {z} from '@openint/util/zod-utils'
 import {zEnvVars, zFlattenForEnv} from './env-utils'
-import {zParser} from './zod-utils'
+import {z, zParser} from './zod-utils'
 
 const env = zEnvVars({
   MY_KEY: z.string(),

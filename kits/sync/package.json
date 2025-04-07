@@ -6,6 +6,7 @@
   "sideEffects": false,
   "module": "./index.ts",
   "dependencies": {
+    "@openint/util": "workspace:*"
   },
   "devDependencies": {}
 }
