@@ -42,13 +42,13 @@ export const plaidSchemas = {
         If a value longer than 30 characters is provided, Link will display "This Application" instead.`,
       ),
     products: z.array(zProducts).default([Products.Transactions]).openapi({
-      'ui:field': 'MultiSelectField',
+      'ui:widget': 'MultiSelectWidget',
     }),
     countryCodes: z
       .array(zCountryCode)
       .default([CountryCode.Us, CountryCode.Ca])
       .openapi({
-        'ui:field': 'MultiSelectField',
+        'ui:widget': 'MultiSelectWidget',
       }),
     /**
      * When using a Link customization, the language configured
