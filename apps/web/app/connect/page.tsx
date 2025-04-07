@@ -126,7 +126,10 @@ export default async function Page(
   )
 
   const api = createAPICaller(viewer)
-
+  const viewerConnections = await api.listConnections({
+    connector_names: searchParams.connector_names,
+    expand: ['connector'],
+  })
   return (
     <ClientApp token={token!}>
       <GlobalCommandBarProvider>
@@ -202,7 +205,7 @@ export default async function Page(
           {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
 
           <TabsClient
-            defaultValue="manage"
+            defaultValue={viewerConnections.items.length > 0 ? 'manage' : 'add'}
             paramKey="view"
             className="flex-1 p-4 lg:pt-12">
             <div className="mx-auto w-full max-w-4xl">
@@ -214,10 +217,7 @@ export default async function Page(
                 <Suspense fallback={<Fallback />}>
                   <MyConnectionsClient
                     connector_names={searchParams.connector_names}
-                    initialData={api.listConnections({
-                      connector_names: searchParams.connector_names,
-                      expand: ['connector'],
-                    })}
+                    initialData={viewerConnections}
                   />
                 </Suspense>
               </TabsContent>

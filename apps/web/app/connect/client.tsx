@@ -332,10 +332,9 @@ export function AddConnectionInner({
 
 export function MyConnectionsClient(props: {
   connector_names?: ConnectorName[]
-  initialData?: Promise<AppRouterOutput['listConnections']>
+  initialData?: AppRouterOutput['listConnections']
 }) {
   const [_, setSearchParams] = useMutableSearchParams()
-  const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
   const [isLoading, setIsLoading] = React.useState(true)
   const trpc = useTRPC()
 
@@ -351,7 +350,7 @@ export function MyConnectionsClient(props: {
           : undefined,
         expand: ['connector'],
       },
-      initialData ? {initialData} : undefined,
+      props.initialData ? {initialData: props.initialData} : undefined,
     ),
   )
 
