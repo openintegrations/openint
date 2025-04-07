@@ -263,7 +263,7 @@ export function AddConnectionInner({
       })
       // This is the only way that works for now...
       // TODO: Fix this madness
-      setSearchParams({tab: 'manage'}, {shallow: false})
+      setSearchParams({view: 'manage'}, {shallow: false})
     } catch (error) {
       console.error('Error connecting', error)
       toast.error('Error connecting', {
@@ -373,7 +373,7 @@ export function MyConnectionsClient(props: {
         </p>
         <Button
           variant="default"
-          onClick={() => setSearchParams({tab: 'add'}, {shallow: true})}>
+          onClick={() => setSearchParams({view: 'add'}, {shallow: true})}>
           Add your first integration
         </Button>
       </div>

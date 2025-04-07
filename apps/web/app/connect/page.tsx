@@ -203,7 +203,7 @@ export default async function Page(
 
           <TabsClient
             defaultValue="manage"
-            paramKey="tab"
+            paramKey="view"
             className="flex-1 p-4 lg:pt-12">
             <div className="mx-auto w-full max-w-4xl">
               <TabsList className="grid w-full grid-cols-2">
