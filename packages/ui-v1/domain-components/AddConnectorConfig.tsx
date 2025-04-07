@@ -3,7 +3,6 @@ import type {HTMLAttributes} from 'react'
 import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Input} from '@openint/shadcn/ui'
-import type {ConnectorTemporary} from './__stories__/fixtures'
 import {ConnectorCard} from './ConnectorCard'
 
 export interface AddConnectorConfigProps
@@ -63,7 +62,9 @@ export const AddConnectorConfig = ({
             type="text"
             placeholder="Search connectors..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+            }}
             className="w-full pl-10"
           />
         </div>
@@ -75,12 +76,10 @@ export const AddConnectorConfig = ({
           {filteredConnectors.map((connector, index) => (
             <div
               key={`${connector.name}-${index}`}
-              onClick={() => onSelectConnector && onSelectConnector(connector)}>
-              {/* NOTE: casting to any and ConnectorTemporary is a temporary solution to avoid type
-              errors until we accept connector types from the server on ConnectorCard*/}
-              <ConnectorCard
-                connector={connector as any as ConnectorTemporary}
-              />
+              onClick={() => {
+                onSelectConnector && onSelectConnector(connector)
+              }}>
+              <ConnectorCard connector={connector} />
             </div>
           ))}
           {filteredConnectors.length === 0 && (
