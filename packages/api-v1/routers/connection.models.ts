@@ -26,7 +26,7 @@ export const zConnectionError = z
   .enum(['refresh_failed', 'unknown_external_error'])
   .describe('Error types: refresh_failed and unknown_external_error')
 
-export const zConnectonExpandOption = z
+export const zConnectionExpandOption = z
   .enum(['connector'])
   .describe('Fields to expand: connector (includes connector details)')
 
@@ -57,7 +57,7 @@ export async function formatConnection(
   _ctx: any,
   connection: Core['connection_select'],
   include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
-  expand: Z.infer<typeof zConnectonExpandOption>[] = [],
+  expand: Z.infer<typeof zConnectionExpandOption>[] = [],
 ) {
   const connector =
     defConnectors[connection.connector_name as keyof typeof defConnectors]

@@ -11,8 +11,8 @@ import {
   formatConnection,
   zConnectionError,
   zConnectionExpanded,
+  zConnectionExpandOption,
   zConnectionStatus,
-  zConnectonExpandOption,
   zIncludeSecrets,
   zRefreshPolicy,
 } from './connection.models'
@@ -41,7 +41,7 @@ export const connectionRouter = router({
         id: zConnectionId,
         include_secrets: zIncludeSecrets.optional().default('none'),
         refresh_policy: zRefreshPolicy.optional().default('auto'),
-        expand: z.array(zConnectonExpandOption).optional().default([]),
+        expand: z.array(zConnectionExpandOption).optional().default([]),
       }),
     )
     .output(zConnectionExpanded)
@@ -152,11 +152,25 @@ export const connectionRouter = router({
     .input(
       zListParams
         .extend({
-          connector_name: zConnectorName.optional(),
-          customer_id: zCustomerId.optional(),
-          connector_config_id: zConnectorConfigId.optional(),
-          include_secrets: zIncludeSecrets.optional().default('none'),
-          expand: z.array(zConnectonExpandOption).optional().default([]),
+          connector_names: z.array(zConnectorName).optional().openapi({
+            description: 'Filter list by connector names',
+          }),
+          customer_id: zCustomerId.optional().openapi({
+            description: 'Filter list by customer id',
+          }),
+          connector_config_id: zConnectorConfigId.optional().openapi({
+            description: 'Filter list by connector config id',
+          }),
+          include_secrets: zIncludeSecrets.optional().default('none').openapi({
+            description: 'Include secret credentials in the response',
+          }),
+          expand: z
+            .array(zConnectionExpandOption)
+            .optional()
+            .default([])
+            .openapi({
+              description: 'Expand the response with additional optionals',
+            }),
         })
         .optional(),
     )
@@ -164,6 +178,8 @@ export const connectionRouter = router({
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input}) => {
+      const connectorNamesFromToken =
+        ctx.viewer?.connectOptions?.connector_names ?? []
       const connectorNames = zConnectorName.options
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
@@ -183,11 +199,20 @@ export const connectionRouter = router({
               input?.['customer_id']
                 ? eq(schema.connection.customer_id, input['customer_id'])
                 : undefined,
-              input?.['connector_name']
-                ? eq(schema.connection.connector_name, input['connector_name'])
+              input?.['connector_names'] && input['connector_names'].length > 0
+                ? inArray(
+                    schema.connection.connector_name,
+                    input['connector_names'],
+                  )
                 : undefined,
               // excluding data from old connectors that are no longer supported
               inArray(schema.connection.connector_name, connectorNames),
+              connectorNamesFromToken.length > 0
+                ? inArray(
+                    schema.connection.connector_name,
+                    connectorNamesFromToken,
+                  )
+                : undefined,
             ),
           ),
         schema.connection.created_at,
