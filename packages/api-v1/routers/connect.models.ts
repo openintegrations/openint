@@ -6,16 +6,19 @@ export const zConnectOptions = z.object({
   // TODO: expand to https://coda.io/d/_d6fsw71RNUB/Implementing-a-native-UI-for-Connect-via-Core-APIs-and-Deep-Link_susYw00i
   return_url: z.string().optional().openapi({
     title: 'Return URL',
-    description: 'The URL to return to after a connection is made',
+    description:
+      'Optional URL to return customers after adding a connection or if they press the Return To Organization button',
   }),
   connector_names: z.array(zConnectorName).optional().openapi({
     title: 'Connector Names',
-    description: 'The names of the connectors to show in the connect page',
+    description:
+      'The names of the connectors to show in the connect page. If not provided, all connectors will be shown',
   }),
   view: z.enum(['add', 'manage', 'default']).optional().openapi({
     title: 'Default View to load',
+    default: 'default',
     description:
-      'The default view to show when the magic link is opened. Defaults to "add"',
+      'The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not',
   }),
   debug: zCoerceBoolean().optional().openapi({
     title: 'Debug',
