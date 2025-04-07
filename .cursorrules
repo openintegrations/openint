@@ -94,3 +94,5 @@ const searchParams = await props.searchParams
 - use zod from zod-utils, and follow naming convention of starting with lowercase z when defining new schemas.
 
 - Always use bun when running ts files
+- If a function takes more than two parameters, it should probably take an object instead.
+- Prefer to use the `test` keyword instead of the `it` keyword when writing tests.

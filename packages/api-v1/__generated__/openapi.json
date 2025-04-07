@@ -2702,7 +2702,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -2747,13 +2748,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -3183,7 +3178,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -3228,13 +3224,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -3326,7 +3316,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -3371,13 +3362,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -3469,7 +3454,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -3514,13 +3500,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -4119,7 +4099,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -4164,13 +4145,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -4459,7 +4434,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -4504,13 +4480,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -4602,7 +4572,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -4647,13 +4618,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -4745,7 +4710,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -4790,13 +4756,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -4888,7 +4848,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -4933,13 +4894,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -5031,7 +4986,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -5076,13 +5032,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -5260,7 +5210,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -5305,13 +5256,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -6396,7 +6341,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -6441,13 +6387,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -6539,7 +6479,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -6584,13 +6525,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -7128,7 +7063,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -7173,13 +7109,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -7970,7 +7900,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -8015,13 +7946,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               },
               "realmId": {
                 "type": "string",
@@ -8393,7 +8318,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -8438,13 +8364,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               },
               "instance_url": {
                 "type": "string",
@@ -8788,7 +8708,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -8833,13 +8754,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -8931,7 +8846,8 @@
                         "type": "string"
                       },
                       "client_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Client ID used for the connection"
                       },
                       "scope": {
                         "type": "string"
@@ -8976,13 +8892,7 @@
                     ],
                     "additionalProperties": {}
                   }
-                },
-                "required": [
-                  "created_at",
-                  "updated_at",
-                  "last_fetched_at",
-                  "metadata"
-                ]
+                }
               }
             },
             "required": [
@@ -10725,6 +10635,17 @@
               "connect_output": {}
             },
             "additionalProperties": false
+          },
+          "authType": {
+            "type": "string",
+            "enum": [
+              "BASIC",
+              "OAUTH1",
+              "OAUTH2",
+              "OAUTH2CC",
+              "API_KEY",
+              "CUSTOM"
+            ]
           },
           "openint_scopes": {
             "type": "array",

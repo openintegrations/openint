@@ -74,18 +74,23 @@ const ConnectorClientComponents = Object.fromEntries(
 
 export function makeNativeOauthConnectorClientComponent(preConnectRes: {
   authorization_url: string
+  code_verifier?: string
 }) {
   // createNativeOauthConnect(preConnectRes)
 
-  return function ManualConnectorClientComponent({
+  return function NativeOauthConnectorClientComponent({
     onConnectFn,
   }: {
     connector_name?: string
     onConnectFn: (fn?: ConnectFn) => void
   }) {
     const connectFn = React.useCallback(
-      () => openOAuthPopup(preConnectRes),
-      [preConnectRes],
+      () =>
+        openOAuthPopup(preConnectRes).then((data) => ({
+          ...data,
+          code_verifier: preConnectRes.code_verifier,
+        })),
+      [],
     )
     React.useEffect(() => {
       onConnectFn(connectFn)
@@ -93,13 +98,6 @@ export function makeNativeOauthConnectorClientComponent(preConnectRes: {
 
     return null
   }
-
-  // createNativeOauthConnect
-  // open popup
-  // listen for message from popup
-  // parse message
-  // close popup
-  // return code and state to the client via message pasing
 }
 
 function makeManualConnectorClientComponent(settingsJsonSchema: JSONSchema) {
@@ -279,7 +277,7 @@ export function AddConnectionInner({
   let Component =
     ConnectorClientComponents[name as keyof typeof ConnectorClientComponents]
 
-  if (!Component && name === 'dummy-oauth2') {
+  if (!Component && connectorConfig.connector?.authType === 'OAUTH2') {
     Component = makeNativeOauthConnectorClientComponent(
       preConnectRes.data.connect_input,
     )

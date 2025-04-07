@@ -112,6 +112,11 @@ export interface ConnectContext<TSettings>
     externalId: ExternalId
     settings: TSettings
   } | null
+  baseUrls: {
+    api: string
+    console: string
+    connect: string
+  }
   /** Custom fetch, typically for testing purposes */
   fetch?: (req: Request) => Promise<Response>
 }
@@ -146,7 +151,7 @@ export interface ConnectionUpdate<
   // make `ResoUpdateData.id` not prefixed so we can have better inheritance
   extends Omit<ConnectionUpdateData<TSettings>, 'id'> {
   // Subset of connUpdate
-  connectionExternalId: ExternalId
+  connectionExternalId?: ExternalId
   // Can we inherit types used by metaLinks?
   /** If missing it means do not change the userId... */
   customerId?: CustomerId | null

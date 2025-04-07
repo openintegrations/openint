@@ -4,12 +4,13 @@ import {expect} from '@jest/globals'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
-import {createOAuth2Client} from './OAuth2Client'
+import {createOAuth2Client} from './createOAuth2Client'
 import {
   createOAuth2Server,
   type OAuthClient,
   type OAuthUser,
-} from './OAuth2Server'
+} from './createOAuth2Server'
+import {createCodeVerifier} from './utils.client'
 
 const client = {
   id: 'client1',
@@ -44,6 +45,7 @@ const oauthClient = createOAuth2Client(
     authorizeURL: 'http://localhost/authorize',
     tokenURL: 'http://localhost/token',
     revokeUrl: 'http://localhost/token/revoke',
+    introspectUrl: 'http://localhost/token/introspect',
   },
   app.handle,
 )
@@ -51,15 +53,15 @@ const oauthClient = createOAuth2Client(
 /** Code verifier must follow the specifications of RFC-7636. We
  * should add a function to generate a random code verifier that meets the spec
  * to OAuth2Client.ts */
-const codeVerifier = 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM'
+const codeVerifier = createCodeVerifier()
 
 const authorizeRes = $test('authorize redirect with PKCE', async () => {
   // Use OAuth2Client to generate the authorize URL
   const authorizeUrl = await oauthClient.getAuthorizeUrl({
     redirect_uri: client.redirectUris[0],
-    scope: client.scopes[0].name,
+    scopes: [client.scopes[0].name],
     state: 'xyz',
-    code_verifier: codeVerifier,
+    code_challenge: {verifier: codeVerifier, method: 'S256'},
   })
 
   const authorizeRequest = new Request(authorizeUrl, {redirect: 'manual'})
@@ -92,7 +94,7 @@ const zTokenRes = z.object({
 
 const tokenRes = $test('exchange code for tokens', async () => {
   // Use OAuth2Client to exchange code for tokens
-  const res = await oauthClient.getToken({
+  const res = await oauthClient.exchangeCodeForToken({
     code: authorizeRes.current.code,
     redirectUri: client.redirectUris[0],
     code_verifier: codeVerifier,
@@ -104,30 +106,12 @@ const tokenRes = $test('exchange code for tokens', async () => {
 })
 
 $test('introspect access token', async () => {
-  // For introspection, we still need to use the app directly since OAuth2Client doesn't have this method
-  const introspectRequest = new Request('http://localhost/token/introspect', {
-    method: 'POST',
-    body: new URLSearchParams({
-      token: tokenRes.current.access_token,
-      client_id: client.id,
-      client_secret: client.secret,
-    }),
+  // Use OAuth2Client to introspect the token
+  const res = await oauthClient.introspectToken({
+    token: tokenRes.current.access_token,
   })
 
-  const response = await app.handle(introspectRequest)
-
-  expect(response.status).toBe(200)
-
-  // More fields available in https://tsoauth2server.com/docs/endpoints/introspect#response
-  const res = z
-    .object({
-      active: z.boolean(),
-      scope: z.string(),
-      client_id: z.string(),
-      sub: z.string(),
-    })
-    .parse(await response.json())
-
+  // Validate the response
   expect(res).toMatchObject({
     active: true,
     scope: client.scopes[0].name,
@@ -138,7 +122,9 @@ $test('introspect access token', async () => {
 
 const refreshTokenRes = $test('handle refresh token request', async () => {
   // Use OAuth2Client to refresh the token
-  const res = await oauthClient.refreshToken(tokenRes.current.refresh_token)
+  const res = await oauthClient.refreshToken({
+    refresh_token: tokenRes.current.refresh_token,
+  })
 
   // Validate the response
   const validatedRes = zTokenRes.parse(res)
@@ -151,59 +137,34 @@ const refreshTokenRes = $test('handle refresh token request', async () => {
 
 // not implemented
 // $test('introspect refresh token', async () => {
-//   const introspectRequest = new Request('http://localhost/token/introspect', {
-//     method: 'POST',
-//     body: new URLSearchParams({
-//       token: refreshTokenRes.current.refresh_token,
-//       client_id: client.id,
-//       client_secret: client.secret,
-//       token_type_hint: 'refresh_token',
-//     }),
+//   const res = await oauthClient.introspectToken({
+//     token: refreshTokenRes.current.refresh_token,
+//     token_type_hint: 'refresh_token',
 //   })
-
-//   const response = await app.handle(introspectRequest)
-//   console.log('response', await response.text())
+//   console.log('response', res)
 // })
 
 $test('previous access token is now invalid', async () => {
-  // For introspection, we still need to use the app directly
-  const introspectRequest = new Request('http://localhost/token/introspect', {
-    method: 'POST',
-    body: new URLSearchParams({
-      token: tokenRes.current.access_token,
-      client_id: client.id,
-      client_secret: client.secret,
-    }),
+  // Use OAuth2Client to introspect the token
+  const res = await oauthClient.introspectToken({
+    token: tokenRes.current.access_token,
   })
-
-  const response = await app.handle(introspectRequest)
-  expect(response.status).toBe(200)
-
-  const res = z.object({active: z.boolean()}).parse(await response.json())
 
   expect(res.active).toBe(false)
 })
 
 $test('handle revoke request', async () => {
   // Use OAuth2Client to revoke the token
-  await oauthClient.revokeToken(refreshTokenRes.current.access_token)
+  await oauthClient.revokeToken({
+    token: refreshTokenRes.current.access_token,
+  })
 })
 
 $test('previous refresh token is now invalid', async () => {
-  // For introspection, we still need to use the app directly
-  const introspectRequest = new Request('http://localhost/token/introspect', {
-    method: 'POST',
-    body: new URLSearchParams({
-      token: refreshTokenRes.current.refresh_token,
-      client_id: client.id,
-      client_secret: client.secret,
-    }),
+  // Use OAuth2Client to introspect the token
+  const res = await oauthClient.introspectToken({
+    token: refreshTokenRes.current.refresh_token,
   })
-
-  const response = await app.handle(introspectRequest)
-  expect(response.status).toBe(200)
-
-  const res = z.object({active: z.boolean()}).parse(await response.json())
 
   expect(res.active).toBe(false)
 })

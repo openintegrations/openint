@@ -229,7 +229,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -239,10 +244,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -400,7 +405,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -410,10 +420,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -448,7 +458,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -458,10 +473,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -496,7 +511,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -506,10 +526,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -715,7 +735,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -725,10 +750,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -823,7 +848,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -833,10 +863,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -871,7 +901,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -881,10 +916,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -919,7 +954,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -929,10 +969,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -967,7 +1007,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -977,10 +1022,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -1015,7 +1060,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1025,10 +1075,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -1103,7 +1153,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1113,10 +1168,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -1453,7 +1508,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1463,10 +1523,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -1501,7 +1561,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1511,10 +1576,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -1717,7 +1782,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1727,10 +1797,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -1990,7 +2060,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -2000,10 +2075,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -2131,7 +2206,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -2141,10 +2221,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -2263,7 +2343,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -2273,10 +2358,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -2311,7 +2396,12 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
+<<<<<<< HEAD
                         client_id?: string;
+=======
+                        /** @description Client ID used for the connection */
+                        client_id: string;
+>>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -2321,10 +2411,10 @@ export interface components {
                             [key: string]: unknown;
                         };
                     };
-                    created_at: string;
-                    updated_at: string;
-                    last_fetched_at: string;
-                    metadata: {
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
                         [key: string]: unknown;
                     } | null;
                 };
@@ -2812,6 +2902,8 @@ export interface components {
                 connect_input?: unknown;
                 connect_output?: unknown;
             };
+            /** @enum {string} */
+            authType?: "BASIC" | "OAUTH1" | "OAUTH2" | "OAUTH2CC" | "API_KEY" | "CUSTOM";
             openint_scopes?: string[];
             scopes?: {
                 scope: string;

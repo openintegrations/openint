@@ -18,8 +18,11 @@ const zOAuthConnectionSettings = z.object({
   credentials: z
     .object({
       access_token: z.string(),
-      // TODO: once we migrate to only cnext connections we can remove this
-      client_id: z.string().optional(),
+      // TODO: once we migrate to only cnext connections we can remove the optional on client_id
+      client_id: z
+        .string()
+        .describe('Client ID used for the connection')
+        .optional(),
       scope: z.string(),
       refresh_token: z.string().optional(),
       expires_in: z.number().optional(),
@@ -31,16 +34,22 @@ const zOAuthConnectionSettings = z.object({
     })
     .optional()
     .describe('Output of the postConnect hook for oauth2 connectors'),
-  created_at: z.string(),
-  updated_at: z.string(),
-  last_fetched_at: z.string(),
-  metadata: z.record(z.unknown()).nullable(),
+  /** @deprecated */
+  created_at: z.string().optional(),
+  /** @deprecated */
+  updated_at: z.string().optional(),
+  /** @deprecated */
+  last_fetched_at: z.string().optional(),
+  /** @deprecated */
+  metadata: z.record(z.unknown()).nullable().optional(),
 })
 
 export const zAuthParamsConfig = z.object({
   authorize: z.record(z.string(), z.string()).optional(),
   token: z.record(z.string(), z.string()).optional(),
   refresh: z.record(z.string(), z.string()).optional(),
+  introspect: z.record(z.string(), z.string()).optional(),
+  revoke: z.record(z.string(), z.string()).optional(),
   param_names: z
     .object({
       client_id: z.string().optional(),
@@ -60,6 +69,10 @@ export const zOAuthConfig = z.object({
   type: z
     .enum(['OAUTH2', 'OAUTH2CC'])
     .describe('The authentication type for OAuth-based providers'),
+  code_challenge_method: z
+    .enum(['S256', 'plain'])
+    .optional()
+    .describe('The method to use for PKCE code challenge'),
   authorization_request_url: z
     .string()
     .url()
@@ -68,6 +81,16 @@ export const zOAuthConfig = z.object({
     .string()
     .url()
     .describe('URL to obtain an access token from the provider'),
+  introspection_request_url: z
+    .string()
+    .url()
+    .optional()
+    .describe('URL to introspect an access token from the provider'),
+  revocation_request_url: z
+    .string()
+    .url()
+    .optional()
+    .describe('URL to revoke an access token from the provider'),
   openint_scopes: z
     .array(z.string())
     .optional()
@@ -109,13 +132,24 @@ export const oauth2Schemas = {
   }),
   // No pre connect input is necessary for oauth2
   // TODO: Fix to be unnecessary
-  pre_connect_input: z.any(),
+  pre_connect_input: z.object({
+    connection_id: z
+      .string()
+      .optional()
+      .describe('In case of re-connecting, id of the existing connection'),
+  }),
   connect_input: z.object({
-    authorization_url: z.string(),
+    code_verifier: z.string().optional().describe('Code verifier for PKCE'),
+    authorization_url: z.string().describe('URL to take user to for approval'),
   }),
   connect_output: z.object({
-    code: z.string(),
-    // connectionId: z.string(),
-    state: z.string(),
+    code_verifier: z
+      .string()
+      .optional()
+      .describe('Code verifier for PKCE from the connect input'),
+    code: z
+      .string()
+      .describe('OAuth2 authorization code used for token exchange'),
+    state: z.string().describe('OAuth2 state'),
   }),
 } satisfies Omit<ConnectorSchemas, 'name'>

@@ -2,7 +2,7 @@ import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
-import {createOAuth2Server} from '@openint/oauth2/OAuth2Server'
+import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {
   createFetchHandlerOpenAPI,
   createFetchHandlerTRPC,

@@ -15,8 +15,98 @@ import {AuthorizationServer} from '@jmondi/oauth2-server'
 import {Elysia} from 'elysia'
 import {requestFromVanilla, responseToVanilla} from './utils.server'
 
-export type {OAuthAuthCode, OAuthClient, OAuthScope, OAuthToken, OAuthUser}
+export function createOAuth2Server({
+  clients,
+  scopes,
+  users,
+  authCodes,
+  serviceName = 'my-service',
+}: {
+  clients?: OAuthClient[]
+  scopes?: OAuthScope[]
+  users?: OAuthUser[]
+  authCodes?: OAuthAuthCode[]
+  serviceName?: string
+}) {
+  const clientRepository = createClientRepository(clients)
+  const tokenRepository = createTokenRepository([])
+  const scopeRepository = createScopeRepository(scopes)
 
+  const authServer = new AuthorizationServer(
+    clientRepository,
+    tokenRepository,
+    scopeRepository,
+    serviceName,
+  )
+
+  const userRepository = createUserRepository(users)
+  const authCodeRepository = createAuthCodeRepository(authCodes)
+
+  authServer.enableGrantTypes('refresh_token')
+  authServer.enableGrantTypes({
+    grant: 'authorization_code',
+    authCodeRepository,
+    userRepository,
+  })
+
+  return new Elysia()
+    .get('/authorize', async ({request}) =>
+      requestFromVanilla(request)
+        .then(async (req) => {
+          // console.log('req', req)
+          const authReq = await authServer.validateAuthorizationRequest(req)
+          // console.log('authReq', authReq)
+          authReq.isAuthorizationApproved = true
+          authReq.user = userRepository.users[0]
+          const authRes = await authServer.completeAuthorizationRequest(authReq)
+          // console.log('authRes', authRes)
+          return authRes
+        })
+        .catch((err: unknown) => {
+          console.log('/authorize err', err)
+          throw err
+        })
+        .then(responseToVanilla),
+    )
+    .post('/token', async ({request}) =>
+      requestFromVanilla(request)
+        .then(async (req) => {
+          // console.log('req', req)
+          const res = await authServer.respondToAccessTokenRequest(req)
+          // console.log('res', res)
+          return res
+        })
+        .catch((err: unknown) => {
+          console.log('/token err', err)
+          throw err
+        })
+        .then(responseToVanilla),
+    )
+    .post('/token/introspect', async ({request}) =>
+      requestFromVanilla(request)
+        .then(async (req) => {
+          const res = await authServer.introspect(req)
+          return res
+        })
+        .catch((err: unknown) => {
+          console.log('/token/introspect err', err)
+          throw err
+        })
+        .then(responseToVanilla),
+    )
+    .post('/token/revoke', async ({request}) =>
+      requestFromVanilla(request)
+        .then(async (req) => {
+          const res = await authServer.revoke(req)
+          return res
+        })
+        .catch((err: unknown) => {
+          console.log('/token/revoke err', err)
+          throw err
+        })
+        .then(responseToVanilla),
+    )
+}
 export function createClientRepository(initialClients: OAuthClient[] = []) {
   const clients = [...initialClients]
 
@@ -52,9 +142,9 @@ export function createTokenRepository(initialTokens: OAuthToken[] = []) {
         accessToken: crypto.randomUUID(),
         refreshToken: crypto.randomUUID(),
         accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
-        scopes: scopes,
+        scopes,
         client,
-        user: user,
+        user,
       }
       await this.persist(token)
       return token
@@ -211,95 +301,4 @@ export function createUserRepository(initialUsers: OAuthUser[] = []) {
   }
 }
 
-export function createOAuth2Server({
-  clients,
-  scopes,
-  users,
-  authCodes,
-  serviceName = 'my-service',
-}: {
-  clients?: OAuthClient[]
-  scopes?: OAuthScope[]
-  users?: OAuthUser[]
-  authCodes?: OAuthAuthCode[]
-  serviceName?: string
-}) {
-  const clientRepository = createClientRepository(clients)
-  const tokenRepository = createTokenRepository([])
-  const scopeRepository = createScopeRepository(scopes)
-
-  const authServer = new AuthorizationServer(
-    clientRepository,
-    tokenRepository,
-    scopeRepository,
-    serviceName,
-  )
-
-  const userRepository = createUserRepository(users)
-  const authCodeRepository = createAuthCodeRepository(authCodes)
-
-  authServer.enableGrantTypes('refresh_token')
-  authServer.enableGrantTypes({
-    grant: 'authorization_code',
-    authCodeRepository,
-    userRepository,
-  })
-
-  return new Elysia()
-    .get('/authorize', async ({request}) =>
-      requestFromVanilla(request)
-        .then(async (req) => {
-          // console.log('req', req)
-          const authReq = await authServer.validateAuthorizationRequest(req)
-          // console.log('authReq', authReq)
-          authReq.isAuthorizationApproved = true
-          authReq.user = userRepository.users[0]
-          const authRes = await authServer.completeAuthorizationRequest(authReq)
-          // console.log('authRes', authRes)
-          return authRes
-        })
-        .catch((err: unknown) => {
-          console.log('/authorize err', err)
-          throw err
-        })
-        .then(responseToVanilla),
-    )
-    .post('/token', async ({request}) =>
-      requestFromVanilla(request)
-        .then(async (req) => {
-          // console.log('req', req)
-          const res = await authServer.respondToAccessTokenRequest(req)
-          // console.log('res', res)
-          return res
-        })
-        .catch((err: unknown) => {
-          console.log('/token err', err)
-          throw err
-        })
-        .then(responseToVanilla),
-    )
-    .post('/token/introspect', async ({request}) =>
-      requestFromVanilla(request)
-        .then(async (req) => {
-          const res = await authServer.introspect(req)
-          return res
-        })
-        .catch((err: unknown) => {
-          console.log('/token/introspect err', err)
-          throw err
-        })
-        .then(responseToVanilla),
-    )
-    .post('/token/revoke', async ({request}) =>
-      requestFromVanilla(request)
-        .then(async (req) => {
-          const res = await authServer.revoke(req)
-          return res
-        })
-        .catch((err: unknown) => {
-          console.log('/token/revoke err', err)
-          throw err
-        })
-        .then(responseToVanilla),
-    )
-}
+export type {OAuthAuthCode, OAuthClient, OAuthScope, OAuthToken, OAuthUser}

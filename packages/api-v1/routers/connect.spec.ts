@@ -1,8 +1,8 @@
 import Elysia from 'elysia'
 import type {CustomerId, Viewer} from '@openint/cdk'
-import {oauth2Schemas} from '@openint/cnext/auth-oauth2/def'
+import {oauth2Schemas} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import {createOAuth2Server} from '@openint/oauth2/OAuth2Server'
+import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import type {Z} from '@openint/util/zod-utils'
@@ -81,7 +81,10 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   })
   // Tests linearly depend on each other for performance and simplicty
 
-  describe('oauth2', () => {
+  const describeMaybeOnly =
+    process.env['TEST'] === 'oauth2' ? describe.only : describe
+
+  describeMaybeOnly('oauth2', () => {
     const ccfgRes = $test('create connector config', async () => {
       const res = await asUser.createConnectorConfig({
         connector_name: 'dummy-oauth2',
@@ -127,8 +130,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         .object({
           code: z.string(),
           state: z.string(),
+          code_verifier: z.string().optional(),
         })
-        .parse(urlSearchParamsToJson(url.searchParams))
+        .parse({
+          ...urlSearchParamsToJson(url.searchParams),
+          code_verifier: preConnectRes.current.code_verifier,
+        })
     })
 
     const postConnectRes = $test('postConnect', async () => {

@@ -5,6 +5,7 @@
   "module": "./index.ts",
   "scripts": {},
   "dependencies": {
+    "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22"
   },
   "devDependencies": {
