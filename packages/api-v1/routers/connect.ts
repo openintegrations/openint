@@ -5,7 +5,7 @@ import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
-import {getServerUrl} from '@openint/env'
+import {getBaseURLs, getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
@@ -129,6 +129,7 @@ export const connectRouter = router({
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
+          baseUrls: getBaseURLs(null),
         },
         input: input.discriminated_data.pre_connect_input,
       })
@@ -198,6 +199,7 @@ export const connectRouter = router({
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
+          baseUrls: getBaseURLs(null),
         },
       })
       const id = makeId(
@@ -221,7 +223,7 @@ export const connectRouter = router({
           settings,
           connector_config_id: input.connector_config_id,
           customer_id: ctx.viewer.customerId ?? ctx.viewer.userId,
-          
+
           // add integration id
         },
         {keyColumns: ['id']},

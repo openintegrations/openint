@@ -37,6 +37,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: settings,
         fetch: undefined,
+        baseUrls: {api: '', console: '', connect: ''},
       }),
 
     async preConnect({config, context, input}) {
@@ -52,6 +53,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: undefined,
         fetch: context.fetch,
+        baseUrls: context.baseUrls,
       })
 
       const codeChallenge = oauthConfig.code_challenge_method
@@ -84,6 +86,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: undefined,
         fetch: context.fetch,
+        baseUrls: context.baseUrls,
       })
       // console.log(`oauthConfig`, oauthConfig)
 
@@ -126,6 +129,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: settings,
         fetch: undefined, // FIX: Always pass context
+        baseUrls: {api: '', console: '', connect: ''},
       })
       const res = await client.refreshToken({
         refresh_token: refreshToken,
@@ -159,6 +163,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: settings,
         fetch: undefined, // FIX: Always pass consistent context with fetch inside
+        baseUrls: {api: '', console: '', connect: ''},
       })
 
       const {expires_at: expiresAt, refresh_token: refreshToken} =
@@ -206,6 +211,7 @@ export function createOAuth2ConnectorServer<
         connectorConfig: config,
         connectionSettings: settings,
         fetch: undefined, // FIX: Always pass consistent context with fetch inside
+        baseUrls: {api: '', console: '', connect: ''},
       })
       if (!settings.oauth.credentials?.access_token) {
         throw new Error('No access token available')

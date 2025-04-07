@@ -112,6 +112,11 @@ export interface ConnectContext<TSettings>
     externalId: ExternalId
     settings: TSettings
   } | null
+  baseUrls: {
+    api: string
+    console: string
+    connect: string
+  }
   /** Custom fetch, typically for testing purposes */
   fetch?: (req: Request) => Promise<Response>
 }
