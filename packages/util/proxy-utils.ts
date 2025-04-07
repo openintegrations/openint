@@ -5,7 +5,12 @@ export function noopFunctionMap<T = any>() {
 }
 
 type ProxyRequiredOptions = {
-  formatError?: (key: string, value: unknown) => Error
+  formatError?: (context: {
+    key: string
+    value: unknown
+    throwOn: 'missing' | 'undefined' | 'nullish'
+    reason: 'missing' | 'undefined' | 'null'
+  }) => Error
   /**
    * Controls which values trigger an error:
    * - 'missing': throw when property is not present in object
@@ -24,7 +29,9 @@ export function proxyRequired<T extends object>(
   opts?: ProxyRequiredOptions,
 ) {
   const formatError =
-    opts?.formatError ?? ((key) => new Error(`${key} is required`))
+    opts?.formatError ??
+    (({key, reason, throwOn}) =>
+      new Error(`${key} is required (${reason}) when throwOn is '${throwOn}'`))
   const throwOn = opts?.throwOn ?? 'nullish'
 
   return new Proxy(target, {
@@ -38,7 +45,12 @@ export function proxyRequired<T extends object>(
         (throwOn === 'undefined' && value === undefined) ||
         (throwOn === 'nullish' && value == null)
       ) {
-        throw formatError(key as string, value)
+        const reason = !hasProperty
+          ? 'missing'
+          : value === undefined
+            ? 'undefined'
+            : 'null'
+        throw formatError({key: key as string, value, throwOn, reason})
       }
       return value
     },
@@ -55,7 +67,8 @@ export function proxyRequiredRecursive<T extends object>(
   parentPath = '',
 ) {
   const formatError =
-    opts?.formatError ?? ((path) => new Error(`${path} is required`))
+    opts?.formatError ??
+    (({key, reason}) => new Error(`${key} is required (${reason})`))
   const throwOn = opts?.throwOn ?? 'nullish'
 
   return new Proxy(target, {
@@ -70,7 +83,12 @@ export function proxyRequiredRecursive<T extends object>(
         (throwOn === 'undefined' && value === undefined) ||
         (throwOn === 'nullish' && value == null)
       ) {
-        throw formatError(keyPath, value)
+        const reason = !hasProperty
+          ? 'missing'
+          : value === undefined
+            ? 'undefined'
+            : 'null'
+        throw formatError({key: keyPath, value, throwOn, reason})
       }
 
       // Recursively proxy nested objects
