@@ -11,7 +11,6 @@ import {
   QueryClientProvider,
   useSuspenseQuery,
 } from '@openint/ui-v1/trpc'
-import OnboardingHoc from './onboarding'
 import {TRPCProvider, useTRPC, useTRPCClient} from './trpc'
 
 // MARK: - Move me into client common
