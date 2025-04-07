@@ -6,7 +6,7 @@ import {
 
 export interface ConnectProps {
   token: string
-  baseUrl?: string
+  baseURL?: string
   width?: number
   height?: number
   onEvent?: (event: OpenIntEvent, unsubscribe: () => void) => void
@@ -24,11 +24,11 @@ export interface ConnectProps {
 }
 const DEFAULT_HOST = 'https://connect.openint.dev'
 const createMagicLinkUrl = ({
-  baseUrl = DEFAULT_HOST,
+  baseURL = DEFAULT_HOST,
   token,
   connectOptions = {},
 }: ConnectProps) => {
-  const url = new URL(baseUrl)
+  const url = new URL(baseURL)
   // TODO; create a new view in the server called 'default' if there's no view and
   // smartly load the right view based on whether the user has connections or not
   if (!connectOptions.view) {

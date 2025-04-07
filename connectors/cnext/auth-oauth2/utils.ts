@@ -60,11 +60,11 @@ export function getClient({
   connectionSettings:
     | Z.infer<typeof oauth2Schemas.connection_settings>
     | undefined
-} & Pick<ConnectContext<{}>, 'baseUrls' | 'fetch'>) {
+} & Pick<ConnectContext<{}>, 'baseURLs' | 'fetch'>) {
   const oauthConfig = renderTemplateObject(oauthConfigTemplate, {
     connectorConfig,
     connectionSettings: connectionSettings ?? {},
-    baseUrls: connectCtx.baseUrls,
+    baseURLs: connectCtx.baseURLs,
   })
 
   const ccfg = injectCcfgDefaultCredentials(

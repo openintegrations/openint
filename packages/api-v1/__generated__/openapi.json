@@ -5,9 +5,7 @@
     "version": "1.0.0"
   },
   "servers": [
-    {
-      "url": "https://api.openint.dev/v1"
-    }
+    {}
   ],
   "paths": {
     "/connector": {
@@ -196,9 +194,12 @@
           },
           {
             "in": "query",
-            "name": "connector_name",
+            "name": "connector_names",
             "schema": {
-              "$ref": "#/components/schemas/core.connector.name"
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/core.connector.name"
+              }
             }
           }
         ],
@@ -1189,9 +1190,12 @@
           },
           {
             "in": "query",
-            "name": "connector_name",
+            "name": "connector_names",
             "schema": {
-              "$ref": "#/components/schemas/core.connector.name"
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/core.connector.name"
+              }
             }
           },
           {
@@ -1224,7 +1228,7 @@
                 "basic",
                 "all"
               ],
-              "description": "Controls secret inclusion: none (default), basic (auth only), or all secrets",
+              "description": "Include secret credentials in the response",
               "default": "none"
             }
           },
@@ -1240,7 +1244,8 @@
                 ],
                 "description": "Fields to expand: connector (includes connector details)"
               },
-              "default": []
+              "default": [],
+              "description": "Expand the response with additional optionals"
             }
           }
         ],
@@ -2112,9 +2117,9 @@
     },
     "/customer/{customer_id}/magic-link": {
       "post": {
-        "operationId": "getMagicLink",
+        "operationId": "createMagicLink",
         "summary": "Create Magic Link",
-        "description": "Create a magic link that is ready to be shared with customers who want to use Connect",
+        "description": "Create a @Connect magic link that is ready to be shared with customers who want to use @Connect",
         "security": [
           {
             "ApiKey": []
@@ -2127,9 +2132,11 @@
           {
             "in": "path",
             "name": "customer_id",
+            "description": "The unique ID of the customer to create the magic link for",
             "schema": {
               "type": "string",
-              "minLength": 1
+              "minLength": 1,
+              "description": "The unique ID of the customer to create the magic link for"
             },
             "required": true
           }
@@ -2146,45 +2153,39 @@
                     "default": 2592000,
                     "description": "How long the magic link will be valid for (in seconds) before it expires"
                   },
-                  "client_options": {
+                  "connect_options": {
                     "type": "object",
                     "properties": {
+                      "return_url": {
+                        "type": "string",
+                        "title": "Return URL",
+                        "description": "Optional URL to return customers after adding a connection or if they press the Return To Organization button"
+                      },
+                      "connector_names": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/core.connector.name"
+                        },
+                        "title": "Connector Names",
+                        "description": "The names of the connectors to show in the connect page. If not provided, all connectors will be shown"
+                      },
                       "view": {
                         "type": "string",
                         "enum": [
                           "add",
-                          "manage"
+                          "manage",
+                          "default"
                         ],
                         "title": "Default View to load",
-                        "description": "The default view to show when the magic link is opened. Defaults to \"add\"",
-                        "default": "add"
-                      },
-                      "connector_name": {
-                        "$ref": "#/components/schemas/core.connector.name",
-                        "description": "The name of the connector to limit connection to. Default to all otherwise"
+                        "default": "default",
+                        "description": "The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not"
                       },
                       "debug": {
                         "type": "boolean",
                         "title": "Debug",
                         "description": "Whether to enable debug mode"
-                      },
-                      "--primary": {
-                        "type": "string"
-                      },
-                      "--background": {
-                        "type": "string"
-                      },
-                      "--foreground": {
-                        "type": "string"
-                      },
-                      "--card": {
-                        "type": "string"
-                      },
-                      "--card-foreground": {
-                        "type": "string"
                       }
-                    },
-                    "description": "Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client"
+                    }
                   }
                 }
               }
@@ -2254,89 +2255,6 @@
         }
       }
     },
-    "/connect/revoke": {
-      "post": {
-        "operationId": "revokeConnection",
-        "security": [
-          {
-            "ApiKey": []
-          },
-          {
-            "CustomerToken": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "id"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/core.connection_select"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/customer/{customer_id}/token": {
       "post": {
         "operationId": "createToken",
@@ -2354,16 +2272,17 @@
           {
             "in": "path",
             "name": "customer_id",
-            "description": "The id of the customer in your application. Ensure it is unique for that customer.",
+            "description": "The unique ID of the customer to create the token for",
             "schema": {
               "type": "string",
-              "description": "The id of the customer in your application. Ensure it is unique for that customer."
+              "minLength": 1,
+              "description": "The unique ID of the customer to create the token for"
             },
             "required": true
           }
         ],
         "requestBody": {
-          "required": false,
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -2371,9 +2290,41 @@
                 "properties": {
                   "validity_in_seconds": {
                     "type": "number",
-                    "exclusiveMinimum": 0,
-                    "default": 2592000,
-                    "description": "How long the token will be valid for (in seconds) before it expires"
+                    "default": 2592000
+                  },
+                  "connect_options": {
+                    "type": "object",
+                    "properties": {
+                      "return_url": {
+                        "type": "string",
+                        "title": "Return URL",
+                        "description": "Optional URL to return customers after adding a connection or if they press the Return To Organization button"
+                      },
+                      "connector_names": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/core.connector.name"
+                        },
+                        "title": "Connector Names",
+                        "description": "The names of the connectors to show in the connect page. If not provided, all connectors will be shown"
+                      },
+                      "view": {
+                        "type": "string",
+                        "enum": [
+                          "add",
+                          "manage",
+                          "default"
+                        ],
+                        "title": "Default View to load",
+                        "default": "default",
+                        "description": "The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not"
+                      },
+                      "debug": {
+                        "type": "boolean",
+                        "title": "Debug",
+                        "description": "Whether to enable debug mode"
+                      }
+                    }
                   }
                 }
               }
@@ -7835,7 +7786,7 @@
           "settings": {
             "type": "object",
             "properties": {
-              "databaseUrl": {
+              "databaseURL": {
                 "type": "string"
               },
               "sourceQueries": {
@@ -7852,7 +7803,7 @@
               }
             },
             "required": [
-              "databaseUrl"
+              "databaseURL"
             ]
           }
         },

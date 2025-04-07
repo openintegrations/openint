@@ -123,25 +123,9 @@ export interface paths {
         put?: never;
         /**
          * Create Magic Link
-         * @description Create a magic link that is ready to be shared with customers who want to use Connect
+         * @description Create a @Connect magic link that is ready to be shared with customers who want to use @Connect
          */
-        post: operations["getMagicLink"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/connect/revoke": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["revokeConnection"];
+        post: operations["createMagicLink"];
         delete?: never;
         options?: never;
         head?: never;
@@ -229,12 +213,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -405,12 +385,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -458,12 +434,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -511,12 +483,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -735,12 +703,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -848,12 +812,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -901,12 +861,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -954,12 +910,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1007,12 +959,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1060,12 +1008,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1153,12 +1097,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1508,12 +1448,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1561,12 +1497,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -1782,12 +1714,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -2032,7 +1960,7 @@ export interface components {
              */
             connector_name: "postgres";
             settings: {
-                databaseUrl: string;
+                databaseURL: string;
                 sourceQueries?: {
                     /** @description Should order by lastModifiedAt and id descending */
                     invoice?: string | null;
@@ -2060,12 +1988,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -2206,12 +2130,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -2343,12 +2263,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -2396,12 +2312,8 @@ export interface components {
                     /** @description Output of the postConnect hook for oauth2 connectors */
                     credentials?: {
                         access_token: string;
-<<<<<<< HEAD
-                        client_id?: string;
-=======
                         /** @description Client ID used for the connection */
-                        client_id: string;
->>>>>>> c21a712b3eec75872069ca653f19df1ff6435ad6
+                        client_id?: string;
                         scope: string;
                         refresh_token?: string;
                         expires_in?: number;
@@ -3175,7 +3087,7 @@ export interface operations {
                 limit?: number;
                 offset?: number;
                 expand?: ("connector" | "connector.schemas" | "connection_count")[];
-                connector_name?: components["schemas"]["core.connector.name"];
+                connector_names?: components["schemas"]["core.connector.name"][];
             };
             header?: never;
             path?: never;
@@ -3443,7 +3355,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 offset?: number;
-                connector_name?: components["schemas"]["core.connector.name"];
+                connector_names?: components["schemas"]["core.connector.name"][];
                 /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                 customer_id?: string;
                 /** @description The id of the connector config, starts with `ccfg_` */
@@ -3691,11 +3603,12 @@ export interface operations {
             };
         };
     };
-    getMagicLink: {
+    createMagicLink: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                /** @description The unique ID of the customer to create the magic link for */
                 customer_id: string;
             };
             cookie?: never;
@@ -3708,27 +3621,29 @@ export interface operations {
                      * @default 2592000
                      */
                     validity_in_seconds?: number;
-                    /** @description Search params to configure the connect page. Not signed as part of JWT and therefore can be modified by client */
-                    client_options?: {
+                    connect_options?: {
+                        /**
+                         * Return URL
+                         * @description Optional URL to return customers after adding a connection or if they press the Return To Organization button
+                         */
+                        return_url?: string;
+                        /**
+                         * Connector Names
+                         * @description The names of the connectors to show in the connect page. If not provided, all connectors will be shown
+                         */
+                        connector_names?: components["schemas"]["core.connector.name"][];
                         /**
                          * Default View to load
-                         * @description The default view to show when the magic link is opened. Defaults to "add"
-                         * @default add
+                         * @description The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not
+                         * @default default
                          * @enum {string}
                          */
-                        view?: "add" | "manage";
-                        /** @description The name of the connector to limit connection to. Default to all otherwise */
-                        connector_name?: components["schemas"]["core.connector.name"];
+                        view?: "add" | "manage" | "default";
                         /**
                          * Debug
                          * @description Whether to enable debug mode
                          */
                         debug?: boolean;
-                        "--primary"?: string;
-                        "--background"?: string;
-                        "--foreground"?: string;
-                        "--card"?: string;
-                        "--card-foreground"?: string;
                     };
                 };
             };
@@ -3784,86 +3699,45 @@ export interface operations {
             };
         };
     };
-    revokeConnection: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    id: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["core.connection_select"];
-                };
-            };
-            /** @description Invalid input data */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
-                };
-            };
-        };
-    };
     createToken: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                /** @description The id of the customer in your application. Ensure it is unique for that customer. */
+                /** @description The unique ID of the customer to create the token for */
                 customer_id: string;
             };
             cookie?: never;
         };
-        requestBody?: {
+        requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description How long the token will be valid for (in seconds) before it expires
-                     * @default 2592000
-                     */
+                    /** @default 2592000 */
                     validity_in_seconds?: number;
+                    connect_options?: {
+                        /**
+                         * Return URL
+                         * @description Optional URL to return customers after adding a connection or if they press the Return To Organization button
+                         */
+                        return_url?: string;
+                        /**
+                         * Connector Names
+                         * @description The names of the connectors to show in the connect page. If not provided, all connectors will be shown
+                         */
+                        connector_names?: components["schemas"]["core.connector.name"][];
+                        /**
+                         * Default View to load
+                         * @description The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not
+                         * @default default
+                         * @enum {string}
+                         */
+                        view?: "add" | "manage" | "default";
+                        /**
+                         * Debug
+                         * @description Whether to enable debug mode
+                         */
+                        debug?: boolean;
+                    };
                 };
             };
         };

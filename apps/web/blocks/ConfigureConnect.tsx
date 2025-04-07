@@ -64,7 +64,7 @@ export function ConfigureConnect() {
             <ConnectEmbed
               className="h-full w-full"
               token={mutation.data?.token}
-              baseUrl={getServerUrl(null) + '/connect'}
+              baseURL={getServerUrl(null) + '/connect'}
             />
           )}
           {/* <iframe src={mutation.data?.token} className="h-full w-full" /> */}

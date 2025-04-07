@@ -178,7 +178,7 @@ export const connectRouter = router({
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
-          baseUrls: getBaseURLs(null),
+          baseURLs: getBaseURLs(null),
         },
         input: input.discriminated_data.pre_connect_input,
       })
@@ -261,7 +261,7 @@ export const connectRouter = router({
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
-          baseUrls: getBaseURLs(null),
+          baseURLs: getBaseURLs(null),
         },
       })
       const id = makeId(

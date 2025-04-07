@@ -2,15 +2,15 @@ import {generateOpenApiDocument} from 'trpc-to-openapi'
 import {appRouter} from '../routers'
 
 export function generateOpenAPISpec({
-  baseUrl = 'https://api.openint.dev/v1',
+  baseURL = 'https://api.openint.dev/v1',
 }: {
-  baseUrl?: string
+  baseURL?: string
 }) {
   const oas = generateOpenApiDocument(appRouter, {
     title: 'OpenInt',
     version: '1.0.0',
     openApiVersion: '3.1.0',
-    baseUrl,
+    baseUrl: baseURL,
     securitySchemes: {
       ApiKey: {
         type: 'http',

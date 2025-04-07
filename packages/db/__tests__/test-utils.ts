@@ -63,7 +63,7 @@ export function describeEachDatabase<T extends DatabaseDriver>(
   ) as Array<[T, (opts: TestDbInitOptions) => AnyDatabase]>
 
   describe.each(dbEntriesFiltered)('db: %s', (driver, makeDb) => {
-    const baseUrl = new URL(
+    const baseURL = new URL(
       // TODO: Make test database url separate env var from prod database url to be safer
       env.DATABASE_URL_UNPOOLED ?? envRequired.DATABASE_URL,
     )
@@ -79,7 +79,7 @@ export function describeEachDatabase<T extends DatabaseDriver>(
           driver.replace(/-/g, '_'),
         ].join('_')
       : undefined
-    const url = new URL(baseUrl)
+    const url = new URL(baseURL)
     if (name && url.pathname !== `/${name}`) {
       url.pathname = `/${name}`
     }
@@ -89,9 +89,9 @@ export function describeEachDatabase<T extends DatabaseDriver>(
       if (
         driver !== 'pglite' &&
         driver !== 'pglite-direct' &&
-        url.toString() !== baseUrl.toString()
+        url.toString() !== baseURL.toString()
       ) {
-        baseDb = makeDb({url: baseUrl.toString(), ...testDbOpts})
+        baseDb = makeDb({url: baseURL.toString(), ...testDbOpts})
         await baseDb.execute(`DROP DATABASE IF EXISTS ${name}`)
         await baseDb.execute(`CREATE DATABASE ${name}`)
       }
