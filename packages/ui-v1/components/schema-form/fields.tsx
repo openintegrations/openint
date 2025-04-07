@@ -58,18 +58,15 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
   const handleSwitchChange = (newValue: boolean) => {
     onChange({
       ...formData,
-      client_id:
-        newValue && initialData?.config
-          ? undefined
-          : initialData.config.oauth.client_id,
-      client_secret:
-        newValue && initialData?.config
-          ? undefined
-          : initialData.config.oauth.client_secret,
+      client_id: newValue ? undefined : initialData?.config?.oauth?.client_id,
+      client_secret: newValue
+        ? undefined
+        : initialData?.config?.oauth?.client_secret,
       scopes: newValue
-        ? formData?.scopes?.filter((s) => openint_scopes.includes(s))
+        ? (formData?.scopes || []).filter((s) => openint_scopes.includes(s))
         : formData?.scopes,
     } as T)
+
     setUseOpenIntCredentials(newValue)
   }
 
