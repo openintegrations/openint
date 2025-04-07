@@ -3,7 +3,7 @@ import {ConnectProps, createConnectIframe} from './common'
 
 export function ConnectEmbed(props: ConnectProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const {baseUrl, connectParams, height, width, onEvent} = props
+  const {baseUrl, height, width, onEvent, className} = props
 
   React.useEffect(() => {
     if (!containerRef.current) return
@@ -18,7 +18,7 @@ export function ConnectEmbed(props: ConnectProps) {
         containerRef.current.innerHTML = ''
       }
     }
-  }, [baseUrl, connectParams, width, height, onEvent]) // Added onEvent to deps
+  }, [baseUrl, className, width, height, onEvent]) // Added onEvent to deps
 
   // Initial render is just an empty div
   // After useEffect, it will contain: the iframe content within it. i.e.
@@ -31,6 +31,7 @@ export function ConnectEmbed(props: ConnectProps) {
   // </div>
   return (
     <div
+      className={className || ''}
       style={{width: width || '100%', height: height || '100%'}}
       ref={containerRef}
     />

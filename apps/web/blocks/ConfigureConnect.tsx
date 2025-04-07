@@ -18,6 +18,10 @@ export function ConfigureConnect() {
   const [formData, setFormData] = React.useState<CreateTokenInput>({
     customer_id: 'cust_123' as any, // Using type assertion for the branded type
     validity_in_seconds: 2592000,
+    connect_options: {
+      connector_names: [],
+      view: 'default',
+    },
   })
 
   const trpc = useTRPC()

@@ -53,7 +53,7 @@ export const frameEventsListener = (
     // Check if the event data has the openIntEvent type
     if (typeof event.data === 'object' && event.data !== null) {
       if (event.data.type === 'openIntEvent' && event.data.event) {
-        let payload = event.data.event
+        const payload = event.data.event
         // the backend may still be sending it as connectionId (camel case)
         if (payload.data?.connectionId) {
           payload.data.connection_id = payload.data.connectionId

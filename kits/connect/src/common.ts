@@ -11,42 +11,51 @@ export interface ConnectProps {
   height?: number
   onEvent?: (event: OpenIntEvent, unsubscribe: () => void) => void
   className?: string
-  connectParams?: {
-    displayName?: string
-    connectionId?: string
+  connectOptions?: {
+    // TODO: expand to https://coda.io/d/_d6fsw71RNUB/Implementing-a-native-UI-for-Connect-via-Core-APIs-and-Deep-Link_susYw00i
+    returnUrl?: string
     connectorNames?: string
-    integrationIds?: string
-    view?: 'add' | 'add-deeplink' | 'manage' | 'manage-deeplink'
-    theme?: 'light' | 'dark'
+    view?: 'add' | 'manage' | 'default'
+    debug?: boolean
+    // TODO: add theme enum and colors object
   }
 }
 const DEFAULT_HOST = 'https://connect.openint.dev'
 const createMagicLinkUrl = ({
   baseUrl = DEFAULT_HOST,
   token,
-  connectParams = {},
+  connectOptions = {},
 }: ConnectProps) => {
   const url = new URL(baseUrl)
   // TODO; create a new view in the server called 'default' if there's no view and
   // smartly load the right view based on whether the user has connections or not
-  if (!connectParams.view) {
-    url.searchParams.set('view', 'add')
+  if (!connectOptions.view) {
+    url.searchParams.set('view', 'default')
   }
   url.searchParams.set('token', token)
-  Object.entries(connectParams).forEach(([key, value]) => {
-    if (value) {
-      url.searchParams.set(key, value)
+  Object.entries(connectOptions).forEach(([key, value]) => {
+    if (value && typeof value === 'string') {
+      url.searchParams.set(
+        // basic camelCase to snake_case conversion
+        key
+          // convert first letter to lowercase for pascal case scenario?
+          .replace(/^([A-Z])/, (match) => match.toLowerCase())
+          // convert remaining uppercase letters to _ + lowercase
+          .replace(/([A-Z])/g, '_$1')
+          .toLowerCase(),
+        value,
+      )
     }
   })
   return url.toString()
 }
 
 export function createConnectIframe(props: ConnectProps) {
-  const {connectParams, width, height, onEvent, className} = props
+  const {width, height, onEvent} = props
 
   // Create wrapper div
   const wrapper = document.createElement('div')
-  wrapper.className = `connect-embed-wrapper ${className || ''}`
+  wrapper.className = `connect-embed-wrapper`
 
   // Create spinner container
   const spinnerContainer = document.createElement('div')
@@ -66,6 +75,8 @@ export function createConnectIframe(props: ConnectProps) {
   iframe.height = String(height || '100%')
 
   // Add styles
+  // note: connect-embed-warpper .spinner-container background
+  // was ${connectOptions?.theme === 'dark' ? '#1C1C1C' : 'white'};
   const style = document.createElement('style')
   style.textContent = `
      .connect-embed-wrapper {
@@ -83,7 +94,7 @@ export function createConnectIframe(props: ConnectProps) {
           justify-content: center;
           align-items: center;
           height: 100%;
-          background: ${connectParams?.theme === 'dark' ? '#1C1C1C' : 'white'};
+          background: white; 
           transition: opacity 0.3s ease;
           max-width: ${width || '100%'}px;
           max-height: ${height || '100%'}px;

@@ -249,7 +249,7 @@ export function AddConnectionInner({
       // None of this is working, why!!!
       void queryClient.invalidateQueries({
         queryKey: trpc.listConnections.queryKey({
-          connector_name: name,
+          connector_names: [name],
           expand: ['connector'],
         }),
       })
@@ -333,9 +333,10 @@ export function AddConnectionInner({
 }
 
 export function MyConnectionsClient(props: {
-  connector_name?: ConnectorName
+  connector_names?: ConnectorName[]
   initialData?: Promise<AppRouterOutput['listConnections']>
 }) {
+  const [_, setSearchParams] = useMutableSearchParams()
   const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
   const [isLoading, setIsLoading] = React.useState(true)
   const trpc = useTRPC()
@@ -346,7 +347,12 @@ export function MyConnectionsClient(props: {
 
   const res = useSuspenseQuery(
     trpc.listConnections.queryOptions(
-      {connector_name: props.connector_name, expand: ['connector']},
+      {
+        connector_names: props.connector_names?.length
+          ? props.connector_names
+          : undefined,
+        expand: ['connector'],
+      },
       initialData ? {initialData} : undefined,
     ),
   )
@@ -361,10 +367,17 @@ export function MyConnectionsClient(props: {
     )
   }
 
-  if (!res.data.items.length) {
+  if (!res.data?.items?.length || res.data.items.length === 0) {
     return (
-      <div className="text-muted-foreground py-8 text-center">
-        No connections found
+      <div className="flex flex-col items-center gap-4 py-8 text-center">
+        <p className="text-muted-foreground">
+          You have no configured integrations.
+        </p>
+        <Button
+          variant="default"
+          onClick={() => setSearchParams({tab: 'add'}, {shallow: true})}>
+          Add your first integration
+        </Button>
       </div>
     )
   }

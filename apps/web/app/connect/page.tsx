@@ -1,10 +1,13 @@
 import {ChevronLeftIcon} from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
-import {Suspense} from 'react'
-import {connectClientOptions} from '@openint/api-v1/routers/connect.models'
+import {cache, Suspense} from 'react'
+import {zConnectOptions} from '@openint/api-v1/routers/connect.models'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
-import {asOrgIfCustomer, type Viewer} from '@openint/cdk'
+import {asOrgIfCustomer, Id, type Viewer} from '@openint/cdk'
+import {getClerkOrganization} from '@openint/console-auth/server'
 import {isProduction} from '@openint/env'
+import {cn} from '@openint/shadcn/lib/utils'
 import {Button} from '@openint/shadcn/ui'
 import {
   Card,
@@ -30,16 +33,51 @@ function Fallback() {
   return <div>Loading...</div>
 }
 
+const getOrganizationInfo = cache(async (orgId: Id['org'] | null) => {
+  return orgId
+    ? await getClerkOrganization(orgId)
+    : {name: 'OpenInt', imageUrl: ''}
+})
+
+async function OrganizationImage({
+  orgId,
+  className,
+}: {
+  orgId: string | null
+  className?: string
+}) {
+  if (!orgId) return null
+  const {imageUrl, name} = await getOrganizationInfo(orgId as Id['org'])
+
+  if (!imageUrl) return null
+
+  return (
+    <div className={cn('flex items-center', className)}>
+      <Image
+        src={imageUrl}
+        alt={name || 'Organization Logo'}
+        width={25}
+        height={25}
+      />
+      <span className="ml-2">{name || 'Organization Name'}</span>
+    </div>
+  )
+}
+
+async function OrganizationName({orgId}: {orgId: string | null}) {
+  if (!orgId) return 'OpenInt Console'
+  const {name} = await getOrganizationInfo(orgId as Id['org'])
+  return <>{name || 'OpenInt Console'}</>
+}
+
 export default async function Page(
   pageProps: PageProps<never, {view?: string; connector_name?: string}>,
 ) {
   const {viewer, token} = isProduction
-    ? // in production we only want to take a token parameter
-      await currentViewerFromPageProps(pageProps)
-    : // In dev we can work with Clerk cookies to know the 'viewer'
-      await currentViewer(pageProps)
+    ? await currentViewerFromPageProps(pageProps)
+    : await currentViewer(pageProps)
 
-  if (viewer.role === 'anon') {
+  if (viewer.role === 'anon' || !viewer.orgId) {
     return (
       <div className="flex min-h-[400px] items-center justify-center p-4">
         <Card className="w-full max-w-md">
@@ -69,9 +107,18 @@ export default async function Page(
   }
 
   const {searchParams} = await parsePageProps(pageProps, {
-    searchParams: connectClientOptions,
+    searchParams: zConnectOptions,
   })
 
+  // now override any searchParams from options in the token.connect_options object as those are signed
+  if (viewer.connectOptions && Object.keys(viewer.connectOptions).length > 0) {
+    for (const [key, value] of Object.entries(viewer.connectOptions)) {
+      searchParams[key as keyof typeof searchParams] = value as any
+    }
+  }
+
+  // NOTE: we are not currently setting these but leaving these in the code for now
+  // to make it easier to add them in the future
   const themeVariables = Object.fromEntries(
     Object.entries(searchParams)
       .filter(([key]) => key.startsWith('--')) // Only include theme variables
@@ -100,6 +147,7 @@ export default async function Page(
               {
                 viewer,
                 searchParams,
+                token: token,
               },
               null,
               2,
@@ -108,25 +156,45 @@ export default async function Page(
         )}
         <div className="flex h-screen w-full">
           {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
-          <div className="bg-primary/10 hidden lg:flex lg:w-[550px]">
+          <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
             <div className="flex flex-col items-start p-8">
-              {/* TODO: Add organization logo here */}
-              <div className="h-48" />
-              <h1 className="mb-4 text-2xl font-bold">Connect Your Services</h1>
+              <Suspense
+                fallback={
+                  <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
+                }>
+                <OrganizationImage
+                  orgId={viewer.orgId as Id['org']}
+                  className="lg:pt-6"
+                />
+              </Suspense>
+
+              <h1 className="mb-4 mt-16 text-2xl font-bold">
+                Connect Your Services
+              </h1>
               <p className="text-muted-foreground">
                 Integrate your favorite tools and services with our platform.
                 Manage all your connections in one place.
               </p>
-              {/* Add back butt */}
-              <Button asChild variant="ghost" className="mt-8">
+              <Button variant="ghost" className="mt-8">
                 <Link href="/console" className="flex items-center gap-2">
                   <ChevronLeftIcon className="h-4 w-4" />
-                  Back to Console
+                  Back to{' '}
+                  <Suspense fallback="OpenInt Console">
+                    <OrganizationName orgId={viewer.orgId as Id['org']} />
+                  </Suspense>
                 </Link>
               </Button>
-              <div className="text-muted-foreground mt-auto flex items-center gap-2 self-end text-sm">
+
+              <div className="text-muted-foreground mt-auto flex items-center gap-0.5 self-end text-sm">
                 <span>Powered by</span>
-                <span className="font-semibold">OpenInt</span>
+                {/* TODO: in future take to a specific landing page for that customer saying XX uses OpenInt to power their integrations */}
+                <a
+                  href="https://openint.dev?ref=connect"
+                  target="_blank"
+                  rel="noopener"
+                  className="font-semibold">
+                  OpenInt
+                </a>
               </div>
             </div>
           </div>
@@ -136,30 +204,32 @@ export default async function Page(
           <TabsClient
             defaultValue="manage"
             paramKey="tab"
-            className="max-w-3xl flex-1 p-4">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="manage">Manage connections</TabsTrigger>
-              <TabsTrigger value="add">Add connection</TabsTrigger>
-            </TabsList>
-            <TabsContent value="manage" className="pt-2">
-              <Suspense fallback={<Fallback />}>
-                <MyConnectionsClient
-                  connector_name={searchParams.connector_name}
-                  initialData={api.listConnections({
-                    connector_name: searchParams.connector_name,
-                    expand: ['connector'],
-                  })}
-                />
-              </Suspense>
-            </TabsContent>
-            <TabsContent value="add" className="pt-2">
-              <Suspense fallback={<Fallback />}>
-                <AddConnections
-                  viewer={viewer}
-                  connector_name={searchParams.connector_name}
-                />
-              </Suspense>
-            </TabsContent>
+            className="flex-1 p-4 lg:pt-12">
+            <div className="mx-auto w-full max-w-4xl">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="manage">Manage Integrations</TabsTrigger>
+                <TabsTrigger value="add">Add New Integration</TabsTrigger>
+              </TabsList>
+              <TabsContent value="manage" className="pt-2">
+                <Suspense fallback={<Fallback />}>
+                  <MyConnectionsClient
+                    connector_names={searchParams.connector_names}
+                    initialData={api.listConnections({
+                      connector_names: searchParams.connector_names,
+                      expand: ['connector'],
+                    })}
+                  />
+                </Suspense>
+              </TabsContent>
+              <TabsContent value="add" className="pt-2">
+                <Suspense fallback={<Fallback />}>
+                  <AddConnections
+                    viewer={viewer}
+                    connector_names={searchParams.connector_names}
+                  />
+                </Suspense>
+              </TabsContent>
+            </div>
           </TabsClient>
         </div>
       </GlobalCommandBarProvider>
@@ -170,19 +240,38 @@ export default async function Page(
 /** This needs to happen server side for preConnect to work */
 async function AddConnections({
   viewer,
-  connector_name,
+  connector_names,
 }: {
   viewer: Viewer
-  connector_name?: ConnectorName
+  connector_names?: ConnectorName[]
 }) {
   // We need to elevate the role to org  to list connector config here
   // Alternative we'd have to modify RLS rules to allow this
   const api = createAPICaller(asOrgIfCustomer(viewer))
 
   const res = await api.listConnectorConfigs({
-    connector_name,
+    connector_names: connector_names,
     expand: ['connector.schemas'], // TODO: FIXME to use an array instead of a string
   })
+
+  if (!res?.items?.length || res.items.length === 0) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-8 text-center">
+        <p className="text-muted-foreground">
+          There are no connectors configured for this organization.
+        </p>
+        <Button asChild variant="default">
+          <Link href="https://console.openint.dev" target="_blank">
+            Go to OpenInt Console
+          </Link>
+        </Button>
+      </div>
+    )
+  }
+  // TODO: DO -> in case there are ccfgs but the user already has connected one of them
+  // THEN -> Check if that ccfg allows multiple of those connections and if so enable them to add it
+  // FINALLY -> if at the end of this its not possible to crease new connections show a user friendly message
+  // "You have configured all enabled integrations. If you'd like to enable new ones please contact the {organizationName} support team"
 
   return (
     <div className="flex flex-col gap-4">
