@@ -3085,8 +3085,40 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
           },
         },
         "required": [
