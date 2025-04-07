@@ -42,7 +42,7 @@ export const AddConnectorConfig = ({
   return (
     <div className={cn('flex size-full flex-col', className)} {...props}>
       {/* Search bar */}
-      <div className={cn('p-6 pb-0')}>
+      <div className={cn('py-1 pl-6 pr-10')}>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-400">
             <svg
