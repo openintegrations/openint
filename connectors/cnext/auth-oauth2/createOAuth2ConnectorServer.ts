@@ -65,7 +65,14 @@ export function createOAuth2ConnectorServer<
 
       const authorizeUrl = await client.getAuthorizeUrl({
         redirect_uri: getServerUrl(null) + '/connect/callback',
-        scopes: config.oauth?.scopes ?? [],
+        scopes: config.oauth?.scopes
+          ? // here because some old ccfgs have scopes as a string
+            typeof config.oauth.scopes === 'string'
+            ? (config.oauth.scopes as string).split(
+                oauthConfigTemplate.scope_separator ?? ' ',
+              )
+            : config.oauth.scopes
+          : [],
         state: connectionId,
         code_challenge: codeChallenge,
         ...oauthConfig.params_config.authorize,
