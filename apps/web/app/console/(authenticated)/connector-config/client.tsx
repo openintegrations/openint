@@ -269,7 +269,7 @@ export function ConnectorConfigList(props: {
         }}>
         <SheetContent
           side="right"
-          className="min-w-1/3 flex max-h-screen flex-col overflow-hidden p-0">
+          className="sm:min-w-1/3 flex max-h-screen w-full flex-col overflow-hidden p-0">
           <div className="p-4 pb-0">
             <SheetHeader>
               <SheetTitle className="text-lg">

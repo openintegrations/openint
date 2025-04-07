@@ -74,13 +74,13 @@ export const AddConnectorConfig = ({
       <div className={cn('min-h-0 flex-1 overflow-y-auto p-6')}>
         <div className={cn('grid grid-cols-1 gap-4 2xl:grid-cols-2')}>
           {filteredConnectors.map((connector, index) => (
-            <div
+            <ConnectorCard
+              connector={connector}
               key={`${connector.name}-${index}`}
               onClick={() => {
                 onSelectConnector && onSelectConnector(connector)
-              }}>
-              <ConnectorCard connector={connector} />
-            </div>
+              }}
+            />
           ))}
           {filteredConnectors.length === 0 && (
             <div className="col-span-2 py-8 text-center text-gray-500">

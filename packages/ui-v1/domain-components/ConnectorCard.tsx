@@ -24,7 +24,7 @@ const ConnectorCard = ({
   return (
     <div
       className={cn(
-        'group flex w-full max-w-md cursor-pointer flex-col items-start gap-4 rounded-lg border border-gray-200 p-6 transition-all hover:border-gray-400 hover:bg-gray-50 md:max-w-lg',
+        'group flex w-full cursor-pointer flex-col items-start gap-4 rounded-lg border border-gray-200 p-6 transition-all hover:border-gray-400 hover:bg-gray-50',
         className,
       )}
       {...props}>
