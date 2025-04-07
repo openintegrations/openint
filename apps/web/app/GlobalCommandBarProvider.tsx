@@ -14,6 +14,7 @@ import {
   useSession,
 } from '@openint/console-auth/client'
 import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
+import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
 import {SIDEBAR_NAV_ITEMS} from '@openint/ui-v1/navigation/app-sidebar'
 import {useMutation, useQueryClient} from '@openint/ui-v1/trpc'
 import {z} from '@openint/util/zod-utils'
@@ -74,9 +75,25 @@ export function useCommandDefinitionMap() {
       },
     ]),
   )
+
+  const {theme, setTheme} = useTheme()
+  const themeCommands = {
+    'theme:toggle': {
+      title: 'Toggle theme',
+      icon: 'SunMoon',
+      execute: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
+    },
+    'theme:reset': {
+      title: 'Reset theme to system default',
+      icon: 'Monitor',
+      execute: () => setTheme('system'),
+    },
+  } satisfies CommandDefinitionMapInput
+
   const allCommands: CommandDefinitionMapInput = {
     ...navCommands,
     ...orgCommands,
+    ...themeCommands,
     ...useConnectionCommands(),
     ...useCurrentSessionCommands(),
   }
