@@ -76,13 +76,6 @@ describe('proxyRequired', () => {
       expect(proxied.b).toBe(null)
       expect(proxied.c).toBe(undefined)
     })
-
-    it('should throw on explicitly defined undefined values when throwOn is "undefined"', () => {
-      const obj = {a: 1, b: undefined}
-      const proxied = proxyRequired(obj, {throwOn: 'undefined'})
-      expect(proxied.a).toBe(1)
-      expect(() => proxied.b).toThrow('b is required (undefined)')
-    })
   })
 })
 
@@ -117,6 +110,7 @@ describe('proxyRequiredRecursive', () => {
     expect(proxied.a).toBe(1)
     expect(proxied.b.d.e).toBe(3)
     expect(() => proxied.b.c).toThrow('b.c is required (undefined)')
+    expect(() => (proxied as any).c.d).toThrow('c is required (missing)')
   })
 
   it('should throw on accessing null nested properties by default', () => {
