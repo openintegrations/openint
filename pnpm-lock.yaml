@@ -39,9 +39,6 @@ importers:
       '@openint/eslint-config':
         specifier: workspace:*
         version: link:dev-packages/eslint-config
-      '@openint/util':
-        specifier: workspace:*
-        version: link:packages/util
       '@tsconfig/strictest':
         specifier: 1.0.2
         version: 1.0.2
@@ -1317,6 +1314,9 @@ importers:
 
   packages/env:
     dependencies:
+      '@openint/util':
+        specifier: workspace:*
+        version: link:../util
       '@t3-oss/env-nextjs':
         specifier: 0.7.3
         version: 0.7.3(typescript@5.8.2)(zod@3.24.2)

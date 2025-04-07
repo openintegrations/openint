@@ -39,7 +39,6 @@
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@jest/globals": "^29.7.0",
     "@openint/eslint-config": "workspace:*",
-    "@openint/util": "workspace:*",
     "@tsconfig/strictest": "1.0.2",
     "@types/jest": "29.5.10",
     "@types/node": "^22.13.10",

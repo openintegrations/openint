@@ -95,4 +95,4 @@ const searchParams = await props.searchParams
 
 - Always use bun when running ts files
 - If a function takes more than two parameters, it should probably take an object instead.
-
+- Prefer to use the `test` keyword instead of the `it` keyword when writing tests.
