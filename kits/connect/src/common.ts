@@ -11,10 +11,12 @@ export interface ConnectProps {
   height?: number
   onEvent?: (event: OpenIntEvent, unsubscribe: () => void) => void
   className?: string
+  // TODO: pull these from a common types package that includes connector name,
+  // albeit a customer should be able to pass in an unknown string in case these get out of date?
   connectOptions?: {
     // TODO: expand to https://coda.io/d/_d6fsw71RNUB/Implementing-a-native-UI-for-Connect-via-Core-APIs-and-Deep-Link_susYw00i
     returnUrl?: string
-    connectorNames?: string
+    connectorNames?: string[]
     view?: 'add' | 'manage' | 'default'
     debug?: boolean
     // TODO: add theme enum and colors object
