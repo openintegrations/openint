@@ -3634,11 +3634,10 @@ export interface operations {
                         connector_names?: components["schemas"]["core.connector.name"][];
                         /**
                          * Default View to load
-                         * @description The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not
-                         * @default default
+                         * @description The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not
                          * @enum {string}
                          */
-                        view?: "add" | "manage" | "default";
+                        view?: "add" | "manage";
                         /**
                          * Debug
                          * @description Whether to enable debug mode
@@ -3727,11 +3726,10 @@ export interface operations {
                         connector_names?: components["schemas"]["core.connector.name"][];
                         /**
                          * Default View to load
-                         * @description The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not
-                         * @default default
+                         * @description The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not
                          * @enum {string}
                          */
-                        view?: "add" | "manage" | "default";
+                        view?: "add" | "manage";
                         /**
                          * Debug
                          * @description Whether to enable debug mode

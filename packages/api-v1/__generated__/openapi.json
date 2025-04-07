@@ -5,7 +5,9 @@
     "version": "1.0.0"
   },
   "servers": [
-    {}
+    {
+      "url": "https://api.openint.dev/v1"
+    }
   ],
   "paths": {
     "/connector": {
@@ -2173,12 +2175,10 @@
                         "type": "string",
                         "enum": [
                           "add",
-                          "manage",
-                          "default"
+                          "manage"
                         ],
                         "title": "Default View to load",
-                        "default": "default",
-                        "description": "The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not"
+                        "description": "The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not"
                       },
                       "debug": {
                         "type": "boolean",
@@ -2312,12 +2312,10 @@
                         "type": "string",
                         "enum": [
                           "add",
-                          "manage",
-                          "default"
+                          "manage"
                         ],
                         "title": "Default View to load",
-                        "default": "default",
-                        "description": "The default view to show when the magic link is opened. Default smartly loads the right view based on whether the user has connections or not"
+                        "description": "The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not"
                       },
                       "debug": {
                         "type": "boolean",
