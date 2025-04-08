@@ -98,7 +98,6 @@
     "patchedDependencies": {
       "@jsonurl/jsonurl@1.1.7": "patches/@jsonurl__jsonurl@1.1.7.patch",
       "esbuild-jest@0.5.0": "patches/esbuild-jest@0.5.0.patch",
-      "firebase@9.8.1": "patches/firebase@9.8.1.patch",
       "micro-memoize@4.0.10": "patches/micro-memoize@4.0.10.patch"
     }
   }
