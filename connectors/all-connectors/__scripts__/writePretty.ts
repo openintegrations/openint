@@ -2,6 +2,7 @@ import * as fs from 'node:fs'
 import {join as pathJoin} from 'path/posix'
 import prettier from 'prettier'
 // Move prettier to its own project like eslint-config
+// eslint-disable-next-line import-x/no-relative-packages
 import prettierConfig from '../../../prettier.config'
 
 export async function writePretty(

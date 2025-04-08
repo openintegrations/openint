@@ -1,5 +1,7 @@
 import type {Z} from '@openint/util/zod-utils'
 // Hack alert. Figure out how to straighten the dependencies out
+// @openint-bot FIX ME
+// eslint-disable-next-line import-x/no-relative-packages
 import type {IconName} from '../ui-v1/components/Icon'
 
 export type _infer<T, TDefault = unknown> = T extends Z.ZodTypeAny

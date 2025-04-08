@@ -1,12 +1,15 @@
-import {rxjs} from '@openint/util/observable-utils'
+import type {rxjs} from '@openint/util/observable-utils'
 import type {
   NoInfer,
   NonDiscriminatedUnion,
   ObjectPartialDeep,
 } from '@openint/util/type-utils'
 import {z, type Z} from '@openint/util/zod-utils'
-// HACK ALERT
-import type {ExternalId, Id} from '../cdk/id.types'
+
+type ExternalId = string
+interface Id {
+  conn: string
+}
 
 /**
  * This will be standardized over time into either
@@ -26,7 +29,7 @@ export interface AnyEntityPayload {
   /** Rename to stream */
   entityName: string
   entity: unknown
-  id: string // ExternalId
+  id: ExternalId
 }
 
 export interface ConnectionUpdateData<

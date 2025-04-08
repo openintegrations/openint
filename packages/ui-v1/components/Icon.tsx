@@ -14,6 +14,7 @@ export type IconName = Exclude<
 >
 
 export function Icon(props: {name: IconName} & lucide.LucideProps) {
+  // eslint-disable-next-line import-x/namespace
   const LucideIcon = lucide[props.name]
   return <LucideIcon {...props} />
 }

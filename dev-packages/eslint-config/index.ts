@@ -125,9 +125,10 @@ export const configs = keyAsName({
       'import-x/no-extraneous-dependencies': [
         'error',
         {
-          devDependencies: false,
-          optionalDependencies: false,
-          peerDependencies: false,
+          // TODO: Turn these to false when have whitelist 
+          devDependencies: true,
+          optionalDependencies: true,
+          peerDependencies: true,
           // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-extraneous-dependencies.md
           // consider adding whitelist
         },
@@ -321,6 +322,9 @@ export const configs = keyAsName({
   },
   codegen: {
     extends: [codegen.flatConfig.recommendedConfig as Config],
+    // TODO: Add a linter rule for preferring named exports especially when working with barrel files
+    // Though barrel should probably not be the default pattern as we want more specific imports generally speaking
+    // combined with explicit entry points in package.json though esm
     rules: {'codegen/codegen': 'warn'},
   },
   'eslint-comments': {

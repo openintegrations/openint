@@ -6,4 +6,3 @@ export * from './StatusCell'
 
 export * from './ConnectorConfigTable'
 export * from './CustomerTable'
-export * from './ConnectionTableCell'

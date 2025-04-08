@@ -9,5 +9,7 @@
     "@openint/util": "workspace:*",
     "elysia": "^1.2.12"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@jest/globals": "^29.7.0"
+  }
 }

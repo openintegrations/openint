@@ -1,12 +1,13 @@
 import {compact} from '@openint/util/array-utils'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
 import {z, type Z} from '@openint/util/zod-utils'
+// @pellicceama fix me
+// eslint-disable-next-line import-x/no-relative-packages
 import {zConnectOptions} from '../../packages/api-v1/models'
 import type {ExtCustomerId} from './id.types'
 import {zCustomerId, zId, zUserId} from './id.types'
 
 export const zViewerRole = z.enum(['anon', 'customer', 'user', 'org', 'system'])
-export {ExtCustomerId}
 
 export const zViewer = z
   .discriminatedUnion('role', [
