@@ -1,4 +1,4 @@
-import type plaid from 'plaid'
+import type * as plaid from 'plaid'
 import type {PlaidAccount as PlaidLinkAccount} from 'react-plaid-link'
 import {A} from '@openint/util/amount-utils'
 import {normalizeError} from '@openint/util/error-utils'
