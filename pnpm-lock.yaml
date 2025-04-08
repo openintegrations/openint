@@ -968,6 +968,9 @@ importers:
 
   dev-packages/dev-configs:
     dependencies:
+      '@eslint/css':
+        specifier: ^0.6.0
+        version: 0.6.0
       '@eslint/eslintrc':
         specifier: ^3.3.0
         version: 3.3.0
@@ -2340,8 +2343,20 @@ packages:
     resolution: {integrity: sha512-kLrdPDJE1ckPo94kmPPf9Hfd0DU0Jw6oKYrhe+pwSC0iTUInmTa+w6fw8sGgcfkFJGNdWOUeOaDM4quW4a7OkA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@eslint/core@0.10.0':
+    resolution: {integrity: sha512-gFHJ+xBOo4G3WRlR1e/3G8A6/KZAH6zcE/hkLRCZTi/B9avAG365QhFA8uOGzTMqgTghpn7/fSnscW++dpMSAw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
   '@eslint/core@0.12.0':
     resolution: {integrity: sha512-cmrR6pytBuSMTaBweKoGMwu3EiHiEC+DoyupPmlZ0HxBJBtIxwe+j/E4XPIKNx+Q74c8lXKPwYawBf5glsTkHg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@eslint/css-tree@3.3.3':
+    resolution: {integrity: sha512-6vH9NNrZAJX/m9TzA6RW4WQtadQOB+TpazhsjcaBckMocduQNMXgJjvoOZ0hvCRGHFVjZH5XINzZ8HPSU2mACg==}
+    engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0}
+
+  '@eslint/css@0.6.0':
+    resolution: {integrity: sha512-MFjbx8n4/NS6aW65efZW22541WZZjy5HGq5ylctzlfoCiCN+Hmsi+M6kQE4drmNqLlreCBnhT9hh51fCrStMpQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/eslintrc@3.3.0':
@@ -10835,6 +10850,9 @@ packages:
   mdast-util-to-string@4.0.0:
     resolution: {integrity: sha512-0H44vDimn51F0YwvxSJSm0eCDOJTRlmN0R1yBh4HLj9wiV1Dn0QoXGbvFAWj2hSItVTlCmBF1hqKlIyUBVFLPg==}
 
+  mdn-data@2.20.0:
+    resolution: {integrity: sha512-/d3otgvmquUkAN2RVxSg6lIbQrYX7isR4aC5Hvw8JuHvzctR3eUG50WmsAZjb9MkbJ5LbijPSy7uIxEtQDGI0w==}
+
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
@@ -15222,9 +15240,24 @@ snapshots:
 
   '@eslint/config-helpers@0.1.0': {}
 
+  '@eslint/core@0.10.0':
+    dependencies:
+      '@types/json-schema': 7.0.15
+
   '@eslint/core@0.12.0':
     dependencies:
       '@types/json-schema': 7.0.15
+
+  '@eslint/css-tree@3.3.3':
+    dependencies:
+      mdn-data: 2.20.0
+      source-map-js: 1.2.1
+
+  '@eslint/css@0.6.0':
+    dependencies:
+      '@eslint/core': 0.10.0
+      '@eslint/css-tree': 3.3.3
+      '@eslint/plugin-kit': 0.2.7
 
   '@eslint/eslintrc@3.3.0':
     dependencies:
@@ -26134,6 +26167,8 @@ snapshots:
   mdast-util-to-string@4.0.0:
     dependencies:
       '@types/mdast': 4.0.4
+
+  mdn-data@2.20.0: {}
 
   media-typer@0.3.0: {}
 
