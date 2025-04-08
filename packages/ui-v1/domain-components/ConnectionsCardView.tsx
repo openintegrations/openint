@@ -40,9 +40,7 @@ export function ConnectionCardContent({
   const customerId = connection.customer_id
   const connectorConfigId = connection.connector_config_id || ''
 
-  // Try to extract values from connection if not provided as props
   const effectiveCategory = category || connection.connector_name || 'Unknown'
-  // Default auth method based on connection settings
   const effectiveAuthMethod =
     authMethod ||
     (connection.settings?.oauth
@@ -50,17 +48,14 @@ export function ConnectionCardContent({
       : connection.settings?.apikey
         ? 'apikey'
         : 'Unknown')
-  // Use provided values or defaults
   const effectivePlatform = platform || 'Desktop'
   const effectiveVersion = version || 'V1'
 
-  // Get connector details for enhanced display
   const connectorName = connection.connector_name || 'Unknown Connector'
   const displayName =
     connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
   const logoUrl = getConnectorLogoUrl(connectorName)
 
-  // Status badge configuration
   const getStatusInfo = (status: StatusType) => {
     switch (status) {
       case 'healthy':
@@ -140,7 +135,6 @@ export function ConnectionCardContent({
 
   return (
     <div className="overflow-hidden rounded-lg">
-      {/* Enhanced header with logo, name and status */}
       <div className="flex items-center gap-3 bg-gradient-to-r from-gray-50 to-white p-5">
         <div className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-gray-100">
           <Image
@@ -150,7 +144,6 @@ export function ConnectionCardContent({
             height={48}
             className="object-contain p-1"
             onError={(e) => {
-              // If logo fails to load, show initials instead
               e.currentTarget.style.display = 'none'
               e.currentTarget.parentElement!.innerHTML = `<span class="text-primary font-medium text-base">${displayName.substring(0, 2).toUpperCase()}</span>`
             }}
@@ -223,7 +216,6 @@ export function ConnectionsCardView({
 }: ConnectionCardProps) {
   const [open, setOpen] = useState(false)
 
-  // Create a nicer trigger element with the connector logo
   const connectorName = connection.connector_name || 'Unknown Connector'
   const logoUrl = getConnectorLogoUrl(connectorName)
   const displayName =
@@ -240,7 +232,6 @@ export function ConnectionsCardView({
             height={40}
             className="object-contain p-1"
             onError={(e) => {
-              // If logo fails to load, show initials instead
               e.currentTarget.style.display = 'none'
               e.currentTarget.parentElement!.innerHTML = `<span class="text-primary text-xs font-medium">${displayName.substring(0, 2).toUpperCase()}</span>`
             }}
