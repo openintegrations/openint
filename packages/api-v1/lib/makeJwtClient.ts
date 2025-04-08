@@ -50,12 +50,7 @@ export function viewerFromJwtPayload(
         Id['org'],
         CustomerId,
       ]
-      return {
-        role: payload.role,
-        customerId,
-        orgId,
-        connectOptions: payload.connect_options,
-      }
+      return {role: payload.role, customerId, orgId}
     }
     case 'org':
       return {role: payload.role, orgId: payload.sub as Id['org']}

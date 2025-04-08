@@ -1,10 +1,13 @@
+import type {ConnectorConfigForCustomer} from './client'
+import type {PageProps} from '@/lib-common/next-utils'
+import type {Viewer} from '@openint/cdk'
 import {ChevronLeftIcon} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {cache, Suspense} from 'react'
 import {zConnectOptions} from '@openint/api-v1/routers/connect.models'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
-import {asOrgIfCustomer, Id, type Viewer} from '@openint/cdk'
+import {asOrgIfCustomer, Id} from '@openint/cdk'
 import {getClerkOrganization} from '@openint/console-auth/server'
 import {isProduction} from '@openint/env'
 import {cn} from '@openint/shadcn/lib/utils'
@@ -17,7 +20,7 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
-import {parsePageProps, type PageProps} from '@/lib-common/next-utils'
+import {parsePageProps} from '@/lib-common/next-utils'
 import {
   currentViewer,
   currentViewerFromPageProps,
@@ -25,7 +28,6 @@ import {
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../console/(authenticated)/client'
 import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
-import type {ConnectorConfigForCustomer} from './client'
 import {AddConnectionInner, MyConnectionsClient} from './client'
 import {TabsClient} from './Tabs.client'
 
@@ -73,7 +75,7 @@ async function OrganizationName({orgId}: {orgId: string | null}) {
 export default async function Page(
   pageProps: PageProps<never, {view?: string; connector_name?: string}>,
 ) {
-  const {viewer, token} = isProduction
+  const {viewer, token, payload} = isProduction
     ? await currentViewerFromPageProps(pageProps)
     : await currentViewer(pageProps)
 
@@ -111,8 +113,11 @@ export default async function Page(
   })
 
   // now override any searchParams from options in the token.connect_options object as those are signed
-  if (viewer.connectOptions && Object.keys(viewer.connectOptions).length > 0) {
-    for (const [key, value] of Object.entries(viewer.connectOptions)) {
+  if (
+    payload?.connect_options &&
+    Object.keys(payload.connect_options).length > 0
+  ) {
+    for (const [key, value] of Object.entries(payload.connect_options)) {
       searchParams[key as keyof typeof searchParams] = value as any
     }
   }

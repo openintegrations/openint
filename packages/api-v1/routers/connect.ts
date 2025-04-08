@@ -1,8 +1,8 @@
+import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
-import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {getBaseURLs, getServerUrl} from '@openint/env'
@@ -126,19 +126,20 @@ export const connectRouter = router({
     )
     .output(discriminatedUnionBySchemaKey.connect_input)
     .query(async ({ctx, input}) => {
-      const connectorNamesFromToken =
-        ctx.viewer?.connectOptions?.connector_names ?? []
-      if (
-        connectorNamesFromToken.length > 0 &&
-        !connectorNamesFromToken.includes(
-          input.discriminated_data.connector_name as ConnectorName,
-        )
-      ) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: `You are not authorized to connect to ${input.discriminated_data.connector_name}`,
-        })
-      }
+      // @pellicceama: Have another way to validate
+      // const connectorNamesFromToken =
+      //   ctx.viewer?.connectOptions?.connector_names ?? []
+      // if (
+      //   connectorNamesFromToken.length > 0 &&
+      //   !connectorNamesFromToken.includes(
+      //     input.discriminated_data.connector_name as ConnectorName,
+      //   )
+      // ) {
+      //   throw new TRPCError({
+      //     code: 'UNAUTHORIZED',
+      //     message: `You are not authorized to connect to ${input.discriminated_data.connector_name}`,
+      //   })
+      // }
 
       const connectors = serverConnectors as Record<string, ConnectorServer>
       const connector = connectors[input.discriminated_data.connector_name]
@@ -208,19 +209,20 @@ export const connectRouter = router({
     .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
       console.log('postConnect', input, ctx)
-      const connectorNamesFromToken =
-        ctx.viewer?.connectOptions?.connector_names ?? []
-      if (
-        connectorNamesFromToken.length > 0 &&
-        !connectorNamesFromToken.includes(
-          input.discriminated_data.connector_name as ConnectorName,
-        )
-      ) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: `You are not authorized to connect to ${input.discriminated_data.connector_name}`,
-        })
-      }
+      // @pellicceama: Have another way to validate
+      // const connectorNamesFromToken =
+      //   ctx.viewer?.connectOptions?.connector_names ?? []
+      // if (
+      //   connectorNamesFromToken.length > 0 &&
+      //   !connectorNamesFromToken.includes(
+      //     input.discriminated_data.connector_name as ConnectorName,
+      //   )
+      // ) {
+      //   throw new TRPCError({
+      //     code: 'UNAUTHORIZED',
+      //     message: `You are not authorized to connect to ${input.discriminated_data.connector_name}`,
+      //   })
+      // }
       const connectors = serverConnectors as Record<string, ConnectorServer>
       const defs = defConnectors as Record<string, ConnectorDef>
       const connector = connectors[input.discriminated_data.connector_name]
