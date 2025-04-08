@@ -113,40 +113,12 @@ export const brexConnectorConfig: Story = {
   args: {name: 'brex'},
 }
 
-export const facebookConnectorConfig: Story = {
-  args: {name: 'facebook'},
-}
-
 export const finchConnectorConfig: Story = {
   args: {name: 'finch'},
 }
 
-export const gongConnectorConfig: Story = {
-  args: {name: 'gong'},
-}
-
 export const heronConnectorConfig: Story = {
   args: {name: 'heron'},
-}
-
-export const instagramConnectorConfig: Story = {
-  args: {name: 'instagram'},
-}
-
-export const intercomConnectorConfig: Story = {
-  args: {name: 'intercom'},
-}
-
-export const jiraConnectorConfig: Story = {
-  args: {name: 'jira'},
-}
-
-export const kustomerConnectorConfig: Story = {
-  args: {name: 'kustomer'},
-}
-
-export const leverConnectorConfig: Story = {
-  args: {name: 'lever'},
 }
 
 export const lunchmoneyConnectorConfig: Story = {
@@ -161,10 +133,6 @@ export const mergeConnectorConfig: Story = {
   args: {name: 'merge'},
 }
 
-export const microsoftConnectorConfig: Story = {
-  args: {name: 'microsoft'},
-}
-
 export const mootaConnectorConfig: Story = {
   args: {name: 'moota'},
 }
@@ -173,28 +141,12 @@ export const onebrickConnectorConfig: Story = {
   args: {name: 'onebrick'},
 }
 
-export const outreachConnectorConfig: Story = {
-  args: {name: 'outreach'},
-}
-
-export const pipedriveConnectorConfig: Story = {
-  args: {name: 'pipedrive'},
-}
-
 export const plaidConnectorConfig: Story = {
   args: {name: 'plaid'},
 }
 
 export const rampConnectorConfig: Story = {
   args: {name: 'ramp'},
-}
-
-export const redditConnectorConfig: Story = {
-  args: {name: 'reddit'},
-}
-
-export const salesloftConnectorConfig: Story = {
-  args: {name: 'salesloft'},
 }
 
 export const saltedgeConnectorConfig: Story = {
@@ -209,22 +161,10 @@ export const tellerConnectorConfig: Story = {
   args: {name: 'teller'},
 }
 
-export const twitterConnectorConfig: Story = {
-  args: {name: 'twitter'},
-}
-
 export const venmoConnectorConfig: Story = {
   args: {name: 'venmo'},
 }
 
-export const xeroConnectorConfig: Story = {
-  args: {name: 'xero'},
-}
-
 export const yodleeConnectorConfig: Story = {
   args: {name: 'yodlee'},
-}
-
-export const zohodeskConnectorConfig: Story = {
-  args: {name: 'zohodesk'},
 }

@@ -125,10 +125,6 @@ export const codaConnectionSettings: Story = {
   args: {name: 'coda'},
 }
 
-export const facebookConnectionSettings: Story = {
-  args: {name: 'facebook'},
-}
-
 export const finchConnectionSettings: Story = {
   args: {name: 'finch'},
 }
@@ -141,52 +137,16 @@ export const foreceiptConnectionSettings: Story = {
   args: {name: 'foreceipt'},
 }
 
-export const gongConnectionSettings: Story = {
-  args: {name: 'gong'},
-}
-
 export const greenhouseConnectionSettings: Story = {
   args: {name: 'greenhouse'},
-}
-
-export const instagramConnectionSettings: Story = {
-  args: {name: 'instagram'},
-}
-
-export const intercomConnectionSettings: Story = {
-  args: {name: 'intercom'},
-}
-
-export const jiraConnectionSettings: Story = {
-  args: {name: 'jira'},
-}
-
-export const kustomerConnectionSettings: Story = {
-  args: {name: 'kustomer'},
-}
-
-export const leverConnectionSettings: Story = {
-  args: {name: 'lever'},
 }
 
 export const mergeConnectionSettings: Story = {
   args: {name: 'merge'},
 }
 
-export const microsoftConnectionSettings: Story = {
-  args: {name: 'microsoft'},
-}
-
 export const onebrickConnectionSettings: Story = {
   args: {name: 'onebrick'},
-}
-
-export const outreachConnectionSettings: Story = {
-  args: {name: 'outreach'},
-}
-
-export const pipedriveConnectionSettings: Story = {
-  args: {name: 'pipedrive'},
 }
 
 export const plaidConnectionSettings: Story = {
@@ -199,14 +159,6 @@ export const postgresConnectionSettings: Story = {
 
 export const rampConnectionSettings: Story = {
   args: {name: 'ramp'},
-}
-
-export const redditConnectionSettings: Story = {
-  args: {name: 'reddit'},
-}
-
-export const salesloftConnectionSettings: Story = {
-  args: {name: 'salesloft'},
 }
 
 export const saltedgeConnectionSettings: Story = {
@@ -233,10 +185,6 @@ export const twentyConnectionSettings: Story = {
   args: {name: 'twenty'},
 }
 
-export const twitterConnectionSettings: Story = {
-  args: {name: 'twitter'},
-}
-
 export const venmoConnectionSettings: Story = {
   args: {name: 'venmo'},
 }
@@ -245,14 +193,6 @@ export const wiseConnectionSettings: Story = {
   args: {name: 'wise'},
 }
 
-export const xeroConnectionSettings: Story = {
-  args: {name: 'xero'},
-}
-
 export const yodleeConnectionSettings: Story = {
   args: {name: 'yodlee'},
-}
-
-export const zohodeskConnectionSettings: Story = {
-  args: {name: 'zohodesk'},
 }
