@@ -39,7 +39,7 @@
   // For some reason dev-packages/eslint-config/eslint.config.ts gets complaint from ci, not sure why...
   "exclude": [
     "node_modules",
-    "dev-packages/dev-configs/eslint.config.ts",
+    "dev-packages/dev-configs/eslint.config.base.ts",
     "eslint.config.ts"
   ],
   "plugins": [{"name": "typescript-snapshots-plugin"}]
