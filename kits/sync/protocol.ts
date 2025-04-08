@@ -6,7 +6,7 @@ import type {
 } from '@openint/util/type-utils'
 import {z, type Z} from '@openint/util/zod-utils'
 
-type ExternalId = string
+type ExternalId = string | number
 interface Id {
   conn: string
 }
