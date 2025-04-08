@@ -1,10 +1,11 @@
+import type {CustomerId, Id, UserId} from '@openint/cdk/id.types'
+import type {Viewer} from '@openint/cdk/viewer'
+import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import * as jose from 'jose'
-import {zId, type CustomerId, type Id, type UserId} from '@openint/cdk/id.types'
-import type {Viewer} from '@openint/cdk/viewer'
+import {zId} from '@openint/cdk/id.types'
 import {zViewer, zViewerRole} from '@openint/cdk/viewer'
 import {zFunction} from '@openint/util/zod-function-utils'
-import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
 import {zConnectOptions} from '../models'
 
@@ -28,47 +29,36 @@ export const zJwtPayload = z.object({
   connect_options: zConnectOptions.optional(),
 })
 
-export const zViewerFromJwtPayload = zJwtPayload
-  .nullish()
-  .transform((payload): Viewer => {
-    // console.log('zViewerFromJwtPayload', payload)
-    switch (payload?.role) {
-      case undefined:
-      case 'anon':
-        return {role: 'anon'}
-      case 'user':
-      case 'authenticated':
-        return {
-          role: 'user',
-          userId: payload.sub as UserId,
-          orgId: payload.org_id,
-        }
-      // good reason to rename customer to customer
-      case 'customer': {
-        const [orgId, customerId] = (payload.sub?.split('/') ?? []) as [
-          Id['org'],
-          CustomerId,
-        ]
-        return {
-          role: payload.role,
-          customerId,
-          orgId,
-          connectOptions: payload.connect_options,
-        }
+export function viewerFromJwtPayload(
+  payload: Z.infer<typeof zJwtPayload>,
+): Viewer {
+  // console.log('zViewerFromJwtPayload', payload)
+  switch (payload?.role) {
+    case undefined:
+    case 'anon':
+      return {role: 'anon'}
+    case 'user':
+    case 'authenticated':
+      return {
+        role: 'user',
+        userId: payload.sub as UserId,
+        orgId: payload.org_id,
       }
-      case 'org':
-        return {role: payload.role, orgId: payload.sub as Id['org']}
-      case 'system':
-        return {role: 'system'}
+    // good reason to rename customer to customer
+    case 'customer': {
+      const [orgId, customerId] = (payload.sub?.split('/') ?? []) as [
+        Id['org'],
+        CustomerId,
+      ]
+      return {role: payload.role, customerId, orgId}
     }
-  })
-  .pipe(zViewer)
+    case 'org':
+      return {role: payload.role, orgId: payload.sub as Id['org']}
+    case 'system':
+      return {role: 'system'}
+  }
+}
 
-export const zViewerFromUnverifiedJwtToken = z
-  .string()
-  .nullish()
-  .transform((token) => (token ? jose.decodeJwt(token) : token))
-  .pipe(zViewerFromJwtPayload)
 // MARK: - JWT
 /**
  * Clerk template for jwt payload below
@@ -91,17 +81,25 @@ export const zViewerFromUnverifiedJwtToken = z
 export const makeJwtClient = zFunction(
   z.object({secretOrPublicKey: z.string()}),
   ({secretOrPublicKey}) => ({
-    verifyViewer: async (token?: string | null): Promise<Viewer> => {
+    verifyToken: async (
+      token?: string | null,
+    ): Promise<{
+      viewer: Viewer
+      payload: Z.infer<typeof zJwtPayload> | undefined
+    }> => {
       if (!token) {
-        return {role: 'anon'}
+        return {viewer: {role: 'anon'}, payload: undefined}
       }
       try {
         const result = await jose.jwtVerify(
           token,
           new TextEncoder().encode(secretOrPublicKey),
         )
+        const payload = zJwtPayload.parse(result.payload)
+        const viewer = zViewer.parse(viewerFromJwtPayload(payload))
+        return {viewer, payload}
+
         // console.log('jwt.verify', data)
-        return zViewerFromJwtPayload.parse(result.payload)
       } catch (err) {
         // console.log('jwt.verify Error', err)
         // Actually throw token expired errror
@@ -112,7 +110,7 @@ export const makeJwtClient = zFunction(
         // return {role: 'anon'}
       }
     },
-    signViewer: async (
+    signToken: async (
       viewer: Viewer,
       {
         validityInSeconds = 3600,
@@ -147,7 +145,7 @@ export const makeJwtClient = zFunction(
           sub: 'system',
         }),
         // Partial is a lie, it should not happen
-      } satisfies Partial<Z.input<typeof zViewerFromJwtPayload>>
+      } satisfies Partial<Z.infer<typeof zJwtPayload>>
       return new jose.SignJWT(payload)
         .setProtectedHeader({alg: 'HS256'})
         .setIssuedAt()

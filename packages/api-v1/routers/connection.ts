@@ -1,10 +1,11 @@
+import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 import {core} from '../models'
 import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
 import {
@@ -178,14 +179,15 @@ export const connectionRouter = router({
       zListResponse(zConnectionExpanded).describe('The list of connections'),
     )
     .query(async ({ctx, input}) => {
-      const connectorNamesFromToken =
-        ctx.viewer?.connectOptions?.connector_names ?? []
+      // @pellicceama: Have another way to validate
+      // const connectorNamesFromToken =
+      //   ctx.viewer?.connectOptions?.connector_names ?? []
       const connectorNames = zConnectorName.options
       const {query, limit, offset} = applyPaginationAndOrder(
         ctx.db
           .select({
             connection: schema.connection,
-            total: sql`count(*) over()`,
+            total: sql`count(*) OVER ()`,
           })
           .from(schema.connection)
           .where(
@@ -207,12 +209,12 @@ export const connectionRouter = router({
                 : undefined,
               // excluding data from old connectors that are no longer supported
               inArray(schema.connection.connector_name, connectorNames),
-              connectorNamesFromToken.length > 0
-                ? inArray(
-                    schema.connection.connector_name,
-                    connectorNamesFromToken,
-                  )
-                : undefined,
+              // connectorNamesFromToken.length > 0
+              //   ? inArray(
+              //       schema.connection.connector_name,
+              //       connectorNamesFromToken,
+              //     )
+              //   : undefined,
             ),
           ),
         schema.connection.created_at,
