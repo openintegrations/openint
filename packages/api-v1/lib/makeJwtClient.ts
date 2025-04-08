@@ -6,6 +6,7 @@ import {zViewer, zViewerRole} from '@openint/cdk/viewer'
 import {zFunction} from '@openint/util/zod-function-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
+import {zConnectOptions} from '../models'
 
 export const zJwtPayload = z.object({
   /** Different meaning in different contexts */
@@ -23,6 +24,8 @@ export const zJwtPayload = z.object({
   org_role: z.string().nullish(),
   /** For readable urls, unique across org */
   org_slug: z.string().nullish(),
+  /** Options for the connect embed */
+  connect_options: zConnectOptions.optional(),
 })
 
 export const zViewerFromJwtPayload = zJwtPayload
@@ -46,7 +49,12 @@ export const zViewerFromJwtPayload = zJwtPayload
           Id['org'],
           CustomerId,
         ]
-        return {role: payload.role, customerId, orgId}
+        return {
+          role: payload.role,
+          customerId,
+          orgId,
+          connectOptions: payload.connect_options,
+        }
       }
       case 'org':
         return {role: payload.role, orgId: payload.sub as Id['org']}
@@ -106,7 +114,13 @@ export const makeJwtClient = zFunction(
     },
     signViewer: async (
       viewer: Viewer,
-      {validityInSeconds = 3600}: {validityInSeconds?: number} = {},
+      {
+        validityInSeconds = 3600,
+        connectOptions,
+      }: {
+        validityInSeconds?: number
+        connectOptions?: Z.infer<typeof zConnectOptions>
+      } = {},
     ) => {
       const payload = {
         role: 'anon',
@@ -116,6 +130,7 @@ export const makeJwtClient = zFunction(
           sub: `${viewer.orgId}/${viewer.customerId}`,
           customer_id: viewer.customerId, // Needed for RLS
           org_id: viewer.orgId, // Needed for RLS
+          ...(connectOptions && {connect_options: connectOptions}),
         }),
         ...(viewer.role === 'org' && {
           role: 'org',

@@ -9,7 +9,7 @@ import {getBaseURLs, getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
-import {core} from '../models'
+import {ConnectorName, core} from '../models'
 import {
   authenticatedProcedure,
   customerProcedure,
@@ -20,15 +20,13 @@ import {connectRouterModels} from './connect.models'
 import {md} from './utils/md'
 
 export const connectRouter = router({
-  // TODO: Move create token in here...  and make sure createToken can contain
-  // signed client options as well and have them override the client options from url params
-  getMagicLink: orgProcedure
+  createMagicLink: orgProcedure
     .meta({
       openapi: {
         method: 'POST',
         path: '/customer/{customer_id}/magic-link',
         description:
-          'Create a magic link that is ready to be shared with customers who want to use Connect',
+          'Create a @Connect magic link that is ready to be shared with customers who want to use @Connect',
         summary: 'Create Magic Link',
       },
     })
@@ -54,22 +52,59 @@ export const connectRouter = router({
       }
       const token = await jwt.signViewer(
         asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
-        {validityInSeconds: input.validity_in_seconds},
+        {
+          validityInSeconds: input.validity_in_seconds,
+          connectOptions: input.connect_options,
+        },
       )
 
       const url = new URL('/connect', getServerUrl(null))
       url.searchParams.set('token', token)
 
-      if (input.client_options) {
-        for (const [key, value] of Object.entries(input.client_options)) {
-          if (value !== undefined) {
-            url.searchParams.set(key, value.toString())
-          }
-        }
-      }
-
       return {
         magic_link_url: url.toString(),
+      }
+    }),
+  createToken: orgProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/customer/{customer_id}/token',
+        description:
+          'Create a @Connect authentication token for a customer. This token can be used to embed @Connect in your application via the `@openint/connect` npm package.',
+        summary: 'Create Customer Authentication Token',
+      },
+    })
+    .input(connectRouterModels.createTokenInput)
+    .output(
+      z.object({
+        token: z
+          .string()
+          .describe('The authentication token to use for API requests'),
+      }),
+    )
+    .mutation(async ({ctx, input}) => {
+      const jwt = makeJwtClient({
+        secretOrPublicKey: process.env['JWT_SECRET']!,
+      })
+
+      if (!input || !input.customer_id) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Missing customer_id in path /customer/{customer_id}/token',
+        })
+      }
+
+      const token = await jwt.signViewer(
+        asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
+        {
+          validityInSeconds: input.validity_in_seconds,
+          connectOptions: input.connect_options,
+        },
+      )
+
+      return {
+        token: token,
       }
     }),
   preConnect: customerProcedure
@@ -91,6 +126,20 @@ export const connectRouter = router({
     )
     .output(discriminatedUnionBySchemaKey.connect_input)
     .query(async ({ctx, input}) => {
+      const connectorNamesFromToken =
+        ctx.viewer?.connectOptions?.connector_names ?? []
+      if (
+        connectorNamesFromToken.length > 0 &&
+        !connectorNamesFromToken.includes(
+          input.discriminated_data.connector_name as ConnectorName,
+        )
+      ) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: `You are not authorized to connect to ${input.discriminated_data.connector_name}`,
+        })
+      }
+
       const connectors = serverConnectors as Record<string, ConnectorServer>
       const connector = connectors[input.discriminated_data.connector_name]
       if (!connector) {
@@ -129,7 +178,7 @@ export const connectRouter = router({
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
-          baseUrls: getBaseURLs(null),
+          baseURLs: getBaseURLs(null),
         },
         input: input.discriminated_data.pre_connect_input,
       })
@@ -159,6 +208,19 @@ export const connectRouter = router({
     .output(core.connection_select)
     .mutation(async ({ctx, input}) => {
       console.log('postConnect', input, ctx)
+      const connectorNamesFromToken =
+        ctx.viewer?.connectOptions?.connector_names ?? []
+      if (
+        connectorNamesFromToken.length > 0 &&
+        !connectorNamesFromToken.includes(
+          input.discriminated_data.connector_name as ConnectorName,
+        )
+      ) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: `You are not authorized to connect to ${input.discriminated_data.connector_name}`,
+        })
+      }
       const connectors = serverConnectors as Record<string, ConnectorServer>
       const defs = defConnectors as Record<string, ConnectorDef>
       const connector = connectors[input.discriminated_data.connector_name]
@@ -199,7 +261,7 @@ export const connectRouter = router({
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
           fetch: ctx.fetch,
-          baseUrls: getBaseURLs(null),
+          baseURLs: getBaseURLs(null),
         },
       })
       const id = makeId(
@@ -245,6 +307,7 @@ export const connectRouter = router({
       openapi: {
         method: 'POST',
         path: '/connect/revoke',
+        enabled: false,
       },
     })
     .input(z.object({id: z.string()}))

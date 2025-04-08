@@ -37,6 +37,8 @@ export function useSession() {
       orgId: organization?.id,
       sessionId: session?.id,
       isLoaded,
+      organizationName: organization?.name,
+      organizationImageUrl: organization?.imageUrl,
     }),
     [clerk, user, organization, session],
   )

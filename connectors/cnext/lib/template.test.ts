@@ -43,7 +43,7 @@ describe('template', () => {
   })
 
   it('should throw for unmatched template variables', () => {
-    const template = 'Hello {{name}} {{baseUrls.connect}}'
+    const template = 'Hello {{name}} {{baseURLs.connect}}'
     const data = proxyRequiredRecursive(
       {name: 'World'},
       {
@@ -52,7 +52,7 @@ describe('template', () => {
       },
     )
     expect(() => Mustache.render(template, data)).toThrow(
-      'Missing variable for baseUrls (missing)',
+      'Missing variable for baseURLs (missing)',
     )
   })
 })
@@ -62,7 +62,7 @@ describe('renderTemplateObject', () => {
     const template = {
       name: '{{connectorConfig.name}}',
       api: {
-        url: '{{connectorConfig.api.baseUrl}}',
+        url: '{{connectorConfig.api.baseURL}}',
         key: '{{connectionSettings.apiKey}}',
       },
     }
@@ -70,7 +70,7 @@ describe('renderTemplateObject', () => {
     const connectorConfig = {
       name: 'TestConnector',
       api: {
-        baseUrl: 'https://api.example.com',
+        baseURL: 'https://api.example.com',
       },
     }
 
@@ -97,14 +97,14 @@ describe('renderTemplateObject', () => {
   it('should handle nested arrays in object templates', () => {
     const template = {
       endpoints: [
-        {path: '{{connectorConfig.api.baseUrl}}/users'},
-        {path: '{{connectorConfig.api.baseUrl}}/products'},
+        {path: '{{connectorConfig.api.baseURL}}/users'},
+        {path: '{{connectorConfig.api.baseURL}}/products'},
       ],
     }
 
     const connectorConfig = {
       api: {
-        baseUrl: 'https://api.example.com',
+        baseURL: 'https://api.example.com',
       },
     }
 

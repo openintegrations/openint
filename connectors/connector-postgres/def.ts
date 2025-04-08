@@ -3,7 +3,7 @@ import {connHelpers} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 
 export const zPgConfig = z.object({
-  databaseUrl: z.string(),
+  databaseURL: z.string(),
 })
 
 export const postgresSchemas = {
@@ -12,7 +12,7 @@ export const postgresSchemas = {
   // if it's connectionSettings then it doesn't make as much sense to configure
   // in the list of integrations...
   // How do we create default connections for integrations that are basically single connection?
-  connection_settings: zPgConfig.pick({databaseUrl: true}).extend({
+  connection_settings: zPgConfig.pick({databaseURL: true}).extend({
     // gotta make sourceQueries a Textarea
     sourceQueries: z
       .object({
