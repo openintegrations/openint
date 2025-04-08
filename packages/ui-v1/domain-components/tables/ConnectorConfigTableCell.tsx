@@ -44,7 +44,7 @@ export function ConnectorConfigTableCell(props: ConnectorConfigTableCellProps) {
   const logo = (
     <div
       className={cn(
-        'bg-primary/15 relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded',
+        'bg-primary/15 relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded-sm',
         compact && 'h-8 w-8',
         simple && 'h-10 w-10',
       )}>
