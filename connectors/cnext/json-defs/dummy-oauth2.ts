@@ -9,8 +9,8 @@ export default {
   auth: {
     type: 'OAUTH2',
     code_challenge_method: 'S256',
-    authorization_request_url: '{{baseUrls.api}}/dummy-oauth2/authorize',
-    token_request_url: '{{baseUrls.api}}/dummy-oauth2/token',
+    authorization_request_url: '{{baseURLs.api}}/dummy-oauth2/authorize',
+    token_request_url: '{{baseURLs.api}}/dummy-oauth2/token',
     scope_separator: ' ',
     params_config: {},
     openint_scopes: ['read:profile'],

@@ -52,20 +52,20 @@ export const Loading: Story = {
 export const MobileDefault: Story = {
   args: {
     children: content,
-    defaultView: 'mobile',
+    defaultView: 'Mobile',
   },
 }
 
 export const TabletDefault: Story = {
   args: {
     children: content,
-    defaultView: 'tablet',
+    defaultView: 'Embedded',
   },
 }
 
-export const BrowserDefault: Story = {
+export const MagicLinkDefault: Story = {
   args: {
     children: content,
-    defaultView: 'browser',
+    defaultView: 'Magic Link',
   },
 }

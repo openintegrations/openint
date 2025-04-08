@@ -5215,7 +5215,7 @@ components:
         settings:
           type: object
           properties:
-            databaseUrl:
+            databaseURL:
               type: string
             sourceQueries:
               type: object
@@ -5226,7 +5226,7 @@ components:
                     - 'null'
                   description: Should order by lastModifiedAt and id descending
           required:
-            - databaseUrl
+            - databaseURL
       required:
         - connector_name
         - settings

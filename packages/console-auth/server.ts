@@ -1,5 +1,6 @@
-import {auth} from '@clerk/nextjs/server'
+import {auth, createClerkClient, Organization} from '@clerk/nextjs/server'
 import {type Id, type Viewer} from '@openint/cdk'
+import {env} from '@openint/env'
 
 export {clerkMiddleware} from '@clerk/nextjs/server'
 
@@ -25,4 +26,17 @@ export async function viewerFromCookie() {
       }
     : {role: 'anon'}
   return viewer
+}
+
+export async function getClerkOrganization(
+  orgId: Id['org'],
+): Promise<Organization> {
+  const client = createClerkClient({
+    secretKey: env.CLERK_SECRET_KEY,
+    publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+  })
+  const organization = await client.organizations.getOrganization({
+    organizationId: orgId,
+  })
+  return organization
 }

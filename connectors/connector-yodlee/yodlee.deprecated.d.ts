@@ -391,7 +391,7 @@ declare namespace Yodlee {
     id: number
     name: string
     loginUrl: string
-    baseUrl: string
+    baseURL: string
     favicon: string
     /** Should be a url already */
     logo: string
@@ -474,7 +474,7 @@ declare namespace Yodlee {
     id: number
     name: string
     loginUrl: string
-    baseUrl: string
+    baseURL: string
     favicon: string
     logo: string
     languageISOCode: string

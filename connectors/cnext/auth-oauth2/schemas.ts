@@ -18,7 +18,11 @@ const zOAuthConnectionSettings = z.object({
   credentials: z
     .object({
       access_token: z.string(),
-      client_id: z.string().describe('Client ID used for the connection'),
+      // TODO: once we migrate to only cnext connections we can remove the optional on client_id
+      client_id: z
+        .string()
+        .describe('Client ID used for the connection')
+        .optional(),
       scope: z.string(),
       refresh_token: z.string().optional(),
       expires_in: z.number().optional(),

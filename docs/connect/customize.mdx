@@ -3,89 +3,9 @@ title: Customizing @Connect
 description: Make OpenInt Connect your Own by styling it to match your brand
 ---
 
-import {ColorSwatch} from '/snippets/color-swatch.mdx'
-
 # Customization Options
 
 All customization options are available on the frontend components or also on the `createMagicLink` API (see [API Reference](/api-reference/create-magic-link)).
-
-## Themes
-
-OpenInt offers a `light` and `dark` theme variant for @Connect. You can specify which theme to use or allow users to toggle between them.
-
- <CodeGroup>
-     ```javascript React
-     import { Connect } from '@openint/connect'
-
-     return <Connect token={token} theme="light" />
-     ```
-
-     ```javascript Vanilla JS
-     import { renderConnect } from '@openint/connect'
-
-     renderConnect({
-       token: 'YOUR_CUSTOMER_TOKEN',
-       container: '#openint-connect-container',
-       theme: 'light'
-     })
-     ```
-
- </CodeGroup>
-
-## Colors
-
-All colors in the themes can be customized by passing them as parameters. Below is a table of all available color options with their default values in both light and dark themes:
-
-| Style                       | Light Theme                     | Dark Theme                        |
-| --------------------------- | ------------------------------- | --------------------------------- |
-| accent                      | <ColorSwatch color="#a5c4e2" /> | <ColorSwatch color="#4a5a78" />   |
-| background                  | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#1c1c1c" />   |
-| border                      | <ColorSwatch color="#d6d9e4" /> | <ColorSwatch color="#333333" />   |
-| button                      | <ColorSwatch color="#8a5df6" /> | <ColorSwatch color="#8a5df6" />   |
-| button_light                | <ColorSwatch color="#f2ebff" /> | <ColorSwatch color="#f2ebff" />   |
-| button_foreground           | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#f6f6f6" />   |
-| button_hover                | <ColorSwatch color="#a082e9" /> | <ColorSwatch color="#a082e9" />   |
-| button_stroke               | <ColorSwatch color="#8a5df6" /> | <ColorSwatch color="#7b4de0" />   |
-| button_secondary            | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#242424" />   |
-| button_secondary_foreground | <ColorSwatch color="#000000" /> | <ColorSwatch color="#f6f6f6" />   |
-| button_secondary_stroke     | <ColorSwatch color="#e6e6e6" /> | <ColorSwatch color="#999999" />   |
-| button_secondary_hover      | <ColorSwatch color="#efefef" /> | <ColorSwatch color="#3d3d3d" />   |
-| card                        | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#242424" />   |
-| card_foreground             | <ColorSwatch color="#2f2d3a" /> | <ColorSwatch color="#f6f6f6" />   |
-| foreground                  | <ColorSwatch color="#2f2d3a" /> | <ColorSwatch color="#f6f6f6" />   |
-| muted                       | <ColorSwatch color="#f2f2f2" /> | <ColorSwatch color="#ffffff19" /> |
-| muted_foreground            | <ColorSwatch color="#454545" /> | <ColorSwatch color="#999999" />   |
-| navbar                      | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#ffffff" />   |
-| popover                     | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#242424" />   |
-| popover_foreground          | <ColorSwatch color="#2f2d3a" /> | <ColorSwatch color="#f6f6f6" />   |
-| primary                     | <ColorSwatch color="#2f2d3a" /> | <ColorSwatch color="#f6f6f6" />   |
-| primary_foreground          | <ColorSwatch color="#e2e6f1" /> | <ColorSwatch color="#1c1c1c" />   |
-| secondary                   | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#242424" />   |
-| secondary_foreground        | <ColorSwatch color="#2f2d3a" /> | <ColorSwatch color="#f6f6f6" />   |
-| sidebar                     | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#ffffff" />   |
-| tab                         | <ColorSwatch color="#ffffff" /> | <ColorSwatch color="#242424" />   |
-
-#### Setting color overrides examples:
-
- <CodeGroup>
-     ```javascript React
-     import { Connect } from '@openint/connect'
-
-     return <Connect token={token} colors={{accent: 'red'}} />
-     ```
-
-     ```javascript Vanilla JS
-     import { renderConnect } from '@openint/connect'
-
-     renderConnect({
-       token: 'YOUR_CUSTOMER_TOKEN',
-       container: '#openint-connect-container',
-       colors: {accent: 'red'}
-     })
-     ```
-
- </CodeGroup>
- You can also do so via the [Magic Link API](/api-reference/create-magic-link)
 
 ## Setting Display Names for Connectors
 

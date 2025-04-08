@@ -1,6 +1,7 @@
 import {compact} from '@openint/util/array-utils'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
 import {z, type Z} from '@openint/util/zod-utils'
+import {zConnectOptions} from '../../packages/api-v1/models'
 import type {ExtCustomerId} from './id.types'
 import {zCustomerId, zId, zUserId} from './id.types'
 
@@ -11,7 +12,7 @@ export const zViewer = z
   .discriminatedUnion('role', [
     z.object({role: z.literal(zViewerRole.Enum.anon)}),
     // prettier-ignore
-    z.object({role: z.literal(zViewerRole.Enum.customer), customerId: zCustomerId, orgId: zId('org')}),
+    z.object({role: z.literal(zViewerRole.Enum.customer), customerId: zCustomerId, orgId: zId('org'), connectOptions: zConnectOptions.optional()}),
     z.object({
       role: z.literal(zViewerRole.Enum.user),
       userId: zUserId,

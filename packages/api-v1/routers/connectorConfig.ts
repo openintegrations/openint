@@ -1,7 +1,7 @@
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
-import {and, asc, desc, eq, schema, sql} from '@openint/db'
+import {and, asc, desc, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import type {ConnectorConfig} from '../models'
@@ -30,9 +30,9 @@ export const connectorConfigRouter = router({
       zListParams
         .extend({
           expand: z.array(zConnectorConfigExpandOption).optional(),
-          connector_name: zConnectorName
-            .optional()
-            .describe('The name of the connector to filter by'),
+          connector_names: z.array(zConnectorName).optional().openapi({
+            description: 'The names of the connectors to filter by',
+          }),
         })
         .optional(),
     )
@@ -41,10 +41,12 @@ export const connectorConfigRouter = router({
         'The list of connector configurations',
       ),
     )
-    .query(async ({ctx, input: {expand, connector_name, ...params} = {}}) => {
+    .query(async ({ctx, input: {expand, connector_names, ...params} = {}}) => {
       const includeConnectionCount = expand?.includes('connection_count')
+      const connectorNamesFromToken =
+        ctx.viewer?.connectOptions?.connector_names ?? []
 
-      const connectorNames = Object.keys(defConnectors)
+      const currentlySupportedConnectorNames = Object.keys(defConnectors ?? {})
 
       const connectionCountExtra = {
         // Need to cast to double precision to avoid being used as string
@@ -63,14 +65,25 @@ export const connectorConfigRouter = router({
             connectionCountExtra) as typeof connectionCountExtra),
         },
         where: and(
-          connector_name
-            ? eq(schema.connector_config.connector_name, connector_name)
+          connector_names && connector_names.length > 0
+            ? inArray(schema.connector_config.connector_name, connector_names)
             : undefined,
           // excluding data from old connectors that are no longer supported
+          // TODO move this to inArray, currently TS doesn't like it
+          // inArray(
+          //   schema.connector_config.connector_name,
+          //   currentlySupportedConnectorNames,
+          // ),
           eq(
             schema.connector_config.connector_name,
-            sql`ANY(${sql.param(connectorNames)})`,
+            sql`ANY(${sql.param(currentlySupportedConnectorNames)})`,
           ),
+          connectorNamesFromToken.length > 0
+            ? inArray(
+                schema.connector_config.connector_name,
+                connectorNamesFromToken,
+              )
+            : undefined,
         ),
         orderBy: [
           desc(schema.connector_config.updated_at),
@@ -98,6 +111,22 @@ export const connectorConfigRouter = router({
         return ccfg
       })
 
+      // this is done as v0 had scopes as a string and we've moved it to an array in v1
+      // but some connector names are called the same
+      expandedItems.forEach((item) => {
+        // TODO: move to a delimeter based on the connector metadata once we have jsonDef in metadata
+        // const delimiter =
+        //   defConnectors[item.connector_name as keyof typeof defConnectors]
+        //     ?.metadata?.oauth?.scopesDelimiter
+        if (item.config?.oauth) {
+          if (!item.config?.oauth?.scopes) {
+            item.config.oauth.scopes = []
+          }
+          if (typeof item.config.oauth.scopes === 'string') {
+            item.config.oauth.scopes = item.config.oauth.scopes.split(/,\s*/)
+          }
+        }
+      })
       return {
         items: expandedItems,
         total,

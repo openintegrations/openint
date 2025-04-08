@@ -112,7 +112,7 @@ export interface ConnectContext<TSettings>
     externalId: ExternalId
     settings: TSettings
   } | null
-  baseUrls: {
+  baseURLs: {
     api: string
     console: string
     connect: string

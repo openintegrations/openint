@@ -2,7 +2,6 @@
 
 import React from 'react'
 import type {AppRouter} from '@openint/api-v1'
-import {useAuth, useUser} from '@openint/console-auth/client'
 import {getServerUrl} from '@openint/env'
 import {Toaster} from '@openint/shadcn/ui'
 import {
@@ -12,7 +11,6 @@ import {
   QueryClientProvider,
   useSuspenseQuery,
 } from '@openint/ui-v1/trpc'
-import OnboardingHoc from './onboarding'
 import {TRPCProvider, useTRPC, useTRPCClient} from './trpc'
 
 // MARK: - Move me into client common
@@ -55,8 +53,6 @@ export function ClientApp({
   token: string
   children: React.ReactNode
 }) {
-  const auth = useAuth()
-  const user = useUser()
   const queryClient = getQueryClient()
   const [trpcClient] = React.useState(() =>
     createTRPCClient<AppRouter>({
@@ -70,12 +66,10 @@ export function ClientApp({
       ],
     }),
   )
-  const showOnboarding = auth.isLoaded && !auth.orgId && user
-
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        {showOnboarding ? <OnboardingHoc /> : children}
+        {children}
         <Toaster />
       </TRPCProvider>
     </QueryClientProvider>

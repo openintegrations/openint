@@ -47,18 +47,18 @@ You can embed @Connect within your web application by creating these programmati
  The second step is to embed the Connect Widget into your web application.
  <CodeGroup>
      ```javascript React
-     import { Connect } from '@openint/connect'
+     import { ConnectEmbed } from '@openint/connect'
 
      // from the previous step, generated in the backend
-     return <Connect token={token} />
+     return <ConnectEmbed token={token} />
      ```
 
      ```javascript Vanilla JS
-     import { renderConnect } from '@openint/connect'
+     import { connect } from '@openint/connect'
 
-     renderConnect({
+     connect.embed({
        token: 'YOUR_CUSTOMER_TOKEN', // from the previous step, generated in the backend
-       container: '#openint-connect-container', // the id of the container element
+       containerRef: '#openint-connect-container', // the id of the container element
      })
      ```
 
@@ -77,15 +77,7 @@ OpenInt has published a [repository](https://github.com/openintegrations/openint
     icon="js"
     href="https://github.com/openintegrations/openint-starter"
   />
-  <Card
-    title="Django"
-    icon="python"
-    href="https://github.com/openintegrations/openint-starter"
-  />
-  <Card
-    title="Laravel"
-    icon="php"
-    href="https://github.com/openintegrations/openint-starter"
-  />
+  <Card title="Django (Coming Soon)" icon="python" />
+  <Card title="Laravel (Coming Soon)" icon="php" />
 </CardGroup>
 ````

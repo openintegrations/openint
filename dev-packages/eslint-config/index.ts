@@ -76,6 +76,9 @@ export const configs = keyAsName({
       //Also cannot even add it to the default config
       '**/eslint-config/index.ts',
       '**/eslint.config.ts',
+
+      // for kits dist files
+      '**/dist/**',
     ],
   },
   defaultFiles: {
