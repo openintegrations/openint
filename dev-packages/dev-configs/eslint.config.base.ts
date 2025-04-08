@@ -76,7 +76,7 @@ export const configs = keyAsName({
       'apps/web/postcss.config.mjs',
       // Unsure why this is not part of the "tsconfig" project somehow...
       //Also cannot even add it to the default config
-      '**/eslint-config/index.ts',
+      '**/dev-configs',
       '**/eslint.config.ts',
 
       // for kits dist files
