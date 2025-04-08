@@ -7,10 +7,12 @@ import pluginJs from '@eslint/js'
 // @ts-expect-error No types available
 import pluginNext from '@next/eslint-plugin-next'
 import configPrettier from 'eslint-config-prettier/flat'
+import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript'
 import codegen from 'eslint-plugin-codegen'
 // @ts-expect-error No types available
 import pluginEslintComments from 'eslint-plugin-eslint-comments'
-import pluginImport from 'eslint-plugin-import'
+// import pluginImport from 'eslint-plugin-import'
+import pluginImportX from 'eslint-plugin-import-x'
 import pluginJest from 'eslint-plugin-jest'
 // @ts-expect-error No types available
 import pluginJestFormatting from 'eslint-plugin-jest-formatting'
@@ -106,30 +108,31 @@ export const configs = keyAsName({
     },
   },
   import: {
-    // extends: [pluginImport.flatConfigs.recommended],
+    // plugin to check mono repo rules seems to work regardless... but maybe this is best practice?
     settings: {
-      'import/resolver': {
-        typescript: {
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
           alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-
           bun: true, // resolve Bun modules https://github.com/import-js/eslint-import-resolver-typescript#bun
-        },
-      },
+        }),
+      ],
     },
-    plugins: {import: pluginImport},
+    extends: [
+      pluginImportX.flatConfigs.recommended,
+      pluginImportX.flatConfigs.typescript,
+    ],
     rules: {
-      // TODO: This rule is not working for some reason. Fix me....
-      // 'import/no-extraneous-dependencies': [
-      //   'error',
-      //   {
-      //     devDependencies: false,
-      //     optionalDependencies: false,
-      //     peerDependencies: false,
-      //   },
-      // ],
-      'import/no-relative-packages': 'error',
-      'import/no-relative-parent-imports': 'error',
-      'import/first': 'error',
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        {
+          devDependencies: false,
+          optionalDependencies: false,
+          peerDependencies: false,
+          // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-extraneous-dependencies.md
+          // consider adding whitelist
+        },
+      ],
+      'import-x/no-relative-packages': 'error',
     },
   },
   typescript: {
