@@ -1,13 +1,13 @@
-import plaidOas from '@opensdks/sdk-plaid/plaid.oas.json'
+import type {ErrorShape} from './plaid.types'
+import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import type * as plaid from 'plaid'
 import type {PlaidError} from 'plaid'
-import {CountryCode, Products} from 'plaid'
 import type {PlaidLinkOnSuccessMetadata} from 'react-plaid-link'
-import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
+import plaidOas from '@opensdks/sdk-plaid/plaid.oas.json'
+import {CountryCode, Products} from 'plaid'
 import {connHelpers, zWebhookInput} from '@openint/cdk'
 import {z, zCast} from '@openint/util/zod-utils'
 import {inferPlaidEnvFromToken} from './plaid-utils'
-import type {ErrorShape} from './plaid.types'
 import {zCountryCode, zLanguage, zPlaidEnvName, zProducts} from './PlaidClient'
 
 export const plaidSchemas = {
