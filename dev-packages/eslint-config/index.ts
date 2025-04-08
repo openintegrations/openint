@@ -125,7 +125,7 @@ export const configs = keyAsName({
       'import-x/no-extraneous-dependencies': [
         'error',
         {
-          // TODO: Turn these to false when have whitelist 
+          // TODO: Turn these to false when have whitelist
           devDependencies: true,
           optionalDependencies: true,
           peerDependencies: true,
@@ -133,7 +133,9 @@ export const configs = keyAsName({
           // consider adding whitelist
         },
       ],
+      // FIXME: This should not be disabled ever - immediate code smell
       'import-x/no-relative-packages': 'error',
+      'import-x/no-useless-path-segments': ['error', {noUselessIndex: true}],
     },
   },
   typescript: {
