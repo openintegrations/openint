@@ -37,14 +37,17 @@ export function PropertyListView({
       {properties.map((property, index) => (
         <div
           key={index}
-          className="flex items-center justify-between overflow-visible">
+          className={cn(
+            'flex gap-4',
+            property.isCopyID ? 'items-center' : 'items-start justify-between',
+          )}>
           <div className="text-sm font-medium text-gray-700">
             {property.title}
           </div>
           <div
             className={cn(
-              'overflow-visible text-sm text-gray-500',
-              property.isCopyID ? 'max-w-[260px]' : 'text-right',
+              'text-sm text-gray-500',
+              property.isCopyID ? 'flex-1' : 'text-right',
             )}>
             {property.value}
           </div>
