@@ -168,7 +168,7 @@ export const configs = keyAsName({
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/unbound-method': 'warn',
 
-      '@typescript-eslint/no-confusing-void-expression': 'warn',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-misused-promises': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'warn',

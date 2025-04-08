@@ -186,9 +186,6 @@ importers:
       next:
         specifier: 15.2.3
         version: 15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      next-themes:
-        specifier: 0.3.0
-        version: 0.3.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       nextjs-toploader:
         specifier: 1.4.2
         version: 1.4.2(next@15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -1449,7 +1446,7 @@ importers:
         specifier: ^0.479.0
         version: 0.479.0(react@19.0.0)
       next-themes:
-        specifier: 0.3.0
+        specifier: ^0.3.0
         version: 0.3.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react:
         specifier: 19.0.0
@@ -1524,6 +1521,9 @@ importers:
       next:
         specifier: 15.2.3
         version: 15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      next-themes:
+        specifier: ^0.3.0
+        version: 0.3.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react:
         specifier: 19.0.0
         version: 19.0.0
