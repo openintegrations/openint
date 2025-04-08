@@ -94,7 +94,7 @@ export function createConnectIframe(props: ConnectProps) {
           background: white; 
           transition: opacity 0.3s ease;
           max-width: ${width || '100'}${width ? 'px' : '%'};
-          max-height: ${height || '100%'}${height ? 'px' : '%'};
+          max-height: ${height || '100'}${height ? 'px' : '%'};
         }
         .connect-embed-wrapper .spinner-container.loaded {
           opacity: 0;
