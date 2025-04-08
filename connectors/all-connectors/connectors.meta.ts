@@ -1,6 +1,18 @@
 // generated file. Do not modify by hand
 
 export default {
+  'acme-oauth2': {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Acme Oauth2',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-acme-oauth2.svg',
+      authType: 'OAUTH2',
+    },
+  },
   aircall: {
     hasClient: false,
     hasServer: false,
@@ -70,18 +82,6 @@ export default {
       verticals: ['social-media'],
       logoUrl:
         'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-discord.svg',
-      authType: 'OAUTH2',
-    },
-  },
-  'dummy-oauth2': {
-    hasClient: false,
-    hasServer: false,
-    metadata: {
-      displayName: 'Dummy OAuth2',
-      stage: 'ga',
-      verticals: ['social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-dummy-oauth2.svg',
       authType: 'OAUTH2',
     },
   },

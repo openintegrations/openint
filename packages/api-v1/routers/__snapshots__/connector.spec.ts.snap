@@ -4,6 +4,194 @@ exports[`db: pglite list connectors with schemas 1`] = `
 [
   {
     "authType": "OAUTH2",
+    "display_name": "Acme Oauth2",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-acme-oauth2.svg",
+    "name": "acme-oauth2",
+    "openint_scopes": [
+      "read:profile",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Read profile information",
+        "scope": "read:profile",
+      },
+      {
+        "description": "Read posts",
+        "scope": "write:posts",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
+    "authType": "OAUTH2",
     "display_name": "Aircall (OAuth)",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-aircall.svg",
     "name": "aircall",
@@ -1179,194 +1367,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
       {
         "description": "Allows generating webhook URLs for a channel, enabling posting messages as the webhook. This is a channel-specific write permission.",
         "scope": "webhook.incoming",
-      },
-    ],
-    "stage": "ga",
-  },
-  {
-    "authType": "OAUTH2",
-    "display_name": "Dummy OAuth2",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-dummy-oauth2.svg",
-    "name": "dummy-oauth2",
-    "openint_scopes": [
-      "read:profile",
-    ],
-    "platforms": undefined,
-    "schemas": {
-      "connect_input": {
-        "properties": {
-          "authorization_url": {
-            "description": "URL to take user to for approval",
-            "type": "string",
-          },
-          "code_verifier": {
-            "description": "Code verifier for PKCE",
-            "type": "string",
-          },
-        },
-        "required": [
-          "authorization_url",
-        ],
-        "type": "object",
-      },
-      "connect_output": {
-        "properties": {
-          "code": {
-            "description": "OAuth2 authorization code used for token exchange",
-            "type": "string",
-          },
-          "code_verifier": {
-            "description": "Code verifier for PKCE from the connect input",
-            "type": "string",
-          },
-          "state": {
-            "description": "OAuth2 state",
-            "type": "string",
-          },
-        },
-        "required": [
-          "code",
-          "state",
-        ],
-        "type": "object",
-      },
-      "connection_settings": {
-        "properties": {
-          "oauth": {
-            "properties": {
-              "created_at": {
-                "type": "string",
-              },
-              "credentials": {
-                "description": "Output of the postConnect hook for oauth2 connectors",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                  },
-                  "client_id": {
-                    "description": "Client ID used for the connection",
-                    "type": "string",
-                  },
-                  "expires_at": {
-                    "type": "string",
-                  },
-                  "expires_in": {
-                    "type": "number",
-                  },
-                  "raw": {
-                    "additionalProperties": {},
-                    "type": "object",
-                  },
-                  "refresh_token": {
-                    "type": "string",
-                  },
-                  "scope": {
-                    "type": "string",
-                  },
-                  "token_type": {
-                    "type": "string",
-                  },
-                },
-                "required": [
-                  "access_token",
-                  "scope",
-                  "raw",
-                ],
-                "type": "object",
-              },
-              "last_fetched_at": {
-                "type": "string",
-              },
-              "metadata": {
-                "additionalProperties": {},
-                "type": [
-                  "object",
-                  "null",
-                ],
-              },
-              "updated_at": {
-                "type": "string",
-              },
-            },
-            "type": "object",
-          },
-        },
-        "required": [
-          "oauth",
-        ],
-        "type": "object",
-      },
-      "connector_config": {
-        "properties": {
-          "oauth": {
-            "description": "Base oauth configuration for the connector",
-            "properties": {
-              "client_id": {
-                "type": [
-                  "string",
-                  "null",
-                ],
-              },
-              "client_secret": {
-                "type": [
-                  "string",
-                  "null",
-                ],
-              },
-              "redirect_uri": {
-                "type": [
-                  "string",
-                  "null",
-                ],
-              },
-              "scopes": {
-                "items": {
-                  "type": "string",
-                },
-                "type": [
-                  "array",
-                  "null",
-                ],
-              },
-            },
-            "type": [
-              "object",
-              "null",
-            ],
-            "ui:field": "OAuthField",
-          },
-        },
-        "required": [
-          "oauth",
-        ],
-        "type": "object",
-      },
-      "integration_data": {
-        "additionalProperties": false,
-        "type": "object",
-      },
-      "pre_connect_input": {
-        "properties": {
-          "connection_id": {
-            "description": "In case of re-connecting, id of the existing connection",
-            "type": "string",
-          },
-        },
-        "type": "object",
-      },
-      "webhook_input": {
-        "additionalProperties": false,
-        "type": "object",
-      },
-    },
-    "scopes": [
-      {
-        "description": "Read profile information",
-        "scope": "read:profile",
-      },
-      {
-        "description": "Read posts",
-        "scope": "write:posts",
       },
     ],
     "stage": "ga",

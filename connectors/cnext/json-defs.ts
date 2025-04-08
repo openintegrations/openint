@@ -3,7 +3,7 @@
 import aircall from './json-defs/aircall'
 import confluence from './json-defs/confluence'
 import discord from './json-defs/discord'
-import dummy_oauth2 from './json-defs/dummy-oauth2'
+import acme_oauth2 from './json-defs/acme-oauth2'
 import github from './json-defs/github'
 import googlecalendar from './json-defs/googlecalendar'
 import googledocs from './json-defs/googledocs'
@@ -20,7 +20,7 @@ import sharepointonline from './json-defs/sharepointonline'
 import slack from './json-defs/slack'
 
 const defs = {
-  'dummy-oauth2': dummy_oauth2,
+  'acme-oauth2': acme_oauth2,
   sharepointonline,
   slack,
   github,

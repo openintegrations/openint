@@ -45,7 +45,7 @@ export function createApp(opts: CreateAppOptions) {
       createFetchHandlerOpenAPI({...opts, endpoint: '/v1'})(request),
     )
     // For testing purposes only
-    .group('/dummy-oauth2', (group) =>
+    .group('/acme-oauth2', (group) =>
       group.use(
         createOAuth2Server({
           // TODO: have a better way to unify this
