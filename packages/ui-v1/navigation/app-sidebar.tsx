@@ -17,7 +17,7 @@ import {
 import type {IconName} from '../components'
 import {Icon} from '../components'
 
-export let SIDEBAR_NAV_ITEMS = [
+export const SIDEBAR_NAV_ITEMS = [
   {
     title: 'Dashboard',
     url: '/console',

@@ -113,7 +113,7 @@ const ScopesList: FC<ScopesListProps> = ({
   </div>
 )
 
-export default function ConnectorScopes({
+export function ConnectorScopes({
   availableScopes = [],
   children,
   className,
@@ -248,3 +248,5 @@ export default function ConnectorScopes({
     </TooltipProvider>
   )
 }
+
+export default ConnectorScopes

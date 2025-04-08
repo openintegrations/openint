@@ -17,7 +17,7 @@ interface SecureInputProps extends Omit<InputProps, 'type'> {
   readOnly?: boolean
 }
 
-export default function SecureInput({
+export function SecureInput({
   label = 'Secure Input',
   placeholder = 'Enter secure text',
   value,
@@ -100,3 +100,5 @@ export default function SecureInput({
     </div>
   )
 }
+
+export default SecureInput
