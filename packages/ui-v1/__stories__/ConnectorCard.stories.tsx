@@ -117,10 +117,6 @@ export const codaConnectorCard: Story = {
   args: {name: 'coda'},
 }
 
-export const facebookConnectorCard: Story = {
-  args: {name: 'facebook'},
-}
-
 export const finchConnectorCard: Story = {
   args: {name: 'finch'},
 }
@@ -133,36 +129,12 @@ export const foreceiptConnectorCard: Story = {
   args: {name: 'foreceipt'},
 }
 
-export const gongConnectorCard: Story = {
-  args: {name: 'gong'},
-}
-
 export const greenhouseConnectorCard: Story = {
   args: {name: 'greenhouse'},
 }
 
 export const heronConnectorCard: Story = {
   args: {name: 'heron'},
-}
-
-export const instagramConnectorCard: Story = {
-  args: {name: 'instagram'},
-}
-
-export const intercomConnectorCard: Story = {
-  args: {name: 'intercom'},
-}
-
-export const jiraConnectorCard: Story = {
-  args: {name: 'jira'},
-}
-
-export const kustomerConnectorCard: Story = {
-  args: {name: 'kustomer'},
-}
-
-export const leverConnectorCard: Story = {
-  args: {name: 'lever'},
 }
 
 export const lunchmoneyConnectorCard: Story = {
@@ -177,24 +149,12 @@ export const mergeConnectorCard: Story = {
   args: {name: 'merge'},
 }
 
-export const microsoftConnectorCard: Story = {
-  args: {name: 'microsoft'},
-}
-
 export const mootaConnectorCard: Story = {
   args: {name: 'moota'},
 }
 
 export const onebrickConnectorCard: Story = {
   args: {name: 'onebrick'},
-}
-
-export const outreachConnectorCard: Story = {
-  args: {name: 'outreach'},
-}
-
-export const pipedriveConnectorCard: Story = {
-  args: {name: 'pipedrive'},
 }
 
 export const plaidConnectorCard: Story = {
@@ -207,14 +167,6 @@ export const postgresConnectorCard: Story = {
 
 export const rampConnectorCard: Story = {
   args: {name: 'ramp'},
-}
-
-export const redditConnectorCard: Story = {
-  args: {name: 'reddit'},
-}
-
-export const salesloftConnectorCard: Story = {
-  args: {name: 'salesloft'},
 }
 
 export const saltedgeConnectorCard: Story = {
@@ -241,10 +193,6 @@ export const twentyConnectorCard: Story = {
   args: {name: 'twenty'},
 }
 
-export const twitterConnectorCard: Story = {
-  args: {name: 'twitter'},
-}
-
 export const venmoConnectorCard: Story = {
   args: {name: 'venmo'},
 }
@@ -253,14 +201,6 @@ export const wiseConnectorCard: Story = {
   args: {name: 'wise'},
 }
 
-export const xeroConnectorCard: Story = {
-  args: {name: 'xero'},
-}
-
 export const yodleeConnectorCard: Story = {
   args: {name: 'yodlee'},
-}
-
-export const zohodeskConnectorCard: Story = {
-  args: {name: 'zohodesk'},
 }
