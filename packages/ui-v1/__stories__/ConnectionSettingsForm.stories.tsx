@@ -37,8 +37,8 @@ const meta: Meta<typeof FormWrapper> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const dummyOauth2ConnectionSettings: Story = {
-  args: {name: 'dummy-oauth2'},
+export const acmeOauth2ConnectionSettings: Story = {
+  args: {name: 'acme-oauth2'},
 }
 
 export const sharepointonlineConnectionSettings: Story = {

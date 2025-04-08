@@ -29,8 +29,8 @@ const meta: Meta<typeof StoryWrapper> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const dummyOauth2ConnectorCard: Story = {
-  args: {name: 'dummy-oauth2'},
+export const acmeOauth2ConnectorCard: Story = {
+  args: {name: 'acme-oauth2'},
 }
 
 export const sharepointonlineConnectorCard: Story = {
