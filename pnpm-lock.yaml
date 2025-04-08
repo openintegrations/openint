@@ -75,6 +75,9 @@ importers:
       jest-watch-typeahead:
         specifier: 2.2.2
         version: 2.2.2(jest@30.0.0-alpha.6(@types/node@22.13.10)(esbuild-register@3.5.0(esbuild@0.17.5))(ts-node@10.9.1(@types/node@22.13.10)(typescript@5.8.2)))
+      jiti:
+        specifier: ^2.4.2
+        version: 2.4.2
       lint-staged:
         specifier: 13.0.3
         version: 13.0.3
@@ -24612,7 +24615,7 @@ snapshots:
       '@types/node': 22.13.10
       chalk: 4.1.2
       co: 4.6.0
-      dedent: 1.5.1
+      dedent: 1.5.3
       is-generator-fn: 2.1.0
       jest-each: 29.7.0
       jest-matcher-utils: 29.7.0

@@ -1,16 +1,8 @@
-import pluginSortImports, {
-  type PluginConfig as PluginSortImportsConfig,
-} from '@ianvs/prettier-plugin-sort-imports'
+import type {PluginConfig as PluginSortImportsConfig} from '@ianvs/prettier-plugin-sort-imports'
 import type {Config} from 'prettier'
 import type {PluginEmbedOptions} from 'prettier-plugin-embed'
-import * as pluginEmbed from 'prettier-plugin-embed'
-// @ts-expect-error No types available
-import pluginPackageJson from 'prettier-plugin-packagejson'
 import type {SqlBaseOptions} from 'prettier-plugin-sql'
-import * as pluginSql from 'prettier-plugin-sql'
-// Import modules without default exports
-import * as pluginTailwindcss from 'prettier-plugin-tailwindcss'
-import {PluginOptions as PluginTailwindcssOptions} from 'prettier-plugin-tailwindcss'
+import type {PluginOptions as PluginTailwindcssOptions} from 'prettier-plugin-tailwindcss'
 
 /** Strict enforcement of prettier config options */
 type OmitIndexSignature<T> = {
@@ -31,12 +23,13 @@ export default {
     trailingComma: 'all',
     useTabs: false,
     plugins: [
-      // This plugin breaks on makeSyncEngine.ts... So commenting out for now.
-      pluginSortImports,
-      pluginPackageJson,
-      pluginTailwindcss, // needs to come last
-      pluginEmbed,
-      pluginSql,
+      // require.resolve works much better than imports.
+      // Would be nice to eventually switch to equivalent imports though
+      require.resolve('@ianvs/prettier-plugin-sort-imports'),
+      require.resolve('prettier-plugin-packagejson'),
+      require.resolve('prettier-plugin-embed'),
+      require.resolve('prettier-plugin-sql'),
+      require.resolve('prettier-plugin-tailwindcss'), // needs to come last
     ],
   } satisfies OmitIndexSignature<Config>),
 
@@ -47,6 +40,7 @@ export default {
 
   ...({
     importOrder: [
+      '<TYPES>',
       '^node:(.+)$',
       '<THIRD_PARTY_MODULES>',
       '^@openint/(.+)$',

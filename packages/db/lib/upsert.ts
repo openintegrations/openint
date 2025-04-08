@@ -1,15 +1,14 @@
-import {isPlainObject} from '@openint/util/object-utils'
-import {and, or, sql} from 'drizzle-orm'
-import type {PgInsertBase} from 'drizzle-orm/pg-core'
-import {
-  getTableConfig,
-  pgTable,
-  type PgColumn,
-  type PgDatabase,
-  type PgInsertValue,
-  type PgTable,
-  type PgUpdateSetSource,
+import type {
+  PgColumn,
+  PgDatabase,
+  PgInsertBase,
+  PgInsertValue,
+  PgTable,
+  PgUpdateSetSource,
 } from 'drizzle-orm/pg-core'
+import {and, or, sql} from 'drizzle-orm'
+import {getTableConfig, pgTable} from 'drizzle-orm/pg-core'
+import {isPlainObject} from '@openint/util/object-utils'
 
 type ColumnKeyOf<T extends PgTable> = Extract<keyof T['_']['columns'], string>
 
@@ -152,10 +151,9 @@ export function dbUpsert<
             // if they are different, even if they are both NULL. On the other hand, the "!=" operator
             // (also known as "not equals") compares two values and returns true if they are different,
             // but treats NULL as an unknown value and does not consider it as different from other values.
-            (c) =>
-              sql`${c} IS DISTINCT FROM ${sql`excluded.${sql.identifier(
-                c.name,
-              )}`}`,
+            (c) => sql`
+              ${c} IS DISTINCT FROM ${sql`excluded.${sql.identifier(c.name)}`}
+            `,
           ),
       ),
       ...(options.mustMatchColumns ?? [])
@@ -219,3 +217,13 @@ const removeUndefinedValues = <T extends Record<string, unknown>>(
     Object.entries(obj).filter(([, v]) => v !== undefined),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as any
+
+const animals = await sql`
+  SELECT
+    first_name,
+    species
+  FROM
+    animals
+  WHERE
+    id = ${id}
+`
