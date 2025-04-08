@@ -1,14 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import React from 'react'
+import React, {useState} from 'react'
 import type {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@openint/shadcn/ui/hover-card'
 import {CopyID} from '../../components/CopyID'
 import type {StatusType} from '../../components/StatusDot'
 import {ConnectionCardContent} from '../ConnectionsCardView'
@@ -38,6 +33,24 @@ export function ConnectionTableCell({
   version,
   ...props
 }: ConnectionTableCellProps) {
+  const [open, setOpen] = useState(false)
+  const [coords, setCoords] = useState({x: 0, y: 0})
+
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    setOpen(true)
+    setCoords({x: e.clientX, y: e.clientY})
+  }
+
+  const handleMouseLeave = () => {
+    setOpen(false)
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (open) {
+      setCoords({x: e.clientX, y: e.clientY})
+    }
+  }
+
   const logo = (
     <div
       className={cn(
@@ -57,7 +70,12 @@ export function ConnectionTableCell({
   )
 
   const cellContent = (
-    <div className={cn('flex items-center gap-2', className)} {...props}>
+    <div
+      className={cn('flex items-center gap-2', className)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+      {...props}>
       {logo}
       {connection.id && (
         <CopyID value={connection.id} size="compact" width="auto" />
@@ -66,24 +84,43 @@ export function ConnectionTableCell({
   )
 
   return (
-    <HoverCard openDelay={150} closeDelay={100}>
-      <HoverCardTrigger asChild>{cellContent}</HoverCardTrigger>
-      <HoverCardContent
-        className="w-[480px] overflow-hidden p-0"
-        align="start"
-        side="right"
-        sideOffset={5}>
-        <ConnectionCardContent
-          connection={connection}
-          status={status || 'healthy'}
-          category={category || connection.connector_name}
-          platform={platform || 'Desktop'}
-          authMethod={
-            authMethod || (connection.settings?.oauth ? 'oauth' : 'apikey')
-          }
-          version={version || 'V1'}
-        />
-      </HoverCardContent>
-    </HoverCard>
+    <>
+      {cellContent}
+      {open && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            pointerEvents: 'none',
+            width: '100vw',
+            height: '100vh',
+            zIndex: 50,
+          }}>
+          <div
+            style={{
+              position: 'absolute',
+              left: `${coords.x}px`,
+              top: `${coords.y}px`,
+              transform: 'translate(10px, -50%)',
+              pointerEvents: 'auto',
+            }}>
+            <div className="bg-popover w-[480px] overflow-hidden rounded-md border p-0 shadow-md">
+              <ConnectionCardContent
+                connection={connection}
+                status={status || 'healthy'}
+                category={category || connection.connector_name}
+                platform={platform || 'Desktop'}
+                authMethod={
+                  authMethod ||
+                  (connection.settings?.oauth ? 'oauth' : 'apikey')
+                }
+                version={version || 'V1'}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

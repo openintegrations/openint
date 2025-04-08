@@ -184,6 +184,16 @@ export function ConnectionsPage(props: {
                           size="medium"
                         />
                       </div>
+                      <div>
+                        <h4 className="text-muted-foreground mb-1 text-sm font-medium">
+                          Customer ID
+                        </h4>
+                        <CopyID
+                          value={selectedConnection.customer_id || ''}
+                          width="100%"
+                          size="medium"
+                        />
+                      </div>
                     </div>
                   </section>
 
