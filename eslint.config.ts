@@ -1,4 +1,7 @@
-import configArray, {configs, defineConfig} from '@openint/eslint-config'
+import configArray, {
+  configs,
+  defineConfig,
+} from '@openint/dev-configs/eslint.config'
 import pkgJson from './package.json'
 
 export const shortConfig = defineConfig(
