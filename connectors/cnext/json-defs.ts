@@ -16,7 +16,7 @@ import linkedin from './json-defs/linkedin'
 import notion from './json-defs/notion'
 import quickbooks from './json-defs/quickbooks'
 import salesforce from './json-defs/salesforce'
-import sharepointonline from './json-defs/sharepointonline'
+import sharepointonline from './json-defs/sharepoint'
 import slack from './json-defs/slack'
 
 const defs = {
