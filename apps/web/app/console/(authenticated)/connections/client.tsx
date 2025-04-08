@@ -16,12 +16,23 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {
     id: 'id',
     header: 'id',
-    cell: ({row}) => (
-      <ConnectionTableCell
-        connection={row.original}
-        logo_url={row.original?.connector?.logo_url}
-      />
-    ),
+    cell: ({row}) => {
+      const connection = row.original
+
+      // Get what data we can from the connection
+      const authMethod = connection.settings?.oauth ? 'oauth' : 'apikey'
+
+      // Pass only what we have to ConnectionTableCell
+      return (
+        <ConnectionTableCell
+          connection={connection}
+          logo_url={connection?.connector?.logo_url}
+          authMethod={authMethod}
+          // We don't have status from listConnections API, would need to call checkConnection
+          // to get the actual status for each connection
+        />
+      )
+    },
   },
   {
     id: 'connector_name',
