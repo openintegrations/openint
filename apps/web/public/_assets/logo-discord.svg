@@ -1,6 +1,6 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_299_392)">
-<rect width="64" height="64" rx="15" fill="#D4D2E8"/>
+<rect width="64" height="64" rx="10" fill="#5865F2"/>
 <g clip-path="url(#clip1_299_392)">
 <path d="M49 0H15C6.71573 0 0 6.71573 0 15V49C0 57.2843 6.71573 64 15 64H49C57.2843 64 64 57.2843 64 49V15C64 6.71573 57.2843 0 49 0Z" fill="#5865F2"/>
 <mask id="mask0_299_392" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="7" y="12" width="50" height="40">
@@ -13,7 +13,7 @@
 </g>
 <defs>
 <clipPath id="clip0_299_392">
-<rect width="64" height="64" rx="15" fill="white"/>
+<rect width="64" height="64" rx="10" fill="white"/>
 </clipPath>
 <clipPath id="clip1_299_392">
 <rect width="64" height="64" fill="white"/>
