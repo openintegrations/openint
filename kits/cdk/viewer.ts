@@ -1,11 +1,39 @@
-import {compact} from '@openint/util/array-utils'
-import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
-import {z, type Z} from '@openint/util/zod-utils'
 // @pellicceama fix me
-// eslint-disable-next-line import-x/no-relative-packages
-import {zConnectOptions} from '../../packages/api-v1/models'
+
 import type {ExtCustomerId} from './id.types'
+import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
+import type {Z} from '@openint/util/zod-utils'
+import {compact} from '@openint/util/array-utils'
+import {z, zCoerceBoolean} from '@openint/util/zod-utils'
 import {zCustomerId, zId, zUserId} from './id.types'
+
+// TODO: @pellicceama fix me put me in the right place
+export const zConnectOptions = z.object({
+  // TODO: expand to https://coda.io/d/_d6fsw71RNUB/Implementing-a-native-UI-for-Connect-via-Core-APIs-and-Deep-Link_susYw00i
+  return_url: z.string().optional().openapi({
+    title: 'Return URL',
+    description:
+      'Optional URL to return customers after adding a connection or if they press the Return To Organization button',
+  }),
+  // TODO: @pellicceama fix me
+  connector_names: z
+    .array(/* zConnectorName* */ z.string())
+    .optional()
+    .openapi({
+      title: 'Connector Names',
+      description:
+        'The names of the connectors to show in the connect page. If not provided, all connectors will be shown',
+    }),
+  view: z.enum(['add', 'manage']).optional().openapi({
+    title: 'Default View to load',
+    description:
+      'The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not',
+  }),
+  debug: zCoerceBoolean().optional().openapi({
+    title: 'Debug',
+    description: 'Whether to enable debug mode',
+  }),
+})
 
 export const zViewerRole = z.enum(['anon', 'customer', 'user', 'org', 'system'])
 

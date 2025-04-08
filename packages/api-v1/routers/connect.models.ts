@@ -1,29 +1,7 @@
-import {zCustomerId} from '@openint/cdk'
-import {z, zCoerceBoolean} from '@openint/util/zod-utils'
-import {zConnectorName} from './connector.models'
+import {zConnectOptions, zCustomerId} from '@openint/cdk'
+import {z} from '@openint/util/zod-utils'
 
-export const zConnectOptions = z.object({
-  // TODO: expand to https://coda.io/d/_d6fsw71RNUB/Implementing-a-native-UI-for-Connect-via-Core-APIs-and-Deep-Link_susYw00i
-  return_url: z.string().optional().openapi({
-    title: 'Return URL',
-    description:
-      'Optional URL to return customers after adding a connection or if they press the Return To Organization button',
-  }),
-  connector_names: z.array(zConnectorName).optional().openapi({
-    title: 'Connector Names',
-    description:
-      'The names of the connectors to show in the connect page. If not provided, all connectors will be shown',
-  }),
-  view: z.enum(['add', 'manage']).optional().openapi({
-    title: 'Default View to load',
-    description:
-      'The default view to show when the magic link is opened. If omitted, by default it will smartly load the right view based on whether the user has connections or not',
-  }),
-  debug: zCoerceBoolean().optional().openapi({
-    title: 'Debug',
-    description: 'Whether to enable debug mode',
-  }),
-})
+export {zConnectOptions}
 
 export const connectRouterModels = {
   getMagicLinkInput: z.object({
