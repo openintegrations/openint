@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "adpyke.vscode-sql-formatter",
     "bradlc.vscode-tailwindcss",
     "chrislajoie.vscode-modelines",
     "dbaeumer.vscode-eslint",
@@ -13,6 +12,8 @@
     "naumovs.color-highlight",
     "orta.vscode-jest",
     "spywhere.mark-jump",
-    "usernamehw.errorlens"
+    "usernamehw.errorlens",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg"
   ]
 }

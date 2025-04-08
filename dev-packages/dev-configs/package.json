@@ -29,6 +29,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-unicorn": "^57.0.0",
     "prettier": "^3.5.3",
+    "prettier-plugin-embed": "^0.5.0",
     "prettier-plugin-packagejson": "2.5.2",
     "prettier-plugin-sql": "0.18.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
