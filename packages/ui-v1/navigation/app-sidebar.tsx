@@ -14,11 +14,10 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@openint/shadcn/ui/sidebar'
-import {isProduction} from '../../env'
 import type {IconName} from '../components'
 import {Icon} from '../components'
 
-export let SIDEBAR_NAV_ITEMS = [
+export const SIDEBAR_NAV_ITEMS = [
   {
     title: 'Dashboard',
     url: '/console',
@@ -64,10 +63,6 @@ export let SIDEBAR_NAV_ITEMS = [
   url: `${string}`
   icon: IconName
 }>
-
-if (isProduction) {
-  SIDEBAR_NAV_ITEMS = SIDEBAR_NAV_ITEMS.slice(0, 1)
-}
 
 export function AppSidebar({
   organizationSwitcher,

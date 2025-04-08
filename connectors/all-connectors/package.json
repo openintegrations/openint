@@ -55,8 +55,8 @@
     "@openint/util": "workspace:*"
   },
   "devDependencies": {
-    "bun": "latest",
-    "prettier": "^3.5.3"
+    "@openint/dev-configs": "workspace:*",
+    "bun": "latest"
   },
   "//": "find-config is needed for the @next/env patch"
 }

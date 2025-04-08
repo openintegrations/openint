@@ -1,18 +1,19 @@
-import configArray, {configs, defineConfig} from '@openint/eslint-config'
+import configArray, {
+  configs,
+  defineConfig,
+} from '@openint/dev-configs/eslint.config.base'
 import pkgJson from './package.json'
 
-const {globaIgnores, defaultFiles, javascript, typescript} = configs
-
 export const shortConfig = defineConfig(
-  globaIgnores,
-  defaultFiles,
-  javascript,
-  typescript as any,
+  configs.globaIgnores as any,
+  configs.defaultFiles as any,
+  configs.javascript,
+  // configs.typescript as any,
+  configs.import as any,
 )
 
 const finalConfig = defineConfig(
   ...configArray.filter((c) => !c.name.startsWith('unicorn')),
-
   {
     name: 'reactVersion',
     settings: {
@@ -21,6 +22,7 @@ const finalConfig = defineConfig(
   },
 )
 
+// export default shortConfig
 export default finalConfig
 
 // @ts-expect-error Upgrade types so .main exists

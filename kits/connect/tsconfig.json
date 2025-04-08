@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "@openint/dev-configs/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist"
   },
