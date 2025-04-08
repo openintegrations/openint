@@ -1,6 +1,7 @@
 import path from 'node:path'
 import {withSentryConfig} from '@sentry/nextjs'
 import type {NextConfig} from 'next'
+// eslint-disable-next-line import-x/no-extraneous-dependencies
 import webpack from 'webpack'
 
 const isDevOrStaging =

@@ -13,7 +13,7 @@ export async function headersForViewer(viewer: Viewer) {
   const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
   return viewer.role === 'anon'
     ? {}
-    : {authorization: `Bearer ${await jwt.signViewer(viewer)}`}
+    : {authorization: `Bearer ${await jwt.signToken(viewer)}`}
 }
 
 /** Prefer to operate at the highest level of stack possible while still bienbeing performant */

@@ -3,14 +3,18 @@
 
 // Failing due to https://github.com/eslint/css/issues/56, should be released in few days hopefully
 // import pluginCss from '@eslint/css'
+// wouuld be @ts-expect-error Esm
+// import {tailwindSyntax} from '@eslint/css/syntax'
 import pluginJs from '@eslint/js'
 // @ts-expect-error No types available
 import pluginNext from '@next/eslint-plugin-next'
 import configPrettier from 'eslint-config-prettier/flat'
+import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript'
 import codegen from 'eslint-plugin-codegen'
 // @ts-expect-error No types available
 import pluginEslintComments from 'eslint-plugin-eslint-comments'
-import pluginImport from 'eslint-plugin-import'
+// import pluginImport from 'eslint-plugin-import'
+import pluginImportX from 'eslint-plugin-import-x'
 import pluginJest from 'eslint-plugin-jest'
 // @ts-expect-error No types available
 import pluginJestFormatting from 'eslint-plugin-jest-formatting'
@@ -21,10 +25,17 @@ import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
-import {defineConfig} from 'eslint/config'
-import pluginTs, {ConfigArray, ConfigWithExtends} from 'typescript-eslint'
+// Causes issue with tsc. So we use the typescript-eslint version which works better
+// https://gist.github.com/openint-bot/fc836878d47b575d3cb3657b78e234d4
+// import {defineConfig} from 'eslint/config'
+import pluginTs, {
+  ConfigArray,
+  ConfigWithExtends,
+  config as defineConfig,
+} from 'typescript-eslint'
 
 export {defineConfig}
+export type ConfigWithExtendsArray = Parameters<typeof defineConfig>
 
 type Config = ConfigArray[number]
 
@@ -74,7 +85,8 @@ export const configs = keyAsName({
       'apps/web/postcss.config.mjs',
       // Unsure why this is not part of the "tsconfig" project somehow...
       //Also cannot even add it to the default config
-      '**/eslint-config/index.ts',
+      // TODO: Fix this hack
+      '**/dev-configs',
       '**/eslint.config.ts',
 
       // for kits dist files
@@ -105,21 +117,37 @@ export const configs = keyAsName({
       'no-empty-pattern': 'off',
     },
   },
-  // import: {
-  //   // extends: [pluginImport.flatConfigs.recommended],
-  //   plugins: {import: pluginImport},
-  //   rules: {
-  //     // TODO: This rule is not working for some reason. Fix me....
-  //     'import/no-extraneous-dependencies': [
-  //       'error',
-  //       {
-  //         devDependencies: false,
-  //         optionalDependencies: false,
-  //         peerDependencies: false,
-  //       },
-  //     ],
-  //   },
-  // },
+  import: {
+    // plugin to check mono repo rules seems to work regardless... but maybe this is best practice?
+    settings: {
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
+          alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+          bun: true, // resolve Bun modules https://github.com/import-js/eslint-import-resolver-typescript#bun
+        }),
+      ],
+    },
+    extends: [
+      pluginImportX.flatConfigs.recommended,
+      pluginImportX.flatConfigs.typescript,
+    ],
+    rules: {
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        {
+          // TODO: Turn these to false when have whitelist
+          devDependencies: true,
+          optionalDependencies: true,
+          peerDependencies: true,
+          // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-extraneous-dependencies.md
+          // consider adding whitelist
+        },
+      ],
+      // FIXME: This should not be disabled ever - immediate code smell
+      'import-x/no-relative-packages': 'error',
+      'import-x/no-useless-path-segments': ['error', {noUselessIndex: true}],
+    },
+  },
   typescript: {
     files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
     // extends: [pluginTs.configs.strict as Config[]],
@@ -231,6 +259,11 @@ export const configs = keyAsName({
   },
   next: {
     plugins: {'@next/next': pluginNext},
+    settings: {
+      next: {
+        rootDir: 'apps/web',
+      },
+    },
     rules: {
       ...pluginNext.configs.recommended.rules,
       ...pluginNext.configs['core-web-vitals'].rules,
@@ -301,6 +334,9 @@ export const configs = keyAsName({
   },
   codegen: {
     extends: [codegen.flatConfig.recommendedConfig as Config],
+    // TODO: Add a linter rule for preferring named exports especially when working with barrel files
+    // Though barrel should probably not be the default pattern as we want more specific imports generally speaking
+    // combined with explicit entry points in package.json though esm
     rules: {'codegen/codegen': 'warn'},
   },
   'eslint-comments': {
@@ -333,9 +369,24 @@ export const configs = keyAsName({
   prettier: {
     extends: [configPrettier],
   },
+  // Does not work because requires esm module. We should upgrade fully to esm one day
+  // css: {
+  //   plugins: {
+  //     css: pluginCss,
+  //   },
+  //   language: 'css/css',
+  //   languageOptions: {
+  //     customSyntax: tailwindSyntax,
+  //   },
+  //   rules: {
+  //     'css/no-empty-blocks': 'error',
+  //   },
+  // },
 } satisfies Record<string, Omit<ConfigWithExtends, 'name'>>)
 
 export default defineConfig(
   Object.values(configs) as [any],
   // defineConfigs will modify the config names actually
-) as Array<{name: `${keyof typeof configs}${string}`}>
+) as Array<
+  {name: `${keyof typeof configs}${string}`} & ConfigWithExtendsArray[number]
+>

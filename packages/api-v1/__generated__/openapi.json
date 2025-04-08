@@ -265,7 +265,7 @@
                           {
                             "oneOf": [
                               {
-                                "$ref": "#/components/schemas/connector.dummy-oauth2.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connector_config"
@@ -331,9 +331,6 @@
                                 "$ref": "#/components/schemas/connector.coda.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.facebook.discriminated_connector_config"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.finch.discriminated_connector_config"
                               },
                               {
@@ -343,28 +340,10 @@
                                 "$ref": "#/components/schemas/connector.foreceipt.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.gong.discriminated_connector_config"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.greenhouse.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.heron.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.instagram.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.intercom.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.jira.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.kustomer.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.lever.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.lunchmoney.discriminated_connector_config"
@@ -376,19 +355,10 @@
                                 "$ref": "#/components/schemas/connector.merge.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.microsoft.discriminated_connector_config"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.moota.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.onebrick.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.outreach.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.plaid.discriminated_connector_config"
@@ -398,12 +368,6 @@
                               },
                               {
                                 "$ref": "#/components/schemas/connector.ramp.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.reddit.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.salesloft.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.saltedge.discriminated_connector_config"
@@ -424,28 +388,19 @@
                                 "$ref": "#/components/schemas/connector.twenty.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.twitter.discriminated_connector_config"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.venmo.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.wise.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.xero.discriminated_connector_config"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.yodlee.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.zohodesk.discriminated_connector_config"
                               }
                             ],
                             "discriminator": {
                               "propertyName": "connector_name",
                               "mapping": {
-                                "dummy-oauth2": "#/components/schemas/connector.dummy-oauth2.discriminated_connector_config",
+                                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
                                 "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connector_config",
                                 "slack": "#/components/schemas/connector.slack.discriminated_connector_config",
                                 "github": "#/components/schemas/connector.github.discriminated_connector_config",
@@ -467,43 +422,28 @@
                                 "apollo": "#/components/schemas/connector.apollo.discriminated_connector_config",
                                 "brex": "#/components/schemas/connector.brex.discriminated_connector_config",
                                 "coda": "#/components/schemas/connector.coda.discriminated_connector_config",
-                                "facebook": "#/components/schemas/connector.facebook.discriminated_connector_config",
                                 "finch": "#/components/schemas/connector.finch.discriminated_connector_config",
                                 "firebase": "#/components/schemas/connector.firebase.discriminated_connector_config",
                                 "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connector_config",
-                                "gong": "#/components/schemas/connector.gong.discriminated_connector_config",
                                 "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connector_config",
                                 "heron": "#/components/schemas/connector.heron.discriminated_connector_config",
-                                "instagram": "#/components/schemas/connector.instagram.discriminated_connector_config",
-                                "intercom": "#/components/schemas/connector.intercom.discriminated_connector_config",
-                                "jira": "#/components/schemas/connector.jira.discriminated_connector_config",
-                                "kustomer": "#/components/schemas/connector.kustomer.discriminated_connector_config",
-                                "lever": "#/components/schemas/connector.lever.discriminated_connector_config",
                                 "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connector_config",
                                 "mercury": "#/components/schemas/connector.mercury.discriminated_connector_config",
                                 "merge": "#/components/schemas/connector.merge.discriminated_connector_config",
-                                "microsoft": "#/components/schemas/connector.microsoft.discriminated_connector_config",
                                 "moota": "#/components/schemas/connector.moota.discriminated_connector_config",
                                 "onebrick": "#/components/schemas/connector.onebrick.discriminated_connector_config",
-                                "outreach": "#/components/schemas/connector.outreach.discriminated_connector_config",
-                                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connector_config",
                                 "plaid": "#/components/schemas/connector.plaid.discriminated_connector_config",
                                 "postgres": "#/components/schemas/connector.postgres.discriminated_connector_config",
                                 "ramp": "#/components/schemas/connector.ramp.discriminated_connector_config",
-                                "reddit": "#/components/schemas/connector.reddit.discriminated_connector_config",
-                                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connector_config",
                                 "saltedge": "#/components/schemas/connector.saltedge.discriminated_connector_config",
                                 "splitwise": "#/components/schemas/connector.splitwise.discriminated_connector_config",
                                 "stripe": "#/components/schemas/connector.stripe.discriminated_connector_config",
                                 "teller": "#/components/schemas/connector.teller.discriminated_connector_config",
                                 "toggl": "#/components/schemas/connector.toggl.discriminated_connector_config",
                                 "twenty": "#/components/schemas/connector.twenty.discriminated_connector_config",
-                                "twitter": "#/components/schemas/connector.twitter.discriminated_connector_config",
                                 "venmo": "#/components/schemas/connector.venmo.discriminated_connector_config",
                                 "wise": "#/components/schemas/connector.wise.discriminated_connector_config",
-                                "xero": "#/components/schemas/connector.xero.discriminated_connector_config",
-                                "yodlee": "#/components/schemas/connector.yodlee.discriminated_connector_config",
-                                "zohodesk": "#/components/schemas/connector.zohodesk.discriminated_connector_config"
+                                "yodlee": "#/components/schemas/connector.yodlee.discriminated_connector_config"
                               }
                             },
                             "description": "Connector specific data"
@@ -751,7 +691,7 @@
                     {
                       "oneOf": [
                         {
-                          "$ref": "#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
@@ -817,9 +757,6 @@
                           "$ref": "#/components/schemas/connector.coda.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.finch.discriminated_connection_settings"
                         },
                         {
@@ -829,28 +766,10 @@
                           "$ref": "#/components/schemas/connector.foreceipt.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.heron.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.kustomer.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings"
@@ -862,19 +781,10 @@
                           "$ref": "#/components/schemas/connector.merge.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.microsoft.discriminated_connection_settings"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.moota.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.onebrick.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.plaid.discriminated_connection_settings"
@@ -884,12 +794,6 @@
                         },
                         {
                           "$ref": "#/components/schemas/connector.ramp.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.saltedge.discriminated_connection_settings"
@@ -910,28 +814,19 @@
                           "$ref": "#/components/schemas/connector.twenty.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.venmo.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.wise.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
-                        },
-                        {
                           "$ref": "#/components/schemas/connector.yodlee.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.zohodesk.discriminated_connection_settings"
                         }
                       ],
                       "discriminator": {
                         "propertyName": "connector_name",
                         "mapping": {
-                          "dummy-oauth2": "#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings",
+                          "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
                           "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                           "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
                           "github": "#/components/schemas/connector.github.discriminated_connection_settings",
@@ -953,43 +848,28 @@
                           "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                           "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
                           "coda": "#/components/schemas/connector.coda.discriminated_connection_settings",
-                          "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
                           "finch": "#/components/schemas/connector.finch.discriminated_connection_settings",
                           "firebase": "#/components/schemas/connector.firebase.discriminated_connection_settings",
                           "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connection_settings",
-                          "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
                           "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                           "heron": "#/components/schemas/connector.heron.discriminated_connection_settings",
-                          "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
-                          "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                          "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
-                          "kustomer": "#/components/schemas/connector.kustomer.discriminated_connection_settings",
-                          "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
                           "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings",
                           "mercury": "#/components/schemas/connector.mercury.discriminated_connection_settings",
                           "merge": "#/components/schemas/connector.merge.discriminated_connection_settings",
-                          "microsoft": "#/components/schemas/connector.microsoft.discriminated_connection_settings",
                           "moota": "#/components/schemas/connector.moota.discriminated_connection_settings",
                           "onebrick": "#/components/schemas/connector.onebrick.discriminated_connection_settings",
-                          "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
-                          "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
                           "plaid": "#/components/schemas/connector.plaid.discriminated_connection_settings",
                           "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                           "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
-                          "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
-                          "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
                           "saltedge": "#/components/schemas/connector.saltedge.discriminated_connection_settings",
                           "splitwise": "#/components/schemas/connector.splitwise.discriminated_connection_settings",
                           "stripe": "#/components/schemas/connector.stripe.discriminated_connection_settings",
                           "teller": "#/components/schemas/connector.teller.discriminated_connection_settings",
                           "toggl": "#/components/schemas/connector.toggl.discriminated_connection_settings",
                           "twenty": "#/components/schemas/connector.twenty.discriminated_connection_settings",
-                          "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
                           "venmo": "#/components/schemas/connector.venmo.discriminated_connection_settings",
                           "wise": "#/components/schemas/connector.wise.discriminated_connection_settings",
-                          "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
-                          "yodlee": "#/components/schemas/connector.yodlee.discriminated_connection_settings",
-                          "zohodesk": "#/components/schemas/connector.zohodesk.discriminated_connection_settings"
+                          "yodlee": "#/components/schemas/connector.yodlee.discriminated_connection_settings"
                         }
                       },
                       "description": "Connector specific data"
@@ -1325,7 +1205,7 @@
                           {
                             "oneOf": [
                               {
-                                "$ref": "#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
@@ -1391,9 +1271,6 @@
                                 "$ref": "#/components/schemas/connector.coda.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.finch.discriminated_connection_settings"
                               },
                               {
@@ -1403,28 +1280,10 @@
                                 "$ref": "#/components/schemas/connector.foreceipt.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.heron.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.kustomer.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings"
@@ -1436,19 +1295,10 @@
                                 "$ref": "#/components/schemas/connector.merge.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.microsoft.discriminated_connection_settings"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.moota.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.onebrick.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.plaid.discriminated_connection_settings"
@@ -1458,12 +1308,6 @@
                               },
                               {
                                 "$ref": "#/components/schemas/connector.ramp.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.saltedge.discriminated_connection_settings"
@@ -1484,28 +1328,19 @@
                                 "$ref": "#/components/schemas/connector.twenty.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.venmo.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.wise.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
-                              },
-                              {
                                 "$ref": "#/components/schemas/connector.yodlee.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.zohodesk.discriminated_connection_settings"
                               }
                             ],
                             "discriminator": {
                               "propertyName": "connector_name",
                               "mapping": {
-                                "dummy-oauth2": "#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings",
+                                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
                                 "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                                 "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
                                 "github": "#/components/schemas/connector.github.discriminated_connection_settings",
@@ -1527,43 +1362,28 @@
                                 "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                                 "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
                                 "coda": "#/components/schemas/connector.coda.discriminated_connection_settings",
-                                "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
                                 "finch": "#/components/schemas/connector.finch.discriminated_connection_settings",
                                 "firebase": "#/components/schemas/connector.firebase.discriminated_connection_settings",
                                 "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connection_settings",
-                                "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
                                 "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                                 "heron": "#/components/schemas/connector.heron.discriminated_connection_settings",
-                                "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
-                                "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                                "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
-                                "kustomer": "#/components/schemas/connector.kustomer.discriminated_connection_settings",
-                                "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
                                 "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings",
                                 "mercury": "#/components/schemas/connector.mercury.discriminated_connection_settings",
                                 "merge": "#/components/schemas/connector.merge.discriminated_connection_settings",
-                                "microsoft": "#/components/schemas/connector.microsoft.discriminated_connection_settings",
                                 "moota": "#/components/schemas/connector.moota.discriminated_connection_settings",
                                 "onebrick": "#/components/schemas/connector.onebrick.discriminated_connection_settings",
-                                "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
-                                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
                                 "plaid": "#/components/schemas/connector.plaid.discriminated_connection_settings",
                                 "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                                 "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
-                                "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
-                                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
                                 "saltedge": "#/components/schemas/connector.saltedge.discriminated_connection_settings",
                                 "splitwise": "#/components/schemas/connector.splitwise.discriminated_connection_settings",
                                 "stripe": "#/components/schemas/connector.stripe.discriminated_connection_settings",
                                 "teller": "#/components/schemas/connector.teller.discriminated_connection_settings",
                                 "toggl": "#/components/schemas/connector.toggl.discriminated_connection_settings",
                                 "twenty": "#/components/schemas/connector.twenty.discriminated_connection_settings",
-                                "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
                                 "venmo": "#/components/schemas/connector.venmo.discriminated_connection_settings",
                                 "wise": "#/components/schemas/connector.wise.discriminated_connection_settings",
-                                "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
-                                "yodlee": "#/components/schemas/connector.yodlee.discriminated_connection_settings",
-                                "zohodesk": "#/components/schemas/connector.zohodesk.discriminated_connection_settings"
+                                "yodlee": "#/components/schemas/connector.yodlee.discriminated_connection_settings"
                               }
                             },
                             "description": "Connector specific data"
@@ -1697,7 +1517,7 @@
                   "data": {
                     "oneOf": [
                       {
-                        "$ref": "#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
@@ -1763,9 +1583,6 @@
                         "$ref": "#/components/schemas/connector.coda.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
-                      },
-                      {
                         "$ref": "#/components/schemas/connector.finch.discriminated_connection_settings"
                       },
                       {
@@ -1775,28 +1592,10 @@
                         "$ref": "#/components/schemas/connector.foreceipt.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
-                      },
-                      {
                         "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.heron.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.kustomer.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings"
@@ -1808,19 +1607,10 @@
                         "$ref": "#/components/schemas/connector.merge.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.microsoft.discriminated_connection_settings"
-                      },
-                      {
                         "$ref": "#/components/schemas/connector.moota.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.onebrick.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.plaid.discriminated_connection_settings"
@@ -1830,12 +1620,6 @@
                       },
                       {
                         "$ref": "#/components/schemas/connector.ramp.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.saltedge.discriminated_connection_settings"
@@ -1856,28 +1640,19 @@
                         "$ref": "#/components/schemas/connector.twenty.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
-                      },
-                      {
                         "$ref": "#/components/schemas/connector.venmo.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.wise.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
-                      },
-                      {
                         "$ref": "#/components/schemas/connector.yodlee.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.zohodesk.discriminated_connection_settings"
                       }
                     ],
                     "discriminator": {
                       "propertyName": "connector_name",
                       "mapping": {
-                        "dummy-oauth2": "#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings",
+                        "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
                         "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                         "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
                         "github": "#/components/schemas/connector.github.discriminated_connection_settings",
@@ -1899,43 +1674,28 @@
                         "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                         "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
                         "coda": "#/components/schemas/connector.coda.discriminated_connection_settings",
-                        "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
                         "finch": "#/components/schemas/connector.finch.discriminated_connection_settings",
                         "firebase": "#/components/schemas/connector.firebase.discriminated_connection_settings",
                         "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connection_settings",
-                        "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
                         "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                         "heron": "#/components/schemas/connector.heron.discriminated_connection_settings",
-                        "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
-                        "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                        "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
-                        "kustomer": "#/components/schemas/connector.kustomer.discriminated_connection_settings",
-                        "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
                         "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings",
                         "mercury": "#/components/schemas/connector.mercury.discriminated_connection_settings",
                         "merge": "#/components/schemas/connector.merge.discriminated_connection_settings",
-                        "microsoft": "#/components/schemas/connector.microsoft.discriminated_connection_settings",
                         "moota": "#/components/schemas/connector.moota.discriminated_connection_settings",
                         "onebrick": "#/components/schemas/connector.onebrick.discriminated_connection_settings",
-                        "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
-                        "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
                         "plaid": "#/components/schemas/connector.plaid.discriminated_connection_settings",
                         "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                         "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
-                        "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
-                        "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
                         "saltedge": "#/components/schemas/connector.saltedge.discriminated_connection_settings",
                         "splitwise": "#/components/schemas/connector.splitwise.discriminated_connection_settings",
                         "stripe": "#/components/schemas/connector.stripe.discriminated_connection_settings",
                         "teller": "#/components/schemas/connector.teller.discriminated_connection_settings",
                         "toggl": "#/components/schemas/connector.toggl.discriminated_connection_settings",
                         "twenty": "#/components/schemas/connector.twenty.discriminated_connection_settings",
-                        "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
                         "venmo": "#/components/schemas/connector.venmo.discriminated_connection_settings",
                         "wise": "#/components/schemas/connector.wise.discriminated_connection_settings",
-                        "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
-                        "yodlee": "#/components/schemas/connector.yodlee.discriminated_connection_settings",
-                        "zohodesk": "#/components/schemas/connector.zohodesk.discriminated_connection_settings"
+                        "yodlee": "#/components/schemas/connector.yodlee.discriminated_connection_settings"
                       }
                     },
                     "description": "Connector specific data"
@@ -2631,6 +2391,145 @@
         ],
         "title": "AuthMode"
       },
+      "connector.acme-oauth2.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "acme-oauth2"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "acme-oauth2"
+      },
+      "connector.acme-oauth2.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "acme-oauth2"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "acme-oauth2"
+      },
       "connector.aircall.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -2755,7 +2654,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -3231,7 +3131,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -3369,7 +3270,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -3382,341 +3284,6 @@
           "config"
         ],
         "title": "discord"
-      },
-      "connector.dummy-oauth2.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "dummy-oauth2"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "client_id": {
-                        "type": "string",
-                        "description": "Client ID used for the connection"
-                      },
-                      "scope": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_in": {
-                        "type": "number"
-                      },
-                      "expires_at": {
-                        "type": "string"
-                      },
-                      "token_type": {
-                        "type": "string"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "additionalProperties": {}
-                      }
-                    },
-                    "required": [
-                      "access_token",
-                      "scope",
-                      "raw"
-                    ],
-                    "description": "Output of the postConnect hook for oauth2 connectors"
-                  },
-                  "created_at": {
-                    "type": "string"
-                  },
-                  "updated_at": {
-                    "type": "string"
-                  },
-                  "last_fetched_at": {
-                    "type": "string"
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                }
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "dummy-oauth2"
-      },
-      "connector.dummy-oauth2.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "dummy-oauth2"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "scopes": {
-                    "type": [
-                      "array",
-                      "null"
-                    ],
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "redirect_uri": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "description": "Base oauth configuration for the connector"
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "dummy-oauth2"
-      },
-      "connector.facebook.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "facebook"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "facebook"
-      },
-      "connector.facebook.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "facebook"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "facebook"
       },
       "connector.finch.discriminated_connection_settings": {
         "type": "object",
@@ -4152,7 +3719,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4165,203 +3733,6 @@
           "config"
         ],
         "title": "github"
-      },
-      "connector.gong.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "gong"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "gong"
-      },
-      "connector.gong.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "gong"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "gong"
       },
       "connector.googlecalendar.discriminated_connection_settings": {
         "type": "object",
@@ -4487,7 +3858,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4625,7 +3997,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4763,7 +4136,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -4901,7 +4275,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -5039,7 +4414,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -5263,7 +4639,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -5276,999 +4653,6 @@
           "config"
         ],
         "title": "hubspot"
-      },
-      "connector.instagram.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "instagram"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "instagram"
-      },
-      "connector.instagram.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "instagram"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "instagram"
-      },
-      "connector.intercom.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "intercom"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "intercom"
-      },
-      "connector.intercom.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "intercom"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "intercom"
-      },
-      "connector.jira.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "jira"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "jira"
-      },
-      "connector.jira.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "jira"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "jira"
-      },
-      "connector.kustomer.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "kustomer"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "kustomer"
-      },
-      "connector.kustomer.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "kustomer"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "kustomer"
-      },
-      "connector.lever.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "lever"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "lever"
-      },
-      "connector.lever.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "lever"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              },
-              "envName": {
-                "type": "string",
-                "enum": [
-                  "sandbox",
-                  "production"
-                ]
-              }
-            },
-            "required": [
-              "oauth",
-              "envName"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "lever"
       },
       "connector.linear.discriminated_connection_settings": {
         "type": "object",
@@ -6394,7 +4778,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -6532,7 +4917,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -6706,249 +5092,6 @@
         ],
         "title": "merge"
       },
-      "connector.microsoft.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "microsoft"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              },
-              "client_id": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "microsoft"
-      },
-      "connector.microsoft.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "microsoft"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string",
-                    "description": "global microsoft connector space separated scopes"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              },
-              "integrations": {
-                "type": "object",
-                "properties": {
-                  "sharepoint": {
-                    "type": "object",
-                    "properties": {
-                      "enabled": {
-                        "type": "boolean"
-                      },
-                      "scopes": {
-                        "type": "string",
-                        "description": "sharepoint specific space separated scopes"
-                      }
-                    }
-                  },
-                  "outlook": {
-                    "type": "object",
-                    "properties": {
-                      "enabled": {
-                        "type": "boolean"
-                      },
-                      "scopes": {
-                        "type": "string",
-                        "description": "outlook specific space separated scopes"
-                      }
-                    }
-                  },
-                  "teams": {
-                    "type": "object",
-                    "properties": {
-                      "enabled": {
-                        "type": "boolean"
-                      },
-                      "scopes": {
-                        "type": "string",
-                        "description": "teams specific space separated scopes"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "required": [
-              "oauth",
-              "integrations"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "microsoft"
-      },
       "connector.moota.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -7116,7 +5259,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -7207,400 +5351,6 @@
           "config"
         ],
         "title": "onebrick"
-      },
-      "connector.outreach.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "outreach"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "outreach"
-      },
-      "connector.outreach.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "outreach"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "outreach"
-      },
-      "connector.pipedrive.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "pipedrive"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "pipedrive"
-      },
-      "connector.pipedrive.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "pipedrive"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "pipedrive"
       },
       "connector.plaid.discriminated_connection_settings": {
         "type": "object",
@@ -7716,7 +5466,7 @@
                 "default": [
                   "transactions"
                 ],
-                "ui:field": "MultiSelectField"
+                "ui:widget": "MultiSelectWidget"
               },
               "countryCodes": {
                 "type": "array",
@@ -7745,7 +5495,7 @@
                   "US",
                   "CA"
                 ],
-                "ui:field": "MultiSelectField"
+                "ui:widget": "MultiSelectWidget"
               },
               "language": {
                 "type": "string",
@@ -7959,7 +5709,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               },
               "envName": {
                 "type": "string",
@@ -8049,203 +5800,6 @@
           "config"
         ],
         "title": "ramp"
-      },
-      "connector.reddit.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "reddit"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "reddit"
-      },
-      "connector.reddit.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "reddit"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "reddit"
       },
       "connector.salesforce.discriminated_connection_settings": {
         "type": "object",
@@ -8377,7 +5931,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -8390,203 +5945,6 @@
           "config"
         ],
         "title": "salesforce"
-      },
-      "connector.salesloft.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "salesloft"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "salesloft"
-      },
-      "connector.salesloft.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "salesloft"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "salesloft"
       },
       "connector.saltedge.discriminated_connection_settings": {
         "type": "object",
@@ -8761,7 +6119,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -8899,7 +6258,8 @@
                     ]
                   }
                 },
-                "description": "Base oauth configuration for the connector"
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
               }
             },
             "required": [
@@ -9331,203 +6691,6 @@
         ],
         "title": "twenty"
       },
-      "connector.twitter.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "twitter"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "twitter"
-      },
-      "connector.twitter.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "twitter"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "twitter"
-      },
       "connector.venmo.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -9650,203 +6813,6 @@
           "config"
         ],
         "title": "wise"
-      },
-      "connector.xero.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "xero"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "xero"
-      },
-      "connector.xero.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "xero"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "xero"
       },
       "connector.yodlee.discriminated_connection_settings": {
         "type": "object",
@@ -10031,203 +6997,6 @@
         ],
         "title": "yodlee"
       },
-      "connector.zohodesk.discriminated_connection_settings": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "zohodesk"
-          },
-          "settings": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "$ref": "#/components/schemas/AuthMode"
-                      },
-                      "api_key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "access_token": {
-                        "type": "string"
-                      },
-                      "refresh_token": {
-                        "type": "string"
-                      },
-                      "expires_at": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "raw": {
-                        "type": "object",
-                        "properties": {
-                          "access_token": {
-                            "type": "string"
-                          },
-                          "expires_in": {
-                            "type": "number"
-                          },
-                          "expires_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "refresh_token": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "refresh_token_expires_in": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          },
-                          "token_type": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "scope": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "access_token"
-                        ],
-                        "additionalProperties": true
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "raw"
-                    ]
-                  },
-                  "connection_config": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "portalId": {
-                        "type": [
-                          "number",
-                          "null"
-                        ]
-                      },
-                      "instance_url": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "additionalProperties": {}
-                  },
-                  "metadata": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "additionalProperties": {}
-                  }
-                },
-                "required": [
-                  "credentials",
-                  "metadata"
-                ]
-              },
-              "error": {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "properties": {
-                  "code": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "refresh_token_external_error"
-                        ]
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "message": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                },
-                "required": [
-                  "code"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "settings"
-        ],
-        "title": "zohodesk"
-      },
-      "connector.zohodesk.discriminated_connector_config": {
-        "type": "object",
-        "properties": {
-          "connector_name": {
-            "type": "string",
-            "const": "zohodesk"
-          },
-          "config": {
-            "type": "object",
-            "properties": {
-              "oauth": {
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "type": "string"
-                  },
-                  "client_secret": {
-                    "type": "string"
-                  },
-                  "scopes": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "client_id",
-                  "client_secret"
-                ]
-              }
-            },
-            "required": [
-              "oauth"
-            ]
-          }
-        },
-        "required": [
-          "connector_name",
-          "config"
-        ],
-        "title": "zohodesk"
-      },
       "core.connection_select": {
         "allOf": [
           {
@@ -10292,7 +7061,7 @@
           {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
@@ -10358,9 +7127,6 @@
                 "$ref": "#/components/schemas/connector.coda.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
-              },
-              {
                 "$ref": "#/components/schemas/connector.finch.discriminated_connection_settings"
               },
               {
@@ -10370,28 +7136,10 @@
                 "$ref": "#/components/schemas/connector.foreceipt.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
-              },
-              {
                 "$ref": "#/components/schemas/connector.greenhouse.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.heron.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.kustomer.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings"
@@ -10403,19 +7151,10 @@
                 "$ref": "#/components/schemas/connector.merge.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.microsoft.discriminated_connection_settings"
-              },
-              {
                 "$ref": "#/components/schemas/connector.moota.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.onebrick.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.plaid.discriminated_connection_settings"
@@ -10425,12 +7164,6 @@
               },
               {
                 "$ref": "#/components/schemas/connector.ramp.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.saltedge.discriminated_connection_settings"
@@ -10451,28 +7184,19 @@
                 "$ref": "#/components/schemas/connector.twenty.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
-              },
-              {
                 "$ref": "#/components/schemas/connector.venmo.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.wise.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
-              },
-              {
                 "$ref": "#/components/schemas/connector.yodlee.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.zohodesk.discriminated_connection_settings"
               }
             ],
             "discriminator": {
               "propertyName": "connector_name",
               "mapping": {
-                "dummy-oauth2": "#/components/schemas/connector.dummy-oauth2.discriminated_connection_settings",
+                "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
                 "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                 "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
                 "github": "#/components/schemas/connector.github.discriminated_connection_settings",
@@ -10494,43 +7218,28 @@
                 "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                 "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
                 "coda": "#/components/schemas/connector.coda.discriminated_connection_settings",
-                "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
                 "finch": "#/components/schemas/connector.finch.discriminated_connection_settings",
                 "firebase": "#/components/schemas/connector.firebase.discriminated_connection_settings",
                 "foreceipt": "#/components/schemas/connector.foreceipt.discriminated_connection_settings",
-                "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
                 "greenhouse": "#/components/schemas/connector.greenhouse.discriminated_connection_settings",
                 "heron": "#/components/schemas/connector.heron.discriminated_connection_settings",
-                "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
-                "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
-                "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
-                "kustomer": "#/components/schemas/connector.kustomer.discriminated_connection_settings",
-                "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
                 "lunchmoney": "#/components/schemas/connector.lunchmoney.discriminated_connection_settings",
                 "mercury": "#/components/schemas/connector.mercury.discriminated_connection_settings",
                 "merge": "#/components/schemas/connector.merge.discriminated_connection_settings",
-                "microsoft": "#/components/schemas/connector.microsoft.discriminated_connection_settings",
                 "moota": "#/components/schemas/connector.moota.discriminated_connection_settings",
                 "onebrick": "#/components/schemas/connector.onebrick.discriminated_connection_settings",
-                "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
-                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
                 "plaid": "#/components/schemas/connector.plaid.discriminated_connection_settings",
                 "postgres": "#/components/schemas/connector.postgres.discriminated_connection_settings",
                 "ramp": "#/components/schemas/connector.ramp.discriminated_connection_settings",
-                "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
-                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
                 "saltedge": "#/components/schemas/connector.saltedge.discriminated_connection_settings",
                 "splitwise": "#/components/schemas/connector.splitwise.discriminated_connection_settings",
                 "stripe": "#/components/schemas/connector.stripe.discriminated_connection_settings",
                 "teller": "#/components/schemas/connector.teller.discriminated_connection_settings",
                 "toggl": "#/components/schemas/connector.toggl.discriminated_connection_settings",
                 "twenty": "#/components/schemas/connector.twenty.discriminated_connection_settings",
-                "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
                 "venmo": "#/components/schemas/connector.venmo.discriminated_connection_settings",
                 "wise": "#/components/schemas/connector.wise.discriminated_connection_settings",
-                "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
-                "yodlee": "#/components/schemas/connector.yodlee.discriminated_connection_settings",
-                "zohodesk": "#/components/schemas/connector.zohodesk.discriminated_connection_settings"
+                "yodlee": "#/components/schemas/connector.yodlee.discriminated_connection_settings"
               }
             },
             "description": "Connector specific data"
@@ -10631,6 +7340,7 @@
       "core.connector.name": {
         "type": "string",
         "enum": [
+          "acme-oauth2",
           "aircall",
           "airtable",
           "apollo",
@@ -10638,13 +7348,10 @@
           "coda",
           "confluence",
           "discord",
-          "dummy-oauth2",
-          "facebook",
           "finch",
           "firebase",
           "foreceipt",
           "github",
-          "gong",
           "googlecalendar",
           "googledocs",
           "googledrive",
@@ -10653,29 +7360,19 @@
           "greenhouse",
           "heron",
           "hubspot",
-          "instagram",
-          "intercom",
-          "jira",
-          "kustomer",
-          "lever",
           "linear",
           "linkedin",
           "lunchmoney",
           "mercury",
           "merge",
-          "microsoft",
           "moota",
           "notion",
           "onebrick",
-          "outreach",
-          "pipedrive",
           "plaid",
           "postgres",
           "quickbooks",
           "ramp",
-          "reddit",
           "salesforce",
-          "salesloft",
           "saltedge",
           "sharepointonline",
           "slack",
@@ -10684,12 +7381,9 @@
           "teller",
           "toggl",
           "twenty",
-          "twitter",
           "venmo",
           "wise",
-          "xero",
-          "yodlee",
-          "zohodesk"
+          "yodlee"
         ],
         "title": "connector"
       },

@@ -6,6 +6,7 @@ import type {
 } from '@openint/sync'
 import {castIs, z, type Z} from '@openint/util/zod-utils'
 // TODO: Fix this cyclic import hack
+// eslint-disable-next-line import-x/no-relative-packages
 import type {AuthType, JsonConnectorDef} from '../../connectors/cnext/schema'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'

@@ -1,6 +1,18 @@
 // generated file. Do not modify by hand
 
 export default {
+  'acme-oauth2': {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Acme Oauth2',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-acme-oauth2.svg',
+      authType: 'OAUTH2',
+    },
+  },
   aircall: {
     hasClient: false,
     hasServer: false,
@@ -73,29 +85,6 @@ export default {
       authType: 'OAUTH2',
     },
   },
-  'dummy-oauth2': {
-    hasClient: false,
-    hasServer: false,
-    metadata: {
-      displayName: 'Dummy OAuth2',
-      stage: 'ga',
-      verticals: ['social-media'],
-      logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-dummy-oauth2.svg',
-      authType: 'OAUTH2',
-    },
-  },
-  facebook: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Facebook',
-      stage: 'beta',
-      verticals: ['social-media'],
-      logoUrl: '/_assets/logo-facebook.svg',
-      nangoProvider: 'facebook',
-    },
-  },
   finch: {
     hasClient: true,
     hasServer: true,
@@ -131,17 +120,6 @@ export default {
       logoUrl:
         'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-github.svg',
       authType: 'OAUTH2',
-    },
-  },
-  gong: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Gong',
-      stage: 'beta',
-      verticals: ['sales-enablement'],
-      logoUrl: '/_assets/logo-gong.svg',
-      nangoProvider: 'gong',
     },
   },
   googlecalendar: {
@@ -236,61 +214,6 @@ export default {
       authType: 'OAUTH2',
     },
   },
-  instagram: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Instagram',
-      stage: 'beta',
-      verticals: ['social-media'],
-      logoUrl: '/_assets/logo-instagram.svg',
-      nangoProvider: 'instagram',
-    },
-  },
-  intercom: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Intercom',
-      stage: 'beta',
-      verticals: ['communication'],
-      logoUrl: '/_assets/logo-intercom.svg',
-      nangoProvider: 'intercom',
-    },
-  },
-  jira: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Jira',
-      stage: 'beta',
-      verticals: ['ticketing'],
-      logoUrl: '/_assets/logo-jira.svg',
-      nangoProvider: 'jira',
-    },
-  },
-  kustomer: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Kustomer',
-      stage: 'beta',
-      verticals: ['communication'],
-      logoUrl: '/_assets/logo-kustomer.svg',
-      nangoProvider: 'kustomer',
-    },
-  },
-  lever: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Lever',
-      stage: 'beta',
-      verticals: ['ats'],
-      logoUrl: '/_assets/logo-lever.svg',
-      nangoProvider: 'lever-sandbox',
-    },
-  },
   linear: {
     hasClient: false,
     hasServer: false,
@@ -342,17 +265,6 @@ export default {
       verticals: ['accounting', 'commerce', 'crm', 'ats'],
     },
   },
-  microsoft: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'microsoft',
-      stage: 'beta',
-      verticals: ['file-storage'],
-      logoUrl: '/_assets/logo-microsoft.svg',
-      nangoProvider: 'microsoft',
-    },
-  },
   moota: {
     hasClient: false,
     hasServer: true,
@@ -379,28 +291,6 @@ export default {
     metadata: {
       verticals: ['banking'],
       logoUrl: '/_assets/logo-onebrick.svg',
-    },
-  },
-  outreach: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Outreach',
-      stage: 'beta',
-      verticals: ['sales-engagement'],
-      logoUrl: '/_assets/logo-outreach.svg',
-      nangoProvider: 'outreach',
-    },
-  },
-  pipedrive: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Outreach',
-      stage: 'beta',
-      verticals: ['crm'],
-      logoUrl: '/_assets/logo-pipedrive.svg',
-      nangoProvider: 'pipedrive',
     },
   },
   plaid: {
@@ -443,17 +333,6 @@ export default {
       stage: 'beta',
     },
   },
-  reddit: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Reddit',
-      stage: 'beta',
-      verticals: ['social-media'],
-      logoUrl: '/_assets/logo-reddit.svg',
-      nangoProvider: 'reddit',
-    },
-  },
   salesforce: {
     hasClient: false,
     hasServer: false,
@@ -464,17 +343,6 @@ export default {
       logoUrl:
         'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesforce.svg',
       authType: 'OAUTH2',
-    },
-  },
-  salesloft: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Salesloft',
-      stage: 'beta',
-      verticals: ['sales-engagement'],
-      logoUrl: '/_assets/logo-salesloft.svg',
-      nangoProvider: 'salesloft',
     },
   },
   saltedge: {
@@ -551,17 +419,6 @@ export default {
       stage: 'beta',
     },
   },
-  twitter: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Twitter',
-      stage: 'beta',
-      verticals: ['social-media'],
-      logoUrl: '/_assets/logo-twitter.svg',
-      nangoProvider: 'twitter',
-    },
-  },
   venmo: {
     hasClient: false,
     hasServer: false,
@@ -578,34 +435,12 @@ export default {
       logoUrl: '/_assets/logo-wise.svg',
     },
   },
-  xero: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      verticals: ['accounting'],
-      logoUrl: '/_assets/logo-xero.svg',
-      displayName: 'Xero',
-      stage: 'beta',
-      nangoProvider: 'xero',
-    },
-  },
   yodlee: {
     hasClient: true,
     hasServer: true,
     metadata: {
       verticals: ['banking'],
       logoUrl: '/_assets/logo-yodlee.svg',
-    },
-  },
-  zohodesk: {
-    hasClient: false,
-    hasServer: true,
-    metadata: {
-      displayName: 'Zoho Desk',
-      stage: 'beta',
-      verticals: ['communication'],
-      logoUrl: '/_assets/logo-zohodesk.svg',
-      nangoProvider: 'zoho-desk',
     },
   },
 } as const

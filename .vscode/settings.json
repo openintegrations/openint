@@ -18,7 +18,7 @@
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
   "[sql]": {
-    "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[tailwindcss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -92,5 +92,20 @@
     "class:list",
     "classNames",
     "ui:classNames"
+  ],
+  "prettier.documentSelectors": [
+    "**/*.sql"
+  ],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "db.localtest.me",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Local",
+      "database": "postgres",
+      "username": "postgres",
+      "password": "password"
+    }
   ]
 }

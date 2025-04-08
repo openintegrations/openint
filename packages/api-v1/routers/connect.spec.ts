@@ -56,7 +56,7 @@ const _oauth2Server = createOAuth2Server({
   authCodes: [],
 })
 
-const oauth2Server = new Elysia({prefix: '/api/dummy-oauth2'}).use(
+const oauth2Server = new Elysia({prefix: '/api/acme-oauth2'}).use(
   _oauth2Server,
 )
 
@@ -87,7 +87,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   describeMaybeOnly('oauth2', () => {
     const ccfgRes = $test('create connector config', async () => {
       const res = await asUser.createConnectorConfig({
-        connector_name: 'dummy-oauth2',
+        connector_name: 'acme-oauth2',
         // TODO: Ensure discriminated union for this.
         config: {oauth: configOauth},
       })
@@ -95,7 +95,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res).toMatchObject({
         id: expect.any(String),
         org_id: 'org_222',
-        connector_name: 'dummy-oauth2',
+        connector_name: 'acme-oauth2',
       })
 
       const parsed = oauth2Schemas.connector_config.parse(res.config)
@@ -158,7 +158,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     // use access token to do something useful, like introspect
     test('introspect token', async () => {
       const res = await oauth2Server.handle(
-        new Request('http://localhost/api/dummy-oauth2/token/introspect', {
+        new Request('http://localhost/api/acme-oauth2/token/introspect', {
           method: 'POST',
           body: new URLSearchParams({
             token:
