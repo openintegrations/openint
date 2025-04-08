@@ -11,7 +11,6 @@ export const shortConfig = defineConfig(
 
 const finalConfig = defineConfig(
   ...configArray.filter((c) => !c.name.startsWith('unicorn')),
-
   {
     name: 'reactVersion',
     settings: {
@@ -20,8 +19,8 @@ const finalConfig = defineConfig(
   },
 )
 
-export default shortConfig
-// export default finalConfig
+// export default shortConfig
+export default finalConfig
 
 // @ts-expect-error Upgrade types so .main exists
 if (import.meta.main) {
