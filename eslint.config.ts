@@ -5,11 +5,11 @@ import configArray, {
 import pkgJson from './package.json'
 
 export const shortConfig = defineConfig(
-  configs.globaIgnores,
-  configs.defaultFiles,
+  configs.globaIgnores as any,
+  configs.defaultFiles as any,
   configs.javascript,
   // configs.typescript as any,
-  configs.import,
+  configs.import as any,
 )
 
 const finalConfig = defineConfig(

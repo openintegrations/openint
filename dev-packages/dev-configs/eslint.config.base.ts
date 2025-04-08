@@ -23,10 +23,17 @@ import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
-import {defineConfig} from 'eslint/config'
-import pluginTs, {ConfigArray, ConfigWithExtends} from 'typescript-eslint'
+// Causes issue with tsc. So we use the typescript-eslint version which works better 
+// https://gist.github.com/openint-bot/fc836878d47b575d3cb3657b78e234d4
+// import {defineConfig} from 'eslint/config'
+import pluginTs, {
+  ConfigArray,
+  ConfigWithExtends,
+  config as defineConfig,
+} from 'typescript-eslint'
 
 export {defineConfig}
+export type ConfigWithExtendsArray = Parameters<typeof defineConfig>
 
 type Config = ConfigArray[number]
 
@@ -76,6 +83,7 @@ export const configs = keyAsName({
       'apps/web/postcss.config.mjs',
       // Unsure why this is not part of the "tsconfig" project somehow...
       //Also cannot even add it to the default config
+      // TODO: Fix this hack
       '**/dev-configs',
       '**/eslint.config.ts',
 
@@ -364,4 +372,6 @@ export const configs = keyAsName({
 export default defineConfig(
   Object.values(configs) as [any],
   // defineConfigs will modify the config names actually
-) as Array<{name: `${keyof typeof configs}${string}`}>
+) as Array<
+  {name: `${keyof typeof configs}${string}`} & ConfigWithExtendsArray[number]
+>
