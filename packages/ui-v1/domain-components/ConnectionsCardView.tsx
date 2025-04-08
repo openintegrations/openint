@@ -4,12 +4,19 @@ import Image from 'next/image'
 import {useMemo, useState} from 'react'
 import {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Separator} from '@openint/shadcn/ui'
+import {
+  Badge,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Separator,
+} from '@openint/shadcn/ui'
 import {CopyID} from '../components/CopyID'
 import type {PropertyItem} from '../components/PropertyListView'
 import {PropertyListView} from '../components/PropertyListView'
 import type {StatusType} from '../components/StatusDot'
 import {getConnectorLogoUrl} from '../utils/images'
+import {ConnectionTableCell} from './tables/ConnectionTableCell'
 
 export interface ConnectionCardProps {
   connection: Core['connection_select']
@@ -22,50 +29,69 @@ export interface ConnectionCardProps {
   className?: string
 }
 
-// Helper function to smartly truncate connector config IDs
-// Format: ccfg_service_id -> ccfg_service_id...
-const truncateConnectorConfigId = (id: string): string => {
-  if (!id) return ''
-
-  // Find the position of the second underscore
-  const firstUnderscore = id.indexOf('_')
-  if (firstUnderscore === -1) return id
-
-  const secondUnderscore = id.indexOf('_', firstUnderscore + 1)
-  if (secondUnderscore === -1) return id
-
-  // Take everything up to 3 characters after the second underscore, then add ellipsis
-  const truncatePoint = secondUnderscore + 4
-  if (id.length <= truncatePoint) return id
-
-  return `${id.substring(0, truncatePoint)}...`
-}
-
 export function ConnectionCardContent({
   connection,
-  category = 'CRM',
-  platform = 'Desktop',
-  authMethod = 'oauth',
-  version = 'V2',
+  status = 'offline',
+  category,
+  platform,
+  authMethod,
+  version,
 }: ConnectionCardProps) {
   const customerId = connection.customer_id
   const connectorConfigId = connection.connector_config_id || ''
 
-  // Create truncated versions of the IDs for display
-  const truncatedCustomerId = customerId
-    ? customerId.length > 8
-      ? `${customerId.substring(0, 8)}...`
-      : customerId
-    : ''
-  const truncatedConnectorConfigId =
-    truncateConnectorConfigId(connectorConfigId)
+  // Try to extract values from connection if not provided as props
+  const effectiveCategory = category || connection.connector_name || 'Unknown'
+  // Default auth method based on connection settings
+  const effectiveAuthMethod =
+    authMethod ||
+    (connection.settings?.oauth
+      ? 'oauth'
+      : connection.settings?.apikey
+        ? 'apikey'
+        : 'Unknown')
+  // Use provided values or defaults
+  const effectivePlatform = platform || 'Desktop'
+  const effectiveVersion = version || 'V1'
+
+  // Get connector details for enhanced display
+  const connectorName = connection.connector_name || 'Unknown Connector'
+  const displayName =
+    connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
+  const logoUrl = getConnectorLogoUrl(connectorName)
+
+  // Status badge configuration
+  const getStatusInfo = (status: StatusType) => {
+    switch (status) {
+      case 'healthy':
+        return {
+          color: 'bg-green-50 text-green-700 border-green-200',
+          label: 'Healthy',
+        }
+      case 'warning':
+        return {
+          color: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+          label: 'Warning',
+        }
+      case 'destructive':
+        return {color: 'bg-red-50 text-red-700 border-red-200', label: 'Error'}
+      case 'offline':
+      default:
+        return {
+          color: 'bg-gray-50 text-gray-700 border-gray-200',
+          label: 'Offline',
+        }
+    }
+  }
+
+  const statusInfo = getStatusInfo(status)
 
   const properties = useMemo(() => {
     const props: PropertyItem[] = [
-      {title: 'Category', value: category},
-      {title: 'Platform', value: platform},
-      {title: 'Auth Method', value: authMethod},
-      {title: 'Version', value: version},
+      {title: 'Category', value: effectiveCategory},
+      {title: 'Platform', value: effectivePlatform},
+      {title: 'Auth Method', value: effectiveAuthMethod},
+      {title: 'Version', value: effectiveVersion},
     ]
 
     if (customerId) {
@@ -74,11 +100,11 @@ export function ConnectionCardContent({
         value: (
           <CopyID
             value={customerId}
-            truncatedDisplay={truncatedCustomerId}
-            width="auto"
+            width="100%"
             size="compact"
             disableTooltip
             mountDelay={100}
+            className="bg-gray-50 transition-colors hover:bg-gray-100"
           />
         ),
         isCopyID: true,
@@ -91,11 +117,11 @@ export function ConnectionCardContent({
         value: (
           <CopyID
             value={connectorConfigId}
-            truncatedDisplay={truncatedConnectorConfigId}
-            width="auto"
+            width="100%"
             size="compact"
             disableTooltip
             mountDelay={100}
+            className="bg-gray-50 transition-colors hover:bg-gray-100"
           />
         ),
         isCopyID: true,
@@ -104,32 +130,25 @@ export function ConnectionCardContent({
 
     return props
   }, [
-    category,
-    platform,
-    authMethod,
-    version,
+    effectiveCategory,
+    effectivePlatform,
+    effectiveAuthMethod,
+    effectiveVersion,
     customerId,
     connectorConfigId,
-    truncatedCustomerId,
-    truncatedConnectorConfigId,
   ])
 
-  // Format connector name for display and get logo URL
-  const connectorName = connection.connector_name || 'Unknown Connector'
-  const displayName =
-    connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
-  const logoUrl = getConnectorLogoUrl(connectorName)
-
   return (
-    <>
-      <div className="flex items-center gap-3 p-4">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-sm bg-gray-50">
+    <div className="overflow-hidden rounded-lg">
+      {/* Enhanced header with logo, name and status */}
+      <div className="flex items-center gap-3 bg-gradient-to-r from-gray-50 to-white p-5">
+        <div className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-gray-100">
           <Image
             src={logoUrl}
             alt={`${displayName} logo`}
-            width={40}
-            height={40}
-            className="object-contain"
+            width={48}
+            height={48}
+            className="object-contain p-1"
             onError={(e) => {
               // If logo fails to load, show initials instead
               e.currentTarget.style.display = 'none'
@@ -137,64 +156,89 @@ export function ConnectionCardContent({
             }}
           />
         </div>
-        <div className="text-base font-medium">{displayName}</div>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-medium text-gray-900">{displayName}</h3>
+            <Badge
+              variant="outline"
+              className={cn('border text-xs font-medium', statusInfo.color)}>
+              {statusInfo.label}
+            </Badge>
+          </div>
+          <div className="text-sm text-gray-500">
+            {effectivePlatform} · {effectiveAuthMethod} · v{effectiveVersion}
+          </div>
+        </div>
       </div>
       <Separator />
-      <div className="overflow-visible p-4">
-        <PropertyListView properties={properties} />
+      <div className="grid grid-cols-1 gap-4 p-5">
+        <div>
+          <div className="mb-1 text-xs font-medium uppercase text-gray-500">
+            Category
+          </div>
+          <div className="text-sm font-medium text-gray-700">
+            {effectiveCategory}
+          </div>
+        </div>
+        {customerId && (
+          <div>
+            <div className="mb-1 text-xs font-medium uppercase text-gray-500">
+              Customer ID
+            </div>
+            <CopyID
+              value={customerId}
+              width="100%"
+              size="compact"
+              className="bg-gray-50 transition-colors hover:bg-gray-100"
+            />
+          </div>
+        )}
+        {connectorConfigId && (
+          <div>
+            <div className="mb-1 text-xs font-medium uppercase text-gray-500">
+              Connector Config ID
+            </div>
+            <CopyID
+              value={connectorConfigId}
+              width="100%"
+              size="compact"
+              className="bg-gray-50 transition-colors hover:bg-gray-100"
+            />
+          </div>
+        )}
       </div>
-    </>
+    </div>
   )
 }
 
 export function ConnectionsCardView({
   connection,
-  status,
-  category = 'CRM',
-  platform = 'Desktop',
-  authMethod = 'oauth',
-  version = 'V2',
+  status = 'offline',
+  category,
+  platform,
+  authMethod,
+  version,
   children,
   className,
 }: ConnectionCardProps) {
   const [open, setOpen] = useState(false)
-  const [coords, setCoords] = useState({x: 0, y: 0})
 
-  const handleMouseEnter = (e: React.MouseEvent) => {
-    setOpen(true)
-    setCoords({x: e.clientX, y: e.clientY})
-  }
-
-  const handleMouseLeave = () => {
-    setOpen(false)
-  }
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (open) {
-      setCoords({x: e.clientX, y: e.clientY})
-    }
-  }
-
-  // Create a simplified connector display element
+  // Create a nicer trigger element with the connector logo
   const connectorName = connection.connector_name || 'Unknown Connector'
+  const logoUrl = getConnectorLogoUrl(connectorName)
   const displayName =
     connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
-  const logoUrl = getConnectorLogoUrl(connectorName)
 
-  const triggerElement = children || (
-    <div
-      className={cn('cursor-pointer', className)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onMouseMove={handleMouseMove}>
+  const customTrigger = (
+    <div className={cn('group cursor-pointer', className)}>
       <div className="flex items-center gap-2">
-        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-sm bg-gray-50">
+        <div className="group-hover:ring-primary/20 flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-gray-100 transition-all group-hover:ring-2">
           <Image
             src={logoUrl}
             alt={`${displayName} logo`}
-            width={32}
-            height={32}
-            className="object-contain"
+            width={40}
+            height={40}
+            className="object-contain p-1"
             onError={(e) => {
               // If logo fails to load, show initials instead
               e.currentTarget.style.display = 'none'
@@ -206,42 +250,25 @@ export function ConnectionsCardView({
     </div>
   )
 
+  const triggerElement = children || customTrigger
+
   return (
-    <>
-      {triggerElement}
-      {open && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            pointerEvents: 'none',
-            width: '100vw',
-            height: '100vh',
-            zIndex: 50,
-          }}>
-          <div
-            style={{
-              position: 'absolute',
-              left: `${coords.x}px`,
-              top: `${coords.y}px`,
-              transform: 'translate(10px, -50%)',
-              pointerEvents: 'auto',
-            }}>
-            <div className="bg-popover w-[480px] overflow-visible rounded-md border p-0 shadow-md">
-              <ConnectionCardContent
-                connection={connection}
-                status={status}
-                category={category}
-                platform={platform}
-                authMethod={authMethod}
-                version={version}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>{triggerElement}</PopoverTrigger>
+      <PopoverContent
+        className="w-[450px] p-0 shadow-lg"
+        align="start"
+        sideOffset={5}>
+        <ConnectionCardContent
+          connection={connection}
+          status={status}
+          category={category}
+          platform={platform}
+          authMethod={authMethod}
+          version={version}
+        />
+      </PopoverContent>
+    </Popover>
   )
 }
 

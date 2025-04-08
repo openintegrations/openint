@@ -28,10 +28,6 @@ interface CopyIDProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   label?: string
   /**
-   * Display a truncated version of the value, the full value will still be copied
-   */
-  truncatedDisplay?: string
-  /**
    * Optional tooltip text to display on copy success
    */
   tooltipCopiedText?: string
@@ -75,7 +71,6 @@ interface CopyIDProps extends React.HTMLAttributes<HTMLDivElement> {
 export function CopyID({
   value,
   label,
-  truncatedDisplay,
   tooltipCopiedText = 'Copied!',
   tooltipDefaultText = 'Copy to clipboard',
   width = '320px',
@@ -164,7 +159,7 @@ export function CopyID({
         {...props}>
         {label && <span className="text-gray-400">{label}</span>}
         <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-mono">
-          {truncatedDisplay || value}
+          {value}
         </span>
         <span className="flex-shrink-0 text-gray-400">
           <Icon name="Copy" size={getIconSize()} />
@@ -186,7 +181,7 @@ export function CopyID({
         {...props}>
         {label && <span className="text-gray-400">{label}</span>}
         <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-mono">
-          {truncatedDisplay || value}
+          {value}
         </span>
         <div className="relative">
           <button
@@ -200,11 +195,11 @@ export function CopyID({
 
           {/* Custom tooltip that's more reliable with popovers */}
           {showTooltip && (
-            <div className="absolute bottom-full right-0 z-50 mb-2">
-              <div className="whitespace-nowrap rounded bg-black px-3 py-1.5 text-xs text-white shadow-md">
+            <div className="absolute bottom-full right-0 mb-1.5">
+              <div className="bg-primary whitespace-nowrap rounded px-2 py-1 text-xs text-white shadow-sm">
                 {copied ? tooltipCopiedText : tooltipDefaultText}
               </div>
-              <div className="absolute right-[9px] top-full -mt-[2px] h-2 w-2 rotate-45 transform bg-black"></div>
+              <div className="bg-primary absolute right-[10px] top-full -mt-[2px] h-2 w-2 rotate-45 transform"></div>
             </div>
           )}
         </div>
@@ -224,7 +219,7 @@ export function CopyID({
       {...props}>
       {label && <span className="text-gray-400">{label}</span>}
       <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-mono">
-        {truncatedDisplay || value}
+        {value}
       </span>
       <TooltipProvider>
         <Tooltip>
