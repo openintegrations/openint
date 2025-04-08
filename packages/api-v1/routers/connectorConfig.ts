@@ -1,10 +1,10 @@
+import type {ConnectorConfig} from '../models'
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
 import {and, asc, desc, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import type {ConnectorConfig} from '../models'
 import {
   connectorConfigExtended,
   core,
@@ -43,23 +43,30 @@ export const connectorConfigRouter = router({
     )
     .query(async ({ctx, input: {expand, connector_names, ...params} = {}}) => {
       const includeConnectionCount = expand?.includes('connection_count')
-      const connectorNamesFromToken =
-        ctx.viewer?.connectOptions?.connector_names ?? []
+      // @pellicceama: Have another way to validate
+      // const connectorNamesFromToken =
+      //   ctx.viewer?.connectOptions?.connector_names ?? []
 
       const currentlySupportedConnectorNames = Object.keys(defConnectors ?? {})
 
       const connectionCountExtra = {
         // Need to cast to double precision to avoid being used as string
-        connection_count: sql<number>`(
-          SELECT COUNT(*)
-          FROM ${schema.connection}
-          WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
-        )`.as('connection_count'),
+        connection_count: sql<number>`
+          (
+            SELECT
+              COUNT(*)
+            FROM
+              ${schema.connection}
+            WHERE
+              ${schema.connection}.connector_config_id = ${schema
+            .connector_config.id}
+          )
+        `.as('connection_count'),
       }
 
       const items = await ctx.db.query.connector_config.findMany({
         extras: {
-          total: sql<number>`count(*) over ()`.as('total'),
+          total: sql<number>`count(*) OVER ()`.as('total'),
           // TODO: Fix typing to make connection_count optional
           ...((includeConnectionCount &&
             connectionCountExtra) as typeof connectionCountExtra),
@@ -76,14 +83,14 @@ export const connectorConfigRouter = router({
           // ),
           eq(
             schema.connector_config.connector_name,
-            sql`ANY(${sql.param(currentlySupportedConnectorNames)})`,
+            sql`ANY (${sql.param(currentlySupportedConnectorNames)})`,
           ),
-          connectorNamesFromToken.length > 0
-            ? inArray(
-                schema.connector_config.connector_name,
-                connectorNamesFromToken,
-              )
-            : undefined,
+          // connectorNamesFromToken.length > 0
+          //   ? inArray(
+          //       schema.connector_config.connector_name,
+          //       connectorNamesFromToken,
+          //     )
+          //   : undefined,
         ),
         orderBy: [
           desc(schema.connector_config.updated_at),

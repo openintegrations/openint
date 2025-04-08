@@ -81,7 +81,7 @@ export async function setupFixture(info: Info) {
       .onConflictDoNothing()
   })()
 
-  const token = await jwt.signViewer(viewer)
+  const token = await jwt.signToken(viewer)
 
   return {...info, token, viewer}
 }

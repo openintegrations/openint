@@ -1,7 +1,7 @@
-import {TRPCError} from '@trpc/server'
 import type {Id, Viewer} from '@openint/cdk'
-import {eq, schema} from '@openint/db'
 import type {AnyDatabase} from '@openint/db/db'
+import {TRPCError} from '@trpc/server'
+import {eq, schema} from '@openint/db'
 import {envRequired} from '@openint/env'
 import {makeJwtClient} from '../lib/makeJwtClient'
 
@@ -41,7 +41,8 @@ export async function viewerFromRequest(
 
   try {
     const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})
-    return await jwt.verifyViewer(token)
+    const {viewer} = await jwt.verifyToken(token)
+    return viewer
   } catch (err) {
     throw new TRPCError({code: 'UNAUTHORIZED', message: `${err}`})
   }
