@@ -1,9 +1,9 @@
 import * as fs from 'node:fs'
 import {join as pathJoin} from 'path/posix'
-import prettier from 'prettier'
+import {prettier} from '@openint/dev-configs'
 // Move prettier to its own project like eslint-config
 // eslint-disable-next-line import-x/no-relative-packages
-import prettierConfig from '../../../prettier.config'
+import prettierConfig from '@openint/dev-configs/prettier.config.base'
 
 export async function writePretty(
   filename: string,
