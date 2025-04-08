@@ -3,6 +3,8 @@
 
 // Failing due to https://github.com/eslint/css/issues/56, should be released in few days hopefully
 // import pluginCss from '@eslint/css'
+// @ts-expect-error Esm
+// import {tailwindSyntax} from '@eslint/css/syntax'
 import pluginJs from '@eslint/js'
 // @ts-expect-error No types available
 import pluginNext from '@next/eslint-plugin-next'
@@ -23,7 +25,7 @@ import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginUnicorn from 'eslint-plugin-unicorn'
-// Causes issue with tsc. So we use the typescript-eslint version which works better 
+// Causes issue with tsc. So we use the typescript-eslint version which works better
 // https://gist.github.com/openint-bot/fc836878d47b575d3cb3657b78e234d4
 // import {defineConfig} from 'eslint/config'
 import pluginTs, {
@@ -367,6 +369,19 @@ export const configs = keyAsName({
   prettier: {
     extends: [configPrettier],
   },
+  // Does not work because requires esm module. We should upgrade fully to esm one day
+  // css: {
+  //   plugins: {
+  //     css: pluginCss,
+  //   },
+  //   language: 'css/css',
+  //   languageOptions: {
+  //     customSyntax: tailwindSyntax,
+  //   },
+  //   rules: {
+  //     'css/no-empty-blocks': 'error',
+  //   },
+  // },
 } satisfies Record<string, Omit<ConfigWithExtends, 'name'>>)
 
 export default defineConfig(

@@ -10,9 +10,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@eslint/css": "^0.6.0",
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.22.0",
+    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@next/eslint-plugin-next": "^15.2.2",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
