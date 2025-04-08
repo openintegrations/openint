@@ -6935,7 +6935,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "type": "string",
             },
             "type": "array",
-            "ui:field": "MultiSelectField",
+            "ui:widget": "MultiSelectWidget",
           },
           "credentials": {
             "anyOf": [
@@ -7009,7 +7009,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
               "type": "string",
             },
             "type": "array",
-            "ui:field": "MultiSelectField",
+            "ui:widget": "MultiSelectWidget",
           },
         },
         "required": [
