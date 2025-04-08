@@ -1,3 +1,3 @@
-import prettierConfig from '@openint/dev-configs/prettier.config.base'
+const jiti = require('jiti')(__dirname)
 
-export default prettierConfig
+module.exports = jiti('@openint/dev-configs/prettier.config.base').default

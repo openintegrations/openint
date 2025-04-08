@@ -3,7 +3,7 @@
 
 // Failing due to https://github.com/eslint/css/issues/56, should be released in few days hopefully
 // import pluginCss from '@eslint/css'
-// @ts-expect-error Esm
+// wouuld be @ts-expect-error Esm
 // import {tailwindSyntax} from '@eslint/css/syntax'
 import pluginJs from '@eslint/js'
 // @ts-expect-error No types available
