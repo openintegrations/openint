@@ -1,19 +1,15 @@
 'use client'
 
+import Image from 'next/image'
 import {useMemo, useState} from 'react'
 import {Core} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Separator,
-} from '@openint/shadcn/ui'
+import {Separator} from '@openint/shadcn/ui'
 import {CopyID} from '../components/CopyID'
 import type {PropertyItem} from '../components/PropertyListView'
 import {PropertyListView} from '../components/PropertyListView'
 import type {StatusType} from '../components/StatusDot'
-import {ConnectionTableCell} from './tables/ConnectionTableCell'
+import {getConnectorLogoUrl} from '../utils/images'
 
 export interface ConnectionCardProps {
   connection: Core['connection_select']
@@ -118,10 +114,30 @@ export function ConnectionCardContent({
     truncatedConnectorConfigId,
   ])
 
+  // Format connector name for display and get logo URL
+  const connectorName = connection.connector_name || 'Unknown Connector'
+  const displayName =
+    connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
+  const logoUrl = getConnectorLogoUrl(connectorName)
+
   return (
     <>
-      <div className="p-4">
-        <ConnectionTableCell connection={connection} />
+      <div className="flex items-center gap-3 p-4">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-sm bg-gray-50">
+          <Image
+            src={logoUrl}
+            alt={`${displayName} logo`}
+            width={40}
+            height={40}
+            className="object-contain"
+            onError={(e) => {
+              // If logo fails to load, show initials instead
+              e.currentTarget.style.display = 'none'
+              e.currentTarget.parentElement!.innerHTML = `<span class="text-primary font-medium text-base">${displayName.substring(0, 2).toUpperCase()}</span>`
+            }}
+          />
+        </div>
+        <div className="text-base font-medium">{displayName}</div>
       </div>
       <Separator />
       <div className="overflow-visible p-4">
@@ -142,30 +158,90 @@ export function ConnectionsCardView({
   className,
 }: ConnectionCardProps) {
   const [open, setOpen] = useState(false)
+  const [coords, setCoords] = useState({x: 0, y: 0})
+
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    setOpen(true)
+    setCoords({x: e.clientX, y: e.clientY})
+  }
+
+  const handleMouseLeave = () => {
+    setOpen(false)
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (open) {
+      setCoords({x: e.clientX, y: e.clientY})
+    }
+  }
+
+  // Create a simplified connector display element
+  const connectorName = connection.connector_name || 'Unknown Connector'
+  const displayName =
+    connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
+  const logoUrl = getConnectorLogoUrl(connectorName)
 
   const triggerElement = children || (
-    <div className={cn('cursor-pointer', className)}>
-      <ConnectionTableCell connection={connection} />
+    <div
+      className={cn('cursor-pointer', className)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}>
+      <div className="flex items-center gap-2">
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-sm bg-gray-50">
+          <Image
+            src={logoUrl}
+            alt={`${displayName} logo`}
+            width={32}
+            height={32}
+            className="object-contain"
+            onError={(e) => {
+              // If logo fails to load, show initials instead
+              e.currentTarget.style.display = 'none'
+              e.currentTarget.parentElement!.innerHTML = `<span class="text-primary text-xs font-medium">${displayName.substring(0, 2).toUpperCase()}</span>`
+            }}
+          />
+        </div>
+      </div>
     </div>
   )
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>{triggerElement}</PopoverTrigger>
-      <PopoverContent
-        className="w-[480px] overflow-visible p-0"
-        align="start"
-        sideOffset={5}>
-        <ConnectionCardContent
-          connection={connection}
-          status={status}
-          category={category}
-          platform={platform}
-          authMethod={authMethod}
-          version={version}
-        />
-      </PopoverContent>
-    </Popover>
+    <>
+      {triggerElement}
+      {open && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            pointerEvents: 'none',
+            width: '100vw',
+            height: '100vh',
+            zIndex: 50,
+          }}>
+          <div
+            style={{
+              position: 'absolute',
+              left: `${coords.x}px`,
+              top: `${coords.y}px`,
+              transform: 'translate(10px, -50%)',
+              pointerEvents: 'auto',
+            }}>
+            <div className="bg-popover w-[480px] overflow-visible rounded-md border p-0 shadow-md">
+              <ConnectionCardContent
+                connection={connection}
+                status={status}
+                category={category}
+                platform={platform}
+                authMethod={authMethod}
+                version={version}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
