@@ -95,5 +95,17 @@
   ],
   "prettier.documentSelectors": [
     "**/*.sql"
+  ],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "db.localtest.me",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Local",
+      "database": "postgres",
+      "username": "postgres",
+      "password": "password"
+    }
   ]
 }
