@@ -26,6 +26,25 @@ export interface ConnectionCardProps {
   className?: string
 }
 
+// Helper function to smartly truncate connector config IDs
+// Format: ccfg_service_id -> ccfg_service_id...
+const truncateConnectorConfigId = (id: string): string => {
+  if (!id) return ''
+
+  // Find the position of the second underscore
+  const firstUnderscore = id.indexOf('_')
+  if (firstUnderscore === -1) return id
+
+  const secondUnderscore = id.indexOf('_', firstUnderscore + 1)
+  if (secondUnderscore === -1) return id
+
+  // Take everything up to 3 characters after the second underscore, then add ellipsis
+  const truncatePoint = secondUnderscore + 4
+  if (id.length <= truncatePoint) return id
+
+  return `${id.substring(0, truncatePoint)}...`
+}
+
 export function ConnectionCardContent({
   connection,
   category = 'CRM',
@@ -35,6 +54,15 @@ export function ConnectionCardContent({
 }: ConnectionCardProps) {
   const customerId = connection.customer_id
   const connectorConfigId = connection.connector_config_id || ''
+
+  // Create truncated versions of the IDs for display
+  const truncatedCustomerId = customerId
+    ? customerId.length > 8
+      ? `${customerId.substring(0, 8)}...`
+      : customerId
+    : ''
+  const truncatedConnectorConfigId =
+    truncateConnectorConfigId(connectorConfigId)
 
   const properties = useMemo(() => {
     const props: PropertyItem[] = [
@@ -50,7 +78,8 @@ export function ConnectionCardContent({
         value: (
           <CopyID
             value={customerId}
-            width="100%"
+            truncatedDisplay={truncatedCustomerId}
+            width="auto"
             size="compact"
             disableTooltip
             mountDelay={100}
@@ -66,7 +95,8 @@ export function ConnectionCardContent({
         value: (
           <CopyID
             value={connectorConfigId}
-            width="100%"
+            truncatedDisplay={truncatedConnectorConfigId}
+            width="auto"
             size="compact"
             disableTooltip
             mountDelay={100}
@@ -77,7 +107,16 @@ export function ConnectionCardContent({
     }
 
     return props
-  }, [category, platform, authMethod, version, customerId, connectorConfigId])
+  }, [
+    category,
+    platform,
+    authMethod,
+    version,
+    customerId,
+    connectorConfigId,
+    truncatedCustomerId,
+    truncatedConnectorConfigId,
+  ])
 
   return (
     <>
@@ -85,7 +124,7 @@ export function ConnectionCardContent({
         <ConnectionTableCell connection={connection} />
       </div>
       <Separator />
-      <div className="p-4">
+      <div className="overflow-visible p-4">
         <PropertyListView properties={properties} />
       </div>
     </>
@@ -113,7 +152,10 @@ export function ConnectionsCardView({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{triggerElement}</PopoverTrigger>
-      <PopoverContent className="w-[450px] p-0" align="start">
+      <PopoverContent
+        className="w-[480px] overflow-visible p-0"
+        align="start"
+        sideOffset={5}>
         <ConnectionCardContent
           connection={connection}
           status={status}
