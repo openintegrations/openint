@@ -217,13 +217,3 @@ const removeUndefinedValues = <T extends Record<string, unknown>>(
     Object.entries(obj).filter(([, v]) => v !== undefined),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as any
-
-const animals = await sql`
-  SELECT
-    first_name,
-    species
-  FROM
-    animals
-  WHERE
-    id = ${id}
-`
