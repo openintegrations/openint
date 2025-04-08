@@ -22,7 +22,7 @@ export function ConnectionTableCell({
   const logo = (
     <div
       className={cn(
-        'bg-primary/15 relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded-md',
+        'bg-primary/15 relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded-sm',
         'h-8 w-8',
       )}>
       {useLogo && logo_url && (
