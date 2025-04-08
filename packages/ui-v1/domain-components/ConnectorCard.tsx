@@ -22,6 +22,7 @@ const ConnectorCard = ({
 }: ConnectorCardProps) => {
   const {name, logo_url, display_name} = connector
   return (
+    // TODO: @snrondina: Refactor to use the proper card component from our library
     <div
       className={cn(
         'group flex w-full cursor-pointer flex-col items-start gap-4 rounded-lg border border-gray-200 p-6 transition-all hover:border-gray-400 hover:bg-gray-50',
