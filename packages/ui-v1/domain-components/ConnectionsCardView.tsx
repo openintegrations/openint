@@ -16,7 +16,6 @@ import type {PropertyItem} from '../components/PropertyListView'
 import {PropertyListView} from '../components/PropertyListView'
 import type {StatusType} from '../components/StatusDot'
 import {getConnectorLogoUrl} from '../utils/images'
-import {ConnectionTableCell} from './tables/ConnectionTableCell'
 
 export interface ConnectionCardProps {
   connection: Core['connection_select']
@@ -84,21 +83,16 @@ export function ConnectionCardContent({
   const properties = useMemo(() => {
     const props: PropertyItem[] = [
       {title: 'Category', value: effectiveCategory},
-      {title: 'Platform', value: effectivePlatform},
-      {title: 'Auth Method', value: effectiveAuthMethod},
-      {title: 'Version', value: effectiveVersion},
     ]
 
     if (customerId) {
       props.push({
-        title: 'CustomerID',
+        title: 'Customer ID',
         value: (
           <CopyID
             value={customerId}
             width="100%"
             size="compact"
-            disableTooltip
-            mountDelay={100}
             className="bg-gray-50 transition-colors hover:bg-gray-100"
           />
         ),
@@ -108,14 +102,12 @@ export function ConnectionCardContent({
 
     if (connectorConfigId) {
       props.push({
-        title: 'ConnectorConfigID',
+        title: 'Connector Config ID',
         value: (
           <CopyID
             value={connectorConfigId}
             width="100%"
             size="compact"
-            disableTooltip
-            mountDelay={100}
             className="bg-gray-50 transition-colors hover:bg-gray-100"
           />
         ),
@@ -124,14 +116,7 @@ export function ConnectionCardContent({
     }
 
     return props
-  }, [
-    effectiveCategory,
-    effectivePlatform,
-    effectiveAuthMethod,
-    effectiveVersion,
-    customerId,
-    connectorConfigId,
-  ])
+  }, [effectiveCategory, customerId, connectorConfigId])
 
   return (
     <div className="overflow-hidden rounded-lg">
@@ -164,41 +149,8 @@ export function ConnectionCardContent({
         </div>
       </div>
       <Separator />
-      <div className="grid grid-cols-1 gap-4 p-5">
-        <div>
-          <div className="mb-1 text-xs font-medium uppercase text-gray-500">
-            Category
-          </div>
-          <div className="text-sm font-medium text-gray-700">
-            {effectiveCategory}
-          </div>
-        </div>
-        {customerId && (
-          <div>
-            <div className="mb-1 text-xs font-medium uppercase text-gray-500">
-              Customer ID
-            </div>
-            <CopyID
-              value={customerId}
-              width="100%"
-              size="compact"
-              className="bg-gray-50 transition-colors hover:bg-gray-100"
-            />
-          </div>
-        )}
-        {connectorConfigId && (
-          <div>
-            <div className="mb-1 text-xs font-medium uppercase text-gray-500">
-              Connector Config ID
-            </div>
-            <CopyID
-              value={connectorConfigId}
-              width="100%"
-              size="compact"
-              className="bg-gray-50 transition-colors hover:bg-gray-100"
-            />
-          </div>
-        )}
+      <div className="p-5">
+        <PropertyListView properties={properties} modern={true} />
       </div>
     </div>
   )
