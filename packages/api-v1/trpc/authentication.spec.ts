@@ -91,7 +91,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
         userId: testUserId,
         orgId: testOrgId,
       }
-      const token = await jwtClient.signViewer(expectedViewer)
+      const token = await jwtClient.signToken(expectedViewer)
 
       const headers = new Headers()
       headers.set('authorization', `Bearer ${token}`)
@@ -122,7 +122,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
       const jwtClientWithExpiry = makeJwtClient({
         secretOrPublicKey: envRequired.JWT_SECRET,
       })
-      const expiredToken = await jwtClientWithExpiry.signViewer(
+      const expiredToken = await jwtClientWithExpiry.signToken(
         {
           role: 'user',
           userId: testUserId,

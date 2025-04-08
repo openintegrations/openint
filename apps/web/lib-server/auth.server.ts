@@ -1,14 +1,20 @@
 import type {PageProps} from '@/lib-common/next-utils'
-import {parsePageProps} from '@/lib-common/next-utils'
+import type {zJwtPayload} from '@openint/api-v1/lib/makeJwtClient'
+import type {MaybePromise, NonEmptyArray} from '@openint/util/type-utils'
+import type {Z} from '@openint/util/zod-utils'
 import {type Viewer} from '@openint/cdk'
 import {viewerFromCookie} from '@openint/console-auth/server'
 import {dbUpsertOne, eq, schema} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
-import type {MaybePromise, NonEmptyArray} from '@openint/util/type-utils'
 import {z} from '@openint/util/zod-utils'
+import {parsePageProps} from '@/lib-common/next-utils'
 import {db, jwt} from './globals'
 
-export type ServerSession = {viewer: Viewer; token: string | undefined}
+export type ServerSession = {
+  viewer: Viewer
+  token: string | undefined
+  payload: Z.infer<typeof zJwtPayload> | undefined
+}
 
 export async function currentViewerFromCookie() {
   const viewer = await viewerFromCookie()
@@ -16,9 +22,9 @@ export async function currentViewerFromCookie() {
   // TODO: we need a way to ensure api calling token does not expire while user is still logged in
   // and that's why we don't want to sign separate token but rather
   // reuse the token they have existing...
-  const token = await jwt.signViewer(viewer)
+  const token = await jwt.signToken(viewer)
 
-  return {viewer, token}
+  return {viewer, token, payload: undefined}
 }
 
 export async function currentViewerFromPageProps(props: PageProps) {
@@ -28,15 +34,19 @@ export async function currentViewerFromPageProps(props: PageProps) {
     searchParams: z.object({token: z.string().optional()}),
   })
 
-  const viewer = await jwt.verifyViewer(token)
-  return {viewer, token}
+  const {viewer, payload} = await jwt.verifyToken(token)
+  return {viewer, token, payload} satisfies ServerSession
 }
 
 export async function currentViewer(props?: PageProps) {
-  const {viewer, token} = await firstNonAnonViewerOrFirst([
+  const {viewer, token, payload} = await firstNonAnonViewerOrFirst([
     props
       ? currentViewerFromPageProps(props)
-      : Promise.resolve({viewer: {role: 'anon'}, token: ''}),
+      : Promise.resolve({
+          viewer: {role: 'anon'},
+          token: '',
+          payload: undefined,
+        }),
     currentViewerFromCookie(),
   ])
   // Ensure the org exists in the database if not already
@@ -58,7 +68,7 @@ export async function currentViewer(props?: PageProps) {
       )
     }
   }
-  return {viewer, token}
+  return {viewer, token, payload} satisfies ServerSession
 }
 
 async function firstNonAnonViewerOrFirst(

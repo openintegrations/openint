@@ -50,7 +50,7 @@ export const connectRouter = router({
             'Missing customer_id in path /customer/{customer_id}/magic-link',
         })
       }
-      const token = await jwt.signViewer(
+      const token = await jwt.signToken(
         asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
         {
           validityInSeconds: input.validity_in_seconds,
@@ -95,7 +95,7 @@ export const connectRouter = router({
         })
       }
 
-      const token = await jwt.signViewer(
+      const token = await jwt.signToken(
         asCustomerOfOrg(ctx.viewer, {customerId: input.customer_id as any}),
         {
           validityInSeconds: input.validity_in_seconds,
