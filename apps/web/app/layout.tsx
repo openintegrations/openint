@@ -1,9 +1,19 @@
 import '@openint/ui-v1/global.css'
 
 export default function RootLayoutV1({children}: {children: React.ReactNode}) {
+  // should this have a theme provivder?
+  //    <ThemeProvider
+  //    attribute="class"
+  //    defaultTheme="system"
+  //    enableSystem
+  //    disableTransitionOnChange>
+  //    {children}
+  //  </ThemeProvider>
+
+  // TODO Fix hydration error rather than suppress warning
+  // https://nextjs.org/docs/messages/react-hydration-error#solution-3-using-suppresshydrationwarning
+
   return (
-    // TODO Fix hydration error rather than suppress warning
-    // https://nextjs.org/docs/messages/react-hydration-error#solution-3-using-suppresshydrationwarning
     <html
       lang="en"
       suppressHydrationWarning
