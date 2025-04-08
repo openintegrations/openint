@@ -105,21 +105,33 @@ export const configs = keyAsName({
       'no-empty-pattern': 'off',
     },
   },
-  // import: {
-  //   // extends: [pluginImport.flatConfigs.recommended],
-  //   plugins: {import: pluginImport},
-  //   rules: {
-  //     // TODO: This rule is not working for some reason. Fix me....
-  //     'import/no-extraneous-dependencies': [
-  //       'error',
-  //       {
-  //         devDependencies: false,
-  //         optionalDependencies: false,
-  //         peerDependencies: false,
-  //       },
-  //     ],
-  //   },
-  // },
+  import: {
+    // extends: [pluginImport.flatConfigs.recommended],
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+
+          bun: true, // resolve Bun modules https://github.com/import-js/eslint-import-resolver-typescript#bun
+        },
+      },
+    },
+    plugins: {import: pluginImport},
+    rules: {
+      // TODO: This rule is not working for some reason. Fix me....
+      // 'import/no-extraneous-dependencies': [
+      //   'error',
+      //   {
+      //     devDependencies: false,
+      //     optionalDependencies: false,
+      //     peerDependencies: false,
+      //   },
+      // ],
+      'import/no-relative-packages': 'error',
+      'import/no-relative-parent-imports': 'error',
+      'import/first': 'error',
+    },
+  },
   typescript: {
     files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
     // extends: [pluginTs.configs.strict as Config[]],
@@ -231,6 +243,11 @@ export const configs = keyAsName({
   },
   next: {
     plugins: {'@next/next': pluginNext},
+    settings: {
+      next: {
+        rootDir: 'apps/web',
+      },
+    },
     rules: {
       ...pluginNext.configs.recommended.rules,
       ...pluginNext.configs['core-web-vitals'].rules,
