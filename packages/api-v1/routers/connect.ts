@@ -9,7 +9,7 @@ import {getBaseURLs, getServerUrl} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
-import {ConnectorName, core} from '../models'
+import {core} from '../models'
 import {
   authenticatedProcedure,
   customerProcedure,
