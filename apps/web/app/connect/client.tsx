@@ -293,9 +293,7 @@ export function AddConnectionInner({
       console.warn(`No Component for connector: ${name}`)
     }
   }
-  if (isConnecting || postConnect.isPending) {
-    return <Spinner />
-  }
+
   return (
     <>
       {/*
