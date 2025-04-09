@@ -268,55 +268,91 @@
                                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.aircall.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.confluence.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.discord.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.facebook.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.github.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.gong.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-docs.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-drive.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-mail.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.hubspot.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.instagram.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.intercom.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.jira.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.lever.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.linear.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.linkedin.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.notion.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.outreach.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.quickbooks.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.reddit.discriminated_connector_config"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.salesloft.discriminated_connector_config"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.slack.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.github.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.twitter.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.quickbooks.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.xero.discriminated_connector_config"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.googlemail.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.notion.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.linkedin.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.googledocs.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.aircall.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.googlecalendar.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.googlesheet.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.discord.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.hubspot.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.salesforce.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.linear.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.confluence.discriminated_connector_config"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.googledrive.discriminated_connector_config"
+                                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connector_config"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.airtable.discriminated_connector_config"
@@ -401,23 +437,35 @@
                               "propertyName": "connector_name",
                               "mapping": {
                                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connector_config",
+                                "aircall": "#/components/schemas/connector.aircall.discriminated_connector_config",
+                                "confluence": "#/components/schemas/connector.confluence.discriminated_connector_config",
+                                "discord": "#/components/schemas/connector.discord.discriminated_connector_config",
+                                "facebook": "#/components/schemas/connector.facebook.discriminated_connector_config",
+                                "github": "#/components/schemas/connector.github.discriminated_connector_config",
+                                "gong": "#/components/schemas/connector.gong.discriminated_connector_config",
+                                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connector_config",
+                                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connector_config",
+                                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connector_config",
+                                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connector_config",
+                                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connector_config",
+                                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connector_config",
+                                "instagram": "#/components/schemas/connector.instagram.discriminated_connector_config",
+                                "intercom": "#/components/schemas/connector.intercom.discriminated_connector_config",
+                                "jira": "#/components/schemas/connector.jira.discriminated_connector_config",
+                                "lever": "#/components/schemas/connector.lever.discriminated_connector_config",
+                                "linear": "#/components/schemas/connector.linear.discriminated_connector_config",
+                                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connector_config",
+                                "notion": "#/components/schemas/connector.notion.discriminated_connector_config",
+                                "outreach": "#/components/schemas/connector.outreach.discriminated_connector_config",
+                                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connector_config",
+                                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connector_config",
+                                "reddit": "#/components/schemas/connector.reddit.discriminated_connector_config",
+                                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connector_config",
                                 "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connector_config",
                                 "slack": "#/components/schemas/connector.slack.discriminated_connector_config",
-                                "github": "#/components/schemas/connector.github.discriminated_connector_config",
-                                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connector_config",
-                                "googlemail": "#/components/schemas/connector.googlemail.discriminated_connector_config",
-                                "notion": "#/components/schemas/connector.notion.discriminated_connector_config",
-                                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connector_config",
-                                "googledocs": "#/components/schemas/connector.googledocs.discriminated_connector_config",
-                                "aircall": "#/components/schemas/connector.aircall.discriminated_connector_config",
-                                "googlecalendar": "#/components/schemas/connector.googlecalendar.discriminated_connector_config",
-                                "googlesheet": "#/components/schemas/connector.googlesheet.discriminated_connector_config",
-                                "discord": "#/components/schemas/connector.discord.discriminated_connector_config",
-                                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connector_config",
-                                "salesforce": "#/components/schemas/connector.salesforce.discriminated_connector_config",
-                                "linear": "#/components/schemas/connector.linear.discriminated_connector_config",
-                                "confluence": "#/components/schemas/connector.confluence.discriminated_connector_config",
-                                "googledrive": "#/components/schemas/connector.googledrive.discriminated_connector_config",
+                                "twitter": "#/components/schemas/connector.twitter.discriminated_connector_config",
+                                "xero": "#/components/schemas/connector.xero.discriminated_connector_config",
+                                "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connector_config",
                                 "airtable": "#/components/schemas/connector.airtable.discriminated_connector_config",
                                 "apollo": "#/components/schemas/connector.apollo.discriminated_connector_config",
                                 "brex": "#/components/schemas/connector.brex.discriminated_connector_config",
@@ -694,55 +742,91 @@
                           "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
                         },
                         {
+                          "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                        },
+                        {
                           "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
                         },
                         {
-                          "$ref": "#/components/schemas/connector.googlemail.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.googledocs.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.googlecalendar.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.googlesheet.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.salesforce.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
-                        },
-                        {
-                          "$ref": "#/components/schemas/connector.googledrive.discriminated_connection_settings"
+                          "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
                         },
                         {
                           "$ref": "#/components/schemas/connector.airtable.discriminated_connection_settings"
@@ -827,23 +911,35 @@
                         "propertyName": "connector_name",
                         "mapping": {
                           "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                          "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
+                          "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
+                          "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
+                          "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
+                          "github": "#/components/schemas/connector.github.discriminated_connection_settings",
+                          "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
+                          "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
+                          "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
+                          "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
+                          "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
+                          "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
+                          "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
+                          "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
+                          "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
+                          "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
+                          "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
+                          "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
+                          "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
+                          "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
+                          "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
+                          "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
+                          "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
+                          "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
+                          "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
                           "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                           "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
-                          "github": "#/components/schemas/connector.github.discriminated_connection_settings",
-                          "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
-                          "googlemail": "#/components/schemas/connector.googlemail.discriminated_connection_settings",
-                          "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
-                          "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
-                          "googledocs": "#/components/schemas/connector.googledocs.discriminated_connection_settings",
-                          "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
-                          "googlecalendar": "#/components/schemas/connector.googlecalendar.discriminated_connection_settings",
-                          "googlesheet": "#/components/schemas/connector.googlesheet.discriminated_connection_settings",
-                          "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
-                          "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
-                          "salesforce": "#/components/schemas/connector.salesforce.discriminated_connection_settings",
-                          "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
-                          "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
-                          "googledrive": "#/components/schemas/connector.googledrive.discriminated_connection_settings",
+                          "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
+                          "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                          "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings",
                           "airtable": "#/components/schemas/connector.airtable.discriminated_connection_settings",
                           "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                           "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
@@ -1208,55 +1304,91 @@
                                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
                               },
                               {
+                                "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
+                              },
+                              {
+                                "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                              },
+                              {
                                 "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
                               },
                               {
-                                "$ref": "#/components/schemas/connector.googlemail.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.googledocs.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.googlecalendar.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.googlesheet.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.salesforce.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
-                              },
-                              {
-                                "$ref": "#/components/schemas/connector.googledrive.discriminated_connection_settings"
+                                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
                               },
                               {
                                 "$ref": "#/components/schemas/connector.airtable.discriminated_connection_settings"
@@ -1341,23 +1473,35 @@
                               "propertyName": "connector_name",
                               "mapping": {
                                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                                "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
+                                "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
+                                "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
+                                "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
+                                "github": "#/components/schemas/connector.github.discriminated_connection_settings",
+                                "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
+                                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
+                                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
+                                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
+                                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
+                                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
+                                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
+                                "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
+                                "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
+                                "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
+                                "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
+                                "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
+                                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
+                                "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
+                                "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
+                                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
+                                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
+                                "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
+                                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
                                 "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                                 "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
-                                "github": "#/components/schemas/connector.github.discriminated_connection_settings",
-                                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
-                                "googlemail": "#/components/schemas/connector.googlemail.discriminated_connection_settings",
-                                "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
-                                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
-                                "googledocs": "#/components/schemas/connector.googledocs.discriminated_connection_settings",
-                                "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
-                                "googlecalendar": "#/components/schemas/connector.googlecalendar.discriminated_connection_settings",
-                                "googlesheet": "#/components/schemas/connector.googlesheet.discriminated_connection_settings",
-                                "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
-                                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
-                                "salesforce": "#/components/schemas/connector.salesforce.discriminated_connection_settings",
-                                "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
-                                "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
-                                "googledrive": "#/components/schemas/connector.googledrive.discriminated_connection_settings",
+                                "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
+                                "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                                "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings",
                                 "airtable": "#/components/schemas/connector.airtable.discriminated_connection_settings",
                                 "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                                 "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
@@ -1520,55 +1664,91 @@
                         "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
                       },
                       {
+                        "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
+                      },
+                      {
+                        "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+                      },
+                      {
                         "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
                       },
                       {
-                        "$ref": "#/components/schemas/connector.googlemail.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.googledocs.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.googlecalendar.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.googlesheet.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.salesforce.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
-                      },
-                      {
-                        "$ref": "#/components/schemas/connector.googledrive.discriminated_connection_settings"
+                        "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
                       },
                       {
                         "$ref": "#/components/schemas/connector.airtable.discriminated_connection_settings"
@@ -1653,23 +1833,35 @@
                       "propertyName": "connector_name",
                       "mapping": {
                         "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                        "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
+                        "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
+                        "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
+                        "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
+                        "github": "#/components/schemas/connector.github.discriminated_connection_settings",
+                        "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
+                        "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
+                        "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
+                        "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
+                        "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
+                        "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
+                        "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
+                        "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
+                        "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
+                        "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
+                        "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
+                        "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
+                        "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
+                        "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
+                        "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
+                        "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
+                        "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
+                        "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
+                        "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
                         "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                         "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
-                        "github": "#/components/schemas/connector.github.discriminated_connection_settings",
-                        "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
-                        "googlemail": "#/components/schemas/connector.googlemail.discriminated_connection_settings",
-                        "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
-                        "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
-                        "googledocs": "#/components/schemas/connector.googledocs.discriminated_connection_settings",
-                        "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
-                        "googlecalendar": "#/components/schemas/connector.googlecalendar.discriminated_connection_settings",
-                        "googlesheet": "#/components/schemas/connector.googlesheet.discriminated_connection_settings",
-                        "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
-                        "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
-                        "salesforce": "#/components/schemas/connector.salesforce.discriminated_connection_settings",
-                        "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
-                        "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
-                        "googledrive": "#/components/schemas/connector.googledrive.discriminated_connection_settings",
+                        "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
+                        "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                        "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings",
                         "airtable": "#/components/schemas/connector.airtable.discriminated_connection_settings",
                         "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                         "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",
@@ -3285,6 +3477,145 @@
         ],
         "title": "discord"
       },
+      "connector.facebook.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "facebook"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "facebook"
+      },
+      "connector.facebook.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "facebook"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "facebook"
+      },
       "connector.finch.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -3734,12 +4065,157 @@
         ],
         "title": "github"
       },
-      "connector.googlecalendar.discriminated_connection_settings": {
+      "connector.gong.discriminated_connection_settings": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googlecalendar"
+            "const": "gong"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              },
+              "api_base_url_for_customer": {
+                "type": "string",
+                "pattern": "https?:\\/\\/.*",
+                "description": "The base URL of your Gong account (e.g., example)"
+              }
+            },
+            "required": [
+              "oauth",
+              "api_base_url_for_customer"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "gong"
+      },
+      "connector.gong.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "gong"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "gong"
+      },
+      "connector.google-calendar.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "google-calendar"
           },
           "settings": {
             "type": "object",
@@ -3812,14 +4288,14 @@
           "connector_name",
           "settings"
         ],
-        "title": "googlecalendar"
+        "title": "google-calendar"
       },
-      "connector.googlecalendar.discriminated_connector_config": {
+      "connector.google-calendar.discriminated_connector_config": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googlecalendar"
+            "const": "google-calendar"
           },
           "config": {
             "type": "object",
@@ -3871,14 +4347,14 @@
           "connector_name",
           "config"
         ],
-        "title": "googlecalendar"
+        "title": "google-calendar"
       },
-      "connector.googledocs.discriminated_connection_settings": {
+      "connector.google-docs.discriminated_connection_settings": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googledocs"
+            "const": "google-docs"
           },
           "settings": {
             "type": "object",
@@ -3951,14 +4427,14 @@
           "connector_name",
           "settings"
         ],
-        "title": "googledocs"
+        "title": "google-docs"
       },
-      "connector.googledocs.discriminated_connector_config": {
+      "connector.google-docs.discriminated_connector_config": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googledocs"
+            "const": "google-docs"
           },
           "config": {
             "type": "object",
@@ -4010,14 +4486,14 @@
           "connector_name",
           "config"
         ],
-        "title": "googledocs"
+        "title": "google-docs"
       },
-      "connector.googledrive.discriminated_connection_settings": {
+      "connector.google-drive.discriminated_connection_settings": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googledrive"
+            "const": "google-drive"
           },
           "settings": {
             "type": "object",
@@ -4090,14 +4566,14 @@
           "connector_name",
           "settings"
         ],
-        "title": "googledrive"
+        "title": "google-drive"
       },
-      "connector.googledrive.discriminated_connector_config": {
+      "connector.google-drive.discriminated_connector_config": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googledrive"
+            "const": "google-drive"
           },
           "config": {
             "type": "object",
@@ -4149,14 +4625,14 @@
           "connector_name",
           "config"
         ],
-        "title": "googledrive"
+        "title": "google-drive"
       },
-      "connector.googlemail.discriminated_connection_settings": {
+      "connector.google-mail.discriminated_connection_settings": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googlemail"
+            "const": "google-mail"
           },
           "settings": {
             "type": "object",
@@ -4229,14 +4705,14 @@
           "connector_name",
           "settings"
         ],
-        "title": "googlemail"
+        "title": "google-mail"
       },
-      "connector.googlemail.discriminated_connector_config": {
+      "connector.google-mail.discriminated_connector_config": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googlemail"
+            "const": "google-mail"
           },
           "config": {
             "type": "object",
@@ -4288,14 +4764,14 @@
           "connector_name",
           "config"
         ],
-        "title": "googlemail"
+        "title": "google-mail"
       },
-      "connector.googlesheet.discriminated_connection_settings": {
+      "connector.google-sheet.discriminated_connection_settings": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googlesheet"
+            "const": "google-sheet"
           },
           "settings": {
             "type": "object",
@@ -4368,14 +4844,14 @@
           "connector_name",
           "settings"
         ],
-        "title": "googlesheet"
+        "title": "google-sheet"
       },
-      "connector.googlesheet.discriminated_connector_config": {
+      "connector.google-sheet.discriminated_connector_config": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "googlesheet"
+            "const": "google-sheet"
           },
           "config": {
             "type": "object",
@@ -4427,7 +4903,7 @@
           "connector_name",
           "config"
         ],
-        "title": "googlesheet"
+        "title": "google-sheet"
       },
       "connector.greenhouse.discriminated_connection_settings": {
         "type": "object",
@@ -4653,6 +5129,562 @@
           "config"
         ],
         "title": "hubspot"
+      },
+      "connector.instagram.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "instagram"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "instagram"
+      },
+      "connector.instagram.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "instagram"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "instagram"
+      },
+      "connector.intercom.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "intercom"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "intercom"
+      },
+      "connector.intercom.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "intercom"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "intercom"
+      },
+      "connector.jira.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "jira"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "jira"
+      },
+      "connector.jira.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "jira"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "jira"
+      },
+      "connector.lever.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "lever"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "lever"
+      },
+      "connector.lever.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "lever"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "lever"
       },
       "connector.linear.discriminated_connection_settings": {
         "type": "object",
@@ -5352,6 +6384,290 @@
         ],
         "title": "onebrick"
       },
+      "connector.outreach.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "outreach"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "outreach"
+      },
+      "connector.outreach.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "outreach"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "outreach"
+      },
+      "connector.pipedrive.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "pipedrive"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              },
+              "api_domain": {
+                "type": "string",
+                "pattern": "https?:\\/\\/.*",
+                "description": "The API URL of your Pipedrive account (e.g., example)"
+              }
+            },
+            "required": [
+              "oauth",
+              "api_domain"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "pipedrive"
+      },
+      "connector.pipedrive.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "pipedrive"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "pipedrive"
+      },
       "connector.plaid.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -5801,12 +7117,12 @@
         ],
         "title": "ramp"
       },
-      "connector.salesforce.discriminated_connection_settings": {
+      "connector.reddit.discriminated_connection_settings": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "salesforce"
+            "const": "reddit"
           },
           "settings": {
             "type": "object",
@@ -5868,16 +7184,10 @@
                     "additionalProperties": {}
                   }
                 }
-              },
-              "instance_url": {
-                "type": "string",
-                "pattern": "https?:\\/\\/.*",
-                "description": "The instance URL of your Salesforce account (e.g., example)"
               }
             },
             "required": [
-              "oauth",
-              "instance_url"
+              "oauth"
             ]
           }
         },
@@ -5885,14 +7195,14 @@
           "connector_name",
           "settings"
         ],
-        "title": "salesforce"
+        "title": "reddit"
       },
-      "connector.salesforce.discriminated_connector_config": {
+      "connector.reddit.discriminated_connector_config": {
         "type": "object",
         "properties": {
           "connector_name": {
             "type": "string",
-            "const": "salesforce"
+            "const": "reddit"
           },
           "config": {
             "type": "object",
@@ -5944,7 +7254,146 @@
           "connector_name",
           "config"
         ],
-        "title": "salesforce"
+        "title": "reddit"
+      },
+      "connector.salesloft.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "salesloft"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "salesloft"
+      },
+      "connector.salesloft.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "salesloft"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "salesloft"
       },
       "connector.saltedge.discriminated_connection_settings": {
         "type": "object",
@@ -6691,6 +8140,145 @@
         ],
         "title": "twenty"
       },
+      "connector.twitter.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "twitter"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "twitter"
+      },
+      "connector.twitter.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "twitter"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "twitter"
+      },
       "connector.venmo.discriminated_connection_settings": {
         "type": "object",
         "properties": {
@@ -6813,6 +8401,145 @@
           "config"
         ],
         "title": "wise"
+      },
+      "connector.xero.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "xero"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "xero"
+      },
+      "connector.xero.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "xero"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "xero"
       },
       "connector.yodlee.discriminated_connection_settings": {
         "type": "object",
@@ -6997,6 +8724,151 @@
         ],
         "title": "yodlee"
       },
+      "connector.zoho-desk.discriminated_connection_settings": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "zoho-desk"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object",
+                    "properties": {
+                      "access_token": {
+                        "type": "string"
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID used for the connection"
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "expires_in": {
+                        "type": "number"
+                      },
+                      "expires_at": {
+                        "type": "string"
+                      },
+                      "token_type": {
+                        "type": "string"
+                      },
+                      "raw": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "access_token",
+                      "scope",
+                      "raw"
+                    ],
+                    "description": "Output of the postConnect hook for oauth2 connectors"
+                  },
+                  "created_at": {
+                    "type": "string"
+                  },
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "last_fetched_at": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": {}
+                  }
+                }
+              },
+              "extension": {
+                "type": "string",
+                "pattern": "https:\\/\\/accounts\\.zoho\\.([a-z.]+)\\/",
+                "description": "The domain extension of your Zoho account (e.g., https://accounts.zoho.com/)"
+              }
+            },
+            "required": [
+              "oauth",
+              "extension"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "settings"
+        ],
+        "title": "zoho-desk"
+      },
+      "connector.zoho-desk.discriminated_connector_config": {
+        "type": "object",
+        "properties": {
+          "connector_name": {
+            "type": "string",
+            "const": "zoho-desk"
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "oauth": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "scopes": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_uri": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "description": "Base oauth configuration for the connector",
+                "ui:field": "OAuthField"
+              }
+            },
+            "required": [
+              "oauth"
+            ]
+          }
+        },
+        "required": [
+          "connector_name",
+          "config"
+        ],
+        "title": "zoho-desk"
+      },
       "core.connection_select": {
         "allOf": [
           {
@@ -7064,55 +8936,91 @@
                 "$ref": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings"
               },
               {
+                "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.facebook.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.gong.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-calendar.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-docs.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-drive.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-mail.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.google-sheet.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.instagram.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.intercom.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.jira.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.lever.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.outreach.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.pipedrive.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.reddit.discriminated_connection_settings"
+              },
+              {
+                "$ref": "#/components/schemas/connector.salesloft.discriminated_connection_settings"
+              },
+              {
                 "$ref": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.slack.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.github.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.twitter.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.quickbooks.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.xero.discriminated_connection_settings"
               },
               {
-                "$ref": "#/components/schemas/connector.googlemail.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.notion.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.linkedin.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.googledocs.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.aircall.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.googlecalendar.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.googlesheet.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.discord.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.hubspot.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.salesforce.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.linear.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.confluence.discriminated_connection_settings"
-              },
-              {
-                "$ref": "#/components/schemas/connector.googledrive.discriminated_connection_settings"
+                "$ref": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings"
               },
               {
                 "$ref": "#/components/schemas/connector.airtable.discriminated_connection_settings"
@@ -7197,23 +9105,35 @@
               "propertyName": "connector_name",
               "mapping": {
                 "acme-oauth2": "#/components/schemas/connector.acme-oauth2.discriminated_connection_settings",
+                "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
+                "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
+                "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
+                "facebook": "#/components/schemas/connector.facebook.discriminated_connection_settings",
+                "github": "#/components/schemas/connector.github.discriminated_connection_settings",
+                "gong": "#/components/schemas/connector.gong.discriminated_connection_settings",
+                "google-calendar": "#/components/schemas/connector.google-calendar.discriminated_connection_settings",
+                "google-docs": "#/components/schemas/connector.google-docs.discriminated_connection_settings",
+                "google-drive": "#/components/schemas/connector.google-drive.discriminated_connection_settings",
+                "google-mail": "#/components/schemas/connector.google-mail.discriminated_connection_settings",
+                "google-sheet": "#/components/schemas/connector.google-sheet.discriminated_connection_settings",
+                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
+                "instagram": "#/components/schemas/connector.instagram.discriminated_connection_settings",
+                "intercom": "#/components/schemas/connector.intercom.discriminated_connection_settings",
+                "jira": "#/components/schemas/connector.jira.discriminated_connection_settings",
+                "lever": "#/components/schemas/connector.lever.discriminated_connection_settings",
+                "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
+                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
+                "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
+                "outreach": "#/components/schemas/connector.outreach.discriminated_connection_settings",
+                "pipedrive": "#/components/schemas/connector.pipedrive.discriminated_connection_settings",
+                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
+                "reddit": "#/components/schemas/connector.reddit.discriminated_connection_settings",
+                "salesloft": "#/components/schemas/connector.salesloft.discriminated_connection_settings",
                 "sharepointonline": "#/components/schemas/connector.sharepointonline.discriminated_connection_settings",
                 "slack": "#/components/schemas/connector.slack.discriminated_connection_settings",
-                "github": "#/components/schemas/connector.github.discriminated_connection_settings",
-                "quickbooks": "#/components/schemas/connector.quickbooks.discriminated_connection_settings",
-                "googlemail": "#/components/schemas/connector.googlemail.discriminated_connection_settings",
-                "notion": "#/components/schemas/connector.notion.discriminated_connection_settings",
-                "linkedin": "#/components/schemas/connector.linkedin.discriminated_connection_settings",
-                "googledocs": "#/components/schemas/connector.googledocs.discriminated_connection_settings",
-                "aircall": "#/components/schemas/connector.aircall.discriminated_connection_settings",
-                "googlecalendar": "#/components/schemas/connector.googlecalendar.discriminated_connection_settings",
-                "googlesheet": "#/components/schemas/connector.googlesheet.discriminated_connection_settings",
-                "discord": "#/components/schemas/connector.discord.discriminated_connection_settings",
-                "hubspot": "#/components/schemas/connector.hubspot.discriminated_connection_settings",
-                "salesforce": "#/components/schemas/connector.salesforce.discriminated_connection_settings",
-                "linear": "#/components/schemas/connector.linear.discriminated_connection_settings",
-                "confluence": "#/components/schemas/connector.confluence.discriminated_connection_settings",
-                "googledrive": "#/components/schemas/connector.googledrive.discriminated_connection_settings",
+                "twitter": "#/components/schemas/connector.twitter.discriminated_connection_settings",
+                "xero": "#/components/schemas/connector.xero.discriminated_connection_settings",
+                "zoho-desk": "#/components/schemas/connector.zoho-desk.discriminated_connection_settings",
                 "airtable": "#/components/schemas/connector.airtable.discriminated_connection_settings",
                 "apollo": "#/components/schemas/connector.apollo.discriminated_connection_settings",
                 "brex": "#/components/schemas/connector.brex.discriminated_connection_settings",

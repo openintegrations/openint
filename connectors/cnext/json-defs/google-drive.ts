@@ -1,6 +1,6 @@
 import type {JsonConnectorDef} from '../schema'
 
-export const jsonDef = {
+export default {
   audience: ['business'],
   verticals: ['wiki', 'file-storage'],
   display_name: 'Google Drive',

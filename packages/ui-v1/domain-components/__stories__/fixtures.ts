@@ -84,17 +84,6 @@ const connectors = {
 } satisfies Record<string, Core['connector']>
 
 const integrations = {
-  salesforce: {
-    id: 'int_salesforce_123',
-    name: 'salesforce',
-    connector_name: 'salesforce',
-    logo_url:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    standard: [{}],
-    external: [{}],
-  },
   hubspot: {
     id: 'int_hubspot_123',
     name: 'hubspot',
@@ -120,7 +109,7 @@ const integrations = {
   'google-drive': {
     id: 'int_google-drive_123',
     name: 'google-drive',
-    connector_name: 'googledrive',
+    connector_name: 'google-drive',
     logo_url:
       'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
     created_at: new Date().toISOString(),

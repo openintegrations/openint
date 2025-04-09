@@ -85,6 +85,18 @@ export default {
       authType: 'OAUTH2',
     },
   },
+  facebook: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Facebook',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-facebook.svg',
+      authType: 'OAUTH2',
+    },
+  },
   finch: {
     hasClient: true,
     hasServer: true,
@@ -122,7 +134,19 @@ export default {
       authType: 'OAUTH2',
     },
   },
-  googlecalendar: {
+  gong: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Gong (Oauth)',
+      stage: 'ga',
+      verticals: ['communication', 'streaming'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-gong.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  'google-calendar': {
     hasClient: false,
     hasServer: false,
     metadata: {
@@ -130,11 +154,11 @@ export default {
       stage: 'ga',
       verticals: ['other'],
       logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlecalendar.svg',
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-calendar.svg',
       authType: 'OAUTH2',
     },
   },
-  googledocs: {
+  'google-docs': {
     hasClient: false,
     hasServer: false,
     metadata: {
@@ -142,23 +166,23 @@ export default {
       stage: 'ga',
       verticals: ['other'],
       logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledocs.svg',
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-docs.svg',
       authType: 'OAUTH2',
     },
   },
-  googledrive: {
+  'google-drive': {
     hasClient: false,
     hasServer: false,
     metadata: {
       displayName: 'Google Drive',
       stage: 'ga',
-      verticals: ['file-storage'],
+      verticals: ['wiki', 'file-storage'],
       logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledrive.svg',
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-drive.svg',
       authType: 'OAUTH2',
     },
   },
-  googlemail: {
+  'google-mail': {
     hasClient: false,
     hasServer: false,
     metadata: {
@@ -166,19 +190,19 @@ export default {
       stage: 'ga',
       verticals: ['other'],
       logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlemail.svg',
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-mail.svg',
       authType: 'OAUTH2',
     },
   },
-  googlesheet: {
+  'google-sheet': {
     hasClient: false,
     hasServer: false,
     metadata: {
       displayName: 'Google Sheet',
       stage: 'ga',
-      verticals: ['flat-files-and-spreadsheets'],
+      verticals: ['other'],
       logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlesheet.svg',
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-sheet.svg',
       authType: 'OAUTH2',
     },
   },
@@ -211,6 +235,54 @@ export default {
       verticals: ['ticketing', 'crm'],
       logoUrl:
         'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-hubspot.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  instagram: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Instagram',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-instagram.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  intercom: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Intercom',
+      stage: 'ga',
+      verticals: ['ticketing'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-intercom.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  jira: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Jira (OAuth)',
+      stage: 'ga',
+      verticals: ['ticketing'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-jira.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  lever: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Lever (OAuth)',
+      stage: 'ga',
+      verticals: ['ats'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lever.svg',
       authType: 'OAUTH2',
     },
   },
@@ -293,6 +365,30 @@ export default {
       logoUrl: '/_assets/logo-onebrick.svg',
     },
   },
+  outreach: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Outreach',
+      stage: 'ga',
+      verticals: ['other'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-outreach.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  pipedrive: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Pipedrive',
+      stage: 'ga',
+      verticals: ['crm'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-pipedrive.svg',
+      authType: 'OAUTH2',
+    },
+  },
   plaid: {
     hasClient: true,
     hasServer: true,
@@ -333,15 +429,27 @@ export default {
       stage: 'beta',
     },
   },
-  salesforce: {
+  reddit: {
     hasClient: false,
     hasServer: false,
     metadata: {
-      displayName: 'Salesforce',
+      displayName: 'Reddit',
       stage: 'ga',
-      verticals: ['crm'],
+      verticals: ['social-media'],
       logoUrl:
-        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesforce.svg',
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-reddit.svg',
+      authType: 'OAUTH2',
+    },
+  },
+  salesloft: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Salesloft',
+      stage: 'ga',
+      verticals: ['other'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesloft.svg',
       authType: 'OAUTH2',
     },
   },
@@ -419,6 +527,18 @@ export default {
       stage: 'beta',
     },
   },
+  twitter: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Twitter (v2)',
+      stage: 'ga',
+      verticals: ['social-media'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twitter.svg',
+      authType: 'OAUTH2',
+    },
+  },
   venmo: {
     hasClient: false,
     hasServer: false,
@@ -435,12 +555,36 @@ export default {
       logoUrl: '/_assets/logo-wise.svg',
     },
   },
+  xero: {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Xero',
+      stage: 'ga',
+      verticals: ['accounting'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-xero.svg',
+      authType: 'OAUTH2',
+    },
+  },
   yodlee: {
     hasClient: true,
     hasServer: true,
     metadata: {
       verticals: ['banking'],
       logoUrl: '/_assets/logo-yodlee.svg',
+    },
+  },
+  'zoho-desk': {
+    hasClient: false,
+    hasServer: false,
+    metadata: {
+      displayName: 'Zoho Desk',
+      stage: 'ga',
+      verticals: ['ticketing'],
+      logoUrl:
+        'https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-zoho-desk.svg',
+      authType: 'OAUTH2',
     },
   },
 } as const
