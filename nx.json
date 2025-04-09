@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "download": {
+      "outputs": [
+        "{projectRoot}/*.oas.json"
+      ],
+      "cache": true
+    },
+    "generate": {
+      "dependsOn": [
+        "^generate",
+        "download"
+      ],
+      "outputs": [
+        "{projectRoot}/*.oas.d.ts"
+      ],
+      "cache": false
+    },
+    "clean": {
+      "cache": true
+    },
+    "build": {
+      "dependsOn": [
+        "^build",
+        "clean"
+      ],
+      "cache": false
+    },
+    "pub": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": false
+    },
+    "lint": {
+      "cache": true
+    }
+  }
+}
