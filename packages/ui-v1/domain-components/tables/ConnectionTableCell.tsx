@@ -15,10 +15,9 @@ interface ConnectionTableCellProps
   className?: string
   logo_url?: string
   status?: StatusType
-  category?: string
   platform?: string
-  authMethod?: string
   version?: string
+  authMethod?: string
 }
 
 export function ConnectionTableCell({
@@ -27,10 +26,9 @@ export function ConnectionTableCell({
   className,
   logo_url,
   status,
-  category,
   platform,
-  authMethod,
   version,
+  authMethod,
   ...props
 }: ConnectionTableCellProps) {
   const [open, setOpen] = useState(false)
@@ -50,6 +48,9 @@ export function ConnectionTableCell({
       setCoords({x: e.clientX, y: e.clientY})
     }
   }
+
+  // Use provided status or default to 'offline' as a safe fallback
+  const connectionStatus: StatusType = status || 'offline'
 
   const logo = (
     <div
@@ -108,14 +109,14 @@ export function ConnectionTableCell({
             <div className="bg-popover w-[480px] overflow-hidden rounded-md border p-0 shadow-md">
               <ConnectionCardContent
                 connection={connection}
-                status={status || 'healthy'}
-                category={category || connection.connector_name}
-                platform={platform || 'Desktop'}
+                status={connectionStatus}
+                category={connection.connector_name}
+                platform={platform}
                 authMethod={
                   authMethod ||
                   (connection.settings?.oauth ? 'oauth' : 'apikey')
                 }
-                version={version || 'V1'}
+                version={version}
               />
             </div>
           </div>
