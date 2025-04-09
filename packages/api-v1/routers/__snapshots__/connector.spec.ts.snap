@@ -1372,6 +1372,226 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "ga",
   },
   {
+    "authType": "OAUTH2",
+    "display_name": "Facebook",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-facebook.svg",
+    "name": "facebook",
+    "openint_scopes": [
+      "email",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Provides access to the user's primary email address.",
+        "scope": "email",
+      },
+      {
+        "description": "Provides access to basic information available on the user's profile (id, name, first_name, last_name, age_range, link, gender, locale, timezone, updated_time, verified).",
+        "scope": "public_profile",
+      },
+      {
+        "description": "Provides access to the user's list of friends who also use the app.",
+        "scope": "user_friends",
+      },
+      {
+        "description": "Provides access to the posts on the user's timeline, including their own posts and posts they're tagged in.",
+        "scope": "user_posts",
+      },
+      {
+        "description": "Provides access to the photos the user has uploaded to Facebook.",
+        "scope": "user_photos",
+      },
+      {
+        "description": "Provides access to the list of pages, places, or things the user has liked.",
+        "scope": "user_likes",
+      },
+      {
+        "description": "Provides access to the user's status updates.",
+        "scope": "user_status",
+      },
+      {
+        "description": "Provides access to the events the user is attending or has created.",
+        "scope": "user_events",
+      },
+      {
+        "description": "Provides access to manage the user's Facebook pages (requires additional permissions).",
+        "scope": "manage_pages",
+      },
+      {
+        "description": "Allows the app to post content to groups the user belongs to.",
+        "scope": "publish_to_groups",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
     "authType": "CUSTOM",
     "display_name": "Finch",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-finch.svg",
@@ -2116,11 +2336,217 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "Google Calendar",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlecalendar.svg",
-    "name": "googlecalendar",
+    "display_name": "Gong (Oauth)",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-gong.svg",
+    "name": "gong",
     "openint_scopes": [
-      "https://www.googleapis.com/auth/calendar.readonly",
+      "user:read",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "api_base_url_for_customer": {
+            "description": "The base URL of your Gong account (e.g., example)",
+            "pattern": "https?:\\/\\/.*",
+            "type": "string",
+          },
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+          "api_base_url_for_customer",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Allows read-only access to basic user profile information",
+        "scope": "user:read",
+      },
+      {
+        "description": "Provides access to read call recordings and metadata",
+        "scope": "calls:read",
+      },
+      {
+        "description": "Grants permission to view analytics and reporting data",
+        "scope": "analytics:read",
+      },
+      {
+        "description": "Provides full administrative access including user management and system settings",
+        "scope": "admin:write",
+      },
+      {
+        "description": "Grants complete read/write access to all conversation data including recordings, transcripts, and comments",
+        "scope": "conversations:full",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Google Calendar",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-calendar.svg",
+    "name": "google-calendar",
+    "openint_scopes": [
+      "https://www.googleapis.com/auth/calendar.settings.readonly",
     ],
     "platforms": undefined,
     "schemas": {
@@ -2292,23 +2718,23 @@ exports[`db: pglite list connectors with schemas 1`] = `
     },
     "scopes": [
       {
-        "description": "Provides read-only access to events, calendars, and settings. Does not allow modifying or creating any calendar data.",
-        "scope": "https://www.googleapis.com/auth/calendar.readonly",
-      },
-      {
-        "description": "Provides read-only access to events (including attendee info and attachments) but not to calendar metadata or settings.",
-        "scope": "https://www.googleapis.com/auth/calendar.events.readonly",
-      },
-      {
-        "description": "Provides read/write access to events (create/modify/delete events and manage attendee responses). Does not include access to calendar metadata or settings.",
-        "scope": "https://www.googleapis.com/auth/calendar.events",
-      },
-      {
-        "description": "Provides full read/write access to calendars, events, and settings (including creating/deleting calendars and modifying sharing permissions).",
+        "description": "Provides full read/write access to the user's calendars, including events, ACLs (access control lists), and settings. This is the most permissive scope.",
         "scope": "https://www.googleapis.com/auth/calendar",
       },
       {
-        "description": "Provides read-only access to user's calendar settings (timezone, notifications, etc.) without access to calendar contents.",
+        "description": "Provides read/write access to events on the user's calendars, but does not include access to calendar metadata (e.g., ACLs or settings).",
+        "scope": "https://www.googleapis.com/auth/calendar.events",
+      },
+      {
+        "description": "Provides read-only access to events on the user's calendars. No write operations are allowed.",
+        "scope": "https://www.googleapis.com/auth/calendar.events.readonly",
+      },
+      {
+        "description": "Provides read-only access to the user's calendars, including events, ACLs, and settings. No write operations are allowed.",
+        "scope": "https://www.googleapis.com/auth/calendar.readonly",
+      },
+      {
+        "description": "Provides read-only access to the user's calendar settings (e.g., time zone, working hours). No access to events or calendars.",
         "scope": "https://www.googleapis.com/auth/calendar.settings.readonly",
       },
     ],
@@ -2317,10 +2743,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
   {
     "authType": "OAUTH2",
     "display_name": "Google Docs",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledocs.svg",
-    "name": "googledocs",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-docs.svg",
+    "name": "google-docs",
     "openint_scopes": [
-      "https://www.googleapis.com/auth/documents.readonly",
+      "https://www.googleapis.com/auth/documents.currentonly",
     ],
     "platforms": undefined,
     "schemas": {
@@ -2492,24 +2918,28 @@ exports[`db: pglite list connectors with schemas 1`] = `
     },
     "scopes": [
       {
-        "description": "Provides full access to Google Docs, including reading, creating, modifying, and deleting documents.",
+        "description": "Provides full read/write access to Google Docs documents. Allows viewing, creating, editing, and deleting documents.",
         "scope": "https://www.googleapis.com/auth/documents",
       },
       {
-        "description": "Allows read-only access to Google Docs. Users can view documents but cannot create, modify, or delete them.",
+        "description": "Provides read-only access to Google Docs documents. Allows viewing document content and metadata but no modifications.",
         "scope": "https://www.googleapis.com/auth/documents.readonly",
       },
       {
-        "description": "Provides access to Google Docs files that the app has created or opened. Does not grant access to all files in Google Drive.",
+        "description": "Provides access to Google Docs files that the app has created or been explicitly granted access to. Limited to specific files rather than all documents.",
         "scope": "https://www.googleapis.com/auth/drive.file",
       },
       {
-        "description": "Allows read-only access to Google Drive, including viewing Google Docs files. Does not permit modifications or deletions.",
+        "description": "Provides read-only access to all Google Drive files including Docs, but no modifications allowed. Wider access than drive.file but limited to viewing.",
         "scope": "https://www.googleapis.com/auth/drive.readonly",
       },
       {
-        "description": "Provides full access to Google Drive, including reading, creating, modifying, and deleting all files and documents.",
+        "description": "Provides full read/write access to all Google Drive files including Docs. The broadest permission for Docs/Drive operations.",
         "scope": "https://www.googleapis.com/auth/drive",
+      },
+      {
+        "description": "Provides access only to the currently open Google Docs document (when used with Docs add-ons). Most limited scope for temporary access.",
+        "scope": "https://www.googleapis.com/auth/documents.currentonly",
       },
     ],
     "stage": "ga",
@@ -2517,10 +2947,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
   {
     "authType": "OAUTH2",
     "display_name": "Google Drive",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googledrive.svg",
-    "name": "googledrive",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-drive.svg",
+    "name": "google-drive",
     "openint_scopes": [
-      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/drive.metadata.readonly",
     ],
     "platforms": undefined,
     "schemas": {
@@ -2692,16 +3122,36 @@ exports[`db: pglite list connectors with schemas 1`] = `
     },
     "scopes": [
       {
-        "description": "View files and folders in your Google Drive",
-        "scope": "https://www.googleapis.com/auth/drive.readonly",
+        "description": "Full, permissive scope to access all of a user's Google Drive files including the ability to read, modify, create, and delete all files and file metadata, including shared files.",
+        "scope": "https://www.googleapis.com/auth/drive",
       },
       {
-        "description": "View and manage files created by this app",
+        "description": "Provides access to only the files that the app has created or opened, and requires explicit user action to select files. Cannot access existing files unless the user selects them.",
         "scope": "https://www.googleapis.com/auth/drive.file",
       },
       {
-        "description": "Full access to files and folders in your Google Drive",
-        "scope": "https://www.googleapis.com/auth/drive",
+        "description": "Provides access to application-specific data stored in Google Drive (in the appdata folder). Files created with this scope are hidden from the user and other apps by default.",
+        "scope": "https://www.googleapis.com/auth/drive.appdata",
+      },
+      {
+        "description": "Provides read-only access to file metadata (such as titles, parents, and properties) but does not allow access to file content. Can view file information but cannot download or modify content.",
+        "scope": "https://www.googleapis.com/auth/drive.metadata",
+      },
+      {
+        "description": "Provides read-only access to file metadata (titles, parents, and properties) without the ability to view or download file content. The most restricted metadata-only access.",
+        "scope": "https://www.googleapis.com/auth/drive.metadata.readonly",
+      },
+      {
+        "description": "Provides read-only access to the user's Google Photos videos and photos stored in Google Drive (specialized for media files).",
+        "scope": "https://www.googleapis.com/auth/drive.photos.readonly",
+      },
+      {
+        "description": "Provides read-only access to all of a user's Google Drive files, including file content and metadata, but no modification capabilities.",
+        "scope": "https://www.googleapis.com/auth/drive.readonly",
+      },
+      {
+        "description": "Provides access to Google Apps Script projects stored in Google Drive, allowing creation, modification, and execution of scripts.",
+        "scope": "https://www.googleapis.com/auth/drive.scripts",
       },
     ],
     "stage": "ga",
@@ -2709,8 +3159,8 @@ exports[`db: pglite list connectors with schemas 1`] = `
   {
     "authType": "OAUTH2",
     "display_name": "Gmail",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlemail.svg",
-    "name": "googlemail",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-mail.svg",
+    "name": "google-mail",
     "openint_scopes": [
       "https://www.googleapis.com/auth/gmail.metadata",
     ],
@@ -2884,40 +3334,36 @@ exports[`db: pglite list connectors with schemas 1`] = `
     },
     "scopes": [
       {
-        "description": "Allows read-only access to the user's Gmail account, including viewing messages and threads but not sending, deleting, or modifying them.",
+        "description": "Allows read-only access to the user's Gmail data, including viewing messages and threads but not making any changes.",
         "scope": "https://www.googleapis.com/auth/gmail.readonly",
       },
       {
-        "description": "Allows sending emails on behalf of the user but doesn't provide access to read, modify, or delete existing emails.",
+        "description": "Allows sending messages only, without access to read, modify, or delete messages.",
         "scope": "https://www.googleapis.com/auth/gmail.send",
       },
       {
-        "description": "Allows creating, modifying, and deleting Gmail labels but doesn't provide access to email content.",
-        "scope": "https://www.googleapis.com/auth/gmail.labels",
-      },
-      {
-        "description": "Allows inserting emails into the user's mailbox (e.g., for archiving purposes) but doesn't allow reading existing emails or sending new ones.",
-        "scope": "https://www.googleapis.com/auth/gmail.insert",
-      },
-      {
-        "description": "Allows reading, sending, and modifying emails, including changing labels and thread state, but doesn't allow permanent deletion.",
-        "scope": "https://www.googleapis.com/auth/gmail.modify",
-      },
-      {
-        "description": "Allows creating and drafting emails but doesn't provide access to read or modify existing emails.",
+        "description": "Allows creating, reading, and sending messages (including drafts), but doesn't allow access to existing messages in the inbox.",
         "scope": "https://www.googleapis.com/auth/gmail.compose",
       },
       {
-        "description": "Allows access to email headers (metadata) like subject, sender, recipients, and timestamps, but not the email body or attachments.",
+        "description": "Allows inserting messages into the user's mailbox (e.g., importing email) but doesn't allow reading or modifying existing messages.",
+        "scope": "https://www.googleapis.com/auth/gmail.insert",
+      },
+      {
+        "description": "Allows creating, reading, and modifying labels only, without access to message content.",
+        "scope": "https://www.googleapis.com/auth/gmail.labels",
+      },
+      {
+        "description": "Allows access to message metadata (headers, labels) but not the message body or attachments. This is the most limited read-only scope.",
         "scope": "https://www.googleapis.com/auth/gmail.metadata",
       },
       {
-        "description": "Allows managing basic Gmail settings like signatures, vacation responders, and filters, but doesn't provide access to emails.",
-        "scope": "https://www.googleapis.com/auth/gmail.settings.basic",
+        "description": "Allows reading, sending, deleting, and modifying messages and threads (includes all actions of readonly, send, and compose).",
+        "scope": "https://www.googleapis.com/auth/gmail.modify",
       },
       {
-        "description": "Allows managing email delegation settings but doesn't provide access to email content.",
-        "scope": "https://www.googleapis.com/auth/gmail.settings.sharing",
+        "description": "Full access to the user's Gmail account, including all read and write operations. Equivalent to gmail.modify plus additional capabilities.",
+        "scope": "https://mail.google.com/",
       },
     ],
     "stage": "ga",
@@ -2925,10 +3371,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
   {
     "authType": "OAUTH2",
     "display_name": "Google Sheet",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-googlesheet.svg",
-    "name": "googlesheet",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-google-sheet.svg",
+    "name": "google-sheet",
     "openint_scopes": [
-      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/spreadsheets.currentonly",
     ],
     "platforms": undefined,
     "schemas": {
@@ -3100,27 +3546,23 @@ exports[`db: pglite list connectors with schemas 1`] = `
     },
     "scopes": [
       {
-        "description": "See, edit, create, and delete all your Google Sheets spreadsheets.",
+        "description": "Full access to read, write, and modify all Google Sheets and their properties. This includes creating, deleting, and sharing spreadsheets.",
         "scope": "https://www.googleapis.com/auth/spreadsheets",
       },
       {
-        "description": "See all your Google Sheets spreadsheets.",
+        "description": "Read-only access to view Google Sheets and their properties, but cannot make any changes or access drive metadata.",
         "scope": "https://www.googleapis.com/auth/spreadsheets.readonly",
       },
       {
-        "description": "See, edit, create, and delete all of your Google Drive files.",
-        "scope": "https://www.googleapis.com/auth/drive",
-      },
-      {
-        "description": "See, edit, create, and delete only the specific Google Drive files you use with this app.",
+        "description": "Access to only Google Sheets files that the app has created or been explicitly opened by the user. Cannot access all user spreadsheets.",
         "scope": "https://www.googleapis.com/auth/drive.file",
       },
       {
-        "description": "See and download all your Google Drive files.",
+        "description": "Read-only access to all Google Sheets files in the user's Drive, but cannot make modifications.",
         "scope": "https://www.googleapis.com/auth/drive.readonly",
       },
       {
-        "description": "Provides read/write access only to the currently opened Google Sheet. This is the most restrictive scope, limiting access to a single spreadsheet at a time.",
+        "description": "Access limited to only the currently opened spreadsheet. Cannot access other spreadsheets or perform drive-level operations.",
         "scope": "https://www.googleapis.com/auth/spreadsheets.currentonly",
       },
     ],
@@ -3498,6 +3940,838 @@ exports[`db: pglite list connectors with schemas 1`] = `
       {
         "description": "Provides read-only access to user settings information.",
         "scope": "settings.users.read",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Instagram",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-instagram.svg",
+    "name": "instagram",
+    "openint_scopes": [
+      "instagram_basic",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Provides access to the user's profile information including username, profile picture, and account type (Business or Personal).",
+        "scope": "user_profile",
+      },
+      {
+        "description": "Provides access to the user's media (photos and videos) including metadata, captions, and comments.",
+        "scope": "user_media",
+      },
+      {
+        "description": "Provides basic access to a user's profile information, username, and profile picture. This is the most limited scope.",
+        "scope": "instagram_basic",
+      },
+      {
+        "description": "Provides access to the list of Instagram Pages a user manages. Required for accessing Page-related features.",
+        "scope": "pages_show_list",
+      },
+      {
+        "description": "Allows the app to publish content (photos and videos) on behalf of the user.",
+        "scope": "instagram_content_publish",
+      },
+      {
+        "description": "Allows the app to read and manage comments on the user's media.",
+        "scope": "instagram_manage_comments",
+      },
+      {
+        "description": "Provides access to business account insights and metrics.",
+        "scope": "instagram_manage_insights",
+      },
+      {
+        "description": "Provides access to manage ads and campaigns for Instagram business accounts.",
+        "scope": "ads_management",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Intercom",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-intercom.svg",
+    "name": "intercom",
+    "openint_scopes": [
+      "users.read",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Allows read-only access to Intercom data, including users, companies, conversations, and more. Cannot modify any data.",
+        "scope": "read",
+      },
+      {
+        "description": "Allows read and write access to Intercom data. Can create and update users, companies, conversations, etc.",
+        "scope": "write",
+      },
+      {
+        "description": "Allows read-only access to user data only. Cannot access companies, conversations, or other data types.",
+        "scope": "users.read",
+      },
+      {
+        "description": "Allows read-only access to company data only. Cannot access user data or other data types.",
+        "scope": "companies.read",
+      },
+      {
+        "description": "Allows read-only access to conversations only. Cannot access user or company data.",
+        "scope": "conversations.read",
+      },
+      {
+        "description": "Allows read and write access to contact data only. More limited than full write access.",
+        "scope": "contacts.write",
+      },
+      {
+        "description": "Provides full access to all Intercom data and administrative functions, including account settings.",
+        "scope": "admin",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Jira (OAuth)",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-jira.svg",
+    "name": "jira",
+    "openint_scopes": [
+      "read:jira-user",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Allows read-only access to user profile information (name, email, avatar, etc.)",
+        "scope": "read:jira-user",
+      },
+      {
+        "description": "Allows read access to Jira issues, projects, boards, and other work items",
+        "scope": "read:jira-work",
+      },
+      {
+        "description": "Allows creating, updating, and transitioning Jira issues and work items",
+        "scope": "write:jira-work",
+      },
+      {
+        "description": "Allows administration of Jira projects including settings, components, and versions",
+        "scope": "manage:jira-project",
+      },
+      {
+        "description": "Allows modifying global Jira configurations and settings",
+        "scope": "manage:jira-configuration",
+      },
+      {
+        "description": "Allows obtaining refresh tokens for long-term access when user is not present",
+        "scope": "offline_access",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Lever (OAuth)",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lever.svg",
+    "name": "lever",
+    "openint_scopes": [
+      "read:applications",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Allows read-only access to all data in Lever, including candidates, postings, opportunities, and more. Does not permit any modifications.",
+        "scope": "read",
+      },
+      {
+        "description": "Allows read and write access to all data in Lever, including creating, updating, and deleting candidates, postings, opportunities, etc.",
+        "scope": "write",
+      },
+      {
+        "description": "Provides full administrative access, including read/write permissions for all data and the ability to modify account settings and configurations.",
+        "scope": "admin",
+      },
+      {
+        "description": "Allows the application to obtain refresh tokens for long-term access to Lever's API without requiring user re-authentication.",
+        "scope": "offline_access",
+      },
+      {
+        "description": "Provides read-only access to job applications and related data, but no access to other candidate or posting information.",
+        "scope": "read:applications",
+      },
+      {
+        "description": "Provides read-only access to candidate profiles and related data, but no access to postings or opportunities.",
+        "scope": "read:candidates",
+      },
+      {
+        "description": "Allows read and write access to candidate profiles and related data, including creating and updating candidates.",
+        "scope": "write:candidates",
       },
     ],
     "stage": "ga",
@@ -4506,6 +5780,424 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": undefined,
   },
   {
+    "authType": "OAUTH2",
+    "display_name": "Outreach",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-outreach.svg",
+    "name": "outreach",
+    "openint_scopes": [
+      "read:user",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Allows read-only access to basic user profile information (name, email, etc.)",
+        "scope": "read:user",
+      },
+      {
+        "description": "Provides read access to prospect data including contact information and engagement history",
+        "scope": "read:prospects",
+      },
+      {
+        "description": "Allows creating and updating prospect records in the Outreach platform",
+        "scope": "write:prospects",
+      },
+      {
+        "description": "Grants read access to sequence data including steps and templates",
+        "scope": "read:sequences",
+      },
+      {
+        "description": "Allows creating and modifying email sequences and templates",
+        "scope": "write:sequences",
+      },
+      {
+        "description": "Provides full administrative access to all Outreach data and functions",
+        "scope": "admin:all",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Pipedrive",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-pipedrive.svg",
+    "name": "pipedrive",
+    "openint_scopes": [
+      "base",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "api_domain": {
+            "description": "The API URL of your Pipedrive account (e.g., example)",
+            "pattern": "https?:\\/\\/.*",
+            "type": "string",
+          },
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+          "api_domain",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Provides access to basic user information such as name, email, and company details. Does not include access to any deal, person, or organization data.",
+        "scope": "base",
+      },
+      {
+        "description": "Allows read-only access to contacts (persons and organizations) including their details, but doesn't permit any modifications.",
+        "scope": "contacts:read",
+      },
+      {
+        "description": "Provides read and write access to contacts (persons and organizations), allowing creation, modification, and deletion of contact information.",
+        "scope": "contacts:write",
+      },
+      {
+        "description": "Grants read-only access to deals including their stages, values, and associated data, but doesn't allow any changes.",
+        "scope": "deals:read",
+      },
+      {
+        "description": "Provides full access to deals including creating, modifying, and deleting deals, as well as changing deal stages.",
+        "scope": "deals:write",
+      },
+      {
+        "description": "Allows reading user information across the organization, including team members' details, but no modifications.",
+        "scope": "users:read",
+      },
+      {
+        "description": "Provides full administrative access including organization settings, user management, and all data. This is the most privileged scope.",
+        "scope": "admin",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
     "authType": "CUSTOM",
     "display_name": "Plaid",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-plaid.svg",
@@ -5155,11 +6847,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "Salesforce",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesforce.svg",
-    "name": "salesforce",
+    "display_name": "Reddit",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-reddit.svg",
+    "name": "reddit",
     "openint_scopes": [
-      "offline_access",
+      "wikiread",
     ],
     "platforms": undefined,
     "schemas": {
@@ -5202,11 +6894,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
       "connection_settings": {
         "properties": {
-          "instance_url": {
-            "description": "The instance URL of your Salesforce account (e.g., example)",
-            "pattern": "https?:\\/\\/.*",
-            "type": "string",
-          },
           "oauth": {
             "properties": {
               "created_at": {
@@ -5268,7 +6955,6 @@ exports[`db: pglite list connectors with schemas 1`] = `
         },
         "required": [
           "oauth",
-          "instance_url",
         ],
         "type": "object",
       },
@@ -5337,8 +7023,292 @@ exports[`db: pglite list connectors with schemas 1`] = `
     },
     "scopes": [
       {
-        "description": "Allows the application to obtain a refresh token, which can be used to request new access tokens even when the user is not actively using the application. This enables long-term access to Salesforce resources on behalf of the user without requiring repeated authentication.",
-        "scope": "offline_access",
+        "description": "Access your Reddit username and signup date, karma, trophies, and other public info shown on your profile",
+        "scope": "identity",
+      },
+      {
+        "description": "Edit and delete your comments and submissions",
+        "scope": "edit",
+      },
+      {
+        "description": "Select and edit your user flair in subreddits",
+        "scope": "flair",
+      },
+      {
+        "description": "Access your voting history and comments/submissions you've hidden/saved",
+        "scope": "history",
+      },
+      {
+        "description": "Manage moderator configuration for subreddits you moderate (flair, settings, etc.)",
+        "scope": "modconfig",
+      },
+      {
+        "description": "Manage user flair in subreddits you moderate",
+        "scope": "modflair",
+      },
+      {
+        "description": "Access moderation logs for subreddits you moderate",
+        "scope": "modlog",
+      },
+      {
+        "description": "Approve, remove, mark NSFW, and distinguish content in subreddits you moderate",
+        "scope": "modposts",
+      },
+      {
+        "description": "Modify wiki pages in subreddits you moderate",
+        "scope": "modwiki",
+      },
+      {
+        "description": "Access the list of subreddits you moderate, contribute to, and subscribe to",
+        "scope": "mysubreddits",
+      },
+      {
+        "description": "Read and send private messages",
+        "scope": "privatemessages",
+      },
+      {
+        "description": "Access posts and comments through your account (required for most read operations)",
+        "scope": "read",
+      },
+      {
+        "description": "Report content for rules violations",
+        "scope": "report",
+      },
+      {
+        "description": "Save and unsave comments and submissions",
+        "scope": "save",
+      },
+      {
+        "description": "Submit links and comments from your account",
+        "scope": "submit",
+      },
+      {
+        "description": "Manage your subreddit subscriptions",
+        "scope": "subscribe",
+      },
+      {
+        "description": "Submit and change votes on comments and submissions",
+        "scope": "vote",
+      },
+      {
+        "description": "Edit wiki pages in subreddits you have access to",
+        "scope": "wikiedit",
+      },
+      {
+        "description": "Read wiki pages in public subreddits",
+        "scope": "wikiread",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Salesloft",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-salesloft.svg",
+    "name": "salesloft",
+    "openint_scopes": [
+      "users:read",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Allows read-only access to user profile information (name, email, role, etc.) but no access to sales data or actions",
+        "scope": "users:read",
+      },
+      {
+        "description": "Provides access to read call recordings, transcripts, and metadata but cannot initiate calls or modify call data",
+        "scope": "calls:read",
+      },
+      {
+        "description": "Grants permission to read email templates and sent email content but cannot send or modify emails",
+        "scope": "emails:read",
+      },
+      {
+        "description": "Allows reading contact/lead information in the CRM but no editing or creation capabilities",
+        "scope": "people:read",
+      },
+      {
+        "description": "Provides read access to sales cadence workflows and sequences but cannot modify or execute them",
+        "scope": "cadences:read",
+      },
+      {
+        "description": "Enables creating and updating sales activities (calls, emails, meetings) in the system",
+        "scope": "activities:write",
+      },
+      {
+        "description": "Allows full create/read/update/delete operations on contact/lead records",
+        "scope": "people:write",
+      },
+      {
+        "description": "Provides full administrative access including user management, settings, and all data operations",
+        "scope": "admin",
       },
     ],
     "stage": "ga",
@@ -6463,6 +8433,190 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "stage": "beta",
   },
   {
+    "authType": "OAUTH2",
+    "display_name": "Twitter (v2)",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twitter.svg",
+    "name": "twitter",
+    "openint_scopes": [
+      "offline.access",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Allows the application to obtain a refresh token that can be used to request new access tokens without user interaction. This is useful for maintaining long-term access to a user's resources when they are not actively using the application.",
+        "scope": "offline.access",
+      },
+    ],
+    "stage": "ga",
+  },
+  {
     "authType": "CUSTOM",
     "display_name": "Venmo",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-venmo.svg",
@@ -6631,6 +8785,194 @@ exports[`db: pglite list connectors with schemas 1`] = `
     },
     "scopes": undefined,
     "stage": undefined,
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Xero",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-xero.svg",
+    "name": "xero",
+    "openint_scopes": [
+      "openid",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "This scope allows the application to obtain a refresh token, which can be used to request new access tokens even when the user is not actively using the application. This is essential for long-term access to the user's resources without requiring repeated authentication.",
+        "scope": "offline_access",
+      },
+      {
+        "description": "This scope enables the application to authenticate the user and receive basic profile information (like user ID) as part of an OpenID Connect request. It does not grant access to any other user data or resources beyond basic identity verification.",
+        "scope": "openid",
+      },
+    ],
+    "stage": "ga",
   },
   {
     "authType": "CUSTOM",
@@ -6872,6 +9214,228 @@ exports[`db: pglite list connectors with schemas 1`] = `
     },
     "scopes": undefined,
     "stage": undefined,
+  },
+  {
+    "authType": "OAUTH2",
+    "display_name": "Zoho Desk",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-zoho-desk.svg",
+    "name": "zoho-desk",
+    "openint_scopes": [
+      "ZohoDesk.basic.READ",
+    ],
+    "platforms": undefined,
+    "schemas": {
+      "connect_input": {
+        "properties": {
+          "authorization_url": {
+            "description": "URL to take user to for approval",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE",
+            "type": "string",
+          },
+        },
+        "required": [
+          "authorization_url",
+        ],
+        "type": "object",
+      },
+      "connect_output": {
+        "properties": {
+          "code": {
+            "description": "OAuth2 authorization code used for token exchange",
+            "type": "string",
+          },
+          "code_verifier": {
+            "description": "Code verifier for PKCE from the connect input",
+            "type": "string",
+          },
+          "state": {
+            "description": "OAuth2 state",
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "state",
+        ],
+        "type": "object",
+      },
+      "connection_settings": {
+        "properties": {
+          "extension": {
+            "description": "The domain extension of your Zoho account (e.g., https://accounts.zoho.com/)",
+            "pattern": "https:\\/\\/accounts\\.zoho\\.([a-z.]+)\\/",
+            "type": "string",
+          },
+          "oauth": {
+            "properties": {
+              "created_at": {
+                "type": "string",
+              },
+              "credentials": {
+                "description": "Output of the postConnect hook for oauth2 connectors",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                  },
+                  "client_id": {
+                    "description": "Client ID used for the connection",
+                    "type": "string",
+                  },
+                  "expires_at": {
+                    "type": "string",
+                  },
+                  "expires_in": {
+                    "type": "number",
+                  },
+                  "raw": {
+                    "additionalProperties": {},
+                    "type": "object",
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                  },
+                  "scope": {
+                    "type": "string",
+                  },
+                  "token_type": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "access_token",
+                  "scope",
+                  "raw",
+                ],
+                "type": "object",
+              },
+              "last_fetched_at": {
+                "type": "string",
+              },
+              "metadata": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null",
+                ],
+              },
+              "updated_at": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "required": [
+          "oauth",
+          "extension",
+        ],
+        "type": "object",
+      },
+      "connector_config": {
+        "properties": {
+          "oauth": {
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
+            ],
+            "ui:field": "OAuthField",
+          },
+        },
+        "required": [
+          "oauth",
+        ],
+        "type": "object",
+      },
+      "integration_data": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+      "pre_connect_input": {
+        "properties": {
+          "connection_id": {
+            "description": "In case of re-connecting, id of the existing connection",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "webhook_input": {
+        "additionalProperties": false,
+        "type": "object",
+      },
+    },
+    "scopes": [
+      {
+        "description": "Allows read-only access to tickets in Zoho Desk",
+        "scope": "ZohoDesk.tickets.READ",
+      },
+      {
+        "description": "Allows creating new tickets in Zoho Desk",
+        "scope": "ZohoDesk.tickets.CREATE",
+      },
+      {
+        "description": "Allows updating existing tickets in Zoho Desk",
+        "scope": "ZohoDesk.tickets.UPDATE",
+      },
+      {
+        "description": "Allows deleting tickets in Zoho Desk",
+        "scope": "ZohoDesk.tickets.DELETE",
+      },
+      {
+        "description": "Allows read-only access to contacts in Zoho Desk",
+        "scope": "ZohoDesk.contacts.READ",
+      },
+      {
+        "description": "Allows read-only access to basic account information in Zoho Desk",
+        "scope": "ZohoDesk.basic.READ",
+      },
+      {
+        "description": "Allows read-only access to account settings in Zoho Desk",
+        "scope": "ZohoDesk.settings.READ",
+      },
+      {
+        "description": "Provides full access (create, read, update, delete) to tickets in Zoho Desk",
+        "scope": "ZohoDesk.tickets.ALL",
+      },
+      {
+        "description": "Allows read-only access to account information in Zoho Desk",
+        "scope": "ZohoDesk.accounts.READ",
+      },
+    ],
+    "stage": "ga",
   },
 ]
 `;

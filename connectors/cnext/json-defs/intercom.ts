@@ -1,6 +1,6 @@
 import type {JsonConnectorDef} from '../schema'
 
-export const jsonDef = {
+export default {
   audience: ['business'],
   verticals: ['ticketing'],
   display_name: 'Intercom',
