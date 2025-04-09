@@ -1,6 +1,6 @@
 import type {JsonConnectorDef} from '../schema'
 
-export const jsonDef = {
+export default {
   audience: ['business'],
   verticals: ['social-media'],
   display_name: 'Reddit',

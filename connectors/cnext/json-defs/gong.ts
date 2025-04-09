@@ -1,7 +1,7 @@
-import type {JsonConnectorDef} from '../schema'
 import {z} from '@openint/util/zod-utils'
+import type {JsonConnectorDef} from '../schema'
 
-export const jsonDef = {
+export default {
   audience: ['business'],
   verticals: ['communication', 'streaming'],
   display_name: 'Gong (Oauth)',
