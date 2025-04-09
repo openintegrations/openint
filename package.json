@@ -5,6 +5,7 @@
   "repository": "git@github.com:openintegrations/openint.git",
   "license": "UNLICENSED",
   "scripts": {
+    "visualize-dependencies": "pnpm nx graph",
     "web": "pnpm run --filter web dev",
     "storybook": "pnpm run --filter ui-v1 storybook --no-open",
     "generate-deprecated:connectorsList": "npx tsx apps/app-config/_generateConnectorLists.ts",
@@ -65,7 +66,8 @@
     "typescript-snapshots-plugin": "^1.7.0",
     "vercel": "^41.4.0",
     "wait-on": "^8.0.1",
-    "webpack": "*"
+    "webpack": "*",
+    "nx": "20.7.2"
   },
   "packageManager": "pnpm@10.6.1",
   "engines": {

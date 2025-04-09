@@ -75,3 +75,8 @@ wrangler.toml
 
 tailwind.css
 tailwind-v3.css
+
+
+
+.nx/cache
+.nx/workspace-data
