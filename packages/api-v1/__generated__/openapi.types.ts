@@ -520,6 +520,55 @@ export interface components {
                 } | null;
             };
         };
+        /** facebook */
+        "connector.facebook.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "facebook";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** facebook */
+        "connector.facebook.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "facebook";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** finch */
         "connector.finch.discriminated_connection_settings": {
             /**
@@ -680,13 +729,13 @@ export interface components {
                 } | null;
             };
         };
-        /** googlecalendar */
-        "connector.googlecalendar.discriminated_connection_settings": {
+        /** gong */
+        "connector.gong.discriminated_connection_settings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googlecalendar";
+            connector_name: "gong";
             settings: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
@@ -710,15 +759,17 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
+                /** @description The base URL of your Gong account (e.g., example) */
+                api_base_url_for_customer: string;
             };
         };
-        /** googlecalendar */
-        "connector.googlecalendar.discriminated_connector_config": {
+        /** gong */
+        "connector.gong.discriminated_connector_config": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googlecalendar";
+            connector_name: "gong";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth: {
@@ -729,13 +780,13 @@ export interface components {
                 } | null;
             };
         };
-        /** googledocs */
-        "connector.googledocs.discriminated_connection_settings": {
+        /** google-calendar */
+        "connector.google-calendar.discriminated_connection_settings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googledocs";
+            connector_name: "google-calendar";
             settings: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
@@ -761,13 +812,13 @@ export interface components {
                 };
             };
         };
-        /** googledocs */
-        "connector.googledocs.discriminated_connector_config": {
+        /** google-calendar */
+        "connector.google-calendar.discriminated_connector_config": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googledocs";
+            connector_name: "google-calendar";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth: {
@@ -778,13 +829,13 @@ export interface components {
                 } | null;
             };
         };
-        /** googledrive */
-        "connector.googledrive.discriminated_connection_settings": {
+        /** google-docs */
+        "connector.google-docs.discriminated_connection_settings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googledrive";
+            connector_name: "google-docs";
             settings: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
@@ -810,13 +861,13 @@ export interface components {
                 };
             };
         };
-        /** googledrive */
-        "connector.googledrive.discriminated_connector_config": {
+        /** google-docs */
+        "connector.google-docs.discriminated_connector_config": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googledrive";
+            connector_name: "google-docs";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth: {
@@ -827,13 +878,13 @@ export interface components {
                 } | null;
             };
         };
-        /** googlemail */
-        "connector.googlemail.discriminated_connection_settings": {
+        /** google-drive */
+        "connector.google-drive.discriminated_connection_settings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googlemail";
+            connector_name: "google-drive";
             settings: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
@@ -859,13 +910,13 @@ export interface components {
                 };
             };
         };
-        /** googlemail */
-        "connector.googlemail.discriminated_connector_config": {
+        /** google-drive */
+        "connector.google-drive.discriminated_connector_config": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googlemail";
+            connector_name: "google-drive";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth: {
@@ -876,13 +927,13 @@ export interface components {
                 } | null;
             };
         };
-        /** googlesheet */
-        "connector.googlesheet.discriminated_connection_settings": {
+        /** google-mail */
+        "connector.google-mail.discriminated_connection_settings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googlesheet";
+            connector_name: "google-mail";
             settings: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
@@ -908,13 +959,62 @@ export interface components {
                 };
             };
         };
-        /** googlesheet */
-        "connector.googlesheet.discriminated_connector_config": {
+        /** google-mail */
+        "connector.google-mail.discriminated_connector_config": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "googlesheet";
+            connector_name: "google-mail";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** google-sheet */
+        "connector.google-sheet.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "google-sheet";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** google-sheet */
+        "connector.google-sheet.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "google-sheet";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth: {
@@ -1004,6 +1104,202 @@ export interface components {
              * @enum {string}
              */
             connector_name: "hubspot";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** instagram */
+        "connector.instagram.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "instagram";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** instagram */
+        "connector.instagram.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "instagram";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** intercom */
+        "connector.intercom.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "intercom";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** intercom */
+        "connector.intercom.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "intercom";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** jira */
+        "connector.jira.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "jira";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** jira */
+        "connector.jira.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "jira";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** lever */
+        "connector.lever.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "lever";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** lever */
+        "connector.lever.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "lever";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth: {
@@ -1278,6 +1574,106 @@ export interface components {
                 redirectUrl?: string | null;
             };
         };
+        /** outreach */
+        "connector.outreach.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "outreach";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** outreach */
+        "connector.outreach.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "outreach";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** pipedrive */
+        "connector.pipedrive.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pipedrive";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description The API URL of your Pipedrive account (e.g., example) */
+                api_domain: string;
+            };
+        };
+        /** pipedrive */
+        "connector.pipedrive.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "pipedrive";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** plaid */
         "connector.plaid.discriminated_connection_settings": {
             /**
@@ -1437,13 +1833,13 @@ export interface components {
                 };
             };
         };
-        /** salesforce */
-        "connector.salesforce.discriminated_connection_settings": {
+        /** reddit */
+        "connector.reddit.discriminated_connection_settings": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "salesforce";
+            connector_name: "reddit";
             settings: {
                 oauth: {
                     /** @description Output of the postConnect hook for oauth2 connectors */
@@ -1467,17 +1863,64 @@ export interface components {
                         [key: string]: unknown;
                     } | null;
                 };
-                /** @description The instance URL of your Salesforce account (e.g., example) */
-                instance_url: string;
             };
         };
-        /** salesforce */
-        "connector.salesforce.discriminated_connector_config": {
+        /** reddit */
+        "connector.reddit.discriminated_connector_config": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            connector_name: "salesforce";
+            connector_name: "reddit";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
+        /** salesloft */
+        "connector.salesloft.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesloft";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** salesloft */
+        "connector.salesloft.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "salesloft";
             config: {
                 /** @description Base oauth configuration for the connector */
                 oauth: {
@@ -1755,6 +2198,55 @@ export interface components {
             connector_name: "twenty";
             config: Record<string, never>;
         };
+        /** twitter */
+        "connector.twitter.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twitter";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** twitter */
+        "connector.twitter.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "twitter";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** venmo */
         "connector.venmo.discriminated_connection_settings": {
             /**
@@ -1804,6 +2296,55 @@ export interface components {
              */
             connector_name: "wise";
             config: Record<string, never>;
+        };
+        /** xero */
+        "connector.xero.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "xero";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+            };
+        };
+        /** xero */
+        "connector.xero.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "xero";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
         };
         /** yodlee */
         "connector.yodlee.discriminated_connection_settings": {
@@ -1855,6 +2396,57 @@ export interface components {
                 } | null;
             };
         };
+        /** zoho-desk */
+        "connector.zoho-desk.discriminated_connection_settings": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zoho-desk";
+            settings: {
+                oauth: {
+                    /** @description Output of the postConnect hook for oauth2 connectors */
+                    credentials?: {
+                        access_token: string;
+                        /** @description Client ID used for the connection */
+                        client_id?: string;
+                        scope: string;
+                        refresh_token?: string;
+                        expires_in?: number;
+                        expires_at?: string;
+                        token_type?: string;
+                        raw: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    created_at?: string;
+                    updated_at?: string;
+                    last_fetched_at?: string;
+                    metadata?: {
+                        [key: string]: unknown;
+                    } | null;
+                };
+                /** @description The domain extension of your Zoho account (e.g., https://accounts.zoho.com/) */
+                extension: string;
+            };
+        };
+        /** zoho-desk */
+        "connector.zoho-desk.discriminated_connector_config": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            connector_name: "zoho-desk";
+            config: {
+                /** @description Base oauth configuration for the connector */
+                oauth: {
+                    client_id?: string | null;
+                    client_secret?: string | null;
+                    scopes?: string[] | null;
+                    redirect_uri?: string | null;
+                } | null;
+            };
+        };
         /** connection_select */
         "core.connection_select": {
             connector_name: "core.connection_select";
@@ -1875,7 +2467,7 @@ export interface components {
             metadata?: {
                 [key: string]: unknown;
             } | null;
-        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.sharepointonline.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.googlemail.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.googledocs.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.googlecalendar.discriminated_connection_settings"] | components["schemas"]["connector.googlesheet.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.salesforce.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.googledrive.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name">);
+        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.sharepointonline.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name">);
         /** Connector */
         "core.connector": {
             name: string;
@@ -2196,7 +2788,7 @@ export interface operations {
                             metadata?: {
                                 [key: string]: unknown;
                             } | null;
-                        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connector_config"] | components["schemas"]["connector.sharepointonline.discriminated_connector_config"] | components["schemas"]["connector.slack.discriminated_connector_config"] | components["schemas"]["connector.github.discriminated_connector_config"] | components["schemas"]["connector.quickbooks.discriminated_connector_config"] | components["schemas"]["connector.googlemail.discriminated_connector_config"] | components["schemas"]["connector.notion.discriminated_connector_config"] | components["schemas"]["connector.linkedin.discriminated_connector_config"] | components["schemas"]["connector.googledocs.discriminated_connector_config"] | components["schemas"]["connector.aircall.discriminated_connector_config"] | components["schemas"]["connector.googlecalendar.discriminated_connector_config"] | components["schemas"]["connector.googlesheet.discriminated_connector_config"] | components["schemas"]["connector.discord.discriminated_connector_config"] | components["schemas"]["connector.hubspot.discriminated_connector_config"] | components["schemas"]["connector.salesforce.discriminated_connector_config"] | components["schemas"]["connector.linear.discriminated_connector_config"] | components["schemas"]["connector.confluence.discriminated_connector_config"] | components["schemas"]["connector.googledrive.discriminated_connector_config"] | components["schemas"]["connector.airtable.discriminated_connector_config"] | components["schemas"]["connector.apollo.discriminated_connector_config"] | components["schemas"]["connector.brex.discriminated_connector_config"] | components["schemas"]["connector.coda.discriminated_connector_config"] | components["schemas"]["connector.finch.discriminated_connector_config"] | components["schemas"]["connector.firebase.discriminated_connector_config"] | components["schemas"]["connector.foreceipt.discriminated_connector_config"] | components["schemas"]["connector.greenhouse.discriminated_connector_config"] | components["schemas"]["connector.heron.discriminated_connector_config"] | components["schemas"]["connector.lunchmoney.discriminated_connector_config"] | components["schemas"]["connector.mercury.discriminated_connector_config"] | components["schemas"]["connector.merge.discriminated_connector_config"] | components["schemas"]["connector.moota.discriminated_connector_config"] | components["schemas"]["connector.onebrick.discriminated_connector_config"] | components["schemas"]["connector.plaid.discriminated_connector_config"] | components["schemas"]["connector.postgres.discriminated_connector_config"] | components["schemas"]["connector.ramp.discriminated_connector_config"] | components["schemas"]["connector.saltedge.discriminated_connector_config"] | components["schemas"]["connector.splitwise.discriminated_connector_config"] | components["schemas"]["connector.stripe.discriminated_connector_config"] | components["schemas"]["connector.teller.discriminated_connector_config"] | components["schemas"]["connector.toggl.discriminated_connector_config"] | components["schemas"]["connector.twenty.discriminated_connector_config"] | components["schemas"]["connector.venmo.discriminated_connector_config"] | components["schemas"]["connector.wise.discriminated_connector_config"] | components["schemas"]["connector.yodlee.discriminated_connector_config"], "connector_name"> & {
+                        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connector_config"] | components["schemas"]["connector.aircall.discriminated_connector_config"] | components["schemas"]["connector.confluence.discriminated_connector_config"] | components["schemas"]["connector.discord.discriminated_connector_config"] | components["schemas"]["connector.facebook.discriminated_connector_config"] | components["schemas"]["connector.github.discriminated_connector_config"] | components["schemas"]["connector.gong.discriminated_connector_config"] | components["schemas"]["connector.google-calendar.discriminated_connector_config"] | components["schemas"]["connector.google-docs.discriminated_connector_config"] | components["schemas"]["connector.google-drive.discriminated_connector_config"] | components["schemas"]["connector.google-mail.discriminated_connector_config"] | components["schemas"]["connector.google-sheet.discriminated_connector_config"] | components["schemas"]["connector.hubspot.discriminated_connector_config"] | components["schemas"]["connector.instagram.discriminated_connector_config"] | components["schemas"]["connector.intercom.discriminated_connector_config"] | components["schemas"]["connector.jira.discriminated_connector_config"] | components["schemas"]["connector.lever.discriminated_connector_config"] | components["schemas"]["connector.linear.discriminated_connector_config"] | components["schemas"]["connector.linkedin.discriminated_connector_config"] | components["schemas"]["connector.notion.discriminated_connector_config"] | components["schemas"]["connector.outreach.discriminated_connector_config"] | components["schemas"]["connector.pipedrive.discriminated_connector_config"] | components["schemas"]["connector.quickbooks.discriminated_connector_config"] | components["schemas"]["connector.reddit.discriminated_connector_config"] | components["schemas"]["connector.salesloft.discriminated_connector_config"] | components["schemas"]["connector.sharepointonline.discriminated_connector_config"] | components["schemas"]["connector.slack.discriminated_connector_config"] | components["schemas"]["connector.twitter.discriminated_connector_config"] | components["schemas"]["connector.xero.discriminated_connector_config"] | components["schemas"]["connector.zoho-desk.discriminated_connector_config"] | components["schemas"]["connector.airtable.discriminated_connector_config"] | components["schemas"]["connector.apollo.discriminated_connector_config"] | components["schemas"]["connector.brex.discriminated_connector_config"] | components["schemas"]["connector.coda.discriminated_connector_config"] | components["schemas"]["connector.finch.discriminated_connector_config"] | components["schemas"]["connector.firebase.discriminated_connector_config"] | components["schemas"]["connector.foreceipt.discriminated_connector_config"] | components["schemas"]["connector.greenhouse.discriminated_connector_config"] | components["schemas"]["connector.heron.discriminated_connector_config"] | components["schemas"]["connector.lunchmoney.discriminated_connector_config"] | components["schemas"]["connector.mercury.discriminated_connector_config"] | components["schemas"]["connector.merge.discriminated_connector_config"] | components["schemas"]["connector.moota.discriminated_connector_config"] | components["schemas"]["connector.onebrick.discriminated_connector_config"] | components["schemas"]["connector.plaid.discriminated_connector_config"] | components["schemas"]["connector.postgres.discriminated_connector_config"] | components["schemas"]["connector.ramp.discriminated_connector_config"] | components["schemas"]["connector.saltedge.discriminated_connector_config"] | components["schemas"]["connector.splitwise.discriminated_connector_config"] | components["schemas"]["connector.stripe.discriminated_connector_config"] | components["schemas"]["connector.teller.discriminated_connector_config"] | components["schemas"]["connector.toggl.discriminated_connector_config"] | components["schemas"]["connector.twenty.discriminated_connector_config"] | components["schemas"]["connector.venmo.discriminated_connector_config"] | components["schemas"]["connector.wise.discriminated_connector_config"] | components["schemas"]["connector.yodlee.discriminated_connector_config"], "connector_name"> & {
                             connector?: components["schemas"]["core.connector"];
                             integrations?: {
                                 [key: string]: components["schemas"]["core.integration_select"];
@@ -2306,7 +2898,7 @@ export interface operations {
                         metadata?: {
                             [key: string]: unknown;
                         } | null;
-                    } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.sharepointonline.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.googlemail.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.googledocs.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.googlecalendar.discriminated_connection_settings"] | components["schemas"]["connector.googlesheet.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.salesforce.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.googledrive.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name"> & {
+                    } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.sharepointonline.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name"> & {
                         connector?: components["schemas"]["core.connector"];
                     };
                 };
@@ -2473,7 +3065,7 @@ export interface operations {
                             metadata?: {
                                 [key: string]: unknown;
                             } | null;
-                        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.sharepointonline.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.googlemail.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.googledocs.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.googlecalendar.discriminated_connection_settings"] | components["schemas"]["connector.googlesheet.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.salesforce.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.googledrive.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name"> & {
+                        } & Omit<components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.sharepointonline.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"], "connector_name"> & {
                             connector?: components["schemas"]["core.connector"];
                         })[];
                         /** @description Total number of items in the database for the organization */
@@ -2556,7 +3148,7 @@ export interface operations {
                     /** @description The id of the customer in your application. Ensure it is unique for that customer. */
                     customer_id: string;
                     /** @description Connector specific data */
-                    data: components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.sharepointonline.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.googlemail.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.googledocs.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.googlecalendar.discriminated_connection_settings"] | components["schemas"]["connector.googlesheet.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.salesforce.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.googledrive.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"];
+                    data: components["schemas"]["connector.acme-oauth2.discriminated_connection_settings"] | components["schemas"]["connector.aircall.discriminated_connection_settings"] | components["schemas"]["connector.confluence.discriminated_connection_settings"] | components["schemas"]["connector.discord.discriminated_connection_settings"] | components["schemas"]["connector.facebook.discriminated_connection_settings"] | components["schemas"]["connector.github.discriminated_connection_settings"] | components["schemas"]["connector.gong.discriminated_connection_settings"] | components["schemas"]["connector.google-calendar.discriminated_connection_settings"] | components["schemas"]["connector.google-docs.discriminated_connection_settings"] | components["schemas"]["connector.google-drive.discriminated_connection_settings"] | components["schemas"]["connector.google-mail.discriminated_connection_settings"] | components["schemas"]["connector.google-sheet.discriminated_connection_settings"] | components["schemas"]["connector.hubspot.discriminated_connection_settings"] | components["schemas"]["connector.instagram.discriminated_connection_settings"] | components["schemas"]["connector.intercom.discriminated_connection_settings"] | components["schemas"]["connector.jira.discriminated_connection_settings"] | components["schemas"]["connector.lever.discriminated_connection_settings"] | components["schemas"]["connector.linear.discriminated_connection_settings"] | components["schemas"]["connector.linkedin.discriminated_connection_settings"] | components["schemas"]["connector.notion.discriminated_connection_settings"] | components["schemas"]["connector.outreach.discriminated_connection_settings"] | components["schemas"]["connector.pipedrive.discriminated_connection_settings"] | components["schemas"]["connector.quickbooks.discriminated_connection_settings"] | components["schemas"]["connector.reddit.discriminated_connection_settings"] | components["schemas"]["connector.salesloft.discriminated_connection_settings"] | components["schemas"]["connector.sharepointonline.discriminated_connection_settings"] | components["schemas"]["connector.slack.discriminated_connection_settings"] | components["schemas"]["connector.twitter.discriminated_connection_settings"] | components["schemas"]["connector.xero.discriminated_connection_settings"] | components["schemas"]["connector.zoho-desk.discriminated_connection_settings"] | components["schemas"]["connector.airtable.discriminated_connection_settings"] | components["schemas"]["connector.apollo.discriminated_connection_settings"] | components["schemas"]["connector.brex.discriminated_connection_settings"] | components["schemas"]["connector.coda.discriminated_connection_settings"] | components["schemas"]["connector.finch.discriminated_connection_settings"] | components["schemas"]["connector.firebase.discriminated_connection_settings"] | components["schemas"]["connector.foreceipt.discriminated_connection_settings"] | components["schemas"]["connector.greenhouse.discriminated_connection_settings"] | components["schemas"]["connector.heron.discriminated_connection_settings"] | components["schemas"]["connector.lunchmoney.discriminated_connection_settings"] | components["schemas"]["connector.mercury.discriminated_connection_settings"] | components["schemas"]["connector.merge.discriminated_connection_settings"] | components["schemas"]["connector.moota.discriminated_connection_settings"] | components["schemas"]["connector.onebrick.discriminated_connection_settings"] | components["schemas"]["connector.plaid.discriminated_connection_settings"] | components["schemas"]["connector.postgres.discriminated_connection_settings"] | components["schemas"]["connector.ramp.discriminated_connection_settings"] | components["schemas"]["connector.saltedge.discriminated_connection_settings"] | components["schemas"]["connector.splitwise.discriminated_connection_settings"] | components["schemas"]["connector.stripe.discriminated_connection_settings"] | components["schemas"]["connector.teller.discriminated_connection_settings"] | components["schemas"]["connector.toggl.discriminated_connection_settings"] | components["schemas"]["connector.twenty.discriminated_connection_settings"] | components["schemas"]["connector.venmo.discriminated_connection_settings"] | components["schemas"]["connector.wise.discriminated_connection_settings"] | components["schemas"]["connector.yodlee.discriminated_connection_settings"];
                 };
             };
         };

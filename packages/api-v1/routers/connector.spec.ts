@@ -38,12 +38,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
 
   test('get connector by name', async () => {
     const res = await asOrg.getConnectorByName({
-      name: 'googledrive',
+      name: 'google-drive',
       expand: ['schemas'],
     })
 
     expect(res).toMatchObject({
-      name: 'googledrive',
+      name: 'google-drive',
       display_name: 'Google Drive',
       logo_url: expect.any(String),
       schemas: {
