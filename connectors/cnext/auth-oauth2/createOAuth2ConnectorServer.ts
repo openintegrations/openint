@@ -2,7 +2,7 @@ import type {oauth2Schemas, zOAuthConfig} from './schemas'
 import type {ConnectorDef, ConnectorServer, ExternalId} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
 import {makeId} from '@openint/cdk'
-import {getBaseURLs} from '@openint/env'
+import {env, getBaseURLs} from '@openint/env'
 import {createCodeVerifier} from '@openint/oauth2/utils.client'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
@@ -66,7 +66,7 @@ export function createOAuth2ConnectorServer<
 
       const authorizeUrl = await client.getAuthorizeUrl({
         // Use vercel.app for now as connect.openint.dev is not working for some reason
-        redirect_uri: 'https://openint-production.vercel.app/connect/callback',
+        redirect_uri: env.OAUTH_REDIRECT_URI_GATEWAY,
         scopes: config.oauth?.scopes
           ? // here because some old ccfgs have scopes as a string
             typeof config.oauth.scopes === 'string'
@@ -112,7 +112,7 @@ export function createOAuth2ConnectorServer<
 
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
-        redirectUri: 'https://openint-production.vercel.app/connect/callback',
+        redirectUri: env.OAUTH_REDIRECT_URI_GATEWAY,
         code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })

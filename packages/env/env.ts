@@ -17,6 +17,11 @@ export const envConfig = {
     CLERK_SECRET_KEY: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
 
+    /** One url to rule them all */
+    OAUTH_REDIRECT_URI_GATEWAY: z
+      .string()
+      .default('https://connect.openint.dev/callback'),
+
     // Required for worker to work when deployed
     INNGEST_SIGNING_KEY: z.string().optional(),
     INNGEST_EVENT_KEY: z.string().optional(),

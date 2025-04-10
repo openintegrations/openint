@@ -2,7 +2,7 @@ import type {CreateFetchHandlerOptions} from './handlers'
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
-import {envRequired} from '@openint/env'
+import {env, envRequired, getBaseURLs} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './handlers'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
@@ -51,14 +51,16 @@ export function createApp(opts: CreateAppOptions) {
               id: 'client_1',
               name: 'client_1',
               secret: 'secret_1',
-              // redirectUris: ['http://localhost:4000/connect/callback'],
-              redirectUris: ['https://openint-production.vercel.app/connect/callback'],
+              redirectUris: [
+                env.OAUTH_REDIRECT_URI_GATEWAY,
+                getBaseURLs(null).connect + '/callback',
+              ],
               allowedGrants: [
                 'authorization_code',
                 'refresh_token',
                 'client_credentials',
               ],
-              scopes: [{name: 'read'}, {name: 'write'}],
+              scopes: [{name: 'read:profile'}, {name: 'write:posts'}],
             },
           ],
           scopes: [{name: 'read'}, {name: 'write'}],
