@@ -1,8 +1,10 @@
+import type {ConnectorName} from './connector.models'
+import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 import {Core, core} from '../models'
-import {getConnectorModelByName, type ConnectorName} from './connector.models'
+import {getConnectorModelByName} from './connector.models'
 
 export const zIncludeSecrets = z
   .enum(['none', 'basic', 'all'])
@@ -35,9 +37,13 @@ export const zConnectionExpanded = z
     core.connection_select,
     z.object({
       connector: core.connector.optional(),
+      // TODO(@openint-box): ensure this exists
+      status: zConnectionStatus.optional(),
     }),
   )
   .describe('The connection details')
+
+export type ConnectionExpanded = Z.infer<typeof zConnectionExpanded>
 
 /**
  * Strips sensitive OAuth credentials from a credentials object

@@ -1,36 +1,30 @@
 'use client'
 
+import type {StatusType} from '../../components/StatusDot'
+import type {Core} from '@openint/api-v1/models'
 import Image from 'next/image'
 import React, {useState} from 'react'
-import type {Core} from '@openint/api-v1/models'
+import {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {CopyID} from '../../components/CopyID'
-import type {StatusType} from '../../components/StatusDot'
 import {ConnectionCardContent} from '../ConnectionsCardView'
 
 interface ConnectionTableCellProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  connection: Core['connection_select']
+  connection: ConnectionExpanded
   useLogo?: boolean
   className?: string
-  logo_url?: string
-  status?: StatusType
-  platform?: string
-  version?: string
-  authMethod?: string
 }
 
 export function ConnectionTableCell({
   connection,
   useLogo = true,
   className,
-  logo_url,
-  status,
-  platform,
-  version,
-  authMethod,
   ...props
 }: ConnectionTableCellProps) {
+  const logoUrl = connection.connector?.logo_url
+  const status = connection.status
+
   const [open, setOpen] = useState(false)
   const [coords, setCoords] = useState({x: 0, y: 0})
 
@@ -49,18 +43,15 @@ export function ConnectionTableCell({
     }
   }
 
-  // Use provided status or default to 'offline' as a safe fallback
-  const connectionStatus: StatusType = status || 'offline'
-
   const logo = (
     <div
       className={cn(
         'bg-primary/15 relative flex h-[55px] w-[55px] items-center justify-center overflow-hidden rounded-sm',
         'h-8 w-8',
       )}>
-      {useLogo && logo_url && (
+      {useLogo && logoUrl && (
         <Image
-          src={logo_url}
+          src={logoUrl}
           alt={`${connection.connector_name} logo`}
           width={100}
           height={100}
@@ -107,7 +98,9 @@ export function ConnectionTableCell({
               pointerEvents: 'auto',
             }}>
             <div className="bg-popover w-[480px] overflow-hidden rounded-md border p-0 shadow-md">
-              <ConnectionCardContent
+              {status}
+              {/* TODO: @santi fix this one accordingly */}
+              {/* <ConnectionCardContent
                 connection={connection}
                 status={connectionStatus}
                 category={connection.connector_name}
@@ -117,7 +110,7 @@ export function ConnectionTableCell({
                   (connection.settings?.oauth ? 'oauth' : 'apikey')
                 }
                 version={version}
-              />
+              /> */}
             </div>
           </div>
         </div>
