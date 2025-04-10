@@ -1,12 +1,15 @@
 import path from 'node:path'
-import {withSentryConfig} from '@sentry/nextjs'
 import type {NextConfig} from 'next'
+import {withSentryConfig} from '@sentry/nextjs'
 // eslint-disable-next-line import-x/no-extraneous-dependencies
 import webpack from 'webpack'
 
 const isDevOrStaging =
   process.env.NODE_ENV !== 'production' ||
   process.env['VERCEL_URL'] == 'openint-git-main-openint-dev.vercel.app'
+
+/** match all paths that are not special in next.js world */
+const nonSpecialPath = '/:path((?!_next|favicon.ico|sitemap.xml|robots.txt).*)'
 
 const nextConfig = {
   // TODO: Figure out why this is still needed. Does not appear to be needed in byos anymore...
@@ -39,12 +42,7 @@ const nextConfig = {
       // api.openint.dev/v0/* -> app.openint.dev/api/v0/*
       {
         source: '/v0/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'api.openint.dev',
-          },
-        ],
+        has: [{type: 'host', value: 'api.openint.dev'}],
         destination:
           'https://openint-git-v0-openint-dev.vercel.app/api/v0/:path*',
       },
@@ -52,26 +50,28 @@ const nextConfig = {
       // api.openint.dev/v1/* -> /api/v1/* (same app)
       {
         source: '/v1/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'api.openint.dev',
-          },
-        ],
+        has: [{type: 'host', value: 'api.openint.dev'}],
         destination: '/api/v1/:path*',
       },
 
       // connect.openint.dev/* -> /connect/*
       {
-        source: '/:path((?![.]))*', // Match any path that doesn't contain a dot for static files
-        has: [
-          {
-            type: 'host',
-            value: 'connect.openint.dev',
-          },
-        ],
+        source: nonSpecialPath,
+        has: [{type: 'host', value: 'connect.openint.dev'}],
         destination: '/connect/:path*',
       },
+      {
+        source: nonSpecialPath,
+        has: [{type: 'host', value: 'console.openint.dev'}],
+        destination: '/console/:path*',
+      },
+      // uncomment this for local testing
+      // {
+      //   source: nonSpecialPath,
+      //   has: [{type: 'host', value: 'local.openint.dev'}],
+      //   // Update this to test any routes
+      //   destination: '/connect/:path*',
+      // },
     ],
     afterFiles: [],
     fallback: [],
