@@ -20,8 +20,10 @@
  * co-located together
  */
 
-import {z} from '@openint/util/zod-utils'
 import type {PageProps} from '@/lib-common/next-utils'
+import {redirect} from 'next/navigation'
+import {getBaseURLs} from '@openint/env'
+import {z} from '@openint/util/zod-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {ConnectCallbackClient} from './page.client'
 
@@ -30,10 +32,27 @@ const zOauthCallbackSearchParams = z.object({
   state: z.string(),
 })
 
+// TODO: Dedupe this with cnext
+const zOauthState = z.object({
+  connection_id: z.string(),
+  redirect_uri: z.string().optional(),
+})
+
 export default async function ConnectCallback(pageProps: PageProps) {
   const {searchParams} = await parsePageProps(pageProps, {
     searchParams: zOauthCallbackSearchParams,
   })
+  const state = zOauthState.parse(JSON.parse(searchParams.state))
+  if (
+    state.redirect_uri &&
+    state.redirect_uri !== getBaseURLs(null).connect + '/callback'
+  ) {
+    const url = new URL(state.redirect_uri)
+    for (const [key, value] of Object.entries(searchParams)) {
+      url.searchParams.set(key, value)
+    }
+    return redirect(url.toString())
+  }
 
   return <ConnectCallbackClient data={searchParams} />
 }
