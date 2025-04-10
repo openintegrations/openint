@@ -1,10 +1,11 @@
+import type {oauth2Schemas, zOAuthConfig} from './schemas'
 import type {ConnectorDef, ConnectorServer, ExternalId} from '@openint/cdk'
+import type {Z} from '@openint/util/zod-utils'
 import {makeId} from '@openint/cdk'
 import {getServerUrl} from '@openint/env'
 import {createCodeVerifier} from '@openint/oauth2/utils.client'
 import {makeUlid} from '@openint/util/id-utils'
-import {type Z} from '@openint/util/zod-utils'
-import type {oauth2Schemas, zOAuthConfig} from './schemas'
+import {z} from '@openint/util/zod-utils'
 import {getClient} from './utils'
 
 /*
@@ -64,7 +65,7 @@ export function createOAuth2ConnectorServer<
         : undefined
 
       const authorizeUrl = await client.getAuthorizeUrl({
-        redirect_uri: getServerUrl(null) + '/connect/callback',
+        redirect_uri: 'https://connect.openint.dev/callback',
         scopes: config.oauth?.scopes
           ? // here because some old ccfgs have scopes as a string
             typeof config.oauth.scopes === 'string'
@@ -73,7 +74,10 @@ export function createOAuth2ConnectorServer<
               )
             : config.oauth.scopes
           : [],
-        state: connectionId,
+        state: JSON.stringify({
+          connection_id: connectionId,
+          redirect_uri: getServerUrl(null) + '/connect/callback',
+        }),
         code_challenge: codeChallenge,
         ...oauthConfig.params_config.authorize,
       })
@@ -85,8 +89,16 @@ export function createOAuth2ConnectorServer<
     },
 
     async postConnect({connectOutput, config, context}) {
-      const connectionId = connectOutput.state
-      console.log(`Oauth2 Postconnect called for connectionId ${connectionId}`)
+      const state = z
+        .object({
+          connection_id: z.string(),
+          redirect_uri: z.string().optional(),
+        })
+        .parse(JSON.parse(connectOutput.state))
+
+      console.log(
+        `Oauth2 Postconnect called for connectionId ${state.connection_id}`,
+      )
       const {client, oauthConfig} = getClient({
         connectorName: connectorDef.name,
         oauthConfigTemplate,
@@ -99,12 +111,13 @@ export function createOAuth2ConnectorServer<
 
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
-        redirectUri: getServerUrl(null) + '/connect/callback',
+        redirectUri: 'https://connect.openint.dev/callback',
         code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })
 
       return {
+        // TODO: Why is connection_id not being used here?
         connectionExternalId: undefined as unknown as ExternalId,
         settings: {
           oauth: {

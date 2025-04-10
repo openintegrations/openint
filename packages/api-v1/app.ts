@@ -1,13 +1,10 @@
+import type {CreateFetchHandlerOptions} from './handlers'
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
-import {
-  createFetchHandlerOpenAPI,
-  createFetchHandlerTRPC,
-  type CreateFetchHandlerOptions,
-} from './handlers'
+import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './handlers'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 
@@ -54,7 +51,8 @@ export function createApp(opts: CreateAppOptions) {
               id: 'client_1',
               name: 'client_1',
               secret: 'secret_1',
-              redirectUris: ['http://localhost:4000/connect/callback'],
+              // redirectUris: ['http://localhost:4000/connect/callback'],
+              redirectUris: ['https://connect.openint.dev/callback'],
               allowedGrants: [
                 'authorization_code',
                 'refresh_token',
