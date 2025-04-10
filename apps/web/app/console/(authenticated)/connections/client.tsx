@@ -1,12 +1,13 @@
 'use client'
 
-import React, {useMemo, useState} from 'react'
 import type {AppRouterOutput} from '@openint/api-v1'
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
+import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
+import React, {useMemo, useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CommandPopover, ConnectionTableCell, CopyID} from '@openint/ui-v1'
-import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
+import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {formatIsoDateString} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/app/GlobalCommandBarProvider'
@@ -19,15 +20,10 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
     cell: ({row}) => {
       const connection = row.original
 
-      // Get what data we can from the connection
-      const authMethod = connection.settings?.oauth ? 'oauth' : 'apikey'
-
       // Pass only what we have to ConnectionTableCell
       return (
         <ConnectionTableCell
           connection={connection}
-          logo_url={connection?.connector?.logo_url}
-          authMethod={authMethod}
           // We don't have status from listConnections API, would need to call checkConnection
           // to get the actual status for each connection
         />
