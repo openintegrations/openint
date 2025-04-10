@@ -52,7 +52,7 @@ export function createApp(opts: CreateAppOptions) {
               name: 'client_1',
               secret: 'secret_1',
               // redirectUris: ['http://localhost:4000/connect/callback'],
-              redirectUris: ['https://connect.openint.dev/callback'],
+              redirectUris: ['https://openint-production.vercel.app/connect/callback'],
               allowedGrants: [
                 'authorization_code',
                 'refresh_token',
