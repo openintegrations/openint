@@ -86,10 +86,8 @@ export const zZodErrorEnriched = z.object({
   description: z.string().optional(),
 }) /** satiesfies Z.ZodError */
 
-export type ZodErrorEnriched<T = unknown> = Omit<
-  Z.infer<typeof zZodErrorEnriched>,
-  'data'
-> & {data: T}
+export type ZodErrorEnriched<T = unknown> = Z.ZodError &
+  Omit<Z.infer<typeof zZodErrorEnriched>, 'issues' | 'data'> & {data: T}
 
 export function isZodError<T>(error: unknown): error is ZodErrorEnriched<T> {
   if (error instanceof ZodError) {

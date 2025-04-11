@@ -57,10 +57,29 @@ const router = trpc.router({
 const handleTrpcRequest = (req: Request) =>
   fetchRequestHandler({router, endpoint: '/', req, onError})
 
+// Object.defineProperty(TRPCError.prototype, 'message', {
+//   get() {
+//     const msg = orgMessage.call(this)
+//     // We do this to prevent data from being too long to display
+//     const issues = JSON.parse(msg)
+//     // const jsonSchema = zodToOas31Schema(this.schema)
+//     // This can sometimes be too long to display, so never mind for now
+//     const schema = this.schema as Z.ZodType
+//     const openapi = schema._def.zodOpenApi?.openapi
+//     return JSON.stringify(
+//       {issues, data: this.data, openapi, description: schema.description},
+//       null,
+//       2,
+//     )
+//   },
+//   configurable: true,
+//   enumerable: true,
+// })
+
 export default async function DebugPage(pageProps: PageProps) {
   const {searchParams} = await parsePageProps(pageProps, {
     searchParams: z.object({
-      type: z.enum(['TRPCError', 'TRPCClientError', 'err500']),
+      type: z.enum(['TRPCError', 'TRPCClientError', 'err500', 'UNAUTHORIZED']),
     }),
   })
 
@@ -73,7 +92,7 @@ export default async function DebugPage(pageProps: PageProps) {
     ],
   })
 
-  const caller = router.createCaller({})
+  const caller = router.createCaller({}, {onError})
 
   if (searchParams.type === 'TRPCError') {
     throw new TRPCError({
@@ -84,5 +103,7 @@ export default async function DebugPage(pageProps: PageProps) {
     await client.errorTest.query({code: 'BAD_REQUEST'})
   } else if (searchParams.type === 'err500') {
     await caller.err500({})
+  } else if (searchParams.type === 'UNAUTHORIZED') {
+    await caller.errorTest({code: 'UNAUTHORIZED'})
   }
 }

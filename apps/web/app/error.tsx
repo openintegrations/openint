@@ -40,6 +40,7 @@ export interface PageErrorProps {
 
 /** TODO: Leverage parseAPIError in addition */
 function RenderError({error}: Pick<PageErrorProps, 'error'>) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   ;(window as any).error = error
   if (error.name === 'ZodError') {
     const err = zZodErrorEnriched.safeParse(safeJSONParse(error.message)).data
@@ -49,6 +50,10 @@ function RenderError({error}: Pick<PageErrorProps, 'error'>) {
         <pre>{JSON.stringify(err, null, 2)}</pre>
       </>
     )
+  } else if (error.name === 'TRPCError') {
+    // We are missing error.code information at this point. Will have to make `message` more informative
+  } else if (error.name === 'TRPCClientError') {
+    // We are missing error.code information at this point. Will have to make `message` more informative
   }
   return (
     <>

@@ -1,4 +1,4 @@
-import type {Z} from '@openint/util/zod-utils'
+import type {Z, zZodIssue} from '@openint/util/zod-utils'
 import type {
   DefaultErrorShape,
   ErrorFormatter,
@@ -15,10 +15,9 @@ import {safeJSONParse} from '@openint/util/json-utils'
 import {isZodError, z, zZodIssues} from '@openint/util/zod-utils'
 
 /** For testing. Consider exporting from /trpc route instead? */
-export {TRPCError, initTRPC} from '@trpc/server'
 export {TRPCClientError} from '@trpc/client'
+export {initTRPC, TRPCError} from '@trpc/server'
 export {fetchRequestHandler} from '@trpc/server/adapters/fetch'
-
 
 export const zErrorCode = z
   .enum(
@@ -109,6 +108,7 @@ export function parseAPIError(error: unknown): APIError | undefined {
 // MARK: - Router / server side
 
 type ZodIssue = Z.infer<typeof zZodIssue>
+
 export interface ErrorShape extends DefaultErrorShape {
   issues?: ZodIssue[]
   output_issues?: ZodIssue[]
@@ -157,4 +157,9 @@ export const onError: RouterCallerErrorHandler<unknown> = ({
   if (isInputError) {
     Object.assign(error, {message: 'Input validation failed'})
   }
+  // for client side error handling
+  console.log('onError', error)
+  Object.assign(error, {
+    message: `[${error.code}] ${error.message}`,
+  })
 }
