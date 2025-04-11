@@ -13,12 +13,17 @@ export default {
     token_request_url: 'https://www.linkedin.com/oauth/v2/accessToken',
     scope_separator: ' ',
     params_config: {},
-    openint_scopes: ['r_liteprofile'],
+    openint_scopes: ['profile', 'email', 'openid'],
     scopes: [
       {
-        scope: 'r_liteprofile',
+        scope: 'profile',
         description:
           "Provides access to the member's basic profile information including name, photo, headline, and current positions. This is a limited subset of profile data compared to 'r_basicprofile'.",
+      },
+      {
+        scope: 'openid',
+        description:
+          'Enables user authentication and allows the application to receive a unique identifier for the user. This scope is required for OpenID Connect authentication flows and provides basic identity information about the authenticated user.',
       },
       {
         scope: 'r_basicprofile',
@@ -26,7 +31,7 @@ export default {
           "Provides access to the member's full basic profile including experience, education, skills, and recommendations. More extensive than 'r_liteprofile' but doesn't include sensitive information.",
       },
       {
-        scope: 'r_emailaddress',
+        scope: 'email',
         description:
           "Provides access to the member's primary email address. Requires explicit member consent as it's considered sensitive information.",
       },
