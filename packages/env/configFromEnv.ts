@@ -53,3 +53,26 @@ export function getBaseURLs(opts: GetServerUrlOptions | null | undefined) {
     connect: `${serverUrl}/connect`,
   }
 }
+
+// Too bad we typed routes are not working with turbopack...
+const ROUTES = {
+  console: {
+    '/': '/',
+    signIn: '/sign-in',
+    signUp: '/sign-up',
+    signOut: '/sign-out',
+  },
+  connect: {
+    '/': '/',
+    callback: '/callback',
+  },
+}
+
+export function getURL<G extends keyof typeof ROUTES>(
+  route: G,
+  path: keyof (typeof ROUTES)[G],
+) {
+  return `${route}${ROUTES[route][path]}`
+}
+
+getURL('connect', 'callback')

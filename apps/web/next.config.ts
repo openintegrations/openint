@@ -108,6 +108,9 @@ const nextConfig = {
 
   // MARK: - Wtrubo pack and webpack configs...
   experimental: {
+    // Not compatible with turbopack for now...
+    // typedRoutes: true,
+    typedEnv: true,
     turbo: {
       // Define rules for file transformations (similar to webpack loaders)
       rules: {
@@ -115,6 +118,8 @@ const nextConfig = {
         '*.node': {loaders: ['node-loader']},
       },
     },
+    // TODO: Turn it on soon as we have a chance
+    // reactCompiler: true
   },
   webpack: (config) => {
     config.module.exprContextCritical = false
