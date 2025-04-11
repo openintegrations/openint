@@ -1,6 +1,5 @@
 import type {Z} from '@openint/util/zod-utils'
-import {throwError} from '@openint/events/errors'
-import {infoFromZodError} from '@openint/util/zod-utils'
+import {rethrowZodError} from '@openint/events/errors'
 
 /* eslint-disable promise/no-nesting */
 
@@ -28,17 +27,17 @@ export async function parsePageProps<
     props.params.then(
       (params): Z.infer<ZParams> =>
         schema.params
-          ? schema.params.parseAsync(params).catch((e) => {
-              throwError('PATH_PARAMS_ERROR', infoFromZodError(e))
-            })
+          ? schema.params
+              .parseAsync(params)
+              .catch(rethrowZodError('Path params not matching schema'))
           : params,
     ),
     props.searchParams.then(
       (searchParams): Z.infer<ZSearchParams> =>
         schema.searchParams
-          ? schema.searchParams.parseAsync(searchParams).catch((e) => {
-              throwError('SEARCH_PARAMS_ERROR', infoFromZodError(e))
-            })
+          ? schema.searchParams
+              .parseAsync(searchParams)
+              .catch(rethrowZodError('Search params not matching schema'))
           : searchParams,
     ),
   ])

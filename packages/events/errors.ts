@@ -7,7 +7,7 @@ import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {titleCase} from '@openint/util/string-utils'
-import {z} from '@openint/util/zod-utils'
+import {infoFromZodError, isZodError, z} from '@openint/util/zod-utils'
 import {errorMap, errorMessageMap, trpcErrorMap} from './errors.def'
 
 export const zErrorCode = z.enum(Object.keys(errorMap) as [ErrorCode])
@@ -41,7 +41,7 @@ export type DiscriminatedError<TCode extends ErrorCode = ErrorCode> = Extract<
   {code: TCode}
 >
 
-// MARK: - Primary functions to interact with errors
+// MARK: - Core functions to interact with errors
 
 export function makeError<TCode extends ErrorCode>(
   code: TCode,
@@ -127,3 +127,17 @@ export const Err = {
 }
 
 export default Err
+
+// MARK: - Other helpers
+
+export function rethrowZodError(message?: string) {
+  return (error: unknown) => {
+    if (isZodError(error)) {
+      throw makeError('SCHEMA_VALIDATION_ERROR', {
+        ...infoFromZodError(error),
+        message,
+      })
+    }
+    throw error
+  }
+}

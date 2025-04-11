@@ -15,7 +15,11 @@ export const trpcErrorMap = R.mapValues(TRPC_ERROR_CODES_BY_KEY, () => ({
 export const errorMap = {
   ...trpcErrorMap,
   UNKNOWN_ERROR: {message: z.string().optional()},
-  SCHEMA_VALIDATION_ERROR: zZodErrorInfo.shape,
+  INVARIANT_ERROR: {message: z.string().optional()},
+  SCHEMA_VALIDATION_ERROR: {
+    message: z.string().optional(),
+    ...zZodErrorInfo.shape,
+  },
   PATH_PARAMS_ERROR: zZodErrorInfo.shape,
   SEARCH_PARAMS_ERROR: zZodErrorInfo.shape,
 } satisfies Record<string, Z.ZodRawShape>
@@ -24,7 +28,8 @@ export const errorMap = {
 export const errorMessageMap = {
   UNKNOWN_ERROR: (data) =>
     ['An unknown error has occurred', data.message].filter(Boolean).join(': '),
-  SCHEMA_VALIDATION_ERROR: 'Data failed to validate against schema',
+  SCHEMA_VALIDATION_ERROR: (data) =>
+    data.message ?? 'Data failed to validate against schema',
   PATH_PARAMS_ERROR: 'Path params did not match schema',
   SEARCH_PARAMS_ERROR: 'Search params did not match schema',
 } satisfies ErrorMessageMap
