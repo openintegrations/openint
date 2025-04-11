@@ -35,7 +35,7 @@ export async function parsePageProps<
                 }),
               })
               .catch((e) => {
-                throwError('PATH_PARAM_VALIDATION_ERROR', infoFromZodError(e))
+                throwError('PATH_PARAMS_ERROR', infoFromZodError(e))
               })
           : params,
     ),
@@ -45,10 +45,7 @@ export async function parsePageProps<
           ? schema.searchParams
               .parseAsync(searchParams)
               .catch((e) =>
-                throwError(
-                  'SEARCH_PARAM_VALIDATION_ERROR',
-                  infoFromZodError(e),
-                ),
+                throwError('SEARCH_PARAMS_ERROR', infoFromZodError(e)),
               )
           : searchParams,
     ),

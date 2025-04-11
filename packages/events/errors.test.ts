@@ -1,6 +1,12 @@
 import {describe, expect, test} from '@jest/globals'
 import {TRPCError} from '@trpc/server'
-import {isError, makeError, parseError} from './errors'
+import Err, {
+  formatError,
+  isError,
+  makeError,
+  parseError,
+  throwError,
+} from './errors'
 
 describe('makeError', () => {
   test('creates a TRPC error with correct properties', () => {
@@ -145,5 +151,66 @@ describe('isError', () => {
 
     expect(isError(error, 'UNKNOWN_ERROR')).toBe(true)
     expect(isError(error, 'BAD_REQUEST')).toBe(false)
+  })
+})
+
+describe('formatError', () => {
+  test('formats UNKNOWN_ERROR correctly', () => {
+    const error = makeError('UNKNOWN_ERROR', {message: 'Something went wrong'})
+    const formatted = formatError(error)
+
+    expect(formatted).toBe('An unknown error has occurred')
+  })
+
+  test('formats PATH_PARAMS_ERROR correctly', () => {
+    const error = makeError('PATH_PARAMS_ERROR', {
+      issues: [{path: ['id'], message: 'Required', code: 'invalid_type'}],
+      description: 'Validation failed',
+      json_schema: {},
+    })
+    const formatted = formatError(error)
+
+    expect(formatted).toBe('Path params did not match schema')
+  })
+
+  test('formats SEARCH_PARAMS_ERROR correctly', () => {
+    const error = makeError('SEARCH_PARAMS_ERROR', {
+      issues: [{path: ['filter'], message: 'Required', code: 'invalid_type'}],
+      description: 'Validation failed',
+      json_schema: {},
+    })
+    const formatted = formatError(error)
+
+    expect(formatted).toBe('Search params did not match schema')
+  })
+
+  test('formats BAD_REQUEST correctly', () => {
+    const error = makeError('BAD_REQUEST', {message: 'Invalid input'})
+    const formatted = formatError(error)
+
+    // Since BAD_REQUEST is not in the errorMessageMap, it should use titleCase
+    expect(formatted).toBe('Bad Request')
+  })
+
+  test('formats NOT_FOUND correctly', () => {
+    const error = Err.make('NOT_FOUND', {message: 'Resource not found'})
+    const formatted = Err.format(error)
+
+    // Since NOT_FOUND is not in the errorMessageMap, it should use titleCase
+    expect(formatted).toBe('Not Found')
+  })
+})
+
+describe('throwError', () => {
+  test('throws a TRPC error correctly', () => {
+    expect(() => Err.throw('BAD_REQUEST', {message: 'Invalid input'})).toThrow(
+      TRPCError,
+    )
+  })
+
+  test('throws a custom error correctly', () => {
+    expect(() =>
+      throwError('UNKNOWN_ERROR', {message: 'Something went wrong'}),
+    ).toThrow(Error)
   })
 })

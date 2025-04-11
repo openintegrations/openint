@@ -19,6 +19,8 @@ export {TRPCClientError} from '@trpc/client'
 export {initTRPC, TRPCError} from '@trpc/server'
 export {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 
+// TODO: Consolidate this with errors.ts for a single, unified error experience
+
 export const zErrorCode = z
   .enum(
     Object.keys(TRPC_ERROR_CODES_BY_KEY) as [
