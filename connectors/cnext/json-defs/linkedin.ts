@@ -23,7 +23,7 @@ export default {
       {
         scope: 'openid',
         description:
-          "Provides access to the member's basic profile information including name, photo, headline, and current positions.",
+          'Enables user authentication and allows the application to receive a unique identifier for the user. This scope is required for OpenID Connect authentication flows and provides basic identity information about the authenticated user.',
       },
       {
         scope: 'r_basicprofile',

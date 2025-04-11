@@ -4994,7 +4994,9 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-linkedin.svg",
     "name": "linkedin",
     "openint_scopes": [
-      "r_liteprofile",
+      "profile",
+      "email",
+      "openid",
     ],
     "platforms": undefined,
     "schemas": {
@@ -5167,7 +5169,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "scopes": [
       {
         "description": "Provides access to the member's basic profile information including name, photo, headline, and current positions. This is a limited subset of profile data compared to 'r_basicprofile'.",
-        "scope": "r_liteprofile",
+        "scope": "profile",
       },
       {
         "description": "Provides access to the member's full basic profile including experience, education, skills, and recommendations. More extensive than 'r_liteprofile' but doesn't include sensitive information.",
@@ -5175,7 +5177,11 @@ exports[`db: pglite list connectors with schemas 1`] = `
       },
       {
         "description": "Provides access to the member's primary email address. Requires explicit member consent as it's considered sensitive information.",
-        "scope": "r_emailaddress",
+        "scope": "email",
+      },
+      {
+        "description": "Enables user authentication and allows the application to receive a unique identifier for the user. This scope is required for OpenID Connect authentication flows and provides basic identity information about the authenticated user.",
+        "scope": "openid",
       },
       {
         "description": "Allows the application to post, comment, and like posts on behalf of the member. Also enables sharing content to LinkedIn.",
@@ -7371,6 +7377,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
     "name": "sharepointonline",
     "openint_scopes": [
       "offline_access",
+      "openid",
     ],
     "platforms": undefined,
     "schemas": {
@@ -7544,6 +7551,10 @@ exports[`db: pglite list connectors with schemas 1`] = `
       {
         "description": "Allows the application to request refresh tokens, which can be used to obtain new access tokens without user interaction. This enables the application to maintain access to resources even when the user is not actively using the application.",
         "scope": "offline_access",
+      },
+      {
+        "description": "Enables user authentication and allows the application to receive a unique identifier for the user. This scope is required for OpenID Connect authentication flows and provides basic identity information about the authenticated user.",
+        "scope": "openid",
       },
     ],
     "stage": "ga",
