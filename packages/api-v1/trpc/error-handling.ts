@@ -67,29 +67,29 @@ export function parseAPIError(error: unknown): APIError | undefined {
   if (error instanceof TRPCError) {
     const cause = isZodError(error.cause) ? error.cause : undefined
     const isOutputError = error.message === 'Output validation failed'
-    return zAPIError.parse(
-      {
+    const data = {
+      code: error.code,
+      message: error.message,
+      data: {
         code: error.code,
-        message: error.message,
-        data: {
-          code: error.code,
-          httpStatus: JSONRPC2_TO_HTTP_CODE[error.code],
-          path: (error as any).path,
-          stack: error.stack,
-        },
-        issues: isOutputError ? undefined : cause?.errors,
-        input: isOutputError ? undefined : cause?.data,
-        output_issues: isOutputError ? cause?.errors : undefined,
-        output: isOutputError ? cause?.data : undefined,
+        httpStatus: JSONRPC2_TO_HTTP_CODE[error.code],
+        path: (error as any).path,
+        stack: error.stack,
       },
-      {
+      issues: isOutputError ? undefined : cause?.errors,
+      input: isOutputError ? undefined : cause?.data,
+      output_issues: isOutputError ? cause?.errors : undefined,
+      output: isOutputError ? cause?.data : undefined,
+    }
+    return (
+      zAPIError.safeParse(data, {
         errorMap: (_, ctx) => {
           console.warn(
             'Did you forget to add custom onError handler when using trpcRouter?',
           )
           return {message: ctx.defaultError}
         },
-      },
+      }).data ?? data
     )
   }
 
