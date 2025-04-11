@@ -30,6 +30,7 @@ import {ConnectCallbackClient} from './page.client'
 const zOauthCallbackSearchParams = z.object({
   code: z.string(),
   state: z.string(),
+  // connector_name: z.enum(['hi', 'there']),
 })
 
 // TODO: Dedupe this with cnext

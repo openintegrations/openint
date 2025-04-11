@@ -1,17 +1,25 @@
+import type {Z, zZodIssue} from '@openint/util/zod-utils'
+import type {
+  DefaultErrorShape,
+  ErrorFormatter,
+  RouterCallerErrorHandler,
+} from '@trpc/server/unstable-core-do-not-import'
 import {TRPCClientError} from '@trpc/client'
 import {TRPCError} from '@trpc/server'
 import {
   TRPC_ERROR_CODES_BY_KEY,
   TRPC_ERROR_CODES_BY_NUMBER,
 } from '@trpc/server/rpc'
-import {
-  ErrorFormatter,
-  JSONRPC2_TO_HTTP_CODE,
-  type DefaultErrorShape,
-  type RouterCallerErrorHandler,
-} from '@trpc/server/unstable-core-do-not-import'
+import {JSONRPC2_TO_HTTP_CODE} from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
-import {isZodError, z, type Z} from '@openint/util/zod-utils'
+import {isZodError, z, zZodIssues} from '@openint/util/zod-utils'
+
+/** For testing. Consider exporting from /trpc route instead? */
+export {TRPCClientError} from '@trpc/client'
+export {initTRPC, TRPCError} from '@trpc/server'
+export {fetchRequestHandler} from '@trpc/server/adapters/fetch'
+
+// TODO: Consolidate this with errors.ts for a single, unified error experience
 
 export const zErrorCode = z
   .enum(
@@ -31,16 +39,6 @@ export const zHTTPStatus = z
   .refine((n) => n >= 100 && n < 600, 'Invalid HTTP status')
   .openapi({ref: 'HTTPStatus'})
 
-export const zZodIssue = z
-  .object({
-    code: z.string().describe('Zod issue code'),
-    expected: z.string().optional().describe('Expected type'),
-    received: z.string().optional().describe('Received type'),
-    path: z.array(z.string()).describe('JSONPath to the error'),
-    message: z.string().describe('Error message'),
-  })
-  .openapi({ref: 'ZodIssue'})
-
 export const zAPIError = z
   .object({
     code: zErrorCode,
@@ -55,10 +53,10 @@ export const zAPIError = z
       .optional(),
     /** Input issues */
     input: z.unknown().optional(),
-    issues: z.array(zZodIssue).optional(),
+    issues: zZodIssues.optional(),
     /** Output issues */
     output: z.unknown().optional(),
-    output_issues: z.array(zZodIssue).optional(),
+    output_issues: zZodIssues.optional(),
   })
   .openapi({ref: 'APIError'})
 
@@ -71,29 +69,29 @@ export function parseAPIError(error: unknown): APIError | undefined {
   if (error instanceof TRPCError) {
     const cause = isZodError(error.cause) ? error.cause : undefined
     const isOutputError = error.message === 'Output validation failed'
-    return zAPIError.parse(
-      {
+    const data = {
+      code: error.code,
+      message: error.message,
+      data: {
         code: error.code,
-        message: error.message,
-        data: {
-          code: error.code,
-          httpStatus: JSONRPC2_TO_HTTP_CODE[error.code],
-          path: (error as any).path,
-          stack: error.stack,
-        },
-        issues: isOutputError ? undefined : cause?.errors,
-        input: isOutputError ? undefined : cause?.data,
-        output_issues: isOutputError ? cause?.errors : undefined,
-        output: isOutputError ? cause?.data : undefined,
+        httpStatus: JSONRPC2_TO_HTTP_CODE[error.code],
+        path: (error as any).path,
+        stack: error.stack,
       },
-      {
+      issues: isOutputError ? undefined : cause?.errors,
+      input: isOutputError ? undefined : cause?.data,
+      output_issues: isOutputError ? cause?.errors : undefined,
+      output: isOutputError ? cause?.data : undefined,
+    }
+    return (
+      zAPIError.safeParse(data, {
         errorMap: (_, ctx) => {
           console.warn(
             'Did you forget to add custom onError handler when using trpcRouter?',
           )
           return {message: ctx.defaultError}
         },
-      },
+      }).data ?? data
     )
   }
 
@@ -112,6 +110,7 @@ export function parseAPIError(error: unknown): APIError | undefined {
 // MARK: - Router / server side
 
 type ZodIssue = Z.infer<typeof zZodIssue>
+
 export interface ErrorShape extends DefaultErrorShape {
   issues?: ZodIssue[]
   output_issues?: ZodIssue[]
@@ -139,18 +138,22 @@ export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
   }
 }
 
+export interface RouterContextOnError {
+  prefixCodeToErrorMessage?: boolean
+}
+
 /**
  * TRPCError does not have path, so we need to add it in order to normalize it
  * properly for parseAPIError
  *
  * This only works for the direct createCaller pattern though.
  */
-export const onError: RouterCallerErrorHandler<unknown> = ({
+export const onError: RouterCallerErrorHandler<RouterContextOnError> = ({
   error,
   path,
   // input,
-  // ctx,
   // type,
+  ctx,
 }) => {
   // Consider adding input and context to make error even more accurate
   // console.log('onError', {error, path, input, ctx, type})
@@ -159,5 +162,12 @@ export const onError: RouterCallerErrorHandler<unknown> = ({
   const isInputError = safeJSONParse(error.message) != null
   if (isInputError) {
     Object.assign(error, {message: 'Input validation failed'})
+  }
+  // for client side error handling
+  // console.log('onError', error)
+  if (ctx?.prefixCodeToErrorMessage) {
+    Object.assign(error, {
+      message: `[${error.code}] ${error.message}`,
+    })
   }
 }

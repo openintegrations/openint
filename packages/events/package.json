@@ -6,9 +6,11 @@
   "scripts": {},
   "dependencies": {
     "@openint/cdk": "workspace:*",
-    "@openint/util": "workspace:*"
+    "@openint/util": "workspace:*",
+    "@trpc/server": "^11.0.1"
   },
   "devDependencies": {
-    "inngest": "^3.22.13"
+    "inngest": "^3.22.13",
+    "@jest/globals": "^29.7.0"
   }
 }
