@@ -70,7 +70,7 @@ export async function formatConnection(
   if (!connector) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: `Connector not found for connection ${connection.id}`,
+      message: `Connector not found for connection ${connection['id']}`,
     })
   }
 

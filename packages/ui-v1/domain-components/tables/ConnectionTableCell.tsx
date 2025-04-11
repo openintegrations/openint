@@ -69,8 +69,8 @@ export function ConnectionTableCell({
       onMouseMove={handleMouseMove}
       {...props}>
       {logo}
-      {connection.id && (
-        <CopyID value={connection.id} size="compact" width="auto" />
+      {connection['id'] && (
+        <CopyID value={String(connection['id'])} size="compact" width="auto" />
       )}
     </div>
   )
@@ -98,19 +98,11 @@ export function ConnectionTableCell({
               pointerEvents: 'auto',
             }}>
             <div className="bg-popover w-[480px] overflow-hidden rounded-md border p-0 shadow-md">
-              {status}
-              {/* TODO: @santi fix this one accordingly */}
-              {/* <ConnectionCardContent
+              <ConnectionCardContent
                 connection={connection}
-                status={connectionStatus}
+                status={status as any}
                 category={connection.connector_name}
-                platform={platform}
-                authMethod={
-                  authMethod ||
-                  (connection.settings?.oauth ? 'oauth' : 'apikey')
-                }
-                version={version}
-              /> */}
+              />
             </div>
           </div>
         </div>
