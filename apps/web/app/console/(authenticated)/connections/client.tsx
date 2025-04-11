@@ -1,12 +1,13 @@
 'use client'
 
-import React, {useMemo, useState} from 'react'
 import type {AppRouterOutput} from '@openint/api-v1'
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
+import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
+import React, {useMemo, useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CommandPopover, ConnectionTableCell, CopyID} from '@openint/ui-v1'
-import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
+import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {formatIsoDateString} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/app/GlobalCommandBarProvider'
@@ -16,12 +17,18 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {
     id: 'id',
     header: 'id',
-    cell: ({row}) => (
-      <ConnectionTableCell
-        connection={row.original}
-        logo_url={row.original?.connector?.logo_url}
-      />
-    ),
+    cell: ({row}) => {
+      const connection = row.original
+
+      // Pass only what we have to ConnectionTableCell
+      return (
+        <ConnectionTableCell
+          connection={connection}
+          // We don't have status from listConnections API, would need to call checkConnection
+          // to get the actual status for each connection
+        />
+      )
+    },
   },
   {
     id: 'connector_name',
@@ -169,6 +176,16 @@ export function ConnectionsPage(props: {
                         </h4>
                         <CopyID
                           value={selectedConnection.connector_config_id || ''}
+                          width="100%"
+                          size="medium"
+                        />
+                      </div>
+                      <div>
+                        <h4 className="text-muted-foreground mb-1 text-sm font-medium">
+                          Customer ID
+                        </h4>
+                        <CopyID
+                          value={selectedConnection.customer_id || ''}
                           width="100%"
                           size="medium"
                         />
