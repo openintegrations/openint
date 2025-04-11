@@ -52,7 +52,7 @@ describe('parseError', () => {
     const originalError = makeError('BAD_REQUEST', {message: 'Invalid input'})
     const parsedError = parseError(originalError)
 
-    expect(parsedError.name).toBe('BAD_REQUEST')
+    expect(parsedError.code).toBe('BAD_REQUEST')
     expect(parsedError.data).toEqual({message: 'Invalid input'})
   })
 
@@ -62,7 +62,7 @@ describe('parseError', () => {
     })
     const parsedError = parseError(originalError)
 
-    expect(parsedError.name).toBe('UNKNOWN_ERROR')
+    expect(parsedError.code).toBe('UNKNOWN_ERROR')
     expect(parsedError.data).toEqual({message: 'Something went wrong'})
   })
 
@@ -74,7 +74,7 @@ describe('parseError', () => {
     })
     const parsedError = parseError(originalError)
 
-    expect(parsedError.name).toBe('SCHEMA_VALIDATION_ERROR')
+    expect(parsedError.code).toBe('SCHEMA_VALIDATION_ERROR')
     expect(parsedError.data).toEqual({
       issues: [{path: ['field'], message: 'Required', code: 'invalid_type'}],
       description: 'Validation failed',
@@ -85,14 +85,14 @@ describe('parseError', () => {
   test('handles non-object errors', () => {
     const parsedError = parseError('String error')
 
-    expect(parsedError.name).toBe('UNKNOWN_ERROR')
+    expect(parsedError.code).toBe('UNKNOWN_ERROR')
     expect(parsedError.data).toEqual({message: 'String error'})
   })
 
   test('handles null errors', () => {
     const parsedError = parseError(null)
 
-    expect(parsedError.name).toBe('UNKNOWN_ERROR')
+    expect(parsedError.code).toBe('UNKNOWN_ERROR')
     expect(parsedError.data).toEqual({message: 'null'})
   })
 
@@ -101,7 +101,7 @@ describe('parseError', () => {
     const errorWithDigest = {...error, digest: 'abc123'}
     const parsedError = parseError(errorWithDigest)
 
-    expect(parsedError.name).toBe('BAD_REQUEST')
+    expect(parsedError.code).toBe('BAD_REQUEST')
     expect(parsedError.data).toEqual({message: 'Invalid input'})
     expect(parsedError.digest).toBe('abc123')
   })
@@ -111,7 +111,7 @@ describe('parseError', () => {
     error.name = 'BAD_REQUEST'
     const parsedError = parseError(error)
 
-    expect(parsedError.name).toBe('BAD_REQUEST')
+    expect(parsedError.code).toBe('BAD_REQUEST')
     expect(parsedError.data).toEqual({message: 'Invalid input'})
   })
 
@@ -123,7 +123,7 @@ describe('parseError', () => {
     const parsedError = parseError(error)
     console.log(parsedError)
 
-    expect(parsedError.name).toBe('NOT_FOUND')
+    expect(parsedError.code).toBe('NOT_FOUND')
     expect(parsedError.data).toEqual({
       message: 'Once upon a time in a land far far away',
     })

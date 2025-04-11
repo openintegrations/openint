@@ -31,10 +31,10 @@ export const errorMessageMap = {
 
 // MARK: - Type exports
 
-export type ErrorName = keyof typeof errorMap
+export type ErrorCode = keyof typeof errorMap
 
 export type ErrorMessageMap = Partial<{
-  [k in ErrorName]:
+  [k in ErrorCode]:
     | string
     | ((data: Z.infer<Z.ZodObject<(typeof errorMap)[k]>>) => string)
 }>

@@ -1,7 +1,7 @@
 // Errors should be thought of nothing but events as well.
-// To be handled just like any other. With a name and schema.
+// To be handled just like any other. With a code and schema.
 
-import type {ErrorMessageMap, ErrorName} from './errors.def'
+import type {ErrorCode, ErrorMessageMap} from './errors.def'
 import type {NonEmptyArray} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
@@ -10,24 +10,25 @@ import {titleCase} from '@openint/util/string-utils'
 import {z} from '@openint/util/zod-utils'
 import {errorMap, errorMessageMap, trpcErrorMap} from './errors.def'
 
-export const zErrorName = z.enum(Object.keys(errorMap) as [ErrorName])
+export const zErrorCode = z.enum(Object.keys(errorMap) as [ErrorCode])
 
 export const zDiscriminatedError = z.intersection(
   z.object({
     /** nextjs error digest for collelating server side log with error displayed to client */
     digest: z.string().optional(),
+    environmentName: z.string().optional(),
   }),
   z.discriminatedUnion(
-    'name',
-    Object.entries(errorMap).map(([name, shape]) =>
+    'code',
+    Object.entries(errorMap).map(([code, shape]) =>
       z.object({
-        name: z.literal(name),
+        code: z.literal(code),
         data: z.object(shape),
       }),
     ) as unknown as NonEmptyArray<
       {
         [k in keyof typeof errorMap]: Z.ZodObject<{
-          name: Z.ZodLiteral<k>
+          code: Z.ZodLiteral<k>
           data: Z.ZodObject<(typeof errorMap)[k]>
         }>
       }[keyof typeof errorMap]
@@ -35,35 +36,35 @@ export const zDiscriminatedError = z.intersection(
   ),
 )
 
-export type DiscriminatedError<TName extends ErrorName = ErrorName> = Extract<
+export type DiscriminatedError<TCode extends ErrorCode = ErrorCode> = Extract<
   Z.infer<typeof zDiscriminatedError>,
-  {name: TName}
+  {code: TCode}
 >
 
 // MARK: - Primary functions to interact with errors
 
-export function makeError<TName extends ErrorName>(
-  name: TName,
-  data: DiscriminatedError<TName>['data'],
+export function makeError<TCode extends ErrorCode>(
+  code: TCode,
+  data: DiscriminatedError<TCode>['data'],
 ) {
-  const schema = errorMap[name]
+  const schema = errorMap[code]
   const parsedData = z.object(schema).parse(data)
   const message = JSON.stringify(parsedData, null, 2)
 
   // Perhaps change to a unknown erro here if it does not pass validation?
   const err =
-    name in trpcErrorMap
-      ? new TRPCError({code: name as keyof typeof trpcErrorMap, message})
+    code in trpcErrorMap
+      ? new TRPCError({code: code as keyof typeof trpcErrorMap, message})
       : new Error(message)
-  Object.assign(err, {name, data})
-  return err as unknown as Error & DiscriminatedError<TName>
+  Object.assign(err, {name: code, code, data})
+  return err as unknown as Error & DiscriminatedError<TCode>
 }
 
-export function throwError<TName extends ErrorName>(
-  name: TName,
-  data: DiscriminatedError<TName>['data'],
+export function throwError<TCode extends ErrorCode>(
+  code: TCode,
+  data: DiscriminatedError<TCode>['data'],
 ) {
-  throw makeError(name, data)
+  throw makeError(code, data)
 }
 
 /**
@@ -72,46 +73,48 @@ export function throwError<TName extends ErrorName>(
  */
 export function parseError(error: unknown): DiscriminatedError {
   if (typeof error !== 'object' || error == null) {
-    return {name: 'UNKNOWN_ERROR', data: {message: String(error)}}
+    return {code: 'UNKNOWN_ERROR', data: {message: String(error)}}
   }
 
   const err = error as {
-    code?: unknown
     name?: unknown
+    code?: unknown
     message?: string
     data?: unknown
     digest?: string
+    environmentName?: string
   }
   const parsed = zDiscriminatedError.safeParse({
     // Shall we be more explicit about the different conditions? We handle
     // 1) discriminated error 2) discriminated error with data in JSON message 3) manually constructed trpc error
-    name: err.code ?? err.name,
+    code: err.code ?? err.name,
     data: err.data ?? safeJSONParse(err.message) ?? {message: err.message},
     digest: err.digest,
+    environmentName: err.environmentName,
   })
 
   if (parsed.success) {
     return parsed.data
   }
 
-  return {name: 'UNKNOWN_ERROR', data: {message: String(error as unknown)}}
+  return {code: 'UNKNOWN_ERROR', data: {message: String(error as unknown)}}
 }
 
-export function isError<TName extends ErrorName>(
+export function isError<TCode extends ErrorCode>(
   error: unknown,
-  name?: TName,
-): error is DiscriminatedError<TName> {
-  return parseError(error).name === name
+  code?: TCode,
+): error is DiscriminatedError<TCode> {
+  return parseError(error).code === code
 }
 
 export function formatError(error: DiscriminatedError) {
-  const msgOrFn = (errorMessageMap as ErrorMessageMap)[error.name]
+  const msgOrFn = (errorMessageMap as ErrorMessageMap)[error.code]
 
   const message =
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     typeof msgOrFn === 'function' ? msgOrFn(error.data as any) : msgOrFn
 
-  return message ?? titleCase(error.name)
+  return message ?? titleCase(error.code)
 }
 
 /** unified export. Not sure if it's nice yet but maybe worth a try? */

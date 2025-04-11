@@ -11,8 +11,15 @@
 // left corner of the screen instead.
 import * as Sentry from '@sentry/nextjs'
 import React from 'react'
-import {parseError} from '@openint/events/errors'
-import {Button} from '@openint/shadcn/ui'
+import {formatError, parseError} from '@openint/events/errors'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Button,
+} from '@openint/shadcn/ui'
+import {FullScreenCenter, Icon} from '@openint/ui-v1'
 
 export type PageError = Error & {
   /**
@@ -56,29 +63,37 @@ export default function DefaultPageError({error, reset}: PageErrorProps) {
     Sentry.captureException(error)
   }, [error])
 
-  return (
-    <div className="space-y-4 p-4">
-      <h2 className="text-2xl font-bold">Something went wrong!</h2>
-      <RenderError error={error} />
-      <pre>
-        Digest: {error.digest} in {error.environmentName}
-      </pre>
-      {reset && <Button onClick={reset}>Try again</Button>}
-    </div>
-  )
-}
-
-/** TODO: Leverage parseAPIError in addition */
-function RenderError({error}: Pick<PageErrorProps, 'error'>) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   ;(window as any).error = error
   const err = parseError(error)
   ;(window as any).err = err
 
   return (
-    <>
-      <h2 className="font-mono text-xl">{err.name}</h2>
-      <pre>{JSON.stringify(err.data, null, 2)}</pre>
-    </>
+    <FullScreenCenter className="justify-start pt-10">
+      <div className="flex max-w-xl flex-col gap-4 p-4">
+        <h2 className="text-2xl font-bold">{formatError(err)}</h2>
+        {reset && (
+          <Button className="self-center" onClick={reset}>
+            <Icon name="RefreshCcw" className="mr-2 h-4 w-4" />
+            Retry
+          </Button>
+        )}
+        <p>
+          If issue persists, please contact support with the following
+          identifier{' '}
+          <span className="font-mono">
+            {err.environmentName}:{error.digest}
+          </span>
+        </p>
+        <Accordion type="single" collapsible>
+          <AccordionItem value="details">
+            <AccordionTrigger>Details</AccordionTrigger>
+            <AccordionContent>
+              <pre>{JSON.stringify(err, null, 2)}</pre>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </FullScreenCenter>
   )
 }
