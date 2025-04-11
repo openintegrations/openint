@@ -1,7 +1,6 @@
 /* eslint-disable promise/no-nesting */
-import type {Z, ZodErrorEnriched} from '@openint/util/zod-utils'
-import {R} from '@openint/util/remeda'
-import {zodToOas31Schema} from '@openint/util/schema'
+import type {Z} from '@openint/util/zod-utils'
+import {throwErr} from './errors'
 
 /** Maybe there is a next.js type for this? */
 export type PageProps<
@@ -53,26 +52,4 @@ export async function parsePageProps<
     params,
     searchParams,
   }
-}
-
-// TODO: Consider if we should make this more like events.ts that maps from error / code to error schema
-export const Errors = {
-  ParamValidation: (zodError: ZodErrorEnriched, message?: string) =>
-    JSON.stringify({
-      message,
-      ...R.omit(zodError, ['schema', 'name', 'message']),
-    }),
-}
-
-export type ErrorName = `${keyof typeof Errors}Error`
-
-function throwErr<TName extends keyof typeof Errors>(
-  name: TName,
-  ...args: Parameters<(typeof Errors)[TName]>
-): never {
-  // @ts-expect-error not sure how to fix this, but it works at runtiem
-  const message = Errors[name](...args)
-  const err = new Error(message)
-  err.name = `${name}Error`
-  throw err
 }
