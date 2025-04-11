@@ -36,7 +36,7 @@ export async function parsePageProps<
       (searchParams): Z.infer<ZSearchParams> =>
         schema.searchParams
           ? schema.searchParams.parseAsync(searchParams, {
-              errorMap: (issue, ctx) => ({
+              errorMap: (_, ctx) => ({
                 message: `Error parsing searchParams: ${ctx.defaultError}`,
               }),
             })

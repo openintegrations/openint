@@ -91,6 +91,7 @@ export const envConfig = {
     CRON_SECRET: process.env['CRON_SECRET'],
     REFRESH_CONNECTION_CONCURRENCY:
       process.env['REFRESH_CONNECTION_CONCURRENCY'],
+    OAUTH_REDIRECT_URI_GATEWAY: process.env['OAUTH_REDIRECT_URI_GATEWAY'],
     // JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
   }),
