@@ -1,8 +1,11 @@
+import type {Core} from '../models'
+import type {ConnectorName} from './connector.models'
+import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
-import {z, type Z} from '@openint/util/zod-utils'
-import {Core, core} from '../models'
-import {getConnectorModelByName, type ConnectorName} from './connector.models'
+import {z} from '@openint/util/zod-utils'
+import {core} from '../models'
+import {getConnectorModelByName} from './connector.models'
 
 export const zIncludeSecrets = z
   .enum(['none', 'basic', 'all'])
@@ -35,20 +38,21 @@ export const zConnectionExpanded = z
     core.connection_select,
     z.object({
       connector: core.connector.optional(),
+      // TODO(@openint-box): ensure this exists
+      status: zConnectionStatus.optional(),
+      integration: core.integration_select.optional(),
     }),
   )
   .describe('The connection details')
 
-/**
- * Strips sensitive OAuth credentials from a credentials object
- */
-export function stripSensitiveOauthCredentials(credentials: any) {
-  return {
-    ...credentials,
-    refresh_token: undefined,
-    raw: undefined,
-  }
-}
+// TODO: Add these into connection expanded
+// interface ConnectionRelations {
+//   connector_config: Core['connector_config_select']
+//   customer: Core['customer_select']
+//   connector: Core['connector']
+//   integration: Core['integration_select']
+// }
+export type ConnectionExpanded = Z.infer<typeof zConnectionExpanded>
 
 /**
  * Formats a connection for API responses
@@ -64,7 +68,7 @@ export async function formatConnection(
   if (!connector) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: `Connector not found for connection ${connection.id}`,
+      message: `Connector not found for connection ${connection['id']}`,
     })
   }
 
