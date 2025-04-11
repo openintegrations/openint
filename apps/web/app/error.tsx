@@ -11,6 +11,7 @@
 // left corner of the screen instead.
 import * as Sentry from '@sentry/nextjs'
 import React from 'react'
+import {parseError} from '@openint/events/errors'
 import {Button} from '@openint/shadcn/ui'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {zZodErrorInfo} from '@openint/util/zod-utils'
@@ -73,28 +74,13 @@ export default function DefaultPageError({error, reset}: PageErrorProps) {
 function RenderError({error}: Pick<PageErrorProps, 'error'>) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   ;(window as any).error = error
-  const errorJson = safeJSONParse(error.message)
-  if (error.name === 'ZodError') {
-    const err = zZodErrorInfo.safeParse(errorJson).data
-    return (
-      <>
-        <h2 className="font-mono text-xl">ZodError</h2>
-        <pre>{JSON.stringify(err, null, 2)}</pre>
-      </>
-    )
-  } else if (error.name === 'TRPCError') {
-    // We are missing error.code information at this point. Will have to make `message` more informative
-  } else if (error.name === 'TRPCClientError') {
-    // We are missing error.code information at this point. Will have to make `message` more informative
-  }
+  const err = parseError(error)
+  ;(window as any).err = err
+
   return (
     <>
-      <h2 className="font-mono text-xl">{error.name}</h2>
-      {errorJson ? (
-        <pre>{JSON.stringify(errorJson, null, 2)}</pre>
-      ) : (
-        <p>{error.message}</p>
-      )}
+      <h2 className="font-mono text-xl">{err?.name}</h2>
+      {err?.data ? <pre>{JSON.stringify(err.data, null, 2)}</pre> : null}
     </>
   )
 }

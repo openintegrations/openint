@@ -27,7 +27,7 @@ function makeZod() {
         const issues = JSON.parse(msg)
         return JSON.stringify(
           // json_schema is not included because it can be too long to display
-          R.omit(zodErrorInfo({...this, issues}), ['json_schema']),
+          R.omit(infoFromZodError({...this, issues}), ['json_schema']),
           null,
           2,
         )
@@ -89,7 +89,7 @@ export const zZodErrorInfo = z.object({
   json_schema: z.unknown(),
 })
 
-export function zodErrorInfo(err: ZodErrorEnriched) {
+export function infoFromZodError(err: ZodErrorEnriched) {
   const openapi = err.schema._def.zodOpenApi?.openapi
   const description = err.schema.description
   const jsonSchema = zodToOas31Schema(err.schema)

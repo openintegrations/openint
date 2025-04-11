@@ -1,6 +1,8 @@
-/* eslint-disable promise/no-nesting */
 import type {Z} from '@openint/util/zod-utils'
-import {throwErr} from './errors'
+import {throwError} from '@openint/events/errors'
+import {infoFromZodError} from '@openint/util/zod-utils'
+
+/* eslint-disable promise/no-nesting */
 
 /** Maybe there is a next.js type for this? */
 export type PageProps<
@@ -33,7 +35,7 @@ export async function parsePageProps<
                 }),
               })
               .catch((e) => {
-                throwErr('ParamValidation', e, 'Invalid path params')
+                throwError('PATH_PARAM_VALIDATION_ERROR', infoFromZodError(e))
               })
           : params,
     ),
@@ -43,7 +45,10 @@ export async function parsePageProps<
           ? schema.searchParams
               .parseAsync(searchParams)
               .catch((e) =>
-                throwErr('ParamValidation', e, 'Invalid search params'),
+                throwError(
+                  'SEARCH_PARAM_VALIDATION_ERROR',
+                  infoFromZodError(e),
+                ),
               )
           : searchParams,
     ),
