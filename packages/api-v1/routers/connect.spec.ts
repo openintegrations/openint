@@ -1,11 +1,12 @@
-import Elysia from 'elysia'
 import type {CustomerId, Viewer} from '@openint/cdk'
+import type {Z} from '@openint/util/zod-utils'
+import Elysia from 'elysia'
 import {oauth2Schemas} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
+import {env} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
-import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
 import {trpc} from '../trpc/_base'
 import {routerContextFromViewer} from '../trpc/context'
@@ -30,7 +31,7 @@ const configOauth = {
   client_id: 'client_222',
   client_secret: 'xxx',
   scopes: ['scope1', 'scope2'],
-  redirect_uri: 'http://localhost:3000/connect/callback',
+
   // should contain whether server requires pkce
 } satisfies Z.infer<typeof oauth2Schemas.connector_config>['oauth']
 
@@ -40,7 +41,7 @@ const _oauth2Server = createOAuth2Server({
       id: configOauth.client_id,
       name: configOauth.client_id,
       secret: configOauth.client_secret,
-      redirectUris: [configOauth.redirect_uri],
+      redirectUris: [env.OAUTH_REDIRECT_URI_GATEWAY],
       allowedGrants: [
         'authorization_code',
         'refresh_token',
@@ -56,9 +57,7 @@ const _oauth2Server = createOAuth2Server({
   authCodes: [],
 })
 
-const oauth2Server = new Elysia({prefix: '/api/acme-oauth2'}).use(
-  _oauth2Server,
-)
+const oauth2Server = new Elysia({prefix: '/api/acme-oauth2'}).use(_oauth2Server)
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   /** Preferred approach */
@@ -124,7 +123,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(response.status).toBe(302)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const url = new URL(response.headers.get('Location')!)
-      expect(url.pathname).toBe('/connect/callback')
+      expect(url.pathname).toContain('/callback')
 
       return z
         .object({
