@@ -1,44 +1,14 @@
 // Errors should be thought of nothing but events as well.
 // To be handled just like any other. With a name and schema.
 
+import type {ErrorMessageMap, ErrorName} from './errors.def'
 import type {NonEmptyArray} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
-import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {safeJSONParse} from '@openint/util/json-utils'
-import {R} from '@openint/util/remeda'
 import {titleCase} from '@openint/util/string-utils'
-import {z, zZodErrorInfo} from '@openint/util/zod-utils'
-
-// MARK: - Definitions
-
-const trpcErrorMap = R.mapValues(TRPC_ERROR_CODES_BY_KEY, () => ({
-  message: z.string(),
-}))
-
-export const errorMap = {
-  ...trpcErrorMap,
-  UNKNOWN_ERROR: {message: z.string()},
-  SCHEMA_VALIDATION_ERROR: zZodErrorInfo.shape,
-  PATH_PARAMS_ERROR: zZodErrorInfo.shape,
-  SEARCH_PARAMS_ERROR: zZodErrorInfo.shape,
-} satisfies Record<string, Z.ZodRawShape>
-
-export type ErrorName = keyof typeof errorMap
-
-type ErrorMessageMap = Partial<{
-  [k in ErrorName]: string | ((data: DiscriminatedError<k>['data']) => string)
-}>
-
-/** This is where we can internationalize easily if needed */
-export const errorMessageMap = {
-  UNKNOWN_ERROR: 'An unknown error has occurred',
-  SCHEMA_VALIDATION_ERROR: 'Data failed to validate against schema',
-  PATH_PARAMS_ERROR: 'Path params did not match schema',
-  SEARCH_PARAMS_ERROR: 'Search params did not match schema',
-} satisfies ErrorMessageMap
-
-// MARK: - Helpers
+import {z} from '@openint/util/zod-utils'
+import {errorMap, errorMessageMap, trpcErrorMap} from './errors.def'
 
 export const zErrorName = z.enum(Object.keys(errorMap) as [ErrorName])
 
@@ -96,7 +66,7 @@ export function throwError<TName extends ErrorName>(
   throw makeError(name, data)
 }
 
-/** 
+/**
  * Should probably be named parsePlainError to distinguish from parseAPIError related logic
  * that try to transform errors we did not "make" into plain error to then be parsed
  */

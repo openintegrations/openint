@@ -156,7 +156,7 @@ describe('isError', () => {
 
 describe('formatError', () => {
   test('formats UNKNOWN_ERROR correctly', () => {
-    const error = makeError('UNKNOWN_ERROR', {message: 'Something went wrong'})
+    const error = makeError('UNKNOWN_ERROR', {})
     const formatted = formatError(error)
 
     expect(formatted).toBe('An unknown error has occurred')
