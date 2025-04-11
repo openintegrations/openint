@@ -28,25 +28,17 @@ export async function parsePageProps<
     props.params.then(
       (params): Z.infer<ZParams> =>
         schema.params
-          ? schema.params
-              .parseAsync(params, {
-                errorMap: (_, ctx) => ({
-                  message: `Error parsing params: ${ctx.defaultError}`,
-                }),
-              })
-              .catch((e) => {
-                throwError('PATH_PARAMS_ERROR', infoFromZodError(e))
-              })
+          ? schema.params.parseAsync(params).catch((e) => {
+              throwError('PATH_PARAMS_ERROR', infoFromZodError(e))
+            })
           : params,
     ),
     props.searchParams.then(
       (searchParams): Z.infer<ZSearchParams> =>
         schema.searchParams
-          ? schema.searchParams
-              .parseAsync(searchParams)
-              .catch((e) =>
-                throwError('SEARCH_PARAMS_ERROR', infoFromZodError(e)),
-              )
+          ? schema.searchParams.parseAsync(searchParams).catch((e) => {
+              throwError('SEARCH_PARAMS_ERROR', infoFromZodError(e))
+            })
           : searchParams,
     ),
   ])
