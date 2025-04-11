@@ -7,6 +7,7 @@ import {z, zZodErrorInfo} from '@openint/util/zod-utils'
 // To be handled just like any other. With a name and schema.
 
 export const errorMap = {
+  UNKNOWN_ERROR: {message: z.string()},
   SCHEMA_VALIDATION_ERROR: zZodErrorInfo.shape,
   PATH_PARAM_VALIDATION_ERROR: zZodErrorInfo.shape,
   SEARCH_PARAM_VALIDATION_ERROR: zZodErrorInfo.shape,
@@ -25,13 +26,13 @@ export const zDiscriminatedError = z.intersection(
     Object.entries(errorMap).map(([name, shape]) =>
       z.object({
         name: z.literal(name),
-        data: z.object({message: z.string().optional()}).extend(shape),
+        data: z.object(shape),
       }),
     ) as unknown as NonEmptyArray<
       {
         [k in keyof typeof errorMap]: Z.ZodObject<{
           name: Z.ZodLiteral<k>
-          data: Z.ZodObject<{message?: Z.ZodString} & (typeof errorMap)[k]>
+          data: Z.ZodObject<(typeof errorMap)[k]>
         }>
       }[keyof typeof errorMap]
     >,
@@ -56,13 +57,11 @@ export function throwError<TName extends ErrorName>(
   throw err
 }
 
-export function parseError<TName extends ErrorName>(
-  error: unknown,
-  name?: TName,
-): DiscriminatedError<TName> | null {
+export function parseError(error: unknown): AllDiscriminatedError {
   if (typeof error !== 'object' || error == null) {
-    return null
+    return {name: 'UNKNOWN_ERROR', data: {message: String(error)}}
   }
+
   const err = error as {
     name?: unknown
     message?: string
@@ -75,16 +74,17 @@ export function parseError<TName extends ErrorName>(
     digest: err.digest,
   })
 
-  if (!parsed.success || (name && name !== parsed.data.name)) {
-    return null
-  }
-
-  return parsed.data as DiscriminatedError<TName>
+  return (
+    parsed.data ?? {
+      name: 'UNKNOWN_ERROR',
+      data: {message: String(err as unknown)},
+    }
+  )
 }
 
 export function isError<TName extends ErrorName>(
   error: unknown,
   name?: TName,
 ): error is DiscriminatedError<TName> {
-  return parseError(error, name) != null
+  return parseError(error).name === name
 }

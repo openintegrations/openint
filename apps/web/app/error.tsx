@@ -13,8 +13,6 @@ import * as Sentry from '@sentry/nextjs'
 import React from 'react'
 import {parseError} from '@openint/events/errors'
 import {Button} from '@openint/shadcn/ui'
-import {safeJSONParse} from '@openint/util/json-utils'
-import {zZodErrorInfo} from '@openint/util/zod-utils'
 
 export type PageError = Error & {
   /**
@@ -79,8 +77,8 @@ function RenderError({error}: Pick<PageErrorProps, 'error'>) {
 
   return (
     <>
-      <h2 className="font-mono text-xl">{err?.name}</h2>
-      {err?.data ? <pre>{JSON.stringify(err.data, null, 2)}</pre> : null}
+      <h2 className="font-mono text-xl">{err.name}</h2>
+      <pre>{JSON.stringify(err.data, null, 2)}</pre>
     </>
   )
 }
