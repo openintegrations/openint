@@ -40,6 +40,7 @@ export interface PageErrorProps {
 
 /** TODO: Leverage parseAPIError in addition */
 function RenderError({error}: Pick<PageErrorProps, 'error'>) {
+  ;(window as any).error = error
   if (error.name === 'ZodError') {
     const err = zZodErrorEnriched.safeParse(safeJSONParse(error.message)).data
     return (
@@ -49,7 +50,12 @@ function RenderError({error}: Pick<PageErrorProps, 'error'>) {
       </>
     )
   }
-  return <p>{error.message}</p>
+  return (
+    <>
+      <h2 className="font-mono text-xl">{error.name}</h2>
+      <p>{error.message}</p>
+    </>
+  )
 }
 
 /** @see https://nextjs.org/docs/app/api-reference/file-conventions/error */

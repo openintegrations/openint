@@ -14,6 +14,12 @@ import {JSONRPC2_TO_HTTP_CODE} from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {isZodError, z, zZodIssues} from '@openint/util/zod-utils'
 
+/** For testing. Consider exporting from /trpc route instead? */
+export {TRPCError, initTRPC} from '@trpc/server'
+export {TRPCClientError} from '@trpc/client'
+export {fetchRequestHandler} from '@trpc/server/adapters/fetch'
+
+
 export const zErrorCode = z
   .enum(
     Object.keys(TRPC_ERROR_CODES_BY_KEY) as [
