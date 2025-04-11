@@ -5172,16 +5172,16 @@ exports[`db: pglite list connectors with schemas 1`] = `
         "scope": "profile",
       },
       {
+        "description": "Enables user authentication and allows the application to receive a unique identifier for the user. This scope is required for OpenID Connect authentication flows and provides basic identity information about the authenticated user.",
+        "scope": "openid",
+      },
+      {
         "description": "Provides access to the member's full basic profile including experience, education, skills, and recommendations. More extensive than 'r_liteprofile' but doesn't include sensitive information.",
         "scope": "r_basicprofile",
       },
       {
         "description": "Provides access to the member's primary email address. Requires explicit member consent as it's considered sensitive information.",
         "scope": "email",
-      },
-      {
-        "description": "Enables user authentication and allows the application to receive a unique identifier for the user. This scope is required for OpenID Connect authentication flows and provides basic identity information about the authenticated user.",
-        "scope": "openid",
       },
       {
         "description": "Allows the application to post, comment, and like posts on behalf of the member. Also enables sharing content to LinkedIn.",
