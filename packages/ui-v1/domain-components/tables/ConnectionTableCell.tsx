@@ -1,10 +1,8 @@
 'use client'
 
-import type {StatusType} from '../../components/StatusDot'
-import type {Core} from '@openint/api-v1/models'
 import Image from 'next/image'
 import React, {useState} from 'react'
-import {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
+import type {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {CopyID} from '../../components/CopyID'
 import {ConnectionCardContent} from '../ConnectionsCardView'
@@ -23,7 +21,6 @@ export function ConnectionTableCell({
   ...props
 }: ConnectionTableCellProps) {
   const logoUrl = connection.connector?.logo_url
-  const status = connection.status
 
   const [open, setOpen] = useState(false)
   const [coords, setCoords] = useState({x: 0, y: 0})
@@ -100,8 +97,6 @@ export function ConnectionTableCell({
             <div className="bg-popover w-[480px] overflow-hidden rounded-md border p-0 shadow-md">
               <ConnectionCardContent
                 connection={connection}
-                status={status as any}
-                category={connection.connector_name}
               />
             </div>
           </div>

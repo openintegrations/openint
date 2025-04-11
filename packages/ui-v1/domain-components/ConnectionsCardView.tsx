@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import {useMemo, useState} from 'react'
-import {Core} from '@openint/api-v1/models'
+import type {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Badge,
@@ -18,37 +18,18 @@ import type {StatusType} from '../components/StatusDot'
 import {getConnectorLogoUrl} from '../utils/images'
 
 export interface ConnectionCardProps {
-  connection: Core['connection_select']
-  status: StatusType
-  category?: string
-  platform?: string
-  authMethod?: string
-  version?: string
+  connection: ConnectionExpanded
   children?: React.ReactNode
   className?: string
 }
 
 export function ConnectionCardContent({
   connection,
-  status = 'offline',
-  category,
-  platform,
-  authMethod,
-  version,
 }: ConnectionCardProps) {
   const customerId = connection.customer_id
   const connectorConfigId = connection.connector_config_id || ''
 
-  const effectiveCategory = category || connection.connector_name || 'Unknown'
-  const effectiveAuthMethod =
-    authMethod ||
-    (connection.settings?.oauth
-      ? 'oauth'
-      : connection.settings?.apikey
-        ? 'apikey'
-        : 'Unknown')
-  const effectivePlatform = platform || 'Desktop'
-  const effectiveVersion = version || 'V1'
+  const effectiveCategory = connection.connector_name || 'Unknown'
 
   const connectorName = connection.connector_name || 'Unknown Connector'
   const displayName =
@@ -78,6 +59,7 @@ export function ConnectionCardContent({
     }
   }
 
+  const status = (connection.status || 'offline') as StatusType
   const statusInfo = getStatusInfo(status)
 
   const properties = useMemo(() => {
@@ -143,9 +125,10 @@ export function ConnectionCardContent({
               {statusInfo.label}
             </Badge>
           </div>
-          <div className="text-sm text-gray-500">
+          {/* TODO: Add platform and version */}
+          {/* <div className="text-sm text-gray-500">
             {effectivePlatform} · {effectiveAuthMethod} · v{effectiveVersion}
-          </div>
+          </div> */}
         </div>
       </div>
       <Separator />
@@ -158,11 +141,6 @@ export function ConnectionCardContent({
 
 export function ConnectionsCardView({
   connection,
-  status = 'offline',
-  category,
-  platform,
-  authMethod,
-  version,
   children,
   className,
 }: ConnectionCardProps) {
@@ -204,11 +182,6 @@ export function ConnectionsCardView({
         sideOffset={5}>
         <ConnectionCardContent
           connection={connection}
-          status={status}
-          category={category}
-          platform={platform}
-          authMethod={authMethod}
-          version={version}
         />
       </PopoverContent>
     </Popover>

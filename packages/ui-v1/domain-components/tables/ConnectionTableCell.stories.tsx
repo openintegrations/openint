@@ -23,28 +23,6 @@ const meta: Meta<typeof ConnectionTableCell> = {
       control: 'boolean',
       description: 'Whether to show the logo',
     },
-    logo_url: {
-      control: 'text',
-      description: 'URL for the logo image',
-    },
-    status: {
-      control: 'select',
-      options: ['healthy', 'warning', 'offline', 'destructive'],
-      description: 'Status of the connection',
-    },
-    platform: {
-      control: 'text',
-      description: 'Platform information',
-    },
-    version: {
-      control: 'text',
-      description: 'Version information',
-    },
-    authMethod: {
-      control: 'select',
-      options: ['oauth', 'apikey'],
-      description: 'Authentication method used',
-    },
   },
 }
 
@@ -54,7 +32,5 @@ type Story = StoryObj<typeof ConnectionTableCell>
 export const Default: Story = {
   args: {
     connection: FIXTURES.connections['hubspot-basic'],
-    logo_url: '/_assets/logo-greenhouse.svg',
-    status: 'healthy',
   },
 }
