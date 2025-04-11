@@ -40,6 +40,7 @@ export const envConfig = {
     // Secret for cron jobs
     CRON_SECRET: z.string().optional(),
     REFRESH_CONNECTION_CONCURRENCY: z.coerce.number().optional().default(3),
+    PORT: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -48,6 +49,18 @@ export const envConfig = {
       .optional()
       .describe(
         'In case API is deployed separately from the main server or there is a reverse proxy in front',
+      ),
+    NEXT_PUBLIC_CONSOLE_URL: z
+      .string()
+      .optional()
+      .describe(
+        'In case console is deployed separately from the main server or there is a reverse proxy in front',
+      ),
+    NEXT_PUBLIC_CONNECT_URL: z
+      .string()
+      .optional()
+      .describe(
+        'In case connect is deployed separately from the main server or there is a reverse proxy in front',
       ),
     NEXT_PUBLIC_NANGO_PUBLIC_KEY: z.string().optional(),
     // Where the app is running. Only used by getServerUrl at the moment
@@ -65,7 +78,10 @@ export const envConfig = {
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
+    NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
+    NEXT_PUBLIC_CONSOLE_URL: process.env['NEXT_PUBLIC_CONSOLE_URL'],
+    NEXT_PUBLIC_CONNECT_URL: process.env['NEXT_PUBLIC_CONNECT_URL'],
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: process.env['NEXT_PUBLIC_COMMANDBAR_ORG_ID'],
     NEXT_PUBLIC_SENTRY_DSN: process.env['NEXT_PUBLIC_SENTRY_DSN'],
     NEXT_PUBLIC_SENTRY_ORG: process.env['NEXT_PUBLIC_SENTRY_ORG'],
@@ -82,7 +98,6 @@ export const envConfig = {
     INNGEST_SIGNING_KEY: process.env['INNGEST_SIGNING_KEY'],
     NEXT_PUBLIC_NANGO_PUBLIC_KEY: process.env['NEXT_PUBLIC_NANGO_PUBLIC_KEY'],
     NEXT_PUBLIC_PORT: process.env['NEXT_PUBLIC_PORT'],
-    NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
     DATABASE_URL: process.env['DATABASE_URL'],
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
     VERCEL_URL: process.env['VERCEL_URL'],
@@ -94,6 +109,7 @@ export const envConfig = {
     OAUTH_REDIRECT_URI_GATEWAY: process.env['OAUTH_REDIRECT_URI_GATEWAY'],
     // JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
+    PORT: process.env['PORT'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 

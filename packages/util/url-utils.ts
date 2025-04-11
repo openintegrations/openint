@@ -43,3 +43,9 @@ export function joinPath(...optionalParts: Array<string | null | undefined>) {
     .filter((p) => !!p) // Removes duplicate `//`
     .join('/')}${trailing}`
 }
+
+export function trimTrailingSlash<T extends string | undefined | null>(
+  path: T,
+): T {
+  return path?.replace(/\/+$/, '') as T
+}
