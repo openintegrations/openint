@@ -3,6 +3,7 @@ import zod, {ZodError} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
 import {compact} from './array-utils'
 import {R} from './remeda'
+import {zodToOas31Schema} from './schema'
 
 const DANGEROUSLY_ENABLE_ZOD_INPUT_DEBUG =
   process.env['DANGEROUSLY_ENABLE_ZOD_INPUT_DEBUG'] === 'true'
@@ -21,15 +22,12 @@ function makeZod() {
     }
     Object.defineProperty(zod.ZodError.prototype, 'message', {
       get() {
+        // We do this to take advanrage of the better zod custom replacer
         const msg = orgMessage.call(this)
-        // We do this to prevent data from being too long to display
         const issues = JSON.parse(msg)
-        // const jsonSchema = zodToOas31Schema(this.schema)
-        // This can sometimes be too long to display, so never mind for now
-        const schema = this.schema as Z.ZodType
-        const openapi = schema._def.zodOpenApi?.openapi
         return JSON.stringify(
-          {issues, data: this.data, openapi, description: schema.description},
+          // json_schema is not included because it can be too long to display
+          R.omit(infoFromZodError({...this, issues}), ['json_schema']),
           null,
           2,
         )
@@ -64,11 +62,52 @@ function makeZod() {
 }
 
 export type {Z}
-export type ZodErrorWithData<T = unknown> = Z.ZodError & {data: T}
 
 export const z = makeZod()
 
-export function isZodError<T>(error: unknown): error is ZodErrorWithData<T> {
+export const zZodIssue = z
+  .object({
+    /** Could be better typed ehre... */
+    code: z.string().describe('Zod issue code'),
+    expected: z.unknown().optional().describe('Expected type'),
+    received: z.unknown().optional().describe('Received type'),
+    path: z
+      .array(z.union([z.string(), z.number()]))
+      .describe('JSONPath to the error'),
+    message: z.string().describe('Error message'),
+    fatal: z.boolean().optional().describe('Whether the error is fatal'),
+  })
+  .openapi({ref: 'ZodIssue'})
+
+export const zZodIssues = z.array(zZodIssue).openapi({ref: 'ZodIssues'})
+
+export const zZodErrorInfo = z.object({
+  issues: zZodIssues,
+  openapi: z.object({ref: z.string()}).partial().optional(),
+  data: z.unknown().optional(),
+  description: z.string().optional(),
+  json_schema: z.unknown(),
+})
+
+export function infoFromZodError(err: ZodErrorEnriched) {
+  const openapi = err.schema._def.zodOpenApi?.openapi
+  const description = err.schema.description
+  const jsonSchema = zodToOas31Schema(err.schema)
+  return {
+    description,
+    issues: err.issues,
+    data: err.data,
+    openapi,
+    json_schema: jsonSchema,
+  } satisfies Z.infer<typeof zZodErrorInfo>
+}
+
+export type ZodErrorEnriched<T = unknown> = Z.ZodError & {
+  data: T
+  schema: Z.ZodType<T>
+}
+
+export function isZodError<T>(error: unknown): error is ZodErrorEnriched<T> {
   if (error instanceof ZodError) {
     if (DANGEROUSLY_ENABLE_ZOD_INPUT_DEBUG && !('data' in error)) {
       console.error('No data found in ZodError. Did you z from makeZod', error)

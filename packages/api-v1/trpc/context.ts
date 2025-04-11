@@ -1,6 +1,8 @@
-import {asOrgIfCustomer, resolveViewer, type Viewer} from '@openint/cdk'
+import type {Viewer} from '@openint/cdk'
 import type {AnyDatabase, AnyDrizzle} from '@openint/db/db'
+import {asOrgIfCustomer, resolveViewer} from '@openint/cdk'
 import {viewerFromRequest} from './authentication'
+import {RouterContextOnError} from './error-handling'
 
 export interface ViewerContext<T extends Viewer = Viewer> {
   viewer: T
@@ -14,7 +16,8 @@ interface RouterContextExtra {
 
 export interface RouterContext<T extends Viewer = Viewer>
   extends ViewerContext<T>,
-    RouterContextExtra {
+    RouterContextExtra,
+    RouterContextOnError {
   as: (viewer: Viewer) => ViewerContext
   /** Elevates the role to org if the viewer is a customer to allow access to org data */
   asOrgIfCustomer: ViewerContext
