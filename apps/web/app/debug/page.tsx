@@ -1,4 +1,5 @@
 import type {PageProps} from '@/lib-common/next-utils'
+import type {RouterContextOnError} from '@openint/api-v1/trpc/error-handling'
 import {
   errorFormatter,
   fetchRequestHandler,
@@ -10,7 +11,7 @@ import {createTRPCClient, httpLink} from '@openint/ui-v1/trpc'
 import {z} from '@openint/util/zod-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
 
-const trpc = initTRPC.create({errorFormatter})
+const trpc = initTRPC.context<RouterContextOnError>().create({errorFormatter})
 
 const router = trpc.router({
   errorTest: trpc.procedure
@@ -54,27 +55,19 @@ const router = trpc.router({
     }),
 })
 
-const handleTrpcRequest = (req: Request) =>
-  fetchRequestHandler({router, endpoint: '/', req, onError})
+// modify TRPCError in case of direct callling
+const caller = router.createCaller({prefixCodeToErrorMessage: true}, {onError})
 
-// Object.defineProperty(TRPCError.prototype, 'message', {
-//   get() {
-//     const msg = orgMessage.call(this)
-//     // We do this to prevent data from being too long to display
-//     const issues = JSON.parse(msg)
-//     // const jsonSchema = zodToOas31Schema(this.schema)
-//     // This can sometimes be too long to display, so never mind for now
-//     const schema = this.schema as Z.ZodType
-//     const openapi = schema._def.zodOpenApi?.openapi
-//     return JSON.stringify(
-//       {issues, data: this.data, openapi, description: schema.description},
-//       null,
-//       2,
-//     )
-//   },
-//   configurable: true,
-//   enumerable: true,
-// })
+// handle TRPCError in case of of calling via client. This is probably not relevant
+// as we never use this pattern in server components directly
+const handleTrpcRequest = (req: Request) =>
+  fetchRequestHandler({
+    router,
+    endpoint: '/',
+    req,
+    onError,
+    createContext: () => ({prefixCodeToErrorMessage: true}),
+  })
 
 export default async function DebugPage(pageProps: PageProps) {
   const {searchParams} = await parsePageProps(pageProps, {
@@ -92,9 +85,10 @@ export default async function DebugPage(pageProps: PageProps) {
     ],
   })
 
-  const caller = router.createCaller({}, {onError})
-
   if (searchParams.type === 'TRPCError') {
+    // if we throw a TRPCError directly, it will not go through onError
+    // and therefore code will not be prefixed and this information will be lost
+    // by the time we get to the client side
     throw new TRPCError({
       code: 'NOT_IMPLEMENTED',
       message: 'This is a test TRPC Server Error',

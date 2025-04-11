@@ -136,18 +136,22 @@ export const errorFormatter: ErrorFormatter<unknown, DefaultErrorShape> = (
   }
 }
 
+export interface RouterContextOnError {
+  prefixCodeToErrorMessage?: boolean
+}
+
 /**
  * TRPCError does not have path, so we need to add it in order to normalize it
  * properly for parseAPIError
  *
  * This only works for the direct createCaller pattern though.
  */
-export const onError: RouterCallerErrorHandler<unknown> = ({
+export const onError: RouterCallerErrorHandler<RouterContextOnError> = ({
   error,
   path,
   // input,
-  // ctx,
   // type,
+  ctx,
 }) => {
   // Consider adding input and context to make error even more accurate
   // console.log('onError', {error, path, input, ctx, type})
@@ -158,8 +162,10 @@ export const onError: RouterCallerErrorHandler<unknown> = ({
     Object.assign(error, {message: 'Input validation failed'})
   }
   // for client side error handling
-  console.log('onError', error)
-  Object.assign(error, {
-    message: `[${error.code}] ${error.message}`,
-  })
+  // console.log('onError', error)
+  if (ctx?.prefixCodeToErrorMessage) {
+    Object.assign(error, {
+      message: `[${error.code}] ${error.message}`,
+    })
+  }
 }
