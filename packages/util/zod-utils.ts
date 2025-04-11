@@ -64,11 +64,34 @@ function makeZod() {
 }
 
 export type {Z}
-export type ZodErrorWithData<T = unknown> = Z.ZodError & {data: T}
 
 export const z = makeZod()
 
-export function isZodError<T>(error: unknown): error is ZodErrorWithData<T> {
+export const zZodIssue = z
+  .object({
+    code: z.string().describe('Zod issue code'),
+    expected: z.string().optional().describe('Expected type'),
+    received: z.string().optional().describe('Received type'),
+    path: z.array(z.string()).describe('JSONPath to the error'),
+    message: z.string().describe('Error message'),
+  })
+  .openapi({ref: 'ZodIssue'})
+
+export const zZodIssues = z.array(zZodIssue).openapi({ref: 'ZodIssues'})
+
+export const zZodErrorEnriched = z.object({
+  issues: zZodIssues,
+  openapi: z.object({ref: z.string()}).partial().optional(),
+  data: z.unknown().optional(),
+  description: z.string().optional(),
+}) /** satiesfies Z.ZodError */
+
+export type ZodErrorEnriched<T = unknown> = Omit<
+  Z.infer<typeof zZodErrorEnriched>,
+  'data'
+> & {data: T}
+
+export function isZodError<T>(error: unknown): error is ZodErrorEnriched<T> {
   if (error instanceof ZodError) {
     if (DANGEROUSLY_ENABLE_ZOD_INPUT_DEBUG && !('data' in error)) {
       console.error('No data found in ZodError. Did you z from makeZod', error)

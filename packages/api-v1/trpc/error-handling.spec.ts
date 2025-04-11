@@ -3,7 +3,7 @@ import {initTRPC, TRPCError} from '@trpc/server'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {createOpenApiFetchHandler, type OpenApiMeta} from 'trpc-to-openapi'
-import {z, ZodErrorWithData} from '@openint/util/zod-utils'
+import {z, ZodErrorEnriched} from '@openint/util/zod-utils'
 import {errorFormatter, onError, parseAPIError} from './error-handling'
 
 const trpc = initTRPC.meta<OpenApiMeta>().create({errorFormatter})
@@ -396,7 +396,7 @@ describe('TRPC caller', () => {
     expect(err.code).toEqual('BAD_REQUEST')
     expect(err.message).toEqual('Input validation failed')
     expect(err.stack).toEqual(expect.any(String))
-    const cause = err.cause as ZodErrorWithData
+    const cause = err.cause as ZodErrorEnriched
     expect(cause).toBeInstanceOf(z.ZodError)
 
     expect(cause.errors).toEqual([
@@ -433,7 +433,7 @@ describe('TRPC caller', () => {
     expect(err.message).toEqual('Output validation failed')
     expect(err.stack).toEqual(expect.any(String))
     // expect(err.cause).toBeInstanceOf(TRPCError)
-    const cause = err.cause as ZodErrorWithData
+    const cause = err.cause as ZodErrorEnriched
     expect(cause).toBeInstanceOf(z.ZodError)
     expect(cause.errors).toEqual([
       {

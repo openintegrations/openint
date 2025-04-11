@@ -27,10 +27,13 @@ import {z} from '@openint/util/zod-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {ConnectCallbackClient} from './page.client'
 
-const zOauthCallbackSearchParams = z.object({
-  code: z.string(),
-  state: z.string(),
-})
+const zOauthCallbackSearchParams = z
+  .object({
+    code: z.string(),
+    state: z.string(),
+    // connector_name: z.enum(['hi', 'there']),
+  })
+  .openapi({ref: 'OauthCallbackSearchParams'})
 
 // TODO: Dedupe this with cnext
 const zOauthState = z.object({

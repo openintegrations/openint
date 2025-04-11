@@ -1,5 +1,4 @@
 /* eslint-disable promise/no-nesting */
-import {TRPCError} from '@openint/api-v1'
 import type {Z} from '@openint/util/zod-utils'
 
 /** Maybe there is a next.js type for this? */
@@ -23,28 +22,26 @@ export async function parsePageProps<
   },
 ) {
   const [params, searchParams] = await Promise.all([
-    props.params.then((params): Z.infer<ZParams> => {
-      if (schema.params) {
-        return schema.params.parseAsync(params).catch((err) => {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: `BadRequest: page params ${err}`,
-          })
-        })
-      }
-      return params
-    }),
-    props.searchParams.then((searchParams): Z.infer<ZSearchParams> => {
-      if (schema.searchParams) {
-        return schema.searchParams.parseAsync(searchParams).catch((err) => {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: `BadRequest: page searchParams ${err}`,
-          })
-        })
-      }
-      return searchParams
-    }),
+    props.params.then(
+      (params): Z.infer<ZParams> =>
+        schema.params
+          ? schema.params.parseAsync(params, {
+              errorMap: (_, ctx) => ({
+                message: `Error parsing params: ${ctx.defaultError}`,
+              }),
+            })
+          : params,
+    ),
+    props.searchParams.then(
+      (searchParams): Z.infer<ZSearchParams> =>
+        schema.searchParams
+          ? schema.searchParams.parseAsync(searchParams, {
+              errorMap: (issue, ctx) => ({
+                message: `Error parsing searchParams: ${ctx.defaultError}`,
+              }),
+            })
+          : searchParams,
+    ),
   ])
   return {
     params,

@@ -1,17 +1,18 @@
+import type {Z} from '@openint/util/zod-utils'
+import type {
+  DefaultErrorShape,
+  ErrorFormatter,
+  RouterCallerErrorHandler,
+} from '@trpc/server/unstable-core-do-not-import'
 import {TRPCClientError} from '@trpc/client'
 import {TRPCError} from '@trpc/server'
 import {
   TRPC_ERROR_CODES_BY_KEY,
   TRPC_ERROR_CODES_BY_NUMBER,
 } from '@trpc/server/rpc'
-import {
-  ErrorFormatter,
-  JSONRPC2_TO_HTTP_CODE,
-  type DefaultErrorShape,
-  type RouterCallerErrorHandler,
-} from '@trpc/server/unstable-core-do-not-import'
+import {JSONRPC2_TO_HTTP_CODE} from '@trpc/server/unstable-core-do-not-import'
 import {safeJSONParse} from '@openint/util/json-utils'
-import {isZodError, z, type Z} from '@openint/util/zod-utils'
+import {isZodError, z, zZodIssues} from '@openint/util/zod-utils'
 
 export const zErrorCode = z
   .enum(
@@ -31,16 +32,6 @@ export const zHTTPStatus = z
   .refine((n) => n >= 100 && n < 600, 'Invalid HTTP status')
   .openapi({ref: 'HTTPStatus'})
 
-export const zZodIssue = z
-  .object({
-    code: z.string().describe('Zod issue code'),
-    expected: z.string().optional().describe('Expected type'),
-    received: z.string().optional().describe('Received type'),
-    path: z.array(z.string()).describe('JSONPath to the error'),
-    message: z.string().describe('Error message'),
-  })
-  .openapi({ref: 'ZodIssue'})
-
 export const zAPIError = z
   .object({
     code: zErrorCode,
@@ -55,10 +46,10 @@ export const zAPIError = z
       .optional(),
     /** Input issues */
     input: z.unknown().optional(),
-    issues: z.array(zZodIssue).optional(),
+    issues: zZodIssues.optional(),
     /** Output issues */
     output: z.unknown().optional(),
-    output_issues: z.array(zZodIssue).optional(),
+    output_issues: zZodIssues.optional(),
   })
   .openapi({ref: 'APIError'})
 
