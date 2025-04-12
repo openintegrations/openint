@@ -1,6 +1,7 @@
+import type {PageProps} from '@/lib-common/next-utils'
+
 import {Suspense} from 'react'
 import {ConfigureConnect} from '@/blocks/ConfigureConnect'
-import type {PageProps} from '@/lib-common/next-utils'
 import {currentViewer} from '@/lib-server/auth.server'
 import {ClientApp} from '../client'
 

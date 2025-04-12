@@ -221,9 +221,9 @@ export type PathsOfProp<
   TDepth extends number = 0,
 > = V extends unknown
   ? {
-      0: `${string & P}`
+      0: string & P
       1:
-        | `${string & P}`
+        | (string & P)
         | `${string & P}.${PathsOfObject<
             V,
             V | TSelf,

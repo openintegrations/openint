@@ -1,5 +1,7 @@
+import type {AnyConnectorImpl} from '@openint/cdk'
+
 import {TRPCError} from '@trpc/server'
-import {AnyConnectorImpl, oauthBaseSchema} from '@openint/cdk'
+import {oauthBaseSchema} from '@openint/cdk'
 
 export function injectDefaultCredentials(
   connector: AnyConnectorImpl,

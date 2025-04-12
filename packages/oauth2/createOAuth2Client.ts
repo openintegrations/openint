@@ -1,7 +1,8 @@
+import type {Z} from '@openint/util/zod-utils'
+
 import {safeJSONParse} from '@openint/util/json-utils'
 import {stringifyQueryParams} from '@openint/util/url-utils'
 import {zFunction} from '@openint/util/zod-function-utils'
-import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
 import {OAuth2Error} from './OAuth2Error'
 import {createCodeChallenge, renameObjectKeys} from './utils.client'
@@ -109,7 +110,6 @@ export function createOAuth2Client(
     )
 
     if (!response.ok) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const errorText = await response.text().catch(() => null)
       // console.log(`errorText`, errorText)
       const errorJSON = safeJSONParse(errorText)

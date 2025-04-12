@@ -1,16 +1,13 @@
 import type {QueryOptions} from '@electric-sql/pglite'
+import type {Viewer} from '@openint/cdk'
+import type {DbOptions} from './db'
+
 import {PGlite} from '@electric-sql/pglite'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {drizzle as drizzlePGLite} from 'drizzle-orm/pglite'
 import {migrate as migratePGLite} from 'drizzle-orm/pglite/migrator'
-import type {Viewer} from '@openint/cdk'
-import {
-  dbFactory,
-  getDrizzleConfig,
-  getMigrationConfig,
-  type DbOptions,
-} from './db'
+import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {parsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
 

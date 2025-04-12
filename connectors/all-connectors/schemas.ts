@@ -1,15 +1,16 @@
 import type {JSONSchema, SchemaKey} from '@openint/cdk'
+import type {NonEmptyArray} from '@openint/util/type-utils'
+import type {Z} from '@openint/util/zod-utils'
+import type {ConnectorName} from './name'
+
 import {
   jsonSchemasFromMaterializedSchemas,
   materializeSchemas,
   schemaKeys,
 } from '@openint/cdk'
 import {nonEmpty} from '@openint/util/array-utils'
-import type {NonEmptyArray} from '@openint/util/type-utils'
-import type {Z} from '@openint/util/zod-utils'
 import {z} from '@openint/util/zod-utils'
 import {defConnectors} from './connectors.def'
-import type {ConnectorName} from './name'
 
 export const schemasByConnectorName = Object.fromEntries(
   Object.entries(defConnectors).map(([name, def]) => [

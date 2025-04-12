@@ -1,5 +1,6 @@
 // packages/shadcn/__stories__/accordion.stories.tsx
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {
   Accordion,
   AccordionContent,

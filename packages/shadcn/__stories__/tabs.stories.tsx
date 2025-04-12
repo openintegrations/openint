@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '../ui/tabs'
 
 const meta = {

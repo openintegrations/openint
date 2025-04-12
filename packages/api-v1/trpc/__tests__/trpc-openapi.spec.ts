@@ -1,8 +1,9 @@
+import type {OpenApiMeta} from 'trpc-to-openapi'
+
 import {initTRPC} from '@trpc/server'
 import {
   createOpenApiFetchHandler,
   generateOpenApiDocument,
-  type OpenApiMeta,
 } from 'trpc-to-openapi'
 import {z, zCoerceBoolean} from '@openint/util/zod-utils'
 

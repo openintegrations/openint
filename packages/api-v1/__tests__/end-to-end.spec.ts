@@ -1,6 +1,7 @@
+import type {paths} from '../__generated__/openapi.types'
+
 import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
-import type {paths} from '../__generated__/openapi.types'
 import {createApp} from '../app'
 import {createTestOrganization} from './test-utils'
 

@@ -1,12 +1,13 @@
 'use client'
 
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 import type {
   ColumnDef,
   ColumnFiltersState,
+  Table as ReactTable,
   SortingState,
-  VisibilityState,
+  VisibilityState,Table as ReactTable
 } from '@tanstack/react-table'
+
 import {
   flexRender,
   getCoreRowModel,
@@ -14,7 +15,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  type Table as ReactTable,
 } from '@tanstack/react-table'
 import {ChevronDown, Loader2, Search} from 'lucide-react'
 import React from 'react'
@@ -39,7 +39,7 @@ import {titleCase} from '@openint/util/string-utils'
 
 const defaultFilter = () => true
 
-export {ColumnDef}
+export type {ColumnDef}
 
 export type Columns<TItem, TValue> = Array<ColumnDef<TItem, TValue>>
 

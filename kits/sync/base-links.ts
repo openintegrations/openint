@@ -1,9 +1,4 @@
-import {compact} from '@openint/util/array-utils'
 import type {WritableDraft} from '@openint/util/immutable-utils'
-import {produce} from '@openint/util/immutable-utils'
-import {Rx, rxjs} from '@openint/util/observable-utils'
-import {R} from '@openint/util/remeda'
-import {snakeCase} from '@openint/util/string-utils'
 import type {
   AnyEntityPayload,
   ConnectionUpdateData,
@@ -11,6 +6,12 @@ import type {
   StateUpdateData,
   SyncOperation,
 } from './protocol'
+
+import {compact} from '@openint/util/array-utils'
+import {produce} from '@openint/util/immutable-utils'
+import {Rx, rxjs} from '@openint/util/observable-utils'
+import {R} from '@openint/util/remeda'
+import {snakeCase} from '@openint/util/string-utils'
 
 type Id = string
 

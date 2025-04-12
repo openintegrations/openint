@@ -1,6 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {EntityTableCell} from './EntityTableCell'
 import type {Core} from '@openint/api-v1/models'
+
+import {EntityTableCell} from './EntityTableCell'
 
 const meta: Meta<typeof EntityTableCell> = {
   title: 'Tables/EntityTableCell',

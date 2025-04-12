@@ -1,14 +1,10 @@
 'use client'
 
+import type {InputProps} from '@openint/shadcn/ui'
+
 import {Check, Copy, Eye, EyeOff} from 'lucide-react'
 import {useState} from 'react'
-import {
-  Button,
-  Input,
-  Label,
-  useToast,
-  type InputProps,
-} from '@openint/shadcn/ui'
+import {Button, Input, Label, useToast} from '@openint/shadcn/ui'
 
 interface SecureInputProps extends Omit<InputProps, 'type'> {
   label?: string

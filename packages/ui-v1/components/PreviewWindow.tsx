@@ -344,7 +344,7 @@ export function TabletScreen({
 
 interface PreviewWindowProps extends PreviewProps {
   defaultView?: 'Magic Link' | 'Embedded' | 'Mobile'
-  supportedViews?: ('Magic Link' | 'Embedded' | 'Mobile')[]
+  supportedViews?: Array<'Magic Link' | 'Embedded' | 'Mobile'>
 }
 
 export function PreviewWindow({

@@ -1,8 +1,9 @@
 'use client'
 
+import type {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
+
 import Image from 'next/image'
 import React, {useState} from 'react'
-import type {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {CopyID} from '../../components/CopyID'
 import {ConnectionCardContent} from '../ConnectionsCardView'
@@ -95,9 +96,7 @@ export function ConnectionTableCell({
               pointerEvents: 'auto',
             }}>
             <div className="bg-popover w-[480px] overflow-hidden rounded-md border p-0 shadow-md">
-              <ConnectionCardContent
-                connection={connection}
-              />
+              <ConnectionCardContent connection={connection} />
             </div>
           </div>
         </div>

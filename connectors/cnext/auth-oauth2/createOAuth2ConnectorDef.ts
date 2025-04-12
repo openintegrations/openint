@@ -1,8 +1,10 @@
 import type {ConnectorDef} from '@openint/cdk'
-import {getConnectorDefaultCredentials} from '@openint/env'
-import {z, type Z} from '@openint/util/zod-utils'
-import {oauth2Schemas} from '.'
+import type {Z} from '@openint/util/zod-utils'
 import type {JsonConnectorDef} from '../schema'
+
+import {getConnectorDefaultCredentials} from '@openint/env'
+import {z} from '@openint/util/zod-utils'
+import {oauth2Schemas} from '.'
 
 /**
  * Generates a connector definition based on the Json simplified connector def.

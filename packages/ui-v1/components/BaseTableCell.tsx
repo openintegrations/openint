@@ -1,6 +1,7 @@
+import type {StatusType} from './StatusDot'
+
 import {cn} from '@openint/shadcn/lib/utils'
 import {CopyID} from './CopyID'
-import {StatusType} from './StatusDot'
 
 interface BaseTableCellProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string

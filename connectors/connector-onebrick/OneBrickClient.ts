@@ -1,8 +1,10 @@
+import type {Z} from '@openint/util/zod-utils'
+
 import {DateTime} from '@openint/util/date-utils'
 import {memoize} from '@openint/util/function-utils'
 import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 import {inferOneBrickEnvFromToken} from './onebrick-utils'
 
 export type OneBrickEnvName = Z.infer<typeof zOneBrickEnvName>

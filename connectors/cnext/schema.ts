@@ -1,5 +1,7 @@
+import type {Z} from '@openint/util/zod-utils'
+
 import {zConnectorStage, zVerticalKey} from '@openint/cdk'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 import {zAPIKeyConnectorDef} from './auth-apikey'
 import {zOAuthConfig} from './auth-oauth2'
 

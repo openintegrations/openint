@@ -1,7 +1,8 @@
+import type {CommandDefinitionMap} from './command-types'
+
 import {zId} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 import {executeCommand, filterCommands, prepareCommands} from './command-fns'
-import type {CommandDefinitionMap} from './command-types'
 
 const definitions = {
   sync: {

@@ -1,5 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {ColumnDef} from '@tanstack/react-table'
+import type {ColumnDef} from '@tanstack/react-table'
+
 import {useState} from 'react'
 import {FIXTURES} from '../domain-components/__stories__/fixtures'
 import {ConnectionCard} from '../domain-components/ConnectionCard'
@@ -49,7 +50,7 @@ const simpleItems: SimpleItem[] = [
   {id: '3', name: 'Item 3', color: 'bg-green-500', description: 'Third item'},
 ]
 
-const simpleColumns: ColumnDef<SimpleItem>[] = [
+const simpleColumns: Array<ColumnDef<SimpleItem>> = [
   {
     accessorKey: 'name',
     cell: ({row}) => (

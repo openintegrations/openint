@@ -1,10 +1,11 @@
 'use client'
 
-import {MoreHorizontal} from 'lucide-react'
 import type {Core} from '@openint/api-v1/models'
+import type {ColumnDef} from '../../components/DataTable'
+
+import {MoreHorizontal} from 'lucide-react'
 import {Button} from '@openint/shadcn/ui'
 import {DataTable} from '../../components/DataTable'
-import type {ColumnDef} from '../../components/DataTable'
 import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 
 // Define the columns for the connector config table

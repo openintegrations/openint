@@ -1,4 +1,5 @@
 import path from 'node:path'
+
 import {camelCase} from '@openint/util/string-utils'
 import {defConnectors} from '../connectors.def'
 import {writePretty} from './writePretty'

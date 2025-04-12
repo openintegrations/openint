@@ -1,6 +1,7 @@
 import type {ConnectorClient} from '@openint/cdk'
-import {useScript} from '@openint/cdk'
 import type {tellerSchemas} from './def'
+
+import {useScript} from '@openint/cdk'
 
 export const tellerClient = {
   useConnectHook: (_) => {

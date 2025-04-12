@@ -58,8 +58,20 @@ describe('rls via non-interactive transaction', () => {
       sql`DROP POLICY IF EXISTS bob_data_access ON customer_data;`,
 
       // Revoke permissions
-      sql`REVOKE SELECT ON customer_data FROM manager_alice, manager_bob;`,
-      sql`REVOKE USAGE ON SCHEMA public FROM manager_alice, manager_bob;`,
+      sql`
+        REVOKE
+        SELECT
+          ON customer_data
+        FROM
+          manager_alice,
+          manager_bob;
+      `,
+      sql`
+        REVOKE USAGE ON SCHEMA public
+        FROM
+          manager_alice,
+          manager_bob;
+      `,
 
       // Drop the table (this will also delete all data)
       sql`DROP TABLE IF EXISTS customer_data;`,
@@ -76,46 +88,72 @@ describe('rls via non-interactive transaction', () => {
       .transaction([
         sql`
           CREATE TABLE customer_data (
-              id SERIAL PRIMARY KEY,
-              customer_name TEXT NOT NULL,
-              email TEXT NOT NULL,
-              account_balance DECIMAL(10, 2) NOT NULL,
-              account_manager TEXT NOT NULL
+            id SERIAL PRIMARY KEY,
+            customer_name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            account_balance DECIMAL(10, 2) NOT NULL,
+            account_manager TEXT NOT NULL
           );
         `,
         // Enable Row-Level Security on the table
         sql`ALTER TABLE customer_data ENABLE ROW LEVEL SECURITY;`,
         // Insert first sample row
         sql`
-          INSERT INTO customer_data (customer_name, email, account_balance, account_manager)
-                  VALUES ('Acme Corporation', 'contact@acme.com', 50000.00, 'manager_alice');
+          INSERT INTO
+            customer_data (
+              customer_name,
+              email,
+              account_balance,
+              account_manager
+            )
+          VALUES
+            (
+              'Acme Corporation',
+              'contact@acme.com',
+              50000.00,
+              'manager_alice'
+            );
         `,
         // Insert second sample row
         sql`
-          INSERT INTO customer_data (customer_name, email, account_balance, account_manager)
-                  VALUES ('Globex Industries', 'info@globex.com', 75000.00, 'manager_bob');
+          INSERT INTO
+            customer_data (
+              customer_name,
+              email,
+              account_balance,
+              account_manager
+            )
+          VALUES
+            (
+              'Globex Industries',
+              'info@globex.com',
+              75000.00,
+              'manager_bob'
+            );
         `,
         // Create first role
         sql`CREATE ROLE manager_alice;`,
         // Create second role
         sql`CREATE ROLE manager_bob;`,
         // Grant schema usage to both roles
-        sql`GRANT USAGE ON SCHEMA public TO manager_alice, manager_bob;`,
+        sql`
+          GRANT USAGE ON SCHEMA public TO manager_alice,
+          manager_bob;
+        `,
         // Grant SELECT permission on the table to both roles
-        sql`GRANT SELECT ON customer_data TO manager_alice, manager_bob;`,
+        sql`
+          GRANT
+          SELECT
+            ON customer_data TO manager_alice,
+            manager_bob;
+        `,
         // Create policy for manager_alice
         sql`
-          CREATE POLICY alice_data_access ON customer_data
-                      FOR ALL
-                      TO manager_alice
-                      USING (account_manager = 'manager_alice');
+          CREATE POLICY alice_data_access ON customer_data FOR ALL TO manager_alice USING (account_manager = 'manager_alice');
         `,
         // Create policy for manager_bob
         sql`
-          CREATE POLICY bob_data_access ON customer_data
-                      FOR ALL
-                      TO manager_bob
-                      USING (account_manager = 'manager_bob');
+          CREATE POLICY bob_data_access ON customer_data FOR ALL TO manager_bob USING (account_manager = 'manager_bob');
         `,
       ])
       .catch(() => null)
@@ -125,7 +163,6 @@ describe('rls via non-interactive transaction', () => {
     const pool = new Pool({connectionString: connectionStringUrl.toString()})
     const db = drizzleNeonServerless({client: pool})
 
-    // eslint-disable-next-line arrow-body-style
     const _res = await db.transaction(async (trx) => {
       return trx.execute(`
           select set_config('role', 'manager_alice', true);
@@ -146,25 +183,53 @@ describe('rls via non-interactive transaction', () => {
 
   test('directly with neon client', async () => {
     const [, res1] = await sql.transaction([
-      sql`select set_config('role', 'manager_alice', true);`, // sql`SET LOCAL ROLE manager_alice;` equivalent
-      sql`SELECT * FROM customer_data;`,
+      sql`
+        SELECT
+          set_config('role', 'manager_alice', TRUE);
+      `, // sql`SET LOCAL ROLE manager_alice;` equivalent
+      sql`
+        SELECT
+          *
+        FROM
+          customer_data;
+      `,
     ])
     expect(res1).toHaveLength(1)
     expect(res1?.[0]).toMatchObject({account_manager: 'manager_alice'})
 
     const [, res2] = await sql.transaction([
-      sql`select set_config('role', 'manager_bob', true);`, // sql`SET LOCAL ROLE manager_bob;` equivalent
-      sql`SELECT * FROM customer_data;`,
+      sql`
+        SELECT
+          set_config('role', 'manager_bob', TRUE);
+      `, // sql`SET LOCAL ROLE manager_bob;` equivalent
+      sql`
+        SELECT
+          *
+        FROM
+          customer_data;
+      `,
     ])
     expect(res2).toHaveLength(1)
     expect(res2?.[0]).toMatchObject({account_manager: 'manager_bob'})
 
-    const [res3] = await sql.transaction([sql`SELECT * FROM customer_data;`])
+    const [res3] = await sql.transaction([
+      sql`
+        SELECT
+          *
+        FROM
+          customer_data;
+      `,
+    ])
     expect(res3).toHaveLength(2)
     expect(res3?.[0]).toMatchObject({account_manager: 'manager_alice'})
     expect(res3?.[1]).toMatchObject({account_manager: 'manager_bob'})
 
-    const res4 = await sql`SELECT * FROM customer_data;`
+    const res4 = await sql`
+      SELECT
+        *
+      FROM
+        customer_data;
+    `
     expect(res4).toHaveLength(2)
     expect(res4?.[0]).toMatchObject({account_manager: 'manager_alice'})
     expect(res4?.[1]).toMatchObject({account_manager: 'manager_bob'})
@@ -190,7 +255,10 @@ SELECT * FROM customer_data;
     const db = drizzleProxy(async (query, params, _method) => {
       // TODO: Do something about _method, whatever that is about...
       const [, res] = await sql.transaction([
-        sql`select set_config('role', 'manager_alice', true);`,
+        sql`
+          SELECT
+            set_config('role', 'manager_alice', TRUE);
+        `,
         sql(query, params),
       ])
       return {rows: res ?? []}
@@ -213,22 +281,36 @@ describe('one-shot queries', () => {
   const sql = neon(env.DATABASE_URL)
 
   test('Using single SQL query', async () => {
-    const [res] = await sql`SELECT 1+1 as sum`
+    const [res] = await sql`
+      SELECT
+        1 + 1 AS SUM
+    `
     expect(res?.['sum']).toEqual(2)
   })
 
   test('use non-interactive transaction', async () => {
     const [res2, res3] = await sql.transaction([
-      sql`SELECT 2+2 as sum`,
-      sql`SELECT 3+3 as sum`,
+      sql`
+        SELECT
+          2 + 2 AS SUM
+      `,
+      sql`
+        SELECT
+          3 + 3 AS SUM
+      `,
     ])
     expect(res2?.[0]?.['sum']).toEqual(4)
     expect(res3?.[0]?.['sum']).toEqual(6)
   })
 
   test('use non-interactive transaction with error', async () => {
-    await expect(sql.transaction([sql`SELECT 1/0 as sum`])).rejects.toThrow(
-      'division by zero',
-    )
+    await expect(
+      sql.transaction([
+        sql`
+          SELECT
+            1 / 0 AS SUM
+        `,
+      ]),
+    ).rejects.toThrow('division by zero')
   })
 })

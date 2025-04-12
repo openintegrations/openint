@@ -1,11 +1,13 @@
-import {makeId, type Viewer} from '@openint/cdk'
+import type {Viewer} from '@openint/cdk'
+
+import {makeId} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
+import {makeUlid} from '@openint/util/id-utils'
 import {routerContextFromViewer} from '../trpc/context'
 import {onError} from '../trpc/error-handling'
 import {connectorConfigRouter} from './connectorConfig'
 import {customerRouter} from './customer'
-import {makeUlid} from '@openint/util/id-utils'
 
 const logger = false
 

@@ -1,9 +1,11 @@
 'use client'
 
+import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
+
 import {useState} from 'react'
 import {type Event} from '@openint/api-v1/models'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
-import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
+import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 

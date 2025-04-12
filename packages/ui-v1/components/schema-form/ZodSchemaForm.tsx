@@ -1,8 +1,10 @@
 'use client'
 
+import type {Z} from '@openint/util/zod-utils'
+import type {JSONSchemaFormProps} from './JSONSchemaForm'
+
 import {zodToOas31Schema} from '@openint/util/schema'
-import {Z} from '@openint/util/zod-utils'
-import {JSONSchemaForm, type JSONSchemaFormProps} from './JSONSchemaForm'
+import {JSONSchemaForm} from './JSONSchemaForm'
 
 export interface ZodSchemaFormProps<TSchema extends Z.ZodTypeAny>
   extends Omit<JSONSchemaFormProps<Z.infer<TSchema>>, 'jsonSchema'> {

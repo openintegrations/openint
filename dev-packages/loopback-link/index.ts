@@ -1,5 +1,6 @@
 // TODO: Move me into opensdks
 import type {Link as FetchLink} from '@opensdks/fetch-links'
+
 import {applyLinks, modifyRequest} from '@opensdks/fetch-links'
 import {serverFromHandler} from './server-utils'
 

@@ -1,4 +1,6 @@
-import {z, type Z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
+
+import {z} from '@openint/util/zod-utils'
 import {zId} from './id.types'
 import {zVerticalKey} from './verticals'
 

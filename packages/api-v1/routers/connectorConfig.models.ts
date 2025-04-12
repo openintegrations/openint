@@ -1,5 +1,7 @@
-import {z, type Z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
 import type {Core} from '../models'
+
+import {z} from '@openint/util/zod-utils'
 import {core} from '../models'
 
 export const connectorConfigExtensions = z.object({

@@ -5,6 +5,7 @@
 
 import * as fs from 'node:fs'
 import {join as pathJoin} from 'node:path'
+
 import {camelCase} from '@openint/util/string-utils'
 import {writePretty} from './writePretty'
 
@@ -43,7 +44,7 @@ const connectorList: Connector[] = [
         ? // TODO: Automate generation of package.json is still needed, otherwise does not work for new packages
           // @see https://share.cleanshot.com/wDmqwsHS
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          (require(`@openint/${d.name}/def`).default as any)
+          require(`@openint/${d.name}/def`).default
         : undefined
       // we do some validation also
 

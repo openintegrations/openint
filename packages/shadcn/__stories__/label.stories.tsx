@@ -1,5 +1,6 @@
 // packages/shadcn/__stories__/label.stories.tsx
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {Checkbox} from '../ui/checkbox'
 import {Input} from '../ui/input'
 import {Label} from '../ui/label'

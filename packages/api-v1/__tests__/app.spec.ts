@@ -1,12 +1,13 @@
+import type {paths} from '../__generated__/openapi.types'
+import type {AppRouter} from '../routers'
+
 import {applyLinks, logLink} from '@opensdks/fetch-links'
 import {createTRPCClient, httpLink} from '@trpc/client'
 import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
 import {initDbPGLite} from '@openint/db/db.pglite'
 import {loopbackLink} from '@openint/loopback-link'
-import type {paths} from '../__generated__/openapi.types'
 import {createApp} from '../app'
 import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from '../handlers'
-import type {AppRouter} from '../routers'
 
 const db = initDbPGLite()
 const app = createApp({db})

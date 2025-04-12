@@ -1,4 +1,5 @@
-import {Core} from '@openint/api-v1/models'
+import type {Core} from '@openint/api-v1/models'
+
 import {cn} from '@openint/shadcn/lib/utils'
 import {Badge} from '@openint/shadcn/ui'
 

@@ -1,7 +1,8 @@
-import type {NonEmptyArray} from '@openint/util/type-utils'
-import type {Z} from '@openint/util/zod-utils'
 import type {Combine, EventSchemas, EventsFromOpts} from 'inngest'
 import type {ZodToStandardSchema} from 'inngest/components/EventSchemas'
+import type {NonEmptyArray} from '@openint/util/type-utils'
+import type {Z} from '@openint/util/zod-utils'
+
 import {R} from '@openint/util/remeda'
 import {z} from '@openint/util/zod-utils'
 import {eventMap} from './events.def'

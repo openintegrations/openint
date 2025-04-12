@@ -1,10 +1,10 @@
+import type {YodleeAccount, YodleeBalances} from './yodlee.types'
+
 import {A} from '@openint/util/amount-utils'
 import {DateTime} from '@openint/util/date-utils'
 import {R} from '@openint/util/remeda'
-import type {YodleeAccount, YodleeBalances} from './yodlee.types'
 
 export function getYodleeAccountName(account: YodleeAccount) {
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   const name = account.nickname || account.accountName || account.displayedName
   const lastFour = account.accountNumber?.slice(-4) ?? null
 

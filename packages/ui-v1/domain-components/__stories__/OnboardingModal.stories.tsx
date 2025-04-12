@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {OnboardingModal} from '../OnboardingModal'
 
 const meta: Meta<typeof OnboardingModal> = {

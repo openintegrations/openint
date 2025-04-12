@@ -1,4 +1,5 @@
 import type {Z} from '@openint/util/zod-utils'
+
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import {
   zDiscriminatedConfig,
@@ -151,8 +152,6 @@ export type ConnectorExpanded<K extends keyof ConnectorRelations> =
   Core['connector'] & Partial<Pick<ConnectorRelations, K>>
 
 // MARK: - Connections
-
-
 
 // MARK: - Customer
 export type Customer = Core['customer_select']

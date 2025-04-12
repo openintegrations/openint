@@ -1,5 +1,5 @@
-import * as tzMock from 'timezone-mock'
 import {DateTime, Settings} from 'luxon'
+import * as tzMock from 'timezone-mock'
 
 // Warning: How would this behave if timezone is involved? Gah :(
 

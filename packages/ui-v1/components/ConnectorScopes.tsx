@@ -1,7 +1,9 @@
 'use client'
 
+import type {FC, ReactNode} from 'react'
+
 import {Check, Info, X} from 'lucide-react'
-import {useCallback, useState, type FC, type ReactNode} from 'react'
+import {useCallback, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Badge,

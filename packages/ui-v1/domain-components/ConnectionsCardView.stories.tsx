@@ -1,5 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import type {Core} from '@openint/api-v1/models'
+
 import {ConnectionCardContent, ConnectionsCardView} from './ConnectionsCardView'
 
 const meta: Meta<typeof ConnectionsCardView> = {

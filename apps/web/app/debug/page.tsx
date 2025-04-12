@@ -1,5 +1,6 @@
-import type {PageProps} from '@/lib-common/next-utils'
 import type {RouterContextOnError} from '@openint/api-v1/trpc/error-handling'
+import type {PageProps} from '@/lib-common/next-utils'
+
 import {
   errorFormatter,
   fetchRequestHandler,

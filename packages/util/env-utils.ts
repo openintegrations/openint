@@ -1,5 +1,7 @@
-import {sort} from 'fast-sort'
 import type {JsonValue} from 'type-fest'
+import type {Z} from './zod-utils'
+
+import {sort} from 'fast-sort'
 import {compact} from './array-utils'
 import {
   javascriptStringify,
@@ -8,7 +10,7 @@ import {
 } from './json-utils'
 import {setAt} from './object-utils'
 import {R} from './remeda'
-import {z, zGuard, type Z} from './zod-utils'
+import {z, zGuard} from './zod-utils'
 
 /** TODO: Consider making this work beyond envVars? */
 export function zEnvVars<T extends Z.ZodRawShape>(shape: T) {
@@ -192,7 +194,7 @@ function unflattenEnv(
     setAt(
       nested,
       key.split(separator).join('.'),
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
       (typeof v === 'string' ? v.trim() : v) || undefined,
     )
   }

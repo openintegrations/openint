@@ -1,5 +1,6 @@
 import type {ParserOptions} from '@electric-sql/pglite'
 import type * as pgTypes from 'pg-types'
+
 import {builtins} from 'pg-types'
 
 /**

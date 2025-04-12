@@ -1,7 +1,8 @@
 import type {CodaSDK} from '@opensdks/sdk-coda'
-import {initCodaSDK} from '@opensdks/sdk-coda'
 import type {ConnectorServer} from '@openint/cdk'
 import type {codaSchemas} from './def'
+
+import {initCodaSDK} from '@opensdks/sdk-coda'
 
 export const codaServer = {
   newInstance({settings}) {

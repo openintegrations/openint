@@ -1,4 +1,5 @@
 import type {ReactElement} from 'react'
+
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Tabs as ShadcnTabs,

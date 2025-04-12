@@ -39,4 +39,3 @@ export function md(
 
   return processedLines.join('\n')
 }
-

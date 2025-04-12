@@ -1,7 +1,7 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import type {Meta, StoryObj} from '@storybook/react'
-import {toast, Toaster} from 'sonner'
 import type {CommandDefinitionMap} from '@openint/commands'
+
+import {toast, Toaster} from 'sonner'
 import {
   CommandBar,
   CommandButton,

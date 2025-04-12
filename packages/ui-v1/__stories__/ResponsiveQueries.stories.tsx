@@ -1,5 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import React, {type FC} from 'react'
+import type {FC} from 'react'
+
+import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 
 interface MediaQueryDemoProps {

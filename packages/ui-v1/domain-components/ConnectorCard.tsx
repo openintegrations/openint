@@ -1,5 +1,6 @@
-import React from 'react'
 import type {Core} from '@openint/api-v1/models'
+
+import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Badge} from '@openint/shadcn/ui'
 

@@ -1,6 +1,8 @@
-import {createClerkClient, Organization} from '@clerk/backend'
-import {eq} from 'drizzle-orm'
+import type {Organization} from '@clerk/backend'
 import type {InferInsertModel, InferSelectModel} from 'drizzle-orm'
+
+import {createClerkClient} from '@clerk/backend'
+import {eq} from 'drizzle-orm'
 import {schema} from '..'
 import {initDbNeon} from '../db.neon'
 

@@ -1,11 +1,11 @@
 /* eslint-disable jest/no-conditional-expect */
 
+import {Elysia} from 'elysia'
 import {
   serverFromElysia,
   serverFromHandler,
 } from '@openint/loopback-link/server-utils'
 import {detectRuntime} from '@openint/util/__tests__/test-utils'
-import {Elysia} from 'elysia'
 
 const {isNode} = detectRuntime()
 
