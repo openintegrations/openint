@@ -59,18 +59,14 @@ describe('rls via non-interactive transaction', () => {
 
       // Revoke permissions
       sql`
-        REVOKE
-        SELECT
-          ON customer_data
-        FROM
-          manager_alice,
-          manager_bob;
+        REVOKE SELECT
+        ON customer_data
+        FROM manager_alice, manager_bob;
       `,
       sql`
-        REVOKE USAGE ON SCHEMA public
-        FROM
-          manager_alice,
-          manager_bob;
+        REVOKE USAGE
+        ON SCHEMA public
+        FROM manager_alice, manager_bob;
       `,
 
       // Drop the table (this will also delete all data)
@@ -99,15 +95,15 @@ describe('rls via non-interactive transaction', () => {
         sql`ALTER TABLE customer_data ENABLE ROW LEVEL SECURITY;`,
         // Insert first sample row
         sql`
-          INSERT INTO
-            customer_data (customer_name, email, account_balance, account_manager)
+          INSERT INTO customer_data
+            (customer_name, email, account_balance, account_manager)
           VALUES
             ('Acme Corporation', 'contact@acme.com', 50000.00, 'manager_alice');
         `,
         // Insert second sample row
         sql`
-          INSERT INTO
-            customer_data (customer_name, email, account_balance, account_manager)
+          INSERT INTO customer_data
+            (customer_name, email, account_balance, account_manager)
           VALUES
             ('Globex Industries', 'info@globex.com', 75000.00, 'manager_bob');
         `,
@@ -117,23 +113,29 @@ describe('rls via non-interactive transaction', () => {
         sql`CREATE ROLE manager_bob;`,
         // Grant schema usage to both roles
         sql`
-          GRANT USAGE ON SCHEMA public TO manager_alice,
-          manager_bob;
+          GRANT USAGE
+          ON SCHEMA public
+          TO manager_alice, manager_bob;
         `,
         // Grant SELECT permission on the table to both roles
         sql`
-          GRANT
-          SELECT
-            ON customer_data TO manager_alice,
-            manager_bob;
+          GRANT SELECT
+          ON customer_data
+          TO manager_alice, manager_bob;
         `,
         // Create policy for manager_alice
         sql`
-          CREATE POLICY alice_data_access ON customer_data FOR ALL TO manager_alice USING (account_manager = 'manager_alice');
+          CREATE POLICY alice_data_access ON customer_data
+          FOR ALL
+          TO manager_alice
+          USING (account_manager = 'manager_alice');
         `,
         // Create policy for manager_bob
         sql`
-          CREATE POLICY bob_data_access ON customer_data FOR ALL TO manager_bob USING (account_manager = 'manager_bob');
+          CREATE POLICY bob_data_access ON customer_data
+          FOR ALL
+          TO manager_bob
+          USING (account_manager = 'manager_bob');
         `,
       ])
       .catch(() => null)
@@ -170,46 +172,25 @@ describe('rls via non-interactive transaction', () => {
       sql`
         SELECT
           *
-        FROM
-          customer_data;
+        FROM customer_data;
       `,
     ])
     expect(res1).toHaveLength(1)
     expect(res1?.[0]).toMatchObject({account_manager: 'manager_alice'})
 
     const [, res2] = await sql.transaction([
-      sql`
-        SELECT
-          set_config('role', 'manager_bob', TRUE);
-      `, // sql`SET LOCAL ROLE manager_bob;` equivalent
-      sql`
-        SELECT
-          *
-        FROM
-          customer_data;
-      `,
+      sql` SELECT set_config('role', 'manager_bob', TRUE); `, // sql`SET LOCAL ROLE manager_bob;` equivalent
+      sql` SELECT * FROM customer_data; `,
     ])
     expect(res2).toHaveLength(1)
     expect(res2?.[0]).toMatchObject({account_manager: 'manager_bob'})
 
-    const [res3] = await sql.transaction([
-      sql`
-        SELECT
-          *
-        FROM
-          customer_data;
-      `,
-    ])
+    const [res3] = await sql.transaction([sql` SELECT * FROM customer_data; `])
     expect(res3).toHaveLength(2)
     expect(res3?.[0]).toMatchObject({account_manager: 'manager_alice'})
     expect(res3?.[1]).toMatchObject({account_manager: 'manager_bob'})
 
-    const res4 = await sql`
-      SELECT
-        *
-      FROM
-        customer_data;
-    `
+    const res4 = await sql` SELECT * FROM customer_data; `
     expect(res4).toHaveLength(2)
     expect(res4?.[0]).toMatchObject({account_manager: 'manager_alice'})
     expect(res4?.[1]).toMatchObject({account_manager: 'manager_bob'})
