@@ -1,4 +1,5 @@
-// Copied from apps/web/.next/types/link.d.ts after running pnpm generate-typed-routes
+// Copied from apps/web/.next/types/link.d.ts after running pnpm generate:typed-routes
+// --- generated begin ---
 
 type SearchOrHash = `?${string}` | `#${string}`
 type WithProtocol = `${string}:${string}`
@@ -55,3 +56,5 @@ export type RouteImpl<T> =
   | WithProtocol
   | `${StaticRoutes}${SearchOrHash}`
   | (T extends `${DynamicRoutes<infer _>}${Suffix}` ? T : never)
+
+// --- generated end ---

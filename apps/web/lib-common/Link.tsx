@@ -1,10 +1,12 @@
+import type React from 'react'
 import type {RouteImpl} from './Link.types'
-import type {UrlObject} from 'url'
 
 import NextLink from 'next/link'
 import {resolveRoute} from '@openint/env'
 
-type LinkProps = React.ComponentProps<typeof NextLink>
+export type LinkProps = React.ComponentProps<typeof NextLink>
+
+export type UrlObject = Exclude<LinkProps['href'], string>
 
 export function Link<RouteType>({
   href,
