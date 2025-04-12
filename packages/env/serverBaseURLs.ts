@@ -61,7 +61,7 @@ export function getBaseURLs(opts: GetServerUrlOptions | null | undefined) {
 export function resolveRoute(
   route: string,
   opts: GetServerUrlOptions | null | undefined,
-): [resolvedRoute: string, baseURL: string | undefined] {
+): [path: string, baseURL: string | undefined] {
   // Absolute urls, return as is
   if (!route.startsWith('/')) {
     return [route, undefined]

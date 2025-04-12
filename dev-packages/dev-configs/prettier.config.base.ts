@@ -25,10 +25,10 @@ export default {
     plugins: [
       // require.resolve works much better than imports.
       // Would be nice to eventually switch to equivalent imports though
-      require.resolve('@ianvs/prettier-plugin-sort-imports'),
-      require.resolve('prettier-plugin-packagejson'),
       require.resolve('prettier-plugin-embed'),
       require.resolve('prettier-plugin-sql'),
+      require.resolve('@ianvs/prettier-plugin-sort-imports'),
+      require.resolve('prettier-plugin-packagejson'),
       require.resolve('prettier-plugin-tailwindcss'), // needs to come last
     ],
   } satisfies OmitIndexSignature<Config>),

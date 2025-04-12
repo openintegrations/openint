@@ -1,6 +1,9 @@
 // MARK: - Casing
 import type {CamelCase, SnakeCase} from 'type-fest'
+
 import {camelCase as _camelCase, snakeCase as _snakeCase} from 'change-case'
+// TODO: Remove lodash dependency as it causes issues with edge functions
+// due to its use of dynamic code execution.
 import {startCase} from 'lodash'
 
 export {capitalCase, sentenceCase} from 'change-case'

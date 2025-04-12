@@ -1,8 +1,6 @@
-import {
-  createClientOnlyEventId,
-  frameEventsListener,
-  type OpenIntEvent,
-} from './events'
+import type {OpenIntEvent} from './events'
+
+import {createClientOnlyEventId, frameEventsListener} from './events'
 
 export interface ConnectProps {
   token: string

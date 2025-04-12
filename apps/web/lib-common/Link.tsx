@@ -15,3 +15,7 @@ export function Link<RouteType>({
   const [route] = typeof href === 'string' ? resolveRoute(href, null) : [href]
   return <NextLink href={route as LinkProps['href']} {...props} />
 }
+
+export function resolveLinkPath<RouteType>(href: RouteImpl<RouteType>) {
+  return resolveRoute(href, null)[0]
+}

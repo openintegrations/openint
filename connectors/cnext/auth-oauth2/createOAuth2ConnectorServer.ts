@@ -1,6 +1,7 @@
-import type {oauth2Schemas, zOAuthConfig} from './schemas'
 import type {ConnectorDef, ConnectorServer, ExternalId} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
+import type {oauth2Schemas, zOAuthConfig} from './schemas'
+
 import {makeId} from '@openint/cdk'
 import {env, getBaseURLs} from '@openint/env'
 import {createCodeVerifier} from '@openint/oauth2/utils.client'
@@ -65,7 +66,6 @@ export function createOAuth2ConnectorServer<
         : undefined
 
       const authorizeUrl = await client.getAuthorizeUrl({
-        // Use vercel.app for now as connect.openint.dev is not working for some reason
         redirect_uri: env.OAUTH_REDIRECT_URI_GATEWAY,
         scopes: config.oauth?.scopes
           ? // here because some old ccfgs have scopes as a string
