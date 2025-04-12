@@ -10,6 +10,21 @@ type OmitIndexSignature<T> = {
   [K in keyof T as string extends K ? never : K]: T[K]
 }
 
+/**
+ * Not ready for prime time due to postgresql grammar support being incomplete
+ * But when it's ready it'll be better than the current sql plugin
+ */
+export const sqlCstPluginOptions = {
+  sqlAcceptUnsupportedGrammar: true,
+  sqlKeywordCase: 'upper',
+  sqlFinalSemicolon: false,
+  embeddedSqlPlugin: 'prettier-plugin-sql-cst',
+  embeddedSqlParser: 'postgresql',
+  overrides: [{files: ['*.sql'], options: {parser: 'postgresql'}}],
+} satisfies Partial<SqlPluginOptions> &
+  PluginEmbedOptions &
+  OmitIndexSignature<Config>
+
 export default {
   ...({
     arrowParens: 'always',
@@ -27,8 +42,8 @@ export default {
       // require.resolve works much better than imports.
       // Would be nice to eventually switch to equivalent imports though
       require.resolve('prettier-plugin-embed'),
-      // require.resolve('prettier-plugin-sql'),
-      require.resolve('prettier-plugin-sql-cst'),
+      require.resolve('prettier-plugin-sql'),
+      // require.resolve('prettier-plugin-sql-cst'),
       require.resolve('@ianvs/prettier-plugin-sort-imports'),
       require.resolve('prettier-plugin-packagejson'),
       require.resolve('prettier-plugin-tailwindcss'), // needs to come last
@@ -57,18 +72,10 @@ export default {
   // Plugin configurations
   ...({
     embeddedSqlTags: ['sql'],
-    embeddedSqlPlugin: 'prettier-plugin-sql-cst',
-    embeddedSqlParser: 'postgresql',
   } satisfies PluginEmbedOptions),
   ...({
-    // sqlAcceptUnsupportedGrammar: true,
-    sqlKeywordCase: 'upper',
-    sqlFinalSemicolon: false,
-    overrides: [{files: ['*.sql'], options: {parser: 'postgresql'}}],
-  } satisfies Partial<SqlPluginOptions> & OmitIndexSignature<Config>),
-  // ...({
-  //   language: 'postgresql',
-  //   keywordCase: 'upper',
-  //   expressionWidth: 80,
-  // } satisfies SqlBaseOptions),
+    language: 'postgresql',
+    keywordCase: 'upper',
+    expressionWidth: 80,
+  } satisfies SqlBaseOptions),
 }
