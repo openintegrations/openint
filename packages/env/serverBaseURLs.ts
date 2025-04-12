@@ -1,3 +1,5 @@
+import {R} from '@openint/util/remeda'
+import {upperCase} from '@openint/util/string-utils'
 import {joinPath, trimTrailingSlash} from '@openint/util/url-utils'
 import {env} from './env'
 
@@ -38,37 +40,36 @@ export function getServerUrl(opts: GetServerUrlOptions | null | undefined) {
   )
 }
 
+const bases = ['api', 'console', 'connect'] as const
+
 export function getBaseURLs(opts: GetServerUrlOptions | null | undefined) {
   const serverUrl = getServerUrl(opts)
   // TODO: Add support for custom domains for each of these services
-  return {
-    api:
-      trimTrailingSlash(env.NEXT_PUBLIC_API_URL) ?? joinPath(serverUrl, 'api'),
-    console:
-      trimTrailingSlash(env.NEXT_PUBLIC_CONSOLE_URL) ??
-      joinPath(serverUrl, 'console'),
-    connect:
-      trimTrailingSlash(env.NEXT_PUBLIC_CONNECT_URL) ??
-      joinPath(serverUrl, 'connect'),
-  }
+  return R.mapToObj(bases, (base) => [
+    base,
+    trimTrailingSlash(env[`NEXT_PUBLIC_${upperCase(base)}_URL`]) ??
+      joinPath(serverUrl, base),
+  ])
 }
 
-export function resolveRoute({
-  base,
-  route,
-  type,
-  opts,
-}: {
-  base: keyof ReturnType<typeof getBaseURLs>
-  route: string
-  type: 'absolute' | 'relative'
-  opts: GetServerUrlOptions | null | undefined
-}) {
-  const baseURLs = getBaseURLs(opts)
-  const urlStr = joinPath(baseURLs[base], route)
-  if (type === 'absolute') {
-    return urlStr
+/**
+ * Resolve relative route strings
+ * Can pass resulting route and baseURL to new URL(route, baseURL) to get the absolute URL
+ */
+export function resolveRoute(
+  route: string,
+  opts: GetServerUrlOptions | null | undefined,
+): [resolvedRoute: string, baseURL: string | undefined] {
+  // Absolute urls, return as is
+  if (!route.startsWith('/')) {
+    return [route, undefined]
   }
-  const url = new URL(urlStr)
-  return url.pathname
+  for (const [base, baseURL] of Object.entries(getBaseURLs(opts))) {
+    if (route.startsWith(`/${base}`)) {
+      return baseURL.endsWith(`/${base}`)
+        ? [route, baseURL.replace(`/${base}`, '')]
+        : [route.replace(`/${base}`, ''), baseURL]
+    }
+  }
+  return [route, getServerUrl(opts)]
 }

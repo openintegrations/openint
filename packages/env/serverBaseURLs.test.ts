@@ -214,95 +214,110 @@ describe('getServerUrl', () => {
 })
 
 describe('resolveRoute', () => {
-  test('should resolve absolute URL for api base', () => {
-    const result = resolveRoute({
-      base: 'api',
-      route: '/v1/users',
-      type: 'absolute',
-      opts: null,
-    })
-    expect(result).toBe('http://localhost:3000/api/v1/users')
+  test('return absolute URLs unchanged', () => {
+    const [result, baseURL] = resolveRoute('https://example.com/path', null)
+    expect(result).toBe('https://example.com/path')
+    expect(baseURL).toBeUndefined()
+    expect(new URL(result, baseURL).toString()).toBe(result)
   })
 
-  test('should resolve relative URL for api base', () => {
-    const result = resolveRoute({
-      base: 'api',
-      route: '/v1/users',
-      type: 'relative',
-      opts: null,
-    })
-    expect(result).toBe('/api/v1/users')
-  })
-
-  test('should resolve absolute URL for console base', () => {
-    const result = resolveRoute({
-      base: 'console',
-      route: '/settings',
-      type: 'absolute',
-      opts: null,
-    })
-    expect(result).toBe('http://localhost:3000/console/settings')
-  })
-
-  test('should resolve relative URL for console base', () => {
-    const result = resolveRoute({
-      base: 'console',
-      route: '/settings',
-      type: 'relative',
-      opts: null,
-    })
-    expect(result).toBe('/console/settings')
-  })
-
-  test('should resolve absolute URL for connect base', () => {
-    const result = resolveRoute({
-      base: 'connect',
-      route: '/callback',
-      type: 'absolute',
-      opts: null,
-    })
-    expect(result).toBe('http://localhost:3000/connect/callback')
-  })
-
-  test('should resolve relative URL for connect base', () => {
-    const result = resolveRoute({
-      base: 'connect',
-      route: '/callback',
-      type: 'relative',
-      opts: null,
-    })
-    expect(result).toBe('/connect/callback')
-  })
-
-  test('should handle custom server URL from environment', () => {
+  test('no custom domains', () => {
     temporarilyModifyEnv(
-      {NEXT_PUBLIC_SERVER_URL: 'https://custom.example.com'},
+      {NEXT_PUBLIC_SERVER_URL: 'https://example.com'},
       () => {
-        const result = resolveRoute({
-          base: 'api',
-          route: '/v1/users',
-          type: 'absolute',
-          opts: null,
-        })
-        expect(result).toBe('https://custom.example.com/api/v1/users')
+        const [result, baseURL] = resolveRoute('/api/test', null)
+        expect(result).toBe('/api/test')
+        expect(baseURL).toBe('https://example.com')
+        expect(new URL(result, baseURL).toString()).toBe(
+          'https://example.com/api/test',
+        )
       },
     )
   })
 
-  test('should handle request-based server URL', () => {
-    const mockRequest = new Request('https://request.example.com/api', {
-      headers: {
-        host: 'request.example.com',
-        'x-forwarded-proto': 'https',
+  test('with custom domains', () => {
+    temporarilyModifyEnv(
+      {
+        NEXT_PUBLIC_SERVER_URL: 'https://example.com',
+        NEXT_PUBLIC_API_URL: 'https://api.example.com',
+        NEXT_PUBLIC_CONSOLE_URL: 'https://console.example.com',
+        NEXT_PUBLIC_CONNECT_URL: 'https://connect.example.com',
       },
-    })
+      () => {
+        const [apiResult, apiBaseURL] = resolveRoute('/api/test', null)
+        expect(apiResult).toBe('/test')
+        expect(apiBaseURL).toBe('https://api.example.com')
+        expect(new URL(apiResult, apiBaseURL).toString()).toBe(
+          'https://api.example.com/test',
+        )
 
-    const result = resolveRoute({
-      base: 'api',
-      route: '/v1/users',
-      type: 'absolute',
-      opts: {req: mockRequest},
-    })
-    expect(result).toBe('https://request.example.com/api/v1/users')
+        const [consoleResult, consoleBaseURL] = resolveRoute(
+          '/console/dashboard',
+          null,
+        )
+        expect(consoleResult).toBe('/dashboard')
+        expect(consoleBaseURL).toBe('https://console.example.com')
+        expect(new URL(consoleResult, consoleBaseURL).toString()).toBe(
+          'https://console.example.com/dashboard',
+        )
+
+        const [connectResult, connectBaseURL] = resolveRoute(
+          '/connect/oauth',
+          null,
+        )
+        expect(connectResult).toBe('/oauth')
+        expect(connectBaseURL).toBe('https://connect.example.com')
+        expect(new URL(connectResult, connectBaseURL).toString()).toBe(
+          'https://connect.example.com/oauth',
+        )
+      },
+    )
+  })
+
+  test('preserve routes that do not match base paths', () => {
+    temporarilyModifyEnv(
+      {
+        NEXT_PUBLIC_SERVER_URL: 'https://example.com',
+        NEXT_PUBLIC_API_URL: 'https://api.example.com',
+      },
+      () => {
+        const [result, baseURL] = resolveRoute('/other/path', null)
+        expect(result).toBe('/other/path')
+        expect(baseURL).toBe('https://example.com')
+        expect(new URL(result, baseURL).toString()).toBe(
+          'https://example.com/other/path',
+        )
+      },
+    )
+  })
+
+  test('preserve url params', () => {
+    temporarilyModifyEnv(
+      {
+        NEXT_PUBLIC_SERVER_URL: 'https://example.com',
+        NEXT_PUBLIC_API_URL: 'https://api.example.com',
+      },
+      () => {
+        const [result, baseURL] = resolveRoute(
+          '/api/test?foo=bar&baz=qux',
+          null,
+        )
+        expect(result).toBe('/test?foo=bar&baz=qux')
+        expect(baseURL).toBe('https://api.example.com')
+        expect(new URL(result, baseURL).toString()).toBe(
+          'https://api.example.com/test?foo=bar&baz=qux',
+        )
+
+        const [withHash, withHashBaseURL] = resolveRoute(
+          '/api/test?foo=bar#hash',
+          null,
+        )
+        expect(withHash).toBe('/test?foo=bar#hash')
+        expect(withHashBaseURL).toBe('https://api.example.com')
+        expect(new URL(withHash, withHashBaseURL).toString()).toBe(
+          'https://api.example.com/test?foo=bar#hash',
+        )
+      },
+    )
   })
 })
