@@ -41,7 +41,9 @@ export const envConfig = {
     CRON_SECRET: z.string().optional(),
     REFRESH_CONNECTION_CONCURRENCY: z.coerce.number().optional().default(3),
     PORT: z.string().optional(),
-    NODE_ENV: z.enum(['production', 'preview', 'development']).optional(),
+    NODE_ENV: z
+      .enum(['production', 'preview', 'development', 'test'])
+      .optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
