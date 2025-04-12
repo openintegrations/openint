@@ -70,7 +70,12 @@ export function resolveRoute(
     if (route.startsWith(`/${base}`)) {
       return baseURL.endsWith(`/${base}`)
         ? [route, baseURL.replace(`/${base}`, '')]
-        : [route.replace(`/${base}`, ''), baseURL]
+        : [
+            route === `/${base}`
+              ? '/' // prevent empty string which means "current url" rather than root url
+              : route.replace(`/${base}`, ''),
+            baseURL,
+          ]
     }
   }
   return [route, getServerUrl(opts)]

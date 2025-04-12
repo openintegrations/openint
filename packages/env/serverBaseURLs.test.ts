@@ -231,6 +231,13 @@ describe('resolveRoute', () => {
         expect(new URL(result, baseURL).toString()).toBe(
           'https://example.com/api/test',
         )
+
+        const [result2, baseURL2] = resolveRoute('/api', null)
+        expect(result2).toBe('/api')
+        expect(baseURL2).toBe('https://example.com')
+        expect(new URL(result2, baseURL2).toString()).toBe(
+          'https://example.com/api',
+        )
       },
     )
   })
@@ -269,6 +276,13 @@ describe('resolveRoute', () => {
         expect(connectBaseURL).toBe('https://connect.example.com')
         expect(new URL(connectResult, connectBaseURL).toString()).toBe(
           'https://connect.example.com/oauth',
+        )
+
+        const [result2, baseURL2] = resolveRoute('/connect', null)
+        expect(result2).toBe('/')
+        expect(baseURL2).toBe('https://connect.example.com')
+        expect(new URL(result2, baseURL2).toString()).toBe(
+          'https://connect.example.com/',
         )
       },
     )
@@ -320,4 +334,7 @@ describe('resolveRoute', () => {
       },
     )
   })
+  
 })
+
+

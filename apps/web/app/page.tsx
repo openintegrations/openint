@@ -9,16 +9,21 @@ export default function Page(pageProps: PageProps) {
       <h1 className="text-2xl font-bold">OpenInt</h1>
       <Link
         href="/connect"
+        // We need absolute URLs because we are rendering outside of
+        // console/connect/api subdomains
+        absolute
         className="text-blue-500 underline hover:text-blue-700">
         Connect
       </Link>
       <Link
         href="/console"
+        absolute
         className="text-blue-500 underline hover:text-blue-700">
         Console
       </Link>
       <Link
         href="/api/v1"
+        absolute
         className="text-blue-500 underline hover:text-blue-700">
         API
       </Link>
