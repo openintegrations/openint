@@ -1,5 +1,4 @@
 import {R} from '@openint/util/remeda'
-import {upperCase} from '@openint/util/string-utils'
 import {joinPath, trimTrailingSlash} from '@openint/util/url-utils'
 import {env} from './env'
 
@@ -47,8 +46,11 @@ export function getBaseURLs(opts: GetServerUrlOptions | null | undefined) {
   // TODO: Add support for custom domains for each of these services
   return R.mapToObj(bases, (base) => [
     base,
-    trimTrailingSlash(env[`NEXT_PUBLIC_${upperCase(base)}_URL`]) ??
-      joinPath(serverUrl, base),
+    trimTrailingSlash(
+      // cannot use stringUtils due to Dynamic Code Evaluation (e. g. 'eval', 'new Function', 'WebAssembly.compile') not allowed in Edge Runtime
+      // in lodash...
+      env[`NEXT_PUBLIC_${base.toUpperCase() as Uppercase<typeof base>}_URL`],
+    ) ?? joinPath(serverUrl, base),
   ])
 }
 
