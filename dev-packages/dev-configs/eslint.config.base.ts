@@ -172,6 +172,8 @@ export const configs = keyAsName({
         'warn',
         {disallowTypeAnnotations: false},
       ],
+      '@typescript-eslint/consistent-type-exports': ['warn'],
+
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',

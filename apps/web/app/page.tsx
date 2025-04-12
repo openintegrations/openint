@@ -1,5 +1,6 @@
-import Link from 'next/link'
 import type {PageProps} from '@/lib-common/next-utils'
+
+import {Link} from '@/lib-common/Link'
 import {currentViewer} from '@/lib-server/auth.server'
 
 export default function Page(pageProps: PageProps) {

@@ -1,9 +1,9 @@
-import type {ConnectorConfigForCustomer} from './client'
-import type {PageProps} from '@/lib-common/next-utils'
 import type {Viewer} from '@openint/cdk'
+import type {PageProps} from '@/lib-common/next-utils'
+import type {ConnectorConfigForCustomer} from './client'
+
 import {ChevronLeftIcon} from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import {cache, Suspense} from 'react'
 import {zConnectOptions} from '@openint/api-v1/routers/connect.models'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
@@ -20,6 +20,7 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
+import {Link} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {
   currentViewer,

@@ -100,3 +100,18 @@ export function proxyRequiredRecursive<T extends object>(
     },
   }) as {[k in keyof typeof target]-?: NonNullable<(typeof target)[k]>}
 }
+
+/**
+ * Wraps an object in a read-only proxy that prevents any modifications to its properties.
+ * Attempting to set or delete properties will throw an error.
+ */
+export function proxyReadOnly<T extends object>(target: T) {
+  return new Proxy(target, {
+    set() {
+      throw new Error('Cannot modify read-only object')
+    },
+    deleteProperty() {
+      throw new Error('Cannot delete properties from read-only object')
+    },
+  }) as {readonly [k in keyof T]: T[k]}
+}
