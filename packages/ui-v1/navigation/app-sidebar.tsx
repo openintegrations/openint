@@ -1,8 +1,9 @@
 'use client'
 
 import type {IconName} from '../components'
+
 import Image from 'next/image'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import {usePathname} from 'next/navigation'
 import * as React from 'react'
 import {Button} from '@openint/shadcn/ui'
@@ -24,6 +25,7 @@ export function AppSidebar({
 }: React.ComponentProps<typeof Sidebar> & {
   navItems: Array<{
     title: string
+    /** These URLs should already be pre-resolved */
     url: string
     icon: IconName
   }>
@@ -45,7 +47,7 @@ export function AppSidebar({
                   asChild
                   isActive={isActive}
                   className="w-full">
-                  <Link
+                  <NextLink
                     href={item.url}
                     className="flex w-full items-center px-4 py-2"
                     target={item.url.startsWith('http') ? '_blank' : undefined}>
@@ -53,7 +55,7 @@ export function AppSidebar({
                       <Icon name={item.icon} className="mr-3 h-5 w-5" />
                     )}
                     {item.title}
-                  </Link>
+                  </NextLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             )

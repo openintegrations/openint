@@ -109,7 +109,7 @@ const nextConfig = {
   // MARK: - Wtrubo pack and webpack configs...
   experimental: {
     // Not compatible with turbopack for now...
-    // typedRoutes: true,
+    typedRoutes: process.env['TYPED_ROUTES'] === 'true',
     typedEnv: true,
     turbo: {
       // Define rules for file transformations (similar to webpack loaders)
