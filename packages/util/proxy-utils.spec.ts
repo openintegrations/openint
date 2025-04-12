@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   noopFunctionMap,
-  proxyReadonly,
+  proxyReadOnly,
   proxyRequired,
   proxyRequiredRecursive,
 } from './proxy-utils'
@@ -285,14 +285,14 @@ describe('proxyRequiredRecursive', () => {
 describe('proxyReadonly', () => {
   test('allows reading properties', () => {
     const obj = {a: 1, b: 'test'}
-    const proxy = proxyReadonly(obj)
+    const proxy = proxyReadOnly(obj)
     expect(proxy.a).toBe(1)
     expect(proxy.b).toBe('test')
   })
 
   test('prevents setting properties', () => {
     const obj = {a: 1}
-    const proxy = proxyReadonly(obj)
+    const proxy = proxyReadOnly(obj)
     expect(() => {
       // @ts-expect-error - Testing runtime error
       proxy.a = 2
@@ -301,7 +301,7 @@ describe('proxyReadonly', () => {
 
   test('prevents deleting properties', () => {
     const obj = {a: 1}
-    const proxy = proxyReadonly(obj)
+    const proxy = proxyReadOnly(obj)
     expect(() => {
       // @ts-expect-error - Testing runtime error
       delete proxy.a
@@ -310,7 +310,7 @@ describe('proxyReadonly', () => {
 
   test('maintains type safety', () => {
     const obj = {a: 1, b: 'test'}
-    const proxy = proxyReadonly(obj)
+    const proxy = proxyReadOnly(obj)
     // These should compile without errors
     const a: number = proxy.a
     const b: string = proxy.b

@@ -105,7 +105,7 @@ export function proxyRequiredRecursive<T extends object>(
  * Wraps an object in a read-only proxy that prevents any modifications to its properties.
  * Attempting to set or delete properties will throw an error.
  */
-export function proxyReadonly<T extends object>(target: T) {
+export function proxyReadOnly<T extends object>(target: T) {
   return new Proxy(target, {
     set() {
       throw new Error('Cannot modify read-only object')

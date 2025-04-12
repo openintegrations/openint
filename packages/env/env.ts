@@ -1,5 +1,5 @@
 import {createEnv} from '@t3-oss/env-nextjs'
-import {proxyReadonly, proxyRequired} from '@openint/util/proxy-utils'
+import {proxyReadOnly, proxyRequired} from '@openint/util/proxy-utils'
 import {z} from '@openint/util/zod-utils'
 
 // TODO: Remove the dep on @t3-oss as it causes all sorts of issues with zod
@@ -119,7 +119,7 @@ export const envMutable = {
 }
 
 /** Read-only proxy of envMutable */
-export const env = proxyReadonly(envMutable)
+export const env = proxyReadOnly(envMutable)
 
 /** Proxy env throw on missing values */
 export const envRequired = proxyRequired(env, {
