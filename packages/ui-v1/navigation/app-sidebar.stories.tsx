@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {
   AudioWaveform,
   ChevronsUpDown,
@@ -40,7 +41,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = {
   args: {
     organizationSwitcher: <DummyOrganizationSwitcher />,
     navItems: [
@@ -86,7 +87,7 @@ export const Default: Story = {
       },
     ],
   },
-}
+} satisfies Story
 
 export function DummyOrganizationSwitcher({
   teams = [
