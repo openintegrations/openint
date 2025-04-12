@@ -100,36 +100,16 @@ describe('rls via non-interactive transaction', () => {
         // Insert first sample row
         sql`
           INSERT INTO
-            customer_data (
-              customer_name,
-              email,
-              account_balance,
-              account_manager
-            )
+            customer_data (customer_name, email, account_balance, account_manager)
           VALUES
-            (
-              'Acme Corporation',
-              'contact@acme.com',
-              50000.00,
-              'manager_alice'
-            );
+            ('Acme Corporation', 'contact@acme.com', 50000.00, 'manager_alice');
         `,
         // Insert second sample row
         sql`
           INSERT INTO
-            customer_data (
-              customer_name,
-              email,
-              account_balance,
-              account_manager
-            )
+            customer_data (customer_name, email, account_balance, account_manager)
           VALUES
-            (
-              'Globex Industries',
-              'info@globex.com',
-              75000.00,
-              'manager_bob'
-            );
+            ('Globex Industries', 'info@globex.com', 75000.00, 'manager_bob');
         `,
         // Create first role
         sql`CREATE ROLE manager_alice;`,

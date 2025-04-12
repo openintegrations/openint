@@ -59,5 +59,6 @@ export default {
   ...({
     language: 'postgresql',
     keywordCase: 'upper',
+    expressionWidth: 80,
   } satisfies SqlBaseOptions),
 }
