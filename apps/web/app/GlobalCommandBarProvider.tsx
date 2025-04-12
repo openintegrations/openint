@@ -1,13 +1,14 @@
 'use client'
 
+import type {
+  CommandDefinitionInput,
+  CommandDefinitionMap,
+  CommandDefinitionMapInput,
+} from '@openint/commands'
+
 import {useRouter} from 'next/navigation'
 import React from 'react'
-import type {CommandDefinitionMapInput} from '@openint/commands'
-import {
-  cmdInit,
-  type CommandDefinitionInput,
-  type CommandDefinitionMap,
-} from '@openint/commands'
+import {cmdInit} from '@openint/commands'
 import {
   useOrganization,
   useOrganizationList,
@@ -15,10 +16,10 @@ import {
 } from '@openint/console-auth/client'
 import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
-import {SIDEBAR_NAV_ITEMS} from '@openint/ui-v1/navigation/app-sidebar'
 import {useMutation, useQueryClient} from '@openint/ui-v1/trpc'
 import {z} from '@openint/util/zod-utils'
 import {useTRPC} from './console/(authenticated)/client'
+import {SIDEBAR_NAV_ITEMS} from './console/(authenticated)/sidebar-nav-items'
 
 export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
   const definitions = useCommandDefinitionMap()
@@ -175,19 +176,6 @@ function useConnectionCommands() {
       execute: async ({params}) => {
         await navigator.clipboard.writeText(params.connection_id)
         alert(`Copied connection ID: ${params.connection_id}`)
-      },
-    }),
-
-    'connection:explore': cmd.identity({
-      title: 'Explore Connection',
-      icon: 'Search',
-      params: z.object({
-        connection_id: z
-          .string()
-          .describe('The ID of the connection to explore'),
-      }),
-      execute: ({params}) => {
-        router.push(`/console/connections/${params.connection_id}/explorer`)
       },
     }),
 

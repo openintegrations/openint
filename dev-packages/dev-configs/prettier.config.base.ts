@@ -41,6 +41,8 @@ export default {
   ...({
     importOrder: [
       '<TYPES>',
+      '<TYPES>^@openint/(.+)$',
+      '',
       '^node:(.+)$',
       '<THIRD_PARTY_MODULES>',
       '^@openint/(.+)$',

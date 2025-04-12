@@ -43,6 +43,48 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     organizationSwitcher: <DummyOrganizationSwitcher />,
+    navItems: [
+      {
+        title: 'Dashboard',
+        url: '/console',
+        icon: 'Box',
+      },
+      {
+        title: 'Connect',
+        url: '/console/connect',
+        icon: 'Wand',
+      },
+      {
+        title: 'Connector Configs',
+        url: '/console/connector-config',
+        icon: 'Layers',
+      },
+      {
+        title: 'Events',
+        url: '/console/events',
+        icon: 'Database',
+      },
+      {
+        title: 'Customers',
+        url: '/console/customers',
+        icon: 'Users',
+      },
+      {
+        title: 'Connections',
+        url: '/console/connections',
+        icon: 'Box',
+      },
+      {
+        title: 'Settings',
+        url: '/console/settings',
+        icon: 'Settings',
+      },
+      {
+        title: 'API Docs',
+        url: 'https://docs.openint.dev',
+        icon: 'ExternalLink',
+      },
+    ],
   },
 }
 

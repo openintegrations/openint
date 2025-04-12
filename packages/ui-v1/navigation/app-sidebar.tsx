@@ -1,5 +1,6 @@
 'use client'
 
+import type {IconName} from '../components'
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
@@ -14,60 +15,18 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@openint/shadcn/ui/sidebar'
-import type {IconName} from '../components'
 import {Icon} from '../components'
-
-export const SIDEBAR_NAV_ITEMS = [
-  {
-    title: 'Dashboard',
-    url: '/console',
-    icon: 'Box',
-  },
-  {
-    title: 'Connect',
-    url: '/console/connect',
-    icon: 'Wand',
-  },
-  {
-    title: 'Connector Configs',
-    url: '/console/connector-config',
-    icon: 'Layers',
-  },
-  {
-    title: 'Events',
-    url: '/console/events',
-    icon: 'Database',
-  },
-  {
-    title: 'Customers',
-    url: '/console/customers',
-    icon: 'Users',
-  },
-  {
-    title: 'Connections',
-    url: '/console/connections',
-    icon: 'Box',
-  },
-  {
-    title: 'Settings',
-    url: '/console/settings',
-    icon: 'Settings',
-  },
-  {
-    title: 'API Docs',
-    url: 'https://docs.openint.dev',
-    icon: 'ExternalLink',
-  },
-] satisfies Array<{
-  title: string
-  url: `${string}`
-  icon: IconName
-}>
 
 export function AppSidebar({
   organizationSwitcher,
+  navItems,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
+  navItems: Array<{
+    title: string
+    url: string
+    icon: IconName
+  }>
   organizationSwitcher: React.ReactNode
 }) {
   // In storybook, pathname would be undefined
@@ -77,7 +36,7 @@ export function AppSidebar({
       <SidebarHeader>{organizationSwitcher}</SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="mt-5">
-          {SIDEBAR_NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const isActive =
               pathname?.replace(/\/*$/, '') === item.url.replace(/\/*$/, '')
             return (
