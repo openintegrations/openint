@@ -8,7 +8,6 @@
 import pluginJs from '@eslint/js'
 // @ts-expect-error No types available
 import pluginNext from '@next/eslint-plugin-next'
-import configPrettier from 'eslint-config-prettier/flat'
 import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript'
 import codegen from 'eslint-plugin-codegen'
 // @ts-expect-error No types available
@@ -20,6 +19,7 @@ import pluginJest from 'eslint-plugin-jest'
 import pluginJestFormatting from 'eslint-plugin-jest-formatting'
 // @ts-expect-error No types available
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
+import pluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 // @ts-expect-error No types available
 import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
@@ -369,7 +369,8 @@ export const configs = keyAsName({
     },
   },
   prettier: {
-    extends: [configPrettier],
+    extends: [pluginPrettierRecommended],
+    rules: {'prettier/prettier': 'warn'},
   },
   // Does not work because requires esm module. We should upgrade fully to esm one day
   // css: {
