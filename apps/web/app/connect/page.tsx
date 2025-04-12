@@ -1,4 +1,4 @@
-import type {Viewer} from '@openint/cdk'
+import type {Id, Viewer} from '@openint/cdk'
 import type {PageProps} from '@/lib-common/next-utils'
 import type {ConnectorConfigForCustomer} from './client'
 
@@ -7,7 +7,7 @@ import Image from 'next/image'
 import {cache, Suspense} from 'react'
 import {zConnectOptions} from '@openint/api-v1/routers/connect.models'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
-import {asOrgIfCustomer, Id} from '@openint/cdk'
+import {asOrgIfCustomer} from '@openint/cdk'
 import {getClerkOrganization} from '@openint/console-auth/server'
 import {isProduction} from '@openint/env'
 import {cn} from '@openint/shadcn/lib/utils'
@@ -36,11 +36,9 @@ function Fallback() {
   return <div>Loading...</div>
 }
 
-const getOrganizationInfo = cache(async (orgId: Id['org'] | null) => {
-  return orgId
-    ? await getClerkOrganization(orgId)
-    : {name: 'OpenInt', imageUrl: ''}
-})
+const getOrganizationInfo = cache(async (orgId: Id['org'] | null) =>
+  orgId ? await getClerkOrganization(orgId) : {name: 'OpenInt', imageUrl: ''},
+)
 
 async function OrganizationImage({
   orgId,
@@ -95,13 +93,7 @@ export default async function Page(
           </CardContent>
           <CardFooter className="flex justify-center">
             <Button asChild size="lg">
-              {/* We do this as in production the renderer may be connect.openint.dev */}
-              <Link
-                href={
-                  isProduction ? 'https://console.openint.dev' : '/console'
-                }>
-                Go to OpenInt Console
-              </Link>
+              <Link href="/console">Go to OpenInt Console</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -156,7 +148,7 @@ export default async function Page(
               {
                 viewer,
                 searchParams,
-                token: token,
+                token,
               },
               null,
               2,
@@ -171,10 +163,7 @@ export default async function Page(
                 fallback={
                   <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
                 }>
-                <OrganizationImage
-                  orgId={viewer.orgId as Id['org']}
-                  className="lg:pt-6"
-                />
+                <OrganizationImage orgId={viewer.orgId} className="lg:pt-6" />
               </Suspense>
 
               <h1 className="mb-4 mt-16 text-2xl font-bold">
@@ -189,7 +178,7 @@ export default async function Page(
                   <ChevronLeftIcon className="h-4 w-4" />
                   Back to{' '}
                   <Suspense fallback="OpenInt Console">
-                    <OrganizationName orgId={viewer.orgId as Id['org']} />
+                    <OrganizationName orgId={viewer.orgId} />
                   </Suspense>
                 </Link>
               </Button>
@@ -256,7 +245,7 @@ async function AddConnections({
   const api = createAPICaller(asOrgIfCustomer(viewer))
 
   const res = await api.listConnectorConfigs({
-    connector_names: connector_names,
+    connector_names,
     expand: ['connector.schemas'], // TODO: FIXME to use an array instead of a string
   })
 
@@ -267,7 +256,7 @@ async function AddConnections({
           There are no connectors configured for this organization.
         </p>
         <Button asChild variant="default">
-          <Link href="https://console.openint.dev" target="_blank">
+          <Link href="/console" target="_blank">
             Go to OpenInt Console
           </Link>
         </Button>

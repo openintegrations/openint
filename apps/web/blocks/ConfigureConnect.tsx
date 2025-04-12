@@ -1,13 +1,15 @@
 'use client'
 
+import type {Z} from '@openint/util/zod-utils'
+
 import React from 'react'
 import {connectRouterModels} from '@openint/api-v1/routers/connect.models'
 import {ConnectEmbed} from '@openint/connect'
-import {getServerUrl, isProduction} from '@openint/env'
+import {getBaseURLs} from '@openint/env'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
 import {useMutation} from '@openint/ui-v1/trpc'
-import {Z} from '@openint/util/zod-utils'
+import {createURL} from '@openint/util/url-utils'
 import {useTRPC} from '@/app/console/(authenticated)/trpc'
 
 // Define the type for the form data based on the schema
@@ -50,20 +52,16 @@ export function ConfigureConnect() {
       <div className="flex flex-1 flex-col p-4">
         <h2 className="mb-4 text-xl font-semibold">Preview</h2>
         <PreviewWindow
-          displayUrl={'https://connect.openint.dev'}
-          shareUrl={
-            (isProduction
-              ? 'https://connect.openint.dev'
-              : getServerUrl(null) + '/connect') +
-            '?token=' +
-            mutation.data?.token
-          }
+          // TODO: Refactor connect to return the URL please
+          shareUrl={createURL(getBaseURLs(null).connect, {
+            searchParams: {token: mutation.data?.token ?? ''},
+          })}
           className="flex-1 overflow-scroll">
           {mutation.data?.token && (
             <ConnectEmbed
               className="h-full w-full"
               token={mutation.data?.token}
-              baseURL={getServerUrl(null) + '/connect'}
+              baseURL={getBaseURLs(null).connect}
             />
           )}
           {/* <iframe src={mutation.data?.token} className="h-full w-full" /> */}

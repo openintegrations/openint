@@ -41,6 +41,7 @@ export const envConfig = {
     CRON_SECRET: z.string().optional(),
     REFRESH_CONNECTION_CONCURRENCY: z.coerce.number().optional().default(3),
     PORT: z.string().optional(),
+    NODE_ENV: z.enum(['production', 'preview', 'development']).optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -110,6 +111,7 @@ export const envConfig = {
     // JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
     PORT: process.env['PORT'],
+    NODE_ENV: process.env['NODE_ENV'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
@@ -129,8 +131,7 @@ export const envRequired = proxyRequired(env, {
 })
 
 export const isProduction =
-  process.env['NODE_ENV'] === 'production' ||
-  process.env['VERCEL_ENV'] === 'production'
+  env['NODE_ENV'] === 'production' || env['VERCEL_ENV'] === 'production'
 
 export type Env = typeof env
 

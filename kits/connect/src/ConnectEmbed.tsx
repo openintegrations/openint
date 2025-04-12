@@ -1,5 +1,7 @@
+import type {ConnectProps} from './common'
+
 import React from 'react'
-import {ConnectProps, createConnectIframe} from './common'
+import {createConnectIframe} from './common'
 
 export function ConnectEmbed(props: ConnectProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
@@ -18,7 +20,7 @@ export function ConnectEmbed(props: ConnectProps) {
         containerRef.current.innerHTML = ''
       }
     }
-  }, [token, baseURL, className, width, height, onEvent])
+  }, [token, baseURL, className, width, height, onEvent, props])
 
   // Initial render is just an empty div
   // After useEffect, it will contain: the iframe content within it. i.e.
