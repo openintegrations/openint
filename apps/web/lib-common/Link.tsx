@@ -9,11 +9,20 @@ export type LinkProps = React.ComponentProps<typeof NextLink>
 export type UrlObject = Exclude<LinkProps['href'], string>
 
 export function Link<RouteType>({
-  href,
+  href: _href,
+  absolute,
   ...props
-}: {href: RouteImpl<RouteType> | UrlObject} & Omit<LinkProps, 'href'>) {
-  const [route] = typeof href === 'string' ? resolveRoute(href, null) : [href]
-  return <NextLink href={route as LinkProps['href']} {...props} />
+}: {href: RouteImpl<RouteType> | UrlObject; absolute?: boolean} & Omit<
+  LinkProps,
+  'href'
+>) {
+  let href = _href as string | UrlObject
+  if (typeof href === 'string') {
+    const [route, baseURL] = resolveRoute(href, null)
+    href = absolute ? new URL(route, baseURL).toString() : route
+  }
+
+  return <NextLink href={href as LinkProps['href']} {...props} />
 }
 
 export function resolveLinkPath<RouteType>(href: RouteImpl<RouteType>) {
