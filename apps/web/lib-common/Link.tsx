@@ -28,7 +28,3 @@ export function Link<RouteType>({
 export function resolveLinkPath<RouteType>(href: RouteImpl<RouteType>) {
   return resolveRoute(href, null)[0]
 }
-
-export function resolveLinkPath<RouteType>(href: RouteImpl<RouteType>) {
-  return resolveRoute(href, null)[0]
-}
