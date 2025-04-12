@@ -1,7 +1,7 @@
 import type {Meta, StoryFn} from '@storybook/react'
-import type type {ChartConfig} from '../ui/chart'
+import type {JSX} from 'react'
+import type {ChartConfig} from '../ui/chart'
 
-import {JSX} from 'react'
 import {
   Area,
   AreaChart,
