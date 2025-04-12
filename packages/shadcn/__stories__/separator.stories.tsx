@@ -1,5 +1,6 @@
 // packages/shadcn/__stories__/separator.stories.tsx
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {Separator} from '../ui/separator'
 
 const meta = {

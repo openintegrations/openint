@@ -1,8 +1,11 @@
 'use client'
 
+import type {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
+import type {PropertyItem} from '../components/PropertyListView'
+import type {StatusType} from '../components/StatusDot'
+
 import Image from 'next/image'
 import {useMemo, useState} from 'react'
-import type {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Badge,
@@ -12,9 +15,7 @@ import {
   Separator,
 } from '@openint/shadcn/ui'
 import {CopyID} from '../components/CopyID'
-import type {PropertyItem} from '../components/PropertyListView'
 import {PropertyListView} from '../components/PropertyListView'
-import type {StatusType} from '../components/StatusDot'
 import {getConnectorLogoUrl} from '../utils/images'
 
 export interface ConnectionCardProps {
@@ -23,9 +24,7 @@ export interface ConnectionCardProps {
   className?: string
 }
 
-export function ConnectionCardContent({
-  connection,
-}: ConnectionCardProps) {
+export function ConnectionCardContent({connection}: ConnectionCardProps) {
   const customerId = connection.customer_id
   const connectorConfigId = connection.connector_config_id || ''
 
@@ -180,9 +179,7 @@ export function ConnectionsCardView({
         className="w-[450px] p-0 shadow-lg"
         align="start"
         sideOffset={5}>
-        <ConnectionCardContent
-          connection={connection}
-        />
+        <ConnectionCardContent connection={connection} />
       </PopoverContent>
     </Popover>
   )

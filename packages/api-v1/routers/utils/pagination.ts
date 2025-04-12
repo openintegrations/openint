@@ -1,6 +1,8 @@
 import type {Column, PgSelectBase} from '@openint/db'
+import type {Z} from '@openint/util/zod-utils'
+
 import {asc, desc, schema} from '@openint/db'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 
 /** TODO: Switch to cursor based pagination */
 export const zListParams = z.object({

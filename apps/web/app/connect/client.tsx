@@ -1,11 +1,13 @@
 'use client'
 
+import type {AppRouterOutput} from '@openint/api-v1'
+import type {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
+import type {JSONSchemaFormRef} from '@openint/ui-v1'
+
 import dynamic from 'next/dynamic'
 import React from 'react'
 import {clientConnectors} from '@openint/all-connectors/connectors.client'
-import type {AppRouterOutput} from '@openint/api-v1'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
-import type {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
 import {type ConnectorClient, type JSONSchema} from '@openint/cdk'
 import {Button, Label, toast} from '@openint/shadcn/ui'
 import {
@@ -19,7 +21,6 @@ import {
   CommandPopover,
   DataTileView,
   JSONSchemaForm,
-  JSONSchemaFormRef,
   Spinner,
   useMutableSearchParams,
 } from '@openint/ui-v1'

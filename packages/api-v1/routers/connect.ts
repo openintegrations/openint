@@ -1,4 +1,5 @@
 import type {ConnectorDef, ConnectorServer, ExtCustomerId} from '@openint/cdk'
+
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
@@ -104,7 +105,7 @@ export const connectRouter = router({
       )
 
       return {
-        token: token,
+        token,
       }
     }),
   preConnect: customerProcedure
@@ -169,7 +170,7 @@ export const connectRouter = router({
 
       const preConnect = connector.preConnect ?? (() => ({}))
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/await-thenable
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       const res = await preConnect({
         config: ccfg.config,
         context: {
@@ -362,7 +363,7 @@ export const connectRouter = router({
 
       // TODO: make sure statis is updated
       return {
-        ...conn!,
+        ...conn,
         customer_id: conn.customer_id!, // Fix me
       }
     }),

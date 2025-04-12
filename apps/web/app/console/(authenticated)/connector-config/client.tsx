@@ -1,9 +1,12 @@
 'use client'
 
-import {Plus} from 'lucide-react'
-import {useRef, useState} from 'react'
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
 import type {AppRouterOutput} from '@openint/api-v1/routers'
+import type {JSONSchemaFormRef} from '@openint/ui-v1'
+import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
+
+import {Plus} from 'lucide-react'
+import {useRef, useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
 import {
   Sheet,
@@ -16,9 +19,8 @@ import {
   AddConnectorConfig,
   ConnectorTableCell,
   JSONSchemaForm,
-  type JSONSchemaFormRef,
 } from '@openint/ui-v1'
-import {DataTable, type ColumnDef} from '@openint/ui-v1/components/DataTable'
+import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'
 

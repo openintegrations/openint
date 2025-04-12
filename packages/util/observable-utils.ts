@@ -1,6 +1,5 @@
 import * as rxjs from 'rxjs'
 import * as Rx from 'rxjs/operators'
-
 import {Deferred, withConcurrency} from './promise-utils'
 
 export {rxjs, Rx}

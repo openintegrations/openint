@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {z} from '@openint/util/zod-utils'
 import {ZodSchemaForm} from './ZodSchemaForm'
 

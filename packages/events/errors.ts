@@ -1,9 +1,10 @@
 // Errors should be thought of nothing but events as well.
 // To be handled just like any other. With a code and schema.
 
-import type {ErrorCode, ErrorMessageMap} from './errors.def'
 import type {NonEmptyArray} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
+import type {ErrorCode, ErrorMessageMap} from './errors.def'
+
 import {TRPCError} from '@trpc/server'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {titleCase} from '@openint/util/string-utils'

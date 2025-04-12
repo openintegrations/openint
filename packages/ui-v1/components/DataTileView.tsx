@@ -1,17 +1,13 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  type ColumnDef,
-  type TableOptions,
-} from '@tanstack/react-table'
+import type {ColumnDef, TableOptions} from '@tanstack/react-table'
+
+import {flexRender, getCoreRowModel, useReactTable} from '@tanstack/react-table'
 import {type ReactNode} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 
 export interface DataTileViewProps<TData> {
   data: TData[]
   /** Column is used for selections and filters */
-  columns: ColumnDef<TData>[]
+  columns: Array<ColumnDef<TData>>
   selectedId?: string
   onSelect?: (item: TData) => void
   getItemId: (item: TData) => string

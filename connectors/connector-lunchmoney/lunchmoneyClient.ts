@@ -1,7 +1,9 @@
+import type {Z} from '@openint/util/zod-utils'
+
 import {DateTime} from '@openint/util/date-utils'
 import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z, zCast, type Z} from '@openint/util/zod-utils'
+import {z, zCast} from '@openint/util/zod-utils'
 
 export type Category = Z.infer<typeof categorySchema>
 export type Asset = Z.infer<typeof assetSchema>

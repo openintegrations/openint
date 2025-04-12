@@ -6,9 +6,14 @@ import type {
   IChangeEvent,
   ThemeProps,
 } from '@rjsf/core'
+import type {
+  RegistryFieldsType,
+  RegistryWidgetsType,
+  RJSFSchema,
+} from '@rjsf/utils'
+import type {Oas31Schema} from '@openint/util/schema'
+
 import {withTheme} from '@rjsf/core'
-import type {RegistryFieldsType, RegistryWidgetsType} from '@rjsf/utils'
-import {type RJSFSchema} from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
@@ -18,7 +23,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@openint/shadcn/ui'
-import {transformJSONSchema, type Oas31Schema} from '@openint/util/schema'
+import {transformJSONSchema} from '@openint/util/schema'
 import {fields} from './fields'
 import {jsonSchemaToUiSchema} from './jsonSchemaToUiSchema'
 import {widgets} from './widgets'

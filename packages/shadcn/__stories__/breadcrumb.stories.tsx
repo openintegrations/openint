@@ -1,5 +1,6 @@
 // packages/shadcn/__stories__/breadcrumb.stories.tsx
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {HomeIcon} from 'lucide-react'
 import {
   Breadcrumb,

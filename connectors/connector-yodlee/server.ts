@@ -1,12 +1,15 @@
 import type {ConnectorServer} from '@openint/cdk'
 import type {yodleeSchemas} from './def'
+
 import {makeYodleeClient} from './YodleeClient'
 
 export const yodleeServer = {
   // TODO: handle reconnecting scenario
   preConnect: async ({config, context}) => {
     const loginName =
-      config.envName === 'sandbox' ? config?.sandboxLoginName : context.extCustomerId
+      config.envName === 'sandbox'
+        ? config?.sandboxLoginName
+        : context.extCustomerId
     if (!loginName) {
       throw new Error('[Yodlee] Sandbox login name not configured')
     }
@@ -21,7 +24,9 @@ export const yodleeServer = {
   postConnect: async ({connectOutput, config, context}) => {
     // Should we get accessToken & loginName from the preConnect phase?
     const loginName =
-      config.envName === 'sandbox' ? config?.sandboxLoginName : context.extCustomerId
+      config.envName === 'sandbox'
+        ? config?.sandboxLoginName
+        : context.extCustomerId
     if (!loginName) {
       throw new Error('[Yodlee] Sandbox login name not configured')
     }

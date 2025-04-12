@@ -1,4 +1,5 @@
 import '@openint/ui-v1/global.css'
+
 import {ThemeProvider} from '@openint/ui-v1/components/ThemeProvider'
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

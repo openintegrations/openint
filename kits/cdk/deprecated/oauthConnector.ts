@@ -1,5 +1,6 @@
-import {z} from '@openint/util/zod-utils'
 import type {ConnectorSchemas, ConnHelpers} from '../connector.types'
+
+import {z} from '@openint/util/zod-utils'
 import {zId} from '../id.types'
 
 export const zAuthMode = z

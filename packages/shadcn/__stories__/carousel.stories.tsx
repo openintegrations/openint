@@ -1,5 +1,6 @@
 // packages/shadcn/__stories__/carousel.stories.tsx
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {
   Carousel,
   CarouselContent,

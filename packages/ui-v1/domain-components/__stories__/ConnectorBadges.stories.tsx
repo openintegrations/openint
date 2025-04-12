@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {ConnectorBadges} from '../ConnectorCard'
 import {FIXTURES} from './fixtures'
 
@@ -19,7 +20,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web'] as Array<'web' | 'mobile' | 'desktop'>,
   },
 
   render: () => (
@@ -41,7 +42,7 @@ export const Default: Story = {
 export const GAStage: Story = {
   args: {
     stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web'] as Array<'web' | 'mobile' | 'desktop'>,
   },
 }
 
@@ -49,7 +50,9 @@ export const GAStage: Story = {
 export const BetaStage: Story = {
   args: {
     stage: 'beta' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web', 'mobile', 'desktop'] as Array<
+      'web' | 'mobile' | 'desktop'
+    >,
   },
 }
 
@@ -57,7 +60,7 @@ export const BetaStage: Story = {
 export const AlphaStage: Story = {
   args: {
     stage: 'alpha' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web'] as Array<'web' | 'mobile' | 'desktop'>,
   },
 }
 
@@ -65,7 +68,9 @@ export const AlphaStage: Story = {
 export const ManyPlatforms: Story = {
   args: {
     stage: 'ga' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web', 'mobile', 'desktop'] as Array<
+      'web' | 'mobile' | 'desktop'
+    >,
   },
   parameters: {
     viewport: {
@@ -84,7 +89,9 @@ export const ManyPlatforms: Story = {
 export const MobileView: Story = {
   args: {
     stage: 'beta' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web', 'mobile', 'desktop'] as Array<
+      'web' | 'mobile' | 'desktop'
+    >,
   },
   parameters: {
     viewport: {
@@ -102,7 +109,9 @@ export const MobileView: Story = {
 export const DesktopView: Story = {
   args: {
     stage: 'beta' as 'ga' | 'beta' | 'alpha',
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web', 'mobile', 'desktop'] as Array<
+      'web' | 'mobile' | 'desktop'
+    >,
   },
   parameters: {
     viewport: {
@@ -119,7 +128,7 @@ export const DesktopView: Story = {
 // No stage, only platforms
 export const PlatformsOnly: Story = {
   args: {
-    platforms: ['web', 'mobile'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web', 'mobile'] as Array<'web' | 'mobile' | 'desktop'>,
   },
 }
 
@@ -133,6 +142,8 @@ export const StageOnly: Story = {
 // All possible platforms
 export const AllPlatforms: Story = {
   args: {
-    platforms: ['web', 'mobile', 'desktop'] as ('web' | 'mobile' | 'desktop')[],
+    platforms: ['web', 'mobile', 'desktop'] as Array<
+      'web' | 'mobile' | 'desktop'
+    >,
   },
 }

@@ -1,4 +1,5 @@
 import type Z from 'zod'
+
 import zod, {ZodError} from 'zod'
 import {extendZodWithOpenApi} from 'zod-openapi'
 import {compact} from './array-utils'

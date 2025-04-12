@@ -4,14 +4,16 @@ import type {
   ConnectionUpdateData,
   Source,
 } from '@openint/sync'
-import {castIs, z, type Z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
 // TODO: Fix this cyclic import hack
 // eslint-disable-next-line import-x/no-relative-packages
 import type {AuthType, JsonConnectorDef} from '../../connectors/cnext/schema'
 import type {ConnHelpers} from './connector.types'
 import type {CustomerId, ExtCustomerId, ExternalId, Id} from './id.types'
-import {zExternalId, zId} from './id.types'
 import type {VerticalKey} from './verticals'
+
+import {castIs, z} from '@openint/util/zod-utils'
+import {zExternalId, zId} from './id.types'
 
 export const zConnectorStage = z.enum(['hidden', 'alpha', 'beta', 'ga'])
 

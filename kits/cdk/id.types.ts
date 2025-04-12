@@ -1,8 +1,10 @@
 // TODO: Maybe this belongs in engine backend?
+import type {Z} from '@openint/util/zod-utils'
+
 import {compact} from '@openint/util/array-utils'
 import {memoize} from '@openint/util/function-utils'
 import {invert} from '@openint/util/object-utils'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 
 export type ExternalId = Z.infer<typeof zExternalId>
 export const zExternalId = z.union([z.string(), z.number()])

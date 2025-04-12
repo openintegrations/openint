@@ -1,9 +1,10 @@
+import type {Customer} from '../models'
+import type {Query} from './utils/pagination'
+
 import {schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
-import type {Customer} from '../models'
 import {core} from '../models'
 import {orgProcedure, router} from '../trpc/_base'
-import type {Query} from './utils/pagination'
 import {
   applyPaginationAndOrder,
   processTypedPaginatedResponse,
@@ -38,14 +39,16 @@ export const customerRouter = router({
       const baseQuery = ctx.db
         .select({
           id: schema.connection.customer_id,
-          connection_count: sql<number>`cast(count(*) as integer)`,
+          connection_count: sql<number>`cast(count(*) AS integer)`,
           created_at: sql<string>`min(${schema.connection.created_at})`,
           updated_at: sql<string>`max(${schema.connection.updated_at})`,
         })
         .from(schema.connection)
         .where(
           input?.keywords
-            ? sql`${schema.connection.customer_id} ILIKE ${`%${input.keywords}%`}`
+            ? sql`
+                ${schema.connection.customer_id} ILIKE ${`%${input.keywords}%`}
+              `
             : undefined,
         )
         .groupBy(schema.connection.customer_id, schema.connection.created_at)

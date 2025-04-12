@@ -1,4 +1,6 @@
-import {ConnectProps, createConnectIframe} from './common'
+import type {ConnectProps} from './common'
+
+import {createConnectIframe} from './common'
 
 export const Connect = {
   embed: (

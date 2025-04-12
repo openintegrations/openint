@@ -1,4 +1,5 @@
 import type {Base, FieldSet, Records} from 'airtable'
+
 import Airtable from 'airtable'
 import {titleCase} from '@openint/util/string-utils'
 import {zFunction} from '@openint/util/zod-function-utils'

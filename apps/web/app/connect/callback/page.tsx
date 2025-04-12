@@ -21,6 +21,7 @@
  */
 
 import type {PageProps} from '@/lib-common/next-utils'
+
 import {redirect} from 'next/navigation'
 import {getBaseURLs} from '@openint/env'
 import {z} from '@openint/util/zod-utils'

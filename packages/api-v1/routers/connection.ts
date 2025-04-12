@@ -1,4 +1,5 @@
 import type {Z} from '@openint/util/zod-utils'
+
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
@@ -304,7 +305,7 @@ export const connectionRouter = router({
         typeof connector.checkConnection === 'function'
       ) {
         try {
-          await connector.checkConnection(connection.settings as any)
+          await connector.checkConnection(connection.settings)
           // QQ: should this parse the results of checkConnection somehow?
 
           // TODO: persist the result of checkConnection for settings

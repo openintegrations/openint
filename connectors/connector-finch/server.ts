@@ -1,7 +1,8 @@
 import type {FinchSDK, FinchSDKTypes} from '@opensdks/sdk-finch'
-import {initFinchSDK} from '@opensdks/sdk-finch'
 import type {ConnectorServer} from '@openint/cdk'
 import type {finchSchemas} from './def'
+
+import {initFinchSDK} from '@opensdks/sdk-finch'
 
 type Finch = FinchSDKTypes['oas']['components']['schemas']
 export const finchServer = {

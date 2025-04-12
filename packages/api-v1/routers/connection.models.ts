@@ -1,6 +1,7 @@
+import type {Z} from '@openint/util/zod-utils'
 import type {Core} from '../models'
 import type {ConnectorName} from './connector.models'
-import type {Z} from '@openint/util/zod-utils'
+
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {z} from '@openint/util/zod-utils'
@@ -61,7 +62,7 @@ export async function formatConnection(
   _ctx: any,
   connection: Core['connection_select'],
   include_secrets: Z.infer<typeof zIncludeSecrets> = 'none',
-  expand: Z.infer<typeof zConnectionExpandOption>[] = [],
+  expand: Array<Z.infer<typeof zConnectionExpandOption>> = [],
 ) {
   const connector =
     defConnectors[connection.connector_name as keyof typeof defConnectors]

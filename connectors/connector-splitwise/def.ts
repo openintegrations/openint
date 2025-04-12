@@ -1,7 +1,9 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
-import {connHelpers} from '@openint/cdk'
-import {z, type Z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
 import type {zUser} from './splitwise-schema'
+
+import {connHelpers} from '@openint/cdk'
+import {z} from '@openint/util/zod-utils'
 import {zCurrentUser} from './splitwise-schema'
 
 export const splitwiseSchemas = {

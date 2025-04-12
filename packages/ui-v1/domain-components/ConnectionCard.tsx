@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 import type {ConnectionExpanded} from '@openint/api-v1/models'
+
 import {Settings} from 'lucide-react'
 import Image from 'next/image'
 import {useState} from 'react'

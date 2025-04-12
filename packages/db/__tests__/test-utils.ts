@@ -1,11 +1,12 @@
 import path from 'node:path'
+import type {AnyDatabase, Database, DatabaseDriver} from '../db'
+
 import {afterAll, beforeAll, describe} from '@jest/globals'
 import {generateDrizzleJson, generateMigration} from 'drizzle-kit/api'
 import {sql} from 'drizzle-orm'
 import {env, envRequired} from '@openint/env'
 import {snakeCase} from '@openint/util/string-utils'
 import {schema} from '..'
-import type {AnyDatabase, Database, DatabaseDriver} from '../db'
 import {initDbNeon} from '../db.neon'
 import {initDbPg, initDbPgDirect} from '../db.pg'
 import {initDbPGLite, initDbPGLiteDirect} from '../db.pglite'
@@ -118,17 +119,22 @@ export function describeEachDatabase<T extends DatabaseDriver>(
 export async function ensureSchema(thisDb: Database, schema: string) {
   // Check existence first because we may not have permission to actually create the schema
   const exists = await thisDb
-    .$exec(
-      sql`SELECT true as exists FROM information_schema.schemata WHERE schema_name = ${schema}`,
-    )
+    .$exec(sql`
+      SELECT
+        TRUE AS EXISTS
+      FROM
+        information_schema.schemata
+      WHERE
+        schema_name = ${schema}
+    `)
     .then((r) => r.rows[0]?.['exists'] === true)
 
   if (exists) {
     return
   }
-  await thisDb.$exec(
-    sql`CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};`,
-  )
+  await thisDb.$exec(sql`
+    CREATE SCHEMA IF NOT EXISTS ${sql.identifier(schema)};
+  `)
 }
 
 // Importing `drizzle-kit/api` in this file causes next.js to crash... So we are separating it instead

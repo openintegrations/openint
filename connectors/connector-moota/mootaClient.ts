@@ -1,6 +1,6 @@
-import {z, zCast} from '@openint/util/zod-utils'
 import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
+import {z, zCast} from '@openint/util/zod-utils'
 
 export const zConfig = z.object({
   token: z.string(),

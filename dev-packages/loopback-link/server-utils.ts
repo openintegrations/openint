@@ -1,6 +1,6 @@
-import type {IncomingMessage, ServerResponse} from 'node:http'
 import {createServer} from 'node:http'
 import type Elysia from 'elysia'
+import type {IncomingMessage, ServerResponse} from 'node:http'
 
 /** Utility to convert Node's IncomingMessage to Web Request */
 export async function nodeRequestToWebRequest(req: IncomingMessage) {

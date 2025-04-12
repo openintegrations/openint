@@ -1,5 +1,3 @@
-import type http from 'node:http'
-import type https from 'node:https'
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -7,6 +5,9 @@ import type {
   AxiosError as IAxiosError,
   Method,
 } from 'axios'
+import type http from 'node:http'
+import type https from 'node:https'
+
 import _Axios from 'axios'
 import {defineProxyFn} from '../di-utils'
 

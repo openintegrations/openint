@@ -1,4 +1,5 @@
 import type {ConnectorSchemas} from '@openint/cdk'
+
 import {z} from '@openint/util/zod-utils'
 
 const zOauthConnectorConfig = z

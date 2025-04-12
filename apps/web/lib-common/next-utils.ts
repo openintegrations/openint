@@ -1,4 +1,5 @@
 import type {Z} from '@openint/util/zod-utils'
+
 import {rethrowZodError} from '@openint/events/errors'
 
 /* eslint-disable promise/no-nesting */

@@ -83,7 +83,7 @@ export const organizationRouter = router({
         id: input.id,
         name: input.name,
         slug: input.name.toLowerCase().replace(/ /g, '-'),
-        api_key: apikey as string,
+        api_key: apikey,
         metadata,
       }
 

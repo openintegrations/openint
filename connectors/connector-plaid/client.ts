@@ -1,11 +1,12 @@
-import React from 'react'
 import type {PlaidLinkOptions} from 'react-plaid-link'
-import {usePlaidLink} from 'react-plaid-link'
 import type {ConnectorClient} from '@openint/cdk'
-import {CANCELLATION_TOKEN} from '@openint/cdk'
-import {Deferred} from '@openint/util/promise-utils'
 import type {RequiredOnly} from '@openint/util/type-utils'
 import type {helpers, plaidSchemas} from './def'
+
+import React from 'react'
+import {usePlaidLink} from 'react-plaid-link'
+import {CANCELLATION_TOKEN} from '@openint/cdk'
+import {Deferred} from '@openint/util/promise-utils'
 
 export const plaidClientConnector = {
   useConnectHook: (_) => {

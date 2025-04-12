@@ -1,4 +1,5 @@
 import type {ConnectorConfig} from '../models'
+
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {makeId} from '@openint/cdk'
@@ -193,7 +194,7 @@ export const connectorConfigRouter = router({
         })
       }
 
-      return ccfg!
+      return ccfg
     }),
   deleteConnectorConfig: orgProcedure
     .meta({

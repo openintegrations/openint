@@ -4,20 +4,29 @@ import {parseNumber} from './type-parsers'
 
 describeEachDatabase({drivers: 'all', __filename}, (db) => {
   test('numeric type parser', async () => {
-    const res = await db.$exec(sql`SELECT 1.0::numeric as numeric`)
+    const res = await db.$exec(sql`
+      SELECT
+        1.0::numeric AS numeric
+    `)
     expect(res.rows[0]?.numeric).toEqual(1.0)
   })
 
   test('count type parser', async () => {
-    const res = await db.$exec(sql`SELECT count(*) from pg_catalog.pg_tables`)
+    const res = await db.$exec(sql`
+      SELECT
+        count(*)
+      FROM
+        pg_catalog.pg_tables
+    `)
     expect(res.rows[0]?.count).toEqual(expect.any(Number))
   })
 
   test('large numeric type parser', async () => {
     await expect(
-      db.$exec(
-        sql`SELECT 9999999999999999999999999999999999::numeric as numeric`,
-      ),
+      db.$exec(sql`
+        SELECT
+          9999999999999999999999999999999999::numeric AS numeric
+      `),
     ).rejects.toThrow('Number overflow')
   })
 

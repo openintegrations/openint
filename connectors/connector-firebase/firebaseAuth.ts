@@ -2,6 +2,7 @@
 // compat is working
 import 'firebase/compat/auth'
 import 'firebase/compat/firestore'
+
 import {UserImpl} from '@firebase/auth/internal'
 import firebase from 'firebase/compat/app'
 import {zFunction} from '@openint/util/zod-function-utils'

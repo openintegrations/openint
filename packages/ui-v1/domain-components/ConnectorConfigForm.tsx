@@ -1,7 +1,8 @@
-import Form from '@rjsf/core'
-import {RJSFSchema} from '@rjsf/utils'
-import {ForwardedRef} from 'react'
-import {defConnectors} from '@openint/all-connectors/connectors.def'
+import type Form from '@rjsf/core'
+import type {RJSFSchema} from '@rjsf/utils'
+import type {ForwardedRef} from 'react'
+import type {defConnectors} from '@openint/all-connectors/connectors.def'
+
 import {JSONSchemaForm} from '../components/schema-form'
 
 export interface ConnectorConfigFormProps<
@@ -31,7 +32,7 @@ export interface ConnectorConfigFormProps<
    * and submitted with formRef.current.submit();
    * onSubmit is then called with the form data
    */
-  ref: ForwardedRef<Form<any, RJSFSchema, any>>
+  ref: ForwardedRef<Form>
 
   /**
    * Optional class name for styling the form container

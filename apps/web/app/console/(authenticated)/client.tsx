@@ -1,7 +1,8 @@
 'use client'
 
-import React from 'react'
 import type {AppRouter} from '@openint/api-v1'
+
+import React from 'react'
 import {getServerUrl} from '@openint/env'
 import {Toaster} from '@openint/shadcn/ui'
 import {

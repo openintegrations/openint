@@ -8,6 +8,7 @@ describe('sql generation', () => {
   test('identifier', () => {
     expect(
       pgDialect.sqlToQuery(
+        // prettier-ignore
         sql`SELECT true FROM ${sql.identifier('connection')}`,
       ),
     ).toMatchObject({sql: 'SELECT true FROM "connection"', params: []})
@@ -21,6 +22,7 @@ describe('sql generation', () => {
 
     expect(
       pgDialect.sqlToQuery(
+        // prettier-ignore
         sql`SELECT ${table.Name}, ${table.id} FROM ${table}`,
       ),
     ).toMatchObject({
@@ -30,8 +32,10 @@ describe('sql generation', () => {
   })
 
   test('concatenate queries', () => {
+    // prettier-ignore
     const fragment = sql`1 = 1`
     expect(
+      // prettier-ignore
       pgDialect.sqlToQuery(sql`SELECT true WHERE ${fragment} AND 2 != 1`),
     ).toMatchObject({sql: 'SELECT true WHERE 1 = 1 AND 2 != 1', params: []})
   })
@@ -39,6 +43,7 @@ describe('sql generation', () => {
   test('dates', () => {
     const date = new Date()
     expect(
+      // prettier-ignore
       pgDialect.sqlToQuery(sql`SELECT true WHERE created > ${date}`),
     ).toMatchObject({sql: 'SELECT true WHERE created > $1', params: [date]})
   })
@@ -46,6 +51,7 @@ describe('sql generation', () => {
   test('apply limit offset', () => {
     expect(
       pgDialect.sqlToQuery(
+        // prettier-ignore
         applyLimitOffset(sql`SELECT * FROM connection`, {limit: 10, offset: 5}),
       ),
     ).toMatchObject({
@@ -54,6 +60,7 @@ describe('sql generation', () => {
     })
     expect(
       pgDialect.sqlToQuery(
+        // prettier-ignore
         applyLimitOffset(sql`SELECT * FROM connection`, {limit: 10}),
       ),
     ).toMatchObject({
@@ -61,6 +68,7 @@ describe('sql generation', () => {
       params: [10],
     })
     expect(
+      // prettier-ignore
       pgDialect.sqlToQuery(applyLimitOffset(sql`SELECT * FROM connection`, {})),
     ).toMatchObject({
       sql: 'SELECT * FROM connection',
@@ -69,6 +77,7 @@ describe('sql generation', () => {
   })
 
   test('array', () => {
+    // prettier-ignore
     expect(pgDialect.sqlToQuery(sql`SELECT ${1} + ${2}`)).toMatchObject({
       sql: 'SELECT $1 + $2',
       params: [1, 2],
@@ -79,6 +88,7 @@ describe('sql generation', () => {
     // array input is flattened by default, this would be an error
     expect(
       pgDialect.sqlToQuery(
+        // prettier-ignore
         sql`SELECT * from connection where id = ANY(${ids}) and status = ${'active'}`,
       ),
     ).toMatchObject({
@@ -89,6 +99,7 @@ describe('sql generation', () => {
     // with param array is passed as a single value
     expect(
       pgDialect.sqlToQuery(
+        // prettier-ignore
         sql`SELECT * from connection where id = ANY(${sql.param(
           ids,
         )}) and status = ${'active'}`,
@@ -100,6 +111,7 @@ describe('sql generation', () => {
     // Single item should also work
     expect(
       pgDialect.sqlToQuery(
+        // prettier-ignore
         sql`SELECT * from connection where id = ANY(${sql.param([
           'i3',
         ])}) and status = ${'active'}`,

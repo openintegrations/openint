@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable jest/no-standalone-expect */
+
+import type {OAuthClient, OAuthUser} from './createOAuth2Server'
+
 import {expect} from '@jest/globals'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
 import {z} from '@openint/util/zod-utils'
 import {createOAuth2Client} from './createOAuth2Client'
-import {
-  createOAuth2Server,
-  type OAuthClient,
-  type OAuthUser,
-} from './createOAuth2Server'
+import {createOAuth2Server} from './createOAuth2Server'
 import {createCodeVerifier} from './utils.client'
 
 const client = {

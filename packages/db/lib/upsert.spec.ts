@@ -9,8 +9,8 @@ describeEachDatabase({drivers: 'all', __filename}, (db) => {
     await db.$exec(sql`
       CREATE TABLE IF NOT EXISTS "test_user" (
         id text PRIMARY KEY,
-        name text default 'unnamed',
-        count integer,
+        name text DEFAULT 'unnamed',
+        COUNT integer,
         data jsonb
       );
     `)
@@ -34,7 +34,12 @@ describeEachDatabase({drivers: 'all', __filename}, (db) => {
   })
 
   test('upsert with inferred table', async () => {
-    const {rows: ret} = await db.$exec(sql`SELECT * FROM "test_user"`)
+    const {rows: ret} = await db.$exec(sql`
+      SELECT
+        *
+      FROM
+        "test_user"
+    `)
     expect(ret[0]).toEqual(row)
   })
 
@@ -45,7 +50,12 @@ describeEachDatabase({drivers: 'all', __filename}, (db) => {
       {...row, name: null},
       {keyColumns: ['id']},
     )
-    const {rows: ret2} = await db.$exec(sql`SELECT * FROM "test_user"`)
+    const {rows: ret2} = await db.$exec(sql`
+      SELECT
+        *
+      FROM
+        "test_user"
+    `)
     expect(ret2[0]).toEqual({...row, name: null})
   })
 
@@ -56,7 +66,12 @@ describeEachDatabase({drivers: 'all', __filename}, (db) => {
       {...row, name: undefined},
       {keyColumns: ['id']},
     )
-    const {rows: ret2} = await db.$exec(sql`SELECT * FROM "test_user"`)
+    const {rows: ret2} = await db.$exec(sql`
+      SELECT
+        *
+      FROM
+        "test_user"
+    `)
     expect(ret2[0]).toEqual(row)
   })
 
@@ -67,7 +82,12 @@ describeEachDatabase({drivers: 'all', __filename}, (db) => {
       {...row, name: undefined},
       {keyColumns: ['id'], undefinedAsDefault: true},
     )
-    const {rows: ret2} = await db.$exec(sql`SELECT * FROM "test_user"`)
+    const {rows: ret2} = await db.$exec(sql`
+      SELECT
+        *
+      FROM
+        "test_user"
+    `)
     expect(ret2[0]).toEqual({...row, name: 'unnamed'})
   })
 
@@ -83,7 +103,14 @@ describeEachDatabase({drivers: 'all', __filename}, (db) => {
     )
 
     expect(
-      await db.$exec(sql`SELECT * FROM "test_user"`).then((r) => r.rows[0]),
+      await db
+        .$exec(sql`
+          SELECT
+            *
+          FROM
+            "test_user"
+        `)
+        .then((r) => r.rows[0]),
     ).toEqual({...row, name: 'original'})
   })
 
@@ -95,11 +122,7 @@ describeEachDatabase({drivers: 'all', __filename}, (db) => {
 
   test('change inferred schema between upserts to same table', async () => {
     await db.$exec(sql`
-      CREATE TABLE IF NOT EXISTS "pipeline" (
-        id text PRIMARY KEY,
-        num integer,
-        str text
-      );
+      CREATE TABLE IF NOT EXISTS "pipeline" (id text PRIMARY KEY, num integer, str text);
     `)
 
     await dbUpsertOne(db, 'pipeline', {id: 1, num: 123}, {keyColumns: ['id']})

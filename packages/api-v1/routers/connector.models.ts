@@ -1,11 +1,14 @@
-import {defConnectors} from '@openint/all-connectors/connectors.def'
 import type {ConnectorName} from '@openint/all-connectors/name'
+import type {ConnectorDef} from '@openint/cdk'
+import type {Z} from '@openint/util/zod-utils'
+
+import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {zConnectorName} from '@openint/all-connectors/name'
 import {jsonSchemasByConnectorName} from '@openint/all-connectors/schemas'
-import {zConnectorSchemas, type ConnectorDef} from '@openint/cdk'
+import {zConnectorSchemas} from '@openint/cdk'
 import {titleCase} from '@openint/util/string-utils'
 import {urlFromImage} from '@openint/util/url-utils'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 
 export const zConnector = z.object({
   name: z.string(),

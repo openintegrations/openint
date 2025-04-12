@@ -1,17 +1,22 @@
 // @deprecated , directly use the new openapi client instead
+import type {HTTPError} from '@openint/util/http/index'
+import type {Z} from '@openint/util/zod-utils'
+import type {YodleeAccount, YodleeTransaction} from './yodlee.types'
+
 import {
   formDataBodySerializer,
   HTTPError as OpenapiHTTPError,
 } from '@opensdks/runtime'
 import {initYodleeSDK} from '@opensdks/sdk-yodlee'
 import {DateTime, parseDateTime} from '@openint/util/date-utils'
-import {$makeProxyAgent, getDefaultProxyAgent} from '@openint/util/http'
-import {createHTTPClient} from '@openint/util/http/index'
-import type {HTTPError} from '@openint/util/http/index'
+import {
+  $makeProxyAgent,
+  createHTTPClient,
+  getDefaultProxyAgent,
+} from '@openint/util/http'
 import {R} from '@openint/util/remeda'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z, type Z} from '@openint/util/zod-utils'
-import type {YodleeAccount, YodleeTransaction} from './yodlee.types'
+import {z} from '@openint/util/zod-utils'
 
 export type YodleeEnvName = Z.infer<typeof zYodleeEnvName>
 export const zYodleeEnvName = z.enum(['sandbox', 'development', 'production'])

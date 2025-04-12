@@ -1,4 +1,11 @@
 import type {DeepMergeLeafURI} from 'deepmerge-ts'
+import type {
+  AnyRecord,
+  Invert,
+  NonEmptyArray,
+  ObjectPartialDeep,
+} from './type-utils'
+
 import {deepmergeCustom} from 'deepmerge-ts'
 import {createCustomEqual, deepEqual} from 'fast-equals'
 import {
@@ -8,12 +15,6 @@ import {
 } from 'lodash'
 import {math} from './math-utils'
 import {R} from './remeda'
-import type {
-  AnyRecord,
-  Invert,
-  NonEmptyArray,
-  ObjectPartialDeep,
-} from './type-utils'
 
 export {
   circularDeepEqual,

@@ -1,5 +1,6 @@
-import {Suspense} from 'react'
 import type {PageProps} from '@/lib-common/next-utils'
+
+import {Suspense} from 'react'
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
 import {ClientApp} from '../client'
