@@ -1,18 +1,19 @@
 import path from 'node:path'
 import type {NextConfig} from 'next'
+
 import {withSentryConfig} from '@sentry/nextjs'
 // eslint-disable-next-line import-x/no-extraneous-dependencies
 import webpack from 'webpack'
 
-const isDevOrStaging =
+const isDevOrPreview =
   process.env.NODE_ENV !== 'production' ||
-  process.env['VERCEL_URL'] == 'openint-git-main-openint-dev.vercel.app'
+  process.env['VERCEL_URL']?.endsWith('openint-dev.vercel.app')
 
 /** match all paths that are not special in next.js world */
 const nonSpecialPath = '/:path((?!_next|favicon.ico|sitemap.xml|robots.txt).*)'
 
 const nextConfig = {
-  // TODO: Figure out why this is still needed. Does not appear to be needed in byos anymore...
+  // TODO: Figure out why this is still needed. Should automatically work
   transpilePackages: [
     // Should we generate this list from fs also?
     path.resolve(__dirname, '../../kits/cdk'),
@@ -39,6 +40,7 @@ const nextConfig = {
       // TODO: Where is this used? and rename to _posthog to be consistent with _sentry
       {source: '/_posthog/:p*', destination: 'https://app.posthog.com/:p*'},
 
+      // Legacy api for compat
       // api.openint.dev/v0/* -> app.openint.dev/api/v0/*
       {
         source: '/v0/:path*',
@@ -46,20 +48,19 @@ const nextConfig = {
         destination:
           'https://openint-git-v0-openint-dev.vercel.app/api/v0/:path*',
       },
-
-      // api.openint.dev/v1/* -> /api/v1/* (same app)
+      // api.openint.dev/* -> /api/*
       {
-        source: '/v1/:path*',
+        source: nonSpecialPath,
         has: [{type: 'host', value: 'api.openint.dev'}],
-        destination: '/api/v1/:path*',
+        destination: '/api/:path*',
       },
-
       // connect.openint.dev/* -> /connect/*
       {
         source: nonSpecialPath,
         has: [{type: 'host', value: 'connect.openint.dev'}],
         destination: '/connect/:path*',
       },
+      // console.openint.dev/* -> /console/*
       {
         source: nonSpecialPath,
         has: [{type: 'host', value: 'console.openint.dev'}],
@@ -90,12 +91,7 @@ const nextConfig = {
     },
     {
       source: '/preview/:branch*',
-      destination: 'https://openint-git-:branch*-openint-dev.vercel.app',
-      permanent: false,
-    },
-    {
-      source: '/api/v0/verticals/:p*',
-      destination: '/api/v0/unified/:p*',
+      destination: 'https://v1-git-:branch*-openint-dev.vercel.app',
       permanent: false,
     },
     // clerk expects these routes to be present in their UI and we have them inside the dashboard
@@ -177,7 +173,7 @@ const nextConfig = {
           value: 'same-origin-allow-popups', // Allows popups to maintain opener relationship
         },
       ].concat(
-        isDevOrStaging
+        isDevOrPreview
           ? [
               {
                 key: 'Cross-Origin-Embedder-Policy',
