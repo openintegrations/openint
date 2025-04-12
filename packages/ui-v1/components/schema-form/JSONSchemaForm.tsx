@@ -6,7 +6,11 @@ import type {
   IChangeEvent,
   ThemeProps,
 } from '@rjsf/core'
-import type {RegistryFieldsType, RegistryWidgetsType,type RJSFSchema} from '@rjsf/utils'
+import type {
+  RegistryFieldsType,
+  RegistryWidgetsType,
+  RJSFSchema,
+} from '@rjsf/utils'
 import type {Oas31Schema} from '@openint/util/schema'
 
 import {withTheme} from '@rjsf/core'

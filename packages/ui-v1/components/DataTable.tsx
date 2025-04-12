@@ -5,7 +5,7 @@ import type {
   ColumnFiltersState,
   Table as ReactTable,
   SortingState,
-  VisibilityState,Table as ReactTable
+  VisibilityState,
 } from '@tanstack/react-table'
 
 import {
