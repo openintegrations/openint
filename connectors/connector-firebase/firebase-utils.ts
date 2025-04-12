@@ -1,9 +1,6 @@
 import type admin from 'firebase-admin'
 import type firebase from 'firebase/compat'
 import type {InjectionToken} from '@openint/util/di-utils'
-import {objectKeys} from '@openint/util/object-utils'
-import {resolveDependency} from '@openint/util/di-utils'
-import {rxjs} from '@openint/util/observable-utils'
 import type {
   AnyDocumentReference,
   AnyDocumentSnapshot,
@@ -22,6 +19,10 @@ import type {
   SnapshotData,
   Timestamp,
 } from './firebase-types'
+
+import {resolveDependency} from '@openint/util/di-utils'
+import {objectKeys} from '@openint/util/object-utils'
+import {rxjs} from '@openint/util/observable-utils'
 
 /** @deprecated. to be removed */
 export const kFieldPath = Symbol(

@@ -1,4 +1,5 @@
 import type {Config} from 'drizzle-kit'
+
 import {env} from '@openint/env'
 
 export default {

@@ -1,8 +1,9 @@
 import type {ConnectorClient} from '@openint/cdk'
-import {CANCELLATION_TOKEN, DivContainer, useScript} from '@openint/cdk'
 import type {NonDiscriminatedUnion} from '@openint/util/type-utils'
 import type {yodleeSchemas} from './def'
 import type {FastLinkOpenOptions} from './fastlink'
+
+import {CANCELLATION_TOKEN, DivContainer, useScript} from '@openint/cdk'
 
 const YODLEE_CONTAINER_ID = 'yodlee-container'
 

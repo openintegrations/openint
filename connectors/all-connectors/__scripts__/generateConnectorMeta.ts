@@ -1,6 +1,7 @@
 // Write the metadata file
 import {join} from 'path'
 import type {ConnectorDef} from '@openint/cdk'
+
 import {R} from '@openint/util/remeda'
 import {clientConnectors} from '../connectors.client'
 import {defConnectors} from '../connectors.def'

@@ -1,8 +1,10 @@
 import type {HTTPError} from '@openint/util/http/index'
+import type {Z} from '@openint/util/zod-utils'
+import type {zCurrentUser, zExpense, zGroup} from './splitwise-schema'
+
 import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z, type Z} from '@openint/util/zod-utils'
-import type {zCurrentUser, zExpense, zGroup} from './splitwise-schema'
+import {z} from '@openint/util/zod-utils'
 import {zExpensesParams} from './splitwise-schema'
 
 const zSplitwiseConfig = z.object({
@@ -15,7 +17,6 @@ const zSplitwiseConfig = z.object({
 export const makeSplitwiseClient = zFunction(zSplitwiseConfig, (cfg) => {
   const createClient = () =>
     createHTTPClient({
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       baseURL: cfg.baseURL || 'https://secure.splitwise.com/api/v3.0',
       requestTransformer: (req) => {
         req.headers = {
@@ -89,9 +90,7 @@ class SplitwiseError extends Error {
     public readonly originalError: HTTPError,
   ) {
     super(
-      `${[...(data.errors ?? []), ...(data.error ? [data.error] : [])].join(
-        ', ',
-      )}`,
+      [...(data.errors ?? []), ...(data.error ? [data.error] : [])].join(', '),
     )
     Object.setPrototypeOf(this, SplitwiseError.prototype)
   }

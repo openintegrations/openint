@@ -1,5 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import type {AppRouterOutput} from '@openint/api-v1'
+
 import {DataTable} from '../../components/DataTable'
 import {CustomersTable} from './CustomerTable'
 

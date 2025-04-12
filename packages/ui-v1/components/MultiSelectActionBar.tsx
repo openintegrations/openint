@@ -1,6 +1,7 @@
 'use client'
 
 import type {Table} from '@tanstack/react-table'
+
 import {Trash2, X} from 'lucide-react'
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'

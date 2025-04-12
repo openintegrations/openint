@@ -1,8 +1,9 @@
 import type {Viewer} from '@openint/cdk'
 import type {AnyDatabase, AnyDrizzle} from '@openint/db/db'
+import type {RouterContextOnError} from './error-handling'
+
 import {asOrgIfCustomer, resolveViewer} from '@openint/cdk'
 import {viewerFromRequest} from './authentication'
-import {RouterContextOnError} from './error-handling'
 
 export interface ViewerContext<T extends Viewer = Viewer> {
   viewer: T

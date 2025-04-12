@@ -4,7 +4,6 @@ import type {
   ConnectionUpdateData,
   SyncOperation,
 } from '@openint/sync'
-import {R} from '@openint/util/remeda'
 import type {MaybePromise} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
 import type {
@@ -18,9 +17,11 @@ import type {
   WebhookReturnType,
 } from './connector-meta.types'
 import type {Id} from './id.types'
-import {makeId} from './id.types'
 import type {VerticalKey} from './verticals'
 import type {ZStandard} from './zStandard'
+
+import {R} from '@openint/util/remeda'
+import {makeId} from './id.types'
 
 /**
  * Equivalent to to airbyte's low code connector spec,

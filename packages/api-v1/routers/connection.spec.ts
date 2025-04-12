@@ -1,13 +1,15 @@
-// TODO: Fix standalone expect calls
-/* eslint-disable jest/no-standalone-expect */
-import {makeId, type CustomerId, type Viewer} from '@openint/cdk'
+import type {CustomerId, Viewer} from '@openint/cdk'
+
+import {makeId} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {$test} from '@openint/util/__tests__/test-utils'
+import {makeUlid} from '@openint/util/id-utils'
 import {routerContextFromViewer} from '../trpc/context'
 import {onError} from '../trpc/error-handling'
 import {connectionRouter} from './connection'
-import {makeUlid} from '@openint/util/id-utils'
+
+// TODO: Fix standalone expect calls
 
 const logger = false
 
@@ -92,7 +94,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     const res = await asCustomer.db
       .select({
         connection: schema.connection,
-        total: sql`count(*) over ()`,
+        total: sql`count(*) OVER ()`,
       })
       .from(schema.connection)
     expect(res[0]?.total).toEqual(1)

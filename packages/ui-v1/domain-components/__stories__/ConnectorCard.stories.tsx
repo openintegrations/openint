@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {Badge} from '@openint/shadcn/ui'
 import {ConnectorCard} from '../ConnectorCard'
 import {FIXTURES} from './fixtures'
@@ -66,11 +67,9 @@ export const ManyPlatforms: Story = {
       logo_url:
         'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/168_Hubspot_logo_logos-512.png',
       stage: 'ga' as 'ga' | 'beta' | 'alpha',
-      platforms: ['web', 'mobile', 'desktop'] as (
-        | 'web'
-        | 'mobile'
-        | 'desktop'
-      )[],
+      platforms: ['web', 'mobile', 'desktop'] as Array<
+        'web' | 'mobile' | 'desktop'
+      >,
     },
   },
 }
@@ -96,11 +95,9 @@ export const CardGrid: Story = {
           logo_url:
             'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1280px-Salesforce.com_logo.svg.png',
           stage: 'ga' as 'ga' | 'beta' | 'alpha',
-          platforms: ['web', 'mobile', 'desktop'] as (
-            | 'web'
-            | 'mobile'
-            | 'desktop'
-          )[],
+          platforms: ['web', 'mobile', 'desktop'] as Array<
+            'web' | 'mobile' | 'desktop'
+          >,
         },
         {
           name: 'google-drive',
@@ -108,11 +105,9 @@ export const CardGrid: Story = {
           logo_url:
             'https://cdn.iconscout.com/icon/free/png-256/free-google-drive-logo-icon-download-in-svg-png-gif-file-formats--storage-social-media-pack-logos-icons-1718511.png?f=webp&w=256',
           stage: 'ga' as 'ga' | 'beta' | 'alpha',
-          platforms: ['web', 'mobile', 'desktop'] as (
-            | 'web'
-            | 'mobile'
-            | 'desktop'
-          )[],
+          platforms: ['web', 'mobile', 'desktop'] as Array<
+            'web' | 'mobile' | 'desktop'
+          >,
         },
         {
           name: 'hubspot',
@@ -120,7 +115,7 @@ export const CardGrid: Story = {
           logo_url:
             'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/168_Hubspot_logo_logos-512.png',
           stage: 'beta' as 'ga' | 'beta' | 'alpha',
-          platforms: ['web', 'mobile'] as ('web' | 'mobile' | 'desktop')[],
+          platforms: ['web', 'mobile'] as Array<'web' | 'mobile' | 'desktop'>,
         },
         {
           name: 'notion',
@@ -128,7 +123,7 @@ export const CardGrid: Story = {
           logo_url:
             'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Notion-logo.svg/2048px-Notion-logo.svg.png',
           stage: 'alpha' as 'ga' | 'beta' | 'alpha',
-          platforms: ['web'] as ('web' | 'mobile' | 'desktop')[],
+          platforms: ['web'] as Array<'web' | 'mobile' | 'desktop'>,
         },
       ].map((connector, index) => (
         <ConnectorCard key={index} connector={connector} />

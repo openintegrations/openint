@@ -1,16 +1,9 @@
 import type {Handler} from 'elysia'
-import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import type {ConnectorServer} from '@openint/cdk'
-import {
-  and,
-  desc,
-  eq,
-  isNotNull,
-  lt,
-  schema,
-  sql,
-  type Database,
-} from '@openint/db'
+import type {Database} from '@openint/db'
+
+import {serverConnectors} from '@openint/all-connectors/connectors.server'
+import {and, desc, eq, isNotNull, lt, schema, sql} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired, isProduction} from '@openint/env'
 
@@ -42,14 +35,18 @@ export async function refreshStaleConnections(
     )
     .where(
       and(
-        isNotNull(
-          sql`connection.settings->'oauth'->'credentials'->>'refresh_token'`,
-        ),
-        isNotNull(
-          sql`connection.settings->'oauth'->'credentials'->>'expires_at'`,
-        ),
+        isNotNull(sql`
+          connection.settings -> 'oauth' -> 'credentials' ->> 'refresh_token'
+        `),
+        isNotNull(sql`
+          connection.settings -> 'oauth' -> 'credentials' ->> 'expires_at'
+        `),
         lt(
-          sql`(connection.settings->'oauth'->'credentials'->>'expires_at')::timestamp`,
+          sql`
+            (
+              connection.settings -> 'oauth' -> 'credentials' ->> 'expires_at'
+            )::timestamp
+          `,
           new Date(Date.now() + expiryWindow),
         ),
       ),
@@ -57,17 +54,16 @@ export async function refreshStaleConnections(
     .orderBy(desc(schema.connection.updated_at))
 
   // Group connections by connector_name
-  const connectionsByConnector = expiringConnections.reduce(
-    (acc, connection) => {
-      const connectorName = connection.connection.connector_name
-      if (!acc[connectorName]) {
-        acc[connectorName] = []
-      }
-      acc[connectorName].push(connection)
-      return acc
-    },
-    {} as Record<string, typeof expiringConnections>,
-  )
+  const connectionsByConnector = expiringConnections.reduce<
+    Record<string, typeof expiringConnections>
+  >((acc, connection) => {
+    const connectorName = connection.connection.connector_name
+    if (!acc[connectorName]) {
+      acc[connectorName] = []
+    }
+    acc[connectorName].push(connection)
+    return acc
+  }, {})
 
   let successfulRefreshes = 0
 

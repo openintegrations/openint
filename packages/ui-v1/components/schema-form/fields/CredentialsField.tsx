@@ -1,6 +1,7 @@
 import type {FieldProps} from '@rjsf/utils'
-import {useState} from 'react'
 import type {ConnectorConfig} from '@openint/api-v1/models'
+
+import {useState} from 'react'
 import {Input} from '@openint/shadcn/ui/input'
 import {Label} from '@openint/shadcn/ui/label'
 import {Switch} from '@openint/shadcn/ui/switch'

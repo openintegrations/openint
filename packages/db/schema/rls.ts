@@ -1,6 +1,7 @@
-import {sql} from 'drizzle-orm'
 import type {Viewer} from '@openint/cdk'
 import type {Database, DatabaseDriver} from '../db'
+
+import {sql} from 'drizzle-orm'
 
 /**
  * This sets the postgres grand unified config (GUC) and determines the identity
@@ -57,7 +58,14 @@ export function withDatabaseForViewer<T extends DatabaseDriver>(
   db.transaction(async (tx) => {
     await Promise.all(
       Object.entries(rlsGucForViewer(viewer)).map(([key, value]) =>
-        tx.execute(sql`SELECT set_config(${key}, ${value}, true)`),
+        tx.execute(sql`
+          SELECT
+            set_config(
+              ${key},
+              ${value},
+              TRUE
+            )
+        `),
       ),
     )
     await fn(tx)

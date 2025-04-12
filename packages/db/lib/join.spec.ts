@@ -84,9 +84,9 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
     const query = db
       .select({connection_count: sql`count(*)`})
       .from(schema.connection)
-      .where(
-        sql`${schema.connection}.connector_config_id = ${'ccfg_greenhouse_222'}`,
-      )
+      .where(sql`
+        ${schema.connection}.connector_config_id = ${'ccfg_greenhouse_222'}
+      `)
     expect(await formatSql(query?.toSQL().sql ?? '')).toMatchInlineSnapshot(`
       "select
         count(*)
@@ -109,11 +109,17 @@ describeEachDatabase({migrate: true, drivers: ['pglite']}, (db) => {
         },
       },
       extras: {
-        connection_count: sql<number>`(
-          SELECT COUNT(*)
-          FROM ${schema.connection}
-          WHERE ${schema.connection}.connector_config_id = ${schema.connector_config.id}
-        )`.as('connection_count'),
+        connection_count: sql<number>`
+          (
+            SELECT
+              COUNT(*)
+            FROM
+              ${schema.connection}
+            WHERE
+              ${schema.connection}.connector_config_id = ${schema
+            .connector_config.id}
+          )
+        `.as('connection_count'),
       },
     })
 

@@ -44,9 +44,7 @@ test('camelCase support', async () => {
   const db2 = initDbPGLiteDirect({logger: true, casing: 'snake_case'})
   // works for column names only, not table names
   await db2.$exec(sql`
-    create table if not exists "myAccount" (
-      my_id serial primary key
-    );
+    CREATE TABLE IF NOT EXISTS "myAccount" (my_id serial PRIMARY KEY);
   `)
 
   const camelTable = pgTable('myAccount', (t) => ({
@@ -59,7 +57,12 @@ test('camelCase support', async () => {
   expect(rows).toEqual([{myId: 1}])
 
   // does not work for raw queries...
-  const {rows: rows2} = await db2.$exec(sql`select * from "myAccount"`)
+  const {rows: rows2} = await db2.$exec(sql`
+    SELECT
+      *
+    FROM
+      "myAccount"
+  `)
   expect(rows2).toEqual([{my_id: 1}])
 
   await db2.$end()
@@ -116,7 +119,12 @@ describeEachDatabase({drivers: 'rls', __filename}, (db) => {
     ])
 
     // fetch raw with db.execute
-    const {rows: rows2} = await db.$exec(sql`SELECT * FROM ${table}`)
+    const {rows: rows2} = await db.$exec(sql`
+      SELECT
+        *
+      FROM
+        ${table}
+    `)
     expect(rows2).toEqual([
       {
         id: 1,
@@ -134,52 +142,80 @@ describeEachDatabase({drivers: 'rls', __filename}, (db) => {
   // Depends on the previous test, cannot be parallel executed
   test('array query', async () => {
     // test array query
-    const {rows: res} = await db.$exec(
-      sql`SELECT * FROM account where email = ANY(${sql.param([
-        'hello@world.com',
-        'sup@sup.com',
-      ])})`,
-    )
+    const {rows: res} = await db.$exec(sql`
+      SELECT
+        *
+      FROM
+        account
+      WHERE
+        email = ANY (${sql.param(['hello@world.com', 'sup@sup.com'])})
+    `)
     expect(res).toMatchObject([{id: 1, email: 'hello@world.com'}])
-    const {rows: res2} = await db.$exec(
-      sql`SELECT * FROM account where email = ANY(${sql.param([])})`,
-    )
+    const {rows: res2} = await db.$exec(sql`
+      SELECT
+        *
+      FROM
+        account
+      WHERE
+        email = ANY (${sql.param([])})
+    `)
     expect(res2).toMatchObject([])
 
     await expect(() =>
-      db.$exec(
-        sql`SELECT * FROM account where email = ANY(${sql.param([
-          'a',
-        ])}::int[])`,
-      ),
+      db.$exec(sql`
+        SELECT
+          *
+        FROM
+          account
+        WHERE
+          email = ANY (${sql.param(['a'])}::INT[])
+      `),
     ).rejects.toThrow('operator does not exist: text = integer')
   })
 
   test('jsonb inserts require string input', async () => {
     await expect(
-      db.$exec(
-        sql`INSERT INTO account (email, data) VALUES (${'hi@mail.com'}, ${{
+      db.$exec(sql`
+        INSERT INTO
+          account (email, data)
+        VALUES
+          (
+            ${'hi@mail.com'},
+            ${{
           a: 1,
-        }})`,
-      ),
+        }}
+          )
+      `),
     ).resolves.toBeTruthy()
     // Breaks in postgres.js but works in pglite
     // rejects.toThrow(
     //   'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received an instance of Object',
     // )
     await expect(
-      db.$exec(
-        sql`INSERT INTO account (email, data) VALUES (${'bool@mail.com'}, ${true})`,
-      ),
+      db.$exec(sql`
+        INSERT INTO
+          account (email, data)
+        VALUES
+          (
+            ${'bool@mail.com'},
+            ${true}
+          )
+      `),
     ).resolves.toBeTruthy()
     // Breaks in postgres.js but works in pglite
     // .rejects.toThrow(
     //       'column "data" is of type jsonb but expression is of type boolean',
     //     )
     await expect(
-      db.$exec(
-        sql`INSERT INTO account (email, data) VALUES (${'int@mail.com'}, ${123})`,
-      ),
+      db.$exec(sql`
+        INSERT INTO
+          account (email, data)
+        VALUES
+          (
+            ${'int@mail.com'},
+            ${123}
+          )
+      `),
     ).resolves.toBeTruthy()
     // Breaks in postgres.js but works in pglite
     // .rejects.toThrow(
@@ -188,29 +224,56 @@ describeEachDatabase({drivers: 'rls', __filename}, (db) => {
 
     // Fails in both postgres.js and pglite
     await expect(
-      db.$exec(
-        sql`INSERT INTO account (email, data) VALUES (${'str@mail.com'}, ${'str'})`,
-      ),
+      db.$exec(sql`
+        INSERT INTO
+          account (email, data)
+        VALUES
+          (
+            ${'str@mail.com'},
+            ${'str'}
+          )
+      `),
     ).rejects.toThrow('invalid input syntax for type json')
 
-    await db.$exec(
-      sql`INSERT INTO account (email, data) VALUES (${'null@mail.com'}, ${'null'})`,
-    )
+    await db.$exec(sql`
+      INSERT INTO
+        account (email, data)
+      VALUES
+        (
+          ${'null@mail.com'},
+          ${'null'}
+        )
+    `)
     // no easy way to differentiate between sql null vs. jsonb null
-    await db.$exec(
-      sql`INSERT INTO account (email, data) VALUES (${'sqlNULL@mail.com'}, ${null})`,
-    )
+    await db.$exec(sql`
+      INSERT INTO
+        account (email, data)
+      VALUES
+        (
+          ${'sqlNULL@mail.com'},
+          ${null}
+        )
+    `)
 
-    await db.$exec(
-      sql`INSERT INTO account (email, data) VALUES (${'hi@mail.com'}, ${JSON.stringify(
-        {a: 1},
-      )})`,
-    )
+    await db.$exec(sql`
+      INSERT INTO
+        account (email, data)
+      VALUES
+        (
+          ${'hi@mail.com'},
+          ${JSON.stringify({a: 1})}
+        )
+    `)
     expect(
       await db
-        .$exec(
-          sql`SELECT * FROM ${table} where ${table.email} = ${'hi@mail.com'}`,
-        )
+        .$exec(sql`
+          SELECT
+            *
+          FROM
+            ${table}
+          WHERE
+            ${table.email} = ${'hi@mail.com'}
+        `)
         .then((r) => r.rows[0]),
     ).toMatchObject({
       email: 'hi@mail.com',
@@ -218,9 +281,14 @@ describeEachDatabase({drivers: 'rls', __filename}, (db) => {
     })
     expect(
       await db
-        .$exec(
-          sql`SELECT * FROM ${table} where ${table.email} = ${'sqlNULL@mail.com'}`,
-        )
+        .$exec(sql`
+          SELECT
+            *
+          FROM
+            ${table}
+          WHERE
+            ${table.email} = ${'sqlNULL@mail.com'}
+        `)
         .then((r) => r.rows[0]),
     ).toMatchObject({
       email: 'sqlNULL@mail.com',
@@ -228,9 +296,14 @@ describeEachDatabase({drivers: 'rls', __filename}, (db) => {
     })
     expect(
       await db
-        .$exec(
-          sql`SELECT * FROM ${table} where ${table.email} = ${'null@mail.com'}`,
-        )
+        .$exec(sql`
+          SELECT
+            *
+          FROM
+            ${table}
+          WHERE
+            ${table.email} = ${'null@mail.com'}
+        `)
         .then((r) => r.rows[0]),
     ).toMatchObject({
       email: 'null@mail.com',
@@ -240,12 +313,22 @@ describeEachDatabase({drivers: 'rls', __filename}, (db) => {
 
   test('= ANY query requires sql.param', async () => {
     await expect(
-      db.$exec(sql`SELECT true WHERE 'a' = ANY(${['a']})`),
+      db.$exec(sql`
+        SELECT
+          TRUE
+        WHERE
+          'a' = ANY (${['a']})
+      `),
     ).rejects.toThrow('malformed array literal: "a"')
 
     await expect(
       db
-        .$exec(sql`SELECT true WHERE 'a' = ANY(${sql.param(['a'])})`)
+        .$exec(sql`
+          SELECT
+            TRUE
+          WHERE
+            'a' = ANY (${sql.param(['a'])})
+        `)
         .then((r) => r.rows[0]),
     ).resolves.toEqual({'?column?': true})
   })

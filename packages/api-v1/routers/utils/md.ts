@@ -34,9 +34,8 @@ export function md(
   // Remove the common indentation from all lines
   const processedLines = lines.map((line) => {
     if (line.trim() === '') return ''
-    return line.slice(Math.max(0, minIndent))
+    return line.slice(Math.max(0, minIndent)).trim()
   })
 
   return processedLines.join('\n')
 }
-

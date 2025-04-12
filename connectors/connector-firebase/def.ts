@@ -1,6 +1,8 @@
 import type {ConnectorDef, ConnectorSchemas} from '@openint/cdk'
+import type {Z} from '@openint/util/zod-utils'
+
 import {connHelpers} from '@openint/cdk'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 
 export const zFirebaseConfig = z.object({
   projectId: z.string(),

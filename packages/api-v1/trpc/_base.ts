@@ -1,7 +1,9 @@
+import type {Viewer} from '@openint/cdk'
+import type {RouterContext} from './context'
+
 import {initTRPC, TRPCError} from '@trpc/server'
 import {type OpenApiMeta} from 'trpc-to-openapi'
-import {hasRole, type Viewer} from '@openint/cdk'
-import type {RouterContext} from './context'
+import {hasRole} from '@openint/cdk'
 import {errorFormatter} from './error-handling'
 
 export const trpc = initTRPC

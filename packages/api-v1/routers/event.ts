@@ -40,7 +40,7 @@ export const eventRouter = router({
         ctx.db
           .select({
             event: schema.event,
-            total: sql`count(*) over()`,
+            total: sql`count(*) OVER ()`,
           })
           .from(schema.event),
         schema.event.timestamp,

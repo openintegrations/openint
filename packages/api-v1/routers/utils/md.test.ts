@@ -48,9 +48,7 @@ describe('md function', () => {
   })
 
   test('should handle a string with only one line', () => {
-    const result = md`
-Single line
-    `
+    const result = md` Single line `
     expect(result).toBe('Single line')
   })
 

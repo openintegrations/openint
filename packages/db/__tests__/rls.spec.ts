@@ -7,46 +7,72 @@ describeEachDatabase({drivers: ['pglite-direct']}, (db) => {
     for (const query of [
       sql`
         CREATE TABLE customer_data (
-            id SERIAL PRIMARY KEY,
-            customer_name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            account_balance DECIMAL(10, 2) NOT NULL,
-            account_manager TEXT NOT NULL
+          id SERIAL PRIMARY KEY,
+          customer_name TEXT NOT NULL,
+          email TEXT NOT NULL,
+          account_balance DECIMAL(10, 2) NOT NULL,
+          account_manager TEXT NOT NULL
         );
       `,
       // Enable Row-Level Security on the table
       sql`ALTER TABLE customer_data ENABLE ROW LEVEL SECURITY;`,
       // Insert first sample row
       sql`
-        INSERT INTO customer_data (id, customer_name, email, account_balance, account_manager)
-                VALUES (100, 'Acme Corporation', 'contact@acme.com', 50000.00, 'manager_alice');
+        INSERT INTO
+          customer_data (
+            id,
+            customer_name,
+            email,
+            account_balance,
+            account_manager
+          )
+        VALUES
+          (
+            100,
+            'Acme Corporation',
+            'contact@acme.com',
+            50000.00,
+            'manager_alice'
+          );
       `,
       // Insert second sample row
       sql`
-        INSERT INTO customer_data (customer_name, email, account_balance, account_manager)
-                VALUES ('Globex Industries', 'info@globex.com', 75000.00, 'manager_bob');
+        INSERT INTO
+          customer_data (
+            customer_name,
+            email,
+            account_balance,
+            account_manager
+          )
+        VALUES
+          (
+            'Globex Industries',
+            'info@globex.com',
+            75000.00,
+            'manager_bob'
+          );
       `,
       // Create first role
       sql`CREATE ROLE manager_alice;`,
       // Create second role
       sql`CREATE ROLE manager_bob;`,
       // Grant schema usage to both roles
-      sql`GRANT USAGE ON SCHEMA public TO manager_alice, manager_bob;`,
+      sql`
+        GRANT USAGE ON SCHEMA public TO manager_alice,
+        manager_bob;
+      `,
       // Grant SELECT permission on the table to both roles
-      sql`GRANT ALL ON customer_data TO manager_alice, manager_bob;`,
+      sql`
+        GRANT ALL ON customer_data TO manager_alice,
+        manager_bob;
+      `,
       // Create policy for manager_alice
       sql`
-        CREATE POLICY alice_data_access ON customer_data
-                    FOR ALL
-                    TO manager_alice
-                    USING (account_manager = 'manager_alice')
+        CREATE POLICY alice_data_access ON customer_data FOR ALL TO manager_alice USING (account_manager = 'manager_alice')
       `,
       // Create policy for manager_bob
       sql`
-        CREATE POLICY bob_data_access ON customer_data
-                    FOR ALL
-                    TO manager_bob
-                    USING (account_manager = 'manager_bob');
+        CREATE POLICY bob_data_access ON customer_data FOR ALL TO manager_bob USING (account_manager = 'manager_bob');
       `,
     ]) {
       await db.$exec(query)

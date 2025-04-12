@@ -1,5 +1,6 @@
-import Image from 'next/image'
 import type {ConnectorConfig} from '@openint/api-v1/models'
+
+import Image from 'next/image'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Card, CardContent} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'

@@ -1,7 +1,7 @@
 import type {Resolver} from 'awilix'
-import {asValue, createContainer} from 'awilix'
-
 import type {AnyFunction, Brand} from './type-utils'
+
+import {asValue, createContainer} from 'awilix'
 
 export const container = createContainer()
 

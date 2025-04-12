@@ -1,10 +1,11 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import type {Core} from '@openint/api-v1/models'
+import type {ColumnDef, Columns} from './DataTable'
+
 import {Button} from '@openint/shadcn/ui'
 import {FIXTURES} from '../domain-components/__stories__/fixtures'
 import {ConnectorTableCell} from '../domain-components/tables/ConnectorTableCell'
 import {DataTable} from './DataTable'
-import type {ColumnDef, Columns} from './DataTable'
 
 const meta: Meta<typeof DataTable> = {
   component: DataTable,

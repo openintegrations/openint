@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {Button} from '@openint/shadcn/ui'
 import {FIXTURES} from './__stories__/fixtures'
 import {ConnectorConfigCard} from './ConnectorConfigCard'

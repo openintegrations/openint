@@ -1,10 +1,12 @@
 'use client'
 
-import {Core} from '@openint/api-v1/models'
+import type {Core} from '@openint/api-v1/models'
+import type {StatusType} from '../../components/StatusDot'
+
 import {cn} from '@openint/shadcn/lib/utils'
 import {BaseTableCell} from '../../components/BaseTableCell'
 import {CopyID} from '../../components/CopyID'
-import {StatusDot, StatusType} from '../../components/StatusDot'
+import {StatusDot} from '../../components/StatusDot'
 
 interface ConnectorConfigTableCellProps
   extends React.HTMLAttributes<HTMLDivElement> {

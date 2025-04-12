@@ -11,6 +11,7 @@ import type {
   OAuthUser,
   OAuthUserRepository,
 } from '@jmondi/oauth2-server'
+
 import {AuthorizationServer} from '@jmondi/oauth2-server'
 import {Elysia} from 'elysia'
 import {requestFromVanilla, responseToVanilla} from './utils.server'

@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+
 import {generateOpenAPISpec} from '../trpc/generateOpenAPISpec'
 
 const dest = path.join(__dirname, '../__generated__', 'openapi.json')

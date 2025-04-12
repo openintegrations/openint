@@ -1,7 +1,7 @@
 import type {MicroMemoize as Memoize} from 'micro-memoize'
-import memoize from 'micro-memoize'
-
 import type {AnyFunction} from './type-utils'
+
+import memoize from 'micro-memoize'
 
 export function memoizeBy<TFunc extends AnyFunction>(
   func: TFunc,

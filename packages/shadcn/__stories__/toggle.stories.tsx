@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {BoldIcon, ItalicIcon, UnderlineIcon} from 'lucide-react'
 import {Toggle} from '../ui/toggle'
 

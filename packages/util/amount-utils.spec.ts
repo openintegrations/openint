@@ -6,7 +6,6 @@ test('AmountMap equals', () => {
 
   expect(AM.equals({USD: 0}, {EUR: 1})).toBe(false)
 
-  // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
   expect(AM.equals({USD: 5.1234567890123456}, {USD: 5.123456789012345})).toBe(
     true,
   )

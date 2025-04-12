@@ -1,6 +1,7 @@
-import type {ExtCustomerId} from './id.types'
 import type {DiscriminatedUnionWithAllKeys} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
+import type {ExtCustomerId} from './id.types'
+
 import {compact} from '@openint/util/array-utils'
 import {z} from '@openint/util/zod-utils'
 import {zCustomerId, zId, zUserId} from './id.types'

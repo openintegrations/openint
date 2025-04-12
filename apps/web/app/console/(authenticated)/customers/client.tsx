@@ -1,7 +1,8 @@
 'use client'
 
-import React from 'react'
 import type {AppRouterOutput} from '@openint/api-v1'
+
+import React from 'react'
 import {CustomersTable} from '@openint/ui-v1/domain-components'
 import {useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {useTRPC} from '../client'

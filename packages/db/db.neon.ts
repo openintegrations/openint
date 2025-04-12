@@ -2,12 +2,13 @@ import type {
   HTTPQueryOptions,
   NeonQueryFunction,
 } from '@neondatabase/serverless'
+import type {Viewer} from '@openint/cdk'
+import type {DbOptions} from './db'
+
 import {neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate} from 'drizzle-orm/pg-proxy/migrator'
 import * as pgTypes from 'pg-types'
-import type {Viewer} from '@openint/cdk'
-import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {setTypeParsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
@@ -70,7 +71,7 @@ export function initDbNeon(url: string, options: DbOptions = {}) {
     $asViewer: (viewer) => drizzleForViewer(neonSql, viewer, options),
     async $exec(query) {
       const res = await db.execute(query)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res as any[]}
     },
     $migrate() {

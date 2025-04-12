@@ -1,5 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {StatusDot, StatusType} from './StatusDot'
+import type {StatusType} from './StatusDot'
+
+import {StatusDot} from './StatusDot'
 
 const meta: Meta<typeof StatusDot> = {
   title: 'Components/StatusDot',
