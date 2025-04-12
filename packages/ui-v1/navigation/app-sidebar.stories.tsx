@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {
   AudioWaveform,
   ChevronsUpDown,
@@ -40,11 +41,53 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default = {
   args: {
     organizationSwitcher: <DummyOrganizationSwitcher />,
+    navItems: [
+      {
+        title: 'Dashboard',
+        url: '/console',
+        icon: 'Box',
+      },
+      {
+        title: 'Connect',
+        url: '/console/connect',
+        icon: 'Wand',
+      },
+      {
+        title: 'Connector Configs',
+        url: '/console/connector-config',
+        icon: 'Layers',
+      },
+      {
+        title: 'Events',
+        url: '/console/events',
+        icon: 'Database',
+      },
+      {
+        title: 'Customers',
+        url: '/console/customers',
+        icon: 'Users',
+      },
+      {
+        title: 'Connections',
+        url: '/console/connections',
+        icon: 'Box',
+      },
+      {
+        title: 'Settings',
+        url: '/console/settings',
+        icon: 'Settings',
+      },
+      {
+        title: 'API Docs',
+        url: 'https://docs.openint.dev',
+        icon: 'ExternalLink',
+      },
+    ],
   },
-}
+} satisfies Story
 
 export function DummyOrganizationSwitcher({
   teams = [

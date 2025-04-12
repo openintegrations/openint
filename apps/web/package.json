@@ -7,6 +7,7 @@
     "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
     "dev": "next dev -p 4000 --turbopack",
+    "generate:typed-routes": "TYPED_ROUTES=true next dev",
     "start": "next start"
   },
   "dependencies": {

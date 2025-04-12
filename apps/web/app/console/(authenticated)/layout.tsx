@@ -6,6 +6,7 @@ import {currentViewer} from '@/lib-server/auth.server'
 import {GlobalCommandBarProvider} from '../../GlobalCommandBarProvider'
 import {ClientApp} from './client'
 import OnboardingHoc from './onboarding'
+import {SIDEBAR_NAV_ITEMS} from './sidebar-nav-items'
 
 export default async function AuthenticatedLayout({
   children,
@@ -23,6 +24,7 @@ export default async function AuthenticatedLayout({
     <ClientApp token={token}>
       <GlobalCommandBarProvider>
         <AppLayout
+          navItems={SIDEBAR_NAV_ITEMS}
           organizationSwitcher={<OrganizationSwitcher hidePersonal={true} />}
           userButton={<UserButton showName />}>
           {shouldShowOnboarding ? <OnboardingHoc /> : children}
