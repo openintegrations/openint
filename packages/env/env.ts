@@ -1,5 +1,5 @@
 import {createEnv} from '@t3-oss/env-nextjs'
-import {proxyRequired} from '@openint/util/proxy-utils'
+import {proxyReadonly, proxyRequired} from '@openint/util/proxy-utils'
 import {z} from '@openint/util/zod-utils'
 
 // TODO: Remove the dep on @t3-oss as it causes all sorts of issues with zod
@@ -113,8 +113,15 @@ export const envConfig = {
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
-export const env = createEnv(envConfig)
+/** Primarily for testing purposes */
+export const envMutable = {
+  ...createEnv(envConfig),
+}
 
+/** Read-only proxy of envMutable */
+export const env = proxyReadonly(envMutable)
+
+/** Proxy env throw on missing values */
 export const envRequired = proxyRequired(env, {
   formatError(key) {
     return new Error(`Missing required env var: ${key}`)
@@ -144,4 +151,20 @@ function overrideFromLocalStorage<T>(runtimeEnv: T) {
     }
   }
   return runtimeEnv
+}
+
+/** For testing */
+export function temporarilyModifyEnv(
+  override: Partial<typeof envMutable>,
+  fn: () => void,
+) {
+  const originalValues = Object.fromEntries(
+    Object.keys(override).map((key) => [
+      key,
+      envMutable[key as keyof typeof envMutable],
+    ]),
+  )
+  Object.assign(envMutable, override)
+  fn()
+  Object.assign(envMutable, originalValues)
 }
