@@ -18,11 +18,7 @@ import {
 } from '@openint/shadcn/ui/sidebar'
 import {Icon} from '../components'
 
-export function AppSidebar({
-  organizationSwitcher,
-  navItems,
-  ...props
-}: React.ComponentProps<typeof Sidebar> & {
+export type AppSidebarProps = {
   navItems: Array<{
     title: string
     /** These URLs should already be pre-resolved */
@@ -30,7 +26,13 @@ export function AppSidebar({
     icon: IconName
   }>
   organizationSwitcher: React.ReactNode
-}) {
+}
+
+export function AppSidebar({
+  organizationSwitcher,
+  navItems,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & AppSidebarProps) {
   // In storybook, pathname would be undefined
   const pathname: string | undefined = usePathname()
   return (

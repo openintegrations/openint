@@ -148,8 +148,6 @@ function useConnectionCommands() {
 
   const cmd = cmdInit()
 
-  const router = useRouter()
-
   return {
     'connection:delete': cmd.identity({
       title: 'Delete Connection',
