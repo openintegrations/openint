@@ -10,9 +10,11 @@ import {
   httpLink,
   QueryClient,
   QueryClientProvider,
+  TRPCProvider,
   useSuspenseQuery,
+  useTRPC,
+  useTRPCClient,
 } from '@/lib-client/trpc.client'
-import {TRPCProvider, useTRPC, useTRPCClient} from '@/lib-client/trpc.client'
 
 // MARK: - Move me into client common
 // TODO: Remove this

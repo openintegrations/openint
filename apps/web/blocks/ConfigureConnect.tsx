@@ -8,9 +8,8 @@ import {ConnectEmbed} from '@openint/connect'
 import {getBaseURLs} from '@openint/env'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
-import {useMutation} from '@/lib-client/trpc.client'
 import {createURL} from '@openint/util/url-utils'
-import {useTRPC} from '@/lib-client/trpc.client'
+import {useMutation, useTRPC} from '@/lib-client/trpc.client'
 
 // Define the type for the form data based on the schema
 type CreateTokenInput = Z.infer<typeof connectRouterModels.createTokenInput>
