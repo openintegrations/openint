@@ -1,6 +1,6 @@
 import type {Id, Viewer} from '@openint/cdk'
 import type {PageProps} from '@/lib-common/next-utils'
-import type {ConnectorConfigForCustomer} from './client'
+import type {ConnectorConfigForCustomer} from './AddConnectionInner.client'
 
 import {ChevronLeftIcon} from 'lucide-react'
 import Image from 'next/image'
@@ -20,6 +20,7 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
+import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
 import {TRPCApp} from '@/lib-client/TRPCApp'
 import {Link} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
@@ -28,50 +29,15 @@ import {
   currentViewerFromPageProps,
 } from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
-import {GlobalCommandBarProvider} from '../../lib-client/GlobalCommandBarProvider'
-import {AddConnectionInner, MyConnectionsClient} from './client'
-import {TabsClient} from './Tabs.client'
+import {AddConnectionInner} from './AddConnectionInner.client'
+import {MyConnectionsClient} from './MyConnections.client'
+import {TabsClient} from './page.client'
 
 function Fallback() {
   return <div>Loading...</div>
 }
 
-const getOrganizationInfo = cache(async (orgId: Id['org'] | null) =>
-  orgId ? await getClerkOrganization(orgId) : {name: 'OpenInt', imageUrl: ''},
-)
-
-async function OrganizationImage({
-  orgId,
-  className,
-}: {
-  orgId: string | null
-  className?: string
-}) {
-  if (!orgId) return null
-  const {imageUrl, name} = await getOrganizationInfo(orgId as Id['org'])
-
-  if (!imageUrl) return null
-
-  return (
-    <div className={cn('flex items-center', className)}>
-      <Image
-        src={imageUrl}
-        alt={name || 'Organization Logo'}
-        width={25}
-        height={25}
-      />
-      <span className="ml-2">{name || 'Organization Name'}</span>
-    </div>
-  )
-}
-
-async function OrganizationName({orgId}: {orgId: string | null}) {
-  if (!orgId) return 'OpenInt Console'
-  const {name} = await getOrganizationInfo(orgId as Id['org'])
-  return <>{name || 'OpenInt Console'}</>
-}
-
-export default async function Page(
+export default async function ConnectPage(
   pageProps: PageProps<never, {view?: string; connector_name?: string}>,
 ) {
   const {viewer, token, payload} = isProduction
@@ -128,6 +94,9 @@ export default async function Page(
     connector_names: searchParams.connector_names,
     expand: ['connector'],
   })
+
+  // TODO: Splitting the layout out of here.
+  // Given that layout.tsx cannot access params, perhaps we should put token as a path segment?
   return (
     <TRPCApp token={token}>
       <GlobalCommandBarProvider>
@@ -272,7 +241,7 @@ async function AddConnections({
     <div className="flex flex-col gap-4">
       {res.items.map((ccfg) => (
         <Suspense key={ccfg.id} fallback={<Fallback />}>
-          <AddConnectionServer
+          <AddConnection
             key={ccfg.id}
             connectorConfig={{
               // NOTE: Be extremely careful that sensitive data is not exposed here
@@ -289,7 +258,7 @@ async function AddConnections({
   )
 }
 
-function AddConnectionServer({
+function AddConnection({
   viewer,
   connectorConfig,
 }: {
@@ -307,4 +276,39 @@ function AddConnectionServer({
   return (
     <AddConnectionInner connectorConfig={connectorConfig} initialData={res} />
   )
+}
+
+const getOrganizationInfo = cache(async (orgId: Id['org'] | null) =>
+  orgId ? await getClerkOrganization(orgId) : {name: 'OpenInt', imageUrl: ''},
+)
+
+async function OrganizationImage({
+  orgId,
+  className,
+}: {
+  orgId: string | null
+  className?: string
+}) {
+  if (!orgId) return null
+  const {imageUrl, name} = await getOrganizationInfo(orgId as Id['org'])
+
+  if (!imageUrl) return null
+
+  return (
+    <div className={cn('flex items-center', className)}>
+      <Image
+        src={imageUrl}
+        alt={name || 'Organization Logo'}
+        width={25}
+        height={25}
+      />
+      <span className="ml-2">{name || 'Organization Name'}</span>
+    </div>
+  )
+}
+
+async function OrganizationName({orgId}: {orgId: string | null}) {
+  if (!orgId) return 'OpenInt Console'
+  const {name} = await getOrganizationInfo(orgId as Id['org'])
+  return <>{name || 'OpenInt Console'}</>
 }
