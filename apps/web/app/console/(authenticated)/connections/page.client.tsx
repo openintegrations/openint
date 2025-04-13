@@ -10,8 +10,8 @@ import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CommandPopover, ConnectionTableCell, CopyID} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {formatIsoDateString} from '@openint/ui-v1/utils'
-import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 import {useCommandDefinitionMap} from '@/lib-client/GlobalCommandBarProvider'
+import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 
 const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {

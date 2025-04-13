@@ -2,7 +2,7 @@ import type {PageProps} from '@/lib-common/next-utils'
 
 import {currentViewer} from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
-import {SettingsContent} from './client'
+import {SettingsContent} from './page.client'
 
 export default async function SettingsPage(props: PageProps) {
   const {viewer} = await currentViewer(props)
