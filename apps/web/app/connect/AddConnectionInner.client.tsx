@@ -101,10 +101,14 @@ export function AddConnectionInner({
         trpc.listConnections.queryKey({}),
       )
       // Need to invalidate listConnections regardless of params. operating on a prefix basis
+      // back up in case refetchQueries doesn't work, query is still marked as stale
       void queryClient.invalidateQueries({
         queryKey: trpc.listConnections.queryKey({}),
       })
-      void queryClient.refetchQueries({stale: true})
+      // Immediately trigger refetch to not need to wait until refetchOnMount
+      void queryClient.refetchQueries({
+        queryKey: trpc.listConnections.queryKey({}),
+      })
 
       // This is the only way that works for now...
       // TODO: Fix this madness
