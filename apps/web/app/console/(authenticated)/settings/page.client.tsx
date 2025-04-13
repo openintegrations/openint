@@ -1,8 +1,8 @@
 'use client'
 
 import {toast} from '@openint/ui-v1'
-import SecureInput from '@openint/ui-v1/components/SecureInput'
-import WebhookInput from '@openint/ui-v1/components/WebhookInput'
+import {SecureInput} from '@openint/ui-v1/components/SecureInput'
+import {WebhookInput} from '@openint/ui-v1/components/WebhookInput'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 
 interface SettingsContentProps {

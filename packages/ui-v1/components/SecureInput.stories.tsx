@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 
 import {useState} from 'react'
-import SecureInput from './SecureInput'
+import {SecureInput} from './SecureInput'
 
 const meta: Meta<typeof SecureInput> = {
   title: 'Components/SecureInput',
