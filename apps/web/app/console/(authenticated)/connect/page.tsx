@@ -1,5 +1,5 @@
 import {Suspense} from 'react'
-import {ConfigureConnect} from '@/blocks/ConfigureConnect'
+import {ConfigureConnect} from './ConfigureConnect'
 
 function Fallback() {
   return <div>Loading...</div>
