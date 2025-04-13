@@ -42,7 +42,7 @@ export function AddConnectionInner({
     throw new Error(`Connector missing in AddConnectionInner`)
   }
 
-  console.log('AddConnectionInner rendering', name, connectorConfig)
+  // console.log('AddConnectionInner rendering', name, connectorConfig)
 
   const ref = React.useRef<ConnectFn | undefined>(undefined)
 
@@ -61,7 +61,7 @@ export function AddConnectionInner({
       initialData ? {initialData} : undefined,
     ),
   )
-  console.log('preConnectRes', preConnectRes)
+  // console.log('preConnectRes', preConnectRes)
 
   const queryClient = useQueryClient()
 
@@ -75,13 +75,13 @@ export function AddConnectionInner({
   const handleConnect = React.useCallback(async () => {
     try {
       setIsConnecting(true)
-      console.log('ref.current', ref.current)
+      // console.log('ref.current', ref.current)
       const connectRes = await ref.current?.(preConnectRes.data.connect_input, {
         connectorConfigId: connectorConfig.id as `ccfg_${string}`,
         connectionExternalId: undefined,
         integrationExternalId: undefined,
       })
-      console.log('connectRes', connectRes)
+      // console.log('connectRes', connectRes)
       /// todo: always validate schema even if pre/post connect are not
       // implemented
       const postConnectRes = await postConnect.mutateAsync({
@@ -93,13 +93,8 @@ export function AddConnectionInner({
         options: {},
       })
 
-      console.log('postConnectRes', postConnectRes)
+      // console.log('postConnectRes', postConnectRes)
 
-      // None of this is working, why!!!
-      console.log(
-        'Invalidating queries for specific connector',
-        trpc.listConnections.queryKey({}),
-      )
       // Need to invalidate listConnections regardless of params. operating on a prefix basis
       // back up in case refetchQueries doesn't work, query is still marked as stale
       void queryClient.invalidateQueries({

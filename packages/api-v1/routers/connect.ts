@@ -6,7 +6,7 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
-import {getBaseURLs, _getServerUrl, resolveRoute} from '@openint/env'
+import {_getServerUrl, getBaseURLs, resolveRoute} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
@@ -84,7 +84,7 @@ export const connectRouter = router({
           .describe('The authentication token to use for API requests'),
       }),
     )
-    .mutation(async ({ctx, input}) => {
+    .query(async ({ctx, input}) => {
       const jwt = makeJwtClient({
         secretOrPublicKey: process.env['JWT_SECRET']!,
       })
@@ -104,9 +104,7 @@ export const connectRouter = router({
         },
       )
 
-      return {
-        token,
-      }
+      return {token}
     }),
   preConnect: customerProcedure
     .meta({

@@ -9,7 +9,7 @@ import {getBaseURLs} from '@openint/env'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'
 import {ZodSchemaForm} from '@openint/ui-v1/components/schema-form'
 import {createURL} from '@openint/util/url-utils'
-import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
+import {useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 
 // Define the type for the form data based on the schema
 type CreateTokenInput = Z.infer<typeof connectRouterModels.createTokenInput>
@@ -25,11 +25,7 @@ export function ConfigureConnect() {
   })
 
   const trpc = useTRPC()
-  const mutation = useMutation(trpc.createToken.mutationOptions())
-
-  React.useEffect(() => {
-    mutation.mutate(formData)
-  }, [formData, mutation])
+  const tokenRes = useSuspenseQuery(trpc.createToken.queryOptions(formData))
 
   return (
     <div className="flex max-h-full flex-1 gap-4">
@@ -53,13 +49,13 @@ export function ConfigureConnect() {
         <PreviewWindow
           // TODO: Refactor connect to return the URL please
           shareUrl={createURL(getBaseURLs(null).connect, {
-            searchParams: {token: mutation.data?.token ?? ''},
+            searchParams: {token: tokenRes.data?.token ?? ''},
           })}
           className="flex-1 overflow-scroll">
-          {mutation.data?.token && (
+          {tokenRes.data?.token && (
             <ConnectEmbed
               className="h-full w-full"
-              token={mutation.data?.token}
+              token={tokenRes.data?.token}
               baseURL={getBaseURLs(null).connect}
             />
           )}
