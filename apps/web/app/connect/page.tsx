@@ -20,6 +20,7 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
+import {ClientApp} from '@/lib-client/ClientApp'
 import {Link} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {
@@ -27,8 +28,7 @@ import {
   currentViewerFromPageProps,
 } from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
-import {ClientApp} from '../console/(authenticated)/client'
-import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
+import {GlobalCommandBarProvider} from '../../lib-client/GlobalCommandBarProvider'
 import {AddConnectionInner, MyConnectionsClient} from './client'
 import {TabsClient} from './Tabs.client'
 
@@ -129,7 +129,7 @@ export default async function Page(
     expand: ['connector'],
   })
   return (
-    <ClientApp token={token!}>
+    <ClientApp token={token}>
       <GlobalCommandBarProvider>
         <style
           dangerouslySetInnerHTML={{

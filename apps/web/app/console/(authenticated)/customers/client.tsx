@@ -2,10 +2,9 @@
 
 import type {AppRouterOutput} from '@openint/api-v1'
 
-import {useSuspenseQuery} from '@/lib-client/trpc.client'
-import {CustomersTable} from '@openint/ui-v1/domain-components'
 import React from 'react'
-import {useTRPC} from '../client'
+import {CustomersTable} from '@openint/ui-v1/domain-components'
+import {useSuspenseQuery, useTRPC} from '@/lib-client/ClientApp'
 
 export function CustomerList(props: {
   initialData?: Promise<AppRouterOutput['listCustomers']>

@@ -4,6 +4,11 @@ import type {AppRouterOutput} from '@openint/api-v1'
 import type {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
 import type {JSONSchemaFormRef} from '@openint/ui-v1'
 
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import React from 'react'
 import {clientConnectors} from '@openint/all-connectors/connectors.client'
@@ -26,14 +31,9 @@ import {
 } from '@openint/ui-v1'
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@/lib-client/trpc.client'
 import {Deferred} from '@openint/util/promise-utils'
-import {useTRPC} from '../console/(authenticated)/client'
-import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'
+import {useTRPC} from '@/lib-client/ClientApp'
+import {useCommandDefinitionMap} from '../../lib-client/GlobalCommandBarProvider'
 import {openOAuthPopup} from './callback/openOAuthPopup'
 
 // MARK: - Connector Client Components

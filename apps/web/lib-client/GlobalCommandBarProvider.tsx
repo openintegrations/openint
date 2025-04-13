@@ -6,6 +6,7 @@ import type {
   CommandDefinitionMapInput,
 } from '@openint/commands'
 
+import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {useRouter} from 'next/navigation'
 import React from 'react'
 import {cmdInit} from '@openint/commands'
@@ -17,9 +18,8 @@ import {
 import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
 import {z} from '@openint/util/zod-utils'
-import {useMutation, useQueryClient} from '@/lib-client/trpc.client'
-import {useTRPC} from './console/(authenticated)/client'
-import {SIDEBAR_NAV_ITEMS} from './console/(authenticated)/sidebar-nav-items'
+import {SIDEBAR_NAV_ITEMS} from '@/app/console/(authenticated)/sidebar-nav-items'
+import {useTRPC} from './ClientApp'
 
 export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
   const definitions = useCommandDefinitionMap()

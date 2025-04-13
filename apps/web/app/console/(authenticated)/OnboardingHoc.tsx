@@ -1,5 +1,6 @@
 'use client'
 
+import {useMutation} from '@tanstack/react-query'
 import {useRouter} from 'next/navigation'
 import {
   useAuth,
@@ -7,8 +8,7 @@ import {
   useUser,
 } from '@openint/console-auth/client'
 import {OnboardingModal} from '@openint/ui-v1'
-import {useMutation} from '@/lib-client/trpc.client'
-import {useTRPC} from './client'
+import {useTRPC} from '@/lib-client/ClientApp'
 
 export default function OnboardingHoc() {
   const auth = useAuth()
