@@ -16,7 +16,7 @@ import {
 } from '@openint/console-auth/client'
 import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
-import {useMutation, useQueryClient} from '@openint/ui-v1/trpc'
+import {useMutation, useQueryClient} from '@/lib-client/trpc.client'
 import {z} from '@openint/util/zod-utils'
 import {useTRPC} from './console/(authenticated)/client'
 import {SIDEBAR_NAV_ITEMS} from './console/(authenticated)/sidebar-nav-items'

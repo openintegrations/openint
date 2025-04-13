@@ -3,7 +3,7 @@
 import {toast} from '@openint/ui-v1'
 import SecureInput from '@openint/ui-v1/components/SecureInput'
 import WebhookInput from '@openint/ui-v1/components/WebhookInput'
-import {useMutation} from '@openint/ui-v1/trpc'
+import {useMutation} from '@/lib-client/trpc.client'
 import {useTRPC} from '../client'
 
 interface SettingsContentProps {

@@ -4,7 +4,7 @@ import type {AppRouterOutput} from '@openint/api-v1'
 
 import React from 'react'
 import {CustomersTable} from '@openint/ui-v1/domain-components'
-import {useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {useSuspenseQuery} from '@/lib-client/trpc.client'
 import {useTRPC} from '../client'
 
 export function CustomerList(props: {

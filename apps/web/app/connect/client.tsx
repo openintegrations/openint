@@ -30,7 +30,7 @@ import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
-} from '@openint/ui-v1/trpc'
+} from '@/lib-client/trpc.client'
 import {Deferred} from '@openint/util/promise-utils'
 import {useTRPC} from '../console/(authenticated)/client'
 import {useCommandDefinitionMap} from '../GlobalCommandBarProvider'

@@ -8,7 +8,7 @@ import {
   onError,
   TRPCError,
 } from '@openint/api-v1/trpc/error-handling'
-import {createTRPCClient, httpLink} from '@openint/ui-v1/trpc'
+import {createTRPCClient, httpLink} from '@/lib-client/trpc.client'
 import {z} from '@openint/util/zod-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
 

@@ -7,7 +7,7 @@ import {
   useUser,
 } from '@openint/console-auth/client'
 import {OnboardingModal} from '@openint/ui-v1'
-import {useMutation} from '@openint/ui-v1/trpc'
+import {useMutation} from '@/lib-client/trpc.client'
 import {useTRPC} from './client'
 
 export default function OnboardingHoc() {

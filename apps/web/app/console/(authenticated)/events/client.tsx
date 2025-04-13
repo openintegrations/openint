@@ -6,7 +6,7 @@ import {useState} from 'react'
 import {type Event} from '@openint/api-v1/models'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
-import {useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {useSuspenseQuery} from '@/lib-client/trpc.client'
 import {useTRPC} from '../client'
 
 const columns: Array<ColumnDef<Event>> = [

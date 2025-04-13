@@ -21,7 +21,7 @@ import {
   JSONSchemaForm,
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
-import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
+import {useMutation, useSuspenseQuery} from '@/lib-client/trpc.client'
 import {useTRPC} from '../client'
 
 export function ConnectorConfigList(props: {

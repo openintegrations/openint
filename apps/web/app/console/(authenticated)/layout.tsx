@@ -5,7 +5,7 @@ import {AppLayout} from '@openint/ui-v1'
 import {currentViewer} from '@/lib-server/auth.server'
 import {GlobalCommandBarProvider} from '../../GlobalCommandBarProvider'
 import {ClientApp} from './client'
-import OnboardingHoc from './onboarding'
+import OnboardingHoc from './OnboardingHoc'
 import {SIDEBAR_NAV_ITEMS} from './sidebar-nav-items'
 
 export default async function AuthenticatedLayout({

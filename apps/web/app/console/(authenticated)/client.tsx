@@ -11,8 +11,8 @@ import {
   QueryClient,
   QueryClientProvider,
   useSuspenseQuery,
-} from '@openint/ui-v1/trpc'
-import {TRPCProvider, useTRPC, useTRPCClient} from './trpc'
+} from '@/lib-client/trpc.client'
+import {TRPCProvider, useTRPC, useTRPCClient} from '@/lib-client/trpc.client'
 
 // MARK: - Move me into client common
 // TODO: Remove this
