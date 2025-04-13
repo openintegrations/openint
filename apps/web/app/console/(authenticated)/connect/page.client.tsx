@@ -29,7 +29,7 @@ export function ConfigureConnect() {
 
   React.useEffect(() => {
     mutation.mutate(formData)
-  }, [formData])
+  }, [formData, mutation])
 
   return (
     <div className="flex max-h-full flex-1 gap-4">
