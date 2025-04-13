@@ -32,7 +32,7 @@ import {
 import {ConnectionCard} from '@openint/ui-v1/domain-components/ConnectionCard'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
 import {Deferred} from '@openint/util/promise-utils'
-import {useTRPC} from '@/lib-client/ClientApp'
+import {useTRPC} from '@/lib-client/TRPCApp'
 import {useCommandDefinitionMap} from '../../lib-client/GlobalCommandBarProvider'
 import {openOAuthPopup} from './callback/openOAuthPopup'
 

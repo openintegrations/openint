@@ -16,7 +16,7 @@ export {useTRPC, useTRPCClient}
 // Convenience exports since useQuery and useTRPC are always together
 export {useQuery, useMutation, useSuspenseQuery} from '@tanstack/react-query'
 
-export function ClientApp({
+export function TRPCApp({
   token,
   children,
 }: {

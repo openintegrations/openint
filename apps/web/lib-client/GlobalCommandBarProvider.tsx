@@ -19,7 +19,7 @@ import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
 import {z} from '@openint/util/zod-utils'
 import {SIDEBAR_NAV_ITEMS} from '@/app/console/(authenticated)/sidebar-nav-items'
-import {useTRPC} from './ClientApp'
+import {useTRPC} from './TRPCApp'
 
 export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
   const definitions = useCommandDefinitionMap()

@@ -8,7 +8,7 @@ import {
   useUser,
 } from '@openint/console-auth/client'
 import {OnboardingModal} from '@openint/ui-v1'
-import {useTRPC} from '@/lib-client/ClientApp'
+import {useTRPC} from '@/lib-client/TRPCApp'
 
 export default function OnboardingHoc() {
   const auth = useAuth()

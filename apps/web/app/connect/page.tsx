@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
-import {ClientApp} from '@/lib-client/ClientApp'
+import {TRPCApp} from '@/lib-client/TRPCApp'
 import {Link} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {
@@ -129,7 +129,7 @@ export default async function Page(
     expand: ['connector'],
   })
   return (
-    <ClientApp token={token}>
+    <TRPCApp token={token}>
       <GlobalCommandBarProvider>
         <style
           dangerouslySetInnerHTML={{
@@ -228,7 +228,7 @@ export default async function Page(
           </TabsClient>
         </div>
       </GlobalCommandBarProvider>
-    </ClientApp>
+    </TRPCApp>
   )
 }
 

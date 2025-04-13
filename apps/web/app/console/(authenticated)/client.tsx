@@ -2,7 +2,7 @@
 
 import {useSuspenseQuery} from '@tanstack/react-query'
 import React from 'react'
-import {useTRPC} from '@/lib-client/ClientApp'
+import {useTRPC} from '@/lib-client/TRPCApp'
 
 // MARK: -
 
