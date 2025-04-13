@@ -12,7 +12,6 @@ import {
 import React from 'react'
 import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
 import {Label, toast} from '@openint/shadcn/ui'
-import {useMutableSearchParams} from '@openint/ui-v1'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
 import {useTRPC} from '@/lib-client/TRPCApp'
 import {
@@ -73,8 +72,6 @@ export function AddConnectionInner({
     }),
   )
 
-  const [, setSearchParams] = useMutableSearchParams()
-
   const handleConnect = React.useCallback(async () => {
     try {
       setIsConnecting(true)
@@ -99,25 +96,18 @@ export function AddConnectionInner({
       console.log('postConnectRes', postConnectRes)
 
       // None of this is working, why!!!
+      console.log(
+        'Invalidating queries for specific connector',
+        trpc.listConnections.queryKey({}),
+      )
+      // Need to invalidate listConnections regardless of params. operating on a prefix basis
       void queryClient.invalidateQueries({
-        queryKey: trpc.listConnections.queryKey({
-          connector_names: [name],
-          expand: ['connector'],
-        }),
+        queryKey: trpc.listConnections.queryKey({}),
       })
-      void queryClient.invalidateQueries({
-        queryKey: trpc.listConnections.queryKey({
-          expand: ['connector'],
-        }),
-      })
-      void queryClient.invalidateQueries()
-      // Really terrible
-      toast.success('Connection created', {
-        description: `Connection ${postConnectRes.id} created`,
-      })
+      void queryClient.refetchQueries({stale: true})
+
       // This is the only way that works for now...
       // TODO: Fix this madness
-      setSearchParams({view: 'manage'}, {shallow: false})
     } catch (error) {
       console.error('Error connecting', error)
       toast.error('Error connecting', {

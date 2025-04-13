@@ -13,6 +13,7 @@ import {formatIsoDateString} from '@openint/ui-v1/utils'
 import {useCommandDefinitionMap} from '@/lib-client/GlobalCommandBarProvider'
 import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 
+/** TODO: move into ui-v1 */
 const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {
     id: 'id',
@@ -127,6 +128,7 @@ export function ConnectionsPage(props: {
         </DataTable>
       </div>
 
+      {/* TODO: Extract into ConnectionSheet and move into ui-v1 */}
       <Sheet
         open={sheetOpen}
         onOpenChange={(open) => {

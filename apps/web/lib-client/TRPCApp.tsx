@@ -38,6 +38,9 @@ export function TRPCApp({
       }),
     [token],
   )
+  ;(window as any).trpcClient = trpcClient
+  ;(window as any).queryClient = queryClient
+
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
