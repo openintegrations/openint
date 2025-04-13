@@ -107,6 +107,7 @@ export function AddConnectionInner({
       })
       // Immediately trigger refetch to not need to wait until refetchOnMount
       void queryClient.refetchQueries({
+        // stale: true, // This is another option
         queryKey: trpc.listConnections.queryKey({}),
       })
 

@@ -6,7 +6,7 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {discriminatedUnionBySchemaKey} from '@openint/all-connectors/schemas'
 import {makeId, zConnectOptions, zId, zPostConnectOptions} from '@openint/cdk'
 import {dbUpsertOne, eq, schema} from '@openint/db'
-import {getBaseURLs, getServerUrl} from '@openint/env'
+import {getBaseURLs, _getServerUrl, resolveRoute} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
@@ -59,7 +59,7 @@ export const connectRouter = router({
         },
       )
 
-      const url = new URL('/connect', getServerUrl(null))
+      const url = new URL(...resolveRoute('/connect', null))
       url.searchParams.set('token', token)
 
       return {
