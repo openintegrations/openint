@@ -1,5 +1,5 @@
 import type React from 'react'
-import type {RouteImpl} from './Link.types'
+import type {RouteImpl} from './typed-routes'
 
 import NextLink from 'next/link'
 import {resolveRoute} from '@openint/env'
