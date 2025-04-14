@@ -113,6 +113,7 @@ export function AddConnectionInner({
       toast.error('Error connecting', {
         description: `${error}`,
       })
+      return undefined
     } finally {
       setIsConnecting(false)
     }
