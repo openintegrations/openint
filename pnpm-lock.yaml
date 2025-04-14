@@ -901,9 +901,6 @@ importers:
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
-      '@opensdks/sdk-nango':
-        specifier: 0.0.6
-        version: 0.0.6
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -917,15 +914,6 @@ importers:
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
-      '@opensdks/sdk-apollo':
-        specifier: 0.0.21
-        version: 0.0.21
-      '@opensdks/sdk-outreach':
-        specifier: 0.0.16
-        version: 0.0.16
-      '@opensdks/sdk-qbo':
-        specifier: ^0.0.23
-        version: 0.0.23
       '@types/react':
         specifier: 19.0.10
         version: 19.0.10
@@ -3308,9 +3296,6 @@ packages:
   '@opensdks/sdk-apollo@0.0.18':
     resolution: {integrity: sha512-i2rps56eTt22cM1pwbVyTVlZtpjP65T3jMJhX2rKO2CiHd7+QoI3+hT+ko6dCIsi6STPnoM+IIJhmyQZjJIktA==}
 
-  '@opensdks/sdk-apollo@0.0.21':
-    resolution: {integrity: sha512-2vysmbvPH7lncmOoxqy870Pv3ZMeMK9bSxzyrJgWsUAFNn7Q6MjNHz+C2igDVnbaKnR5ow7eSl6lOr1/bI5P9g==}
-
   '@opensdks/sdk-brex@0.0.1':
     resolution: {integrity: sha512-4qNzNAyzHhmKAQlA71ofeU7eyJA4lfoPvOud9DM3bTAWZCX9msRte2kwL4/mIalJskk2UiBub3JeSdX3iqrnyA==}
 
@@ -3332,23 +3317,14 @@ packages:
   '@opensdks/sdk-merge@0.0.6':
     resolution: {integrity: sha512-OJO+rJFpjh0ctqFH7Fq88sepjoVlGseN82MujNZfb7IPpoUIlAdM9dfj0kORfDgt4yFsqnz7TxhgQtNUvDemeg==}
 
-  '@opensdks/sdk-nango@0.0.6':
-    resolution: {integrity: sha512-nlDbJzZZ9burlpHy85CHlK4UDzmMOv3gKS2zWHebYSj2x9qSM0W6WTL4+PZkFuYVh5sIdiizZhZsyrruHUk6Ig==}
-
   '@opensdks/sdk-onebrick@0.0.0':
     resolution: {integrity: sha512-6x+X60ZKLZ7C9FVi9ZI4CTOOa0TSM+M3ou3ICYVJO/f5k8jFSvMpARS20m73Wa2nHdl4VC9lpe88RyWCd/rfbQ==}
 
   '@opensdks/sdk-openai@0.0.14':
     resolution: {integrity: sha512-QqLiT2LAZnHZc5pyGNRyhBsk87QfDYUwAi3zE3VhGQSLnT88KiZ+TOpIJIyM1zqcQIlXPIy98H/DSWSWufDDQA==}
 
-  '@opensdks/sdk-outreach@0.0.16':
-    resolution: {integrity: sha512-i2p4JSNWpzz/BbSTvcOyOziiB88SWUOVOl1OrwDG3fVLhzRPFkg+icZDXL7nWa9w0L4HEavPm/2Wl4uIYZLYeA==}
-
   '@opensdks/sdk-plaid@0.0.19':
     resolution: {integrity: sha512-o4iZWn8e0enVB6ZV6Y6wHZT9cAk4vQtJqN27BIQyTCL22JVQE/RhUmW/T+RWW2Tx+/5kSteMhlCXLMdkzA6Evg==}
-
-  '@opensdks/sdk-qbo@0.0.23':
-    resolution: {integrity: sha512-U6mjnOjwfraS8RS5+e6Ypy7HEEXCwdiwP1qEQZB0lhKcHLwtmqjoS4O6bS9HQPXHo8rZIfuGNv1yARv7qAEBVA==}
 
   '@opensdks/sdk-revert@0.0.1':
     resolution: {integrity: sha512-r19UD+xs4w+7ezofeYEbuPPuILLnSleVKHpw2KZ7AChtB4X6mR5KGV2LggqBHzY4bdOjp07SheS9zIY+rgar7A==}
@@ -17091,8 +17067,6 @@ snapshots:
 
   '@opensdks/sdk-apollo@0.0.18': {}
 
-  '@opensdks/sdk-apollo@0.0.21': {}
-
   '@opensdks/sdk-brex@0.0.1': {}
 
   '@opensdks/sdk-coda@0.0.1': {}
@@ -17109,19 +17083,13 @@ snapshots:
 
   '@opensdks/sdk-merge@0.0.6': {}
 
-  '@opensdks/sdk-nango@0.0.6': {}
-
   '@opensdks/sdk-onebrick@0.0.0': {}
 
   '@opensdks/sdk-openai@0.0.14': {}
 
-  '@opensdks/sdk-outreach@0.0.16': {}
-
   '@opensdks/sdk-plaid@0.0.19':
     dependencies:
       '@opensdks/runtime': 0.0.22
-
-  '@opensdks/sdk-qbo@0.0.23': {}
 
   '@opensdks/sdk-revert@0.0.1': {}
 

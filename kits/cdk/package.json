@@ -10,15 +10,11 @@
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@opensdks/runtime": "^0.0.19",
-    "@opensdks/sdk-nango": "0.0.6",
     "react-script-hook": "1.7.2"
   },
   "devDependencies": {
     "@openint/dev-configs": "workspace:*",
     "@openint/env": "workspace:*",
-    "@opensdks/sdk-apollo": "0.0.21",
-    "@opensdks/sdk-outreach": "0.0.16",
-    "@opensdks/sdk-qbo": "^0.0.23",
     "@types/react": "*",
     "openapi3-ts": "4.1.2"
   },
