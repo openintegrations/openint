@@ -9,12 +9,7 @@ import {TRPCError} from '@trpc/server'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {titleCase} from '@openint/util/string-utils'
 import {infoFromZodError, isZodError, z} from '@openint/util/zod-utils'
-import {
-  errorMap,
-  errorMessageMap,
-  isTRPCErrorCode,
-  trpcErrorMap,
-} from './errors.def'
+import {errorMap, errorMessageMap, isTRPCErrorCode} from './errors.def'
 
 export const zErrorCode = z.enum(Object.keys(errorMap) as [ErrorCode])
 
