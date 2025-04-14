@@ -9,7 +9,7 @@ import {TRPCError} from '@trpc/server'
 import {safeJSONParse} from '@openint/util/json-utils'
 import {titleCase} from '@openint/util/string-utils'
 import {infoFromZodError, isZodError, z} from '@openint/util/zod-utils'
-import {errorMap, errorMessageMap, trpcErrorMap} from './errors.def'
+import {errorMap, errorMessageMap, isTRPCErrorCode} from './errors.def'
 
 export const zErrorCode = z.enum(Object.keys(errorMap) as [ErrorCode])
 
@@ -50,23 +50,30 @@ export function makeError<TCode extends ErrorCode>(
 ) {
   const schema = errorMap[code]
   const parsedData = z.object(schema).parse(data)
-  const message = JSON.stringify(parsedData, null, 2)
 
-  // Perhaps change to a unknown erro here if it does not pass validation?
-  const err =
-    code in trpcErrorMap
-      ? new TRPCError({code: code as keyof typeof trpcErrorMap, message})
-      : new Error(message)
-  // Assgning name as code breaks the trpc server built in error handling
-  // TOFO: Figure out a better option and add test for throwing error inside trpc
-  Object.assign(err, {name: code, code, data})
-  return err as unknown as Error & DiscriminatedError<TCode>
+  if (isTRPCErrorCode(code)) {
+    const message =
+      z.object({message: z.string()}).strict().safeParse(parsedData).data
+        ?.message ?? JSON.stringify(parsedData, null, 2)
+
+    const err = new TRPCError({code, message})
+    // Assgning name as code breaks the trpc server built in error handling
+    // TOFO: Figure out a better option and add test for throwing error inside trpc
+    Object.assign(err, {data})
+    return err as Error & DiscriminatedError<TCode>
+  } else {
+    const message = JSON.stringify(parsedData, null, 2)
+    // Perhaps change to a unknown error here if it does not pass validation?
+    const err = new Error(message)
+    Object.assign(err, {data, name: code, code})
+    return err as unknown as Error & DiscriminatedError<TCode>
+  }
 }
 
 export function throwError<TCode extends ErrorCode>(
   code: TCode,
   data: DiscriminatedError<TCode>['data'],
-) {
+): never {
   throw makeError(code, data)
 }
 
