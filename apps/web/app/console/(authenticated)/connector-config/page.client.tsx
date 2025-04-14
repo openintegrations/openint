@@ -1,7 +1,7 @@
 'use client'
 
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
-import type {AppRouterOutput} from '@openint/api-v1/routers'
+import type {AppRouterOutput} from '@openint/api-v1/trpc/routers'
 import type {JSONSchemaFormRef} from '@openint/ui-v1'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 

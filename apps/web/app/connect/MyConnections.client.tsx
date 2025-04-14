@@ -4,7 +4,7 @@ import type {AppRouterOutput} from '@openint/api-v1'
 
 import {useSuspenseQuery} from '@tanstack/react-query'
 import React from 'react'
-import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
+import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {Button} from '@openint/shadcn/ui'
 import {
   CommandPopover,

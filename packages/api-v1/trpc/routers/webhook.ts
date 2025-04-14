@@ -3,7 +3,7 @@ import type {ConnectorServer} from '@openint/cdk'
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {z} from '@openint/util/zod-utils'
-import {publicProcedure, router} from '../trpc/_base'
+import {publicProcedure, router} from '../_base'
 import {zConnectorName} from './connector.models'
 
 export const webhookRouter = router({

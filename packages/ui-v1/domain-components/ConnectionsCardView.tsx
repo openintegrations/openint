@@ -1,6 +1,6 @@
 'use client'
 
-import type {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
+import type {ConnectionExpanded} from '@openint/api-v1/trpc/routers/connection.models'
 import type {PropertyItem} from '../components/PropertyListView'
 import type {StatusType} from '../components/StatusDot'
 

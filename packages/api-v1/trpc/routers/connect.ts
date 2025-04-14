@@ -9,15 +9,15 @@ import {dbUpsertOne, eq, schema} from '@openint/db'
 import {_getServerUrl, getBaseURLs, resolveRoute} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
-import {getApiV1URL} from '../lib/typed-routes'
-import {core} from '../models'
 import {
   authenticatedProcedure,
   customerProcedure,
   orgProcedure,
   router,
-} from '../trpc/_base'
+} from '../_base'
+import {asCustomerOfOrg, makeJwtClient} from '../../lib/makeJwtClient'
+import {getApiV1URL} from '../../lib/typed-routes'
+import {core} from '../../models'
 import {connectRouterModels} from './connect.models'
 import {md} from './utils/md'
 

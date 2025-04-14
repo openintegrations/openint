@@ -5,8 +5,8 @@ import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {makeUlid} from '@openint/util/id-utils'
-import {routerContextFromViewer} from '../trpc/context'
-import {onError} from '../trpc/error-handling'
+import {routerContextFromViewer} from '../context'
+import {onError} from '../error-handling'
 import {connectionRouter} from './connection'
 
 // TODO: Fix standalone expect calls
