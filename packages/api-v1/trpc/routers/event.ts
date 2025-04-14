@@ -1,6 +1,6 @@
 import {schema, sql} from '@openint/db'
-import {core} from '../models'
-import {orgProcedure, router} from '../trpc/_base'
+import {orgProcedure, router} from '../_base'
+import {core} from '../../models/core'
 import {
   applyPaginationAndOrder,
   processPaginatedResponse,

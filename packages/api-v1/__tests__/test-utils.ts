@@ -1,15 +1,15 @@
 import type {Viewer} from '@openint/cdk'
 import type {Database} from '@openint/db'
-import type {CreateFetchHandlerOptions} from '../handlers'
+import type {CreateFetchHandlerOptions} from '../trpc/handlers'
 
 import {createTRPCClient, httpLink} from '@trpc/client'
 import {schema} from '@openint/db'
 import {envRequired} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {createApp} from '../app'
-import {createFetchHandlerTRPC} from '../handlers'
 import {makeJwtClient} from '../lib/makeJwtClient'
-import {type AppRouter} from '../routers'
+import {createFetchHandlerTRPC} from '../trpc/handlers'
+import {type AppRouter} from '../trpc/routers'
 
 export async function headersForViewer(viewer: Viewer) {
   const jwt = makeJwtClient({secretOrPublicKey: envRequired.JWT_SECRET})

@@ -2,8 +2,8 @@ import type {Z} from '@openint/util/zod-utils'
 
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {z} from '@openint/util/zod-utils'
-import {core} from '../models'
-import {publicProcedure, router} from '../trpc/_base'
+import {publicProcedure, router} from '../_base'
+import {core} from '../../models/core'
 import {getConnectorModel, zConnectorName} from './connector.models'
 import {zListResponse} from './utils/pagination'
 

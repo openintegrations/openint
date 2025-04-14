@@ -1,7 +1,7 @@
 'use client'
 
 import type {AppRouterOutput} from '@openint/api-v1'
-import type {ConnectorConfig} from '@openint/api-v1/routers/connectorConfig.models'
+import type {ConnectorConfig} from '@openint/api-v1/trpc/routers/connectorConfig.models'
 import type {ConnectFn} from './ConnectorClientComponents.client'
 
 import {
@@ -10,7 +10,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import React from 'react'
-import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
+import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {Label, toast} from '@openint/shadcn/ui'
 import {ConnectorConfigCard} from '@openint/ui-v1/domain-components/ConnectorConfigCard'
 import {useTRPC} from '@/lib-client/TRPCApp'

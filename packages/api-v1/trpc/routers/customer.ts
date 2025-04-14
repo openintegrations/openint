@@ -1,10 +1,10 @@
-import type {Customer} from '../models'
+import type {Customer} from '../../models'
 import type {Query} from './utils/pagination'
 
 import {schema, sql} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
-import {core} from '../models'
-import {orgProcedure, router} from '../trpc/_base'
+import {orgProcedure, router} from '../_base'
+import {core} from '../../models/core'
 import {
   applyPaginationAndOrder,
   processTypedPaginatedResponse,

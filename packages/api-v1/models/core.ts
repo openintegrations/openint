@@ -7,7 +7,7 @@ import {
 } from '@openint/all-connectors/schemas'
 import {schema} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
-import {zConnector, zConnectorName} from '../routers/connector.models'
+import {zConnector, zConnectorName} from '../trpc/routers/connector.models'
 
 // TODO: make all metadata default to `{}` and not nullable to simplify typing
 const zMetadata = z.record(z.string(), z.unknown()).describe(`

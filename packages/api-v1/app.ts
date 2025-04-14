@@ -1,11 +1,11 @@
-import type {CreateFetchHandlerOptions} from './handlers'
+import type {CreateFetchHandlerOptions} from './trpc/handlers'
 
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
 import {env, envRequired, getBaseURLs} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
-import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './handlers'
+import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './trpc/handlers'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 

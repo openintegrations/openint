@@ -2,8 +2,8 @@ import {TRPCError} from '@trpc/server'
 import {dbUpsertOne, eq, inArray, schema} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {core} from '../models'
-import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
+import {authenticatedProcedure, orgProcedure, router} from '../_base'
+import {core} from '../../models'
 
 const zOnboardingState = z.object({
   first_connector_configured: z.boolean(),
