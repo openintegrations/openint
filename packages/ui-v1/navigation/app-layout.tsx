@@ -5,6 +5,7 @@ import {SidebarInset, SidebarProvider} from '@openint/shadcn/ui/sidebar'
 import {AppHeader} from './app-header'
 import {AppSidebar} from './app-sidebar'
 
+/** Rename to console-authenticated-layout */
 export function AppLayout({
   children,
   userButton,
