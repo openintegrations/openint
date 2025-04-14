@@ -45,7 +45,7 @@ export function AppHeader(props: {userButton: React.ReactNode}) {
       </Breadcrumb>
       <div className="ml-auto flex items-center">
         <CommandBarShortcut />
-        {props.userButton}
+        <div className="w-27">{props.userButton}</div>
       </div>
     </header>
   )
