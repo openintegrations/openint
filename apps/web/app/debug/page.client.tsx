@@ -5,11 +5,13 @@ import {
   QueryClientProvider,
   useSuspenseQuery,
 } from '@tanstack/react-query'
+import {ErrorBoundary} from 'next/dist/client/components/error-boundary'
 import React, {Suspense} from 'react'
 import {delay} from '@openint/util/promise-utils'
 
 const fetchDummyData = async (input: string) => {
   await delay(3000)
+  throw new Error('Something went wrong')
   return {message: `dummy response ${input}`}
 }
 
@@ -47,9 +49,16 @@ const queryClient = new QueryClient({
 export default function DebugClientPageWithProvider() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<div>Running query...</div>}>
-        <DebugClientPage />
-      </Suspense>
+      {/* Should we use suspense boundary with pre and post connect? */}
+      <ErrorBoundary errorComponent={ErrorComponent}>
+        <Suspense fallback={<div>Running query...</div>}>
+          <DebugClientPage />
+        </Suspense>
+      </ErrorBoundary>
     </QueryClientProvider>
   )
+}
+
+const ErrorComponent = () => {
+  return <div>Something went wrong but got caught by us...</div>
 }
