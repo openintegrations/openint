@@ -58,3 +58,5 @@ export type RouteImpl<T> =
   | (T extends `${DynamicRoutes<infer _>}${Suffix}` ? T : never)
 
 // --- generated end ---
+
+// TODO: Have this leverage the openapi spec / openapi.types.ts to generate API route paths as well?

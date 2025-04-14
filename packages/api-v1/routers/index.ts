@@ -9,6 +9,7 @@ import {customerRouter} from './customer'
 import {eventRouter} from './event'
 import {generalRouter} from './general'
 import {organizationRouter} from './organization'
+import {webhookRouter} from './webhook'
 
 export const appRouter = trpc.mergeRouters(
   connectorRouter,
@@ -19,6 +20,7 @@ export const appRouter = trpc.mergeRouters(
   customerRouter,
   generalRouter,
   organizationRouter,
+  webhookRouter,
 )
 
 export type AppRouter = typeof appRouter

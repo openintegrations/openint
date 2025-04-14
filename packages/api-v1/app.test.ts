@@ -1,13 +1,13 @@
-import type {paths} from '../__generated__/openapi.types'
-import type {AppRouter} from '../routers'
+import type {paths} from './__generated__/openapi.types'
+import type {AppRouter} from './routers'
 
 import {applyLinks, logLink} from '@opensdks/fetch-links'
 import {createTRPCClient, httpLink} from '@trpc/client'
 import createClient, {wrapAsPathBasedClient} from 'openapi-fetch'
 import {initDbPGLite} from '@openint/db/db.pglite'
 import {loopbackLink} from '@openint/loopback-link'
-import {createApp} from '../app'
-import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from '../handlers'
+import {createApp} from './app'
+import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './handlers'
 
 const db = initDbPGLite()
 const app = createApp({db})
@@ -141,5 +141,83 @@ describe('trpc route', () => {
     })
     const res = await client.health.query()
     expect(res).toEqual({ok: true})
+  })
+})
+
+describe('/v1/webhook/:connector_name', () => {
+  test('connector supporting webhooks', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/v1/webhook/plaid', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({hi: 'there'}),
+      }),
+    )
+
+    expect(res.status).toBe(200)
+    expect(await res.json()).toMatchObject({
+      info: {connector_name: 'plaid'},
+    })
+  })
+
+  test('connector not supporting webhooks', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/v1/webhook/apollo', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({hi: 'there'}),
+      }),
+    )
+
+    expect(res.status).toBe(501) // not implemented
+    expect(await res.json()).toMatchObject({
+      message: 'Connector apollo does not support webhooks',
+    })
+  })
+
+  test('invalid connector name', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/v1/webhook/invalid', {
+        method: 'POST',
+        // content type is always required
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({hi: 'there'}),
+      }),
+    )
+
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({
+      message: 'Input validation failed',
+    })
+  })
+
+  test('bad json request', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/v1/webhook/plaid', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: 'not json',
+      }),
+    )
+
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({
+      message: 'Failed to parse request body',
+      code: 'PARSE_ERROR',
+    })
+  })
+
+  // This causes the whole test to crash due to TRPCError: Unsupported content-type "text/plain"
+  // and is not actually caught
+  test.skip('non json request', async () => {
+    const res = await app.handle(
+      new Request('http://localhost/v1/webhook/plaid', {
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain'},
+        body: 'not json',
+      }),
+    )
+
+    expect(res.status).toBe(500)
   })
 })

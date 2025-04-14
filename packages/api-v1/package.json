@@ -8,7 +8,7 @@
     "dev": "bun run --watch ./app.ts",
     "gen": "run-s gen:*",
     "gen:oas": "bun ./scripts/gen-oas.ts",
-    "gen:types": "bunx openapi-typescript ./__generated__/openapi.json --output ./__generated__/openapi.types.ts"
+    "gen:types": "bunx openapi-typescript ./__generated__/openapi.json --output ./__generated__/openapi.types.d.ts --path-params-as-types"
   },
   "dependencies": {
     "@elysiajs/swagger": "^1.2.0",
@@ -27,6 +27,7 @@
     "trpc-to-openapi": "^2.1.3"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@openint/cnext": "workspace:*",
     "@openint/loopback-link": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",

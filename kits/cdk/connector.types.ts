@@ -177,7 +177,7 @@ export interface ConnectorServer<
   // Need to add a input schema for each provider to verify the shape of the received
   // webhook requests...
 
-  /** @deprecated */
+  /** @deprecated. Should just be Request -> Response probably? */
   handleWebhook?: (opts: {
     webhookInput: T['_types']['webhook_input']
     config: T['_types']['connector_config']
