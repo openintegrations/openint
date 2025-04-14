@@ -20,6 +20,7 @@ export function createApp(opts: CreateAppOptions) {
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}), {
       detail: {hide: true},
     })
+    // TODO: Should this be made singular given that's what we do for all?
     .get('/jobs/refresh-stale-connections', handleRefreshStaleConnections, {
       detail: {hide: true},
     })
@@ -42,6 +43,7 @@ export function createApp(opts: CreateAppOptions) {
     .all('/v1/*', ({request}) =>
       createFetchHandlerOpenAPI({...opts, endpoint: '/v1'})(request),
     )
+
     // For testing purposes only
     .group('/acme-oauth2', (group) =>
       group.use(

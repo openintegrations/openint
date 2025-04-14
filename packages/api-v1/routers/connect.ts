@@ -10,6 +10,7 @@ import {_getServerUrl, getBaseURLs, resolveRoute} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {asCustomerOfOrg, makeJwtClient} from '../lib/makeJwtClient'
+import {getApiV1URL} from '../lib/typed-routes'
 import {core} from '../models'
 import {
   authenticatedProcedure,
@@ -21,6 +22,7 @@ import {connectRouterModels} from './connect.models'
 import {md} from './utils/md'
 
 export const connectRouter = router({
+  // TODO: Should these all be scoped under `/connect` instead?
   createMagicLink: orgProcedure
     .meta({
       openapi: {
@@ -172,8 +174,7 @@ export const connectRouter = router({
       const res = await preConnect({
         config: ccfg.config,
         context: {
-          webhookBaseUrl:
-            'https://webhook.site/ce79fc9e-8f86-45f2-8701-749b770e5cdb',
+          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
@@ -256,8 +257,7 @@ export const connectRouter = router({
         connectOutput: input.discriminated_data.connect_output,
         config: ccfg.config,
         context: {
-          webhookBaseUrl:
-            'https://webhook.site/ce79fc9e-8f86-45f2-8701-749b770e5cdb',
+          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
           extCustomerId: (ctx.viewer.role === 'customer'
             ? ctx.viewer.customerId
             : ctx.viewer.userId) as ExtCustomerId,
