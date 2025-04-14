@@ -96,5 +96,3 @@ export function SecureInput({
     </div>
   )
 }
-
-export default SecureInput

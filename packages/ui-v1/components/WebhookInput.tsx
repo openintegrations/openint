@@ -107,4 +107,3 @@ export function WebhookInput({
   )
 }
 
-export default WebhookInput

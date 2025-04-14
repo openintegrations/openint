@@ -1,6 +1,7 @@
 import type {RouterContextOnError} from '@openint/api-v1/trpc/error-handling'
 import type {PageProps} from '@/lib-common/next-utils'
 
+import {createTRPCClient, httpLink} from '@trpc/client'
 import {
   errorFormatter,
   fetchRequestHandler,
@@ -8,7 +9,6 @@ import {
   onError,
   TRPCError,
 } from '@openint/api-v1/trpc/error-handling'
-import {createTRPCClient, httpLink} from '@openint/ui-v1/trpc'
 import {z} from '@openint/util/zod-utils'
 import {parsePageProps} from '@/lib-common/next-utils'
 

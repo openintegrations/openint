@@ -146,6 +146,7 @@ export const configs = keyAsName({
       // FIXME: This should not be disabled ever - immediate code smell
       'import-x/no-relative-packages': 'error',
       'import-x/no-useless-path-segments': ['error', {noUselessIndex: true}],
+      'import-x/no-named-as-default-member': 'off',
     },
   },
   typescript: {

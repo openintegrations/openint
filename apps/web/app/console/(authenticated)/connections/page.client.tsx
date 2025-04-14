@@ -9,11 +9,11 @@ import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CommandPopover, ConnectionTableCell, CopyID} from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
-import {useMutation, useSuspenseQuery} from '@openint/ui-v1/trpc'
 import {formatIsoDateString} from '@openint/ui-v1/utils'
-import {useCommandDefinitionMap} from '@/app/GlobalCommandBarProvider'
-import {useTRPC} from '../client'
+import {useCommandDefinitionMap} from '@/lib-client/GlobalCommandBarProvider'
+import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 
+/** TODO: move into ui-v1 */
 const columns: Array<ColumnDef<ConnectionExpanded>> = [
   {
     id: 'id',
@@ -128,6 +128,7 @@ export function ConnectionsPage(props: {
         </DataTable>
       </div>
 
+      {/* TODO: Extract into ConnectionSheet and move into ui-v1 */}
       <Sheet
         open={sheetOpen}
         onOpenChange={(open) => {
