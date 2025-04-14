@@ -5,7 +5,7 @@ import {
   QueryClientProvider,
   useSuspenseQuery,
 } from '@tanstack/react-query'
-import React from 'react'
+import React, {Suspense} from 'react'
 import {delay} from '@openint/util/promise-utils'
 
 const fetchDummyData = async (input: string) => {
@@ -47,7 +47,9 @@ const queryClient = new QueryClient({
 export default function DebugClientPageWithProvider() {
   return (
     <QueryClientProvider client={queryClient}>
-      <DebugClientPage />
+      <Suspense fallback={<div>Running query...</div>}>
+        <DebugClientPage />
+      </Suspense>
     </QueryClientProvider>
   )
 }
