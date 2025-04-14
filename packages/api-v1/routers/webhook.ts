@@ -1,8 +1,8 @@
 import type {ConnectorServer} from '@openint/cdk'
 
+import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {z} from '@openint/util/zod-utils'
-import {TRPCError} from '@trpc/server'
 import {publicProcedure, router} from '../trpc/_base'
 import {zConnectorName} from './connector.models'
 
@@ -19,7 +19,8 @@ export const webhookRouter = router({
     .input(z.object({connector_name: zConnectorName}).passthrough())
     .output(z.object({status: z.enum(['ok', 'error']), info: z.unknown()}))
     .mutation(async ({input}) => {
-      console.log('handleWebhook', input)
+      // TODO: 1) Pass webhook over for actual handling 2) Add webhook to queue to handle asynchronously
+      console.log('[webhookRouter] input', input)
       const serverConnector = serverConnectors[
         input.connector_name as keyof typeof serverConnectors
       ] as ConnectorServer
