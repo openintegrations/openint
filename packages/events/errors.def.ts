@@ -13,6 +13,12 @@ export const trpcErrorMap = R.mapValues(TRPC_ERROR_CODES_BY_KEY, () => ({
   message: z.string(),
 }))
 
+export function isTRPCErrorCode(
+  code: string,
+): code is keyof typeof trpcErrorMap {
+  return code in trpcErrorMap
+}
+
 export const errorMap = {
   ...trpcErrorMap,
   UNKNOWN_ERROR: {message: z.string().optional()},

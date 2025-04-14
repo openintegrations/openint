@@ -13,11 +13,9 @@ describe('makeError', () => {
     const error = makeError('BAD_REQUEST', {message: 'Invalid input'})
 
     expect(error).toBeInstanceOf(TRPCError)
-    expect(error.name).toBe('BAD_REQUEST')
+    expect(error.name).toBe('TRPCError') // we do not modify the name, because otherwise it breaks error handling in trpc
     expect(error.data).toEqual({message: 'Invalid input'})
-    expect(error.message).toEqual(
-      JSON.stringify({message: 'Invalid input'}, null, 2),
-    )
+    expect(error.message).toEqual('Invalid input')
   })
 
   test('creates a custom error with correct properties', () => {
