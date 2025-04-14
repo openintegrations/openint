@@ -2,7 +2,7 @@ import {Suspense} from 'react'
 import {delay} from '@openint/util/promise-utils'
 import DebugPage from './page'
 
-export default async function DebugLayout({
+export async function DebugLayoutDelay({
   children,
 }: {
   children: React.ReactNode
@@ -24,4 +24,8 @@ export default async function DebugLayout({
       </div>
     </div>
   )
+}
+
+export default function DebugLayout({children}: {children: React.ReactNode}) {
+  return <div className="p-8">{children}</div>
 }
