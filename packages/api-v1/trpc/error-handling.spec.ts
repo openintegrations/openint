@@ -6,6 +6,7 @@ import {initTRPC, TRPCError} from '@trpc/server'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
+import {makeError, throwError} from '@openint/events/errors'
 import {z} from '@openint/util/zod-utils'
 import {errorFormatter, onError, parseAPIError} from './error-handling'
 
@@ -19,15 +20,10 @@ const router = trpc.router({
     .query(({input}) => {
       switch (input.code) {
         case 'NOT_FOUND':
-          throw new TRPCError({
-            code: 'NOT_FOUND',
-            message: 'Resource not found',
-          })
+          throw makeError('NOT_FOUND', {message: 'Resource not found'})
         case 'BAD_REQUEST':
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'Invalid request parameters',
-          })
+          throwError('BAD_REQUEST', {message: 'Invalid request parameters'})
+        // eslint-disable-next-line no-fallthrough
         case 'UNAUTHORIZED':
           throw new TRPCError({
             code: 'UNAUTHORIZED',

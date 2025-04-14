@@ -160,7 +160,9 @@ export const onError: RouterCallerErrorHandler<RouterContextOnError> = ({
   // console.log('onError', {error, path, input, ctx, type})
   Object.assign(error, {path})
   // TODO: Better way to check if it's an input error
-  const isInputError = safeJSONParse(error.message) != null
+  const isInputError = z
+    .object({issues: zZodIssues})
+    .safeParse(safeJSONParse(error.message)).success
   if (isInputError) {
     Object.assign(error, {message: 'Input validation failed'})
   }
