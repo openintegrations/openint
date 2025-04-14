@@ -17,6 +17,8 @@ import {CommandContext} from '../components'
 export function AppHeader(props: {userButton: React.ReactNode}) {
   const path = usePathname() ?? '/'
 
+  // TODO: This should probably leverage the same sidebar-nav-items (or just rename to nav-items)
+  // component that is already being used
   // Extract title from path
   let title = 'Dashboard'
   const consoleMatch = path?.match(/\/console(?:\/(.+))?/)
