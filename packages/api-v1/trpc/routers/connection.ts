@@ -7,8 +7,8 @@ import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
-import {core} from '../models'
-import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
+import {authenticatedProcedure, orgProcedure, router} from '../_base'
+import {core} from '../../models/core'
 import {
   formatConnection,
   zConnectionError,

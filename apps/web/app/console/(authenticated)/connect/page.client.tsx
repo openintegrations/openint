@@ -3,7 +3,7 @@
 import type {Z} from '@openint/util/zod-utils'
 
 import React from 'react'
-import {connectRouterModels} from '@openint/api-v1/routers/connect.models'
+import {connectRouterModels} from '@openint/api-v1/trpc/routers/connect.models'
 import {ConnectEmbed} from '@openint/connect'
 import {getBaseURLs} from '@openint/env'
 import {PreviewWindow} from '@openint/ui-v1/components/PreviewWindow'

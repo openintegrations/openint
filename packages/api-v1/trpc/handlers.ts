@@ -5,9 +5,9 @@ import type {Database} from '@openint/db'
 import {fetchRequestHandler} from '@trpc/server/adapters/fetch'
 import {createOpenApiFetchHandler} from 'trpc-to-openapi'
 // Technically doesn't belong here as it introduces circular dependencies
+import {routerContextFromRequest, routerContextFromViewer} from './context'
+import {onError} from './error-handling'
 import {appRouter} from './routers'
-import {routerContextFromRequest, routerContextFromViewer} from './trpc/context'
-import {onError} from './trpc/error-handling'
 
 export interface CreateFetchHandlerOptions {
   endpoint: `/${string}`

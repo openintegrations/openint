@@ -1,11 +1,11 @@
 import type {Z} from '@openint/util/zod-utils'
-import type {Core} from '../models'
+import type {Core} from '../../models'
 import type {ConnectorName} from './connector.models'
 
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
 import {z} from '@openint/util/zod-utils'
-import {core} from '../models'
+import {core} from '../../models'
 import {getConnectorModelByName} from './connector.models'
 
 export const zIncludeSecrets = z

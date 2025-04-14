@@ -1,6 +1,6 @@
 import {zViewerRole} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
-import {publicProcedure, router} from '../trpc/_base'
+import {publicProcedure, router} from '../_base'
 
 export const generalRouter = router({
   health: publicProcedure

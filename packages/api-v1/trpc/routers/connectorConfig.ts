@@ -1,4 +1,4 @@
-import type {ConnectorConfig} from '../models'
+import type {ConnectorConfig} from '../../models'
 
 import {TRPCError} from '@trpc/server'
 import {defConnectors} from '@openint/all-connectors/connectors.def'
@@ -6,12 +6,12 @@ import {makeId} from '@openint/cdk'
 import {and, asc, desc, eq, inArray, schema, sql} from '@openint/db'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
+import {authenticatedProcedure, orgProcedure, router} from '../_base'
 import {
   connectorConfigExtended,
   core,
   zConnectorConfigExpandOption,
-} from '../models'
-import {authenticatedProcedure, orgProcedure, router} from '../trpc/_base'
+} from '../../models'
 import {getConnectorModelByName, zConnectorName} from './connector.models'
 import {zListParams, zListResponse} from './utils/pagination'
 import {zConnectorConfigId} from './utils/types'
@@ -112,7 +112,7 @@ export const connectorConfigRouter = router({
           expand?.includes('connector') ||
           expand?.includes('connector.schemas')
         ) {
-          ccfg.connector = getConnectorModelByName(item.connector_name, {
+          ccfg['connector'] = getConnectorModelByName(item.connector_name, {
             includeSchemas: expand?.includes('connector.schemas'),
           })
         }

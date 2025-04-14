@@ -1,6 +1,6 @@
 'use client'
 
-import type {ConnectionExpanded} from '@openint/api-v1/routers/connection.models'
+import type {ConnectionExpanded} from '@openint/api-v1/trpc/routers/connection.models'
 
 import Image from 'next/image'
 import React, {useState} from 'react'
