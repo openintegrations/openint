@@ -106,8 +106,8 @@ export function AddConnectionInner({
         queryKey: trpc.listConnections.queryKey({}),
       })
 
-      // This is the only way that works for now...
-      // TODO: Fix this madness
+      // TODO: update local cache state with result from postConnect
+      return postConnectRes
     } catch (error) {
       console.error('Error connecting', error)
       toast.error('Error connecting', {
