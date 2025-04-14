@@ -57,6 +57,8 @@ export function makeError<TCode extends ErrorCode>(
     code in trpcErrorMap
       ? new TRPCError({code: code as keyof typeof trpcErrorMap, message})
       : new Error(message)
+  // Assgning name as code breaks the trpc server built in error handling
+  // TOFO: Figure out a better option and add test for throwing error inside trpc
   Object.assign(err, {name: code, code, data})
   return err as unknown as Error & DiscriminatedError<TCode>
 }

@@ -21,6 +21,7 @@ import {connectRouterModels} from './connect.models'
 import {md} from './utils/md'
 
 export const connectRouter = router({
+  // TODO: Should these all be scoped under `/connect` instead?
   createMagicLink: orgProcedure
     .meta({
       openapi: {
