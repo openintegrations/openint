@@ -11,7 +11,9 @@ import {delay} from '@openint/util/promise-utils'
 
 const fetchDummyData = async (input: string) => {
   await delay(3000)
-  throw new Error('Something went wrong')
+  if (input === 'error') {
+    throw new Error('Something went wrong')
+  }
   return {message: `dummy response ${input}`}
 }
 
