@@ -5,16 +5,22 @@ import {TRPCApp} from '@/lib-client/TRPCApp'
 
 // TODO: react.cache currentViewer function
 
+// This does not currently work... See TRPCApp.tsx for more details
+const enableReactQueryStreamedHydration = false
+
 export default async function ConsoleLayout(props: {
   children: React.ReactNode
 }) {
-  // Pass cookie to the TRPCApp for any authenticated requests to the API route
-  const cookie = await cookies()
+  const additionalProps = enableReactQueryStreamedHydration
+    ? // Pass cookie to the TRPCApp for any authenticated requests to the API route
+      // Though we aren't actually making requests server side at all
+      // when not using ReactQueryStreamedHydration
+      {reactQueryNextExperimental: true, cookie: (await cookies()).toString()}
+    : {}
+
   return (
     <AuthProvider dynamic>
-      <TRPCApp reactQueryNextExperimental cookie={cookie.toString()}>
-        {props.children}
-      </TRPCApp>
+      <TRPCApp {...additionalProps}>{props.children}</TRPCApp>
     </AuthProvider>
   )
 }

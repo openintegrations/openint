@@ -226,7 +226,7 @@ export function ConnectorConfigList() {
   }
 
   return (
-    <div>
+    <div className="p-6">
       <DataTable<
         ConnectorConfig<'connector' | 'integrations' | 'connection_count'>,
         string | number | string[]

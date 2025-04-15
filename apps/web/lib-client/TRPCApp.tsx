@@ -101,6 +101,7 @@ export function TRPCApp({
 }
 
 // Example code... that results in empty data
+// 'use client'
 // export function ConnectorConfigList() {
 //   // Must use multiple queries to avoid waterfall and allow server prefetch to work
 //   const [res, connectorRes] = useSuspenseQueries({
