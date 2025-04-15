@@ -46,6 +46,8 @@ export function ConnectorConfigList() {
       }),
     ],
   })
+  console.log('[connector-config-list] res', res.data)
+  console.log('[connector-config-list] connectorRes', connectorRes.data)
 
   const connectorConfigs = res.data?.items
 
@@ -218,22 +220,11 @@ export function ConnectorConfigList() {
       // TODO: We need to show a toast here
     }
   }
-  return (
-    <pre>
-      {JSON.stringify(
-        {
-          connectorConfigs: connectorConfigs?.length,
-          connectors: connectorRes.data.items?.length,
-          connectorStatus: connectorRes.status,
-          connectorFetchStatus: connectorRes.fetchStatus,
-          connectorConfigsStatus: res.status,
-          connectorConfigsFetchStatus: res.fetchStatus,
-        },
-        null,
-        2,
-      )}
-    </pre>
-  )
+  // initial flash of no data....
+  if (!res.data.items || !connectorRes.data.items) {
+    return null
+  }
+
   return (
     <div>
       <DataTable<

@@ -33,6 +33,11 @@ export function TRPCApp({
    *
    * downsides are 1) request waterfall and 2) additional http request to the API
    * instead of direct trpc router call on the server-side
+   *
+   * More importantly, it can result in `result.data` being empty object (vs. undefined)
+   * for a split second on the client which will have to be handled in a hooks-safe way, defeating the
+   * convenience offered by useSuspenseQuery and also leading to initial flash of empty data
+   * TODO: File issue with react-query regarding this...
    */
   reactQueryNextExperimental?: boolean
   children: React.ReactNode
@@ -67,11 +72,10 @@ export function TRPCApp({
         {reactQueryNextExperimental ? (
           <ReactQueryStreamedHydration
             options={{
-              dehydrate: {
-                shouldDehydrateQuery(query) {
-                  console.log('[TRPCApp] shouldDehydrateQuery', query.queryKey)
-                  return true
-                },
+              // Not sure why this isn't already the default...
+              dehydrate: queryClient.getDefaultOptions().dehydrate,
+              hydrate: {
+                defaultOptions: queryClient.getDefaultOptions().hydrate,
               },
             }}>
             {children}
@@ -83,3 +87,24 @@ export function TRPCApp({
     </QueryClientProvider>
   )
 }
+
+// Example code... that results in empty data
+// export function ConnectorConfigList() {
+//   // Must use multiple queries to avoid waterfall and allow server prefetch to work
+//   const [res, connectorRes] = useSuspenseQueries({
+//     queries: [
+//       trpc.listConnectorConfigs.queryOptions({
+//         expand: ['connection_count', 'connector.schemas'],
+//       }),
+//       trpc.listConnectors.queryOptions({
+//         expand: ['schemas'],
+//       }),
+//     ],
+//   })
+//   console.log('[connector-config-list] res', res.data)
+//   console.log('[connector-config-list] connectorRes', connectorRes.data)
+//   // We have data but also empty items...
+//   if (!res.data.items || !connectorRes.data.items) {
+//     return new Error('No data') // This should never happen... but it does with ReactQueryStreamedHydration
+//   }
+// }
