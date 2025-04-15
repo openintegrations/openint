@@ -1,5 +1,4 @@
 import type {Z} from '@openint/util/zod-utils'
-
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
@@ -224,18 +223,26 @@ export const connectionRouter = router({
 
       const {items, total} = await processPaginatedResponse(query, 'connection')
 
+      const mappedItems = await Promise.all(
+        items.map((conn) => {
+          // Parse DB record
+          core.connection_select.parse(conn)
+          const extendedConnection = formatConnection(
+            ctx,
+            conn,
+            input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
+            input?.expand ?? [],
+          )
+          // Parse extended connection
+          zConnectionExpanded.parse(extendedConnection)
+
+          return extendedConnection
+        }),
+      )
+
       return {
         // TODO: fix this to respect rls policy... Add corresponding tests also
-        items: await Promise.all(
-          items.map((conn) =>
-            formatConnection(
-              ctx,
-              conn as any,
-              input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
-              input?.expand ?? [],
-            ),
-          ),
-        ),
+        items: mappedItems,
         total,
         limit,
         offset,
