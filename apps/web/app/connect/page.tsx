@@ -24,8 +24,12 @@ import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
 import {TRPCApp} from '@/lib-client/TRPCApp'
 import {Link} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
+import {createQueryClient} from '@/lib-common/trpc.common'
 import {createAPICaller} from '@/lib-server/globals'
-import {getServerComponentContext} from '@/lib-server/trpc.server'
+import {
+  getServerComponentContext,
+  serverComponentContextForViewer,
+} from '@/lib-server/trpc.server'
 import {AddConnectionInner} from './AddConnectionInner.client'
 import {MyConnectionsClient} from './MyConnections.client'
 import {TabsClient} from './page.client'
@@ -270,16 +274,23 @@ function AddConnection({
   viewer: Viewer
   connectorConfig: ConnectorConfigForCustomer
 }) {
-  const api = createAPICaller(viewer)
+  const {trpc} = serverComponentContextForViewer(viewer)
+  // create a fresh query client to avoid having to send down more cache
+  const queryClient = createQueryClient()
+
   const name = connectorConfig.connector_name
-  const res = api.preConnect({
-    connector_config_id: connectorConfig.id,
-    discriminated_data: {connector_name: name, pre_connect_input: {}},
-    options: {},
-  })
+  void queryClient.prefetchQuery(
+    trpc.preConnect.queryOptions({
+      connector_config_id: connectorConfig.id,
+      discriminated_data: {connector_name: name, pre_connect_input: {}},
+      options: {},
+    }),
+  )
 
   return (
-    <AddConnectionInner connectorConfig={connectorConfig} initialData={res} />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <AddConnectionInner connectorConfig={connectorConfig} />
+    </HydrationBoundary>
   )
 }
 

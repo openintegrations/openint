@@ -36,12 +36,16 @@ export const trpcOptionsProxy = createTRPCOptionsProxy({
 
 // TODO: Move this to a separate file?
 export async function getServerComponentContext(pageProps: PageProps) {
-  const queryClient = getServerQueryClient()
   const {viewer, token, payload} = await currentViewer(pageProps)
-  const ctx = routerContextFromViewer({viewer, db})
+  const ctx = serverComponentContextForViewer(viewer)
+  return {...ctx, token, tokenPayload: payload}
+}
 
+export function serverComponentContextForViewer(viewer: Viewer) {
+  const queryClient = getServerQueryClient()
+  const ctx = routerContextFromViewer({viewer, db})
   const trpc = createTRPCOptionsProxy({ctx, queryClient, router: appRouter})
-  return {...ctx, queryClient, trpc, token, tokenPayload: payload}
+  return {...ctx, queryClient, trpc}
 }
 
 // TODO: Add a serverComponent context that extends routerContext and make it available to server components also

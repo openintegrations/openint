@@ -1,6 +1,5 @@
 'use client'
 
-import type {AppRouterOutput} from '@openint/api-v1'
 import type {ConnectorConfig} from '@openint/api-v1/trpc/routers/connectorConfig.models'
 import type {ConnectFn} from './ConnectorClientComponents.client'
 
@@ -27,13 +26,10 @@ export type ConnectorConfigForCustomer = Pick<
 
 export function AddConnectionInner({
   connectorConfig,
-  ...props
 }: {
   connectorConfig: ConnectorConfigForCustomer
   onReady?: (ctx: {state: string}, name: string) => void
-  initialData?: Promise<AppRouterOutput['preConnect']>
 }) {
-  const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
   const [isConnecting, setIsConnecting] = React.useState(false)
 
   const name = connectorConfig.connector_name as ConnectorName
@@ -49,17 +45,14 @@ export function AddConnectionInner({
   const trpc = useTRPC()
   // Should load script immediately (via useConnectHook) rather than waiting for suspense query?
   const preConnectRes = useSuspenseQuery(
-    trpc.preConnect.queryOptions(
-      {
-        connector_config_id: connectorConfig.id,
-        discriminated_data: {
-          connector_name: name,
-          pre_connect_input: {},
-        },
-        options: {},
+    trpc.preConnect.queryOptions({
+      connector_config_id: connectorConfig.id,
+      discriminated_data: {
+        connector_name: name,
+        pre_connect_input: {},
       },
-      initialData ? {initialData} : undefined,
-    ),
+      options: {},
+    }),
   )
   // console.log('preConnectRes', preConnectRes)
 
