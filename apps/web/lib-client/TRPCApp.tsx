@@ -3,7 +3,7 @@
 
 import type {AppRouter} from '@openint/api-v1'
 
-import {QueryClientProvider} from '@tanstack/react-query'
+import {isServer, QueryClientProvider} from '@tanstack/react-query'
 import {ReactQueryStreamedHydration} from '@tanstack/react-query-next-experimental'
 import {createTRPCClient, httpLink} from '@trpc/client'
 import {createTRPCContext} from '@trpc/tanstack-react-query'
@@ -22,10 +22,14 @@ export {useMutation, useQuery, useSuspenseQuery} from '@tanstack/react-query'
 
 export function TRPCApp({
   token,
+  cookie,
   reactQueryNextExperimental,
   children,
 }: {
   token?: string
+  /** Cookie for SSR requests to API route where we need to pass the cookie for auth information */
+  cookie?: string
+
   /**
    * Enable automatic prefetching of useSuspenseQuery via `ReactQueryStreamedHydration`
    * provider from `@tanstack/react-query-next-experimental`.
@@ -56,7 +60,10 @@ export function TRPCApp({
             // TODO: if SRR, bypass http link completely, is that possibe?
             url: new URL(...resolveRoute('/api/v1/trpc', null)).toString(),
             // Rely on cookie auth when explicit token is not provided
-            headers: token ? {authorization: `Bearer ${token}`} : undefined,
+            headers: {
+              ...(token ? {authorization: `Bearer ${token}`} : {}),
+              ...(isServer && cookie ? {cookie} : {}),
+            },
           }),
         ],
       }),
