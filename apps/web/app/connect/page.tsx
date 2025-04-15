@@ -2,6 +2,7 @@ import type {Id, Viewer} from '@openint/cdk'
 import type {PageProps} from '@/lib-common/next-utils'
 import type {ConnectorConfigForCustomer} from './AddConnectionInner.client'
 
+import {dehydrate, HydrationBoundary} from '@tanstack/react-query'
 import {ChevronLeftIcon} from 'lucide-react'
 import Image from 'next/image'
 import {cache, Suspense} from 'react'
@@ -9,7 +10,6 @@ import {zConnectOptions} from '@openint/api-v1/trpc/routers/connect.models'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
 import {asOrgIfCustomer} from '@openint/cdk'
 import {getClerkOrganization} from '@openint/console-auth/server'
-import {isProduction} from '@openint/env'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Button} from '@openint/shadcn/ui'
 import {
@@ -24,11 +24,12 @@ import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
 import {TRPCApp} from '@/lib-client/TRPCApp'
 import {Link} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
-import {
-  currentViewer,
-  currentViewerFromPageProps,
-} from '@/lib-server/auth.server'
+import {createQueryClient} from '@/lib-common/trpc.common'
 import {createAPICaller} from '@/lib-server/globals'
+import {
+  getServerComponentContext,
+  serverComponentContextForViewer,
+} from '@/lib-server/trpc.server'
 import {AddConnectionInner} from './AddConnectionInner.client'
 import {MyConnectionsClient} from './MyConnections.client'
 import {TabsClient} from './page.client'
@@ -40,9 +41,13 @@ function Fallback() {
 export default async function ConnectPage(
   pageProps: PageProps<never, {view?: string; connector_name?: string}>,
 ) {
-  const {viewer, token, payload} = isProduction
-    ? await currentViewerFromPageProps(pageProps)
-    : await currentViewer(pageProps)
+  const {
+    queryClient,
+    trpc,
+    tokenPayload: payload,
+    token,
+    viewer,
+  } = await getServerComponentContext(pageProps)
 
   if (viewer.role === 'anon' || !viewer.orgId) {
     return (
@@ -89,114 +94,118 @@ export default async function ConnectPage(
       .map(([key, value]) => [key, value]),
   )
 
-  const api = createAPICaller(viewer)
-  const viewerConnections = await api.listConnections({
-    connector_names: searchParams.connector_names,
-    expand: ['connector'],
-  })
+  const viewerConnections = await queryClient.fetchQuery(
+    trpc.listConnections.queryOptions({
+      connector_names: searchParams.connector_names,
+      expand: ['connector'],
+    }),
+  )
 
   // TODO: Splitting the layout out of here.
   // Given that layout.tsx cannot access params, perhaps we should put token as a path segment?
   return (
     <TRPCApp token={token}>
-      <GlobalCommandBarProvider>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <GlobalCommandBarProvider>
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
           :root {
             ${Object.entries(themeVariables)
               .map(([key, value]) => `${key}: ${value};`)
               .join('\n')}
           }
         `,
-          }}
-        />
-        {searchParams.debug && (
-          <pre>
-            {JSON.stringify(
-              {
-                viewer,
-                searchParams,
-                token,
-              },
-              null,
-              2,
-            )}
-          </pre>
-        )}
-        <div className="flex h-screen w-full">
-          {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
-          <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
-            <div className="flex flex-col items-start p-8">
-              <Suspense
-                fallback={
-                  <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
-                }>
-                <OrganizationImage orgId={viewer.orgId} className="lg:pt-6" />
-              </Suspense>
+            }}
+          />
+          {searchParams.debug && (
+            <pre>
+              {JSON.stringify(
+                {
+                  viewer,
+                  searchParams,
+                  token,
+                },
+                null,
+                2,
+              )}
+            </pre>
+          )}
+          <div className="flex h-screen w-full">
+            {/* Left Banner - Hidden on mobile and tablets, shown only on lg+ screens */}
+            <div className="bg-primary/10 hidden lg:flex lg:w-[450px]">
+              <div className="flex flex-col items-start p-8">
+                <Suspense
+                  fallback={
+                    <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
+                  }>
+                  <OrganizationImage orgId={viewer.orgId} className="lg:pt-6" />
+                </Suspense>
 
-              <h1 className="mb-4 mt-16 text-2xl font-bold">
-                Connect Your Services
-              </h1>
-              <p className="text-muted-foreground">
-                Integrate your favorite tools and services with our platform.
-                Manage all your connections in one place.
-              </p>
-              <Button variant="ghost" className="mt-8">
-                <Link href="/console" className="flex items-center gap-2">
-                  <ChevronLeftIcon className="h-4 w-4" />
-                  Back to{' '}
-                  <Suspense fallback="OpenInt Console">
-                    <OrganizationName orgId={viewer.orgId} />
-                  </Suspense>
-                </Link>
-              </Button>
+                <h1 className="mb-4 mt-16 text-2xl font-bold">
+                  Connect Your Services
+                </h1>
+                <p className="text-muted-foreground">
+                  Integrate your favorite tools and services with our platform.
+                  Manage all your connections in one place.
+                </p>
+                <Button variant="ghost" className="mt-8">
+                  <Link href="/console" className="flex items-center gap-2">
+                    <ChevronLeftIcon className="h-4 w-4" />
+                    Back to{' '}
+                    <Suspense fallback="OpenInt Console">
+                      <OrganizationName orgId={viewer.orgId} />
+                    </Suspense>
+                  </Link>
+                </Button>
 
-              <div className="text-muted-foreground mt-auto flex items-center gap-0.5 self-end text-sm">
-                <span>Powered by</span>
-                {/* TODO: in future take to a specific landing page for that customer saying XX uses OpenInt to power their integrations */}
-                <a
-                  href="https://openint.dev?ref=connect"
-                  target="_blank"
-                  rel="noopener"
-                  className="font-semibold">
-                  OpenInt
-                </a>
+                <div className="text-muted-foreground mt-auto flex items-center gap-0.5 self-end text-sm">
+                  <span>Powered by</span>
+                  {/* TODO: in future take to a specific landing page for that customer saying XX uses OpenInt to power their integrations */}
+                  <a
+                    href="https://openint.dev?ref=connect"
+                    target="_blank"
+                    rel="noopener"
+                    className="font-semibold">
+                    OpenInt
+                  </a>
+                </div>
               </div>
             </div>
+
+            {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
+
+            <TabsClient
+              defaultValue={
+                viewerConnections.items.length > 0 ? 'manage' : 'add'
+              }
+              paramKey="view"
+              className="flex-1 p-4 lg:pt-12">
+              <div className="mx-auto w-full max-w-4xl">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="manage">Manage Integrations</TabsTrigger>
+                  <TabsTrigger value="add">Add New Integration</TabsTrigger>
+                </TabsList>
+                <TabsContent value="manage" className="pt-2">
+                  <Suspense fallback={<Fallback />}>
+                    <MyConnectionsClient
+                      connector_names={searchParams.connector_names}
+                    />
+                  </Suspense>
+                </TabsContent>
+                <TabsContent value="add" className="pt-2">
+                  <Suspense fallback={<Fallback />}>
+                    <AddConnections
+                      viewer={viewer}
+                      connector_names={searchParams.connector_names}
+                    />
+                  </Suspense>
+                </TabsContent>
+              </div>
+            </TabsClient>
           </div>
-
-          {/* Main Content Area - Full width on mobile, flex-1 on larger screens */}
-
-          <TabsClient
-            defaultValue={viewerConnections.items.length > 0 ? 'manage' : 'add'}
-            paramKey="view"
-            className="flex-1 p-4 lg:pt-12">
-            <div className="mx-auto w-full max-w-4xl">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="manage">Manage Integrations</TabsTrigger>
-                <TabsTrigger value="add">Add New Integration</TabsTrigger>
-              </TabsList>
-              <TabsContent value="manage" className="pt-2">
-                <Suspense fallback={<Fallback />}>
-                  <MyConnectionsClient
-                    connector_names={searchParams.connector_names}
-                    initialData={viewerConnections}
-                  />
-                </Suspense>
-              </TabsContent>
-              <TabsContent value="add" className="pt-2">
-                <Suspense fallback={<Fallback />}>
-                  <AddConnections
-                    viewer={viewer}
-                    connector_names={searchParams.connector_names}
-                  />
-                </Suspense>
-              </TabsContent>
-            </div>
-          </TabsClient>
-        </div>
-      </GlobalCommandBarProvider>
+        </GlobalCommandBarProvider>
+      </HydrationBoundary>
     </TRPCApp>
   )
 }
@@ -265,16 +274,23 @@ function AddConnection({
   viewer: Viewer
   connectorConfig: ConnectorConfigForCustomer
 }) {
-  const api = createAPICaller(viewer)
+  const {trpc} = serverComponentContextForViewer(viewer)
+  // create a fresh query client to avoid having to send down more cache
+  const queryClient = createQueryClient()
+
   const name = connectorConfig.connector_name
-  const res = api.preConnect({
-    connector_config_id: connectorConfig.id,
-    discriminated_data: {connector_name: name, pre_connect_input: {}},
-    options: {},
-  })
+  void queryClient.prefetchQuery(
+    trpc.preConnect.queryOptions({
+      connector_config_id: connectorConfig.id,
+      discriminated_data: {connector_name: name, pre_connect_input: {}},
+      options: {},
+    }),
+  )
 
   return (
-    <AddConnectionInner connectorConfig={connectorConfig} initialData={res} />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <AddConnectionInner connectorConfig={connectorConfig} />
+    </HydrationBoundary>
   )
 }
 

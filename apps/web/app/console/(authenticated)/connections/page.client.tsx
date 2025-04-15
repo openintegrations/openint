@@ -1,10 +1,9 @@
 'use client'
 
-import type {AppRouterOutput} from '@openint/api-v1'
 import type {ConnectionExpanded, Core} from '@openint/api-v1/models'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
-import React, {useMemo, useState} from 'react'
+import {useMemo, useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
 import {Sheet, SheetContent, SheetTitle} from '@openint/shadcn/ui/sheet'
 import {CommandPopover, ConnectionTableCell, CopyID} from '@openint/ui-v1'
@@ -55,10 +54,7 @@ const columns: Array<ColumnDef<ConnectionExpanded>> = [
   },
 ]
 
-export function ConnectionsPage(props: {
-  initialData?: Promise<AppRouterOutput['listConnections']>
-}) {
-  const initialData = React.use(props.initialData ?? Promise.resolve(undefined))
+export function ConnectionsPage() {
   const trpc = useTRPC()
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedConnection, setSelectedConnection] = useState<
@@ -66,10 +62,7 @@ export function ConnectionsPage(props: {
   >(null)
 
   const connectionData = useSuspenseQuery(
-    trpc.listConnections.queryOptions(
-      {expand: ['connector']},
-      initialData ? {initialData} : undefined,
-    ),
+    trpc.listConnections.queryOptions({expand: ['connector']}),
   )
 
   const deleteConn = useMutation(
