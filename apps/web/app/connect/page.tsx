@@ -25,7 +25,6 @@ import {TRPCApp} from '@/lib-client/TRPCApp'
 import {Link} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {createQueryClient} from '@/lib-common/trpc.common'
-import {createAPICaller} from '@/lib-server/globals'
 import {
   getServerComponentContext,
   serverComponentContextForViewer,
@@ -220,12 +219,16 @@ async function AddConnections({
 }) {
   // We need to elevate the role to org  to list connector config here
   // Alternative we'd have to modify RLS rules to allow this
-  const api = createAPICaller(asOrgIfCustomer(viewer))
+  const {trpc, queryClient} = serverComponentContextForViewer(
+    asOrgIfCustomer(viewer),
+  )
 
-  const res = await api.listConnectorConfigs({
-    connector_names,
-    expand: ['connector.schemas'], // TODO: FIXME to use an array instead of a string
-  })
+  const res = await queryClient.fetchQuery(
+    trpc.listConnectorConfigs.queryOptions({
+      connector_names,
+      expand: ['connector.schemas'], // TODO: FIXME to use an array instead of a string
+    }),
+  )
 
   if (!res?.items?.length || res.items.length === 0) {
     return (
