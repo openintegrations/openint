@@ -35,7 +35,9 @@ export function ConnectorConfigList() {
 
   const trpc = useTRPC()
   const res = useSuspenseQuery(
-    trpc.listConnectorConfigs.queryOptions({expand: ['connector.schemas']}),
+    trpc.listConnectorConfigs.queryOptions({
+      expand: ['connection_count', 'connector.schemas'],
+    }),
   )
   const connectorRes = useSuspenseQuery(
     trpc.listConnectors.queryOptions({

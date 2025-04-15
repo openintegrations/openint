@@ -7,20 +7,22 @@ import {ConnectorConfigList} from './page.client'
 export default async function ConnectorConfigPage(props: PageProps) {
   const {queryClient, trpc} = await getServerComponentContext(props)
 
-  await queryClient.prefetchQuery(
+  void queryClient.prefetchQuery(
     trpc.listConnectorConfigs.queryOptions({
       expand: ['connection_count', 'connector.schemas'],
     }),
   )
-  await queryClient.prefetchQuery(
+  void queryClient.prefetchQuery(
     trpc.listConnectors.queryOptions({
       expand: ['schemas'],
     }),
   )
+  const state = dehydrate(queryClient)
+  // console.log(JSON.stringify(state, null, 2))
 
   return (
     <div className="p-6">
-      <HydrationBoundary state={dehydrate(queryClient)}>
+      <HydrationBoundary state={state}>
         <ConnectorConfigList />
       </HydrationBoundary>
     </div>
