@@ -18,7 +18,6 @@ import {useCommandDefinitionMap} from '../../lib-client/GlobalCommandBarProvider
 
 export function MyConnectionsClient(props: {
   connector_names?: ConnectorName[]
-  initialData?: AppRouterOutput['listConnections']
 }) {
   const [_, setSearchParams] = useMutableSearchParams()
   const [isLoading, setIsLoading] = React.useState(true)
@@ -29,15 +28,12 @@ export function MyConnectionsClient(props: {
   }, [])
 
   const res = useSuspenseQuery(
-    trpc.listConnections.queryOptions(
-      {
-        connector_names: props.connector_names?.length
-          ? props.connector_names
-          : undefined,
-        expand: ['connector'],
-      },
-      props.initialData ? {initialData: props.initialData} : undefined,
-    ),
+    trpc.listConnections.queryOptions({
+      connector_names: props.connector_names?.length
+        ? props.connector_names
+        : undefined,
+      expand: ['connector'],
+    }),
   )
 
   const definitions = useCommandDefinitionMap()
