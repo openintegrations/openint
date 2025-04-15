@@ -1,4 +1,5 @@
 import type {Z} from '@openint/util/zod-utils'
+
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
@@ -224,10 +225,10 @@ export const connectionRouter = router({
       const {items, total} = await processPaginatedResponse(query, 'connection')
 
       const mappedItems = await Promise.all(
-        items.map((conn) => {
+        items.map(async (conn) => {
           // Parse DB record
           core.connection_select.parse(conn)
-          const extendedConnection = formatConnection(
+          const extendedConnection = await formatConnection(
             ctx,
             conn,
             input?.include_secrets ?? 'all', // TODO: Change to none once we fix schema issue
