@@ -46,8 +46,6 @@ export function ConnectorConfigList() {
       }),
     ],
   })
-  console.log('[connector-config-list] res', res.data)
-  console.log('[connector-config-list] connectorRes', connectorRes.data)
 
   const connectorConfigs = res.data?.items
 
