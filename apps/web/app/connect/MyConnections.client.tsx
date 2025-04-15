@@ -1,7 +1,5 @@
 'use client'
 
-import type {AppRouterOutput} from '@openint/api-v1'
-
 import {useSuspenseQuery} from '@tanstack/react-query'
 import React from 'react'
 import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
@@ -18,7 +16,6 @@ import {useCommandDefinitionMap} from '../../lib-client/GlobalCommandBarProvider
 
 export function MyConnectionsClient(props: {
   connector_names?: ConnectorName[]
-  initialData?: AppRouterOutput['listConnections']
 }) {
   const [_, setSearchParams] = useMutableSearchParams()
   const [isLoading, setIsLoading] = React.useState(true)
@@ -29,15 +26,12 @@ export function MyConnectionsClient(props: {
   }, [])
 
   const res = useSuspenseQuery(
-    trpc.listConnections.queryOptions(
-      {
-        connector_names: props.connector_names?.length
-          ? props.connector_names
-          : undefined,
-        expand: ['connector'],
-      },
-      props.initialData ? {initialData: props.initialData} : undefined,
-    ),
+    trpc.listConnections.queryOptions({
+      connector_names: props.connector_names?.length
+        ? props.connector_names
+        : undefined,
+      expand: ['connector'],
+    }),
   )
 
   const definitions = useCommandDefinitionMap()

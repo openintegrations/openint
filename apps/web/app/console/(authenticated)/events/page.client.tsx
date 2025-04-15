@@ -26,22 +26,12 @@ const columns: Array<ColumnDef<Event>> = [
   },
 ]
 
-export function EventsList(props: {
-  initialData?: {
-    items: Event[]
-    total: number
-    limit: number
-    offset: number
-  }
-}) {
-  const {initialData} = props
+export function EventsList() {
   const trpc = useTRPC()
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 
-  const eventData = useSuspenseQuery(
-    trpc.listEvents.queryOptions({}, initialData ? {initialData} : undefined),
-  )
+  const eventData = useSuspenseQuery(trpc.listEvents.queryOptions({}))
 
   const handleRowClick = (event: Event) => {
     console.log('row click event', event)
