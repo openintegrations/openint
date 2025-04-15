@@ -25,6 +25,10 @@
     "@openint/util": "workspace:*",
     "@opensdks/fetch-links": "^0.0.22",
     "@sentry/nextjs": "^9.5.0",
+    "@tanstack/react-query": "^5.74.0",
+    "@tanstack/react-query-next-experimental": "^5.74.3",
+    "@trpc/client": "^11.0.1",
+    "@trpc/tanstack-react-query": "11.0.1",
     "inngest": "^3.22.13",
     "lucide-react": "^0.479.0",
     "mongodb": "4.9.1",
@@ -34,10 +38,7 @@
     "posthog-js": "^1.166.1",
     "posthog-node": "2.5.4",
     "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "@trpc/client": "^11.0.1",
-    "@trpc/tanstack-react-query": "11.0.1",
-    "@tanstack/react-query": "^5.74.0"
+    "react-dom": "19.0.0"
   },
   "devDependencies": {
     "@sentry/cli": "^2.36.6",

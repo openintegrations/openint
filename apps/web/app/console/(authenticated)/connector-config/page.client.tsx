@@ -1,10 +1,10 @@
 'use client'
 
 import type {ConnectorConfig, Core} from '@openint/api-v1/models'
-import type {AppRouterOutput} from '@openint/api-v1/trpc/routers'
 import type {JSONSchemaFormRef} from '@openint/ui-v1'
 import type {ColumnDef} from '@openint/ui-v1/components/DataTable'
 
+import {useSuspenseQueries} from '@tanstack/react-query'
 import {Plus} from 'lucide-react'
 import {useRef, useState} from 'react'
 import {Button} from '@openint/shadcn/ui'
@@ -21,19 +21,9 @@ import {
   JSONSchemaForm,
 } from '@openint/ui-v1'
 import {DataTable} from '@openint/ui-v1/components/DataTable'
-import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
+import {useMutation, useTRPC} from '@/lib-client/TRPCApp'
 
-export function ConnectorConfigList(props: {
-  initialData?: {
-    items: Array<
-      ConnectorConfig<'connector' | 'integrations' | 'connection_count'>
-    >
-    total: number
-    limit: number
-    offset: number
-  }
-  initialConnectorData?: AppRouterOutput['listConnectors']
-}) {
+export function ConnectorConfigList() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedConnector, setSelectedConnector] = useState<
     Core['connector'] | null
@@ -43,25 +33,21 @@ export function ConnectorConfigList(props: {
   > | null>(null)
   const formRef = useRef<JSONSchemaFormRef>(null)
 
-  const {initialData, initialConnectorData} = props
-
   const trpc = useTRPC()
-  const res = useSuspenseQuery(
-    trpc.listConnectorConfigs.queryOptions(
-      {expand: ['connector.schemas']},
-      initialData ? {initialData} : undefined,
-    ),
-  )
-  const connectorRes = useSuspenseQuery(
-    trpc.listConnectors.queryOptions(
-      {
-        expand: ['schemas'],
-      },
-      initialConnectorData ? {initialData: initialConnectorData} : undefined,
-    ),
-  )
 
-  const connectorConfigs = res.data.items
+  // Must use multiple queries to avoid waterfall and allow server prefetch to work
+  const [res, connectorRes] = useSuspenseQueries({
+    queries: [
+      trpc.listConnectorConfigs.queryOptions({
+        expand: ['connection_count', 'connector.schemas'],
+      }),
+      trpc.listConnectors.queryOptions({
+        expand: ['schemas'],
+      }),
+    ],
+  })
+
+  const connectorConfigs = res.data?.items
 
   const formSchema = {
     type: 'object' as const,
@@ -232,9 +218,13 @@ export function ConnectorConfigList(props: {
       // TODO: We need to show a toast here
     }
   }
+  // initial flash of no data....
+  if (!res.data.items || !connectorRes.data.items) {
+    return null
+  }
 
   return (
-    <div>
+    <div className="p-6">
       <DataTable<
         ConnectorConfig<'connector' | 'integrations' | 'connection_count'>,
         string | number | string[]

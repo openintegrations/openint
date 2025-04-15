@@ -1,43 +1,40 @@
-import type {ConnectorConfig} from '@openint/api-v1/models'
 import type {PageProps} from '@/lib-common/next-utils'
 
-import {Suspense} from 'react'
-import {currentViewer} from '@/lib-server/auth.server'
-import {createAPICaller} from '@/lib-server/globals'
+import {dehydrate, HydrationBoundary} from '@tanstack/react-query'
+import {getServerComponentContext} from '@/lib-server/trpc.server'
 import {ConnectorConfigList} from './page.client'
 
-function Fallback() {
-  return <div>Loading...</div>
-}
+// if we comment out prefetch, then technically server still should stream / respect suspense boundary?
+// or is that not how it works?
+// I would expect server streaming to work with SSR but it is not working for
+// whatever reason... it only works when we do explicit prefetch
+// whereas I guess SSR just blocks the full page?
+// That's why we have server comopnents?
 
-export default async function Page(props: PageProps) {
-  const {viewer} = await currentViewer(props)
 
-  const api = createAPICaller(viewer)
+/**
+ * Only purpose now is to provide explicit prefetching of data for perf.
+ * Client component will work automagically with or without this.
+ */
+export default async function ConnectorConfigPageExplicitPrefetch(
+  props: PageProps,
+) {
+  const {queryClient, trpc} = await getServerComponentContext(props)
+
+  void queryClient.prefetchQuery(
+    trpc.listConnectorConfigs.queryOptions({
+      expand: ['connection_count', 'connector.schemas'],
+    }),
+  )
+  void queryClient.prefetchQuery(
+    trpc.listConnectors.queryOptions({
+      expand: ['schemas'],
+    }),
+  )
 
   return (
-    <div className="p-6">
-      <Suspense fallback={<Fallback />}>
-        <ConnectorConfigList
-          initialData={
-            (await api.listConnectorConfigs({
-              expand: ['connection_count', 'connector.schemas'],
-            })) as {
-              items: Array<
-                ConnectorConfig<
-                  'connector' | 'integrations' | 'connection_count'
-                >
-              >
-              total: number
-              limit: number
-              offset: number
-            }
-          }
-          initialConnectorData={await api.listConnectors({
-            expand: ['schemas'],
-          })}
-        />
-      </Suspense>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ConnectorConfigList />
+    </HydrationBoundary>
   )
 }
