@@ -1,13 +1,12 @@
-import type {StatusType} from '../components/StatusDot'
-import type {ConnectionExpanded} from '@openint/api-v1/models'
+import type {ConnectionExpanded} from '@openint/api-v1/trpc/routers/connection.models'
+
 import {Settings} from 'lucide-react'
 import Image from 'next/image'
 import React, {useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Badge, Card, CardContent, Separator} from '@openint/shadcn/ui'
+import {Card, CardContent, Separator} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
 import {PropertyListView} from '../components/PropertyListView'
-import {StatusDot} from '../components/StatusDot'
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
@@ -17,24 +16,7 @@ export interface ConnectionCardProps {
   children?: React.ReactNode
 }
 
-// Convert API connection status to UI StatusType
-function mapApiStatusToUiStatus(apiStatus?: string): StatusType {
-  if (!apiStatus) return 'offline'
-
-  switch (apiStatus) {
-    case 'healthy':
-      return 'healthy'
-    case 'error':
-      return 'destructive'
-    case 'disconnected':
-      return 'warning'
-    case 'manual':
-    default:
-      return 'offline'
-  }
-}
-
-// Simple content component for the hover popover
+// Content
 function ConnectionHoverContent({
   connection,
 }: {
@@ -47,33 +29,21 @@ function ConnectionHoverContent({
     connection.integration?.name ||
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
-
-  // Get connection status
-  const apiStatus = (connection as any).status
-  const uiStatus = mapApiStatusToUiStatus(apiStatus)
-
-  // Status label mapping
-  const statusLabels = {
-    healthy: 'Connected',
-    warning: 'Warning',
-    destructive: 'Error',
-    offline: 'Offline',
-  }
-
   const properties = [
     {title: 'Category', value: connection.connector_name || ''},
-    {title: 'Platform', value: 'Desktop'},
+    {
+      title: 'Platform',
+      value: connection.connector?.platforms?.[0] || 'Desktop',
+    },
     {
       title: 'Auth Method',
-      value: connection.settings?.oauth ? 'oauth' : 'apikey',
+      value: connection.settings?.oauth ? 'OAuth' : 'API Key',
     },
-    {title: 'Version', value: 'V2'},
-    {title: 'Status', value: apiStatus || 'Unknown'},
+    {title: 'Status', value: connection.status || 'Unknown'},
   ]
 
   return (
     <>
-      {/* Header with logo and name.*/}
       <div className="flex items-center gap-3 p-4">
         <div className="bg-muted/30 border-border/30 flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border">
           {logoUrl ? (
@@ -92,18 +62,11 @@ function ConnectionHoverContent({
         </div>
         <div className="flex flex-col">
           <div className="text-lg font-medium">{displayName}</div>
-          {apiStatus && (
-            <div className="text-muted-foreground flex items-center gap-1.5 text-sm">
-              <StatusDot status={uiStatus} />
-              <span>{statusLabels[uiStatus]}</span>
-            </div>
-          )}
         </div>
       </div>
 
       <Separator />
 
-      {/* Properties */}
       <div className="p-4">
         <PropertyListView properties={properties} />
       </div>
