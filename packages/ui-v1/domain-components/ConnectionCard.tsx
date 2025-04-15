@@ -2,11 +2,35 @@ import type {ConnectionExpanded} from '@openint/api-v1/trpc/routers/connection.m
 
 import {Settings} from 'lucide-react'
 import Image from 'next/image'
-import React, {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Card, CardContent, Separator} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
 import {PropertyListView} from '../components/PropertyListView'
+
+const menuRegistry = {
+  openMenus: new Map<string, number>(),
+
+  isMenuActiveForConnection(id: string): boolean {
+    return this.openMenus.has(id)
+  },
+
+  registerMenu(id: string): void {
+    this.openMenus.set(id, Date.now())
+  },
+
+  clearMenu(id: string): void {
+    this.openMenus.delete(id)
+  },
+
+  checkForVisibleMenus(): boolean {
+    return (
+      document.querySelectorAll(
+        '[role="menu"], .dropdown-menu, .menu-dropdown, [data-radix-popper-content-wrapper]',
+      ).length > 0
+    )
+  },
+}
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
@@ -16,7 +40,6 @@ export interface ConnectionCardProps {
   children?: React.ReactNode
 }
 
-// Content
 function ConnectionHoverContent({
   connection,
 }: {
@@ -29,6 +52,7 @@ function ConnectionHoverContent({
     connection.integration?.name ||
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
+
   const properties = [
     {title: 'Category', value: connection.connector_name || ''},
     {
@@ -83,7 +107,10 @@ export function ConnectionCard({
 }: ConnectionCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [showPopover, setShowPopover] = useState(false)
-  const [coords, setCoords] = useState({x: 0, y: 0})
+  const [position, setPosition] = useState({x: 0, y: 0})
+  const cardRef = useRef<HTMLDivElement>(null)
+  const threeDotButtonRef = useRef<Element | null>(null)
+  const connectionId = connection.id
 
   const logoUrl =
     connection.integration?.logo_url || connection.connector?.logo_url
@@ -93,33 +120,86 @@ export function ConnectionCard({
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
 
+  useEffect(() => {
+    if (cardRef.current) {
+      const dotsButton = cardRef.current.querySelector(
+        '.dropdown-trigger, [aria-haspopup="menu"], button:has(.dots-icon), button:has(.three-dots)',
+      )
+      if (dotsButton) {
+        threeDotButtonRef.current = dotsButton
+
+        dotsButton.addEventListener('click', () => {
+          menuRegistry.registerMenu(connectionId)
+        })
+      }
+    }
+  }, [connectionId])
+
+  useEffect(() => {
+    const checkMenuVisibility = () => {
+      const anyMenuVisible = menuRegistry.checkForVisibleMenus()
+
+      if (!anyMenuVisible) {
+        menuRegistry.clearMenu(connectionId)
+      }
+    }
+
+    const handleClick = () => {
+      setShowPopover(false)
+      checkMenuVisibility()
+      setTimeout(checkMenuVisibility, 50)
+      setTimeout(checkMenuVisibility, 200)
+    }
+
+    document.addEventListener('click', handleClick)
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('mouseup', checkMenuVisibility)
+    const interval = setInterval(checkMenuVisibility, 300)
+
+    return () => {
+      document.removeEventListener('click', handleClick)
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('mouseup', checkMenuVisibility)
+      clearInterval(interval)
+    }
+  }, [connectionId])
+
   const handleMouseEnter = (e: React.MouseEvent) => {
+    if (menuRegistry.isMenuActiveForConnection(connectionId)) return
+
+    const anyMenuVisible = menuRegistry.checkForVisibleMenus()
+    if (anyMenuVisible) {
+      menuRegistry.registerMenu(connectionId)
+      return
+    }
+
     if (onPress) {
       setIsHovered(true)
     } else {
-      // Only show popover if not clickable
+      setPosition({x: e.clientX, y: e.clientY})
       setShowPopover(true)
-      setCoords({x: e.clientX, y: e.clientY})
     }
   }
 
   const handleMouseLeave = () => {
     if (onPress) {
       setIsHovered(false)
-    } else {
-      setShowPopover(false)
     }
+    setShowPopover(false)
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (showPopover) {
-      setCoords({x: e.clientX, y: e.clientY})
+    if (menuRegistry.isMenuActiveForConnection(connectionId)) return
+
+    if (!onPress && showPopover) {
+      setPosition({x: e.clientX, y: e.clientY})
     }
   }
 
   return (
     <>
       <Card
+        ref={cardRef}
         className={cn(
           'border-card-border bg-card relative h-[150px] w-[150px] rounded-lg border p-0',
           onPress
@@ -175,31 +255,21 @@ export function ConnectionCard({
         </CardContent>
       </Card>
 
-      {showPopover && !isHovered && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            pointerEvents: 'none',
-            width: '100vw',
-            height: '100vh',
-            zIndex: 50,
-          }}>
-          <div
-            style={{
-              position: 'absolute',
-              left: `${coords.x}px`,
-              top: `${coords.y}px`,
-              transform: 'translate(10px, -50%)',
-              pointerEvents: 'auto',
-            }}>
-            <div className="bg-popover w-[380px] overflow-hidden rounded-md border p-0 shadow-md">
+      {showPopover &&
+        !onPress &&
+        !menuRegistry.isMenuActiveForConnection(connectionId) && (
+          <div className="pointer-events-none fixed left-0 top-0 z-50 h-screen w-screen">
+            <div
+              className="bg-popover pointer-events-auto absolute w-[380px] overflow-hidden rounded-md border shadow-md"
+              style={{
+                left: `${position.x + 15}px`,
+                top: `${position.y + 20}px`,
+                transform: 'none',
+              }}>
               <ConnectionHoverContent connection={connection} />
             </div>
           </div>
-        </div>
-      )}
+        )}
     </>
   )
 }
