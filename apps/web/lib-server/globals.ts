@@ -8,8 +8,7 @@ import {envRequired} from '@openint/env'
 
 export const db = initDbNeon(envRequired.DATABASE_URL)
 
-export type APICaller = ReturnType<typeof createTRPCCaller>
-
+/** @deprecated Use trpcOptionsProxy instead */
 export function createAPICaller<T extends Viewer>(viewer: T) {
   return createTRPCCaller({db}, viewer)
 }

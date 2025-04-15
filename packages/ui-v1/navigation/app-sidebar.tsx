@@ -37,7 +37,7 @@ export function AppSidebar({
   const pathname: string | undefined = usePathname()
   return (
     <Sidebar {...props}>
-      <SidebarHeader>{organizationSwitcher}</SidebarHeader>
+      <SidebarHeader className="h-11">{organizationSwitcher}</SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="mt-5">
           {navItems.map((item) => {
