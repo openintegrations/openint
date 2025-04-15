@@ -4,7 +4,7 @@ import {dehydrate, HydrationBoundary} from '@tanstack/react-query'
 import {getServerComponentContext} from '@/lib-server/trpc.server'
 import {ConnectorConfigList} from './page.client'
 
-export default async function ConnectorConfigPage(props: PageProps) {
+export async function ConnectorConfigPageExplicitPrefetch(props: PageProps) {
   const {queryClient, trpc} = await getServerComponentContext(props)
 
   void queryClient.prefetchQuery(
@@ -30,3 +30,11 @@ export default async function ConnectorConfigPage(props: PageProps) {
 }
 
 // TODO:Try out the automatic prefetching on server without even needing an explicit prefetch AT ALL
+
+export default function ConnectorConfigPage(props: PageProps) {
+  return (
+    <div className="p-6">
+      <ConnectorConfigList />
+    </div>
+  )
+}

@@ -4,11 +4,11 @@
 import type {AppRouter} from '@openint/api-v1'
 
 import {QueryClientProvider} from '@tanstack/react-query'
+import {ReactQueryStreamedHydration} from '@tanstack/react-query-next-experimental'
 import {createTRPCClient, httpLink} from '@trpc/client'
 import {createTRPCContext} from '@trpc/tanstack-react-query'
 import React from 'react'
 import {resolveRoute} from '@openint/env'
-import {Toaster} from '@openint/shadcn/ui'
 import {getQueryClient} from '@/lib-common/trpc.common'
 
 const {TRPCProvider, useTRPC, useTRPCClient} = createTRPCContext<AppRouter>()
@@ -22,9 +22,19 @@ export {useMutation, useQuery, useSuspenseQuery} from '@tanstack/react-query'
 
 export function TRPCApp({
   token,
+  reactQueryNextExperimental,
   children,
 }: {
   token?: string
+  /**
+   * Enable automatic prefetching of useSuspenseQuery via `ReactQueryStreamedHydration`
+   * provider from `@tanstack/react-query-next-experimental`.
+   * @see https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr#experimental-streaming-without-prefetching-in-nextjs
+   *
+   * downsides are 1) request waterfall and 2) additional http request to the API
+   * instead of direct trpc router call on the server-side
+   */
+  reactQueryNextExperimental?: boolean
   children: React.ReactNode
 }) {
   // NOTE: Avoid useState when initializing the query client if you don't
@@ -54,8 +64,21 @@ export function TRPCApp({
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        {children}
-        <Toaster />
+        {reactQueryNextExperimental ? (
+          <ReactQueryStreamedHydration
+            options={{
+              dehydrate: {
+                shouldDehydrateQuery(query) {
+                  console.log('[TRPCApp] shouldDehydrateQuery', query.queryKey)
+                  return true
+                },
+              },
+            }}>
+            {children}
+          </ReactQueryStreamedHydration>
+        ) : (
+          children
+        )}
       </TRPCProvider>
     </QueryClientProvider>
   )
