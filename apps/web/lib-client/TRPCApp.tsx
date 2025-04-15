@@ -23,7 +23,7 @@ export {useMutation, useQuery, useSuspenseQuery} from '@tanstack/react-query'
 export function TRPCApp({
   token,
   cookie,
-  reactQueryNextExperimental,
+  reactQueryNextExperimental /* = true */,
   children,
 }: {
   token?: string
@@ -41,6 +41,11 @@ export function TRPCApp({
    * More importantly, it can result in `result.data` being empty object (vs. undefined)
    * for a split second on the client which will have to be handled in a hooks-safe way, defeating the
    * convenience offered by useSuspenseQuery and also leading to initial flash of empty data
+   *
+   * There is also frequently but not 100% reproducible issue with Hydration failed
+   * because the server rendered HTML didn't match the client
+   * I suppose that's because of the experimental nature of the library?
+   * great to know that automatic prefetching is even possible! One day.
    * TODO: File issue with react-query regarding this...
    */
   reactQueryNextExperimental?: boolean
