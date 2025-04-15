@@ -1,6 +1,9 @@
 import {redirect} from 'next/navigation'
 import React from 'react'
-import {OrganizationSwitcher, UserButton} from '@openint/console-auth/client'
+import {
+  DynamicOrganizationSwitcher,
+  DynamicUserButton,
+} from '@openint/console-auth/client'
 import {AppLayout} from '@openint/ui-v1'
 import {currentViewer} from '@/lib-server/auth.server'
 import {GlobalCommandBarProvider} from '../../../lib-client/GlobalCommandBarProvider'
@@ -23,8 +26,10 @@ export default async function AuthenticatedLayout({
     <GlobalCommandBarProvider>
       <AppLayout
         navItems={SIDEBAR_NAV_ITEMS}
-        organizationSwitcher={<OrganizationSwitcher hidePersonal={true} />}
-        userButton={<UserButton showName />}>
+        organizationSwitcher={
+          <DynamicOrganizationSwitcher hidePersonal={true} />
+        }
+        userButton={<DynamicUserButton showName />}>
         {shouldShowOnboarding ? <OnboardingHoc /> : children}
       </AppLayout>
     </GlobalCommandBarProvider>

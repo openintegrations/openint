@@ -1,19 +1,22 @@
 'use client'
 
 import {
+  OrganizationSwitcher,
   useClerk,
   useSession as useClerkSession,
   useOrganization,
+  UserButton,
   useUser,
 } from '@clerk/nextjs'
+import dynamic from 'next/dynamic'
 import React from 'react'
 
 export {
   ClerkProvider as AuthProvider,
+  /** TODO: Move these to noSsr also to avoid hydration errors */
   SignIn,
+  /** TODO: Move these to noSsr also to avoid hydration errors */
   SignUp,
-  OrganizationSwitcher,
-  UserButton,
   useOrganization,
   useOrganizationList,
   /** @deprecated use useSession instead */
@@ -43,3 +46,12 @@ export function useSession() {
     [clerk, user, organization, session],
   )
 }
+
+export const DynamicOrganizationSwitcher = dynamic(
+  () => Promise.resolve(OrganizationSwitcher),
+  {ssr: false},
+)
+
+export const DynamicUserButton = dynamic(() => Promise.resolve(UserButton), {
+  ssr: false,
+})

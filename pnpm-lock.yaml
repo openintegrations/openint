@@ -1043,6 +1043,9 @@ importers:
       '@openint/util':
         specifier: workspace:*
         version: link:../util
+      next:
+        specifier: 15.2.3
+        version: 15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react:
         specifier: 19.0.0
         version: 19.0.0
