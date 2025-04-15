@@ -23,17 +23,7 @@ import {
 import {DataTable} from '@openint/ui-v1/components/DataTable'
 import {useMutation, useSuspenseQuery, useTRPC} from '@/lib-client/TRPCApp'
 
-export function ConnectorConfigList(props: {
-  initialData?: {
-    items: Array<
-      ConnectorConfig<'connector' | 'integrations' | 'connection_count'>
-    >
-    total: number
-    limit: number
-    offset: number
-  }
-  initialConnectorData?: AppRouterOutput['listConnectors']
-}) {
+export function ConnectorConfigList() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedConnector, setSelectedConnector] = useState<
     Core['connector'] | null
@@ -43,22 +33,14 @@ export function ConnectorConfigList(props: {
   > | null>(null)
   const formRef = useRef<JSONSchemaFormRef>(null)
 
-  const {initialData, initialConnectorData} = props
-
   const trpc = useTRPC()
   const res = useSuspenseQuery(
-    trpc.listConnectorConfigs.queryOptions(
-      {expand: ['connector.schemas']},
-      initialData ? {initialData} : undefined,
-    ),
+    trpc.listConnectorConfigs.queryOptions({expand: ['connector.schemas']}),
   )
   const connectorRes = useSuspenseQuery(
-    trpc.listConnectors.queryOptions(
-      {
-        expand: ['schemas'],
-      },
-      initialConnectorData ? {initialData: initialConnectorData} : undefined,
-    ),
+    trpc.listConnectors.queryOptions({
+      expand: ['schemas'],
+    }),
   )
 
   const connectorConfigs = res.data.items
