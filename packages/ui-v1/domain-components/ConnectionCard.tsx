@@ -1,11 +1,36 @@
-import type {ConnectionExpanded} from '@openint/api-v1/models'
+import type {ConnectionExpanded} from '@openint/api-v1/trpc/routers/connection.models'
 
 import {Settings} from 'lucide-react'
 import Image from 'next/image'
-import {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Card, CardContent} from '@openint/shadcn/ui'
+import {Card, CardContent, Separator} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
+import {PropertyListView} from '../components/PropertyListView'
+
+const menuRegistry = {
+  openMenus: new Map<string, number>(),
+
+  isMenuActiveForConnection(id: string): boolean {
+    return this.openMenus.has(id)
+  },
+
+  registerMenu(id: string): void {
+    this.openMenus.set(id, Date.now())
+  },
+
+  clearMenu(id: string): void {
+    this.openMenus.delete(id)
+  },
+
+  checkForVisibleMenus(): boolean {
+    return (
+      document.querySelectorAll(
+        '[role="menu"], .dropdown-menu, .menu-dropdown, [data-radix-popper-content-wrapper]',
+      ).length > 0
+    )
+  },
+}
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
@@ -13,6 +38,64 @@ export interface ConnectionCardProps {
   className?: string
   variant?: 'default' | 'developer'
   children?: React.ReactNode
+}
+
+function ConnectionHoverContent({
+  connection,
+}: {
+  connection: ConnectionExpanded
+}) {
+  const logoUrl =
+    connection.integration?.logo_url || connection.connector?.logo_url
+
+  const displayName =
+    connection.integration?.name ||
+    connection.connector?.display_name ||
+    titleCase(connection.connector_name)
+
+  const properties = [
+    {title: 'Category', value: connection.connector_name || ''},
+    {
+      title: 'Platform',
+      value: connection.connector?.platforms?.[0] || 'Desktop',
+    },
+    {
+      title: 'Auth Method',
+      value: connection.settings?.oauth ? 'OAuth' : 'API Key',
+    },
+    {title: 'Status', value: connection.status || 'Unknown'},
+  ]
+
+  return (
+    <>
+      <div className="flex items-center gap-3 p-4">
+        <div className="bg-muted/30 border-border/30 flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border">
+          {logoUrl ? (
+            <Image
+              src={logoUrl}
+              alt={`${displayName} logo`}
+              width={32}
+              height={32}
+              className="object-contain"
+            />
+          ) : (
+            <div className="bg-primary/10 text-primary flex h-full w-full items-center justify-center rounded font-medium">
+              {displayName.substring(0, 2).toUpperCase()}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <div className="text-lg font-medium">{displayName}</div>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="p-4">
+        <PropertyListView properties={properties} />
+      </div>
+    </>
+  )
 }
 
 export function ConnectionCard({
@@ -23,6 +106,11 @@ export function ConnectionCard({
   children,
 }: ConnectionCardProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const [showPopover, setShowPopover] = useState(false)
+  const [position, setPosition] = useState({x: 0, y: 0})
+  const cardRef = useRef<HTMLDivElement>(null)
+  const threeDotButtonRef = useRef<Element | null>(null)
+  const connectionId = connection.id
 
   const logoUrl =
     connection.integration?.logo_url || connection.connector?.logo_url
@@ -32,53 +120,156 @@ export function ConnectionCard({
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
 
+  useEffect(() => {
+    if (cardRef.current) {
+      const dotsButton = cardRef.current.querySelector(
+        '.dropdown-trigger, [aria-haspopup="menu"], button:has(.dots-icon), button:has(.three-dots)',
+      )
+      if (dotsButton) {
+        threeDotButtonRef.current = dotsButton
+
+        dotsButton.addEventListener('click', () => {
+          menuRegistry.registerMenu(connectionId)
+        })
+      }
+    }
+  }, [connectionId])
+
+  useEffect(() => {
+    const checkMenuVisibility = () => {
+      const anyMenuVisible = menuRegistry.checkForVisibleMenus()
+
+      if (!anyMenuVisible) {
+        menuRegistry.clearMenu(connectionId)
+      }
+    }
+
+    const handleClick = () => {
+      setShowPopover(false)
+      checkMenuVisibility()
+      setTimeout(checkMenuVisibility, 50)
+      setTimeout(checkMenuVisibility, 200)
+    }
+
+    document.addEventListener('click', handleClick)
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('mouseup', checkMenuVisibility)
+    const interval = setInterval(checkMenuVisibility, 300)
+
+    return () => {
+      document.removeEventListener('click', handleClick)
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('mouseup', checkMenuVisibility)
+      clearInterval(interval)
+    }
+  }, [connectionId])
+
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    if (menuRegistry.isMenuActiveForConnection(connectionId)) return
+
+    const anyMenuVisible = menuRegistry.checkForVisibleMenus()
+    if (anyMenuVisible) {
+      menuRegistry.registerMenu(connectionId)
+      return
+    }
+
+    if (onPress) {
+      setIsHovered(true)
+    } else {
+      setPosition({x: e.clientX, y: e.clientY})
+      setShowPopover(true)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (onPress) {
+      setIsHovered(false)
+    }
+    setShowPopover(false)
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (menuRegistry.isMenuActiveForConnection(connectionId)) return
+
+    if (!onPress && showPopover) {
+      setPosition({x: e.clientX, y: e.clientY})
+    }
+  }
+
   return (
-    <Card
-      className={cn(
-        'border-card-border bg-card relative h-[150px] w-[150px] rounded-lg border p-0',
-        onPress &&
-          'hover:border-button hover:bg-button-light cursor-pointer transition-colors duration-300 ease-in-out',
-        className,
-      )}
-      onMouseEnter={() => onPress && setIsHovered(true)}
-      onMouseLeave={() => onPress && setIsHovered(false)}>
-      <CardContent
-        className="flex h-full flex-col items-center justify-center p-4 py-2"
-        onClick={onPress}>
-        <div className="relative flex size-full flex-col items-center justify-center gap-1">
-          {isHovered && onPress ? (
-            <div className="flex h-full flex-col items-center justify-center">
-              <Settings className="text-button" size={24} />
-              <span className="text-button mt-2 font-sans text-[14px] font-semibold">
-                Manage
-              </span>
+    <>
+      <Card
+        ref={cardRef}
+        className={cn(
+          'border-card-border bg-card relative h-[150px] w-[150px] rounded-lg border p-0',
+          onPress
+            ? 'hover:border-button hover:bg-button-light cursor-pointer transition-colors duration-300 ease-in-out'
+            : 'hover:border-primary/20 transition-colors duration-300 ease-in-out',
+          className,
+        )}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={handleMouseMove}>
+        <CardContent
+          className="flex h-full flex-col items-center justify-center p-4 py-2"
+          onClick={onPress}>
+          <div className="relative flex size-full flex-col items-center justify-center gap-1">
+            {isHovered && onPress ? (
+              <div className="flex h-full flex-col items-center justify-center">
+                <Settings className="text-button" size={24} />
+                <span className="text-button mt-2 font-sans text-[14px] font-semibold">
+                  Manage
+                </span>
+              </div>
+            ) : (
+              <>
+                <div className="bg-muted/30 border-border/30 mb-2 rounded-lg border p-1.5">
+                  {logoUrl ? (
+                    <Image
+                      src={logoUrl}
+                      alt={`${displayName} logo`}
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
+                  ) : (
+                    <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-lg font-medium">
+                      {displayName.substring(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+                <p className="mt-1 w-full break-words text-center text-sm font-semibold">
+                  {displayName}
+                </p>
+                {variant === 'developer' && (
+                  <pre
+                    className="text-muted-foreground w-full truncate text-center text-xs"
+                    title={connection.id}>
+                    {connection.id}
+                  </pre>
+                )}
+              </>
+            )}
+          </div>
+          {children}
+        </CardContent>
+      </Card>
+
+      {showPopover &&
+        !onPress &&
+        !menuRegistry.isMenuActiveForConnection(connectionId) && (
+          <div className="pointer-events-none fixed left-0 top-0 z-50 h-screen w-screen">
+            <div
+              className="bg-popover pointer-events-auto absolute w-[380px] overflow-hidden rounded-md border shadow-md"
+              style={{
+                left: `${position.x + 15}px`,
+                top: `${position.y + 20}px`,
+                transform: 'none',
+              }}>
+              <ConnectionHoverContent connection={connection} />
             </div>
-          ) : (
-            <>
-              {logoUrl && (
-                <Image
-                  src={logoUrl}
-                  alt="Logo"
-                  width={64}
-                  height={64}
-                  className="rounded-lg"
-                />
-              )}
-              <p className="mt-2 w-full break-words text-center text-sm font-semibold">
-                {displayName}
-              </p>
-              {variant === 'developer' && (
-                <pre
-                  className="text-muted-foreground w-full truncate text-center text-xs"
-                  title={connection.id}>
-                  {connection.id}
-                </pre>
-              )}
-            </>
-          )}
-        </div>
-        {children}
-      </CardContent>
-    </Card>
+          </div>
+        )}
+    </>
   )
 }
