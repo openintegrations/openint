@@ -1,5 +1,7 @@
 import type {Meta, StoryFn} from '@storybook/react'
-import {JSX} from 'react'
+import type {JSX} from 'react'
+import type {ChartConfig} from '../ui/chart'
+
 import {
   Area,
   AreaChart,
@@ -20,7 +22,6 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from '../ui/chart'
 
 // Define a wrapper component to use in stories

@@ -168,6 +168,15 @@ importers:
       '@sentry/nextjs':
         specifier: ^9.5.0
         version: 9.5.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(next@15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(webpack@5.74.0(esbuild@0.17.5))
+      '@tanstack/react-query':
+        specifier: ^5.74.0
+        version: 5.74.0(react@19.0.0)
+      '@trpc/client':
+        specifier: ^11.0.1
+        version: 11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2)
+      '@trpc/tanstack-react-query':
+        specifier: 11.0.1
+        version: 11.0.1(@tanstack/react-query@5.74.0(react@19.0.0))(@trpc/client@11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.0.1(typescript@5.8.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)
       inngest:
         specifier: ^3.22.13
         version: 3.22.13(@vercel/node@5.1.13(rollup@4.34.9))(express@4.21.1)(h3@1.8.2)(next@15.2.3(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.8.2)
@@ -776,9 +785,6 @@ importers:
       eslint:
         specifier: ^9.22.0
         version: 9.22.0(jiti@2.4.2)
-      eslint-config-prettier:
-        specifier: ^10.1.1
-        version: 10.1.1(eslint@9.22.0(jiti@2.4.2))
       eslint-import-resolver-typescript:
         specifier: ^4.3.2
         version: 4.3.2(eslint-plugin-import-x@4.10.2(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.22.0(jiti@2.4.2))
@@ -800,6 +806,9 @@ importers:
       eslint-plugin-jsx-a11y:
         specifier: ^6.10.2
         version: 6.10.2(eslint@9.22.0(jiti@2.4.2))
+      eslint-plugin-prettier:
+        specifier: ^5.2.6
+        version: 5.2.6(@types/eslint@8.56.12)(eslint-config-prettier@10.1.2(eslint@9.22.0(jiti@2.4.2)))(eslint@9.22.0(jiti@2.4.2))(prettier@3.5.3)
       eslint-plugin-promise:
         specifier: ^7.2.1
         version: 7.2.1(eslint@9.22.0(jiti@2.4.2))
@@ -824,6 +833,9 @@ importers:
       prettier-plugin-sql:
         specifier: 0.18.1
         version: 0.18.1(prettier@3.5.3)
+      prettier-plugin-sql-cst:
+        specifier: ^0.13.0
+        version: 0.13.0
       prettier-plugin-tailwindcss:
         specifier: ^0.6.11
         version: 0.6.11(@ianvs/prettier-plugin-sort-imports@4.1.1(prettier@3.5.3))(prettier@3.5.3)
@@ -889,9 +901,6 @@ importers:
       '@opensdks/runtime':
         specifier: ^0.0.19
         version: 0.0.19
-      '@opensdks/sdk-nango':
-        specifier: 0.0.6
-        version: 0.0.6
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -905,15 +914,6 @@ importers:
       '@openint/env':
         specifier: workspace:*
         version: link:../../packages/env
-      '@opensdks/sdk-apollo':
-        specifier: 0.0.21
-        version: 0.0.21
-      '@opensdks/sdk-outreach':
-        specifier: 0.0.16
-        version: 0.0.16
-      '@opensdks/sdk-qbo':
-        specifier: ^0.0.23
-        version: 0.0.23
       '@types/react':
         specifier: 19.0.10
         version: 19.0.10
@@ -985,6 +985,9 @@ importers:
         specifier: ^2.1.3
         version: 2.1.3(@trpc/server@11.0.1(typescript@5.8.2))(zod-openapi@4.2.4(zod@3.24.2))(zod@3.24.2)
     devDependencies:
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
       '@openint/cnext':
         specifier: workspace:*
         version: link:../../connectors/cnext
@@ -1123,6 +1126,10 @@ importers:
       '@t3-oss/env-nextjs':
         specifier: 0.7.3
         version: 0.7.3(typescript@5.8.2)(zod@3.24.2)
+    devDependencies:
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
 
   packages/events:
     dependencies:
@@ -1321,18 +1328,9 @@ importers:
       '@rjsf/validator-ajv8':
         specifier: 5.6.2
         version: 5.6.2(@rjsf/utils@5.6.2(react@19.0.0))
-      '@tanstack/react-query':
-        specifier: ^5.71.5
-        version: 5.71.5(react@19.0.0)
       '@tanstack/react-table':
         specifier: ^8.21.2
         version: 8.21.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@trpc/client':
-        specifier: ^11.0.1
-        version: 11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2)
-      '@trpc/tanstack-react-query':
-        specifier: ^11.0.1
-        version: 11.0.1(@tanstack/react-query@5.71.5(react@19.0.0))(@trpc/client@11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.0.1(typescript@5.8.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)
       lucide-react:
         specifier: ^0.482.0
         version: 0.482.0(react@19.0.0)
@@ -3298,9 +3296,6 @@ packages:
   '@opensdks/sdk-apollo@0.0.18':
     resolution: {integrity: sha512-i2rps56eTt22cM1pwbVyTVlZtpjP65T3jMJhX2rKO2CiHd7+QoI3+hT+ko6dCIsi6STPnoM+IIJhmyQZjJIktA==}
 
-  '@opensdks/sdk-apollo@0.0.21':
-    resolution: {integrity: sha512-2vysmbvPH7lncmOoxqy870Pv3ZMeMK9bSxzyrJgWsUAFNn7Q6MjNHz+C2igDVnbaKnR5ow7eSl6lOr1/bI5P9g==}
-
   '@opensdks/sdk-brex@0.0.1':
     resolution: {integrity: sha512-4qNzNAyzHhmKAQlA71ofeU7eyJA4lfoPvOud9DM3bTAWZCX9msRte2kwL4/mIalJskk2UiBub3JeSdX3iqrnyA==}
 
@@ -3322,23 +3317,14 @@ packages:
   '@opensdks/sdk-merge@0.0.6':
     resolution: {integrity: sha512-OJO+rJFpjh0ctqFH7Fq88sepjoVlGseN82MujNZfb7IPpoUIlAdM9dfj0kORfDgt4yFsqnz7TxhgQtNUvDemeg==}
 
-  '@opensdks/sdk-nango@0.0.6':
-    resolution: {integrity: sha512-nlDbJzZZ9burlpHy85CHlK4UDzmMOv3gKS2zWHebYSj2x9qSM0W6WTL4+PZkFuYVh5sIdiizZhZsyrruHUk6Ig==}
-
   '@opensdks/sdk-onebrick@0.0.0':
     resolution: {integrity: sha512-6x+X60ZKLZ7C9FVi9ZI4CTOOa0TSM+M3ou3ICYVJO/f5k8jFSvMpARS20m73Wa2nHdl4VC9lpe88RyWCd/rfbQ==}
 
   '@opensdks/sdk-openai@0.0.14':
     resolution: {integrity: sha512-QqLiT2LAZnHZc5pyGNRyhBsk87QfDYUwAi3zE3VhGQSLnT88KiZ+TOpIJIyM1zqcQIlXPIy98H/DSWSWufDDQA==}
 
-  '@opensdks/sdk-outreach@0.0.16':
-    resolution: {integrity: sha512-i2p4JSNWpzz/BbSTvcOyOziiB88SWUOVOl1OrwDG3fVLhzRPFkg+icZDXL7nWa9w0L4HEavPm/2Wl4uIYZLYeA==}
-
   '@opensdks/sdk-plaid@0.0.19':
     resolution: {integrity: sha512-o4iZWn8e0enVB6ZV6Y6wHZT9cAk4vQtJqN27BIQyTCL22JVQE/RhUmW/T+RWW2Tx+/5kSteMhlCXLMdkzA6Evg==}
-
-  '@opensdks/sdk-qbo@0.0.23':
-    resolution: {integrity: sha512-U6mjnOjwfraS8RS5+e6Ypy7HEEXCwdiwP1qEQZB0lhKcHLwtmqjoS4O6bS9HQPXHo8rZIfuGNv1yARv7qAEBVA==}
 
   '@opensdks/sdk-revert@0.0.1':
     resolution: {integrity: sha512-r19UD+xs4w+7ezofeYEbuPPuILLnSleVKHpw2KZ7AChtB4X6mR5KGV2LggqBHzY4bdOjp07SheS9zIY+rgar7A==}
@@ -5718,11 +5704,11 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6
 
-  '@tanstack/query-core@5.71.5':
-    resolution: {integrity: sha512-XOQ5SyjCdwhxyLksGKWSL5poqyEXYPDnsrZAzJm2LgrMm4Yh6VOrfC+IFosXreDw9HNqC11YAMY3HlfHjNzuaA==}
+  '@tanstack/query-core@5.74.0':
+    resolution: {integrity: sha512-kMqBfXA06INskI06rm+abAY3/Vi/Kq1nRNfLbpwuhuMJ5lMAI5qASretlvjEO5OJoze6w7OB3pNvsbztirIWWQ==}
 
-  '@tanstack/react-query@5.71.5':
-    resolution: {integrity: sha512-WpxZWy4fDASjY+iAaXB+aY+LC95PQ34W6EWVkjJ0hdzWWbczFnr9nHvHkVDpwdR18I1NO8igNGQJFrLrgyzI8Q==}
+  '@tanstack/react-query@5.74.0':
+    resolution: {integrity: sha512-tT/XQ8FmG5nlN7O8xnYaOM1c1ckJi9+SPKRq+Ay8rV118lefWCoFDQIsF/BarRsLTHijBmSQ6xE9PRugaOqrCQ==}
     peerDependencies:
       react: 19.0.0
 
@@ -8246,8 +8232,8 @@ packages:
     engines: {node: '>=6.0'}
     hasBin: true
 
-  eslint-config-prettier@10.1.1:
-    resolution: {integrity: sha512-4EQQr6wXwS+ZJSzaR5ZCrYgLxqvUjdXctaEtBqHcbkW944B1NQyO4qpdHQbXBONfwxXdkAY81HH4+LUfrg+zPw==}
+  eslint-config-prettier@10.1.2:
+    resolution: {integrity: sha512-Epgp/EofAUeEpIdZkW60MHKvPyru1ruQJxPL+WIycnaPApuseK0Zpkrh/FwL9oIpQvIhJwV7ptOy0DWUjTlCiA==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -8314,6 +8300,20 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8'
+
+  eslint-plugin-prettier@5.2.6:
+    resolution: {integrity: sha512-mUcf7QG2Tjk7H055Jk0lGBjbgDnfrvqjhXh9t2xLMSCjZVcw9Rb1V6sVNXO0th3jgeO7zllWPTNRil3JW94TnQ==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      '@types/eslint': '>=8.0.0'
+      eslint: '>=8.0.0'
+      eslint-config-prettier: '>= 7.0.0 <10.0.0 || >=10.1.0'
+      prettier: '>=3.0.0'
+    peerDependenciesMeta:
+      '@types/eslint':
+        optional: true
+      eslint-config-prettier:
+        optional: true
 
   eslint-plugin-promise@7.2.1:
     resolution: {integrity: sha512-SWKjd+EuvWkYaS+uN2csvj0KoP43YTu7+phKQ5v+xw6+A0gutVX2yqCeCkC3uLCJFiPfR2dD8Es5L7yUsmvEaA==}
@@ -8515,6 +8515,9 @@ packages:
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+
+  fast-diff@1.3.0:
+    resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==}
 
   fast-equals@3.0.3:
     resolution: {integrity: sha512-NCe8qxnZFARSHGztGMZOO/PC1qa5MIFB5Hp66WdzbCRAz8U8US3bx1UTgLS49efBQPcUtO9gf5oVEY8o7y/7Kg==}
@@ -11958,6 +11961,10 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
+  prettier-linter-helpers@1.0.0:
+    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
+    engines: {node: '>=6.0.0'}
+
   prettier-plugin-embed@0.5.0:
     resolution: {integrity: sha512-A5nzX8U9x+FJdpOKrDrH9eq86xHZNiGguWpphS6chTME0OK1bDgH1X+WLtZq7qV3kUEMkL/dHkr6C1NLdUA7RQ==}
 
@@ -11968,6 +11975,9 @@ packages:
     peerDependenciesMeta:
       prettier:
         optional: true
+
+  prettier-plugin-sql-cst@0.13.0:
+    resolution: {integrity: sha512-F2NMvK/yD4BooQsNce8yyOjY5wWxJCpwaMfQEQCqkwFUmsvRsH5STGIgQILjbA1iwOsvYsJzRAEEl4hqp0aDRQ==}
 
   prettier-plugin-sql@0.18.1:
     resolution: {integrity: sha512-2+Nob2sg7hzLAKJoE6sfgtkhBZCqOzrWHZPvE4Kee/e80oOyI4qwy9vypeltqNBJwTtq3uiKPrCxlT03bBpOaw==}
@@ -13056,6 +13066,9 @@ packages:
     resolution: {integrity: sha512-Pw4aAgfuyml/SHMlhbJhyOv+GR+Z1HNb9sgX3CVBVdN5YNM+v2VWkYJ3NNbYS7cu37GY3vP/PgnwoVynCuXRxg==}
     hasBin: true
 
+  sql-parser-cst@0.33.1:
+    resolution: {integrity: sha512-7PHLI98bo86S740GQWlerh9GHu10dbMqDo1jBCXVlGB/nc55WgIAeoVrp0jzgK+WikycE9iGUUKkSuFNxj8w3Q==}
+
   stable-hash@0.0.5:
     resolution: {integrity: sha512-+L3ccpzibovGXFK+Ap/f8LOS0ahMrHTf3xu7mMLSpEGU0EO9ucaysSylKo9eRDFNhWve/y275iPmIZ4z39a9iA==}
 
@@ -13311,6 +13324,10 @@ packages:
     resolution: {integrity: sha512-dshNvs3ExOqtZ6kJBaAsabhPdHyeY4P2cKwRCniDVifBMoG/SVI7tfLWqPXriVspf2Rg4tPzXJTnwaihIeFw2A==}
     peerDependencies:
       react: 19.0.0
+
+  synckit@0.11.3:
+    resolution: {integrity: sha512-szhWDqNNI9etJUvbZ1/cx1StnZx8yMmFxme48SwR4dty4ioSY50KEZlpv0qAfgc1fpRzuh9hBXEzoCpJ779dLg==}
+    engines: {node: ^14.18.0 || >=16.0.0}
 
   synckit@0.9.1:
     resolution: {integrity: sha512-7gr8p9TQP6RAHusBOSLs46F4564ZrjV8xFmw5zCmgmhGUcw2hxsShhJ6CEiHQMgPDwAQ1fWHPM0ypc4RMAig4A==}
@@ -17050,8 +17067,6 @@ snapshots:
 
   '@opensdks/sdk-apollo@0.0.18': {}
 
-  '@opensdks/sdk-apollo@0.0.21': {}
-
   '@opensdks/sdk-brex@0.0.1': {}
 
   '@opensdks/sdk-coda@0.0.1': {}
@@ -17068,19 +17083,13 @@ snapshots:
 
   '@opensdks/sdk-merge@0.0.6': {}
 
-  '@opensdks/sdk-nango@0.0.6': {}
-
   '@opensdks/sdk-onebrick@0.0.0': {}
 
   '@opensdks/sdk-openai@0.0.14': {}
 
-  '@opensdks/sdk-outreach@0.0.16': {}
-
   '@opensdks/sdk-plaid@0.0.19':
     dependencies:
       '@opensdks/runtime': 0.0.22
-
-  '@opensdks/sdk-qbo@0.0.23': {}
 
   '@opensdks/sdk-revert@0.0.1': {}
 
@@ -19593,11 +19602,11 @@ snapshots:
       tailwindcss: 4.0.12
       vite: 5.4.9(@types/node@22.13.10)(lightningcss@1.29.2)(terser@5.15.1)
 
-  '@tanstack/query-core@5.71.5': {}
+  '@tanstack/query-core@5.74.0': {}
 
-  '@tanstack/react-query@5.71.5(react@19.0.0)':
+  '@tanstack/react-query@5.74.0(react@19.0.0)':
     dependencies:
-      '@tanstack/query-core': 5.71.5
+      '@tanstack/query-core': 5.74.0
       react: 19.0.0
 
   '@tanstack/react-table@8.21.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
@@ -19650,9 +19659,9 @@ snapshots:
     dependencies:
       typescript: 5.8.2
 
-  '@trpc/tanstack-react-query@11.0.1(@tanstack/react-query@5.71.5(react@19.0.0))(@trpc/client@11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.0.1(typescript@5.8.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)':
+  '@trpc/tanstack-react-query@11.0.1(@tanstack/react-query@5.74.0(react@19.0.0))(@trpc/client@11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.0.1(typescript@5.8.2))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)':
     dependencies:
-      '@tanstack/react-query': 5.71.5(react@19.0.0)
+      '@tanstack/react-query': 5.74.0(react@19.0.0)
       '@trpc/client': 11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2)
       '@trpc/server': 11.0.1(typescript@5.8.2)
       react: 19.0.0
@@ -22548,9 +22557,10 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
-  eslint-config-prettier@10.1.1(eslint@9.22.0(jiti@2.4.2)):
+  eslint-config-prettier@10.1.2(eslint@9.22.0(jiti@2.4.2)):
     dependencies:
       eslint: 9.22.0(jiti@2.4.2)
+    optional: true
 
   eslint-import-resolver-node@0.3.9:
     dependencies:
@@ -22672,6 +22682,16 @@ snapshots:
       mdast-util-from-markdown: 0.8.5
     transitivePeerDependencies:
       - supports-color
+
+  eslint-plugin-prettier@5.2.6(@types/eslint@8.56.12)(eslint-config-prettier@10.1.2(eslint@9.22.0(jiti@2.4.2)))(eslint@9.22.0(jiti@2.4.2))(prettier@3.5.3):
+    dependencies:
+      eslint: 9.22.0(jiti@2.4.2)
+      prettier: 3.5.3
+      prettier-linter-helpers: 1.0.0
+      synckit: 0.11.3
+    optionalDependencies:
+      '@types/eslint': 8.56.12
+      eslint-config-prettier: 10.1.2(eslint@9.22.0(jiti@2.4.2))
 
   eslint-plugin-promise@7.2.1(eslint@9.22.0(jiti@2.4.2)):
     dependencies:
@@ -23038,6 +23058,8 @@ snapshots:
       - supports-color
 
   fast-deep-equal@3.1.3: {}
+
+  fast-diff@1.3.0: {}
 
   fast-equals@3.0.3: {}
 
@@ -27805,6 +27827,10 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
+  prettier-linter-helpers@1.0.0:
+    dependencies:
+      fast-diff: 1.3.0
+
   prettier-plugin-embed@0.5.0:
     dependencies:
       '@types/estree': 1.0.6
@@ -27822,6 +27848,11 @@ snapshots:
       synckit: 0.9.1
     optionalDependencies:
       prettier: 3.5.3
+
+  prettier-plugin-sql-cst@0.13.0:
+    dependencies:
+      prettier: 3.5.3
+      sql-parser-cst: 0.33.1
 
   prettier-plugin-sql@0.18.1(prettier@3.5.3):
     dependencies:
@@ -29283,6 +29314,8 @@ snapshots:
       get-stdin: 8.0.0
       nearley: 2.20.1
 
+  sql-parser-cst@0.33.1: {}
+
   stable-hash@0.0.5: {}
 
   stack-utils@2.0.5:
@@ -29569,6 +29602,11 @@ snapshots:
       dequal: 2.0.3
       react: 19.0.0
       use-sync-external-store: 1.5.0(react@19.0.0)
+
+  synckit@0.11.3:
+    dependencies:
+      '@pkgr/core': 0.2.1
+      tslib: 2.8.1
 
   synckit@0.9.1:
     dependencies:

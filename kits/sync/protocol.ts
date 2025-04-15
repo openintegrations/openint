@@ -4,7 +4,9 @@ import type {
   NonDiscriminatedUnion,
   ObjectPartialDeep,
 } from '@openint/util/type-utils'
-import {z, type Z} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
+
+import {z} from '@openint/util/zod-utils'
 
 type ExternalId = string | number
 interface Id {

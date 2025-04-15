@@ -1,5 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import type {Core} from '@openint/api-v1/models'
+
 import {ConnectionCardContent, ConnectionsCardView} from './ConnectionsCardView'
 
 const meta: Meta<typeof ConnectionsCardView> = {
@@ -12,27 +13,6 @@ const meta: Meta<typeof ConnectionsCardView> = {
     connection: {
       control: 'object',
       description: 'Connection object containing all connection details',
-    },
-    status: {
-      control: 'select',
-      options: ['healthy', 'warning', 'offline', 'destructive'],
-      description: 'The connection status',
-    },
-    category: {
-      control: 'text',
-      description: 'Category of the connection',
-    },
-    platform: {
-      control: 'text',
-      description: 'Platform of the connection',
-    },
-    authMethod: {
-      control: 'text',
-      description: 'Authentication method used',
-    },
-    version: {
-      control: 'text',
-      description: 'Version of the API or connector',
     },
   },
 }
@@ -80,7 +60,6 @@ export const Default: Story = {
       'cust_123',
       'config_123',
     ),
-    status: 'healthy',
   },
 }
 
@@ -88,7 +67,6 @@ export const Default: Story = {
 export const WarningStatus: Story = {
   args: {
     connection: createMockConnection('conn_hubspot', 'cust_456', 'config_456'),
-    status: 'warning',
   },
 }
 
@@ -96,7 +74,6 @@ export const WarningStatus: Story = {
 export const OfflineStatus: Story = {
   args: {
     connection: createMockConnection('conn_stripe', 'cust_789', 'config_789'),
-    status: 'offline',
   },
 }
 
@@ -104,7 +81,6 @@ export const OfflineStatus: Story = {
 export const DestructiveStatus: Story = {
   args: {
     connection: createMockConnection('conn_zapier', 'cust_012', 'config_012'),
-    status: 'destructive',
   },
 }
 
@@ -118,7 +94,6 @@ export const CardContent: Story = {
           'cust_123',
           'config_123',
         )}
-        status="healthy"
       />
     </div>
   ),
@@ -137,7 +112,6 @@ export const AllVariants: Story = {
               'cust_123',
               'config_123',
             )}
-            status="healthy"
           />
           <ConnectionsCardView
             connection={createMockConnection(
@@ -145,7 +119,6 @@ export const AllVariants: Story = {
               'cust_456',
               'config_456',
             )}
-            status="warning"
           />
           <ConnectionsCardView
             connection={createMockConnection(
@@ -153,7 +126,6 @@ export const AllVariants: Story = {
               'cust_789',
               'config_789',
             )}
-            status="offline"
           />
           <ConnectionsCardView
             connection={createMockConnection(
@@ -161,7 +133,6 @@ export const AllVariants: Story = {
               'cust_012',
               'config_012',
             )}
-            status="destructive"
           />
         </div>
       </div>
@@ -177,11 +148,6 @@ export const AllVariants: Story = {
               'cust_345',
               'config_345',
             )}
-            status="healthy"
-            category="CRM"
-            platform="Web"
-            authMethod="OAuth 2.0"
-            version="v2"
           />
           <ConnectionsCardView
             connection={createMockConnection(
@@ -189,11 +155,6 @@ export const AllVariants: Story = {
               'cust_678',
               'config_678',
             )}
-            status="warning"
-            category="Marketing"
-            platform="Mobile"
-            authMethod="API Key"
-            version="v1"
           />
         </div>
       </div>

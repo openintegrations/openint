@@ -10,7 +10,11 @@ interface WebhookInputProps {
   isSaving: boolean
 }
 
-export function WebhookInput({defaultValue, onSave, isSaving}: WebhookInputProps) {
+export function WebhookInput({
+  defaultValue,
+  onSave,
+  isSaving,
+}: WebhookInputProps) {
   const [webhookValue, setWebhookValue] = useState(defaultValue)
   const [lastSavedValue, setLastSavedValue] = useState(defaultValue)
   const [copied, setCopied] = useState(false)
@@ -103,4 +107,3 @@ export function WebhookInput({defaultValue, onSave, isSaving}: WebhookInputProps
   )
 }
 
-export default WebhookInput

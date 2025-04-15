@@ -1,11 +1,13 @@
 'use client'
 
-import {Core} from '@openint/api-v1/models'
+import type {Core} from '@openint/api-v1/models'
+import type {StatusType} from '../../components/StatusDot'
+
 import {cn} from '@openint/shadcn/lib/utils'
 import {BaseTableCell} from '../../components/BaseTableCell'
 import {CopyID} from '../../components/CopyID'
 import {Icon} from '../../components/Icon'
-import {StatusDot, StatusType} from '../../components/StatusDot'
+import {StatusDot} from '../../components/StatusDot'
 
 export type EntityType = keyof Core
 

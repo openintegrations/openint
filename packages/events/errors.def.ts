@@ -2,6 +2,7 @@
 // To be handled just like any other. With a name and schema.
 
 import type {Z} from '@openint/util/zod-utils'
+
 import {TRPC_ERROR_CODES_BY_KEY} from '@trpc/server/rpc'
 import {R} from '@openint/util/remeda'
 import {z, zZodErrorInfo} from '@openint/util/zod-utils'
@@ -11,6 +12,12 @@ import {z, zZodErrorInfo} from '@openint/util/zod-utils'
 export const trpcErrorMap = R.mapValues(TRPC_ERROR_CODES_BY_KEY, () => ({
   message: z.string(),
 }))
+
+export function isTRPCErrorCode(
+  code: string,
+): code is keyof typeof trpcErrorMap {
+  return code in trpcErrorMap
+}
 
 export const errorMap = {
   ...trpcErrorMap,

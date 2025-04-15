@@ -1,6 +1,7 @@
 // Adapted from https://github.com/blend/promise-utils/blob/6ca9c71c55781b6db20a5d196e61b58489ed0478/src/delay.ts#L9
-import {Sema} from 'async-sema'
 import type {MaybePromise} from './type-utils'
+
+import {Sema} from 'async-sema'
 
 export {RateLimit} from 'async-sema'
 

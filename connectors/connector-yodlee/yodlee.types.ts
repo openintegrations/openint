@@ -1,5 +1,7 @@
 import type {YodleeSDKTypes} from '@opensdks/sdk-yodlee'
-import {z, type Z, zCast} from '@openint/util/zod-utils'
+import type {Z} from '@openint/util/zod-utils'
+
+import {z, zCast} from '@openint/util/zod-utils'
 
 type components = YodleeSDKTypes['oas']['components']
 
@@ -9,7 +11,6 @@ export type YodleeBalances = Partial<
   Pick<
     YodleeAccount,
     | 'cash'
-    | 'balance'
     | 'balance'
     | 'remainingBalance'
     | 'currentBalance'

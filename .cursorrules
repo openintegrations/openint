@@ -95,6 +95,9 @@ const searchParams = await props.searchParams
 
 - Always use bun when running ts files
 - If a function takes more than two parameters, it should probably take an object instead.
-- Prefer to use the `test` keyword instead of the `it` keyword when writing tests.
+
+## Testing
 - Always import test keywords like `test` and `describe` from `@jest/globals` rather than assume they exist in the global scope
-```
+- Prefer to use the `test` keyword instead of the `it` keyword when writing tests.
+- Use `.test` not .spec` for extension
+- Prefer co-locating test with the file being tested when possible. Only if test is not file-specific then create and use a __tests__ directory

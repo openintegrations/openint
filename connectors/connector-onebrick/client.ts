@@ -1,7 +1,8 @@
-import React from 'react'
 import type {ConnectorClient} from '@openint/cdk'
-import {Deferred} from '@openint/util/promise-utils'
 import type {helpers, onebrickSchemas} from './def'
+
+import React from 'react'
+import {Deferred} from '@openint/util/promise-utils'
 
 export const onebrickClientConector = {
   useConnectHook: (_) => {

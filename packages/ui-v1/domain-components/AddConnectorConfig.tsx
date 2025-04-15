@@ -1,6 +1,7 @@
-import * as React from 'react'
 import type {HTMLAttributes} from 'react'
 import type {Core} from '@openint/api-v1/models'
+
+import * as React from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Input} from '@openint/shadcn/ui'
 import {ConnectorCard} from './ConnectorCard'

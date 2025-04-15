@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {type FC} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Alert, AlertDescription, AlertTitle} from '@openint/shadcn/ui/alert'
@@ -23,7 +24,6 @@ interface ThemeOverrideProps {
 const ThemeOverrideDemo: FC<ThemeOverrideProps> = ({
   className,
   themeVariables = {},
-  // eslint-disable-next-line arrow-body-style
 }) => {
   // Parse theme variables from URL params
   const urlParams = new URLSearchParams(window.location.search)

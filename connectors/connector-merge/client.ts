@@ -1,8 +1,9 @@
 /** Used for the side effect of window.MergeLink */
 import type {UseMergeLinkProps} from '@mergeapi/react-merge-link/dist/types'
 import type {ConnectorClient} from '@openint/cdk'
-import {CANCELLATION_TOKEN, useScript} from '@openint/cdk'
 import type {mergeSchemas} from './def'
+
+import {CANCELLATION_TOKEN, useScript} from '@openint/cdk'
 
 export const mergeClient = {
   useConnectHook: () => {

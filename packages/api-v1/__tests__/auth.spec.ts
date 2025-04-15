@@ -1,9 +1,10 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
+
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {initDbPGLite} from '@openint/db/db.pglite'
 import {makeUlid} from '@openint/util/id-utils'
-import {createTRPCCaller} from '../handlers'
+import {createTRPCCaller} from '../trpc/handlers'
 import {getTestTRPCClient} from './test-utils'
 
 const viewers = {

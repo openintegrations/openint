@@ -10,5 +10,7 @@
     "@openint/util": "workspace:*",
     "@t3-oss/env-nextjs": "0.7.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@jest/globals": "^29.7.0"
+  }
 }

@@ -1,5 +1,5 @@
 import {createEnv} from '@t3-oss/env-nextjs'
-import {proxyRequired} from '@openint/util/proxy-utils'
+import {proxyReadOnly, proxyRequired} from '@openint/util/proxy-utils'
 import {z} from '@openint/util/zod-utils'
 
 // TODO: Remove the dep on @t3-oss as it causes all sorts of issues with zod
@@ -40,6 +40,10 @@ export const envConfig = {
     // Secret for cron jobs
     CRON_SECRET: z.string().optional(),
     REFRESH_CONNECTION_CONCURRENCY: z.coerce.number().optional().default(3),
+    PORT: z.string().optional(),
+    NODE_ENV: z
+      .enum(['production', 'preview', 'development', 'test'])
+      .optional(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -48,6 +52,18 @@ export const envConfig = {
       .optional()
       .describe(
         'In case API is deployed separately from the main server or there is a reverse proxy in front',
+      ),
+    NEXT_PUBLIC_CONSOLE_URL: z
+      .string()
+      .optional()
+      .describe(
+        'In case console is deployed separately from the main server or there is a reverse proxy in front',
+      ),
+    NEXT_PUBLIC_CONNECT_URL: z
+      .string()
+      .optional()
+      .describe(
+        'In case connect is deployed separately from the main server or there is a reverse proxy in front',
       ),
     NEXT_PUBLIC_NANGO_PUBLIC_KEY: z.string().optional(),
     // Where the app is running. Only used by getServerUrl at the moment
@@ -65,7 +81,10 @@ export const envConfig = {
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
   },
   runtimeEnv: overrideFromLocalStorage({
+    NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
+    NEXT_PUBLIC_CONSOLE_URL: process.env['NEXT_PUBLIC_CONSOLE_URL'],
+    NEXT_PUBLIC_CONNECT_URL: process.env['NEXT_PUBLIC_CONNECT_URL'],
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: process.env['NEXT_PUBLIC_COMMANDBAR_ORG_ID'],
     NEXT_PUBLIC_SENTRY_DSN: process.env['NEXT_PUBLIC_SENTRY_DSN'],
     NEXT_PUBLIC_SENTRY_ORG: process.env['NEXT_PUBLIC_SENTRY_ORG'],
@@ -82,7 +101,6 @@ export const envConfig = {
     INNGEST_SIGNING_KEY: process.env['INNGEST_SIGNING_KEY'],
     NEXT_PUBLIC_NANGO_PUBLIC_KEY: process.env['NEXT_PUBLIC_NANGO_PUBLIC_KEY'],
     NEXT_PUBLIC_PORT: process.env['NEXT_PUBLIC_PORT'],
-    NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
     DATABASE_URL: process.env['DATABASE_URL'],
     DATABASE_URL_UNPOOLED: process.env['DATABASE_URL_UNPOOLED'],
     VERCEL_URL: process.env['VERCEL_URL'],
@@ -94,11 +112,20 @@ export const envConfig = {
     OAUTH_REDIRECT_URI_GATEWAY: process.env['OAUTH_REDIRECT_URI_GATEWAY'],
     // JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
+    PORT: process.env['PORT'],
+    NODE_ENV: process.env['NODE_ENV'],
   }),
 } satisfies Parameters<typeof createEnv>[0]
 
-export const env = createEnv(envConfig)
+/** Primarily for testing purposes */
+export const envMutable = {
+  ...createEnv(envConfig),
+}
 
+/** Read-only proxy of envMutable */
+export const env = proxyReadOnly(envMutable)
+
+/** Proxy env throw on missing values */
 export const envRequired = proxyRequired(env, {
   formatError(key) {
     return new Error(`Missing required env var: ${key}`)
@@ -106,8 +133,7 @@ export const envRequired = proxyRequired(env, {
 })
 
 export const isProduction =
-  process.env['NODE_ENV'] === 'production' ||
-  process.env['VERCEL_ENV'] === 'production'
+  env['NODE_ENV'] === 'production' || env['VERCEL_ENV'] === 'production'
 
 export type Env = typeof env
 
@@ -128,4 +154,20 @@ function overrideFromLocalStorage<T>(runtimeEnv: T) {
     }
   }
   return runtimeEnv
+}
+
+/** For testing */
+export function temporarilyModifyEnv(
+  override: Partial<typeof envMutable>,
+  fn: () => void,
+) {
+  const originalValues = Object.fromEntries(
+    Object.keys(override).map((key) => [
+      key,
+      envMutable[key as keyof typeof envMutable],
+    ]),
+  )
+  Object.assign(envMutable, override)
+  fn()
+  Object.assign(envMutable, originalValues)
 }

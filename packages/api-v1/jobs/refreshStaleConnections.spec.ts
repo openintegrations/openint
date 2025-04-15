@@ -1,4 +1,5 @@
 import type {ConnectorServer} from '@openint/cdk'
+
 import {makeId} from '@openint/cdk'
 import {schema, sql} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
@@ -140,10 +141,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       const updatedGoogleDriveConnections = await db
         .select()
         .from(schema.connection)
-        .where(
-          sql`id LIKE 'conn_googledrive%' AND 
-             (settings->'oauth'->'credentials'->>'refresh_token' IN ('test_refresh_token_gd', 'test_refresh_token_gd2'))`,
-        )
+        .where(sql`
+          id LIKE 'conn_googledrive%'
+          AND (
+            settings -> 'oauth' -> 'credentials' ->> 'refresh_token' IN ('test_refresh_token_gd', 'test_refresh_token_gd2')
+          )
+        `)
 
       expect(updatedGoogleDriveConnections).toHaveLength(2)
 
@@ -151,11 +154,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       const greenhouseConnections = await db
         .select()
         .from(schema.connection)
-        .where(
-          sql`connector_name = 'greenhouse' AND (connection.settings->'oauth'->'credentials'->>'expires_at')::timestamp < ${new Date(
-            Date.now() + 1000 * 60 * 30,
-          )}`,
-        )
+        .where(sql`
+          connector_name = 'greenhouse'
+          AND (
+            connection.settings -> 'oauth' -> 'credentials' ->> 'expires_at'
+          )::timestamp < ${new Date(Date.now() + 1000 * 60 * 30)}
+        `)
 
       expect(greenhouseConnections).toHaveLength(1)
 

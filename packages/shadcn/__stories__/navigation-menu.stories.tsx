@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {
   NavigationMenu,
   NavigationMenuContent,

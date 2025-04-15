@@ -1,8 +1,9 @@
-import type {ErrorShape} from './plaid.types'
-import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
 import type * as plaid from 'plaid'
 import type {PlaidError} from 'plaid'
 import type {PlaidLinkOnSuccessMetadata} from 'react-plaid-link'
+import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
+import type {ErrorShape} from './plaid.types'
+
 import plaidOas from '@opensdks/sdk-plaid/plaid.oas.json'
 import {CountryCode, Products} from 'plaid'
 import {connHelpers, zWebhookInput} from '@openint/cdk'

@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   noopFunctionMap,
+  proxyReadOnly,
   proxyRequired,
   proxyRequiredRecursive,
 } from './proxy-utils'
@@ -229,7 +230,6 @@ describe('proxyRequiredRecursive', () => {
       expect(proxied.b.d).toBe(undefined)
     })
 
-    // eslint-disable-next-line jest/no-identical-title
     it('throw on explicitly defined undefined values in nested objects when throwOn is "undefined"', () => {
       const obj = {
         a: 1,
@@ -278,5 +278,42 @@ describe('proxyRequiredRecursive', () => {
       )
       expect(nullishProxy.arr[1].a).toBe(1)
     })
+  })
+})
+
+describe('proxyReadonly', () => {
+  test('allows reading properties', () => {
+    const obj = {a: 1, b: 'test'}
+    const proxy = proxyReadOnly(obj)
+    expect(proxy.a).toBe(1)
+    expect(proxy.b).toBe('test')
+  })
+
+  test('prevents setting properties', () => {
+    const obj = {a: 1}
+    const proxy = proxyReadOnly(obj)
+    expect(() => {
+      // @ts-expect-error - Testing runtime error
+      proxy.a = 2
+    }).toThrow('Cannot modify read-only object')
+  })
+
+  test('prevents deleting properties', () => {
+    const obj = {a: 1}
+    const proxy = proxyReadOnly(obj)
+    expect(() => {
+      // @ts-expect-error - Testing runtime error
+      delete proxy.a
+    }).toThrow('Cannot delete properties from read-only object')
+  })
+
+  test('maintains type safety', () => {
+    const obj = {a: 1, b: 'test'}
+    const proxy = proxyReadOnly(obj)
+    // These should compile without errors
+    const a: number = proxy.a
+    const b: string = proxy.b
+    expect(a).toBe(1)
+    expect(b).toBe('test')
   })
 })

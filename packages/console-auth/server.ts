@@ -1,4 +1,6 @@
-import {auth, createClerkClient, Organization} from '@clerk/nextjs/server'
+import type {Organization} from '@clerk/nextjs/server'
+
+import {auth, createClerkClient} from '@clerk/nextjs/server'
 import {type Id, type Viewer} from '@openint/cdk'
 import {env} from '@openint/env'
 

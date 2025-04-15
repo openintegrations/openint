@@ -1,6 +1,7 @@
 import type {FieldProps, RegistryFieldsType} from '@rjsf/utils'
-import {useState} from 'react'
 import type {ConnectorConfig} from '@openint/api-v1/models'
+
+import {useState} from 'react'
 import {Input, Switch} from '@openint/shadcn/ui'
 import {ConnectorBadges} from '../../domain-components/ConnectorCard'
 import ConnectorScopes from '../ConnectorScopes'

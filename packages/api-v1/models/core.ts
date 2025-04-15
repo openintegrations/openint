@@ -1,11 +1,13 @@
+import type {Z} from '@openint/util/zod-utils'
+
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod'
 import {
   zDiscriminatedConfig,
   zDiscriminatedSettings,
 } from '@openint/all-connectors/schemas'
 import {schema} from '@openint/db'
-import {z, type Z} from '@openint/util/zod-utils'
-import {zConnector, zConnectorName} from '../routers/connector.models'
+import {z} from '@openint/util/zod-utils'
+import {zConnector, zConnectorName} from '../trpc/routers/connector.models'
 
 // TODO: make all metadata default to `{}` and not nullable to simplify typing
 const zMetadata = z.record(z.string(), z.unknown()).describe(`
@@ -150,17 +152,6 @@ export type ConnectorExpanded<K extends keyof ConnectorRelations> =
   Core['connector'] & Partial<Pick<ConnectorRelations, K>>
 
 // MARK: - Connections
-
-interface ConnectionRelations {
-  connector_config: Core['connector_config_select']
-  customer: Core['customer_select']
-  connector: Core['connector']
-  integration: Core['integration_select']
-}
-
-export type ConnectionExpanded<
-  K extends keyof ConnectionRelations = keyof ConnectionRelations,
-> = Core['connection_select'] & Partial<Pick<ConnectionRelations, K>>
 
 // MARK: - Customer
 export type Customer = Core['customer_select']

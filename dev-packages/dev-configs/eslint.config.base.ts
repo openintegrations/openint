@@ -8,7 +8,6 @@
 import pluginJs from '@eslint/js'
 // @ts-expect-error No types available
 import pluginNext from '@next/eslint-plugin-next'
-import configPrettier from 'eslint-config-prettier/flat'
 import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript'
 import codegen from 'eslint-plugin-codegen'
 // @ts-expect-error No types available
@@ -20,6 +19,7 @@ import pluginJest from 'eslint-plugin-jest'
 import pluginJestFormatting from 'eslint-plugin-jest-formatting'
 // @ts-expect-error No types available
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
+import pluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 // @ts-expect-error No types available
 import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
@@ -146,6 +146,7 @@ export const configs = keyAsName({
       // FIXME: This should not be disabled ever - immediate code smell
       'import-x/no-relative-packages': 'error',
       'import-x/no-useless-path-segments': ['error', {noUselessIndex: true}],
+      'import-x/no-named-as-default-member': 'off',
     },
   },
   typescript: {
@@ -172,6 +173,8 @@ export const configs = keyAsName({
         'warn',
         {disallowTypeAnnotations: false},
       ],
+      '@typescript-eslint/consistent-type-exports': ['warn'],
+
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -367,7 +370,8 @@ export const configs = keyAsName({
     },
   },
   prettier: {
-    extends: [configPrettier],
+    extends: [pluginPrettierRecommended],
+    rules: {'prettier/prettier': 'warn'},
   },
   // Does not work because requires esm module. We should upgrade fully to esm one day
   // css: {

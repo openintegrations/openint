@@ -1,5 +1,6 @@
-import codaOas from '@opensdks/sdk-coda/coda.oas.json'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
+
+import codaOas from '@opensdks/sdk-coda/coda.oas.json'
 import {connHelpers} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 

@@ -1,6 +1,7 @@
 // generated file. Do not modify by hand
 
 import type {NoOverlappingKeys} from '@openint/util/type-utils'
+
 import {defConnectors as cnextConnectors} from '@openint/cnext/connectors.def'
 import {default as connectorAirtable} from '@openint/connector-airtable/def'
 import {default as connectorApollo} from '@openint/connector-apollo/def'

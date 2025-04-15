@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {SidebarProvider} from '@openint/shadcn/ui/sidebar'
 import {AppHeader} from './app-header'
 

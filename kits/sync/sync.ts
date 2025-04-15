@@ -1,5 +1,3 @@
-import {Rx, toCompletion} from '@openint/util/observable-utils'
-import {R} from '@openint/util/remeda'
 import type {
   AnyEntityPayload,
   ConnectionUpdateData,
@@ -9,6 +7,9 @@ import type {
   StateUpdateData,
   SyncOperation,
 } from './protocol'
+
+import {Rx, toCompletion} from '@openint/util/observable-utils'
+import {R} from '@openint/util/remeda'
 
 type Data = AnyEntityPayload
 

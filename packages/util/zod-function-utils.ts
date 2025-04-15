@@ -1,6 +1,8 @@
-// TODO: this is a bit of a mess, but it works for now. Consider cleaning up the types
+import type {Z} from './zod-utils'
 
-import {isZodType, z, type Z} from './zod-utils'
+import {isZodType, z} from './zod-utils'
+
+// TODO: this is a bit of a mess, but it works for now. Consider cleaning up the types
 
 /** Use fn.implementation to access the raw fn without validation */
 export type AnyZFunction = ReturnType<typeof zFunction>

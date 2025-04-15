@@ -1,18 +1,16 @@
-import oas from '@opensdks/sdk-apollo/apollo.oas.json'
 import type {ConnectorDef, ConnectorSchemas, OpenApiSpec} from '@openint/cdk'
-import {connHelpers, oauthBaseSchema} from '@openint/cdk'
+
+import oas from '@opensdks/sdk-apollo/apollo.oas.json'
+import {connHelpers} from '@openint/cdk'
 import {z} from '@openint/util/zod-utils'
 
 export const APOLLO_ENTITY_NAME = ['contact', 'account'] as const
 
 export const apolloSchemas = {
   name: z.literal('apollo'),
-  // Should get this from apollo sdk def...
-  // connectionSettings: z.object({
-  //   api_key: z.string(),
-  // }),
-  // TODO: Migrate away from nango...
-  connection_settings: oauthBaseSchema.connection_settings,
+  connection_settings: z.object({
+    api_key: z.string(),
+  }),
 } satisfies ConnectorSchemas
 
 export const apolloHelpers = connHelpers(apolloSchemas)

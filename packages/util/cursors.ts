@@ -1,5 +1,7 @@
+import type {Z} from './zod-utils'
+
 import JsonURL from '@jsonurl/jsonurl'
-import {z, type Z} from './zod-utils'
+import {z} from './zod-utils'
 
 const cursorFromSchema = <T>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

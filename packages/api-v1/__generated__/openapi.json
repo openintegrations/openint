@@ -975,6 +975,19 @@
                       "properties": {
                         "connector": {
                           "$ref": "#/components/schemas/core.connector"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "healthy",
+                            "disconnected",
+                            "error",
+                            "manual"
+                          ],
+                          "description": "Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)"
+                        },
+                        "integration": {
+                          "$ref": "#/components/schemas/core.integration_select"
                         }
                       }
                     }
@@ -1537,6 +1550,19 @@
                             "properties": {
                               "connector": {
                                 "$ref": "#/components/schemas/core.connector"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "healthy",
+                                  "disconnected",
+                                  "error",
+                                  "manual"
+                                ],
+                                "description": "Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)"
+                              },
+                              "integration": {
+                                "$ref": "#/components/schemas/core.integration_select"
                               }
                             }
                           }
@@ -2520,6 +2546,95 @@
                     "role"
                   ],
                   "additionalProperties": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/{connector_name}": {
+      "post": {
+        "operationId": "handleWebhook",
+        "description": "Handle a webhook event",
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "CustomerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "connector_name",
+            "schema": {
+              "$ref": "#/components/schemas/core.connector.name"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ok",
+                        "error"
+                      ]
+                    },
+                    "info": {}
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
                 }
               }
             }
@@ -9268,18 +9383,24 @@
           "coda",
           "confluence",
           "discord",
+          "facebook",
           "finch",
           "firebase",
           "foreceipt",
           "github",
-          "googlecalendar",
-          "googledocs",
-          "googledrive",
-          "googlemail",
-          "googlesheet",
+          "gong",
+          "google-calendar",
+          "google-docs",
+          "google-drive",
+          "google-mail",
+          "google-sheet",
           "greenhouse",
           "heron",
           "hubspot",
+          "instagram",
+          "intercom",
+          "jira",
+          "lever",
           "linear",
           "linkedin",
           "lunchmoney",
@@ -9288,11 +9409,14 @@
           "moota",
           "notion",
           "onebrick",
+          "outreach",
+          "pipedrive",
           "plaid",
           "postgres",
           "quickbooks",
           "ramp",
-          "salesforce",
+          "reddit",
+          "salesloft",
           "saltedge",
           "sharepointonline",
           "slack",
@@ -9301,9 +9425,12 @@
           "teller",
           "toggl",
           "twenty",
+          "twitter",
           "venmo",
           "wise",
-          "yodlee"
+          "xero",
+          "yodlee",
+          "zoho-desk"
         ],
         "title": "connector"
       },

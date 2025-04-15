@@ -17,7 +17,6 @@ import {
 interface PreviewProps {
   children: React.ReactNode
   className?: string
-  displayUrl?: string
   shareUrl?: string
   isLoading?: boolean
 }
@@ -25,7 +24,7 @@ interface PreviewProps {
 export function BrowserWindow({
   children,
   className,
-  displayUrl = 'https://example.com',
+  shareUrl,
   isLoading = false,
 }: PreviewProps) {
   return (
@@ -62,7 +61,7 @@ export function BrowserWindow({
             </svg>
             <input
               type="text"
-              value={displayUrl}
+              value={shareUrl}
               readOnly
               className="text-muted-foreground w-full bg-transparent outline-none"
             />
@@ -136,7 +135,7 @@ export function BrowserWindow({
 export function MobileScreen({
   children,
   className,
-  displayUrl = 'https://example.com',
+  shareUrl = 'https://example.com',
   isLoading = false,
 }: PreviewProps) {
   return (
@@ -191,7 +190,7 @@ export function MobileScreen({
             <path d="M21 3v9h-9" />
           </svg>
           <span className="text-muted-foreground flex-1 truncate text-xs">
-            {displayUrl}
+            {shareUrl}
           </span>
           {isLoading && (
             <div className="ml-auto">
@@ -231,7 +230,7 @@ export function MobileScreen({
 export function TabletScreen({
   children,
   className,
-  displayUrl = 'https://example.com',
+  shareUrl = 'https://example.com',
   isLoading = false,
 }: PreviewProps) {
   return (
@@ -309,7 +308,7 @@ export function TabletScreen({
             <path d="M21 3v9h-9" />
           </svg>
           <span className="text-muted-foreground flex-1 truncate">
-            {displayUrl}
+            {shareUrl}
           </span>
           {isLoading && (
             <div className="ml-auto">
@@ -345,13 +344,12 @@ export function TabletScreen({
 
 interface PreviewWindowProps extends PreviewProps {
   defaultView?: 'Magic Link' | 'Embedded' | 'Mobile'
-  supportedViews?: ('Magic Link' | 'Embedded' | 'Mobile')[]
+  supportedViews?: Array<'Magic Link' | 'Embedded' | 'Mobile'>
 }
 
 export function PreviewWindow({
   children,
   className,
-  displayUrl = 'https://example.com',
   shareUrl,
   isLoading = false,
   defaultView = 'Magic Link',
@@ -397,17 +395,17 @@ export function PreviewWindow({
       {/* Preview Container */}
 
       <TabsContent value="Magic Link" className="mt-0 flex justify-center">
-        <BrowserWindow displayUrl={displayUrl} isLoading={isLoading}>
+        <BrowserWindow shareUrl={shareUrl} isLoading={isLoading}>
           {children}
         </BrowserWindow>
       </TabsContent>
       <TabsContent value="Embedded" className="mt-0 flex justify-center">
-        <TabletScreen displayUrl={displayUrl} isLoading={isLoading}>
+        <TabletScreen shareUrl={shareUrl} isLoading={isLoading}>
           {children}
         </TabletScreen>
       </TabsContent>
       <TabsContent value="Mobile" className="mt-0 flex justify-center">
-        <MobileScreen displayUrl={displayUrl} isLoading={isLoading}>
+        <MobileScreen shareUrl={shareUrl} isLoading={isLoading}>
           {children}
         </MobileScreen>
       </TabsContent>

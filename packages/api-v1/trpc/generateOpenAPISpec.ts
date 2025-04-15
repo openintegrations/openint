@@ -1,5 +1,5 @@
 import {generateOpenApiDocument} from 'trpc-to-openapi'
-import {appRouter} from '../routers'
+import {appRouter} from './routers'
 
 export function generateOpenAPISpec({
   baseURL = 'https://api.openint.dev/v1',
@@ -32,27 +32,24 @@ export function generateOpenAPISpec({
     // sort schemas object based on key name and add titles
     const sortedSchemas = Object.keys(oas.components.schemas)
       .sort()
-      .reduce(
-        (acc, key) => {
-          // Get the original schema
-          const schema = oas.components!.schemas![key]
+      .reduce<Record<string, any>>((acc, key) => {
+        // Get the original schema
+        const schema = oas.components!.schemas![key]
 
-          // Add a title if it doesn't already have one
-          if (schema && typeof schema === 'object' && !('title' in schema)) {
-            // Extract just the connector name (e.g., "aircall" from "connectors.aircall.connectionSettings")
-            const parts = key.split('.')
-            const connectorName =
-              parts.length > 1 && parts[1] ? parts[1].toLowerCase() : key
+        // Add a title if it doesn't already have one
+        if (schema && typeof schema === 'object' && !('title' in schema)) {
+          // Extract just the connector name (e.g., "aircall" from "connectors.aircall.connectionSettings")
+          const parts = key.split('.')
+          const connectorName =
+            parts.length > 1 && parts[1] ? parts[1].toLowerCase() : key
 
-            acc[key] = {...schema, title: connectorName}
-          } else {
-            acc[key] = schema
-          }
+          acc[key] = {...schema, title: connectorName}
+        } else {
+          acc[key] = schema
+        }
 
-          return acc
-        },
-        {} as Record<string, any>,
-      )
+        return acc
+      }, {})
 
     oas.components.schemas = sortedSchemas
   }

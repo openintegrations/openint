@@ -43,3 +43,26 @@ export function joinPath(...optionalParts: Array<string | null | undefined>) {
     .filter((p) => !!p) // Removes duplicate `//`
     .join('/')}${trailing}`
 }
+
+export function trimTrailingSlash<T extends string | undefined | null>(
+  path: T,
+): T {
+  return path?.replace(/\/+$/, '') as T
+}
+
+export function createURL(
+  url: string,
+  options: {
+    searchParams?: Record<string, string | string[]>
+  },
+) {
+  const urlObj = new URL(url)
+  Object.entries(options.searchParams ?? {}).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((v) => urlObj.searchParams.append(key, v))
+    } else {
+      urlObj.searchParams.set(key, value)
+    }
+  })
+  return urlObj.toString()
+}

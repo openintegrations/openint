@@ -58,7 +58,7 @@ export function ConnectPage({
   const createMagicLink = _trpcReact?.createMagicLink?.useMutation({
     onError: (err: ErrorWithMessage) => {
       toast.error('Error creating magic link', {
-        description: `${err.message}`,
+        description: err.message,
       })
     },
   }) || {

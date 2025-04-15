@@ -1,5 +1,6 @@
-export {appRouter, AppRouter, AppRouterInput, AppRouterOutput} from './routers'
-export {createTRPCCaller} from './handlers'
+export type {AppRouter, AppRouterInput, AppRouterOutput} from './trpc/routers'
+export {appRouter} from './trpc/routers'
+export {createTRPCCaller} from './trpc/handlers'
 
 export * from './app'
 

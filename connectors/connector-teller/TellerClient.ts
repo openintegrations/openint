@@ -1,7 +1,9 @@
+import type {Z} from '@openint/util/zod-utils'
+
 import {memoize} from '@openint/util/function-utils'
 import {createHTTPClient} from '@openint/util/http/index'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z, type Z} from '@openint/util/zod-utils'
+import {z} from '@openint/util/zod-utils'
 import institutionsWsResponse from './institutionWsResponse.json'
 
 export const zEnvName = z.enum(['sandbox', 'development', 'production'])

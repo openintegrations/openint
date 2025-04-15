@@ -1,13 +1,13 @@
-import type {ConnectorConfigForCustomer} from './client'
+import type {Id, Viewer} from '@openint/cdk'
 import type {PageProps} from '@/lib-common/next-utils'
-import type {Viewer} from '@openint/cdk'
+import type {ConnectorConfigForCustomer} from './AddConnectionInner.client'
+
 import {ChevronLeftIcon} from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import {cache, Suspense} from 'react'
-import {zConnectOptions} from '@openint/api-v1/routers/connect.models'
-import {type ConnectorName} from '@openint/api-v1/routers/connector.models'
-import {asOrgIfCustomer, Id} from '@openint/cdk'
+import {zConnectOptions} from '@openint/api-v1/trpc/routers/connect.models'
+import {type ConnectorName} from '@openint/api-v1/trpc/routers/connector.models'
+import {asOrgIfCustomer} from '@openint/cdk'
 import {getClerkOrganization} from '@openint/console-auth/server'
 import {isProduction} from '@openint/env'
 import {cn} from '@openint/shadcn/lib/utils'
@@ -20,59 +20,24 @@ import {
   CardTitle,
 } from '@openint/shadcn/ui/card'
 import {TabsContent, TabsList, TabsTrigger} from '@openint/shadcn/ui/tabs'
+import {GlobalCommandBarProvider} from '@/lib-client/GlobalCommandBarProvider'
+import {TRPCApp} from '@/lib-client/TRPCApp'
+import {Link} from '@/lib-common/Link'
 import {parsePageProps} from '@/lib-common/next-utils'
 import {
   currentViewer,
   currentViewerFromPageProps,
 } from '@/lib-server/auth.server'
 import {createAPICaller} from '@/lib-server/globals'
-import {ClientApp} from '../console/(authenticated)/client'
-import {GlobalCommandBarProvider} from '../GlobalCommandBarProvider'
-import {AddConnectionInner, MyConnectionsClient} from './client'
-import {TabsClient} from './Tabs.client'
+import {AddConnectionInner} from './AddConnectionInner.client'
+import {MyConnectionsClient} from './MyConnections.client'
+import {TabsClient} from './page.client'
 
 function Fallback() {
   return <div>Loading...</div>
 }
 
-const getOrganizationInfo = cache(async (orgId: Id['org'] | null) => {
-  return orgId
-    ? await getClerkOrganization(orgId)
-    : {name: 'OpenInt', imageUrl: ''}
-})
-
-async function OrganizationImage({
-  orgId,
-  className,
-}: {
-  orgId: string | null
-  className?: string
-}) {
-  if (!orgId) return null
-  const {imageUrl, name} = await getOrganizationInfo(orgId as Id['org'])
-
-  if (!imageUrl) return null
-
-  return (
-    <div className={cn('flex items-center', className)}>
-      <Image
-        src={imageUrl}
-        alt={name || 'Organization Logo'}
-        width={25}
-        height={25}
-      />
-      <span className="ml-2">{name || 'Organization Name'}</span>
-    </div>
-  )
-}
-
-async function OrganizationName({orgId}: {orgId: string | null}) {
-  if (!orgId) return 'OpenInt Console'
-  const {name} = await getOrganizationInfo(orgId as Id['org'])
-  return <>{name || 'OpenInt Console'}</>
-}
-
-export default async function Page(
+export default async function ConnectPage(
   pageProps: PageProps<never, {view?: string; connector_name?: string}>,
 ) {
   const {viewer, token, payload} = isProduction
@@ -94,13 +59,7 @@ export default async function Page(
           </CardContent>
           <CardFooter className="flex justify-center">
             <Button asChild size="lg">
-              {/* We do this as in production the renderer may be connect.openint.dev */}
-              <Link
-                href={
-                  isProduction ? 'https://console.openint.dev' : '/console'
-                }>
-                Go to OpenInt Console
-              </Link>
+              <Link href="/console">Go to OpenInt Console</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -135,8 +94,11 @@ export default async function Page(
     connector_names: searchParams.connector_names,
     expand: ['connector'],
   })
+
+  // TODO: Splitting the layout out of here.
+  // Given that layout.tsx cannot access params, perhaps we should put token as a path segment?
   return (
-    <ClientApp token={token!}>
+    <TRPCApp token={token}>
       <GlobalCommandBarProvider>
         <style
           dangerouslySetInnerHTML={{
@@ -155,7 +117,7 @@ export default async function Page(
               {
                 viewer,
                 searchParams,
-                token: token,
+                token,
               },
               null,
               2,
@@ -170,10 +132,7 @@ export default async function Page(
                 fallback={
                   <div className="h-[50px] w-[50px] animate-pulse rounded-full bg-gray-200" />
                 }>
-                <OrganizationImage
-                  orgId={viewer.orgId as Id['org']}
-                  className="lg:pt-6"
-                />
+                <OrganizationImage orgId={viewer.orgId} className="lg:pt-6" />
               </Suspense>
 
               <h1 className="mb-4 mt-16 text-2xl font-bold">
@@ -188,7 +147,7 @@ export default async function Page(
                   <ChevronLeftIcon className="h-4 w-4" />
                   Back to{' '}
                   <Suspense fallback="OpenInt Console">
-                    <OrganizationName orgId={viewer.orgId as Id['org']} />
+                    <OrganizationName orgId={viewer.orgId} />
                   </Suspense>
                 </Link>
               </Button>
@@ -238,7 +197,7 @@ export default async function Page(
           </TabsClient>
         </div>
       </GlobalCommandBarProvider>
-    </ClientApp>
+    </TRPCApp>
   )
 }
 
@@ -255,7 +214,7 @@ async function AddConnections({
   const api = createAPICaller(asOrgIfCustomer(viewer))
 
   const res = await api.listConnectorConfigs({
-    connector_names: connector_names,
+    connector_names,
     expand: ['connector.schemas'], // TODO: FIXME to use an array instead of a string
   })
 
@@ -266,7 +225,7 @@ async function AddConnections({
           There are no connectors configured for this organization.
         </p>
         <Button asChild variant="default">
-          <Link href="https://console.openint.dev" target="_blank">
+          <Link href="/console" target="_blank">
             Go to OpenInt Console
           </Link>
         </Button>
@@ -282,7 +241,7 @@ async function AddConnections({
     <div className="flex flex-col gap-4">
       {res.items.map((ccfg) => (
         <Suspense key={ccfg.id} fallback={<Fallback />}>
-          <AddConnectionServer
+          <AddConnection
             key={ccfg.id}
             connectorConfig={{
               // NOTE: Be extremely careful that sensitive data is not exposed here
@@ -299,7 +258,7 @@ async function AddConnections({
   )
 }
 
-function AddConnectionServer({
+function AddConnection({
   viewer,
   connectorConfig,
 }: {
@@ -317,4 +276,39 @@ function AddConnectionServer({
   return (
     <AddConnectionInner connectorConfig={connectorConfig} initialData={res} />
   )
+}
+
+const getOrganizationInfo = cache(async (orgId: Id['org'] | null) =>
+  orgId ? await getClerkOrganization(orgId) : {name: 'OpenInt', imageUrl: ''},
+)
+
+async function OrganizationImage({
+  orgId,
+  className,
+}: {
+  orgId: string | null
+  className?: string
+}) {
+  if (!orgId) return null
+  const {imageUrl, name} = await getOrganizationInfo(orgId as Id['org'])
+
+  if (!imageUrl) return null
+
+  return (
+    <div className={cn('flex items-center', className)}>
+      <Image
+        src={imageUrl}
+        alt={name || 'Organization Logo'}
+        width={25}
+        height={25}
+      />
+      <span className="ml-2">{name || 'Organization Name'}</span>
+    </div>
+  )
+}
+
+async function OrganizationName({orgId}: {orgId: string | null}) {
+  if (!orgId) return 'OpenInt Console'
+  const {name} = await getOrganizationInfo(orgId as Id['org'])
+  return <>{name || 'OpenInt Console'}</>
 }

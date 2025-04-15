@@ -1,3 +1,6 @@
+import type {Z} from '@openint/util/zod-utils'
+import type {WebhookShape} from './plaid.types'
+
 import {createEnv} from '@t3-oss/env-core'
 import {
   Configuration,
@@ -9,9 +12,8 @@ import {
 import {memoize} from '@openint/util/function-utils'
 import {getDefaultProxyAgent} from '@openint/util/http'
 import {zFunction} from '@openint/util/zod-function-utils'
-import {z, zCast, type Z} from '@openint/util/zod-utils'
+import {z, zCast} from '@openint/util/zod-utils'
 import {inferPlaidEnvFromToken} from './plaid-utils'
-import type {WebhookShape} from './plaid.types'
 
 type EnvName = Z.infer<typeof zPlaidEnvName>
 export const zPlaidEnvName = z.enum(['sandbox', 'development', 'production'])

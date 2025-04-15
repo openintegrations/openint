@@ -1,5 +1,7 @@
 import {parseArgs} from 'node:util'
-import {makeId, type Id, type Viewer} from '@openint/cdk'
+import type {Id, Viewer} from '@openint/cdk'
+
+import {makeId} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {initDbNeon} from '@openint/db/db.neon'
 import {envRequired} from '@openint/env'

@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {ConnectPage} from './ConnectPage'
 
 // Mock schema that matches the expected structure from customerRouterSchema

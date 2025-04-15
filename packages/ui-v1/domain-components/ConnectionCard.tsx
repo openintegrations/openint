@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
+import type {StatusType} from '../components/StatusDot'
+import type {ConnectionExpanded} from '@openint/api-v1/models'
 import {Settings} from 'lucide-react'
 import Image from 'next/image'
 import React, {useState} from 'react'
-import type {ConnectionExpanded} from '@openint/api-v1/models'
 import {cn} from '@openint/shadcn/lib/utils'
-import {Card, CardContent, Separator, Badge} from '@openint/shadcn/ui'
+import {Badge, Card, CardContent, Separator} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
 import {PropertyListView} from '../components/PropertyListView'
-import {StatusDot, type StatusType} from '../components/StatusDot'
+import {StatusDot} from '../components/StatusDot'
 
 export interface ConnectionCardProps {
-  connection: ConnectionExpanded<'integration' | 'connector'>
+  connection: ConnectionExpanded
   onPress?: () => void
   className?: string
   variant?: 'default' | 'developer'
@@ -20,51 +20,62 @@ export interface ConnectionCardProps {
 // Convert API connection status to UI StatusType
 function mapApiStatusToUiStatus(apiStatus?: string): StatusType {
   if (!apiStatus) return 'offline'
-  
+
   switch (apiStatus) {
-    case 'healthy': return 'healthy'
-    case 'error': return 'destructive'
-    case 'disconnected': return 'warning'
+    case 'healthy':
+      return 'healthy'
+    case 'error':
+      return 'destructive'
+    case 'disconnected':
+      return 'warning'
     case 'manual':
-    default: return 'offline'
+    default:
+      return 'offline'
   }
 }
 
 // Simple content component for the hover popover
-function ConnectionHoverContent({connection}: {connection: ConnectionExpanded<'integration' | 'connector'>}) {
+function ConnectionHoverContent({
+  connection,
+}: {
+  connection: ConnectionExpanded
+}) {
   const logoUrl =
     connection.integration?.logo_url || connection.connector?.logo_url
-  
+
   const displayName =
     connection.integration?.name ||
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
-  
+
   // Get connection status
   const apiStatus = (connection as any).status
   const uiStatus = mapApiStatusToUiStatus(apiStatus)
-  
+
   // Status label mapping
   const statusLabels = {
     healthy: 'Connected',
     warning: 'Warning',
-    destructive: 'Error', 
-    offline: 'Offline'
+    destructive: 'Error',
+    offline: 'Offline',
   }
-  
+
   const properties = [
     {title: 'Category', value: connection.connector_name || ''},
     {title: 'Platform', value: 'Desktop'},
-    {title: 'Auth Method', value: connection.settings?.oauth ? 'oauth' : 'apikey'},
+    {
+      title: 'Auth Method',
+      value: connection.settings?.oauth ? 'oauth' : 'apikey',
+    },
     {title: 'Version', value: 'V2'},
     {title: 'Status', value: apiStatus || 'Unknown'},
   ]
-  
+
   return (
     <>
       {/* Header with logo and name.*/}
       <div className="flex items-center gap-3 p-4">
-        <div className="bg-muted/30 border border-border/30 flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-md">
+        <div className="bg-muted/30 border-border/30 flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border">
           {logoUrl ? (
             <Image
               src={logoUrl}
@@ -74,24 +85,24 @@ function ConnectionHoverContent({connection}: {connection: ConnectionExpanded<'i
               className="object-contain"
             />
           ) : (
-            <div className="bg-primary/10 text-primary font-medium flex items-center justify-center rounded w-full h-full">
+            <div className="bg-primary/10 text-primary flex h-full w-full items-center justify-center rounded font-medium">
               {displayName.substring(0, 2).toUpperCase()}
             </div>
           )}
         </div>
         <div className="flex flex-col">
-          <div className="font-medium text-lg">{displayName}</div>
+          <div className="text-lg font-medium">{displayName}</div>
           {apiStatus && (
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-1.5 text-sm">
               <StatusDot status={uiStatus} />
               <span>{statusLabels[uiStatus]}</span>
             </div>
           )}
         </div>
       </div>
-      
+
       <Separator />
-      
+
       {/* Properties */}
       <div className="p-4">
         <PropertyListView properties={properties} />
@@ -169,7 +180,7 @@ export function ConnectionCard({
               </div>
             ) : (
               <>
-                <div className="bg-muted/30 border border-border/30 rounded-lg p-1.5 mb-2">
+                <div className="bg-muted/30 border-border/30 mb-2 rounded-lg border p-1.5">
                   {logoUrl ? (
                     <Image
                       src={logoUrl}
@@ -179,7 +190,7 @@ export function ConnectionCard({
                       className="object-contain"
                     />
                   ) : (
-                    <div className="bg-primary/10 text-primary font-medium flex items-center justify-center rounded-lg w-12 h-12">
+                    <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-lg font-medium">
                       {displayName.substring(0, 2).toUpperCase()}
                     </div>
                   )}

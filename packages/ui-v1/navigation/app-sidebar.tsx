@@ -1,7 +1,9 @@
 'use client'
 
+import type {IconName} from '../components'
+
 import Image from 'next/image'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import {usePathname} from 'next/navigation'
 import * as React from 'react'
 import {Button} from '@openint/shadcn/ui'
@@ -14,62 +16,23 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@openint/shadcn/ui/sidebar'
-import type {IconName} from '../components'
 import {Icon} from '../components'
 
-export const SIDEBAR_NAV_ITEMS = [
-  {
-    title: 'Dashboard',
-    url: '/console',
-    icon: 'Box',
-  },
-  {
-    title: 'Connect',
-    url: '/console/connect',
-    icon: 'Wand',
-  },
-  {
-    title: 'Connector Configs',
-    url: '/console/connector-config',
-    icon: 'Layers',
-  },
-  {
-    title: 'Events',
-    url: '/console/events',
-    icon: 'Database',
-  },
-  {
-    title: 'Customers',
-    url: '/console/customers',
-    icon: 'Users',
-  },
-  {
-    title: 'Connections',
-    url: '/console/connections',
-    icon: 'Box',
-  },
-  {
-    title: 'Settings',
-    url: '/console/settings',
-    icon: 'Settings',
-  },
-  {
-    title: 'API Docs',
-    url: 'https://docs.openint.dev',
-    icon: 'ExternalLink',
-  },
-] satisfies Array<{
-  title: string
-  url: `${string}`
-  icon: IconName
-}>
+export type AppSidebarProps = {
+  navItems: Array<{
+    title: string
+    /** These URLs should already be pre-resolved */
+    url: string
+    icon: IconName
+  }>
+  organizationSwitcher: React.ReactNode
+}
 
 export function AppSidebar({
   organizationSwitcher,
+  navItems,
   ...props
-}: React.ComponentProps<typeof Sidebar> & {
-  organizationSwitcher: React.ReactNode
-}) {
+}: React.ComponentProps<typeof Sidebar> & AppSidebarProps) {
   // In storybook, pathname would be undefined
   const pathname: string | undefined = usePathname()
   return (
@@ -77,7 +40,7 @@ export function AppSidebar({
       <SidebarHeader>{organizationSwitcher}</SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="mt-5">
-          {SIDEBAR_NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const isActive =
               pathname?.replace(/\/*$/, '') === item.url.replace(/\/*$/, '')
             return (
@@ -86,7 +49,7 @@ export function AppSidebar({
                   asChild
                   isActive={isActive}
                   className="w-full">
-                  <Link
+                  <NextLink
                     href={item.url}
                     className="flex w-full items-center px-4 py-2"
                     target={item.url.startsWith('http') ? '_blank' : undefined}>
@@ -94,7 +57,7 @@ export function AppSidebar({
                       <Icon name={item.icon} className="mr-3 h-5 w-5" />
                     )}
                     {item.title}
-                  </Link>
+                  </NextLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             )

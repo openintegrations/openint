@@ -1,10 +1,11 @@
+import type {Viewer} from '@openint/cdk'
+import type {DbOptions} from './db'
+
 import {drizzle as drizzlePg} from 'drizzle-orm/node-postgres'
 import {migrate} from 'drizzle-orm/node-postgres/migrator'
 import {drizzle as drizzlePgProxy} from 'drizzle-orm/pg-proxy'
 import {migrate as migratePgProxy} from 'drizzle-orm/pg-proxy/migrator'
 import {types as pgTypes, Pool} from 'pg'
-import type {Viewer} from '@openint/cdk'
-import type {DbOptions} from './db'
 import {dbFactory, getDrizzleConfig, getMigrationConfig} from './db'
 import {setTypeParsers} from './lib/type-parsers'
 import {rlsStatementsForViewer} from './schema/rls'
@@ -54,7 +55,7 @@ export function initDbPg(url: string, options: DbOptions = {}) {
     $asViewer: (viewer) => drizzleForViewer(pool, viewer, options),
     async $exec(query) {
       const res = await db.execute(query)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res as any[]}
     },
     async $migrate() {
@@ -87,7 +88,7 @@ export function initDbPgDirect(url: string, options: DbOptions = {}) {
   return dbFactory('pg-direct', db, {
     async $exec(query) {
       const res = await db.execute(query)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {rows: res.rows as any[]}
     },
     $migrate() {

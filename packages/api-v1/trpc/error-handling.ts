@@ -1,9 +1,10 @@
-import type {Z, zZodIssue} from '@openint/util/zod-utils'
 import type {
   DefaultErrorShape,
   ErrorFormatter,
   RouterCallerErrorHandler,
 } from '@trpc/server/unstable-core-do-not-import'
+import type {Z, zZodIssue} from '@openint/util/zod-utils'
+
 import {TRPCClientError} from '@trpc/client'
 import {TRPCError} from '@trpc/server'
 import {
@@ -159,7 +160,9 @@ export const onError: RouterCallerErrorHandler<RouterContextOnError> = ({
   // console.log('onError', {error, path, input, ctx, type})
   Object.assign(error, {path})
   // TODO: Better way to check if it's an input error
-  const isInputError = safeJSONParse(error.message) != null
+  const isInputError = z
+    .object({issues: zZodIssues})
+    .safeParse(safeJSONParse(error.message)).success
   if (isInputError) {
     Object.assign(error, {message: 'Input validation failed'})
   }

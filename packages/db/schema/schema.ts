@@ -1,3 +1,5 @@
+import type {ConnectorName} from '@openint/all-connectors/name'
+
 import {sql} from 'drizzle-orm'
 import {
   boolean,
@@ -12,7 +14,6 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
-import type {ConnectorName} from '@openint/all-connectors/name'
 
 export const orgRole = pgRole('org')
 export const customerRole = pgRole('customer')
@@ -70,48 +71,76 @@ export const connection = pgTable(
       .onDelete('restrict'),
     pgPolicy('org_member_access', {
       to: 'authenticated',
-      using: sql`(
-        connector_config_id IN (
-          SELECT connector_config.id
-          FROM public.connector_config
-          WHERE connector_config.org_id = public.jwt_org_id()
+      using: sql`
+        (
+          connector_config_id IN (
+            SELECT
+              connector_config.id
+            FROM
+              public.connector_config
+            WHERE
+              connector_config.org_id = public.jwt_org_id ()
+          )
         )
-      )`,
-      withCheck: sql`(
-        connector_config_id IN (
-          SELECT connector_config.id
-          FROM public.connector_config
-          WHERE connector_config.org_id = public.jwt_org_id()
+      `,
+      withCheck: sql`
+        (
+          connector_config_id IN (
+            SELECT
+              connector_config.id
+            FROM
+              public.connector_config
+            WHERE
+              connector_config.org_id = public.jwt_org_id ()
+          )
         )
-      )`,
+      `,
     }),
     pgPolicy('org_access', {
       to: 'org',
-      using: sql`(
-        connector_config_id IN (
-          SELECT connector_config.id
-          FROM public.connector_config
-          WHERE connector_config.org_id = public.jwt_org_id()
+      using: sql`
+        (
+          connector_config_id IN (
+            SELECT
+              connector_config.id
+            FROM
+              public.connector_config
+            WHERE
+              connector_config.org_id = public.jwt_org_id ()
+          )
         )
-      )`,
-      withCheck: sql`(
-        connector_config_id IN (
-          SELECT connector_config.id
-          FROM public.connector_config
-          WHERE connector_config.org_id = public.jwt_org_id()
+      `,
+      withCheck: sql`
+        (
+          connector_config_id IN (
+            SELECT
+              connector_config.id
+            FROM
+              public.connector_config
+            WHERE
+              connector_config.org_id = public.jwt_org_id ()
+          )
         )
-      )`,
+      `,
     }),
     pgPolicy('customer_access', {
       to: 'customer',
-      using: sql`(
-        connector_config_id IN (
-          SELECT connector_config.id
-          FROM public.connector_config
-          WHERE connector_config.org_id = public.jwt_org_id()
+      using: sql`
+        (
+          connector_config_id IN (
+            SELECT
+              connector_config.id
+            FROM
+              public.connector_config
+            WHERE
+              connector_config.org_id = public.jwt_org_id ()
+          )
+          AND customer_id = (
+            SELECT
+              public.jwt_customer_id ()
+          )
         )
-        AND customer_id = (SELECT public.jwt_customer_id())
-      )`,
+      `,
     }),
   ],
 )
@@ -165,61 +194,94 @@ export const pipeline = pgTable(
       .onDelete('cascade'),
     pgPolicy('customer_access', {
       to: 'customer',
-      using: sql`(
-        SELECT array(
-          SELECT id
-          FROM connection
-          WHERE
-            connector_config_id = ANY(
-              SELECT id
-              FROM connector_config
-              WHERE org_id = jwt_org_id()
-            )
-            AND customer_id = (SELECT jwt_customer_id())
-        ) && array[pipeline.source_id, pipeline.destination_id]
-      )`,
+      using: sql`
+        (
+          SELECT
+            array(
+              SELECT
+                id
+              FROM
+                connection
+              WHERE
+                connector_config_id = ANY (
+                  SELECT
+                    id
+                  FROM
+                    connector_config
+                  WHERE
+                    org_id = jwt_org_id ()
+                )
+                AND customer_id = (
+                  SELECT
+                    jwt_customer_id ()
+                )
+            ) && ARRAY[pipeline.source_id, pipeline.destination_id]
+        )
+      `,
     }),
     pgPolicy('org_access', {
       to: 'org',
-      using: sql`(
-        SELECT array(
-          SELECT r.id
-          FROM resource r
-          JOIN connector_config cc on r.connector_config_id = cc.id
-          WHERE cc.org_id = jwt_org_id()
-        ) && array[source_id, destination_id]
-        -- && and @> is the same, however we are using && to stay consistent with end user policy
-      )`,
-      withCheck: sql`(
-        select array(
-          select r.id
-          from resource r
-          join connector_config cc on r.connector_config_id = cc.id
-          where cc.org_id = jwt_org_id()
-        ) @> array[source_id, destination_id]
-        -- Pipeline must be fully within the org
-      )`,
+      using: sql`
+        (
+          SELECT
+            array(
+              SELECT
+                r.id
+              FROM
+                resource r
+                JOIN connector_config cc ON r.connector_config_id = cc.id
+              WHERE
+                cc.org_id = jwt_org_id ()
+            ) && ARRAY[source_id, destination_id]
+            -- && and @> is the same, however we are using && to stay consistent with end user policy
+        )
+      `,
+      withCheck: sql`
+        (
+          SELECT
+            array(
+              SELECT
+                r.id
+              FROM
+                resource r
+                JOIN connector_config cc ON r.connector_config_id = cc.id
+              WHERE
+                cc.org_id = jwt_org_id ()
+            ) @> ARRAY[source_id, destination_id]
+            -- Pipeline must be fully within the org
+        )
+      `,
     }),
     pgPolicy('org_member_access', {
       to: 'authenticated',
-      using: sql`(
-        array(
-          select r.id
-          from resource r
-          join connector_config cc on cc.id = r.connector_config_id
-          where cc.org_id = jwt_org_id()
-        ) && array[source_id, destination_id]
-        -- && and @> is the same, however we are using && to stay consistent with end user policy
-      )`,
-      withCheck: sql`(
-        array(
-          select r.id
-          from resource r
-          join connector_config cc on cc.id = r.connector_config_id
-          where cc.org_id = jwt_org_id()
-        ) @> array[source_id, destination_id]
-        -- User must have access to both the source & destination resources
-      )`,
+      using: sql`
+        (
+          array(
+            SELECT
+              r.id
+            FROM
+              resource r
+              JOIN connector_config cc ON cc.id = r.connector_config_id
+            WHERE
+              cc.org_id = jwt_org_id ()
+          ) && ARRAY[source_id, destination_id]
+          -- && and @> is the same, however we are using && to stay consistent with end user policy
+        )
+      `,
+      withCheck: sql`
+        (
+          array(
+            SELECT
+              r.id
+            FROM
+              resource r
+              JOIN connector_config cc ON cc.id = r.connector_config_id
+            WHERE
+              cc.org_id = jwt_org_id ()
+          ) @> ARRAY[source_id, destination_id]
+          -- User must have access to both the source & destination resources
+        )
+      `,
     }),
   ],
 )
@@ -253,13 +315,13 @@ export const integration = pgTable(
     // -- It's not YET an issue because we are not issuing any org-role tokens at the moment
     pgPolicy('org_write_access', {
       to: 'public',
-      using: sql`true`,
-      withCheck: sql`true`,
+      using: sql`TRUE`,
+      withCheck: sql`TRUE`,
     }),
     pgPolicy('public_readonly_access', {
       for: 'select',
       to: 'public',
-      using: sql`true`,
+      using: sql`TRUE`,
     }),
   ],
 )
@@ -291,12 +353,12 @@ export const connector_config = pgTable(
     disabled: boolean().default(false),
     default_pipe_out: jsonb().$type<any>(),
     default_pipe_in: jsonb().$type<any>(),
-    default_pipe_out_destination_id: varchar().generatedAlwaysAs(
-      sql`(default_pipe_out ->> 'destination_id'::text)`,
-    ),
-    default_pipe_in_source_id: varchar().generatedAlwaysAs(
-      sql`(default_pipe_in ->> 'source_id'::text)`,
-    ),
+    default_pipe_out_destination_id: varchar().generatedAlwaysAs(sql`
+      (default_pipe_out ->> 'destination_id'::text)
+    `),
+    default_pipe_in_source_id: varchar().generatedAlwaysAs(sql`
+      (default_pipe_in ->> 'source_id'::text)
+    `),
     metadata: jsonb().$type<any>(),
   },
   (table) => [
@@ -321,17 +383,17 @@ export const connector_config = pgTable(
     check('connector_config_id_prefix_check', sql`starts_with(id, 'ccfg_')`),
     pgPolicy('org_access', {
       to: 'org',
-      using: sql`org_id = jwt_org_id()`,
-      withCheck: sql`org_id = jwt_org_id()`,
+      using: sql`org_id = jwt_org_id ()`,
+      withCheck: sql`org_id = jwt_org_id ()`,
     }),
     pgPolicy('customer_access', {
       to: 'customer',
-      using: sql`org_id = public.jwt_org_id()`,
+      using: sql`org_id = public.jwt_org_id ()`,
     }),
     pgPolicy('org_member_access', {
       to: 'authenticated',
-      using: sql`org_id = public.jwt_org_id()`,
-      withCheck: sql`org_id = public.jwt_org_id()`,
+      using: sql`org_id = public.jwt_org_id ()`,
+      withCheck: sql`org_id = public.jwt_org_id ()`,
     }),
   ],
 )
@@ -357,11 +419,11 @@ export const event = pgTable(
      * Will be used for RLS policies
      * Slightly inconsistent given that user_id and customer_id are not abbreviated
      */
-    org_id: varchar().generatedAlwaysAs(sql`"user"->>'org_id'`), // organization_id
-    user_id: varchar().generatedAlwaysAs(sql`"user"->>'user_id'`), // user_id
+    org_id: varchar().generatedAlwaysAs(sql`"user" ->> 'org_id'`), // organization_id
+    user_id: varchar().generatedAlwaysAs(sql`"user" ->> 'user_id'`), // user_id
     customer_id: varchar().generatedAlwaysAs(
       // TODO: remove this once we have a migration to fix the data
-      sql`COALESCE("user"->>'cus_id', "user"->>'customer_id')`,
+      sql`COALESCE("user" ->> 'cus_id', "user" ->> 'customer_id')`,
     ), // customer_id
   },
   (table) => [
@@ -373,32 +435,32 @@ export const event = pgTable(
     pgPolicy('org_read', {
       to: 'org',
       for: 'select',
-      using: sql`org_id = jwt_org_id()`,
+      using: sql`org_id = jwt_org_id ()`,
     }),
     pgPolicy('org_member_read', {
       to: 'authenticated',
       for: 'select',
-      using: sql`org_id = public.jwt_org_id()`,
+      using: sql`org_id = public.jwt_org_id ()`,
     }),
     pgPolicy('customer_read', {
       to: 'customer',
       for: 'select',
-      using: sql`org_id = public.jwt_org_id()`,
+      using: sql`org_id = public.jwt_org_id ()`,
     }),
     pgPolicy('org_append', {
       to: 'org',
       for: 'insert',
-      withCheck: sql`org_id = jwt_org_id()`,
+      withCheck: sql`org_id = jwt_org_id ()`,
     }),
     pgPolicy('org_member_append', {
       to: 'authenticated',
       for: 'insert',
-      withCheck: sql`org_id = public.jwt_org_id()`,
+      withCheck: sql`org_id = public.jwt_org_id ()`,
     }),
     pgPolicy('customer_append', {
       to: 'customer',
       for: 'insert',
-      withCheck: sql`org_id = public.jwt_org_id()`,
+      withCheck: sql`org_id = public.jwt_org_id ()`,
     }),
   ],
 )
@@ -425,12 +487,12 @@ export const organization = pgTable(
     pgPolicy('org_read', {
       to: 'org',
       for: 'select',
-      using: sql`id = jwt_org_id()`,
+      using: sql`id = jwt_org_id ()`,
     }),
     pgPolicy('org_member_read', {
       to: 'authenticated',
       for: 'select',
-      using: sql`id = jwt_org_id()`,
+      using: sql`id = jwt_org_id ()`,
     }),
   ],
 )
@@ -454,17 +516,20 @@ export const customer = pgTable(
     primaryKey({columns: [t.org_id, t.id]}),
     pgPolicy('org_access', {
       to: 'org',
-      using: sql`org_id = jwt_org_id()`,
-      withCheck: sql`org_id = jwt_org_id()`,
+      using: sql`org_id = jwt_org_id ()`,
+      withCheck: sql`org_id = jwt_org_id ()`,
     }),
     pgPolicy('org_member_access', {
       to: 'authenticated',
-      using: sql`org_id = jwt_org_id()`,
-      withCheck: sql`org_id = jwt_org_id()`,
+      using: sql`org_id = jwt_org_id ()`,
+      withCheck: sql`org_id = jwt_org_id ()`,
     }),
     pgPolicy('customer_read', {
       to: 'customer',
-      using: sql`org_id = jwt_org_id() AND id = jwt_customer_id()`,
+      using: sql`
+        org_id = jwt_org_id ()
+        AND id = jwt_customer_id ()
+      `,
     }),
   ],
 )

@@ -193,13 +193,12 @@ export function CopyID({
             <Icon name={copied ? 'Check' : 'Copy'} size={getIconSize()} />
           </button>
 
-          {/* Custom tooltip that's more reliable with popovers */}
           {showTooltip && (
-            <div className="absolute bottom-full left-1/2 mb-1.5 -translate-x-1/2 transform">
-              <div className="bg-primary rounded px-2 py-1 text-xs text-white shadow-sm">
+            <div className="absolute bottom-full right-0 mb-1.5">
+              <div className="bg-primary whitespace-nowrap rounded px-2 py-1 text-xs text-white shadow-sm">
                 {copied ? tooltipCopiedText : tooltipDefaultText}
               </div>
-              <div className="bg-primary absolute left-1/2 top-full -mt-[2px] h-2 w-2 -translate-x-1/2 rotate-45 transform"></div>
+              <div className="bg-primary absolute right-[10px] top-full -mt-[2px] h-2 w-2 rotate-45 transform"></div>
             </div>
           )}
         </div>

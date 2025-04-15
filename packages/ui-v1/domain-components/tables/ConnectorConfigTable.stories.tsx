@@ -1,10 +1,8 @@
 import type {Meta, StoryObj} from '@storybook/react'
-import {Core} from '@openint/api-v1/models'
-import {
-  ColumnDef,
-  DataTable,
-  useDataTableContext,
-} from '../../components/DataTable'
+import type {Core} from '@openint/api-v1/models'
+import type {ColumnDef} from '../../components/DataTable'
+
+import {DataTable, useDataTableContext} from '../../components/DataTable'
 import {
   MultiSelectActionBar,
   useTableRowSelection,
@@ -13,7 +11,7 @@ import {columns, ConnectorConfigTable} from './ConnectorConfigTable'
 import {ConnectorConfigTableCell} from './ConnectorConfigTableCell'
 
 // Sample data for the connector config table
-const connectorConfigs: Core['connector_config_select'][] = [
+const connectorConfigs: Array<Core['connector_config_select']> = [
   {
     id: '101',
     display_name: 'Salesforce',
@@ -96,15 +94,15 @@ type Story = StoryObj<
 >
 
 type StoryArgs = {
-  data: Core['connector_config_select'][]
-  columns: ColumnDef<Core['connector_config_select'], unknown>[]
+  data: Array<Core['connector_config_select']>
+  columns: Array<ColumnDef<Core['connector_config_select']>>
   enableSelect?: boolean
 }
 
 export const Default: Story = {
   args: {
     data: connectorConfigs,
-    columns: columns,
+    columns,
   },
   render: (args: StoryArgs) => (
     <div className="overflow-hidden rounded-lg border shadow-sm">
@@ -129,7 +127,7 @@ const SelectionActionsBar = () => {
   // Handle row deletion (would be connected to API in real application)
   const handleDeleteRows = (
     _selectedRows: Record<string, boolean>,
-    selectedItems: Core['connector_config_select'][],
+    selectedItems: Array<Core['connector_config_select']>,
   ) => {
     console.log('Deleting connector configs:', selectedItems)
     alert(
@@ -157,7 +155,7 @@ const SelectionActionsBar = () => {
 export const WithRowSelection: Story = {
   args: {
     data: connectorConfigs,
-    columns: columns,
+    columns,
     enableSelect: true,
   },
   render: (args: StoryArgs) => (
@@ -178,7 +176,7 @@ export const WithRowSelection: Story = {
 }
 
 // Define compact cell columns for the connector config table
-const compactColumns: Array<ColumnDef<Core['connector_config_select'], unknown>> = [
+const compactColumns: Array<ColumnDef<Core['connector_config_select']>> = [
   {
     id: 'connectorConfig',
     header: 'Connector Config',

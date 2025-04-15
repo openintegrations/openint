@@ -1,5 +1,6 @@
 import type * as plaid from 'plaid'
 import type {PlaidAccount as PlaidLinkAccount} from 'react-plaid-link'
+
 import {A} from '@openint/util/amount-utils'
 import {normalizeError} from '@openint/util/error-utils'
 
@@ -60,7 +61,6 @@ export function getPlaidAccountShortName(
   // name: FIRST LAST -01006
   // official_name: Hilton Honors Business Card
   if (institution?.institution_id === 'ins_10') {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return a.official_name || a.name || ''
   }
 
@@ -71,7 +71,7 @@ export function getPlaidAccountShortName(
 
   // For Mercury, `.name` can equal to `Pilot` while official_name is always
   // `Mercury Checking` causing conflict.
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
   return a.name || a.official_name || ''
 }
 
@@ -99,8 +99,7 @@ export function getPlaidAccountBalance(
   const unit = account.balances?.['iso_currency_code'] as string | null
 
   return account.balances?.[type] != null && unit != null
-    ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      A(account.balances[type]! * (inverseSign ? -1 : 1), unit)
+    ? A(account.balances[type] * (inverseSign ? -1 : 1), unit)
     : null
 }
 
@@ -114,9 +113,7 @@ export function plaidUnitForCurrency(input: {
   iso_currency_code: string | null
   unofficial_currency_code: string | null
 }) {
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   return (input.iso_currency_code ||
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     input.unofficial_currency_code ||
     '') as Unit
 }
@@ -127,7 +124,7 @@ export function plaidMapHolding(
   if (h.quantity == null || !h.security) {
     return null
   }
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
   const curr = h.iso_currency_code || h.unofficial_currency_code || ''
   const amount = (() => {
     switch (h.security.type) {

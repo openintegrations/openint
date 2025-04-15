@@ -35,7 +35,7 @@ export function renderTemplateObject<
     )
 
     // Parse back to object
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
     return JSON.parse(processedString) as U
   } catch (error) {
     if (error instanceof Error && error.message.includes('Template variable')) {

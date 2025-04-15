@@ -7,6 +7,7 @@
     "build:migration": "pnpm --dir ../../ migrate",
     "build:next": "next build",
     "dev": "next dev -p 4000 --turbopack",
+    "generate:typed-routes": "TYPED_ROUTES=true next dev",
     "start": "next start"
   },
   "dependencies": {
@@ -33,7 +34,10 @@
     "posthog-js": "^1.166.1",
     "posthog-node": "2.5.4",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "@trpc/client": "^11.0.1",
+    "@trpc/tanstack-react-query": "11.0.1",
+    "@tanstack/react-query": "^5.74.0"
   },
   "devDependencies": {
     "@sentry/cli": "^2.36.6",

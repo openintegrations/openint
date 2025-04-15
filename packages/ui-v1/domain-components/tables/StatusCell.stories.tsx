@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {StatusCell} from './StatusCell'
 
 const meta: Meta<typeof StatusCell> = {

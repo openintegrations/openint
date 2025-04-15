@@ -1,8 +1,8 @@
 import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import Openint from '@openint/sdk'
-import {createApp} from '../app'
 import {makeUlid} from '@openint/util/id-utils'
+import {createApp} from '../app'
 
 describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   const app = createApp({db})
@@ -16,7 +16,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true}, (db) => {
   const customerId = 'cus_123'
 
   const apiKeyClient = new Openint({
-    apiKey: apiKey,
+    apiKey,
     baseURL: 'http://localhost/v1',
     fetch: appFetch,
   })

@@ -1,10 +1,11 @@
-import type {CreateFetchHandlerOptions} from './handlers'
+import type {CreateFetchHandlerOptions} from './trpc/handlers'
+
 import {swagger} from '@elysiajs/swagger'
 import {Elysia} from 'elysia'
 import {initDbNeon} from '@openint/db/db.neon'
 import {env, envRequired, getBaseURLs} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
-import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './handlers'
+import {createFetchHandlerOpenAPI, createFetchHandlerTRPC} from './trpc/handlers'
 import {handleRefreshStaleConnections} from './jobs/refreshStaleConnections'
 import {generateOpenAPISpec} from './trpc/generateOpenAPISpec'
 
@@ -19,6 +20,7 @@ export function createApp(opts: CreateAppOptions) {
     .post('/health', (ctx) => ({healthy: true, body: ctx.body}), {
       detail: {hide: true},
     })
+    // TODO: Should this be made singular given that's what we do for all?
     .get('/jobs/refresh-stale-connections', handleRefreshStaleConnections, {
       detail: {hide: true},
     })
@@ -41,6 +43,7 @@ export function createApp(opts: CreateAppOptions) {
     .all('/v1/*', ({request}) =>
       createFetchHandlerOpenAPI({...opts, endpoint: '/v1'})(request),
     )
+
     // For testing purposes only
     .group('/acme-oauth2', (group) =>
       group.use(

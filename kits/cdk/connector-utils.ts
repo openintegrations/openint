@@ -1,7 +1,8 @@
-import {zodToOas31Schema} from '@openint/util/schema'
 import type {Z} from '@openint/util/zod-utils'
-import {z, zCast} from '@openint/util/zod-utils'
 import type {ConnectorSchemas} from './connector.types'
+
+import {zodToOas31Schema} from '@openint/util/schema'
+import {z, zCast} from '@openint/util/zod-utils'
 
 export const _zOauthConfig = z.object({
   clientId: z.string(),
@@ -22,7 +23,6 @@ export const zCcfgAuth = {
   }),
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 /**  ReturnType<typeof zodToOas31Schema> | JSONSchema7Definition */
 export type JSONSchema = {}
 

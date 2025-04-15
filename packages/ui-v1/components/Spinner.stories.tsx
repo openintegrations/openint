@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react'
+
 import {Loader2} from 'lucide-react'
 
 export function Spinner() {

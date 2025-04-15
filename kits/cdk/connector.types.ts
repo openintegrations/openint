@@ -4,7 +4,6 @@ import type {
   ConnectionUpdateData,
   SyncOperation,
 } from '@openint/sync'
-import {R} from '@openint/util/remeda'
 import type {MaybePromise} from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
 import type {
@@ -18,9 +17,11 @@ import type {
   WebhookReturnType,
 } from './connector-meta.types'
 import type {Id} from './id.types'
-import {makeId} from './id.types'
 import type {VerticalKey} from './verticals'
 import type {ZStandard} from './zStandard'
+
+import {R} from '@openint/util/remeda'
+import {makeId} from './id.types'
 
 /**
  * Equivalent to to airbyte's low code connector spec,
@@ -176,7 +177,7 @@ export interface ConnectorServer<
   // Need to add a input schema for each provider to verify the shape of the received
   // webhook requests...
 
-  /** @deprecated */
+  /** @deprecated. Should just be Request -> Response probably? */
   handleWebhook?: (opts: {
     webhookInput: T['_types']['webhook_input']
     config: T['_types']['connector_config']
