@@ -165,7 +165,7 @@ export function DataTableTable(props: {className?: string}) {
     useDataTableContext()
 
   return (
-    <div className={cn('rounded-md border', props.className)}>
+    <div className={cn('overflow-hidden rounded-md border', props.className)}>
       <Table className="w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
