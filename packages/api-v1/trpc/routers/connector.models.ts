@@ -71,10 +71,7 @@ export const getConnectorModel = (
     // authType: def.metadata?.authType,
 
     // hasPreConnect: def.preConnect != null,
-    // hasUseConnectHook: def.useConnectHook != null,
-    // TODO: Maybe nangoProvider be more explicit as a base provider?
-    // hasPostConnect: def.postConnect != null || def.metadata?.nangoProvider,
-    // nangoProvider: def.metadata?.nangoProvider,
+    // hasUseConnectHook: def.useConnectHook != null
     schemas: opts.includeSchemas
       ? jsonSchemasByConnectorName[def.name as ConnectorName]
       : undefined,
