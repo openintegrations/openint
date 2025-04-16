@@ -1,17 +1,5 @@
-'use client'
+import type {Meta, StoryObj} from '@storybook/react'
 
-// Error boundaries must be Client Components
-
-// We error.tsx instead of global-errors.tsx
-// because we dont' want to have to separately render a html element
-// as global-error bypasses root layout
-// Also global error does not have a reset function
-// but it does show issues right away on page load, while individual error.tsx
-// does not show issues right away on page load but it is acessible in the bottom
-// left corner of the screen instead.
-import * as Sentry from '@sentry/nextjs'
-import React from 'react'
-import {formatError, parseError} from '@openint/events/errors'
 import {
   Accordion,
   AccordionContent,
@@ -19,44 +7,24 @@ import {
   AccordionTrigger,
   Button,
 } from '@openint/shadcn/ui'
-import {CopyID, FullScreenCenter, Icon} from '@openint/ui-v1'
+import {CopyID} from '../components/CopyID'
+import {FullScreenCenter} from '../components/FullScreenCenter'
+import {Icon} from '../components/Icon'
 
-export type PageError = Error & {
-  /**
-   * Name of the original error prior to serialization
-   * e.g. 'ZodError' or 'TRPCError'
-   */
+// Import the types from the error page
+type PageError = Error & {
   name: string
-  /**
-   * Errors forwarded from Client Components show the original Error message.
-   * Errors forwarded from Server Components show a generic message with an identifier.
-   * This is to prevent leaking sensitive details. You can use the identifier,
-   * under errors.digest, to match the corresponding server-side logs.
-   */
   message: string
   digest?: string
-
-  /** Undocumented property. Usually 'Server' | 'Client' */
   environmentName?: string
 }
 
-/** @see https://nextjs.org/docs/app/api-reference/file-conventions/error#props */
-export interface PageErrorProps {
+interface ErrorPageProps {
   error: PageError
-  /**
-   * The cause of an error can sometimes be temporary. In these cases, trying again
-   * might resolve the issue.
-   * An error component can use the reset() function to prompt the user to attempt
-   * to recover from the error. When executed, the function will try to re-render
-   * the error boundary's contents. If successful, the fallback error component is
-   * replaced with the result of the re-render.
-   *
-   * Empirically, this does not always exist. In particular it does not seem to exist
-   * inside global-error.tsx.
-   */
   reset?: () => void
 }
 
+// Recreate the WarningIcon component
 const WarningIcon = () => (
   <div className="mb-3">
     <svg
@@ -77,21 +45,18 @@ const WarningIcon = () => (
   </div>
 )
 
-/** @see https://nextjs.org/docs/app/api-reference/file-conventions/error */
-export default function DefaultPageError({error, reset}: PageErrorProps) {
-  React.useEffect(() => {
-    Sentry.captureException(error)
-  }, [error])
+// Recreate a simple version of the error page for Storybook
+// This avoids import issues with the Next.js app directory
+function ErrorPageStory({error, reset}: ErrorPageProps) {
+  // Simple formatter for the demo
+  const formatError = (err: PageError) => {
+    if (err.name === 'ZodError') return 'Search params not matching schema'
+    if (err.name === 'TRPCError') return 'Server error'
+    return err.message || 'An unknown error has occurred'
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  ;(window as any).error = error
-  const err = parseError(error)
-  ;(window as any).err = err
-
-  // Use the formatError function to get the properly formatted error message
-  const formattedError = formatError(err)
-
-  const errorId = `${err.environmentName || 'Client'}:${error.digest || 'unknown'}`
+  const formattedError = formatError(error)
+  const errorId = `${error.environmentName || 'Client'}:${error.digest || 'unknown'}`
 
   return (
     <FullScreenCenter className="justify-start pt-12">
@@ -137,7 +102,7 @@ export default function DefaultPageError({error, reset}: PageErrorProps) {
                 <div className="bg-secondary-foreground overflow-hidden rounded-md shadow-inner">
                   <div className="p-4 text-sm">
                     <div className="text-background whitespace-pre-wrap break-words font-mono">
-                      {JSON.stringify(err, null, 2)}
+                      {JSON.stringify(error, null, 2)}
                     </div>
                   </div>
                 </div>
@@ -148,4 +113,81 @@ export default function DefaultPageError({error, reset}: PageErrorProps) {
       </div>
     </FullScreenCenter>
   )
+}
+
+// Storybook configuration
+const meta: Meta<typeof ErrorPageStory> = {
+  title: 'Pages/ErrorPage',
+  component: ErrorPageStory,
+  parameters: {
+    layout: 'fullscreen',
+  },
+}
+
+export default meta
+type Story = StoryObj<typeof ErrorPageStory>
+
+/**
+ * An example of a validation error with a reset button.
+ */
+export const ValidationError: Story = {
+  args: {
+    error: {
+      name: 'ZodError',
+      message: 'Search params not matching schema',
+      environmentName: 'Client',
+      digest: '1214259461',
+    },
+    reset: () => {
+      alert('Reset clicked')
+    },
+  },
+}
+
+/**
+ * An example of a server-side error without a reset button.
+ */
+export const ServerError: Story = {
+  args: {
+    error: {
+      name: 'TRPCError',
+      message: 'Internal Server Error',
+      environmentName: 'Server',
+      digest: '4059953678',
+    },
+  },
+}
+
+/**
+ * An example of a runtime JavaScript error.
+ */
+export const RuntimeError: Story = {
+  args: {
+    error: {
+      name: 'TypeError',
+      message: "Cannot read properties of undefined (reading '_def')",
+      environmentName: 'Client',
+      digest: '1214259461',
+    },
+    reset: () => {
+      alert('Reset clicked')
+    },
+  },
+}
+
+/**
+ * An example of a network error.
+ */
+export const NetworkError: Story = {
+  args: {
+    error: {
+      name: 'Error',
+      message: 'Failed to fetch data: Network error',
+      environmentName: 'Client',
+      digest: '3384772109',
+    },
+    reset: () => {
+      alert('Reset clicked')
+    },
+  },
 }
