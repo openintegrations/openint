@@ -399,7 +399,8 @@ export default {
       logoUrl: '/_assets/logo-plaid.svg',
     },
   },
-  postgres: {
+  // TODO: If postgres is not supported, remove it?
+  /*   postgres: {
     hasClient: false,
     hasServer: true,
     metadata: {
@@ -407,7 +408,7 @@ export default {
       logoUrl: '/_assets/logo-postgres.svg',
       stage: 'ga',
     },
-  },
+  }, */
   quickbooks: {
     hasClient: false,
     hasServer: false,

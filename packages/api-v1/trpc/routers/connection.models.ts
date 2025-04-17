@@ -55,6 +55,27 @@ export const zConnectionExpanded = z
 // }
 export type ConnectionExpanded = Z.infer<typeof zConnectionExpanded>
 
+const defaultValueLookup: Record<string, unknown> = {
+  oauth: {},
+}
+const insertValueToObject = (
+  obj: Record<string, unknown> | undefined,
+  path: Array<string | number>,
+  value: string,
+) => {
+  let current = obj ?? {}
+  path.forEach((key, index) => {
+    if (index === path.length - 1) {
+      current[key] = value
+    } else {
+      if (!current[key]) {
+        current[key] = {}
+      }
+      current = current[key] as Record<string, unknown>
+    }
+  })
+}
+
 /**
  * Formats a connection for API responses
  */
@@ -97,6 +118,33 @@ export async function formatConnection(
   // } else if (include_secrets === 'all') {
   //   settingsToInclude = {settings: connection.settings}
   // }
+  const fullConnection = {...connection}
+  try {
+    zConnectionExpanded.parse(connection)
+  } catch (err) {
+    const extras = connection.settings.extra?.tokenInfo ?? {}
+    const scopeSeparator =
+      'jsonDef' in connector.metadata
+        ? connector.metadata.jsonDef.auth.scope_separator
+        : ''
+    const credentials = connection.settings.oauth?.credentials ?? {}
+
+    if (err instanceof z.ZodError) {
+      const errorPaths = err.issues.map((issue) => issue.path)
+      errorPaths.forEach((path) => {
+        const key = path[path.length - 1] as string
+        const extrasValue =
+          key === 'scope' ? extras.scopes?.join(scopeSeparator) : extras[key]
+        const valueToInsert =
+          extrasValue ||
+          credentials?.[key] ||
+          credentials?.raw?.[key] ||
+          defaultValueLookup[key] ||
+          ''
+        insertValueToObject(fullConnection, path, valueToInsert)
+      })
+    }
+  }
 
   let expandedFields = {}
   if (expand.includes('connector')) {
@@ -108,7 +156,7 @@ export async function formatConnection(
   }
 
   return {
-    ...connection,
+    ...fullConnection,
     // ...settingsToInclude, // buggy, fix me
     ...expandedFields,
   }
