@@ -60,10 +60,19 @@ export function ConnectionsPage() {
   const [selectedConnection, setSelectedConnection] = useState<
     Core['connection_select'] | null
   >(null)
+  const [pageIndex, setPageIndex] = useState(0)
 
   const connectionData = useSuspenseQuery(
-    trpc.listConnections.queryOptions({expand: ['connector']}),
+    trpc.listConnections.queryOptions({
+      expand: ['connector'],
+      limit: 10,
+      offset: pageIndex * 10,
+    }),
   )
+
+  const handlePageChange = (newPageIndex: number) => {
+    setPageIndex(newPageIndex)
+  }
 
   const deleteConn = useMutation(
     trpc.deleteConnection.mutationOptions({
@@ -107,9 +116,11 @@ export function ConnectionsPage() {
     <>
       <div>
         <DataTable<ConnectionExpanded, string | number | string[]>
-          data={connectionData.data.items}
+          data={connectionData.data}
           columns={columnsWithActions}
-          onRowClick={handleRowClick}>
+          onRowClick={handleRowClick}
+          onPageChange={handlePageChange}
+          isLoading={connectionData.isFetching || connectionData.isLoading}>
           <DataTable.Header>
             <DataTable.SearchInput />
             <DataTable.ColumnVisibilityToggle />
