@@ -70,11 +70,20 @@ const columns: Array<
 
 export function CustomersTable({
   data,
+  onPageChange,
+  isLoading,
 }: {
-  data: AppRouterOutput['listCustomers']['items']
+  data: AppRouterOutput['listCustomers']
+  onPageChange: (pageIndex: number) => void
+  isLoading: boolean
 }) {
   return (
-    <DataTable data={data} columns={columns} enableSelect={false}>
+    <DataTable
+      data={data}
+      columns={columns}
+      enableSelect={false}
+      onPageChange={onPageChange}
+      isLoading={isLoading}>
       <DataTable.Header>
         <DataTable.SearchInput />
         <DataTable.ColumnVisibilityToggle />
