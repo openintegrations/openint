@@ -1,13 +1,12 @@
 import type {PageProps} from '@/lib-common/next-utils'
 
-import {currentViewer} from '@/lib-server/auth.server'
-import {createAPICaller} from '@/lib-server/globals'
+import {getServerComponentContext} from '@/lib-server/trpc.server'
 import {SettingsContent} from './page.client'
 
 export default async function SettingsPage(props: PageProps) {
-  const {viewer} = await currentViewer(props)
-  const api = createAPICaller(viewer)
-  const org = await api.getOrganization()
+  const {viewer, queryClient, trpc} = await getServerComponentContext(props)
+
+  const org = await queryClient.fetchQuery(trpc.getOrganization.queryOptions())
 
   return (
     <SettingsContent

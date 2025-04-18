@@ -35,9 +35,9 @@ export function SettingsContent({
   return (
     <div className="p-6">
       <h2 className="mb-4 text-2xl font-bold tracking-tight">Settings</h2>
-      <p className="mb-4 font-bold">
+      <div className="mb-4 font-bold">
         <SecureInput label="Organization Id" value={orgId} showValue={true} />
-      </p>
+      </div>
 
       <div className="mt-4 flex items-center">
         <SecureInput label="API Key" readOnly value={apiKey} />

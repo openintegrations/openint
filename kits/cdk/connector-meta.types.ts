@@ -51,9 +51,6 @@ export interface ConnectorMetadata {
     original?: OpenApiSpec
   }
 
-  /** Whether this is an oauth integration? */
-  nangoProvider?: string
-
   /* Native oauth type */
   authType?: AuthType
 
