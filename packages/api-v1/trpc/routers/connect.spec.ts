@@ -1,6 +1,7 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
 
+import {modifyRequest} from '@opensdks/fetch-links'
 import Elysia from 'elysia'
 import {oauth2Schemas} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
@@ -32,6 +33,7 @@ const configOauth = {
   client_id: 'client_222',
   client_secret: 'xxx',
   scopes: ['scope1', 'scope2'],
+  redirect_uri: 'https://openint.mydomain.com/connect/callback',
 
   // should contain whether server requires pkce
 } satisfies Z.infer<typeof oauth2Schemas.connector_config>['oauth']
@@ -42,7 +44,7 @@ const _oauth2Server = createOAuth2Server({
       id: configOauth.client_id,
       name: configOauth.client_id,
       secret: configOauth.client_secret,
-      redirectUris: [env.OAUTH_REDIRECT_URI_GATEWAY],
+      redirectUris: [env.OAUTH_REDIRECT_URI_GATEWAY, configOauth.redirect_uri],
       allowedGrants: [
         'authorization_code',
         'refresh_token',
@@ -113,7 +115,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           pre_connect_input: {},
         },
       })
-      return oauth2Schemas.connect_input.parse(res.connect_input)
+      const parsed = oauth2Schemas.connect_input.parse(res.connect_input)
+      const authorizationUrl = new URL(parsed.authorization_url)
+      expect(authorizationUrl.searchParams.get('redirect_uri')).toEqual(
+        configOauth.redirect_uri,
+      )
+      return parsed
     })
 
     const connectRes = $test('connect get 302 redirect', async () => {
@@ -124,18 +131,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(response.status).toBe(302)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const url = new URL(response.headers.get('Location')!)
-      expect(url.pathname).toContain('/callback')
+      expect(url.toString()).toContain(configOauth.redirect_uri)
 
-      return z
-        .object({
-          code: z.string(),
-          state: z.string(),
-          code_verifier: z.string().optional(),
-        })
-        .parse({
-          ...urlSearchParamsToJson(url.searchParams),
-          code_verifier: preConnectRes.current.code_verifier,
-        })
+      return oauth2Schemas.connect_output.parse({
+        ...urlSearchParamsToJson(url.searchParams),
+        code_verifier: preConnectRes.current.code_verifier,
+      })
     })
 
     const postConnectRes = $test('postConnect', async () => {

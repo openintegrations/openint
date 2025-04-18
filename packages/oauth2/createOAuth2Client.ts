@@ -172,13 +172,13 @@ export function createOAuth2Client(
   const exchangeCodeForToken = zFunction(
     z.object({
       code: z.string(),
-      redirectUri: z.string(),
+      redirect_uri: z.string(),
       code_verifier: z.string().optional(),
       additional_params: z.record(z.string(), z.string()).optional(),
     }),
     // zFunction does not support promise properly just yet...
     // So we need to do a manual parse
-    ({code, redirectUri: redirect_uri, code_verifier, additional_params}) =>
+    ({code, redirect_uri, code_verifier, additional_params}) =>
       post(config.tokenURL, {
         grant_type: 'authorization_code',
         code,

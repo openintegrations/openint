@@ -53,6 +53,7 @@ export function createOAuth2ConnectorServer<
 
       console.log(
         `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!context.connection}`,
+        config,
       )
 
       const codeChallenge = oauthConfig.code_challenge_method
@@ -62,8 +63,17 @@ export function createOAuth2ConnectorServer<
           }
         : undefined
 
+      console.log(
+        'redirect_uri',
+        config.oauth?.redirect_uri ?? env.OAUTH_REDIRECT_URI_GATEWAY,
+        'config.oauth?.redirect_uri ',
+        config.oauth?.redirect_uri,
+        'env.OAUTH_REDIRECT_URI_GATEWAY',
+        env.OAUTH_REDIRECT_URI_GATEWAY,
+      )
       const authorizeUrl = await client.getAuthorizeUrl({
-        redirect_uri: env.OAUTH_REDIRECT_URI_GATEWAY,
+        redirect_uri:
+          config.oauth?.redirect_uri ?? env.OAUTH_REDIRECT_URI_GATEWAY,
         scopes: config.oauth?.scopes
           ? // here because some old ccfgs have scopes as a string
             typeof config.oauth.scopes === 'string'
@@ -104,7 +114,8 @@ export function createOAuth2ConnectorServer<
 
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
-        redirectUri: env.OAUTH_REDIRECT_URI_GATEWAY,
+        redirect_uri:
+          config.oauth?.redirect_uri ?? env.OAUTH_REDIRECT_URI_GATEWAY,
         code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })
