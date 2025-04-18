@@ -67,7 +67,8 @@ export const zConnectOptions = z.object({
   // userId: UserId,
   /** Noop if `connectionId` is specified */
   integrationExternalId: zExternalId.nullish(),
-  // connectionExternalId: zExternalId.nullish(),
+  /** @deprecated . use the `connection` property instead */
+  connectionExternalId: zExternalId.nullish(),
 })
 
 export const zPostConnectOptions = zConnectOptions.extend({

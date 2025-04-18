@@ -131,7 +131,7 @@ export function createOAuth2ConnectorServer<
       }
     },
 
-    async checkConnection({settings, config, context, instance}) {
+    async checkConnection({settings, config, instance}) {
       const {client, oauthConfig} = instance
       // If there's no access token, throw an error
       if (!settings?.oauth?.credentials?.access_token) {

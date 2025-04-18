@@ -188,8 +188,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.status_message).toBeNull()
     })
 
-    test.todo('refresh token')
-
+    // Simulate expiration
     test.todo('revoke connection')
 
     test.todo('handle status update after external revoke')

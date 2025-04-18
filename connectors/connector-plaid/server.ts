@@ -252,7 +252,7 @@ export const plaidServerConnector = {
     return {connectionUpdates: []}
   },
   newInstance: ({config, settings}) => {
-    const env = inferPlaidEnvFromToken(settings.accessToken)
+    const env = inferPlaidEnvFromToken(settings!.accessToken)
     // https://plaid.com/docs/api/#api-host
     const creds = config.credentials ?? getPlatformConfig(env)
     const sdk = initSDK(plaidSdkDef, {
@@ -285,7 +285,7 @@ export const plaidServerConnector = {
       //       : links
       // },
     })
-    return {...sdk, accessToken: settings.accessToken}
+    return {...sdk, accessToken: settings!.accessToken}
   },
 } satisfies ConnectorServer<typeof plaidSchemas, PlaidSDK>
 

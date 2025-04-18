@@ -481,7 +481,7 @@ export const connectRouter = router({
       // Two requests instead of one to allow RLS to apply. Revoke is not a common operation
       const ccfg =
         await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
-          where: eq(schema.connector_config.id, conn.connector_config_id),
+          where: eq(schema.connector_config.id, conn.connector_config_id!),
         })
       if (!ccfg) {
         throw new TRPCError({

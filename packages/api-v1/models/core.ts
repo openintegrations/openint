@@ -37,6 +37,9 @@ export const connection_select_base = createSelectSchema(schema.connection)
     metadata: true,
     status: true,
   })
+  .partial({
+    status_message: true,
+  })
   .extend({
     status: zStandard.connection.shape.status,
     metadata: zMetadata.nullish(),

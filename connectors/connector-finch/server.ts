@@ -44,7 +44,7 @@ export const finchServer = {
   newInstance: ({settings, fetchLinks}) => {
     const sdk = initFinchSDK({
       headers: {
-        authorization: `Bearer ${settings.access_token}`,
+        authorization: `Bearer ${settings!.access_token}`,
       },
       links: (defaultLinks) => [...fetchLinks, ...defaultLinks],
     })
