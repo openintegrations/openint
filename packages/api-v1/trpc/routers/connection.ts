@@ -3,19 +3,16 @@ import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
-import {ConnectorServer, makeId} from '@openint/cdk'
+import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
-import {getBaseURLs} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {connection_select_base, core} from '../../models/core'
+import {core} from '../../models/core'
 import {
   formatConnection,
-  zConnectionError,
   zConnectionExpanded,
   zConnectionExpandOption,
-  zConnectionStatus,
   zIncludeSecrets,
   zRefreshPolicy,
 } from './connection.models'
@@ -240,112 +237,6 @@ export const connectionRouter = router({
         total,
         limit,
         offset,
-      }
-    }),
-  // TODO: Move to connect.ts
-  checkConnection: authenticatedProcedure
-    .meta({
-      openapi: {
-        method: 'POST',
-        path: '/connection/{id}/check',
-        description: 'Verify that a connection is healthy',
-        summary: 'Check Connection Health',
-      },
-    })
-    .input(z.object({id: zConnectionId}))
-    .output(
-      connection_select_base.pick({
-        id: true,
-        status: true,
-        status_message: true,
-      }),
-    )
-    .mutation(async ({ctx, input}) => {
-      const connection = await ctx.db.query.connection.findFirst({
-        where: eq(schema.connection.id, input.id),
-      })
-      if (!connection || !connection.connector_config_id) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Connection not found',
-        })
-      }
-
-      const credentialsRequiresRefresh = connection.settings.oauth?.credentials
-        ?.expires_at
-        ? new Date(connection.settings.oauth.credentials.expires_at) <
-          new Date()
-        : false
-
-      if (credentialsRequiresRefresh) {
-        // TODO: implement refresh logic here
-        console.warn('Connection requires refresh', credentialsRequiresRefresh)
-        // Add actual refresh implementation
-      }
-
-      const connector = serverConnectors[
-        connection.connector_name as keyof typeof serverConnectors
-      ] as ConnectorServer
-      if (!connector) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Connector not found for connection ${connection.id}`,
-        })
-      }
-
-      if (
-        'checkConnection' in connector &&
-        typeof connector.checkConnection === 'function'
-      ) {
-        const ccfg =
-          await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
-            where: eq(
-              schema.connector_config.id,
-              connection.connector_config_id,
-            ),
-          })
-        if (!ccfg) {
-          throw new TRPCError({
-            code: 'NOT_FOUND',
-            message: `Connector config ${connection.connector_config_id} not found`,
-          })
-        }
-        try {
-          const res = await connector.checkConnection({
-            settings: connection.settings,
-            config: ccfg.config,
-            options: {},
-            context: {
-              fetch: ctx.fetch,
-              webhookBaseUrl: '', // FIX ME
-              baseURLs: getBaseURLs(null),
-            },
-          })
-          console.log('[connection] Check connection result', res)
-          // QQ: should this parse the results of checkConnection somehow?
-
-          // TODO: persist the result of checkConnection for settings
-          return {
-            ...res,
-            id: connection.id,
-            status: res.status ?? null,
-            status_message: res.status_message ?? null,
-          }
-        } catch (error) {
-          console.error('[connection] Check connection failed', error)
-          return {
-            id: connection.id as `conn_${string}`,
-            status: 'disconnected',
-            status_message: 'Unknown error',
-          }
-        }
-      }
-
-      // QQ: should we return healthy by default even if there's no check connection implemented?
-      return {
-        id: connection.id as `conn_${string}`,
-        status: 'healthy',
-        status_message: null,
       }
     }),
 
