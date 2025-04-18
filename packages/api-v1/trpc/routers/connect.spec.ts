@@ -177,8 +177,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           body: new URLSearchParams({
             token:
               postConnectRes.current.settings.oauth.credentials!.access_token,
-            client_id: oauthConfig.client_id,
-            client_secret: oauthConfig.client_secret,
+            client_id: oauthConfig.client_id!,
+            client_secret: oauthConfig.client_secret!,
           }),
         }),
       )
