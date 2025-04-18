@@ -3,12 +3,13 @@ import type {Z} from '@openint/util/zod-utils'
 import {TRPCError} from '@trpc/server'
 import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
-import {makeId} from '@openint/cdk'
+import {ConnectorServer, makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
+import {getBaseURLs} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
-import {core} from '../../models/core'
+import {connection_select_base, core} from '../../models/core'
 import {
   formatConnection,
   zConnectionError,
@@ -241,7 +242,8 @@ export const connectionRouter = router({
         offset,
       }
     }),
-  checkConnection: orgProcedure
+  // TODO: Move to connect.ts
+  checkConnection: authenticatedProcedure
     .meta({
       openapi: {
         method: 'POST',
@@ -250,20 +252,12 @@ export const connectionRouter = router({
         summary: 'Check Connection Health',
       },
     })
-    .input(
-      z.object({
-        id: zConnectionId,
-      }),
-    )
+    .input(z.object({id: zConnectionId}))
     .output(
-      z.object({
-        id: zConnectionId,
-        status: zConnectionStatus,
-        error: zConnectionError.optional(),
-        errorMessage: z
-          .string()
-          .optional()
-          .describe('Optional expanded error message'),
+      connection_select_base.pick({
+        id: true,
+        status: true,
+        status_message: true,
       }),
     )
     .mutation(async ({ctx, input}) => {
@@ -289,10 +283,9 @@ export const connectionRouter = router({
         // Add actual refresh implementation
       }
 
-      const connector =
-        serverConnectors[
-          connection.connector_name as keyof typeof serverConnectors
-        ]
+      const connector = serverConnectors[
+        connection.connector_name as keyof typeof serverConnectors
+      ] as ConnectorServer
       if (!connector) {
         throw new TRPCError({
           code: 'NOT_FOUND',
@@ -304,20 +297,46 @@ export const connectionRouter = router({
         'checkConnection' in connector &&
         typeof connector.checkConnection === 'function'
       ) {
+        const ccfg =
+          await ctx.asOrgIfCustomer.db.query.connector_config.findFirst({
+            where: eq(
+              schema.connector_config.id,
+              connection.connector_config_id,
+            ),
+          })
+        if (!ccfg) {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: `Connector config ${connection.connector_config_id} not found`,
+          })
+        }
         try {
-          await connector.checkConnection(connection.settings)
+          const res = await connector.checkConnection({
+            settings: connection.settings,
+            config: ccfg.config,
+            options: {},
+            context: {
+              fetch: ctx.fetch,
+              webhookBaseUrl: '', // FIX ME
+              baseURLs: getBaseURLs(null),
+            },
+          })
+          console.log('[connection] Check connection result', res)
           // QQ: should this parse the results of checkConnection somehow?
 
           // TODO: persist the result of checkConnection for settings
           return {
-            id: connection.id as `conn_${string}`,
-            status: 'healthy',
+            ...res,
+            id: connection.id,
+            status: res.status ?? null,
+            status_message: res.status_message ?? null,
           }
         } catch (error) {
+          console.error('[connection] Check connection failed', error)
           return {
             id: connection.id as `conn_${string}`,
             status: 'disconnected',
-            error: 'unknown_external_error',
+            status_message: 'Unknown error',
           }
         }
       }
@@ -326,6 +345,7 @@ export const connectionRouter = router({
       return {
         id: connection.id as `conn_${string}`,
         status: 'healthy',
+        status_message: null,
       }
     }),
 

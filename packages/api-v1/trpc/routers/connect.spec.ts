@@ -149,10 +149,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
 
       const settings = oauth2Schemas.connection_settings.parse(res.settings)
-      return {
-        id: res.id,
-        settings,
-      }
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
+      return {id: res.id, settings}
     })
 
     // use access token to do something useful, like introspect
@@ -177,9 +176,17 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         id: postConnectRes.current.id,
       })
       expect(res.settings).toEqual(postConnectRes.current.settings)
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
     })
 
-    test.todo('check connection')
+    test('check connection', async () => {
+      const res = await asCustomer.checkConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
+    })
 
     test.todo('refresh token')
 
@@ -289,6 +296,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           connect_output: preConnectRes.current.connect_input,
         },
       })
+      // expect(res.status).toBe('healthy')
+      // expect(res.status_message).toBeNull()
 
       return res
     })
@@ -300,7 +309,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.settings).toEqual(postConnectRes.current.settings)
     })
 
-    test.todo('check connection')
+    test.skip('check connection', async () => {
+      const res = await asCustomer.checkConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
+    })
 
     test('revoke connection', async () => {
       const res = await asCustomer.revokeConnection({

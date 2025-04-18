@@ -134,10 +134,12 @@ export function createOAuth2ConnectorServer<
           },
         },
         integration: undefined, // TODO: add integration
+        status: 'healthy',
+        status_message: null,
       }
     },
 
-    async refreshConnection({settings, config}) {
+    async refreshConnection({settings, config, context}) {
       const refreshToken = settings?.oauth?.credentials?.refresh_token
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
@@ -149,14 +151,15 @@ export function createOAuth2ConnectorServer<
         oauthConfigTemplate,
         connectorConfig: config,
         connectionSettings: settings,
-        fetch: undefined, // FIX: Always pass context
-        baseURLs: {api: '', console: '', connect: ''},
+        fetch: context?.fetch,
+        baseURLs: context?.baseURLs ?? {api: '', console: '', connect: ''},
       })
       const res = await client.refreshToken({
         refresh_token: refreshToken,
         additional_params: oauthConfig.params_config.refresh,
       })
 
+      // TODO: Update the status message
       return {
         oauth: {
           credentials: {
@@ -172,7 +175,7 @@ export function createOAuth2ConnectorServer<
       } satisfies Z.infer<typeof oauth2Schemas.connection_settings>
     },
 
-    async checkConnection({settings, config}) {
+    async checkConnection({settings, config, context}) {
       // If there's no access token, throw an error
       if (!settings?.oauth?.credentials?.access_token) {
         throw new Error('No access token available')
@@ -183,9 +186,11 @@ export function createOAuth2ConnectorServer<
         oauthConfigTemplate,
         connectorConfig: config,
         connectionSettings: settings,
-        fetch: undefined, // FIX: Always pass consistent context with fetch inside
-        baseURLs: {api: '', console: '', connect: ''},
+        fetch: context.fetch,
+        baseURLs: context.baseURLs,
       })
+
+      console.log('[oauth2] Check connection called', oauthConfig)
 
       const {expires_at: expiresAt, refresh_token: refreshToken} =
         settings.oauth.credentials
@@ -200,7 +205,15 @@ export function createOAuth2ConnectorServer<
 
         try {
           // Attempt to refresh the token
-          return {settings: await this.refreshConnection({settings, config})}
+          return {
+            settings: await this.refreshConnection({
+              settings,
+              config,
+              context,
+            }),
+            status: 'healthy',
+            status_message: null,
+          }
         } catch (error: unknown) {
           throw new Error(`Failed to refresh token: ${error}`)
         }
@@ -210,9 +223,11 @@ export function createOAuth2ConnectorServer<
           additional_params: oauthConfig.params_config.introspect,
         })
         if (res.active) {
-          return {settings}
+          return {settings, status: 'healthy', status_message: null}
         } else {
-          throw new Error('Token is not active')
+          console.log('[oauth2] Token introspection failed', res)
+          // Should this be revoked?
+          return {settings, status: 'disconnected', status_message: null}
         }
       }
       // TODO: Return proper `status` for connection
@@ -223,7 +238,7 @@ export function createOAuth2ConnectorServer<
       // for now we're just going to check if the token is expired and try to refresh it
       // 2) We could also support the token introspection endpoint https://www.oauth.com/oauth2-servers/token-introspection-endpoint/
 
-      return {settings}
+      return {settings, status: 'healthy', status_message: null}
     },
     revokeConnection: async ({settings, config}) => {
       const {client, oauthConfig} = getClient({

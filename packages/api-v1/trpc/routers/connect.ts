@@ -286,7 +286,8 @@ export const connectRouter = router({
           settings,
           connector_config_id: input.connector_config_id,
           customer_id: ctx.viewer.customerId ?? ctx.viewer.userId,
-
+          status: connUpdate.status,
+          status_message: connUpdate.status_message,
           // add integration id
         },
         {keyColumns: ['id']},

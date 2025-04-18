@@ -171,6 +171,7 @@ export interface ConnectorServer<
   refreshConnection?: (opts: {
     settings: T['_types']['connection_settings']
     config: T['_types']['connector_config']
+    context?: CheckConnectionContext
   }) => Promise<T['_types']['connection_settings']>
 
   // MARK - Webhook

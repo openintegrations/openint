@@ -99,6 +99,12 @@ export type UseConnectHook<T extends ConnHelpers = ConnHelpers> = (scope: {
 
 export interface CheckConnectionContext {
   webhookBaseUrl: string
+  baseURLs: {
+    api: string
+    console: string
+    connect: string
+  }
+  fetch?: (req: Request) => Promise<Response>
 }
 
 /** Context providers get during the connection establishing phase */

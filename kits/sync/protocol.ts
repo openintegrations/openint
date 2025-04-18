@@ -50,7 +50,7 @@ export interface ConnectionUpdateData<
     data: TInsData
   }
   status?: ZStandard['connection']['status']
-  status_message?: string
+  status_message?: string | null
 }
 export interface StateUpdateData<TSrcOptions = {}, TDestOptions = {}> {
   sourceState?: ObjectPartialDeep<NoInfer<TSrcOptions>>
