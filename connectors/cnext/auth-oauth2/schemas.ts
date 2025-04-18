@@ -3,7 +3,7 @@ import type {Z} from '@openint/util/zod-utils'
 
 import {z} from '@openint/util/zod-utils'
 
-const zOauthConnectorConfig = z
+const _zOauthConnectorConfig = z
   .object({
     client_id: z.string().nullish(),
     client_secret: z.string().nullish(),
@@ -14,11 +14,13 @@ const zOauthConnectorConfig = z
     }),
   })
   .describe('Base oauth configuration for the connector')
-  .openapi({
-    'ui:field': 'OAuthField',
-  })
 
-export type OAuthConnectorConfig = Z.infer<typeof zOauthConnectorConfig>
+export type OAuthConnectorConfig = Z.infer<typeof _zOauthConnectorConfig>
+
+/** To avoid the circular type reference */
+export const zOauthConnectorConfig = _zOauthConnectorConfig.openapi({
+  'ui:field': 'OAuthField',
+})
 
 const zOAuthConnectionSettings = z.object({
   credentials: z
