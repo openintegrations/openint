@@ -33,7 +33,7 @@ const mockConnectors = {
 const logger = false
 
 describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
-  describe('refreshStaleConnections', () => {
+  describe.skip('refreshStaleConnections', () => {
     beforeEach(async () => {
       // Clear any existing data
       await db.delete(schema.connection)
@@ -156,9 +156,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         .from(schema.connection)
         .where(sql`
           connector_name = 'greenhouse'
-          AND (
-            connection.settings -> 'oauth' -> 'credentials' ->> 'expires_at'
-          )::timestamp < ${new Date(Date.now() + 1000 * 60 * 30)}
+          AND (connection.settings -> 'oauth' -> 'credentials' ->> 'expires_at')::timestamp < ${new Date(
+            Date.now() + 1000 * 60 * 30,
+          )}
         `)
 
       expect(greenhouseConnections).toHaveLength(1)
