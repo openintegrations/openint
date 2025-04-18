@@ -8,7 +8,9 @@ const zOauthConnectorConfig = z
     client_secret: z.string().nullish(),
     scopes: z.array(z.string()).nullish(),
     // TODO: Is this needed?
-    redirect_uri: z.string().nullish(),
+    redirect_uri: z.string().nullish().openapi({
+      description: 'Custom redirect URI',
+    }),
   })
   .describe('Base oauth configuration for the connector')
   .openapi({
