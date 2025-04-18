@@ -7,6 +7,7 @@ import type {
 import type {Z} from '@openint/util/zod-utils'
 
 import {z} from '@openint/util/zod-utils'
+import {ZStandard} from '../cdk'
 
 type ExternalId = string | number
 interface Id {
@@ -48,9 +49,8 @@ export interface ConnectionUpdateData<
     externalId: ExternalId
     data: TInsData
   }
-  // QQ: Extend this or calculate it before displaying based on settings?
-  // status?: ZStandard['connection']['status']
-  // statusMessage?: string
+  status?: ZStandard['connection']['status']
+  status_message?: string
 }
 export interface StateUpdateData<TSrcOptions = {}, TDestOptions = {}> {
   sourceState?: ObjectPartialDeep<NoInfer<TSrcOptions>>
