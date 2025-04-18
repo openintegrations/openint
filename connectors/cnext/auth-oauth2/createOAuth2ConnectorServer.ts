@@ -131,38 +131,6 @@ export function createOAuth2ConnectorServer<
       }
     },
 
-    async refreshConnection({
-      settings,
-      config,
-      instance: {client, oauthConfig},
-    }) {
-      const refreshToken = settings?.oauth?.credentials?.refresh_token
-      if (!refreshToken) {
-        throw new Error('No refresh token available for this connection')
-      }
-
-      console.log(`Oauth2 Refresh connection called`)
-      const res = await client.refreshToken({
-        refresh_token: refreshToken,
-        additional_params: oauthConfig.params_config.refresh,
-      })
-
-      // TODO: Update the status message
-      return {
-        oauth: {
-          credentials: {
-            client_id: client.config.clientId,
-            access_token: res.access_token,
-            refresh_token: res.refresh_token,
-            expires_in: res.expires_in,
-            raw: res,
-            scope: res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
-            token_type: undefined, // What should this be?
-          },
-        },
-      } satisfies Z.infer<typeof oauth2Schemas.connection_settings>
-    },
-
     async checkConnection({settings, config, context, instance}) {
       const {client, oauthConfig} = instance
       // If there's no access token, throw an error
@@ -179,22 +147,30 @@ export function createOAuth2ConnectorServer<
       const shouldRefreshToken = isTokenExpired || refreshToken
 
       if (shouldRefreshToken) {
-        if (!refreshToken || !this.refreshConnection) {
+        if (!refreshToken) {
           throw new Error('Token expired and no refresh token available')
         }
-
         try {
+          const res = await client.refreshToken({
+            refresh_token: refreshToken,
+            additional_params: oauthConfig.params_config.refresh,
+          })
+          const settings = {
+            oauth: {
+              credentials: {
+                client_id: client.config.clientId,
+                access_token: res.access_token,
+                refresh_token: res.refresh_token,
+                expires_in: res.expires_in,
+                raw: res,
+                scope:
+                  res.scope ?? client.joinScopes(config.oauth?.scopes ?? []),
+                token_type: undefined, // What should this be?
+              },
+            },
+          } satisfies Z.infer<typeof oauth2Schemas.connection_settings>
           // Attempt to refresh the token
-          return {
-            settings: await this.refreshConnection({
-              settings,
-              config,
-              context,
-              instance,
-            }),
-            status: 'healthy',
-            status_message: null,
-          }
+          return {settings, status: 'healthy', status_message: null}
         } catch (error: unknown) {
           throw new Error(`Failed to refresh token: ${error}`)
         }

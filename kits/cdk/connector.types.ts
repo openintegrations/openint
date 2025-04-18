@@ -146,13 +146,6 @@ export interface ConnectorServer<
     >
   >
 
-  refreshConnection?: (opts: {
-    instance: TInstance
-    settings: T['_types']['connection_settings']
-    config: T['_types']['connector_config']
-    context: BaseContext
-  }) => Promise<T['_types']['connection_settings']>
-
   revokeConnection?: (opts: {
     instance: TInstance
     settings: T['_types']['connection_settings']

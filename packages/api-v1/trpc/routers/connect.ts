@@ -345,11 +345,15 @@ export const connectRouter = router({
     })
     .input(z.object({id: zConnectionId}))
     .output(
-      connection_select_base.pick({
-        id: true,
-        status: true,
-        status_message: true,
-      }),
+      connection_select_base
+        .pick({
+          id: true,
+          status: true,
+          status_message: true,
+        })
+        .extend({
+          // check_result: z.enum(['token', 'disconnected', 'unknown']),
+        }),
     )
     .mutation(async ({ctx, input}) => {
       const connection = await ctx.db.query.connection.findFirst({
