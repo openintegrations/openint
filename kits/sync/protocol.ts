@@ -5,9 +5,10 @@ import type {
   ObjectPartialDeep,
 } from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
+// eslint-disable-next-line import-x/no-relative-packages
+import type {ZStandard} from '../cdk'
 
 import {z} from '@openint/util/zod-utils'
-import {ZStandard} from '../cdk'
 
 type ExternalId = string | number
 interface Id {
