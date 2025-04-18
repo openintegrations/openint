@@ -57,10 +57,9 @@ export const connectorConfigRouter = router({
             SELECT
               COUNT(*)
             FROM
-              ${schema.connection}
+              ${schema.connection} AS conn
             WHERE
-              ${schema.connection}.connector_config_id = ${schema
-            .connector_config.id}
+              conn.connector_config_id = "connector_config"."id"::text
           )
         `.as('connection_count'),
       }

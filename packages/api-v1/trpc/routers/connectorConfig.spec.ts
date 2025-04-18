@@ -1,5 +1,6 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
 
+import {schema} from '@openint/db'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {getTestTRPCClient} from '../../__tests__/test-utils'
 import {routerContextFromViewer} from '../context'
@@ -101,6 +102,23 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     })
     expect(res2.items[0]?.connector).toBeDefined()
     expect(res2.items[0]?.connector?.schemas).toBeDefined()
+  })
+
+  test('list connector config with expanded connection_count', async () => {
+    const res = await asOrg.listConnectorConfigs({
+      expand: ['connection_count'],
+    })
+    const connector_config_id = res.items[0]?.id ?? ''
+    await db.insert(schema.connection).values({
+      connector_config_id,
+      settings: {},
+      disabled: false,
+    })
+    const res2 = await asOrg.listConnectorConfigs({
+      expand: ['connection_count'],
+    })
+    expect(res2.items[0]?.connection_count).toEqual(1)
+    expect(res2.items[1]?.connection_count).toEqual(0)
   })
 
   test('list connector config via custom client', async () => {
