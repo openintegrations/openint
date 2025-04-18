@@ -1,4 +1,5 @@
 import type {ConnectorSchemas} from '@openint/cdk'
+import type {Z} from '@openint/util/zod-utils'
 
 import {z} from '@openint/util/zod-utils'
 
@@ -16,6 +17,8 @@ const zOauthConnectorConfig = z
   .openapi({
     'ui:field': 'OAuthField',
   })
+
+export type OAuthConnectorConfig = Z.infer<typeof zOauthConnectorConfig>
 
 const zOAuthConnectionSettings = z.object({
   credentials: z
@@ -46,6 +49,8 @@ const zOAuthConnectionSettings = z.object({
   /** @deprecated */
   metadata: z.record(z.unknown()).nullable().optional(),
 })
+
+export type OAuthConnectionSettings = Z.infer<typeof zOAuthConnectionSettings>
 
 export const zAuthParamsConfig = z.object({
   authorize: z.record(z.string(), z.string()).optional(),
