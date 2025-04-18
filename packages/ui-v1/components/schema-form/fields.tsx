@@ -117,10 +117,10 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
             className="text-sm font-medium text-gray-700">
             Redirect URI (Optional)
           </label>
-          <p className="text-sm text-gray-500">
+          <div className="text-sm text-gray-500">
             If not specified, will default to{' '}
-            <pre>{env.OAUTH_REDIRECT_URI_GATEWAY}</pre>
-          </p>
+            <pre>{env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY}</pre>
+          </div>
           <Input
             id="redirect_uri"
             type="text"
@@ -131,7 +131,7 @@ export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
             onChange={(e) => {
               handleChange('redirect_uri', e.target.value)
             }}
-            placeholder="Enter Redirect URI"
+            placeholder={env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY}
           />
         </div>
       )}

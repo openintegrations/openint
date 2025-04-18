@@ -65,7 +65,7 @@ export function createOAuth2ConnectorServer<
 
       const authorizeUrl = await client.getAuthorizeUrl({
         redirect_uri:
-          config.oauth?.redirect_uri?.trim() || env.OAUTH_REDIRECT_URI_GATEWAY,
+          config.oauth?.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
         scopes: config.oauth?.scopes
           ? // here because some old ccfgs have scopes as a string
             typeof config.oauth.scopes === 'string'
@@ -107,7 +107,7 @@ export function createOAuth2ConnectorServer<
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
         redirect_uri:
-          config.oauth?.redirect_uri?.trim() || env.OAUTH_REDIRECT_URI_GATEWAY,
+          config.oauth?.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
         code_verifier: connectOutput.code_verifier,
         additional_params: oauthConfig.params_config.token,
       })

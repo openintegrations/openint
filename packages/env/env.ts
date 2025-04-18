@@ -17,11 +17,6 @@ export const envConfig = {
     CLERK_SECRET_KEY: z.string().optional(),
     NANGO_SECRET_KEY: z.string().optional(),
 
-    /** One url to rule them all */
-    OAUTH_REDIRECT_URI_GATEWAY: z
-      .string()
-      .default('https://connect.openint.dev/callback'),
-
     // Required for worker to work when deployed
     INNGEST_SIGNING_KEY: z.string().optional(),
     INNGEST_EVENT_KEY: z.string().optional(),
@@ -73,7 +68,10 @@ export const envConfig = {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
 
     NEXT_PUBLIC_COMMANDBAR_ORG_ID: z.string().optional(),
-
+    /** One url to rule them all */
+    NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY: z
+      .string()
+      .default('https://connect.openint.dev/callback'),
     // Useful later for when we switch to asymmetric jwt rather than symmetric ones
     // JWT_PRIVATE_KEY: z.string().optional(),
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: z.string().optional(),
@@ -107,7 +105,8 @@ export const envConfig = {
     CRON_SECRET: process.env['CRON_SECRET'],
     REFRESH_CONNECTION_CONCURRENCY:
       process.env['REFRESH_CONNECTION_CONCURRENCY'],
-    OAUTH_REDIRECT_URI_GATEWAY: process.env['OAUTH_REDIRECT_URI_GATEWAY'],
+    NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY:
+      process.env['NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY'],
     // JWT_PRIVATE_KEY: process.env['JWT_PRIVATE_KEY'],
     // NEXT_PUBLIC_JWT_PUBLIC_KEY: process.env['NEXT_PUBLIC_JWT_PUBLIC_KEY'],
     PORT: process.env['PORT'],

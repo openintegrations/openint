@@ -50,7 +50,7 @@ const _oauth2Server = createOAuth2Server({
     secret: config.client_secret,
     redirectUris: [
       (config as OAuthConnectorConfig).redirect_uri?.trim() ||
-        env.OAUTH_REDIRECT_URI_GATEWAY,
+        env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
     ],
     allowedGrants: [
       'authorization_code',
@@ -99,7 +99,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     const oauthConfig: OAuthConnectorConfig =
       oauthConfigs[key as keyof typeof oauthConfigs]
     const redirectUri =
-      oauthConfig.redirect_uri?.trim() || env.OAUTH_REDIRECT_URI_GATEWAY
+      oauthConfig.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY
 
     const ccfgRes = $test('create connector config', async () => {
       const res = await asUser.createConnectorConfig({
