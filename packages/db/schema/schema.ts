@@ -34,7 +34,7 @@ export const connection = pgTable(
       .$type<ConnectorName>()
       .generatedAlwaysAs(sql`split_part((id)::text, '_'::text, 2)`),
     customer_id: varchar(),
-    connector_config_id: varchar().notNull(),
+    connector_config_id: varchar(), // .notNull(), // Currently nullible
     integration_id: varchar(),
     /** @deprecated Not sure if we want this */
     env_name: varchar(),
