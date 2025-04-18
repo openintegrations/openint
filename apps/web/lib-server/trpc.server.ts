@@ -12,7 +12,10 @@ import {db} from './globals'
 
 export type APICaller = ReturnType<typeof createTRPCCaller>
 
-/** @deprecated Use getTRPCOptionsProxy instead */
+/**
+ * @deprecated Prefer queryClient with getTRPCOptionsProxy when possible for
+ * seamless hydration whenever needed
+ */
 export function createAPICaller(viewer: Viewer) {
   return createTRPCCaller({db}, viewer)
 }
@@ -45,6 +48,7 @@ export function serverComponentContextForViewer(viewer: Viewer) {
   const queryClient = getServerQueryClient()
   const ctx = routerContextFromViewer({viewer, db})
   const trpc = createTRPCOptionsProxy({ctx, queryClient, router: appRouter})
+
   return {...ctx, queryClient, trpc}
 }
 
