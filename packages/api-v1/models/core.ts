@@ -5,6 +5,7 @@ import {
   zDiscriminatedConfig,
   zDiscriminatedSettings,
 } from '@openint/all-connectors/schemas'
+import {zStandard} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
 import {zConnector, zConnectorName} from '../trpc/routers/connector.models'
@@ -36,8 +37,12 @@ const connection_select = z
         connector_name: true,
         env_name: true, // not sure if we want this
         metadata: true,
+        status: true,
       })
-      .extend({metadata: zMetadata.nullish()}),
+      .extend({
+        status: zStandard.connection.shape.status,
+        metadata: zMetadata.nullish(),
+      }),
     zDiscriminatedSettings,
   )
   .openapi({ref: 'core.connection_select'})
@@ -51,7 +56,10 @@ const connection_insert = z
         env_name: true, // not sure if we want this
         metadata: true,
       })
-      .extend({metadata: zMetadata.nullish()}),
+      .extend({
+        status: zStandard.connection.shape.status,
+        metadata: zMetadata.nullish(),
+      }),
     zDiscriminatedSettings,
   )
   .openapi({ref: 'core.connection_insert'})
