@@ -147,9 +147,9 @@ export const connectRouter = router({
       //     message: `You are not authorized to connect to ${input.discriminated_data.connector_name}`,
       //   })
       // }
-
-      const connectors = serverConnectors as Record<string, ConnectorServer>
-      const connector = connectors[input.discriminated_data.connector_name]
+      const connector = serverConnectors[
+        input.discriminated_data.connector_name as keyof typeof serverConnectors
+      ] as ConnectorServer
       if (!connector) {
         throw new TRPCError({
           code: 'NOT_FOUND',
@@ -176,17 +176,28 @@ export const connectRouter = router({
 
       const preConnect = connector.preConnect ?? (() => ({}))
 
+      const context = {
+        webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+        extCustomerId: (ctx.viewer.role === 'customer'
+          ? ctx.viewer.customerId
+          : ctx.viewer.userId) as ExtCustomerId,
+        fetch: ctx.fetch,
+        baseURLs: getBaseURLs(null),
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const instance = connector.newInstance?.({
+        config: ccfg.config,
+        settings: undefined,
+        context,
+        fetchLinks: [],
+        onSettingsChange: () => {}, // noop
+      })
+
       // eslint-disable-next-line @typescript-eslint/await-thenable
       const res = await preConnect({
         config: ccfg.config,
-        context: {
-          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
-          extCustomerId: (ctx.viewer.role === 'customer'
-            ? ctx.viewer.customerId
-            : ctx.viewer.userId) as ExtCustomerId,
-          fetch: ctx.fetch,
-          baseURLs: getBaseURLs(null),
-        },
+        instance,
+        context,
         input: input.discriminated_data.pre_connect_input,
       })
 
@@ -229,9 +240,11 @@ export const connectRouter = router({
       //     message: `You are not authorized to connect to ${input.discriminated_data.connector_name}`,
       //   })
       // }
-      const connectors = serverConnectors as Record<string, ConnectorServer>
+
       const defs = defConnectors as Record<string, ConnectorDef>
-      const connector = connectors[input.discriminated_data.connector_name]
+      const connector = serverConnectors[
+        input.discriminated_data.connector_name as keyof typeof serverConnectors
+      ] as ConnectorServer
       const def = defs[input.discriminated_data.connector_name]
       if (!connector || !def) {
         throw new TRPCError({
@@ -259,17 +272,28 @@ export const connectRouter = router({
         }))
 
       console.log('postConnect', input, ctx, ccfg)
+      const context = {
+        webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+        extCustomerId: (ctx.viewer.role === 'customer'
+          ? ctx.viewer.customerId
+          : ctx.viewer.userId) as ExtCustomerId,
+        fetch: ctx.fetch,
+        baseURLs: getBaseURLs(null),
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const instance = connector.newInstance?.({
+        config: ccfg.config,
+        settings: undefined,
+        context,
+        fetchLinks: [],
+        onSettingsChange: () => {}, // noop
+      })
+
       const connUpdate = await postConnect({
         connectOutput: input.discriminated_data.connect_output,
         config: ccfg.config,
-        context: {
-          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
-          extCustomerId: (ctx.viewer.role === 'customer'
-            ? ctx.viewer.customerId
-            : ctx.viewer.userId) as ExtCustomerId,
-          fetch: ctx.fetch,
-          baseURLs: getBaseURLs(null),
-        },
+        instance,
+        context,
       })
       const id = makeId(
         'conn',
@@ -377,16 +401,30 @@ export const connectRouter = router({
             message: `Connector config ${connection.connector_config_id} not found`,
           })
         }
+        const context = {
+          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+          extCustomerId: (ctx.viewer.role === 'customer'
+            ? ctx.viewer.customerId
+            : ctx.viewer.userId) as ExtCustomerId,
+          fetch: ctx.fetch,
+          baseURLs: getBaseURLs(null),
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const instance = connector.newInstance?.({
+          config: ccfg.config,
+          settings: undefined,
+          context,
+          fetchLinks: [],
+          onSettingsChange: () => {}, // noop
+        })
+
         try {
           const res = await connector.checkConnection({
             settings: connection.settings,
             config: ccfg.config,
             options: {},
-            context: {
-              fetch: ctx.fetch,
-              webhookBaseUrl: '', // FIX ME
-              baseURLs: getBaseURLs(null),
-            },
+            instance,
+            context,
           })
           console.log('[connection] Check connection result', res)
           // QQ: should this parse the results of checkConnection somehow?
@@ -457,13 +495,21 @@ export const connectRouter = router({
           message: `Connector ${conn.connector_name} not found`,
         })
       }
-
-      // TODO: Make me metter here
+      const context = {
+        webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+        extCustomerId: (ctx.viewer.role === 'customer'
+          ? ctx.viewer.customerId
+          : ctx.viewer.userId) as ExtCustomerId,
+        fetch: ctx.fetch,
+        baseURLs: getBaseURLs(null),
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const instance = connector.newInstance?.({
         config: ccfg.config,
-        settings: conn.settings,
+        settings: undefined,
+        context,
         fetchLinks: [],
-        onSettingsChange: () => {},
+        onSettingsChange: () => {}, // noop
       })
 
       await connector.revokeConnection?.({

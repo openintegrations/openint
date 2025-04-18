@@ -32,31 +32,28 @@ export function createOAuth2ConnectorServer<
 
   // Create the base server implementation
   const baseServer = {
-    newInstance: ({config, settings}) =>
+    newInstance: ({config, settings, context}) =>
       getClient({
         connectorName: connectorDef.name,
         oauthConfigTemplate,
         connectorConfig: config,
         connectionSettings: settings,
-        fetch: undefined,
-        baseURLs: {api: '', console: '', connect: ''},
+        fetch: context.fetch,
+        baseURLs: context.baseURLs,
       }),
 
-    async preConnect({config, context, input}) {
+    async preConnect({
+      config,
+      context,
+      input,
+      instance: {client, oauthConfig},
+    }) {
       const connectionId =
         input.connection_id ?? makeId('conn', connectorDef.name, makeUlid())
 
       console.log(
         `Oauth2 Preconnect called with for connectionId ${connectionId} and connectionSettings ${!!context.connection}`,
       )
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: undefined,
-        fetch: context.fetch,
-        baseURLs: context.baseURLs,
-      })
 
       const codeChallenge = oauthConfig.code_challenge_method
         ? {
@@ -89,7 +86,11 @@ export function createOAuth2ConnectorServer<
       }
     },
 
-    async postConnect({connectOutput, config, context}) {
+    async postConnect({
+      connectOutput,
+      config,
+      instance: {client, oauthConfig},
+    }) {
       const state = z
         .object({
           connection_id: z.string(),
@@ -100,15 +101,6 @@ export function createOAuth2ConnectorServer<
       console.log(
         `Oauth2 Postconnect called for connectionId ${state.connection_id}`,
       )
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: undefined,
-        fetch: context.fetch,
-        baseURLs: context.baseURLs,
-      })
-      // console.log(`oauthConfig`, oauthConfig)
 
       const res = await client.exchangeCodeForToken({
         code: connectOutput.code,
@@ -139,21 +131,17 @@ export function createOAuth2ConnectorServer<
       }
     },
 
-    async refreshConnection({settings, config, context}) {
+    async refreshConnection({
+      settings,
+      config,
+      instance: {client, oauthConfig},
+    }) {
       const refreshToken = settings?.oauth?.credentials?.refresh_token
       if (!refreshToken) {
         throw new Error('No refresh token available for this connection')
       }
 
       console.log(`Oauth2 Refresh connection called`)
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: settings,
-        fetch: context?.fetch,
-        baseURLs: context?.baseURLs ?? {api: '', console: '', connect: ''},
-      })
       const res = await client.refreshToken({
         refresh_token: refreshToken,
         additional_params: oauthConfig.params_config.refresh,
@@ -175,20 +163,12 @@ export function createOAuth2ConnectorServer<
       } satisfies Z.infer<typeof oauth2Schemas.connection_settings>
     },
 
-    async checkConnection({settings, config, context}) {
+    async checkConnection({settings, config, context, instance}) {
+      const {client, oauthConfig} = instance
       // If there's no access token, throw an error
       if (!settings?.oauth?.credentials?.access_token) {
         throw new Error('No access token available')
       }
-
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: settings,
-        fetch: context.fetch,
-        baseURLs: context.baseURLs,
-      })
 
       console.log('[oauth2] Check connection called', oauthConfig)
 
@@ -210,6 +190,7 @@ export function createOAuth2ConnectorServer<
               settings,
               config,
               context,
+              instance,
             }),
             status: 'healthy',
             status_message: null,
@@ -240,15 +221,8 @@ export function createOAuth2ConnectorServer<
 
       return {settings, status: 'healthy', status_message: null}
     },
-    revokeConnection: async ({settings, config}) => {
-      const {client, oauthConfig} = getClient({
-        connectorName: connectorDef.name,
-        oauthConfigTemplate,
-        connectorConfig: config,
-        connectionSettings: settings,
-        fetch: undefined, // FIX: Always pass consistent context with fetch inside
-        baseURLs: {api: '', console: '', connect: ''},
-      })
+
+    revokeConnection: async ({settings, instance: {client, oauthConfig}}) => {
       if (!settings.oauth.credentials?.access_token) {
         throw new Error('No access token available')
       }
@@ -260,7 +234,13 @@ export function createOAuth2ConnectorServer<
         additional_params: oauthConfig.params_config.revoke,
       })
     },
-  } satisfies ConnectorServer<typeof oauth2Schemas & {name: T['name']}>
+  } satisfies ConnectorServer<
+    typeof oauth2Schemas & {name: T['name']},
+    ReturnType<typeof getClient>
+  >
 
-  return baseServer as unknown as ConnectorServer<ConnectorDef<T>['schemas']>
+  return baseServer as unknown as ConnectorServer<
+    ConnectorDef<T>['schemas'],
+    ReturnType<typeof getClient>
+  >
 }
