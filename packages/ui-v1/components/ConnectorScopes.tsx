@@ -39,13 +39,14 @@ const RequestLink: FC<{className?: string}> = ({className}) => (
   <div className={cn('flex items-center text-sm text-gray-500', className)}>
     <Info className="mr-1 size-4" />
     <span>Need new scopes?</span>
-    <button
+    {/* TODO: @rodrigo - Add connector name to the email title and body */}
+    <a
+      href={`mailto:support@openint.dev?subject=Add%20OpenInt%20scopes%20request%20&body=I%20require%20the%20following%20scopes%20to%20be%20added%20to%20<CONNECTOR_NAME>:\n\n`}
       className="text-primary ml-1 cursor-pointer border-none bg-transparent p-1 hover:underline"
-      onClick={() => {
-        // TODO: @rodrigo - Handle request for new scopes
-      }}>
-      Request them
-    </button>
+      target="_blank"
+      rel="noopener noreferrer">
+      Request Scopes
+    </a>
   </div>
 )
 
