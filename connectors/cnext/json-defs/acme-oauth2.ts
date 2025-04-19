@@ -3,7 +3,7 @@ import type {JsonConnectorDef} from '../schema'
 export default {
   audience: ['consumer'],
   verticals: ['social-media'],
-  display_name: 'Acme Oauth Connector',
+  display_name: 'Acme OAuth',
   stage: 'ga',
   version: 1,
   auth: {

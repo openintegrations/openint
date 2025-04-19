@@ -4,8 +4,8 @@ import type {ConnectionExpanded} from '@openint/api-v1/trpc/routers/connection.m
 import type {PropertyItem} from '../components/PropertyListView'
 import type {StatusType} from '../components/StatusDot'
 
-import Image from 'next/image'
 import {useMemo, useState} from 'react'
+import {ConnectorName} from '@openint/all-connectors/name'
 import {cn} from '@openint/shadcn/lib/utils'
 import {
   Badge,
@@ -16,7 +16,7 @@ import {
 } from '@openint/shadcn/ui'
 import {CopyID} from '../components/CopyID'
 import {PropertyListView} from '../components/PropertyListView'
-import {getConnectorLogoUrl} from '../utils/images'
+import {ConnectorLogo} from './ConnectorLogo'
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
@@ -30,10 +30,9 @@ export function ConnectionCardContent({connection}: ConnectionCardProps) {
 
   const effectiveCategory = connection.connector_name || 'Unknown'
 
-  const connectorName = connection.connector_name || 'Unknown Connector'
+  const connectorName = connection.connector_name as ConnectorName
   const displayName =
     connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
-  const logoUrl = getConnectorLogoUrl(connectorName)
 
   const getStatusInfo = (status: StatusType) => {
     switch (status) {
@@ -103,17 +102,7 @@ export function ConnectionCardContent({connection}: ConnectionCardProps) {
     <div className="overflow-hidden rounded-lg">
       <div className="flex items-center gap-3 bg-gradient-to-r from-gray-50 to-white p-5">
         <div className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-gray-100">
-          <Image
-            src={logoUrl}
-            alt={`${displayName} logo`}
-            width={48}
-            height={48}
-            className="object-contain p-1"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none'
-              e.currentTarget.parentElement!.innerHTML = `<span class="text-primary font-medium text-base">${displayName.substring(0, 2).toUpperCase()}</span>`
-            }}
-          />
+          <ConnectorLogo connectorName={connectorName as ConnectorName} />
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
@@ -145,26 +134,13 @@ export function ConnectionsCardView({
 }: ConnectionCardProps) {
   const [open, setOpen] = useState(false)
 
-  const connectorName = connection.connector_name || 'Unknown Connector'
-  const logoUrl = getConnectorLogoUrl(connectorName)
-  const displayName =
-    connectorName.charAt(0).toUpperCase() + connectorName.slice(1)
+  const connectorName = connection.connector_name as ConnectorName
 
   const customTrigger = (
     <div className={cn('group cursor-pointer', className)}>
       <div className="flex items-center gap-2">
         <div className="group-hover:ring-primary/20 flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-gray-100 transition-all group-hover:ring-2">
-          <Image
-            src={logoUrl}
-            alt={`${displayName} logo`}
-            width={40}
-            height={40}
-            className="object-contain p-1"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none'
-              e.currentTarget.parentElement!.innerHTML = `<span class="text-primary text-xs font-medium">${displayName.substring(0, 2).toUpperCase()}</span>`
-            }}
-          />
+          <ConnectorLogo connectorName={connectorName as ConnectorName} />
         </div>
       </div>
     </div>
