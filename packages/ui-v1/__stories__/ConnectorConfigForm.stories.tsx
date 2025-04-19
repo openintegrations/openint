@@ -38,124 +38,124 @@ const meta: Meta<typeof FormWrapper> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const slackConnectorConfig: Story = {
-  args: {name: 'slack'},
-}
-
-export const intercomConnectorConfig: Story = {
-  args: {name: 'intercom'},
-}
-
-export const redditConnectorConfig: Story = {
-  args: {name: 'reddit'},
-}
-
-export const githubConnectorConfig: Story = {
-  args: {name: 'github'},
-}
-
-export const quickbooksConnectorConfig: Story = {
-  args: {name: 'quickbooks'},
-}
-
-export const notionConnectorConfig: Story = {
-  args: {name: 'notion'},
-}
-
-export const linkedinConnectorConfig: Story = {
-  args: {name: 'linkedin'},
-}
-
-export const instagramConnectorConfig: Story = {
-  args: {name: 'instagram'},
-}
-
-export const jiraConnectorConfig: Story = {
-  args: {name: 'jira'},
-}
-
-export const zohoDeskConnectorConfig: Story = {
-  args: {name: 'zoho-desk'},
-}
-
-export const sharepointConnectorConfig: Story = {
-  args: {name: 'sharepoint'},
+export const acmeOauth2ConnectorConfig: Story = {
+  args: {name: 'acme-oauth2'},
 }
 
 export const aircallConnectorConfig: Story = {
   args: {name: 'aircall'},
 }
 
-export const googleCalendarConnectorConfig: Story = {
-  args: {name: 'google-calendar'},
-}
-
-export const twitterConnectorConfig: Story = {
-  args: {name: 'twitter'},
-}
-
-export const pipedriveConnectorConfig: Story = {
-  args: {name: 'pipedrive'},
-}
-
-export const facebookConnectorConfig: Story = {
-  args: {name: 'facebook'},
-}
-
-export const xeroConnectorConfig: Story = {
-  args: {name: 'xero'},
-}
-
-export const leverConnectorConfig: Story = {
-  args: {name: 'lever'},
-}
-
-export const acmeOauth2ConnectorConfig: Story = {
-  args: {name: 'acme-oauth2'},
-}
-
-export const outreachConnectorConfig: Story = {
-  args: {name: 'outreach'},
-}
-
-export const googleMailConnectorConfig: Story = {
-  args: {name: 'google-mail'},
+export const confluenceConnectorConfig: Story = {
+  args: {name: 'confluence'},
 }
 
 export const discordConnectorConfig: Story = {
   args: {name: 'discord'},
 }
 
+export const facebookConnectorConfig: Story = {
+  args: {name: 'facebook'},
+}
+
+export const githubConnectorConfig: Story = {
+  args: {name: 'github'},
+}
+
 export const gongConnectorConfig: Story = {
   args: {name: 'gong'},
 }
 
-export const hubspotConnectorConfig: Story = {
-  args: {name: 'hubspot'},
+export const googleCalendarConnectorConfig: Story = {
+  args: {name: 'google-calendar'},
 }
 
-export const linearConnectorConfig: Story = {
-  args: {name: 'linear'},
+export const googleDocsConnectorConfig: Story = {
+  args: {name: 'google-docs'},
 }
 
 export const googleDriveConnectorConfig: Story = {
   args: {name: 'google-drive'},
 }
 
+export const googleMailConnectorConfig: Story = {
+  args: {name: 'google-mail'},
+}
+
 export const googleSheetConnectorConfig: Story = {
   args: {name: 'google-sheet'},
 }
 
-export const confluenceConnectorConfig: Story = {
-  args: {name: 'confluence'},
+export const hubspotConnectorConfig: Story = {
+  args: {name: 'hubspot'},
+}
+
+export const instagramConnectorConfig: Story = {
+  args: {name: 'instagram'},
+}
+
+export const intercomConnectorConfig: Story = {
+  args: {name: 'intercom'},
+}
+
+export const jiraConnectorConfig: Story = {
+  args: {name: 'jira'},
+}
+
+export const leverConnectorConfig: Story = {
+  args: {name: 'lever'},
+}
+
+export const linearConnectorConfig: Story = {
+  args: {name: 'linear'},
+}
+
+export const linkedinConnectorConfig: Story = {
+  args: {name: 'linkedin'},
+}
+
+export const notionConnectorConfig: Story = {
+  args: {name: 'notion'},
+}
+
+export const outreachConnectorConfig: Story = {
+  args: {name: 'outreach'},
+}
+
+export const pipedriveConnectorConfig: Story = {
+  args: {name: 'pipedrive'},
+}
+
+export const quickbooksConnectorConfig: Story = {
+  args: {name: 'quickbooks'},
+}
+
+export const redditConnectorConfig: Story = {
+  args: {name: 'reddit'},
 }
 
 export const salesloftConnectorConfig: Story = {
   args: {name: 'salesloft'},
 }
 
-export const googleDocsConnectorConfig: Story = {
-  args: {name: 'google-docs'},
+export const sharepointConnectorConfig: Story = {
+  args: {name: 'sharepoint'},
+}
+
+export const slackConnectorConfig: Story = {
+  args: {name: 'slack'},
+}
+
+export const twitterConnectorConfig: Story = {
+  args: {name: 'twitter'},
+}
+
+export const xeroConnectorConfig: Story = {
+  args: {name: 'xero'},
+}
+
+export const zohoDeskConnectorConfig: Story = {
+  args: {name: 'zoho-desk'},
 }
 
 export const brexConnectorConfig: Story = {
