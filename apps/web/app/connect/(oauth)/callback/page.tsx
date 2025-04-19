@@ -1,4 +1,5 @@
 import {redirect} from 'next/navigation'
+import {safeJSONParse} from '@openint/util/json-utils'
 import {FullScreenCenter} from '@/components/FullScreenCenter'
 import {CloseWindowScript} from './CloseWindowScript'
 
@@ -18,6 +19,18 @@ export default function OAuthCallback({
   const state = searchParams['state'] as string | null
 
   if (code && state) {
+    const stateJSON = safeJSONParse(state)
+    if (typeof stateJSON === 'object' && (stateJSON as any)?.connection_id) {
+      // dealing with v1 state, redirect to v1 instead.
+      const url = new URL('https://connect.openint.dev/callback')
+      for (const [key, value] of Object.entries(searchParams)) {
+        if (typeof value === 'string') {
+          url.searchParams.append(key, value)
+        }
+      }
+      return redirect(url.toString())
+    }
+
     // Just close the window - parent that opens this in a popup after redirect will read params directly
     // state in connection new is the base64 of the connection ID. In the future, this will change to a more secure string
     const isNewState = Buffer.from(state, 'base64')
