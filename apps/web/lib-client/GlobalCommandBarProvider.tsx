@@ -42,7 +42,9 @@ export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
 
 export function useCommandDefinitionMap() {
   // Switch organization commands
-  const orgList = useOrganizationList({userMemberships: true})
+  const orgList = useOrganizationList({
+    userMemberships: {pageSize: 500}, // No user would have been able to have more than 500 orgs, so this is good enough to get it all in one go
+  })
   const org = useOrganization()
 
   const orgCommands = Object.fromEntries(
