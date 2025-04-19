@@ -20,12 +20,6 @@ export const zRefreshPolicy = z
     'Controls credential refresh: none (never), force (always), or auto (when expired, default)',
   )
 
-export const zConnectionStatus = z
-  .enum(['healthy', 'disconnected', 'error', 'manual'])
-  .describe(
-    'Connection status: healthy (all well), disconnected (needs reconnection), error (system issue), manual (import connection)',
-  )
-
 export const zConnectionError = z
   .enum(['refresh_failed', 'unknown_external_error'])
   .describe('Error types: refresh_failed and unknown_external_error')
@@ -39,8 +33,6 @@ export const zConnectionExpanded = z
     core.connection_select,
     z.object({
       connector: core.connector.optional(),
-      // TODO(@openint-box): ensure this exists
-      status: zConnectionStatus.optional(),
       integration: core.integration_select.optional(),
     }),
   )

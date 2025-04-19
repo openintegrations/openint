@@ -1,14 +1,15 @@
 import type {CustomerId, Viewer} from '@openint/cdk'
-import type {Z} from '@openint/util/zod-utils'
 
 import Elysia from 'elysia'
-import {oauth2Schemas} from '@openint/cnext/auth-oauth2/schemas'
+import {
+  oauth2Schemas,
+  OAuthConnectorConfig,
+} from '@openint/cnext/auth-oauth2/schemas'
 import {describeEachDatabase} from '@openint/db/__tests__/test-utils'
 import {env} from '@openint/env'
 import {createOAuth2Server} from '@openint/oauth2/createOAuth2Server'
 import {$test} from '@openint/util/__tests__/test-utils'
 import {urlSearchParamsToJson} from '@openint/util/url-utils'
-import {z} from '@openint/util/zod-utils'
 import {trpc} from '../_base'
 import {routerContextFromViewer} from '../context'
 import {onError} from '../error-handling'
@@ -28,32 +29,42 @@ const router = trpc.mergeRouters(
   customerRouter,
 )
 
-const configOauth = {
-  client_id: 'client_222',
-  client_secret: 'xxx',
-  scopes: ['scope1', 'scope2'],
-
-  // should contain whether server requires pkce
-} satisfies Z.infer<typeof oauth2Schemas.connector_config>['oauth']
+const oauthConfigs = {
+  default: {
+    client_id: 'client_111',
+    client_secret: '864076C6-7D1D-43DE-BBA9-D257E7EB06B5',
+    scopes: ['read:user', 'write:org'],
+  },
+  customRedirect: {
+    client_id: 'client_222',
+    client_secret: 'xxx',
+    scopes: ['scope1', 'scope2'],
+    redirect_uri: 'https://openint.mydomain.com/connect/callback',
+  },
+} satisfies Record<string, OAuthConnectorConfig>
 
 const _oauth2Server = createOAuth2Server({
-  clients: [
-    {
-      id: configOauth.client_id,
-      name: configOauth.client_id,
-      secret: configOauth.client_secret,
-      redirectUris: [env.OAUTH_REDIRECT_URI_GATEWAY],
-      allowedGrants: [
-        'authorization_code',
-        'refresh_token',
-        'client_credentials',
-      ],
-      scopes: configOauth.scopes.map((scope) => ({
-        name: scope,
-      })),
-    },
-  ],
-  scopes: configOauth.scopes.map((scope) => ({name: scope})),
+  clients: Object.values(oauthConfigs).map((config) => ({
+    id: config.client_id,
+    name: config.client_id,
+    secret: config.client_secret,
+    redirectUris: [
+      (config as OAuthConnectorConfig).redirect_uri?.trim() ||
+        env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
+    ],
+    allowedGrants: [
+      'authorization_code',
+      'refresh_token',
+      'client_credentials',
+    ],
+    scopes: config.scopes.map((scope) => ({
+      name: scope,
+    })),
+  })),
+
+  scopes: Object.values(oauthConfigs).flatMap((config) =>
+    config.scopes.map((scope) => ({name: scope})),
+  ),
   users: [{id: 'user_222', username: 'user_222', password: 'xxx'}],
   authCodes: [],
 })
@@ -84,12 +95,17 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   const describeMaybeOnly =
     process.env['TEST'] === 'oauth2' ? describe.only : describe
 
-  describeMaybeOnly('oauth2', () => {
+  describeMaybeOnly.each(Object.keys(oauthConfigs))('oauth2 %s', (key) => {
+    const oauthConfig: OAuthConnectorConfig =
+      oauthConfigs[key as keyof typeof oauthConfigs]
+    const redirectUri =
+      oauthConfig.redirect_uri?.trim() || env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY
+
     const ccfgRes = $test('create connector config', async () => {
       const res = await asUser.createConnectorConfig({
         connector_name: 'acme-oauth2',
         // TODO: Ensure discriminated union for this.
-        config: {oauth: configOauth},
+        config: {oauth: oauthConfig},
       })
 
       expect(res).toMatchObject({
@@ -99,7 +115,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
 
       const parsed = oauth2Schemas.connector_config.parse(res.config)
-      expect(parsed.oauth).toEqual(configOauth)
+      expect(parsed.oauth).toEqual(oauthConfig)
 
       return res
     })
@@ -113,7 +129,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           pre_connect_input: {},
         },
       })
-      return oauth2Schemas.connect_input.parse(res.connect_input)
+      const parsed = oauth2Schemas.connect_input.parse(res.connect_input)
+      const authorizationUrl = new URL(parsed.authorization_url)
+      expect(authorizationUrl.searchParams.get('redirect_uri')).toEqual(
+        redirectUri,
+      )
+      return parsed
     })
 
     const connectRes = $test('connect get 302 redirect', async () => {
@@ -124,18 +145,12 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(response.status).toBe(302)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const url = new URL(response.headers.get('Location')!)
-      expect(url.pathname).toContain('/callback')
+      expect(url.toString()).toContain(redirectUri)
 
-      return z
-        .object({
-          code: z.string(),
-          state: z.string(),
-          code_verifier: z.string().optional(),
-        })
-        .parse({
-          ...urlSearchParamsToJson(url.searchParams),
-          code_verifier: preConnectRes.current.code_verifier,
-        })
+      return oauth2Schemas.connect_output.parse({
+        ...urlSearchParamsToJson(url.searchParams),
+        code_verifier: preConnectRes.current.code_verifier,
+      })
     })
 
     const postConnectRes = $test('postConnect', async () => {
@@ -149,10 +164,9 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       })
 
       const settings = oauth2Schemas.connection_settings.parse(res.settings)
-      return {
-        id: res.id,
-        settings,
-      }
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
+      return {id: res.id, settings}
     })
 
     // use access token to do something useful, like introspect
@@ -163,8 +177,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           body: new URLSearchParams({
             token:
               postConnectRes.current.settings.oauth.credentials!.access_token,
-            client_id: configOauth.client_id,
-            client_secret: configOauth.client_secret,
+            client_id: oauthConfig.client_id!,
+            client_secret: oauthConfig.client_secret!,
           }),
         }),
       )
@@ -177,16 +191,25 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
         id: postConnectRes.current.id,
       })
       expect(res.settings).toEqual(postConnectRes.current.settings)
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
     })
 
-    test.todo('check connection')
+    test('check connection', async () => {
+      const res = await asCustomer.checkConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
+    })
 
-    test.todo('refresh token')
-
+    // Simulate expiration
     test.todo('revoke connection')
 
     test.todo('handle status update after external revoke')
   })
+
+  // MARK: - APIKEY BASED AUTH
 
   describe('apikey based auth', () => {
     const settings = {apiKey: 'key-123'}
@@ -245,6 +268,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
     test.todo('handle status update after external revoke')
   })
 
+  // MARK: - CUSTOM AUTH
+
   describe('custom auth', () => {
     const ccfgRes = $test('create plaid connector config', async () => {
       const res = await asUser.createConnectorConfig({
@@ -289,6 +314,8 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
           connect_output: preConnectRes.current.connect_input,
         },
       })
+      // expect(res.status).toBe('healthy')
+      // expect(res.status_message).toBeNull()
 
       return res
     })
@@ -300,7 +327,13 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
       expect(res.settings).toEqual(postConnectRes.current.settings)
     })
 
-    test.todo('check connection')
+    test.skip('check connection', async () => {
+      const res = await asCustomer.checkConnection({
+        id: postConnectRes.current.id,
+      })
+      expect(res.status).toBe('healthy')
+      expect(res.status_message).toBeNull()
+    })
 
     test('revoke connection', async () => {
       const res = await asCustomer.revokeConnection({

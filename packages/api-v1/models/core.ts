@@ -5,6 +5,7 @@ import {
   zDiscriminatedConfig,
   zDiscriminatedSettings,
 } from '@openint/all-connectors/schemas'
+import {zStandard} from '@openint/cdk'
 import {schema} from '@openint/db'
 import {z} from '@openint/util/zod-utils'
 import {zConnector, zConnectorName} from '../trpc/routers/connector.models'
@@ -28,18 +29,24 @@ const organization_select = createSelectSchema(schema.organization).openapi({
   ref: 'core.organization',
 })
 
+export const connection_select_base = createSelectSchema(schema.connection)
+  .omit({
+    settings: true,
+    connector_name: true,
+    env_name: true, // not sure if we want this
+    metadata: true,
+    status: true,
+  })
+  .partial({
+    status_message: true,
+  })
+  .extend({
+    status: zStandard.connection.shape.status,
+    metadata: zMetadata.nullish(),
+  })
+
 const connection_select = z
-  .intersection(
-    createSelectSchema(schema.connection)
-      .omit({
-        settings: true,
-        connector_name: true,
-        env_name: true, // not sure if we want this
-        metadata: true,
-      })
-      .extend({metadata: zMetadata.nullish()}),
-    zDiscriminatedSettings,
-  )
+  .intersection(connection_select_base, zDiscriminatedSettings)
   .openapi({ref: 'core.connection_select'})
 
 const connection_insert = z
@@ -51,7 +58,10 @@ const connection_insert = z
         env_name: true, // not sure if we want this
         metadata: true,
       })
-      .extend({metadata: zMetadata.nullish()}),
+      .extend({
+        status: zStandard.connection.shape.status,
+        metadata: zMetadata.nullish(),
+      }),
     zDiscriminatedSettings,
   )
   .openapi({ref: 'core.connection_insert'})

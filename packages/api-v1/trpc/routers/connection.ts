@@ -1,3 +1,4 @@
+import type {ConnectorServer, ExtCustomerId} from '@openint/cdk'
 import type {Z} from '@openint/util/zod-utils'
 
 import {TRPCError} from '@trpc/server'
@@ -5,16 +6,16 @@ import {serverConnectors} from '@openint/all-connectors/connectors.server'
 import {zDiscriminatedSettings} from '@openint/all-connectors/schemas'
 import {makeId} from '@openint/cdk'
 import {and, dbUpsertOne, eq, inArray, schema, sql} from '@openint/db'
+import {getBaseURLs} from '@openint/env'
 import {makeUlid} from '@openint/util/id-utils'
 import {z} from '@openint/util/zod-utils'
 import {authenticatedProcedure, orgProcedure, router} from '../_base'
+import {getApiV1URL} from '../../lib/typed-routes'
 import {core} from '../../models/core'
 import {
   formatConnection,
-  zConnectionError,
   zConnectionExpanded,
   zConnectionExpandOption,
-  zConnectionStatus,
   zIncludeSecrets,
   zRefreshPolicy,
 } from './connection.models'
@@ -66,10 +67,10 @@ export const connectionRouter = router({
         })
       }
 
-      const connector =
-        serverConnectors[
-          connection.connector_name as keyof typeof serverConnectors
-        ]
+      const connector = serverConnectors[
+        connection.connector_name as keyof typeof serverConnectors
+      ] as ConnectorServer
+
       if (!connector) {
         throw new TRPCError({
           code: 'NOT_FOUND',
@@ -87,11 +88,14 @@ export const connectionRouter = router({
 
       if (
         credentialsRequiresRefresh &&
-        'refreshConnection' in connector &&
-        typeof connector.refreshConnection === 'function'
+        'checkConnection' in connector &&
+        typeof connector.checkConnection === 'function'
       ) {
-        const connector_config = await ctx.db.query.connector_config.findFirst({
-          where: eq(schema.connector_config.id, connection.connector_config_id),
+        const ccfg = await ctx.db.query.connector_config.findFirst({
+          where: eq(
+            schema.connector_config.id,
+            connection.connector_config_id!,
+          ),
           columns: {
             id: true,
             connector_name: true,
@@ -101,21 +105,43 @@ export const connectionRouter = router({
           },
         })
 
-        if (!connector_config) {
+        if (!ccfg) {
           throw new TRPCError({
             code: 'NOT_FOUND',
             message: 'Connector config not found',
           })
         }
 
-        const refreshedConnectionSettings = await connector.refreshConnection({
+        const context = {
+          webhookBaseUrl: getApiV1URL(`/webhook/${ccfg.connector_name}`),
+          extCustomerId: (ctx.viewer.role === 'customer'
+            ? ctx.viewer.customerId
+            : ctx.viewer.userId) as ExtCustomerId,
+          fetch: ctx.fetch,
+          baseURLs: getBaseURLs(null),
+        }
+
+        const instance = connector.newInstance?.({
+          config: ccfg.config,
+          settings: undefined,
+          context,
+          fetchLinks: [],
+          onSettingsChange: () => {}, // noop
+        })
+
+        const connUpdate = await connector.checkConnection({
           settings: connection.settings,
-          config: connector_config.config,
+          config: ccfg.config,
+          options: {},
+          instance,
+          context,
         })
         const updatedConnection = await ctx.db
           .update(schema.connection)
           .set({
-            settings: refreshedConnectionSettings,
+            settings: connUpdate.settings,
+            status: connUpdate.status,
+            status_message: connUpdate.status_message,
             updated_at: new Date().toISOString(),
           })
           .where(eq(schema.connection.id, connection.id))
@@ -241,93 +267,6 @@ export const connectionRouter = router({
         offset,
       }
     }),
-  checkConnection: orgProcedure
-    .meta({
-      openapi: {
-        method: 'POST',
-        path: '/connection/{id}/check',
-        description: 'Verify that a connection is healthy',
-        summary: 'Check Connection Health',
-      },
-    })
-    .input(
-      z.object({
-        id: zConnectionId,
-      }),
-    )
-    .output(
-      z.object({
-        id: zConnectionId,
-        status: zConnectionStatus,
-        error: zConnectionError.optional(),
-        errorMessage: z
-          .string()
-          .optional()
-          .describe('Optional expanded error message'),
-      }),
-    )
-    .mutation(async ({ctx, input}) => {
-      const connection = await ctx.db.query.connection.findFirst({
-        where: eq(schema.connection.id, input.id),
-      })
-      if (!connection || !connection.connector_config_id) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Connection not found',
-        })
-      }
-
-      const credentialsRequiresRefresh = connection.settings.oauth?.credentials
-        ?.expires_at
-        ? new Date(connection.settings.oauth.credentials.expires_at) <
-          new Date()
-        : false
-
-      if (credentialsRequiresRefresh) {
-        // TODO: implement refresh logic here
-        console.warn('Connection requires refresh', credentialsRequiresRefresh)
-        // Add actual refresh implementation
-      }
-
-      const connector =
-        serverConnectors[
-          connection.connector_name as keyof typeof serverConnectors
-        ]
-      if (!connector) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Connector not found for connection ${connection.id}`,
-        })
-      }
-
-      if (
-        'checkConnection' in connector &&
-        typeof connector.checkConnection === 'function'
-      ) {
-        try {
-          await connector.checkConnection(connection.settings)
-          // QQ: should this parse the results of checkConnection somehow?
-
-          // TODO: persist the result of checkConnection for settings
-          return {
-            id: connection.id as `conn_${string}`,
-            status: 'healthy',
-          }
-        } catch (error) {
-          return {
-            id: connection.id as `conn_${string}`,
-            status: 'disconnected',
-            error: 'unknown_external_error',
-          }
-        }
-      }
-
-      // QQ: should we return healthy by default even if there's no check connection implemented?
-      return {
-        id: connection.id as `conn_${string}`,
-        status: 'healthy',
-      }
-    }),
 
   deleteConnection: authenticatedProcedure
     .meta({
@@ -406,30 +345,7 @@ export const connectionRouter = router({
         })
       }
 
-      let settings = input.data.settings
-      // Check if connection is valid
-      if (
-        'checkConnection' in connector &&
-        typeof connector.checkConnection === 'function'
-      ) {
-        try {
-          settings = await connector.checkConnection({
-            settings: input.data.settings,
-            config: ccfg.config,
-            options: {
-              updateWebhook: false,
-            },
-            context: {
-              webhookBaseUrl: '',
-            },
-          })
-        } catch (error) {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: `Connection check failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          })
-        }
-      }
+      // TODO: Launch an async job to check connection here
 
       // Create connection record
       const id = makeId('conn', input.data.connector_name, makeUlid())
@@ -438,7 +354,7 @@ export const connectionRouter = router({
         schema.connection,
         {
           id,
-          settings,
+          settings: input.data.settings,
           connector_config_id: input.connector_config_id,
           customer_id: input.customer_id,
           metadata: input.metadata,

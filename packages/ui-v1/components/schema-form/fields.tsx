@@ -1,18 +1,14 @@
 import type {FieldProps, RegistryFieldsType} from '@rjsf/utils'
 import type {ConnectorConfig} from '@openint/api-v1/models'
+import type {OAuthConnectorConfig} from '@openint/cnext/auth-oauth2/schemas'
 
 import {useState} from 'react'
+import {env} from '@openint/env'
 import {Input, Switch} from '@openint/shadcn/ui'
 import {ConnectorBadges} from '../../domain-components/ConnectorCard'
-import ConnectorScopes from '../ConnectorScopes'
+import {ConnectorScopes} from '../ConnectorScopes'
 import {CopyID} from '../CopyID'
 import {CredentialsField} from './fields/CredentialsField'
-
-interface OAuthFormData {
-  client_id?: string
-  client_secret?: string
-  scopes?: string[]
-}
 
 interface Scope {
   scope: string
@@ -27,9 +23,7 @@ interface OAuthFormContext {
   initialData: ConnectorConfig
 }
 
-export function OAuthField<T extends OAuthFormData = OAuthFormData>(
-  props: FieldProps<T>,
-) {
+export function OAuthField(props: FieldProps<OAuthConnectorConfig>) {
   const {formData, onChange, formContext} = props
   const {openint_scopes, scopes, connectorName, initialData} =
     formContext as OAuthFormContext
@@ -52,7 +46,7 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
     onChange({
       ...formData,
       [field]: value,
-    } as T)
+    } as OAuthConnectorConfig)
   }
 
   const handleSwitchChange = (newValue: boolean) => {
@@ -62,10 +56,13 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
       client_secret: newValue
         ? undefined
         : initialData?.config?.oauth?.client_secret,
+      redirect_uri: newValue
+        ? undefined
+        : initialData?.config?.oauth?.redirect_uri,
       scopes: newValue
         ? (formData?.scopes || []).filter((s) => openint_scopes.includes(s))
         : formData?.scopes,
-    } as T)
+    } as OAuthConnectorConfig)
 
     setUseOpenIntCredentials(newValue)
   }
@@ -114,6 +111,27 @@ export function OAuthField<T extends OAuthFormData = OAuthFormData>(
               handleChange('client_secret', e.target.value)
             }}
             placeholder="Enter client secret"
+          />
+          <label
+            htmlFor="redirect_uri"
+            className="text-sm font-medium text-gray-700">
+            Redirect URI (Optional)
+          </label>
+          <div className="text-sm text-gray-500">
+            If not specified, will default to{' '}
+            <pre>{env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY}</pre>
+          </div>
+          <Input
+            id="redirect_uri"
+            type="text"
+            // TODO: Validate that this is a URL field...
+            // TODO: Delegate to schema form for this rather than
+            // rendering these individual fields but losing all validation information
+            value={formData?.redirect_uri || ''}
+            onChange={(e) => {
+              handleChange('redirect_uri', e.target.value)
+            }}
+            placeholder={env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY}
           />
         </div>
       )}

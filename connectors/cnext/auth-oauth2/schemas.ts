@@ -1,19 +1,26 @@
 import type {ConnectorSchemas} from '@openint/cdk'
+import type {Z} from '@openint/util/zod-utils'
 
 import {z} from '@openint/util/zod-utils'
 
-const zOauthConnectorConfig = z
+const _zOauthConnectorConfig = z
   .object({
     client_id: z.string().nullish(),
     client_secret: z.string().nullish(),
     scopes: z.array(z.string()).nullish(),
     // TODO: Is this needed?
-    redirect_uri: z.string().nullish(),
+    redirect_uri: z.string().nullish().openapi({
+      description: 'Custom redirect URI',
+    }),
   })
   .describe('Base oauth configuration for the connector')
-  .openapi({
-    'ui:field': 'OAuthField',
-  })
+
+export type OAuthConnectorConfig = Z.infer<typeof _zOauthConnectorConfig>
+
+/** To avoid the circular type reference */
+export const zOauthConnectorConfig = _zOauthConnectorConfig.openapi({
+  'ui:field': 'OAuthField',
+})
 
 const zOAuthConnectionSettings = z.object({
   credentials: z
@@ -44,6 +51,8 @@ const zOAuthConnectionSettings = z.object({
   /** @deprecated */
   metadata: z.record(z.unknown()).nullable().optional(),
 })
+
+export type OAuthConnectionSettings = Z.infer<typeof zOAuthConnectionSettings>
 
 export const zAuthParamsConfig = z.object({
   authorize: z.record(z.string(), z.string()).optional(),

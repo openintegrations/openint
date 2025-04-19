@@ -5,6 +5,8 @@ import type {
   ObjectPartialDeep,
 } from '@openint/util/type-utils'
 import type {Z} from '@openint/util/zod-utils'
+// eslint-disable-next-line import-x/no-relative-packages
+import type {ZStandard} from '../cdk'
 
 import {z} from '@openint/util/zod-utils'
 
@@ -48,9 +50,8 @@ export interface ConnectionUpdateData<
     externalId: ExternalId
     data: TInsData
   }
-  // QQ: Extend this or calculate it before displaying based on settings?
-  // status?: ZStandard['connection']['status']
-  // statusMessage?: string
+  status?: ZStandard['connection']['status']
+  status_message?: string | null
 }
 export interface StateUpdateData<TSrcOptions = {}, TDestOptions = {}> {
   sourceState?: ObjectPartialDeep<NoInfer<TSrcOptions>>

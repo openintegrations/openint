@@ -55,7 +55,7 @@ export function createApp(opts: CreateAppOptions) {
               name: 'client_1',
               secret: 'secret_1',
               redirectUris: [
-                env.OAUTH_REDIRECT_URI_GATEWAY,
+                env.NEXT_PUBLIC_OAUTH_REDIRECT_URI_GATEWAY,
                 getBaseURLs(null).connect + '/callback',
               ],
               allowedGrants: [

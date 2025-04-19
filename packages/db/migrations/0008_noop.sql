@@ -1,0 +1,151 @@
+-- drizzle snapshot appears to be out of date with the actual state in the db
+-- So we generate an empty migration to try to get it up to date again
+
+-- ALTER TABLE "connector_config" drop column "default_pipe_out_destination_id";--> statement-breakpoint
+-- ALTER TABLE "connector_config" ADD COLUMN "default_pipe_out_destination_id" varchar GENERATED ALWAYS AS (
+--       (default_pipe_out ->> 'destination_id'::text)
+--     ) STORED;--> statement-breakpoint
+-- ALTER TABLE "connector_config" drop column "default_pipe_in_source_id";--> statement-breakpoint
+-- ALTER TABLE "connector_config" ADD COLUMN "default_pipe_in_source_id" varchar GENERATED ALWAYS AS (
+--       (default_pipe_in ->> 'source_id'::text)
+--     ) STORED;--> statement-breakpoint
+-- ALTER TABLE "event" drop column "org_id";--> statement-breakpoint
+-- ALTER TABLE "event" ADD COLUMN "org_id" varchar GENERATED ALWAYS AS ("user" ->> 'org_id') STORED;--> statement-breakpoint
+-- ALTER TABLE "event" drop column "user_id";--> statement-breakpoint
+-- ALTER TABLE "event" ADD COLUMN "user_id" varchar GENERATED ALWAYS AS ("user" ->> 'user_id') STORED;--> statement-breakpoint
+-- ALTER TABLE "event" drop column "customer_id";--> statement-breakpoint
+-- ALTER TABLE "event" ADD COLUMN "customer_id" varchar GENERATED ALWAYS AS (COALESCE("user" ->> 'cus_id', "user" ->> 'customer_id')) STORED;--> statement-breakpoint
+-- ALTER POLICY "org_member_access" ON "connection" TO authenticated USING (
+--         (
+--           connector_config_id IN (
+--             SELECT
+--               connector_config.id
+--             FROM
+--               public.connector_config
+--             WHERE
+--               connector_config.org_id = public.jwt_org_id ()
+--           )
+--         )
+--       ) WITH CHECK (
+--         (
+--           connector_config_id IN (
+--             SELECT
+--               connector_config.id
+--             FROM
+--               public.connector_config
+--             WHERE
+--               connector_config.org_id = public.jwt_org_id ()
+--           )
+--         )
+--       );--> statement-breakpoint
+-- ALTER POLICY "org_access" ON "connection" TO org USING (
+--         (
+--           connector_config_id IN (
+--             SELECT
+--               connector_config.id
+--             FROM
+--               public.connector_config
+--             WHERE
+--               connector_config.org_id = public.jwt_org_id ()
+--           )
+--         )
+--       ) WITH CHECK (
+--         (
+--           connector_config_id IN (
+--             SELECT
+--               connector_config.id
+--             FROM
+--               public.connector_config
+--             WHERE
+--               connector_config.org_id = public.jwt_org_id ()
+--           )
+--         )
+--       );--> statement-breakpoint
+-- ALTER POLICY "customer_access" ON "connection" TO customer USING (
+--         (
+--           connector_config_id IN (
+--             SELECT
+--               connector_config.id
+--             FROM
+--               public.connector_config
+--             WHERE
+--               connector_config.org_id = public.jwt_org_id ()
+--           )
+--           AND customer_id = (
+--             SELECT
+--               public.jwt_customer_id ()
+--           )
+--         )
+--       );--> statement-breakpoint
+-- ALTER POLICY "org_access" ON "connector_config" TO org USING (org_id = jwt_org_id ()) WITH CHECK (org_id = jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "customer_access" ON "connector_config" TO customer USING (org_id = public.jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "org_member_access" ON "connector_config" TO authenticated USING (org_id = public.jwt_org_id ()) WITH CHECK (org_id = public.jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "org_access" ON "customer" TO org USING (org_id = jwt_org_id ()) WITH CHECK (org_id = jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "org_member_access" ON "customer" TO authenticated USING (org_id = jwt_org_id ()) WITH CHECK (org_id = jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "customer_read" ON "customer" TO customer USING (
+--         org_id = jwt_org_id ()
+--         AND id = jwt_customer_id ()
+--       );--> statement-breakpoint
+-- ALTER POLICY "org_read" ON "event" TO org USING (org_id = jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "org_member_read" ON "event" TO authenticated USING (org_id = public.jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "customer_read" ON "event" TO customer USING (org_id = public.jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "org_append" ON "event" TO org WITH CHECK (org_id = jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "org_member_append" ON "event" TO authenticated WITH CHECK (org_id = public.jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "customer_append" ON "event" TO customer WITH CHECK (org_id = public.jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "org_write_access" ON "integration" TO public USING (TRUE) WITH CHECK (TRUE);--> statement-breakpoint
+-- ALTER POLICY "public_readonly_access" ON "integration" TO public USING (TRUE);--> statement-breakpoint
+-- ALTER POLICY "org_read" ON "organization" TO org USING (id = jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "org_member_read" ON "organization" TO authenticated USING (id = jwt_org_id ());--> statement-breakpoint
+-- ALTER POLICY "customer_access" ON "pipeline" TO customer USING (
+--         (
+--           SELECT
+--             array(
+--               SELECT
+--                 id
+--               FROM
+--                 connection
+--               WHERE
+--                 connector_config_id = ANY (
+--                   SELECT
+--                     id
+--                   FROM
+--                     connector_config
+--                   WHERE
+--                     org_id = jwt_org_id ()
+--                 )
+--                 AND customer_id = (
+--                   SELECT
+--                     jwt_customer_id ()
+--                 )
+--             ) && ARRAY[pipeline.source_id, pipeline.destination_id]
+--         )
+--       );--> statement-breakpoint
+-- ALTER POLICY "org_access" ON "pipeline" TO org USING (
+--         (
+--           SELECT
+--             array(
+--               SELECT
+--                 r.id
+--               FROM
+--                 resource r
+--                 JOIN connector_config cc ON r.connector_config_id = cc.id
+--               WHERE
+--                 cc.org_id = jwt_org_id ()
+--             ) && ARRAY[source_id, destination_id]
+--             ) WITH CHECK ( && and @> is the same, however we are using && to stay consistent with end user policy
+--         )
+--       );--> statement-breakpoint
+-- ALTER POLICY "org_member_access" ON "pipeline" TO authenticated USING (
+--         (
+--           array(
+--             SELECT
+--               r.id
+--             FROM
+--               resource r
+--               JOIN connector_config cc ON cc.id = r.connector_config_id
+--             WHERE
+--               cc.org_id = jwt_org_id ()
+--           ) && ARRAY[source_id, destination_id]
+--           ) WITH CHECK ( && and @> is the same, however we are using && to stay consistent with end user policy
+--         )
+--       );
