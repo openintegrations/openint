@@ -735,6 +735,7 @@
                             "disconnected",
                             "error",
                             "manual",
+                            "unknown",
                             null
                           ]
                         },
@@ -1322,6 +1323,7 @@
                                   "disconnected",
                                   "error",
                                   "manual",
+                                  "unknown",
                                   null
                                 ]
                               },
@@ -2328,6 +2330,7 @@
                         "disconnected",
                         "error",
                         "manual",
+                        "unknown",
                         null
                       ]
                     },
@@ -2751,7 +2754,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -2891,7 +2893,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -3237,7 +3238,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -3377,7 +3377,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -3517,7 +3516,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -3967,7 +3965,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -4107,7 +4104,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -4253,7 +4249,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -4393,7 +4388,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -4533,7 +4527,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -4673,7 +4666,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -4813,7 +4805,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -5039,7 +5030,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -5179,7 +5169,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -5319,7 +5308,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -5459,7 +5447,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -5599,7 +5586,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -5739,7 +5725,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -5879,7 +5864,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -6222,7 +6206,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -6440,7 +6423,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -6580,7 +6562,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -6865,23 +6846,8 @@
             "properties": {
               "databaseURL": {
                 "type": "string"
-              },
-              "sourceQueries": {
-                "type": "object",
-                "properties": {
-                  "invoice": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
-                    "description": "Should order by lastModifiedAt and id descending"
-                  }
-                }
               }
-            },
-            "required": [
-              "databaseURL"
-            ]
+            }
           }
         },
         "required": [
@@ -6953,7 +6919,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -7176,7 +7141,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -7316,7 +7280,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -7505,7 +7468,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -7645,7 +7607,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -8203,7 +8164,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -8466,7 +8426,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -8789,7 +8748,6 @@
                     },
                     "required": [
                       "access_token",
-                      "scope",
                       "raw"
                     ],
                     "description": "Output of the postConnect hook for oauth2 connectors"
@@ -8950,6 +8908,7 @@
                   "disconnected",
                   "error",
                   "manual",
+                  "unknown",
                   null
                 ]
               },
