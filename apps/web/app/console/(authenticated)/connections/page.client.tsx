@@ -122,7 +122,8 @@ export function ConnectionsPage() {
         <DataTable<ConnectionExpanded, string | number | string[]>
           data={connectionData.data.items}
           columns={columnsWithActions}
-          onRowClick={handleRowClick}>
+          // Disable row click for now as it interferes with the command popover
+          onRowClick={false ? handleRowClick : undefined}>
           <DataTable.Header>
             <DataTable.SearchInput />
             <DataTable.ColumnVisibilityToggle />
