@@ -4,7 +4,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
 [
   {
     "authType": "OAUTH2",
-    "display_name": "Acme Oauth2",
+    "display_name": "Acme Oauth Connector",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-acme-oauth2.svg",
     "name": "acme-oauth2",
     "openint_scopes": [
@@ -193,7 +193,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "Aircall (OAuth)",
+    "display_name": "Aircall",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-aircall.svg",
     "name": "aircall",
     "openint_scopes": [
@@ -771,69 +771,42 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "read:confluence-user",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "redirect_uri": {
-                    "description": "Custom redirect URI",
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "description": "Custom redirect URI",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -1011,69 +984,42 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "identify",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "redirect_uri": {
-                    "description": "Custom redirect URI",
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "description": "Custom redirect URI",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -1897,7 +1843,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "GitHub (User OAuth)",
+    "display_name": "GitHub",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-github.svg",
     "name": "github",
     "openint_scopes": [
@@ -2011,69 +1957,42 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "user:email",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "redirect_uri": {
-                    "description": "Custom redirect URI",
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "description": "Custom redirect URI",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -2133,7 +2052,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "Gong (Oauth)",
+    "display_name": "Gong",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-gong.svg",
     "name": "gong",
     "openint_scopes": [
@@ -4172,7 +4091,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "Jira (OAuth)",
+    "display_name": "Jira",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-jira.svg",
     "name": "jira",
     "openint_scopes": [
@@ -4377,7 +4296,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "Lever (OAuth)",
+    "display_name": "Lever",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-lever.svg",
     "name": "lever",
     "openint_scopes": [
@@ -4700,69 +4619,42 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "user:read",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "redirect_uri": {
-                    "description": "Custom redirect URI",
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "description": "Custom redirect URI",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -4942,71 +4834,42 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "profile",
-                        "email",
-                        "openid",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "redirect_uri": {
-                    "description": "Custom redirect URI",
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "description": "Custom redirect URI",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -5447,69 +5310,42 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "user:read",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "redirect_uri": {
-                    "description": "Custom redirect URI",
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "description": "Custom redirect URI",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -7271,9 +7107,9 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "SharePoint Online (v2)",
-    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepointonline.svg",
-    "name": "sharepointonline",
+    "display_name": "SharePoint",
+    "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-sharepoint.svg",
+    "name": "sharepoint",
     "openint_scopes": [
       "offline_access",
       "openid",
@@ -7386,70 +7222,42 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "offline_access",
-                        "openid",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "redirect_uri": {
-                    "description": "Custom redirect URI",
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "description": "Custom redirect URI",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -7603,69 +7411,42 @@ exports[`db: pglite list connectors with schemas 1`] = `
       "connector_config": {
         "properties": {
           "oauth": {
-            "anyOf": [
-              {
-                "properties": {
-                  "scopes": {
-                    "description": "Scopes for OpenInt Platform Credentials",
-                    "items": {
-                      "enum": [
-                        "users:read",
-                      ],
-                      "type": "string",
-                    },
-                    "title": "Scopes",
-                    "type": "array",
-                  },
-                },
-                "required": [
-                  "scopes",
-                ],
-                "title": "Use OpenInt platform credentials",
-                "type": "object",
-              },
-              {
-                "description": "Base oauth configuration for the connector",
-                "properties": {
-                  "client_id": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "client_secret": {
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "redirect_uri": {
-                    "description": "Custom redirect URI",
-                    "type": [
-                      "string",
-                      "null",
-                    ],
-                  },
-                  "scopes": {
-                    "items": {
-                      "type": "string",
-                    },
-                    "type": [
-                      "array",
-                      "null",
-                    ],
-                  },
-                },
-                "title": "Use my own",
+            "description": "Base oauth configuration for the connector",
+            "properties": {
+              "client_id": {
                 "type": [
-                  "object",
+                  "string",
                   "null",
                 ],
-                "ui:field": "OAuthField",
               },
+              "client_secret": {
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "redirect_uri": {
+                "description": "Custom redirect URI",
+                "type": [
+                  "string",
+                  "null",
+                ],
+              },
+              "scopes": {
+                "items": {
+                  "type": "string",
+                },
+                "type": [
+                  "array",
+                  "null",
+                ],
+              },
+            },
+            "type": [
+              "object",
+              "null",
             ],
             "ui:field": "OAuthField",
-            "ui:fieldReplacesAnyOrOneOf": true,
           },
         },
         "required": [
@@ -8401,7 +8182,7 @@ exports[`db: pglite list connectors with schemas 1`] = `
   },
   {
     "authType": "OAUTH2",
-    "display_name": "Twitter (v2)",
+    "display_name": "Twitter",
     "logo_url": "https://cdn.jsdelivr.net/gh/openintegrations/openint@main/apps/web/public/_assets/logo-twitter.svg",
     "name": "twitter",
     "openint_scopes": [

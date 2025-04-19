@@ -34,7 +34,7 @@ describeEachDatabase({drivers: ['pglite'], migrate: true, logger}, (db) => {
   test('get connector by with invalid name returns error', async () => {
     await expect(
       asOrg.getConnectorByName({name: 'foo' as never}),
-    ).rejects.toThrow(/Input validation failed/)
+    ).rejects.toThrow(/invalid_enum_value/)
   })
 
   test('get connector by name', async () => {
