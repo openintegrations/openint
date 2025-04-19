@@ -227,7 +227,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -277,7 +277,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -416,7 +416,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -466,7 +466,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -516,7 +516,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -677,7 +677,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -727,7 +727,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -779,7 +779,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -829,7 +829,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -879,7 +879,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -929,7 +929,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -979,7 +979,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1069,7 +1069,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1119,7 +1119,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1169,7 +1169,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1219,7 +1219,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1269,7 +1269,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1319,7 +1319,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1369,7 +1369,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1508,7 +1508,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1586,7 +1586,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1636,7 +1636,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1735,11 +1735,7 @@ export interface components {
              */
             connector_name: "postgres";
             settings: {
-                databaseURL: string;
-                sourceQueries?: {
-                    /** @description Should order by lastModifiedAt and id descending */
-                    invoice?: string | null;
-                };
+                databaseURL?: string;
             };
         };
         /** postgres */
@@ -1765,7 +1761,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1848,7 +1844,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1898,7 +1894,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -1970,7 +1966,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -2020,7 +2016,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -2217,7 +2213,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -2317,7 +2313,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -2417,7 +2413,7 @@ export interface components {
                         access_token: string;
                         /** @description Client ID used for the connection */
                         client_id?: string;
-                        scope: string;
+                        scope?: string;
                         refresh_token?: string;
                         expires_in?: number;
                         expires_at?: string;
@@ -2469,7 +2465,7 @@ export interface components {
             display_name: string | null;
             disabled: boolean | null;
             /** @enum {string|null} */
-            status?: "healthy" | "disconnected" | "error" | "manual" | null;
+            status?: "healthy" | "disconnected" | "error" | "manual" | "unknown" | null;
             /** @description
              *       JSON object can can be used to associate arbitrary metadata to
              *       avoid needing a separate 1-1 table just for simple key values in your application.
@@ -2903,7 +2899,7 @@ export interface operations {
                         display_name: string | null;
                         disabled: boolean | null;
                         /** @enum {string|null} */
-                        status?: "healthy" | "disconnected" | "error" | "manual" | null;
+                        status?: "healthy" | "disconnected" | "error" | "manual" | "unknown" | null;
                         /** @description
                          *       JSON object can can be used to associate arbitrary metadata to
                          *       avoid needing a separate 1-1 table just for simple key values in your application.
@@ -3074,7 +3070,7 @@ export interface operations {
                             display_name: string | null;
                             disabled: boolean | null;
                             /** @enum {string|null} */
-                            status?: "healthy" | "disconnected" | "error" | "manual" | null;
+                            status?: "healthy" | "disconnected" | "error" | "manual" | "unknown" | null;
                             /** @description
                              *       JSON object can can be used to associate arbitrary metadata to
                              *       avoid needing a separate 1-1 table just for simple key values in your application.
@@ -3427,7 +3423,7 @@ export interface operations {
                     "application/json": {
                         id: string;
                         /** @enum {string|null} */
-                        status?: "healthy" | "disconnected" | "error" | "manual" | null;
+                        status?: "healthy" | "disconnected" | "error" | "manual" | "unknown" | null;
                         status_message?: string | null;
                     };
                 };

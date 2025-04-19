@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import type {CommandDefinitionMap} from '@openint/commands'
 
-import {toast, Toaster} from 'sonner'
+import {toast, Toaster} from '@openint/shadcn/ui/sonner'
 import {
   CommandBar,
   CommandButton,

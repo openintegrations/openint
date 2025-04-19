@@ -15,7 +15,8 @@ import {
   useOrganizationList,
   useSession,
 } from '@openint/console-auth/client'
-import {CommandBar, CommandContext, toast} from '@openint/ui-v1'
+import {toast, Toaster} from '@openint/shadcn/ui/sonner'
+import {CommandBar, CommandContext} from '@openint/ui-v1'
 import {useTheme} from '@openint/ui-v1/components/ThemeProvider'
 import {z} from '@openint/util/zod-utils'
 import {SIDEBAR_NAV_ITEMS} from '@/app/console/(authenticated)/sidebar-nav-items'
@@ -33,7 +34,7 @@ export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
         definitions,
       }}>
       <CommandBar ctx={{}} definitions={definitions} />
-
+      <Toaster />
       {props.children}
     </CommandContext.Provider>
   )
@@ -41,7 +42,9 @@ export function GlobalCommandBarProvider(props: {children: React.ReactNode}) {
 
 export function useCommandDefinitionMap() {
   // Switch organization commands
-  const orgList = useOrganizationList({userMemberships: true})
+  const orgList = useOrganizationList({
+    userMemberships: {pageSize: 500}, // No user would have been able to have more than 500 orgs, so this is good enough to get it all in one go
+  })
   const org = useOrganization()
 
   const orgCommands = Object.fromEntries(
@@ -134,13 +137,38 @@ function useConnectionCommands() {
 
   const deleteConnection = useMutation(
     trpc.deleteConnection.mutationOptions({
+      onMutate: () => {
+        toast.loading('Deleting connection...')
+      },
+      onSuccess: () => {
+        toast.success('Connection deleted successfully!')
+      },
+      onError: (error) => {
+        toast.error(`Connection deletion failed: ${error.message}`)
+      },
       onSettled: () => {
         // Refetch the connections after deletion
         void queryClient.invalidateQueries({
-          queryKey: trpc.listConnections.queryKey({
-            // What to do here...
-            // connector_name: props.connector_name,
-          }),
+          queryKey: trpc.listConnections.queryKey(),
+        })
+      },
+    }),
+  )
+
+  const checkConnection = useMutation(
+    trpc.checkConnection.mutationOptions({
+      onMutate: (_variables) => {
+        toast.loading('Checking connection...')
+      },
+      onSuccess: () => {
+        toast.success('Connection check successful!')
+      },
+      onError: (error) => {
+        toast.error(`Connection check failed: ${error.message}`)
+      },
+      onSettled: () => {
+        void queryClient.invalidateQueries({
+          queryKey: trpc.listConnections.queryKey(),
         })
       },
     }),
@@ -173,7 +201,7 @@ function useConnectionCommands() {
       }),
       execute: async ({params}) => {
         await navigator.clipboard.writeText(params.connection_id)
-        alert(`Copied connection ID: ${params.connection_id}`)
+        toast.success(`Copied connection ID: ${params.connection_id}`)
       },
     }),
 
@@ -183,35 +211,8 @@ function useConnectionCommands() {
       params: z.object({
         connection_id: z.string().describe('The ID of the connection to check'),
       }),
-      execute: () => {
-        try {
-          // await trpc.checkConnection.mutate({id: params.connection_id})
-          alert('Connection check successful!')
-        } catch (error) {
-          alert(
-            `Connection check failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          )
-        }
-      },
-    }),
-
-    'connection:refresh': cmd.identity({
-      title: 'Refresh Connection',
-      icon: 'RefreshCcw',
-      params: z.object({
-        connection_id: z
-          .string()
-          .describe('The ID of the connection to refresh'),
-      }),
-      execute: () => {
-        try {
-          // await trpc.refreshConnection.mutate({id: params.connection_id})
-          alert('Connection refreshed successfully!')
-        } catch (error) {
-          alert(
-            `Failed to refresh connection: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          )
-        }
+      execute: async ({params}) => {
+        await checkConnection.mutateAsync({id: params.connection_id})
       },
     }),
   } satisfies CommandDefinitionMap

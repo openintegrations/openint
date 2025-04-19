@@ -21,9 +21,36 @@ const meta: Meta<typeof ConnectionCard> = {
 export default meta
 type Story = StoryObj<typeof ConnectionCard>
 
-export const Default: Story = {
+export const Healthy: Story = {
   args: {
     connection: FIXTURES.connections['salesforce-basic'],
+  },
+}
+
+export const Error: Story = {
+  args: {
+    connection: {
+      ...FIXTURES.connections['salesforce-basic'],
+      status: 'error',
+    },
+  },
+}
+
+export const Disconnected: Story = {
+  args: {
+    connection: {
+      ...FIXTURES.connections['salesforce-basic'],
+      status: 'disconnected',
+    },
+  },
+}
+
+export const Manual: Story = {
+  args: {
+    connection: {
+      ...FIXTURES.connections['salesforce-basic'],
+      status: 'manual',
+    },
   },
 }
 

@@ -42,9 +42,10 @@ export const zStandard = {
     status: z
       .enum([
         'healthy', // Connected and all is well
-        'disconnected', // User intervention needed to reconnect
-        'error', // System error, nothing user can do. This would also include revoked
+        'disconnected', // User intervention needed to reconnect. this includes revoked
+        'error', // System error, nothing user can do, should recover on its own
         'manual', // This is a manual connection (e.g. import. So normal status does not apply)
+        'unknown', // Status unknown, this is the default if status is missing
       ])
       .nullish(), // Status unknown
     statusMessage: z.string().nullish(),

@@ -13,19 +13,8 @@ export const postgresSchemas = {
   // if it's connectionSettings then it doesn't make as much sense to configure
   // in the list of integrations...
   // How do we create default connections for integrations that are basically single connection?
-  connection_settings: zPgConfig.pick({databaseURL: true}).extend({
-    // gotta make sourceQueries a Textarea
-    sourceQueries: z
-      .object({
-        invoice: z
-          .string()
-          .nullish()
-          .describe('Should order by lastModifiedAt and id descending'),
-      })
-      // .nullish() does not translate well to jsonSchema
-      // @see https://share.cleanshot.com/w0KVx1Y2
-      .optional(),
-  }),
+  // This is to take into account all the default postgres connections that used to exist
+  connection_settings: zPgConfig.partial({databaseURL: true}),
 } satisfies ConnectorSchemas
 
 export const postgresHelpers = connHelpers(postgresSchemas)

@@ -6,6 +6,7 @@ import {useState} from 'react'
 import {cn} from '@openint/shadcn/lib/utils'
 import {Card, CardContent} from '@openint/shadcn/ui'
 import {titleCase} from '@openint/util/string-utils'
+import {ConnectionStatusBadge, getConnectionStatusStyles} from './ConnectionStatusBadge'
 
 export interface ConnectionCardProps {
   connection: ConnectionExpanded
@@ -32,12 +33,15 @@ export function ConnectionCard({
     connection.connector?.display_name ||
     titleCase(connection.connector_name)
 
+  const {borderColor} = getConnectionStatusStyles(connection.status)
+
   return (
     <Card
       className={cn(
         'border-card-border bg-card relative h-[150px] w-[150px] rounded-lg border p-0',
         onPress &&
           'hover:border-button hover:bg-button-light cursor-pointer transition-colors duration-300 ease-in-out',
+        borderColor,
         className,
       )}
       onMouseEnter={() => onPress && setIsHovered(true)}
@@ -74,6 +78,7 @@ export function ConnectionCard({
                   {connection.id}
                 </pre>
               )}
+              <ConnectionStatusBadge status={connection.status} />
             </>
           )}
         </div>

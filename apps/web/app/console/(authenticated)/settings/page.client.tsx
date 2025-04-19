@@ -1,6 +1,6 @@
 'use client'
 
-import {toast} from '@openint/ui-v1'
+import {toast} from '@openint/shadcn/ui/sonner'
 import {SecureInput} from '@openint/ui-v1/components/SecureInput'
 import {WebhookInput} from '@openint/ui-v1/components/WebhookInput'
 import {useMutation, useTRPC} from '@/lib-client/TRPCApp'

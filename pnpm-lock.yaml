@@ -135,6 +135,9 @@ importers:
       '@openint/cdk':
         specifier: workspace:*
         version: link:../../kits/cdk
+      '@openint/cnext':
+        specifier: workspace:*
+        version: link:../../connectors/cnext
       '@openint/commands':
         specifier: workspace:*
         version: link:../../packages/commands
@@ -1355,9 +1358,6 @@ importers:
       react:
         specifier: 19.0.0
         version: 19.0.0
-      sonner:
-        specifier: ^1.4.0
-        version: 1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       zod-openapi:
         specifier: ^4.2.4
         version: 4.2.4(zod@3.24.2)
