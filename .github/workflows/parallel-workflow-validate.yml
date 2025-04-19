@@ -50,20 +50,23 @@ jobs:
         run: pnpm install
       - name: Run generate
         run: pnpm generate
-      - name: Check for new generated files
+      - name: Check for changes after generate
         run: |
-          # Get list of changed files
-          CHANGED_FILES=$(git diff --name-only origin/main..HEAD)
+          # Check if there are any changes in the entire repo after running generate
+          CHANGES=$(git status --porcelain)
 
-          # Check for changes in generated directories
-          GENERATED_CHANGES=$(echo "$CHANGED_FILES" | grep -E "(__generated__|\.generated\.|\.gen\.)")
-
-          if [ ! -z "$GENERATED_CHANGES" ]; then
-            echo "::error::Generated files have been modified. Please run 'pnpm generate' locally and commit the changes."
-            echo "::error::The following generated files were changed:"
-            echo "$GENERATED_CHANGES" | while read -r file; do
-              echo "::error::  - $file"
+          if [ ! -z "$CHANGES" ]; then
+            echo "::error::Found uncommitted changes after running 'pnpm generate'. This means either:"
+            echo "::error::1. You modified generated files manually instead of using 'pnpm generate', or"
+            echo "::error::2. You forgot to run 'pnpm generate' after changing source files"
+            echo "::error::"
+            echo "::error::The following files are not in sync:"
+            echo "$CHANGES" | while read -r line; do
+              # Extract filename from git status output (removes status codes)
+              FILE=$(echo "$line" | sed 's/^...//')
+              echo "::error::  - $FILE"
             done
+            echo "::error::"
             echo "::error::To fix this:"
             echo "::error::1. Run 'pnpm generate' locally"
             echo "::error::2. See the diffs, performs any checks and tests manually and if you're happy with them add them to the PR, commit & push the changes"
